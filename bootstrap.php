@@ -13,9 +13,19 @@
  */
 
 
+//helper for bad bad bad cases
+function rawIncludeError($strFileMissed) {
+    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
+    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
+    $strErrormessage .= "Error including necessary files. Can't proceed.<br />";
+    $strErrormessage .= "Searched for ".$strFileMissed." but failed. Going home now...<br />";
+    $strErrormessage .= "</div></body></html>";
+	die($strErrormessage);
+}
+
 //---The Path on the filesystem------------------------------------------------------------------------------
-	//Determing the current path on the filesystem. Use the dirname of the current file, cut "/system"
-	define("_realpath_",  substr(dirname(__FILE__), 0, -7));
+	//Determine the current path on the filesystem. Use the dirname of the current file, cut "/system"
+	define("_realpath_", dirname(__FILE__));
 
 //--- Loader preconfiguration
     if(!defined("_xmlLoader_"))
@@ -27,23 +37,23 @@
 	@date_default_timezone_set(date_default_timezone_get());
 
 	//Functions to have fun & check for mb-string
-	if(!@include_once(_realpath_."/system/functions.php"))
-		rawIncludeError("./system/functions.php");
+	if(!@include_once(_realpath_."/modul_system/system/functions.php"))
+		rawIncludeError(_realpath_."/modul_system/system/functions.php");
 
 	//Exception-Handler
-	if(!@include_once(_realpath_."/system/class_exception.php"))
+	if(!@include_once(_realpath_."/modul_system/system/class_exception.php"))
 		rawIncludeError("global exception handler");
 	//register global exception handler for exceptions thrown but not catched (bad style ;) )
 	@set_exception_handler(array("class_exception", "globalExceptionHandler"));
 
 	//Include the logging-engine
-    if(!@include_once(_realpath_."/system/class_logger.php"))
+    if(!@include_once(_realpath_."/modul_system/system/class_logger.php"))
 		rawIncludeError("logging engine");
 
 
 //---The Path on web-------------------------------------------------------------------------------------
 
-    include_once (dirname(__FILE__)."/class_config.php");
+    include_once (_realpath_."/modul_system/system/class_config.php");
     $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
@@ -73,87 +83,12 @@
 	}
 
 	//The Carrier-Class
-	if(!@include_once(_realpath_."/system/class_carrier.php"))
+	if(!@include_once(_realpath_."/modul_system/system/class_carrier.php"))
 		rawIncludeError("carrier-class");
 
 //---Autoloader for classes------------------------------------------------------------------------------
-    include_once (dirname(__FILE__)."/class_classloader.php");
+    include_once (_realpath_."/modul_system/system/class_classloader.php");
     spl_autoload_register(array (new class_classloader(), "loadClass"));
-
-
-
-
-//    function __autoload($strClassName) {
-//
-//        //---ADMIN CLASSES-------------------------------------------------------------------------------
-//        //adminwidgets
-//        if(preg_match("/(class|interface)_adminwidget(.*)/", $strClassName)) {
-//            if(require(_adminpath_."/widgets/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //systemtasks
-//        if(preg_match("/(class|interface)(.*)systemtask(.*)/", $strClassName)) {
-//            if(require(_adminpath_."/systemtasks/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //statsreports
-//        if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
-//            if(require(_adminpath_."/statsreports/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //admin classes
-//        //TODO: wtf? why strpos needed? whats wrong with that regex?
-//        if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
-//            if(require(_adminpath_."/".$strClassName.".php"))
-//                return;
-//        }
-//
-//
-//        //---PORTAL CLASSES------------------------------------------------------------------------------
-//
-//        //search plugins
-//        if(preg_match("/interface_search(.*)/", $strClassName)) {
-//            if(require(_portalpath_."/searchplugins/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //portal classes
-//        if(preg_match("/(class|interface)_(.*)portal(.*)/", $strClassName)) {
-//            if(require(_portalpath_."/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //---SYSTEM CLASSES------------------------------------------------------------------------------
-//        //db-drivers
-//        if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
-//            if(require(_systempath_."/db/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //usersources
-//        if(preg_match("/(class|interface)_usersources_(.*)/", $strClassName)) {
-//            if(require(_systempath_."/usersources/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //workflows
-//        if(preg_match("/class_workflow_(.*)/", $strClassName)) {
-//            if(require(_systempath_."/workflows/".$strClassName.".php"))
-//                return;
-//        }
-//
-//        //system-classes
-//        if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
-//            if(require(_systempath_."/".$strClassName.".php"))
-//                return;
-//        }
-//
-//    }
-
-
 
 
 ?>

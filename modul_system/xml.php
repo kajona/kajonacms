@@ -9,9 +9,9 @@
 
 
 //mark the request as a xml-based request
-define("_xmlLoader_", true);	
+define("_xmlLoader_", true);
 
-if(!require_once("./system/includes.php"))
+if(!require_once("./system/bootstrap.php"))
 	die("Error including necessary files");
 
 
@@ -20,8 +20,8 @@ if(issetGet("admin") && getGet("admin") == 1)
 	define("_admin_", true);
 else
 	define("_admin_", false);
-	
-	
+
+
 
 /**
  * Class handling all requests to be served with xml
@@ -29,13 +29,13 @@ else
  * @package modul_system
  */
 class class_xml {
-    
+
     private static $bitSuppressXmlHeader = false;
-    
+
     public function __construct() {
 		class_carrier::getInstance();
     }
-    
+
     public function processRequest() {
 
         $strModule = getGet("module");
@@ -45,28 +45,28 @@ class class_xml {
         $strAction = getGet("action");
         if($strAction == "")
             $strAction = getPost("action");
-        
+
         $strLanguageParam = getGet("language");
         if($strLanguageParam == "")
             $strLanguageParam = getPost("language");
-        
+
 
         $objDispatcher = new class_request_dispatcher();
         $strContent = $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
-        
+
         if($strContent == "") {
             header(class_http_statuscodes::$strSC_BADREQUEST);
             $strContent = "<error>An error occured, malformed request</error>";
         }
-        
+
         if(!self::$bitSuppressXmlHeader)
             $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$strContent;
         return $strContent;
     }
-    
+
     /**
      * If set to true, the output will be sent without the mandatory xml-head-element
-     * @param bool $bitSuppressXmlHeader 
+     * @param bool $bitSuppressXmlHeader
      */
     public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
         self::$bitSuppressXmlHeader = $bitSuppressXmlHeader;

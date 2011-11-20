@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -32,16 +32,16 @@ if(issetPost("doimport")) {
 	if($objDb->importDb($strFilename))
 		echo "import successfull.\n";
 	else
-		echo "import failed.\n";	
+		echo "import failed.\n";
 }
 else {
 
 	echo "searching dbdumps available...\n";
-	
+
 	$objFilesystem = new class_filesystem();
 	$arrFiles = $objFilesystem->getFilelist("/system/dbdumps/");
 	echo "found ".count($arrFiles)." dump(s)\n\n";
-	
+
 	echo "<form method=\"post\">";
 	echo "dump to import:\n";
 	echo "<select name=\"dumpname\" type=\"dropdown\">";

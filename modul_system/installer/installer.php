@@ -7,7 +7,7 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 //includes...
-include_once("../system/includes.php");
+include_once("../system/bootstrap.php");
 
 /**
  * Class representing a graphical installer.

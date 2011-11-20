@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -59,17 +59,17 @@ echo "</tr>";
 
 $strPrevHash = "";
 foreach($arrEntries as $objOneEntry) {
-    
+
     if($objOneEntry->strSoundex == "")
         continue;
-    
+
     $strStyle = "";
-    
+
     if($objOneEntry->strHash == $strPrevHash)
             $strStyle = "background-color: green;";
-    
+
     $strPrevHash = $objOneEntry->strHash;
-    
+
     echo "<tr style=\"".$strStyle."\">";
     echo "  <td>".$objOneEntry->strArea."</td>";
     echo "  <td>".$objOneEntry->strModul."</td>";
@@ -90,32 +90,32 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
     foreach($arrContent as $strOneEntry) {
         if($strOneEntry == "." || $strOneEntry == "..")
             continue;
-        
+
         if(is_file($strSourceFolder."/".$strOneEntry)) {
            if(substr($strOneEntry, 0, 5) == "lang_" ) {
-               
+
                $arrTemp = explode("_", substr($strOneEntry, 0, -4));
                //regular lang file found, parse contents
                $lang = array();
                require($strSourceFolder."/".$strOneEntry);
-               
+
                foreach($lang as $strKey => $strValue) {
-                   
+
                    $strArea = strpos($strSourceFolder, "/admin/") !== false ? "admin" : "portal";
                    $strModul = $arrTemp[1];
-                   
+
                    $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey, $strArea);
                    if($arrTemp[2] == "de") $objTemp->strDe = $strValue;
                    if($arrTemp[2] == "en") $objTemp->strEn = $strValue;
                    if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
                    if($arrTemp[2] == "bg") $objTemp->strBg = $strValue;
                    if($arrTemp[2] == "ru") $objTemp->strRu = $strValue;
-                  
-                           
+
+
                }
            }
         }
-        
+
         if(is_dir($strSourceFolder."/".$strOneEntry)) {
             debug_parse_foldercontent($strSourceFolder."/".$strOneEntry, $arrEntries);
         }
@@ -125,14 +125,14 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
 function debug_get_langhelper(&$arrEntries, $strModul, $strKey, $strArea) {
     foreach($arrEntries as $objOneHelper) {
         if($objOneHelper->strModul == $strModul &&
-           $objOneHelper->strArea == $strArea && 
+           $objOneHelper->strArea == $strArea &&
            $objOneHelper->strKey == $strKey) {
-            
+
             return $objOneHelper;
         }
-                
+
     }
-    
+
     $objOneHelper = new debug_class_lang_helper();
     $objOneHelper->strModul = $strModul;
     $objOneHelper->strArea = $strArea;
@@ -151,15 +151,15 @@ function debug_get_soundex($arrEntries) {
 }
 
 
-function debug_sort( $objA, $objB ) { 
-    if(  $objA->strSoundex ==  $objB->strSoundex ) { 
-        if(  $objA->strEn ==  $objB->strEn ) { 
-            return 0 ; 
-        } 
+function debug_sort( $objA, $objB ) {
+    if(  $objA->strSoundex ==  $objB->strSoundex ) {
+        if(  $objA->strEn ==  $objB->strEn ) {
+            return 0 ;
+        }
         return ($objA->strEn < $objB->strEn) ? -1 : 1;
-    } 
+    }
     return ($objA->strSoundex < $objB->strSoundex) ? -1 : 1;
-} 
+}
 
 
 
@@ -173,7 +173,7 @@ class debug_class_lang_helper {
     public $strPt;
     public $strBg;
     public $strRu;
-    
+
     public $strSoundex;
     public $strHash;
 }

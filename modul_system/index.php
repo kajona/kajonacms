@@ -7,20 +7,7 @@
 *   $Id$                                                   *
 ********************************************************************************************************/
 
-//helper for bad bad bad cases
-function rawIncludeError($strFileMissed) {
-    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
-    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
-    $strErrormessage .= "Error including necessary files. Can't proceed.<br />";
-    $strErrormessage .= "Searched for ".$strFileMissed." but failed. Going home now...<br />";
-    $strErrormessage .= "</div></body></html>";
-	die($strErrormessage);
-}
 
-//Requiring the includes
-if(!@include_once("./system/includes.php")) {
-    rawIncludeError("./system/includes.php");
-}
 
 
 //Determing the area to load
@@ -39,31 +26,31 @@ else
  * @package modul_system
  */
 class class_index  {
-	
+
 	public function __construct() {
 		class_carrier::getInstance();
 	}
-    
+
     public function processRequest() {
 
         $strModule = getGet("module");
         if($strModule == "")
             $strModule = getPost("module");
-        
-        if($strModule == "" && _admin_) 
+
+        if($strModule == "" && _admin_)
             $strModule = "dashboard";
 
-        if($strModule == "" && !_admin_) 
+        if($strModule == "" && !_admin_)
             $strModule = "pages";
 
         $strAction = getGet("action");
         if($strAction == "")
             $strAction = getPost("action");
-        
+
         $strLanguageParam = getGet("language");
         if($strLanguageParam == "")
             $strLanguageParam = getPost("language");
-        
+
 
         $objDispatcher = new class_request_dispatcher();
         return $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);

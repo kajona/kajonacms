@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -42,7 +42,7 @@ if(issetPost("doquery")) {
 else {
 
 	echo "Provide the query to execute.\nPlease be aware of the consequences!\n\n";
-	
+
 	echo "<form method=\"post\">";
 	echo "<textarea name=\"dbquery\" cols=\"75\" rows=\"10\">";
 	echo "</textarea><br />";

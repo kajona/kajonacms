@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -33,19 +33,19 @@ echo "+-------------------------------------------------------------------------
 function walkFolderRecursive($strStartFolder) {
 	$objFilesystem = new class_filesystem();
 	 $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn"));
-	 
+
 	 foreach($arrFilesAndFolders["files"] as $arrOneFile) {
 	 	$strFilename = $arrOneFile["filename"];
-	 	
+
 	 	//include the filecontent
 	 	$strContent = file_get_contents($strStartFolder."/".$strFilename);
 	 	if(uniSubstr($strContent, 0, 5) != "<?php")
 	        echo "Whitespace at the beginning of file >> ".$strStartFolder."/".$strFilename." is:>".uniSubstr($strContent, 0, 1)."< << \n";
-	        
+
         if(uniSubstr($strContent, -2) != "?>")
-            echo "Whitespace at the end of file >> ".$strStartFolder."/".$strFilename." << \n";    
+            echo "Whitespace at the end of file >> ".$strStartFolder."/".$strFilename." << \n";
 	 }
-	 
+
 	 foreach($arrFilesAndFolders["folders"] as $strOneFolder)
 	     walkFolderRecursive($strStartFolder."/".$strOneFolder);
 }

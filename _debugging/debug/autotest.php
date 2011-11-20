@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -77,7 +77,7 @@ if(issetPost("dotest")) {
 
     }
 
-		
+
 }
 
 function get_php_classes($php_code) {
@@ -188,7 +188,7 @@ final class class_testLogger {
     public static $levelInfo = 2;
     private static $objInstance = null;
     private $intLogLevel = 0;
-    
+
     private function __construct() {
         $this->intLogLevel = 2;
     }
@@ -208,7 +208,7 @@ final class class_testLogger {
             return;
         if($intLevel == self::$levelInfo && $this->intLogLevel < 3)
             return;
-        
+
         $strLevel = "";
         if($intLevel == self::$levelError)
             $strMessage = "<span style=\"color: red;\">ERROR &gt;&gt;&gt;</span> ".$strMessage." <span style=\"color: red;\">&lt;&lt;&lt;</span>";
@@ -224,54 +224,54 @@ final class class_testLogger {
 }
 
 class PHPUnit_Framework_TestCase {
- 
-    
+
+
     public function kajonaTestTrigger() {
         //setUp
         $this->setUp();
-        
+
         //loop test methods
         $objReflection = new ReflectionClass($this);
         $arrMethods = $objReflection->getMethods();
-        
+
         foreach($arrMethods as $objOneMethod) {
             if(uniStrpos($objOneMethod->getName(), "test") !== false) {
                 echo "calling ".$objOneMethod->getName()."...\n";
                 $objOneMethod->invoke($this);
             }
         }
-        
+
         //tearDown
         $this->tearDown();
     }
-    
+
     public function assertTrue($mixedVal, $strComment = "") {
         class_assertions::assertTrue($mixedVal, $strComment);
     }
-    
+
     public function assertNull($mixedVal, $strComment = "") {
         class_assertions::assertTrue($mixedVal === null, $strComment);
     }
-    
+
     public function assertNotNull($mixedVal, $strComment = "") {
         class_assertions::assertTrue($mixedVal !== null, $strComment);
     }
-    
+
     public function assertEquals($mixedVal1, $mixedVal2, $strComment = "") {
         class_assertions::assertEqual($mixedVal1, $mixedVal2, $strComment);
     }
-    
+
     public function assertNotEquals($mixedVal1, $mixedVal2, $strComment = "") {
         class_assertions::assertNotEqual($mixedVal1, $mixedVal2, $strComment);
     }
-    
+
     public function assertFileExists($strFile, $strComment = "") {
         class_assertions::assertTrue(is_file($strFile), $strComment);
     }
-    
+
     protected function setUp() {
     }
-    
+
     protected function tearDown() {
     }
 }

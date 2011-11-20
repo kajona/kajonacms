@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -40,7 +40,7 @@ $arrHeader[] = "Hash 1";
 $arrHeader[] = "Hash 2";
 $arrHeader[] = "Hits";
 $arrHeader[] = "Size";
-            
+
 foreach ($arrEntries as $objOneEntry) {
     $arrRowData = array();
 

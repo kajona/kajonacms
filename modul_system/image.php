@@ -7,7 +7,7 @@
 *	$Id$                                                    *
 ********************************************************************************************************/
 
-if(!require_once("./system/includes.php"))
+if(!require_once("./system/bootstrap.php"))
 	die("Error including necessary files");
 
 

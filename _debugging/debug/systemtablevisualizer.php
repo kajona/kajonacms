@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
-require_once("../system/includes.php");
+require_once("../system/bootstrap.php");
 
 
 echo "<pre>\n";
@@ -109,14 +109,14 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
         echo    "<a href=\"javascript:fold('".$strStartId."')\">+</a> ";
     else
         echo    "  ";
-    
+
     echo $objCommon->getRecordComment()." / ".$objCommon->getSystemid()."\n";
-    
+
     echo "   state: ".$strStatus ." module nr: ".$arrRecord["system_module_nr"]." sort: ".$arrRecord["system_sort"]."\n";
 
     echo "</div>";
 
-    
+
 
     if(count($arrChilds) > 0) {
 
