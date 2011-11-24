@@ -118,7 +118,7 @@ final class class_logger {
 
         $strText = $strDate." ".$strLevel." ".$strSessid." ".$strMessage."\r\n";
 
-		$handle = fopen(_systempath_."/debug/".$this->strFilename, "a");
+		$handle = fopen(_realpath_._projectpath_."/log/".$this->strFilename, "a");
 		fwrite($handle, $strText);
 		fclose($handle);
     }

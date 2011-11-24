@@ -71,12 +71,13 @@ default:
     $config['dirsystem']            = "/system";                               //Path containing the system classes
     $config['dirlang']              = "/lang";                                 //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
+    $config['dirproject']           = "/project";                              //Path containing the project-files
 
     $config["images_cachepath"]     = "/portal/pics/cache/";                   //Path used to store the cached and manipulated images
 
     $config['adminlangs']           = "de,en,pt,ru,bg,sv";                     //Available languages for the administration
 
-    $config['admintoolkit']         = "class_toolkit_admin";                   //The admin-toolkit class to use. If you created your own implementation, 
+    $config['admintoolkit']         = "class_toolkit_admin";                   //The admin-toolkit class to use. If you created your own implementation,
                                                                                //e.g. by extending the Kajona-class, set the name of the class here.
 
     $config['https_header']         = "HTTPS";                                 //Http-header used to validate if the current connection is encrypted by https.
@@ -85,10 +86,10 @@ default:
     $config['https_header_value']   = "on";                                    //If the presence of the header is not enough to validate the https status,
                                                                                //set the required value to compare against here
 
-    $config['cache_texts']          = false;                                   //caches read lang files with the users' session. Enable only on productive 
+    $config['cache_texts']          = false;                                   //caches read lang files with the users' session. Enable only on productive
                                                                                //environments. Could consume up a lot of ram.
 
-    $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers 
+    $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers
                                                                                //are queried in the order of appearance. The list is comma-separated, no blanks allowed.
 
 //--system settings--------------------------------------------------------------------------------------

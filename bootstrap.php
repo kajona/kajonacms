@@ -24,8 +24,9 @@ function rawIncludeError($strFileMissed) {
 }
 
 //---The Path on the filesystem------------------------------------------------------------------------------
-	//Determine the current path on the filesystem. Use the dirname of the current file, cut "/system"
-	define("_realpath_", dirname(__FILE__));
+	//Determine the current path on the filesystem. Use the dirname of the current file
+	define("_realpath_", substr(dirname(__FILE__), 0, -5));
+	define("_corepath_", dirname(__FILE__));
 
 //--- Loader preconfiguration
     if(!defined("_xmlLoader_"))
@@ -37,23 +38,23 @@ function rawIncludeError($strFileMissed) {
 	@date_default_timezone_set(date_default_timezone_get());
 
 	//Functions to have fun & check for mb-string
-	if(!@include_once(_realpath_."/module_system/system/functions.php"))
-		rawIncludeError(_realpath_."/module_system/system/functions.php");
+	if(!@include_once(_corepath_."/module_system/system/functions.php"))
+		rawIncludeError(_corepath_."/module_system/system/functions.php");
 
 	//Exception-Handler
-	if(!@include_once(_realpath_."/module_system/system/class_exception.php"))
+	if(!@include_once(_corepath_."/module_system/system/class_exception.php"))
 		rawIncludeError("global exception handler");
 	//register global exception handler for exceptions thrown but not catched (bad style ;) )
 	@set_exception_handler(array("class_exception", "globalExceptionHandler"));
 
 	//Include the logging-engine
-    if(!@include_once(_realpath_."/module_system/system/class_logger.php"))
+    if(!@include_once(_corepath_."/module_system/system/class_logger.php"))
 		rawIncludeError("logging engine");
 
 
 //---The Path on web-------------------------------------------------------------------------------------
 
-    include_once (_realpath_."/module_system/system/class_config.php");
+    include_once (_corepath_."/module_system/system/class_config.php");
     $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
@@ -77,11 +78,11 @@ function rawIncludeError($strFileMissed) {
 
 //---Include Section 2-----------------------------------------------------------------------------------
 	//Module-Constants
-	foreach(scandir(_realpath_."/") as $strDirEntry ) {
-        if(is_dir(_realpath_."/".$strDirEntry."/system/config/")) {
-            foreach(scandir(_realpath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
+	foreach(scandir(_corepath_."/") as $strDirEntry ) {
+        if(is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
+            foreach(scandir(_corepath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
                 if(preg_match("/modul\_([a-z])+\_id\.php/", $strModuleEntry))
-                    @include_once(_realpath_."/".$strDirEntry."/system/config/".$strModuleEntry);
+                    @include_once(_corepath_."/".$strDirEntry."/system/config/".$strModuleEntry);
             }
         }
 
@@ -89,11 +90,11 @@ function rawIncludeError($strFileMissed) {
 
 
     //---Autoloader for classes--------------------------------------------------------------------------
-    include_once (_realpath_."/module_system/system/class_classloader.php");
+    include_once (_corepath_."/module_system/system/class_classloader.php");
     spl_autoload_register(array (class_classloader::getInstance(), "loadClass"));
 
     //The Carrier-Class
-    if(!@include_once(_realpath_."/module_system/system/class_carrier.php"))
+    if(!@include_once(_corepath_."/module_system/system/class_carrier.php"))
         rawIncludeError("carrier-class");
 
 

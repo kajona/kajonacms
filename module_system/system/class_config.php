@@ -34,7 +34,7 @@ class class_config {
 
 		//Include the config-File
         //FIXME: add auto-resolve
-		if(!@include(_realpath_."/module_system/system/config/".$strConfigFile))
+		if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
 			die("Error reading config-file!");
 
 		$this->arrConfig = $config;
@@ -47,6 +47,7 @@ class class_config {
             define("_portalpath_" , 	$this->getConfig("dirportal"));
             define("_adminpath_" , 		$this->getConfig("diradmin"));
             define("_templatepath_" , 	$this->getConfig("dirtemplates"));
+            define("_projectpath_" , 	$this->getConfig("dirproject"));
             define("_langpath_" , 		$this->getConfig("dirlang"));
             define("_skinpath_" , 		$this->getConfig("dirskins"));
             define("_indexpath_",		_webpath_."/index.php");
