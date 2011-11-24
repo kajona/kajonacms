@@ -11,6 +11,7 @@
  * Implemented as a singleton.
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_classloader {
 

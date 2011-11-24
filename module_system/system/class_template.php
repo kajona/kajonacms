@@ -10,12 +10,11 @@
  * This class does all the template stuff as loading, parsing, etc..
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_template {
-	private $arrModul = array();
 	private $arrCacheTemplates = array();
 	private $arrCacheTemplateSections = array();
-	private $strArea;
 
 	private $strTempTemplate = "";
 
@@ -30,10 +29,7 @@ class class_template {
 	 *
 	 */
 	private function __construct() 	{
-		$this->arrModul["name"] 		= "template";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
-		$this->strArea = "";
 
         //any caches to load from session?
         $objSession = class_session::getInstance();
@@ -85,9 +81,7 @@ class class_template {
 		//avoid directory traversals
         $strName = removeDirectoryTraversals($strName);
 
-        //Adding the current area prefix
-		if(!$bitForce && $this->strArea != "portal")
-			$strName = $this->strArea . $strName;
+        $strName = class_resourceloader::getInstance()->getTemplate($strName);
 
 		$strTemplate = "Template not found";
 		$bitKnownTemplate = false;
@@ -103,23 +97,24 @@ class class_template {
 
 		if(!$bitKnownTemplate) {
 			//Build the path-prefixes
-			if($bitForce)
-				$strTemplatePath = _realpath_;
-			elseif (uniStrpos($this->strArea, "admin/skins/") !== false)
-				$strTemplatePath = _realpath_;
-			else
-				$strTemplatePath = _templatepath_;
+            //FIXME: may be deleted
+//			if($bitForce)
+//				$strTemplatePath = _realpath_;
+//			elseif (uniStrpos($this->strArea, "admin/skins/") !== false)
+//				$strTemplatePath = _realpath_;
+//			else
+//				$strTemplatePath = _templatepath_;
 
 			//We have to read the whole template from the filesystem
-            if(file_exists($strTemplatePath."/".$strName) && is_file($strTemplatePath."/".$strName) && uniSubstr($strName, -4) == ".tpl" ) {
-				$strTemplate = file_get_contents($strTemplatePath."/".$strName);
+            if(uniSubstr($strName, -4) == ".tpl" ) {
+				$strTemplate = file_get_contents(_realpath_."/".$strName);
 				//Saving to the cache
 				$this->arrCacheTemplates[$strCacheTemplate] = $strTemplate;
 			}
 			else {
-			    $strTemplate = "Template ".$strTemplatePath."/".$strName ." not found!";
+			    $strTemplate = "Template ".$strName ." not found!";
 			    if($bitThrowErrors)
-			        throw new class_exception("Template ".$strTemplatePath."/".$strName ." not found!", class_exception::$level_FATALERROR);
+			        throw new class_exception("Template ".$strName ." not found!", class_exception::$level_FATALERROR);
 			}
 		}
 		else
@@ -238,19 +233,18 @@ class class_template {
 		$this->strTempTemplate = str_replace($arrConstants, $arrValues, $this->strTempTemplate);
 	}
 
-	/**
-	 * Deletes placholder in the template set by setTemplate()
-	 *
-	 * @param string $strText
-	 */
+    /**
+     * Deletes placeholder in the template set by setTemplate()
+     */
 	public function deletePlaceholder() {
 		$this->strTempTemplate = preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $this->strTempTemplate);
 	}
 
 	/**
-	 * Deletes placholder in the string
+	 * Deletes placeholder in the string
 	 *
 	 * @param string $strText
+     * @return string
 	 */
 	private function deletePlaceholderRaw($strText) {
 		return preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $strText);
@@ -268,7 +262,7 @@ class class_template {
 	}
 
     /**
-     * Checks if the template referenced by the identifier containes the placeholder provided
+     * Checks if the template referenced by the identifier contains the placeholder provided
      * by the second param.
      *
      * @param string $strIdentifier
@@ -377,6 +371,9 @@ class class_template {
 	 * @param string $strArea
 	 */
 	public function setArea($strArea) {
+
+        throw new class_exception("method setArea@class_template no longer supported!, passed: ".$strArea, class_exception::$level_FATALERROR);
+
 	    //when coming from the installer, do nothing - installer uses force-option when loading templates
 	    if($strArea == "installer")
 	       return;

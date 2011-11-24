@@ -26,11 +26,11 @@ case "vserver":
 
     //Database-Access
     $config['dbhost']               = "localhost";                             //Server name
-    $config['dbusername']           = "kajona";                                //Username
-    $config['dbpassword']           = "kajona";                                //Password
-    $config['dbname']               = "kajona";                                //Database name
+    $config['dbusername']           = "kajona4";                                //Username
+    $config['dbpassword']           = "kajona4";                                //Password
+    $config['dbname']               = "kajona4";                                //Database name
     $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3, oci8
-    $config['dbprefix']             = "kajona_";                               //table-prefix
+    $config['dbprefix']             = "kajona4_";                               //table-prefix
     $config['dbport']               = "";                                      //Database port, default: ""
 
     break;
@@ -60,7 +60,7 @@ default:
 
     Change the properties defined below only, if you now what you do!
     In most cases, those should be left as they are.
-    Incorrect values could make the system unuseable!
+    Incorrect values could make the system unusable!
 */
 
 //--common settings -------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ default:
     $debug['time']                  = false;                                   //Calculates the time needed to create the requested page
     $debug['dbnumber']              = false;                                   //Counts the number of queries passed to the db / retrieved from the cache
     $debug['templatenr']            = false;                                   //Counts the number of templates retrieved from the cache
-    $debug['memory']                = false;                                   //Displays the memory used by kajona to generate the current page
+    $debug['memory']                = false;                                   //Displays the memory used by Kajona to generate the current page
     $debug['cache']                 = false;                                   //Counts the internal cache-hits and requests to save s.th. to the cache
 
     $debug['dblog']                 = false;                                   //Logs all queries sent to the db into a logfile
@@ -112,5 +112,5 @@ default:
                                                                                    // 0: Nothing is logged to file
                                                                                    // 1: Errors are logged
                                                                                    // 2: Errors and warning
-                                                                                   // 3: Errors, warnings and infos are logged
+                                                                                   // 3: Errors, warnings and information are logged
 ?>

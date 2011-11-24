@@ -119,7 +119,7 @@ abstract class class_portal  {
 		$this->objSystemCommon = new class_modul_system_common($strSystemid);
 
 		//Setting template area
-		$this->objTemplate->setArea($this->strArea);
+		//FIXME removed $this->objTemplate->setArea($this->strArea);
 
 		//Writing to the history
         if(!_xmlLoader_)
