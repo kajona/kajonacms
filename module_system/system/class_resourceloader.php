@@ -10,6 +10,8 @@
  * Loader to dynamically resolve and load resources (this is mapping a virtual file-name to a real filename,
  * relative to the project-root).
  * Currently, this includes the loading of templates and lang-files.
+ * In addition, the resource-loader supports the listing of files in a given folder.
+ * Therefore, the merged file-list of each module below /core may be read.
  *
  * The loader is, as usual, implemented as a singleton.
  * All lookups are cached, so subsequent lookups will be done without filesystem-queries.

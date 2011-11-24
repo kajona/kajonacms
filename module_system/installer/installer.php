@@ -6,12 +6,10 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
 ********************************************************************************************************/
-//includes...
-include_once("../system/bootstrap.php");
 
 /**
  * Class representing a graphical installer.
- * Loads all subinstallers
+ * Loads all sub-installers
  *
  * @author sidler@mulchprod.de
  * @package module_system
@@ -24,7 +22,7 @@ class class_installer {
 	private $strForwardLink = "";
 	private $strBackwardLink = "";
 
-	private $strVersion = "V 3.4.1";
+	private $strVersion = "V 3.9";
 
 	/**
 	 * Instance of template-engine

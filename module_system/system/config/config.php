@@ -26,11 +26,11 @@ case "vserver":
 
     //Database-Access
     $config['dbhost']               = "localhost";                             //Server name
-    $config['dbusername']           = "kajona4";                                //Username
-    $config['dbpassword']           = "kajona4";                                //Password
-    $config['dbname']               = "kajona4";                                //Database name
+    $config['dbusername']           = "kajona_v4";                                //Username
+    $config['dbpassword']           = "kajona_v4";                                //Password
+    $config['dbname']               = "kajona_v4";                                //Database name
     $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3, oci8
-    $config['dbprefix']             = "kajona4_";                               //table-prefix
+    $config['dbprefix']             = "kajona_";                               //table-prefix
     $config['dbport']               = "";                                      //Database port, default: ""
 
     break;

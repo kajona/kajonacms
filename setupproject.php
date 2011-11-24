@@ -28,6 +28,13 @@ class class_project_setup {
         self::checkDir("/project/dbdumps");
         self::checkDir("/templates");
 
+
+        echo "copy index.php.root to index.php\n";
+        copy(_corepath_."/index.php.root", _realpath_."/index.php");
+
+        echo "copy installer.php.root to installer.php\n";
+        copy(_corepath_."/installer.php.root", _realpath_."/installer.php");
+
     }
 
 
