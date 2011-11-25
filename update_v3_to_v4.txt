@@ -1,0 +1,11 @@
+
+
+Module Update
+- rename module-folder from modul_xx to module_xx
+- rename template-folder from modul_xx to module_xx
+- the folder /elemente is renamed to /elements
+
+Element Update
+- portal classes should extended by _portal (class_element_image_portal.php)
+- admin classes should extended by _admin (class_element_image_admin.php)
+- the folder /elemente is renamed to /elements
