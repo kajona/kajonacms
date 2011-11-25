@@ -16,6 +16,10 @@
  */
 class class_installer {
 
+
+    private $STR_ORIG_CONFIG_FILE = "";
+    private $STR_PROJECT_CONFIG_FILE = "";
+
 	private $arrInstaller;
 	private $strOutput = "";
 	private $strLogfile = "";
@@ -67,6 +71,8 @@ class class_installer {
 		  $this->objTexte->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
 
+        $this->STR_ORIG_CONFIG_FILE = _corepath_."/module_system/system/config/config.php";
+        $this->STR_PROJECT_CONFIG_FILE = _realpath_._projectpath_."/system/config/config.php";
 	}
 
 
@@ -120,9 +126,9 @@ class class_installer {
 	public function checkPHPSetting() {
 	    $strReturn = "";
 
-	    $arrFilesAndFolders = array("/system/config/config.php",
-	                                "/system/dbdumps",
-	                                "/system/debug",
+	    $arrFilesAndFolders = array("/project/system/config",
+	                                "/project/dbdumps",
+	                                "/project/log",
 	                                "/portal/pics/cache",
 	                                "/portal/pics/upload",
 	                                "/portal/downloads");
@@ -138,7 +144,7 @@ class class_installer {
 	    $arrLangs = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
 	    $intLangCount = 1;
 	    foreach ($arrLangs as $strOneLang) {
-            $strReturn .= "<a href=\""._webpath_."/installer/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjText()->getText("lang_".$strOneLang, "user", "admin")."</a>";
+            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjText()->getText("lang_".$strOneLang, "user", "admin")."</a>";
             if ($intLangCount++ < count($arrLangs)) {
                 $strReturn .= " | ";
             }
@@ -162,7 +168,7 @@ class class_installer {
     	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getText("installer_nloaded")."</span>!<br />";
 	    }
 
-	    $this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=config");
+	    $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=config");
         $this->strBackwardLink = "";
 	    $this->strOutput = $strReturn;
 	}
@@ -175,7 +181,7 @@ class class_installer {
         $strReturn = "";
 
         if($this->checkDefaultValues())
-            header("Location: "._webpath_."/installer/installer.php?step=loginData");
+            header("Location: "._webpath_."/installer.php?step=loginData");
 
 
         if(!isset($_POST["write"])) {
@@ -218,13 +224,13 @@ class class_installer {
                                                                   "postgresInfo" => $strPostgresInfo,
                                                                   "oci8Info" => $strOci8Info
 	        ), $strTemplateID);
-	        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php");
+	        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
 
         }
         elseif ($_POST["write"] == "true") {
             //check vor values
             if($_POST["hostname"] == "" || $_POST["username"] == "" || $_POST["password"] == "" || $_POST["dbname"] == "" || $_POST["driver"] == "") {
-                header("Location: "._webpath_."/installer/installer.php");
+                header("Location: "._webpath_."/installer.php");
                 return;
             }
 
@@ -248,13 +254,13 @@ class class_installer {
                    $_POST["port"]
                );
             //load config file
-            $strConfig = file_get_contents(_systempath_."/config/config.php");
+            $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
             //insert values
             $strConfig = str_replace($arrSearch, $arrReplace, $strConfig);
             //and save to file
-            file_put_contents(_systempath_."/config/config.php", $strConfig);
+            file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strConfig);
             // and reload
-            header("Location: "._webpath_."/installer/installer.php?step=loginData");
+            header("Location: "._webpath_."/installer.php?step=loginData");
         }
 
         $this->strOutput = $strReturn;
@@ -294,7 +300,7 @@ class class_installer {
                 $this->objSession->setSession("install_username", $strUsername);
                 $this->objSession->setSession("install_password", $strPassword);
                 $this->objSession->setSession("install_email", $strEmail);
-                header("Location: "._webpath_."/installer/installer.php?step=install");
+                header("Location: "._webpath_."/installer.php?step=install");
             }
 	    }
 
@@ -307,9 +313,9 @@ class class_installer {
 	                                                              ), $strTemplateID);
 	    }
 
-	    $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php");
+	    $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
 	    if($bitUserInstalled || ($this->objSession->getSession("install_username") !== false && $this->objSession->getSession("install_password") !== false))
-	        $this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=install");
+	        $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=install");
 	}
 
 	/**
@@ -317,12 +323,8 @@ class class_installer {
 	 *
 	 */
 	public function loadInstaller() {
-		$objFilesystem = new class_filesystem();
-		//load all installer files
-		$this->arrInstaller = $objFilesystem->getFilelist("/installer", array(".php"));
 
         $this->arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
-        var_dump($this->arrInstaller);
 
 		foreach($this->arrInstaller as $strKey => $strFile) {
 			if($strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php" || $strFile == "index.php")
@@ -397,8 +399,8 @@ class class_installer {
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
-		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=loginData");
-		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=postInstall");
+		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
+		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=postInstall");
 	}
 
 	/**
@@ -467,8 +469,8 @@ class class_installer {
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
-		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=install");
-		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=samplecontent");
+		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=install");
+		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=samplecontent");
 	}
 
 
@@ -532,15 +534,15 @@ class class_installer {
 		}
 
 		if(!$bitInstallerFound)
-		    header("Location: "._webpath_."/installer/installer.php?step=finish");
+		    header("Location: "._webpath_."/installer.php?step=finish");
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_samplecontent_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
-		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=postInstall");
-		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=finish");
+		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=postInstall");
+		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=finish");
 	}
 
 	/**
@@ -558,7 +560,7 @@ class class_installer {
 	    $strReturn .= $this->getText("installer_finish_closer");
 
 	    $this->strOutput = $strReturn;
-	    $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=samplecontent");
+	    $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=samplecontent");
 	}
 
 
@@ -582,7 +584,7 @@ class class_installer {
 	    if($strCurrentCommand == "")
 	       $strCurrentCommand = "phpsettings";
 
-	    $arrProgessEntries = array(
+	    $arrProgressEntries = array(
 	       "phpsettings" => $this->getText("installer_step_phpsettings"),
 	       "config" => $this->getText("installer_step_dbsettings"),
 	       "loginData" => $this->getText("installer_step_adminsettings"),
@@ -592,26 +594,26 @@ class class_installer {
 	       "finish" => $this->getText("installer_step_finish"),
 	    );
 
-	    $strProgess = "";
+	    $strProgress = "";
 	    $strTemplateEntryTodoID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_progress_entry", true);
 	    $strTemplateEntryCurrentID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_progress_entry_current", true);
 	    $strTemplateEntryDoneID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_progress_entry_done", true);
 
 	    $strTemplateEntryID = $strTemplateEntryDoneID;
-	    foreach($arrProgessEntries as $strKey => $strValue) {
+	    foreach($arrProgressEntries as $strKey => $strValue) {
 	    	$arrTemplateEntry = array();
 	    	$arrTemplateEntry["entry_name"] = $strValue;
 
 	    	//choose the correct template section
 	    	if($strCurrentCommand == $strKey) {
-	    	    $strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryCurrentID, true);
+	    	    $strProgress .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryCurrentID, true);
 	    	    $strTemplateEntryID = $strTemplateEntryTodoID;
 	    	} else
-	    	    $strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryID, true);
+	    	    $strProgress .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryID, true);
 
 	    }
         $arrTemplate = array();
-	    $arrTemplate["installer_progress"] = $strProgess;
+	    $arrTemplate["installer_progress"] = $strProgress;
 	    $arrTemplate["installer_version"] = $this->strVersion;
 	    $arrTemplate["installer_output"] = $this->strOutput;
 	    $arrTemplate["installer_forward"] = $this->strForwardLink;
@@ -637,7 +639,11 @@ class class_installer {
 	    //return true;
         //Load the config to parse it
         //FIXME: add file-resolving
-        $strConfig = file_get_contents(_corepath_."/module_system/system/config/config.php");
+        if(is_file($this->STR_PROJECT_CONFIG_FILE))
+            $strConfig = file_get_contents($this->STR_PROJECT_CONFIG_FILE);
+        else
+            $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
+
         //check all needed values
         if(   uniStrpos($strConfig, "%%defaulthost%%") !== false
            || uniStrpos($strConfig, "%%defaultusername%%") !== false

@@ -12,9 +12,9 @@
  * Class managing access to textfiles
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_texte {
-	private $arrModul;
 
 	/**
 	 * This is the default language.
@@ -54,9 +54,6 @@ class class_texte {
 	 *
 	 */
 	private function __construct() 	{
-		$this->arrModul["t_name"] 		= "class_texte";
-		$this->arrModul["t_author"]		= "sidler@mulchprod.de";
-		$this->arrModul["t_nummer"]		= _system_modul_id_;
 
         //load texts from session
 
@@ -100,14 +97,15 @@ class class_texte {
 		return self::$objText;
 	}
 
-	/**
-	 * Returning the searched text
-	 *
-	 * @param string $strText
-	 * @param strings $strModul
-	 * @param string $strArea
-	 * @return string
-	 */
+    /**
+     * Returning the searched text
+     *
+     * @param string $strText
+     * @param $strModule
+     * @param string $strArea
+     *
+     * @return string
+     */
 	public function getText($strText, $strModule, $strArea) {
 		$strReturn = "";
 
@@ -174,12 +172,13 @@ class class_texte {
     }
 
 
-	/**
-	 * Loading texts from textfiles
-	 *
-	 * @param string $strModule
-	 * @return void
-	 */
+    /**
+     * Loading texts from textfiles
+     *
+     * @param string $strModule
+     * @param $strArea
+     * @return void
+     */
 	private function loadText($strModule, $strArea) {
 
 	    $bitFileMatched = false;
@@ -187,16 +186,19 @@ class class_texte {
 
 		//load files
 		$arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
+
+        $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("modul_".$strModule, $strArea);
+
 		if(is_array($arrFiles)) {
-			foreach($arrFiles as $strFile) {
+			foreach($arrFiles as $strPath => $strFilename) {
 				$lang = array();
-				$strTemp = str_replace(".php", "", $strFile);
+				$strTemp = str_replace(".php", "", $strFilename);
 			 	$arrName = explode("_", $strTemp);
 
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
-                    $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strLanguage, $this->arrTexts);
+                    $this->loadAndMergeTextfile($strArea, $strModule, $strPath, $this->strLanguage, $this->arrTexts);
 
 			 	}
 			}
@@ -204,13 +206,13 @@ class class_texte {
 		        return true;
 
 			//if we reach up here, no matching file was found. search for fallback file (fallback language)
-			foreach($arrFiles as $strFile) {
+			foreach($arrFiles as $strFilename) {
 				$lang = array();
-				$strTemp = str_replace(".php", "", $strFile);
+				$strTemp = str_replace(".php", "", $strFilename);
 			 	$arrName = explode("_", $strTemp);
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
-                    $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strFallbackLanguage, $this->arrTexts);
+                    $this->loadAndMergeTextfile($strArea, $strModule, $strPath, $this->strFallbackLanguage, $this->arrTexts);
 
 			 	}
 			}
@@ -222,13 +224,13 @@ class class_texte {
      * NOTE: this array is used as a reference!!!
      * @param string $strArea
      * @param string $strModule
-     * @param string $strFile
+     * @param string $strFilename
      * @param string $strLanguage
      * @param array $arrTargetArray
      */
-    private function loadAndMergeTextfile($strArea, $strModule, $strFile, $strLanguage, &$arrTargetArray) {
+    private function loadAndMergeTextfile($strArea, $strModule, $strFilename, $strLanguage, &$arrTargetArray) {
         $lang = array();
-        include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
+        include_once(_realpath_.$strFilename);
 
         if(!isset($arrTargetArray[$strArea.$strLanguage]))
             $arrTargetArray[$strArea.$strLanguage] = array();

@@ -26,6 +26,11 @@ class class_project_setup {
         self::checkDir("/project");
         self::checkDir("/project/log");
         self::checkDir("/project/dbdumps");
+        self::checkDir("/project/lang");
+        self::checkDir("/project/lang/admin");
+        self::checkDir("/project/lang/portal"); //FIXME: remove after merge of portal and lang-files
+        self::checkDir("/project/system");
+        self::checkDir("/project/system/config");
         self::checkDir("/templates");
 
 

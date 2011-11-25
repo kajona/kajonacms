@@ -11,10 +11,13 @@
  * Class handling communication with the filesystem, e.g. to read directories
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_filesystem {
-	private $arrModul;
 
+    /**
+     * @var null|resource
+     */
 	private $objFilePointer = null;
 
 	/**
@@ -22,12 +25,7 @@ class class_filesystem {
 	 *
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_filesystem";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _filesystem_modul_id_;
 
-		$objCarrier = class_carrier::getInstance();
-		//$this->objConfig = $objCarrier->getObjConfig();
 	}
 
 	/**
@@ -146,7 +144,7 @@ class class_filesystem {
 	}
 
 	/**
-	 * Returns detailed infos about a file
+	 * Returns detailed info about a file
 	 *
 	 * @param string $strFile
 	 * @return mixed
@@ -170,7 +168,7 @@ class class_filesystem {
 			$arrReturn["filetype"] = uniStrtolower($arrReturn["filetype"]);
 			//Size
 			$arrReturn["filesize"] = filesize($strFile);
-			//creatopn
+			//creatipn
 			$arrReturn["filecreation"] = filemtime($strFile);
 			//change
 			$arrReturn["filechange"] = filectime($strFile);
@@ -456,7 +454,7 @@ class class_filesystem {
     }
 
 	/**
-	 * Checks if a file or folder is writeable
+	 * Checks if a file or folder is writable
 	 *
 	 * @param string $strFile
 	 * @return bool

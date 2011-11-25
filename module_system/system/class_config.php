@@ -34,7 +34,10 @@ class class_config {
 
 		//Include the config-File
         //FIXME: add auto-resolve
-		if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
+        if(is_file(_realpath_."/project/system/config/".$strConfigFile) ) {
+            @include(_realpath_."/project/system/config/".$strConfigFile);
+        }
+		else if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
 			die("Error reading config-file!");
 
 		$this->arrConfig = $config;

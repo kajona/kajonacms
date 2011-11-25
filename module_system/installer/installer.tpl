@@ -119,7 +119,7 @@ function switchDriver() {
 }
 </script>
 <br />
-<form action="_webpath_/installer/installer.php" method="POST">
+<form action="_webpath_/installer.php" method="POST">
 <input type="hidden" name="write" value="true" />
 <div id="dbInfo">
     %%mysqliInfo%%
@@ -145,7 +145,7 @@ function switchDriver() {
 
 
 <loginwizard_form>
-<form action="_webpath_/installer/installer.php?step=loginData" method="POST">
+<form action="_webpath_/installer.php?step=loginData" method="POST">
 <input type="hidden" name="write" value="true" />
 <div><label for="username">%%login_username%%</label><input type="text" name="username" id="username" class="inputText" /></div><br />
 <div><label for="password">%%login_password%%</label><input type="password" name="password" id="password" class="inputText" /></div><br />
@@ -163,7 +163,7 @@ function switchDriver() {
 </installer_backward_link>
 
 <installer_modules_form>
-	<form action="_webpath_/installer/installer.php?step=install" method="POST">
+	<form action="_webpath_/installer.php?step=install" method="POST">
 
 	   %%module_rows%%
 	   <br />
@@ -172,7 +172,7 @@ function switchDriver() {
 </installer_modules_form>
 
 <installer_samplecontent_form>
-    <form action="_webpath_/installer/installer.php?step=samplecontent" method="POST">
+    <form action="_webpath_/installer.php?step=samplecontent" method="POST">
 
        %%module_rows%%
        <br />
@@ -211,7 +211,7 @@ function switchDriver() {
 </installer_modules_row_installable>
 
 <installer_elements_form>
-    <form action="_webpath_/installer/installer.php?step=postInstall" method="POST">
+    <form action="_webpath_/installer.php?step=postInstall" method="POST">
 
        %%module_rows%%
        <br />

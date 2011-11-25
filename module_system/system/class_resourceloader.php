@@ -29,7 +29,6 @@ class class_resourceloader {
     private $arrModules = array();
 
     //FIXME: caches may be moved to the session. validate if this makes sense. (invalidation, size, ...)
-    private $arrLangFiles = array();
     private $arrTemplates = array();
     private $arrFoldercontent = array();
 
@@ -101,6 +100,54 @@ class class_resourceloader {
     }
 
     /**
+     * Loads all lang-files in a passed folder (module or element).
+     * The loader resolves the files stored in the project-folder, overwriting the files found in the default-installation.
+     * The array returned is based on [path_to_file] = [filename] where the key is relative to the project-root.
+     * No caching is done for lang-files, since the entries are cached by the lang-class, too.
+     *
+     * @param $strFolder
+     * @param $strArea deprecated, will be removed FIXME: remove param when admin & portal files are merged
+     * @return array
+     */
+    public function getLanguageFiles($strFolder, $strArea) {
+        $arrReturn = array();
+
+        //loop all given modules
+        foreach($this->arrModules as $strSingleModule) {
+            if(is_dir(_corepath_."/".$strSingleModule._langpath_."/".$strArea."/".$strFolder)) {
+                $arrContent = scandir(_corepath_."/".$strSingleModule._langpath_."/".$strArea."/".$strFolder);
+                foreach($arrContent as $strSingleEntry) {
+
+                    if(substr($strSingleEntry, -4) == ".php") {
+                        $arrReturn["/core/".$strSingleModule._langpath_."/".$strArea."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+					}
+
+                }
+            }
+        }
+
+        //check if the same is available in the projects-folder
+        if(is_dir(_realpath_._projectpath_._langpath_."/".$strArea."/".$strFolder)) {
+            $arrContent = scandir(_realpath_._projectpath_._langpath_."/".$strArea."/".$strFolder);
+            foreach($arrContent as $strSingleEntry) {
+
+                if(substr($strSingleEntry, 0, -4) == ".php") {
+
+                    $strKey = array_search($arrReturn, $strSingleEntry);
+                    if($strKey !== false) {
+                        unset($arrReturn[$strKey]);
+                        $arrReturn[_projectpath_._langpath_."/".$strArea."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                    }
+
+                }
+
+            }
+        }
+
+        return $arrReturn;
+    }
+
+    /**
      * Loads all files in a passed folder, as usual relative to the core whereas the single module-folders may be skipped.
      * The array returned is based on [path_to_file] = [filename] where the key is relative to the project-root.
      *
@@ -136,6 +183,37 @@ class class_resourceloader {
 					}
 
                 }
+            }
+        }
+
+        //check if the same is available in the projects-folder
+        if(is_dir(_realpath_._projectpath_."/".$strFolder)) {
+            $arrContent = scandir(_realpath_._projectpath_."/".$strFolder);
+            foreach($arrContent as $strSingleEntry) {
+
+
+                //Wanted Type?
+                if(count($arrExtensionFilter)==0) {
+
+                    $strKey = array_search($arrReturn, $strSingleEntry);
+                    if($strKey !== false) {
+                        unset($arrReturn[$strKey]);
+                        $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                    }
+
+                }
+                else {
+                    //check, if suffix is in allowed list
+                    $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
+                    if(in_array($strFileSuffix, $arrExtensionFilter)) {
+                        $strKey = array_search($arrReturn, $strSingleEntry);
+                        if($strKey !== false) {
+                            unset($arrReturn[$strKey]);
+                            $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        }
+                    }
+                }
+
             }
         }
 
