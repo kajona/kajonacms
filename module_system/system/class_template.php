@@ -369,11 +369,12 @@ class class_template {
 	 * Sets an area such as portal / admin or admin/style/...
 	 *
 	 * @param string $strArea
+     * @deprecated
 	 */
 	public function setArea($strArea) {
 
         throw new class_exception("method setArea@class_template no longer supported!, passed: ".$strArea, class_exception::$level_FATALERROR);
-
+    //FIME: remove
 	    //when coming from the installer, do nothing - installer uses force-option when loading templates
 	    if($strArea == "installer")
 	       return;

@@ -85,7 +85,7 @@ abstract class class_root {
      */
     private $strSystemid;
     /**
-     * The records interal parent-id
+     * The records internal parent-id
      * @var string
      */
     private $strPrevId = -1;
@@ -152,13 +152,14 @@ abstract class class_root {
     //---
 
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $arrModul
-	 * @param string $strSystemid
-	 * @param string $strArea
-	 */
+    /**
+     * Constructor
+     *
+     * @param $arrModule
+     * @param string $strSystemid
+     * @param string $strArea
+     * @return class_root
+     */
 	public function __construct($arrModule, $strSystemid = "", $strArea = "portal") {
 		$this->arrModule["r_name"] 			= "class_root";
 		$this->arrModule["r_nummer"] 		= _system_modul_id_;
@@ -192,7 +193,7 @@ abstract class class_root {
 		$this->objRights = $objCarrier->getObjRights();
 
 		//Setting template area LATERON THE SKIN IS BEING SET HERE
-		$this->setTemplateArea("");
+		//$this->setTemplateArea(""); //FIXME: remove
 
 		//And keep the action
 		$this->strAction = $this->getParam("action");

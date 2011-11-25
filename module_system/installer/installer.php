@@ -275,7 +275,7 @@ class class_installer {
 	    $bitShowForm = true;
 	    $this->strOutput .= $this->getText("installer_login_intro");
 
-	    //if user-moduls is already installed, skip this step
+	    //if user-module is already installed, skip this step
 	    try {
 	        $objUser = class_modul_system_module::getModuleByName("user");
 	        if($objUser != null) {
@@ -345,7 +345,7 @@ class class_installer {
 		//Is there a module to be updated?
 		if(isset($_GET["update"])) {
 			$strClass = $_GET["update"].".php";
-			include_once(_realpath_."/installer/".$strClass);
+			include_once(_realpath_.array_search($strClass, $this->arrInstaller));
 		    $strClass = "class_".str_replace(".php", "", $strClass);
 		    $objInstaller = new $strClass();
 	        $strInstallLog .= $objInstaller->doModuleUpdate();
@@ -356,7 +356,7 @@ class class_installer {
             $arrModulesToInstall = $_POST["moduleInstallBox"];
             foreach($arrModulesToInstall as $strOneModule => $strValue) {
                 $strClass = $strOneModule.".php";
-                include_once(_realpath_."/installer/".$strClass);
+                include_once(_realpath_.array_search($strClass, $this->arrInstaller));
                 $strClass = "class_".str_replace(".php", "", $strClass);
                 $objInstaller = new $strClass();
                 $strInstallLog .= $objInstaller->doModuleInstall()."";
@@ -373,7 +373,7 @@ class class_installer {
 
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
-			include_once(_realpath_."/installer/".$strInstaller);
+			include_once(_realpath_.array_search($strInstaller, $this->arrInstaller));
 			//Creating an object....
 			$strClass = "class_".str_replace(".php", "", $strInstaller);
 			$objInstaller = new $strClass();
@@ -416,7 +416,7 @@ class class_installer {
         //Is there a module to be post-updated?
 		if(isset($_GET["postUpdate"])) {
 			$strClass = $_GET["postUpdate"].".php";
-			include_once(_realpath_."/installer/".$strClass);
+			include_once(_realpath_.array_search($strClass, $this->arrInstaller));
 		    $strClass = "class_".str_replace(".php", "", $strClass);
 		    $objInstaller = new $strClass();
 	        $strInstallLog .= $objInstaller->doModulePostUpdate();
@@ -427,7 +427,7 @@ class class_installer {
             $arrModulesToInstall = $_POST["moduleInstallBox"];
             foreach($arrModulesToInstall as $strOneModule => $strValue) {
                 $strClass = $strOneModule.".php";
-                include_once(_realpath_."/installer/".$strClass);
+                include_once(_realpath_.array_search($strClass, $this->arrInstaller));
                 $strClass = "class_".str_replace(".php", "", $strClass);
                 $objInstaller = new $strClass();
                 $strInstallLog .= $objInstaller->doPostInstall()."";
@@ -443,7 +443,7 @@ class class_installer {
         $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_elements_row_installable", true);
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
-			include_once(_realpath_."/installer/".$strInstaller);
+			include_once(_realpath_.array_search($strInstaller, $this->arrInstaller));
 			//Creating an object....
 			$strClass = "class_".str_replace(".php", "", $strInstaller);
 			$objInstaller = new $strClass();
@@ -485,7 +485,7 @@ class class_installer {
 		//Is there a module to be installed or updated?
 		if(isset($_GET["update"])) {
 		    $strClass = $_GET["update"].".php";
-			include_once(_realpath_."/installer/".$strClass);
+			include_once(_realpath_.array_search($strClass, $this->arrInstaller));
 		    $strClass = "class_".str_replace(".php", "", $strClass);
 		    $objInstaller = new $strClass();
 	        $strInstallLog .= $objInstaller->doModuleUpdate();
@@ -496,7 +496,7 @@ class class_installer {
             $arrModulesToInstall = $_POST["moduleInstallBox"];
             foreach($arrModulesToInstall as $strOneModule => $strValue) {
                 $strClass = $strOneModule.".php";
-                include_once(_realpath_."/installer/".$strClass);
+                include_once(_realpath_.array_search($strClass, $this->arrInstaller));
                 $strClass = "class_".str_replace(".php", "", $strClass);
                 $objInstaller = new $strClass();
                 $strInstallLog .= $objInstaller->doModuleInstall()."";
@@ -512,7 +512,7 @@ class class_installer {
         $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row_installable", true);
 		$bitInstallerFound = false;
 		foreach($this->arrInstaller as $strInstaller) {
-			include_once(_realpath_."/installer/".$strInstaller);
+			include_once(_realpath_.array_search($strInstaller, $this->arrInstaller));
 			//Creating an object....
 			$strClass = "class_".str_replace(".php", "", $strInstaller);
 			$objInstaller = new $strClass();

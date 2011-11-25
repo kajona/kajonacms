@@ -55,19 +55,18 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", $this->arrModule["version"] , false);
 
 		//search for installers available
-		$objFilesystem = new class_filesystem();
-		$arrInstaller = $objFilesystem->getFilelist("/installer", array(".php"));
+        $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
 
-        foreach($arrInstaller as $intKey => $strFile)
+        foreach($arrInstaller as $strPath => $strFile)
             if(strpos($strFile, "installer_sc_") === false)
-                unset($arrInstaller[$intKey]);
+                unset($arrInstaller[$strPath]);
 
         asort($arrInstaller);
 
         $strReturn .= "Loading installers...\n";
         foreach ($arrInstaller as $strOneInstaller) {
             $strReturn .= "\n\nInstaller found: ".$strOneInstaller."\n";
-            include_once(_realpath_."/installer/".$strOneInstaller);
+            include_once(_realpath_.array_search($strOneInstaller, $arrInstaller));
             //Creating an object....
             $strClass = "class_".str_replace(".php", "", $strOneInstaller);
             $objInstaller = new $strClass();
