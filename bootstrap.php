@@ -63,7 +63,7 @@ function rawIncludeError($strFileMissed) {
     if($strHeaderValue == "")
         $strHeaderValue = "on";
 
-	if(strpos($_SERVER['SCRIPT_FILENAME'], "installer.php") || strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
+	if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
 		//Determing the current path on the web
 		$strWeb = dirname ((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 		$strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));

@@ -8,7 +8,7 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="_webpath_/installer/installer.css" type="text/css" />
+	<link rel="stylesheet" href="_webpath_/core/module_system/installer/installer.css" type="text/css" />
 </head>
 <body>
 
@@ -33,7 +33,7 @@
 							  <div style="clear: both;"></div>
 							</div>
 						</div>
-					</div>				
+					</div>
 				</div>
 			</div>
 			<div class="progressContainer">
@@ -76,12 +76,12 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 <script type="text/javascript">
 function switchDriver() {
     var strValue = document.getElementById('driver').value;
-    
+
     var strMysqliInfo = '%%mysqliInfo%%';
     var strPostgresInfo = '%%postgresInfo%%';
     var strSqlite3Info = '%%sqlite3Info%%';
     var strOci8Info = '%%oci8Info%%';
-    
+
     if(strValue == "mysqli") {
         document.getElementById('dbInfo').innerHTML = strMysqliInfo;
     }
@@ -94,7 +94,7 @@ function switchDriver() {
     else if(strValue == "oci8") {
         document.getElementById('dbInfo').innerHTML = strOci8Info;
     }
-    
+
     if(strValue == "sqlite3") {
         document.getElementById('username').value = 'n.a.';
         document.getElementById('password').value = 'n.a.';
@@ -110,13 +110,13 @@ function switchDriver() {
         document.getElementById('password').value = '';
         document.getElementById('port').value = '';
         document.getElementById('hostname').value = 'localhost';
-        
+
         document.getElementById('username').readOnly = false;
         document.getElementById('password').readOnly = false;
         document.getElementById('port').readOnly = false;
         document.getElementById('hostname').readOnly = false;
     }
-}    
+}
 </script>
 <br />
 <form action="_webpath_/installer/installer.php" method="POST">
@@ -164,19 +164,19 @@ function switchDriver() {
 
 <installer_modules_form>
 	<form action="_webpath_/installer/installer.php?step=install" method="POST">
-	  
+
 	   %%module_rows%%
 	   <br />
-	   <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br /> 
+	   <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br />
 	</form>
 </installer_modules_form>
 
 <installer_samplecontent_form>
     <form action="_webpath_/installer/installer.php?step=samplecontent" method="POST">
-      
+
        %%module_rows%%
        <br />
-       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br /> 
+       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br />
     </form>
 </installer_samplecontent_form>
 
@@ -212,10 +212,10 @@ function switchDriver() {
 
 <installer_elements_form>
     <form action="_webpath_/installer/installer.php?step=postInstall" method="POST">
-       
+
        %%module_rows%%
        <br />
-       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br /> 
+       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br />
     </form>
 </installer_elements_form>
 

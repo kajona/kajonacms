@@ -80,8 +80,8 @@ class class_template {
 	public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
 		//avoid directory traversals
         $strName = removeDirectoryTraversals($strName);
-
-        $strName = class_resourceloader::getInstance()->getTemplate($strName);
+        if(!$bitForce)
+            $strName = class_resourceloader::getInstance()->getTemplate($strName);
 
 		$strTemplate = "Template not found";
 		$bitKnownTemplate = false;

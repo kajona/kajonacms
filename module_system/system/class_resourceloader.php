@@ -22,7 +22,7 @@
 class class_resourceloader {
 
     /**
-     * @var class_classloader
+     * @var class_resourceloader
      */
     private static $objInstance = null;
 
@@ -31,6 +31,7 @@ class class_resourceloader {
     //FIXME: caches may be moved to the session. validate if this makes sense. (invalidation, size, ...)
     private $arrLangFiles = array();
     private $arrTemplates = array();
+    private $arrFoldercontent = array();
 
 
     /**
@@ -97,6 +98,51 @@ class class_resourceloader {
             throw new class_exception("Required file ".$strTemplateName." could not be mapped on the filesystem.", class_exception::$level_ERROR);
 
         return $strFilename;
+    }
+
+    /**
+     * Loads all files in a passed folder, as usual relative to the core whereas the single module-folders may be skipped.
+     * The array returned is based on [path_to_file] = [filename] where the key is relative to the project-root.
+     *
+     * @param $strFolder
+     * @param array $arrExtensionFilter
+     * @return array
+     */
+    public function getFolderContent($strFolder, $arrExtensionFilter = array()) {
+        $arrReturn = array();
+        $strCachename = md5($strFolder.implode(",", $arrExtensionFilter));
+
+        if(isset($this->arrFoldercontent[$strCachename]))
+            return $this->arrFoldercontent[$strCachename];
+
+        //loop all given modules
+        foreach($this->arrModules as $strSingleModule) {
+            if(is_dir(_corepath_."/".$strSingleModule.$strFolder)) {
+                $arrContent = scandir(_corepath_."/".$strSingleModule.$strFolder);
+                foreach($arrContent as $strSingleEntry) {
+
+                    if(($strSingleEntry != "." && $strSingleEntry != "..") && is_file(_corepath_."/".$strSingleModule.$strFolder."/".$strSingleEntry)) {
+						//Wanted Type?
+						if(count($arrExtensionFilter)==0) {
+							$arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+						}
+						else {
+						    //check, if suffix is in allowed list
+						    $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
+							if(in_array($strFileSuffix, $arrExtensionFilter)) {
+								$arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+							}
+						}
+					}
+
+                }
+            }
+        }
+
+
+        $this->arrFoldercontent[$strCachename] = $arrReturn;
+
+        return $arrReturn;
     }
 
 
