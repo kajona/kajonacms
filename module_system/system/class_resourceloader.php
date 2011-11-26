@@ -99,6 +99,38 @@ class class_resourceloader {
         return $strFilename;
     }
 
+
+    /**
+     * Looks up the real filename of a template passed.
+     * The filename is the relative path, so adding /templates/[packname] is not required and not allowed.
+     *
+     * @param string $strFolder
+     * @return array A list of templates, so the merged result of the current template-pack + default-pack + fallback-files
+     */
+    public function getTemplatesInFolder($strFolder) {
+
+        $arrReturn = array();
+
+
+        //first try: load the file in the current template-pack
+
+
+        //second try: load the file from the default-pack
+
+
+        //third try: try to load the file from given modules
+        foreach($this->arrModules as $strOneModule) {
+            if(is_dir(_corepath_."/".$strOneModule."/templates/".$strFolder)) {
+                $arrFiles = scandir(_corepath_."/".$strOneModule."/templates/".$strFolder);
+                foreach($arrFiles as $strOneFile)
+                    if(substr($strOneFile, -4) == ".tpl")
+                        $arrReturn[] = $strOneFile;
+            }
+        }
+
+        return $arrReturn;
+    }
+
     /**
      * Loads all lang-files in a passed folder (module or element).
      * The loader resolves the files stored in the project-folder, overwriting the files found in the default-installation.

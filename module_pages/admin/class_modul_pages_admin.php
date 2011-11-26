@@ -396,8 +396,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 
         //Load all the Templates available
-        $objFilesystem = new class_filesystem();
-        $arrTemplates = $objFilesystem->getFilelist("/templates/module_pages", ".tpl");
+        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_pages");
 
         $arrTemplatesDD = array();
         if(count($arrTemplates) > 0)
