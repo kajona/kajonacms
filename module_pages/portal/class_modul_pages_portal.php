@@ -356,7 +356,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
         if(_pages_portaleditor_ == "true" && ($objPageData->rightEdit()  || $bitEditPermissionOnMasterPage) && $this->objSession->isAdmin()) {
 
     		if(!defined("skinwebpath_"))
-    		    define("_skinwebpath_", _webpath_."/admin/skins/".$this->objSession->getAdminSkin());
+    		    define("_skinwebpath_", _webpath_."/core/module_system/admin/skins/".$this->objSession->getAdminSkin());
 
     		//save back the current portal text language and set the admin-one
     		$strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
@@ -393,8 +393,8 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
     		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
 
     		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
-    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
-    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
+    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
+    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
                 $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.loadPortaleditorBase();</script>";
                 $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";

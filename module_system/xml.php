@@ -11,9 +11,6 @@
 //mark the request as a xml-based request
 define("_xmlLoader_", true);
 
-if(!require_once("./system/bootstrap.php"))
-	die("Error including necessary files");
-
 
 //Determin the area to load
 if(issetGet("admin") && getGet("admin") == 1)

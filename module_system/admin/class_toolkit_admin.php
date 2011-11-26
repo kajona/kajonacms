@@ -12,6 +12,7 @@
  * Admin-Part of the toolkit-classes
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_toolkit_admin extends class_toolkit {
 
@@ -23,7 +24,6 @@ class class_toolkit_admin extends class_toolkit {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"]           = "modul_elemente_admin";
-        $arrModul["author"]         = "sidler@mulchprod.de";
 
         //Calling the base class
         parent::__construct($arrModul, $strSystemid);
@@ -34,9 +34,9 @@ class class_toolkit_admin extends class_toolkit {
      * Returns a simple Date-Form
      *
      * @param string $strName
-     * @param int $intDay
-     * @param int $intMonth
-     * @param int $intYear
+     * @param int|string $intDay
+     * @param int|string $intMonth
+     * @param int|string $intYear
      * @param string $strTitle
      * @param bool $bitToday If set true, the current date will be inserted, if no date is passed
      * @param string $strClass

@@ -16,7 +16,7 @@ if (typeof KAJONA == "undefined") {
 }
 
 
-/* 
+/*
  * -------------------------------------------------------------------------
  * Global functions
  * -------------------------------------------------------------------------
@@ -24,20 +24,20 @@ if (typeof KAJONA == "undefined") {
 
 /**
  * Function to evaluate the script-tags in a passed string, e.g. loaded by an ajax-request
- * 
+ *
  * @param {String} scripts
  * @see http://wiki.ajax-community.de/know-how:nachladen-von-javascript
  **/
 KAJONA.util.evalScript = function (scripts) {
-	try {	
-        if(scripts != '')	{	
+	try {
+        if(scripts != '')	{
             var script = "";
 			scripts = scripts.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, function() {
-                 if (scripts !== null) 
+                 if (scripts !== null)
                          script += arguments[1] + '\n';
                 return '';
             });
-			if(script) 
+			if(script)
                 (window.execScript) ? window.execScript(script) : window.setTimeout(script, 0);
 		}
 		return false;
@@ -49,7 +49,7 @@ KAJONA.util.evalScript = function (scripts) {
 
 /**
  * Checks if the given array contains the given string
- * 
+ *
  * @param {String} strNeedle
  * @param {String[]} arrHaystack
  */
@@ -64,7 +64,7 @@ KAJONA.util.inArray = function (strNeedle, arrHaystack) {
 
 /**
  * Used to show/hide an html element
- * 
+ *
  * @param {String} strElementId
  * @param {Function} objCallbackVisible
  * @param {Function} objCallbackInvisible
@@ -87,7 +87,7 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
 
 /**
  * Used to show/hide an html element and switch an image (e.g. a button)
- * 
+ *
  * @param {String} strElementId
  * @param {String} strImageId
  * @param {String} strImageVisible
@@ -119,7 +119,7 @@ KAJONA.util.setBrowserFocus = function (strElementId) {
 	});
 };
 
-/** 
+/**
  * some functions to track the mouse position and move an element
  * @deprecated will be removed with Kajona 3.4 or 3.5, use YUI Panel instead
  */
@@ -129,7 +129,7 @@ KAJONA.util.mover = (function() {
 	var objToMove = null;
 	var objDiffX = 0;
 	var objDiffY = 0;
-	
+
 	function checkMousePosition(e) {
 		if (document.all) {
 			currentMouseXPos = event.clientX + document.body.scrollLeft;
@@ -144,7 +144,7 @@ KAJONA.util.mover = (function() {
 			objToMove.style.top = currentMouseYPos - objDiffY + "px";
 		}
 	}
-	
+
 	function setMousePressed(obj) {
 		objToMove = obj;
 		objDiffX = currentMouseXPos - objToMove.offsetLeft;
@@ -155,7 +155,7 @@ KAJONA.util.mover = (function() {
 		objToMove = null;
 	}
 
-	
+
 	//public variables and methods
 	return {
 		checkMousePosition : checkMousePosition,
@@ -167,7 +167,7 @@ KAJONA.util.mover = (function() {
 /**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * Please only use the specific instances KAJONA.portal.loader or KAJONA.admin.loader
- * 
+ *
  * @param {String} strScriptBase
  * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
  */
@@ -177,32 +177,32 @@ KAJONA.util.Loader = function (strScriptBase) {
 	var arrRequestedModules = {};
 	var arrLoadedModules = {};
 	var arrCallbacks = [];
-	
+
 	function createYuiLoader() {
 		//create instance of YUILoader
 		var yuiLoader = new YAHOO.util.YUILoader({
 			base : yuiBase,
-	
+
 			//filter: "DEBUG", //use debug versions
 			//add the cachebuster
-			filter: { 
-				'searchExp': "\\.js$", 
+			filter: {
+				'searchExp': "\\.js$",
 				'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
 			},
-			
+
 			onFailure : function(o) {
 				alert("File loading failed: " + YAHOO.lang.dump(o));
 			},
-							
-			onProgress : function(o) {			
+
+			onProgress : function(o) {
 				arrLoadedModules[o.name] = true;
 				checkCallbacks();
 			}
 		});
-		
+
 		return yuiLoader;
 	}
-	
+
 	function checkCallbacks() {
 		//check if we're ready to call some registered callbacks
 		for (var i = 0; i < arrCallbacks.length; i++) {
@@ -213,7 +213,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 						bitCallback = false;
 					}
 				}
-				
+
 				//execute callback and delete it so it won't get called again
 				if (bitCallback) {
 					arrCallbacks[i].callback();
@@ -222,10 +222,10 @@ KAJONA.util.Loader = function (strScriptBase) {
 			}
 		}
 	}
-	
+
 	this.load = function(arrYuiComponents, arrFiles, callback) {
 		var arrYuiComponentsToWaitFor = [];
-		var arrFilesToWaitFor = [];		
+		var arrFilesToWaitFor = [];
 		var arrYuiComponentsToLoad = [];
 		var arrFilesToLoad = [];
 
@@ -240,7 +240,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 				}
 			}
 		}
-		
+
 		//check own JS/CSS files, if they are already loaded or requested
 		if (YAHOO.lang.isArray(arrFiles)) {
 			for (var i = 0; i < arrFiles.length; i++) {
@@ -266,25 +266,25 @@ KAJONA.util.Loader = function (strScriptBase) {
 					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
 				});
 			}
-					
+
 			//are there components/files to load which are not already requested?
-			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {	
+			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
 				var yuiLoader = createYuiLoader();
-				
+
 				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
 					yuiLoader.require(arrYuiComponentsToLoad[i]);
 					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
 				}
 				for (var i = 0; i < arrFilesToLoad.length; i++) {
                     var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
-                    
-                    var filter = { 
-        				'searchExp': "\\."+fileType, 
+
+                    var filter = {
+        				'searchExp': "\\."+fileType,
         				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
         			};
                     var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
 
-					yuiLoader.addModule( { 
+					yuiLoader.addModule( {
 						name : arrFilesToLoad[i],
 						type : fileType,
 						skinnable : false,
@@ -294,7 +294,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 					yuiLoader.require(arrFilesToLoad[i]);
 					arrRequestedModules[arrFilesToLoad[i]] = true;
 				}
-				
+
 				//fire YUILoader after the onDOMReady event
 				YAHOO.util.Event.onDOMReady(function () {
 					yuiLoader.insert();
@@ -321,7 +321,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 };
 
 
-/* 
+/*
  * -------------------------------------------------------------------------
  * Admin-specific functions
  * -------------------------------------------------------------------------
@@ -329,10 +329,10 @@ KAJONA.util.Loader = function (strScriptBase) {
 
 /**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
- * 
+ *
  * Simply use any of the predefined helpers, e.g.:
  * 	   KAJONA.admin.loader.loadAjaxBase(callback, "rating.js");
- * 
+ *
  * Or if you want to add your custom YUI components and own files (with absolute path), e.g.:
  *     KAJONA.admin.loader.load(
  *         ["dragdrop", "animation", "container"],
@@ -343,7 +343,7 @@ KAJONA.util.Loader = function (strScriptBase) {
  *     );
  *
  */
-KAJONA.admin.loader = new KAJONA.util.Loader("/admin/scripts/");
+KAJONA.admin.loader = new KAJONA.util.Loader("/core/module_system/admin/scripts/");
 
 /*
  * extend the loader with predefined helper functions
@@ -369,11 +369,11 @@ KAJONA.admin.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles)
 	    KAJONA_WEBPATH + "/admin/scripts/yui/calendar/calendar-min.js",
         KAJONA_WEBPATH + "/admin/scripts/yui/calendar/assets/calendar.css"
 	];
-    
+
 	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
 		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
 	}
-    
+
 	this.load(null, arrCustomFiles, objCallback);
 };
 
@@ -401,16 +401,16 @@ KAJONA.admin.loader.loadTreeviewBase = function(objCallback, arrAdditionalFiles)
 };
 
 
-/** 
+/**
  * Tooltips
- * 
+ *
  * originally based on Bubble Tooltips by Alessandro Fulciniti (http://pro.html.it - http://web-graphics.com)
  */
 KAJONA.admin.tooltip = (function() {
 	var container;
 	var lastMouseX = 0;
 	var lastMouseY = 0;
-	
+
 	function locate(e) {
 		var posx = 0, posy = 0, c;
 		if (e == null) {
@@ -428,7 +428,7 @@ KAJONA.admin.tooltip = (function() {
 				posy = e.clientY + document.body.scrollTop;
 			}
 		}
-		
+
 		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
 		if (posx == 0 && posy == 0) {
 			posx = lastMouseX;
@@ -437,7 +437,7 @@ KAJONA.admin.tooltip = (function() {
 			lastMouseX = posx;
 			lastMouseY = posy;
 		}
-		
+
 		c = container;
 		var left = (posx - c.offsetWidth);
 		if (left - c.offsetWidth < 0) {
@@ -446,10 +446,10 @@ KAJONA.admin.tooltip = (function() {
 		c.style.top = (posy + 10) + "px";
 		c.style.left = left + "px";
 	}
-	
+
 	function add(objElement, strHtmlContent, bitOpacity) {
 		var tooltip;
-	
+
 		if (strHtmlContent == null || strHtmlContent.length == 0) {
 			try {
 				strHtmlContent = objElement.getAttribute("title");
@@ -458,24 +458,24 @@ KAJONA.admin.tooltip = (function() {
 		if (strHtmlContent == null || strHtmlContent.length == 0) {
 			return;
 		}
-		
+
 		//try to remove title
 		try {
 			objElement.removeAttribute("title");
 		} catch (e) {}
-		
+
 		tooltip = document.createElement("span");
 		tooltip.className = "kajonaAdminTooltip";
 		tooltip.style.display = "block";
 		tooltip.innerHTML = strHtmlContent;
-		
+
 		if (bitOpacity != false) {
 			tooltip.style.filter = "alpha(opacity:85)";
 			tooltip.style.KHTMLOpacity = "0.85";
 			tooltip.style.MozOpacity = "0.85";
 			tooltip.style.opacity = "0.85";
 		}
-		
+
 		//create tooltip container and save reference
 		if (container == null) {
 			var h = document.createElement("span");
@@ -486,20 +486,20 @@ KAJONA.admin.tooltip = (function() {
 			document.getElementsByTagName("body")[0].appendChild(h);
 			container = h;
 		}
-		
+
 		objElement.tooltip = tooltip;
 		objElement.onmouseover = show;
 		objElement.onmouseout = hide;
 		objElement.onmousemove = locate;
 		objElement.onmouseover(objElement);
 	}
-	
+
 	function show(objEvent) {
 		hide();
 		container.appendChild(this.tooltip);
 		locate(objEvent);
 	}
-	
+
 	function hide() {
 		try {
 			var c = container;
@@ -508,7 +508,7 @@ KAJONA.admin.tooltip = (function() {
 			}
 		} catch (e) {}
 	}
-	
+
 	//public variables and methods
 	return {
 		add : add,
@@ -525,7 +525,7 @@ KAJONA.admin.folderview = {
 	 * holds a reference to the ModalDialog
 	 */
 	dialog: undefined,
-	
+
 	/**
 	 * holds CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.fillFormFields()
 	 * so we don't have to pass through the param with all requests
@@ -535,7 +535,7 @@ KAJONA.admin.folderview = {
 	/**
 	 * To be called when the user selects an page/folder/file out of a folderview dialog/popup
 	 * Detects if the folderview is embedded in a dialog or popup to find the right context
-     * 
+     *
      * @param {Array} arrTargetsValues
      * @param {function} objCallback
 	 */
@@ -545,28 +545,28 @@ KAJONA.admin.folderview = {
 		} else if (parent) {
 			parent.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
 		}
-        
+
         if (YAHOO.lang.isFunction(objCallback)) {
 			objCallback();
 		}
-        
+
         this.close();
-        
+
 	},
-	
+
 	/**
 	 * fills the form fields with the selected values
 	 */
-	fillFormFields: function (arrTargetsValues) {	
+	fillFormFields: function (arrTargetsValues) {
 		for (var i in arrTargetsValues) {
 	    	if (arrTargetsValues[i][0] == "ckeditor") {
 	    		CKEDITOR.tools.callFunction(this.selectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
 	    	} else {
 	    		var formField = YAHOO.util.Dom.get(arrTargetsValues[i][0]);
-	    		
+
                 if (formField != null) {
                 	formField.value = arrTargetsValues[i][1];
-            	
+
                 	//fire the onchange event on the form field
                     if (document.createEvent) { //Firefox
                         var evt = document.createEvent("Events");
@@ -576,16 +576,16 @@ KAJONA.admin.folderview = {
                         var evt = document.createEventObject();
                         formField.fireEvent('onchange', evt);
                     }
-                	
+
                 }
 	    	}
 		}
 	},
-	
+
 	/**
 	 * fills the form fields with the selected values
 	 */
-	close: function () {	
+	close: function () {
 		if (window.opener) {
 			window.close();
 		} else if (parent) {
@@ -653,7 +653,7 @@ KAJONA.admin.checkRightMatrix = function() {
  * 		 class: jsStatusBoxMessage			class in case of an informal message
  * 		 class: jsStatusBoxError		    class in case of an error message
  * - div,   id: jsStatusBoxContent			the box to place the message-content into
- * 
+ *
  * Pass a xml-response from a Kajona server to displayXMLMessage() to start the logic
  * or use messageOK() / messageError() passing a regular string
  */
@@ -666,11 +666,11 @@ KAJONA.admin.statusDisplay = {
 	timeToFadeOutError : 10000,
 	timeToFadeOut : null,
 	animObject : null,
-	
+
 	/**
 	 * General entrance point. Use this method to pass an xml-response from the kajona server.
 	 * Tries to find a message- or an error-tag an invokes the corresponding methods
-	 * 
+	 *
 	 * @param {String} message
 	 */
 	displayXMLMessage : function(message) {
@@ -680,17 +680,17 @@ KAJONA.admin.statusDisplay = {
 			var responseText = message.substr(intStart, message.indexOf("</message>")-intStart);
 			this.messageOK(responseText);
 		}
-		
+
 		if(message.indexOf("<error>") != -1) {
 			var intStart = message.indexOf("<error>")+7;
 			var responseText = message.substr(intStart, message.indexOf("</error>")-intStart);
 			this.messageError(responseText);
 		}
 	},
-	
+
 	/**
 	 * Creates a informal message box containg the passed content
-	 * 
+	 *
 	 * @param {String} strMessage
 	 */
     messageOK : function(strMessage) {
@@ -703,7 +703,7 @@ KAJONA.admin.statusDisplay = {
 
 	/**
 	 * Creates an error message box containg the passed content
-	 * 
+	 *
 	 * @param {String} strMessage
 	 */
     messageError : function(strMessage) {
@@ -713,7 +713,7 @@ KAJONA.admin.statusDisplay = {
 		this.timeToFadeOut = this.timeToFadeOutError;
 		this.startFadeIn(strMessage);
     },
-	
+
 	startFadeIn : function(strMessage) {
 		//currently animated?
 		if(this.animObject != null && this.animObject.isAnimated()) {
@@ -725,7 +725,7 @@ KAJONA.admin.statusDisplay = {
 		contentBox.innerHTML = strMessage;
 		YAHOO.util.Dom.setStyle(statusBox, "display", "");
 		YAHOO.util.Dom.setStyle(statusBox, "opacity", 0.0);
-		
+
 		//place the element at the top of the page
 		var screenWidth = YAHOO.util.Dom.getViewportWidth();
 		var divWidth = statusBox.offsetWidth;
@@ -738,16 +738,16 @@ KAJONA.admin.statusDisplay = {
     		KAJONA.admin.statusDisplay.fadeIn();
 		});
 	},
-	
+
 	fadeIn : function () {
 		this.animObject = new YAHOO.util.Anim(this.idOfMessageBox, {opacity: {to: 0.8}}, 1, YAHOO.util.Easing.easeOut);
 		this.animObject.onComplete.subscribe(function() {window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", this.timeToFadeOut);});
 		this.animObject.animate();
 	},
-	
+
 	startFadeOut : function() {
 		var statusBox = YAHOO.util.Dom.get(this.idOfMessageBox);
-		
+
 		//get the current pos
 		var attributes = {
 	        points: {by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5]}
@@ -771,7 +771,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 	this.setTitle = function(strTitle) {
 		document.getElementById(this.containerId + "_title").innerHTML = strTitle;
 	}
-	
+
 	this.setContent = function(strQuestion, strConfirmButton, strLinkHref) {
 		if (intDialogType == 1) {
 			document.getElementById(this.containerId + "_content").innerHTML = strQuestion;
@@ -790,7 +790,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 		//center the dialog (later() as workaround to add a minimal delay)
 		YAHOO.lang.later(10, this, function() {this.dialog.center();});
 	}
-	
+
 	this.setContentIFrame = function(strUrl) {
 		this.iframeId = this.containerId+"_iframe";
         this.iframeURL = strUrl;
@@ -813,7 +813,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             height: intHeight
 		});
 
-		
+
 		document.getElementById(this.containerId).style.display = "block";
 
 		this.dialog.render(document.body);
@@ -825,7 +825,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+this.iframeURL+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
             this.iframeURL = null;
         }
-        
+
 		//TODO: dynamically loading of dragdrop/resize files
 		if (bitDragging) {
 			this.enableDragging();
@@ -834,14 +834,14 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 			this.enableResizing();
 		}
 	}
-	
+
 	this.hide = function() {
 		try {
 			this.dialog.hide();
 		}
 		catch (e) {};
 	}
-	
+
 	this.enableDragging = function() {
 		this.dialog.cfg.setProperty("draggable", true);
 
@@ -856,16 +856,16 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 			}
         }, this, true);
 	}
-	
+
 	this.enableResizing = function() {
 		var resize = new YAHOO.util.Resize(this.containerId, {
             handles: ["br"],
             autoRatio: false,
             minWidth: 400,
             minHeight: 300,
-            status: false 
+            status: false
         });
-		
+
         resize.on("startResize", function(args) {
 		    if (this.dialog.cfg.getProperty("constraintoviewport")) {
                 var D = YAHOO.util.Dom;
@@ -890,7 +890,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             var panelHeight = args.height;
             this.dialog.cfg.setProperty("height", panelHeight + "px");
         }, this, true);
-        
+
         resize.on("endResize", function(args) {
 			//show iframe after resize, if available
 			if (!YAHOO.lang.isUndefined(this.iframeId)) {
@@ -918,11 +918,11 @@ KAJONA.admin.systemtask = {
             document.getElementById('systemtaskCancelButton').onclick = this.cancelExecution;
             jsDialog_0.init();
         }
-        
+
         KAJONA.admin.ajax.executeSystemtask(strTaskname, strAdditionalParam, {
             success : function(o) {
                 var strResponseText = o.responseText;
-                
+
                 //parse the response and check if it's valid
                 if(strResponseText.indexOf("<error>") != -1) {
                     KAJONA.admin.statusDisplay.displayXMLMessage(strResponseText);
@@ -933,7 +933,7 @@ KAJONA.admin.systemtask = {
                 else {
                     var intStart = strResponseText.indexOf("<statusinfo>")+12;
                     var strStatusInfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
-                    
+
                     //parse text to decide if a reload is necessary
                     var strReload = "";
                     if(strResponseText.indexOf("<reloadurl>") != -1) {
@@ -956,7 +956,7 @@ KAJONA.admin.systemtask = {
                     }
                 }
             },
-            
+
             failure : function(o) {
                 jsDialog_0.hide();
                 KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />"+o.responseText);
@@ -988,7 +988,7 @@ KAJONA.admin.ajax = {
 	rotateConn: null,
 	genericCall: null,
     systemTaskCall: null,
-    
+
     regularCallback: {
 		success : function(o) {
 			KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText)
@@ -1013,7 +1013,7 @@ KAJONA.admin.ajax = {
 	genericAjaxCall : function(module, action, systemid, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
 		var postBody = 'systemid=' + systemid;
-	
+
         KAJONA.admin.ajax.genericCall = YAHOO.util.Connect.asyncRequest(
                 'POST', postTarget, objCallback, postBody);
 	},
@@ -1049,15 +1049,15 @@ KAJONA.admin.ajax = {
 	setSystemStatus : function(strSystemIdToSet) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setStatus';
 		var postBody = 'systemid=' + strSystemIdToSet;
-		
+
         var objCallback = {
-            success: function(o) { 
+            success: function(o) {
 				KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
-			
+
 				if (o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
 					var image = document.getElementById('statusImage_' + strSystemIdToSet);
 					var link = document.getElementById('statusLink_' + strSystemIdToSet);
-			
+
 					if (image.src.indexOf('icon_enabled.gif') != -1) {
 						image.src = strInActiveImageSrc;
 						image.setAttribute('alt', strInActiveText);
@@ -1067,12 +1067,12 @@ KAJONA.admin.ajax = {
 						image.setAttribute('alt', strActiveText);
 						link.setAttribute('title', strActiveText);
 					}
-					
+
 					KAJONA.admin.tooltip.add(link);
 				}
         	},
-        	
-            failure: function(o) { 
+
+            failure: function(o) {
         		KAJONA.admin.statusDisplay.messageError(o.responseText);
         	}
         };
@@ -1250,7 +1250,7 @@ KAJONA.admin.ajax = {
 
                             intTemp = strSingleFolder.indexOf("<isleaf>")+8;
                             var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
-                            
+
                             strName = strName.replace(/&amp;/g, '&', strName);
 
                             var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
@@ -1276,10 +1276,10 @@ KAJONA.admin.ajax = {
 
                             intTemp = strSinglePage.indexOf("<isleaf>")+8;
                             var strLeaf = strSinglePage.substr(intTemp, strSinglePage.indexOf("</isleaf>")-intTemp);
-                            
+
                             intTemp = strSinglePage.indexOf("<type>")+6;
                             var intType = strSinglePage.substr(intTemp, strSinglePage.indexOf("</type>")-intTemp);
-                            
+
                             strName = strName.replace(/&amp;/g, '&', strName);
 
                             tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
@@ -1337,7 +1337,7 @@ KAJONA.admin.ajax = {
 
                         intTemp = strSingleFolder.indexOf("<link>")+6;
                         var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
-                        
+
                         intTemp = strSingleFolder.indexOf("<isleaf>")+8;
                         var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
 
@@ -1377,13 +1377,13 @@ KAJONA.admin.filemanager = {
 	        KAJONA.admin.ajax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction, strSourceSystemid);
 	    }
 	},
-	
+
 	renameFile : function(strInputId, strRepoId, strRepoFolder, strOldName, strSourceModule, strSourceAction) {
 	    var strNewFilename = document.getElementById(strInputId).value;
 	    if(strNewFilename != "") {
 	        KAJONA.admin.ajax.renameFile(strRepoId, strNewFilename, strOldName, strRepoFolder, strSourceModule, strSourceAction);
 	    }
-	}	
+	}
 };
 
 KAJONA.admin.filemanager.Uploader = function(config) {
@@ -1396,18 +1396,18 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 	this.fileCountUploaded = 0;
 	this.fileTotalSize = 0;
 	this.listElementSample;
-	
+
 	this.init = function() {
 		//check if Flash Player is available in needed version, otherwise abort and show fallback upload
 		if (!YAHOO.util.SWFDetect.isFlashVersionAtLeast(9.045)) {
 			try {
 				document.getElementById('kajonaUploadFallbackContainer').style.display = 'block';
 			} catch (e) {}
-			
+
 			document.getElementById('kajonaUploadButtonsContainer').style.display = 'none';
 			return;
 		}
-		
+
 		this.uploader = new YAHOO.widget.Uploader(self.config['overlayContainerId']);
 		this.uploader.addListener('contentReady', self.handleContentReady);
 		this.uploader.addListener('fileSelect', self.onFileSelect)
@@ -1453,9 +1453,9 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 
 		jsDialog_0.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
 		document.getElementById('kajonaUploadDialog').innerHTML = '';
-		
+
 		self.createFileList();
-		
+
 		jsDialog_0.init();
 		YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('kajonaUploadDialog'),
 				'display', "block");
@@ -1469,7 +1469,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 		for (var i in self.fileList) {
 			self.fileCount++;
 		}
-		
+
 		//sort file list, otherwise the upload will start with the last file in the list
 		var sortedFileList = new Array();
 		var tempFileCount = 0;
@@ -1479,7 +1479,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 			sortedFileList[entryId] = entry;
 			tempFileCount++;
 		}
-		
+
 		//create table row for each file
 		for (var i in sortedFileList) {
 			var entry = sortedFileList[i];
@@ -1493,19 +1493,19 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 						'filename', 'div', listElement)[0];
 
 				filename.innerHTML = entry['name'].substring(0, 30) + (entry['name'].length > 30 ? "...":"") + " ("+self.bytesToString(entry['size'])+")";
-				
+
 				//check if file size exceeds upload limit
 				if (entry['size'] > self.config['maxFileSize']) {
 					listElement.className = "error";
 					bitFileError = true;
 				}
-				
+
 				self.fileTotalSize += entry['size'];
-				
+
 				htmlList.appendChild(listElement);
 			}
 		}
-		
+
 		document.getElementById("kajonaUploadFilesTotal").innerHTML = self.fileCount;
 		document.getElementById("kajonaUploadFilesTotalSize").innerHTML = self.bytesToString(self.fileTotalSize);
 
@@ -1518,12 +1518,12 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 				this.style.visibility = "hidden";
 				self.upload();
 				return false;
-			};			
+			};
 		}
-		
+
 		document.getElementById(self.config['cancelLinkId']).onclick = function() {
 			YAHOO.util.Event.removeListener(window, 'beforeunload');
-			
+
 			self.uploader.cancel();
 			location.reload();
 			return false;
@@ -1535,10 +1535,10 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 			self.uploader.uploadAll(self.config['uploadUrl'], "POST",
 					self.config['uploadUrlParams'],
 					self.config['uploadInputName']);
-			
+
 			//show nice progress cursor
 			document.getElementsByTagName("body")[0].style.cursor = "progress";
-			
+
             //show confirm box if upload is still running when existing the page
             YAHOO.util.Event.addListener(window, 'beforeunload', this.showWarningNotComplete);
 		}
@@ -1567,7 +1567,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 
 	this.onUploadCompleteAll = function() {
 		YAHOO.util.Event.removeListener(window, 'beforeunload');
-		
+
 		//check if callback method is available
         try {
             kajonaUploaderCallback();
@@ -1592,7 +1592,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 		if (event['data'].indexOf('<error>') != -1) {
 			var intStart = event['data'].indexOf("<error>")+7;
 			var responseText = event['data'].substr(intStart, event['data'].indexOf("</error>")-intStart);
-			
+
 			document.getElementById('kajonaUploadFile_' + event['id']).className = "error";
 			alert('Error on file '+self.fileList[event['id']]['name']+':\n'+responseText);
 		}
@@ -1602,7 +1602,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 		if (intBytes == 0) {
 			return "0 B"
 		}
-		
+
 		var entities = [ "B", "KB", "MB", "GB" ];
 		var entity = Math.floor(Math.log(intBytes) / Math.log(1024));
 		return (intBytes / Math.pow(1024, Math.floor(entity))).toFixed(2) + " "
@@ -1624,7 +1624,7 @@ KAJONA.admin.filemanager.imageEditor = {
     showRealSize : function () {
         document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "&x="
             + (new Date()).getMilliseconds();
-        
+
         this.fm_image_isScaled = false;
 
         this.hideCropping();
@@ -1651,7 +1651,7 @@ KAJONA.admin.filemanager.imageEditor = {
             YAHOO.util.Event.addListener("fm_filemanagerPic_wrap", 'dblclick', function (event) {
             	KAJONA.admin.filemanager.imageEditor.saveCropping();
             });
-            
+
             //show confirm box when existing the page without saving the cropping
             YAHOO.util.Event.addListener(window, 'beforeunload', function (event) {
             	event.returnValue = fm_warning_unsavedHint;
@@ -1660,11 +1660,11 @@ KAJONA.admin.filemanager.imageEditor = {
         	this.hideCropping();
         }
     },
-    
+
     hideCropping : function () {
         if (this.fm_cropObj != null) {
         	YAHOO.util.Event.removeListener(window, 'beforeunload');
-        	
+
         	this.fm_cropObj.destroy();
         	this.fm_cropObj = null;
             document.getElementById("accept_icon").src = document
@@ -1672,16 +1672,16 @@ KAJONA.admin.filemanager.imageEditor = {
                     "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
         }
     },
-   
-    saveCropping : function () {   	
+
+    saveCropping : function () {
         if (this.fm_cropObj != null) {
         	YAHOO.util.Event.removeListener(window, 'beforeunload');
-        	
+
             init_fm_crop_save_warning_dialog();
         }
     },
-    
-    saveCroppingToBackend : function () {  	
+
+    saveCroppingToBackend : function () {
         jsDialog_1.hide();
         init_fm_screenlock_dialog();
         this.cropArea = this.fm_cropObj.getCropCoords();
@@ -1697,7 +1697,7 @@ KAJONA.admin.filemanager.imageEditor = {
             this.cropArea.width = Math.floor(this.cropArea.width * (intOriginalWidth / intScaledWidth));
             this.cropArea.height = Math.floor(this.cropArea.height * (intOriginalHeigth / intScaledHeight));
         }
-        
+
         var callback = {
             success : function(o) {
         		var iE = KAJONA.admin.filemanager.imageEditor;
@@ -1729,14 +1729,14 @@ KAJONA.admin.filemanager.imageEditor = {
                 hide_fm_screenlock_dialog();
             }
         };
-        
+
         KAJONA.admin.ajax.saveImageCropping(this.cropArea.left, this.cropArea.top,
         		this.cropArea.width, this.cropArea.height, fm_repo_id, fm_folder, fm_file, callback);
     },
 
-    rotate : function (intAngle) {   	
+    rotate : function (intAngle) {
         init_fm_screenlock_dialog();
-        
+
         var callback = {
             success : function(o) {
         		var iE = KAJONA.admin.filemanager.imageEditor;
@@ -1777,7 +1777,7 @@ KAJONA.admin.filemanager.imageEditor = {
                 hide_fm_screenlock_dialog();
             }
         };
-        
+
         KAJONA.admin.ajax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file, callback);
     }
 
@@ -1811,7 +1811,7 @@ KAJONA.admin.calendar.showCalendar = function(strCalendarId, strCalendarContaine
 
 		//show nice loading animation while loading the calendar files
 		YAHOO.util.Dom.addClass(strCalendarContainerId, "loadingContainer");
-       
+
 		KAJONA.admin.loader.loadCalendarBase(function() {
 	    	KAJONA.admin.calendar.initCalendar(strCalendarId, strCalendarContainerId);
 	    	YAHOO.util.Dom.removeClass(strCalendarContainerId, "loadingContainer");
@@ -1824,7 +1824,7 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 	calendar.cfg.setProperty("WEEKDAYS_SHORT", KAJONA.admin.lang.toolsetCalendarWeekday);
 	calendar.cfg.setProperty("MONTHS_LONG", KAJONA.admin.lang.toolsetCalendarMonth);
 	calendar.cfg.setProperty("START_WEEKDAY", 1);
-	
+
 	var handleSelect = function(type, args, obj) {
 		var dates = args[0];
 		var date = dates[0];
@@ -1833,12 +1833,12 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 		document.getElementById(strCalendarId+"_day").value = day;
 		document.getElementById(strCalendarId+"_month").value = month;
 		document.getElementById(strCalendarId+"_year").value = year;
-		
+
 		//disabled because of JS error: this.config is null
 		//calendar.destroy();
 		KAJONA.util.fold(strCalendarContainerId);
 	};
-	
+
 	//check for values in date form
 	var formDate = [document.getElementById(strCalendarId+"_day").value, document.getElementById(strCalendarId+"_month").value, document.getElementById(strCalendarId+"_year").value];
 	if (formDate[0] > 0 && formDate[1] > 0 && formDate[2] > 0) {
@@ -1906,7 +1906,7 @@ KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute
  */
 KAJONA.admin.forms = {};
 KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
-    
+
     for(var i=0; i<arrFields.length; i++) {
         var arrElement = arrFields[i];
         if(arrElement.length == 2) {
@@ -1915,7 +1915,7 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
                 YAHOO.util.Dom.addClass(arrElement[0]+"_month", "mandatoryFormElement");
                 YAHOO.util.Dom.addClass(arrElement[0]+"_year", "mandatoryFormElement");
             }
-            else 
+            else
                 YAHOO.util.Dom.addClass(arrElement[0], "mandatoryFormElement");
         }
     }
@@ -1928,7 +1928,7 @@ KAJONA.admin.dashboardCalendar = {};
 KAJONA.admin.dashboardCalendar.eventMouseOver = function(strSourceId) {
     if(strSourceId == "")
         return;
-    
+
     var sourceArray = eval("kj_cal_"+strSourceId);
     if(typeof sourceArray != undefined) {
         for(var i=0; i< sourceArray.length; i++) {
@@ -1940,7 +1940,7 @@ KAJONA.admin.dashboardCalendar.eventMouseOver = function(strSourceId) {
 KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
     if(strSourceId == "")
         return;
-    
+
     var sourceArray = eval("kj_cal_"+strSourceId);
     if(typeof sourceArray != undefined) {
         for(var i=0; i< sourceArray.length; i++) {
@@ -1954,26 +1954,26 @@ KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
  */
 KAJONA.admin.contextMenu = {
     menus: {},
-    
+
     addElements: function (strIdentifier, arrElements) {
 		this.menus[strIdentifier] = {
 			elements: arrElements
 		};
 	},
-	
+
 	showElementMenu: function (strIdentifier, objAttach) {
         KAJONA.admin.tooltip.hide();
 
 		var arrEntry = this.menus[strIdentifier];
 		var arrElements = arrEntry["elements"];
 		var menu;
-		
+
 		if (YAHOO.lang.isUndefined(arrEntry["menu"])) {
 			arrEntry["menu"] = menu = new YAHOO.widget.Menu("menu_"+strIdentifier, {
 				shadow: false,
 				lazyLoad: true
 			});
-			
+
 			var handleClick = function (strType, arrArgs, objElement) {
 				eval(objElement.elementAction);
 			}
@@ -1998,18 +1998,18 @@ KAJONA.admin.contextMenu = {
 KAJONA.admin.openPrintView = function(strUrlToLoad) {
     var intWidth = YAHOO.util.Dom.getViewportWidth() * 0.8;
     var intHeight = YAHOO.util.Dom.getViewportHeight() * 0.9;
-    
+
     if(strUrlToLoad == null)
         strUrlToLoad = location.href;
-    
+
     strUrlToLoad = strUrlToLoad.replace(/#/g, '')+"&printView=1";
-    
+
     if(strUrlToLoad.indexOf('html&')) {
         strUrlToLoad = strUrlToLoad.replace(/html&/g, 'html?');
     }
-    
-    KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad); 
-    
+
+    KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad);
+
     KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"px"); return false;
 };
 

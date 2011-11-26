@@ -78,10 +78,26 @@ class class_template {
 	 * @throws class_exception
 	 */
 	public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
+
+
+
 		//avoid directory traversals
         $strName = removeDirectoryTraversals($strName);
-        if(!$bitForce)
-            $strName = class_resourceloader::getInstance()->getTemplate($strName);
+        if(!$bitForce) {
+            try {
+                $strName = class_resourceloader::getInstance()->getTemplate($strName);
+            }
+            catch (class_exception $objEx) {
+                if(_admin_) {
+                    //try to resolve the file in the current skin
+                    if(is_file(_corepath_."/module_system"._adminpath_."/skins/".class_session::getInstance()->getAdminSkin().$strName))
+                        $strName = "/core/module_system"._adminpath_."/skins/".class_session::getInstance()->getAdminSkin().$strName;
+                }
+                else
+                    throw $objEx;
+            }
+
+        }
 
 		$strTemplate = "Template not found";
 		$bitKnownTemplate = false;
@@ -385,7 +401,7 @@ class class_template {
 			$objSession = class_carrier::getInstance()->getObjSession();
 			$strArea .= "/skins/".$objSession->getAdminSkin();
 			if(!defined("_skinwebpath_"))
-				define("_skinwebpath_", _webpath_."/admin/skins/".$objSession->getAdminSkin());
+				define("_skinwebpath_", _webpath_."/core/module_system/admin/skins/".$objSession->getAdminSkin());
 		}
 		$this->strArea = $strArea;
 	}

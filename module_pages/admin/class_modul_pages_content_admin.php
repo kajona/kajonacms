@@ -302,8 +302,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		$strPlaceholderElement = $this->getParam("element");
     		//Now, load all infos about the requested element
     		$objElement = class_modul_pages_element::getElement($strPlaceholderElement);
-    		//Load the class to create an object
-    		include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
     		//Build the class-name
     		$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     		//and finally create the object
@@ -337,8 +335,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                 $objElement->getLockManager()->lockRecord();
 
     			//Load the class to create an object
-    			include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
-    			//Build the class-name
     			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     			//and finally create the object
     			$objPageElement = new $strElementClass();
@@ -378,8 +374,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			//Now, load all infos about the requested element
 			$objElement = class_modul_pages_element::getElement($strPlaceholderElement);
 			//Load the class to create an object
-			include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
-			//Build the class-name
 			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
 			//and finally create the object
 			$objElement = new $strElementClass();
@@ -424,8 +418,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		if($objLockmanager->isLockedByCurrentUser()) {
 			//Load the data of the current element
 			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
-			//Load the class to create an object
-			include_once(_adminpath_."/elemente/".$objElementData->getStrClassAdmin());
 			//Build the class-name
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
@@ -564,8 +556,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		if($objLockmanager->isLockedByCurrentUser() && $objCommons->rightEdit()) {
 			//Load the data of the current element
 			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
-			//Load the class to create an object
-			include_once(_adminpath_."/elemente/".$objElementData->getStrClassAdmin());
 			//Build the class-name
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
