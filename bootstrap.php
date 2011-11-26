@@ -15,20 +15,20 @@
 
 //helper for bad bad bad cases
 function rawIncludeError($strFileMissed) {
-    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
-    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
-    $strErrormessage .= "Error including necessary files. Can't proceed.<br />";
-    $strErrormessage .= "Searched for ".$strFileMissed." but failed. Going home now...<br />";
-    $strErrormessage .= "</div></body></html>";
-	die($strErrormessage);
+    $strErrorMessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana, serif; font-size: 12px; \">\n";
+    $strErrorMessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occurred:</div>\n";
+    $strErrorMessage .= "Error including necessary files. Can't proceed.<br />";
+    $strErrorMessage .= "Searched for ".$strFileMissed." but failed. Going home now...<br />";
+    $strErrorMessage .= "</div></body></html>";
+	die($strErrorMessage);
 }
 
 //---The Path on the filesystem------------------------------------------------------------------------------
-	//Determine the current path on the filesystem. Use the dirname of the current file
+	//Determine the current path on the filesystem. Use the dir-name of the current file
 	define("_realpath_", substr(dirname(__FILE__), 0, -5));
 	define("_corepath_", dirname(__FILE__));
 
-//--- Loader preconfiguration
+//--- Loader pre-configuration
     if(!defined("_xmlLoader_"))
         define("_xmlLoader_", false);
 
@@ -64,13 +64,13 @@ function rawIncludeError($strFileMissed) {
         $strHeaderValue = "on";
 
 	if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
-		//Determing the current path on the web
+		//Determine the current path on the web
 		$strWeb = dirname ((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 		$strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));
 		define("_webpath_", saveUrlEncode($strWeb));
 	}
 	else {
-		//Determing the current path on the web
+		//Determine the current path on the web
 		$strWeb = dirname ((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 		$strWeb = saveUrlEncode($strWeb);
 		define("_webpath_", $strWeb);
@@ -81,7 +81,7 @@ function rawIncludeError($strFileMissed) {
 	foreach(scandir(_corepath_."/") as $strDirEntry ) {
         if(is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
             foreach(scandir(_corepath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
-                if(preg_match("/modul\_([a-z])+\_id\.php/", $strModuleEntry))
+                if(preg_match("/modul\_([a-z])+\_id\.php/", $strModuleEntry)) //FIXME: rename id-files to module_
                     @include_once(_corepath_."/".$strDirEntry."/system/config/".$strModuleEntry);
             }
         }
@@ -89,7 +89,7 @@ function rawIncludeError($strFileMissed) {
 	}
 
 
-    //---Autoloader for classes--------------------------------------------------------------------------
+    //---Auto-Loader for classes--------------------------------------------------------------------------
     include_once (_corepath_."/module_system/system/class_classloader.php");
     spl_autoload_register(array (class_classloader::getInstance(), "loadClass"));
 
