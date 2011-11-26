@@ -53,7 +53,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		parent::__construct($arrModul, $arrElementData);
 
-		//Determin the current site to load
+		//Determine the current site to load
 		$this->strCurrentSite = $this->getPagename();
 
         //init with the current navigation, required in all cases
@@ -492,7 +492,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                               //wohooooo, an element was found.
                               //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
                           	  //load the real-pageelement
-                          	  $objRealElement = new class_element_navigation($objElement);
+                          	  $objRealElement = new class_element_navigation_portal($objElement);
                           	  $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
 
                           	  if($arrContent["navigation_mode"] == "tree") {
@@ -593,8 +593,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
     /**
      * INTERNAL DEBUG
      * @deprecated
-     * @param <type> $intLevel
-     * @param <type> $arrNodes
+     * @param $intLevel
+     * @param $arrNodes
      */
     private function printTreeLevel($intLevel, $arrNodes) {
         for($intI=0; $intI<$intLevel; $intI++) {

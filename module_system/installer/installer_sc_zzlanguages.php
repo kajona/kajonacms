@@ -17,7 +17,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;
-    
+
     private $strMasterID = "";
 
     /**
@@ -26,12 +26,12 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
      */
     public function install() {
         $strReturn = "";
-        
+
         //search the master page
         $objMaster = class_modul_pages_page::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
-            
+
         if($this->strMasterID != "") {
             $strReturn .= "Adding languageswitch to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
@@ -52,34 +52,34 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                             WHERE content_id = ? ";
                 $this->objDB->_pQuery($strQuery, array("languageswitch.tpl", $strElementId));
             }
-         }    
+         }
 
-        
+
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {
-        
-            if(include_once(_systempath_."/class_modul_pages_page.php"))
+
+            if(class_exists("class_modul_pages_page", false) || class_classloader::getInstance()->loadClass("class_modul_pages_page") !== false)
                 class_modul_pages_page::assignNullProperties("de");
-            if(include_once(_systempath_."/class_modul_pages_pageelement.php"))
+            if(class_exists("class_modul_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_modul_pages_pageelement") !== false)
                 class_modul_pages_pageelement::assignNullElements("de");
         }
         else {
-        	
-            if(include_once(_systempath_."/class_modul_pages_page.php"))
+
+            if(class_exists("class_modul_pages_page", false) || class_classloader::getInstance()->loadClass("class_modul_pages_page") !== false)
                 class_modul_pages_page::assignNullProperties("en");
-            if(include_once(_systempath_."/class_modul_pages_pageelement.php"))
+            if(class_exists("class_modul_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_modul_pages_pageelement") !== false)
                 class_modul_pages_pageelement::assignNullElements("en");
-                
+
         }
-            
+
 
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }
