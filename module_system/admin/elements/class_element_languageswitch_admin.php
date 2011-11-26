@@ -11,14 +11,14 @@
  * Class to handle the admin-part of the element
  *
  * @package modul_languages
+ * @author sidler@mulchprod.de
  */
-class class_element_languageswitch extends class_element_admin implements interface_admin_element {
+class class_element_languageswitch_admin extends class_element_admin implements interface_admin_element {
 
 
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "element_languageswitch";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]	 		= _dbprefix_."element_universal";
 		$arrModule["modul"]			= "elemente";

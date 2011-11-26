@@ -192,8 +192,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("paragraph");
-		    $objElement->setStrClassAdmin("class_element_paragraph.php");
-		    $objElement->setStrClassPortal("class_element_paragraph.php");
+		    $objElement->setStrClassAdmin("class_element_paragraph_admin.php");
+		    $objElement->setStrClassPortal("class_element_paragraph_portal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
@@ -215,8 +215,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("row");
-		    $objElement->setStrClassAdmin("class_element_row.php");
-		    $objElement->setStrClassPortal("class_element_row.php");
+		    $objElement->setStrClassAdmin("class_element_row_admin.php");
+		    $objElement->setStrClassPortal("class_element_row_portal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
@@ -254,8 +254,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("image");
-		    $objElement->setStrClassAdmin("class_element_image.php");
-		    $objElement->setStrClassPortal("class_element_image.php");
+		    $objElement->setStrClassAdmin("class_element_image_admin.php");
+		    $objElement->setStrClassPortal("class_element_image_portal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());

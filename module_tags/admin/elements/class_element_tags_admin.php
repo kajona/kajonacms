@@ -12,9 +12,9 @@
  * Class to handle the admin-stuff of the tags-element
  *
  * @package module_tags
- *
+ * @author sidler@mulchpro.de
  */
-class class_element_tags extends class_element_admin implements interface_admin_element {
+class class_element_tags_admin extends class_element_admin implements interface_admin_element {
 
 	/**
 	 * Constructor
@@ -23,7 +23,6 @@ class class_element_tags extends class_element_admin implements interface_admin_
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "element_tags";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"] 		= _dbprefix_."element_universal";
 		$arrModule["modul"]			= "elemente";

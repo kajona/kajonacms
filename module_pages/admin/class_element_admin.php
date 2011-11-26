@@ -12,6 +12,7 @@
  * The base class for all page-elements
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  * @abstract
  */
 abstract class class_element_admin extends class_admin {
@@ -35,7 +36,6 @@ abstract class class_element_admin extends class_admin {
 	 */
 	public function __construct($arrModule) {
 		$arrModule["p_name"] 			= "element_admin";
-		$arrModule["p_author"] 			= "sidler@mulchprod.de";
 		$arrModule["p_nummer"] 			= _pages_elemente_modul_id_;
 		$arrModule["p_module"]          = "pages_content";
 

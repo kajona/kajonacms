@@ -11,6 +11,7 @@
  * Base Class for all portal-elements
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  * @abstract
  */
 abstract class class_element_portal extends class_portal {
@@ -33,7 +34,6 @@ abstract class class_element_portal extends class_portal {
 	public function __construct($arrModule, $objElementData) {
         $arrModule["modul"]             = "elemente";
 		$arrModule["p_name"] 			= "element_portal";
-		$arrModule["p_author"] 			= "sidler@mulchprod.de";
 		$arrModule["p_nummer"] 			= _pages_elemente_modul_id_;
 
 		parent::__construct($arrModule);

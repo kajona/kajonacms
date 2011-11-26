@@ -186,7 +186,7 @@ class class_resourceloader {
             }
         }
 
-        //check if the same is available in the projects-folder
+        //check if the same is available in the projects-folder and overwrite the first hits
         if(is_dir(_realpath_._projectpath_."/".$strFolder)) {
             $arrContent = scandir(_realpath_._projectpath_."/".$strFolder);
             foreach($arrContent as $strSingleEntry) {
@@ -221,6 +221,33 @@ class class_resourceloader {
         $this->arrFoldercontent[$strCachename] = $arrReturn;
 
         return $arrReturn;
+    }
+
+
+    /**
+     * Converts a relative path to a real path on the filesystem.
+     * If the file can't be found, false is returned instead.
+     *
+     * @param string $strFile the relative path
+     * @return string|false the absolute path
+     */
+    public function getPathForFile($strFile) {
+        $strReturn = array();
+
+        //check if the same is available in the projects-folder
+        if(is_file(_realpath_._projectpath_."/".$strFile)) {
+            return _projectpath_."/".$strFile;
+        }
+
+        //loop all given modules
+        foreach($this->arrModules as $strSingleModule) {
+            if(is_file(_corepath_."/".$strSingleModule."/".$strFile)) {
+                return "/core/".$strSingleModule."/".$strFile;
+
+            }
+        }
+
+        return false;
     }
 
 

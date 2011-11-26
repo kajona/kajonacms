@@ -11,8 +11,9 @@
  * Admin class to handle the paragraphs
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  */
-class class_element_paragraph extends class_element_admin implements interface_admin_element {
+class class_element_paragraph_admin extends class_element_admin implements interface_admin_element {
 
 	/**
 	 * Contructor
@@ -21,7 +22,6 @@ class class_element_paragraph extends class_element_admin implements interface_a
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "element_paragraph";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_paragraph";
 		$arrModule["modul"]			= "elemente";

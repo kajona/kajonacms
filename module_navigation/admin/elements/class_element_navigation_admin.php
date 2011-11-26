@@ -11,9 +11,9 @@
  * Admin class of the navigation element
  *
  * @package module_navigation
- *
+ * @author sidler@mulchprod.de
  */
-class class_element_navigation extends class_element_admin implements interface_admin_element {
+class class_element_navigation_admin extends class_element_admin implements interface_admin_element {
 
 	/**
 	 * Constructor
@@ -22,7 +22,6 @@ class class_element_navigation extends class_element_admin implements interface_
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "element_navigation";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"] 		    = _dbprefix_."element_navigation";
 		$arrModule["modul"]			= "elemente";

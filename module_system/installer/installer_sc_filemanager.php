@@ -21,12 +21,13 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
     /**
      * Does the hard work: installs the module and registers needed constants
      *
+     * @return string
      */
     public function install() {
 		$strReturn = "";
 
         $strReturn .= "Creating picture upload folder\n";
-        if(!is_dir(_portalpath_."/pics/upload"))
+        if(!is_dir(_portalpath_."/pics/upload"))//FIXME path
             mkdir(_realpath_."/portal/pics/upload");
 
         $strReturn .= "Creating new picture repository\n";
@@ -37,7 +38,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         else
             $objRepo->setStrName("Picture uploads");
 
-        $objRepo->setStrPath("/portal/pics/upload");
+        $objRepo->setStrPath("/portal/pics/upload"); //FIXME path
         $objRepo->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
         $objRepo->setStrViewFilter(".jpg,.png,.gif,.jpeg");
         $objRepo->updateObjectToDb();
@@ -49,7 +50,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         $objSetting->updateObjectToDb();
 
         $strReturn .= "Creating file upload folder\n";
-        if(!is_dir(_portalpath_."/downloads/public"))
+        if(!is_dir(_portalpath_."/downloads/public"))//FIXME path
             mkdir(_realpath_."/portal/downloads/public");
 
         $strReturn .= "Creating new file repository\n";
@@ -60,7 +61,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         else
             $objRepo->setStrName("File uploads");
 
-        $objRepo->setStrPath("/portal/downloads/public");
+        $objRepo->setStrPath("/portal/downloads/public");//FIXME path
         $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
         $objRepo->setStrViewFilter(".zip,.pdf,.txt");
         $objRepo->updateObjectToDb();
@@ -74,11 +75,11 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
 
 		return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }
@@ -86,6 +87,6 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
     public function getCorrespondingModule() {
         return "filemanager";
     }
-    
+
 }
 ?>

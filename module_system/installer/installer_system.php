@@ -67,8 +67,8 @@ class class_installer_system extends class_installer_base implements interface_i
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("languageswitch");
-		    $objElement->setStrClassAdmin("class_element_languageswitch.php");
-		    $objElement->setStrClassPortal("class_element_languageswitch.php");
+		    $objElement->setStrClassAdmin("class_element_languageswitch_admin.php");
+		    $objElement->setStrClassPortal("class_element_languageswitch_portal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());

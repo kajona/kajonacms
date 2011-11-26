@@ -51,7 +51,6 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
    public function install() {
 		$strReturn = "";
-		//Tabellen anlegen
 
 		//tags_tag --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_tag...\n";
@@ -106,8 +105,8 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("tags");
-		    $objElement->setStrClassAdmin("class_element_tags.php");
-		    $objElement->setStrClassPortal("class_element_tags.php");
+		    $objElement->setStrClassAdmin("class_element_tags_admin.php");
+		    $objElement->setStrClassPortal("class_element_tags_portal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());

@@ -117,7 +117,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         if($objElementdefinitionToCreate == null)
             return false;
 
-        include_once(_adminpath_."/elemente/".$objElementdefinitionToCreate->getStrClassAdmin());
         //Build the class-name
         $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
         //and finally create the object
@@ -201,7 +200,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
         //now the tricky part - the elements content-table...
         //get elements table-name
-        include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
 		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
 		$objElement = new $strElementClass();
 		//Fetch the table
@@ -610,7 +608,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	    $objRoot = new class_modul_system_common($strSystemid);
 	    //Load the Element-Data
 		$objElementData = new class_modul_pages_pageelement($strSystemid);
-		include_once(_adminpath_."/elemente/".$objElementData->getStrClassAdmin());
 		//Build the class-name
 		$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 		//and finally create the object
@@ -747,7 +744,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
             return $this->strTitle;
         //Create an instance of the object and let it serve the comment...
         $strClassname = str_replace(".php", "", $this->getStrClassAdmin());
-        include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
         $objElement = new $strClassname();
         $objElement->setSystemid($this->getSystemid());
         return $objElement->getContentTitle();

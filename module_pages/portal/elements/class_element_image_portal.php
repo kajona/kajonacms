@@ -11,8 +11,9 @@
  * Portal-Class of the picture element
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  */
-class class_element_image extends class_element_portal implements interface_portal_element  {
+class class_element_image_portal extends class_element_portal implements interface_portal_element  {
 
 	/**
 	 * Constructor
@@ -22,7 +23,6 @@ class class_element_image extends class_element_portal implements interface_port
 	public function __construct($objElementData) {
         $arrModule = array();
 		$arrModule["name"] 			= "element_image";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_image";
 

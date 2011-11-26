@@ -11,14 +11,14 @@
  * Class to handle the admin-part of the element
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  */
-class class_element_image extends class_element_admin implements interface_admin_element {
+class class_element_image_admin extends class_element_admin implements interface_admin_element {
 
 
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "element_image";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]	 		= _dbprefix_."element_image";
 		$arrModule["modul"]			= "elemente";

@@ -11,8 +11,9 @@
  * Portal-class of the navigation element, loads the navigation-portal class
  *
  * @package module_navigation
+ * @author sidler@mulchprod.de
  */
-class class_element_navigation extends class_element_portal implements interface_portal_element {
+class class_element_navigation_portal extends class_element_portal implements interface_portal_element {
 
     /**
      * Contructor
@@ -22,7 +23,6 @@ class class_element_navigation extends class_element_portal implements interface
 	public function __construct($objElementData) {
         $arrModule = array();
 		$arrModule["name"] 			= "element_navigation";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]		    = _dbprefix_."element_navigation";
 		parent::__construct($arrModule, $objElementData);

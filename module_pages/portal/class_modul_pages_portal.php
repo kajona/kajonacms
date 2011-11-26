@@ -12,6 +12,7 @@
  * page ready for output
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  */
 class class_modul_pages_portal extends class_portal implements interface_portal {
 
@@ -26,7 +27,6 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 	public function __construct($arrElementData) {
         $arrModul = array();
 		$arrModul["name"] 			= "module_pages";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_modul_id_;
 		$arrModul["modul"]			= "pages";
 
@@ -139,7 +139,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
             $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getPortalLanguage());
         else
             $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
-		//If theres a master-page, load elements on that, too
+		//If there's a master-page, load elements on that, too
 		$objMasterData = class_modul_pages_page::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
 		if($objMasterData->getStrName() != "") {
@@ -204,8 +204,6 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
                                               );
             }
 
-			//Include the portal-class of the element
-			include_once(_portalpath_."/elemente/".$objOneElementOnPage->getStrClassPortal());
 			//Build the class-name for the object
 			$strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
 			$objElement = new $strClassname($objOneElementOnPage);
@@ -346,7 +344,10 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		$arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
 		//Include the $arrGlobal Elements
 		$arrGlobal = array();
-		include(_portalpath_."/global_includes.php");
+        $strPath = class_resourceloader::getInstance()->getPathForFile(_portalpath_."/global_includes.php");
+        if($strPath !== false)
+		    include(_realpath_.$strPath);
+
 		$arrTemplate = array_merge($arrTemplate, $arrGlobal);
 		//fill the template. the template was read before
 		$strPageContent = $this->fillTemplate($arrTemplate, $strTemplateID);

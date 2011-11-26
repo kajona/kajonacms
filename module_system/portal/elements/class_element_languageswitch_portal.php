@@ -11,8 +11,9 @@
  * Portal-Class of the picture element
  *
  * @package modul_languages
+ * @author sidler@mulchprod.de
  */
-class class_element_languageswitch extends class_element_portal implements interface_portal_element  {
+class class_element_languageswitch_portal extends class_element_portal implements interface_portal_element  {
 
 	/**
 	 * Constructor
@@ -22,7 +23,6 @@ class class_element_languageswitch extends class_element_portal implements inter
 	public function __construct($objElementData) {
         $arrModule = array();
 		$arrModule["name"] 			= "element_languageswitch";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_universal";
 		$arrModule["modul"]          = "elemente";
@@ -63,7 +63,7 @@ class class_element_languageswitch extends class_element_portal implements inter
                 if($objLanguageset != null) {
                     $strTargetSystemid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
                 }
-                
+
                 //the languaswitch is content aware. check if the target id is a news-entry
                 $strSeoAddon = "";
                 if($strTargetSystemid != null && defined("_news_modul_id_")) {
@@ -82,7 +82,7 @@ class class_element_languageswitch extends class_element_portal implements inter
                 else {
                     $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", $this->getAction(), "", $strTargetSystemid, $objOneLanguage->getStrName(), $strSeoAddon);
                 }
-                
+
                 $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
                 $arrTemplate["langname_long"] = $this->getText("lang_".$objOneLanguage->getStrName());
 

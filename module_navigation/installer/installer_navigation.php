@@ -105,8 +105,8 @@ class class_installer_navigation extends class_installer_base implements interfa
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("navigation");
-		    $objElement->setStrClassAdmin("class_element_navigation.php");
-		    $objElement->setStrClassPortal("class_element_navigation.php");
+		    $objElement->setStrClassAdmin("class_element_navigation_admin.php");
+		    $objElement->setStrClassPortal("class_element_navigation_portal.php");
 		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());

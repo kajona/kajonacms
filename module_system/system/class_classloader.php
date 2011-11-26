@@ -100,7 +100,13 @@ class class_classloader {
 
         //statsreports
         if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php")  && require(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php"))
+                return true;
+        }
+
+        //admin elements
+        if(preg_match("/(class_element)_(.*)_admin/", $strClassName)) {
+            if(is_file(_corepath_.$strModule._adminpath_."/elements/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/elements/".$strClassName.".php"))
                 return true;
         }
 
@@ -117,6 +123,12 @@ class class_classloader {
         //search plugins
         if(preg_match("/interface_search(.*)/", $strClassName)) {
             if(is_file(_corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php") && require(_corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php"))
+                return true;
+        }
+
+        //portal elements
+        if(preg_match("/(class_element)_(.*)_portal/", $strClassName)) {
+            if(is_file(_corepath_.$strModule._portalpath_."/elements/".$strClassName.".php") && require(_corepath_.$strModule._portalpath_."/elements/".$strClassName.".php"))
                 return true;
         }
 

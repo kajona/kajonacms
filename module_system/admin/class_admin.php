@@ -135,7 +135,7 @@ abstract class class_admin {
 
 
 		//Setting template area LATERON THE SKIN IS BEING SET HERE
-		$this->setTemplateArea("");
+		//$this->setTemplateArea(""); FIXME: remove
 
 		//Writing to the history
         if(!_xmlLoader_)

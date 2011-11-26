@@ -11,8 +11,9 @@
  * Portal-Part of the paragraph
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  */
-class class_element_paragraph extends class_element_portal implements  interface_portal_element {
+class class_element_paragraph_portal extends class_element_portal implements  interface_portal_element {
 
 	/**
 	 * Constructor
@@ -22,7 +23,6 @@ class class_element_paragraph extends class_element_portal implements  interface
 	public function __construct($objElementData) {
         $arrModule = array();
 		$arrModule["name"] 			= "element_paragraph";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_paragraph";
 
