@@ -22,7 +22,6 @@ case "testpage.mulchprod.intern":
 case "aquarium":
 case "mango":
 case "vserver":
-    $config = array();
 
     //Database-Access
     $config['dbhost']               = "localhost";                             //Server name
@@ -38,7 +37,6 @@ case "vserver":
 
 //--Standard---------------------------------------------------------------------------------------------
 default:
-    $config = array();
 
     //Database-Access
     $config['dbhost']               = "%%defaulthost%%";                       //Server name
@@ -94,8 +92,6 @@ default:
                                                                                //are queried in the order of appearance. The list is comma-separated, no blanks allowed.
 
 //--system settings--------------------------------------------------------------------------------------
-
-    $debug = array();
 
     //Debug options
     $debug['time']                  = false;                                   //Calculates the time needed to create the requested page

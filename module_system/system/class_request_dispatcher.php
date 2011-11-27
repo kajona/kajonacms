@@ -78,9 +78,6 @@ class class_request_dispatcher {
             $strHeaderName = class_carrier::getInstance()->getObjConfig()->getConfig("https_header");
             $strHeaderValue = strtolower(class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
 
-            if($strHeaderName == "")
-                $strHeaderName = "HTTPS";
-
             //header itself given?
 		    if(!issetServer($strHeaderName) ) {
                 //reload to https

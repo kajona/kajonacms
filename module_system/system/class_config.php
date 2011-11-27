@@ -31,11 +31,12 @@ class class_config {
 
 		//Include the config-File
         if($strConfigFile == "config.php") {
-            if(is_file(_realpath_."/project/system/config/".$strConfigFile) ) {
-                @include(_realpath_."/project/system/config/".$strConfigFile);
-            }
-            else if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
+            if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
                 die("Error reading config-file!");
+
+            //overwrite with settings from project
+            if(is_file(_realpath_."/project/system/config/".$strConfigFile) )
+                @include(_realpath_."/project/system/config/".$strConfigFile);
         }
         else {
             $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);

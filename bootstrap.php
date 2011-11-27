@@ -58,11 +58,6 @@ function rawIncludeError($strFileMissed) {
     $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
-    if($strHeaderName == "")
-        $strHeaderName = "HTTPS";
-    if($strHeaderValue == "")
-        $strHeaderValue = "on";
-
 	if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
 		//Determine the current path on the web
 		$strWeb = dirname ((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
