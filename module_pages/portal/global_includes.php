@@ -27,9 +27,9 @@
 
 //---Kajona head parts, please leave them as the are----------------------------------------------------------
 
-    $arrGlobal["kajona_head"]           = "<script type=\"text/javascript\" src=\""._webpath_."/portal/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>\n";
+    $arrGlobal["kajona_head"]           = "<script type=\"text/javascript\" src=\""._webpath_."/templates/default/js/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>\n";
     $arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '"._system_browser_cachebuster_."';</script>\n";
-    $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_."/portal/scripts/kajona.js?"._system_browser_cachebuster_."\"></script>\n";
+    $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_."/templates/default/js/kajona.js?"._system_browser_cachebuster_."\"></script>\n";
     $arrGlobal["kajona_head"]          .= "    <meta http-equiv=\"content-language\" content=\"".$this->getPortalLanguage()."\" />\n";
     $arrGlobal["kajona_head"]          .= "    <meta name=\"generator\" content=\"Kajona³, www.kajona.de\" />";
 

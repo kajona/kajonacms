@@ -66,5 +66,3 @@ class_project_setup::setUp();
 
 echo "Project set up.";
 echo "</pre>";
-
-?>

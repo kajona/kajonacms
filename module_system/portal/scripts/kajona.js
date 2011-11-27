@@ -16,7 +16,7 @@ if (typeof KAJONA == "undefined") {
 }
 
 
-/* 
+/*
  * -------------------------------------------------------------------------
  * Global functions
  * -------------------------------------------------------------------------
@@ -25,7 +25,7 @@ if (typeof KAJONA == "undefined") {
 
 /**
  * Checks if the given array contains the given string
- * 
+ *
  * @param {String} strNeedle
  * @param {String[]} arrHaystack
  */
@@ -40,7 +40,7 @@ KAJONA.util.inArray = function (strNeedle, arrHaystack) {
 
 /**
  * Used to show/hide an html element
- * 
+ *
  * @param {String} strElementId
  * @param {Function} objCallbackVisible
  * @param {Function} objCallbackInvisible
@@ -64,7 +64,7 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
 /**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * Please only use the specific instances KAJONA.portal.loader or KAJONA.admin.loader
- * 
+ *
  * @param {String} strScriptBase
  * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
  */
@@ -74,32 +74,32 @@ KAJONA.util.Loader = function (strScriptBase) {
 	var arrRequestedModules = {};
 	var arrLoadedModules = {};
 	var arrCallbacks = [];
-	
+
 	function createYuiLoader() {
 		//create instance of YUILoader
 		var yuiLoader = new YAHOO.util.YUILoader({
 			base : yuiBase,
-	
+
 			//filter: "DEBUG", //use debug versions
 			//add the cachebuster
-			filter: { 
-				'searchExp': "\\.js$", 
+			filter: {
+				'searchExp': "\\.js$",
 				'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
 			},
-			
+
 			onFailure : function(o) {
 				alert("File loading failed: " + YAHOO.lang.dump(o));
 			},
-							
-			onProgress : function(o) {			
+
+			onProgress : function(o) {
 				arrLoadedModules[o.name] = true;
 				checkCallbacks();
 			}
 		});
-		
+
 		return yuiLoader;
 	}
-	
+
 	function checkCallbacks() {
 		//check if we're ready to call some registered callbacks
 		for (var i = 0; i < arrCallbacks.length; i++) {
@@ -110,7 +110,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 						bitCallback = false;
 					}
 				}
-				
+
 				//execute callback and delete it so it won't get called again
 				if (bitCallback) {
 					arrCallbacks[i].callback();
@@ -119,10 +119,10 @@ KAJONA.util.Loader = function (strScriptBase) {
 			}
 		}
 	}
-	
+
 	this.load = function(arrYuiComponents, arrFiles, callback) {
 		var arrYuiComponentsToWaitFor = [];
-		var arrFilesToWaitFor = [];		
+		var arrFilesToWaitFor = [];
 		var arrYuiComponentsToLoad = [];
 		var arrFilesToLoad = [];
 
@@ -137,7 +137,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 				}
 			}
 		}
-		
+
 		//check own JS/CSS files, if they are already loaded or requested
 		if (YAHOO.lang.isArray(arrFiles)) {
 			for (var i = 0; i < arrFiles.length; i++) {
@@ -163,25 +163,25 @@ KAJONA.util.Loader = function (strScriptBase) {
 					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
 				});
 			}
-					
+
 			//are there components/files to load which are not already requested?
-			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {	
+			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
 				var yuiLoader = createYuiLoader();
-				
+
 				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
 					yuiLoader.require(arrYuiComponentsToLoad[i]);
 					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
 				}
 				for (var i = 0; i < arrFilesToLoad.length; i++) {
                     var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
-                    
-                    var filter = { 
-        				'searchExp': "\\."+fileType, 
+
+                    var filter = {
+        				'searchExp': "\\."+fileType,
         				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
         			};
                     var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
 
-					yuiLoader.addModule( { 
+					yuiLoader.addModule( {
 						name : arrFilesToLoad[i],
 						type : fileType,
 						skinnable : false,
@@ -191,7 +191,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 					yuiLoader.require(arrFilesToLoad[i]);
 					arrRequestedModules[arrFilesToLoad[i]] = true;
 				}
-				
+
 				//fire YUILoader after the onDOMReady event
 				YAHOO.util.Event.onDOMReady(function () {
 					yuiLoader.insert();
@@ -218,7 +218,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 };
 
 
-/* 
+/*
  * -------------------------------------------------------------------------
  * Portal-specific functions
  * -------------------------------------------------------------------------
@@ -227,14 +227,14 @@ KAJONA.util.Loader = function (strScriptBase) {
 
 /**
  * Loads/Reloads the Kajona captcha image with the given element id
- * 
+ *
  * @param {String} strImageId
  * @param {Number} intWidth
  */
 KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
     var containerName = "kajonaCaptcha";
     var imgID = "kajonaCaptchaImg";
-    
+
     if(strCaptchaId != null) {
         containerName += "_"+strCaptchaId;
         imgID += "_"+strCaptchaId;
@@ -258,16 +258,16 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
 	}
 };
 
-/** 
+/**
  * Tooltips
- * 
+ *
  * originally based on Bubble Tooltips by Alessandro Fulciniti (http://pro.html.it - http://web-graphics.com)
  */
 KAJONA.portal.tooltip = (function() {
 	var container;
 	var lastMouseX = 0;
 	var lastMouseY = 0;
-	
+
 	function locate(e) {
 		var posx = 0, posy = 0, c;
 		if (e == null) {
@@ -285,7 +285,7 @@ KAJONA.portal.tooltip = (function() {
 				posy = e.clientY + document.body.scrollTop;
 			}
 		}
-		
+
 		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
 		if (posx == 0 && posy == 0) {
 			posx = lastMouseX;
@@ -294,7 +294,7 @@ KAJONA.portal.tooltip = (function() {
 			lastMouseX = posx;
 			lastMouseY = posy;
 		}
-		
+
 		c = container;
 		var left = (posx - c.offsetWidth);
 		if (left - c.offsetWidth < 0) {
@@ -303,10 +303,10 @@ KAJONA.portal.tooltip = (function() {
 		c.style.top = (posy + 10) + "px";
 		c.style.left = left + "px";
 	}
-	
+
 	function add(objElement, strHtmlContent, bitOpacity) {
 		var tooltip;
-	
+
 		if (strHtmlContent == null || strHtmlContent.length == 0) {
 			try {
 				strHtmlContent = objElement.getAttribute("title");
@@ -315,24 +315,24 @@ KAJONA.portal.tooltip = (function() {
 		if (strHtmlContent == null || strHtmlContent.length == 0) {
 			return;
 		}
-		
+
 		//try to remove title
 		try {
 			objElement.removeAttribute("title");
 		} catch (e) {}
-		
+
 		tooltip = document.createElement("span");
 		tooltip.className = "kajonaTooltip";
 		tooltip.style.display = "block";
 		tooltip.innerHTML = strHtmlContent;
-		
+
 		if (bitOpacity != false) {
 			tooltip.style.filter = "alpha(opacity:85)";
 			tooltip.style.KHTMLOpacity = "0.85";
 			tooltip.style.MozOpacity = "0.85";
 			tooltip.style.opacity = "0.85";
 		}
-		
+
 		//create tooltip container and save reference
 		if (container == null) {
 			var h = document.createElement("span");
@@ -343,20 +343,20 @@ KAJONA.portal.tooltip = (function() {
 			document.getElementsByTagName("body")[0].appendChild(h);
 			container = h;
 		}
-		
+
 		objElement.tooltip = tooltip;
 		objElement.onmouseover = show;
 		objElement.onmouseout = hide;
 		objElement.onmousemove = locate;
 		objElement.onmouseover(objElement);
 	}
-	
+
 	function show(objEvent) {
 		hide();
 		container.appendChild(this.tooltip);
 		locate(objEvent);
 	}
-	
+
 	function hide() {
 		try {
 			var c = container;
@@ -365,7 +365,7 @@ KAJONA.portal.tooltip = (function() {
 			}
 		} catch (e) {}
 	}
-	
+
 	//public variables and methods
 	return {
 		add : add,
@@ -377,10 +377,10 @@ KAJONA.portal.tooltip = (function() {
 
 /**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
- * 
+ *
  * Simply use any of the predefined helpers, e.g.:
  * 	   KAJONA.portal.loader.loadAjaxBase(callback, "rating.js");
- * 
+ *
  * Or if you want to add your custom YUI components and own files (with absolute path), e.g.:
  *     KAJONA.portal.loader.load(
  *         ["dragdrop", "animation", "container"],
@@ -391,7 +391,7 @@ KAJONA.portal.tooltip = (function() {
  *     );
  *
  */
-KAJONA.portal.loader = new KAJONA.util.Loader("/portal/scripts/");
+KAJONA.portal.loader = new KAJONA.util.Loader("/templates/default/js/");
 
 /*
  * extend the loader with predefined helper functions
@@ -413,7 +413,7 @@ KAJONA.portal.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles
 };
 
 
-/* 
+/*
  * aliases to stay compatible with old templates
  * will be removed with Kajona 3.4 or 3.5
  */

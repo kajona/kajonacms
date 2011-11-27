@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <link href="_webpath_/portal/css/kajona.css?_system_browser_cachebuster_" rel="stylesheet" type="text/css" />
+    <link href="_webpath_/templates/default/css/kajona.css?_system_browser_cachebuster_" rel="stylesheet" type="text/css" />
     %%kajona_head%%
     <title>%%additionalTitle%%%%title%% | Kajona³</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -22,21 +22,21 @@
         <div class="clearer"></div>
     </div>
     <div id="imageHeader"></div>
-    
+
     <div id="mainContainer">
         <div id="portalNaviContainer">
             <div id="languageSwitchContainer">
                 %%masterlanguageswitch_languageswitch%%
             </div>
-            <div id="pNaviContainer">   
+            <div id="pNaviContainer">
                 %%masterportalnavi_navigation%%
             </div>
-            <div class="clearer"></div> 
+            <div class="clearer"></div>
         </div>
         <div class="contentSpacer"></div>
         <div id="mainContentContainer">
             <div id="mainNaviContainer">
-                
+
                 %%mastermainnavi_navigation%%
             </div>
             <div id="contentContainer">
@@ -59,7 +59,7 @@
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
                 %%mixed2_portalupload%%
                 %%mixed3_flash|mediaplayer|tags|eventmanager%%
-                
+
                 <div align="right">
                 <div id="fb-root"></div>
                 <script>(function(d, s, id) {
