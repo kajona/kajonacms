@@ -27,8 +27,8 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
 		$strReturn = "";
 
         $strReturn .= "Creating picture upload folder\n";
-//        if(!is_dir(_portalpath_."/pics/upload"))//FIXME path
-//            mkdir(_realpath_."/portal/pics/upload");
+        if(!is_dir(_realpath_._projectpath_."/pics/upload"))
+            mkdir(_realpath_._projectpath_."/pics/upload", 0777, true);
 
         $strReturn .= "Creating new picture repository\n";
         $objRepo = new class_modul_filemanager_repo();
@@ -38,7 +38,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         else
             $objRepo->setStrName("Picture uploads");
 
-        $objRepo->setStrPath("/portal/pics/upload"); //FIXME path
+        $objRepo->setStrPath(_projectpath_."/pics/upload");
         $objRepo->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
         $objRepo->setStrViewFilter(".jpg,.png,.gif,.jpeg");
         $objRepo->updateObjectToDb();
@@ -50,8 +50,8 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         $objSetting->updateObjectToDb();
 
         $strReturn .= "Creating file upload folder\n";
-//        if(!is_dir(_portalpath_."/downloads/public"))//FIXME path
-//            mkdir(_realpath_."/portal/downloads/public");
+        if(!is_dir(_realpath_._projectpath_."/downloads/public"))
+            mkdir(_realpath_._projectpath_."/downloads/public", 0777, true);
 
         $strReturn .= "Creating new file repository\n";
         $objRepo = new class_modul_filemanager_repo();
@@ -61,7 +61,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         else
             $objRepo->setStrName("File uploads");
 
-        $objRepo->setStrPath("/portal/downloads/public");//FIXME path
+        $objRepo->setStrPath(_projectpath_."/downloads/public");
         $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
         $objRepo->setStrViewFilter(".zip,.pdf,.txt");
         $objRepo->updateObjectToDb();

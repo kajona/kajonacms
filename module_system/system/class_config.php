@@ -16,7 +16,6 @@
 class class_config {
 	private $arrConfig = null;
 	private $arrDebug = null;
-	private $arrModul = null;
 
 	private static $arrInstances = array();
 
@@ -26,19 +25,24 @@ class class_config {
      * @param string $strConfigFile the config-file to parse
 	 */
 	private function __construct($strConfigFile = "config.php") 	{
-		$this->arrModul["name"] 		= "config";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
 		$config = array();
 		$debug = array();
 
 		//Include the config-File
-        //FIXME: add auto-resolve
-        if(is_file(_realpath_."/project/system/config/".$strConfigFile) ) {
-            @include(_realpath_."/project/system/config/".$strConfigFile);
+        if($strConfigFile == "config.php") {
+            if(is_file(_realpath_."/project/system/config/".$strConfigFile) ) {
+                @include(_realpath_."/project/system/config/".$strConfigFile);
+            }
+            else if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
+                die("Error reading config-file!");
         }
-		else if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
-			die("Error reading config-file!");
+        else {
+            $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);
+            if(!@include(_realpath_.$strPath))
+                die("Error reading config-file: ".$strConfigFile);
+
+        }
 
 		$this->arrConfig = $config;
 		$this->arrDebug = $debug;
@@ -74,7 +78,7 @@ class class_config {
 
     /**
      * Static function to read a value from the config.phps' config-array.
-     * <b>Attention:</b> Use this method only, of you know what you do!
+     * <b>Attention:</b> Use this method only, if you know what you do!
      * This method allows access to those values even before the kernel started.
      * In nearly all cases the access via the instance-object is sufficient!
      *
@@ -85,9 +89,13 @@ class class_config {
     public static function readPlainConfigsFromFilesystem($strEntryName) {
 
         $config = array();
-        //Include the config-File
-		if(!@include(dirname(__FILE__)."/config/config.php"))
-			die("Error reading config-file!");
+
+        if(is_file(dirname(__FILE__)."/../../../project/system/config/config.php") ) {
+            if(!@include(dirname(__FILE__)."/../../../project/system/config/config.php"))
+                die("Error reading config-file!");
+        }
+        else if(!@include(dirname(__FILE__)."/config/config.php"))
+            die("Error reading config-file!");
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
 
@@ -172,22 +180,15 @@ class class_config {
 	 *             invoke this method on your own. This method is no longer called at system startup!
 	 */
 	public function loadConfigsFilesystem() 	{
-		$objFilesystem = new class_filesystem();
-		$arrFiles = $objFilesystem->getFilelist("/system/config/", ".php");
-
-		foreach($arrFiles as $strFile)
-			if($strFile != "config.php" && uniStrpos($strFile, "~") === false)
-				include_once(_systempath_."/config/".$strFile);
-
-		return;
+        throw new class_exception("no longer supported", class_exception::$level_FATALERROR);
 	}
 
 	/**
-	 * Loads all configs from the db and inits the contants
+	 * Loads all configs from the db and initializations the constants
 	 *
-	 * @param object $objDB
+	 * @param class_db $objDB
 	 */
-	public function loadConfigsDatabase($objDB) {
+	public function loadConfigsDatabase(class_db $objDB) {
 	    if(count($objDB->getTables()) > 0) {
             $strQuery = "SELECT * FROM "._dbprefix_."system_config ORDER BY system_config_module ASC";
             $arrConfigs = $objDB->getPArray($strQuery, array());
