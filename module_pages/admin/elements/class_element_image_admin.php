@@ -53,8 +53,7 @@ class class_element_image_admin extends class_element_admin implements interface
 		}
 
         //load templates
-		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/element_image", ".tpl");
+		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_image");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

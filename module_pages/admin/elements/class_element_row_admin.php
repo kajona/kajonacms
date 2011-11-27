@@ -44,8 +44,7 @@ class class_element_row_admin extends class_element_admin implements interface_a
 		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
 
         //load templates
-		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/element_row", ".tpl");
+		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_row");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

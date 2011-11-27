@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.1";
+		$arrModule["version"] 		= "3.4.9";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -806,6 +806,27 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.4.1");
         $this->updateElementVersion("paragraph", "3.4.1");
         $this->updateElementVersion("image", "3.4.1");
+        return $strReturn;
+    }
+
+    private function update_341_349() {
+        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+
+        $strReturn .= "Setting new element-classes...\n";
+        $arrElements = class_modul_pages_element::getAllElements();
+        /** @var class_modul_pages_element $objOneElement */
+        foreach($arrElements as $objOneElement) {
+            $objOneElement->setStrClassAdmin(uniStrReplace(".php", "_admin.php", $objOneElement->getStrClassAdmin()));
+            $objOneElement->setStrClassPortal(uniStrReplace(".php", "_portal.php", $objOneElement->getStrClassPortal()));
+            $objOneElement->updateObjectToDb();
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9");
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.9");
+        $this->updateElementVersion("paragraph", "3.4.9");
+        $this->updateElementVersion("image", "3.4.9");
         return $strReturn;
     }
 }

@@ -114,7 +114,7 @@ class class_modul_pages_element extends class_model implements interface_model  
     /**
 	 * Loads all installed Elements
 	 *
-	 * @return mixed
+	 * @return class_modul_pages_element
 	 * @static
 	 */
 	public static function getAllElements() {

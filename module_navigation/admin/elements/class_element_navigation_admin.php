@@ -54,7 +54,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/module_navigation", ".tpl");
+		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_navigation");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

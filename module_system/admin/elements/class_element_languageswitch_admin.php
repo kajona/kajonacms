@@ -39,8 +39,7 @@ class class_element_languageswitch_admin extends class_element_admin implements 
 		$strReturn = "";
 
         //Load the available templates
-		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/element_languageswitch", ".tpl");
+		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_languageswitch");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

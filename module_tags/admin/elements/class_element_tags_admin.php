@@ -42,8 +42,7 @@ class class_element_tags_admin extends class_element_admin implements interface_
 		$strReturn = "";
 
 		//Load the available templates
-		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/element_tags/", ".tpl");
+		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_tags");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

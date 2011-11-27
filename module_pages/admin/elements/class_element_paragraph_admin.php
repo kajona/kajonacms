@@ -50,8 +50,7 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 		$strReturn .= $this->objToolkit->formInputPageSelector("paragraph_link", $this->getText("paragraph_link"), (isset($arrElementData["paragraph_link"]) ? $arrElementData["paragraph_link"] : ""));
 
         //load templates
-		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/element_paragraph", ".tpl");
+		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_paragraph");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

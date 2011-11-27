@@ -112,7 +112,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             //try to load template, otherwise abort
             $strTemplateID = null;
 			try {
-                $strTemplateID = $this->objTemplate->readTemplate("templates/module_pages/".$objPage->getStrTemplate(), "", true, true);
+                $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
 			} catch (class_exception $objException) {
                 $strReturn .= $this->getText("templateNotLoaded")."<br />";
             }
