@@ -27,8 +27,8 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
 		$strReturn = "";
 
         $strReturn .= "Creating picture upload folder\n";
-        if(!is_dir(_realpath_._projectpath_."/pics/upload"))
-            mkdir(_realpath_._projectpath_."/pics/upload", 0777, true);
+        if(!is_dir(_realpath_._filespath_."/images/upload"))
+            mkdir(_realpath_._filespath_."/images/upload", 0777, true);
 
         $strReturn .= "Creating new picture repository\n";
         $objRepo = new class_modul_filemanager_repo();
@@ -50,8 +50,8 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         $objSetting->updateObjectToDb();
 
         $strReturn .= "Creating file upload folder\n";
-        if(!is_dir(_realpath_._projectpath_."/downloads/public"))
-            mkdir(_realpath_._projectpath_."/downloads/public", 0777, true);
+        if(!is_dir(_realpath_._filespath_."/public"))
+            mkdir(_realpath_._filespath_."/public", 0777, true);
 
         $strReturn .= "Creating new file repository\n";
         $objRepo = new class_modul_filemanager_repo();

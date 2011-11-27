@@ -43,9 +43,13 @@
  * A hint regarding overlays: Right now, only PNGs are supported for transparent overlays. GIFs are no longer supported.
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_image {
-	private $arrModul;
+
+    /**
+     * @var null|resource
+     */
 	private $objImage = null;
 
 	private $intWidth = 0;
@@ -62,14 +66,11 @@ class class_image {
 	private $bitNeedToSave;
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
 	 * @param string $strCacheAdd Additional string to add for the caching
 	 */
 	public function __construct($strCacheAdd = "") {
-		$this->arrModul["name"] 		= "class_image";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
 
 
 		$this->strCachepath = _images_cachepath_;
@@ -97,9 +98,10 @@ class class_image {
         $this->strType = $strType;
         if($this->intHeight != 0 && $this->intWidth != 0) {
             $this->objImage = $this->createEmptyImage($this->intWidth, $this->intHeight);
+            return true;
         }
-        else
-            return false;
+
+        return false;
 	}
 
 
@@ -129,12 +131,11 @@ class class_image {
 	}
 
 	/**
-	 * Creates the imageobject, if the image was loaded using preLoadImage()
+	 * Creates the image-object, if the image was loaded using preLoadImage()
 	 *
 	 * @return bool
 	 */
 	private function finalLoadImage() {
-		$bitReturn = false;
 		if($this->bitPreload) {
 			switch ($this->strType) {
 				case ".jpg":
@@ -235,16 +236,13 @@ class class_image {
 
 			switch (uniStrtolower($strType)) {
 				case ".jpg":
-					imagejpeg($this->objImage, _realpath_.$strTarget, $intJpegQuality);
-					$bitReturn = true;
+					$bitReturn = imagejpeg($this->objImage, _realpath_.$strTarget, $intJpegQuality);
 					break;
 				case ".png":
-					imagepng($this->objImage, _realpath_.$strTarget);
-					$bitReturn = true;
+					$bitReturn = imagepng($this->objImage, _realpath_.$strTarget);
 					break;
 				case ".gif":
-					imagegif($this->objImage, _realpath_.$strTarget);
-					$bitReturn = true;
+					$bitReturn = imagegif($this->objImage, _realpath_.$strTarget);
 					break;
 			}
 		}
@@ -321,12 +319,12 @@ class class_image {
 
 
 	/**
-	 * Resizes the image to the given params
+	 * Resize the image to the given params
 	 *
 	 * @param int $intWidth
 	 * @param int $intHeight
 	 * @param int $intFactor
-	 * @param int $bitCache
+	 * @param bool $bitCache
 	 * @return bool
 	 */
 	public function resizeImage($intWidth = 0, $intHeight = 0, $intFactor = 0, $bitCache = false) {

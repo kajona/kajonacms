@@ -7,10 +7,6 @@
 *	$Id$                                                    *
 ********************************************************************************************************/
 
-if(!require_once("./system/bootstrap.php"))
-	die("Error including necessary files");
-
-
 /**
  * This class can be used to create fast "on-the-fly" resizes of images
  * or to create a captcha image
@@ -52,7 +48,7 @@ class class_flyimage {
     private $intQuality;
 
     /**
-     * constructor, inits the parent-class
+     * constructor, init the parent-class
      *
      */
     public function __construct() {
@@ -96,7 +92,7 @@ class class_flyimage {
         //Load the image-dimensions
         $intWidthNew = 0;
 		$intHeightNew = 0;
-		if(is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "/portal/pics") !== false || uniStrpos($this->strFilename, "/portal/downloads") !== false)) {
+		if(is_file(_realpath_.$this->strFilename) && uniStrpos($this->strFilename, "/files") !== false ) {
 
 			//check headers, maybe execution could be terminated right here
 			if(checkConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight))) {
@@ -262,4 +258,3 @@ if($objImage->getImageFilename() == "kajonaCaptcha")
     $objImage->generateCaptchaImage();
 else
     $objImage->generateImage();
-?>

@@ -55,6 +55,7 @@ class class_config {
             define("_adminpath_" , 		$this->getConfig("diradmin"));
             define("_templatepath_" , 	$this->getConfig("dirtemplates"));
             define("_projectpath_" , 	$this->getConfig("dirproject"));
+            define("_filespath_" , 	    $this->getConfig("dirfiles"));
             define("_langpath_" , 		$this->getConfig("dirlang"));
             define("_skinpath_" , 		$this->getConfig("dirskins"));
             define("_indexpath_",		_webpath_."/index.php");

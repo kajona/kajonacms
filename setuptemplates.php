@@ -37,6 +37,9 @@ class class_templatesetup {
 
             if(is_dir(_corepath_."/".$strSingleModule."/portal/scripts"))
                 self::copyFolder(_corepath_."/".$strSingleModule."/portal/scripts", _realpath_._templatepath_."/default/js");
+
+            if(is_dir(_corepath_."/".$strSingleModule."/files"))
+                self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_._filespath_."");
         }
     }
 

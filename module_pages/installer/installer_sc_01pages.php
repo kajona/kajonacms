@@ -111,7 +111,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $arrParams[] = "Herzlichen Glückwunsch!";
                 $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
                                 Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
-                $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
+                $arrParams[] = "/files/images/samples/P3197800.JPG";
                 $arrParams[] = $strElementId;
 
             }
@@ -119,7 +119,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $arrParams[] = "Congratulations!";
                 $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona!<br />
                                  For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
-                $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
+                $arrParams[] = "/files/images/samples/P3197800.JPG";
                 $arrParams[] = $strElementId;
             }
 

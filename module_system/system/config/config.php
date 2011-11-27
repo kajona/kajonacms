@@ -72,8 +72,9 @@ default:
     $config['dirlang']              = "/lang";                                 //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
     $config['dirproject']           = "/project";                              //Path containing the project-files
+    $config['dirfiles']             = "/files";                                //Path containing the files-directory
 
-    $config["images_cachepath"]     = "/portal/pics/cache/";                   //Path used to store the cached and manipulated images
+    $config["images_cachepath"]     = "/files/cache/";                         //Path used to store the cached and manipulated images
 
     $config['adminlangs']           = "de,en,pt,ru,bg,sv";                     //Available languages for the administration
 

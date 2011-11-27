@@ -27,18 +27,25 @@ class class_project_setup {
         self::checkDir("/project/log");
         self::checkDir("/project/dbdumps");
         self::checkDir("/project/lang");
-        self::checkDir("/project/lang/admin");
-        self::checkDir("/project/lang/portal"); //FIXME: remove after merge of portal and lang-files
         self::checkDir("/project/system");
         self::checkDir("/project/system/config");
+        self::checkDir("/project/portal");
         self::checkDir("/templates");
+        self::checkDir("/files");
+        self::checkDir("/files/cache");
+        self::checkDir("/files/downloads");
+        self::checkDir("/files/images");
+        self::checkDir("/files/public");
 
 
         echo "copy index.php.root to index.php\n";
         copy(_corepath_."/index.php.root", _realpath_."/index.php");
 
-        echo "copy xml.php.root to index.php\n";
+        echo "copy xml.php.root to xml.php\n";
         copy(_corepath_."/xml.php.root", _realpath_."/xml.php");
+
+        echo "copy image.php.root to image.php\n";
+        copy(_corepath_."/image.php.root", _realpath_."/image.php");
 
         echo "copy installer.php.root to installer.php\n";
         copy(_corepath_."/installer.php.root", _realpath_."/installer.php");
