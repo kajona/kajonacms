@@ -42,7 +42,7 @@ a.hiddenAnchor {
 
 a, a:link, a:visited {
     color: #246b39;
-    text-decoration: none; 
+    text-decoration: none;
 }
 
 a:hover, a:active, a:focus {
@@ -50,11 +50,11 @@ a:hover, a:active, a:focus {
 }
 
 img {
-    border: none;   
+    border: none;
 }
 
 .clearer {
-    clear: both !important;    
+    clear: both !important;
 }
 
 
@@ -89,8 +89,8 @@ h2 {
     height: 70px;
     background-color: #ffffff;
     vertical-align: top;
-}   
-    
+}
+
 #imageHeader {
     width: 900px;
     height: 180px;
@@ -111,7 +111,7 @@ h2 {
     width: 217px;
     height: 59px;
     margin-left: 5px;
-    margin-top: 6px; 
+    margin-top: 6px;
 }
 
 #headerLogoR {
@@ -121,12 +121,12 @@ h2 {
     width: 189px;
     height: 32px;
     margin-right: 5px;
-    margin-top: 30px; 
+    margin-top: 30px;
 }
 
 #portalNaviContainer {
     height: 15px;
-    border-bottom: 1px solid #a5a5a5;   
+    border-bottom: 1px solid #a5a5a5;
     padding: 3px 0 3px 0;
 }
 
@@ -136,13 +136,13 @@ h2 {
 
 #footerContainer {
     border-top: 1px solid #a5a5a5;
-    height: 15px;   
-    padding: 2px;       
+    height: 15px;
+    padding: 2px;
 }
 
 #footerContainer a {
     color: #3b3b3b;
-    text-decoration: none;      
+    text-decoration: none;
 }
 
 #mainNaviContainer {
@@ -152,19 +152,19 @@ h2 {
 }
 
 #pNaviContainer {
-    float: right;   
+    float: right;
 }
 
 #contentContainer {
     border-left: 1px solid #a5a5a5;
     float: right;
     width: 690px;
-    padding: 30px 20px 0 25px;  
+    padding: 30px 20px 0 25px;
 }
 
 .contentSpacer {
     border: none;
-    height: 15px;   
+    height: 15px;
 }
 
 
@@ -216,11 +216,11 @@ h2 {
 #pNaviContainer ul {
     list-style: none;
     margin: 0px;
-    padding: 0px;   
+    padding: 0px;
 }
 
 #pNaviContainer ul li {
-    display: inline;    
+    display: inline;
 }
 
 #pNaviContainer a, #pNaviContainer a:link, #pNaviContainer a:visited {
@@ -399,7 +399,7 @@ h2 {
 
 /* E L E M E N T  L A N G U A G E S W I T C H */
 #languageSwitchContainer {
-    float: left;    
+    float: left;
 }
 
 #languageSwitchContainer a {
@@ -499,12 +499,12 @@ h2 {
 /* P O S T A C O M M E N T */
 #postaCommentForm {
 	display: none;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
 
 .pacComment {
     border: 1px solid #cccccc;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
 
 .pacHeader {
@@ -523,16 +523,16 @@ h2 {
 
 .pacSubject {
     float: left;
-    padding: 0 1px 1px 1px; 
+    padding: 0 1px 1px 1px;
 }
 
 .pacText {
-    padding: 1px;   
+    padding: 1px;
 }
 
 .pacRating {
     float: right;
-    padding: 1px 1px 0 1px;	
+    padding: 1px 1px 0 1px;
 }
 
 /* G U E S T B O O K */
