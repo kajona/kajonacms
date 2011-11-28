@@ -29,14 +29,14 @@ class class_templatesetup {
         });
 
         foreach($arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule."/portal/css"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/portal/css", _realpath_._templatepath_."/default/css");
+            if(is_dir(_corepath_."/".$strSingleModule."/templates"))
+                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_._templatepath_."");
 
-            if(is_dir(_corepath_."/".$strSingleModule."/portal/pics"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/portal/pics", _realpath_._templatepath_."/default/pics");
-
-            if(is_dir(_corepath_."/".$strSingleModule."/portal/scripts"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/portal/scripts", _realpath_._templatepath_."/default/js");
+//            if(is_dir(_corepath_."/".$strSingleModule."/portal/pics"))
+//                self::copyFolder(_corepath_."/".$strSingleModule."/portal/pics", _realpath_._templatepath_."/default/pics");
+//
+//            if(is_dir(_corepath_."/".$strSingleModule."/portal/scripts"))
+//                self::copyFolder(_corepath_."/".$strSingleModule."/portal/scripts", _realpath_._templatepath_."/default/js");
 
             if(is_dir(_corepath_."/".$strSingleModule."/files"))
                 self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_._filespath_."");
@@ -48,7 +48,7 @@ class class_templatesetup {
     private static function checkDir($strFolder) {
         echo "checking dir "._realpath_._templatepath_.$strFolder."\n";
         if(!is_dir(_realpath_._templatepath_.$strFolder)) {
-            mkdir(_realpath_._templatepath_.$strFolder);
+            mkdir(_realpath_._templatepath_.$strFolder, 0777);
             echo " \t\t... directory created\n";
         }
         else {
@@ -68,7 +68,7 @@ class class_templatesetup {
             }
             else if(is_dir($strSourceFolder."/".$strOneEntry)) {
                 if(!is_dir($strTargetFolder."/".$strOneEntry))
-                    mkdir($strTargetFolder."/".$strOneEntry);
+                    mkdir($strTargetFolder."/".$strOneEntry, 0777);
                 self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
             }
         }

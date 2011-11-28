@@ -58,7 +58,7 @@ class class_project_setup {
     private static function checkDir($strFolder) {
         echo "checking dir "._realpath_.$strFolder."\n";
         if(!is_dir(_realpath_.$strFolder)) {
-            mkdir(_realpath_.$strFolder);
+            mkdir(_realpath_.$strFolder, 0777);
             echo " \t\t... directory created\n";
         }
         else {

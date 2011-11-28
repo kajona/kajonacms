@@ -84,8 +84,8 @@ class class_resourceloader {
 
         //third try: try to load the file from a given module
         foreach($this->arrModules as $strOneModule) {
-            if(is_file(_corepath_."/".$strOneModule."/templates".$strTemplateName)) {
-                $strFilename = "/core/".$strOneModule."/templates".$strTemplateName;
+            if(is_file(_corepath_."/".$strOneModule."/templates/tpl".$strTemplateName)) {
+                $strFilename = "/core/".$strOneModule."/templates/default/tpl".$strTemplateName;
                 break;
             }
 
