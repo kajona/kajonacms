@@ -84,7 +84,7 @@ class class_resourceloader {
 
         //third try: try to load the file from a given module
         foreach($this->arrModules as $strOneModule) {
-            if(is_file(_corepath_."/".$strOneModule."/templates/tpl".$strTemplateName)) {
+            if(is_file(_corepath_."/".$strOneModule."/templates/default/tpl".$strTemplateName)) {
                 $strFilename = "/core/".$strOneModule."/templates/default/tpl".$strTemplateName;
                 break;
             }
@@ -120,8 +120,8 @@ class class_resourceloader {
 
         //third try: try to load the file from given modules
         foreach($this->arrModules as $strOneModule) {
-            if(is_dir(_corepath_."/".$strOneModule."/templates/".$strFolder)) {
-                $arrFiles = scandir(_corepath_."/".$strOneModule."/templates/".$strFolder);
+            if(is_dir(_corepath_."/".$strOneModule."/templates/default/tpl".$strFolder)) {
+                $arrFiles = scandir(_corepath_."/".$strOneModule."/templates/default/tpl".$strFolder);
                 foreach($arrFiles as $strOneFile)
                     if(substr($strOneFile, -4) == ".tpl")
                         $arrReturn[] = $strOneFile;
