@@ -130,7 +130,7 @@ final class class_logger {
      */
     public function getLogFileContent() {
         $objFile = new class_filesystem();
-        $objFile->openFilePointer("/system/debug/".$this->strFilename, "r");
+        $objFile->openFilePointer(_projectpath_."/log/".$this->strFilename, "r");
         return $objFile->readLastLinesFromFile(25);
     }
 
@@ -142,7 +142,7 @@ final class class_logger {
      */
     public function getPhpLogFileContent() {
         $objFile = new class_filesystem();
-        $objFile->openFilePointer("/system/debug/php.log", "r");
+        $objFile->openFilePointer(_projectpath_."/log/php.log", "r");
         return $objFile->readLastLinesFromFile(25);
     }
 }

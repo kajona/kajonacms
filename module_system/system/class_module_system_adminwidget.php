@@ -114,7 +114,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
 
         $objFilesystem = new class_filesystem();
 
-        $arrFiles = $objFilesystem->getFilelist("/admin/widgets/", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"));
 
         foreach($arrFiles as $strOneFile) {
             if($strOneFile != "interface_adminwidget.php" && $strOneFile != "class_adminwidget.php") {
