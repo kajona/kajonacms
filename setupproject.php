@@ -10,6 +10,8 @@
 class class_project_setup {
     public static function setUp() {
 
+        echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
+
         $strCurFolder = dirname(__FILE__);
 
         echo "core-path: ".$strCurFolder.", ".substr($strCurFolder, -4)."\n";
@@ -20,8 +22,17 @@ class class_project_setup {
         }
 
 
+
+
         echo "loading core...\n\n";
         include "./bootstrap.php";
+
+        $arrModules = scandir(_corepath_);
+
+        $arrModules = array_filter($arrModules, function($strValue) {
+            return preg_match("/(module|element|_)+.*/i", $strValue);
+        });
+
 
         self::checkDir("/project");
         self::checkDir("/project/log");
@@ -44,36 +55,33 @@ class class_project_setup {
         self::checkDir("/default/pics");
 
 
+        echo "searching for files on root-path...\n";
+        foreach($arrModules as $strSingleModule) {
+            if(!is_dir(_corepath_."/".$strSingleModule))
+                continue;
 
-        echo "copy index.php.root to index.php\n";
-        copy(_corepath_."/index.php.root", _realpath_."/index.php");
-
-        echo "copy xml.php.root to xml.php\n";
-        copy(_corepath_."/xml.php.root", _realpath_."/xml.php");
-
-        echo "copy image.php.root to image.php\n";
-        copy(_corepath_."/image.php.root", _realpath_."/image.php");
-
-        echo "copy installer.php.root to installer.php\n";
-        copy(_corepath_."/installer.php.root", _realpath_."/installer.php");
+            $arrContent = scandir(_corepath_."/".$strSingleModule);
+            foreach($arrContent as $strSingleEntry) {
+                if(substr($strSingleEntry, -5) == ".root") {
+                    echo "copy ".$strSingleEntry." to "._realpath_."/".substr($strSingleEntry, 0, -5)."\n";
+                    copy(_corepath_."/".$strSingleModule."/".$strSingleEntry, _realpath_."/".substr($strSingleEntry, 0, -5));
+                }
+            }
+        }
 
 
-        echo "Kajona V4 template setup.\nCreates the default-template-pack required to render pages.\n";
+        echo "<b>Kajona V4 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
         echo "Files already existing are NOT overwritten.\n";
 
-        $arrModules = scandir(_corepath_);
-
-        $arrModules = array_filter($arrModules, function($strValue) {
-            return preg_match("/(module|element|_)+.*/i", $strValue);
-        });
 
         foreach($arrModules as $strSingleModule) {
             if(is_dir(_corepath_."/".$strSingleModule."/templates"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_._templatepath_."");
+                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates");
 
             if(is_dir(_corepath_."/".$strSingleModule."/files"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_._filespath_."");
+                self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_."/files");
         }
+
 
     }
 
@@ -114,8 +122,7 @@ class class_project_setup {
 }
 
 echo "<pre>";
-echo "Kajona V4 project setup.\nCreates the folder-structure required to build a new project.\n\n";
+
 class_project_setup::setUp();
 
-echo "Project set up.";
 echo "</pre>";
