@@ -11,7 +11,7 @@ class class_test_csv extends class_testbase  {
         echo "\ttesting class_csv...\n";
 
         //test code
-        $strFile = "/portal/downloads/public/testCsv.csv";
+        $strFile = "/files/public/testCsv.csv";
 
         $arrValues = array(
                             array("v11", "v21", "v31"),
