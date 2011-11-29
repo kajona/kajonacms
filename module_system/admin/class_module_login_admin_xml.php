@@ -14,7 +14,7 @@
  *
  * @package module_system
  */
-class class_modul_login_admin_xml extends class_admin implements interface_xml_admin  {
+class class_module_login_admin_xml extends class_admin implements interface_xml_admin  {
 
 	public function __construct() {
         $arrModule = array();

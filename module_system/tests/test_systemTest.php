@@ -18,7 +18,7 @@ class class_test_system extends class_testbase  {
         $intNrSystemRecords = $arrRow["COUNT(*)"];
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
         $intNrRightsRecords = $arrRow["COUNT(*)"];
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         $arrSysRecords = array();
         for ($intI = 0; $intI < 100; $intI++) {
             $intSysId = $objSystemCommon->createSystemRecord(0, "autotest", false);
@@ -46,7 +46,7 @@ class class_test_system extends class_testbase  {
         $intNrSystemRecords = $arrRow["COUNT(*)"];
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
         $intNrRightsRecords = $arrRow["COUNT(*)"];
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         $arrSysRecords = array();
         for ($intI = 0; $intI <= 100; $intI++) {
             $intSysId = $objSystemCommon->createSystemRecord(0, "autotest");
@@ -114,7 +114,7 @@ class class_test_system extends class_testbase  {
         //test the setToPos
         echo "\tposition handling...\n";
         //create 10 test records
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         //new base-node
         $strBaseNodeId = $objSystemCommon->createSystemRecord(0, "positionShiftTest");
         $arrNodes = array();
@@ -166,7 +166,7 @@ class class_test_system extends class_testbase  {
         //test sections
         echo "\tsection-handling of class db...\n";
         //create 10 test records
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         //new base-node
         $strBaseNodeId = $objSystemCommon->createSystemRecord(0, "sectionTest");
         $arrNodes = array();

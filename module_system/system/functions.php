@@ -692,10 +692,10 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
     //$strParams = urlencode($strParams);
 
 	//more than one language installed?
-	$intNumberOfLanguages = class_modul_languages_language::getNumberOfLanguagesAvailable(true);
+	$intNumberOfLanguages = class_module_languages_language::getNumberOfLanguagesAvailable(true);
 
 	if($strLanguage == "" && $intNumberOfLanguages > 1) {
-		$objCommon = new class_modul_system_common();
+		$objCommon = new class_module_system_common();
 		$strLanguage = $objCommon->getStrPortalLanguage();
 	}
 	else if($strLanguage != "" && $intNumberOfLanguages <=1)

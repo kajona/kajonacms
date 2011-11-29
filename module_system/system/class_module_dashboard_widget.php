@@ -13,7 +13,7 @@
  * @package modul_dashboard
  * @author sidler@mulchprod.de
  */
-class class_modul_dashboard_widget extends class_model implements interface_model {
+class class_module_dashboard_widget extends class_model implements interface_model {
 
     private $strColumn = "";
     private $strUser = "";
@@ -78,7 +78,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      * Updates the current widget to the db
      */
     protected function updateStateToDb() {
-        
+
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET dashboard_user = ?,
                        dashboard_column = ?,
@@ -96,7 +96,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function deleteObjectFromDb() {
         if($this->getWidgetmodelForCurrentEntry()->deleteObjectFromDb()) {
             class_logger::getInstance()->addLogRow("deleted dashboardentry ".$this->getSystemid(), class_logger::$levelInfo);
-    	    $objRoot = new class_modul_system_common();
+    	    $objRoot = new class_module_system_common();
     	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
                                  WHERE dashboard_id = ?";
             if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
@@ -107,21 +107,21 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 
         return false;
     }
-    
+
     /**
      * Implementing callback to react on user-delete events
-     * 
-     * @param string $strSystemid 
+     *
+     * @param string $strSystemid
      * @return bool
      */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         $strQuery = "SELECT dashboard_id FROM ".$this->arrModule["table"]." WHERE dashboard_user = ?";
         $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
         foreach($arrRows as $arrOneRow) {
-            $objWidget = new class_modul_dashboard_widget($arrOneRow["dashboard_id"]);
+            $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
             $objWidget->deleteObjectFromDb();
         }
-        
+
         return true;
     }
 
@@ -130,7 +130,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      * returns a list of instances
      *
      * @param string $strColumn
-     * @return array of class_modul_system_adminwidget
+     * @return array of class_module_system_adminwidget
      */
     public function getWidgetsForColumn($strColumn, $strAspectFilter = "") {
 
@@ -150,12 +150,12 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         			   AND dashboard_id = system_id
                        ".$strAspectFilter."
         	     ORDER BY system_sort ASC ";
-        
+
         $arrRows = $this->objDB->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         if(count($arrRows) > 0) {
             foreach ($arrRows as $arrOneRow) {
-            	$arrReturn[] = new class_modul_dashboard_widget($arrOneRow["system_id"]);
+            	$arrReturn[] = new class_module_dashboard_widget($arrOneRow["system_id"]);
             }
 
         }
@@ -164,14 +164,14 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 
 
     /**
-     * Returns the correpsponding instance of class_modul_system_adminwidget.
-     * User class_modul_system_adminwidget::getConcreteAdminwidget() to obtain
+     * Returns the correpsponding instance of class_module_system_adminwidget.
+     * User class_module_system_adminwidget::getConcreteAdminwidget() to obtain
      * an instance of the real widget
      *
-     * @return class_modul_system_adminwidget
+     * @return class_module_system_adminwidget
      */
     public function getWidgetmodelForCurrentEntry() {
-        return new class_modul_system_adminwidget($this->getStrWidgetId());
+        return new class_module_system_adminwidget($this->getStrWidgetId());
     }
 
 
@@ -197,17 +197,17 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 
 
         foreach($arrWidgets as $arrOneWidget) {
-            $objSystemWidget = new class_modul_system_adminwidget();
+            $objSystemWidget = new class_module_system_adminwidget();
             $objSystemWidget->setStrClass($arrOneWidget[0]);
             $objSystemWidget->setStrContent($arrOneWidget[1]);
-            
+
             if($objSystemWidget->updateObjectToDb()) {
                 $strWidgetId = $objSystemWidget->getSystemid();
-                $objDashboard = new class_modul_dashboard_widget();
+                $objDashboard = new class_module_dashboard_widget();
                 $objDashboard->setStrColumn($arrOneWidget[2]);
                 $objDashboard->setStrUser($strUserid);
                 $objDashboard->setStrWidgetId($strWidgetId);
-                $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
+                $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
                 if(!$objDashboard->updateObjectToDb())
                     $bitReturn = false;
             }

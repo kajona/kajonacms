@@ -17,26 +17,26 @@ class test_systemchangelogTest extends class_testbase {
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
 
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
 
         $strSystemid = $objSystemCommon->createSystemRecord($objSystemCommon->getModuleSystemid("system"), "autotest dummy record");
 
-        $objChanges = new class_modul_system_changelog();
+        $objChanges = new class_module_system_changelog();
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "1");
-        $this->assertEquals(1, class_modul_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(1, class_module_system_changelog::getLogEntriesCount($strSystemid));
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2");
-        $this->assertEquals(1, class_modul_system_changelog::getLogEntriesCount($strSystemid));
-        $this->assertEquals(1, count(class_modul_system_changelog::getLogEntries($strSystemid)));
+        $this->assertEquals(1, class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(1, count(class_module_system_changelog::getLogEntries($strSystemid)));
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2", true);
-        $this->assertEquals(2, class_modul_system_changelog::getLogEntriesCount($strSystemid));
-        $this->assertEquals(2, count(class_modul_system_changelog::getLogEntries($strSystemid)));
+        $this->assertEquals(2, class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(2, count(class_module_system_changelog::getLogEntries($strSystemid)));
 
         $objSystemCommon->deleteSystemRecord($strSystemid);
 

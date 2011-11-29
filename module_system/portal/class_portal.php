@@ -59,9 +59,9 @@ abstract class class_portal  {
 	private  $objText = null;				//Object managing the textfiles
 
 	/**
-	 * Instance of class_modul_system_common
+	 * Instance of class_module_system_common
 	 *
-	 * @var class_modul_system_common
+	 * @var class_module_system_common
 	 */
 	private $objSystemCommon = null;
 
@@ -116,7 +116,7 @@ abstract class class_portal  {
 	    $this->objText = $objCarrier->getObjText();
 	    $this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objRights = $objCarrier->getObjRights();
-		$this->objSystemCommon = new class_modul_system_common($strSystemid);
+		$this->objSystemCommon = new class_module_system_common($strSystemid);
 
 		//Setting template area
 		//FIXME removed $this->objTemplate->setArea($this->strArea);
@@ -136,7 +136,7 @@ abstract class class_portal  {
 		    $this->setParam("page", $this->getPagename());
 
 		//set the correct language
-        $objLanguage = new class_modul_languages_language();
+        $objLanguage = new class_module_languages_language();
         //set current language to the texts-object
         $this->objText->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
@@ -301,7 +301,7 @@ abstract class class_portal  {
 	public function setStatus($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
         return $objCommon->setStatus();
 	}
 
@@ -314,7 +314,7 @@ abstract class class_portal  {
 	public function getStatus($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->getStatus();
 	}
 
@@ -327,7 +327,7 @@ abstract class class_portal  {
 	public function getLastEditUser($strSystemid = "") {
 		if($strSystemid == 0)
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->getLastEditUser();
 	}
 
@@ -340,7 +340,7 @@ abstract class class_portal  {
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
         return $objCommon->getPrevId();
 	}
 

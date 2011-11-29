@@ -13,7 +13,7 @@ class class_test_rights extends class_testbase {
         $objDB = class_carrier::getInstance()->getObjDB();
         $objRights = class_carrier::getInstance()->getObjRights();
         $this->objRights = class_carrier::getInstance()->getObjRights();
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
 
 
 
@@ -28,7 +28,7 @@ class class_test_rights extends class_testbase {
         $this->strUserId = $objUser->getSystemid();
 
         echo "\tcreating a test group\n";
-        $objGroup = new class_modul_user_group();
+        $objGroup = new class_module_user_group();
         $strName = "name_".generateSystemid();
         $objGroup->setStrName($strName);
         $objGroup->updateObjectToDb();
@@ -66,7 +66,7 @@ class class_test_rights extends class_testbase {
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "edit");
 
         $objDB->flushQueryCache();
-        
+
         echo "\tchecking leaf nodes for inherited rights\n";
         foreach($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, true, true);
@@ -98,7 +98,7 @@ class class_test_rights extends class_testbase {
 
 
         echo "\tmove SecOne as child to 221\n";
-        $objTempCommons = new class_modul_system_common($strSecOne);
+        $objTempCommons = new class_module_system_common($strSecOne);
         $objTempCommons->setStrPrevId($strThird221);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strThird221, $strSecOne);
@@ -144,7 +144,7 @@ class class_test_rights extends class_testbase {
 
 
         echo "\tsetting 211 as parent node for third11\n";
-        $objTempCommons = new class_modul_system_common($strThirdOne1);
+        $objTempCommons = new class_module_system_common($strThirdOne1);
         $objTempCommons->setStrPrevId($strThird211);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strThird211, $strThirdOne1);
@@ -171,18 +171,18 @@ class class_test_rights extends class_testbase {
 
 
         echo "\trebuilding initial tree structure\n";
-        $objTempCommons = new class_modul_system_common($strSecOne);
+        $objTempCommons = new class_module_system_common($strSecOne);
         $objTempCommons->setStrPrevId($strRootId);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strRootId, $strSecOne); //SecOne still inheriting
-        $objTempCommons = new class_modul_system_common($strThirdOne1);
+        $objTempCommons = new class_module_system_common($strThirdOne1);
         $objTempCommons->setStrPrevId($strSecOne);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strSecOne, $strThirdOne1);
         $objRights->setInherited(true, $strThirdOne1);
         echo "\tchecking node rights\n";
-        $this->checkNodeRights($strRootId, true, true); 
-        $this->checkNodeRights($strSecOne, true, true); 
+        $this->checkNodeRights($strRootId, true, true);
+        $this->checkNodeRights($strSecOne, true, true);
         $this->checkNodeRights($strSecTwo, false, true);
         $this->checkNodeRights($strThirdOne1, true, true);
         $this->checkNodeRights($strThirdOne2, true, true);
@@ -229,7 +229,7 @@ class class_test_rights extends class_testbase {
 //        echo "\n\n\n";
 
         echo "\tdeleting systemnodes\n";
-        
+
         $objSystemCommon->deleteSystemRecord($strThird111);
         $objSystemCommon->deleteSystemRecord($strThird112);
         $objSystemCommon->deleteSystemRecord($strThird121);
@@ -253,7 +253,7 @@ class class_test_rights extends class_testbase {
         $objUser->deleteUser();
         echo "\tdeleting the test group\n";
         $objGroup->deleteGroup();
-        
+
     }
 
 
@@ -285,7 +285,7 @@ class class_test_rights extends class_testbase {
         for($i=0; $i<$intLevel; $i++)
             echo "   ";
 
-        $objCommon = new class_modul_system_common($strRootNode);
+        $objCommon = new class_module_system_common($strRootNode);
         //var_dump($objCommon->getSystemRecord());
         echo $objCommon->getRecordComment()." / (v: ".$this->objRights->rightView($strRootNode, $this->strUserId)." e: ".$this->objRights->rightEdit($strRootNode, $this->strUserId).") /  ".$objCommon->getSystemid()."\n";
 

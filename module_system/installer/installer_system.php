@@ -378,17 +378,17 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Now we have to register module by module
 
 		//The Systemkernel
-		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "class_modul_system_admin.php", $this->arrModule["version"], true, "", "class_modul_system_admin_xml.php" );
+		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "class_module_system_admin.php", $this->arrModule["version"], true, "", "class_module_system_admin_xml.php" );
 		//The Rightsmodule
-		$strRightID = $this->registerModule("right", _system_modul_id_, "", "class_modul_right_admin.php", $this->arrModule["version"], false );
+		$strRightID = $this->registerModule("right", _system_modul_id_, "", "class_module_right_admin.php", $this->arrModule["version"], false );
 		//The Usermodule
-		$strUserID = $this->registerModule("user", _user_modul_id_, "", "class_modul_user_admin.php", $this->arrModule["version"], true );
+		$strUserID = $this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->arrModule["version"], true );
         //The filemanagermodule
-		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_modul_filemanager_admin.php", $this->arrModule["version"], true, "", "class_modul_filemanager_admin_xml.php");
+		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_module_filemanager_admin.php", $this->arrModule["version"], true, "", "class_module_filemanager_admin_xml.php");
         //the dashboard
-        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
+        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_module_dashboard_admin.php", $this->arrModule["version"], false, "", "class_module_dashboard_admin_xml.php");
         //languages
-        $strLanguagesID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_modul_languages_admin.php", $this->arrModule["version"] , true);
+        $strLanguagesID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_module_languages_admin.php", $this->arrModule["version"] , true);
 
 
 
@@ -398,59 +398,59 @@ class class_installer_system extends class_installer_base implements interface_i
 		$this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
 
         //And the default skin
-        $this->registerConstant("_admin_skin_default_", "kajona_v3", class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        $this->registerConstant("_admin_skin_default_", "kajona_v3", class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
         //and a few system-settings
-        $this->registerConstant("_system_portal_disable_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-        $this->registerConstant("_system_portal_disablepage_", "", class_modul_system_setting::$int_TYPE_PAGE, _system_modul_id_);
+        $this->registerConstant("_system_portal_disable_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_portal_disablepage_", "", class_module_system_setting::$int_TYPE_PAGE, _system_modul_id_);
 
         //New in 3.0: Number of db-dumps to hold
-	    $this->registerConstant("_system_dbdump_amount_", 5, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+	    $this->registerConstant("_system_dbdump_amount_", 5, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
 	    //new in 3.0: mod-rewrite on / off
-        $this->registerConstant("_system_mod_rewrite_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_mod_rewrite_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
         //New Constant: Max time to lock records
-	    $this->registerConstant("_system_lock_maxtime_", 7200, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+	    $this->registerConstant("_system_lock_maxtime_", 7200, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         //Filemanger settings
-        $this->registerConstant("_filemanager_foldersize_", "true", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_foldersize_", "true", class_module_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
         //Email to send error-reports
-	    $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+	    $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
 	    //3.0.2: user are allowed to change their settings?
-	    $this->registerConstant("_user_selfedit_", "true", class_modul_system_setting::$int_TYPE_BOOL, _user_modul_id_);
+	    $this->registerConstant("_user_selfedit_", "true", class_module_system_setting::$int_TYPE_BOOL, _user_modul_id_);
 
 	    //3.1: nr of rows in admin
-	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
-	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-        $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+	    $this->registerConstant("_admin_nr_of_rows_", 15, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
+	    $this->registerConstant("_admin_only_https_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_use_dbcache_", "true", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         //3.1: remoteloader max cachtime --> default 30 min
-        $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         //3.2: max session duration
-        $this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        $this->registerConstant("_system_release_time_", 3600, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.2: filemanager hidden repos
-        $this->registerConstant("_filemanager_show_foreign_", "false", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_show_foreign_", "false", class_module_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
 
         //3.3: filemanager repo-ids for an image- and a file-browser - values set lateron via the filemanager samplecontent installer
-        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
-        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
 
         //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
-        $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        $this->registerConstant("_system_browser_cachebuster_", 0, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.4: Adding constant _system_graph_type_ indicating the chart-engine to use
-        $this->registerConstant("_system_graph_type_", "ezc", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_graph_type_", "ezc", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
         //3.4: Enabling or disabling the internal changehistory
-        $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_changehistory_enabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
 
         //Creating the admin & guest groups
-        $objAdminGroup = new class_modul_user_group();
+        $objAdminGroup = new class_module_user_group();
         $objAdminGroup->setStrName("Admins");
         $objAdminGroup->updateObjectToDb();
         $strReturn .= "Registered Group Admins...\n";
 
-        $objGuestGroup = new class_modul_user_group();
+        $objGuestGroup = new class_module_user_group();
         $objGuestGroup->setStrName("Guests");
         $objGuestGroup->updateObjectToDb();
         $strReturn .= "Registered Group Guests...\n";
@@ -458,8 +458,8 @@ class class_installer_system extends class_installer_base implements interface_i
         //Systemid of guest-user & admin group
         $strGuestID = $objGuestGroup->getSystemid();
         $strAdminID = $objAdminGroup->getSystemid();
-        $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
-        $this->registerConstant("_admins_group_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        $this->registerConstant("_guests_group_id_", $strGuestID, class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        $this->registerConstant("_admins_group_id_", $strAdminID, class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -500,7 +500,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //create a default language
 		$strReturn .= "Creating new default-language\n";
-        $objLanguage = new class_modul_languages_language();
+        $objLanguage = new class_module_languages_language();
 
         if($this->strContentLanguage == "de")
             $objLanguage->setStrName("de");
@@ -531,7 +531,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //creating a new default-aspect
         $strReturn .= "Registering new default aspect...\n";
-        $objAspect = new class_modul_system_aspect();
+        $objAspect = new class_module_system_aspect();
         $objAspect->setStrName("default");
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
@@ -703,7 +703,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Updating owner-fields...\n";
         $arrRecords = $this->objDB->getArray("SELECT system_id FROM ".$this->objDB->encloseTableName(_dbprefix_."system"));
         foreach($arrRecords as $strOneSysId) {
-            $objRecord = new class_modul_system_common($strOneSysId["system_id"]);
+            $objRecord = new class_module_system_common($strOneSysId["system_id"]);
             $objRecord->setOwnerId($objRecord->getLastEditUserId());
         }
 
@@ -969,8 +969,8 @@ class class_installer_system extends class_installer_base implements interface_i
            $strReturn .= "<b>Error deleting the folder \n /admin/scripts/fckeditor,\nplease delete manually</b>\n";
 
         $strReturn .= "Registering filemanager defaul repo-id-settings...\n";
-        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
-        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
 
 
         $strReturn .= "Updating module-versions...\n";
@@ -1054,7 +1054,7 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Registering new system-setting for cache-debugging...\n";
-        $this->registerConstant("_system_cache_stats_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_cache_stats_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         $strReturn .= "Setting cache-timeouts for languageswitch-element...\n";
         $strQuery = "UPDATE "._dbprefix_."element
@@ -1089,7 +1089,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 3.3.1 to 3.3.1.1...\n";
 
         $strReturn .= "Removing unused constant _system_cache_stats_...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_system_cache_stats_");
+        $objConstant = class_module_system_setting::getConfigByName("_system_cache_stats_");
         $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_id='".$objConstant->getSystemid()."'";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
@@ -1107,7 +1107,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 3.3.1.1 to 3.3.1.2...\n";
 
         $strReturn .= "Adding constant _system_browser_cachebuster_ to be able to flush the browsers cache (JS and CSS files)...\n";
-        $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        $this->registerConstant("_system_browser_cachebuster_", 0, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.2");
@@ -1144,7 +1144,7 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";
 
         //creating a new default-aspect
-        $objAspect = new class_modul_system_aspect();
+        $objAspect = new class_module_system_aspect();
         $objAspect->setStrName("default");
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
@@ -1210,7 +1210,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 3.3.1.4 to 3.3.1.5...\n";
 
         $strReturn .= "Adding constant _system_graph_type_ indicating the chart-engine to use...\n";
-        $this->registerConstant("_system_graph_type_", "ezc", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_graph_type_", "ezc", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
 
         $strReturn .= "Updating module-versions...\n";
@@ -1233,7 +1233,7 @@ class class_installer_system extends class_installer_base implements interface_i
     private function update_3318_3319() {
         $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
 
-        $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_changehistory_enabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.9");

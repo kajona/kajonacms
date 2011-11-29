@@ -15,17 +15,17 @@
  * @author sidler@mulchprod.de
  */
 class class_modul_user_user extends class_model implements interface_model  {
-    
+
     private $strSubsystem = "kajona";
-    
+
     /**
      *
      * @var interface_usersources_user
      */
     private $objSourceUser;
-    
+
     private $strUsername = "";
-    
+
     private $intLogins = 0;
     private $intLastlogin = 0;
     private $intActive = 0;
@@ -114,7 +114,7 @@ class class_modul_user_user extends class_model implements interface_model  {
                 $this->getStrSubsystem(),
                 $this->getStrUsername()
             ));
-            
+
             //create the new instance on the remote-system
             $objSources = new class_modul_user_sourcefactory();
             $objProvider = $objSources->getUsersource($this->getStrSubsystem());
@@ -122,11 +122,11 @@ class class_modul_user_user extends class_model implements interface_model  {
             $objTargetUser->updateObjectToDb();
             $objTargetUser->setNewRecordId($this->getSystemid());
             $this->objDB->flushQueryCache();
-            
+
             //intial dashboard widgets
-            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard = new class_module_dashboard_widget();
             $objDashboard->createInitialWidgetsForUser($this->getSystemid());
-            
+
             return $bitReturn;
         }
         else {
@@ -143,13 +143,13 @@ class class_modul_user_user extends class_model implements interface_model  {
                     $this->getStrSubsystem(), $this->getStrUsername(),
                     $this->getSystemid()
                );
-                   
+
 
             class_logger::getInstance()->addLogRow("updated userfor subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
     }
-   
+
 
     /**
      * Fetches all available users an returns them in an array
@@ -161,14 +161,14 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public static function getAllUsers($strUsernameFilter = "", $intStart = false, $intEnd = false) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
-        
-            
+
+
 
         if($intStart !== false && $intEnd !== false)
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strUsernameFilter."%"), $intStart, $intEnd);
         else
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUsernameFilter."%"));
-        
+
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -179,7 +179,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 
     /**
      * Counts the number of users created
-     * 
+     *
      * @param string $strUsernameFilter
      * @return int
      */
@@ -188,21 +188,21 @@ class class_modul_user_user extends class_model implements interface_model  {
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsernameFilter."%"));
 		return $arrRow["COUNT(*)"];
     }
-    
-    /** 
+
+    /**
      * Fetches all available active users with the given username an returns them in an array
      *
      * @param string $strName
      * @param boolean $bitOnlyActive
      * @return mixed
-     * 
+     *
      */
     public static function getAllUsersByName($strName, $bitOnlyActive = true) {
         $objSubsystem = new class_modul_user_sourcefactory();
         $objUser = $objSubsystem->getUserByUsername($strName);
         if($objUser != null)
             return array($objUser);
-        else 
+        else
             return null;
     }
 
@@ -220,48 +220,48 @@ class class_modul_user_user extends class_model implements interface_model  {
         $this->getObjSourceUser()->deleteUser();
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         $this->additionalCallsOnDeletion($this->getSystemid());
-        
+
         return $bitReturn;
     }
 
-    
+
     /**
      * Returns an array of group-ids the current user is assigned to
-     * @return array string 
+     * @return array string
      */
     public function getArrGroupIds() {
         $this->loadSourceObject();
         return $this->objSourceUser->getGroupIdsForUser();
     }
-    
+
     public function getStrEmail() {
         $this->loadSourceObject();
         return $this->objSourceUser->getStrEmail();
     }
-    
+
     public function getStrForename() {
         $this->loadSourceObject();
         return $this->objSourceUser->getStrForename();
     }
-    
+
     public function getStrName() {
         $this->loadSourceObject();
         return $this->objSourceUser->getStrName();
     }
-    
+
     private function loadSourceObject() {
         if($this->objSourceUser == null) {
             $objUsersources = new class_modul_user_sourcefactory();
             $this->setObjSourceUser($objUsersources->getSourceUser($this));
         }
     }
-    
-    
-    
+
+
+
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
-    
+
     public function getLongDate() {
         return $this->longDate;
     }
@@ -358,7 +358,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 
 
 
-    
+
 
 }
 ?>

@@ -13,7 +13,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_adminwidget extends class_model implements interface_model {
+class class_module_system_adminwidget extends class_model implements interface_model {
 
     private $strClass = "";
     private $strContent = "";
@@ -91,7 +91,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
      */
     public function deleteObjectFromDb() {
         class_logger::getInstance()->addLogRow("deleted adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
-	    $objRoot = new class_modul_system_common();
+	    $objRoot = new class_module_system_common();
 	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
                              WHERE adminwidget_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {

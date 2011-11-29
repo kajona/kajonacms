@@ -168,7 +168,7 @@ class class_rights {
 	        $arrRights["inherit"] = 0;
 
 
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
         $strPrevSystemid = $objCommon->getPrevId();
 
 
@@ -653,7 +653,7 @@ class class_rights {
 	 * @return string
 	 */
 	public function getModuleSystemid($intModuleNr) {
-	    return class_modul_system_module::getModuleIdByNr($intModuleNr);
+	    return class_module_system_module::getModuleIdByNr($intModuleNr);
 	}
 
 

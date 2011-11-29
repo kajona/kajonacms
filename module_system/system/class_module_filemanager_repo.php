@@ -14,7 +14,7 @@
  * @package modul_filemanager
  * @author sidler@mulchprod.de
  */
-class class_modul_filemanager_repo extends class_model implements interface_model  {
+class class_module_filemanager_repo extends class_model implements interface_model  {
 
     private $strPath = "";
     private $strName = "";
@@ -113,7 +113,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $arrIds = $objDB->getPArray($strQuery, array());
 
         foreach ($arrIds as $arrOneID)
-            $arrReturn[] = new class_modul_filemanager_repo($arrOneID["system_id"]);
+            $arrReturn[] = new class_module_filemanager_repo($arrOneID["system_id"]);
 
         return $arrReturn;
     }
@@ -121,7 +121,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
     /**
      * Searches for an repo identified by a foreign id
      * @param string $strForeignId
-     * @return class_modul_filemanager_repo
+     * @return class_module_filemanager_repo
      * @static
      */
     public static function getRepoForForeignId($strForeignId) {
@@ -132,7 +132,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $arrId = $objDB->getPRow($strQuery, array($strForeignId));
 
         if(isset($arrId["filemanager_id"]))
-            return new class_modul_filemanager_repo($arrId["filemanager_id"]);
+            return new class_module_filemanager_repo($arrId["filemanager_id"]);
 
         return null;
     }
@@ -146,7 +146,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
      */
     public function deleteRepo() {
         class_logger::getInstance()->addLogRow("deleted repo ".$this->getSystemid(), class_logger::$levelInfo);
-        
+
 
 		$this->objDB->transactionBegin();
 		$bitCommit = true;

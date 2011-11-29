@@ -52,7 +52,7 @@ abstract class class_systemtask_base {
 
     /**
      *
-     * @var class_modul_system_common
+     * @var class_module_system_common
      */
     private $objSystemCommon;
 
@@ -72,7 +72,7 @@ abstract class class_systemtask_base {
         $this->objDB = class_carrier::getInstance()->getObjDB();
         $this->objTexte = class_carrier::getInstance()->getObjText();
         $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $this->objSystemCommon = new class_modul_system_common();
+        $this->objSystemCommon = new class_module_system_common();
 
 
     }

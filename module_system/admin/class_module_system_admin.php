@@ -14,7 +14,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_admin extends class_admin implements interface_admin {
+class class_module_system_admin extends class_admin implements interface_admin {
 
     private $strUpdateServer = "updatecheck.kajona.de";
     private $strUpdateUrl = "/updates.php";
@@ -108,7 +108,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		$strListId = generateSystemid();
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Loading the modules
-			$arrModules = class_modul_system_module::getAllModules();
+			$arrModules = class_module_system_module::getAllModules();
 			$intI = 0;
 			$strReturn .= $this->objToolkit->dragableListHeader($strListId);
 			foreach($arrModules as $objSingleModule) {
@@ -160,11 +160,11 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     protected function actionModuleAspect() {
         $strReturn = "";
         if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $objModule = new class_modul_system_module($this->getSystemid());
+            $objModule = new class_module_system_module($this->getSystemid());
             $strReturn .= $this->objToolkit->formHeadline($objModule->getStrName());
             $arrAspectsSet = explode(",", $objModule->getStrAspect());
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveModuleAspect"));
-            $arrAspects = class_modul_system_aspect::getAllAspects();
+            $arrAspects = class_module_system_aspect::getAllAspects();
             foreach($arrAspects as $objOneAspect)
                 $strReturn .= $this->objToolkit->formInputCheckbox("aspect_".$objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
 
@@ -186,7 +186,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 if(uniStrpos($strName, "aspect_") !== false)
                     $arrParams[] = uniSubstr($strName, 7);
 
-            $objModule = new class_modul_system_module($this->getSystemid());
+            $objModule = new class_module_system_module($this->getSystemid());
             $objModule->setStrAspect(implode(",", $arrParams));
 
             $objModule->updateObjectToDb();
@@ -208,7 +208,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	protected function actionSystemInfo() {
 		$strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $objCommon = new class_modul_system_common();
+            $objCommon = new class_module_system_common();
 
     		//Phpinfos abhandeln
 
@@ -277,7 +277,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 //Create a warning before doing s.th.
                 $strReturn .= $this->objToolkit->warningBox($this->getText("warnung_settings"));
 
-                $arrSettings = class_modul_system_setting::getAllConfigValues();
+                $arrSettings = class_module_system_setting::getAllConfigValues();
                 $objCurrentModule = null;
                 $strRows = "";
                 foreach ($arrSettings as $objOneSetting) {
@@ -332,7 +332,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 //Seems we have to update a few records
                 $arrSettings = $this->getAllParams();
                 foreach($arrSettings["set"] as $strKey => $strValue) {
-                    $objSetting = new class_modul_system_setting($strKey);
+                    $objSetting = new class_module_system_setting($strKey);
                     $objSetting->setStrValue($strValue);
                     $objSetting->updateObjectToDb();
                 }
@@ -479,8 +479,8 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
             //react on commands?
             if($this->getParam("logout") == "true") {
-                $objSession = new class_modul_system_session($this->getSystemid());
-                $objSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
+                $objSession = new class_module_system_session($this->getSystemid());
+                $objSession->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDOUT);
                 $objSession->updateObjectToDb();
                 $this->objDB->flushQueryCache();
             }
@@ -488,16 +488,16 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 
             //showing a list using the pageview
-            $objArraySectionIterator = new class_array_section_iterator(class_modul_system_session::getNumberOfActiveSessions());
+            $objArraySectionIterator = new class_array_section_iterator(class_module_system_session::getNumberOfActiveSessions());
 		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-		    $objArraySectionIterator->setArraySection(class_modul_system_session::getAllActiveSessions($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+		    $objArraySectionIterator->setArraySection(class_module_system_session::getAllActiveSessions($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
             $arrSessions = $arrPageViews["elements"];
 
 
-            //$arrSessions = class_modul_system_session::getAllActiveSessions();
+            //$arrSessions = class_module_system_session::getAllActiveSessions();
             $arrData = array();
             $arrHeader = array();
             $arrHeader[0] = "";
@@ -516,7 +516,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $arrRowData[0] = getImageAdmin("icon_user.gif");
                 $arrRowData[1] = $strUsername;
                 $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
-                if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
+                if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
                     $arrRowData[3] = $this->getText("session_loggedin");
                 else
                     $arrRowData[3] = $this->getText("session_loggedout");
@@ -553,7 +553,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 }
 
                 $arrRowData[4] = $strActivity;
-                if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
+                if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
                     $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getText("session_logout"), "icon_ton.gif");
                 else
                     $arrRowData[5] = getImageAdmin("icon_tonDisabled.gif");
@@ -627,10 +627,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 
             //showing a list using the pageview
-            $objArraySectionIterator = new class_array_section_iterator(class_modul_system_changelog::getLogEntriesCount($strSystemid));
+            $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
 		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-		    $objArraySectionIterator->setArraySection(class_modul_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+		    $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid);
             $arrLogs = $arrPageViews["elements"];
@@ -725,7 +725,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         $arrCleanModules[$arrOneRemoteModule[0]["value"]] = $arrOneRemoteModule[1]["value"];
                     }
                     //Get all installed modules
-                    $arrModules = class_modul_system_module::getAllModules();
+                    $arrModules = class_module_system_module::getAllModules();
                     $arrHeader = array();
                     $arrHeader[] = $this->getText("update_module_name");
                     $arrHeader[] = $this->getText("update_module_localversion");
@@ -774,7 +774,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		$intI = 0;
 		//rights
 		if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
-		   $arrObjAspects = class_modul_system_aspect::getAllAspects();
+		   $arrObjAspects = class_module_system_aspect::getAllAspects();
 
             foreach ($arrObjAspects as $objOneAspect) {
                 //Correct Rights?
@@ -842,7 +842,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			    $strReturn = $this->getText("commons_error_permissions");
         }
         elseif ($strMode == "edit") {
-            $objAspect = new class_modul_system_aspect($this->getSystemid());
+            $objAspect = new class_module_system_aspect($this->getSystemid());
             if($objAspect->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
                 $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("commons_name"), $objAspect->getStrName());
@@ -871,14 +871,14 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $objAspect = null;
 
             if($this->getParam("mode") == "new")
-                $objAspect = new class_modul_system_aspect();
+                $objAspect = new class_module_system_aspect();
             else if($this->getParam("mode") == "edit")
-                $objAspect = new class_modul_system_aspect($this->getSystemid());
+                $objAspect = new class_module_system_aspect($this->getSystemid());
 
             if($objAspect != null) {
 	            //reset the default aspect?
 	            if($this->getParam("aspect_default") == "1")
-	                class_modul_system_aspect::resetDefaultAspect();
+	                class_module_system_aspect::resetDefaultAspect();
 
                 $objAspect->setStrName($this->getParam("aspect_name"));
                	$objAspect->setBitDefault($this->getParam("aspect_default"));
@@ -898,7 +898,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 */
 	protected function actionDeleteAspect() {
         if($this->objRights->rightDelete($this->getSystemid()) && $this->objRights->rightRight5($this->getSystemid())) {
-            $objAspect = new class_modul_system_aspect($this->getSystemid());
+            $objAspect = new class_module_system_aspect($this->getSystemid());
             if(!$objAspect->deleteObject())
                 throw new class_exception("Error deleting aspect", class_exception::$level_ERROR);
 
@@ -1004,7 +1004,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 * @return mixed
 	 */
 	private function getModuleDataID($intModuleID, $bitZeroIsSystem = false) {
-		$arrModules = class_modul_system_module::getAllModules();
+		$arrModules = class_module_system_module::getAllModules();
 
 		if($intModuleID != 0 || !$bitZeroIsSystem) {
     		foreach($arrModules as $objOneModule) {

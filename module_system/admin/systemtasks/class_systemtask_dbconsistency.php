@@ -54,7 +54,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     public function executeTask() {
     	$intI = 0;
     	$strReturn = "";
-        $objWorker = new class_modul_system_worker();
+        $objWorker = new class_module_system_worker();
 
         //chec 1.level nodes
         $arrCorruptedRecords = $objWorker->checkFirstLevelNodeConsistency();

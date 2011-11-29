@@ -19,7 +19,7 @@
  * @author sidler@mulchprod.de
  * @see class_logger
  */
-class class_modul_system_changelog extends class_model implements interface_model  {
+class class_module_system_changelog extends class_model implements interface_model  {
 
     /**
      * Constructor to create a valid object

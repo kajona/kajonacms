@@ -14,7 +14,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_right_admin extends class_admin implements interface_admin {
+class class_module_right_admin extends class_admin implements interface_admin {
 
 	/**
 	 * Contructor
@@ -22,7 +22,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 	 */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"] 			= "class_modul_right_admin";
+		$arrModul["name"] 			= "class_module_right_admin";
 		$arrModul["moduleId"] 		= _system_modul_id_;
 		$arrModul["modul"]			= "right";
 
@@ -61,10 +61,10 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			//Get Rights
 			$arrRights = $this->objRights->getArrayRights($strSystemID);
 			//Get groups
-			$arrGroups = class_modul_user_group::getAllGroups();
+			$arrGroups = class_module_user_group::getAllGroups();
 
 			//Determin name of the record
-            $objCommon = new class_modul_system_common($strSystemID);
+            $objCommon = new class_module_system_common($strSystemID);
 			if($objCommon->getStrRecordComment() == "")
 				$strTitle = $this->getText("titel_leer");
 			else
@@ -77,8 +77,8 @@ class class_modul_right_admin extends class_admin implements interface_admin {
             else if(defined("_pages_folder_id_") && $objCommon->getIntModuleNr() == _pages_folder_id_)
                 $strModule = "pages";
 			else {
-			    $strTempId = class_modul_system_module::getModuleIdByNr($objCommon->getIntModuleNr());
-			    $objModule = new class_modul_system_module($strTempId);
+			    $strTempId = class_module_system_module::getModuleIdByNr($objCommon->getIntModuleNr());
+			    $objModule = new class_module_system_module($strTempId);
 			    $strModule = $objModule->getStrName();
 			}
 
@@ -226,7 +226,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
 			//place all inheritance-rights as hidden-fields to support the change-js script
-            $objCommons = new class_modul_system_common($strSystemID);
+            $objCommons = new class_module_system_common($strSystemID);
             $strPrevId = $objCommons->getPrevId();
             $arrRightsInherited = $this->objRights->getArrayRights($strPrevId);
 
@@ -292,7 +292,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strAdminId = _admins_group_id_;
 
 			//Get Groups
-			$arrGroups = class_modul_user_group::getAllGroups();
+			$arrGroups = class_module_user_group::getAllGroups();
 
 			$strView = $strAdminId;
 			$strEdit = $strAdminId;

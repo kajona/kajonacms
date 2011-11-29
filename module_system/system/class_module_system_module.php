@@ -13,7 +13,7 @@
  *
  * @package module_system
  */
-class class_modul_system_module extends class_model implements interface_model  {
+class class_module_system_module extends class_model implements interface_model  {
 
     private $strName = "";
     private $strNamePortal = "";
@@ -128,7 +128,7 @@ class class_modul_system_module extends class_model implements interface_model  
 		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_system_module($arrOneId["module_id"]);
+		    $arrReturn[] = new class_module_system_module($arrOneId["module_id"]);
 
 		return $arrReturn;
 	}
@@ -138,7 +138,7 @@ class class_modul_system_module extends class_model implements interface_model  
 	 *
 	 * @param string $strName
 	 * @param bool $bitIgnoreStatus
-	 * @return class_modul_system_module
+	 * @return class_module_system_module
 	 * @static
 	 */
 	public static function getModuleByName($strName, $bitIgnoreStatus = false) {
@@ -157,13 +157,13 @@ class class_modul_system_module extends class_model implements interface_model  
             //check the status right here - better performance due to cached queries
             if(!$bitIgnoreStatus) {
                 if($arrRow["system_status"] == "1")
-                    return new class_modul_system_module($arrRow["module_id"]);
+                    return new class_module_system_module($arrRow["module_id"]);
                 else
                     return null;
 
             }
             else
-                return new class_modul_system_module($arrRow["module_id"]);
+                return new class_module_system_module($arrRow["module_id"]);
         }
 		else
 		    return null;

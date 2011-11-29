@@ -61,16 +61,16 @@ abstract class class_admin {
 	private   $objText = null;				//Object managing the textfiles
 
 	/**
-	 * Instance of class_modul_system_common
+	 * Instance of class_module_system_common
 	 *
-	 * @var class_modul_system_common
+	 * @var class_module_system_common
 	 */
 	private $objSystemCommon = null;
 
     /**
      * Instance of the current modules' definition
      *
-     * @var class_modul_system_module
+     * @var class_module_system_module
      */
     private $objModule = null;
 
@@ -131,7 +131,7 @@ abstract class class_admin {
 		$this->objText = $objCarrier->getObjText();
 		$this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objRights = $objCarrier->getObjRights();
-		$this->objSystemCommon = new class_modul_system_common($strSystemid);
+		$this->objSystemCommon = new class_module_system_common($strSystemid);
 
 
 		//Setting template area LATERON THE SKIN IS BEING SET HERE
@@ -267,7 +267,7 @@ abstract class class_admin {
 	public function setStatus($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->setStatus();
 	}
 
@@ -280,7 +280,7 @@ abstract class class_admin {
 	public function getStatus($strSystemid = "") {
 		if($strSystemid == "0" || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->getStatus();
 	}
 
@@ -293,7 +293,7 @@ abstract class class_admin {
 	public function getLastEditUser($strSystemid = "") {
 		if($strSystemid == 0 || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->getLastEditUser();
 	}
 
@@ -306,7 +306,7 @@ abstract class class_admin {
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->getPrevId();
 
 	}
@@ -368,7 +368,7 @@ abstract class class_admin {
 	 * @return string "" in case of an error
 	 */
 	public function getModuleSystemid($strModule) {
-        $objModule = class_modul_system_module::getModuleByName($strModule);
+        $objModule = class_module_system_module::getModuleByName($strModule);
         if($objModule != null)
             return $objModule->getSystemid();
         else
@@ -572,7 +572,7 @@ abstract class class_admin {
 		$this->arrOutput["mainnavi"] = $this->getOutputMainNavi();
 		$this->arrOutput["modulenavi"] = $this->getOutputModuleActionsNavi();
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
-        if(class_modul_system_aspect::getNumberOfAspectsAvailable(true) > 1)
+        if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
             $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
 		$this->arrOutput["login"] = $this->getOutputLogin();
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
@@ -609,11 +609,11 @@ abstract class class_admin {
             return;
 
         $arrModule = $this->getModuleData($this->arrModule["modul"]);
-        $strCurrentAspect = class_modul_system_aspect::getCurrentAspectId();
+        $strCurrentAspect = class_module_system_aspect::getCurrentAspectId();
         if(isset($arrModule["module_aspect"]) && $arrModule["module_aspect"] != "") {
             $arrAspects = explode(",", $arrModule["module_aspect"]);
             if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
-                class_modul_system_aspect::setCurrentAspectId($arrAspects[0]);
+                class_module_system_aspect::setCurrentAspectId($arrAspects[0]);
             }
 
         }
@@ -686,7 +686,7 @@ abstract class class_admin {
 	protected function getOutputMainNavi() {
 		if($this->objSession->isLoggedin()) {
 			//Loading all Modules
-			$arrModules = class_modul_system_module::getModulesInNaviAsArray(class_modul_system_aspect::getCurrentAspectId());
+			$arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
 			$intI = 0;
 			$arrModuleRows = array();
 			foreach ($arrModules as $arrModule) {
@@ -720,7 +720,7 @@ abstract class class_admin {
 		    $arrItems = $this->getOutputModuleNavi();
 		    $arrFinalItems = array();
 
-            $objModule = class_modul_system_module::getModuleByName($this->arrModule["modul"]);
+            $objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
 		    //build array of final items
 		    foreach($arrItems as $arrOneItem) {
 		        $bitAdd = false;
@@ -808,7 +808,7 @@ abstract class class_admin {
 	 *
 	 */
 	protected function getOutputLogin() {
-		$objLogin = new class_modul_login_admin();
+		$objLogin = new class_module_login_admin();
 		return $objLogin->getLoginStatus();
 	}
 
@@ -860,7 +860,7 @@ abstract class class_admin {
             if($this->arrModule["template"] == "/login.tpl" && $this->getParam("pe") != "")
                 throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
 
-            if(get_class($this) == "class_modul_login_admin_xml") {
+            if(get_class($this) == "class_module_login_admin_xml") {
                 header(class_http_statuscodes::$strSC_UNAUTHORIZED);
                 throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
             }
@@ -1002,14 +1002,14 @@ abstract class class_admin {
     }
 
     /**
-     * Returns the current instance of class_modul_system_module, based on the current subclass.
+     * Returns the current instance of class_module_system_module, based on the current subclass.
      * Lazy-loading, so loaded on first access.
-     * @return class_modul_system_module|null
+     * @return class_module_system_module|null
      */
     protected function getObjModule() {
 
         if($this->objModule == null)
-            $this->objModule = class_modul_system_module::getModuleByName($this->arrModule["modul"]);
+            $this->objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
 
         return $this->objModule;
     }

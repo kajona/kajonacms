@@ -13,7 +13,7 @@
  * @package modul_user
  * @author sidler@mulchprod.de
  */
-class class_modul_user_log extends class_model implements interface_model  {
+class class_module_user_log extends class_model implements interface_model  {
 
     /**
      * Constructor to create a valid object
@@ -59,7 +59,7 @@ class class_modul_user_log extends class_model implements interface_model  {
 
     }
 
-    
+
     /**
      * Generates a login-log-entry
      *
@@ -106,7 +106,7 @@ class class_modul_user_log extends class_model implements interface_model  {
 				   ORDER BY log.user_log_date DESC";
 		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
     }
-    
+
     /**
      * Returns the number of logins written to the log
      *
@@ -116,10 +116,10 @@ class class_modul_user_log extends class_model implements interface_model  {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_log as log";
 		$arrRow = $this->objDB->getPRow($strQuery, array());
-		
+
 		return $arrRow["COUNT(*)"];
     }
-    
+
     /**
      * Returns a section of the login-logs as an array
      *
@@ -134,7 +134,7 @@ class class_modul_user_log extends class_model implements interface_model  {
 							LEFT JOIN "._dbprefix_."user as user
 								ON log.user_log_userid = user.user_id
 						ORDER BY log.user_log_date DESC";
-        
+
 		return $this->objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
     }
 }

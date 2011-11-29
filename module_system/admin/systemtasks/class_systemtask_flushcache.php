@@ -53,7 +53,7 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
     public function executeTask() {
 
         //increase the cachebuster, so browsers are forced to reload JS and CSS files
-        $objCachebuster = class_modul_system_setting::getConfigByName("_system_browser_cachebuster_");
+        $objCachebuster = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue()+1);
         $objCachebuster->updateObjectToDb();
 

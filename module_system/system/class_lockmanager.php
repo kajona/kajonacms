@@ -19,7 +19,7 @@ class class_lockmanager  {
 
     /**
      *
-     * @var class_modul_system_common
+     * @var class_module_system_common
      */
     private $objSystemCommon;
 
@@ -29,7 +29,7 @@ class class_lockmanager  {
 	 * Contructor
 	 */
 	public function __construct($strSystemid = "") {
-        $this->objSystemCommon = new class_modul_system_common($strSystemid);
+        $this->objSystemCommon = new class_module_system_common($strSystemid);
         $this->strSystemid = $strSystemid;
 
         $this->unlockOldRecords();
@@ -48,7 +48,7 @@ class class_lockmanager  {
 
 		if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid ))) {
             class_carrier::getInstance()->getObjDB()->flushQueryCache();
-            $this->objSystemCommon = new class_modul_system_common($this->strSystemid);
+            $this->objSystemCommon = new class_module_system_common($this->strSystemid);
             return true;
         }
 
@@ -80,7 +80,7 @@ class class_lockmanager  {
                             WHERE system_id=? ";
             if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
                 class_carrier::getInstance()->getObjDB()->flushQueryCache();
-                $this->objSystemCommon = new class_modul_system_common($this->strSystemid);
+                $this->objSystemCommon = new class_module_system_common($this->strSystemid);
                 return true;
             }
         }

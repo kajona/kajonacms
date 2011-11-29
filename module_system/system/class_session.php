@@ -29,7 +29,7 @@ final class class_session {
 	/**
 	 * Instance of internal kajona-session
 	 *
-	 * @var class_modul_system_session
+	 * @var class_module_system_session
 	 */
 	private $objInternalSession = null;
 
@@ -347,7 +347,7 @@ final class class_session {
 
 		if($bitReturn === false) {
 		    class_logger::getInstance()->addLogRow("Unsuccessfull login attempt by user ".$strName, class_logger::$levelInfo);
-		    class_modul_user_log::generateLog(0, $strName);
+		    class_module_user_log::generateLog(0, $strName);
 		}
 
 		return $bitReturn;
@@ -369,7 +369,7 @@ final class class_session {
             $objUser->setIntLastLogin(time());
             $objUser->updateObjectToDb();
 
-            $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
+            $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
             $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
 
             $strGroups = implode(",", $objUser->getArrGroupIds());
@@ -379,10 +379,10 @@ final class class_session {
 
             //Drop a line to the logger
             class_logger::getInstance()->addLogRow("User: ".$objUser->getStrUsername()." successfully logged in, login provider: ".$objUser->getStrSubsystem(), class_logger::$levelInfo);
-            class_modul_user_log::generateLog();
+            class_module_user_log::generateLog();
 
             //right now we have the time to do a few cleanups...
-            class_modul_system_session::deleteInvalidSessions();
+            class_module_system_session::deleteInvalidSessions();
 
             //Login successfull, quit
             $bitReturn = true;
@@ -402,7 +402,7 @@ final class class_session {
 	public function logout() {
 	    class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
 
-	    $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
+	    $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDOUT);
 	    $this->getObjInternalSession()->updateObjectToDb();
 	    $this->getObjInternalSession()->deleteObject();
 	    $this->objInternalSession = null;
@@ -544,7 +544,7 @@ final class class_session {
             return;
 
 	    if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
-	        $this->objInternalSession = class_modul_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
+	        $this->objInternalSession = class_module_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
 
 	        if($this->objInternalSession!= null && $this->objInternalSession->isSessionValid()) {
     	        $this->objInternalSession->setIntReleasetime(time()+_system_release_time_);
@@ -566,7 +566,7 @@ final class class_session {
             $strGroups = implode(",", $this->objUser->getArrGroupIds() );
         }
 
-        $objSession = new class_modul_system_session();
+        $objSession = new class_module_system_session();
         $objSession->setStrPHPSessionId($this->getSessionId());
         $objSession->setStrUserid($this->getUserID());
         $objSession->setStrGroupids($strGroups);

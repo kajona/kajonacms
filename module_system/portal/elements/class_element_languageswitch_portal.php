@@ -45,10 +45,10 @@ class class_element_languageswitch_portal extends class_element_portal implement
 
 		$strReturn = "";
 
-        $arrObjLanguages = class_modul_languages_language::getAllLanguages(true);
+        $arrObjLanguages = class_module_languages_language::getAllLanguages(true);
 
         //load the languageset in order to generate more specific switches
-        $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getParam("systemid"));
+        $objLanguageset = class_module_languages_languageset::getLanguagesetForSystemid($this->getParam("systemid"));
 
         //Iterate over all languages
         $strRows = "";
@@ -67,7 +67,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
                 //the languaswitch is content aware. check if the target id is a news-entry
                 $strSeoAddon = "";
                 if($strTargetSystemid != null && defined("_news_modul_id_")) {
-                    $objCommon = new class_modul_system_common($strTargetSystemid);
+                    $objCommon = new class_module_system_common($strTargetSystemid);
                     if($objCommon->getIntModuleNr() == _news_modul_id_) {
                         $objNews = new class_modul_news_news($strTargetSystemid);
                         $strSeoAddon = $objNews->getStrTitle();

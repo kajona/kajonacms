@@ -277,7 +277,7 @@ class class_installer {
 
 	    //if user-module is already installed, skip this step
 	    try {
-	        $objUser = class_modul_system_module::getModuleByName("user");
+	        $objUser = class_module_system_module::getModuleByName("user");
 	        if($objUser != null) {
 	            $bitUserInstalled = true;
 	        }

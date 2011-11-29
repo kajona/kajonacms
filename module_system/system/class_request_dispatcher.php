@@ -101,14 +101,14 @@ class class_request_dispatcher {
 		}
 
         //process language-param
-        $objLanguage = new class_modul_languages_language();
+        $objLanguage = new class_module_languages_language();
         $objLanguage->setStrAdminLanguageToWorkOn($strLanguageParam);
 
         //validate login-status / process login-request
         if($strModule != "login" && $this->objSession->isLoggedin() ) {
             if($this->objSession->isAdmin()) {
                 //try to load the module
-                $objModuleRequested = class_modul_system_module::getModuleByName($strModule);
+                $objModuleRequested = class_module_system_module::getModuleByName($strModule);
                 if($objModuleRequested != null) {
 
                     if(_xmlLoader_) { //FIXME: will be removed
@@ -156,11 +156,11 @@ class class_request_dispatcher {
         if($bitLogin) {
             //FIXME: xml-annotations
             if(_xmlLoader_) {
-                $objLogin = new class_modul_login_admin_xml();
+                $objLogin = new class_module_login_admin_xml();
                 $strReturn = $objLogin->action($strAction);
             }
             else {
-                $objLogin = new class_modul_login_admin();
+                $objLogin = new class_module_login_admin();
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
@@ -184,13 +184,13 @@ class class_request_dispatcher {
         $strReturn = "";
 
         //process language-param
-        if(class_modul_system_module::getModuleByName("languages") != null) {
-            $objLanguage = new class_modul_languages_language();
+        if(class_module_system_module::getModuleByName("languages") != null) {
+            $objLanguage = new class_module_languages_language();
             $objLanguage->setStrPortalLanguage($strLanguageParam);
         }
 
         //process stats request
-        $objStats = class_modul_system_module::getModuleByName("stats");
+        $objStats = class_module_system_module::getModuleByName("stats");
         if($objStats != null) {
             $objStats = $objStats->getPortalInstanceOfConcreteModule();
             $objStats->insertStat();
@@ -199,7 +199,7 @@ class class_request_dispatcher {
 
 
         //Load the portal parts
-        $objModule = class_modul_system_module::getModuleByName($strModule);
+        $objModule = class_module_system_module::getModuleByName($strModule);
         if($objModule != null) {
 
             if(_xmlLoader_) { //FIXME: will be removed

@@ -82,7 +82,7 @@ BUG: query to determin top-searchterms was erroneous (#655)
 
 Module System
 Core:
-NEW: class_modul_system_changelog::getSpecificEntries(), used to fetch records from the change-table filtered and limited by specific values
+NEW: class_module_system_changelog::getSpecificEntries(), used to fetch records from the change-table filtered and limited by specific values
 NEW: hacked a simple emulation of phpunit into autotest.php. simple tests may be run by browser again, complex ones won't be supported and should be run by phpunit out of your favorite IDE.
 NEW: class_root loads details only on request (lazy loading). reduces the total number of queries significantly
 NEW: added the config-option "loginproviders". can be used to activate additional login-providers. If not present, the system will use "kajona" as the fallback value.
@@ -94,7 +94,7 @@ NEW: class_request_dispatcher. harmonizes duplicate code in xml.php and index.ph
 NEW: constant _xmlLoader_ is set transparently, no need to set manually
 NEW: removed system-setting _system_output_gzip_ - gzipping should be handled by apache rather than the system, much more error-safe
 NEW: class_csv can skip the headers during export
-NEW: massive internal api-changes. many methods located at class_model are moved to class_root. to be compatible with the logic of other model-classes, class_root now holds its properties like other value-objects and stores them back to the database as expected (by using a single update). reorganized a lof of low-level api-calls at class_admin / class_portal in order to be compatible with the new class_root. class_root is getting more strict concerning OO-patterns, so for many use-cases an instance of class_modul_system_common should be used in order to modify a system-record without its matching model-class-instance.
+NEW: massive internal api-changes. many methods located at class_model are moved to class_root. to be compatible with the logic of other model-classes, class_root now holds its properties like other value-objects and stores them back to the database as expected (by using a single update). reorganized a lof of low-level api-calls at class_admin / class_portal in order to be compatible with the new class_root. class_root is getting more strict concerning OO-patterns, so for many use-cases an instance of class_module_system_common should be used in order to modify a system-record without its matching model-class-instance.
 NEW: when calling the xml-interface, the mandatory <xml>-header may be suppressed by calling class_xml::setBitSuppressXmlHeader(true)
 NEW: the mail sent in case of an exception contains the last urls called by the user (admin & portal)
 NEW: added a first and still unfinished version of an oracle driver. therefore some of the db-parts had to be migrated to comply with the 30-char limit of table-names and column-names
@@ -102,7 +102,7 @@ NEW: when checking for registered subscribers of delete- and status-change-event
 NEW: passed env-params are stored with class_carrier as a static var. this reduces the number of array_merge calls when calling getAllPassedParams().
 NEW: debug-information are sent on xml-requests, too
 NEW: the current aspect is cached, this boosts performance
-NEW: added  class_wadlgenerator, is capable of generating a wadl-document required by REST-clients. class_modul_login_admin_xml makes use of this class
+NEW: added  class_wadlgenerator, is capable of generating a wadl-document required by REST-clients. class_module_login_admin_xml makes use of this class
 NEW: added more http-statuscodes, the xml-classes make more use of different statuscodes in order to pass more informations to the clients
 NEW: added rewrite-rules for xml-requests to the .htaccess file. the wadls generated are capable of using full url-rewriting, other xml-handlers may follow. schema: /xml/[admin/]/module/action/systemid/
 NEW / BUG: class_filesystem now provides the method readLastLinesFromFile() in order to explicitely read the end of a file. otherwise tail-like operation may have lead to a out of memory error. adopted to admin-log viewer and admin-widget. (#632)

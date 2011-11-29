@@ -14,7 +14,7 @@
  * @package modul_filemanager
  * @author sidler@mulchpro.de
  */
-class class_modul_filemanager_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_filemanager_admin_xml extends class_admin implements interface_xml_admin {
 
 
 	/**
@@ -40,7 +40,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
             //create repo-instance
-            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $this->getParam("folder");
             $strFile = $this->getParam("file");
 
@@ -71,7 +71,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         if($this->objRights->rightRight1($this->getSystemid())) {
 
             //create repo-instance
-            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $objFmRepo->getStrPath()."/".$this->getParam("folder");
 
 
@@ -111,7 +111,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         if($this->objRights->rightRight1($this->getSystemid())) {
 
             //create repo-instance
-            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $this->getParam("folder");
 
             //Create the folder
@@ -151,7 +151,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
             //create repo-instance
-            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $this->getParam("folder");
 
             //Delete from filesystem
@@ -197,7 +197,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
         if($this->objRights->rightEdit($this->getSystemid()) || ($this->getSystemid() == "" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) ) {
             //create repo instance
-            //$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            //$objRepo = new class_module_filemanager_repo($this->getSystemid());
             //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
             $strFile = $this->getParam("file");
 
@@ -245,7 +245,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
         if($this->objRights->rightEdit($this->getSystemid())  || ($this->getSystemid() == "" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) ) {
             //create repo instance
-            //$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            //$objRepo = new class_module_filemanager_repo($this->getSystemid());
             //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
             $strFile = $this->getParam("file");
 
@@ -292,7 +292,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
 	    if($this->objRights->rightRight1($this->getSystemid())) {
 	    	//create repo instance
-	        $objRepo = new class_modul_filemanager_repo($this->getSystemid());
+	        $objRepo = new class_module_filemanager_repo($this->getSystemid());
 
 	        $strFolder = $objRepo->getStrPath().$this->getParam("folder");
 

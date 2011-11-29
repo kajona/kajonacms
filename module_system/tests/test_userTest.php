@@ -19,7 +19,7 @@ class class_test_user extends class_testbase  {
         echo "\t ...found ".$intStartUsers." users.\n";
 
         echo "\tcheck number of groups installed...\n";
-        $arrGroupsInstalled = class_modul_user_group::getAllGroups();
+        $arrGroupsInstalled = class_module_user_group::getAllGroups();
         $intStartGroups = count($arrGroupsInstalled);
         echo "\t ...found ".$intStartUsers." users.\n";
 
@@ -46,17 +46,17 @@ class class_test_user extends class_testbase  {
         echo "\tcreate 100 groups using the model...\n";
         $arrGroupsCreated = array();
         for($intI =0; $intI < 100; $intI++) {
-            $objGroup = new class_modul_user_group();
+            $objGroup = new class_module_user_group();
             $strName = "name_".generateSystemid();
             $objGroup->setStrName($strName);
             $objGroup->updateObjectToDb();
             $strID = $objGroup->getSystemid();
             $arrGroupsCreated[] = $objGroup->getSystemid();
             $objDB->flushQueryCache();
-            $objGroup = new class_modul_user_group($strID);
+            $objGroup = new class_module_user_group($strID);
             $this->assertEquals($objGroup->getStrName(), $strName, __FILE__." checkNameOfGroupCreated");
         }
-        $arrGroupsInstalled = class_modul_user_group::getAllGroups();
+        $arrGroupsInstalled = class_module_user_group::getAllGroups();
         $this->assertEquals(count($arrGroupsInstalled), (100+$intStartGroups), __FILE__." checkNrOfGroupsByModel");
 
 
@@ -78,17 +78,17 @@ class class_test_user extends class_testbase  {
 
         echo "\tdeleting groups created...\n";
         foreach($arrGroupsCreated as $strOneGroup) {
-            $objOneGroup = new class_modul_user_group($strOneGroup);
+            $objOneGroup = new class_module_user_group($strOneGroup);
             $objOneGroup->deleteGroup();
             $objDB->flushQueryCache();
         }
 
         echo "\tcheck number of groups installed...\n";
-        $arrGroupsInstalled = class_modul_user_group::getAllGroups();
+        $arrGroupsInstalled = class_module_user_group::getAllGroups();
         $this->assertEquals(count($arrGroupsInstalled), $intStartGroups, __FILE__." checkNrOfGroups");
 
         echo "\ttest group membership handling...\n";
-        $objGroup = new class_modul_user_group();
+        $objGroup = new class_module_user_group();
         $objGroup->setStrName("AUTOTESTGROUP");
         $objGroup->updateObjectToDb();
 
@@ -100,7 +100,7 @@ class class_test_user extends class_testbase  {
             $objUser->updateObjectToDb();
             //add user to group
             $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
-            $arrUsersInGroup = $objGroup->getObjSourceGroup()->getUserIdsForGroup(); 
+            $arrUsersInGroup = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
             $this->assertTrue(in_array($objUser->getSystemid(), $arrUsersInGroup), __FILE__." checkUserInGroup");
             $this->assertEquals(count($arrUsersInGroup), 1+$intI, __FILE__." checkNrOfUsersInGroup");
             $objDB->flushQueryCache();
@@ -120,7 +120,7 @@ class class_test_user extends class_testbase  {
         $this->assertEquals(count($arrUserInstalled), $intStartUsers, __FILE__." checkNrOfUsersAtEnd");
 
         echo "\tcheck number of groups installed is same as at beginning...\n";
-        $arrGroupsInstalled = class_modul_user_group::getAllGroups();
+        $arrGroupsInstalled = class_module_user_group::getAllGroups();
         $this->assertEquals(count($arrGroupsInstalled), $intStartGroups, __FILE__." checkNrOfGrpupsAtEnd");
 
     }

@@ -38,7 +38,7 @@ class class_model extends class_root {
      */
     public function getFloatRating($bitRound = true) {
         $floatRating = null;
-        $objModule = class_modul_system_module::getModuleByName("rating");
+        $objModule = class_module_system_module::getModuleByName("rating");
         if($objModule != null) {
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null) {
@@ -60,7 +60,7 @@ class class_model extends class_root {
      */
     public function isRateableByUser() {
         $bitReturn = false;
-        $objModule = class_modul_system_module::getModuleByName("rating");
+        $objModule = class_module_system_module::getModuleByName("rating");
         if($objModule != null) {
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null)
@@ -80,7 +80,7 @@ class class_model extends class_root {
      */
     public function getIntRatingHits() {
         $intHits = 0;
-        $objModule = class_modul_system_module::getModuleByName("rating");
+        $objModule = class_module_system_module::getModuleByName("rating");
         if($objModule != null) {
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null)

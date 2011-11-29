@@ -18,7 +18,7 @@
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class class_modul_system_aspect extends class_model implements interface_model  {
+class class_module_system_aspect extends class_model implements interface_model  {
 
     private $strName = "";
     private $bitDefault = false;
@@ -90,7 +90,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     protected function updateStateToDb() {
 
         //if no other aspect exists, we have a new default aspect
-        $arrObjAspects = class_modul_system_aspect::getAllAspects();
+        $arrObjAspects = class_module_system_aspect::getAllAspects();
         if(count($arrObjAspects) == 0 ) {
         	$this->setBitDefault(1);
         }
@@ -107,7 +107,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
      * Returns an array of all aspects available
      *
      * @param bool $bitJustActive
-     * @return class_modul_system_aspect
+     * @return class_module_system_aspect
      * @static
      */
     public static function getAllAspects($bitJustActive = false) {
@@ -119,7 +119,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_modul_system_aspect($arrOneId["system_id"]);
+            $arrReturn[] = new class_module_system_aspect($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -174,7 +174,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 		    $bitCommit = false;
 
 		//if we have just one aspect remaining, set this one as default
-        $arrObjAspects = class_modul_system_aspect::getAllAspects();
+        $arrObjAspects = class_module_system_aspect::getAllAspects();
         if(count($arrObjAspects) == 1) {
         	$objOneLanguage = $arrObjAspects[0];
         	$objOneLanguage->setBitDefault(1);
@@ -198,7 +198,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
      * Returns the default aspect, defined in the admin.
      * This takes permissions into account!
      *
-     * @return class_modul_system_aspect null if no aspect is set up
+     * @return class_module_system_aspect null if no aspect is set up
      */
     public static function getDefaultAspect() {
         //try to load the default language
@@ -210,11 +210,11 @@ class class_modul_system_aspect extends class_model implements interface_model  
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0 && class_carrier::getInstance()->getObjRights()->rightView($arrRow["system_id"])) {
-            return new class_modul_system_aspect($arrRow["system_id"]);
+            return new class_module_system_aspect($arrRow["system_id"]);
         }
         else {
-            if(count(class_modul_system_aspect::getAllAspects(true)) > 0) {
-                $arrAspects = class_modul_system_aspect::getAllAspects(true);
+            if(count(class_module_system_aspect::getAllAspects(true)) > 0) {
+                $arrAspects = class_module_system_aspect::getAllAspects(true);
                 foreach($arrAspects as $objOneAspect)
                     if($objOneAspect->rightView())
                         return $objOneAspect;
@@ -228,7 +228,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
      * Returns an aspect by name, ignoring the status
      *
      * @param string $strName
-     * @return class_modul_system_aspect or null if not found
+     * @return class_module_system_aspect or null if not found
      */
     public static function getAspectByName($strName) {
         $strQuery = "SELECT system_id
@@ -238,7 +238,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         if(count($arrRow) > 0) {
-            return new class_modul_system_aspect($arrRow["system_id"]);
+            return new class_module_system_aspect($arrRow["system_id"]);
         }
         else {
             return null;
@@ -252,7 +252,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
      * In addition, the current params are processed in order to react on changes made
      * by the user / external sources.
      *
-     * @return class_modul_system_aspect null if no aspect is set up
+     * @return class_module_system_aspect null if no aspect is set up
      */
     public static function getCurrentAspect() {
 
@@ -262,11 +262,11 @@ class class_modul_system_aspect extends class_model implements interface_model  
         }
 
         //aspect registered in session?
-        if(validateSystemid(class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY))) {
-            return class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_OBJECT);
+        if(validateSystemid(class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY))) {
+            return class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT);
         }
         else {
-            return class_modul_system_aspect::getDefaultAspect();
+            return class_module_system_aspect::getDefaultAspect();
         }
     }
 
@@ -277,7 +277,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
      * @return string
      */
     public static function getCurrentAspectId() {
-        $objAspect = class_modul_system_aspect::getCurrentAspect();
+        $objAspect = class_module_system_aspect::getCurrentAspect();
         if($objAspect != null)
             return $objAspect->getSystemid();
         else
@@ -290,9 +290,9 @@ class class_modul_system_aspect extends class_model implements interface_model  
      * @param string $strAspectId
      */
     public static function setCurrentAspectId($strAspectId) {
-        if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY) ) {
-            class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
-            class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_OBJECT, new class_modul_system_aspect($strAspectId));
+        if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY) ) {
+            class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
+            class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT, new class_module_system_aspect($strAspectId));
         }
     }
 

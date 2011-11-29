@@ -13,7 +13,7 @@
  *
  */
 class class_adminwidget_systeminfo extends class_adminwidget implements interface_adminwidget {
-    
+
     /**
      * Basic constructor, registers the fields to be persisted and loaded
      *
@@ -23,9 +23,9 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         //register the fields to be persisted and loaded
         $this->setPersistenceKeys(array("php", "server", "kajona"));
     }
-    
+
     /**
-     * Allows the widget to add additional fields to the edit-/create form. 
+     * Allows the widget to add additional fields to the edit-/create form.
      * Use the toolkit class as usual.
      *
      * @return string
@@ -37,11 +37,11 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         $strReturn .= $this->objToolkit->formInputCheckbox("kajona", $this->getText("sysinfo_checkboxkajona"), $this->getFieldValue("kajona"));
         return $strReturn;
     }
-    
+
     /**
      * This method is called, when the widget should generate it's content.
      * Return the complete content using the methods provided by the base class.
-     * Do NOT use the toolkit right here! 
+     * Do NOT use the toolkit right here!
      *
      * @return string
      */
@@ -62,14 +62,14 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_version").class_modul_system_module::getModuleByName("system")->getStrVersion());
+            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_version").class_module_system_module::getModuleByName("system")->getStrVersion());
             $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_versionAvail").$this->getLatestKernelVersion());
-            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_nrOfModules").count(class_modul_system_module::getAllModules()));
+            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_nrOfModules").count(class_module_system_module::getAllModules()));
         }
         return $strReturn;
     }
-    
-    
+
+
     /**
      * Return a short (!) name of the widget.
      *
@@ -78,7 +78,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
     public function getWidgetName() {
         return $this->getText("sysinfo_name");
     }
-    
+
     /**
      * Queries the kajona-updatecheck-server to fetch the latest version
      *
@@ -86,7 +86,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      */
     private function getLatestKernelVersion() {
     	$strReturn = "";
-    	
+
         //Fetch the xml-file of available updates
         //To do this, use sockets, since php 5.2 url_fopen is disabled in most cases
         $strChecksum = md5(urldecode(_webpath_)."getVersions");
@@ -102,11 +102,11 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         catch (class_exception $objExeption) {
             $strXmlVersionList = false;
         }
-        
+
         if(!$strXmlVersionList) {
             return "n.a.";
         }
-            
+
         try {
             $objXmlParser = new class_xml_parser();
             if($objXmlParser->loadString($strXmlVersionList)) {
@@ -116,7 +116,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
                 foreach ($arrRemoteModules as $arrOneRemoteModule) {
                     $arrCleanModules[$arrOneRemoteModule[0]["value"]] = $arrOneRemoteModule[1]["value"];
                 }
-                
+
                 if(key_exists("system", $arrCleanModules)) {
                 	$strReturn = $arrCleanModules["system"];
                 }
@@ -127,11 +127,11 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         }
         catch (class_exception $objException) {
             $strReturn .= "n.a.";
-        }    
-    	
+        }
+
     	return $strReturn;
     }
-    
+
 }
 
 

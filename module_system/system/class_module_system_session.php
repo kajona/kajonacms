@@ -14,7 +14,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_session extends class_model implements interface_model  {
+class class_module_system_session extends class_model implements interface_model  {
 
     public static $LOGINSTATUS_LOGGEDIN = "loggedin";
     public static $LOGINSTATUS_LOGGEDOUT = "loggedout";
@@ -160,10 +160,10 @@ class class_modul_system_session extends class_model implements interface_model 
      * Returns, if available, the internal session-object for the passed internal session-id
      *
      * @param sring $strSessionid
-     * @return class_modul_system_session
+     * @return class_module_system_session
      */
     public static function getSessionById($strSessionid) {
-        $objSession = new class_modul_system_session($strSessionid);
+        $objSession = new class_module_system_session($strSessionid);
         if($objSession->isSessionValid())
             return $objSession;
         else
@@ -189,7 +189,7 @@ class class_modul_system_session extends class_model implements interface_model 
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_modul_system_session($arrOneId["session_id"]);
+            $arrReturn[] = new class_module_system_session($arrOneId["session_id"]);
 
         return $arrReturn;
     }

@@ -13,7 +13,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_worker extends class_model implements interface_model  {
+class class_module_system_worker extends class_model implements interface_model  {
 
 
 

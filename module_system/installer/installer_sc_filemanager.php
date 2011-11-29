@@ -31,7 +31,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             mkdir(_realpath_._filespath_."/images/upload", 0777, true);
 
         $strReturn .= "Creating new picture repository\n";
-        $objRepo = new class_modul_filemanager_repo();
+        $objRepo = new class_module_filemanager_repo();
 
         if($this->strContentLanguage == "de")
             $objRepo->setStrName("Hochgeladene Bilder");
@@ -45,7 +45,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
 
         $strReturn .= "Setting the repository as the default images repository\n";
-        $objSetting = class_modul_system_setting::getConfigByName("_filemanager_default_imagesrepoid_");
+        $objSetting = class_module_system_setting::getConfigByName("_filemanager_default_imagesrepoid_");
         $objSetting->setStrValue($objRepo->getSystemid());
         $objSetting->updateObjectToDb();
 
@@ -54,7 +54,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             mkdir(_realpath_._filespath_."/public", 0777, true);
 
         $strReturn .= "Creating new file repository\n";
-        $objRepo = new class_modul_filemanager_repo();
+        $objRepo = new class_module_filemanager_repo();
 
         if($this->strContentLanguage == "de")
             $objRepo->setStrName("Hochgeladene Dateien");
@@ -68,7 +68,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
 
         $strReturn .= "Setting the repository as the default files repository\n";
-        $objSetting = class_modul_system_setting::getConfigByName("_filemanager_default_filesrepoid_");
+        $objSetting = class_module_system_setting::getConfigByName("_filemanager_default_filesrepoid_");
         $objSetting->setStrValue($objRepo->getSystemid());
         $objSetting->updateObjectToDb();
 

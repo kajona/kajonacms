@@ -12,7 +12,7 @@
  *
  * @package modul_languages
  */
-class class_modul_languages_admin extends class_admin implements interface_admin {
+class class_module_languages_admin extends class_admin implements interface_admin {
     private $strAction;
 
     /**
@@ -55,7 +55,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		$intI = 0;
 		//rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
-		   $arrObjLanguages = class_modul_languages_language::getAllLanguages();
+		   $arrObjLanguages = class_module_languages_language::getAllLanguages();
 
             foreach ($arrObjLanguages as $objOneLanguage) {
                 //Correct Rights?
@@ -85,11 +85,11 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		}
 		else
 			$strReturn = $this->getText("commons_error_permissions");
-        
+
 		return $strReturn;
 	}
 
-    
+
     protected function actionEditLanguage() {
         return $this->actionNewLanguage("edit");
     }
@@ -104,7 +104,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	    $strReturn = "";
 	    $arrLanguages = array();
 	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
-	    $objLang = new class_modul_languages_language();
+	    $objLang = new class_module_languages_language();
 	    $arrLanguages = $objLang->getAllLanguagesAvailable();
 	    $arrLanguagesDD = array();
 	    foreach ($arrLanguages as $strLangShort)
@@ -125,7 +125,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 			    $strReturn = $this->getText("commons_error_permissions");
         }
         elseif ($strMode == "edit") {
-            $objLanguage = new class_modul_languages_language($this->getSystemid());
+            $objLanguage = new class_module_languages_language($this->getSystemid());
             if($objLanguage->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"), $objLanguage->getStrName());
@@ -156,37 +156,37 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
 	            //language already existing?
-	            if(class_modul_languages_language::getLanguageByName($this->getParam("language_name")) !== false)
+	            if(class_module_languages_language::getLanguageByName($this->getParam("language_name")) !== false)
 	               return $this->getText("language_existing");
 
 	            //reset the default languages?
 	            if($this->getParam("language_default") == "1")
-	                class_modul_languages_language::resetAllDefaultLanguages();
+	                class_module_languages_language::resetAllDefaultLanguages();
 
-                $objLanguage = new class_modul_languages_language();
+                $objLanguage = new class_module_languages_language();
                 $objLanguage->setStrName($this->getParam("language_name"));
                	$objLanguage->setBitDefault($this->getParam("language_default"));
 
                 if(!$objLanguage->updateObjectToDb() )
                     throw new class_exception("Error creating new language", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	        }
 	        else
 			    $strReturn = $this->getText("commons_error_permissions");
 	    }
 	    elseif ($this->getParam("mode") == "edit") {
-	        $objLanguage = new class_modul_languages_language($this->getSystemid());
+	        $objLanguage = new class_module_languages_language($this->getSystemid());
 	        $strOldLanguage = $objLanguage->getStrName();
 	        if($objLanguage->rightEdit()) {
 	            //language already existing?
-	            $objTestLang = class_modul_languages_language::getLanguageByName($this->getParam("language_name"));
+	            $objTestLang = class_module_languages_language::getLanguageByName($this->getParam("language_name"));
 	            if($objTestLang !== false && $objTestLang->getSystemid() != $this->getSystemid())
 	               return $this->getText("language_existing");
 
 	            //reset the default languages?
 	            if($this->getParam("language_default") == "1")
-	                class_modul_languages_language::resetAllDefaultLanguages();
+	                class_module_languages_language::resetAllDefaultLanguages();
 
 
                 $objLanguage->setStrName($this->getParam("language_name"));
@@ -199,13 +199,13 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                     if(!$objLanguage->moveContentsToCurrentLanguage($strOldLanguage))
                         throw new class_exception("Error moving contents to new language", class_exception::$level_ERROR);
                 }
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             }
             else
 			    $strReturn = $this->getText("commons_error_permissions");
 	    }
-        
+
         return $strReturn;
 	}
 
@@ -217,22 +217,22 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	protected function actionDeleteLanguageFinal() {
 	    $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
-            $objLang = new class_modul_languages_language($this->getSystemid());
-            
-            
-            
+            $objLang = new class_module_languages_language($this->getSystemid());
+
+
+
             if(!$objLang->deleteObject())
                 throw new class_exception("Error deleting language", class_exception::$level_ERROR);
-            
+
             //check if the current active one was deleted. if, then reset. #kajona trace id 613
             if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
                 $this->objDB->flushQueryCache();
-                $arrLangs = class_modul_languages_language::getAllLanguages();
+                $arrLangs = class_module_languages_language::getAllLanguages();
                 if(count($arrLangs) > 0 ) {
                     $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
                 }
             }
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
@@ -249,7 +249,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	public function getLanguageSwitch() {
 	    $strReturn = "";
         //Load all languages available
-        $arrObjLanguages = class_modul_languages_language::getAllLanguages(true);
+        $arrObjLanguages = class_module_languages_language::getAllLanguages(true);
         //create a button for each of them
         $strButtons = "";
         if(count($arrObjLanguages) > 1) {

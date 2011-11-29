@@ -13,7 +13,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_common extends class_model implements interface_model  {
+class class_module_system_common extends class_model implements interface_model  {
 
 
 
@@ -237,7 +237,7 @@ class class_modul_system_common extends class_model implements interface_model  
      *
      * @param int $intMaxNrOfRecords
      * @param int $intModuleFilter
-     * @return array class_modul_system_common
+     * @return array class_module_system_common
      * @since 3.3.0
      */
     public static function getLastModifiedRecords($intMaxNrOfRecords, $intModuleFilter = false) {
@@ -254,7 +254,7 @@ class class_modul_system_common extends class_model implements interface_model  
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, 0, $intMaxNrOfRecords-1);
         foreach($arrIds as $arrSingleRow) {
-            $arrReturn[] = new class_modul_system_common($arrSingleRow["system_id"]);
+            $arrReturn[] = new class_module_system_common($arrSingleRow["system_id"]);
         }
 
         return $arrReturn;

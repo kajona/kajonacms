@@ -23,7 +23,7 @@
  * @package modul_languages
  * @author sidler@mulchprod.de
  */
-class class_modul_languages_languageset extends class_model implements interface_model {
+class class_module_languages_languageset extends class_model implements interface_model {
 
     private $arrLanguageSet = array();
 
@@ -162,7 +162,7 @@ class class_modul_languages_languageset extends class_model implements interface
      * If no record is found, null is returned instead.
      *
      * @param string $strSystemid
-     * @return class_modul_languages_languageset
+     * @return class_module_languages_languageset
      */
     public static function getLanguagesetForSystemid($strSystemid) {
         $strQuery = "SELECT languageset_id
@@ -172,7 +172,7 @@ class class_modul_languages_languageset extends class_model implements interface
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid) );
 
         if(isset($arrRow["languageset_id"])) {
-            $objReturn = new class_modul_languages_languageset($arrRow["languageset_id"]);
+            $objReturn = new class_module_languages_languageset($arrRow["languageset_id"]);
             return $objReturn;
         }
 
@@ -186,17 +186,17 @@ class class_modul_languages_languageset extends class_model implements interface
      * instead of creating a new one.
      *
      * @param string $strSystemid
-     * @param class_modul_languages_language $objTargetLanguage
-     * @return class_modul_languages_languageset
+     * @param class_module_languages_language $objTargetLanguage
+     * @return class_module_languages_languageset
      */
     public static function createLanguagesetForSystemid($strSystemid, $objTargetLanguage) {
 
         //already existing?
-        $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($strSystemid);
+        $objLanguageset = class_module_languages_languageset::getLanguagesetForSystemid($strSystemid);
 
         if($objLanguageset == null) {
             //create a new one
-            $objLanguageset = new class_modul_languages_languageset("");
+            $objLanguageset = new class_module_languages_languageset("");
             $objLanguageset->setSystemidForLanguageid($strSystemid, $objTargetLanguage->getSystemid());
         }
         else if($objLanguageset->getSystemidForLanguageid($objTargetLanguage->getSystemid()) == null) {
@@ -224,12 +224,12 @@ class class_modul_languages_languageset extends class_model implements interface
                          OR languageset_systemid = ?";
 
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
-        
+
     }
-   
+
     /**
      * Returns the list of current associations
-     * 
+     *
      * @return array
      */
     public function getArrLanguageSet() {

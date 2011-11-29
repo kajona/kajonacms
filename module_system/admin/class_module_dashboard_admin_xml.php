@@ -14,11 +14,11 @@
  *
  * @package modul_dashboard
  */
-class class_modul_dashboard_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_dashboard_admin_xml extends class_admin implements interface_xml_admin {
 
     private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
-    
+
 	/**
 	 * Constructor
 	 *
@@ -50,12 +50,12 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 		    $strNewColumn = $this->getParam("listId");
 		    if($intNewPos != "")
 		        $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
-		        
-		    $objWidget = new class_modul_dashboard_widget($this->getSystemid());
+
+		    $objWidget = new class_module_dashboard_widget($this->getSystemid());
 		    $objWidget->setStrColumn($strNewColumn);
 		    $objWidget->updateObjectToDb();
-		        
-		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";    
+
+		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";
 		}
 		else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
@@ -74,7 +74,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
         $strReturn = "";
         if($this->objRights->rightView($this->getSystemid())) {
             $strReturn = "<content>";
-            $objWidgetModel = new class_modul_system_adminwidget($this->getSystemid());
+            $objWidgetModel = new class_module_system_adminwidget($this->getSystemid());
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
             $strReturn .= "<![CDATA[". $objConcreteWidget->generateWidgetOutput() ."]]>";
             $strReturn .= "</content>";
@@ -88,7 +88,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
     }
 
     /**
-     * 
+     *
      *
      * @return string
      */
@@ -96,15 +96,15 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
         $strReturn = "";
         $strContent = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
-            
+
             $arrJsHighlights = array();
-            
+
             $strReturn .= "<content><![CDATA[";
 
             $arrRelevantModules = array();
 
             //fetch modules relevant for processing
-            $arrModules = class_modul_system_module::getAllModules();
+            $arrModules = class_module_system_module::getAllModules();
             foreach($arrModules as $objSingleModule) {
                 if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
                     $arrRelevantModules[] = $objSingleModule->getAdminInstanceOfConcreteModule();
@@ -170,7 +170,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 
                     if($strSecondLine != "")
                         $strSecondLine = "<br />".$strSecondLine;
-                    
+
                     //register mouse-over highlight relations
                     if($objOneEvent->getStrHighlightId() != "" && $objOneEvent->getStrSystemid() != "") {
                         if(!isset($arrJsHighlights[$objOneEvent->getStrHighlightId()]))
@@ -191,7 +191,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
                    $objToday->getIntMonth() == $objDate->getIntMonth() &&
                    $objToday->getIntDay() == $objDate->getIntDay())
                         $strToday = " calendarDateToday";
-                
+
 
                 if($objDate->getIntMonth() != $intCurMonth)
                     $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryOutOfRange".$strToday);
@@ -213,7 +213,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             }
 
             $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
-            
+
             //build js-arrays
             $strJs = "<script type=\"text/javascript\">";
                 foreach($arrJsHighlights as $strCommonId => $arrEntries) {
@@ -222,9 +222,9 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
                         $strJs .= "kj_cal_".$strCommonId.".push('".$strOneIdentifier."');";
                     }
                 }
-            
+
             $strJs .= "</script>";
-            
+
             $strReturn .= $strJs;
 
             $strReturn .= "]]></content>";

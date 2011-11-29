@@ -15,7 +15,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_system_admin_xml extends class_admin implements interface_xml_admin {
 
 
 	/**
@@ -48,7 +48,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $intNewPos = $this->getParam("listPos");
 
             //there is a different mode for page-elements, catch now
-            $objCommon = new class_modul_system_common($this->getSystemid());
+            $objCommon = new class_module_system_common($this->getSystemid());
             //store edit date
             $objCommon->updateObjectToDb();
 
@@ -283,7 +283,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            $objCommon = new class_modul_system_common();
+            $objCommon = new class_module_system_common();
 
             $strReturn .= "<info>";
 
@@ -357,7 +357,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
             $strReturn .= "<modules>";
 			//Loading the modules
-			$arrModules = class_modul_system_module::getAllModules();
+			$arrModules = class_module_system_module::getAllModules();
 			foreach($arrModules as $objSingleModule) {
                 $strReturn .= "<module>";
                 $strReturn .= "<name>".  xmlSafeString($objSingleModule->getStrName())."</name>";
@@ -396,7 +396,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
         //check needed rights
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            $arrSessions = class_modul_system_session::getAllActiveSessions();
+            $arrSessions = class_module_system_session::getAllActiveSessions();
 
             $strReturn .= "<sessions>";
 
@@ -411,7 +411,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                 }
 
                 $strLoginStatus = "";
-                if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
+                if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
                     $strLoginStatus = $this->getText("session_loggedin");
                 else
                     $strLoginStatus = $this->getText("session_loggedout");

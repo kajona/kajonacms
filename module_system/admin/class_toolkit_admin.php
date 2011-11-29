@@ -1013,7 +1013,7 @@ class class_toolkit_admin extends class_toolkit {
     public function listStatusButton($strSystemid) {
         //read the current status
         $strButton = "";
-        $objRecord = new class_modul_system_common($strSystemid);
+        $objRecord = new class_module_system_common($strSystemid);
         $strImage = "";
         $strNewImage = "";
         $strText = "";
@@ -1910,8 +1910,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["options"] = "";
 
         //process rows
-        $strCurrentId = class_modul_system_aspect::getCurrentAspectId();
-        $arrAspects = class_modul_system_aspect::getAllAspects(true);
+        $strCurrentId = class_module_system_aspect::getCurrentAspectId();
+        $arrAspects = class_module_system_aspect::getAllAspects(true);
 
         $intNrOfAspects = 0;
         foreach($arrAspects as $objSingleAspect) {

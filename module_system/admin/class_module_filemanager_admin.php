@@ -14,7 +14,7 @@
  * @package modul_filemanager
  * @author sidler@mulchprod.de
  */
-class class_modul_filemanager_admin extends class_admin implements  interface_admin {
+class class_module_filemanager_admin extends class_admin implements  interface_admin {
 	private $strFolder;
 	private $strFolderOld;
 
@@ -29,7 +29,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$arrModule["modul"]				= "filemanager";
 		//base class
 		parent::__construct($arrModule);
-		
+
 		$this->getCurrentFolder();
 	}
 
@@ -71,7 +71,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		//Check rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Load the repos
-			$arrObjRepos = class_modul_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
+			$arrObjRepos = class_module_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
 			$intI = 0;
 			//Print every repo
 			foreach($arrObjRepos as $objOneRepo) {
@@ -118,9 +118,9 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 
 		if($this->objRights->rightDelete($this->getSystemid())) {
-            $objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $objRepo = new class_module_filemanager_repo($this->getSystemid());
             $objRepo->deleteRepo();
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
@@ -164,14 +164,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			}
 			else {
 				//save the passed data to database
-				$objRepo = new class_modul_filemanager_repo();
+				$objRepo = new class_module_filemanager_repo();
 				$objRepo->setStrName($this->getParam("filemanager_name"));
 				$objRepo->setStrPath($this->getParam("filemanager_path"));
 				$objRepo->setStrUploadFilter($this->getParam("filemanager_upload_filter"));
 				$objRepo->setStrViewFilter($this->getParam("filemanager_view_filter"));
                 if(!$objRepo->updateObjectToDb())
                     throw new class_exception($this->getText("fehler_repo"), class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
@@ -200,7 +200,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	        }
 			//Form or update?
 			if($this->getParam("repoSaveEdit") == "") {
-				$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+				$objRepo = new class_module_filemanager_repo($this->getSystemid());
 
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "editRepo");
 				//create the form
@@ -219,7 +219,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			}
 			else {
 				//Update the databse
-				$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+				$objRepo = new class_module_filemanager_repo($this->getSystemid());
 				$objRepo->setStrName($this->getParam("filemanager_name"));
 				$objRepo->setStrPath($this->getParam("filemanager_path"));
 				$objRepo->setStrUploadFilter($this->getParam("filemanager_upload_filter"));
@@ -230,7 +230,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					$strReturn = "";
 				else
 				    throw new class_exception($this->getText("repo_bearbeiten_fehler"), class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
@@ -241,13 +241,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	}
 
 
-    
-    
-    
+
+
+
     protected function actionUploadFile() {
         return $this->actionOpenFolder();
     }
-    
+
 	/**
 	 * Loads the content of a folder
 	 * If requested, loads subactions,too
@@ -257,7 +257,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	protected function actionOpenFolder() {
 		$strReturn = "";
 		if($this->objRights->rightView($this->getSystemid())) {
-			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+			$objRepo = new class_module_filemanager_repo($this->getSystemid());
 			//Load the files
 			$objFilesystem = new class_filesystem();
             $strExtra = "";
@@ -387,23 +387,23 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 */
 	protected function actionFolderContentFolderviewMode() {
 		$strReturn = "";
-        
+
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests
 	    if ($this->getParam("CKEditorFuncNum") != "") {
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
-        
-        
+
+
         $strTargetfield = $this->getParam("form_element");
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        
+
 		//list repos or contents?
 		if($this->getSystemid() == "") {
             if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
     			//Load the repos
-    			$arrObjRepos = class_modul_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
+    			$arrObjRepos = class_module_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
     			$intI = 0;
     			//Print every repo
     			foreach($arrObjRepos as $objOneRepo) {
@@ -428,7 +428,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		}
 		else {
     		if($this->objRights->rightView($this->getSystemid())) {
-    			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+    			$objRepo = new class_module_filemanager_repo($this->getSystemid());
     			//Load the files
     			$objFilesystem = new class_filesystem();
     			$strAddonAction = $this->getParam("fmcommand");
@@ -538,16 +538,16 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		return $strReturn;
 	}
 
-    
+
     /**
      * Generates a view to browse the filesystem directly
      * @return string
      */
     protected function actionFolderListFolderview() {
-        
+
         $this->setArrModuleEntry("template", "/folderview.tpl");
         $strReturn = "";
-        
+
         //param inits
         $strFolder = "/portal/pics";
         if($this->getParam("folder") != "")
@@ -576,15 +576,15 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         $strFormElement = "bild";
         if($this->getParam("form_element") != "")
             $strFormElement = $this->getParam("form_element");
-        
 
-        
+
+
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests
 	    if ($this->getParam("CKEditorFuncNum") != "") {
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
-        
+
         $objFilesystem = new class_filesystem();
 		$arrContent = $objFilesystem->getCompleteList($strFolder, $arrSuffix, $arrExclude, $arrExcludeFolder, $bitFolder, false);
 
@@ -617,10 +617,10 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		}
 		if($bitHit)
 		  $strReturn .= $this->objToolkit->listFooter();
-        
+
         return $strReturn;
     }
-    
+
 	/**
 	 * Shows the form to delete a file / deletes a file
 	 *
@@ -639,7 +639,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 else
                     $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
             }
-            
+
 		}
 		else
 			$strReturn = $this->getText("commons_error_permissions");
@@ -734,7 +734,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 		if($this->objRights->rightRight1($this->getSystemid())) {
 			//Upload-Form
-			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+			$objRepo = new class_module_filemanager_repo($this->getSystemid());
 
     	    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getAction(), "datei_upload_final=1"), "formUpload", "multipart/form-data");
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -790,25 +790,25 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 
         $strPlainImage = "";
-        
+
         //overlay-mode
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        
+
         //see, if there was an image passed directly
         $strFile = $this->getParam("imageFile");
         if($strFile != "") {
             $strFile = uniStrReplace(_webpath_, "", $strFile);
             $strPlainImage = $strFile;
             $strFile = _realpath_.$strFile;
-            
+
             $this->setArrModuleEntry("template", "/folderview.tpl");
         }
-        
-        
-        
-        
+
+
+
+
         $arrTemplate = array();
-        
+
         if($strFile == "") {
             $strFile = _realpath_.(substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
             $strPlainImage =  (substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
@@ -857,7 +857,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(270); return false;\"", "", $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showCropping(); return false;\"", "", $this->getText("cropImage"), "icon_crop.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.saveCropping(); return false;\"", "", $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
-            
+
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
                 KAJONA.admin.loader.loadImagecropperBase();
@@ -899,7 +899,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 */
 	private function getCurrentFolder() {
-		$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+		$objRepo = new class_module_filemanager_repo($this->getSystemid());
 		//Check, which level should be loaded. Remind the evil ones!
 		if($this->getParam("folder") != "")
 			$strFolder = $this->getParam("folder");
@@ -924,7 +924,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 */
 	private function generatePathNavi($strPath) {
         $arrPaths = array();
-        $objRepo = new class_modul_filemanager_repo($this->getSystemid());
+        $objRepo = new class_module_filemanager_repo($this->getSystemid());
 
         //remove repo-folder
         $strPath = uniStrReplace($objRepo->getStrPath(), "", $strPath);

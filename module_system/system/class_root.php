@@ -834,7 +834,7 @@ abstract class class_root {
 	 */
 	public function setPosition($strIdToShift, $strDirection = "upwards") {
 		//Load all elements on the same level, so at first get the prev id
-        $objCommon = new class_modul_system_common($strIdToShift);
+        $objCommon = new class_module_system_common($strIdToShift);
 		$strPrevID = $objCommon->getPrevId();
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
@@ -907,7 +907,7 @@ abstract class class_root {
 		$intPosition--;
 
 		//Load all elements on the same level, so at first get the prev id
-        $objCommon = new class_modul_system_common($strIdToSet);
+        $objCommon = new class_module_system_common($strIdToSet);
 		$strPrevID = $objCommon->getPrevId();
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
@@ -1171,7 +1171,7 @@ abstract class class_root {
 		while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
 			$arrReturn[] = $strTempId;
 
-            $objCommon = new class_modul_system_common($strTempId);
+            $objCommon = new class_module_system_common($strTempId);
 			$strTempId = $objCommon->getPrevId();
 		}
 
@@ -1266,7 +1266,7 @@ abstract class class_root {
      * @return string
      */
     public final function getStrPortalLanguage() {
-        $objLanguage = new class_modul_languages_language();
+        $objLanguage = new class_module_languages_language();
         return $objLanguage->getPortalLanguage();
     }
 
@@ -1281,7 +1281,7 @@ abstract class class_root {
      * @return string
      */
     public final function getStrAdminLanguageToWorkOn() {
-        $objLanguage = new class_modul_languages_language();
+        $objLanguage = new class_module_languages_language();
         return $objLanguage->getAdminLanguage();
     }
 

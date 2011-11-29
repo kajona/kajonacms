@@ -17,7 +17,7 @@
  * @author sidler@mulchprod.de
  * @deprecated
  */
-class class_modul_folderview_admin extends class_admin  implements interface_admin {
+class class_module_folderview_admin extends class_admin  implements interface_admin {
 
 	/**
 	 * Constructor, doin nothing but a few inits
@@ -25,7 +25,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 					= "class_modul_folderview_admin";
+		$arrModule["name"] 					= "class_module_folderview_admin";
 		$arrModule["moduleId"]				= _filesystem_modul_id_;
 		$arrModule["modul"]					= "folderview";
 		$arrModule["template"] 				= "/folderview.tpl";

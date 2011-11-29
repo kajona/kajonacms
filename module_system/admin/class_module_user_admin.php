@@ -14,7 +14,7 @@
  * @package modul_user
  * @author sidler@mulchprod.de
  */
-class class_modul_user_admin extends class_admin implements interface_admin {
+class class_module_user_admin extends class_admin implements interface_admin {
 
     private $STR_FILTER_SESSION_KEY = "USERLIST_FILTER_SESSION_KEY";
 
@@ -104,7 +104,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             //merge with fields from source
             $objBlankGroup = null;
             if($this->getSystemid() != "") {
-                $objUser = new class_modul_user_group($this->getSystemid());
+                $objUser = new class_module_user_group($this->getSystemid());
                 $objBlankGroup = $objUser->getObjSourceGroup();
             }
             else {
@@ -630,10 +630,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightView()) {
 
-            $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getNumberOfGroups());
+            $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getNumberOfGroups());
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-            $objArraySectionIterator->setArraySection(class_modul_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+            $objArraySectionIterator->setArraySection(class_module_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupList");
             $arrGroups = $arrPageViews["elements"];
@@ -642,7 +642,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             $objUsersources = new class_modul_user_sourcefactory();
             $intI = 0;
-            /* @var $objSingleGroup class_modul_user_group */
+            /* @var $objSingleGroup class_module_user_group */
             foreach($arrGroups as $objSingleGroup) {
                 $strAction = "";
                 if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admins_group_id_) {
@@ -765,7 +765,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             else {
 
-                $objNewGroup = new class_modul_user_group($this->getSystemid());
+                $objNewGroup = new class_module_user_group($this->getSystemid());
                 $this->setParam("usersource", $objNewGroup->getStrSubsystem());
 
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "groupSave");
@@ -831,7 +831,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             //create a new group and pass all relevant data
 
-            $objGroup = new class_modul_user_group();
+            $objGroup = new class_module_user_group();
             $objGroup->setStrName($this->getParam("group_name"));
             $objGroup->setStrSubsystem($this->getParam("usersource"));
             $objGroup->updateObjectToDb();
@@ -866,7 +866,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             //create a new group and pass all relevant data
 
-            $objGroup = new class_modul_user_group($this->getSystemid());
+            $objGroup = new class_module_user_group($this->getSystemid());
             $objGroup->setStrName($this->getParam("group_name"));
             $objGroup->updateObjectToDb();
 
@@ -908,7 +908,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
             if($this->getSystemid() != "") {
-            	$objGroup = new class_modul_user_group($this->getSystemid());
+            	$objGroup = new class_module_user_group($this->getSystemid());
                 $objSourceGroup = $objGroup->getObjSourceGroup();
             	$strReturn .= $this->objToolkit->formHeadline($this->getText("group_memberlist")."\"".$objGroup->getStrName()."\"");
                 $objUsersources = new class_modul_user_sourcefactory();
@@ -951,7 +951,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     protected function actionGroupMemberDelete() {
         $strReturn = "";
         if($this->getObjModule()->rightDelete())	{
-            $objGroup = new class_modul_user_group($this->getParam("groupid"));
+            $objGroup = new class_module_user_group($this->getParam("groupid"));
             $objUser = new class_modul_user_user($this->getParam("userid"));
             if($objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser()))
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupMember", "systemid=".$this->getParam("groupid")));
@@ -974,7 +974,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightDelete()) {
             //Delete memberships
-            $objGroup = new class_modul_user_group($this->getSystemid());
+            $objGroup = new class_module_user_group($this->getSystemid());
             //delete group
             if($objGroup->deleteGroup()) {
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
@@ -1009,7 +1009,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $arrGroups = $objSourcesytem->getAllGroupIds();
             $arrUserGroups = $objUser->getArrGroupIds();
             foreach($arrGroups as $strSingleGroup) {
-                $objSingleGroup = new class_modul_user_group($strSingleGroup);
+                $objSingleGroup = new class_module_user_group($strSingleGroup);
                 if(in_array($strSingleGroup, $arrUserGroups)) {
                     //user in group, checkbox checked
                     $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), true);
@@ -1051,7 +1051,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
                     //add the user to this group
                     if(!in_array($strSingleGroup, $arrUserGroups)) {
-                        $objGroup = new class_modul_user_group($strSingleGroup);
+                        $objGroup = new class_module_user_group($strSingleGroup);
                         $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                     }
                     else {
@@ -1067,7 +1067,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             //loop the users' list in order to remove unwanted relations
             foreach($arrUserGroups as $strValue) {
                 if(validateSystemid($strValue)) {
-                    $objGroup = new class_modul_user_group($strValue);
+                    $objGroup = new class_module_user_group($strValue);
                     $objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser());
                 }
             }
@@ -1089,7 +1089,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightRight1()) {
             //fetch log-rows
-		    $objLogbook = new class_modul_user_log();
+		    $objLogbook = new class_module_user_log();
 		    $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
 		    $objArraySectionIterator->setIntElementsPerPage(_user_log_nrofrecords_);
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -1137,7 +1137,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         if($this->getObjModule()->rightView()) {
             if($this->getSystemid() == "") {
                 //show groups
-                $arrUsers = class_modul_user_group::getAllGroups();
+                $arrUsers = class_module_user_group::getAllGroups();
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 foreach($arrUsers as $objSingleGroup) {
@@ -1153,7 +1153,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             else {
                 //show members of group
-                $objGroup = new class_modul_user_group($this->getSystemid());
+                $objGroup = new class_module_user_group($this->getSystemid());
                 $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
@@ -1259,7 +1259,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $arrElements = array_merge($arrElements, $objSource->getGrouplistByQuery($strFilter));
             }
 
-            usort($arrElements, array("class_modul_user_admin", "sortUserAndGroups"));
+            usort($arrElements, array("class_module_user_admin", "sortUserAndGroups"));
 
             $strReturn .= "<result>\n";
             foreach ($arrElements as $objOneElement) {
@@ -1274,7 +1274,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strReturn .= "    <icon>".xmlSafeString(_skinwebpath_."/pics/icon_user.gif")."</icon>\n";
                     $strReturn .= "  </user>\n";
                 }
-                else if($objOneElement instanceof class_modul_user_group) {
+                else if($objOneElement instanceof class_module_user_group) {
                     $strReturn .= "  <user>\n";
                     $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrName())."</title>\n";
                     $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";

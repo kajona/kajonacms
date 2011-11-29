@@ -12,7 +12,7 @@
  * @package modul_dashboard
  *
  */
-class class_modul_dashboard_admin extends class_admin implements interface_admin {
+class class_module_dashboard_admin extends class_admin implements interface_admin {
 
     protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 
@@ -58,13 +58,13 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	    if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strReturn .= $this->objToolkit->jsDialog(1);
 	        //load the widgets for each column. currently supporting 3 columns on the dashboard.
-	        $objDashboardmodel = new class_modul_dashboard_widget();
+	        $objDashboardmodel = new class_module_dashboard_widget();
 	        $arrColumns = array();
 	        //build each row
 	        foreach($this->arrColumnsOnDashboard as $strColumnName) {
 	            $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
     	        $strWidgetContent = "";
-	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName, class_modul_system_aspect::getCurrentAspectId()) as $objOneSystemmodel) {
+	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName, class_module_system_aspect::getCurrentAspectId()) as $objOneSystemmodel) {
     	            $strWidgetContent .= $this->layoutAdminWidget($objOneSystemmodel);
     	        }
 
@@ -84,7 +84,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	/**
 	 * Creates the layout of a dashboard-entry. loads the widget to fetch the contents of the concrete widget.
 	 *
-	 * @param class_modul_dashboard_widget $objDashboardWidget
+	 * @param class_module_dashboard_widget $objDashboardWidget
 	 * @return string
 	 */
 	protected function layoutAdminWidget($objDashboardWidget) {
@@ -201,7 +201,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
             //fetch modules relevant for processing
             $arrLegendEntries = array();
             $arrFilterEntries = array();
-            $arrModules = class_modul_system_module::getAllModules();
+            $arrModules = class_module_system_module::getAllModules();
             foreach($arrModules as $objSingleModule) {
                 $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
                 if($objSingleModule->getStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) {
@@ -248,7 +248,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
             $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
             $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
 
-            
+
 
             $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
             $strReturn .= $strContent;
@@ -260,7 +260,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         }
 	    else
 	        $strReturn = $this->getText("commons_error_permissions");
-        
+
         return $strReturn;
     }
 
@@ -276,7 +276,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
 	        //step 1: select a widget, plz
 	        if($this->getParam("step") == "") {
-	            $objSystemWidget = new class_modul_system_adminwidget();
+	            $objSystemWidget = new class_module_system_adminwidget();
 	            $arrWidgetsAvailable = $objSystemWidget->getListOfWidgetsAvailable();
 
 	            $arrDD = array();
@@ -325,7 +325,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $objWidget->loadFieldsFromArray($this->getAllParams());
 
 	            //instantiate a model-widget
-	            $objSystemWidget = new class_modul_system_adminwidget();
+	            $objSystemWidget = new class_module_system_adminwidget();
 	            $objSystemWidget->setStrClass($strWidgetClass);
 	            $objSystemWidget->setStrContent($objWidget->getFieldsAsString());
 
@@ -333,11 +333,11 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            if($objSystemWidget->updateObjectToDb()) {
                     $strWidgetId = $objSystemWidget->getSystemid();
                     //and save the dashboard-entry
-                    $objDashboard = new class_modul_dashboard_widget();
+                    $objDashboard = new class_module_dashboard_widget();
                     $objDashboard->setStrColumn($this->getParam("column"));
                     $objDashboard->setStrUser($this->objSession->getUserID());
                     $objDashboard->setStrWidgetId($strWidgetId);
-                    $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
+                    $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
                     if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
                         $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
                     }
@@ -364,7 +364,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	    $strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
-		    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+		    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
 		    if(!$objDashboardwidget->deleteObjectFromDb())
 		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
@@ -387,7 +387,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
 			if($this->getParam("saveWidget") == "") {
-			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+			    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
 				$objWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
 
 	            //ask the widget to generate its form-parts and wrap our elements around
@@ -400,7 +400,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 			}
 			elseif($this->getParam("saveWidget") == "1") {
 			    //the dashboard entry
-			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+			    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
 			    //widgets model
 			    $objSystemWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry();
                 //the concrete widget

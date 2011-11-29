@@ -13,7 +13,7 @@
  * @package modul_languages
  * @author sidler@mulchprod.de
  */
-class class_modul_languages_language extends class_model implements interface_model  {
+class class_module_languages_language extends class_model implements interface_model  {
 
     private $strName = "";
     private $bitDefault = false;
@@ -81,11 +81,11 @@ class class_modul_languages_language extends class_model implements interface_mo
     protected function updateStateToDb() {
 
         //if no other language exists, we have a new default language
-        $arrObjLanguages = class_modul_languages_language::getAllLanguages();
+        $arrObjLanguages = class_module_languages_language::getAllLanguages();
         if(count($arrObjLanguages) == 0 ) {
         	$this->setBitDefault(1);
         }
-        
+
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET language_name = ?,
                          language_default = ?
@@ -109,13 +109,13 @@ class class_modul_languages_language extends class_model implements interface_mo
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_modul_languages_language($arrOneId["system_id"]);
+            $arrReturn[] = new class_module_languages_language($arrOneId["system_id"]);
 
         return $arrReturn;
     }
-    
+
     /**
-     * Returns the number of languages installed in the system 
+     * Returns the number of languages installed in the system
      *
      * @param bool $bitJustActive
      * @return int
@@ -128,7 +128,7 @@ class class_modul_languages_language extends class_model implements interface_mo
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
         return (int)$arrRow["COUNT(*)"];
-    	
+
     }
 
     /**
@@ -137,7 +137,7 @@ class class_modul_languages_language extends class_model implements interface_mo
      *
      * @param string $strName
      * @static
-     * @return  class_modul_languages_language or false
+     * @return  class_module_languages_language or false
      */
     public static function getLanguageByName($strName) {
         $strQuery = "SELECT system_id
@@ -147,7 +147,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         if(count($arrRow)>0)
-            return new class_modul_languages_language($arrRow["system_id"]);
+            return new class_module_languages_language($arrRow["system_id"]);
         else
             return false;
     }
@@ -186,7 +186,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		    $bitCommit = false;
 
 		 //if we have just one language remaining, set this one as default
-        $arrObjLanguages = class_modul_languages_language::getAllLanguages();
+        $arrObjLanguages = class_module_languages_language::getAllLanguages();
         if(count($arrObjLanguages) == 1) {
         	$objOneLanguage = $arrObjLanguages[0];
         	$objOneLanguage->setBitDefault(1);
@@ -203,8 +203,8 @@ class class_modul_languages_language extends class_model implements interface_mo
 			return false;
 		}
     }
-    
-    
+
+
     /**
      * Moves all contents created in a given language to the current langugage
      *
@@ -214,17 +214,17 @@ class class_modul_languages_language extends class_model implements interface_mo
     public function moveContentsToCurrentLanguage($strSourceLanguage) {
         $bitCommit = true;
         $this->objDB->transactionBegin();
-        
-        $strQuery1 = "UPDATE "._dbprefix_."page_properties 
+
+        $strQuery1 = "UPDATE "._dbprefix_."page_properties
                         SET pageproperties_language = ?
                         WHERE pageproperties_language = ?";
-        
+
         $strQuery2 = "UPDATE "._dbprefix_."page_element
                         SET page_element_ph_language = ?
                         WHERE page_element_ph_language = ?";
-        
+
         $bitCommit = ($this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage)) && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage)));
-        
+
         if($bitCommit) {
             $this->objDB->transactionCommit();
             class_logger::getInstance()->addLogRow("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." successfully", class_logger::$levelInfo);
@@ -233,7 +233,7 @@ class class_modul_languages_language extends class_model implements interface_mo
             $this->objDB->transactionRollback();
             class_logger::getInstance()->addLogRow("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." failed", class_logger::$levelError);
         }
-        
+
         return $bitCommit;
     }
 
@@ -357,7 +357,7 @@ class class_modul_languages_language extends class_model implements interface_mo
     /**
      * Returns the default language, defined in the admin.
      *
-     * @return class_modul_languages_language
+     * @return class_module_languages_language
      */
     public static function getDefaultLanguage() {
         //try to load the default language
@@ -369,11 +369,11 @@ class class_modul_languages_language extends class_model implements interface_mo
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0) {
-            return new class_modul_languages_language($arrRow["system_id"]);
+            return new class_module_languages_language($arrRow["system_id"]);
         }
         else {
-            if(count(class_modul_languages_language::getAllLanguages(true)) > 0) {
-                $arrLangs = class_modul_languages_language::getAllLanguages(true);
+            if(count(class_module_languages_language::getAllLanguages(true)) > 0) {
+                $arrLangs = class_module_languages_language::getAllLanguages(true);
                 return $arrLangs[0];
             }
 
@@ -387,7 +387,7 @@ class class_modul_languages_language extends class_model implements interface_mo
      * @param string $strLanguage
      */
     public function setStrPortalLanguage($strLanguage) {
-        $objLanguage = class_modul_languages_language::getLanguageByName($strLanguage);
+        $objLanguage = class_module_languages_language::getLanguageByName($strLanguage);
         if($objLanguage !== false) {
             if($objLanguage->getStatus() != 0) {
                 $this->objSession->setSession("portalLanguage", $objLanguage->getStrName());
@@ -401,7 +401,7 @@ class class_modul_languages_language extends class_model implements interface_mo
      * @param string $strLanguage
      */
     public function setStrAdminLanguageToWorkOn($strLanguage) {
-        $objLanguage = class_modul_languages_language::getLanguageByName($strLanguage);
+        $objLanguage = class_module_languages_language::getLanguageByName($strLanguage);
         if($objLanguage !== false) {
             if($objLanguage->getStatus() != 0) {
                 $this->objSession->setSession("adminLanguage", $objLanguage->getStrName());

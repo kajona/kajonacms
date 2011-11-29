@@ -55,7 +55,7 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
     public function executeTask() {
         //try to load and update the systemrecord
         if(validateSystemid($this->getParam("systemstatus_systemid"))) {
-            $objRecord = new class_modul_system_common($this->getParam("systemstatus_systemid"));
+            $objRecord = new class_module_system_common($this->getParam("systemstatus_systemid"));
             $objRecord->setIntRecordStatus($this->getParam("systemstatus_status"));
 
             return $this->objToolkit->getTextRow($this->getText("systemtask_status_success"));

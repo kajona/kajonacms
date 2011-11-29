@@ -14,7 +14,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_modul_system_setting extends class_model implements interface_model, interface_versionable  {
+class class_module_system_setting extends class_model implements interface_model, interface_versionable  {
 
 
     private $strActionChange = "changeSetting";
@@ -101,7 +101,7 @@ class class_modul_system_setting extends class_model implements interface_model,
      */
     public function updateObjectToDb($strPrevId = false) {
 
-        if(!class_modul_system_setting::checkConfigExisting($this->getStrName())) {
+        if(!class_module_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelInfo);
 
 
@@ -114,7 +114,7 @@ class class_modul_system_setting extends class_model implements interface_model,
 
             class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
 
-            $objChangelog = new class_modul_system_changelog();
+            $objChangelog = new class_module_system_changelog();
 //            $objChangelog->createLogEntry("system", "change setting", $this->getSystemid(), $this->getStrName(), $this->strOldValue, $this->strValue);
 
             $objChangelog->createLogEntry($this, $this->strActionChange);
@@ -155,7 +155,7 @@ class class_modul_system_setting extends class_model implements interface_model,
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_system_setting($arrOneId["system_config_id"]);
+		    $arrReturn[] = new class_module_system_setting($arrOneId["system_config_id"]);
 
 		return $arrReturn;
 	}
@@ -163,13 +163,13 @@ class class_modul_system_setting extends class_model implements interface_model,
 	/**
 	 * Fetches a Configs selected by name
 	 *
-	 * @return class_modul_system_setting
+	 * @return class_module_system_setting
 	 * @static
 	 */
 	public static function getConfigByName($strName) {
 	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config WHERE system_config_name = ?";
         $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-		return new class_modul_system_setting($arrId["system_config_id"]);
+		return new class_module_system_setting($arrId["system_config_id"]);
 	}
 
 	/**

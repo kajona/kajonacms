@@ -66,7 +66,7 @@ abstract class class_installer_base extends class_root {
         $strNeeded = "";
         foreach($arrModulesNeeded as $strOneModule) {
             try {
-                $objModule = class_modul_system_module::getModuleByName($strOneModule, true);
+                $objModule = class_module_system_module::getModuleByName($strOneModule, true);
             }
             catch (class_exception $objException) {
                 $objModule = null;
@@ -83,7 +83,7 @@ abstract class class_installer_base extends class_root {
         //check, if a min version of the system is needed
         if($this->getMinSystemVersion() != "") {
             //the systems version to compare to
-            $objSystem = class_modul_system_module::getModuleByName("system");
+            $objSystem = class_module_system_module::getModuleByName("system");
             if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
                 return $this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
             }
@@ -92,7 +92,7 @@ abstract class class_installer_base extends class_root {
         //ok, all needed modules are installed. check if update or install-link should be generated
         //first check: current module installed?
         try {
-            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
         }
         catch (class_exception $objException) {
                 $objModule = null;
@@ -127,7 +127,7 @@ abstract class class_installer_base extends class_root {
     	if($this->getModuleInstallInfo() == "") {
     		//check if module not yet installed
             try {
-            	$objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            	$objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
             }
             catch (class_exception $objException) {
 				$objModule = null;
@@ -157,7 +157,7 @@ abstract class class_installer_base extends class_root {
 		$strNeeded = "";
 		foreach($arrModulesNeeded as $strOneModule) {
 		    try {
-		        $objModule = class_modul_system_module::getModuleByName($strOneModule, true);
+		        $objModule = class_module_system_module::getModuleByName($strOneModule, true);
 		    }
 		    catch (class_exception $objException) {
 		        $objModule = null;
@@ -175,7 +175,7 @@ abstract class class_installer_base extends class_root {
 		//check, if a min version of the system is needed
 		if($this->getMinSystemVersion() != "") {
 		    //the systems version to compare to
-		    $objSystem = class_modul_system_module::getModuleByName("system");
+		    $objSystem = class_module_system_module::getModuleByName("system");
 		    if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
 		        return $strReturn.$this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
 		    }
@@ -185,7 +185,7 @@ abstract class class_installer_base extends class_root {
 		//or, no link ;)
 		//first check: current module installed?
 		try {
-		    $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+		    $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
 		}
 		catch (class_exception $objException) {
 		        $objModule = null;
@@ -220,7 +220,7 @@ abstract class class_installer_base extends class_root {
         if($this->getModulePostInstallInfo() == "") {
             $objModule = null;
             try {
-                $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+                $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
             }
             catch (class_exception $objE) { }
 
@@ -235,7 +235,7 @@ abstract class class_installer_base extends class_root {
             $arrModulesNeeded = $this->getNeededModules();
             foreach($arrModulesNeeded as $strOneModule) {
                 try {
-                    $objModule = class_modul_system_module::getModuleByName($strOneModule, true);
+                    $objModule = class_module_system_module::getModuleByName($strOneModule, true);
                 }
                 catch (class_exception $objException) {
                     $objModule = null;
@@ -248,7 +248,7 @@ abstract class class_installer_base extends class_root {
             //check, if a min version of the system is needed
             if($this->getMinSystemVersion() != "") {
                 //the systems version to compare to
-                $objSystem = class_modul_system_module::getModuleByName("system");
+                $objSystem = class_module_system_module::getModuleByName("system");
                 if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
                     $bitReturn = false;
                 }
@@ -272,7 +272,7 @@ abstract class class_installer_base extends class_root {
         //first check: current module installed?
         $objModule = null;
         try {
-            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
         }
         catch (class_exception $objE) { }
 
@@ -282,7 +282,7 @@ abstract class class_installer_base extends class_root {
         //check, if a min version of the system is needed
         if($this->getMinSystemVersion() != "") {
             //the systems version to compare to
-            $objSystem = class_modul_system_module::getModuleByName("system");
+            $objSystem = class_module_system_module::getModuleByName("system");
             if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
                 return $this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
             }
@@ -294,7 +294,7 @@ abstract class class_installer_base extends class_root {
         $strNeeded = "";
         foreach($arrModulesNeeded as $strOneModule) {
             try {
-                $objTestModule = class_modul_system_module::getModuleByName($strOneModule, true);
+                $objTestModule = class_module_system_module::getModuleByName($strOneModule, true);
             }
             catch (class_exception $objException) {
                 $objTestModule = null;
@@ -332,7 +332,7 @@ abstract class class_installer_base extends class_root {
 	    $strReturn = "";
         //check, if module aint installed
         try {
-            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
         }
         catch (class_exception $objException) {
 		        $objModule = null;
@@ -346,7 +346,7 @@ abstract class class_installer_base extends class_root {
     		$arrModulesNeeded = $this->getNeededModules();
     		$strNeeded = "";
     		foreach($arrModulesNeeded as $strOneModule) {
-    		    $objModule = class_modul_system_module::getModuleByName($strOneModule, true);
+    		    $objModule = class_module_system_module::getModuleByName($strOneModule, true);
     		    if($objModule == null) {
     		        $strNeeded .= $strOneModule.", ";
     		    }
@@ -371,7 +371,7 @@ abstract class class_installer_base extends class_root {
 	public final function doPostInstall() {
 	    $strReturn = "";
         //check, if module has postinstalles
-        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
         if($objModule == null && strpos($this->arrModule["name"], "element") === false) {
             $strReturn .= "<b>No post-install options available!</b>";
         }
@@ -390,7 +390,7 @@ abstract class class_installer_base extends class_root {
 	public final function doModuleUpdate() {
 	    $strReturn = "";
         //check, if module is installed
-        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
         if($objModule == null) {
             $strReturn .= "<b>Module not installed!</b>";
         }
@@ -579,8 +579,8 @@ abstract class class_installer_base extends class_root {
 		if(!defined($strName))
 			define($strName, $strValue);
 
-	    if(!class_modul_system_setting::checkConfigExisting($strName)) {
-    	    $objConstant = new class_modul_system_setting("");
+	    if(!class_module_system_setting::checkConfigExisting($strName)) {
+    	    $objConstant = new class_module_system_setting("");
     	    $objConstant->setStrName($strName);
     	    $objConstant->setStrValue($strValue);
     	    $objConstant->setIntType($intType);
