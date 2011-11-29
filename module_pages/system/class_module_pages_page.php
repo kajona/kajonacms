@@ -170,7 +170,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $this->setStrName($strName);
 
         //create change-logs
-        $objChanges = new class_modul_system_changelog();
+        $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionEdit);
 
 		//Update the baserecord
@@ -357,7 +357,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 
 
-        $objChanges = new class_modul_system_changelog();
+        $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
 
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
@@ -464,7 +464,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 	    $this->objDB->transactionBegin();
 
 	    //copy the rights and systemrecord
-	    $objCommon = new class_modul_system_common($this->getSystemid());
+	    $objCommon = new class_module_system_common($this->getSystemid());
 	    if(!$objCommon->copyCurrentSystemrecord($strIdOfNewPage)) {
 	        $this->objDB->transactionRollback();
             class_logger::getInstance()->addLogRow("error while duplicating systemrecord ".$this->getSystemid()." to ".$strIdOfNewPage, class_logger::$levelError);

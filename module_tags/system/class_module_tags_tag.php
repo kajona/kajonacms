@@ -332,11 +332,11 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         $bitReturn = true;
         //module installed?
-        if(class_modul_system_module::getModuleByName("tags") == null)
+        if(class_module_system_module::getModuleByName("tags") == null)
             return true;
 
         //check that systemid isn't the id of a tag to avoid recursions
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
         if($objCommon->getIntModuleNr() == _tags_modul_id_)
             return true;
 

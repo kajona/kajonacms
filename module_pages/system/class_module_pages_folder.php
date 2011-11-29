@@ -95,7 +95,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      */
     protected function updateStateToDb() {
         //create change-logs
-        $objChanges = new class_modul_system_changelog();
+        $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionEdit);
 
         class_logger::getInstance()->addLogRow("updated folder ".$this->getStrName(), class_logger::$levelInfo);
@@ -140,7 +140,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	 */
 	public static function getFolderList($strSystemid = "") {
 		if(!validateSystemid($strSystemid))
-			$strSystemid = class_modul_system_module::getModuleByName("pages")->getSystemid();
+			$strSystemid = class_module_system_module::getModuleByName("pages")->getSystemid();
 
 		//Get all folders
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
@@ -168,7 +168,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	public static function moveFolder($strFolderID, $strNewPrevID) {
 
         if(!validateSystemid($strNewPrevID))
-            $strNewPrevID = class_modul_system_module::getModuleByName("pages")->getSystemid();
+            $strNewPrevID = class_module_system_module::getModuleByName("pages")->getSystemid();
 
 		$strQuery = "UPDATE "._dbprefix_."system
 		              SET  system_prev_id=?
@@ -189,7 +189,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	public static function moveSite($strSiteID, $strNewPrevID) {
 
         if(!validateSystemid($strNewPrevID))
-            $strNewPrevID = class_modul_system_module::getModuleByName("pages")->getSystemid();
+            $strNewPrevID = class_module_system_module::getModuleByName("pages")->getSystemid();
 
 
 		$strQuery = "UPDATE "._dbprefix_."system
@@ -209,7 +209,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	 */
 	public static function getPagesInFolder($strFolderid = "") {
 		if(!validateSystemid($strFolderid))
-			$strFolderid = class_modul_system_module::getModuleByName("pages")->getSystemid();
+			$strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
 
 		$strQuery = "SELECT system_id
 						FROM "._dbprefix_."page as page,
@@ -236,7 +236,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      */
     public static function getPagesAndFolderList($strFolderid = "") {
         if(!validateSystemid($strFolderid))
-			$strFolderid = class_modul_system_module::getModuleByName("pages")->getSystemid();
+			$strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
 
 		$strQuery = "SELECT system_id, system_module_nr
 						FROM "._dbprefix_."system
@@ -276,7 +276,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
                 $objOneElement->deleteFolder();
         }
 
-        $objChanges = new class_modul_system_changelog();
+        $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
 
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);

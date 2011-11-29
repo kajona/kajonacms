@@ -29,12 +29,12 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Shifting pages to first position...\n";
-        $objPagesModule = class_modul_system_module::getModuleByName("pages");
-        $objCommon = new class_modul_system_common();
+        $objPagesModule = class_module_system_module::getModuleByName("pages");
+        $objCommon = new class_module_system_common();
         $objCommon->setAbsolutePosition($objPagesModule->getSystemid(), 1);
 
         $strReturn .= "Setting default template...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_pages_defaulttemplate_");
+        $objConstant = class_module_system_setting::getConfigByName("_pages_defaulttemplate_");
         $objConstant->setStrValue("kajona_demo.tpl");
         $objConstant->updateObjectToDb();
 
@@ -42,7 +42,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Creating system folder...\n";
         $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("_system");
-        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(class_module_system_module::getModuleByName("pages")->getSystemid());
         $strSystemFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
 
@@ -50,7 +50,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Creating mainnavigation folder...\n";
         $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("mainnavigation");
-        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(class_module_system_module::getModuleByName("pages")->getSystemid());
         $strMainnavigationFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
 

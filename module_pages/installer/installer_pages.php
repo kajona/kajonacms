@@ -140,22 +140,22 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//The pages_content
 		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
-		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
+		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_module_folderview_admin.phpp", $this->arrModule["version"] , false);
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_pages_templatechange_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
-		$this->registerConstant("_pages_indexpage_", "index", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
-		$this->registerConstant("_pages_errorpage_", "error", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
-		$this->registerConstant("_pages_defaulttemplate_", "", class_modul_system_setting::$int_TYPE_STRING, _pages_modul_id_);
+		$this->registerConstant("_pages_templatechange_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
+		$this->registerConstant("_pages_indexpage_", "index", class_module_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
+		$this->registerConstant("_pages_errorpage_", "error", class_module_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
+		$this->registerConstant("_pages_defaulttemplate_", "", class_module_system_setting::$int_TYPE_STRING, _pages_modul_id_);
 		//2.1.1: overall cachetime
-		$this->registerConstant("_pages_cacheenabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_); //FIXME: reenable
+		$this->registerConstant("_pages_cacheenabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_); //FIXME: reenable
 		//2.1.1: possibility, to create new pages disabled
-		$this->registerConstant("_pages_newdisabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
+		$this->registerConstant("_pages_newdisabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
 		//portaleditor
-        $this->registerConstant("_pages_portaleditor_", "true", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
+        $this->registerConstant("_pages_portaleditor_", "true", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
 
         $strReturn .= "Shifting pages to first position...\n";
-        $objCommon = new class_modul_system_common();
+        $objCommon = new class_module_system_common();
         $objCommon->setAbsolutePosition($strSystemID, 1);
 
 
@@ -647,7 +647,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.3.1 to 3.3.1.1...\n";
 
         $strReturn .= "Removing unused constant _pages_maxcachetime_...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_pages_maxcachetime_");
+        $objConstant = class_module_system_setting::getConfigByName("_pages_maxcachetime_");
         $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_id='".$objConstant->getSystemid()."'";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
@@ -683,7 +683,7 @@ class class_installer_pages extends class_installer_base implements interface_in
                       WHERE system_module_nr = "._pages_folder_id_."";
         $arrEntries = $this->objDB->getArray($strQuery);
         $strDefaultLang = "";
-        $objDefaultLanguage = class_modul_languages_language::getDefaultLanguage();
+        $objDefaultLanguage = class_module_languages_language::getDefaultLanguage();
         if($objDefaultLanguage != null)
             $strDefaultLang = $objDefaultLanguage->getStrName();
 
@@ -785,7 +785,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         if(!$objFilesystem->fileDelete("/admin/class_modul_pages_admin_xml.php"))
             $strReturn .= "Deletion of /admin/class_modul_pages_admin_xml.php failed!\n";
 
-        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"]);
         $objModule->setStrXmlNameAdmin("");
         $objModule->updateObjectToDb();
 

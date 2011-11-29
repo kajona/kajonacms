@@ -47,7 +47,7 @@ $arrStart = gettimeofday();
 $objDb = class_carrier::getInstance()->getObjDB();
     $arrSystemidsCreated = array();
     for($intI =0; $intI < 100; $intI++) {
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         $arrSystemidsCreated[] = $objSystemCommon->createSystemRecord(0, "test record");
     }
 $arrEnd = gettimeofday();
@@ -56,7 +56,7 @@ echo "TX inserts took        ".$intTimeUsed." sec\n";
 
 $arrStart = gettimeofday();
     foreach($arrSystemidsCreated as $strOneSysID) {
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         $objSystemCommon->deleteSystemRecord($strOneSysID);
     }
 $arrEnd = gettimeofday();
@@ -136,7 +136,7 @@ $arrStart = gettimeofday();
 $objDb = class_carrier::getInstance()->getObjDB();
     $arrSystemidsCreated = array();
     for($intI =0; $intI < 100; $intI++) {
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         $arrSystemidsCreated[] = $objSystemCommon->createSystemRecord(0, "test record");
     }
 $arrEnd = gettimeofday();
@@ -145,7 +145,7 @@ echo "TX inserts took        ".$intTimeUsed." sec\n";
 
 $arrStart = gettimeofday();
     foreach($arrSystemidsCreated as $strOneSysID) {
-        $objSystemCommon = new class_modul_system_common();
+        $objSystemCommon = new class_module_system_common();
         $objSystemCommon->deleteSystemRecord($strOneSysID);
     }
 $arrEnd = gettimeofday();

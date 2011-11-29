@@ -84,7 +84,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //check, if the page may be loaded using the default-language
             $strPreviousLang = $this->getPortalLanguage();
-            $objDefaultLang = class_modul_languages_language::getDefaultLanguage();
+            $objDefaultLang = class_module_languages_language::getDefaultLanguage();
             if($this->getPortalLanguage() != $objDefaultLang->getStrName()) {
                 class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());

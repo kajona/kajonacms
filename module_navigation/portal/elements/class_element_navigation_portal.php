@@ -36,7 +36,7 @@ class class_element_navigation_portal extends class_element_portal implements in
 	public function loadData() {
 		$strReturn = "";
 
-        $objNaviModule = class_modul_system_module::getModuleByName("navigation");
+        $objNaviModule = class_module_system_module::getModuleByName("navigation");
 		if($objNaviModule != null) {
             $objNavigation = $objNaviModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objNavigation->action();

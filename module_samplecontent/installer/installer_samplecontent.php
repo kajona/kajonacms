@@ -74,7 +74,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
             if($objInstaller instanceof interface_sc_installer ) {
                 $strModule = $objInstaller->getCorrespondingModule();
                 $strReturn .= "Module ".$strModule."...\n";
-                $objModule = class_modul_system_module::getModuleByName($strModule);
+                $objModule = class_module_system_module::getModuleByName($strModule);
                 if($objModule == null) {
                     $strReturn .= "\t... not installed!\n";
                 }

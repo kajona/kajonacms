@@ -98,7 +98,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 		               AND system_prev_id = ?
 		               AND system_module_nr = ?
 		          ORDER BY system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_navigation_tree($arrOneId["system_id"]);
@@ -122,7 +122,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
                      AND navigation_name = ?
                      AND system_module_nr = ?
                      ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), $strName, _navigation_modul_id_));
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), $strName, _navigation_modul_id_));
         if(isset($arrRow["system_id"]))
             return new class_module_navigation_tree($arrRow["system_id"]);
         else

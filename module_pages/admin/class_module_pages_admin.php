@@ -97,7 +97,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
     protected function actionShowHistory() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getSystemid())) {
-            $objSystemAdmin = class_modul_system_module::getModuleByName("system")->getAdminInstanceOfConcreteModule();
+            $objSystemAdmin = class_module_system_module::getModuleByName("system")->getAdminInstanceOfConcreteModule();
             $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
         }
         else
@@ -260,9 +260,9 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 
             //if languages are installed, present a language switch right here
-            if(count(class_modul_languages_language::getAllLanguages(true)) > 1) {
+            if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
                 $arrToolbarEntries = array();
-                $objLanguages = new class_modul_languages_admin();
+                $objLanguages = new class_module_languages_admin();
                 $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
                 $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
             }
@@ -357,9 +357,9 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
             //if languages are installed, present a language switch right here
             $strPathNavi = "";
-            if(count(class_modul_languages_language::getAllLanguages(true)) > 1) {
+            if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
                 $arrToolbarEntries = array();
-                $objLanguages = new class_modul_languages_admin();
+                $objLanguages = new class_module_languages_admin();
                 $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
                 $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
             }
@@ -431,7 +431,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	                $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
                 }
                 //if languages are installed, present a language switch right here
-                $objLanguages = new class_modul_languages_admin();
+                $objLanguages = new class_module_languages_admin();
                 $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
                 if($this->getParam("pe") != 1)
@@ -461,7 +461,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 
                     //check if folder or page given as prev-id
-                    $objSystemCommons = new class_modul_system_common($objPage->getPrevId());
+                    $objSystemCommons = new class_module_system_common($objPage->getPrevId());
                     $strFoldername = "";
                     $strFolderid = "";
                     if($objSystemCommons->getIntModuleNr() == _pages_folder_id_) {
@@ -513,7 +513,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
 
                 //include the tags, if present
-                $objTags = class_modul_system_module::getModuleByName("tags");
+                $objTags = class_module_system_module::getModuleByName("tags");
                 if($objTags != null) {
                     /**
                      * @var class_module_tags_admin
@@ -531,7 +531,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
                 $arrToolbarEntries = array();
 
                 //if languages are installed, present a language switch right here
-                $objLanguages = new class_modul_languages_admin();
+                $objLanguages = new class_module_languages_admin();
                 $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
 
                 if($this->getParam("pe") != 1)
@@ -562,7 +562,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
                 $strFolder = "";
                 //initial prev-id
                 if($this->getSystemid() != "") {
-                    $objCommon = new class_modul_system_common($this->getSystemid());
+                    $objCommon = new class_module_system_common($this->getSystemid());
                     if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                         $objFolder = new class_module_pages_folder($this->getSystemid());
                         $strFolder = $objFolder->getStrName();
@@ -577,7 +577,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				}
                 //maybe overriden manually / by page-reload
 				if($this->getParam("folder_id") != "") {
-                    $objCommon = new class_modul_system_common($this->getParam("folder_id"));
+                    $objCommon = new class_module_system_common($this->getParam("folder_id"));
                     if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                         $objFolder = new class_module_pages_folder($this->getParam("folder_id"));
                         $strFolder = $objFolder->getStrName();
@@ -836,7 +836,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
             $arrToolbarEntries = array();
 
             //if languages are installed, present a language switch right here
-            $objLanguages = new class_modul_languages_admin();
+            $objLanguages = new class_module_languages_admin();
             $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
 
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
@@ -954,7 +954,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 		//Link to root-folder
         $arrPathLinks[] = getLinkAdmin("pages", "list", "", "&nbsp;/&nbsp;");
 		foreach($arrPath as $strOneFolderID) {
-            $objCommon = new class_modul_system_common($strOneFolderID);
+            $objCommon = new class_module_system_common($strOneFolderID);
             if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                 $objFolder = new class_module_pages_folder($strOneFolderID);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
@@ -1051,7 +1051,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	        			$strClass = "class_".str_replace(".php", "", $strInstaller);
 	        			$objInstaller = new $strClass();
 
-	        			$objSystem = class_modul_system_module::getModuleByName("system");
+	        			$objSystem = class_module_system_module::getModuleByName("system");
 	        			if($objInstaller instanceof interface_installer ) {
 	                		$bitNeededSysversionInstalled = true;
 	                	    //check, if a min version of the system is needed
@@ -1069,7 +1069,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
                             foreach($arrModulesNeeded as $strOneModule) {
                                 $objTestModule = null;
                                 try {
-                                    $objTestModule = class_modul_system_module::getModuleByName($strOneModule, true);
+                                    $objTestModule = class_module_system_module::getModuleByName($strOneModule, true);
                                 }
                                 catch (class_exception $objException) { }
                                 if($objTestModule == null) {

@@ -176,7 +176,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         //working directly on the db is much easier right here!
         //start by making a copy of the sysrecords, attaching them to the new page
-        $objCommon = new class_modul_system_common($this->getSystemid());
+        $objCommon = new class_module_system_common($this->getSystemid());
         $objCommon->copyCurrentSystemrecord($strIdOfNewPageelement, $strNewPage);
 
 
@@ -605,7 +605,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 	public static function deletePageElement($strSystemid) {
 	    class_logger::getInstance()->addLogRow("deleted page-element ".$strSystemid, class_logger::$levelInfo);
 	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $objRoot = new class_modul_system_common($strSystemid);
+	    $objRoot = new class_module_system_common($strSystemid);
 	    //Load the Element-Data
 		$objElementData = new class_module_pages_pageelement($strSystemid);
 		//Build the class-name

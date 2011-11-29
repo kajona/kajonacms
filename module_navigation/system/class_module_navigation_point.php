@@ -153,7 +153,7 @@ class class_module_navigation_point extends class_model implements interface_mod
         $arrReturn = array();
 
         //split modes  - regular navigation or generated out of the pages / folders
-        $objCommon = new class_modul_system_common($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
 
         //current node is a navigation-node
         if($objCommon->getIntModuleNr() == _navigation_modul_id_) {

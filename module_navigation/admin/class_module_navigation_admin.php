@@ -137,7 +137,7 @@ class class_module_navigation_admin extends class_admin implements interface_adm
                 $strListID = generateSystemid();
     			$strNaviReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
-                $objCommons = new class_modul_system_common($this->getSystemid());
+                $objCommons = new class_module_system_common($this->getSystemid());
                 $strPrevID = $objCommons->getStrPrevId();
 
     			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID.$this->strPeAddon, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_treeLevelUp.gif"));

@@ -173,7 +173,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 	}
 
     private function searchPageTags() {
-        if(class_modul_system_module::getModuleByName("tags") != null) {
+        if(class_module_system_module::getModuleByName("tags") != null) {
 
             $arrWhere = array();
 		    //Build an or-statemement out of the columns

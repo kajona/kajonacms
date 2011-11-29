@@ -40,7 +40,7 @@ echo "  found ".count($arrSystemids)." systemrecords.\n";
 echo "traversing internal tree structure...\n\n";
 
 echo "root-record / 0\n";
-$objCommon = new class_modul_system_common();
+$objCommon = new class_module_system_common();
 $arrChilds = $objCommon->getChildNodesAsIdArray("0");
 
 echo "<div style=\"border: 1px solid #cccccc; margin: 0 0 10px 0px;\" >";
@@ -94,7 +94,7 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
     }
 
 
-    $objCommon = new class_modul_system_common($strStartId);
+    $objCommon = new class_module_system_common($strStartId);
     $arrRecord = $objCommon->getSystemRecord();
 
     $arrChilds = $objCommon->getChildNodesAsIdArray();

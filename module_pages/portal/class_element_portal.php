@@ -226,7 +226,7 @@ abstract class class_element_portal extends class_portal {
                 class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
 
                 //fetch the language to set the correct admin-lang
-                $objLanguages = new class_modul_languages_language();
+                $objLanguages = new class_module_languages_language();
                 $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
 
@@ -382,7 +382,7 @@ abstract class class_element_portal extends class_portal {
                 class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
 
                 //fetch the language to set the correct admin-lang
-                $objLanguages = new class_modul_languages_language();
+                $objLanguages = new class_module_languages_language();
                 $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
 
@@ -442,7 +442,7 @@ abstract class class_element_portal extends class_portal {
         class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
 
         //fetch the language to set the correct admin-lang
-        $objLanguages = new class_modul_languages_language();
+        $objLanguages = new class_module_languages_language();
         $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
         $strElementHref = getLinkAdminHref("pages_content", "newElement", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");

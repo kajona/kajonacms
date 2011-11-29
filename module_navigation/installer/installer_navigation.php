@@ -208,7 +208,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Registering systemsetting...\n";
-        $this->registerConstant("_navigation_use_cache_", "false", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
+        $this->registerConstant("_navigation_use_cache_", "false", class_module_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
 
         $this->updateModuleVersion("navigation", "3.2.0.9");
         return $strReturn;
@@ -265,7 +265,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         $strReturn = "Updating 3.2.91 to 3.2.92...\n";
 
         $strReturn .= "Registering admin-xml class...\n";
-        $objModule = class_modul_system_module::getModuleByName("navigation", true);
+        $objModule = class_module_system_module::getModuleByName("navigation", true);
         $objModule->setStrXmlNameAdmin("class_modul_navigation_admin_xml.php");
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
@@ -375,7 +375,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         if(!$objFilesystem->fileDelete("/admin/class_modul_navigation_admin_xml.php"))
             $strReturn .= "Deletion of /admin/class_modul_navigation_admin_xml.php failed!\n";
 
-        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"]);
         $objModule->setStrXmlNameAdmin("");
         $objModule->updateObjectToDb();
 

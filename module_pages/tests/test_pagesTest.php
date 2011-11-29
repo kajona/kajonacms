@@ -13,14 +13,14 @@ class class_test_pages extends class_testbase  {
         echo "testing module_pages\n";
 
         //pages at startup:
-        $intPagesAtStartup = count(class_module_pages_folder::getPagesInFolder( class_modul_system_module::getModuleByName("pages")->getSystemid() ));
+        $intPagesAtStartup = count(class_module_pages_folder::getPagesInFolder( class_module_system_module::getModuleByName("pages")->getSystemid() ));
         $objDB->flushQueryCache();
 
 
         echo "\tcreate a new folder...\n";
         $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("autotest");
-        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(class_module_system_module::getModuleByName("pages")->getSystemid());
         $strTestFolderID = $objFolder->getSystemid();
 
         echo "\tcreate 100 folders using the model...\n";
@@ -54,7 +54,7 @@ class class_test_pages extends class_testbase  {
             $this->assertEquals($objPage->getStrTemplate(), "kajona_demo.tpl", __FILE__." checkTemplateOfPageCreated");
         }
 
-        $arrPagesAtLevel = class_module_pages_folder::getPagesInFolder(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $arrPagesAtLevel = class_module_pages_folder::getPagesInFolder(class_module_system_module::getModuleByName("pages")->getSystemid());
         $this->assertEquals(count($arrPagesAtLevel), 100+$intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
 
         echo "\tdeleting pages created...\n";
@@ -64,7 +64,7 @@ class class_test_pages extends class_testbase  {
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of pages installed...\n";
-        $arrPagesAtLevel = class_module_pages_folder::getPagesInFolder(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $arrPagesAtLevel = class_module_pages_folder::getPagesInFolder(class_module_system_module::getModuleByName("pages")->getSystemid());
         $this->assertEquals(count($arrPagesAtLevel), $intPagesAtStartup, __FILE__." checkNrOfPagesAtLevel");
 
         echo "\tdeleting folders created...\n";

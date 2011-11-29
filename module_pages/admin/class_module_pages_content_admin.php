@@ -89,7 +89,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
 
             //if languages are installed, present a language switch right here
-            $objLanguages = new class_modul_languages_admin();
+            $objLanguages = new class_module_languages_admin();
             $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
             if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
@@ -410,7 +410,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		// ************************************* Edit the current Element *******************************
 
 		//check, if the element isn't locked
-        $objCommons = new class_modul_system_common($this->getSystemid());
+        $objCommons = new class_module_system_common($this->getSystemid());
 		$strPageSystemid = $objCommons->getPrevId();
 
         $objLockmanager = new class_lockmanager($this->getSystemid());
@@ -490,7 +490,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                     throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
 			}
 			//Edit Date of page & unlock
-            $objCommons = new class_modul_system_common($strPageSystemid);
+            $objCommons = new class_module_system_common($strPageSystemid);
             $objCommons->updateObjectToDb();
 			$objLockmanager->unlockRecord();
 			//And update the internal comment and language
@@ -510,7 +510,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $objStartDate->generateDateFromParams("start", $this->getAllParams());
             $objEndDate->generateDateFromParams("end", $this->getAllParams());
 
-			$objSystemCommon = new class_modul_system_common($this->getSystemid());
+			$objSystemCommon = new class_module_system_common($this->getSystemid());
 			if($objStartDate->getIntYear() == "0000" && $objEndDate->getIntYear() == "0000") {
 			    //Delete the record (maybe) existing in the dates-table
 			    if(!$objSystemCommon->deleteDateRecord())
@@ -548,7 +548,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	protected function actionUpdateElementField() {
 		$strReturn = "";
 		//check, if the element isn't locked
-        $objCommons = new class_modul_system_common($this->getSystemid());
+        $objCommons = new class_module_system_common($this->getSystemid());
 		$strPageSystemid = $objCommons->getPrevId();
 
         $objLockmanager = new class_lockmanager($this->getSystemid());
@@ -627,7 +627,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 				    throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
 			}
 			//Edit Date of page & unlock
-            $objCommons = new class_modul_system_common($strPageSystemid);
+            $objCommons = new class_module_system_common($strPageSystemid);
             $objCommons->updateObjectToDb();
 			$objLockmanager->unlockRecord();
 
@@ -719,9 +719,9 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
             $objLang = null;
             if($this->getParam("copyElement_language") != "") {
-                $objLang = new class_modul_languages_language($this->getParam("copyElement_language"));
+                $objLang = new class_module_languages_language($this->getParam("copyElement_language"));
             } else {
-                $objLang = class_modul_languages_language::getLanguageByName($this->getLanguageToWorkOn());
+                $objLang = class_module_languages_language::getLanguageByName($this->getLanguageToWorkOn());
             }
 
             $objPage = null;
@@ -745,7 +745,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 
             //step one: language selection
-            $arrLanguages = class_modul_languages_language::getAllLanguages(true);
+            $arrLanguages = class_module_languages_language::getAllLanguages(true);
             $arrLanguageDD = array();
             foreach($arrLanguages as $objSingleLanguage)
                 $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getText("lang_".$objSingleLanguage->getStrName(), "languages", "admin");
@@ -867,7 +867,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
 
 		foreach($arrPath as $strOneSystemid) {
-            $objCommon = new class_modul_system_common($strOneSystemid);
+            $objCommon = new class_module_system_common($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigations
 			if($objCommon->getIntModuleNr() == _pages_content_modul_id_)
 				continue;

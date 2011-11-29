@@ -50,7 +50,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         if($intMax < 0)
             $intMax = 1;
 
-        $arrRecords = class_modul_system_common::getLastModifiedRecords($intMax, _pages_modul_id_);
+        $arrRecords = class_module_system_common::getLastModifiedRecords($intMax, _pages_modul_id_);
 
         foreach($arrRecords as $objSingleRecord) {
             $objPage = new class_module_pages_page($objSingleRecord->getSystemid());
