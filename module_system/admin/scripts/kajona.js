@@ -366,8 +366,8 @@ KAJONA.admin.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFi
 
 KAJONA.admin.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles) {
 	var arrCustomFiles = [
-	    KAJONA_WEBPATH + "/admin/scripts/yui/calendar/calendar-min.js",
-        KAJONA_WEBPATH + "/admin/scripts/yui/calendar/assets/calendar.css"
+	    KAJONA_WEBPATH + "/core/module_system/admin/scripts/yui/calendar/calendar-min.js",
+        KAJONA_WEBPATH + "/core/module_system/admin/scripts/yui/calendar/assets/calendar.css"
 	];
 
 	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
@@ -387,8 +387,8 @@ KAJONA.admin.loader.loadImagecropperBase = function(objCallback, arrAdditionalFi
 
 KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
 	var arrCustomFiles = [
-	    KAJONA_WEBPATH + "/admin/scripts/yui/container/container-min.js",
-	    KAJONA_WEBPATH+"/admin/scripts/yui/resize/resize-min.js"
+	    KAJONA_WEBPATH + "/core/module_system/admin/scripts/yui/container/container-min.js",
+	    KAJONA_WEBPATH+"/core/module_system/admin/scripts/yui/resize/resize-min.js"
 	];
 	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
 		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));

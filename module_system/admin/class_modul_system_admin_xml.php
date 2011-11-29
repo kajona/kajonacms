@@ -13,6 +13,7 @@
  * Serves xml-requests, mostly general requests e.g. changing a records status or position in a list
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -25,7 +26,6 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "module_system";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _system_modul_id_;
 		$arrModule["modul"]				= "system";
 
@@ -113,7 +113,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             if($this->getParam("task") != "") {
                 //include the list of possible tasks
                 $objFilesystem = new class_filesystem();
-                $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
+                $arrFiles = class_resourceloader::getInstance()->getFolderContent(_adminpath_."/systemtasks/", array(".php"));
                 asort($arrFiles);
                 //search for the matching task
                 foreach ($arrFiles as $strOneFile) {

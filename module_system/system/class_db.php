@@ -774,18 +774,18 @@ class class_db {
 
 	    // Check, how many dumps to keep
 	    $objFilesystem = new class_filesystem();
-	    $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
+	    $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
 
 	    while(count($arrFiles) >= _system_dbdump_amount_) {
 	        $strFile = array_shift($arrFiles);
-	        if(!$objFilesystem->fileDelete("/system/dbdumps/".$strFile)) {
+	        if(!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
 	           class_logger::getInstance()->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
 	           return false;
 	        }
-	        $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
+	        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
 	    }
 
-        $strTargetFilename = "/system/dbdumps/dbdump_".time().".sql";
+        $strTargetFilename = _projectpath_."/dbdumps/dbdump_".time().".sql";
 
         $arrTables = $this->getTables();
         $arrTablesFinal = array();
@@ -833,7 +833,7 @@ class class_db {
 	        //try to decompress
 	        $objGzip = new class_gzip();
 	        try {
-	        if($objGzip->decompressFile("/system/dbdumps/".$strFilename))
+	        if($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename))
 	           $strFilename = substr($strFilename, 0, strlen($strFilename)-3);
 	        else
 	           return false;
@@ -844,11 +844,11 @@ class class_db {
 	        }
 	    }
 
-	    $bitImport = $this->objDbDriver->dbImport("/system/dbdumps/".$strFilename);
+	    $bitImport = $this->objDbDriver->dbImport(_projectpath_."/dbdumps/".$strFilename);
         //Delete source unzipped file?
         if($bitGzip) {
             $objFilesystem = new class_filesystem();
-            $objFilesystem->fileDelete("/system/dbdumps/".$strFilename);
+            $objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFilename);
         }
         if($bitImport)
             class_logger::getInstance()->addLogRow("DB-DUMP ".$strFilename." was restored", class_logger::$levelWarning);
