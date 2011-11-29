@@ -10,7 +10,7 @@
 /**
  * Class to represent a single adminwidget
  *
- * @package modul_dashboard
+ * @package module_dashboard
  * @author sidler@mulchprod.de
  */
 class class_module_dashboard_widget extends class_model implements interface_model {
@@ -28,7 +28,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_dashboard";
+        $arrModul["name"] 				= "module_dashboard";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]              = _dbprefix_."dashboard";
 		$arrModul["modul"]              = "dashboard";

@@ -9,7 +9,7 @@
 
 
 /**
- * @package modul_dashboard
+ * @package module_dashboard
  *
  */
 class class_adminwidget_systemcheck extends class_adminwidget implements interface_adminwidget {

@@ -9,7 +9,7 @@
 
 
 /**
- * @package modul_dashboard
+ * @package module_dashboard
  *
  */
 class class_module_dashboard_admin extends class_admin implements interface_admin {
@@ -25,7 +25,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"] 				= "modul_dashboard";
+		$arrModul["name"] 				= "module_dashboard";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _dashboard_modul_id_;
 		$arrModul["modul"]				= "dashboard";

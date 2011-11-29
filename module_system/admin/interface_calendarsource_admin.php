@@ -11,12 +11,12 @@
  * This interface indicates whether a single module may be a factory for calendar-events.
  * If given, the dashboard may query implementing classes for entries.
  *
- * @package modul_dashboard
+ * @package module_dashboard
  * @author sidler@mulchprod.de
  * @since 3.4
  */
 interface interface_calendarsource_admin {
-	
+
     /**
      * Returns an array of calendar-entries.
      *

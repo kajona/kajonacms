@@ -11,7 +11,7 @@
  * Data-Container for a single calendar-entry.
  * May be produces by classes in order to be written into the calendar.
  *
- * @package modul_dashboard
+ * @package module_dashboard
  * @author sidler@mulchprod.de
  * @since 3.4
  */

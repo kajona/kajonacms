@@ -12,7 +12,7 @@
  * admin-class of the dashboard-module
  * Serves xml-requests, mostly general requests e.g. changing a widgets position
  *
- * @package modul_dashboard
+ * @package module_dashboard
  */
 class class_module_dashboard_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -26,7 +26,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 				= "modul_dashboard";
+		$arrModule["name"] 				= "module_dashboard";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _dashboard_modul_id_;
 		$arrModule["modul"]				= "dashboard";

@@ -9,7 +9,7 @@
 
 
 /**
- * @package modul_dashboard
+ * @package module_dashboard
  *
  */
 class class_adminwidget_systemlog extends class_adminwidget implements interface_adminwidget {
@@ -76,7 +76,7 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
     /**
      * Return a short (!) name of the widget.
      *
-     * @return
+     * @return string
      */
     public function getWidgetName() {
         return $this->getText("syslog_name");

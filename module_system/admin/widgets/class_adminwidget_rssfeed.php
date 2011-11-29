@@ -9,11 +9,11 @@
 
 
 /**
- * @package modul_dashboard
+ * @package module_dashboard
  *
  */
 class class_adminwidget_rssfeed extends class_adminwidget implements interface_adminwidget {
-    
+
     /**
      * Basic constructor, registers the fields to be persisted and loaded
      *
@@ -23,9 +23,9 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         //register the fields to be persisted and loaded
         $this->setPersistenceKeys(array("feedurl", "posts"));
     }
-    
+
     /**
-     * Allows the widget to add additional fields to the edit-/create form. 
+     * Allows the widget to add additional fields to the edit-/create form.
      * Use the toolkit class as usual.
      *
      * @return string
@@ -36,20 +36,20 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         $strReturn .= $this->objToolkit->formInputText("posts", $this->getText("rssfeed_posts"), $this->getFieldValue("posts"));
         return $strReturn;
     }
-    
+
     /**
      * This method is called, when the widget should generate it's content.
      * Return the complete content using the methods provided by the base class.
-     * Do NOT use the toolkit right here! 
+     * Do NOT use the toolkit right here!
      *
      * @return string
      */
     public function getWidgetOutput() {
         $strReturn = "";
-        
+
         //request the xml...
         $strContent = @file_get_contents($this->getFieldValue("feedurl"));
-        
+
         try {
             $objRemoteloader = new class_remoteloader();
             $objRemoteloader->setStrHost(str_ireplace("http://", "", $this->getFieldValue("feedurl")));
@@ -59,72 +59,72 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         catch (class_exception $objExeption) {
             $strContent = "";
         }
-        
+
         if($strContent != "") {
         	$objXmlparser = new class_xml_parser();
             $objXmlparser->loadString($strContent);
-            
+
             $arrFeed = $objXmlparser->xmlToArray();
-            
+
             if(count($arrFeed) >= 1) {
-                
+
                 //rss feed
                 if(isset($arrFeed["rss"])) {
                     $intCounter = 0;
                     foreach ($arrFeed["rss"][0]["channel"][0]["item"] as $arrOneItem) {
-                    	
+
                         $strTitle = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                         $strLink = (isset($arrOneItem["link"][0]["value"]) ? $arrOneItem["link"][0]["value"] : "");
-                        
+
                         $strReturn .= $this->widgetText("<a href=\"".$strLink."\" target=\"_blank\">".$strTitle."</a>");
                         $strReturn .= $this->widgetSeparator();
-                                                
+
                         if(++$intCounter >= $this->getFieldValue("posts"))
                            break;
-                    
+
                     }
                 }
-                
+
                 //atom feed
                 if(isset($arrFeed["feed"]) && isset($arrFeed["feed"][0]["entry"])) {
                     $intCounter = 0;
                     foreach ($arrFeed["feed"][0]["entry"] as $arrOneItem) {
-                        
+
                         $strTitle = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                         $strLink = (isset($arrOneItem["link"][0]["attributes"]["href"]) ? $arrOneItem["link"][0]["attributes"]["href"] : "");
-            
+
                         $strReturn .= $this->widgetText("<a href=\"".$strLink."\" target=\"_blank\">".$strTitle."</a>");
                         $strReturn .= $this->widgetSeparator();
-                        
+
                         if(++$intCounter >= $this->getFieldValue("posts"))
                            break;
-                    
+
                     }
                 }
             }
             else {
                 $strContent = $this->getText("rssfeed_errorparsing");
-            }                       
-                                
+            }
+
         }
         else
             $strReturn .= $this->getText("rssfeed_errorloading");
-            
-            
-        
+
+
+
         return $strReturn;
     }
-    
-    
+
+
     /**
      * Return a short (!) name of the widget.
      *
-     * @return 
+     * @return
      */
     public function getWidgetName() {
         return $this->getText("rssfeed_name");
     }
-    
+
 }
 
 
