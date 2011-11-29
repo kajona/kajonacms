@@ -1,7 +1,7 @@
 <?php
 
-require_once (dirname(__FILE__)."/../system/class_testbase.php");
-require_once (dirname(__FILE__)."/../system/interface_versionable.php");
+require_once (dirname(__FILE__)."/../../module_system/system/class_testbase.php");
+require_once (dirname(__FILE__)."/../../module_system/system/interface_versionable.php");
 
 /**
  * Tests a few aspects of the changelog-component

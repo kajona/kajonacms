@@ -37,7 +37,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @return bool
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
-        $this->strDbFile = '/system/db/'.$strDbName.'.db3';
+        $this->strDbFile = _projectpath_.'/dbdumps/'.$strDbName.'.db3';
 
         try {
             $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);

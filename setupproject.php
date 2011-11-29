@@ -25,7 +25,7 @@ class class_project_setup {
 
 
         echo "loading core...\n\n";
-        include "./bootstrap.php";
+        include dirname(__FILE__)."/bootstrap.php";
 
         $arrModules = scandir(_corepath_);
 
@@ -48,11 +48,11 @@ class class_project_setup {
         self::checkDir("/files/images");
         self::checkDir("/files/public");
 
-        self::checkDir("/default");
-        self::checkDir("/default/js");
-        self::checkDir("/default/css");
-        self::checkDir("/default/tpl");
-        self::checkDir("/default/pics");
+        self::checkDir("/templates/default");
+        self::checkDir("/templates/default/js");
+        self::checkDir("/templates/default/css");
+        self::checkDir("/templates/default/tpl");
+        self::checkDir("/templates/default/pics");
 
 
         echo "searching for files on root-path...\n";
