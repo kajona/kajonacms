@@ -37,6 +37,13 @@ class class_project_setup {
         self::checkDir("/files/images");
         self::checkDir("/files/public");
 
+        self::checkDir("/default");
+        self::checkDir("/default/js");
+        self::checkDir("/default/css");
+        self::checkDir("/default/tpl");
+        self::checkDir("/default/pics");
+
+
 
         echo "copy index.php.root to index.php\n";
         copy(_corepath_."/index.php.root", _realpath_."/index.php");
@@ -49,6 +56,24 @@ class class_project_setup {
 
         echo "copy installer.php.root to installer.php\n";
         copy(_corepath_."/installer.php.root", _realpath_."/installer.php");
+
+
+        echo "Kajona V4 template setup.\nCreates the default-template-pack required to render pages.\n";
+        echo "Files already existing are NOT overwritten.\n";
+
+        $arrModules = scandir(_corepath_);
+
+        $arrModules = array_filter($arrModules, function($strValue) {
+            return preg_match("/(module|element|_)+.*/i", $strValue);
+        });
+
+        foreach($arrModules as $strSingleModule) {
+            if(is_dir(_corepath_."/".$strSingleModule."/templates"))
+                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_._templatepath_."");
+
+            if(is_dir(_corepath_."/".$strSingleModule."/files"))
+                self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_._filespath_."");
+        }
 
     }
 
@@ -63,6 +88,27 @@ class class_project_setup {
         }
         else {
             echo " \t\t... already existing.\n";
+        }
+    }
+
+
+    private static function copyFolder($strSourceFolder, $strTargetFolder) {
+        $arrEntries = scandir($strSourceFolder);
+        foreach($arrEntries as $strOneEntry) {
+            if($strOneEntry == "." || $strOneEntry == ".." || $strOneEntry == ".svn")
+                continue;
+
+            if(is_file($strSourceFolder."/".$strOneEntry) && !is_file($strTargetFolder."/".$strOneEntry)) {
+                echo "copying file ".$strSourceFolder."/".$strOneEntry." to ".$strTargetFolder."/".$strOneEntry."\n";
+                copy($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
+                chmod($strTargetFolder."/".$strOneEntry, 0777);
+            }
+            else if(is_dir($strSourceFolder."/".$strOneEntry)) {
+                if(!is_dir($strTargetFolder."/".$strOneEntry))
+                    mkdir($strTargetFolder."/".$strOneEntry, 0777);
+
+                self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
+            }
         }
     }
 }
