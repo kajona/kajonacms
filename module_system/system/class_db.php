@@ -328,7 +328,7 @@ class class_db {
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
     		if($arrReturn === false) {
-    		    $this->getError($strQuery."\nparams: ".implode(", ", $arrParams));
+    		    $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
     		    return array();
     		}
     		if($bitCache)
@@ -346,6 +346,7 @@ class class_db {
      * @param string $strQuery
      * @param int $intStart
      * @param int $intEnd
+     * @param bool $bitCache
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
@@ -408,6 +409,7 @@ class class_db {
      * @param array $arrParams
      * @param int $intStart
      * @param int $intEnd
+     * @param bool $bitCache
      * @return array
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true) {
@@ -450,7 +452,7 @@ class class_db {
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
     		if($arrReturn === false) {
-    		    $this->getError($strQuery."\nparams: ".implode(", ", $arrParams));
+    		    $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
     		    return array();
     		}
     		if($bitCache)
@@ -464,7 +466,7 @@ class class_db {
 	/**
 	 * Writes a message to the dblog
 	 *
-	 * @param sring $strText
+	 * @param string $strText
 	 */
 	private function writeDbLog($strText) {
 	    $arrStack = debug_backtrace();
@@ -476,7 +478,7 @@ class class_db {
 		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
 		                 "\r\n"
 		              . $strText . "\r\n\r\n\r\n";
-		$handle = fopen(_systempath_."/debug/dblog.log", "a");
+		$handle = fopen(_projectpath_."/debug/querylog.log", "a");
 		fwrite($handle, $strText);
 		fclose($handle);
 	}
@@ -501,23 +503,23 @@ class class_db {
 		                             array("\nFROM " , "\nWHERE ", "\n\tAND ", "\nGROUP BY ", "\nORDER BY " ),
 		                             $strQuery);
 
-		    $strErrorcode = "";
-			$strErrorcode .= "<pre>Error in query\n\n";
-			$strErrorcode .= "Error:\n";
-			$strErrorcode .= $strError . "\n\n";
-			$strErrorcode .= "Query:\n";
-			$strErrorcode .= $strQuery ."\n";
-			$strErrorcode .= "\n";
-			$strErrorcode .= "Callstack:\n";
+		    $strErrorCode = "";
+			$strErrorCode .= "<pre>Error in query\n\n";
+			$strErrorCode .= "Error:\n";
+			$strErrorCode .= $strError . "\n\n";
+			$strErrorCode .= "Query:\n";
+			$strErrorCode .= $strQuery ."\n";
+			$strErrorCode .= "\n";
+			$strErrorCode .= "Callstack:\n";
 			if (function_exists("debug_backtrace")) {
 				$arrStack = debug_backtrace();
 
 				foreach ($arrStack as $intPos => $arrValue) {
-					$strErrorcode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
+					$strErrorCode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
 				}
 			}
-			$strErrorcode .= "</pre>";
-			throw new class_exception($strErrorcode, class_exception::$level_ERROR);
+			$strErrorCode .= "</pre>";
+			throw new class_exception($strErrorCode, class_exception::$level_ERROR);
 		}
 		else {
 		    //send a warning to the logger
@@ -730,8 +732,8 @@ class class_db {
      * By passing the query through this method, the driver can
      * add db-specific commands.
      * The array of fields should have the following structure
-     * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
-     * whereas datatype is one of the following:
+     * $array[string columnName] = array(string data-type, boolean isNull [, default (only if not null)])
+     * whereas data-type is one of the following:
      * 		int
      *      long
      * 		double
@@ -761,13 +763,13 @@ class class_db {
         return $bitReturn;
     }
 
-	/**
-	 * Dumps the current db
-	 * Takes care of holding just the defined number of dumps in the filesystem, defined by _system_dbdump_amount_
-	 *
-     * @param array $arrTablesToExlude specify a set of tables not to be included in the dump
-	 * @return bool
-	 */
+    /**
+     * Dumps the current db
+     * Takes care of holding just the defined number of dumps in the filesystem, defined by _system_dbdump_amount_
+     *
+     * @param array $arrTablesToExclude specify a set of tables not to be included in the dump
+     * @return bool
+     */
 	public function dumpDb($arrTablesToExclude = array()) {
         if(!$this->bitConnected)
             $this->dbconnect();
@@ -858,7 +860,7 @@ class class_db {
 	}
 
 	/**
-	 * Parses a query to eliminate unecessary characters suchs as whitespaces
+	 * Parses a query to eliminate unnecessary characters such as whitespaces
 	 *
 	 * @param string $strQuery
 	 * @return string
@@ -907,7 +909,7 @@ class class_db {
 	}
 
 	/**
-	 * Returns the nnumber of queries solved by the cache
+	 * Returns the number of queries solved by the cache
 	 *
 	 * @return int
 	 */
@@ -929,7 +931,7 @@ class class_db {
      * as used by prepared statements.
      *
      * @param array $arrParams
-     * @param array $arrEscapes An array of booleans for each param, used to block the escaping of html-special chars.
+     * @param array $arrEscapes An array of boolean for each param, used to block the escaping of html-special chars.
      *                          If not passed, all params will be cleaned.
      * @return array
      * @since 3.4
@@ -997,7 +999,7 @@ class class_db {
      * Allows the db-driver to add database-specific surroundings to table-names.
      * E.g. needed by the mysql-drivers
      *
-     * @param string $strColumn
+     * @param string $strTable
      * @return string
      */
     public function encloseTableName($strTable) {
