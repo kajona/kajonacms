@@ -43,7 +43,7 @@ class class_installer_system extends class_installer_base implements interface_i
         //check, if not already existing
 	    $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("languageswitch");
+		    $objElement = class_module_pages_element::getElement("languageswitch");
 		}
 		catch (class_exception $objEx)  {
 		}
@@ -60,12 +60,12 @@ class class_installer_system extends class_installer_base implements interface_i
         //check, if not already existing
         $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("languageswitch");
+		    $objElement = class_module_pages_element::getElement("languageswitch");
 		}
 		catch (class_exception $objEx)  {
 		}
 		if($objElement == null) {
-		    $objElement = new class_modul_pages_element();
+		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("languageswitch");
 		    $objElement->setStrClassAdmin("class_element_languageswitch_admin.php");
 		    $objElement->setStrClassPortal("class_element_languageswitch_portal.php");
@@ -742,7 +742,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 
             $strReturn .= "Updating element-versions...\n";
-            $arrElements = class_modul_pages_element::getAllElements();
+            $arrElements = class_module_pages_element::getAllElements();
             foreach($arrElements as $objOneElement) {
                 $objOneElement->setStrVersion("3.2.0.9");
                 $objOneElement->updateObjectToDb();

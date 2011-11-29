@@ -38,7 +38,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         //check, if not already existing
 	    $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("tags");
+		    $objElement = class_module_pages_element::getElement("tags");
 		}
 		catch (class_exception $objEx)  {
 		}
@@ -78,11 +78,11 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$this->registerModule("tags",
                                  _tags_modul_id_,
                                  "",
-                                 "class_module_tags_adminn.php",
+                                 "class_module_tags_admin.php",
                                  $this->arrModule["version"],
                                  true,
                                  "",
-                                 "class_module_tags_admin_xml.phpp");
+                                 "class_module_tags_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 
@@ -98,12 +98,12 @@ class class_installer_tags extends class_installer_base implements interface_ins
         //check, if not already existing
         $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("tags");
+		    $objElement = class_module_pages_element::getElement("tags");
 		}
 		catch (class_exception $objEx)  {
 		}
 		if($objElement == null) {
-		    $objElement = new class_modul_pages_element();
+		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("tags");
 		    $objElement->setStrClassAdmin("class_element_tags_admin.php");
 		    $objElement->setStrClassPortal("class_element_tags_portal.php");

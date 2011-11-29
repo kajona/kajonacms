@@ -53,7 +53,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $objCommon->updateObjectToDb();
 
             if($objCommon->getRecordModuleNr() == _pages_content_modul_id_ && $intNewPos != "") {
-                $objElement = new class_modul_pages_pageelement($this->getSystemid());
+                $objElement = new class_module_pages_pageelement($this->getSystemid());
                 $objElement->setAbsolutePosition($this->getSystemid(), $intNewPos);
             }
             else {

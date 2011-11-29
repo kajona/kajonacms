@@ -246,7 +246,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
 
-        $arrPages = class_modul_pages_folder::getPagesAndFolderList($strSourceId);
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($strSourceId);
         $arrReturn = array();
 
         //transform the sublevel
@@ -255,17 +255,17 @@ class class_module_navigation_point extends class_model implements interface_mod
             if($objOneEntry->getStatus() == 0)
                 continue;
 
-            if($objOneEntry instanceof class_modul_pages_page) {
+            if($objOneEntry instanceof class_module_pages_page) {
 
                 //validate if the page to be links has a template assigned and at least a single element created
-                if( $objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
+                if( $objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
 
                     $objPoint = new class_module_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
                     $objPoint->setIntRecordStatus(1, false);
 
                     //if in alias mode, then check what type of target is requested
-                    if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
+                    if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
                         $strAlias = uniStrtolower($objOneEntry->getStrAlias());
                         if(uniStrpos($strAlias, "http") !== false) {
                             $objPoint->setStrPageE($objOneEntry->getStrAlias());

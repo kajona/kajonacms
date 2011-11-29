@@ -54,7 +54,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
         $strRows = "";
         foreach($arrObjLanguages as $objOneLanguage) {
             //Check, if the current page has elements
-            $objPage = class_modul_pages_page::getPageByName($this->getPagename());
+            $objPage = class_module_pages_page::getPageByName($this->getPagename());
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {
 

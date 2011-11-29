@@ -136,9 +136,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Now we have to register module by module
 
 		//the pages
-		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.phpp", "class_module_pages_admin.phpp", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.php", "class_module_pages_admin.php", $this->arrModule["version"] , true);
 		//The pages_content
-		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_adminn.php", $this->arrModule["version"], false);
+		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
 		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 

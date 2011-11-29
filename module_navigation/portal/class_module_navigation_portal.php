@@ -466,8 +466,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	private function isPageVisibleInOtherNavigation() {
 
 	   //load the placeholders placed on the current page-template. therefore, instantiate a page-object
-       $objPageData = class_modul_pages_page::getPageByName($this->getPagename());
-       $objMasterPageData = class_modul_pages_page::getPageByName("master");
+       $objPageData = class_module_pages_page::getPageByName($this->getPagename());
+       $objMasterPageData = class_module_pages_page::getPageByName("master");
        if($objPageData != null) {
            //analyze the placeholders on the page, faster than iterating the the elements available in the db
            $strTemplateId = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate());
@@ -483,10 +483,10 @@ class class_module_navigation_portal extends class_portal implements interface_p
 
                           //seems as we have a navigation-element different than the current one.
                           //check, if the element is installed on the current page
-                          $objElement = class_modul_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
+                          $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
                           //maybe on the masters-page?
                           if($objElement == null)
-                              $objElement = class_modul_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
+                              $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
 
                           if($objElement != null) {
                               //wohooooo, an element was found.
@@ -568,7 +568,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
         }
 
         if($objPointData->getStrPageI() != "") {
-            $objPage = class_modul_pages_page::getPageByName($objPointData->getStrPageI());
+            $objPage = class_module_pages_page::getPageByName($objPointData->getStrPageI());
             if($objPage->getIntLmTime() != "")
                 $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getIntLmTime());
         }

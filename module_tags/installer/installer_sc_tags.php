@@ -29,18 +29,18 @@ class class_installer_sc_tags implements interface_sc_installer  {
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_modul_pages_folder::getFolderList();
+        $arrFolder = class_module_pages_folder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
 
         //search the master page
-        $objMaster = class_modul_pages_page::getPageByName("master");
+        $objMaster = class_module_pages_page::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
         $strReturn .= "Creating tags page\n";
-            $objPage = new class_modul_pages_page();
+            $objPage = new class_module_pages_page();
             $objPage->setStrName("tags");
 
             if($this->strContentLanguage == "de")
@@ -54,8 +54,8 @@ class class_installer_sc_tags implements interface_sc_installer  {
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding tags-element to new page\n";
 
-            if(class_modul_pages_element::getElement("tags") != null) {
-                $objPagelement = new class_modul_pages_pageelement();
+            if(class_module_pages_element::getElement("tags") != null) {
+                $objPagelement = new class_module_pages_pageelement();
                 $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags|eventmanager");
                 $objPagelement->setStrName("mixed3");
                 $objPagelement->setStrElement("tags");
@@ -72,8 +72,8 @@ class class_installer_sc_tags implements interface_sc_installer  {
             }
 
             $strReturn .= "Adding headline-element to new page\n";
-            if(class_modul_pages_element::getElement("row") != null) {
-                $objPagelement = new class_modul_pages_pageelement();
+            if(class_module_pages_element::getElement("row") != null) {
+                $objPagelement = new class_module_pages_pageelement();
                 $objPagelement->setStrPlaceholder("headline_row");
                 $objPagelement->setStrName("headline");
                 $objPagelement->setStrElement("row");

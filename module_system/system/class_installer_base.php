@@ -555,7 +555,7 @@ abstract class class_installer_base extends class_root {
      */
     protected function updateElementVersion($strElementName, $strVersion) {
         $this->objDB->flushQueryCache();
-        $objElement = class_modul_pages_element::getElement($strElementName);
+        $objElement = class_module_pages_element::getElement($strElementName);
         if($objElement != null) {
             $objElement->setStrVersion($strVersion);
             $objElement->updateObjectToDb();

@@ -26,13 +26,13 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
     public function install() {
 
         //search the master page
-        $objMaster = class_modul_pages_page::getPageByName("master");
+        $objMaster = class_module_pages_page::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_modul_pages_folder::getFolderList();
+        $arrFolder = class_module_pages_folder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
@@ -67,8 +67,8 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strReturn .= "Adding mainnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(class_modul_pages_element::getElement("navigation") != null) {
-                $objPagelement = new class_modul_pages_pageelement();
+            if(class_module_pages_element::getElement("navigation") != null) {
+                $objPagelement = new class_module_pages_pageelement();
                 $objPagelement->setStrPlaceholder("mastermainnavi_navigation");
                 $objPagelement->setStrName("mastermainnavi");
                 $objPagelement->setStrElement("navigation");
@@ -88,8 +88,8 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strReturn .= "Adding portalnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(class_modul_pages_element::getElement("navigation") != null) {
-                $objPagelement = new class_modul_pages_pageelement();
+            if(class_module_pages_element::getElement("navigation") != null) {
+                $objPagelement = new class_module_pages_pageelement();
                 $objPagelement->setStrPlaceholder("masterportalnavi_navigation");
                 $objPagelement->setStrName("masterportalnavi");
                 $objPagelement->setStrElement("navigation");
@@ -109,7 +109,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         }
 
         $strReturn .= "Creating simple sitemap...\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("sitemap");
         $objPage->setStrBrowsername("Sitemap");
         $objPage->setStrTemplate("kajona_demo.tpl");
@@ -118,8 +118,8 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strSitemapId."\n";
         $strReturn .= "Adding sitemap to new page\n";
 
-        if(class_modul_pages_element::getElement("navigation") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("navigation") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("sitemap_navigation");
             $objPagelement->setStrName("sitemap");
             $objPagelement->setStrElement("navigation");
@@ -138,8 +138,8 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(class_modul_pages_element::getElement("row") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");

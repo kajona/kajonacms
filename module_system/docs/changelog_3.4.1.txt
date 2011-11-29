@@ -64,7 +64,7 @@ NEW: updated the news-methods to be able to handle androids REST-requests
 
 Module Pages
 NEW: the portaleditor allows to set page-elements active or inactive. Therefore inactive elements are rendered on pages, too, as soon as the portaleditor is enabled. (#610)
-NEW: made class_modul_pages_portal conform to all portal-classes (implementing interface_portal)
+NEW: made class_module_pages_portal conform to all portal-classes (implementing interface_portal)
 NEW: various performance-improvements. page-generation (portal & backend) may be up to 30% faster.
 NEW: added the language-switcher to the admin-pages-list (was visible only on the pages-content list) (#634)
 BUG: fixed portaleditor in IE

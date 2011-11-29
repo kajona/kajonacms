@@ -150,7 +150,7 @@ class class_module_navigation_admin extends class_admin implements interface_adm
                         $strNameExternal = $objOneNavigation->getStrPageE();
                         $strNameFolder = "";
                         if(validateSystemid($objOneNavigation->getStrFolderI())) {
-                            $objFolder = new class_modul_pages_folder($objOneNavigation->getStrFolderI());
+                            $objFolder = new class_module_pages_folder($objOneNavigation->getStrFolderI());
                             $strNameFolder = $objFolder->getStrName();
                         }
 
@@ -222,7 +222,7 @@ class class_module_navigation_admin extends class_admin implements interface_adm
             $strFoldername = "";
             $strFolderid = "";
             if(validateSystemid($objNavi->getStrFolderId())) {
-                $objFolder = new class_modul_pages_folder($objNavi->getStrFolderId());
+                $objFolder = new class_module_pages_folder($objNavi->getStrFolderId());
                 $strFoldername = $objFolder->getStrName();
                 $strFolderid = $objFolder->getSystemid();
             }
@@ -309,7 +309,7 @@ class class_module_navigation_admin extends class_admin implements interface_adm
 
         $strFoldername = "";
         if(validateSystemid($this->getParam("navigation_folder_i_id"))) {
-            $objFolder = new class_modul_pages_folder($this->getParam("navigation_folder_i_id"));
+            $objFolder = new class_module_pages_folder($this->getParam("navigation_folder_i_id"));
             $strFoldername = $objFolder->getStrName();
         }
 
@@ -349,7 +349,7 @@ class class_module_navigation_admin extends class_admin implements interface_adm
 			    $objPoint = new class_module_navigation_point($this->getSystemid());
 
                 if($strFoldername == "" && validateSystemid($objPoint->getStrFolderI())) {
-                    $objFolder = new class_modul_pages_folder($objPoint->getStrFolderI());
+                    $objFolder = new class_module_pages_folder($objPoint->getStrFolderI());
                     $strFoldername = $objFolder->getStrName();
                 }
 

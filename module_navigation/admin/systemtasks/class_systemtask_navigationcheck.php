@@ -99,7 +99,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
         }
         else if($objPoint->getStrPageI() != "" && $objPoint->getStrPageE() == "") {
             //try to load internal page and check if it exists
-            $objPage = class_modul_pages_page::getPageByName($objPoint->getStrPageI());
+            $objPage = class_module_pages_page::getPageByName($objPoint->getStrPageI());
 
             if($objPage->getSystemid() == "") {
                 $strReturn .= $this->getText("systemtask_navigationcheck_invalidInternal")." ".$objPoint->getStrPageI().")";

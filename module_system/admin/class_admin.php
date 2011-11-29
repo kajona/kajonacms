@@ -650,11 +650,11 @@ abstract class class_admin {
         if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "editElement" || $this->getParam("action") == "newElement")) {
             $objElement = null;
             if($this->getParam("action") == "editElement") {
-                $objElement = new class_modul_pages_pageelement($this->getSystemid());
+                $objElement = new class_module_pages_pageelement($this->getSystemid());
             }
             else if ($this->getParam("action") == "newElement") {
                 $strPlaceholderElement = $this->getParam("element");
-                $objElement = class_modul_pages_element::getElement($strPlaceholderElement);
+                $objElement = class_module_pages_element::getElement($strPlaceholderElement);
             }
             //Build the class-name
             $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());

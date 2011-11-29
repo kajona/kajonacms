@@ -708,7 +708,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 	    if(_system_mod_rewrite_ == "true") {
 
             //used later to add seo-relevant keywords
-            $objPage = class_modul_pages_page::getPageByName($strPageI);
+            $objPage = class_module_pages_page::getPageByName($strPageI);
             if($strLanguage != "") {
                 $objPage->setStrLanguage($strLanguage);
                 $objPage->initObject();

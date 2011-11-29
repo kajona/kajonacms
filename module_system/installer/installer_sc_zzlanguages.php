@@ -28,7 +28,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
         $strReturn = "";
 
         //search the master page
-        $objMaster = class_modul_pages_page::getPageByName("master");
+        $objMaster = class_module_pages_page::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
@@ -36,8 +36,8 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
             $strReturn .= "Adding languageswitch to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(class_modul_pages_element::getElement("languageswitch") != null) {
-                $objPagelement = new class_modul_pages_pageelement();
+            if(class_module_pages_element::getElement("languageswitch") != null) {
+                $objPagelement = new class_module_pages_pageelement();
                 $objPagelement->setStrPlaceholder("masterlanguageswitch_languageswitch");
                 $objPagelement->setStrName("masterswitch");
                 $objPagelement->setStrElement("languageswitch");
@@ -58,17 +58,17 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {
 
-            if(class_exists("class_modul_pages_page", false) || class_classloader::getInstance()->loadClass("class_modul_pages_page") !== false)
-                class_modul_pages_page::assignNullProperties("de");
-            if(class_exists("class_modul_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_modul_pages_pageelement") !== false)
-                class_modul_pages_pageelement::assignNullElements("de");
+            if(class_exists("class_module_pages_page", false) || class_classloader::getInstance()->loadClass("class_module_pages_page") !== false)
+                class_module_pages_page::assignNullProperties("de");
+            if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
+                class_module_pages_pageelement::assignNullElements("de");
         }
         else {
 
-            if(class_exists("class_modul_pages_page", false) || class_classloader::getInstance()->loadClass("class_modul_pages_page") !== false)
-                class_modul_pages_page::assignNullProperties("en");
-            if(class_exists("class_modul_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_modul_pages_pageelement") !== false)
-                class_modul_pages_pageelement::assignNullElements("en");
+            if(class_exists("class_module_pages_page", false) || class_classloader::getInstance()->loadClass("class_module_pages_page") !== false)
+                class_module_pages_page::assignNullProperties("en");
+            if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
+                class_module_pages_pageelement::assignNullElements("en");
 
         }
 

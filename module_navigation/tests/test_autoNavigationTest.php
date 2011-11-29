@@ -11,20 +11,20 @@ class class_test_autonavigationtest extends class_testbase  {
 
     public function testSetup() {
         //creating a new page-node structure
-        $objFolder = new class_modul_pages_folder();
+        $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("naviautotest");
         $objFolder->updateObjectToDb();
         self::$strFolderSystemid = $objFolder->getSystemid();
 
-        $objPage1 = new class_modul_pages_page();
+        $objPage1 = new class_module_pages_page();
         $objPage1->setStrName("testpage1");
         $objPage1->setStrBrowsername("testpage1");
-        $objPage1->setIntType(class_modul_pages_page::$INT_TYPE_PAGE);
+        $objPage1->setIntType(class_module_pages_page::$INT_TYPE_PAGE);
         $objPage1->setStrTemplate("kajona_demo.tpl");
         $objPage1->updateObjectToDb($objFolder->getSystemid());
         self::$strPage1Systemid = $objPage1->getSystemid();
 
-        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement = new class_module_pages_pageelement();
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
@@ -32,23 +32,23 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPagelement->updateObjectToDb($objPage1->getSystemid());
 
 
-        $objPage2 = new class_modul_pages_page();
+        $objPage2 = new class_module_pages_page();
         $objPage2->setStrName("testpage2");
         $objPage2->setStrBrowsername("testpage2");
-        $objPage2->setIntType(class_modul_pages_page::$INT_TYPE_ALIAS);
+        $objPage2->setIntType(class_module_pages_page::$INT_TYPE_ALIAS);
         $objPage2->setStrAlias("testpage2a");
         $objPage2->updateObjectToDb($objFolder->getSystemid());
         self::$strPage2Systemid = $objPage2->getSystemid();
 
-        $objPage3 = new class_modul_pages_page();
+        $objPage3 = new class_module_pages_page();
         $objPage3->setStrName("testpage2a");
         $objPage3->setStrBrowsername("testpage2a");
-        $objPage3->setIntType(class_modul_pages_page::$INT_TYPE_PAGE);
+        $objPage3->setIntType(class_module_pages_page::$INT_TYPE_PAGE);
         $objPage3->setStrTemplate("kajona_demo.tpl");
         $objPage3->updateObjectToDb($objPage2->getSystemid());
         self::$strPage2aSystemid = $objPage3->getSystemid();
 
-        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement = new class_module_pages_pageelement();
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
@@ -105,16 +105,16 @@ class class_test_autonavigationtest extends class_testbase  {
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
         //delete pages and folders created
 
-        $objPage = new class_modul_pages_page(self::$strPage2aSystemid);
+        $objPage = new class_module_pages_page(self::$strPage2aSystemid);
         $objPage->deletePage();
 
-        $objPage = new class_modul_pages_page(self::$strPage2Systemid);
+        $objPage = new class_module_pages_page(self::$strPage2Systemid);
         $objPage->deletePage();
 
-        $objPage = new class_modul_pages_page(self::$strPage1Systemid);
+        $objPage = new class_module_pages_page(self::$strPage1Systemid);
         $objPage->deletePage();
 
-        $objFolder = new class_modul_pages_folder(self::$strFolderSystemid);
+        $objFolder = new class_module_pages_folder(self::$strFolderSystemid);
         $objFolder->deleteFolder();
     }
 
