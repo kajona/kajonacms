@@ -49,11 +49,11 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         $intMax = $this->getFieldValue("nrofrows");
         if($intMax < 0)
             $intMax = 1;
-            
+
         $arrRecords = class_modul_system_common::getLastModifiedRecords($intMax, _pages_modul_id_);
 
         foreach($arrRecords as $objSingleRecord) {
-            $objPage = new class_modul_pages_page($objSingleRecord->getSystemid());
+            $objPage = new class_module_pages_page($objSingleRecord->getSystemid());
             $strReturn .= $this->widgetText(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrName()) );
             $strReturn .= $this->widgetText("&nbsp; &nbsp; ".timeToString($objPage->getIntLmTime())."");
         }

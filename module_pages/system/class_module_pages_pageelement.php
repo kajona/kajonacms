@@ -13,7 +13,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_pageelement extends class_model implements interface_model  {
+class class_module_pages_pageelement extends class_model implements interface_model  {
 
     private $strPlaceholder = "";
     private $strName = "";
@@ -113,7 +113,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     protected function onInsertToDb() {
 
 
-        $objElementdefinitionToCreate = class_modul_pages_element::getElement($this->getStrElement());
+        $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
         if($objElementdefinitionToCreate == null)
             return false;
 
@@ -166,7 +166,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      * This copy includes the records in the elements' foreign tables
      *
      * @param string $strNewPage
-     * @return class_modul_pages_pageelement the new element or null in case of an error
+     * @return class_module_pages_pageelement the new element or null in case of an error
      */
     public function copyElementToPage($strNewPage) {
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
@@ -257,7 +257,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $this->objDB->transactionCommit();
 
         //create an instance of the new element and return it
-        $objNewElement = new class_modul_pages_pageelement($strIdOfNewPageelement);
+        $objNewElement = new class_module_pages_pageelement($strIdOfNewPageelement);
 
         //adopt the new sort id, since page-elements have a special order at each placeholder
         //As a special feature, we set the element as the last
@@ -321,7 +321,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_pageelement($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
 
 		return $arrReturn;
     }
@@ -351,7 +351,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_pageelement($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
 
 		return $arrReturn;
     }
@@ -364,7 +364,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      * @param string $strPlaceholder
      * @param string $strLanguage
      * @param bool $bitJustActive
-     * @return class_modul_pages_pageelement or NULL of no element was found.
+     * @return class_module_pages_pageelement or NULL of no element was found.
      */
     public static function getElementByPlaceholderAndPage($strPageId, $strPlaceholder, $strLanguage, $bitJustActive = true) {
     	$strAnd = "";
@@ -398,7 +398,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         if(count($arrIds) == 1) {
-            return (new class_modul_pages_pageelement($arrIds[0]["system_id"]));
+            return (new class_module_pages_pageelement($arrIds[0]["system_id"]));
         }
         else {
         	return null;
@@ -588,7 +588,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		//Loading the data of the corresp site
         $this->objDB->flushQueryCache();
-		$objPage = new class_modul_pages_page($this->getPrevId());
+		$objPage = new class_module_pages_page($this->getPrevId());
         class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
 		return $strReturn;
@@ -607,7 +607,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	    $objDB = class_carrier::getInstance()->getObjDB();
 	    $objRoot = new class_modul_system_common($strSystemid);
 	    //Load the Element-Data
-		$objElementData = new class_modul_pages_pageelement($strSystemid);
+		$objElementData = new class_module_pages_pageelement($strSystemid);
 		//Build the class-name
 		$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 		//and finally create the object
@@ -631,7 +631,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			return false;
 
 		//Loading the data of the corresp site
-		$objPage = new class_modul_pages_page($objRoot->getPrevId());
+		$objPage = new class_module_pages_page($objRoot->getPrevId());
         class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
 		return true;
@@ -675,7 +675,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder) {
 	    $bitReturn = true;
 	    //Fetch all pages
-        $arrObjPages = class_modul_pages_page::getAllPages();
+        $arrObjPages = class_module_pages_page::getAllPages();
         foreach($arrObjPages as $objOnePage) {
             if($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
                 //Search for matching elements
@@ -692,7 +692,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $objOnePage->getSystemid() ) );
 		        $arrPageElements = array();
 		        foreach ($arrIds as $arrOneRow) {
-		            $arrPageElements[] = new class_modul_pages_pageelement($arrOneRow["system_id"]);
+		            $arrPageElements[] = new class_module_pages_pageelement($arrOneRow["system_id"]);
 		        }
 
                 foreach($arrPageElements as $objOnePageelement) {

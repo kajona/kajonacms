@@ -14,7 +14,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_folder extends class_model implements interface_model, interface_versionable  {
+class class_module_pages_folder extends class_model implements interface_model, interface_versionable  {
 
     private $strActionEdit = "editFolder";
     private $strActionDelete = "deleteFolder";
@@ -151,7 +151,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(_pages_folder_id_, $strSystemid));
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_folder($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_pages_folder($arrOneId["system_id"]);
 
 		return $arrReturn;
 	}
@@ -222,7 +222,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $strFolderid, _pages_modul_id_ ) );
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_page($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_pages_page($arrOneId["system_id"]);
 
 		return $arrReturn;
 	}
@@ -232,7 +232,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
      * under a given systemid.
      *
      * @param string $strFolderid
-     * @return class_modul_pages_page | class_modul_pages_folder
+     * @return class_module_pages_page | class_module_pages_folder
      */
     public static function getPagesAndFolderList($strFolderid = "") {
         if(!validateSystemid($strFolderid))
@@ -248,9 +248,9 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		$arrReturn = array();
 		foreach($arrIds as $arrOneRecord) {
             if($arrOneRecord["system_module_nr"] == _pages_modul_id_)
-                $arrReturn[] = new class_modul_pages_page($arrOneRecord["system_id"]);
+                $arrReturn[] = new class_module_pages_page($arrOneRecord["system_id"]);
             else if($arrOneRecord["system_module_nr"] == _pages_folder_id_)
-                $arrReturn[] = new class_modul_pages_folder($arrOneRecord["system_id"]);
+                $arrReturn[] = new class_module_pages_folder($arrOneRecord["system_id"]);
         }
 
 		return $arrReturn;
@@ -267,12 +267,12 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	public function deleteFolder() {
 
         //scan subfolders
-        $arrSubElements = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
+        $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
-            if($objOneElement instanceof class_modul_pages_page)
+            if($objOneElement instanceof class_module_pages_page)
                 $objOneElement->deletePage();
 
-            if($objOneElement instanceof class_modul_pages_folder)
+            if($objOneElement instanceof class_module_pages_folder)
                 $objOneElement->deleteFolder();
         }
 

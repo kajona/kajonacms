@@ -14,7 +14,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_portal extends class_portal implements interface_portal {
+class class_module_pages_portal extends class_portal implements interface_portal {
 
     /**
      * Static field storing the last registered page-title. Modules may register additional page-titles in order
@@ -47,7 +47,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		$strPagename = $this->getPagename();
 
 		//Load the data of the page
-        $objPageData = class_modul_pages_page::getPageByName($strPagename);
+        $objPageData = class_module_pages_page::getPageByName($strPagename);
 
 
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
@@ -88,7 +88,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
             if($this->getPortalLanguage() != $objDefaultLang->getStrName()) {
                 class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
-                $objPageData = class_modul_pages_page::getPageByName($strPagename);
+                $objPageData = class_module_pages_page::getPageByName($strPagename);
 
                 try {
                     $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
@@ -103,7 +103,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
                 $strPagename = _pages_errorpage_;
 
 
-			$objPageData = class_modul_pages_page::getPageByName($strPagename);
+			$objPageData = class_module_pages_page::getPageByName($strPagename);
 
 			//check, if the page is enabled and if the rights are given, too
 			if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid()))) {
@@ -136,18 +136,18 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		$arrElementsOnPage = array();
 
         if($bitPeRequested)
-            $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getPortalLanguage());
+            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getPortalLanguage());
         else
-            $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
+            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
 		//If there's a master-page, load elements on that, too
-		$objMasterData = class_modul_pages_page::getPageByName("master");
+		$objMasterData = class_module_pages_page::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
 		if($objMasterData->getStrName() != "") {
             $arrElementsOnMaster = array();
             if($bitPeRequested)
-                $arrElementsOnMaster = class_modul_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getPortalLanguage());
+                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getPortalLanguage());
             else
-                $arrElementsOnMaster = class_modul_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getPortalLanguage());
+                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getPortalLanguage());
 			//and merge them
 			$arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
             if($objMasterData->rightEdit())
@@ -291,7 +291,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
                     if($arrOnePeNewElement != null) {
 
                         //check if the linked element exists
-                        $objPeNewElement = class_modul_pages_element::getElement($arrOnePeNewElement["element"]);
+                        $objPeNewElement = class_module_pages_element::getElement($arrOnePeNewElement["element"]);
                         if($objPeNewElement != null) {
                             //placeholder processed before?
                             $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();

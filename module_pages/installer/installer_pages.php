@@ -136,9 +136,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Now we have to register module by module
 
 		//the pages
-		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages_portal.php", "class_modul_pages_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.phpp", "class_module_pages_admin.phpp", $this->arrModule["version"] , true);
 		//The pages_content
-		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
+		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_adminn.php", $this->arrModule["version"], false);
 		//The folderview
 		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 
@@ -185,12 +185,12 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//check, if not already existing
         $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("paragraph");
+		    $objElement = class_module_pages_element::getElement("paragraph");
 		}
 		catch (class_exception $objEx)  {
 		}
 		if($objElement == null) {
-		    $objElement = new class_modul_pages_element();
+		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("paragraph");
 		    $objElement->setStrClassAdmin("class_element_paragraph_admin.php");
 		    $objElement->setStrClassPortal("class_element_paragraph_portal.php");
@@ -208,12 +208,12 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//check, if not already existing
         $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("row");
+		    $objElement = class_module_pages_element::getElement("row");
 		}
 		catch (class_exception $objEx)  {
 		}
 		if($objElement == null) {
-		    $objElement = new class_modul_pages_element();
+		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("row");
 		    $objElement->setStrClassAdmin("class_element_row_admin.php");
 		    $objElement->setStrClassPortal("class_element_row_portal.php");
@@ -247,12 +247,12 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//check, if not already existing
         $objElement = null;
 		try {
-		    $objElement = class_modul_pages_element::getElement("image");
+		    $objElement = class_module_pages_element::getElement("image");
 		}
 		catch (class_exception $objEx)  {
 		}
 		if($objElement == null) {
-		    $objElement = new class_modul_pages_element();
+		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("image");
 		    $objElement->setStrClassAdmin("class_element_image_admin.php");
 		    $objElement->setStrClassPortal("class_element_image_portal.php");
@@ -813,8 +813,8 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.4.1 to 3.4.9...\n";
 
         $strReturn .= "Setting new element-classes...\n";
-        $arrElements = class_modul_pages_element::getAllElements();
-        /** @var class_modul_pages_element $objOneElement */
+        $arrElements = class_module_pages_element::getAllElements();
+        /** @var class_module_pages_element $objOneElement */
         foreach($arrElements as $objOneElement) {
             $objOneElement->setStrClassAdmin(uniStrReplace(".php", "_admin.php", $objOneElement->getStrClassAdmin()));
             $objOneElement->setStrClassPortal(uniStrReplace(".php", "_portal.php", $objOneElement->getStrClassPortal()));

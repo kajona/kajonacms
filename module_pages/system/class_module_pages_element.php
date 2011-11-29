@@ -14,7 +14,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_element extends class_model implements interface_model  {
+class class_module_pages_element extends class_model implements interface_model  {
 
     private $strName = "";
     private $strClassPortal = "";
@@ -114,7 +114,7 @@ class class_modul_pages_element extends class_model implements interface_model  
     /**
 	 * Loads all installed Elements
 	 *
-	 * @return class_modul_pages_element
+	 * @return class_module_pages_element
 	 * @static
 	 */
 	public static function getAllElements() {
@@ -123,7 +123,7 @@ class class_modul_pages_element extends class_model implements interface_model  
 		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_element($arrOneId["element_id"]);
+		    $arrReturn[] = new class_module_pages_element($arrOneId["element_id"]);
 
 		return $arrReturn;
 	}
@@ -132,13 +132,13 @@ class class_modul_pages_element extends class_model implements interface_model  
 	 * Returns the element using the given element-name
 	 *
 	 * @param string $strName
-	 * @return class_modul_pages_element
+	 * @return class_module_pages_element
 	 */
 	public static function getElement($strName) {
 		$strQuery = "SELECT element_id FROM "._dbprefix_."element WHERE element_name=?";
 		$arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 		if(isset($arrId["element_id"]))
-            return new class_modul_pages_element($arrId["element_id"]);
+            return new class_module_pages_element($arrId["element_id"]);
         else
             return null;
 	}

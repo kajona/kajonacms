@@ -13,7 +13,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_page extends class_model implements interface_model, interface_versionable  {
+class class_module_pages_page extends class_model implements interface_model, interface_versionable  {
 
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
@@ -241,7 +241,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	 * @param int $intEnd
 	 * @param string $intFilter
      * @param bool $bitIncludeAlias
-	 * @return mixed class_modul_pages_page
+	 * @return mixed class_module_pages_page
 	 * @static
 	 */
 	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "", $bitIncludeAlias = true) {
@@ -265,7 +265,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_page($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_pages_page($arrOneId["system_id"]);
 
 		return $arrReturn;
 	}
@@ -290,14 +290,14 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	 * Returns a new page-instance, using the given name
 	 *
 	 * @param string $strName
-	 * @return class_modul_pages_page
+	 * @return class_module_pages_page
 	 */
 	public static function getPageByName($strName) {
         $strQuery = "SELECT page_id
 						FROM "._dbprefix_."page
 						WHERE page_name= ?";
 		$arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-		return new class_modul_pages_page((isset($arrId["page_id"]) ? $arrId["page_id"] : ""));
+		return new class_module_pages_page((isset($arrId["page_id"]) ? $arrId["page_id"] : ""));
 	}
 
 	/**
@@ -346,12 +346,12 @@ class class_modul_pages_page extends class_model implements interface_model, int
      */
 	public function deletePage() {
 
-        $arrSubElements = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
+        $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
-            if($objOneElement instanceof class_modul_pages_page)
+            if($objOneElement instanceof class_module_pages_page)
                 $objOneElement->deletePage();
 
-            if($objOneElement instanceof class_modul_pages_folder)
+            if($objOneElement instanceof class_module_pages_folder)
                 $objOneElement->deleteFolder();
         }
 
@@ -363,7 +363,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
 
 	    //Get all Elements belonging to this page
-		$arrElements = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
+		$arrElements = class_module_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 
 		//Start the transaction
 		$this->objDB->transactionBegin();
@@ -372,7 +372,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 		//Loop over the elements
 		foreach($arrElements as $objOneElement) {
 			//Deletion passed to the pages_content class
-			if(!class_modul_pages_pageelement::deletePageElement($objOneElement->getSystemid())) {
+			if(!class_module_pages_pageelement::deletePageElement($objOneElement->getSystemid())) {
 				$bitElements = false;
 				$bitCommit = false;
 				break;
@@ -515,7 +515,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	    }
 
 	    //ok. so now load all elements on the source page and copy them, too
-	    $arrElementsOnSource = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
+	    $arrElementsOnSource = class_module_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 	    if(count($arrElementsOnSource) > 0) {
     	    foreach ($arrElementsOnSource as $objOneSourceElement) {
     	        if($objOneSourceElement->copyElementToPage($strIdOfNewPage) == null) {

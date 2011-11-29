@@ -40,7 +40,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating system folder...\n";
-        $objFolder = new class_modul_pages_folder();
+        $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("_system");
         $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
         $strSystemFolderID = $objFolder->getSystemid();
@@ -48,14 +48,14 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating mainnavigation folder...\n";
-        $objFolder = new class_modul_pages_folder();
+        $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("mainnavigation");
         $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
         $strMainnavigationFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
 
         $strReturn .= "Creating index-site...\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("index");
 
         if($this->strContentLanguage == "de") {
@@ -70,8 +70,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        if(class_modul_pages_element::getElement("row") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -98,8 +98,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_modul_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
@@ -136,7 +136,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $strReturn .= "Creating master-page\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("master");
         $objPage->setStrBrowsername("master");
         $objPage->setStrTemplate("master.tpl");
@@ -146,7 +146,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating error-site...\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("error");
 
         if($this->strContentLanguage == "de")
@@ -161,8 +161,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(class_modul_pages_element::getElement("row") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -190,8 +190,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_modul_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
@@ -223,7 +223,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating imprint-site...\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("imprint");
         if($this->strContentLanguage == "de")
             $objPage->setStrBrowsername("Impressum");
@@ -234,8 +234,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        if(class_modul_pages_element::getElement("row") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -263,8 +263,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_modul_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
@@ -311,7 +311,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating sample page...\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("page_1");
         if($this->strContentLanguage == "de")
             $objPage->setStrBrowsername("Beispielseite 1");
@@ -323,8 +323,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
 
-        if(class_modul_pages_element::getElement("row") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -351,8 +351,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
         }
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_modul_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
@@ -392,7 +392,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
        $strReturn .= "Creating sample subpage...\n";
-        $objPage = new class_modul_pages_page();
+        $objPage = new class_module_pages_page();
         $objPage->setStrName("subpage_1");
 
         if($this->strContentLanguage == "de")
@@ -405,8 +405,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
 
-        if(class_modul_pages_element::getElement("row") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -434,8 +434,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_modul_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_modul_pages_pageelement();
+        if(class_module_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");

@@ -64,7 +64,7 @@ class class_element_paragraph_portal extends class_element_portal implements  in
 
         if($this->arrElementData["paragraph_link"] != "") {
 		    //internal page?
-		    $objPage = class_modul_pages_page::getPageByName($this->arrElementData["paragraph_link"]);
+		    $objPage = class_module_pages_page::getPageByName($this->arrElementData["paragraph_link"]);
 		    if($objPage->getStrName() != "")
 			    $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
 			else

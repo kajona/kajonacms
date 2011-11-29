@@ -59,7 +59,7 @@ class class_element_image_portal extends class_element_portal implements interfa
 		//Link?
 		if($this->arrElementData["image_link"] != "") {
 		    //internal page?
-		    $objPage = class_modul_pages_page::getPageByName($this->arrElementData["image_link"]);
+		    $objPage = class_module_pages_page::getPageByName($this->arrElementData["image_link"]);
 		    if($objPage->getStrName() != "")
 			    $this->arrElementData["link_href"] = getLinkPortalHref($this->arrElementData["image_link"], "");
 			else

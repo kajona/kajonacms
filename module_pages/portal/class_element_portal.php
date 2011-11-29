@@ -21,7 +21,7 @@ abstract class class_element_portal extends class_portal {
 
     /**
      *
-     * @var class_modul_pages_pageelement
+     * @var class_module_pages_pageelement
      */
     private $objElementData;
 
@@ -29,7 +29,7 @@ abstract class class_element_portal extends class_portal {
 	 * Constructor
 	 *
 	 * @param mixed $arrModule
-	 * @param class_modul_pages_pageelement $objElementData
+	 * @param class_module_pages_pageelement $objElementData
 	 */
 	public function __construct($arrModule, $objElementData) {
         $arrModule["modul"]             = "elemente";

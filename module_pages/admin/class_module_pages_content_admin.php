@@ -15,7 +15,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_content_admin extends class_admin implements interface_admin {
+class class_module_pages_content_admin extends class_admin implements interface_admin {
 	/**
 	 * Constructor
 	 *
@@ -61,9 +61,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
      * @return string
      */
 	public function getOutputModuleTitle() {
-		$objPage = new class_modul_pages_page($this->getSystemid());
+		$objPage = new class_module_pages_page($this->getSystemid());
 		if($objPage->getStrName() == "")
-			$objPage = new class_modul_pages_page($objPage->getPrevId());
+			$objPage = new class_module_pages_page($objPage->getPrevId());
 		return $this->getText("modul_titel") . " (".$objPage->getStrName().")";
 	}
 
@@ -81,7 +81,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
             //get infos about the page
-            $objPage = new class_modul_pages_page($this->getSystemid());
+            $objPage = new class_module_pages_page($this->getSystemid());
 
             $arrToolbarEntries = array();
             $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
@@ -92,7 +92,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $objLanguages = new class_modul_languages_admin();
             $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
-            if($objPage->getIntType() != class_modul_pages_page::$INT_TYPE_ALIAS)
+            if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
                 $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
 
 			$arrTemplate = array();
@@ -125,12 +125,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 			$arrElementsOnPage = array();
 			//Language-dependant loading of elements, if installed
-		    $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
+		    $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
             //save a copy of the array to be able to check against all values later on
             $arrElementsOnPageCopy = $arrElementsOnPage;
 
 			//Loading all Elements installed on the system ("RAW"-Elements)
-			$arrElementsInSystem = class_modul_pages_element::getAllElements();
+			$arrElementsInSystem = class_module_pages_element::getAllElements();
 
 
 			//So, loop through the placeholders and check, if theres any element already belonging to this one
@@ -301,7 +301,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		//OK, here we go. So, what information do we have?
     		$strPlaceholderElement = $this->getParam("element");
     		//Now, load all infos about the requested element
-    		$objElement = class_modul_pages_element::getElement($strPlaceholderElement);
+    		$objElement = class_module_pages_element::getElement($strPlaceholderElement);
     		//Build the class-name
     		$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     		//and finally create the object
@@ -328,7 +328,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		//check rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
     		//Load the element data
-    		$objElement = new class_modul_pages_pageelement($this->getSystemid());
+    		$objElement = new class_module_pages_pageelement($this->getSystemid());
     		//check, if the element isn't locked
     		if($objElement->getLockManager()->isAccessibleForCurrentUser()) {
 
@@ -372,7 +372,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strPlaceholderName = $arrPlaceholder[0];
 			$strPlaceholderElement = $this->getParam("element");
 			//Now, load all infos about the requested element
-			$objElement = class_modul_pages_element::getElement($strPlaceholderElement);
+			$objElement = class_module_pages_element::getElement($strPlaceholderElement);
 			//Load the class to create an object
 			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
 			//and finally create the object
@@ -385,7 +385,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			}
 
 			//So, lets do the magic - create the records
-			$objPageElement = new class_modul_pages_pageelement("");
+			$objPageElement = new class_module_pages_pageelement("");
 			$objPageElement->setStrName($strPlaceholderName);
 			$objPageElement->setStrPlaceholder($strPlaceholder);
 			$objPageElement->setStrElement($strPlaceholderElement);
@@ -417,7 +417,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 		if($objLockmanager->isLockedByCurrentUser()) {
 			//Load the data of the current element
-			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
+			$objElementData = new class_module_pages_pageelement($this->getSystemid());
 			//Build the class-name
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
@@ -527,7 +527,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 
 			//Loading the data of the corresp site
-			$objPage = new class_modul_pages_page($this->getPrevId());
+			$objPage = new class_module_pages_page($this->getPrevId());
 			$this->flushPageFromPagesCache($objPage->getStrName());
 
             $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId()));
@@ -555,7 +555,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 		if($objLockmanager->isLockedByCurrentUser() && $objCommons->rightEdit()) {
 			//Load the data of the current element
-			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
+			$objElementData = new class_module_pages_pageelement($this->getSystemid());
 			//Build the class-name
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
@@ -635,7 +635,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $objElement->doAfterSaveToDb();
 
 			//Loading the data of the corresp site
-			$objPage = new class_modul_pages_page($this->getPrevId());
+			$objPage = new class_module_pages_page($this->getPrevId());
 			$this->flushPageFromPagesCache($objPage->getStrName());
 
             $strReturn = "<message><success>update succeeded</success></message>";
@@ -657,7 +657,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$strReturn = "";
 		//Rights?
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			$objElement = new class_modul_pages_pageelement($this->getSystemid());
+			$objElement = new class_module_pages_pageelement($this->getSystemid());
 
             $strQuestion = uniStrReplace("%%element_name%%", htmlToString($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" ), true), $this->getText("element_loeschen_frage"));
 
@@ -690,7 +690,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 			if($objLockmanager->isAccessibleForCurrentUser()) {
 			    //delete object
-			    if(!class_modul_pages_pageelement::deletePageElement($strSystemid))
+			    if(!class_module_pages_pageelement::deletePageElement($strSystemid))
 			        throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
 
                 $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
@@ -726,14 +726,14 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
             $objPage = null;
             if($this->getParam("copyElement_page") != "") {
-                $objPage = class_modul_pages_page::getPageByName($this->getParam("copyElement_page"));
+                $objPage = class_module_pages_page::getPageByName($this->getParam("copyElement_page"));
                 $objPage->setStrLanguage($objLang->getStrName());
                 $objPage->initObject();
             } else {
-                $objPage = new class_modul_pages_page($this->getPrevId());
+                $objPage = new class_module_pages_page($this->getPrevId());
             }
 
-            $objSourceElement = new class_modul_pages_pageelement($this->getSystemid());
+            $objSourceElement = new class_module_pages_pageelement($this->getSystemid());
 
 
             //form header
@@ -776,7 +776,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                         }
                         else {
                             //not repeatable - element already existing at placeholder?
-                            $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPage->getSystemid(), false, $objLang->getStrName());
+                            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), false, $objLang->getStrName());
                             //loop in order to find same element-types - other elements may be possible due to piped placeholders, too
                             $bitAdd = true;
                             //var_dump($arrElementsOnPage);
@@ -873,11 +873,11 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 				continue;
 
             if($objCommon->getIntModuleNr() == _pages_folder_id_) {
-                $objFolder = new class_modul_pages_folder($strOneSystemid);
+                $objFolder = new class_module_pages_folder($strOneSystemid);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
             }
             if($objCommon->getIntModuleNr() == _pages_modul_id_) {
-                $objPage = new class_modul_pages_page($strOneSystemid);
+                $objPage = new class_module_pages_page($strOneSystemid);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objPage->getStrBrowsername());
             }
 
@@ -891,7 +891,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
      */
     protected function actionElementSortUp() {
         //Create the objecet
-		$objElement = new class_modul_pages_pageelement($this->getSystemid());
+		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setPosition($this->getSystemid(), "up");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
@@ -902,7 +902,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
      */
     protected function actionElementSortDown() {
         //Create the objecet
-		$objElement = new class_modul_pages_pageelement($this->getSystemid());
+		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setPosition($this->getSystemid(), "down");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
@@ -912,7 +912,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
      */
     protected function actionElementStatus() {
         //Create the objecet
-		$objElement = new class_modul_pages_pageelement($this->getSystemid());
+		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setStatus();
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
