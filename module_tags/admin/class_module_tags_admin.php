@@ -15,7 +15,7 @@
  * @package module_tags
  * @author sidler@mulchprod.de
  */
-class class_modul_tags_admin extends class_admin implements interface_admin {
+class class_module_tags_admin extends class_admin implements interface_admin {
 
 	/**
 	 * Constructor

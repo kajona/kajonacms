@@ -78,11 +78,11 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$this->registerModule("tags",
                                  _tags_modul_id_,
                                  "",
-                                 "class_modul_tags_admin.php",
+                                 "class_module_tags_adminn.php",
                                  $this->arrModule["version"],
                                  true,
                                  "",
-                                 "class_modul_tags_admin_xml.php");
+                                 "class_module_tags_admin_xml.phpp");
 
 		$strReturn .= "Registering system-constants...\n";
 

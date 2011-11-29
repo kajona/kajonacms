@@ -18,7 +18,7 @@
  * @since 3.3.1.1
  * @author sidler@mulchprod.de
  */
-class class_modul_tags_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_tags_admin_xml extends class_admin implements interface_xml_admin {
 
 	/**
 	 * Constructor
