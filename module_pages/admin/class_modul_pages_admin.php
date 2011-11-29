@@ -516,7 +516,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $objTags = class_modul_system_module::getModuleByName("tags");
                 if($objTags != null) {
                     /**
-                     * @var class_modul_tags_admin
+                     * @var class_module_tags_admin
                      */
                     $objTagsInstance = $objTags->getAdminInstanceOfConcreteModule();
                     $strReturn .= $objTagsInstance->getTagForm($objPage->getSystemid(), $objPage->getStrLanguage());

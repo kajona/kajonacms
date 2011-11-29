@@ -56,7 +56,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
         $strReturn = "";
 
         //load all navigation points, tree by tree
-        $arrTrees = class_modul_navigation_tree::getAllNavis();
+        $arrTrees = class_module_navigation_tree::getAllNavis();
         foreach($arrTrees as $objOneTree) {
             $strReturn .= $this->getText("systemtask_navigationcheck_treescan")." \"".$objOneTree->getStrName()."\"...<br />";
             if(validateSystemid($objOneTree->getStrFolderId()))
@@ -70,7 +70,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
 
     private function processLevel($intParentId, $intLevel) {
         $strReturn = "";
-        $arrNaviPoints = class_modul_navigation_point::getNaviLayer($intParentId);
+        $arrNaviPoints = class_module_navigation_point::getNaviLayer($intParentId);
         foreach($arrNaviPoints as $objOnePoint) {
             for($intI = 0; $intI<=$intLevel; $intI++)
                 $strReturn .= "&nbsp; &nbsp;";

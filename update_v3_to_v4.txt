@@ -5,6 +5,7 @@ Module Update
 - rename template-folder from modul_xx to module_xx
 - the folder /elemente is renamed to /elements
 - rename /config/modul_xx_id.php to /config/module_xx_id.php
+- rename modul_ files to module_
 
 Element Update
 - portal classes should extended by _portal (class_element_image_portal.php)

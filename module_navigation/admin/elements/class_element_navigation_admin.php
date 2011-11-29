@@ -42,8 +42,8 @@ class class_element_navigation_admin extends class_element_admin implements inte
 		$strReturn = "";
 		//Load all navigations available
 		if(isset($arrElementData["navigation_id"]) && $arrElementData["navigation_id"] != '') {
-		  $objNavigation = new class_modul_navigation_admin();
-		  $objNavi = new class_modul_navigation_tree($arrElementData["navigation_id"]);
+		  $objNavigation = new class_module_navigation_admin();
+		  $objNavi = new class_module_navigation_tree($arrElementData["navigation_id"]);
 		  $strNaviName = $objNavi->getStrName();
 		}
 		else

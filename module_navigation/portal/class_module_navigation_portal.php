@@ -13,13 +13,13 @@
  * This class was refactored for Kajona 3.4. Since 3.4 it's possible to mix regular navigations and
  * page/folder structures within a single tree.
  *
- * Therefore only the nodes in $arrTempNodes may be used. A instantiation via new class_modul_navigation_point()
+ * Therefore only the nodes in $arrTempNodes may be used. A instantiation via new class_module_navigation_point()
  * is not recommend since a node created out of the pages will fail to load this way!
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
  */
-class class_modul_navigation_portal extends class_portal implements interface_portal {
+class class_module_navigation_portal extends class_portal implements interface_portal {
 
 	private $strCurrentSite = "";
 	private $arrTree = array();
@@ -57,7 +57,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$this->strCurrentSite = $this->getPagename();
 
         //init with the current navigation, required in all cases
-        $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
+        $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
         $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
 
 
@@ -92,7 +92,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                             );
 
         //only add the code, if not auto-generated
-        $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
+        $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
         if(!validateSystemid($objNavigation->getStrFolderId()))
             $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
 
@@ -312,7 +312,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      * the last one is the last parent being active, so in most cases the node on the
      * first level of the navigation
      *
-     * @param class_modul_navigation_point $objActivePoint
+     * @param class_module_navigation_point $objActivePoint
      * @return string
      */
     private function getActiveIdStack($objActivePoint) {
@@ -344,7 +344,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
     /**
      * Traverses the internal node-structure in order to build a stack of active nodes
      *
-     * @param class_modul_navigation_point $objNodeToSearch
+     * @param class_module_navigation_point $objNodeToSearch
      * @param array $arrNodes
      * @return string
      */
@@ -376,7 +376,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      *
      * @param string $strPagename
      * @param string $strNavigationId
-     * @return class_modul_navigation_point or null
+     * @return class_module_navigation_point or null
      */
     private function searchPageInNavigationTree($strPagename, $strNavigationId) {
 
@@ -384,7 +384,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
         //nodestructure given?
         if(!isset($this->arrTempNodes[$strNavigationId])) {
-            $objNavigation = new class_modul_navigation_tree($strNavigationId);
+            $objNavigation = new class_module_navigation_tree($strNavigationId);
             $this->arrTempNodes[$strNavigationId] = $objNavigation->getCompleteNaviStructure();
         }
 
@@ -499,7 +499,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
                                   //navigation found. trigger loading of nodes if not yet happend
                                   if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
-                                      $objNavigation = new class_modul_navigation_tree($arrContent["navigation_id"]);
+                                      $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
 
                                       if($objNavigation->getStatus() == 0)
                                           $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
@@ -546,7 +546,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	/**
 	 * Creates the html-code for one single navigationpoint. The check if the user has the needed rights should have been made before!
 	 *
-	 * @param class_modul_navigation_point $objPointData
+	 * @param class_module_navigation_point $objPointData
 	 * @param bool $bitActive
 	 * @param int $intLevel
 	 * @param bool $bitFirst

@@ -13,7 +13,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  */
-class class_modul_navigation_tree extends class_model implements interface_model  {
+class class_module_navigation_tree extends class_model implements interface_model  {
 
     private $strName = "";
     private $strFolderId = "";
@@ -101,7 +101,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_modul_navigation_tree($arrOneId["system_id"]);
+            $arrReturn[] = new class_module_navigation_tree($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -111,7 +111,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
      * Looks up a navigation by its name
      *
      * @param string $strName
-     * @return class_modul_navigation_tree
+     * @return class_module_navigation_tree
      * @static
      */
     public static function getNavigationByName($strName) {
@@ -124,7 +124,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
                      ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), $strName, _navigation_modul_id_));
         if(isset($arrRow["system_id"]))
-            return new class_modul_navigation_tree($arrRow["system_id"]);
+            return new class_module_navigation_tree($arrRow["system_id"]);
         else
             return null;
 
@@ -154,7 +154,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
     private function loadSingleLevel($strParentNode) {
         $arrReturn = array();
 
-        $arrCurLevel = class_modul_navigation_point::getDynamicNaviLayer($strParentNode);
+        $arrCurLevel = class_module_navigation_point::getDynamicNaviLayer($strParentNode);
 
         foreach($arrCurLevel as $objOneNode) {
             if($objOneNode->getStatus() == 1 && $objOneNode->rightView()) {
@@ -179,7 +179,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
        //Are there any childs?
-       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+       $arrChild = class_module_navigation_point::getNaviLayer($this->getSystemid());
         if(count($arrChild) > 0) {
             //Call this method for each child
             foreach($arrChild as $objOneChild) {

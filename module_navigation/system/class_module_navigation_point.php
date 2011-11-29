@@ -13,7 +13,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  */
-class class_modul_navigation_point extends class_model implements interface_model  {
+class class_module_navigation_point extends class_model implements interface_model  {
 
     private $strName = "";
     private $strPageE = "";
@@ -123,7 +123,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $objNavigationPoint = new class_modul_navigation_point($arrOneId["system_id"]);
+            $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);
             //check where the layer links to
             //TODO removal, no longer required
 //            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
@@ -146,7 +146,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
      * linked to the current point.
      *
      * @param string $strSystemid
-     * @return class_modul_navigation_point
+     * @return class_module_navigation_point
      */
     public static function getDynamicNaviLayer($strSystemid) {
 
@@ -159,7 +159,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
         if($objCommon->getIntModuleNr() == _navigation_modul_id_) {
 
             //check where the point links to - navigation-point or pages-entry
-            $objNavigationPoint = new class_modul_navigation_point($strSystemid);
+            $objNavigationPoint = new class_module_navigation_point($strSystemid);
             if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
                 $arrReturn = self::loadPageLevelToNavigationNodes($objNavigationPoint->getStrFolderI());
             }
@@ -186,7 +186,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
        //Are there any childs?
-       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+       $arrChild = class_module_navigation_point::getNaviLayer($this->getSystemid());
         if(count($arrChild) > 0) {
             //Call this method for each child
             foreach($arrChild as $objOneChild) {
@@ -229,7 +229,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	    $arrIds = $objDB->getPArray($strQuery, array(_navigation_modul_id_, $strPagename));
 
 	    foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_modul_navigation_point($arrOneId["system_id"]);
+            $arrReturn[] = new class_module_navigation_point($arrOneId["system_id"]);
 
         return $arrReturn;
 	}
@@ -241,7 +241,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
      * This node is used for portal-actions only, so there's no way to edit the node.
      *
      * @param string $strSourceId
-     * @return class_modul_navigation_point
+     * @return class_module_navigation_point
      * @since 3.4
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
@@ -260,7 +260,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 //validate if the page to be links has a template assigned and at least a single element created
                 if( $objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
 
-                    $objPoint = new class_modul_navigation_point();
+                    $objPoint = new class_module_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
                     $objPoint->setIntRecordStatus(1, false);
 

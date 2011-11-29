@@ -40,7 +40,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
 
         $strReturn = "";
         $strReturn .= "Creating new mainnavigation-tree\n";
-        $objNaviTree = new class_modul_navigation_tree();
+        $objNaviTree = new class_module_navigation_tree();
         $objNaviTree->setStrName("mainnavigation");
         $objNaviTree->setStrFolderId($strNaviFolderId);
         $objNaviTree->updateObjectToDb();
@@ -49,14 +49,14 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
 
 
         $strReturn .= "Creating new portalnavigation-tree\n";
-        $objNaviTree = new class_modul_navigation_tree();
+        $objNaviTree = new class_module_navigation_tree();
         $objNaviTree->setStrName("portalnavigation");
         $objNaviTree->updateObjectToDb();
         $strTreePortalId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
 
         $strReturn .= "Creating navigation points\n";
-        $objNaviPoint = new class_modul_navigation_point();
+        $objNaviPoint = new class_module_navigation_point();
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
@@ -155,13 +155,13 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         }
 
         $strReturn .= "Creating navigation points\n";
-        $objNaviPoint = new class_modul_navigation_point();
+        $objNaviPoint = new class_module_navigation_point();
         $objNaviPoint->setStrName("Sitemap");
         $objNaviPoint->setStrPageI("sitemap");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";
 
-        $objNaviPoint = new class_modul_navigation_point();
+        $objNaviPoint = new class_module_navigation_point();
         if($this->strContentLanguage == "de")
             $objNaviPoint->setStrName("Impressum");
         else

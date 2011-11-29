@@ -14,7 +14,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  */
-class class_modul_navigation_admin extends class_admin implements interface_admin {
+class class_module_navigation_admin extends class_admin implements interface_admin {
 
     private $strPeAddon = "";
 
@@ -98,7 +98,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		//Decide, whether to return the list of navigations or the layer of a navigation
     		if($this->getSystemid() == "" || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"]))  {
     			//Return a list of available navigations
-    			$arrNavigations = class_modul_navigation_tree::getAllNavis();
+    			$arrNavigations = class_module_navigation_tree::getAllNavis();
 				//Print all navigations
 				foreach($arrNavigations as $objOneNavigation) {
 					//Correct Rights?
@@ -133,7 +133,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		else {
     			//Load a sublevel of elements
                 $strNaviReturn = "";
-                $arrNavigations = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+                $arrNavigations = class_module_navigation_point::getNaviLayer($this->getSystemid());
                 $strListID = generateSystemid();
     			$strNaviReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
@@ -215,9 +215,9 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		//check Rights & mode
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($strMode == "edit")
-                $objNavi = new class_modul_navigation_tree($this->getSystemid());
+                $objNavi = new class_module_navigation_tree($this->getSystemid());
             else
-                $objNavi = new class_modul_navigation_tree("");
+                $objNavi = new class_module_navigation_tree("");
 
             $strFoldername = "";
             $strFolderid = "";
@@ -261,7 +261,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			// new navi or edit exising?
 			if($this->getParam("mode") == "new") {
-				$objNavi = new class_modul_navigation_tree("");
+				$objNavi = new class_module_navigation_tree("");
 				$objNavi->setStrName($this->getParam("navigation_name"));
                 $objNavi->setStrFolderId($this->getParam("navigation_folder_i_id"));
 				if(!$objNavi->updateObjectToDb())
@@ -270,7 +270,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			}
 			elseif($this->getParam("mode") == "edit") {
 				//Just update the record
-				$objNavi = new class_modul_navigation_tree($this->getSystemid());
+				$objNavi = new class_module_navigation_tree($this->getSystemid());
 				$objNavi->setStrName($this->getParam("navigation_name"));
                 $objNavi->setStrFolderId($this->getParam("navigation_folder_i_id"));
 				if(!$objNavi->updateObjectToDb())
@@ -316,7 +316,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $strParentname = "";
         $objParentPoint = null;
         if(validateSystemid($this->getParam("navigation_parent_id"))) {
-            $objParentPoint = new class_modul_navigation_point($this->getParam("navigation_parent_id"));
+            $objParentPoint = new class_module_navigation_point($this->getParam("navigation_parent_id"));
             $strParentname = $objParentPoint->getStrName();
         }
 
@@ -346,7 +346,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		elseif ($strMode == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    //Load Point data
-			    $objPoint = new class_modul_navigation_point($this->getSystemid());
+			    $objPoint = new class_module_navigation_point($this->getSystemid());
 
                 if($strFoldername == "" && validateSystemid($objPoint->getStrFolderI())) {
                     $objFolder = new class_modul_pages_folder($objPoint->getStrFolderI());
@@ -354,7 +354,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 }
 
                 if($strParentname == "" && validateSystemid($objPoint->getPrevId())) {
-                    $objParentPoint = new class_modul_navigation_point($objPoint->getPrevId());
+                    $objParentPoint = new class_module_navigation_point($objPoint->getPrevId());
                     $strParentname = $objParentPoint->getStrName();
                 }
 
@@ -404,7 +404,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		//Insert or update?
 		if($this->getParam("mode") == "new") {
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $objPoint = new class_modul_navigation_point("");
+			    $objPoint = new class_module_navigation_point("");
 				//and the navigation-table
 				$objPoint->setStrImage($this->getParam("navigation_image"));
 				$objPoint->setStrName($this->getParam("navigation_name"));
@@ -422,7 +422,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		}
 		elseif ($this->getParam("mode") == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
-				$objPoint = new class_modul_navigation_point($this->getSystemid());
+				$objPoint = new class_module_navigation_point($this->getSystemid());
 				//and the navigation-table
 				$objPoint->setStrImage($this->getParam("navigation_image"));
 				$objPoint->setStrName($this->getParam("navigation_name"));
@@ -463,7 +463,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		    //small trick: call prevID() now, to get the result lateron from the cache ;)
 		    $this->getPrevId();
-            $objNavi = new class_modul_navigation_point($this->getSystemid());
+            $objNavi = new class_module_navigation_point($this->getSystemid());
 
 		    if(!$objNavi->deleteNaviPoint())
 		        throw new class_exception("Error deleting object from db. Needed rights given?", class_exception::$level_ERROR);
@@ -486,7 +486,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		$intCounter = 1;
 		//Load all navis
 
-        $arrPoints = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+        $arrPoints = class_module_navigation_point::getNaviLayer($this->getSystemid());
         $strReturn .= $this->objToolkit->listHeader();
 
         //Link one level up
@@ -522,7 +522,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		$intCounter = 1;
         $this->setArrModuleEntry("template", "/folderview.tpl");
 		//Load all navis
-		$arrNavis = class_modul_navigation_tree::getAllNavis();
+		$arrNavis = class_module_navigation_tree::getAllNavis();
 
 
 		$strReturn .= $this->objToolkit->listHeader();
@@ -546,7 +546,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		$arrPathLinks = array();
 
 		foreach($arrPath as $strOneSystemid) {
-			$objPoint = new class_modul_navigation_point($strOneSystemid);
+			$objPoint = new class_module_navigation_point($strOneSystemid);
 			$arrPathLinks[] = getLinkAdmin("navigation", "list", "&systemid=".$strOneSystemid, $objPoint->getStrName(), $objPoint->getStrName());
 		}
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
@@ -584,7 +584,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $strReturn = " ";
 
         $strReturn .= "<subnodes>";
-        $arrNavigations = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+        $arrNavigations = class_module_navigation_point::getNaviLayer($this->getSystemid());
 
         if(count($arrNavigations) > 0) {
             foreach ($arrNavigations as $objSinglePoint) {
@@ -593,7 +593,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                     $strReturn .= "<name>".xmlSafeString($objSinglePoint->getStrName())."</name>";
                     $strReturn .= "<systemid>".$objSinglePoint->getSystemid()."</systemid>";
                     $strReturn .= "<link>".getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid())."</link>";
-                    $strReturn .= "<isleaf>".(count(class_modul_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
+                    $strReturn .= "<isleaf>".(count(class_module_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
                     $strReturn .= "</point>";
                 }
             }
