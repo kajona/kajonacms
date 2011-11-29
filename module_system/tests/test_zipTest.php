@@ -75,9 +75,9 @@ class class_test_zip extends class_testbase  {
         $objZip = new class_zip();
         $this->assertTrue($objZip->extractArchive("/files/cache/test.zip", "/files/cache/zipextract"), __FILE__." extractArchive");
         
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/ziptest/files/cache/ziptest/tables1.txt", __FILE__." extractArchive");
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/ziptest/files/cache/ziptest/tables2.txt", __FILE__." extractArchive");
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/ziptest/files/cache/ziptest/subdir/tables.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/tables1.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/tables2.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/subdir/tables.txt", __FILE__." extractArchive");
         
         
 
