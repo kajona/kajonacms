@@ -58,10 +58,10 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 			$intI = 0;
 
 			//showing a list using the pageview
-            $objArraySectionIterator = new class_array_section_iterator(class_modul_tags_tag::getNumberOfTags());
+            $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getNumberOfTags());
 		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-		    $objArraySectionIterator->setArraySection(class_modul_tags_tag::getAllTags($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+		    $objArraySectionIterator->setArraySection(class_module_tags_tag::getAllTags($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "list");
             $arrTags = $arrPageViews["elements"];
@@ -107,7 +107,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-            $objTag = new class_modul_tags_tag($this->getSystemid());
+            $objTag = new class_module_tags_tag($this->getSystemid());
             if(!$objTag->deleteTag())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
@@ -127,7 +127,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
     protected function actionEditTag() {
         $strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid()) ) {
-            $objTag = new class_modul_tags_tag($this->getSystemid());
+            $objTag = new class_module_tags_tag($this->getSystemid());
 
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "saveTag");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
@@ -157,7 +157,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
         $strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
 			//Collect data to save to db
-			$objTag = new class_modul_tags_tag($this->getSystemid());
+			$objTag = new class_module_tags_tag($this->getSystemid());
 			$objTag->setStrName($this->getParam("tag_name"), true);
             $objTag->updateObjectToDb();
 

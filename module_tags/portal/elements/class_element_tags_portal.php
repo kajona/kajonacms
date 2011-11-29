@@ -39,7 +39,7 @@ class class_element_tags_portal extends class_element_portal implements interfac
 		$strReturn = "";
 
 
-        $arrTags = class_modul_tags_tag::getTagsWithAssignments();
+        $arrTags = class_module_tags_tag::getTagsWithAssignments();
 
         //load the template
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_tags/".$this->arrElementData["char1"], "tags");

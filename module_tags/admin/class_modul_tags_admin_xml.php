@@ -57,9 +57,9 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
                     continue;
 
                 //load the tag itself
-                $objTag = class_modul_tags_tag::getTagByName($strOneTag);
+                $objTag = class_module_tags_tag::getTagByName($strOneTag);
                 if($objTag == null) {
-                    $objTag = new class_modul_tags_tag();
+                    $objTag = new class_module_tags_tag();
                     $objTag->setStrName($strOneTag);
                     $objTag->updateObjectToDb();
                 }
@@ -97,7 +97,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
             $strSystemid = $this->getSystemid();
             $strAttribute = $this->getParam("attribute");
 
-            $arrTags = class_modul_tags_tag::getTagsForSystemid($strSystemid, $strAttribute);
+            $arrTags = class_module_tags_tag::getTagsForSystemid($strSystemid, $strAttribute);
 
             $strReturn .=" <tags>";
             foreach($arrTags as $objOneTag) {
@@ -128,7 +128,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
             $strAttribute = $this->getParam("attribute");
 
             //load the tag itself
-            $objTag = new class_modul_tags_tag($this->getSystemid());
+            $objTag = new class_module_tags_tag($this->getSystemid());
 
             //add the connection itself
             if($objTag->removeFromSystemrecord($strTargetSystemid, $strAttribute))
@@ -160,7 +160,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
              $strFilter = $this->getParam("filter");
 
-             $arrTags = class_modul_tags_tag::getTagsByFilter($strFilter);
+             $arrTags = class_module_tags_tag::getTagsByFilter($strFilter);
              foreach($arrTags as $objOneTag) {
                  $strReturn .="<tag>";
                  $strReturn .= "<name>".  xmlSafeString($objOneTag->getStrName())."</name>";

@@ -18,7 +18,7 @@
  * @author sidler@mulchprod.de
  * @since 3.4
  */
-class class_modul_tags_tag extends class_model implements interface_model, interface_sortable_rating  {
+class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating  {
 
     private $strName;
 
@@ -124,7 +124,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      *
      * @param int $intStart
      * @param int $intEnd
-     * @return class_modul_tags_tag
+     * @return class_module_tags_tag
      */
     public static function getAllTags($intStart = null, $intEnd = null) {
 
@@ -138,7 +138,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tag_id"]);
+            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tag_id"]);
         }
 
         return $arrReturn;
@@ -188,7 +188,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tagid"]);
+            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tagid"]);
         }
 
         return $arrReturn;
@@ -198,7 +198,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      * Returns a tag for a given tag-name - if present. Otherwise null.
      *
      * @param string $strName
-     * @return class_modul_tags_tag
+     * @return class_module_tags_tag
      */
     public static function getTagByName($strName) {
         $strQuery = "SELECT tags_tag_id
@@ -206,7 +206,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
                       WHERE tags_tag_name LIKE ?";
         $arrCols = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(trim($strName)));
         if(isset($arrCols["tags_tag_id"]) && validateSystemid($arrCols["tags_tag_id"]))
-            return new class_modul_tags_tag($arrCols["tags_tag_id"]);
+            return new class_module_tags_tag($arrCols["tags_tag_id"]);
         else
             return null;
     }
@@ -215,7 +215,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      * Creates a list of tags matching the passed filter.
      *
      * @param string $strFilter
-     * @return class_modul_tags_tag
+     * @return class_module_tags_tag
      */
     public static function getTagsByFilter($strFilter) {
         $strQuery = "SELECT tags_tag_id
@@ -226,7 +226,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter."%"));
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tag_id"]);
+            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tag_id"]);
         }
 
         return $arrReturn;
@@ -235,7 +235,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     /**
      * Loads all tags having at least one assigned systemrecord
      * and being active
-     * @return class_modul_tags_tag
+     * @return class_module_tags_tag
      */
     public static function getTagsWithAssignments() {
         $strQuery = "SELECT DISTINCT(tags_tagid)
@@ -250,7 +250,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tagid"]);
+            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tagid"]);
         }
 
         return $arrReturn;
