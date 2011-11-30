@@ -747,13 +747,13 @@ abstract class class_root {
 	 * @param string $strSystemid
 	 * @return bool
 	 * @see class_root::setStatus, class_model::doAdditionalActionsOnStatusChange
+     * @fixme move to callback interface
 	 */
 	protected final function additionalCallsOnStatuschange($strSystemid) {
 	    $bitReturn = true;
 
 	    //Look up classes extending class_model
-	    $objFilesystem = new class_filesystem();
-	    $arrFiles = $objFilesystem->getFilelist(_systempath_, array(".php"));
+	    $arrFiles = class_resourceloader::getInstance()->getFolderContent(_systempath_, array(".php"));
 
 	    foreach ($arrFiles as $strOneFile) {
 	        //just match classes starting with "class_modul"
@@ -1110,13 +1110,13 @@ abstract class class_root {
 	 * @param string $strSystemid
 	 * @return bool
 	 * @see class_root::deleteSystemRecord, class_model::doAdditionalCleanupsOnDeletion
+     * @fixme move to an callback-interface
 	 */
 	protected final function additionalCallsOnDeletion($strSystemid) {
 	    $bitReturn = true;
 
 	    //Look up classes extending class_model
-	    $objFilesystem = new class_filesystem();
-	    $arrFiles = $objFilesystem->getFilelist(_systempath_, array(".php"));
+	    $arrFiles = class_resourceloader::getInstance()->getFolderContent(_systempath_, array(".php"));
 
 	    foreach ($arrFiles as $strOneFile) {
 	        //just match classes starting with "class_modul"
