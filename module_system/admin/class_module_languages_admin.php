@@ -10,7 +10,7 @@
 /**
  * Admin-class to manage all languages
  *
- * @package modul_languages
+ * @package module_languages
  */
 class class_module_languages_admin extends class_admin implements interface_admin {
     private $strAction;
@@ -21,7 +21,7 @@ class class_module_languages_admin extends class_admin implements interface_admi
      */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"] 				= "modul_languages";
+		$arrModul["name"] 				= "module_languages";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _languages_modul_id_;
 		$arrModul["table"]     			= _dbprefix_."languages";

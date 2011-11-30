@@ -13,7 +13,7 @@
  *
  * @since 3.3.0.1
  * @author sidler@mulchprod.de
- * @package modul_system
+ * @package module_system
  */
 class class_db_sqlite3 implements interface_db_driver {
 
@@ -50,9 +50,9 @@ class class_db_sqlite3 implements interface_db_driver {
             throw new class_exception("Error connecting to database: ".$e, class_exception::$level_FATALERROR);
         }
     }
-    
+
     /**
-     * Closes the connection to the database 
+     * Closes the connection to the database
      */
     public function dbclose() {
         $this->linkDB->close();
@@ -101,7 +101,7 @@ class class_db_sqlite3 implements interface_db_driver {
 
         if ($objStmt->execute() === false)
             return false;
-        
+
         return true;
     }
 
@@ -139,7 +139,7 @@ class class_db_sqlite3 implements interface_db_driver {
         $objStmt = $this->getPreparedStatement($strQuery);
         if($objStmt === false)
             return false;
-        
+
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
             if($strOneParam == null)
@@ -168,7 +168,7 @@ class class_db_sqlite3 implements interface_db_driver {
     /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
      * defined by the params
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas 
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!
      *
      * @param string $strQuery
@@ -206,7 +206,7 @@ class class_db_sqlite3 implements interface_db_driver {
         //and load the array
         return $this->getPArray($strQuery, $arrParams);
     }
-    
+
 
     /**
      * Returns the last error reported by the database.
@@ -232,7 +232,7 @@ class class_db_sqlite3 implements interface_db_driver {
         	$arrReturn[] = array("name" => $arrRow["name"]);
         return $arrReturn;
     }
-    
+
     /**
      * Looks up the columns of the given table.
      * Should return an array for each row consting of:
@@ -297,19 +297,19 @@ class class_db_sqlite3 implements interface_db_driver {
         foreach ($arrTables as $arrTable)
             if ($arrTable["name"] == $strName)
                 return true;
-        
+
     	$strQuery = "";
 
     	//build the mysql code
     	$strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
-    	
+
     	//loop the fields
     	foreach($arrFields as $strFieldName => $arrColumnSettings) {
     		$strQuery .= " ".$strFieldName." ";
-    		
+
     		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
-    		
-    		//any default?	
+
+    		//any default?
     		if(isset($arrColumnSettings[2]))
     			$strQuery .= " DEFAULT ".$arrColumnSettings[2]." ";
 
@@ -320,21 +320,21 @@ class class_db_sqlite3 implements interface_db_driver {
     		else {
     			$strQuery .= " NOT NULL, \n";
     		}
-    				
+
     	}
 
     	//primary keys
     	$strQuery .= " PRIMARY KEY (".implode(", ", $arrKeys).") \n";
-    	
+
     	$strQuery .= ") ";
-            
+
         $bitCreate = $this->_query($strQuery);
-        
+
         if($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".  implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_query($strQuery);
         }
-        
+
         return $bitCreate;
     }
 
@@ -408,7 +408,7 @@ class class_db_sqlite3 implements interface_db_driver {
         $objFilesystem = new class_filesystem();
         return $objFilesystem->fileCopy($strFilename, $this->strDbFile, true);
     }
-    
+
     /**
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
@@ -419,7 +419,7 @@ class class_db_sqlite3 implements interface_db_driver {
     public function encloseColumnName($strColumn) {
         return $strColumn;
     }
-    
+
     /**
      * Allows the db-driver to add database-specific surroundings to table-names.
      * E.g. needed by the mysql-drivers
@@ -430,7 +430,7 @@ class class_db_sqlite3 implements interface_db_driver {
     public function encloseTableName($strTable) {
         return $strTable;
     }
-    
+
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
@@ -444,25 +444,25 @@ class class_db_sqlite3 implements interface_db_driver {
      *      char500
      *      text
      *      longtext
-     * 
+     *
      * @param string $strType
      * @return string
      */
     public function getDatatype($strType) {
         $strReturn = "";
-    	
+
         if($strType == "int")
             $strReturn .= " INTEGER ";
         elseif($strType == "long")
             $strReturn .= " INTEGER ";
         elseif($strType == "double")
-            $strReturn .= " REAL ";    
+            $strReturn .= " REAL ";
         elseif($strType == "char10")
-            $strReturn .= " TEXT "; 
+            $strReturn .= " TEXT ";
         elseif($strType == "char20")
             $strReturn .= " TEXT ";
         elseif($strType == "char100")
-            $strReturn .= " TEXT ";    
+            $strReturn .= " TEXT ";
         elseif($strType == "char254")
             $strReturn .= " TEXT ";
         elseif($strType == "char500")
@@ -473,13 +473,13 @@ class class_db_sqlite3 implements interface_db_driver {
             $strReturn .= " TEXT ";
         else
             $strReturn .= " TEXT ";
-            
-        return $strReturn;    
+
+        return $strReturn;
     }
 
     /**
      * Fixes the quoting of ' in queries.
-     * 
+     *
      * By default ' is quoted as \', but it must be quoted as '' in sqlite.
      *
      * @param srtin $strSql
@@ -515,13 +515,13 @@ class class_db_sqlite3 implements interface_db_driver {
     private function getPreparedStatement($strQuery) {
 
         $strName = md5($strQuery);
-        
+
         if(isset($this->arrStatementsCache[$strName]))
             return $this->arrStatementsCache[$strName];
 
         $objStmt = $this->linkDB->prepare($strQuery);
         $this->arrStatementsCache[$strName] = $objStmt;
-        
+
         return $objStmt;
     }
 }

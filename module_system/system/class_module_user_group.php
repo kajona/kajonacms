@@ -11,7 +11,7 @@
  * Model for a user-group, can be based on any type of usersource
  * Groups are NOT represented in the system-table.
  *
- * @package modul_user
+ * @package module_user
  * @author sidler@mulchprod.de
  */
 class class_module_user_group extends class_model implements interface_model  {
@@ -33,7 +33,7 @@ class class_module_user_group extends class_model implements interface_model  {
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_user";
+        $arrModul["name"] 				= "module_user";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["modul"]				= "user";
 

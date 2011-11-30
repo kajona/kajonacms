@@ -10,7 +10,7 @@
 /**
  * Model for a user-login-log
  *
- * @package modul_user
+ * @package module_user
  * @author sidler@mulchprod.de
  */
 class class_module_user_log extends class_model implements interface_model  {
@@ -22,7 +22,7 @@ class class_module_user_log extends class_model implements interface_model  {
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_user";
+        $arrModul["name"] 				= "module_user";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."user_log";
 		$arrModul["modul"]				= "user";

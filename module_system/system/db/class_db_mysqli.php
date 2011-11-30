@@ -10,7 +10,7 @@
 /**
  * db-driver for MySQL using the php-mysqli-interface
  *
- * @package modul_system
+ * @package module_system
  */
 class class_db_mysqli implements interface_db_driver {
 

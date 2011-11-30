@@ -11,7 +11,7 @@
  * admin-class of the filemananger-module
  * Serves xml-requests, currently to handle uploads
  *
- * @package modul_filemanager
+ * @package module_filemanager
  * @author sidler@mulchpro.de
  */
 class class_module_filemanager_admin_xml extends class_admin implements interface_xml_admin {

@@ -11,7 +11,7 @@
 /**
  * Model for a filemanager repo
  *
- * @package modul_filemanager
+ * @package module_filemanager
  * @author sidler@mulchprod.de
  */
 class class_module_filemanager_repo extends class_model implements interface_model  {
@@ -29,7 +29,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_filemanager";
+        $arrModul["name"] 				= "module_filemanager";
 		$arrModul["moduleId"] 			= _filemanager_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."filemanager";
 		$arrModul["modul"]				= "filemanager";

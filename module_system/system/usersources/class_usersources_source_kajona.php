@@ -12,7 +12,7 @@
  *
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @package modul_usersources
+ * @package module_usersource
  */
 class class_usersources_source_kajona  implements interface_usersources_usersource {
 

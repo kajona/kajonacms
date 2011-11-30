@@ -10,7 +10,7 @@
 /**
  * Base class for all module-classes in the portal
  *
- * @package modul_system
+ * @package module_system
  */
 abstract class class_portal  {
 

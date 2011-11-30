@@ -16,7 +16,7 @@
  *
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @package modul_user
+ * @package module_user
  */
 class class_modul_user_sourcefactory {
 

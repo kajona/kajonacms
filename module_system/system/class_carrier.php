@@ -79,7 +79,7 @@ class class_carrier {
 	public function getObjDB() {
 		//Do we have to generate the object?
 		if($this->objDB == null) {
-		    //require_once(_realpath_."/modul_system/system/class_db.php");
+		    //require_once(_realpath_."/module_system/system/class_db.php");
 		    $this->objDB = class_db::getInstance();
 			//Now we have to set up the database connection
             //SIR 2010/03: connection is established on request, lazy loading

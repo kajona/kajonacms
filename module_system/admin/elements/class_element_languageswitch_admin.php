@@ -10,7 +10,7 @@
 /**
  * Class to handle the admin-part of the element
  *
- * @package modul_languages
+ * @package module_languages
  * @author sidler@mulchprod.de
  */
 class class_element_languageswitch_admin extends class_element_admin implements interface_admin_element {

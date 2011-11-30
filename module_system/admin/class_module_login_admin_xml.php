@@ -18,7 +18,7 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 			= "modul_user";
+		$arrModule["name"] 			= "module_user";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _user_modul_id_;
 		$arrModule["modul"]			= "login";

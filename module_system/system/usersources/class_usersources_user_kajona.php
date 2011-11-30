@@ -11,13 +11,13 @@
  * Model representing an user within the classical kajona subsystem.
  * Since kajona-users are NOT reflected in the system-table, the classical systemid is not available.
  * Relevant methods have to be reimplemented to reflect this change.
- * 
+ *
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @package modul_usersources
+ * @package module_usersource
  */
 class class_usersources_user_kajona extends class_model implements interface_model, interface_usersources_user {
-    
+
     private $strPass = "";
     private $strEmail = "";
     private $strForename = "";
@@ -28,7 +28,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     private $strTel = "";
     private $strMobile = "";
     private $longDate = 0;
-    
+
     /**
      * The immutable password from the database.
      * $strPass is not puglished with the information from the database, otherwise it would be
@@ -45,7 +45,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      */
     public function __construct($strSystemid = "", $bitLoadPassword = false) {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_user";
+        $arrModul["name"] 				= "module_user";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["modul"]				= "user";
 
@@ -76,17 +76,17 @@ class class_usersources_user_kajona extends class_model implements interface_mod
             $this->setStrMobile($arrRow["user_mobile"]);
             $this->setLongDate($arrRow["user_date"]);
             $this->setSystemid($arrRow["user_id"]);
-            
+
             $this->strFinalPass = $arrRow["user_pass"];
         }
     }
-    
+
     /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the
      * subsystem may fail.
-     * 
+     *
      * @param string $strId
      * @return void
      */
@@ -108,7 +108,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
             $strUserid = generateSystemid();
             $this->setSystemid($strUserid);
             $strQuery = "INSERT INTO "._dbprefix_."user_kajona (
-                        user_id, 
+                        user_id,
                         user_pass, user_email, user_forename,
                         user_name, 	user_street,
                         user_postal, user_city,
@@ -146,7 +146,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
                         $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
                         $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getSystemid()
                    );
-                   
+
             }
             else {
                 $strQuery = "UPDATE "._dbprefix_."user_kajona SET
@@ -157,7 +157,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
                         $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
                         $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getSystemid()
                    );
-                   
+
             }
 
             class_logger::getInstance()->addLogRow("updated user ".$this->getStrEmail(), class_logger::$levelInfo);
@@ -192,7 +192,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members WHERE group_member_user_kajona_id=?";
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
-    
+
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
      */
@@ -219,7 +219,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $arrTemp[] = new class_usersources_form_entry("tel", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrTel(), false );
         $arrTemp[] = new class_usersources_form_entry("mobile", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrMobile(), false );
         $arrTemp[] = new class_usersources_form_entry("date", class_usersources_form_entry::$INT_TYPE_DATE, $this->getLongDate(), false );
-            
+
         return $arrTemp;
     }
 
@@ -228,7 +228,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * @return array
      */
 	public function getGroupIdsForUser() {
-        $strQuery = "SELECT group_id 
+        $strQuery = "SELECT group_id
                        FROM "._dbprefix_."user_group,
                             "._dbprefix_."user_kajona_members
                       WHERE group_member_user_kajona_id= ?
@@ -240,10 +240,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = $arrOneId["group_id"];
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Indicates if the current user is editable or read-only
      * @return bool
@@ -280,7 +280,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
                 $this->setLongDate($objOneParam->getStrValue());
         }
     }
-    
+
     /**
      * Writes a single field to the user
      * @param string $strName
@@ -309,8 +309,8 @@ class class_usersources_user_kajona extends class_model implements interface_mod
             $this->setLongDate($strValue);
     }
 
-    
-    
+
+
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function getStrPass() {
@@ -325,17 +325,17 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     public function getStrName() {
         return $this->strName;
     }
-    
+
     /**
      * The immutable password from the database.
-     * @return type 
+     * @return type
      */
     public function getStrFinalPass() {
         return $this->strFinalPass;
     }
 
-        
-    
+
+
     public function setStrPass($strPass) {
         if(trim($strPass) != "")
             $this->strPass = class_usersources_source_kajona::encryptPassword($strPass);
@@ -352,7 +352,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     public function setStrName($strName) {
         $this->strName = $strName;
     }
-        
+
     public function getStrStreet() {
         return $this->strStreet;
     }
@@ -402,6 +402,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     }
 
 
-	
+
 }
 ?>

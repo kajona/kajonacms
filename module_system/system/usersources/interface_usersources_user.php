@@ -10,10 +10,10 @@
 
 /**
  * Interface for all users. Defines the common methods for user-objects.
- * 
+ *
  * @author sidler
  * @since 3.4.1
- * @package modul_usersources
+ * @package module_usersource
  */
 interface interface_usersources_user {
 
@@ -34,7 +34,7 @@ interface interface_usersources_user {
      * @return bool
      */
     public function deleteUser();
-    
+
     /**
      * Indicates if the current user is editable or read-only
      * @return bool
@@ -46,42 +46,42 @@ interface interface_usersources_user {
      * @param class_admin_form_entry $arrParams
      */
 	public function setEditFormEntries($arrParams);
-    
+
     /**
      * Writes a single field to the user
      * @param string $strName
      * @param string $strValue
      */
     public function setField($strName, $strValue);
-    
+
     /**
      * Returns the forename
      * @return string
      */
     public function getStrForename();
-    
+
     /**
      * Returns the family-name
      * @return string
      */
     public function getStrName();
-    
+
     /**
      * Returns the email adress of the current user
      */
     public function getStrEmail();
-    
+
     /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the
      * subsystem may fail.
-     * 
+     *
      * @param string $strId
      * @return void
      */
     public function setNewRecordId($strId);
-    
+
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
      */

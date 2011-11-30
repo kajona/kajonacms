@@ -11,7 +11,7 @@
 /**
  * Installer of the filemanager samplecontent
  *
- * @package modul_filemanager
+ * @package module_filemanager
  */
 class class_installer_sc_filemanager implements interface_sc_installer  {
 

@@ -12,10 +12,10 @@
  * This class represents a group based on the internal authentication system.
  * Since groups are NOT reflected in the system-table, all relevant methods have to be overwritten and
  * reimplemented.
- * 
+ *
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @package modul_usersources
+ * @package module_usersource
  */
 class class_usersources_group_kajona extends class_model implements interface_model, interface_usersources_group {
 
@@ -30,7 +30,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_user";
+        $arrModul["name"] 				= "module_user";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["modul"]				= "user";
 
@@ -97,13 +97,13 @@ class class_usersources_group_kajona extends class_model implements interface_mo
             return $this->objDB->_pQuery($strQuery, array($this->getStrDesc(), $this->getSystemid()));
         }
     }
-    
+
     /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the
      * subsystem may fail.
-     * 
+     *
      * @param string $strId
      * @return void
      */
@@ -116,7 +116,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     /**
      * Returns an array of user-ids associated with the current group.
      * If possible, pageing should be supported
-     * 
+     *
      * @param int $intStart
      * @param int $intEnd
      * @return array
@@ -147,7 +147,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * @return int
      */
     public function getNumberOfMembers() {
-		$strQuery = "SELECT COUNT(*) 
+		$strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."user_kajona_members
 					   WHERE group_member_group_kajona_id= ?";
 		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
@@ -166,7 +166,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
         $this->additionalCallsOnDeletion($this->getSystemid());
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
-    
+
     /**
 	 * Deletes all users from the current group
 	 *
@@ -187,8 +187,8 @@ class class_usersources_group_kajona extends class_model implements interface_mo
                          (?, ?)";
     	 return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
     }
-    
-    
+
+
     /**
      * Defines whether the current group-properties (e.g. the name) may be edited or is read-only
      * @return bool
@@ -208,7 +208,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 						  AND group_member_user_kajona_id=?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
     }
-    
+
 
     /**
 	 * Returns the list of form-entries allowed to be modified
@@ -216,7 +216,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	 */
     public function getEditFormEntries() {
         return array(new class_usersources_form_entry("desc", class_usersources_form_entry::$INT_TYPE_LONGTEXT, $this->getStrDesc(), false));
-        
+
     }
 
 
@@ -229,7 +229,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
             if($objOneField->getStrName() == "desc")
                 $this->setStrDesc($objOneField->getStrValue());
         }
-        
+
     }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
@@ -240,13 +240,13 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     public function setStrDesc($strDesc) {
         $this->strDesc = $strDesc;
     }
-    
-    
-    
-    
-    
 
-	
+
+
+
+
+
+
 
 }
 ?>

@@ -10,7 +10,7 @@
 /**
  * Model for a language
  *
- * @package modul_languages
+ * @package module_languages
  * @author sidler@mulchprod.de
  */
 class class_module_languages_language extends class_model implements interface_model  {
@@ -27,7 +27,7 @@ class class_module_languages_language extends class_model implements interface_m
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_languages";
+        $arrModul["name"] 				= "module_languages";
 		$arrModul["moduleId"] 			= _languages_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."languages";
 		$arrModul["modul"]				= "languages";

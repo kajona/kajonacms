@@ -11,7 +11,7 @@
  * Interface to specify the layout of db-drivers.
  * Implement this interface, if you want to provide a db-layer for Kajona.
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_db_driver {
 
@@ -26,9 +26,9 @@ interface interface_db_driver {
      * @return bool
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort);
-    
+
     /**
-     * Closes the connection to the database 
+     * Closes the connection to the database
      */
     public function dbclose();
 
@@ -74,7 +74,7 @@ interface interface_db_driver {
     /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
      * defined by the params
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas 
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!
      *
      * @param string $strQuery
@@ -115,7 +115,7 @@ interface interface_db_driver {
      * @return array
      */
     public function getTables();
-    
+
     /**
      * Looks up the columns of the given table.
      * Should return an array for each row consting of:
@@ -201,7 +201,7 @@ interface interface_db_driver {
      * @return bool
      */
     public function dbImport($strFilename);
-    
+
     /**
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
@@ -210,7 +210,7 @@ interface interface_db_driver {
      * @return string
      */
     public function encloseColumnName($strColumn);
-    
+
     /**
      * Allows the db-driver to add database-specific surroundings to table-names.
      * E.g. needed by the mysql-drivers
@@ -219,7 +219,7 @@ interface interface_db_driver {
      * @return string
      */
     public function encloseTableName($strTable);
-    
+
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
@@ -231,8 +231,8 @@ interface interface_db_driver {
      *      char100
      *      char254
      *      char500
-     *      text 
-     * 
+     *      text
+     *
      * @param string $strType
      * @return string
      */

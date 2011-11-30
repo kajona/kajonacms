@@ -11,7 +11,7 @@
 /**
  * Admin-Parts of the filemanager
  *
- * @package modul_filemanager
+ * @package module_filemanager
  * @author sidler@mulchprod.de
  */
 class class_module_filemanager_admin extends class_admin implements  interface_admin {
@@ -24,7 +24,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 				= "modul_filemanager";
+		$arrModule["name"] 				= "module_filemanager";
 		$arrModule["moduleId"] 			= _filemanager_modul_id_;
 		$arrModule["modul"]				= "filemanager";
 		//base class

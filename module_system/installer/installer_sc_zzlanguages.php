@@ -11,7 +11,7 @@
 /**
  * Installer of the navigation languages
  *
- * @package modul_languages
+ * @package module_languages
  */
 class class_installer_sc_zzlanguages implements interface_sc_installer  {
 

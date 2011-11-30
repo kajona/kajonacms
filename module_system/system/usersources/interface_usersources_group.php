@@ -9,10 +9,10 @@
 
 /**
  * Global interface for all groups. Defines the common methods for all groups.
- * 
+ *
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @package modul_usersources
+ * @package module_usersource
  */
 interface interface_usersources_group {
 
@@ -37,13 +37,13 @@ interface interface_usersources_group {
     /**
      * Returns an array of user-ids associated with the current group.
      * If possible, pageing should be supported
-     * 
+     *
      * @param int $intStart
      * @param int $intEnd
      * @return array
      */
 	public function getUserIdsForGroup($intStart = null, $intEnd = null);
-    
+
     /**
      * Returns the number of members of the current group.
      * @return int
@@ -68,13 +68,13 @@ interface interface_usersources_group {
      * @return bool
      */
     public function deleteGroup();
-    
+
     /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the
      * subsystem may fail.
-     * 
+     *
      * @param string $strId
      * @return void
      */

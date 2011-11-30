@@ -10,7 +10,7 @@
 /**
  * db-driver for oracle using the ovi8-interface
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
@@ -22,13 +22,13 @@ class class_db_oci8 implements interface_db_driver {
     private $strPass = "";
     private $strDbName = "";
     private $intPort = "";
-    
+
     private $strDumpBin = "exp";              // Binary to dump db (if not in path, add the path here)
                                               // /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/
     private $strRestoreBin = "imp";              //Binary to restore db (if not in path, add the path here)
 
     private $arrStatementsCache = array();
-    
+
     private $bitTxOpen = false;
 
    /**
@@ -52,13 +52,13 @@ class class_db_oci8 implements interface_db_driver {
 		$this->strPass = $strPass;
 		$this->strDbName = $strDbName;
 		$this->intPort = $intPort;
-        
+
         //try to set the NLS_LANG env attribute
         putenv("NLS_LANG=American_America.UTF8");
 
 		$this->linkDB = oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
-        
-				
+
+
 		if($this->linkDB !== false) {
             oci_set_client_info($this->linkDB, "Kajona CMS");
 			return true;
@@ -67,7 +67,7 @@ class class_db_oci8 implements interface_db_driver {
 			throw new class_exception("Error connecting to database", class_exception::$level_FATALERROR);
 		}
     }
-    
+
     /*
      * Closes the connection to the database
      */
@@ -83,7 +83,7 @@ class class_db_oci8 implements interface_db_driver {
      */
     public function _query($strQuery) {
         $objStatement = $this->getParsedStatement($strQuery);
-        
+
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
@@ -106,7 +106,7 @@ class class_db_oci8 implements interface_db_driver {
         $objStatement = $this->getParsedStatement($strQuery);
         if($objStatement === false)
             return false;
-        
+
         foreach($arrParams as $intPos => $strValue)
             oci_bind_by_name($objStatement, ":".($intPos+1), $arrParams[$intPos]);
 
@@ -128,20 +128,20 @@ class class_db_oci8 implements interface_db_driver {
         $arrReturn = array();
         $intCounter = 0;
         $objStatement = $this->getParsedStatement($strQuery);
-        
+
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
 		$resultSet = oci_execute($objStatement, $bitAddon);
-        
+
 		if(!$resultSet)
 			return false;
-        
+
 		while($arrRow = oci_fetch_array($objStatement, OCI_BOTH+OCI_RETURN_NULLS)) {
             $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
 		}
-        
+
         @oci_free_statement($objStatement);
 		return $arrReturn;
     }
@@ -158,13 +158,13 @@ class class_db_oci8 implements interface_db_driver {
     public function getPArray($strQuery, $arrParams) {
         $arrReturn = array();
         $intCounter = 0;
-        
+
         $strQuery = $this->processQuery($strQuery);
         $objStatement = $this->getParsedStatement($strQuery);
-        
+
         if($objStatement === false)
             return false;
-        
+
         foreach($arrParams as $intPos => $strValue)
             oci_bind_by_name($objStatement, ":".($intPos+1), $arrParams[$intPos]);
 
@@ -172,10 +172,10 @@ class class_db_oci8 implements interface_db_driver {
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
         $resultSet = oci_execute($objStatement, $bitAddon);
-        
+
         if(!$resultSet)
 			return false;
-        
+
         while($arrRow = oci_fetch_array($objStatement, OCI_BOTH+OCI_RETURN_NULLS)) {
             $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
@@ -197,15 +197,15 @@ class class_db_oci8 implements interface_db_driver {
         //array-counters to real-counters
         $intStart++;
         $intEnd++;
-        
+
         //modify the query
         $strQuery = "SELECT * FROM (
-             SELECT a.*, ROWNUM rnum FROM 
-                ( ".$strQuery.") a 
-             WHERE ROWNUM <= ".$intEnd."       
-        )    
+             SELECT a.*, ROWNUM rnum FROM
+                ( ".$strQuery.") a
+             WHERE ROWNUM <= ".$intEnd."
+        )
         WHERE rnum >= ".$intStart;
-        
+
         //and load the array
         return $this->getArray($strQuery);
     }
@@ -228,15 +228,15 @@ class class_db_oci8 implements interface_db_driver {
         //array-counters to real-counters
         $intStart++;
         $intEnd++;
-        
+
         //modify the query
         $strQuery = "SELECT * FROM (
-             SELECT a.*, ROWNUM rnum FROM 
-                ( ".$strQuery.") a 
-             WHERE ROWNUM <= ".$intEnd."       
-        )    
+             SELECT a.*, ROWNUM rnum FROM
+                ( ".$strQuery.") a
+             WHERE ROWNUM <= ".$intEnd."
+        )
         WHERE rnum >= ".$intStart;
-        
+
         //and load the array
         return $this->getPArray($strQuery, $arrParams);
     }
@@ -265,7 +265,7 @@ class class_db_oci8 implements interface_db_driver {
             $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
 		return $arrTemp;
     }
-    
+
     /**
      * Looks up the columns of the given table.
      * Should return an array for each row consting of:
@@ -277,18 +277,18 @@ class class_db_oci8 implements interface_db_driver {
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
         $arrTemp = $this->getPArray("select column_name, data_type from user_tab_columns where table_name=?", array(strtoupper($strTableName)));
-        
+
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                         "columnName" => strtolower($arrOneColumn["column_name"]),
                         "columnType" => ($arrOneColumn["data_type"] == "integer" ? "int" : strtolower($arrOneColumn["data_type"])),
             );
-            
+
         }
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
@@ -302,25 +302,25 @@ class class_db_oci8 implements interface_db_driver {
      *      char500
      *      text
      *      longtext
-     * 
+     *
      * @param string $strType
      * @return string
      */
     public function getDatatype($strType) {
         $strReturn = "";
-        
+
         if($strType == "int")
             $strReturn .= " NUMBER(19,0) ";
         elseif($strType == "long")
             $strReturn .= " NUMBER(19, 0) ";
         elseif($strType == "double")
-            $strReturn .= " FLOAT (24) ";   
+            $strReturn .= " FLOAT (24) ";
         elseif($strType == "char10")
-            $strReturn .= " VARCHAR2( 10 ) "; 
+            $strReturn .= " VARCHAR2( 10 ) ";
         elseif($strType == "char20")
             $strReturn .= " VARCHAR2( 20 ) ";
         elseif($strType == "char100")
-            $strReturn .= " VARCHAR2( 100 ) ";    
+            $strReturn .= " VARCHAR2( 100 ) ";
         elseif($strType == "char254")
             $strReturn .= " VARCHAR2( 280 ) ";
         elseif($strType == "char500")
@@ -331,8 +331,8 @@ class class_db_oci8 implements interface_db_driver {
             $strReturn .= " CLOB ";
         else
             $strReturn .= " VARCHAR( 254 ) ";
-            
-        return $strReturn;    
+
+        return $strReturn;
     }
 
     /**
@@ -362,26 +362,26 @@ class class_db_oci8 implements interface_db_driver {
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
     	$strQuery = "";
-    	
+
     	//loop over existing tables to check, if the table already exists
     	$arrTables = $this->getTables();
     	foreach ($arrTables as $arrOneTable) {
     		if($arrOneTable["name"] == _dbprefix_.$strName)
     			return true;
     	}
-    	
+
     	//build the oracle code
     	$strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
-    	
+
     	//loop the fields
     	foreach($arrFields as $strFieldName => $arrColumnSettings) {
     		$strQuery .= " ".$strFieldName." ";
-    		
+
     		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
-    		
-    		//any default?	
+
+    		//any default?
     		if(isset($arrColumnSettings[2]))
-    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";	
+    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";
 
     		//nullable?
     		if($arrColumnSettings[1] === true) {
@@ -392,17 +392,17 @@ class class_db_oci8 implements interface_db_driver {
     		}
 
     		$strQuery .= " , \n";
-    				
+
     	}
 
     	//primary keys
         $strQuery .= " CONSTRAINT pk_".  generateSystemid()." primary key ( ".implode(" , ", $arrKeys)." ) \n";
-    	
-    	
+
+
     	$strQuery .= ") ";
-        
-        
-        
+
+
+
 //        $arrStack = debug_backtrace();
 //		$strText = date("G:i:s, d-m-y"). "\t\t".
 //		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
@@ -411,14 +411,14 @@ class class_db_oci8 implements interface_db_driver {
 //		$handle = fopen(_systempath_."/debug/dblog.log", "a");
 //		fwrite($handle, $strText);
 //		fclose($handle);
-    	  
+
         $bitCreate = $this->_query($strQuery);
-        
+
         if($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".  implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_query($strQuery);
         }
-        
+
         return $bitCreate;
     }
 
@@ -455,7 +455,7 @@ class class_db_oci8 implements interface_db_driver {
         $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version($this->linkDB) : "";
         return $arrReturn;
     }
-    
+
 	/**
      * Allows the db-driver to add database-specific surrounding to column-names.
      * E.g. needed by the mysql-drivers
@@ -466,7 +466,7 @@ class class_db_oci8 implements interface_db_driver {
     public function encloseColumnName($strColumn) {
     	return $strColumn;
     }
-    
+
     /**
      * Allows the db-driver to add database-specific surrounding to table-names.
      *
@@ -476,7 +476,7 @@ class class_db_oci8 implements interface_db_driver {
     public function encloseTableName($strTable) {
         return $strTable;
     }
-    
+
 
 //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 
@@ -487,7 +487,7 @@ class class_db_oci8 implements interface_db_driver {
      * @param array $arrTables
      */
     public function dbExport($strFilename, $arrTables) {
-    	
+
         $strFilename = _realpath_.$strFilename;
         $strTables = implode(",", $arrTables);
 
@@ -513,7 +513,7 @@ class class_db_oci8 implements interface_db_driver {
      * @return bool
      */
     public function dbImport($strFilename) {
-    	
+
         $strFilename = _realpath_.$strFilename;
 		/*
         if ($this->strPass != "") {
@@ -552,11 +552,11 @@ class class_db_oci8 implements interface_db_driver {
      * @since 3.4
      */
     private function getParsedStatement($strQuery) {
-        
+
         if(uniStripos($strQuery, "select") !== false) {
             $strQuery = uniStrReplace(array(" as ", " AS "), array(" ", " "), $strQuery);
         }
-        
+
 //        $arrStack = debug_backtrace();
 //		$strText = date("G:i:s, d-m-y"). "\t\t".
 //		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
@@ -565,12 +565,12 @@ class class_db_oci8 implements interface_db_driver {
 //		$handle = fopen(_systempath_."/debug/dblog.log", "a");
 //		fwrite($handle, $strText);
 //		fclose($handle);
-        
-        
+
+
 //        $strSum = md5($strQuery);
 //        if(array_key_exists($strSum, $this->arrStatementsCache))
 //            return $this->arrStatementsCache[$strSum];
-        
+
         $objStatement = oci_parse($this->linkDB, $strQuery);
 
 //        if($objStatement)
@@ -580,18 +580,18 @@ class class_db_oci8 implements interface_db_driver {
 
         return $objStatement;
     }
-    
+
     /**
      * convertes a result-row. changes all keys to lower-case keys again
-     * 
+     *
      * @param array $arrRow
-     * @return array 
+     * @return array
      */
     private function parseResultRow(array $arrRow) {
         $arrRow = array_change_key_case($arrRow, CASE_LOWER);
         if(isset($arrRow["count(*)"]))
             $arrRow["COUNT(*)"] = $arrRow["count(*)"];
-        
+
         foreach($arrRow as $intKey => $mixedValue) {
             if(is_object($mixedValue)) {
                 $arrRow[$intKey] = $mixedValue->load();

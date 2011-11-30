@@ -11,7 +11,7 @@
  * Model for a user
  * Note: Users do not use the classical system-id relation, so no entry in the system-table
  *
- * @package modul_user
+ * @package module_user
  * @author sidler@mulchprod.de
  */
 class class_modul_user_user extends class_model implements interface_model  {
@@ -44,7 +44,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public function __construct($strSystemid = "", $bitLoadPassword = false) {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_user";
+        $arrModul["name"] 				= "module_user";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["modul"]				= "user";
 

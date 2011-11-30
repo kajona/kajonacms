@@ -10,7 +10,7 @@
 /**
  * db-driver for postgres using the php-postgres-interface
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_db_postgres implements interface_db_driver {
@@ -49,7 +49,7 @@ class class_db_postgres implements interface_db_driver {
 		$this->intPort = $intPort;
 
 		$this->linkDB = @pg_connect("host='".$strHost."' port='".$intPort."' dbname='".$strDbName."' user='".$strUsername."' password='".$strPass."'");
-				
+
 		if($this->linkDB !== false) {
 			$this->_query("SET client_encoding='UTF8'");
 			return true;
@@ -58,7 +58,7 @@ class class_db_postgres implements interface_db_driver {
 			throw new class_exception("Error connecting to database", class_exception::$level_FATALERROR);
 		}
     }
-    
+
     /*
      * Closes the connection to the database
      */
@@ -112,7 +112,7 @@ class class_db_postgres implements interface_db_driver {
 			//   count --> COUNT(*)
 			if(isset($arrRow["count"]))
 				$arrRow["COUNT(*)"] = $arrRow["count"];
-				
+
 			$arrReturn[$intCounter++] = $arrRow;
 		}
 		return $arrReturn;
@@ -130,14 +130,14 @@ class class_db_postgres implements interface_db_driver {
     public function getPArray($strQuery, $arrParams) {
         $arrReturn = array();
         $intCounter = 0;
-        
+
         $strQuery = $this->processQuery($strQuery);
         $strName = $this->getPreparedStatementName($strQuery);
         if($strName === false)
             return false;
 
         $resultSet = @pg_execute($this->linkDB, $strName, $arrParams);
-        
+
         while($arrRow = @pg_fetch_array($resultSet)) {
 			//conversions to remain compatible:
 			//   count --> COUNT(*)
@@ -159,7 +159,7 @@ class class_db_postgres implements interface_db_driver {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: 
+        //calculate the end-value:
         $intEnd = $intEnd - $intStart +1;
         //add the limits to the query
         $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
@@ -207,8 +207,8 @@ class class_db_postgres implements interface_db_driver {
      */
     public function getTables() {
 		$arrTemp = $this->getArray(
-				"SELECT *, table_name as name 
-				   FROM information_schema.tables 
+				"SELECT *, table_name as name
+				   FROM information_schema.tables
 				   ");
 
         $arrReturn = array();
@@ -219,7 +219,7 @@ class class_db_postgres implements interface_db_driver {
 
 		return $arrTemp;
     }
-    
+
     /**
      * Looks up the columns of the given table.
      * Should return an array for each row consting of:
@@ -231,22 +231,22 @@ class class_db_postgres implements interface_db_driver {
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
         $arrTemp = $this->getArray("
-			        	SELECT *  
-						FROM information_schema.columns 
+			        	SELECT *
+						FROM information_schema.columns
 						WHERE table_name = '".dbsafeString($strTableName)."'"
         );
-        
+
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                         "columnName" => $arrOneColumn["column_name"],
                         "columnType" => ($arrOneColumn["data_type"] == "integer" ? "int" : $arrOneColumn["data_type"]),
             );
-            
+
         }
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
@@ -260,25 +260,25 @@ class class_db_postgres implements interface_db_driver {
      *      char500
      *      text
      *      longtext
-     * 
+     *
      * @param string $strType
      * @return string
      */
     public function getDatatype($strType) {
         $strReturn = "";
-        
+
         if($strType == "int")
             $strReturn .= " INT ";
         elseif($strType == "long")
             $strReturn .= " BIGINT ";
         elseif($strType == "double")
-            $strReturn .= " NUMERIC ";   
+            $strReturn .= " NUMERIC ";
         elseif($strType == "char10")
-            $strReturn .= " VARCHAR( 10 ) "; 
+            $strReturn .= " VARCHAR( 10 ) ";
         elseif($strType == "char20")
             $strReturn .= " VARCHAR( 20 ) ";
         elseif($strType == "char100")
-            $strReturn .= " VARCHAR( 100 ) ";    
+            $strReturn .= " VARCHAR( 100 ) ";
         elseif($strType == "char254")
             $strReturn .= " VARCHAR( 254 ) ";
         elseif($strType == "char500")
@@ -289,8 +289,8 @@ class class_db_postgres implements interface_db_driver {
             $strReturn .= " TEXT ";
         else
             $strReturn .= " VARCHAR( 254 ) ";
-            
-        return $strReturn;    
+
+        return $strReturn;
     }
 
     /**
@@ -320,26 +320,26 @@ class class_db_postgres implements interface_db_driver {
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
     	$strQuery = "";
-    	
+
     	//loop over existing tables to check, if the table already exists
     	$arrTables = $this->getTables();
     	foreach ($arrTables as $arrOneTable) {
     		if($arrOneTable["name"] == _dbprefix_.$strName)
     			return true;
     	}
-    	
+
     	//build the mysql code
     	$strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
-    	
+
     	//loop the fields
     	foreach($arrFields as $strFieldName => $arrColumnSettings) {
     		$strQuery .= " ".$strFieldName." ";
-    		
+
     		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
-    		
-    		//any default?	
+
+    		//any default?
     		if(isset($arrColumnSettings[2]))
-    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";	
+    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";
 
     		//nullable?
     		if($arrColumnSettings[1] === true) {
@@ -350,21 +350,21 @@ class class_db_postgres implements interface_db_driver {
     		}
 
     		$strQuery .= " , \n";
-    				
+
     	}
 
     	//primary keys
     	$strQuery .= " PRIMARY KEY ( ".implode(" , ", $arrKeys)." ) \n";
-    	
-    	
+
+
     	$strQuery .= ") ";
         $bitCreate = $this->_query($strQuery);
-        
+
         if($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".  implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_query($strQuery);
         }
-        
+
         return $bitCreate;
     }
 
@@ -405,7 +405,7 @@ class class_db_postgres implements interface_db_driver {
         $arrReturn["dbconnection"] = $arrInfo["protocol"];
         return $arrReturn;
     }
-    
+
 	/**
      * Allows the db-driver to add database-specific surrounding to column-names.
      * E.g. needed by the mysql-drivers
@@ -416,7 +416,7 @@ class class_db_postgres implements interface_db_driver {
     public function encloseColumnName($strColumn) {
     	return $strColumn;
     }
-    
+
     /**
      * Allows the db-driver to add database-specific surrounding to table-names.
      *
@@ -426,7 +426,7 @@ class class_db_postgres implements interface_db_driver {
     public function encloseTableName($strTable) {
         return $strTable;
     }
-    
+
 
 //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 
@@ -437,7 +437,7 @@ class class_db_postgres implements interface_db_driver {
      * @param array $arrTables
      */
     public function dbExport($strFilename, $arrTables) {
-    	
+
         $strFilename = _realpath_.$strFilename;
         $strTables = "-t ".implode(" -t ", $arrTables);
         $strParamPass = "";
@@ -463,7 +463,7 @@ class class_db_postgres implements interface_db_driver {
      * @return bool
      */
     public function dbImport($strFilename) {
-    	
+
         $strFilename = _realpath_.$strFilename;
         $strParamPass = "";
 		/*

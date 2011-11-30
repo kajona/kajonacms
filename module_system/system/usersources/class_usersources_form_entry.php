@@ -13,7 +13,7 @@
  *
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @package modul_usersources
+ * @package module_usersource
  */
 class class_usersources_form_entry {
 
@@ -22,8 +22,8 @@ class class_usersources_form_entry {
     public static $INT_TYPE_PASSWORD = 3;
     public static $INT_TYPE_LONGTEXT = 4;
     public static $INT_TYPE_DATE = 5;
-    
-    
+
+
 	private $strName;
 	private $intType;
 	private $strValue;
@@ -35,7 +35,7 @@ class class_usersources_form_entry {
         $this->strValue = $strValue;
         $this->bitRequired = $bitRequired;
     }
-    
+
     public function getStrName() {
         return $this->strName;
     }

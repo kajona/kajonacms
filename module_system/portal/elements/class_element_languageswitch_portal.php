@@ -10,7 +10,7 @@
 /**
  * Portal-Class of the picture element
  *
- * @package modul_languages
+ * @package module_languages
  * @author sidler@mulchprod.de
  */
 class class_element_languageswitch_portal extends class_element_portal implements interface_portal_element  {
