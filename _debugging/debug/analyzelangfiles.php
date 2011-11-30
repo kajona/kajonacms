@@ -7,11 +7,7 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 
-header("Content-Type: text/html; charset=utf-8");
-require_once("../system/bootstrap.php");
 
-
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -20,17 +16,11 @@ echo "|                                                                         
 echo "| Prints all lang-entries in all languages given in order to find duplicates.   |\n";
 echo "| Therefore different algorithms are used to identify similar ones.             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-        $objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 echo "parsing lang-files...\n";
 flush();
 
-$strStartFolder = _realpath_."/lang/";
+$strStartFolder = "/lang";
 $arrEntries = array();
 debug_parse_foldercontent($strStartFolder, $arrEntries);
 
@@ -86,22 +76,22 @@ echo "</table>";
 
 
 function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
-    $arrContent = scandir($strSourceFolder);
-    foreach($arrContent as $strOneEntry) {
+    $arrContent = class_resourceloader::getInstance()->getFolderContent($strSourceFolder, array(), true);
+    foreach($arrContent as $strPath => $strOneEntry) {
         if($strOneEntry == "." || $strOneEntry == "..")
             continue;
 
-        if(is_file($strSourceFolder."/".$strOneEntry)) {
+        if(is_file(_realpath_.$strPath)) {
            if(substr($strOneEntry, 0, 5) == "lang_" ) {
 
                $arrTemp = explode("_", substr($strOneEntry, 0, -4));
                //regular lang file found, parse contents
                $lang = array();
-               require($strSourceFolder."/".$strOneEntry);
+               require(_realpath_.$strPath);
 
                foreach($lang as $strKey => $strValue) {
 
-                   $strArea = strpos($strSourceFolder, "/admin/") !== false ? "admin" : "portal";
+                   $strArea = strpos($strPath, "/admin/") !== false ? "admin" : "portal";
                    $strModul = $arrTemp[1];
 
                    $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey, $strArea);
@@ -116,7 +106,7 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
            }
         }
 
-        if(is_dir($strSourceFolder."/".$strOneEntry)) {
+        if(is_dir(_realpath_.$strPath) && $strOneEntry != ".svn") {
             debug_parse_foldercontent($strSourceFolder."/".$strOneEntry, $arrEntries);
         }
     }
@@ -183,7 +173,3 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
-
-
-?>

@@ -165,7 +165,7 @@ class class_resourceloader {
 
                 if(substr($strSingleEntry, 0, -4) == ".php") {
 
-                    $strKey = array_search($arrReturn, $strSingleEntry);
+                    $strKey = array_search($strSingleEntry, $arrReturn);
                     if($strKey !== false) {
                         unset($arrReturn[$strKey]);
                         $arrReturn[_projectpath_._langpath_."/".$strArea."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -185,9 +185,10 @@ class class_resourceloader {
      *
      * @param $strFolder
      * @param array $arrExtensionFilter
+     * @param bool $bitWithSubfolders
      * @return array
      */
-    public function getFolderContent($strFolder, $arrExtensionFilter = array()) {
+    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false) {
         $arrReturn = array();
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter));
 
@@ -200,7 +201,7 @@ class class_resourceloader {
                 $arrContent = scandir(_corepath_."/".$strSingleModule.$strFolder);
                 foreach($arrContent as $strSingleEntry) {
 
-                    if(($strSingleEntry != "." && $strSingleEntry != "..") && is_file(_corepath_."/".$strSingleModule.$strFolder."/".$strSingleEntry)) {
+                    if(($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_corepath_."/".$strSingleModule.$strFolder."/".$strSingleEntry))) {
 						//Wanted Type?
 						if(count($arrExtensionFilter)==0) {
 							$arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -227,7 +228,7 @@ class class_resourceloader {
                 //Wanted Type?
                 if(count($arrExtensionFilter)==0) {
 
-                    $strKey = array_search($arrReturn, $strSingleEntry);
+                    $strKey = array_search($strSingleEntry, $arrReturn);
                     if($strKey !== false) {
                         unset($arrReturn[$strKey]);
                         $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -238,7 +239,7 @@ class class_resourceloader {
                     //check, if suffix is in allowed list
                     $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
                     if(in_array($strFileSuffix, $arrExtensionFilter)) {
-                        $strKey = array_search($arrReturn, $strSingleEntry);
+                        $strKey = array_search($strSingleEntry, $arrReturn);
                         if($strKey !== false) {
                             unset($arrReturn[$strKey]);
                             $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;

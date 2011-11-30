@@ -38,7 +38,7 @@ class class_graph_ezc implements interface_graph {
 
     private $bitRenderLegend = true;
     private $bitLegendPositionBottom = false;
-    private $strFont = "/fonts/dejavusans.ttf";
+    private $strFont = "/core/module_system/system/fonts/dejavusans.ttf";
 
     private $intXAxisAngle = 0;
     private $arrXAxisLabels = array();
@@ -52,7 +52,7 @@ class class_graph_ezc implements interface_graph {
 
 
 	//---------------------------------------------------------------------------------------------------
-	//   The following values are used to seperate the graph-modes, because not all
+	//   The following values are used to separate the graph-modes, because not all
 	//   methods are allowed with every chart-type
 
 	private $GRAPH_TYPE_BAR = 1;
@@ -82,9 +82,6 @@ class class_graph_ezc implements interface_graph {
 	 *
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_graph";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
 
 	}
 
@@ -358,7 +355,7 @@ class class_graph_ezc implements interface_graph {
         $this->objGraph->title = $this->strGraphTitle;
 
         //set the font properties
-        $this->objGraph->options->font = _systempath_.$this->strFont;
+        $this->objGraph->options->font = _realpath_.$this->strFont;
         $this->objGraph->options->font->color = $this->strFontColor;
         $this->objGraph->options->font->maxFontSize = 9;
 

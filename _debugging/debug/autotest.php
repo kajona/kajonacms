@@ -7,11 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-header("Content-Type: text/html; charset=utf-8");
-require_once("../system/bootstrap.php");
-
-
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -39,7 +34,7 @@ echo "             Some tests require a full PHPUnit environment to run properly
 echo "searching tests available...\n";
 
 $objFilesystem = new class_filesystem();
-$arrFiles = $objFilesystem->getFilelist("/tests/", array(".php"));
+$arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
 echo "found ".count($arrFiles)." test(s)\n\n";
 
 echo "<form method=\"post\">";
@@ -48,6 +43,7 @@ echo "<select name=\"testname\" type=\"dropdown\">";
 foreach ($arrFiles as $strOneFile)
     echo "<option id=\"".$strOneFile."\" ".(getPost("testname") == $strOneFile ? "selected" : "")." >".$strOneFile."</option>";
 echo "</select>";
+echo "<input type=\"hidden\" name=\"debugfile\" value=\"autotest.php\" />";
 echo "<input type=\"hidden\" name=\"dotest\" value=\"1\" />";
 echo "<input type=\"submit\" value=\"Run test\" />";
 echo "</form>";
@@ -59,10 +55,14 @@ if(issetPost("dotest")) {
 
 	$strFilename = getPost("testname");
 
-    if(substr($strFilename, 0, 5) == "test_" && substr($strFilename, -4) == ".php") {
+    $arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
+
+    $strSearched = array_search($strFilename, $arrFiles);
+
+    if($strSearched !== false && substr($strFilename, 0, 5) == "test_" && substr($strFilename, -4) == ".php") {
         echo " \n\nfound test-script ".$strFilename." \n";
-        include_once _realpath_."/tests/".$strFilename;
-        $arrClasses = get_php_classes(file_get_contents(_realpath_."/tests/".$strFilename));
+        include_once _realpath_.$strSearched;
+        $arrClasses = get_php_classes(file_get_contents(_realpath_.$strSearched));
         foreach($arrClasses as $strClassName) {
             if(uniStripos($strClassName, "test") !== false) {
                 $objTest = new $strClassName();
@@ -102,8 +102,6 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
-
 
 
 // --- tools needed to run tests ------------------------------------------------------------------------

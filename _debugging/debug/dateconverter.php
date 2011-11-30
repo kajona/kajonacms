@@ -7,23 +7,12 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
-header("Content-Type: text/html; charset=utf-8");
-require_once("../system/bootstrap.php");
-
-
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
 echo "| DATECONVERTER                                                                 |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-        $objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 
 echo "<form method=\"post\">";
@@ -57,6 +46,7 @@ echo "  --> ".$objDateFromInt."\n";
 
 
 echo "\n<input type=\"submit\" value=\"submit\" />\n";
+echo "<input type='hidden' name='debugfile' value='".basename(__FILE__)."'>";
 echo "</form>";
 
 echo "\ncurrent time: ".class_date::getCurrentTimestamp()."\n";
@@ -65,7 +55,3 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
-
-
-?>
