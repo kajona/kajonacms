@@ -36,7 +36,8 @@ class class_config {
 
             //overwrite with settings from project
             if(is_file(_realpath_."/project/system/config/".$strConfigFile) )
-                @include(_realpath_."/project/system/config/".$strConfigFile);
+                if(!@include(_realpath_."/project/system/config/".$strConfigFile))
+                    die("Error reading config-file: ".$strConfigFile);
         }
         else {
             $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);

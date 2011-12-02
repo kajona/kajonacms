@@ -234,31 +234,45 @@ class class_installer {
                 return;
             }
 
-                //collect data
-               $arrSearch = array(
-                   "%%defaulthost%%",
-                   "%%defaultusername%%",
-                   "%%defaultpassword%%",
-                   "%%defaultdbname%%",
-                   "%%defaultprefix%%",
-                   "%%defaultdriver%%",
-                   "%%defaultport%%"
-               );
-               $arrReplace = array(
-                   $_POST["hostname"],
-                   $_POST["username"],
-                   $_POST["password"],
-                   $_POST["dbname"],
-                   $_POST["dbprefix"],
-                   $_POST["driver"],
-                   $_POST["port"]
-               );
-            //load config file
-            $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
-            //insert values
-            $strConfig = str_replace($arrSearch, $arrReplace, $strConfig);
+
+            $strFileContent = "<?php\n";
+            $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
+            $strFileContent .= "\n";
+            $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
+            $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";
+            $strFileContent .= "  \$config['dbpassword']           = '".$_POST["password"]."';                   //Password \n";
+            $strFileContent .= "  \$config['dbname']               = '".$_POST["dbname"]."';                     //Database name \n";
+            $strFileContent .= "  \$config['dbdriver']             = '".$_POST["driver"]."';                     //DB-Driver \n";
+            $strFileContent .= "  \$config['dbprefix']             = '".$_POST["dbprefix"]."';                   //Table-prefix \n";
+            $strFileContent .= "  \$config['dbport']               = '".$_POST["port"]."';                       //Database port \n";
+
+            $strFileContent .= "\n";
+
+//                //collect data FIXME remove
+//               $arrSearch = array(
+//                   "%%defaulthost%%",
+//                   "%%defaultusername%%",
+//                   "%%defaultpassword%%",
+//                   "%%defaultdbname%%",
+//                   "%%defaultprefix%%",
+//                   "%%defaultdriver%%",
+//                   "%%defaultport%%"
+//               );
+//               $arrReplace = array(
+//                   $_POST["hostname"],
+//                   $_POST["username"],
+//                   $_POST["password"],
+//                   $_POST["dbname"],
+//                   $_POST["dbprefix"],
+//                   $_POST["driver"],
+//                   $_POST["port"]
+//               );
+//            //load config file
+//            $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
+//            //insert values
+//            $strConfig = str_replace($arrSearch, $arrReplace, $strConfig);
             //and save to file
-            file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strConfig);
+            file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
             // and reload
             header("Location: "._webpath_."/installer.php?step=loginData");
         }
@@ -639,7 +653,9 @@ class class_installer {
 	    //return true;
         //Load the config to parse it
         //FIXME: add file-resolving
-        if(is_file($this->STR_PROJECT_CONFIG_FILE))
+        return is_file($this->STR_PROJECT_CONFIG_FILE);
+
+        /*
             $strConfig = file_get_contents($this->STR_PROJECT_CONFIG_FILE);
         else
             $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
@@ -656,6 +672,7 @@ class class_installer {
             return false;
         else
             return true;
+        */
 	}
 
 	/**
