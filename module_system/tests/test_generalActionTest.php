@@ -19,21 +19,16 @@ class class_test_generalActionTest extends class_testbase  {
 
                 /** @var interface_admin|class_admin $objAdminInstance */
                 $objAdminInstance = new $strClassname();
-
                 $objReflection = new ReflectionClass($objAdminInstance);
-
                 $arrMethods = $objReflection->getMethods();
 
                 /** @var ReflectionMethod $objOneMethod */
                 foreach($arrMethods as $objOneMethod) {
 
-
-
                     $objAnnotations = new class_annotations(get_class($objAdminInstance));
 
                     if($objAnnotations->hasMethodAnnotation($objOneMethod->getName(), "@autoTestable")) {
                         echo "found method ".$strClassname."@".$objOneMethod->getName()." marked as @autoTestable, preparing call\n";
-
 
 
                         if(uniSubstr($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
@@ -45,8 +40,6 @@ class class_test_generalActionTest extends class_testbase  {
                             $objOneMethod->invoke($objAdminInstance);
                         }
                     }
-
-
                 }
 
             }

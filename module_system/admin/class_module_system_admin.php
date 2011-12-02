@@ -92,7 +92,8 @@ class class_module_system_admin extends class_admin implements interface_admin {
         //status: for setting the status of modules, you have to be member of the admin-group
         $objUser = new class_modul_user_user($this->objSession->getUserID());
         $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
-        if($this->objRights->rightEdit($this->getSystemid()) &&  in_array(_admins_group_id_, $arrGroups)) {
+        $objCommon = new class_module_system_common($this->getSystemid());
+        if($objCommon->rightEdit() &&  in_array(_admins_group_id_, $arrGroups)) {
             $this->setStatus();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
@@ -107,7 +108,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	protected function actionModuleList() {
 		$strReturn = "";
 		$strListId = generateSystemid();
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightView()) {
 			//Loading the modules
 			$arrModules = class_module_system_module::getAllModules();
 			$intI = 0;
@@ -115,7 +116,6 @@ class class_module_system_admin extends class_admin implements interface_admin {
 			foreach($arrModules as $objSingleModule) {
 				$strActions = "";
 				$strCenter = "V ".$objSingleModule->getStrVersion()." &nbsp;(".timeToString($objSingleModule->getIntDate(), true).")";
-		   		$intModuleSystemID= $objSingleModule->getSystemid();
 
                 $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
                 if($objAdminInstance != null)
@@ -125,9 +125,9 @@ class class_module_system_admin extends class_admin implements interface_admin {
                 $strDescription .= ($strDescription != "" ? "<br />" : "");
                 $strDescription .= $objSingleModule->getStrName()." <br /> ".$objSingleModule->getStrVersion();
 
-		   		if($intModuleSystemID != "") {
-                    if($this->objRights->rightRight5($intModuleSystemID))
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$intModuleSystemID, "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
+		   		if($objSingleModule->getSystemid() != "") {
+                    if($objSingleModule->rightRight5())
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
 
                     //status: for setting the status of modules, you have to be member of the admin-group
                     $objUser = new class_modul_user_user($this->objSession->getUserID());
@@ -135,17 +135,17 @@ class class_module_system_admin extends class_admin implements interface_admin {
                     if($objUser->getObjSourceUser() != null )
                         $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
 
-                    if($this->objRights->rightEdit($objSingleModule->getSystemid()) && in_array(_admins_group_id_, $arrGroups)) {
+                    if($objSingleModule->rightEdit() && in_array(_admins_group_id_, $arrGroups)) {
 		   		        if($objSingleModule->getStrName() == "system")
 		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
 		   		        else if($objSingleModule->getStatus() == 0)
-		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$intModuleSystemID, "", $this->getText("modul_status_disabled"), "icon_disabled.gif"));
+		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_status_disabled"), "icon_disabled.gif"));
 		   			    else
-		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$intModuleSystemID, "", $this->getText("modul_status_enabled"), "icon_enabled.gif"));
+		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_status_enabled"), "icon_enabled.gif"));
 		   		    }
 		   		    //rights
-		   		    if($this->objRights->rightRight($intModuleSystemID))
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("commons_module_permissions"), getRightsImageAdminName($intModuleSystemID)));
+		   		    if($objSingleModule->rightRight())
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("commons_module_permissions"), getRightsImageAdminName($objSingleModule->getSystemid())));
 		   		}
 		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif", $strDescription), $intI++, $objSingleModule->getSystemid());
 			}
@@ -163,7 +163,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
      */
     protected function actionModuleAspect() {
         $strReturn = "";
-        if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight5()) {
             $objModule = new class_module_system_module($this->getSystemid());
             $strReturn .= $this->objToolkit->formHeadline($objModule->getStrName());
             $arrAspectsSet = explode(",", $objModule->getStrAspect());
@@ -183,7 +183,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
     }
 
     protected function actionSaveModuleAspect() {
-        if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight5()) {
 
             $arrParams = array();
             foreach($this->getAllParams() as $strName => $intValue)
@@ -211,7 +211,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	 */
 	protected function actionSystemInfo() {
 		$strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
             $objCommon = new class_module_system_common();
 
     		//Phpinfos abhandeln
@@ -277,7 +277,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
     protected function actionSystemSettings() {
         $strReturn = "";
         //Check for needed rights
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
             if($this->getParam("save") != "true") {
                 //Create a warning before doing s.th.
                 $strReturn .= $this->objToolkit->warningBox($this->getText("warnung_settings"));
@@ -363,7 +363,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
         $strTaskOutput = "";
 
         //check needed rights
-        if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight2()) {
 
         	//include the list of possible tasks
             $objFilesystem = new class_filesystem();
@@ -484,7 +484,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
     protected function actionSystemSessions() {
         $strReturn = "";
         //check needed rights
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             //react on commands?
             if($this->getParam("logout") == "true") {
@@ -591,7 +591,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
     protected function actionSystemlog() {
         $strReturn = "";
         //check needed rights
-        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight3()) {
             $strLogContent = class_logger::getInstance()->getLogFileContent();
             $strPhpLogContent = class_logger::getInstance()->getPhpLogFileContent();
 
@@ -634,7 +634,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
     public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog") {
         $strReturn = "";
         //check needed rights
-        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight3()) {
 
             //showing a list using the pageview
             $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
@@ -705,7 +705,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
     protected function actionUpdateCheck() {
         $strReturn = "";
         //check needed rights
-        if($this->objRights->rightRight4($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight4()) {
             $strChecksum = md5(urldecode(_webpath_)."getVersions");
             $strQueryString = $this->strUpdateUrl."?action=getVersions&domain=".urlencode(_webpath_)."&checksum=".urlencode($strChecksum);
             $strXmlVersionList = false;
@@ -783,26 +783,26 @@ class class_module_system_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		$intI = 0;
 		//rights
-		if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight5()) {
 		   $arrObjAspects = class_module_system_aspect::getAllAspects();
 
             foreach ($arrObjAspects as $objOneAspect) {
                 //Correct Rights?
-				if($this->objRights->rightView($objOneAspect->getSystemid())) {
+				if($objOneAspect->rightView()) {
 					$strAction = "";
-					if($this->objRights->rightEdit($objOneAspect->getSystemid()))
+					if($objOneAspect->rightEdit())
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editAspect", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("aspect_edit"), "icon_pencil.gif"));
-		    		if($this->objRights->rightDelete($objOneAspect->getSystemid()))
+		    		if($objOneAspect->rightDelete())
 		    		    $strAction .= $this->objToolkit->listDeleteButton($objOneAspect->getStrName(), $this->getText("aspect_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteAspect", "&systemid=".$objOneAspect->getSystemid()));
-		    		if($this->objRights->rightEdit($objOneAspect->getSystemid()))
+		    		if($objOneAspect->rightEdit())
 		    		    $strAction .= $this->objToolkit->listStatusButton($objOneAspect->getSystemid());
-		    		if($this->objRights->rightRight($objOneAspect->getSystemid()))
+		    		if($objOneAspect->rightRight())
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneAspect->getSystemid())));
 
 		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_aspect.gif"), $objOneAspect->getStrName().($objOneAspect->getBitDefault() == 1 ? " (".$this->getText("aspect_isDefault").")" : ""), $strAction, $intI++);
 				}
             }
-            if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+            if($this->getObjModule()->rightEdit())
                 $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif"), $intI++);
 
             if(uniStrlen($strReturn) != 0)
@@ -838,7 +838,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
 
         if($strMode == "new") {
-            if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+            if($this->getObjModule()->rightRight5()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
                 $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("commons_name"), $this->getParam("aspect_name"));
                 $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $this->getParam("aspect_default"));
@@ -877,7 +877,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	 * @return string, "" in case of success
 	 */
 	protected function actionSaveAspect() {
-	    if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+	    if($this->getObjModule()->rightRight5()) {
             $objAspect = null;
 
             if($this->getParam("mode") == "new")
@@ -907,8 +907,8 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	 * @return string
 	 */
 	protected function actionDeleteAspect() {
-        if($this->objRights->rightDelete($this->getSystemid()) && $this->objRights->rightRight5($this->getSystemid())) {
-            $objAspect = new class_module_system_aspect($this->getSystemid());
+        $objAspect = new class_module_system_aspect($this->getSystemid());
+        if($objAspect->rightDelete() && $objAspect->rightRight5()) {
             if(!$objAspect->deleteObject())
                 throw new class_exception("Error deleting aspect", class_exception::$level_ERROR);
 
@@ -946,7 +946,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
      */
     protected function actionMailForm() {
         $strReturn = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightView()) {
             $this->setArrModuleEntry("template", "/folderview.tpl");
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendMail"));

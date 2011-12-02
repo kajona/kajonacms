@@ -12,7 +12,7 @@ class class_debug_helper {
         class_carrier::getInstance();
     }
 
-public function debugHelper() {
+    public function debugHelper() {
         echo "<pre>";
         echo "<b>Kajona V4 Debug Subsystem</b>\n\n";
 
@@ -23,7 +23,7 @@ public function debugHelper() {
             $strPath = array_search(getGet("debugfile"), class_resourceloader::getInstance()->getFolderContent("/debug", array(".php")));
             if($strPath !== false) {
                 echo "Passing request to ".$strPath."\n\n";
-                include(_realpath_.$strPath);
+                include _realpath_.$strPath;
             }
 
         }

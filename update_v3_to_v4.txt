@@ -5,7 +5,9 @@ Module Update
 - rename template-folder from modul_xx to module_xx
 - the folder /elemente is renamed to /elements
 - rename /config/modul_xx_id.php to /config/module_xx_id.php
-- rename modul_ files to module_
+- rename modul_ files to module_ (and entries of table system_module)
+
+- admin and portal calls to $this->objRights are no longer supported
 
 Element Update
 - portal classes should extended by _portal (class_element_image_portal.php)
