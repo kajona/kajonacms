@@ -192,9 +192,6 @@ abstract class class_root {
    	        $this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objRights = $objCarrier->getObjRights();
 
-		//Setting template area LATERON THE SKIN IS BEING SET HERE
-		//$this->setTemplateArea(""); //FIXME: remove
-
 		//And keep the action
 		$this->strAction = $this->getParam("action");
 
@@ -1225,15 +1222,7 @@ abstract class class_root {
 	    return $this->objText;
 	}
 
-	/**
-	 * Sets the current area in the template object to function as expected
-	 *
-	 * @param string $strArea
-	 */
-	protected  function setTemplateArea($strArea) {
-	    if($this->objTemplate != null)
-		    $this->objTemplate->setArea($this->strArea.$strArea);
-	}
+
 
 
     // --- PageCache Features -------------------------------------------------------------------------------

@@ -118,9 +118,6 @@ abstract class class_portal  {
 		$this->objRights = $objCarrier->getObjRights();
 		$this->objSystemCommon = new class_module_system_common($strSystemid);
 
-		//Setting template area
-		//FIXME removed $this->objTemplate->setArea($this->strArea);
-
 		//Writing to the history
         if(!_xmlLoader_)
             $this->setHistory();

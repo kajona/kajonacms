@@ -382,31 +382,6 @@ class class_template {
 	}
 
 	/**
-	 * Sets an area such as portal / admin or admin/style/...
-	 *
-	 * @param string $strArea
-     * @deprecated
-	 */
-	public function setArea($strArea) {
-
-        throw new class_exception("method setArea@class_template no longer supported!, passed: ".$strArea, class_exception::$level_FATALERROR);
-    //FIME: remove
-	    //when coming from the installer, do nothing - installer uses force-option when loading templates
-	    if($strArea == "installer")
-	       return;
-
-		//If we are in the admin-area, we have to add the current skin
-		if($strArea == "admin") {
-			//We need the session-object
-			$objSession = class_carrier::getInstance()->getObjSession();
-			$strArea .= "/skins/".$objSession->getAdminSkin();
-			if(!defined("_skinwebpath_"))
-				define("_skinwebpath_", _webpath_."/core/module_system/admin/skins/".$objSession->getAdminSkin());
-		}
-		$this->strArea = $strArea;
-	}
-
-	/**
 	 * Returns the number of cached template sections
 	 *
 	 * @return int
