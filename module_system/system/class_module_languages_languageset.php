@@ -236,4 +236,3 @@ class class_module_languages_languageset extends class_model implements interfac
         return $this->arrLanguageSet;
     }
 }
-?>

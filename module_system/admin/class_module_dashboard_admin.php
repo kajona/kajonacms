@@ -422,4 +422,3 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 }
 
 
-?>

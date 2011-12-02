@@ -119,4 +119,3 @@ $lang["user_system"]                     = "Настройки на систем
 $lang["user_tel"]                        = "Телефон:";
 $lang["user_username"]                   = "Потребителско име:";
 $lang["user_zugehoerigkeit"]             = "Членства в групи";
-?>

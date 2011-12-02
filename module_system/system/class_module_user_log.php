@@ -138,4 +138,3 @@ class class_module_user_log extends class_model implements interface_model  {
 		return $this->objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
     }
 }
-?>

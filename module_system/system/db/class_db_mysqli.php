@@ -558,4 +558,3 @@ class class_db_mysqli implements interface_db_driver {
 
 }
 
-?>

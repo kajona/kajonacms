@@ -101,4 +101,3 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
 }
 
 
-?>

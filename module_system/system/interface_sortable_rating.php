@@ -32,4 +32,3 @@ interface interface_sortable_rating {
 
 
 }
-?>

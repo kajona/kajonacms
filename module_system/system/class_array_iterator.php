@@ -162,4 +162,3 @@ class class_array_iterator implements interface_iterator {
         return $arrReturn;
     }
 }
-?>

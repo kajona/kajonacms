@@ -1583,4 +1583,3 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 }
 
-?>

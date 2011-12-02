@@ -1340,4 +1340,3 @@ function checkConditionalGetHeaders($strChecksum) {
     return false;
 }
 
-?>

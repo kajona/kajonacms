@@ -74,4 +74,3 @@ class class_usersources_form_entry {
 
 
 }
-?>

@@ -169,4 +169,3 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
     }
 
 }
-?>

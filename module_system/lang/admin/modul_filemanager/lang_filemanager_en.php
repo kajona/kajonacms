@@ -108,4 +108,3 @@ $lang["quickhelp_deleteFile"]            = $lang["quickhelp_openFolder"];
 $lang["quickhelp_deleteFolder"]          = $lang["quickhelp_openFolder"];
 $lang["quickhelp_imageDetail"]           = $lang["quickhelp_openFolder"];
 $lang["quickhelp_newFolder"]             = $lang["quickhelp_openFolder"];
-?>

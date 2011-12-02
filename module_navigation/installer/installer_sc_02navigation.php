@@ -186,4 +186,3 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         return "navigation";
     }
 }
-?>

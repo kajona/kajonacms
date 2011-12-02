@@ -26,4 +26,3 @@ $lang["tag_name"]                        = "Tagnamn:";
 $lang["tag_name_hint"]                   = "Fler tags i form av en kommaseparerad lista kan anges";
 $lang["tag_rechte"]                      = "Redigera rättigheter";
 $lang["tagsection_header"]               = "Tags";
-?>

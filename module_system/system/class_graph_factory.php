@@ -47,4 +47,3 @@ class class_graph_factory {
         return new class_graph_ezc();
     }
 }
-?>

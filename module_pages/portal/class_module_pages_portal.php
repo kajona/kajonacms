@@ -472,4 +472,3 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
 
 }
-?>

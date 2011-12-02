@@ -1015,4 +1015,3 @@ abstract class class_admin {
     }
 }
 
-?>

@@ -17,4 +17,3 @@ $lang["lang_fr"]                         = "Français";
 $lang["lang_it"]                         = "Italiano";
 $lang["lang_pt"]                         = "Português";
 $lang["lang_ru"]                         = "Pусский";
-?>

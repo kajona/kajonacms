@@ -53,4 +53,3 @@ $lang["modul_titel"]                     = "Sprachen";
 $lang["quickhelp_editLanguage"]          = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
 $lang["quickhelp_list"]                  = "Sämtliche Sprachen die im System angelegt wurden finden sich in dieser Liste wieder. Um die default-Sprache des Systems zu verändern, müssen die Grunddaten der zukünftigen Standardsprache bearbeitet werden.";
 $lang["quickhelp_newLanguage"]           = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
-?>

@@ -1308,4 +1308,3 @@ class class_module_user_admin extends class_admin implements interface_admin {
         return strcmp(strtolower($strA), strtolower($strB));
     }
 }
-?>

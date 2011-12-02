@@ -10,4 +10,3 @@
 //ID der Navigations-Verwaltung
 	define( "_navigation_modul_id_",					25);
 
-?>

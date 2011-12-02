@@ -1413,4 +1413,3 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
 }
-?>

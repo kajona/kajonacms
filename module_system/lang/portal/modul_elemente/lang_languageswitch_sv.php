@@ -17,4 +17,3 @@ $lang["lang_fr"]                         = "Franska";
 $lang["lang_it"]                         = "Italienska";
 $lang["lang_pt"]                         = "Portugisiska";
 $lang["lang_ru"]                         = "Ryska";
-?>

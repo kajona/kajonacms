@@ -224,4 +224,3 @@ class class_modul_pages_search extends class_portal implements interface_search_
     }
 
 }
-?>

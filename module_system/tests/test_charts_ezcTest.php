@@ -118,4 +118,3 @@ class class_test_charts_ezcTest extends class_testbase  {
 
 }
 
-?>

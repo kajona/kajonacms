@@ -48,4 +48,3 @@ interface interface_calendarsource_admin {
     public function getArrFilterEntries();
 
 }
-?>

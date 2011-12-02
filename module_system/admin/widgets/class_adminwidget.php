@@ -218,4 +218,3 @@ abstract class class_adminwidget {
 }
 
 
-?>

@@ -15,4 +15,3 @@ $lang["commons_captcha"]                 = "Код за сигурност:";
 $lang["commons_captcha_reload"]          = "Кодексът не се чете?";
 $lang["commons_error_permissions"]       = "Нямате достатъчно права за тези действия";
 $lang["commons_next"]                    = "напред";
-?>

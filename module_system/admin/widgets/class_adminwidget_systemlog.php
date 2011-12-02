@@ -85,4 +85,3 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
 }
 
 
-?>

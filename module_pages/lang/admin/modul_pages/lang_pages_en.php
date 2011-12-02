@@ -167,4 +167,3 @@ $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelement
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
-?>

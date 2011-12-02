@@ -17,4 +17,3 @@
 interface interface_xml_admin extends interface_xml  {
 
 }
-?>

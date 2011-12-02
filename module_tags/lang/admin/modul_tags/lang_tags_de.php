@@ -20,4 +20,3 @@ $lang["tag_edit"]                        = "Bearbeiten";
 $lang["tag_name"]                        = "Tag-Name:";
 $lang["tag_name_hint"]                   = "Mehrere Tags können in Form einer kommaseparierten Liste eingegeben werden";
 $lang["tagsection_header"]               = "Tags";
-?>

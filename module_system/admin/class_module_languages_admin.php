@@ -266,4 +266,3 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	}
 
 }
-?>

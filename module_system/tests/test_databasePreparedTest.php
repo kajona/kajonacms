@@ -12,9 +12,9 @@ class class_test_databasePrepared extends class_testbase  {
             class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
         }
     }
-    
+
     public function test() {
-    
+
         $objDB = class_carrier::getInstance()->getObjDB();
 
         echo "testing database...\n";
@@ -60,7 +60,7 @@ class class_test_databasePrepared extends class_testbase  {
         $arrRow = $objDB->getPRow($strQuery, array('2'));
         $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
         $this->assertEquals($arrRow["temp_char10"] , "2", "testDataBase getRow content");
-        
+
         echo "\tgetArray test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array());
@@ -74,7 +74,7 @@ class class_test_databasePrepared extends class_testbase  {
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest  WHERE temp_char10 = ? ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array('2'));
         $this->assertEquals(count($arrRow) , 1, "testDataBase getArray count");
-        
+
         echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArraySection($strQuery, array(), 0, 9);
@@ -83,7 +83,7 @@ class class_test_databasePrepared extends class_testbase  {
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
             $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection content");
-        
+
         $this->flushDBCache();
         echo "\tgetArraySection param test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char10 LIKE ? ORDER BY temp_long ASC";
@@ -110,10 +110,9 @@ class class_test_databasePrepared extends class_testbase  {
 
         $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
-		
+
 
     }
 
 }
 
-?>

@@ -89,4 +89,3 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
         return "&cacheSource=".$this->getParam("cacheSource");
     }
 }
-?>

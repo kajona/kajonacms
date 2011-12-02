@@ -15,4 +15,3 @@ $lang["fehler_email"]                    = "Please provide a valid email address
 $lang["fehler_nachricht"]                = "Please provide a message";
 $lang["fehler_name"]                     = "Please provide a name";
 $lang["fehler_seite"]                    = "Start page not existing";
-?>

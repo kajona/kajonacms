@@ -50,4 +50,3 @@ class class_testbase extends PHPUnit_Framework_TestCase {
 
 }
 
-?>

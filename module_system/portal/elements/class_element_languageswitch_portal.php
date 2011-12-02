@@ -104,4 +104,3 @@ class class_element_languageswitch_portal extends class_element_portal implement
 	}
 
 }
-?>

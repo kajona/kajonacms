@@ -20,4 +20,3 @@ $lang["weather_location_string"]         = "Location: ";
 $lang["weather_name"]                    = "Weather";
 $lang["weather_temp_string"]             = "Temperature: ";
 $lang["weather_unit"]                    = "Unit:";
-?>

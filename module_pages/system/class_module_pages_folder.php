@@ -351,4 +351,3 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
 
 }
-?>

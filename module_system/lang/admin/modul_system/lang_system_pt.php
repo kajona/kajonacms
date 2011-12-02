@@ -206,4 +206,3 @@ $lang["uploadmaxsize"]                   = "Tamanho máximo do ficheiro";
 $lang["uploads"]                         = "Ficheiros carregados";
 $lang["version"]                         = "Versão";
 $lang["warnung_settings"]                = "!! ATENÇÃO !!<br />O uso de vaores incorrectos para as seguintes preferências pode tornar os sistema instável ou mesmo inutilizado!";
-?>

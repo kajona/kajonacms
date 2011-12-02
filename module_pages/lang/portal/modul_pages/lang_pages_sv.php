@@ -16,4 +16,3 @@ $lang["fehler_nachricht"]                = "Vänligen skriv in ett meddelande";
 $lang["fehler_name"]                     = "Vänligen ange ett namn";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för att utföra denna handling";
 $lang["fehler_seite"]                    = "Startsida existerar inte";
-?>

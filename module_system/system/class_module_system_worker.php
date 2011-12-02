@@ -155,4 +155,3 @@ class class_module_system_worker extends class_model implements interface_model 
     }
 
 }
-?>

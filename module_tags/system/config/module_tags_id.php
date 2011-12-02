@@ -10,4 +10,3 @@
 //ID of the tags-module
 	define( "_tags_modul_id_",							95);
 
-?>

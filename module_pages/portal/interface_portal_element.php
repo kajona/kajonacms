@@ -40,4 +40,3 @@ interface interface_portal_element {
 	 */
 	//public function getElementOutput();
 }
-?>

@@ -399,4 +399,3 @@ class class_installer_navigation extends class_installer_base implements interfa
         return $strReturn;
     }
 }
-?>

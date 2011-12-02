@@ -15,4 +15,3 @@ $lang["commons_captcha"]                 = "Sicherheits-Code:";
 $lang["commons_captcha_reload"]          = "Code nicht lesbar?";
 $lang["commons_error_permissions"]       = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["commons_next"]                    = "weiter";
-?>

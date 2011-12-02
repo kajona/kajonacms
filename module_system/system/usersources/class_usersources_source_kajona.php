@@ -163,4 +163,3 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
 
 
 }
-?>

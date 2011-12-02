@@ -127,4 +127,3 @@ class class_test_user extends class_testbase  {
 
 }
 
-?>

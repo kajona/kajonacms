@@ -41,4 +41,3 @@ $lang["systemtask_navigationcheck_invalidInternal"] = "Ошибка, внутр�
 $lang["systemtask_navigationcheck_name"] = "Утвердить пункты навигации";
 $lang["systemtask_navigationcheck_treescan"] = "Исследовать навигацию";
 $lang["systemtask_navigationcheck_valid"] = "O.K., Цель:";
-?>

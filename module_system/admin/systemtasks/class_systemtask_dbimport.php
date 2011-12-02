@@ -83,4 +83,3 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
         return "&dbImportFile=".$this->getParam("dbImportFile");
     }
 }
-?>

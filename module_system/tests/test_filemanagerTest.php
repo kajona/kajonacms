@@ -40,4 +40,3 @@ class class_test_filemanager extends class_testbase  {
 
 }
 
-?>

@@ -282,4 +282,3 @@ class class_module_system_session extends class_model implements interface_model
 
 
 }
-?>

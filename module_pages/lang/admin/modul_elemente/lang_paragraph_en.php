@@ -15,4 +15,3 @@ $lang["page_element_ph_title"]           = "Internal title:";
 $lang["paragraph_content"]               = "Text:";
 $lang["paragraph_link"]                  = "Link:";
 $lang["quickhelp_element_paragraph"]     = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
-?>

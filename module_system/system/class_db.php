@@ -1007,4 +1007,3 @@ class class_db {
     }
 
 }
-?>

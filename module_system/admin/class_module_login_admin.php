@@ -197,4 +197,3 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 
 
 }
-?>

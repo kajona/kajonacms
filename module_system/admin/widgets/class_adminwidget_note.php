@@ -61,4 +61,3 @@ class class_adminwidget_note extends class_adminwidget implements interface_admi
 }
 
 
-?>

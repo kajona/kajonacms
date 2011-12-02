@@ -42,4 +42,3 @@ interface interface_model {
 
 
 }
-?>

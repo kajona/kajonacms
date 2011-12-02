@@ -13,4 +13,3 @@
 $lang["modus_baum"]                      = "Tree";
 $lang["modus_sitemap"]                   = "Sitemap";
 $lang["navigation_mode"]                 = "Mode:";
-?>

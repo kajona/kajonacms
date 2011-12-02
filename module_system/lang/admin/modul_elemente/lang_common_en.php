@@ -13,4 +13,3 @@
 $lang["directory"]                       = "Directory:";
 $lang["image_edit"]                      = "Edit image";
 $lang["template"]                        = "Template:";
-?>

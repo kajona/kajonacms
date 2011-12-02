@@ -41,4 +41,3 @@ interface interface_adminwidget {
 }
 
 
-?>

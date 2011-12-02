@@ -88,4 +88,3 @@ class class_element_tags_portal extends class_element_portal implements interfac
 	}
 
 }
-?>

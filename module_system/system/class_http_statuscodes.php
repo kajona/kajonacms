@@ -68,4 +68,3 @@ class class_http_statuscodes {
 
 
 }
-?>

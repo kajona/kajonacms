@@ -106,4 +106,3 @@ class class_installer_sc_tags implements interface_sc_installer  {
         return "tags";
     }
 }
-?>

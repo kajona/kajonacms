@@ -11,4 +11,3 @@
 
 //editable entries
 $lang["template"]                        = "Шаблон:";
-?>

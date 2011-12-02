@@ -47,4 +47,3 @@ $lang["systemtask_navigationcheck_invalidInternal"] = "Fehler, interne Seite exi
 $lang["systemtask_navigationcheck_name"] = "Navigationspunkte validieren";
 $lang["systemtask_navigationcheck_treescan"] = "Untersuche Navigation";
 $lang["systemtask_navigationcheck_valid"] = "gültig (Ziel:";
-?>

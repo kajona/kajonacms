@@ -677,4 +677,3 @@ class class_graph_pchart implements interface_graph {
 
 }
 
-?>

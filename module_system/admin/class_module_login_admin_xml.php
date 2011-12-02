@@ -88,4 +88,3 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
 
 
 }
-?>

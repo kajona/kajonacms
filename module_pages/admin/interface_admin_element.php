@@ -22,4 +22,3 @@ interface interface_admin_element {
 	public function getEditForm($arrElementData);
 
 }
-?>

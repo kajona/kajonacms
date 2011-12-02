@@ -12,4 +12,3 @@
 //editable entries
 $lang["lmpages_name"]                    = "Modified Pages";
 $lang["nrofrows"]                        = "Number of entries";
-?>

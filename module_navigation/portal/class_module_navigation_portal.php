@@ -607,4 +607,3 @@ class class_module_navigation_portal extends class_portal implements interface_p
     }
 }
 
-?>

@@ -53,4 +53,3 @@ $lang["modul_titel"]                     = "Languages";
 $lang["quickhelp_editLanguage"]          = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
 $lang["quickhelp_list"]                  = "All languages created can be found in this list. To change the systems default-language, the basic data of the future default-language have to be changed.";
 $lang["quickhelp_newLanguage"]           = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
-?>

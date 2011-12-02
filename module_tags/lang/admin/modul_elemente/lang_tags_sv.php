@@ -11,4 +11,3 @@
 
 //editable entries
 $lang["tags_hint"]                       = "För närvarande stöder den fullständiga portalutgåvan av modulen bara sidor och nyheter.";
-?>

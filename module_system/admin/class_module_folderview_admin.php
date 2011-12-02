@@ -60,4 +60,3 @@ class class_module_folderview_admin extends class_admin  implements interface_ad
     }
 
 }
-?>

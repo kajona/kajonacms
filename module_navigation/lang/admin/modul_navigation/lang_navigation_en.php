@@ -47,4 +47,3 @@ $lang["systemtask_navigationcheck_invalidInternal"] = "Error, internal page does
 $lang["systemtask_navigationcheck_name"] = "Validate navigationpoints";
 $lang["systemtask_navigationcheck_treescan"] = "Investigate navigation";
 $lang["systemtask_navigationcheck_valid"] = "valid (Target:";
-?>

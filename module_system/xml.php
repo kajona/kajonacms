@@ -53,11 +53,11 @@ class class_xml {
 
         if($strContent == "") {
             header(class_http_statuscodes::$strSC_BADREQUEST);
-            $strContent = "<error>An error occured, malformed request</error>";
+            $strContent = "<error>An error occurred, malformed request</error>";
         }
 
         if(!self::$bitSuppressXmlHeader)
-            $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$strContent;
+            $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n".$strContent;
         return $strContent;
     }
 
@@ -78,4 +78,3 @@ $objXML = new class_xml();
 header("Content-Type: text/xml; charset=utf-8");
 echo $objXML->processRequest();
 
-?>

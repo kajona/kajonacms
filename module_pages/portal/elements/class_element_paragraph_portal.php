@@ -82,4 +82,3 @@ class class_element_paragraph_portal extends class_element_portal implements  in
 	}
 
 }
-?>

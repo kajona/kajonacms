@@ -25,4 +25,3 @@ $lang["quickhelp_list"]                  = "В панель инструмент
 $lang["setDashboardPosition"]            = "Новая позиция успешно сохранена";
 $lang["widget"]                          = "Виджет:";
 $lang["widgetDeleteQuestion"]            = "Вы действительно хотите удалить виджет &quot;<b>%%element_name%%</b>&quot;?";
-?>

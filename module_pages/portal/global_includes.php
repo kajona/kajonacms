@@ -42,4 +42,3 @@
 
 	$arrGlobal["kajonaTitleSeparator"] = " | ";
 
-?>

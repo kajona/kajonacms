@@ -120,4 +120,3 @@ class class_test_autonavigationtest extends class_testbase  {
 
 }
 
-?>

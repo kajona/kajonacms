@@ -607,4 +607,3 @@ class class_module_navigation_admin extends class_admin implements interface_adm
 
 }
 
-?>

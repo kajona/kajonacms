@@ -249,4 +249,3 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
 
 }
-?>

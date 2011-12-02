@@ -13,4 +13,3 @@
 $lang["modus_baum"]                      = "Дерево";
 $lang["modus_sitemap"]                   = "Карта сайта";
 $lang["navigation_mode"]                 = "Режим:";
-?>

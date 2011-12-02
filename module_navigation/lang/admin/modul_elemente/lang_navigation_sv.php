@@ -15,4 +15,3 @@ $lang["modus_baum"]                      = "Träd";
 $lang["modus_sitemap"]                   = "Sitemap";
 $lang["navigation_mode"]                 = "Läge:";
 $lang["navigation_name"]                 = "Navigering:";
-?>

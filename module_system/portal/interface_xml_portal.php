@@ -16,4 +16,3 @@
 interface interface_xml_portal extends interface_xml  {
 
 }
-?>

@@ -238,4 +238,3 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
     }
 
 }
-?>

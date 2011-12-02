@@ -15,4 +15,3 @@ $lang["fehler_email"]                    = "Por favor introduza um correio elect
 $lang["fehler_nachricht"]                = "Por favor introduza uma mensagem";
 $lang["fehler_name"]                     = "Por favor, introduza um nome";
 $lang["fehler_seite"]                    = "Página inicial não existente";
-?>

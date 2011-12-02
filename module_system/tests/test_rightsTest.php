@@ -299,4 +299,3 @@ class class_test_rights extends class_testbase {
 
 }
 
-?>

@@ -360,4 +360,3 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		return $strReturn;
 	}
 }
-?>

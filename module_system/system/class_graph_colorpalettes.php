@@ -39,4 +39,3 @@ class class_graph_colorpalettes {
     public static $arrContrastGreenColorPalette     = array("#e58f16", "#a0e5b1", "#723d99", "#8500e5", "#998f82", "#e58f16");
 }
 
-?>

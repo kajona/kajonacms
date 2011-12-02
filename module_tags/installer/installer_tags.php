@@ -182,4 +182,3 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 
 }
-?>

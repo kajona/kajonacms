@@ -718,4 +718,3 @@ $objInstaller = new class_installer();
 $objInstaller->action();
 echo $objInstaller->getOutput();
 
-?>

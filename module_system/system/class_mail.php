@@ -321,4 +321,3 @@ class class_mail {
 
 }
 
-?>

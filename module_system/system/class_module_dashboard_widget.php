@@ -253,4 +253,3 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 }
 
 
-?>

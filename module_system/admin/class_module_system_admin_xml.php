@@ -467,4 +467,3 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         return $strReturn;
     }
 }
-?>

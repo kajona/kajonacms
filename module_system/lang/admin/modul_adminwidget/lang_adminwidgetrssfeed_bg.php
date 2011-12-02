@@ -15,4 +15,3 @@ $lang["rssfeed_errorparsing"]            = "Грешка При Анализ н�
 $lang["rssfeed_feedurl"]                 = "Feed-URL:";
 $lang["rssfeed_name"]                    = "Newsfeed";
 $lang["rssfeed_posts"]                   = "Номер на постове";
-?>

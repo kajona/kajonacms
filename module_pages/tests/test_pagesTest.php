@@ -105,4 +105,3 @@ class class_test_pages extends class_testbase  {
 
 
 
-?>

@@ -800,4 +800,3 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
 }
-?>

@@ -86,4 +86,3 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     }
 
 }
-?>

@@ -74,4 +74,3 @@ interface interface_versionable {
      */
     public function renderValue($strProperty, $strValue);
 }
-?>

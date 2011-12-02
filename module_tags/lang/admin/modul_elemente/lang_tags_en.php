@@ -11,4 +11,3 @@
 
 //editable entries
 $lang["tags_hint"]                       = "Currently only the pages and news support the full portal-functionality of the tags-module.";
-?>

@@ -237,4 +237,3 @@ class class_xml_parser {
 
 }
 
-?>

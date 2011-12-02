@@ -25,4 +25,3 @@ $lang["quickhelp_list"]                  = "Таблото е мястото, н
 $lang["setDashboardPosition"]            = "Новите позиции запазени успешно!";
 $lang["widget"]                          = "Приложение";
 $lang["widgetDeleteQuestion"]            = "Наистина ли искате да премахнете приложение: &quot;<b>%%element_name%%</b>&quot;?";
-?>

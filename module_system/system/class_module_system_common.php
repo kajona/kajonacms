@@ -403,4 +403,3 @@ class class_module_system_common extends class_model implements interface_model 
 		return $arrReturn;
 	}
 }
-?>

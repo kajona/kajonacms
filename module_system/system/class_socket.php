@@ -255,4 +255,3 @@ class class_socket {
     }
 }
 
-?>

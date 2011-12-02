@@ -330,4 +330,3 @@ class class_date {
 
 }
 
-?>

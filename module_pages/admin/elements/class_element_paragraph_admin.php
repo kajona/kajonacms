@@ -112,4 +112,3 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 
 
 }
-?>

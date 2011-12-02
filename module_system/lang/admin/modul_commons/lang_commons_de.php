@@ -39,4 +39,3 @@ $lang["commons_result_page"]             = "Treffer-Seite:";
 $lang["commons_save"]                    = "Speichern";
 $lang["commons_title"]                   = "Titel:";
 $lang["commons_yes"]                     = "Ja";
-?>

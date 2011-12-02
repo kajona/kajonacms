@@ -780,4 +780,3 @@ class class_rights {
 }
 
 
-?>

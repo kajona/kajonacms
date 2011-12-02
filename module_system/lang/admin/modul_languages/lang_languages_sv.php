@@ -62,4 +62,3 @@ $lang["nondefault"]                      = "Nej";
 $lang["quickhelp_editLanguage"]          = "För att skapa eller redigera ett existerande språk kan detta formulär användas för att ange grunddata.<br />Listan av språk kan inte utvidgas här, detta måste göras av en administratör.";
 $lang["quickhelp_list"]                  = "Samtliga skapade språk skapade i systemet återfinns in denna lista. Föra att ändra systemets förvalda språk måste grunddata i det nya förvalda språket ändras.";
 $lang["quickhelp_newLanguage"]           = "För att skapa eller redigera ett existerande språk kan detta formulär användas för att ange grunddata.<br />Listan av språk kan inte utvidgas här, detta måste göras av en administratör.";
-?>

@@ -90,4 +90,3 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
         return "&systemstatus_systemid=".$this->getParam("systemstatus_systemid")."&systemstatus_status=".$this->getParam("systemstatus_status");
     }
 }
-?>

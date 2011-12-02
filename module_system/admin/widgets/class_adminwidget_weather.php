@@ -109,4 +109,3 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
 }
 
 
-?>

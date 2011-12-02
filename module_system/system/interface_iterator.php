@@ -52,4 +52,3 @@ interface interface_iterator {
     public function getNumberOfElements();
 
 }
-?>

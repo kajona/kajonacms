@@ -87,4 +87,3 @@ interface interface_usersources_user {
      */
     public function isPasswortResetable();
 }
-?>

@@ -956,4 +956,3 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 
 
 }
-?>

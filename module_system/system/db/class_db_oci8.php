@@ -603,4 +603,3 @@ class class_db_oci8 implements interface_db_driver {
 
 }
 
-?>

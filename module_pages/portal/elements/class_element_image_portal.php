@@ -73,4 +73,3 @@ class class_element_image_portal extends class_element_portal implements interfa
 	}
 
 }
-?>

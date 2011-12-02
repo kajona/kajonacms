@@ -188,4 +188,3 @@ class class_test_system extends class_testbase  {
 
 }
 
-?>

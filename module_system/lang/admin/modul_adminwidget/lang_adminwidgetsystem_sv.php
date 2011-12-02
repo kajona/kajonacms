@@ -40,4 +40,3 @@ $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
 $lang["systemcheck_php_urlfopen"]        = "PHP Tillåt url fopen: ";
 $lang["systemcheck_yes"]                 = "Ja";
-?>

@@ -37,7 +37,7 @@ abstract class class_portal  {
 	 *
 	 * @var class_session
 	 */
-	protected $objSession = null;			//Object containting the session-management
+	protected $objSession = null;			//Object containing the session-management
 	/**
 	 * Instance of class_template
 	 *
@@ -577,4 +577,3 @@ abstract class class_portal  {
     }
 
 }
-?>

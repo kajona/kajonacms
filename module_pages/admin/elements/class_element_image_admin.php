@@ -94,4 +94,3 @@ class class_element_image_admin extends class_element_admin implements interface
 
 
 }
-?>

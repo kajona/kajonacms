@@ -307,4 +307,3 @@ $lang["uploadmaxsize"]                   = "Max storlek för uplladdning";
 $lang["uploads"]                         = "Uppladdningar";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! VARNING !!<br />Felaktiga värden i följande inställningar kan göra system obrukbart!";
-?>

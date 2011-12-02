@@ -149,4 +149,3 @@ class class_gzip {
 
 }
 
-?>

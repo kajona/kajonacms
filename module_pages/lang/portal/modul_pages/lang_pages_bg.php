@@ -15,4 +15,3 @@ $lang["fehler_email"]                    = "Моля попълнете съще
 $lang["fehler_nachricht"]                = "Моля напишете съобщение";
 $lang["fehler_name"]                     = "Моля попълнете име";
 $lang["fehler_seite"]                    = "Не съществува начална страница";
-?>

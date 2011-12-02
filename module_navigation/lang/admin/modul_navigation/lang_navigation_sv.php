@@ -56,4 +56,3 @@ $lang["systemtask_navigationcheck_invalidInternal"] = "Fel, intern sida existera
 $lang["systemtask_navigationcheck_name"] = "Bekräfta menypunkt";
 $lang["systemtask_navigationcheck_treescan"] = "Undersök meny";
 $lang["systemtask_navigationcheck_valid"] = "giltigt (mål:";
-?>

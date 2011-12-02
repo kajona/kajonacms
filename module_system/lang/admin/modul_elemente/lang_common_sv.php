@@ -13,4 +13,3 @@
 $lang["directory"]                       = "Mapp:";
 $lang["image_edit"]                      = "Redigera bild";
 $lang["template"]                        = "Mall:";
-?>

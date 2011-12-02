@@ -595,4 +595,3 @@ abstract class class_installer_base extends class_root {
 
 }
 
-?>

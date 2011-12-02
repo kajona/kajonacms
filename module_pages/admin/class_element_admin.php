@@ -278,4 +278,3 @@ abstract class class_element_admin extends class_admin {
 
 }
 
-?>

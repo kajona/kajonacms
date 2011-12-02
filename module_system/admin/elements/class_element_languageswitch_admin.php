@@ -64,4 +64,3 @@ class class_element_languageswitch_admin extends class_element_admin implements 
 
 
 }
-?>

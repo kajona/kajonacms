@@ -516,4 +516,3 @@ class class_db_postgres implements interface_db_driver {
 
 }
 
-?>

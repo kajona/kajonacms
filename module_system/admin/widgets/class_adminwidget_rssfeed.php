@@ -128,4 +128,3 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
 }
 
 
-?>

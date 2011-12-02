@@ -94,4 +94,3 @@ interface interface_usersources_usersource {
     public function getAllGroupIds();
 
 }
-?>

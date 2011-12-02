@@ -12,4 +12,3 @@
 //editable entries
 $lang["lmpages_name"]                    = "Ändrade sidor";
 $lang["nrofrows"]                        = "Antal poster";
-?>

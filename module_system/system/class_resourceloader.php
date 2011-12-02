@@ -285,4 +285,3 @@ class class_resourceloader {
 
 
 }
-?>

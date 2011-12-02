@@ -53,4 +53,3 @@ class class_element_row_portal extends class_element_portal implements  interfac
 	}
 
 }
-?>

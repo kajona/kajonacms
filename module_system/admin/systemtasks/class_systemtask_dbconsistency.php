@@ -147,4 +147,3 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     }
 
 }
-?>

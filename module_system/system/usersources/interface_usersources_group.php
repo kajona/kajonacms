@@ -80,4 +80,3 @@ interface interface_usersources_group {
      */
     public function setNewRecordId($strId);
 }
-?>

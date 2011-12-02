@@ -17,7 +17,7 @@ class class_test_class_image extends class_testbase  {
 
         //$strImage = "<img src=\""._webpath_."/portal/pics/upload/samples/IMG_3000.JPG\"/>";
 
-        
+
         echo "\timage: ".$strImage."\n";
         $objImage = new class_image();
         $objImage->preLoadImage($strImage);
@@ -33,7 +33,7 @@ class class_test_class_image extends class_testbase  {
 
         echo "\tcachename: ".$strResizeCacheName1."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName1."\"/>";
-        
+
         $this->assertFileExists(_realpath_._images_cachepath_.$strResizeCacheName1,  __FILE__." getCachenameAfterResize");
 
         echo "\treplay test...\n";
@@ -72,7 +72,7 @@ class class_test_class_image extends class_testbase  {
 
         echo "\tcachename: ".$strResizeCacheName3."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName3."\"/>";
-        
+
         $this->assertFileExists(_realpath_._images_cachepath_.$strResizeCacheName3,  __FILE__." getCachenameAfterResize");
 
         echo "\tresize & text...\n";
@@ -91,7 +91,7 @@ class class_test_class_image extends class_testbase  {
 
         echo "\tcachename: ".$strResizeCacheName3."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName4."\"/>";
-        
+
         $this->assertFileExists(_realpath_._images_cachepath_.$strResizeCacheName4,  __FILE__." getCachenameAfterResize");
 
         echo "\ttest image overlay.\n";
@@ -106,7 +106,7 @@ class class_test_class_image extends class_testbase  {
 
         echo "\tcachename: ".$strResizeCacheName5."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName5."\"/>";
-        
+
         $this->assertFileExists(_realpath_._images_cachepath_.$strResizeCacheName5,  __FILE__." getCachenameAfterResize");
 
 
@@ -115,4 +115,3 @@ class class_test_class_image extends class_testbase  {
 
 }
 
-?>

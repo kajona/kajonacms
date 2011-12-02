@@ -526,4 +526,3 @@ class class_db_sqlite3 implements interface_db_driver {
     }
 }
 
-?>

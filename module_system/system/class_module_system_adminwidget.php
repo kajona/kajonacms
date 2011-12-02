@@ -157,4 +157,3 @@ class class_module_system_adminwidget extends class_model implements interface_m
 }
 
 
-?>

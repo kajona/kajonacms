@@ -20,4 +20,3 @@ $lang["tag_edit"]                        = "Edit";
 $lang["tag_name"]                        = "Tag-Name:";
 $lang["tag_name_hint"]                   = "A set of tags may be submitted as a comma-separated list";
 $lang["tagsection_header"]               = "Tags";
-?>

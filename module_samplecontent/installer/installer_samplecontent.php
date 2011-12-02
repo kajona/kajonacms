@@ -203,4 +203,3 @@ class class_installer_samplecontent extends class_installer_base implements inte
     }
 
 }
-?>

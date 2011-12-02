@@ -26,4 +26,3 @@
 //ID der Ordnerverwaltung
 	define( "_pages_folder_id_" ,						14);
 
-?>

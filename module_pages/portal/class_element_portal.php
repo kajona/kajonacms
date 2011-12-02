@@ -509,4 +509,3 @@ abstract class class_element_portal extends class_portal {
 
 }
 
-?>

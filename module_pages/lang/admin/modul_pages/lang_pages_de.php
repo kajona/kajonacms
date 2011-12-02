@@ -167,4 +167,3 @@ $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
-?>

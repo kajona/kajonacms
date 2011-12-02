@@ -336,4 +336,3 @@ final class class_changelog_container {
 
 
 }
-?>

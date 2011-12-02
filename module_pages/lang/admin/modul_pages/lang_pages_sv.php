@@ -168,4 +168,3 @@ $lang["templateNotLoaded"]               = "VARNING: För denna sida har ingen m
 $lang["templateNotSelectedBefore"]       = "VARNING: För denna sida har ingen mall valts!";
 $lang["updatePlaceholder"]               = "Uppdatera platshållare";
 $lang["warning_elementsremaining"]       = "VARNING: <br />I systemet finns sidoelement, som inte kan tilldelas någon platshållare. Detta kan hända om en platshållare i mallen har bytt namn eller blivit raderad. För att byta namn på platshållaren också i systemet kan man använda funktionen \"uppdatera platshållare\". En lista med de element det gäller finns efter denna varning.";
-?>

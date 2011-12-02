@@ -123,4 +123,3 @@ $lang["xmlupload_error_copyUpload"]      = "Ett fel har uppstått vid kopiering 
 $lang["xmlupload_error_filter"]          = "Filtyp i filter inte tillåten";
 $lang["xmlupload_error_notWritable"]     = "Mapp är skrivskyddad";
 $lang["xmlupload_success"]               = "Uppladdningen har lyckats";
-?>

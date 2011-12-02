@@ -341,4 +341,3 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
 
 
 }
-?>

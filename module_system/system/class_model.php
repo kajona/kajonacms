@@ -93,4 +93,3 @@ class class_model extends class_root {
     }
 
 }
-?>

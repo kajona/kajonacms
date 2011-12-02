@@ -55,4 +55,3 @@ class class_element_navigation_portal extends class_element_portal implements in
     }
 
 }
-?>

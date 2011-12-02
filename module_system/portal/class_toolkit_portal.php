@@ -286,4 +286,3 @@ class class_toolkit_portal extends class_toolkit {
     }
 
 }
-?>

@@ -99,4 +99,3 @@ class dummyObject implements interface_versionable {
     }
 
 }
-?>

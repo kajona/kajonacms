@@ -11,10 +11,10 @@ class class_test_database extends class_testbase  {
             class_carrier::getInstance()->getObjDB()->_query($strQuery);
         }
     }
-    
+
 
     public function test() {
-    
+
         $objDB = class_carrier::getInstance()->getObjDB();
 
         echo "testing database...\n";
@@ -52,7 +52,7 @@ class class_test_database extends class_testbase  {
         $arrRow = $objDB->getRow($strQuery);
         $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
         $this->assertEquals($arrRow["temp_char10"] , "1", "testDataBase getRow content");
-        
+
         echo "\tgetArray test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getArray($strQuery);
@@ -61,7 +61,7 @@ class class_test_database extends class_testbase  {
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
             $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArray content");
-        
+
         echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getArraySection($strQuery, 0, 9);
@@ -76,10 +76,9 @@ class class_test_database extends class_testbase  {
 
         $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
         $this->assertTrue($objDB->_query($strQuery), "testDataBase dropTable");
-		
+
 
     }
 
 }
 
-?>

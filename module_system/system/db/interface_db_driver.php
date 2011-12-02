@@ -240,4 +240,3 @@ interface interface_db_driver {
 }
 
 
-?>

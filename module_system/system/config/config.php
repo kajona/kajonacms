@@ -110,4 +110,3 @@ default:
                                                                                    // 1: Errors are logged
                                                                                    // 2: Errors and warning
                                                                                    // 3: Errors, warnings and information are logged
-?>

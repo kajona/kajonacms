@@ -11,4 +11,3 @@
 
 //editable entries
 $lang["link_more_title"]                 = "Ytterligare information";
-?>

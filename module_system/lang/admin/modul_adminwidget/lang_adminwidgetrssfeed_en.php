@@ -15,4 +15,3 @@ $lang["rssfeed_errorparsing"]            = "Error while parsing the feed";
 $lang["rssfeed_feedurl"]                 = "Feed-URL:";
 $lang["rssfeed_name"]                    = "Newsfeed";
 $lang["rssfeed_posts"]                   = "Number of posts:";
-?>

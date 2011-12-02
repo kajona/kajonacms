@@ -31,4 +31,3 @@ $lang["quickhelp_list"]                  = "I instrumentpanelen kan alla sorters
 $lang["setDashboardPosition"]            = "Sparande av ny position lyckades";
 $lang["widget"]                          = "Widget:";
 $lang["widgetDeleteQuestion"]            = "Vill du verkligen ta bort widget &quot;<b>%%element_name%%</b>&quot;?";
-?>

@@ -79,4 +79,3 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     }
 
 }
-?>

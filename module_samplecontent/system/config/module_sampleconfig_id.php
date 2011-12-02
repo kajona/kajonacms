@@ -9,4 +9,3 @@
 
 //ID of samplecontent
     define( "_samplecontent_modul_id_",                 70);
-?>

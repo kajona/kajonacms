@@ -74,4 +74,3 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
 }
 
 
-?>

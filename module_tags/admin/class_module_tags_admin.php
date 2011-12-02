@@ -206,4 +206,3 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 
 
 }
-?>

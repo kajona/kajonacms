@@ -122,4 +122,3 @@ $lang["user_zugehoerigkeit"]             = "Участие в группах";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
-?>

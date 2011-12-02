@@ -11,4 +11,3 @@
 
 //editable entries
 $lang["element_row_name"]                = "Överskrift";
-?>

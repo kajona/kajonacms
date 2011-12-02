@@ -28,4 +28,3 @@ $arrSearch["page"][_dbprefix_."page"][] = "pageproperties_keywords";
 $arrSearch["page"][_dbprefix_."page"][] = "pageproperties_browsername";
 
 
-?>

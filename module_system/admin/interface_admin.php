@@ -19,4 +19,3 @@ interface interface_admin {
 
 
 }
-?>

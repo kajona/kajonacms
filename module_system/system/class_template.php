@@ -416,4 +416,3 @@ class class_template {
 	}
 }
 
-?>

@@ -232,4 +232,3 @@ class class_module_pages_element extends class_model implements interface_model 
 
 
 }
-?>

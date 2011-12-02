@@ -138,4 +138,3 @@ $lang["user_system"]                     = "Systeminställningar";
 $lang["user_zugehoerigkeit"]             = "Grupptillhörigheter";
 $lang["username"]                        = "Användarnamn:";
 $lang["vorname"]                         = "Förnamn";
-?>
