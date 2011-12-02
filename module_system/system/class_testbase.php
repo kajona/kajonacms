@@ -26,6 +26,10 @@ class class_testbase extends PHPUnit_Framework_TestCase {
             define("_block_config_db_loading_", true);
         }
 
+        if(!defined("_autotesting_")) {
+            define("_autotesting_", true);
+        }
+
         $objCarrier = class_carrier::getInstance();
 
         $strSQL = "UPDATE "._dbprefix_."system_config SET system_config_value = 'true'

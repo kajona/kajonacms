@@ -33,6 +33,8 @@ class class_rights {
 
 	private static $objRights = null;
 
+    private $bitTestMode = false;
+
 	/**
 	 * Constructor doing the usual setup things
 	 *
@@ -206,6 +208,7 @@ class class_rights {
      * If not, false is being returned, if the record inherits the rights from another
      * record, true is returned instead.
      *
+     * @param $strSystemid
      * @return bool
      */
 	public function isInherited($strSystemid) {
@@ -226,13 +229,12 @@ class class_rights {
         return $this->setRights($arrRights, $strSystemid);
 	}
 
-	/**
-	 * Looks up the rights for a given SystemID and going up the tree if needed (inheritance!)
-	 *
-	 * @param string $strSystemid
-	 * @param bool $bitLoadInherited behave as if loading inherited rights
-	 * @return array
-	 */
+    /**
+     * Looks up the rights for a given SystemID and going up the tree if needed (inheritance!)
+     *
+     * @param string $strSystemid
+     * @return array
+     */
 	private function getPlainRightRow($strSystemid) {
 
         $strQuery = "SELECT *
@@ -259,13 +261,12 @@ class class_rights {
 	}
 
 
-	/**
-	 * Returns a 2-dimensional Array containg the groups and the assigned rights.
-	 *
-	 * @param string $strSystemid
-	 * @param bool $bitLoadInherited behave as if loading inherited rights
-	 * @return mixed
-	 */
+    /**
+     * Returns a 2-dimensional Array containg the groups and the assigned rights.
+     *
+     * @param string $strSystemid
+     * @return mixed
+     */
 	public function getArrayRights($strSystemid) {
 		$arrReturn = array();
 
@@ -295,6 +296,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightView($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -334,6 +339,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightEdit($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -374,6 +383,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightDelete($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -414,6 +427,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -455,6 +472,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight1($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -495,6 +516,11 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight2($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -535,6 +561,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight3($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -574,6 +604,10 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight4($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -614,6 +648,11 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight5($strSystemid, $strUserid = "") {
+
+        if($this->bitTestMode)
+            return true;
+
+
 		$bitReturn = false;
         $arrGroups = array();
 		if($strUserid == "") {
@@ -769,13 +808,18 @@ class class_rights {
 	}
 
     /**
-     * Flushes the interal rights cache
+     * Flushes the internal rights cache
      *
      * @return void
      */
     public function flushRightsCache() {
         $this->arrRightsCache = array();
     }
+
+    public function setBitTestMode($bitTestMode) {
+        $this->bitTestMode = $bitTestMode &&  _autotesting_;
+    }
+
 
 }
 

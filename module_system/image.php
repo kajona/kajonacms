@@ -7,6 +7,7 @@
 *	$Id$                                                    *
 ********************************************************************************************************/
 
+
 /**
  * This class can be used to create fast "on-the-fly" resizes of images
  * or to create a captcha image
@@ -252,6 +253,7 @@ class class_flyimage {
 }
 
 define("_block_config_db_loading_", true);
+define("_autotesting_", false);
 
 $objImage = new class_flyimage();
 if($objImage->getImageFilename() == "kajonaCaptcha")

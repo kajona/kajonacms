@@ -18,6 +18,7 @@ if(issetGet("admin") && getGet("admin") == 1)
 else
 	define("_admin_", false);
 
+define("_autotesting_", false);
 
 
 /**

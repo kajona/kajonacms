@@ -102,6 +102,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	 * Creates a list of all installed modules
 	 *
 	 * @return string
+     * @autoTestable
 	 */
 	protected function actionModuleList() {
 		$strReturn = "";
@@ -130,7 +131,10 @@ class class_module_system_admin extends class_admin implements interface_admin {
 
                     //status: for setting the status of modules, you have to be member of the admin-group
                     $objUser = new class_modul_user_user($this->objSession->getUserID());
-                    $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
+                    $arrGroups = array();
+                    if($objUser->getObjSourceUser() != null )
+                        $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
+
                     if($this->objRights->rightEdit($objSingleModule->getSystemid()) && in_array(_admins_group_id_, $arrGroups)) {
 		   		        if($objSingleModule->getStrName() == "system")
 		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
@@ -201,7 +205,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 
 
 	/**
-	 * Shows infos about the current system
+	 * Shows information about the current system
 	 *
 	 * @return string
 	 */
@@ -268,6 +272,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
      * Creates a form to edit systemsettings or updates them
      *
      * @return string "" in case of success
+     * @autoTestable
      */
     protected function actionSystemSettings() {
         $strReturn = "";
@@ -347,8 +352,12 @@ class class_module_system_admin extends class_admin implements interface_admin {
     }
 
 
-// --- Systemtasks --------------------------------------------------------------------------------------
 
+    /**
+     * Loads the list of all systemtasks available and creates the form required to trigger a task
+     * @return string
+     * @autoTestable
+     */
     protected function actionSystemTasks() {
         $strReturn = "";
         $strTaskOutput = "";
@@ -465,10 +474,10 @@ class class_module_system_admin extends class_admin implements interface_admin {
     }
 
 
-// --- Sessionmanagement --------------------------------------------------------------------------------
 
     /**
      * Creates a table filled with the sessions currently registered
+     * @autoTestable
      *
      * @return string
      */
@@ -572,12 +581,12 @@ class class_module_system_admin extends class_admin implements interface_admin {
 
 
 
-// --- Systemlog ---------------------------------------------------------------------------------------.
 
     /**
      * Fetches the entries from the system-log an prints them as preformatted text
      *
      * @return string
+     * @autoTestable
      */
     protected function actionSystemlog() {
         $strReturn = "";
@@ -620,6 +629,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
      * @return string
      *
      * @since 3.4.0
+     * @autoTestable
      */
     public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog") {
         $strReturn = "";
@@ -685,12 +695,12 @@ class class_module_system_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-// --- UpdateCheck --------------------------------------------------------------------------------------
 
     /**
      * Looks for possible updates of the installed modules
      *
      * @return string
+     * @autoTestable
      */
     protected function actionUpdateCheck() {
         $strReturn = "";
@@ -762,11 +772,11 @@ class class_module_system_admin extends class_admin implements interface_admin {
     }
 
 
-//---Aspects---------------------------------------------------------------------------------------------
 
     /**
      * Renders the list of aspects available
      * @return string
+     * @autoTestable
      */
     protected function actionAspects() {
 
@@ -910,9 +920,10 @@ class class_module_system_admin extends class_admin implements interface_admin {
 
 
     /**
-     * About kajona, credits and co
+     * About Kajona, credits and co
      *
      * @return string
+     * @autoTestable
      */
     protected function actionAbout() {
         $strReturn = "";
@@ -931,6 +942,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
      *
      * @return string
      * @since 3.4
+     * @autoTestable
      */
     protected function actionMailForm() {
         $strReturn = "";
@@ -994,15 +1006,14 @@ class class_module_system_admin extends class_admin implements interface_admin {
     }
 
 
-//---Helpers---------------------------------------------------------------------------------------------
 
-	/**
-	 * Loads the data for one module
-	 *
-	 * @param int $intModuleID
-	 * @package bool $bitZeroIsSystem
-	 * @return mixed
-	 */
+    /**
+     * Loads the data for one module
+     *
+     * @param int $intModuleID
+     * @param bool $bitZeroIsSystem
+     * @return mixed
+     */
 	private function getModuleDataID($intModuleID, $bitZeroIsSystem = false) {
 		$arrModules = class_module_system_module::getAllModules();
 

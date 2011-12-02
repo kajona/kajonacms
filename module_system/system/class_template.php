@@ -88,7 +88,7 @@ class class_template {
                 $strName = class_resourceloader::getInstance()->getTemplate($strName);
             }
             catch (class_exception $objEx) {
-                if(_admin_) {
+                if($strName == "/elements.tpl" || _admin_) {
                     //try to resolve the file in the current skin
                     if(is_file(_corepath_."/module_system"._adminpath_."/skins/".class_session::getInstance()->getAdminSkin().$strName))
                         $strName = "/core/module_system"._adminpath_."/skins/".class_session::getInstance()->getAdminSkin().$strName;
