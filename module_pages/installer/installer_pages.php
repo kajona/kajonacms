@@ -384,6 +384,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_3402_341();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.1") {
+            $strReturn .= $this->update_341_349();
+        }
+
         return $strReturn."\n\n";
 	}
 

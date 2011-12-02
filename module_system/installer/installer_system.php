@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.4.1";
+		$arrModul["version"] 			= "3.4.9";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -683,6 +683,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.0.2") {
             $strReturn .= $this->update_3402_341();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.1") {
+            $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
@@ -1410,6 +1416,39 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.4.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.4.1");
+        return $strReturn;
+    }
+
+
+    private function update_341_349() {
+        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+
+        $strReturn .= "Updating model-classes...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."system_module";
+        $arrRows = $this->objDB->_pQuery($strQuery, array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system_module SET
+                                module_filenameadmin = ?,
+                                module_xmlfilenameadmin = ?,
+                                module_filenameportal = ?,
+                                module_xmlfilenameportal = ?
+                            WHERE module_id = ?";
+            $arrParams = array();
+            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_filenameadmin"]);
+            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_xmlfilenameadmin"]);
+            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_filenameportal"]);
+            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_xmlfilenameportal"]);
+            $arrParams[] = $arrOneRow["module_id"];
+
+            $strReturn .= "Updated ".$arrOneRow["module_name"]."\n";
+            $this->objDB->_pQuery($strQuery, $arrParams);
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.9");
         return $strReturn;
     }
 }
