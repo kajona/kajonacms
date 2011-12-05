@@ -54,7 +54,7 @@ class class_module_languages_admin extends class_admin implements interface_admi
 		$strReturn = "";
 		$intI = 0;
 		//rights
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightView()) {
 		   $arrObjLanguages = class_module_languages_language::getAllLanguages();
 
             foreach ($arrObjLanguages as $objOneLanguage) {
@@ -73,7 +73,7 @@ class class_module_languages_admin extends class_admin implements interface_admi
 		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (".$this->getText("language_isDefault").")" : ""), $strAction, $intI++);
 				}
             }
-            if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+            if($this->getObjModule()->rightEdit())
                 $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
 
             if(uniStrlen($strReturn) != 0)
@@ -111,7 +111,7 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	       $arrLanguagesDD[$strLangShort] = $this->getText("lang_".$strLangShort);
 
         if($strMode == "new") {
-            if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+            if($this->getObjModule()->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"));
@@ -153,7 +153,7 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	protected function actionSaveLanguage() {
         $strReturn = "";
 	    if($this->getParam("mode") == "new") {
-	        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+	        if($this->getObjModule()->rightEdit()) {
 
 	            //language already existing?
 	            if(class_module_languages_language::getLanguageByName($this->getParam("language_name")) !== false)

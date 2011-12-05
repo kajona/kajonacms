@@ -281,7 +281,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      */
     protected function actionSystemInfo() {
         $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
 
             $objCommon = new class_module_system_common();
 
@@ -353,7 +353,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
     protected function actionModuleList() {
         $strReturn = "";
 
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightView()) {
 
             $strReturn .= "<modules>";
 			//Loading the modules

@@ -10,7 +10,7 @@
 
 /**
  * @package module_dashboard
- *
+ * @author sidler@mulchprod.de
  */
 class class_module_dashboard_admin extends class_admin implements interface_admin {
 
@@ -26,7 +26,6 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 				= "module_dashboard";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _dashboard_modul_id_;
 		$arrModul["modul"]				= "dashboard";
 
@@ -51,11 +50,12 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 * Loads all widgets placed on the dashboard
 	 *
 	 * @return string
+     * @autoTestable
 	 */
 	protected function actionList() {
 	    $strReturn = "";
 	    //check needed permissions
-	    if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+	    if($this->getObjModule()->rightView()) {
             $strReturn .= $this->objToolkit->jsDialog(1);
 	        //load the widgets for each column. currently supporting 3 columns on the dashboard.
 	        $objDashboardmodel = new class_module_dashboard_widget();
@@ -116,7 +116,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();
 
-        if($this->objRights->rightDelete($objDashboardWidget->getSystemid())) {
+        if($objDashboardWidget->rightDelete()) {
             $strWidgetContent .= $this->objToolkit->jsDialog(1);
         }
 
@@ -125,8 +125,8 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                                         $strWidgetId,
                                         $strWidgetName,
                                         $strGeneratedContent,
-                                        ($this->objRights->rightEdit($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
-                                        ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ?
+                                        ($objDashboardWidget->rightEdit() ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
+                                        ($objDashboardWidget->rightDelete() ?
                                         		$this->objToolkit->listDeleteButton($objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName(), $this->getText("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
                                                  : ""),
                                         $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getLayoutSection()
@@ -159,10 +159,11 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
      *
      * @return string
      * @since 3.4
+     * @autoTestable
      */
     protected function actionCalendar() {
         $strReturn = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightView()) {
 
             //save dates to session
             if($this->getParam("month") != "")
@@ -268,11 +269,12 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 * Generates the forms to add a widget to the dashboard
 	 *
 	 * @return string, "" in case of success
+     * @autoTestable
 	 */
 	protected function actionAddWidgetToDashboard() {
 	    $strReturn = "";
 	    //check permissions
-	    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+	    if($this->getObjModule()->rightEdit()) {
 
 	        //step 1: select a widget, plz
 	        if($this->getParam("step") == "") {
@@ -363,7 +365,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	protected function actionDeleteWidget() {
 	    $strReturn = "";
 		//Rights
-		if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightDelete()) {
 		    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
 		    if(!$objDashboardwidget->deleteObjectFromDb())
 		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
@@ -384,7 +386,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	protected function actionEditWidget() {
 	    $strReturn = "";
 		//Rights
-		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightEdit()) {
 
 			if($this->getParam("saveWidget") == "") {
 			    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());

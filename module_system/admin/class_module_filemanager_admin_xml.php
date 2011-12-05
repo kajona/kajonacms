@@ -195,7 +195,7 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
     protected function actionRotate(){
     	$strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid()) || ($this->getSystemid() == "" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) ) {
+        if($this->objRights->rightEdit($this->getSystemid()) || ($this->getSystemid() == "" && $this->getObjModule()->rightEdit()) ) {
             //create repo instance
             //$objRepo = new class_module_filemanager_repo($this->getSystemid());
             //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
@@ -243,7 +243,7 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
     protected function actionSaveCropping() {
     	$strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid())  || ($this->getSystemid() == "" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) ) {
+        if($this->objRights->rightEdit($this->getSystemid())  || ($this->getSystemid() == "" && $this->getObjModule()->rightEdit()) ) {
             //create repo instance
             //$objRepo = new class_module_filemanager_repo($this->getSystemid());
             //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");

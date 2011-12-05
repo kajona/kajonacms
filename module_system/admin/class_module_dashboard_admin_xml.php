@@ -13,6 +13,7 @@
  * Serves xml-requests, mostly general requests e.g. changing a widgets position
  *
  * @package module_dashboard
+ * @author sidler@mulchprod.de
  */
 class class_module_dashboard_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -21,13 +22,10 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 
 	/**
 	 * Constructor
-	 *
-	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "module_dashboard";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _dashboard_modul_id_;
 		$arrModule["modul"]				= "dashboard";
 
@@ -44,14 +42,14 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 	protected function actionSetDashboardPosition() {
 	    $strReturn = "";
 
+        $objWidget = new class_module_dashboard_widget($this->getSystemid());
 		//check permissions
-		if($this->objRights->rightEdit($this->getSystemid())) {
+		if($objWidget->rightEdit()) {
 		    $intNewPos = $this->getParam("listPos");
 		    $strNewColumn = $this->getParam("listId");
 		    if($intNewPos != "")
 		        $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
 
-		    $objWidget = new class_module_dashboard_widget($this->getSystemid());
 		    $objWidget->setStrColumn($strNewColumn);
 		    $objWidget->updateObjectToDb();
 
@@ -72,9 +70,9 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
      */
     protected function actionGetWidgetContent() {
         $strReturn = "";
-        if($this->objRights->rightView($this->getSystemid())) {
+        $objWidgetModel = new class_module_system_adminwidget($this->getSystemid());
+        if($objWidgetModel->rightView()) {
             $strReturn = "<content>";
-            $objWidgetModel = new class_module_system_adminwidget($this->getSystemid());
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
             $strReturn .= "<![CDATA[". $objConcreteWidget->generateWidgetOutput() ."]]>";
             $strReturn .= "</content>";
@@ -95,7 +93,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
     protected function actionRenderCalendar() {
         $strReturn = "";
         $strContent = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightView()) {
 
             $arrJsHighlights = array();
 
@@ -163,6 +161,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
                 }
 
                 $strEvents = "";
+                /** @var class_calendarentry $objOneEvent */
                 foreach($arrEvents as $objOneEvent) {
 
                     $strName = $objOneEvent->getStrName();
