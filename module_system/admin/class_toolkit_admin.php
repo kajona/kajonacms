@@ -1205,8 +1205,8 @@ class class_toolkit_admin extends class_toolkit {
 		return $strReturn;
     }
 
-/*"*****************************************************************************************************/
-// --- Navigation-Elements ------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Navigation-Elements ------------------------------------------------------------------------------
 
     /**
      * Generates the module-navigation in the admin-area
@@ -1225,7 +1225,6 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateRowSelectedIDFirst = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_selected_first");
         $strTemplateRowSelectedIDLast = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_selected_last");
         $strRows = "";
-        $strCurrent = uniSubstr($strCurrent, uniStrpos($strCurrent, "_")+1);
         $intCount = 1;
         $intMax = count($arrModules);
         foreach ($arrModules as $arrOneModule) {
