@@ -22,7 +22,6 @@ class class_toolkit_portal extends class_toolkit {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_elemente_admin";
 
-		//Und den Eltern-Teil informieren
 		parent::__construct($arrModul, $strSystemid);
 	}
 

@@ -88,7 +88,8 @@ abstract class class_element_portal extends class_portal {
 
             if(_pages_portaleditor_ == "true") {
                 //Check needed rights
-                if($this->objRights->rightEdit($this->getSystemid())) {
+                $objCommon = new class_module_system_common($this->getSystemid());
+                if($objCommon->rightEdit()) {
                     $arrConfig = array();
                     $arrConfig["pe_module"] = "";
                     $arrConfig["pe_action"] = "";

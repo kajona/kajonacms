@@ -363,14 +363,14 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             if($this->strContentLanguage == "de") {
                 $arrParams[] = "Standard-Absatz";
                 $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-                $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
+                $arrParams[] = "/files/images/samples/IMG_3000.JPG";
                 $arrParams[] = "http://www.kajona.de/";
                 $arrParams[] = $strElementId;
             }
             else {
                 $arrParams[] = "Standard paragraph";
                 $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-                $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
+                $arrParams[] = "/files/images/samples/IMG_3000.JPG";
                 $arrParams[] = "http://www.kajona.de/";
                 $arrParams[] = $strElementId;
             }

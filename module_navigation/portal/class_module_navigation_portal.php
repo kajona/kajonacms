@@ -10,7 +10,7 @@
 
 /**
  * Portal-part of the navigation. Creates the different navigation-views as sitemap or tree.
- * This class was refactored for Kajona 3.4. Since 3.4 it's possible to mix regular navigations and
+ * This class was refactored for Kajona 3.4. Since 3.4 it's possible to mix regular navigation and
  * page/folder structures within a single tree.
  *
  * Therefore only the nodes in $arrTempNodes may be used. A instantiation via new class_module_navigation_point()
@@ -100,7 +100,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	}
 
 
-// --- Tree-Functions -----------------------------------------------------------------------------------
+    // --- Tree-Functions -----------------------------------------------------------------------------------
 
 	/**
 	 * Creates a common tree-view of the navigation
@@ -111,10 +111,10 @@ class class_module_navigation_portal extends class_portal implements interface_p
 		$strReturn = "";
         $objPagePointData = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]);
         $strStack = $this->getActiveIdStack($objPagePointData);
-        //var_dump($this->strCurrentSite."-->".$strStack);
 
 		//path created, build the tree using recursion
-        if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1)
+        $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+        if($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1)
             $this->createTree($strStack, 0, $this->arrTempNodes[$this->arrElementData["navigation_id"]]);
 
 		//Create the tree
@@ -225,7 +225,6 @@ class class_module_navigation_portal extends class_portal implements interface_p
 		}
 	}
 
-// --- Sitemapfunktionen --------------------------------------------------------------------------------
 
 	/**
 	 * creates the code for a sitemap
@@ -235,7 +234,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	protected function actionNavigationSitemap() {
 		$strReturn = "";
 		//check rights on the navigation
-		if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1) {
+        $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+		if($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1) {
             //create a stack to highlight the points being active
             $strStack = $this->getActiveIdStack($this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]));
 
@@ -248,13 +248,15 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	}
 
 
-	/**
-	 * Creates a sitemap recursive level by level
-	 *
-	 * @param int $intLevel
-	 * @param string $strSystemid
-	 * @return string
-	 */
+    /**
+     * Creates a sitemap recursive level by level
+     *
+     * @param int $intLevel
+     * @param $objStartEntry
+     * @param $strStack
+     * @internal param string $strSystemid
+     * @return string
+     */
 	private function sitemapRecursive($intLevel, $objStartEntry, $strStack) {
 		$strReturn = "";
 		$arrChilds = $objStartEntry["subnodes"];

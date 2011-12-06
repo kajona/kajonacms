@@ -52,12 +52,12 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
 		$bitErrorpage = false;
-        if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
+        if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$objPageData->rightView()))
 			$bitErrorpage = true;
 
 
 		//but: if count != 0 && preview && rights:
-		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
+		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $objPageData->rightEdit())
 			$bitErrorpage = false;
 
 
@@ -78,7 +78,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 			    header(class_http_statuscodes::$strSC_NOT_FOUND);
 
 			//user is not allowed to view the page
-			if($objPageData->getStrName() != "" && !$this->objRights->rightView($objPageData->getSystemid()))
+			if($objPageData->getStrName() != "" && !$objPageData->rightView())
 			    header(class_http_statuscodes::$strSC_FORBIDDEN);
 
 
@@ -106,7 +106,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 			$objPageData = class_module_pages_page::getPageByName($strPagename);
 
 			//check, if the page is enabled and if the rights are given, too
-			if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid()))) {
+			if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$objPageData->rightView())) {
 				//Whoops. Nothing to output here
 				throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
 				return;
@@ -188,6 +188,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 		//Build the array to fill the template
 		$arrTemplate = array();
 
+        /** @var class_module_pages_pageelement $objOneElementOnPage */
 		foreach($arrElementsOnPage as $objOneElementOnPage) {
 			//element really available on the template?
 			if(!in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
@@ -206,6 +207,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
 			//Build the class-name for the object
 			$strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
+            /** @var  class_element_portal $objElement  */
 			$objElement = new $strClassname($objOneElementOnPage);
 			//let the element do the work and earn the output
 			if(!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()]))

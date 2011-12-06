@@ -11,6 +11,7 @@
  * Base class for all module-classes in the portal
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 abstract class class_portal  {
 
@@ -44,19 +45,13 @@ abstract class class_portal  {
 	 * @var class_template
 	 */
 	protected $objTemplate = null;			//Object to handle templates
-	/**
-	 * Instance of class_rights
-	 *
-	 * @var class_rights
-	 */
-	protected $objRights = null;			//Object handling the right-stuff
 
 	/**
 	 * Instance of class_texte
 	 *
 	 * @var class_texte
 	 */
-	private  $objText = null;				//Object managing the textfiles
+	private  $objText = null;				//Object managing the lang-files
 
 	/**
 	 * Instance of class_module_system_common
@@ -64,6 +59,13 @@ abstract class class_portal  {
 	 * @var class_module_system_common
 	 */
 	private $objSystemCommon = null;
+
+    /**
+     * Instance of the current modules' definition
+     *
+     * @var class_module_system_module
+     */
+    private $objModule = null;
 
 	private   $strAction;			        //current action to perform (GET/POST)
 	private   $strSystemid;			        //current systemid
@@ -75,15 +77,15 @@ abstract class class_portal  {
 	protected $strOutput;
 	protected $arrElementData;
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrModule
-	 * @param string $strSystemid
-	 */
+    /**
+     * Constructor
+     *
+     * @param mixed $arrModule
+     * @param array $arrElementData
+     * @param string $strSystemid
+     */
 	public function __construct($arrModule = array(), $arrElementData = array(), $strSystemid = "") {
 		$arrModule["p_name"] 			= "modul_portal";
-		$arrModule["p_author"] 			= "sidler@mulchprod.de";
 		$arrModule["p_nummer"] 			= _system_modul_id_;
         $this->arrElementData           = $arrElementData;
 
@@ -115,7 +117,6 @@ abstract class class_portal  {
 		$this->objSession = $objCarrier->getObjSession();
 	    $this->objText = $objCarrier->getObjText();
 	    $this->objTemplate = $objCarrier->getObjTemplate();
-		$this->objRights = $objCarrier->getObjRights();
 		$this->objSystemCommon = new class_module_system_common($strSystemid);
 
 		//Writing to the history
@@ -279,16 +280,6 @@ abstract class class_portal  {
 		return $this->strSystemid;
 	}
 
-
-	/**
-	 * Returns the current instance of the class_rights
-	 *
-	 * @return object
-	 */
-	public function getObjRights() {
-	    return $this->objRights;
-	}
-
 	/**
 	 * Negates the status of a systemRecord
 	 *
@@ -388,7 +379,6 @@ abstract class class_portal  {
 	}
 
 
-// --- HistoryMethods -----------------------------------------------------------------------------------
 
 	/**
 	 * Holds the last 5 URLs the user called in the Session
@@ -491,9 +481,9 @@ abstract class class_portal  {
      *
      * @see class_template::fill_template
      * @since 3.2.0
-     * @param <type> $arrContent
-     * @param <type> $strIdentifier
-     * @return <type>
+     * @param array $arrContent
+     * @param string $strIdentifier
+     * @return string
      */
     public final function fillTemplate($arrContent, $strIdentifier) {
         return $this->objTemplate->fillTemplate($arrContent, $strIdentifier, true, $this->getLangWrapper());
@@ -571,6 +561,20 @@ abstract class class_portal  {
         $strUrlToLoad = str_replace("_webpath_", _webpath_, $strUrlToLoad);
         $strUrlToLoad = str_replace("_indexpath_", _indexpath_, $strUrlToLoad);
         header("Location: ".str_replace("&amp;", "&", $strUrlToLoad));
+    }
+
+
+    /**
+     * Returns the current instance of class_module_system_module, based on the current subclass.
+     * Lazy-loading, so loaded on first access.
+     * @return class_module_system_module|null
+     */
+    protected function getObjModule() {
+
+        if($this->objModule == null)
+            $this->objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
+
+        return $this->objModule;
     }
 
 }

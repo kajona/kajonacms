@@ -15,11 +15,11 @@
  */
 class class_element_tags_portal extends class_element_portal implements interface_portal_element {
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrElementData
-	 */
+    /**
+     * Constructor
+     *
+     * @param $objElementData
+     */
 	public function __construct($objElementData) {
         $arrModule = array();
 		$arrModule["name"] 			= "element_tags";
