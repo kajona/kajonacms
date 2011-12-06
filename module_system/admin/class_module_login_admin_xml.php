@@ -13,13 +13,13 @@
  * Attach the params username, password either via GET params, or even better by POST params).
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_module_login_admin_xml extends class_admin implements interface_xml_admin  {
 
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "module_user";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _user_modul_id_;
 		$arrModule["modul"]			= "login";
 
@@ -65,6 +65,7 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
     /**
      * Generates the wadl file for the current module
      *
+     * @return string
      * @xml
      */
     protected function actionWADL() {
@@ -72,15 +73,16 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
         $objWadl->addIncludeGrammars("http://apidocs.kajona.de/xsd/message.xsd");
 
         $objWadl->addMethod(
-                true, "login",
-                array(
-                    array("username", "xsd:string", true),
-                    array("password", "xsd:string", true)
-                ),
-                array(),
-                array(
-                    array("application/xml", "message")
-                ));
+            true, "login",
+            array(
+                array("username", "xsd:string", true),
+                array("password", "xsd:string", true)
+            ),
+            array(),
+            array(
+                array("application/xml", "message")
+            )
+        );
 
         $objWadl->addMethod(true, "logout", array());
         return $objWadl->getDocument();

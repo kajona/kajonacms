@@ -132,13 +132,13 @@ class class_module_user_admin extends class_admin implements interface_admin {
         return $arrReturn;
     }
 
-    //--USER-Mgmt----------------------------------------------------------------------------------------
 
 
     /**
 	 * Returns a list of current users
 	 *
 	 * @return string
+     * @autoTestable
 	 */
     protected function actionList() {
         $strReturn = "";
@@ -295,6 +295,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
      *
      * @param string $strAction
      * @return string
+     * @autoTestable
      */
     protected function actionNewUser($strAction = "new") {
         $strReturn = "";
@@ -625,6 +626,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
 	 * Returns the list of all current groups
 	 *
 	 * @return string
+     * @autoTestable
 	 */
     protected function actionGroupList() {
         $strReturn = "";
@@ -686,10 +688,11 @@ class class_module_user_admin extends class_admin implements interface_admin {
     }
 
     /**
-     * Edits or creates a group (displays formular)
+     * Edits or creates a group (displays form)
      *
      * @param string $strMode
      * @return string
+     * @autoTestable
      */
     protected function actionGroupNew($strMode = "new") {
         $strReturn = "";
@@ -814,7 +817,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
     }
 
     /**
-	 * Saves a new group to databse
+	 * Saves a new group to database
 	 *
 	 * @return string "" in case of success
 	 */
@@ -900,7 +903,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
 
     /**
-	 * Returns a list of users beloning to a specified group
+	 * Returns a list of users belonging to a specified group
 	 *
 	 * @return string
 	 */
@@ -1079,11 +1082,11 @@ class class_module_user_admin extends class_admin implements interface_admin {
     }
 
 
-//--Log-Funktion-----------------------------------------------------------------------------------------
     /**
      * returns a list of the last logins
      *
      * @return string
+     * @autoTestable
      */
     protected function actionLoginLog() {
         $strReturn = "";
@@ -1108,7 +1111,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                 $arrRows[$intI][]	= $arrLogs[$intI]["user_log_ip"];
             }
 
-            //Bulding the sourrounding table
+            //Building the surrounding table
             $arrHeader = array();
             $arrHeader[]	= $this->getText("login_nr");
             $arrHeader[]	= $this->getText("login_user");
@@ -1180,7 +1183,6 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
     }
 
-    //--- helpers--------------------------------------------------------------------------------------------
 
     /**
      * Checks, if two passwords are equal
@@ -1233,7 +1235,6 @@ class class_module_user_admin extends class_admin implements interface_admin {
         return $bitPass;
     }
 
-    //--- xml -------------------------------------------------------------------------------------------
 
     /**
      * Returns a list of users and/or groups matching the passed query.
@@ -1293,8 +1294,6 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
 
     public static function sortUserAndGroups($objA, $objB) {
-        $strA = "";
-        $strB = "";
         if($objA instanceof class_modul_user_user)
             $strA = $objA->getStrUsername();
         else

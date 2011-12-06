@@ -42,13 +42,13 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	protected function actionSetAbsolutePosition() {
 	    $strReturn = "";
 
+        $objCommon = new class_module_system_common($this->getSystemid());
 		//check permissions
-		if($this->objRights->rightEdit($this->getSystemid())) {
+		if($objCommon->rightEdit()) {
 
             $intNewPos = $this->getParam("listPos");
 
             //there is a different mode for page-elements, catch now
-            $objCommon = new class_module_system_common($this->getSystemid());
             //store edit date
             $objCommon->updateObjectToDb();
 
@@ -81,7 +81,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	 */
 	protected function actionSetStatus() {
 	    $strReturn = "";
-	    if($this->objRights->rightEdit($this->getSystemid())) {
+        $objCommon = new class_module_system_common($this->getSystemid());
+	    if($objCommon->rightEdit()) {
     	    if(parent::setStatus()) {
     	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
@@ -108,7 +109,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
     protected function actionExecuteSystemTask() {
         $strReturn = "";
         $strTaskOutput = "";
-        if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight2()) {
 
             if($this->getParam("task") != "") {
                 //include the list of possible tasks
@@ -182,7 +183,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
     protected function actionSystemLog() {
         $strReturn = "";
 
-        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight3()) {
 
 
             $intStartDate = false;
@@ -394,7 +395,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
     protected function actionSystemSessions() {
         $strReturn = "";
         //check needed rights
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             $arrSessions = class_module_system_session::getAllActiveSessions();
 

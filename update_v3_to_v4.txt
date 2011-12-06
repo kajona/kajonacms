@@ -1,4 +1,7 @@
 
+General
+- Remove ?> closing tags
+
 
 Module Update
 - rename module-folder from modul_xx to module_xx

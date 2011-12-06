@@ -11,9 +11,9 @@
  * Admin-class to manage all languages
  *
  * @package module_languages
+ * @author sidler@mulchprod.de
  */
 class class_module_languages_admin extends class_admin implements interface_admin {
-    private $strAction;
 
     /**
      * Constructor
@@ -22,7 +22,6 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 				= "module_languages";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _languages_modul_id_;
 		$arrModul["table"]     			= _dbprefix_."languages";
 		$arrModul["modul"]				= "languages";
@@ -41,9 +40,6 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	}
 
 
-
-// --- List-Functions -----------------------------------------------------------------------------------
-
 	/**
 	 * Returns a list of the languages
 	 *
@@ -55,19 +51,19 @@ class class_module_languages_admin extends class_admin implements interface_admi
 		$intI = 0;
 		//rights
 		if($this->getObjModule()->rightView()) {
-		   $arrObjLanguages = class_module_languages_language::getAllLanguages();
+		    $arrObjLanguages = class_module_languages_language::getAllLanguages();
 
             foreach ($arrObjLanguages as $objOneLanguage) {
                 //Correct Rights?
-				if($this->objRights->rightView($objOneLanguage->getSystemid())) {
-					$strAction = "";
-					if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
+			    if($objOneLanguage->rightView()) {
+				    $strAction = "";
+					if($objOneLanguage->rightEdit())
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
-		    		if($this->objRights->rightDelete($objOneLanguage->getSystemid()))
+		    		if($objOneLanguage->rightDelete())
 		    		    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid()));
-		    		if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
+		    		if($objOneLanguage->rightEdit())
 		    		    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
-		    		if($this->objRights->rightRight($objOneLanguage->getSystemid()))
+		    		if($objOneLanguage->rightRight())
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneLanguage->getSystemid())));
 
 		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (".$this->getText("language_isDefault").")" : ""), $strAction, $intI++);
@@ -79,8 +75,8 @@ class class_module_languages_admin extends class_admin implements interface_admi
             if(uniStrlen($strReturn) != 0)
                 $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
 
-		   if(count($arrObjLanguages) == 0)
-		       $strReturn .= $this->getText("liste_leer");
+		    if(count($arrObjLanguages) == 0)
+		        $strReturn .= $this->getText("liste_leer");
 
 		}
 		else
@@ -216,11 +212,8 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 */
 	protected function actionDeleteLanguageFinal() {
 	    $strReturn = "";
-        if($this->objRights->rightDelete($this->getSystemid())) {
-            $objLang = new class_module_languages_language($this->getSystemid());
-
-
-
+        $objLang = new class_module_languages_language($this->getSystemid());
+        if($objLang->rightDelete()) {
             if(!$objLang->deleteObject())
                 throw new class_exception("Error deleting language", class_exception::$level_ERROR);
 
@@ -254,9 +247,11 @@ class class_module_languages_admin extends class_admin implements interface_admi
         $strButtons = "";
         if(count($arrObjLanguages) > 1) {
             foreach ($arrObjLanguages as $objOneLanguage) {
-            	$strButtons .= $this->objToolkit->getLanguageButton($objOneLanguage->getStrName(),
-            	                                                    $this->getText("lang_".$objOneLanguage->getStrName()),
-            	                                                    ($objOneLanguage->getStrName() == $this->getLanguageToWorkOn() ? true : false));
+            	$strButtons .= $this->objToolkit->getLanguageButton(
+                    $objOneLanguage->getStrName(),
+                    $this->getText("lang_".$objOneLanguage->getStrName()),
+            	    ($objOneLanguage->getStrName() == $this->getLanguageToWorkOn() ? true : false)
+                );
             }
 
             $strReturn = $this->objToolkit->getLanguageSwitch($strButtons);

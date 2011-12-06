@@ -8,16 +8,16 @@
 ********************************************************************************************************/
 
 /**
- * This class shows a little LoginScreen if the user is net yet loggedin
+ * This class shows a little LoginScreen if the user is net yet logged in
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_module_login_admin extends class_admin implements interface_admin  {
 
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 			= "module_user";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _user_modul_id_;
 		$arrModule["modul"]			= "login";
 		$arrModule["template"]		= "/login.tpl";
@@ -55,7 +55,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 		$arrTemplate["loginTitle"] = $this->getText("login_loginTitle", "user");
 		$arrTemplate["loginJsInfo"] = $this->getText("login_loginJsInfo", "user");
 		$arrTemplate["loginCookiesInfo"] = $this->getText("login_loginCookiesInfo", "user");
-		//An error occured?
+		//An error occurred?
 		if($this->getParam("loginerror") == 1)
 			$arrTemplate["error"] = $this->getText("login_loginError", "user");
 

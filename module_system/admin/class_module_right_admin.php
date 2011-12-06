@@ -57,14 +57,16 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		if($strSystemID == "")
 			return $this->getText("commons_error_permissions");
 
-		if($this->objRights->rightRight($strSystemID)) {
+        $objCommon = new class_module_system_common($strSystemID);
+        $objRights = class_carrier::getInstance()->getObjRights();
+
+		if($objCommon->rightRight()) {
 			//Get Rights
-			$arrRights = $this->objRights->getArrayRights($strSystemID);
+			$arrRights = $objRights->getArrayRights($strSystemID);
 			//Get groups
 			$arrGroups = class_module_user_group::getAllGroups();
 
 			//Determin name of the record
-            $objCommon = new class_module_system_common($strSystemID);
 			if($objCommon->getStrRecordComment() == "")
 				$strTitle = $this->getText("titel_leer");
 			else
@@ -226,9 +228,8 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
 			//place all inheritance-rights as hidden-fields to support the change-js script
-            $objCommons = new class_module_system_common($strSystemID);
-            $strPrevId = $objCommons->getPrevId();
-            $arrRightsInherited = $this->objRights->getArrayRights($strPrevId);
+            $strPrevId = $objCommon->getPrevId();
+            $arrRightsInherited = $objRights->getArrayRights($strPrevId);
 
             foreach ($arrRightsInherited as $strRightName => $arrRightsPerAction) {
                 if($strRightName != "inherit") {
@@ -270,6 +271,9 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		//Collecting & sorting the passed values
 		$strSystemid = $this->getSystemid();
 
+        $objCommon = new class_module_system_common($strSystemid);
+        $objRights = class_carrier::getInstance()->getObjRights();
+
 		//Special case: The root-record.
         if($strSystemid == null) {
             if($this->getParam("systemid") == "0") {
@@ -277,7 +281,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
             }
         }
 
-		if($this->objRights->rightRight($strSystemid)) {
+		if($objCommon->rightRight()) {
 			//Inheritance?
 			if($this->getParam("inherit") == 1)
 			 	$intInherit = 1;
@@ -341,7 +345,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 							"right5"		=> $strRight5);
 
 			//Pass to right-class
-			if($this->objRights->setRights($arrReturn, $strSystemid ))	{
+			if($objRights->setRights($arrReturn, $strSystemid))	{
 
                 //Redirecting
                 $strUrlHistory = $this->getHistory(0);
