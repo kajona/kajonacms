@@ -71,8 +71,8 @@ abstract class class_portal  {
 	private   $strSystemid;			        //current systemid
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
 	private   $strArea;				        //String containing the current Area - admin or portal or installer or download
-	private   $arrHistory;			        //Stack cotaining the 5 urls last visited
-	protected $arrModule;			        //Array containing Infos about the current modul
+	private   $arrHistory;			        //Stack containing the 5 urls last visited
+	protected $arrModule = array();	        //Array containing info about the current module
 	protected $strTemplateArea;		        //String containing the current Area for the templateobject
 	protected $strOutput;
 	protected $arrElementData;
@@ -80,20 +80,13 @@ abstract class class_portal  {
     /**
      * Constructor
      *
-     * @param mixed $arrModule
      * @param array $arrElementData
      * @param string $strSystemid
      */
-	public function __construct($arrModule = array(), $arrElementData = array(), $strSystemid = "") {
-		$arrModule["p_name"] 			= "modul_portal";
-		$arrModule["p_nummer"] 			= _system_modul_id_;
-        $this->arrElementData           = $arrElementData;
+	public function __construct($arrElementData = array(), $strSystemid = "") {
 
         //saving area
 		$this->strArea = "portal";
-
-		//Merging Module-Data
-		$this->arrModule = $arrModule;
 
 		//GET / POST / FILE Params
 		$this->arrParams = getAllPassedParams();
@@ -137,6 +130,8 @@ abstract class class_portal  {
         $objLanguage = new class_module_languages_language();
         //set current language to the texts-object
         $this->objText->setStrTextLanguage($objLanguage->getStrPortalLanguage());
+
+        $this->arrElementData = $arrElementData;
 
 	}
 
@@ -377,6 +372,16 @@ abstract class class_portal  {
 	    else
 	        return "";
 	}
+
+    /**
+     * Writes a key-value-pair to the arrModule
+     *
+     * @param string $strKey
+     * @param mixed $strValue
+     */
+    public function setArrModuleEntry($strKey, $strValue) {
+        $this->arrModule[$strKey] = $strValue;
+    }
 
 
 

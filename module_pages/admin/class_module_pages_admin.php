@@ -23,14 +23,11 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "module_pages";
-		$arrModule["moduleId"] 		= _pages_modul_id_;
-		$arrModule["modul"]			= "pages";
 
-		//base class
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "pages");
+        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
 
+		parent::__construct();
         if($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord();

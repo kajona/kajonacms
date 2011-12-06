@@ -16,14 +16,12 @@
 class class_module_login_admin extends class_admin implements interface_admin  {
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "module_user";
-		$arrModule["moduleId"] 		= _user_modul_id_;
-		$arrModule["modul"]			= "login";
-		$arrModule["template"]		= "/login.tpl";
 
-		//Base-Class...
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "login");
+        $this->setArrModuleEntry("moduleId", _user_modul_id_);
+        $this->setArrModuleEntry("template", "/login.tpl");
+
+		parent::__construct();
 
         if($this->getAction() != "pwdReset" || $this->getAction() != "adminLogin" || $this->getAction() != "adminLogout")
             $this->setAction("login");

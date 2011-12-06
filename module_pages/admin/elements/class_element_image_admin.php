@@ -17,15 +17,11 @@ class class_element_image_admin extends class_element_admin implements interface
 
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_image";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]	 		= _dbprefix_."element_image";
-		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "image_title|char,image_link|char,image_image|char,image_x|number,image_y|number,image_template|char";
-
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("name", "element_image");
+        $this->setArrModuleEntry("table", _dbprefix_."element_image");
+        $this->setArrModuleEntry("tableColumns", "image_title|char,image_link|char,image_image|char,image_x|number,image_y|number,image_template|char");
+		parent::__construct();
 	}
 
 

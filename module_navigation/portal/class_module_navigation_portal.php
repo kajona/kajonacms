@@ -40,18 +40,15 @@ class class_module_navigation_portal extends class_portal implements interface_p
      */
     private $arrTempNodes = array();
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrElementData
-	 */
+    /**
+     * Constructor
+     * @param $arrElementData
+     */
 	public function __construct($arrElementData) {
-        $arrModul = array();
-        $arrModul["modul"]          = "navigation";
-		$arrModul["name"] 			= "module_navigation";
-		$arrModul["moduleId"] 		= _navigation_modul_id_;
+		parent::__construct($arrElementData);
 
-		parent::__construct($arrModul, $arrElementData);
+        $this->setArrModuleEntry("modul", "navigation");
+        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
 
 		//Determine the current site to load
 		$this->strCurrentSite = $this->getPagename();

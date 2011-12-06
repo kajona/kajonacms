@@ -21,18 +21,15 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 				= "modul_pages_elemente";
-		$arrModule["moduleId"] 			= _pages_content_modul_id_;
-		$arrModule["modul"]				= "pages";
+
+        $this->setArrModuleEntry("modul", "pages");
+        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
 
         if(_xmlLoader_)
-            $arrModule["modul"]				= "pages_content"; //FIXME: ugly hack
+            $this->setArrModuleEntry("modul", "pages_content");
 
-		//Calling the base class
-		parent::__construct($arrModule);
-
-        //If theres anything to unlock, do it now
+		parent::__construct();
+        //If there's anything to unlock, do it now
 		if($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord();

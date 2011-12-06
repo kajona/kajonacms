@@ -22,13 +22,10 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 				= "module_tags";
-		$arrModule["moduleId"] 			= _tags_modul_id_;
-		$arrModule["modul"]				= "tags";
+        $this->setArrModuleEntry("modul", "tags");
+        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
+		parent::__construct();
 
-		//base class
-		parent::__construct($arrModule);
 	}
 
 

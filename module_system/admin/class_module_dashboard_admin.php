@@ -24,13 +24,10 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 *
 	 */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 				= "module_dashboard";
-		$arrModul["moduleId"] 			= _dashboard_modul_id_;
-		$arrModul["modul"]				= "dashboard";
 
-		//Base class
-		parent::__construct($arrModul);
+        $this->setArrModuleEntry("modul", "dashboard");
+        $this->setArrModuleEntry("moduleId", _dashboard_modul_id_);
+		parent::__construct();
 
 	}
 

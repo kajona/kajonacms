@@ -20,18 +20,16 @@
 class class_module_folderview_admin extends class_admin  implements interface_admin {
 
 	/**
-	 * Constructor, doin nothing but a few inits
+	 * Constructor, doing nothing but a few inits
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 					= "class_module_folderview_admin";
-		$arrModule["moduleId"]				= _filesystem_modul_id_;
-		$arrModule["modul"]					= "folderview";
-		$arrModule["template"] 				= "/folderview.tpl";
-
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "folderview");
+        $this->setArrModuleEntry("moduleId", _filesystem_modul_id_);
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+		parent::__construct();
 		$this->setStrTextBase("filemanager");
+
 	}
 
 

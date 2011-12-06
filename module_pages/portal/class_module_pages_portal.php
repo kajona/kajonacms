@@ -25,12 +25,11 @@ class class_module_pages_portal extends class_portal implements interface_portal
     private static $strAdditionalTitle = "";
 
 	public function __construct($arrElementData) {
-        $arrModul = array();
-		$arrModul["name"] 			= "module_pages";
-		$arrModul["moduleId"] 		= _pages_modul_id_;
-		$arrModul["modul"]			= "pages";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrElementData);
+
+        $this->setArrModuleEntry("modul", "pages");
+        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
 
         $this->setAction("generatePage");
 

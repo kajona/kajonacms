@@ -4,7 +4,7 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                 *
+*	$Id$                         *
 ********************************************************************************************************/
 
 /**
@@ -16,16 +16,14 @@
 class class_element_navigation_portal extends class_element_portal implements interface_portal_element {
 
     /**
-     * Contructor
+     * Constructor
      *
-     * @param mixed $arrElementData
+     * @param $objElementData
      */
 	public function __construct($objElementData) {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_navigation";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]		    = _dbprefix_."element_navigation";
-		parent::__construct($arrModule, $objElementData);
+		parent::__construct($objElementData);
+
+        $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
 	}
 
     /**

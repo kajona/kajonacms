@@ -32,15 +32,13 @@ abstract class class_element_admin extends class_admin {
 	/**
 	 * Constructor
 	 *
-	 * @param mixed $arrModule
 	 */
-	public function __construct($arrModule) {
-		$arrModule["p_name"] 			= "element_admin";
-		$arrModule["p_nummer"] 			= _pages_elemente_modul_id_;
-		$arrModule["p_module"]          = "pages_content";
+	public function __construct() {
 
-		//Calling the base class
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
+        $this->setArrModuleEntry("modul", "elemente");
+
+		parent::__construct();
 	}
 
 
@@ -62,7 +60,7 @@ abstract class class_element_admin extends class_admin {
 		$strFormElement = $this->getEditForm(array_merge($arrElementData, $this->getAllParams()));
 
 		//Start by creating the form & action
-		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["p_module"], "saveElement"), "elEditForm");
+		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "saveElement"), "elEditForm");
 
 		//validation errors?
         if($this->bitDoValidation)

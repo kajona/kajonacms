@@ -23,12 +23,10 @@ class class_module_navigation_admin extends class_admin implements interface_adm
      *
      */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 				= "module_navigation";
-		$arrModul["moduleId"] 			= _navigation_modul_id_;
-		$arrModul["table"]     			= _dbprefix_."navigation";
-		$arrModul["modul"]				= "navigation";
-		parent::__construct($arrModul);
+
+        $this->setArrModuleEntry("modul", "navigation");
+        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
+		parent::__construct();
 
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";

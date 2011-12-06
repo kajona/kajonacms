@@ -17,19 +17,16 @@
 class class_element_row_admin extends class_element_admin implements interface_admin_element {
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_row";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]			= _dbprefix_."element_paragraph";
-		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]  = "paragraph_title|char,paragraph_template|char";
+        $this->setArrModuleEntry("name", "element_row");
+        $this->setArrModuleEntry("table", _dbprefix_."element_paragraph");
+        $this->setArrModuleEntry("tableColumns", "paragraph_title|char,paragraph_template|char");
 
-		parent::__construct($arrModule);
+		parent::__construct();
 	}
 
 

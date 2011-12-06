@@ -24,12 +24,10 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"]		 		= "module_system";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["modul"]				= "system";
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+		parent::__construct();
 
-		parent::__construct($arrModul);
 
         if($this->getAction() == "list")
             $this->setAction("moduleList");

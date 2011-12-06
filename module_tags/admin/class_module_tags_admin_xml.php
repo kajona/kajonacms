@@ -25,13 +25,10 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
 	 *
 	 */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 			= "module_tags";
-		$arrModul["moduleId"] 		= _tags_modul_id_;
-		$arrModul["modul"]			= "tags";
 
-		//base class
-		parent::__construct($arrModul);
+        $this->setArrModuleEntry("modul", "tags");
+        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
+		parent::__construct();
 	}
 
 

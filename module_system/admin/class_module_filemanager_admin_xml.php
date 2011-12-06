@@ -17,18 +17,15 @@
 class class_module_filemanager_admin_xml extends class_admin implements interface_xml_admin {
 
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrElementData
-	 */
+    /**
+     * Constructor
+     *
+     */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 				= "modul_filemanger";
-		$arrModule["moduleId"] 			= _filemanager_modul_id_;
-		$arrModule["modul"]				= "filemanager";
 
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "filemanager");
+        $this->setArrModuleEntry("moduleId", _filemanager_modul_id_);
+		parent::__construct();
 	}
 
 

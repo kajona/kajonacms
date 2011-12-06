@@ -20,15 +20,11 @@ class class_element_navigation_admin extends class_element_admin implements inte
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_navigation";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"] 		    = _dbprefix_."element_navigation";
-		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "navigation_id|char,navigation_template|char,navigation_mode|char";
-
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("name", "element_navigation");
+        $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
+        $this->setArrModuleEntry("tableColumns", "navigation_id|char,navigation_template|char,navigation_mode|char");
+		parent::__construct();
 	}
 
 

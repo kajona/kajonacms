@@ -18,12 +18,10 @@
 class class_module_login_admin_xml extends class_admin implements interface_xml_admin  {
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "module_user";
-		$arrModule["moduleId"] 		= _user_modul_id_;
-		$arrModule["modul"]			= "login";
+        $this->setArrModuleEntry("modul", "login");
+        $this->setArrModuleEntry("moduleId", _user_modul_id_);
+		parent::__construct();
 
-		parent::__construct($arrModule);
 
         if($this->getAction() == "list")
             $this->setAction("login");

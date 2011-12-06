@@ -23,12 +23,10 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 				= "module_filemanager";
-		$arrModule["moduleId"] 			= _filemanager_modul_id_;
-		$arrModule["modul"]				= "filemanager";
-		//base class
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "filemanager");
+        $this->setArrModuleEntry("moduleId", _filemanager_modul_id_);
+		parent::__construct();
+
 
 		$this->getCurrentFolder();
 	}

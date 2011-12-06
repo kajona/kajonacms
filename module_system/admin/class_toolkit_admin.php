@@ -19,14 +19,10 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Constructor
      *
-     * @param string $strSystemid
      */
-    public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"]           = "modul_elemente_admin";
-
+    public function __construct() {
         //Calling the base class
-        parent::__construct($arrModul, $strSystemid);
+        parent::__construct();
     }
 
 
@@ -167,7 +163,7 @@ class class_toolkit_admin extends class_toolkit {
 
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
-        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
+        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
             var ckeditorConfig = {

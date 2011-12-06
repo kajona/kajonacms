@@ -20,12 +20,10 @@ class class_module_languages_admin extends class_admin implements interface_admi
      *
      */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 				= "module_languages";
-		$arrModul["moduleId"] 			= _languages_modul_id_;
-		$arrModul["table"]     			= _dbprefix_."languages";
-		$arrModul["modul"]				= "languages";
-		parent::__construct($arrModul);
+        $this->setArrModuleEntry("modul", "languages");
+        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
+		parent::__construct();
+
 	}
 
 

@@ -26,14 +26,11 @@ class class_module_user_admin extends class_admin implements interface_admin {
 	 *
 	 */
     public function __construct() {
-        $arrModul = array();
-        $arrModul["name"] 			= "module_user";
-        $arrModul["moduleId"] 		= _user_modul_id_;
-        $arrModul["modul"]			= "user";
 
-        //base class
-        parent::__construct($arrModul);
+        $this->setArrModuleEntry("modul", "user");
+        $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
+        parent::__construct();
         $this->arrLanguages = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
 
         //backwards compatibility

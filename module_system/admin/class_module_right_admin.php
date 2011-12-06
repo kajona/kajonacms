@@ -17,17 +17,15 @@
 class class_module_right_admin extends class_admin implements interface_admin {
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
 	 */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 			= "class_module_right_admin";
-		$arrModul["moduleId"] 		= _system_modul_id_;
-		$arrModul["modul"]			= "right";
-
-		parent::__construct($arrModul);
+        $this->setArrModuleEntry("modul", "right");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+		parent::__construct();
 		$this->setStrTextBase("system");
+
 
         if($this->getAction() == "list")
             $this->setAction("change");

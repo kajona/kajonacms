@@ -21,13 +21,10 @@ class class_element_tags_portal extends class_element_portal implements interfac
      * @param $objElementData
      */
 	public function __construct($objElementData) {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_tags";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]		    = _dbprefix_."element_universal";
-		$arrModule["modul"]		    = "elemente";
 
-		parent::__construct($arrModule, $objElementData);
+		parent::__construct($objElementData);
+
+        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
 	}
 
     /**

@@ -16,19 +16,14 @@
 class class_element_paragraph_admin extends class_element_admin implements interface_admin_element {
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_paragraph";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]			= _dbprefix_."element_paragraph";
-		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "";
-
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("name", "element_paragraph");
+        $this->setArrModuleEntry("table", _dbprefix_."element_paragraph");
+		parent::__construct();
 	}
 
 

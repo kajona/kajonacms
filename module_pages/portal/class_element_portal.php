@@ -25,18 +25,17 @@ abstract class class_element_portal extends class_portal {
      */
     private $objElementData;
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrModule
-	 * @param class_module_pages_pageelement $objElementData
-	 */
-	public function __construct($arrModule, $objElementData) {
-        $arrModule["modul"]             = "elemente";
-		$arrModule["p_name"] 			= "element_portal";
-		$arrModule["p_nummer"] 			= _pages_elemente_modul_id_;
+    /**
+     * Constructor
+     *
+     * @param class_module_pages_pageelement $objElementData
+     */
+	public function __construct($objElementData) {
+		parent::__construct();
 
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "elemente");
+        $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
+
 
 		$arrTemp = array();
 		$this->setSystemid($objElementData->getSystemid());

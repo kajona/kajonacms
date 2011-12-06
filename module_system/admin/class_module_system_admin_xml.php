@@ -18,18 +18,15 @@
 class class_module_system_admin_xml extends class_admin implements interface_xml_admin {
 
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrElementData
-	 */
+    /**
+     * Constructor
+     *
+     */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 				= "module_system";
-		$arrModule["moduleId"] 			= _system_modul_id_;
-		$arrModule["modul"]				= "system";
 
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+		parent::__construct();
 	}
 
 

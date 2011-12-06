@@ -17,15 +17,11 @@ class class_element_languageswitch_admin extends class_element_admin implements 
 
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_languageswitch";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]	 		= _dbprefix_."element_universal";
-		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "char1|char";
-
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("name", "element_languageswitch");
+        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
+        $this->setArrModuleEntry("tableColumns", "char1|char");
+		parent::__construct();
 	}
 
 

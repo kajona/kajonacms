@@ -21,15 +21,11 @@ class class_element_tags_admin extends class_element_admin implements interface_
 	 *
 	 */
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_tags";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"] 		= _dbprefix_."element_universal";
-		$arrModule["modul"]			= "elemente";
-		//char1 => template
-		$arrModule["tableColumns"]  = "char1|char";
 
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("name", "element_tags");
+        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
+        $this->setArrModuleEntry("tableColumns", "char1|char");
+		parent::__construct();
 	}
 
    /**
