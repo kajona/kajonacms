@@ -247,30 +247,6 @@ class class_installer {
             $strFileContent .= "  \$config['dbport']               = '".$_POST["port"]."';                       //Database port \n";
 
             $strFileContent .= "\n";
-
-//                //collect data FIXME remove
-//               $arrSearch = array(
-//                   "%%defaulthost%%",
-//                   "%%defaultusername%%",
-//                   "%%defaultpassword%%",
-//                   "%%defaultdbname%%",
-//                   "%%defaultprefix%%",
-//                   "%%defaultdriver%%",
-//                   "%%defaultport%%"
-//               );
-//               $arrReplace = array(
-//                   $_POST["hostname"],
-//                   $_POST["username"],
-//                   $_POST["password"],
-//                   $_POST["dbname"],
-//                   $_POST["dbprefix"],
-//                   $_POST["driver"],
-//                   $_POST["port"]
-//               );
-//            //load config file
-//            $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
-//            //insert values
-//            $strConfig = str_replace($arrSearch, $arrReplace, $strConfig);
             //and save to file
             file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
             // and reload

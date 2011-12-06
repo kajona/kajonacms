@@ -47,7 +47,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getText("modul_liste_alle"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), "", "", true, "adminnavi"));
-        //FIXME: sidler: removed $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("commons_create_folder"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listElements", "", $this->getText("modul_elemente"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), "", "", true, "adminnavi"));
@@ -1189,11 +1188,11 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
     		$objFilesystem = new class_filesystem();
     		//load installers available
-    		$arrInstallers = $objFilesystem->getFilelist("/installer");
+    		$arrInstallers = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
 
-    		foreach($arrInstallers as $strFile) {
+    		foreach($arrInstallers as $strPath => $strFile) {
     			if(uniStrReplace(".php", "", $strFile) == $strElementToInstall) {
-                    include_once(_realpath_."/installer/".$strFile); //FIXME: file resolving
+                    include_once(_realpath_.$strPath);
         			//Creating an object....
         			$strClass = "class_".str_replace(".php", "", $strFile);
         			$objInstaller = new $strClass();

@@ -124,14 +124,6 @@ class class_module_navigation_point extends class_model implements interface_mod
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
             $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);
-            //check where the layer links to
-            //TODO removal, no longer required
-//            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
-//                $objFirstLevelPage = self::getNextValidPage($objNavigationPoint->getStrFolderI());
-//                if($objFirstLevelPage != null)
-//                    $objNavigationPoint->setStrPageI($objFirstLevelPage->getStrName());
-//            }
-
             $arrReturn[] = $objNavigationPoint;
         }
 

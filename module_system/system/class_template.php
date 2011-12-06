@@ -112,15 +112,6 @@ class class_template {
 			$bitKnownTemplate = true;
 
 		if(!$bitKnownTemplate) {
-			//Build the path-prefixes
-            //FIXME: may be deleted
-//			if($bitForce)
-//				$strTemplatePath = _realpath_;
-//			elseif (uniStrpos($this->strArea, "admin/skins/") !== false)
-//				$strTemplatePath = _realpath_;
-//			else
-//				$strTemplatePath = _templatepath_;
-
 			//We have to read the whole template from the filesystem
             if(uniSubstr($strName, -4) == ".tpl" ) {
 				$strTemplate = file_get_contents(_realpath_."/".$strName);
