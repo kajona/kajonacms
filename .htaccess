@@ -7,3 +7,7 @@
 #*******************************************************************************************************/
 
 Deny from all
+
+<FilesMatch "setupproject\.php" >
+  Allow from all
+</FilesMatch>

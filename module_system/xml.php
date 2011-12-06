@@ -8,11 +8,7 @@
 ********************************************************************************************************/
 
 
-//mark the request as a xml-based request
-define("_xmlLoader_", true);
-
-
-//Determin the area to load
+//Determine the area to load
 if(issetGet("admin") && getGet("admin") == 1)
 	define("_admin_", true);
 else

@@ -83,6 +83,12 @@ class class_project_setup {
         }
 
 
+        echo "<b>Kajona V4 htaccess setup</b>\n";
+        self::createAllowHtaccess("/files/.htaccess");
+        self::createAllowHtaccess("/templates/.htaccess");
+
+        self::createDenyHtaccess("/project/.htaccess");
+
     }
 
 
@@ -118,6 +124,18 @@ class class_project_setup {
                 self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
             }
         }
+    }
+
+    private static function createDenyHtaccess($strPath) {
+        echo "placing deny htaccess in ".$strPath."\n";
+        $strContent = "\n\nDeny from all\n\n";
+        file_put_contents(_realpath_.$strPath, $strContent);
+    }
+
+    private static function createAllowHtaccess($strPath) {
+        echo "placing allow htaccess in ".$strPath."\n";
+        $strContent = "\n\nAllow from all\n\n";
+        file_put_contents(_realpath_.$strPath, $strContent);
     }
 }
 

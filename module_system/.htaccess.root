@@ -84,7 +84,7 @@
 # recommended: enable the following lines to prevent displaying php errors in browser and instead log php errors into file
 #php_value display_errors Off
 #php_value log_errors On
-#php_value error_log system/debug/php.log
+#php_value error_log project/log/php.log
 
 
 
