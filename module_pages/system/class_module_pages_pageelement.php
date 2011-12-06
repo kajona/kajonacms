@@ -601,6 +601,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 	 *
 	 * @param string $strSystemid
 	 * @return bool
+     * FIXME: remove static behaviour
 	 */
 	public static function deletePageElement($strSystemid) {
 	    class_logger::getInstance()->addLogRow("deleted page-element ".$strSystemid, class_logger::$levelInfo);

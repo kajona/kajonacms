@@ -79,9 +79,9 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 */
 	protected function actionList() {
 		$strReturn = "";
-		if($this->objRights->rightEdit($this->getSystemid())) {
+        $objPage = new class_module_pages_page($this->getSystemid());
+		if($objPage->rightEdit($this->getSystemid())) {
             //get infos about the page
-            $objPage = new class_module_pages_page($this->getSystemid());
 
             $arrToolbarEntries = array();
             $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
@@ -289,15 +289,17 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
-	/**
-	 * Loads the form to create a new element
-	 *
-	 * @return string
-	 */
+    /**
+     * Loads the form to create a new element
+     *
+     * @param bool $bitShowErrors
+     * @return string
+     */
 	protected function actionNewElement($bitShowErrors = false) {
 		$strReturn = "";
         //check rights
-		if($this->objRights->rightEdit($this->getSystemid())) {
+        $objCommon = new class_module_system_common($this->getSystemid());
+		if($objCommon->rightEdit()) {
     		//OK, here we go. So, what information do we have?
     		$strPlaceholderElement = $this->getParam("element");
     		//Now, load all infos about the requested element
@@ -318,20 +320,20 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	}
 
 
-	/**
-	 * Loads the form to edit the element
-	 *
-	 * @return string
-	 */
+    /**
+     * Loads the form to edit the element
+     *
+     * @param bool $bitShowErrors
+     * @return string
+     */
 	protected function actionEditElement($bitShowErrors = false) {
 		$strReturn = "";
 		//check rights
-		if($this->objRights->rightEdit($this->getSystemid())) {
+        $objElement = new class_module_pages_pageelement($this->getSystemid());
+		if($objElement->rightEdit()) {
     		//Load the element data
-    		$objElement = new class_module_pages_pageelement($this->getSystemid());
     		//check, if the element isn't locked
     		if($objElement->getLockManager()->isAccessibleForCurrentUser()) {
-
                 $objElement->getLockManager()->lockRecord();
 
     			//Load the class to create an object
@@ -355,7 +357,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	}
 
 	/**
-	 * Saves the passed Element to the databse (edit or new modes)
+	 * Saves the passed Element to the database (edit or new modes)
 	 *
 	 * @return string "" in case of success
 	 */
@@ -526,7 +528,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $objElement->doAfterSaveToDb();
 
 
-			//Loading the data of the corresp site
+			//Loading the data of the corresponding site
 			$objPage = new class_module_pages_page($this->getPrevId());
 			$this->flushPageFromPagesCache($objPage->getStrName());
 
@@ -655,10 +657,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 */
 	protected function actionDeleteElement() {
 		$strReturn = "";
-		//Rights?
-		if($this->objRights->rightDelete($this->getSystemid())) {
-			$objElement = new class_module_pages_pageelement($this->getSystemid());
-
+        $objElement = new class_module_pages_pageelement($this->getSystemid());
+		if($objElement->rightDelete()) {
             $strQuestion = uniStrReplace("%%element_name%%", htmlToString($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" ), true), $this->getText("element_loeschen_frage"));
 
 			$strReturn .= $this->objToolkit->warningBox($strQuestion
@@ -677,13 +677,11 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 * @param string $strSystemid
 	 * @return string, "" in case of success
 	 */
-	protected function actionDeleteElementFinal($strSystemid = "") {
+	protected function actionDeleteElementFinal($strSystemid) {
 		$strReturn = "";
 
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-		//Check the rights
-		if($this->objRights->rightDelete($strSystemid)) {
+        $objPageElement = new class_module_pages_pageelement($this->getSystemid());
+		if($objPageElement->rightDelete($strSystemid)) {
 			//Locked?
 			$objLockmanager = new class_lockmanager($this->getSystemid());
 			$strPrevId = $this->getPrevId();
@@ -715,7 +713,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
     protected function actionCopyElement() {
         $strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid())) {
+        $objSourceElement = new class_module_pages_pageelement($this->getSystemid());
+        if($objSourceElement->rightEdit($this->getSystemid())) {
 
             $objLang = null;
             if($this->getParam("copyElement_language") != "") {
@@ -732,9 +731,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
             } else {
                 $objPage = new class_module_pages_page($this->getPrevId());
             }
-
-            $objSourceElement = new class_module_pages_pageelement($this->getSystemid());
-
 
             //form header
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"), "formCopyElement");
@@ -868,7 +864,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 		foreach($arrPath as $strOneSystemid) {
             $objCommon = new class_module_system_common($strOneSystemid);
-			//Skip Elements: No sense to show in path-navigations
+			//Skip Elements: No sense to show in path-navigation
 			if($objCommon->getIntModuleNr() == _pages_content_modul_id_)
 				continue;
 
@@ -890,7 +886,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
      * Sorts the current element upwards
      */
     protected function actionElementSortUp() {
-        //Create the objecet
+        //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setPosition($this->getSystemid(), "up");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
@@ -901,7 +897,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
      * Sorts the current element downwards
      */
     protected function actionElementSortDown() {
-        //Create the objecet
+        //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setPosition($this->getSystemid(), "down");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
@@ -911,11 +907,10 @@ class class_module_pages_content_admin extends class_admin implements interface_
      * Sorts the current element upwards
      */
     protected function actionElementStatus() {
-        //Create the objecet
+        //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setStatus();
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-
     }
 
 }

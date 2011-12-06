@@ -36,13 +36,13 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
 
 
     /**
-     * Creates a new tag (if not already existing) and assigns the tag to the passed systemrecord
+     * Creates a new tag (if not already existing) and assigns the tag to the passed system-record
      *
      * @return string
      */
     protected function actionSaveTag() {
         $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
             $strTagname = $this->getParam("tagname");
             $strSystemid = $this->getParam("systemid");
             $strAttribute = $this->getParam("attribute");
@@ -86,13 +86,13 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
     }
 
     /**
-     * Loads the lost of tags assigned to the passed systemrecord and renders them using the toolkit.
+     * Loads the lost of tags assigned to the passed system-record and renders them using the toolkit.
      *
      * @return string
      */
     protected function actionTagList() {
         $strReturn = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightView()) {
 
             $strSystemid = $this->getSystemid();
             $strAttribute = $this->getParam("attribute");
@@ -116,14 +116,14 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
     }
 
     /**
-     * Removes a tag from the the systemrecord passed.
+     * Removes a tag from the the system-record passed.
      * Please be aware of the fact, that this only deletes the assignment, not the tag itself.
      *
      * @return string
      */
     protected function actionRemoveTag() {
         $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
             $strTargetSystemid = $this->getParam("targetid");
             $strAttribute = $this->getParam("attribute");
 
@@ -157,7 +157,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
      */
     protected function actionGetTagsByFilter() {
         $strReturn = "<tags>";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightView()) {
              $strFilter = $this->getParam("filter");
 
              $arrTags = class_module_tags_tag::getTagsByFilter($strFilter);

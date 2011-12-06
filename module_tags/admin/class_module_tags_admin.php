@@ -51,10 +51,14 @@ class class_module_tags_admin extends class_admin implements interface_admin {
         return $arrReturn;
 	}
 
+    /**
+     * @return string
+     * @autoTestable
+     */
     protected function actionList() {
         $strReturn = "";
 		//Check the rights
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightView()) {
 			$intI = 0;
 
 			//showing a list using the pageview
@@ -69,13 +73,13 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 			foreach($arrTags as $objTag) {
 				$strActions = "";
 
-	    		if($this->objRights->rightEdit($objTag->getSystemid()))
+	    		if($objTag->rightEdit())
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editTag", "&systemid=".$objTag->getSystemid(), "", $this->getText("tag_edit"), "icon_pencil.gif"));
-	    		if($this->objRights->rightDelete($objTag->getSystemid()))
+	    		if($objTag->rightDelete())
 	    			$strActions.= $this->objToolkit->listDeleteButton($objTag->getStrName(), $this->getText("tag_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteTag", "&systemid=".$objTag->getSystemid()));
-	    		if($this->objRights->rightEdit($objTag->getSystemid()))
+	    		if($objTag->rightEdit())
 	    			$strActions.= $this->objToolkit->listStatusButton($objTag->getSystemid());
-	    		if($this->objRights->rightRight($objTag->getSystemid()	))
+	    		if($objTag->rightRight())
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objTag->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objTag->getSystemid())));
 
 	  			$strReturn .= $this->objToolkit->listRow3($objTag->getStrName(), count($objTag->getListOfAssignments())." ".$this->getText("tag_assignments"), $strActions, getImageAdmin("icon_dot.gif"), $intI++);
@@ -105,9 +109,8 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 	 */
 	protected function actionDeleteTag() {
 		$strReturn = "";
-		//Rights
-		if($this->objRights->rightDelete($this->getSystemid())) {
-            $objTag = new class_module_tags_tag($this->getSystemid());
+        $objTag = new class_module_tags_tag($this->getSystemid());
+		if($objTag->rightDelete($this->getSystemid())) {
             if(!$objTag->deleteTag())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
@@ -126,8 +129,8 @@ class class_module_tags_admin extends class_admin implements interface_admin {
      */
     protected function actionEditTag() {
         $strReturn = "";
-		if($this->objRights->rightEdit($this->getSystemid()) ) {
-            $objTag = new class_module_tags_tag($this->getSystemid());
+        $objTag = new class_module_tags_tag($this->getSystemid());
+		if($objTag->rightEdit()) {
 
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "saveTag");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
@@ -155,12 +158,11 @@ class class_module_tags_admin extends class_admin implements interface_admin {
             return $this->actionEditTag();
 
         $strReturn = "";
-		if($this->objRights->rightEdit($this->getSystemid())) {
+        $objTag = new class_module_tags_tag($this->getSystemid());
+		if($objTag->rightEdit()) {
 			//Collect data to save to db
-			$objTag = new class_module_tags_tag($this->getSystemid());
 			$objTag->setStrName($this->getParam("tag_name"), true);
             $objTag->updateObjectToDb();
-
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
@@ -176,12 +178,12 @@ class class_module_tags_admin extends class_admin implements interface_admin {
      * Therefore the form-handling of existing forms can remain as is
      *
      * @param string $strTargetSystemid the systemid to tag
-     * @param string $strAttribute additional info used to differ betweeen tag-sets for a single systemid
+     * @param string $strAttribute additional info used to differ between tag-sets for a single systemid
      * @return string
      */
     public function getTagForm($strTargetSystemid, $strAttribute = null) {
         $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
 
             $strTagContent = "";
 

@@ -161,7 +161,6 @@ class class_module_pages_element extends class_model implements interface_model 
      * @return object An instance of the admin-class linked by the current element
      */
     public function getAdminElementInstance() {
-        include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
         //Build the class-name
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
         //and finally create the object

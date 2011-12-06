@@ -82,9 +82,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 
 
-//*"*****************************************************************************************************
-//--Pages-Management-------------------------------------------------------------------------------------
-
 
     protected function actionSortUp() {
         $this->setPositionAndReload($this->getSystemid(), "upwards");
@@ -96,7 +93,8 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
     protected function actionShowHistory() {
         $strReturn = "";
-        if($this->objRights->rightEdit($this->getSystemid())) {
+        $objCommon = new class_module_system_common($this->getSystemid());
+        if($objCommon->rightEdit()) {
             $objSystemAdmin = class_module_system_module::getModuleByName("system")->getAdminInstanceOfConcreteModule();
             $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
         }
@@ -110,15 +108,15 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 * Creates a list of sites in the current folder
 	 *
 	 * @return string
+     * @autoTestable
 	 */
 	protected function actionList() {
 		$strReturn = "";
 		//Check rights
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
-
+		if($this->getObjModule()->rightView()) {
 
             //GetFolders
-			//if theres a folder-level, load it
+			//if there's a folder-level, load it
 			$arrFolder = class_module_pages_folder::getFolderList($this->getSystemid());
 			$intI = 0;
 
@@ -136,23 +134,22 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 			if(count($arrFolder) > 0) {
 				foreach($arrFolder as $objOneEntry) {
 					//Correct Rights?
-					if($this->objRights->rightView($objOneEntry->getSystemid())) {
+					if($objOneEntry->rightView()) {
 						$strActions = "";
-                        $strSystemid = $objOneEntry->getSystemid();
 
-			    		if($this->objRights->rightEdit($strSystemid))
+			    		if($objOneEntry->rightEdit())
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
-                        if($this->objRights->rightView($strSystemid)) {
+                        if($objOneEntry->rightView()) {
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
                             if(_system_changehistory_enabled_ != "false")
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
                         }
-			    		if($this->objRights->rightDelete($strSystemid))
+			    		if($objOneEntry->rightDelete())
                             $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
-                        if($this->objRights->rightEdit($strSystemid)) {
+                        if($objOneEntry->rightEdit()) {
                             $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
                         }
-			    		if($this->objRights->rightRight($objOneEntry->getSystemid()))
+			    		if($objOneEntry->rightRight())
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
 			  			$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderClosed.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
@@ -160,16 +157,14 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				}
 			}
 
-			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])) && (!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])))
+			if($this->getObjModule()->rightRight2() && (!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])))
 			    $strFolder .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("commons_create_folder"), $this->getText("commons_create_folder"), "icon_new.gif"), $intI++);
 
 			if(uniStrlen($strFolder) != 0)
 	  		    $strFolder = $this->objToolkit->listHeader().$strFolder.$this->objToolkit->listFooter();
 
 	  		$strFolder .= $this->objToolkit->divider();
-
 			$strFolder = $this->objToolkit->getLayoutFolderPic($strFolder, $this->getText("klapper"));
-
 
 
 			//Collect the pages and folders belonging to the current folder to display
@@ -177,35 +172,28 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 			$intI = 0;
 			$strPages = "";
-
+            /** @var class_module_pages_page $objOneEntry */
 			foreach($arrPages as $objOneEntry) {
 				$strActions = "";
-			 	$strSystemid = $objOneEntry->getSystemid();
 			 	//As usual: Just display, if the needed rights are given
-			 	if($this->objRights->rightView($strSystemid)) {
-
+			 	if($objOneEntry->rightView()) {
                     if($objOneEntry instanceof class_module_pages_page) {
-
 
                         if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
                             $objTargetPage = class_module_pages_page::getPageByName($objOneEntry->getStrAlias());
 
                             //Split up rights
-                            if($this->objRights->rightEdit($strSystemid))
+                            if($objOneEntry->rightEdit())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                            if($this->objRights->rightEdit($objTargetPage->getStrSystemid()))
+                            if($objTargetPage->rightEdit($objTargetPage->getStrSystemid()))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                            if($this->objRights->rightView($strSystemid))
+                            if($objOneEntry->rightView())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
-                            if($this->objRights->rightDelete($strSystemid))
+                            if($objOneEntry->rightDelete())
                                     $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrBrowsername(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
-                            if($this->objRights->rightEdit($strSystemid)) {
-                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
-                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
-
+                            if($objOneEntry->rightEdit())
                                 $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
-                            }
-                            if($this->objRights->rightRight($strSystemid))
+                            if($objOneEntry->rightRight())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
                             $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objOneEntry->getStrBrowsername()." (-> ".uniStrTrim($objOneEntry->getStrAlias(), 20).")", $strActions, $intI++, "", $objOneEntry->getSystemid());
@@ -213,25 +201,20 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
                         else {
 
                             //Split up rights
-                            if($this->objRights->rightEdit($strSystemid))
+                            if($objOneEntry->rightEdit())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                            if($this->objRights->rightEdit($strSystemid))
+                            if($objOneEntry->rightEdit())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                            if($this->objRights->rightEdit($strSystemid))
+                            if($objOneEntry->rightEdit())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-                            if($this->objRights->rightView($strSystemid))
+                            if($objOneEntry->rightView())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
-                            if($this->objRights->rightDelete($strSystemid)) {
+                            if($objOneEntry->rightDelete())
                                 $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrBrowsername(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
-                            }
-
-                            if($this->objRights->rightEdit($strSystemid)) {
-                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
-                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
-
+                            if($objOneEntry->rightEdit())
                                 $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
-                            }
-                            if($this->objRights->rightRight($strSystemid))
+
+                            if($objOneEntry->rightRight())
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
                             $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrBrowsername()." (".$objOneEntry->getStrName().")", $strActions, $intI++, "", $objOneEntry->getSystemid());
@@ -243,7 +226,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 			 	}
 			}
 
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+			if($this->getObjModule()->rightEdit()) {
 			    $strAddPageButtons  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"));
 			    $strAddPageButtons .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newAlias", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif"));
 			    $strPages .= $this->objToolkit->listRow2Image("", "", $strAddPageButtons, $intI++);
@@ -257,7 +240,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				$strPages .= $this->getText("liste_seiten_leer");
 
             $strPathNavi = $this->generateFolderNavigation();
-
 
             //if languages are installed, present a language switch right here
             if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
@@ -283,11 +265,12 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 * Returns a list of all pages in the system, not worrying about the folders -> Flat List
 	 *
 	 * @return string The complete List
+     * @autoTestable
 	 */
 	protected function actionListAll() {
 		$strReturn = "";
 		//Check the rights
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightView()) {
 			$intI = 0;
 
 			//showing a list using the pageview
@@ -299,48 +282,49 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "pages", "listAll");
             $arrPages = $arrPageViews["elements"];
 
+            /** @var class_module_pages_page $objPage */
 			foreach($arrPages as $objPage) {
 				$strActions = "";
 
                 if($objPage->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
                     $objTargetPage = class_module_pages_page::getPageByName($objPage->getStrAlias());
 
-                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                    if($objPage->rightEdit())
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                    if($this->objRights->rightEdit($objTargetPage->getStrSystemid()))
+                    if($objTargetPage->rightEdit())
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                    if($this->objRights->rightDelete($objPage->getSystemid())) {
+                    if($objPage->rightDelete()) {
                         if(count(class_module_pages_folder::getPagesAndFolderList($objPage->getSystemid())) != 0)
                             $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
                         else
                             $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrBrowsername(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
                     }
-                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                    if($objPage->rightEdit())
                         $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
-                    if($this->objRights->rightRight($objPage->getSystemid()	))
+                    if($objPage->rightRight(	))
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objPage->getSystemid())));
 
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objPage->getStrBrowsername()." (-> ".uniStrTrim($objPage->getStrAlias(), 20).")", $strActions, $intI++);
                 }
                 else {
-                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                    if($objPage->rightEdit())
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                    if($objPage->rightEdit())
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                    if($objPage->rightEdit())
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-                    if($this->objRights->rightDelete($objPage->getSystemid()))
+                    if($objPage->rightDelete())
                         $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrBrowsername(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
-                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                    if($objPage->rightEdit())
                         $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
-                    if($this->objRights->rightRight($objPage->getSystemid()	))
+                    if($objPage->rightRight())
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objPage->getSystemid())));
 
 
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrBrowsername()." (".$objPage->getStrName().")", $strActions, $intI++);
                 }
 			}
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+			if($this->getObjModule()->rightEdit()) {
                 $strAddPageButtons  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"));
 			    $strAddPageButtons .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newAlias", "", $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif"));
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", $strAddPageButtons, $intI++);
@@ -386,11 +370,14 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         return $this->actionNewPage("edit", true);
     }
 
-	/**
-	 * Shows the form to create a new Site
-	 *
-	 * @return string The form
-	 */
+    /**
+     * Shows the form to create a new Site
+     *
+     * @param string $strMode
+     * @param bool $bitAlias
+     * @return string The form
+     * @autoTestable
+     */
 	protected function actionNewPage($strMode = "new", $bitAlias = false) {
 		$strReturn = "";
 
@@ -418,11 +405,10 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
         //edit mode
 		if($strMode == "edit") {
+            $objPage = new class_module_pages_page($this->getSystemid());
 
-
-			if($this->objRights->rightEdit($this->getSystemid())) {
+			if($objPage->rightEdit($this->getSystemid())) {
                 //Load data of the page
-                $objPage = new class_module_pages_page($this->getSystemid());
 
                 $arrToolbarEntries = array();
                 if(!$bitAlias) {
@@ -527,7 +513,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 		}
 		else {
 			//Mode: Create a new Page
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+			if($this->getObjModule()->rightEdit()) {
                 $arrToolbarEntries = array();
 
                 //if languages are installed, present a language switch right here
@@ -619,18 +605,19 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         return $this->actionSavePage(true);
     }
 
-	/**
-	 * Saves a sumbitted page in the database (new Page!)
-	 *
-	 * @return String, "" if successful
-	 */
+    /**
+     * Saves a submitted page in the database (new Page!)
+     *
+     * @param bool $bitAlias
+     * @return String, "" if successful
+     */
 	protected function actionSavePage($bitAlias = false) {
 		$strReturn = "";
 
         if(!$this->validateForm())
             return $this->actionNewPage("new", $bitAlias);
 
-		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightEdit()) {
 			$strName = $this->getParam("name");
 
 			if($strName != "" && $strName != " ") {
@@ -674,11 +661,12 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         return $this->actionChangePage(true);
     }
 
-	/**
-	 * Saves the edited, submitted page
-	 *
-	 * @return string, "" in case of success
-	 */
+    /**
+     * Saves the edited, submitted page
+     *
+     * @param bool $bitAlias
+     * @return string, "" in case of success
+     */
 	protected function actionChangePage($bitAlias = false) {
 		$strReturn = "";
 
@@ -692,11 +680,11 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 		$strKeywords = $this->getParam("keywords");
 
-		if($this->objRights->rightEdit($this->getSystemid())) {
+        $objPage = new class_module_pages_page($this->getSystemid());
+		if($objPage->rightEdit()) {
 			$strName = $this->getParam("name");
 			if($strName != "" && $strName != " ") {
 
-			    $objPage = new class_module_pages_page($this->getSystemid());
 			    $objPage->setStrBrowsername($this->getParam("browsername"));
 			    $objPage->setStrDesc($this->getParam("description"));
 			    $objPage->setStrName($strName);
@@ -738,9 +726,8 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionDeletePageFinal() {
 		$strReturn = "";
-		//System-Id zur Rechtepruefung ermitteln
-		if($this->objRights->rightDelete($this->getSystemid())) {
-		    $objPage = new class_module_pages_page($this->getSystemid());
+        $objPage = new class_module_pages_page($this->getSystemid());
+		if($objPage->rightDelete()) {
 			//Are there any locked records on this page?
 			if($objPage->getNumberOfLockedElementsOnPage() == 0) {
 
@@ -772,9 +759,8 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionCopyPage() {
 	    $strReturn = "";
-		//System-Id zur Rechtepruefung ermitteln
-		if($this->objRights->rightEdit($this->getSystemid())) {
-		    $objPage = new class_module_pages_page($this->getSystemid());
+        $objPage = new class_module_pages_page($this->getSystemid());
+		if($objPage->rightEdit($this->getSystemid())) {
 			if(!$objPage->copyPage())
                 throw new class_exception("Error while copying the page!", class_exception::$level_ERROR);
 
@@ -787,9 +773,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	}
 
 
-//*"*****************************************************************************************************
-//--Folder-Mgmt------------------------------------------------------------------------------------------
-
 
 	/**
 	 * Returns a form to create a new folder
@@ -798,12 +781,8 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionNewFolder() {
 		$strReturn = "";
-		if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
-
+		if($this->getObjModule()->rightRight2()) {
             $strReturn = $this->generateFolderNavigation().$strReturn;
-
-			//Build the form
-			//create an errorlist
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderNewSave");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderNewSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $this->getParam("ordner_name"));
@@ -826,13 +805,9 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionEditFolder() {
 		$strReturn = "";
-		if($this->objRights->rightEdit($this->getSystemid())) {
-
+        $objFolder = new class_module_pages_folder($this->getSystemid());
+		if($objFolder->rightEdit()) {
             $strReturn = $this->generateFolderNavigation().$strReturn;
-
-			//Load folder-data
-            $objFolder = new class_module_pages_folder($this->getSystemid());
-
             $arrToolbarEntries = array();
 
             //if languages are installed, present a language switch right here
@@ -840,9 +815,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
             $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
 
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
-
-			//Build the form
-			//create an errorlist
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderEditSave");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderEditSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName());
@@ -877,7 +849,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionFolderNewSave() {
 		$strReturn = "";
-		if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight2()) {
 
             if(!$this->validateForm())
                 return $this->actionNewFolder();
@@ -902,12 +874,11 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionFolderEditSave() {
 		$strReturn = "";
-		if($this->objRights->rightRight2($this->getSystemid())) {
+        $objFolder = new class_module_pages_folder($this->getSystemid());
+		if($objFolder->rightRight2()) {
             if(!$this->validateForm())
                 return $this->actionEditFolder();
 
-			//Collect data to save to db
-			$objFolder = new class_module_pages_folder($this->getSystemid());
 			$objFolder->setStrName($this->getParam("ordner_name"));
             $objFolder->setStrLanguage($this->getLanguageToWorkOn());
             $objFolder->updateObjectToDb($this->getParam("folder_id"));
@@ -928,9 +899,8 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionDeleteFolderFinal() {
 		$strReturn = "";
-		if($this->objRights->rightDelete($this->getSystemid())) 	{
-			//Delete the folder
-            $objFolder = new class_module_pages_folder($this->getSystemid());
+        $objFolder = new class_module_pages_folder($this->getSystemid());
+		if($objFolder->rightDelete($this->getSystemid())) 	{
             $strPrevID = $objFolder->getPrevId();
 			if($objFolder->deleteFolder())
 				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&systemid=".$strPrevID));
@@ -946,7 +916,8 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	/**
 	 * Creates a pathnavigation through all folders till the current page / folder
 	 *
-	 */
+     * @return string
+     */
 	private function generateFolderNavigation() {
 		//Provide a small path-navigation to know where we are...
 		$arrPath = $this->getPathArray($this->getSystemid());
@@ -987,19 +958,19 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
     }
 
 
-    //*"*****************************************************************************************************
-    // --- Elements -----------------------------------------------------------------------------------------
 
 	/**
 	 * Returns a list of all installed Elements
 	 *
 	 * @return string
+     * @autoTestable
 	 */
 	protected function actionListElements() {
 		$strReturn = "";
-		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight1()) {
 			$arrElements = class_module_pages_element::getAllElements();
 			$intI = 0;
+            /** @var class_module_pages_element $objOneElement */
 			foreach($arrElements as $objOneElement) {
 
                 $objAdminInstance = $objOneElement->getAdminElementInstance();
@@ -1018,7 +989,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(), $this->getText("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objOneElement->getSystemid()));
                 $strReturn .= $this->objToolkit->listRow3($strElementName, " V ".$objOneElement->getStrVersion()." (".$strCachetime.")", $strActions, getImageAdmin("icon_dot.gif", $strDescription), $intI++);
 			}
-			if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
+			if($this->getObjModule()->rightRight1())
 			    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), $this->getText("modul_element_neu"), "icon_new.gif"), "", $intI++);
 
 
@@ -1034,21 +1005,23 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 		    $arrElementsToInstall = array();
     		$objFilesystem = new class_filesystem();
     		//load installers available
-    		$arrInstallers = $objFilesystem->getFilelist("/installer");
+    		$arrInstallers = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
 
     		if($arrInstallers !== false) {
 
-	    		foreach($arrInstallers as $intKey => $strFile)
+	    		foreach($arrInstallers as $strPath => $strFile)
 	    			if(strpos($strFile, ".php") === false || strpos($strFile, "installer_element") === false)
-	    				unset($arrInstallers[$intKey]);
+	    				unset($arrInstallers[$strPath]);
 
 	    		if(count($arrInstallers) > 0) {
 	    		    asort($arrInstallers);
 	    		    //Loading each installer
-	        		foreach($arrInstallers as $strInstaller) {
+	        		foreach($arrInstallers as $strPath => $strInstaller) {
 	        			//Creating an object....
-                        include_once(_realpath_."/installer/".$strInstaller);
+                        include_once(_realpath_.$strPath);
 	        			$strClass = "class_".str_replace(".php", "", $strInstaller);
+
+                        /** @var interface_installer $objInstaller  */
 	        			$objInstaller = new $strClass();
 
 	        			$objSystem = class_module_system_module::getModuleByName("system");
@@ -1114,10 +1087,11 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 *
 	 * @param string $strMode new || edit
 	 * @return string
+     * @autoTestable
 	 */
 	protected function actionNewElement($strMode = "new") {
 		$strReturn = "";
-		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight1()) {
 			//Object to handle the filesystem
 			$objFilesystem = new class_filesystem();
 
@@ -1134,7 +1108,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", 0);
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "new");
 				//Fetch Admin classes
-				$arrClasses = $objFilesystem->getFilelist("/admin/elemente", ".php");
+				$arrClasses = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"));
 				$arrClassesAdmin = array();
 				foreach($arrClasses as $strClass)
 					$arrClassesAdmin[$strClass] = $strClass;
@@ -1142,7 +1116,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 				//Fetch Portal-Classes
 				$arrClassesPortal = array();
-				$arrClasses = $objFilesystem->getFilelist("/portal/elemente", ".php");
+				$arrClasses = class_resourceloader::getInstance()->getFolderContent("/portal/elements", array(".php"));
 				foreach($arrClasses as $strClass)
 					$arrClassesPortal[$strClass] = $strClass;
 				$strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getText("element_portal"), $this->getParam("element_portal"));
@@ -1172,7 +1146,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", $this->getParam("elementid"));
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "edit");
 				//Fetch Admin classes
-				$arrClasses = $objFilesystem->getFilelist("/admin/elemente", ".php");
+				$arrClasses = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"));
 				$arrClassesAdmin = array();
 				foreach($arrClasses as $strClass)
 					$arrClassesAdmin[$strClass] = $strClass;
@@ -1180,7 +1154,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
 				//Fetch Portal-Classes
 				$arrClassesPortal = array();
-				$arrClasses = $objFilesystem->getFilelist("/portal/elemente", ".php");
+				$arrClasses = class_resourceloader::getInstance()->getFolderContent("/portal/elements", array(".php"));
 				foreach($arrClasses as $strClass)
 					$arrClassesPortal[$strClass] = $strClass;
 				$strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getText("element_portal"), $objData->getStrClassPortal());
@@ -1210,7 +1184,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionInstallElement() {
         $strReturn = "";
-		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight1()) {
             $strElementToInstall = $this->getParam("elementName");
 
     		$objFilesystem = new class_filesystem();
@@ -1219,7 +1193,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
     		foreach($arrInstallers as $strFile) {
     			if(uniStrReplace(".php", "", $strFile) == $strElementToInstall) {
-                    include_once(_realpath_."/installer/".$strFile);
+                    include_once(_realpath_."/installer/".$strFile); //FIXME: file resolving
         			//Creating an object....
         			$strClass = "class_".str_replace(".php", "", $strFile);
         			$objInstaller = new $strClass();
@@ -1246,7 +1220,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionSaveElement() {
 		$strReturn = "";
-		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight1()) {
 
             if(!$this->validateForm() | $this->checkElementExisting()) {
                 if($this->getParam("modus") == "edit")
@@ -1301,7 +1275,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionDeleteElement() {
 		$strReturn = "";
-		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+		if($this->getObjModule()->rightRight1()) {
 			//Delete
             $objElement = new class_module_pages_element($this->getParam("elementid"));
 			if(!$objElement->deleteElement())
@@ -1321,10 +1295,11 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 * Creates a form to update placeholder in the database
 	 *
 	 * @return string
+     * @autoTestable
 	 */
 	protected function actionUpdatePlaceholder() {
         $strReturn = "";
-        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight3()) {
             if($this->getParam("plToUpdate") == "") {
                 $strReturn .= $this->objToolkit->getTextRow($this->getText("plUpdateHelp"));
                 $strReturn .= $this->objToolkit->divider();
@@ -1332,7 +1307,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
                 //fetch available templates
                 //Load the available templates
 				$objFilesystem = new class_filesystem();
-				$arrTemplates = $objFilesystem->getFilelist("/templates/module_pages", ".tpl");
+				$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_pages");
 				$arrTemplatesDD = array();
                 $arrTemplatesDD[-1] = $this->getText("plUpdateAll");
 				if(count($arrTemplates) > 0) {
@@ -1362,13 +1337,10 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	}
 
 
-    // -- Helferfunktionen ------------------------------------------------------------------------------
-
-
     /**
      * Checks, if a new element already exists
      *
-     * @return boo
+     * @return bool
      */
     private function checkElementExisting() {
         $objElement = class_module_pages_element::getElement($this->getParam("element_name"));
@@ -1380,7 +1352,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
             return false;
     }
 
-    // --- Folderview -----------------------------------------------------------------------------------
 
     /**
 	 * Returns a list of folders in the pages-database
@@ -1484,6 +1455,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
             $objPage = new class_module_pages_page($strPageid);
             if(count($arrPageelements) > 0) {
                 $strReturn .= $this->objToolkit->listHeader();
+                /** @var class_module_pages_pageelement $objOnePageelement */
                 foreach($arrPageelements as $objOnePageelement) {
                     $arrSinglePage = array();
                     //Should we generate a link ?
@@ -1502,7 +1474,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 		return $strReturn;
 	}
 
-    // --- xml ------------------------------------------------------------------------------------------
     /**
 	 * Creates a list of sites reduced to match the filter passed.
      * Used e.g. by the page-selector.
@@ -1543,6 +1514,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         $arrFolder = class_module_pages_folder::getFolderList($this->getSystemid());
         foreach ($arrFolder as $objSingleEntry) {
                 if($objSingleEntry->rightView()) {
+                    /** @var class_module_pages_folder $objSingleEntry */
                     if($objSingleEntry instanceof class_module_pages_folder) {
                         $strReturn .= "<folder>";
                         $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrName())."</name>";
@@ -1559,6 +1531,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         if(count($arrPages) > 0) {
             foreach ($arrPages as $objSingleEntry) {
                 if($objSingleEntry->rightView()) {
+                    /** @var class_module_pages_page $objSingleEntry */
                     if($objSingleEntry instanceof class_module_pages_page) {
                         $strReturn .= "<page>";
                         $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrBrowsername())."</name>";
