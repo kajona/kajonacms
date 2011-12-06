@@ -28,9 +28,6 @@ class class_zip {
 	 *
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_zip";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
-
         if(!class_exists("ZipArchive"))
             throw new class_exception("current installation has no support for ZipArchive", class_exception::$level_ERROR);
 

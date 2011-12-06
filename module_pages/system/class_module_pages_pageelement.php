@@ -36,14 +36,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModule = array();
-        $arrModule["name"] 				= "modul_pages_content";
-		$arrModule["moduleId"] 			= _pages_content_modul_id_;
-		$arrModule["table"]       		= _dbprefix_."page_element";
-		$arrModule["modul"]				= "pages_content";
+        $this->setArrModuleEntry("modul", "pages_content");
+        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."page_element");
 
-		//base class
-		parent::__construct($arrModule, $strSystemid);
+		parent::__construct( $strSystemid);
 
 		//init current object
 		if($strSystemid != "")

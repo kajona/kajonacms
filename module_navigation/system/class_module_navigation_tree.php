@@ -24,14 +24,13 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_navigation";
-		$arrModul["moduleId"] 			= _navigation_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."navigation";
-		$arrModul["modul"]				= "navigation";
+
+        $this->setArrModuleEntry("modul", "navigation");
+        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."navigation");
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

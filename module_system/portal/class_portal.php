@@ -101,7 +101,7 @@ abstract class class_portal  {
 		else
 			$this->setSystemid($strSystemid);
 
-		//Generating all the needes Objects. For this we use our cool cool carrier-object
+		//Generating all the required objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();

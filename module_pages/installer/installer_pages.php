@@ -15,14 +15,12 @@
 class class_installer_pages extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["version"] 		= "3.4.9";
-		$arrModule["name"] 			= "pages";
-		$arrModule["name2"] 		= "pages_content";
-		$arrModule["name3"] 		= "folderview";
-		$arrModule["name_lang"] 	= "Module Pages";
-		$arrModule["moduleId"] 		= _pages_modul_id_;
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("version", "3.4.9");
+        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
+        $this->setArrModuleEntry("name", "pages");
+        $this->setArrModuleEntry("name_lang", "Module Pages");
+
+		parent::__construct();
 	}
 
 	public function getNeededModules() {

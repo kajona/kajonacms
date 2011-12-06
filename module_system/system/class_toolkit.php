@@ -9,10 +9,11 @@
 
 
 /**
- * BaseClass for admin / portal tookits
+ * BaseClass for admin / portal toolkits
  * Toolkits are there to serve small patterns used time by time
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_toolkit  {
 	protected $arrModul = array();
@@ -25,17 +26,10 @@ class class_toolkit  {
 	protected $objTemplate;
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
-	 * @param mixed $arrModul
-	 * @param string $strSystemid
 	 */
-	public function __construct($arrModul = array(), $strSystemid = "") {
-		$this->arrModul["p_name"] 			= "class_elemente";
-		$this->arrModul["p_author"]			= "sidler@mulchprod.de";
-
-		$this->arrModul = array_merge($arrModul, $this->arrModul);
-		$this->strSystemid = $strSystemid;
+	public function __construct() {
 
 		$objCarrier = class_carrier::getInstance();
 		$this->objTemplate = $objCarrier->getObjTemplate();
@@ -49,7 +43,6 @@ class class_toolkit  {
 	 * @return mixed
 	 */
 	public function mimeType($strFilename) {
-		$arrReturn = array();
 		$arrMime = array();
 
 		$arrMime["doc"] 		= array("application/msword", "doc", "icon_word.gif");

@@ -44,13 +44,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * @param bool $bitLoadPassword
      */
     public function __construct($strSystemid = "", $bitLoadPassword = false) {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_user";
-		$arrModul["moduleId"] 			= _user_modul_id_;
-		$arrModul["modul"]				= "user";
+        $this->setArrModuleEntry("modul", "user");
+        $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

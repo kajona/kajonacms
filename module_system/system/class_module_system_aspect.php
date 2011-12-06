@@ -32,14 +32,11 @@ class class_module_system_aspect extends class_model implements interface_model 
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_system";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."aspects";
-		$arrModul["modul"]				= "system";
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."aspects");
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

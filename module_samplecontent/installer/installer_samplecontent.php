@@ -21,12 +21,13 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["version"] 		  = "3.4.1";
-		$arrModule["name"] 			  = "samplecontent";
-		$arrModule["name_lang"] 	  = "Module Samplecontent";
-		$arrModule["moduleId"] 		  = _samplecontent_modul_id_;
-		parent::__construct($arrModule);
+
+        $this->setArrModuleEntry("version", "3.4.1");
+        $this->setArrModuleEntry("moduleId", _samplecontent_modul_id_);
+        $this->setArrModuleEntry("name", "samplecontent");
+        $this->setArrModuleEntry("name_lang", "Module Samplecontent");
+
+		parent::__construct();
 
 		//set the correct language
         $this->strContentLanguage = $this->objSession->getAdminLanguage();

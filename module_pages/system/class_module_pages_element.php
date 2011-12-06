@@ -29,14 +29,12 @@ class class_module_pages_element extends class_model implements interface_model 
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_pages";
-		$arrModul["moduleId"] 			= _pages_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."element";
-		$arrModul["modul"]				= "pages";
+        $this->setArrModuleEntry("modul", "pages");
+        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."element");
 
 		//base class
-		parent::__construct($arrModul, "");
+		parent::__construct("");
 
         $this->setSystemid($strSystemid);
 

@@ -30,14 +30,12 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_pages";
-		$arrModul["moduleId"] 			= _pages_folder_id_;
-		$arrModul["modul"]				= "pages";
-        $arrModul["table"]       		= _dbprefix_."page_folderproperties";
+        $this->setArrModuleEntry("modul", "pages");
+        $this->setArrModuleEntry("moduleId", _pages_folder_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."page_folderproperties");
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
         //init the object with the language currently selected - admin or portal
 		if(defined("_admin_") && _admin_ === true)

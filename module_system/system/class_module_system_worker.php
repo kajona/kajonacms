@@ -23,14 +23,11 @@ class class_module_system_worker extends class_model implements interface_model 
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_system";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["table"]       		= "";
-		$arrModul["modul"]				= "system";
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("table", "");
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

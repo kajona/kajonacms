@@ -11,6 +11,7 @@
  * Heart of the system - granting access to all needed objects e.g. the database or the session-object
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_carrier {
 
@@ -43,8 +44,10 @@ class class_carrier {
 	 *
 	 */
 	private function __construct() {
-        $this->arrModule["author"]     = "sidler@mulchprod.de";
 	}
+
+    private function __clone() {
+    }
 
 	/**
 	 * Method to get an instance of class_carrier though the constructor is private

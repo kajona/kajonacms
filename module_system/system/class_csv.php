@@ -40,16 +40,11 @@ class class_csv {
     public static $str_delimiter_comma = ",";
 
 
-
-	/**
-	 * Constructor
-	 *
-	 */
+    /**
+     * Constructor
+     * @param string $strDelimiter
+     */
 	public function __construct($strDelimiter = "") {
-		$this->arrModul["name"] 		= "class_csv";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
-
 		if($strDelimiter == "") {
 		    $this->strDelimiter = class_csv::$str_delimiter_comma;
 		} else {

@@ -61,11 +61,18 @@ class class_cache  {
 
 
     /**
-     * Contructor, being private. Please note that
+     * Constructor, being private. Please note that
      * there are factory methods in order to get instances.
      *
      * @see class_cache::getCachedEntry()
      * @see class_cache::createNewInstance()
+     * @param $strSourceName
+     * @param $strHash1
+     * @param $strHash2
+     * @param $strLanguage
+     * @param $strContent
+     * @param $intLeasetime
+     * @param $strCacheId
      */
     private function __construct($strSourceName, $strHash1, $strHash2, $strLanguage, $strContent, $intLeasetime, $strCacheId) {
 

@@ -28,14 +28,12 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_navigation";
-		$arrModul["moduleId"] 			= _navigation_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."navigation";
-		$arrModul["modul"]				= "navigation";
+        $this->setArrModuleEntry("modul", "navigation");
+        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."navigation");
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")
@@ -59,7 +57,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     }
 
     /**
-     * Initalises the current object, if a systemid was given
+     * Initialises the current object, if a systemid was given
      *
      */
     public function initObject() {
@@ -106,7 +104,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
 
     /**
-	 * Loads all navigations points one layer under the given systemid
+	 * Loads all navigation points one layer under the given systemid
 	 *
 	 * @param string $strSystemid
 	 * @param bool

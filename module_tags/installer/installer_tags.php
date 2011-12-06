@@ -15,15 +15,13 @@
 class class_installer_tags extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["version"] 		  = "3.4.1";
-		$arrModule["name"] 			  = "tags";
-		$arrModule["name_lang"] 	  = "Module Tags";
-		$arrModule["moduleId"] 		  = _tags_modul_id_;
 
-		$arrModule["table1"]          = _dbprefix_."tags_tag";
-		$arrModule["table2"]          = _dbprefix_."tags_member";
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("version", "3.4.1");
+        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
+        $this->setArrModuleEntry("name", "tags");
+        $this->setArrModuleEntry("name_lang", "Module Tags");
+
+		parent::__construct();
 	}
 
 	public function getNeededModules() {

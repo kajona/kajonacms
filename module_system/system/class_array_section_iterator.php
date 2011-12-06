@@ -12,6 +12,7 @@
  * This class is able to create a pageview-mechanism
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_array_section_iterator extends class_array_iterator {
 
@@ -25,10 +26,6 @@ class class_array_section_iterator extends class_array_iterator {
 	 * @param int $intNrOfElements The total number of elements
 	 */
 	public function __construct($intNrOfElements) {
-		$this->arrModul["name"] 		= "class_array_section_iterator";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
-
 		$this->intTotalElements = $intNrOfElements;
 
 		parent::__construct(array());

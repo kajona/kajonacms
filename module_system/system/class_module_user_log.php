@@ -21,14 +21,11 @@ class class_module_user_log extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_user";
-		$arrModul["moduleId"] 			= _user_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."user_log";
-		$arrModul["modul"]				= "user";
+        $this->setArrModuleEntry("modul", "user");
+        $this->setArrModuleEntry("moduleId", _user_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."user_log");
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

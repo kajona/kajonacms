@@ -29,25 +29,11 @@ abstract class class_root {
 	 */
 	protected $objDB = null;				//Object to the database
 	/**
-	 * Instance of class_toolkit_<area>
-	 *
-     * @todo: investigate if the toolkit instance is required, e.g. by the installer. could be moved to an extending subclass.
-	 * @var class_toolkit_admin
-	 */
-	protected $objToolkit = null;			//Toolkit-Object
-	/**
 	 * Instance of class_session
 	 *
 	 * @var class_session
 	 */
-	protected $objSession = null;			//Object containting the session-management
-	/**
-	 * Instance of class_template
-	 *
-     * @todo: investigate if the template instance is required, e.g. by the installer. could be moved to an extending subclass.
-	 * @var class_template
-	 */
-	protected $objTemplate = null;			//Object to handle templates
+	protected $objSession = null;			//Object containing the session-management
 	/**
 	 * Instance of class_rights
 	 *
@@ -63,11 +49,8 @@ abstract class class_root {
 	private   $objText = null;				//Object managing the textfiles
 
 	private   $strAction;			        //current action to perform (GET/POST)
-	// replaced below private   $strSystemid;			        //current systemid
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
-	private   $strArea;				        //String containing the current Area - admin or portal or installer or download
-	protected $arrModule;			        //Array containing Infos about the current modul
-	protected $strTemplateArea;		        //String containing the current Area for the templateobject
+	protected $arrModule = array();	        //Array containing information about the current module
 
 
     //--- fields to be synchronized with the database ---
@@ -149,31 +132,14 @@ abstract class class_root {
      */
     private $longCreateDate;
 
-    //---
-
 
     /**
      * Constructor
      *
-     * @param $arrModule
      * @param string $strSystemid
-     * @param string $strArea
      * @return class_root
      */
-	public function __construct($arrModule, $strSystemid = "", $strArea = "portal") {
-		$this->arrModule["r_name"] 			= "class_root";
-		$this->arrModule["r_nummer"] 		= _system_modul_id_;
-
-
-		//Verifying area
-		if($strArea == "installer" || $strArea == "download" || $strArea == "model")
-			$this->strArea = $strArea;
-		else
-			$this->strArea = "portal";
-
-
-		//Merging Module-Data
-		$this->arrModule = array_merge($this->arrModule, $arrModule);
+	public function __construct($strSystemid = "") {
 
 
 		//GET / POST / FILE Params
@@ -184,12 +150,8 @@ abstract class class_root {
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
-	    $this->objToolkit = $objCarrier->getObjToolkit($this->strArea);
 		$this->objSession = $objCarrier->getObjSession();
    	    $this->objText = $objCarrier->getObjText();
-		//a template instance is not needed in case of models
-		if($this->strArea != "model")
-   	        $this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objRights = $objCarrier->getObjRights();
 
 		//And keep the action
@@ -199,9 +161,9 @@ abstract class class_root {
 	}
 
     /**
-     * Inits the current record with the system-fields
+     * Init the current record with the system-fields
      * @todo: add dates?
-     * @param type $strSystemid
+     * @param string $strSystemid
      */
     private function internalInit($strSystemid) {
 
@@ -262,8 +224,7 @@ abstract class class_root {
      * primary key). The newly created systemid is being set as the current objects' one and can be used in the afterwards
      * called updateStateToDb() method to reference the correct rows.
      *
-     * @param string $strPrevId The prev-id of the records, either to be used for the insert or to be used during the update of the record
-     * @param string $strComment Comment to describe the record in the systemtable
+     * @param string|bool $strPrevId The prev-id of the records, either to be used for the insert or to be used during the update of the record
      * @return bool
      * @since 3.3.0
      * @throws class_exception
@@ -452,19 +413,19 @@ abstract class class_root {
     }
 
 
-	/**
-	 * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inherintance is default)
-	 * Returns the systemID used for this record
-	 *
-	 * @param string $strPrevId	Previous ID in the tree-structure
-	 * @param string $strComment Comment to indentify the record
-	 * @param bool $bitRight Should the right-record be generated?
-	 * @param int $intModulNr Number of the module this record belonges to
-	 * @param string $strSystemId SystemID to be used
-	 * @param string $intStatus	Active (1)/Inactive (0)?
-	 * @return string The ID used/generated
-	 */
-	public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModulNr = "", $strSystemId = "", $intStatus = 1) {
+    /**
+     * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inheritance is default)
+     * Returns the systemID used for this record
+     *
+     * @param string $strPrevId    Previous ID in the tree-structure
+     * @param string $strComment Comment to identify the record
+     * @param bool $bitRight Should the right-record be generated?
+     * @param int|string $intModuleNr Number of the module this record belongs to
+     * @param string $strSystemId SystemID to be used
+     * @param int $intStatus    Active (1)/Inactive (0)?
+     * @return string The ID used/generated
+     */
+	public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1) {
 		//Do we need a new SystemID?
 		if($strSystemId == "")
 			$strSystemId = generateSystemid();
@@ -472,8 +433,8 @@ abstract class class_root {
         $this->setStrSystemid($strSystemId);
 
 		//Given a ModuleNr?
-		if($intModulNr == "")
-			$intModulNr = $this->arrModule["moduleId"];
+		if($intModuleNr == "")
+			$intModuleNr = $this->arrModule["moduleId"];
 		//Correct prevID
 		if($strPrevId == "")
 			$strPrevId = 0;
@@ -495,7 +456,7 @@ abstract class class_root {
 		$this->objDB->_pQuery($strQuery, array(
             $strSystemId,
             $strPrevId,
-            (int)$intModulNr,
+            (int)$intModuleNr,
             $this->objSession->getUserID(),
             class_date::getCurrentTimestamp(),
             $this->objSession->getUserID(),
@@ -1206,9 +1167,6 @@ abstract class class_root {
 		if($strModule == "")
 			$strModule = $this->arrModule["modul"];
 
-		if($strArea == "")
-			$strArea = $this->strArea;
-
 		//Now we have to ask the Text-Object to return the text
 		return $this->objText->getText($strName, $strModule, $strArea);
 	}
@@ -1341,31 +1299,6 @@ abstract class class_root {
         return $this->getStrPrevId();
 	}
 
-    /**
-	 * Sets the Prev-ID of a record
-	 *
-	 * @param string $strNewPrevId
-	 * @param string $strSystemid If not given, the current objects' systemid is used
-	 * @return bool
-     * @deprecated should be removed
-	 *
-	public function setPrevId($strNewPrevId, $strSystemid = "") {
-        if($strSystemid != "")
-            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-
-        $strOldPrevid = $this->getStrPrevId();
-
-        $this->setStrPrevId($strNewPrevId);
-        $this->updateObjectToDb();
-
-        if($strNewPrevId != $strOldPrevid) {
-            $this->objDB->flushQueryCache();
-            $this->objRights->flushRightsCache();
-            $this->objRights->rebuildRightsStructure($strSystemid);
-        }
-
-		return true;
-	}*/
 
     public function getStrPrevId() {
         $this->internalInit($this->strSystemid);
@@ -1714,5 +1647,15 @@ abstract class class_root {
         return new class_lockmanager($this->getSystemid());
     }
 
+
+    /**
+     * Writes a key-value-pair to the arrModule
+     *
+     * @param string $strKey
+     * @param mixed $strValue
+     */
+    public function setArrModuleEntry($strKey, $strValue) {
+        $this->arrModule[$strKey] = $strValue;
+    }
 
 }

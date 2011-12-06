@@ -85,14 +85,10 @@ class class_graph_pchart implements interface_graph {
 
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_graph_pchart";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
-
         $this->objDataset = new pData();
         $this->objAdditionalDataset = new pData();
         $this->arrDefaultColorPalette = class_graph_colorpalettes::$arrDefaultColorPalette;

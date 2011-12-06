@@ -48,15 +48,13 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_pages";
-		$arrModul["moduleId"] 			= _pages_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."page";
-		$arrModul["table2"]       		= _dbprefix_."page_properties";
-		$arrModul["modul"]				= "pages";
+        $this->setArrModuleEntry("modul", "pages");
+        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."page");
+        $this->setArrModuleEntry("table2", _dbprefix_."page_properties");
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init the object with the language currently selected - admin or portal
 		if(defined("_admin_") && _admin_ === true)

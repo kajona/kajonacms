@@ -18,11 +18,8 @@
 class class_toolkit_portal extends class_toolkit {
 
 
-	public function __construct($strSystemid = 0) {
-        $arrModul = array();
-		$arrModul["name"] 			= "modul_elemente_admin";
-
-		parent::__construct($arrModul, $strSystemid);
+	public function __construct() {
+		parent::__construct();
 	}
 
 

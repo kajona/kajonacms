@@ -28,14 +28,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_tags";
-		$arrModul["moduleId"] 			= _tags_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."tags_tag";
-		$arrModul["modul"]				= "tags";
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+        $this->setArrModuleEntry("modul", "tags");
+        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."tags_tag");
+
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

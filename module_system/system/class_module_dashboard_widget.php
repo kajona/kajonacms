@@ -27,14 +27,12 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_dashboard";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["table"]              = _dbprefix_."dashboard";
-		$arrModul["modul"]              = "dashboard";
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+        $this->setArrModuleEntry("modul", "dashboard");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."dashboard");
+
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

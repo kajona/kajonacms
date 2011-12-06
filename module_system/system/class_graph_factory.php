@@ -8,7 +8,7 @@
 
 /**
  * Generates a graph-instance based on the current config.
- * Thererfore either ez components or pChart will be used.
+ * Therefore either ez components or pChart will be used.
  * Since pChart won't be shipped with kajona, the user has to download it manually.
  *
  * @author sidler@mulchprod.de

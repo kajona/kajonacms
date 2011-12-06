@@ -25,14 +25,11 @@ class class_module_system_adminwidget extends class_model implements interface_m
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_system";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["table"]              = _dbprefix_."adminwidget";
-		$arrModul["modul"]              = "system";
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."adminwidget");
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

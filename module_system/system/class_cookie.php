@@ -8,22 +8,19 @@
 ********************************************************************************************************/
 
 /**
- * A small class to provide acces to cookies, both ways, reading as writing.
+ * A small class to provide access to cookies, both ways, reading as writing.
  * Use this class ONLY to access / set cookies!
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_cookie {
 
-    private $arrModul;
 
 	/**
-	 * Contructor
+	 * Constructor
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_cookie";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
 	}
 
 	/**

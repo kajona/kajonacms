@@ -28,14 +28,13 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_filemanager";
-		$arrModul["moduleId"] 			= _filemanager_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."filemanager";
-		$arrModul["modul"]				= "filemanager";
+
+        $this->setArrModuleEntry("modul", "filemanager");
+        $this->setArrModuleEntry("moduleId", _filemanager_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."filemanager");
 
 		//base class
-		parent::__construct($arrModul, $strSystemid, "model");
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

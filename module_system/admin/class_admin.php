@@ -53,12 +53,6 @@ abstract class class_admin {
 	 */
 	private   $objText = null;				//Object managing the lang-files
 
-	/**
-	 * Instance of class_module_system_common
-	 *
-	 * @var class_module_system_common
-	 */
-	private $objSystemCommon = null;
     /**
      * Instance of the current modules' definition
      *
@@ -115,7 +109,6 @@ abstract class class_admin {
 		$this->objSession = $objCarrier->getObjSession();
 		$this->objText = $objCarrier->getObjText();
 		$this->objTemplate = $objCarrier->getObjTemplate();
-		$this->objSystemCommon = new class_module_system_common($strSystemid);
 
 		//Writing to the history
         if(!_xmlLoader_)
@@ -299,7 +292,8 @@ abstract class class_admin {
 	 * @return void
 	 */
 	public function setPosition($strIdToShift, $strDirection = "upwards") {
-	    $this->objSystemCommon->setPosition($strIdToShift, $strDirection);
+        $objSystemCommon = new class_module_system_common();
+	    $objSystemCommon->setPosition($strIdToShift, $strDirection);
         $this->flushCompletePagesCache();
 	}
 
@@ -313,7 +307,8 @@ abstract class class_admin {
 	 * @return void
 	 */
 	public function setPositionAndReload($strIdToShift, $strDirection = "upwards") {
-	    $this->objSystemCommon->setPosition($strIdToShift, $strDirection);
+        $objSystemCommon = new class_module_system_common();
+	    $objSystemCommon->setPosition($strIdToShift, $strDirection);
         $this->flushCompletePagesCache();
         $this->adminReload(_indexpath_."?".$this->getHistory(1));
 	}
@@ -325,7 +320,8 @@ abstract class class_admin {
 	 * @param int $intPosition
 	 */
 	public function setAbsolutePosition($strIdToSet, $intPosition) {
-		$this->objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
+        $objSystemCommon = new class_module_system_common();
+		$objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
         $this->flushCompletePagesCache();
 	}
 
@@ -335,9 +331,13 @@ abstract class class_admin {
 	 * @param string $strName
 	 * @param bool $bitCache
 	 * @return mixed
+     *
+     * @deprecated
+     * FIXME: validate if still required
 	 */
 	public function getModuleData($strName, $bitCache = true) {
-	    return $this->objSystemCommon->getModuleData($strName, $bitCache);
+        $objSystemCommon = new class_module_system_common();
+	    return $objSystemCommon->getModuleData($strName, $bitCache);
 
 	}
 
@@ -369,7 +369,8 @@ abstract class class_admin {
         if($strStopSystemid == "")
             $strStopSystemid = $this->getModuleSystemid($this->arrModule["modul"]);
 
-		return $this->objSystemCommon->getPathArray($strSystemid, $strStopSystemid);
+        $objSystemCommon = new class_module_system_common();
+		return $objSystemCommon->getPathArray($strSystemid, $strStopSystemid);
 	}
 
 	/**
@@ -397,7 +398,7 @@ abstract class class_admin {
 	}
 
     /**
-     * Creates a text-based decription of the current module.
+     * Creates a text-based description of the current module.
      * Therefore the text-entry module_description should be available.
      *
      * @return string
@@ -970,7 +971,8 @@ abstract class class_admin {
      * @return string
      */
     public function getLanguageToWorkOn() {
-        return $this->objSystemCommon->getStrAdminLanguageToWorkOn();
+        $objSystemCommon = new class_module_system_common();
+        return $objSystemCommon->getStrAdminLanguageToWorkOn();
     }
 
     /**

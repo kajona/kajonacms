@@ -30,18 +30,15 @@ class class_module_system_module extends class_model implements interface_model 
     /**
      * Constructor to create a valid object
      *
-     * @param string $strModuleid (use "" on new objects)
+     * @param string $strSystemid
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."system_module";
-		$arrModul["modul"]				= "system";
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."system_module");
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

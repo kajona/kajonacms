@@ -18,10 +18,10 @@
  * When using the old, plain queries, you have to escape all embedded arguments yourself by using dbsafeString()
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  *
  */
 class class_db {
-    private $arrModule;
 	private $objConfig = NULL;				    //Config-Objekt
 	private $arrQueryCache = array();		    //Array to cache queries
     private $arrTablesCache = array();
@@ -37,11 +37,11 @@ class class_db {
 	private static $objDB = null;               //An object of this class
 
 	/**
-	 * The number of tranactions currently opened
+	 * The number of transactions currently opened
 	 *
 	 * @var int
 	 */
-	private $intNumberOfOpenTransactions = 0;    //The number of tranactions opened
+	private $intNumberOfOpenTransactions = 0;    //The number of transactions opened
 
 	/**
 	 * Set to true, if a rollback is requested, but there are still open tx.
@@ -53,7 +53,7 @@ class class_db {
 
     /**
      * Flag indicating if the internal connection was setup.
-     * Needed to have a proper lazy-connection initalization.
+     * Needed to have a proper lazy-connection initialization.
      *
      * @var bool
      */
@@ -65,10 +65,6 @@ class class_db {
 	 *
 	 */
 	private function __construct() 	{
-
-	    $this->arrModule["moduleId"]     = _system_modul_id_;
-	    $this->arrModule["author"]       = "sidler@mulchprod.de";
-
 
 		$this->objConfig = class_config::getInstance();
 
@@ -97,7 +93,7 @@ class class_db {
 	 */
 	public function __destruct() {
 	    if($this->intNumberOfOpenTransactions != 0) {
-	        //something bad happend. rollback, plz
+	        //something bad happened. rollback, plz
 	        $this->objDbDriver->transactionRollback();
 	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }

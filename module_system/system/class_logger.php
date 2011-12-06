@@ -12,6 +12,7 @@
  * The granularity of the logging is defined in the config.php
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 final class class_logger {
 

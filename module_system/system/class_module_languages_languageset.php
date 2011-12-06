@@ -34,14 +34,13 @@ class class_module_languages_languageset extends class_model implements interfac
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_languages";
-		$arrModul["moduleId"] 			= _languages_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."languages_languageset";
-		$arrModul["modul"]				= "languages";
+
+        $this->setArrModuleEntry("modul", "languages");
+        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
+        $this->setArrModuleEntry("table", _dbprefix_."languages_languageset");
 
         //base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

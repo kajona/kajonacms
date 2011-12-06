@@ -43,13 +43,11 @@ class class_modul_user_user extends class_model implements interface_model  {
      * @param bool $bitLoadPassword
      */
     public function __construct($strSystemid = "", $bitLoadPassword = false) {
-        $arrModul = array();
-        $arrModul["name"] 				= "module_user";
-		$arrModul["moduleId"] 			= _user_modul_id_;
-		$arrModul["modul"]				= "user";
 
-		//base class
-		parent::__construct($arrModul, $strSystemid);
+        $this->setArrModuleEntry("modul", "user");
+        $this->setArrModuleEntry("moduleId", _user_modul_id_);
+
+		parent::__construct($strSystemid);
 
 		//init current object
 		if($strSystemid != "")

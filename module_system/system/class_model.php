@@ -20,9 +20,9 @@
  */
 class class_model extends class_root {
 
-    public function __construct($arrModule, $strSystemid)  {
+    public function __construct($strSystemid)  {
 
-        parent::__construct($arrModule, $strSystemid, "model");
+        parent::__construct($strSystemid);
     }
 
 

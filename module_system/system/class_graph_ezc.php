@@ -78,7 +78,7 @@ class class_graph_ezc implements interface_graph {
 
 
 	/**
-	 * Contructor
+	 * Constructor
 	 *
 	 */
 	public function __construct() {

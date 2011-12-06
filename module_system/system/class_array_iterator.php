@@ -12,11 +12,11 @@
  * This class is able to create a pageview-mechanism
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_array_iterator implements interface_iterator {
 
     protected $arrElements = array();
-    private $arrModule = array();
     protected $intArrCursor = 0;
 
     protected $intElementsPerPage = 100;
@@ -28,11 +28,8 @@ class class_array_iterator implements interface_iterator {
      *
      */
 	public function __construct($arrElements) {
-		$this->arrModule["name"] 		= "class_array_iterator";
-		$this->arrModule["author"] 		= "sidler@mulchprod.de";
-		$this->arrModule["moduleId"]	= _system_modul_id_;
 
-        //Loop over elements to create numeric indizees
+        //Loop over elements to create numeric indices
         if(count($arrElements) > 0) {
             foreach ($arrElements as $objOneElement) {
                 $this->arrElements[] = $objOneElement;

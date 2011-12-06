@@ -15,12 +15,12 @@
 class class_installer_navigation extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-        $arrModule = array();
-		$arrModule["version"] 		= "3.4.1";
-		$arrModule["name"] 			= "navigation";
-		$arrModule["name_lang"] 	= "Module Navigation";
-		$arrModule["moduleId"] 		= _navigation_modul_id_;
-		parent::__construct($arrModule);
+        $this->setArrModuleEntry("version", "3.4.1");
+        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
+        $this->setArrModuleEntry("name", "navigation");
+        $this->setArrModuleEntry("name_lang", "Module Navigation");
+
+		parent::__construct();
 	}
 
 	public function getNeededModules() {

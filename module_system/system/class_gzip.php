@@ -12,6 +12,7 @@
  * It can be used to create compressed versions of files
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_gzip {
 
@@ -20,9 +21,6 @@ class class_gzip {
 	 *
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_gzip";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
 	}
 
 	/**

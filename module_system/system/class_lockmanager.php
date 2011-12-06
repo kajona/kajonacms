@@ -25,9 +25,10 @@ class class_lockmanager  {
 
     private $strSystemid = "";
 
-	/**
-	 * Contructor
-	 */
+    /**
+     * Constructor
+     * @param string $strSystemid
+     */
 	public function __construct($strSystemid = "") {
         $this->objSystemCommon = new class_module_system_common($strSystemid);
         $this->strSystemid = $strSystemid;

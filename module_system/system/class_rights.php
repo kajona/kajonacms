@@ -14,7 +14,6 @@
  * @author sidler@mulchprod.de
  */
 class class_rights {
-	private $arrModule = null;
 
 	/**
 	 * class_db
@@ -40,9 +39,6 @@ class class_rights {
 	 *
 	 */
 	private function __construct() 	{
-		$this->arrModule["name"] 		= "class_rights";
-		$this->arrModule["moduleId"]    = _rechte_modul_id_;
-
 		$objCarrier = class_carrier::getInstance();
 		$this->objDb = $objCarrier->getObjDb();
 		$this->objSession = $objCarrier->getObjSession();

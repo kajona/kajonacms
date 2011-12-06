@@ -60,7 +60,7 @@ class class_classloader {
      */
     public function loadClass($strClassName) {
 
-        //scan the system-folder as the first on, may produce the best hit
+        //scan the system-folder as the first one, may produce the best hit
         if($this->scanSingleModule("/module_system", $strClassName))
             return true;
 

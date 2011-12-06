@@ -25,6 +25,7 @@
  * $objMail->sendMail();
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_mail {
 
@@ -52,9 +53,6 @@ class class_mail {
 	 *
 	 */
 	public function __construct() {
-		$this->arrModul["name"] 		= "class_mail";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
 	}
 
 	/**

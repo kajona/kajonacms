@@ -23,14 +23,11 @@ class class_module_system_common extends class_model implements interface_model 
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModule = array();
-        $arrModule["name"] 				= "module_system";
-		$arrModule["moduleId"] 			= _system_modul_id_;
-		$arrModule["table"]       		= "";
-		$arrModule["modul"]				= "system";
 
-		//base class
-		parent::__construct($arrModule, $strSystemid);
+        $this->setArrModuleEntry("modul", "system");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+
+		parent::__construct($strSystemid);
 
     }
 

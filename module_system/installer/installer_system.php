@@ -18,13 +18,13 @@ class class_installer_system extends class_installer_base implements interface_i
     private $strContentLanguage;
 
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["version"] 			= "3.4.9";
-		$arrModul["name"] 				= "system";
-		$arrModul["name_lang"] 			= "System kernel";
-		$arrModul["moduleId"] 			= _system_modul_id_;
 
-		parent::__construct($arrModul);
+        $this->setArrModuleEntry("version", "3.4.9");
+        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("name", "system");
+        $this->setArrModuleEntry("name_lang", "System Kernel");
+
+		parent::__construct();
 
 		//set the correct language
 		$this->strContentLanguage = $this->objSession->getAdminLanguage();

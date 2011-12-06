@@ -16,6 +16,7 @@
  * Use this class only in cases the other way won't work, so e.g. for birthdays.
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_date {
 
@@ -26,16 +27,11 @@ class class_date {
     private $longTimestamp;
 
 
-    private $arrModul;
-
-	/**
-	 * Creates an instance of the class_date an initialises it with the current date.
-	 */
+    /**
+     * Creates an instance of the class_date an initialises it with the current date.
+     * @param string $longInitValue
+     */
 	public function __construct($longInitValue = "") {
-		$this->arrModul["name"] 		= "class_date";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
-
 
         if($longInitValue == "") {
             $this->setTimeInOldStyle(time());

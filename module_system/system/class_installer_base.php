@@ -17,12 +17,12 @@
 abstract class class_installer_base extends class_root {
 
     /**
-	 * Contructor
+	 * Constructor
 	 *
 	 */
-	public function __construct($arrModule) {
+	public function __construct() {
 	    //Call base constructor
-		parent::__construct($arrModule, "", "installer");
+		parent::__construct();
 	}
 
     /**
