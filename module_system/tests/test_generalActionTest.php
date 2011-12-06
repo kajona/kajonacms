@@ -33,7 +33,7 @@ class class_test_generalActionTest extends class_testbase  {
 
                         if(uniSubstr($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
                             echo "   calling via action() method\n";
-                            echo $objAdminInstance->action(uniSubstr($objOneMethod->getName(), 6));
+                            $objAdminInstance->action(uniSubstr($objOneMethod->getName(), 6));
                         }
                         else {
                             echo "   direct call";
