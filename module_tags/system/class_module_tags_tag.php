@@ -18,7 +18,7 @@
  * @author sidler@mulchprod.de
  * @since 3.4
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating  {
+class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener  {
 
     private $strName;
 
@@ -321,15 +321,18 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
     /**
      * Searches for tags assigned to the systemid to be deleted.
-     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid)
      *
-     * @param string $strSystemid
+     * Called whenever a records was deleted using the common methods.
+     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
+     * There's no need to register the listener, this is done automatically.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     * @param $strSystemid
+     *
      * @return bool
-     *
      */
-    public function doAdditionalCleanupsOnDeletion($strSystemid) {
-        $bitReturn = true;
-        //module installed?
+    public function handleRecordDeletedEvent($strSystemid) {
         if(class_module_system_module::getModuleByName("tags") == null)
             return true;
 
@@ -346,8 +349,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     }
 
 
-
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function getStrName() {
         return $this->strName;

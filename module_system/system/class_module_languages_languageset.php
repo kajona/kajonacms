@@ -23,7 +23,7 @@
  * @package module_languages
  * @author sidler@mulchprod.de
  */
-class class_module_languages_languageset extends class_model implements interface_model {
+class class_module_languages_languageset extends class_model implements interface_model, interface_recorddeleted_listener {
 
     private $arrLanguageSet = array();
 
@@ -67,6 +67,7 @@ class class_module_languages_languageset extends class_model implements interfac
     /**
      * Updates the current state to the database
      *
+     * @param bool $strPrevId
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -209,21 +210,24 @@ class class_module_languages_languageset extends class_model implements interfac
 
     /**
      * Searches for languagesets containing the current systemid. either as a language or a referenced record.
-     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid)
      *
-     * @param string $strSystemid
+     * Called whenever a records was deleted using the common methods.
+     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
+     * There's no need to register the listener, this is done automatically.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     * @param $strSystemid
+     *
      * @return bool
-     *
      */
-    public function doAdditionalCleanupsOnDeletion($strSystemid) {
-
+    public function handleRecordDeletedEvent($strSystemid) {
         //fire a plain query on the database, much faster then searching for matching records
         $strQuery = "DELETE FROM "._dbprefix_."languages_languageset
                       WHERE languageset_language = ?
                          OR languageset_systemid = ?";
 
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
-
     }
 
     /**

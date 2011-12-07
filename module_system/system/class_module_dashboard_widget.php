@@ -13,7 +13,7 @@
  * @package module_dashboard
  * @author sidler@mulchprod.de
  */
-class class_module_dashboard_widget extends class_model implements interface_model {
+class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener {
 
     private $strColumn = "";
     private $strUser = "";
@@ -74,6 +74,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
     /**
      * Updates the current widget to the db
+     * @return bool
      */
     protected function updateStateToDb() {
 
@@ -109,10 +110,17 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     /**
      * Implementing callback to react on user-delete events
      *
-     * @param string $strSystemid
+     * Called whenever a records was deleted using the common methods.
+     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
+     * There's no need to register the listener, this is done automatically.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     * @param $strSystemid
+     *
      * @return bool
      */
-    public function doAdditionalCleanupsOnDeletion($strSystemid) {
+    public function handleRecordDeletedEvent($strSystemid) {
         $strQuery = "SELECT dashboard_id FROM ".$this->arrModule["table"]." WHERE dashboard_user = ?";
         $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
         foreach($arrRows as $arrOneRow) {
@@ -128,6 +136,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * returns a list of instances
      *
      * @param string $strColumn
+     * @param string $strAspectFilter
      * @return array of class_module_system_adminwidget
      */
     public function getWidgetsForColumn($strColumn, $strAspectFilter = "") {
@@ -162,7 +171,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
 
     /**
-     * Returns the correpsponding instance of class_module_system_adminwidget.
+     * Returns the corresponding instance of class_module_system_adminwidget.
      * User class_module_system_adminwidget::getConcreteAdminwidget() to obtain
      * an instance of the real widget
      *
@@ -216,7 +225,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
-//--- GETTERS / SETTERS ---------------------------------------------------------------------------------
+    //--- GETTERS / SETTERS ---------------------------------------------------------------------------------
 
     public function setStrColumn($strColumn) {
         $this->strColumn = $strColumn;

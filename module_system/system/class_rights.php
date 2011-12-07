@@ -293,6 +293,9 @@ class class_rights {
 	 */
 	public function rightView($strSystemid, $strUserid = "") {
 
+        if($strSystemid == "")
+            return false;
+
         if($this->bitTestMode)
             return true;
 
@@ -335,6 +338,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightEdit($strSystemid, $strUserid = "") {
+
+        if($strSystemid == "")
+            return false;
 
         if($this->bitTestMode)
             return true;
@@ -380,6 +386,9 @@ class class_rights {
 	 */
 	public function rightDelete($strSystemid, $strUserid = "") {
 
+        if($strSystemid == "")
+            return false;
+
         if($this->bitTestMode)
             return true;
 
@@ -423,6 +432,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight($strSystemid, $strUserid = "") {
+
+        if($strSystemid == "")
+            return false;
 
         if($this->bitTestMode)
             return true;
@@ -469,6 +481,9 @@ class class_rights {
 	 */
 	public function rightRight1($strSystemid, $strUserid = "") {
 
+        if($strSystemid == "")
+            return false;
+
         if($this->bitTestMode)
             return true;
 
@@ -512,6 +527,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight2($strSystemid, $strUserid = "") {
+
+        if($strSystemid == "")
+            return false;
 
         if($this->bitTestMode)
             return true;
@@ -558,6 +576,9 @@ class class_rights {
 	 */
 	public function rightRight3($strSystemid, $strUserid = "") {
 
+        if($strSystemid == "")
+            return false;
+
         if($this->bitTestMode)
             return true;
 
@@ -600,6 +621,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight4($strSystemid, $strUserid = "") {
+
+        if($strSystemid == "")
+            return false;
 
         if($this->bitTestMode)
             return true;
@@ -644,6 +668,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight5($strSystemid, $strUserid = "") {
+
+        if($strSystemid == "")
+            return false;
 
         if($this->bitTestMode)
             return true;

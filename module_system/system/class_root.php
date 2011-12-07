@@ -550,31 +550,6 @@ abstract class class_root {
 	    return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $strSystemid));
 	}
 
-
-
-
-
-
-    // --- MISC ---------------------------------------------------------------------------------------------
-
-    /**
-	 * Overwrite this method, if an object should be notified in case of deleting a systemrecord.
-	 * This can be useful to delete other records being dependent on the record to be deleted
-	 */
-    public function doAdditionalCleanupsOnDeletion($strSystemid) {
-        return true;
-	}
-
-
-    /**
-	 * Overwrite this method, if an object should be notified in case of changing the status of a systemrecord.
-	 * This can be useful to trigger workflows or other events.
-	 */
-    public function doAdditionalActionsOnStatusChange($strSystemid) {
-        return true;
-	}
-
-
     // --- RIGHTS-METHODS -----------------------------------------------------------------------------------
 
     /**
@@ -584,10 +559,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightView() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightView($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightView($this->getSystemid());
     }
 
     /**
@@ -597,10 +569,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightEdit() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightEdit($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightEdit($this->getSystemid());
     }
 
     /**
@@ -610,10 +579,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightDelete() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightDelete($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightDelete($this->getSystemid());
     }
 
     /**
@@ -623,10 +589,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightRight($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightRight($this->getSystemid());
     }
 
     /**
@@ -636,10 +599,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight1() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightRight1($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightRight1($this->getSystemid());
     }
 
     /**
@@ -649,10 +609,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight2() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightRight2($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightRight2($this->getSystemid());
     }
 
     /**
@@ -662,10 +619,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight3() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightRight3($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightRight3($this->getSystemid());
     }
 
     /**
@@ -675,10 +629,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight4() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightRight4($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightRight4($this->getSystemid());
     }
 
     /**
@@ -688,52 +639,10 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight5() {
-        if($this->getSystemid() != "") {
-            return $this->objRights->rightRight5($this->getSystemid());
-        }
-        return false;
+        return $this->objRights->rightRight5($this->getSystemid());
     }
 
     // --- SystemID & System-Table Methods ------------------------------------------------------------------
-
-
-    /**
-	 * Calls other model-classes to be able to do additional cleanups, if a systemrecords' state is changed
-	 * by invoking class_root::setStatus before.
-	 * To be called, a model-class has to overwrite class_model::doAdditionalActionsOnStatusChange
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 * @see class_root::setStatus, class_model::doAdditionalActionsOnStatusChange
-     * @fixme move to callback interface
-	 */
-	protected final function additionalCallsOnStatuschange($strSystemid) {
-	    $bitReturn = true;
-
-	    //Look up classes extending class_model
-	    $arrFiles = class_resourceloader::getInstance()->getFolderContent(_systempath_, array(".php"));
-
-	    foreach ($arrFiles as $strOneFile) {
-	        //just match classes starting with "class_modul"
-	        if(strpos($strOneFile, "class_modul") !== false) {
-
-	            $strClassname = uniStrReplace(".php", "", $strOneFile);
-	            //create instance
-                $objClass = new ReflectionClass($strClassname);
-                if(!$objClass->isAbstract()) {
-                    $objModel = new $strClassname;
-                    if ($objModel instanceof class_root) {
-                        if(method_exists($objModel, "doAdditionalActionsOnStatusChange")) {
-                            class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional actions on statuschange", class_logger::$levelInfo);
-                            $bitReturn &= $objModel->doAdditionalActionsOnStatusChange($strSystemid);
-                        }
-                    }
-                }
-	        }
-	    }
-
-	    return $bitReturn;
-	}
 
 	/**
 	 * Fetches the number of siblings belonging to the passed systemid
@@ -1016,32 +925,26 @@ abstract class class_root {
 	 * @return bool
 	 */
 	public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
-		$bit1 = true;
-		$bit2 = true;
-		$bit3 = true;
-		$bit4 = true;
 
 		//try to call other modules, maybe wanting to delete anything in addition, if the current record
 		//is going to be deleted
-		$bit4 = $this->additionalCallsOnDeletion($strSystemid);
+        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid);
 
 		//Start a tx before deleting anything
 		$this->objDB->transactionBegin();
 
 		$strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
-		$bit1 = $this->objDB->_pQuery($strQuery, array($strSystemid));
+        $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
 
 		if($bitRight) {
 			$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
-			$bit2 = $this->objDB->_pQuery($strQuery, array($strSystemid));
+            $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
 		}
 
         if($bitDate) {
 			$strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
-			$bit3 = $this->objDB->_pQuery($strQuery, array($strSystemid));
+            $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
 		}
-
-		$bitResult = $bit1 && $bit2 && $bit3 && $bit4;
 
 		//end tx
 		if($bitResult) {
@@ -1059,47 +962,8 @@ abstract class class_root {
 		return $bitResult;
 	}
 
-
 	/**
-	 * Calls other model-classes to be able to do additional cleanups, if a systemrecord is deleted
-	 * by invoking class_root::deleteSystemRecord before.
-	 * To be called, a model-class has to overwrite class_model::doAdditionalCleanupsOnDeletion
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 * @see class_root::deleteSystemRecord, class_model::doAdditionalCleanupsOnDeletion
-     * @fixme move to an callback-interface
-	 */
-	protected final function additionalCallsOnDeletion($strSystemid) {
-	    $bitReturn = true;
-
-	    //Look up classes extending class_model
-	    $arrFiles = class_resourceloader::getInstance()->getFolderContent(_systempath_, array(".php"));
-
-	    foreach ($arrFiles as $strOneFile) {
-	        //just match classes starting with "class_modul"
-	        if(strpos($strOneFile, "class_modul") !== false) {
-
-	            $strClassname = uniStrReplace(".php", "", $strOneFile);
-	            //create instance
-                $objClass = new ReflectionClass($strClassname);
-                if(!$objClass->isAbstract()) {
-                    $objModel = new $strClassname;
-                    if ($objModel instanceof class_root) {
-                        if(method_exists($objModel, "doAdditionalCleanupsOnDeletion")) {
-                            class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional deletions", class_logger::$levelInfo);
-                            $bitReturn &= $objModel->doAdditionalCleanupsOnDeletion($strSystemid);
-                        }
-                    }
-                }
-	        }
-	    }
-
-	    return $bitReturn;
-	}
-
-	/**
-	 * Delets a record from the rights-table
+	 * Deletes a record from the rights-table
 	 *
 	 * @param string $strSystemid
 	 * @return bool
@@ -1529,6 +1393,7 @@ abstract class class_root {
      *
      * @param int $intRecordStatus
      * @param bool $bitFireStatusChangeEvent
+     * @return bool
      */
     public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
         $this->internalInit($this->strSystemid);
@@ -1539,8 +1404,9 @@ abstract class class_root {
 
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
             $this->updateSystemrecord();
-            if($bitFireStatusChangeEvent)
-                $bitReturn = $this->additionalCallsOnStatuschange($this->getSystemid());
+            if($bitFireStatusChangeEvent) {
+                $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
+            }
         }
 
         return $bitReturn;
@@ -1564,7 +1430,7 @@ abstract class class_root {
     /**
 	 * Sets the comment saved with a record
 	 *
-	 * @param string $strSystemid
+	 * @param string $strNewComment
 	 * @return bool
      * @deprecated
 	 */

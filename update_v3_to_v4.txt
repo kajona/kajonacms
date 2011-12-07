@@ -30,3 +30,9 @@ General:
   Entries to $arrModule have to be set by class_root::setArrModuleEntry($strKey, $strValue)
 - Updated signature of class_installer_base::__construct: public function __construct()
   Entries to $arrModule have to be set by class_root::setArrModuleEntry($strKey, $strValue)
+
+Event-Handling
+- statusChanged events are no longer triggered by class_root::additionalCallsOnStatuschange / class_model::doAdditionalActionsOnStatusChange()
+  instead, model-objects should implement interface_statuschanged_listener
+- recordDeleted events are no longer triggered by class_root::additionalCallsOnDeletion / class_model::doAdditionalCleanupsOnDeletion()
+  instead, model-objects should implement interface_recorddeleted_listener
