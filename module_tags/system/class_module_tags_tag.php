@@ -31,7 +31,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
         $this->setArrModuleEntry("modul", "tags");
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."tags_tag");
 
 		parent::__construct($strSystemid);
 
@@ -40,11 +39,16 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 		    $this->initObject();
     }
 
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
+
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."tags_tag" => "tags_tag_id");
     }
 
@@ -52,17 +56,17 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "tag ".$this->getStrName();
     }
 
     /**
-     * Initalises the current object, if a systemid was given
+     * Initialises the current object, if a systemid was given
      *
      */
     public function initObject() {
         $strQuery = "SELECT *
-		   			 FROM ".$this->arrModule["table"]."
+		   			 FROM "._dbprefix_."tags_tag
 					 WHERE tags_tag_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         $this->setStrName($arrRow["tags_tag_name"]);
@@ -73,9 +77,9 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
 
-        $strQuery = "UPDATE ".$this->arrModule["table"]." SET
+        $strQuery = "UPDATE "._dbprefix_."tags_tag SET
                     	    tags_tag_name = ?
 					  WHERE tags_tag_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
@@ -85,10 +89,9 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * Deletes the tag with the given systemid from the system
      *
-     * @param string $strSystemid
      * @return bool
      */
-    public function deleteTag() {
+    public function deleteObject() {
         class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
         $objDB = class_carrier::getInstance()->getObjDB();
         //start a tx

@@ -46,7 +46,7 @@ class class_module_user_group extends class_model implements interface_model  {
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -54,9 +54,18 @@ class class_module_user_group extends class_model implements interface_model  {
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "user group ".$this->getStrSystemid();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -75,6 +84,7 @@ class class_module_user_group extends class_model implements interface_model  {
     /**
      * Updates the current object to the database
      *
+     * @param bool $strPrevId
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -111,13 +121,25 @@ class class_module_user_group extends class_model implements interface_model  {
     }
 
     /**
-	 * Returns all groups from database
-	 *
-     * @param int $intStart
-     * @param int $intEnd
-	 * @return array of class_module_user_group
-	 * @static
-	 */
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
+
+    /**
+     * Returns all groups from database
+     *
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
+     * @return array of class_module_user_group
+     * @static
+     */
 	public static function getAllGroups($intStart = false, $intEnd = false) {
 		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
 
@@ -156,7 +178,7 @@ class class_module_user_group extends class_model implements interface_model  {
 	 *
 	 * @return bool
 	 */
-	public function deleteGroup() {
+	public function deleteObject() {
 	    class_logger::getInstance()->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
 
         //Delete related group

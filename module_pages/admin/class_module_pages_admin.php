@@ -730,7 +730,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
                 //To load the correct list afterwards, save the folder as current folder
                 $strPrevid = $this->getPrevId();
 
-			    if(!$objPage->deletePage())
+			    if(!$objPage->deleteObject())
 			         throw new class_exception("Error deleting page from db", class_exception::$level_ERROR);
 
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
@@ -898,7 +898,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         $objFolder = new class_module_pages_folder($this->getSystemid());
 		if($objFolder->rightDelete($this->getSystemid())) 	{
             $strPrevID = $objFolder->getPrevId();
-			if($objFolder->deleteFolder())
+			if($objFolder->deleteObject())
 				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&systemid=".$strPrevID));
 			else
 				throw new class_exception($this->getText("ordner_loeschen_fehler"), class_exception::$level_ERROR);
@@ -1274,7 +1274,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 		if($this->getObjModule()->rightRight1()) {
 			//Delete
             $objElement = new class_module_pages_element($this->getParam("elementid"));
-			if(!$objElement->deleteElement())
+			if(!$objElement->deleteObject())
 			    throw new class_exception($this->getText("element_loeschen_fehler"), class_exception::$level_ERROR);
 
 			$this->flushCompletePagesCache();

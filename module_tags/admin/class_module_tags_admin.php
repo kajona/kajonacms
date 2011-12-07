@@ -108,7 +108,7 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 		$strReturn = "";
         $objTag = new class_module_tags_tag($this->getSystemid());
 		if($objTag->rightDelete($this->getSystemid())) {
-            if(!$objTag->deleteTag())
+            if(!$objTag->deleteObject())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));

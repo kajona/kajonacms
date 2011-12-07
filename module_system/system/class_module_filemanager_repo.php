@@ -31,7 +31,6 @@ class class_module_filemanager_repo extends class_model implements interface_mod
 
         $this->setArrModuleEntry("modul", "filemanager");
         $this->setArrModuleEntry("moduleId", _filemanager_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."filemanager");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -45,7 +44,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."filemanager" => "filemanager_id");
     }
 
@@ -53,8 +52,16 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "filemnager repo ".$this->getStrName();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
     }
 
 
@@ -63,7 +70,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      *
      */
     public function  initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
+        $strQuery = "SELECT * FROM "._dbprefix_."filemanager,
                                    "._dbprefix_."system
 						WHERE system_id = filemanager_id
 						AND system_id = ? ";
@@ -78,7 +85,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
         }
     }
 
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
 
         $strQuery = "UPDATE "._dbprefix_."filemanager
                      SET filemanager_name = ?,
@@ -139,11 +146,9 @@ class class_module_filemanager_repo extends class_model implements interface_mod
     /**
      * Deletes the record with the given systemid
      *
-     * @param string $strSystemid
-     * @static
      * @return bool
      */
-    public function deleteRepo() {
+    public function deleteObject() {
         class_logger::getInstance()->addLogRow("deleted repo ".$this->getSystemid(), class_logger::$levelInfo);
 
 

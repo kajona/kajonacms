@@ -38,7 +38,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "pages_content");
         $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."page_element");
 
 		parent::__construct( $strSystemid);
 
@@ -52,7 +51,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."page_element" => "page_element_id");
     }
 
@@ -60,8 +59,16 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "page element ".$this->getStrName();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrTitle(true);
     }
 
 
@@ -147,7 +154,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
         $strQuery = "UPDATE "._dbprefix_."page_element
 							SET page_element_ph_title = ?,
 							    page_element_ph_language = ?,
@@ -178,10 +185,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 
         //fetch data of the current element
-        $arrCurrentElement = $this->objDB->getPRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_element_id = ?", array( $this->getSystemid() ));
+        $arrCurrentElement = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."page_element WHERE page_element_id = ?", array( $this->getSystemid() ));
 
         //save data as foreign data of the new record
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+        $strQuery = "INSERT INTO "._dbprefix_."page_element
         			(page_element_id, page_element_ph_placeholder, page_element_ph_name, page_element_ph_element, page_element_ph_title, page_element_ph_language) VALUES
         			( ?, ?, ?, ?, ?, ?)";
 
@@ -596,18 +603,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 	/**
 	 * Deletes the element from the system-tables, also from the foreign-element-tables
 	 *
-	 * @param string $strSystemid
 	 * @return bool
-     * FIXME: remove static behaviour
 	 */
-	public static function deletePageElement($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted page-element ".$strSystemid, class_logger::$levelInfo);
-	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $objRoot = new class_module_system_common($strSystemid);
+	public function deleteObject() {
+	    class_logger::getInstance()->addLogRow("deleted page-element ".$this->getSystemid(), class_logger::$levelInfo);
 	    //Load the Element-Data
-		$objElementData = new class_module_pages_pageelement($strSystemid);
 		//Build the class-name
-		$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
+		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
 		//and finally create the object
 		$objElement = new $strElementClass();
 		//Fetch the table
@@ -615,21 +617,21 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 		//Delete the entry in the Element-Table
 		if($strElementTable != "") {
     		$strQuery = "DELETE FROM ".$strElementTable." WHERE content_id= ?";
-    		if(!$objDB->_pQuery($strQuery, array($strSystemid)))
+    		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
     			return false;
 		}
 
 		//Delete from page_element table
 		$strQuery = "DELETE FROM "._dbprefix_."page_element WHERE page_element_id= ?";
-		if(!$objDB->_pQuery($strQuery, array($strSystemid)))
+		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
 			return false;
 
 		//And now the system / right table
-		if(!$objRoot->deleteSystemRecord($strSystemid))
+		if(!$this->deleteSystemRecord($this->getSystemid()))
 			return false;
 
-		//Loading the data of the corresp site
-		$objPage = new class_module_pages_page($objRoot->getPrevId());
+		//Loading the data of the corresponding site
+		$objPage = new class_module_pages_page($this->getPrevId());
         class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
 		return true;
@@ -705,7 +707,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         return $bitReturn;
 	}
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
+
     public function getStrPlaceholder() {
         return $this->strPlaceholder;
     }

@@ -34,7 +34,6 @@ class class_module_system_aspect extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."aspects");
 
 		parent::__construct($strSystemid);
 
@@ -48,7 +47,7 @@ class class_module_system_aspect extends class_model implements interface_model 
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."aspects" => "aspect_id");
     }
 
@@ -57,8 +56,16 @@ class class_module_system_aspect extends class_model implements interface_model 
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "aspect ".$this->getStrName();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
     }
 
 
@@ -67,7 +74,7 @@ class class_module_system_aspect extends class_model implements interface_model 
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system, ".$this->arrModule["table"]."
+        $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."aspects
                      WHERE system_id = aspect_id
                      AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -84,7 +91,7 @@ class class_module_system_aspect extends class_model implements interface_model 
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
 
         //if no other aspect exists, we have a new default aspect
         $arrObjAspects = class_module_system_aspect::getAllAspects();
@@ -92,7 +99,7 @@ class class_module_system_aspect extends class_model implements interface_model 
         	$this->setBitDefault(1);
         }
 
-        $strQuery = "UPDATE ".$this->arrModule["table"]."
+        $strQuery = "UPDATE "._dbprefix_."aspects
                         SET aspect_name = ?,
                             aspect_default = ?
                       WHERE aspect_id = ?";
@@ -164,7 +171,7 @@ class class_module_system_aspect extends class_model implements interface_model 
 		$bitCommit = true;
         class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
         //start with the modul-table
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE aspect_id = ?";
+        $strQuery = "DELETE FROM "._dbprefix_."aspects WHERE aspect_id = ?";
 
 		//rights an systemrecords
 		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())) || !$this->deleteSystemRecord($this->getSystemid()))

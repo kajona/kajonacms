@@ -44,7 +44,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."navigation" => "navigation_id");
     }
 
@@ -52,9 +52,18 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "navigation point ".$this->getStrName();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
 
     /**
      * Initialises the current object, if a systemid was given
@@ -82,7 +91,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
                         SET 	navigation_name= ?,
     							navigation_page_i= ?,
@@ -172,7 +181,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 	 *
 	 * @return bool
 	 */
-	public function deleteNaviPoint() {
+	public function deleteObject() {
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
        //Are there any childs?
@@ -180,7 +189,7 @@ class class_module_navigation_point extends class_model implements interface_mod
         if(count($arrChild) > 0) {
             //Call this method for each child
             foreach($arrChild as $objOneChild) {
-                if(!$objOneChild->deleteNaviPoint()) {
+                if(!$objOneChild->deleteObject()) {
                     return false;
                 }
             }

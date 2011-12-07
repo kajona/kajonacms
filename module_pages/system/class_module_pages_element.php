@@ -31,7 +31,6 @@ class class_module_pages_element extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "pages");
         $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."element");
 
 		//base class
 		parent::__construct("");
@@ -47,7 +46,7 @@ class class_module_pages_element extends class_model implements interface_model 
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -55,8 +54,19 @@ class class_module_pages_element extends class_model implements interface_model 
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "";
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
+        if($strName == "!element_".$this->getStrName()."_name!")
+            $strName = $this->getStrName();
+        return $strName;
     }
 
 
@@ -82,6 +92,7 @@ class class_module_pages_element extends class_model implements interface_model 
     /**
      * Updates the current object to the database
      * @overwrites class_model::updateObjectToDb()
+     * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
         if($this->getSystemid() == "") {
@@ -108,6 +119,18 @@ class class_module_pages_element extends class_model implements interface_model 
         }
 
     }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
 
     /**
 	 * Loads all installed Elements
@@ -146,7 +169,7 @@ class class_module_pages_element extends class_model implements interface_model 
 	 *
 	 * @return bool
 	 */
-	public function deleteElement() {
+	public function deleteObject() {
 	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id=?";
 	    return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
@@ -171,7 +194,7 @@ class class_module_pages_element extends class_model implements interface_model 
         }
     }
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function getStrName() {
         return $this->strName;
@@ -194,6 +217,9 @@ class class_module_pages_element extends class_model implements interface_model 
      * Searches the lang-file for an entry element_NAME_name.
      *
      * @return string
+     * @deprecated
+     *
+     * @fixme remove me
      */
     public function getStrReadableName() {
         $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrName()."_name", "elemente", "admin");

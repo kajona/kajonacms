@@ -23,7 +23,6 @@ class class_module_user_log extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."user_log");
 
 		parent::__construct($strSystemid);
 
@@ -36,7 +35,7 @@ class class_module_user_log extends class_model implements interface_model  {
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -44,16 +43,43 @@ class class_module_user_log extends class_model implements interface_model  {
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "";
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return "";
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
      *
      */
     public function initObject() {
+    }
 
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
     }
 
 

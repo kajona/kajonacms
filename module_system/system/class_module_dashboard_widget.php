@@ -30,7 +30,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
         $this->setArrModuleEntry("modul", "dashboard");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."dashboard");
 
 		parent::__construct($strSystemid);
 
@@ -44,7 +43,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."dashboard" => "dashboard_id");
     }
 
@@ -52,12 +51,21 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "dashboard widget ".$this->getSystemid();
     }
 
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return "dashboard widget ".$this->getSystemid();
+    }
+
+
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
+        $strQuery = "SELECT * FROM "._dbprefix_."dashboard,
         						   "._dbprefix_."system
         				WHERE system_id = dashboard_id
         				  AND system_id = ?";
@@ -76,9 +84,9 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * Updates the current widget to the db
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
 
-        $strQuery = "UPDATE ".$this->arrModule["table"]."
+        $strQuery = "UPDATE "._dbprefix_."dashboard
                    SET dashboard_user = ?,
                        dashboard_column = ?,
                        dashboard_widgetid = ?,
@@ -92,11 +100,11 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function deleteObjectFromDb() {
-        if($this->getWidgetmodelForCurrentEntry()->deleteObjectFromDb()) {
+    public function deleteObject() {
+        if($this->getWidgetmodelForCurrentEntry()->deleteObject()) {
             class_logger::getInstance()->addLogRow("deleted dashboardentry ".$this->getSystemid(), class_logger::$levelInfo);
     	    $objRoot = new class_module_system_common();
-    	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
+    	    $strQuery = "DELETE FROM "._dbprefix_."dashboard
                                  WHERE dashboard_id = ?";
             if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
                 if($objRoot->deleteSystemRecord($this->getSystemid()))
@@ -121,11 +129,11 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @return bool
      */
     public function handleRecordDeletedEvent($strSystemid) {
-        $strQuery = "SELECT dashboard_id FROM ".$this->arrModule["table"]." WHERE dashboard_user = ?";
+        $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
         $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
         foreach($arrRows as $arrOneRow) {
             $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
-            $objWidget->deleteObjectFromDb();
+            $objWidget->deleteObject();
         }
 
         return true;
@@ -150,7 +158,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         }
 
         $strQuery = "SELECT system_id
-        			  FROM ".$this->arrModule["table"].",
+        			  FROM "._dbprefix_."dashboard,
         			  	   "._dbprefix_."system
         			 WHERE dashboard_user = ?
         			   AND dashboard_column = ?

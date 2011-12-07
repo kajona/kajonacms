@@ -85,5 +85,5 @@ interface interface_usersources_user {
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
      */
-    public function isPasswortResetable();
+    public function isPasswortResetable(); //FIXME: rename, bad bad spelling! fixed as soon as ldap-subsystem is reintegrated into head codeline
 }

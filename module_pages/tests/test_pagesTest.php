@@ -60,7 +60,7 @@ class class_test_pages extends class_testbase  {
         echo "\tdeleting pages created...\n";
         foreach($arrPagesCreated as $strOnePageID) {
             $objDelPage = new class_module_pages_page($strOnePageID);
-            $objDelPage->deletePage();
+            $objDelPage->deleteObject();
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of pages installed...\n";
@@ -70,7 +70,7 @@ class class_test_pages extends class_testbase  {
         echo "\tdeleting folders created...\n";
         foreach($arrFoldersCreated as $strOneFolderID) {
             $objFolder = new class_module_pages_folder($strOneFolderID);
-            $objFolder->deleteFolder();
+            $objFolder->deleteObject();
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of folders installed...\n";
@@ -97,7 +97,7 @@ class class_test_pages extends class_testbase  {
 
         echo"\tdeleting folder...\n";
         $objFolder = new class_module_pages_folder($strTestFolderID);
-        $objFolder->deleteFolder();
+        $objFolder->deleteObject();
 
     }
 

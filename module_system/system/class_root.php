@@ -216,10 +216,10 @@ abstract class class_root {
     // --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
 
     /**
-     * Saves the current object to the database. Determins, whether the current object has to be inserted
+     * Saves the current object to the database. Determines, whether the current object has to be inserted
      * or updated to the database.
      * In case of an update, the objects' updateStateToDb() method is being called (as required by class_model).
-     * In the case of a new object, a blank record is being created. Thererfore, all tables returned by the
+     * In the case of a new object, a blank record is being created. Therefore, all tables returned by the
      * objects' getObjectTables() method will be filled with a new record (using the same new systemid as the
      * primary key). The newly created systemid is being set as the current objects' one and can be used in the afterwards
      * called updateStateToDb() method to reference the correct rows.
@@ -228,11 +228,13 @@ abstract class class_root {
      * @return bool
      * @since 3.3.0
      * @throws class_exception
-     * @todo will become final before 3.3.0, please update your implementations of interface_model
      * @see interface_model
      */
     public function updateObjectToDb($strPrevId = false) {
         $bitCommit = true;
+
+        if(!$this instanceof interface_model)
+            throw new class_exception("current object must implemented interface_model", class_exception::$level_FATALERROR);
 
         $this->objDB->transactionBegin();
 
@@ -280,7 +282,7 @@ abstract class class_root {
             $this->objDB->flushQueryCache();
         }
 
-        //update ourself to the database
+        //update ourselves to the database
         if(!$this->updateStateToDb())
             $bitCommit = false;
 
@@ -307,54 +309,6 @@ abstract class class_root {
 
 
         return $bitReturn;
-    }
-
-    /**
-     * Overwrite this method if you want to trigger additional commands during the insert
-     * of an object, e.g. to create additional objects / relations
-     *
-     * @return bool
-     */
-    protected function onInsertToDb() {
-        return true;
-    }
-
-    /**
-     * Updates the current object to the database.
-     * Use this method in order to synchronize the objects' internal state
-     * to the database.
-     *
-     * @return bool
-     * @abstract
-     * @todo will become abstract before 3.3.0, please update your implementations of interface_model
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
-    /**
-     * Returns the tables being used to store the current objects' state.
-     * The array should contain the name of the table as the key and the name
-     * of the primary-key (so the column name) as the matching value.
-     * E.g.: array(_dbprefix_."pages" => "page_id)
-     *
-     * @return array tablename => table-primary-key-column
-     * @abstract
-     * @todo will become abstract before 3.3.0, please update your implementations of interface_model
-     */
-    protected function getObjectTables() {
-    }
-
-    /**
-     * Returns a human-readable description of the current record.
-     * To be used within the system-table as a comment
-     *
-     * @return string
-     * @abstract
-     * @todo will become abstract before 3.3.0, please update your implementations of interface_model
-     */
-    protected function getObjectDescription() {
-        return $this->getStrRecordComment();
     }
 
     /**
@@ -1362,12 +1316,13 @@ abstract class class_root {
 
     /**
      * If a defined status is passed, it will be set. Ohterwise, it
-	 * negates the status of a systemRecord.
-	 *
-	 * @param string $strSystemid
-	 * @return bool
+     * negates the status of a systemRecord.
+     *
+     * @param string $strSystemid
+     * @param bool $intStatus
+     * @return bool
      * @todo: systemid param handling
-	 */
+     */
 	public function setStatus($strSystemid = "", $intStatus = false) {
         $this->internalInit($this->strSystemid);
 		if($strSystemid == "")
@@ -1454,11 +1409,11 @@ abstract class class_root {
 
 
     /**
-	 * Writes a value to the params-array
-	 *
-	 * @param string $strName Key
-	 * @param mixed $mixedValue Value
-	 */
+     * Writes a value to the params-array
+     *
+     * @param string $strKey
+     * @param mixed $mixedValue Value
+     */
 	public function setParam($strKey, $mixedValue) {
 		$this->arrParams[$strKey] = $mixedValue;
 	}

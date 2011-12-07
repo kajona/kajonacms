@@ -25,7 +25,6 @@ class class_module_system_worker extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", "");
 
 		parent::__construct($strSystemid);
 
@@ -38,7 +37,7 @@ class class_module_system_worker extends class_model implements interface_model 
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -46,25 +45,42 @@ class class_module_system_worker extends class_model implements interface_model 
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "";
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return "";
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
      *
      */
     public function initObject() {
-
     }
 
     /**
      * Updates the current object to the database
-     *
+     * @return bool
      */
-    protected function updateStateToDb() {
-
+    public function updateStateToDb() {
+        return true;
     }
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
 
     /**
      * Checks if there are more nodes on the first level
@@ -139,7 +155,7 @@ class class_module_system_worker extends class_model implements interface_model 
      *
      * @return array
      */
-    public function chekDateSystemRelations() {
+    public function checkDateSystemRelations() {
         $arrReturn = array();
         $strQuery = "SELECT system_date_id
                        FROM "._dbprefix_."system_date

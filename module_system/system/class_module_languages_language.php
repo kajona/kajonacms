@@ -44,7 +44,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."languages" => "language_id");
     }
 
@@ -52,9 +52,18 @@ class class_module_languages_language extends class_model implements interface_m
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "language ".$this->getStrName();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -77,7 +86,7 @@ class class_module_languages_language extends class_model implements interface_m
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
 
         //if no other language exists, we have a new default language
         $arrObjLanguages = class_module_languages_language::getAllLanguages();

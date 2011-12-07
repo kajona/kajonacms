@@ -460,7 +460,7 @@ class class_module_navigation_admin extends class_admin implements interface_adm
 		    //small trick: call prevID() now, to get the result lateron from the cache ;)
 		    $this->getPrevId();
 
-		    if(!$objNavi->deleteNaviPoint())
+		    if(!$objNavi->deleteObject())
 		        throw new class_exception("Error deleting object from db. Needed rights given?", class_exception::$level_ERROR);
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));

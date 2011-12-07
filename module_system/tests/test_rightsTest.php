@@ -250,9 +250,9 @@ class class_test_rights extends class_testbase {
         $objSystemCommon->deleteSystemRecord($strRootId);
 
         echo "\tdeleting the test user\n";
-        $objUser->deleteUser();
+        $objUser->deleteObject();
         echo "\tdeleting the test group\n";
-        $objGroup->deleteGroup();
+        $objGroup->deleteObject();
 
     }
 

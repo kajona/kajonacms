@@ -233,7 +233,7 @@ class class_module_system_common extends class_model implements interface_model 
      * Can be filtered via a given module-id
      *
      * @param int $intMaxNrOfRecords
-     * @param int $intModuleFilter
+     * @param bool|int $intModuleFilter
      * @return array class_module_system_common
      * @since 3.3.0
      */
@@ -399,4 +399,54 @@ class class_module_system_common extends class_model implements interface_model 
 
 		return $arrReturn;
 	}
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @return string
+     */
+    public function getObjectDescription() {
+        return "";
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return "";
+    }
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
+
 }

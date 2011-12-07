@@ -50,8 +50,6 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "pages");
         $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."page");
-        $this->setArrModuleEntry("table2", _dbprefix_."page_properties");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -73,7 +71,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."page" => "page_id");
     }
 
@@ -81,9 +79,18 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "page ".$this->getStrName();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        $this->getStrName();
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -93,7 +100,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 		//language independant fields
 		$strQuery = "SELECT *
 					FROM "._dbprefix_."system,
-					     ".$this->arrModule["table"]."
+					     "._dbprefix_."page
 					WHERE system_id = page_id
 					  AND system_id = ?";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()) );
@@ -101,7 +108,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 		//language dependant fields
 		if(count($arrRow) > 0) {
     		$strQuery = "SELECT *
-    					FROM ".$this->arrModule["table2"]."
+    					FROM "._dbprefix_."page_properties
     					WHERE pageproperties_id = ?
     					  AND pageproperties_language = ? ";
     		$arrPropRow = $this->objDB->getPRow($strQuery, array( $this->getSystemid(), $this->getStrLanguage() ));
@@ -161,7 +168,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
 
         //Make texts db-safe
         $strName = $this->generateNonexistingPagename($this->getStrName());
@@ -179,7 +186,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 		//and the properties record
 		//properties for this language already existing?
-		$strCountQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table2"]."
+		$strCountQuery = "SELECT COUNT(*) FROM "._dbprefix_."page_properties
 		                 WHERE pageproperties_id= ?
 		                   AND pageproperties_language= ?";
 		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()) );
@@ -209,7 +216,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 		}
 		else {
 		    //Not existing, create one
-		    $strQuery2 = "INSERT INTO ".$this->arrModule["table2"]."
+		    $strQuery2 = "INSERT INTO "._dbprefix_."page_properties
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
 						 pageproperties_seostring, pageproperties_alias, pageproperties_language) VALUES
 						(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -231,17 +238,16 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
 
-
     /**
-	 * Loads all pages known by the system
-	 *
-	 * @param int $intStart
-	 * @param int $intEnd
-	 * @param string $intFilter
+     * Loads all pages known by the system
+     *
+     * @param int $intStart
+     * @param int $intEnd
+     * @param string $strFilter
      * @param bool $bitIncludeAlias
-	 * @return mixed class_module_pages_page
-	 * @static
-	 */
+     * @return mixed class_module_pages_page
+     * @static
+     */
 	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "", $bitIncludeAlias = true) {
         $arrParams = array();
 
@@ -342,15 +348,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-	public function deletePage() {
+	public function deleteObject() {
 
         $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
-            if($objOneElement instanceof class_module_pages_page)
-                $objOneElement->deletePage();
-
-            if($objOneElement instanceof class_module_pages_folder)
-                $objOneElement->deleteFolder();
+            $objOneElement->deleteObject();
         }
 
 
@@ -370,7 +372,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 		//Loop over the elements
 		foreach($arrElements as $objOneElement) {
 			//Deletion passed to the pages_content class
-			if(!class_module_pages_pageelement::deletePageElement($objOneElement->getSystemid())) {
+			if(!$objOneElement->deleteObject()) {
 				$bitElements = false;
 				$bitCommit = false;
 				break;
@@ -450,10 +452,10 @@ class class_module_pages_page extends class_model implements interface_model, in
 	    $strSourcePage = $this->getSystemid();
 
 	    //load basic page properties
-	    $arrBasicSourcePage = $this->objDB->getPRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_id = ?", array( $strSourcePage ));
+	    $arrBasicSourcePage = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."page WHERE page_id = ?", array( $strSourcePage ));
 
 	    //and load an array of corresponding pageproperties
-	    $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM ".$this->arrModule["table2"]." WHERE pageproperties_id = ?", array( $strSourcePage ));
+	    $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?", array( $strSourcePage ));
 
 	    //create the new systemid
 	    $strIdOfNewPage = generateSystemid();
@@ -472,12 +474,12 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         $strNewPagename = $this->generateNonexistingPagename($arrBasicSourcePage["page_name"], false);
 	    //create the foregin record in our table
-	    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+	    $strQuery = "INSERT INTO "._dbprefix_."page
 	    			(page_id, page_name, page_type) VALUES
 	    			(?, ?, ?)";
 	    if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPage, $strNewPagename, $arrBasicSourcePage["page_type"] ) )) {
 	        $this->objDB->transactionRollback();
-            class_logger::getInstance()->addLogRow("error while creating record in table ".$this->arrModule["table"], class_logger::$levelError);
+            class_logger::getInstance()->addLogRow("error while creating record in table "._dbprefix_."page", class_logger::$levelError);
 	        return false;
 	    }
 
@@ -490,7 +492,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 	    //insert all pageprops in all languages
 	    foreach ($arrBasicSourceProperties as $arrOneProperty) {
-	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
+	        $strQuery = "INSERT INTO "._dbprefix_."page_properties
 	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language, pageproperties_alias) VALUES
 	        (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -535,7 +537,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * is being returned. Can be suppressed.
      *
      * @param string $strName
-     * @param bool $bitWithSelfcheck
+     * @param bool $bitAvoidSelfchek
      * @return string
      */
 	public function generateNonexistingPagename($strName, $bitAvoidSelfchek = true) {
@@ -544,7 +546,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 		//Pagename already existing?
 		$strQuery = "SELECT page_id
-					FROM ".$this->arrModule["table"]."
+					FROM "._dbprefix_."page
 					WHERE page_name=? ";
 		$arrTemp = $this->objDB->getPRow($strQuery, array($strName));
 
@@ -555,7 +557,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 			while($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid()) ) {
 				$strTemp = $strName."_".$intCount;
 				$strQuery = "SELECT page_id
-							FROM ".$this->arrModule["table"] ."
+							FROM "._dbprefix_."page
 							WHERE page_name=? ";
 				$arrTemp = $this->objDB->getPRow($strQuery, array($strTemp));
 				$intNumbers = count($arrTemp);

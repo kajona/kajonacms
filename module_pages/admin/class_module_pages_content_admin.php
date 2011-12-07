@@ -685,7 +685,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			if($objLockmanager->isAccessibleForCurrentUser()) {
 			    //delete object
-			    if(!class_module_pages_pageelement::deletePageElement($strSystemid))
+			    if(!$objPageElement->deleteObject())
 			        throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
 
                 $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));

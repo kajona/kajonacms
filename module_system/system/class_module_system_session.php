@@ -42,7 +42,6 @@ class class_module_system_session extends class_model implements interface_model
 
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."session");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -51,6 +50,23 @@ class class_module_system_session extends class_model implements interface_model
 		if($strSystemid != "")
 		    $this->initObject();
     }
+
+    /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @return string
+     */
+    public function getObjectDescription() {
+        return "session ".$this->getSystemid();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getSystemid();
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -78,6 +94,7 @@ class class_module_system_session extends class_model implements interface_model
     /**
      * saves the current object with all its params back to the database
      *
+     * @param bool $strPrevId
      * @return bool
      * @overwrite class_model::updateObjectToDb() due to performance issues
      */
@@ -91,7 +108,7 @@ class class_module_system_session extends class_model implements interface_model
             class_logger::getInstance()->addLogRow("new session ".$this->getSystemid(), class_logger::$levelInfo);
 
             //insert in session table
-            $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+            $strQuery = "INSERT INTO "._dbprefix_."session
                          (session_id,
                           session_phpid,
                           session_userid,
@@ -117,7 +134,7 @@ class class_module_system_session extends class_model implements interface_model
         else {
 
             class_logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), class_logger::$levelInfo);
-            $strQuery = "UPDATE ".$this->arrModule["table"]." SET
+            $strQuery = "UPDATE "._dbprefix_."session SET
                           session_phpid = ?,
                           session_userid = ?,
                           session_groupids = ?,
@@ -140,6 +157,30 @@ class class_module_system_session extends class_model implements interface_model
         }
     }
 
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
 
     /**
      * Deletes the current object from the database
@@ -149,7 +190,7 @@ class class_module_system_session extends class_model implements interface_model
     public function deleteObject() {
         class_logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), class_logger::$levelInfo);
         //start with the modul-table
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE session_id = ?";
+        $strQuery = "DELETE FROM "._dbprefix_."session WHERE session_id = ?";
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 

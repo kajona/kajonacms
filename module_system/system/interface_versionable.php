@@ -25,6 +25,7 @@ interface interface_versionable {
      * Used afterwards to instantiate the related object
      *
      * @return string
+     * @fixme: move to interface_model / automatic determination
      */
     public function getClassname();
 
@@ -52,6 +53,7 @@ interface interface_versionable {
      * Returns a human readable name of the record / object stored with the changeset.
      *
      * @return string the human readable name
+     * @fixme merge with interface_model::getStrDisplayName
      */
     public function getRecordName();
 

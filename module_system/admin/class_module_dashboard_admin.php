@@ -364,7 +364,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 		//Rights
 		if($this->getObjModule()->rightDelete()) {
 		    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
-		    if(!$objDashboardwidget->deleteObjectFromDb())
+		    if(!$objDashboardwidget->deleteObject())
 		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));

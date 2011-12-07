@@ -29,16 +29,49 @@ interface interface_model {
      */
     public function initObject();
 
+
     /**
-     * Method to update the existing record with the new values
+     * Deletes the current object from the system
+     * @abstract
      * @return bool
-     *
-     * @todo remove method pre 3.3.0
-     * @deprecated use updateStateToDb() instead
      */
-    public function updateObjectToDb();
+    public function deleteObject();
 
+    /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @abstract
+     * @return string
+     */
+    public function getObjectDescription();
 
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @abstract
+     * @return string
+     */
+    public function getStrDisplayName();
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @abstract
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables();
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @abstract
+     * @return bool
+     */
+    public function updateStateToDb();
 
 
 }

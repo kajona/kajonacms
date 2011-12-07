@@ -43,7 +43,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -51,9 +51,18 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "kajona user group ".$this->getStrName();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrDesc();
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -94,6 +103,18 @@ class class_usersources_group_kajona extends class_model implements interface_mo
             return $this->objDB->_pQuery($strQuery, array($this->getStrDesc(), $this->getSystemid()));
         }
     }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
 
     /**
      * Passes a new system-id to the object.
@@ -163,6 +184,15 @@ class class_usersources_group_kajona extends class_model implements interface_mo
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid());
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return $this->deleteObject();
+    }
+
 
     /**
 	 * Deletes all users from the current group

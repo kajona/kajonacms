@@ -118,7 +118,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
         $objRepo = new class_module_filemanager_repo($this->getSystemid());
 
 		if($objRepo->rightDelete()) {
-            $objRepo->deleteRepo();
+            $objRepo->deleteObject();
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}

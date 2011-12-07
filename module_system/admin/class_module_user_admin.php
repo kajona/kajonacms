@@ -611,7 +611,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
         if($this->getObjModule()->rightDelete()) {
             //The user itself
             $objUser = new class_modul_user_user($this->getSystemid());
-            $objUser->deleteUser();
+            $objUser->deleteObject();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
         return $this->getText("user_loeschen_fehler");
@@ -976,7 +976,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             //Delete memberships
             $objGroup = new class_module_user_group($this->getSystemid());
             //delete group
-            if($objGroup->deleteGroup()) {
+            if($objGroup->deleteObject()) {
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
             }
             else

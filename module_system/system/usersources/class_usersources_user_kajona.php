@@ -55,6 +55,23 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     }
 
     /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @return string
+     */
+    public function getObjectDescription() {
+        return "kajona user ".$this->getStrName();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
+
+    /**
      * Initialises the current object, if a systemid was given
      */
     public function initObject($bitPassword = false) {
@@ -97,6 +114,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * Updates the current object to the database
      * <b>ATTENTION</b> If you don't want to update the password, set it to "" before!
      *
+     * @param bool $strPrevId
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -164,6 +182,18 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     }
 
     /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
+
+    /**
      * Deletes a user from the systems
      *
      * @param string $strUserid
@@ -178,6 +208,28 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid());
         return $bitDelete;
     }
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return $this->deleteUser();
+    }
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables() {
+        return array();
+    }
+
 
     /**
 	 * Deletes all memberships of the given USER from ALL groups

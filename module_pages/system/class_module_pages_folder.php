@@ -32,7 +32,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "pages");
         $this->setArrModuleEntry("moduleId", _pages_folder_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."page_folderproperties");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -53,7 +52,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -61,9 +60,18 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "folder ".$this->getStrName();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -72,7 +80,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
     public function initObject() {
         //load content language-dependant
         $strQuery = "SELECT *
-                    FROM ".$this->arrModule["table"]."
+                    FROM "._dbprefix_."page_folderproperties
                     WHERE folderproperties_id = ?
                       AND folderproperties_language = ?";
         $arrPropRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage() ));
@@ -91,7 +99,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
         //create change-logs
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionEdit);
@@ -100,7 +108,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
         //and the properties record
 		//properties for this language already existing?
-		$strCountQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table"]."
+		$strCountQuery = "SELECT COUNT(*) FROM "._dbprefix_."page_folderproperties
 		                 WHERE folderproperties_id=?
 		                   AND folderproperties_language=?";
 		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage() ));
@@ -109,7 +117,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
         $arrParams = array();
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
 		    //Already existing, updating properties
-    		$strQuery = "UPDATE  ".$this->arrModule["table"]."
+    		$strQuery = "UPDATE  "._dbprefix_."page_folderproperties
     					    SET folderproperties_name=?
     				      WHERE folderproperties_id=?
     			      	    AND folderproperties_language=?";
@@ -118,7 +126,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 		}
 		else {
 		    //Not existing, create one
-		    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+		    $strQuery = "INSERT INTO "._dbprefix_."page_folderproperties
 						(folderproperties_id, folderproperties_name, folderproperties_language) VALUES
 						(?,?,?)";
 
@@ -262,16 +270,12 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	 *
 	 * @return bool
 	 */
-	public function deleteFolder() {
+	public function deleteObject() {
 
         //scan subfolders
         $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
-            if($objOneElement instanceof class_module_pages_page)
-                $objOneElement->deletePage();
-
-            if($objOneElement instanceof class_module_pages_folder)
-                $objOneElement->deleteFolder();
+            $objOneElement->deleteObject();
         }
 
         $objChanges = new class_module_system_changelog();
@@ -329,7 +333,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
         return class_carrier::getInstance()->getObjText()->getText("change_object_folder", "pages", "admin");
     }
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
         return $this->strName;
     }

@@ -29,7 +29,6 @@ class class_module_system_changelog extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."changelog");
 
 		parent::__construct($strSystemid);
 
@@ -42,7 +41,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array();
     }
 
@@ -50,9 +49,18 @@ class class_module_system_changelog extends class_model implements interface_mod
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "system changelog";
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return "changelog";
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -89,7 +97,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             return;
 
         $arrChanges = $objSourceModel->getChangedFields($strAction);
-        if(is_array($arrChanges) && in_array($this->arrModule["table"], $this->objDB->getTables())) {
+        if(is_array($arrChanges) && in_array(_dbprefix_."changelog", $this->objDB->getTables())) {
             foreach($arrChanges as $arrChangeSet) {
 
                 $strOldvalue = "";
@@ -113,7 +121,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
                 class_logger::getInstance()->addLogRow("change in class ".$objSourceModel->getClassname()."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60), class_logger::$levelInfo);
 
-                $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+                $strQuery = "INSERT INTO "._dbprefix_."changelog
                      (change_id,
                       change_date,
                       change_systemid,
@@ -149,8 +157,8 @@ class class_module_system_changelog extends class_model implements interface_mod
      * or limited to the given systemid.
      *
      * @param string $strSystemidFilter
-     * @param int $intStartDate
-     * @param int $intEndDate
+     * @param null|int $intStart
+     * @param null|int $intEnd
      * @return class_changelog_container
      */
     public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
@@ -251,6 +259,27 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         return $arrReturn;
     }
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
+
 }
 
 

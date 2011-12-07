@@ -27,7 +27,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."adminwidget");
 
 		parent::__construct($strSystemid);
 
@@ -40,7 +39,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."adminwidget" => "adminwidget_id");
     }
 
@@ -48,16 +47,25 @@ class class_module_system_adminwidget extends class_model implements interface_m
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "adminwidget ".$this->getStrClass();
     }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrClass();
+    }
+
 
     /**
      * Inits the object by loading the values from the db
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
+        $strQuery = "SELECT * FROM "._dbprefix_."adminwidget,
         						   "._dbprefix_."system
         				WHERE system_id = adminwidget_id
         				  AND system_id = ? ";
@@ -71,10 +79,10 @@ class class_module_system_adminwidget extends class_model implements interface_m
 
     /**
      * Updates the values of the current widget to the db
-     * @todo: was dbsafeString($this->getStrContent(), false) / false still required?
+     * @return bool
      */
-    protected function updateStateToDb() {
-        $strQuery = "UPDATE ".$this->arrModule["table"]."
+    public function updateStateToDb() {
+        $strQuery = "UPDATE "._dbprefix_."adminwidget
                    SET adminwidget_class = ?,
                        adminwidget_content = ?
                  WHERE adminwidget_id = ? ";
@@ -86,10 +94,10 @@ class class_module_system_adminwidget extends class_model implements interface_m
      *
      * @return bool
      */
-    public function deleteObjectFromDb() {
+    public function deleteObject() {
         class_logger::getInstance()->addLogRow("deleted adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
 	    $objRoot = new class_module_system_common();
-	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
+	    $strQuery = "DELETE FROM "._dbprefix_."adminwidget
                              WHERE adminwidget_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             if($objRoot->deleteSystemRecord($this->getSystemid()))
@@ -135,7 +143,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
         return $objWidget;
     }
 
-//--- GETTERS / SETTERS ---------------------------------------------------------------------------------
+    //--- GETTERS / SETTERS ---------------------------------------------------------------------------------
 
     public function setStrClass($strClass) {
         $this->strClass = $strClass;

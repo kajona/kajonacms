@@ -65,7 +65,6 @@ class class_module_system_setting extends class_model implements interface_model
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."system_config");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -80,7 +79,7 @@ class class_module_system_setting extends class_model implements interface_model
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"]." WHERE system_config_id = ?";
+        $strQuery = "SELECT * FROM "._dbprefix_."system_config WHERE system_config_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->setStrName($arrRow["system_config_name"]);
@@ -92,9 +91,59 @@ class class_module_system_setting extends class_model implements interface_model
     }
 
     /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @return string
+     */
+    public function getObjectDescription() {
+        return "setting ".$this->getStrName();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
+    }
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
+
+    /**
      * Updates the current object to the database.
      * Only the value is updated!!!
      *
+     * @param bool $strPrevId
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -113,8 +162,6 @@ class class_module_system_setting extends class_model implements interface_model
             class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
 
             $objChangelog = new class_module_system_changelog();
-//            $objChangelog->createLogEntry("system", "change setting", $this->getSystemid(), $this->getStrName(), $this->strOldValue, $this->strValue);
-
             $objChangelog->createLogEntry($this, $this->strActionChange);
 
             $strQuery = "UPDATE "._dbprefix_."system_config
@@ -158,12 +205,13 @@ class class_module_system_setting extends class_model implements interface_model
 		return $arrReturn;
 	}
 
-	/**
-	 * Fetches a Configs selected by name
-	 *
-	 * @return class_module_system_setting
-	 * @static
-	 */
+    /**
+     * Fetches a Configs selected by name
+     *
+     * @param $strName
+     * @return class_module_system_setting
+     * @static
+     */
 	public static function getConfigByName($strName) {
 	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config WHERE system_config_name = ?";
         $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
@@ -216,7 +264,7 @@ class class_module_system_setting extends class_model implements interface_model
 
 
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
         return $this->strName;
     }

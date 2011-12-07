@@ -94,7 +94,7 @@ class class_test_autonavigationtest extends class_testbase  {
         $this->assertEquals("testpage2a", $objFirstNode->getStrPageI());
 
 
-        $objTestNavigation->deleteNavigation();
+        $objTestNavigation->deleteObject();
     }
 
 
@@ -106,16 +106,16 @@ class class_test_autonavigationtest extends class_testbase  {
         //delete pages and folders created
 
         $objPage = new class_module_pages_page(self::$strPage2aSystemid);
-        $objPage->deletePage();
+        $objPage->deleteObject();
 
         $objPage = new class_module_pages_page(self::$strPage2Systemid);
-        $objPage->deletePage();
+        $objPage->deleteObject();
 
         $objPage = new class_module_pages_page(self::$strPage1Systemid);
-        $objPage->deletePage();
+        $objPage->deleteObject();
 
         $objFolder = new class_module_pages_folder(self::$strFolderSystemid);
-        $objFolder->deleteFolder();
+        $objFolder->deleteObject();
     }
 
 }

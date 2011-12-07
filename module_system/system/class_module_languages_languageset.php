@@ -37,7 +37,6 @@ class class_module_languages_languageset extends class_model implements interfac
 
         $this->setArrModuleEntry("modul", "languages");
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."languages_languageset");
 
         //base class
 		parent::__construct($strSystemid);
@@ -52,7 +51,7 @@ class class_module_languages_languageset extends class_model implements interfac
      * Inits the current object and loads the language-mappings
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"]." WHERE languageset_id = ?";
+        $strQuery = "SELECT * FROM "._dbprefix_."languages_languageset WHERE languageset_id = ?";
         $arrRow = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
@@ -61,6 +60,22 @@ class class_module_languages_languageset extends class_model implements interfac
                 $this->arrLanguageSet[$arrSingleRow["languageset_language"]] = $arrSingleRow["languageset_systemid"];
             }
         }
+    }
+
+    /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @return string
+     */
+    public function getObjectDescription() {
+        return "";
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return "";
     }
 
 
@@ -78,7 +93,7 @@ class class_module_languages_languageset extends class_model implements interfac
         }
         else {
             //remove old records
-            $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE languageset_id = ?";
+            $strQuery = "DELETE FROM "._dbprefix_."languages_languageset WHERE languageset_id = ?";
             $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         }
 
@@ -87,7 +102,7 @@ class class_module_languages_languageset extends class_model implements interfac
 
         $bitReturn = true;
         foreach($this->arrLanguageSet as $strLanguage => $strSystemid) {
-            $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+            $strQuery = "INSERT INTO "._dbprefix_."languages_languageset
                            (languageset_id, languageset_language, languageset_systemid) VALUES
                            (?, ?, ?)";
 
@@ -96,6 +111,39 @@ class class_module_languages_languageset extends class_model implements interfac
 
         return $bitReturn;
     }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return true;
+    }
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables() {
+        return array();
+    }
+
 
     /**
      * Returns the id of the mapped systemrecord for the given language.

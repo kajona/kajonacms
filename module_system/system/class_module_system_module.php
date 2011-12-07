@@ -49,7 +49,7 @@ class class_module_system_module extends class_model implements interface_model 
      * @see class_model::getObjectTables();
      * @return array
      */
-    protected function getObjectTables() {
+    public function getObjectTables() {
         return array(_dbprefix_."system_module" => "module_id");
     }
 
@@ -57,8 +57,16 @@ class class_module_system_module extends class_model implements interface_model 
      * @see class_model::getObjectDescription();
      * @return string
      */
-    protected function getObjectDescription() {
+    public function getObjectDescription() {
         return "Module  ".$this->getStrName();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return $this->getStrName();
     }
 
 
@@ -93,7 +101,7 @@ class class_module_system_module extends class_model implements interface_model 
      * Updates the current object to the database
      * @return bool
      */
-    protected function updateStateToDb() {
+    public function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
 					  module_name =?,
 					  module_filenameportal =?,
@@ -109,6 +117,15 @@ class class_module_system_module extends class_model implements interface_model 
         return$this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrNamePortal(), $this->getStrXmlNamePortal(), $this->getStrNameAdmin(),
                                             $this->getStrXmlNameAdmin(), $this->getStrVersion(), $this->getIntDate(), $this->getIntNavigation(), $this->getStrAspect(), $this->getSystemid()));
     }
+
+    /**
+     * Deletes the current object from the system
+     * @return bool
+     */
+    public function deleteObject() {
+        return true;
+    }
+
 
     /**
      * Loads an array containing all installed modules from database
@@ -166,12 +183,13 @@ class class_module_system_module extends class_model implements interface_model 
 		    return null;
 	}
 
-	/**
+    /**
      * Looks up the id of a module using the passed module-number
-	 *
-	 * @return string $strNr
-	 * @static
-	 */
+     *
+     * @param $strNr
+     * @return string $strNr
+     * @static
+     */
 	public static function getModuleIdByNr($strNr) {
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
 		$arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());

@@ -116,7 +116,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
         }
 
         //check if every date-record has a system-record
-        $arrCorruptedRecords = $objWorker->chekDateSystemRelations();
+        $arrCorruptedRecords = $objWorker->checkDateSystemRelations();
         //create the output tables
         if(count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables

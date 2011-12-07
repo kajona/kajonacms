@@ -55,6 +55,40 @@ class class_modul_user_user extends class_model implements interface_model  {
     }
 
     /**
+     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
+     * @return string
+     */
+    public function getObjectDescription() {
+        return "user ".$this->getStrUsername();
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * @return string
+     */
+    public function getStrDisplayName() {
+        $strReturn =  $this->getStrUsername();
+        if($this->getStrName() != "")
+            $strReturn .= " (".$this->getStrName().", ".$this->getStrForename().")";
+
+        return $strReturn;
+    }
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    public function getObjectTables() {
+        return array();
+    }
+
+
+    /**
      * Initialises the current object, if a systemid was given
      *
      * @param bool $bitPassword Should the password be loaded, too?
@@ -82,6 +116,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      * Updates the current object to the database
      * <b>ATTENTION</b> If you don't want to update the password, set it to "" before!
      *
+     * @param bool $strPrevid
      * @return bool
      */
     public function updateObjectToDb($strPrevid = false) {
@@ -148,13 +183,24 @@ class class_modul_user_user extends class_model implements interface_model  {
         }
     }
 
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize yourselves with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    public function updateStateToDb() {
+        return false;
+    }
+
 
     /**
      * Fetches all available users an returns them in an array
      *
      * @param string $strUsernameFilter
-     * @param int $intStart
-     * @param int $intEnd
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
      * @return mixed
      */
     public static function getAllUsers($strUsernameFilter = "", $intStart = false, $intEnd = false) {
@@ -210,7 +256,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function deleteUser() {
+    public function deleteObject() {
         class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
         //call other models that may be interested

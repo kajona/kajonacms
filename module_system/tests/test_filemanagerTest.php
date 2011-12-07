@@ -31,7 +31,7 @@ class class_test_filemanager extends class_testbase  {
         foreach ($arrRepoIDs as $strOneRepo) {
             echo "\t  deleting repo with id ".$strOneRepo."...\n";
             $objRepo = new class_module_filemanager_repo($strOneRepo);
-            $objRepo->deleteRepo();
+            $objRepo->deleteObject();
             $objDB->flushQueryCache();
 
         }
