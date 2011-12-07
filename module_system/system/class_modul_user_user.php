@@ -208,7 +208,6 @@ class class_modul_user_user extends class_model implements interface_model  {
     /**
      * Deletes a user from the systems
      *
-     * @param string $strUserid
      * @return bool
      */
     public function deleteUser() {
@@ -217,7 +216,7 @@ class class_modul_user_user extends class_model implements interface_model  {
         //call other models that may be interested
         $this->getObjSourceUser()->deleteUser();
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        $this->additionalCallsOnDeletion($this->getSystemid());
+        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid());
 
         return $bitReturn;
     }

@@ -160,7 +160,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	    class_logger::getInstance()->addLogRow("deleted kajona group with id ".$this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUsersFromCurrentGroup();
         $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona WHERE group_id=?";
-        $this->additionalCallsOnDeletion($this->getSystemid());
+        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid());
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
