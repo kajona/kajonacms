@@ -164,7 +164,7 @@ class class_module_user_group extends class_model implements interface_model  {
 
         $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        $this->doAdditionalCleanupsOnDeletion($this->getSystemid());
+        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid());
         return $bitReturn;
 	}
 
