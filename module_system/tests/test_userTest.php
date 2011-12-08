@@ -14,7 +14,7 @@ class class_test_user extends class_testbase  {
         //blank system - one user should have been created
 
         echo "\tcheck number of users installed...\n";
-        $arrUserInstalled = class_modul_user_user::getAllUsers();
+        $arrUserInstalled = class_module_user_user::getAllUsers();
         $intStartUsers = count($arrUserInstalled);
         echo "\t ...found ".$intStartUsers." users.\n";
 
@@ -27,7 +27,7 @@ class class_test_user extends class_testbase  {
         echo "\tcreate 100 users using the model...\n";
         $arrUsersCreated = array();
         for($intI =0; $intI < 100; $intI++) {
-            $objUser = new class_modul_user_user();
+            $objUser = new class_module_user_user();
            // $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
             $strUsername = "user_".generateSystemid();
             $objUser->setStrUsername($strUsername);
@@ -35,10 +35,10 @@ class class_test_user extends class_testbase  {
             $arrUsersCreated[] = $objUser->getSystemid();
             $strID = $objUser->getSystemid();
             $objDB->flushQueryCache();
-            $objUser = new class_modul_user_user($strID);
+            $objUser = new class_module_user_user($strID);
             $this->assertEquals($objUser->getStrUsername(), $strUsername, __FILE__." checkNameOfUserCreated");
         }
-        $arrUserInstalled = class_modul_user_user::getAllUsers();
+        $arrUserInstalled = class_module_user_user::getAllUsers();
         $this->assertEquals(count($arrUserInstalled), (100+$intStartUsers), __FILE__." checkNrOfUsersCreatedByModel");
 
 
@@ -64,14 +64,14 @@ class class_test_user extends class_testbase  {
         echo "\tdeleting users created...\n";
         foreach($arrUsersCreated as $strOneUser) {
             echo "\t\tdeleting user ".$strOneUser."...\n";
-            $objUser = new class_modul_user_user($strOneUser);
+            $objUser = new class_module_user_user($strOneUser);
             $objUser->deleteObject();
             $objDB->flushQueryCache();
         }
 
 
         echo "\tcheck number of users installed...\n";
-        $arrUserInstalled = class_modul_user_user::getAllUsers();
+        $arrUserInstalled = class_module_user_user::getAllUsers();
         $this->assertEquals(count($arrUserInstalled), $intStartUsers, __FILE__." checkNrOfUsers");
 
 
@@ -94,7 +94,7 @@ class class_test_user extends class_testbase  {
 
         echo "\tadding 100 members to group...\n";
         for ($intI = 0; $intI <= 100; $intI++) {
-            $objUser = new class_modul_user_user();
+            $objUser = new class_module_user_user();
             $objUser->setStrUsername("AUTOTESTUSER_".$intI);
             //$objUser->setStrEmail("autotest_".$intI."@kajona.de");
             $objUser->updateObjectToDb();
@@ -108,7 +108,7 @@ class class_test_user extends class_testbase  {
 
         echo "\tdeleting groups & users\n";
         foreach($objGroup->getObjSourceGroup()->getUserIdsForGroup() as $strOneUser) {
-            $objOneUser = new class_modul_user_user($strOneUser);
+            $objOneUser = new class_module_user_user($strOneUser);
             $objOneUser->deleteObject();
         }
         $objGroup->deleteObject();
@@ -116,7 +116,7 @@ class class_test_user extends class_testbase  {
 
         $objDB->flushQueryCache();
         echo "\tcheck number of users installed is same as at beginning...\n";
-        $arrUserInstalled = class_modul_user_user::getAllUsers();
+        $arrUserInstalled = class_module_user_user::getAllUsers();
         $this->assertEquals(count($arrUserInstalled), $intStartUsers, __FILE__." checkNrOfUsersAtEnd");
 
         echo "\tcheck number of groups installed is same as at beginning...\n";

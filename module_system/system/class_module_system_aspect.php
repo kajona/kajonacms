@@ -51,15 +51,6 @@ class class_module_system_aspect extends class_model implements interface_model 
         return array(_dbprefix_."aspects" => "aspect_id");
     }
 
-
-    /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "aspect ".$this->getStrName();
-    }
-
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
@@ -67,7 +58,6 @@ class class_module_system_aspect extends class_model implements interface_model 
     public function getStrDisplayName() {
         return $this->getStrName();
     }
-
 
     /**
      * Initalises the current object, if a systemid was given
@@ -169,7 +159,7 @@ class class_module_system_aspect extends class_model implements interface_model 
         //Start tx
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
-        class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("deleted ".$this->getStrDisplayName(), class_logger::$levelInfo);
         //start with the modul-table
         $strQuery = "DELETE FROM "._dbprefix_."aspects WHERE aspect_id = ?";
 

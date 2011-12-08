@@ -404,7 +404,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
                 $strUsername = "";
                 if($objOneSession->getStrUserid() != "") {
-                    $objUser = new class_modul_user_user($objOneSession->getStrUserid());
+                    $objUser = new class_module_user_user($objOneSession->getStrUserid());
                     $strUsername = $objUser->getStrUsername();
                 }
 

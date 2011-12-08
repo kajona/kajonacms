@@ -49,14 +49,6 @@ class class_module_languages_language extends class_model implements interface_m
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "language ".$this->getStrName();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

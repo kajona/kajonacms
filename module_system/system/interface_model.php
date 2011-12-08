@@ -38,15 +38,6 @@ interface interface_model {
     public function deleteObject();
 
     /**
-     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
-     * @abstract
-     * @return string
-     *
-     * @deprecated will be removed
-     */
-    public function getObjectDescription();
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @abstract
      * @return string

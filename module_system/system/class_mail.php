@@ -193,7 +193,7 @@ class class_mail {
             if($this->strSender == "") {
                 //try to load the current users' mail adress
                 if(validateSystemid(class_carrier::getInstance()->getObjSession()->getUserID())) {
-                    $objUser = new class_modul_user_user(class_carrier::getInstance()->getObjSession()->getUserID());
+                    $objUser = new class_module_user_user(class_carrier::getInstance()->getObjSession()->getUserID());
                     if(checkEmailaddress($objUser->getStrEmail()))
                         $this->strSender = $objUser->getStrEmail();
                 }

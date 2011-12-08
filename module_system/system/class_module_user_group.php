@@ -51,14 +51,6 @@ class class_module_user_group extends class_model implements interface_model  {
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "user group ".$this->getStrSystemid();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
@@ -101,7 +93,7 @@ class class_module_user_group extends class_model implements interface_model  {
             $bitReturn = $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrSubsystem(), $this->getStrName()));
 
             //create the new instance on the remote-system
-            $objSources = new class_modul_user_sourcefactory();
+            $objSources = new class_module_user_sourcefactory();
             $objProvider = $objSources->getUsersource($this->getStrSubsystem());
             $objTargetGroup = $objProvider->getNewGroup();
             $objTargetGroup->updateObjectToDb();
@@ -195,7 +187,7 @@ class class_module_user_group extends class_model implements interface_model  {
      */
     private function loadSourceObject() {
         if($this->objSourceGroup == null) {
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUsersources = new class_module_user_sourcefactory();
             $this->setObjSourceGroup($objUsersources->getSourceGroup($this));
         }
     }
@@ -207,7 +199,7 @@ class class_module_user_group extends class_model implements interface_model  {
      *
      */
     public static function getGroupByName($strName) {
-		$objFactory = new class_modul_user_sourcefactory();
+		$objFactory = new class_module_user_sourcefactory();
         return $objFactory->getGroupByName($strName);
 	}
 

@@ -29,7 +29,7 @@ if(issetPost("dodelete")) {
 	$strUsername = getPost("username");
 	$strPassword = getPost("password");
 
-    $objUsersource = new class_modul_user_sourcefactory();
+    $objUsersource = new class_module_user_sourcefactory();
     $objUser = $objUsersource->getUserByUsername($strUsername);
     echo "Authenticating user...\n";
     if($objUsersource->authenticateUser($strUsername, $strPassword)) {

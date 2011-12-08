@@ -18,7 +18,7 @@
  * @since 3.4.1
  * @package module_user
  */
-class class_modul_user_sourcefactory {
+class class_module_user_sourcefactory {
 
     private $arrSubsystemsAvailable = array("kajona");
 
@@ -77,7 +77,7 @@ class class_modul_user_sourcefactory {
      * Please note that the leightweight object is returned!
      *
      * @param string $strName
-     * @return class_modul_user_user or null
+     * @return class_module_user_user or null
      */
     public function getUserByUsername($strName) {
 
@@ -86,7 +86,7 @@ class class_modul_user_sourcefactory {
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
         if(isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
-            return new class_modul_user_user($arrRow["user_id"]);
+            return new class_module_user_user($arrRow["user_id"]);
         }
 
         //since some login-provides may trigger additional searches, query them now
@@ -105,7 +105,7 @@ class class_modul_user_sourcefactory {
      * Only active users may be returned!
      *
      * @param string $strQuery
-     * @return class_modul_user_user
+     * @return class_module_user_user
      */
     public function getUserlistByUserquery($strParam) {
 
@@ -115,7 +115,7 @@ class class_modul_user_sourcefactory {
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
-            $arrReturn[] =  new class_modul_user_user($arrOneRow["user_id"]);
+            $arrReturn[] =  new class_module_user_user($arrOneRow["user_id"]);
         }
 
         return $arrReturn;
@@ -161,10 +161,10 @@ class class_modul_user_sourcefactory {
 	/**
      * Returns the fully featured user-instance created by the matching subsystem.
      *
-     * @param class_modul_user_user $objLeightweightUser
+     * @param class_module_user_user $objLeightweightUser
      * @return interface_usersources_user
      */
-	public function getSourceUser(class_modul_user_user $objLeightweightUser) {
+	public function getSourceUser(class_module_user_user $objLeightweightUser) {
         $objSubsystem = $this->getUsersource($objLeightweightUser->getStrSubsystem());
         $objPlainUser = $objSubsystem->getUserById($objLeightweightUser->getSystemid());
         return $objPlainUser;

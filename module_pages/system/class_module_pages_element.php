@@ -51,14 +51,6 @@ class class_module_pages_element extends class_model implements interface_model 
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "";
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

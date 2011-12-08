@@ -101,6 +101,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_lock_id"]        = array("char20", true);
 		$arrFields["system_lock_time"]  	= array("int", true);
 		$arrFields["system_status"]         = array("int", true);
+		$arrFields["system_class"]          = array("char254", true);
 		$arrFields["system_comment"]        = array("char254", true);
 
 		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr")))
@@ -378,17 +379,17 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Now we have to register module by module
 
 		//The Systemkernel
-		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "class_module_system_admin.php", $this->arrModule["version"], true, "", "class_module_system_admin_xml.php" );
+		$this->registerModule("system", _system_modul_id_, "", "class_module_system_admin.php", $this->arrModule["version"], true, "", "class_module_system_admin_xml.php" );
 		//The Rightsmodule
-		$strRightID = $this->registerModule("right", _system_modul_id_, "", "class_module_right_admin.php", $this->arrModule["version"], false );
+		$this->registerModule("right", _system_modul_id_, "", "class_module_right_admin.php", $this->arrModule["version"], false );
 		//The Usermodule
-		$strUserID = $this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->arrModule["version"], true );
+		$this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->arrModule["version"], true );
         //The filemanagermodule
-		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_module_filemanager_admin.php", $this->arrModule["version"], true, "", "class_module_filemanager_admin_xml.php");
+		$this->registerModule("filemanager", _filemanager_modul_id_, "", "class_module_filemanager_admin.php", $this->arrModule["version"], true, "", "class_module_filemanager_admin_xml.php");
         //the dashboard
-        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_module_dashboard_admin.php", $this->arrModule["version"], false, "", "class_module_dashboard_admin_xml.php");
+        $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_module_dashboard_admin.php", $this->arrModule["version"], false, "", "class_module_dashboard_admin_xml.php");
         //languages
-        $strLanguagesID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_module_languages_admin.php", $this->arrModule["version"] , true);
+        $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_module_languages_admin.php", $this->arrModule["version"] , true);
 
 
 
@@ -462,7 +463,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_admins_group_id_", $strAdminID, class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
         //Create an root-record for the tree
-        $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
+        $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0", "1", "class_module_system_common");
 		//BUT: We have to modify the right-record of the system
 		$strGroupsAll = "'".$strGuestID.",".$strAdminID."'";
 		$strGroupsAdmin = "'".$strAdminID."'";
@@ -514,7 +515,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		//the admin-language
 		$strAdminLanguage = $this->objSession->getAdminLanguage();
 
-        $objUser = new class_modul_user_user();
+        $objUser = new class_module_user_user();
         $objUser->setStrUsername($strUsername);
         $objUser->setIntActive(1);
         $objUser->setIntAdmin(1);
@@ -1425,7 +1426,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating model-classes...\n";
         $strQuery = "SELECT * FROM "._dbprefix_."system_module";
-        $arrRows = $this->objDB->_pQuery($strQuery, array());
+        $arrRows = $this->objDB->getPArray($strQuery, array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system_module SET
                                 module_filenameadmin = ?,
@@ -1442,6 +1443,55 @@ class class_installer_system extends class_installer_base implements interface_i
 
             $strReturn .= "Updated ".$arrOneRow["module_name"]."\n";
             $this->objDB->_pQuery($strQuery, $arrParams);
+        }
+
+        $strReturn .= "Updating system table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                            ADD ".$this->objDB->encloseColumnName("system_class")." ".$this->objDB->getDatatype("char254")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+
+
+        $strReturn .= "Adding classes for existing records...\n";
+        $strReturn .= "Modules\n";
+        foreach(class_module_system_module::getAllModules() as $objOneModule) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( get_class($objOneModule), $objOneModule->getSystemid() ) );
+        }
+
+        $strReturn .= "Filemanager\n";
+        foreach(class_module_filemanager_repo::getAllRepos(true) as $objOneEntry) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( get_class($objOneEntry), $objOneEntry->getSystemid() ) );
+        }
+
+        $strReturn .= "Widgets\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."adminwidget, "._dbprefix_."system WHERE system_id = adminwidget_id", array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_system_adminwidget', $arrOneRow["system_id"] ) );
+        }
+
+        $strReturn .= "Dashboard\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."dashboard, "._dbprefix_."system WHERE system_id = dashboard_id", array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_dashboard_widget', $arrOneRow["system_id"] ) );
+        }
+
+        $strReturn .= "Languages\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."languages, "._dbprefix_."system WHERE system_id = language_id", array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_languages_language', $arrOneRow["system_id"] ) );
+        }
+
+        $strReturn .= "Languages\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."aspects, "._dbprefix_."system WHERE system_id = aspect_id", array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_system_aspect', $arrOneRow["system_id"] ) );
         }
 
 

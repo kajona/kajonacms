@@ -19,7 +19,7 @@ class class_test_rights extends class_testbase {
 
         //create a new user & group to be used during testing
         echo "\tcreating a test user\n";
-        $objUser = new class_modul_user_user();
+        $objUser = new class_module_user_user();
         //$objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
         $strUsername = "user_".generateSystemid();
         $objUser->setStrUsername($strUsername);

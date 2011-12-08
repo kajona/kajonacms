@@ -72,7 +72,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 		$strReturn = "";
 
         if(validateSystemid($this->getParam("systemid"))) {
-            $objUser = new class_modul_user_user($this->getParam("systemid"));
+            $objUser = new class_module_user_user($this->getParam("systemid"));
 
             if($objUser->getStrAuthcode() != "" && $this->getParam("authcode") == $objUser->getStrAuthcode() && $objUser->getStrUsername() != "") {
                 if($this->getParam("reset") == "") {

@@ -104,9 +104,9 @@ abstract class class_installer_base extends class_root {
             //updates available?
             if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
                 if($this->arrModule["name"] == "samplecontent")
-                    return "<a href=\""._webpath_."/installer/installer.php?step=samplecontent&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                    return "<a href=\""._webpath_."/installer.php?step=samplecontent&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
                 else
-                    return "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                    return "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
             }
             elseif(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "=="))
                 return $this->getText("installer_versioninstalled", "system", "admin").$objModule->getStrVersion();
@@ -193,15 +193,15 @@ abstract class class_installer_base extends class_root {
 		if($objModule == null) {
 		    //install link
 		    if($this->arrModule["name"] == "samplecontent")
-		        $strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=samplecontent&install=installer_".$this->arrModule["name"]."\">".$this->getText("installer_install", "system", "admin")."</a>";
+		        $strReturn .= "<a href=\""._webpath_."/installer.php?step=samplecontent&install=installer_".$this->arrModule["name"]."\">".$this->getText("installer_install", "system", "admin")."</a>";
 		    else
-		        $strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=install&install=installer_".$this->arrModule["name"]."\">".$this->getText("installer_install", "system", "admin")."</a>";
+		        $strReturn .= "<a href=\""._webpath_."/installer.php?step=install&install=installer_".$this->arrModule["name"]."\">".$this->getText("installer_install", "system", "admin")."</a>";
 		    return $strReturn."<br />";
 		}
 		else {
 		    //updates available?
 		    if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
-                $strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                $strReturn .= "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
             }
 
 			return $strReturn."<br />";
@@ -318,7 +318,7 @@ abstract class class_installer_base extends class_root {
 
         //Update-Link?
         if($this->hasPostUpdates()) {
-            return "<a href=\""._webpath_."/installer/installer.php?step=postInstall&postUpdate=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]."</a>";
+            return "<a href=\""._webpath_."/installer.php?step=postInstall&postUpdate=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]."</a>";
         }
 
         return "";
@@ -327,7 +327,8 @@ abstract class class_installer_base extends class_root {
 	/**
 	 * Invokes the installation of the module
 	 *
-	 */
+     * @return string
+     */
 	public final function doModuleInstall() {
 	    $strReturn = "";
         //check, if module aint installed
@@ -489,41 +490,29 @@ abstract class class_installer_base extends class_root {
 	 * @return string the new SystemID of the record
 	 */
 	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi, $strXmlPortal = "", $strXmlAdmin = "") {
-		//We need 3 Steps:
-		// 	1: New SystemID
-		//	2: New SystemRecord
-		// 	3: Register the Module in the ModuleTable
 
 		//The previous id is the the id of the Root-Record -> 0
 		$strPrevId = "0";
 
-		$strSystemid = $this->createSystemRecord($strPrevId, "Module ".$strName." System node", true, $intModuleNr);
+        $objModule = new class_module_system_module();
+        $objModule->setStrName($strName);
+        $objModule->setIntNr($intModuleNr);
+        $objModule->setStrNamePortal($strFilePortal);
+        $objModule->setStrNameAdmin($strFileAdmin);
+        $objModule->setStrVersion($strVersion);
+        $objModule->setIntNavigation($bitNavi ? 1 : 0);
+        $objModule->setStrXmlNamePortal($strXmlPortal);
+        $objModule->setStrXmlNameAdmin($strXmlAdmin);
+        $objModule->setIntDate(time());
 
-		$strQuery = "INSERT INTO "._dbprefix_."system_module
-						(module_id, module_name, module_nr, module_filenameportal, module_xmlfilenameportal, module_filenameadmin,
-						module_xmlfilenameadmin, module_version ,module_date, module_navigation)
-					VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $objModule->updateObjectToDb($strPrevId);
 
-        $arrParams = array();
-        $arrParams[] = $strSystemid;
-		$arrParams[] = $strName;
-		$arrParams[] = (int)$intModuleNr;
-		$arrParams[] = $strFilePortal;
-		$arrParams[] = $strXmlPortal;
-		$arrParams[] = $strFileAdmin;
-		$arrParams[] = $strXmlAdmin;
-		$arrParams[] = $strVersion;
-		$arrParams[] = (int)time();
-		$arrParams[] = ($bitNavi ? 1 : 0);
-
-		$this->objDB->_pQuery($strQuery, $arrParams);
-
-		class_logger::getInstance()->addLogRow("New module registered: ".$strSystemid. "(".$strName.")", class_logger::$levelInfo);
+		class_logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", class_logger::$levelInfo);
 
 		//flush db-cache afterwards
 		$this->objDB->flushQueryCache();
 
-		return $strSystemid;
+		return $objModule->getSystemid();
 	}
 
 	/**

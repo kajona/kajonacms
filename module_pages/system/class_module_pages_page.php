@@ -76,14 +76,6 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "page ".$this->getStrName();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
@@ -360,7 +352,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
 
-	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
+	    class_logger::getInstance()->addLogRow("deleted ".$this->getStrDisplayName(), class_logger::$levelInfo);
 
 	    //Get all Elements belonging to this page
 		$arrElements = class_module_pages_pageelement::getAllElementsOnPage($this->getSystemid());

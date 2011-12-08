@@ -53,14 +53,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "tag ".$this->getStrName();
-    }
-
-    /**
      * Initialises the current object, if a systemid was given
      *
      */
@@ -92,7 +84,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return bool
      */
     public function deleteObject() {
-        class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("deleted ".$this->getStrDisplayName(), class_logger::$levelInfo);
         $objDB = class_carrier::getInstance()->getObjDB();
         //start a tx
 		$objDB->transactionBegin();

@@ -48,14 +48,6 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "kajona user group ".$this->getStrName();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

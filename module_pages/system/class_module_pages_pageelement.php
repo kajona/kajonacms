@@ -56,14 +56,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "page element ".$this->getStrName();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
@@ -741,7 +733,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return string
      */
     public function getStrTitle($bitClever = true) {
-        if($this->strTitle != "" || !$bitClever)
+        if($this->strTitle != "" || !$bitClever || $this->getStrClassAdmin() == "")
             return $this->strTitle;
         //Create an instance of the object and let it serve the comment...
         $strClassname = str_replace(".php", "", $this->getStrClassAdmin());

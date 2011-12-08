@@ -35,7 +35,7 @@ final class class_session {
 
     /**
      *
-     * @var class_modul_user_user
+     * @var class_module_user_user
      */
 	private $objUser = null;
 
@@ -313,11 +313,11 @@ final class class_session {
      * This method is only useful if you have a concrete user object and want to make this user the
      * currently active one.
      *
-     * @param class_modul_user_user $objUser
+     * @param class_module_user_user $objUser
      * @see class_session::login($strName, $strPass)
      * @return bool
      */
-    public function loginUser(class_modul_user_user $objUser) {
+    public function loginUser(class_module_user_user $objUser) {
         return $this->internalLoginHelper($objUser);
     }
 
@@ -333,7 +333,7 @@ final class class_session {
 	public function login($strName, $strPassword) {
 	    $bitReturn = false;
 		//How many users are out there with this username and being active?
-        $objUsersources = new class_modul_user_sourcefactory();
+        $objUsersources = new class_module_user_sourcefactory();
         try {
             if($objUsersources->authenticateUser($strName, $strPassword)) {
                 $objUser = $objUsersources->getUserByUsername($strName);
@@ -356,10 +356,10 @@ final class class_session {
     /**
      * Does all the internal login-handling
      *
-     * @param class_modul_user_user $objUser
+     * @param class_module_user_user $objUser
      * @return bool
      */
-    private function internalLoginHelper(class_modul_user_user $objUser) {
+    private function internalLoginHelper(class_module_user_user $objUser) {
 
         $bitReturn = false;
 
@@ -455,14 +455,14 @@ final class class_session {
 	/**
 	 * Returns an instance of the current user or null of not given
 	 *
-	 * @return class_modul_user_user
+	 * @return class_module_user_user
 	 */
 	private function getUser() {
 	    if($this->objUser != null)
 	       return $this->objUser;
 
 	    if($this->getUserID() != "") {
-	       $this->objUser = new class_modul_user_user($this->getUserID());
+	       $this->objUser = new class_module_user_user($this->getUserID());
 	       return $this->objUser;
 	    }
 
@@ -474,7 +474,7 @@ final class class_session {
 	 */
 	public function resetUser() {
 	    if($this->getUserID() != "") {
-           $this->objUser = new class_modul_user_user($this->getUserID());
+           $this->objUser = new class_module_user_user($this->getUserID());
         }
 	}
 
@@ -562,7 +562,7 @@ final class class_session {
         //try to load the matching groups
         $strGroups = _guests_group_id_;
         if(validateSystemid($this->getUserID())) {
-            $this->objUser = new class_modul_user_user($this->getUserID());
+            $this->objUser = new class_module_user_user($this->getUserID());
             $strGroups = implode(",", $this->objUser->getArrGroupIds() );
         }
 

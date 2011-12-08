@@ -55,14 +55,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     }
 
     /**
-     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "kajona user ".$this->getStrName();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

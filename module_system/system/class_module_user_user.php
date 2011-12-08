@@ -14,7 +14,7 @@
  * @package module_user
  * @author sidler@mulchprod.de
  */
-class class_modul_user_user extends class_model implements interface_model  {
+class class_module_user_user extends class_model implements interface_model  {
 
     private $strSubsystem = "kajona";
 
@@ -52,14 +52,6 @@ class class_modul_user_user extends class_model implements interface_model  {
 		//init current object
 		if($strSystemid != "")
 		    $this->initObject($bitLoadPassword);
-    }
-
-    /**
-     * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "user ".$this->getStrUsername();
     }
 
     /**
@@ -149,7 +141,7 @@ class class_modul_user_user extends class_model implements interface_model  {
             ));
 
             //create the new instance on the remote-system
-            $objSources = new class_modul_user_sourcefactory();
+            $objSources = new class_module_user_sourcefactory();
             $objProvider = $objSources->getUsersource($this->getStrSubsystem());
             $objTargetUser = $objProvider->getNewUser();
             $objTargetUser->updateObjectToDb();
@@ -216,7 +208,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
+		    $arrReturn[] = new class_module_user_user($arrOneId["user_id"]);
 
 		return $arrReturn;
     }
@@ -242,7 +234,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      *
      */
     public static function getAllUsersByName($strName, $bitOnlyActive = true) {
-        $objSubsystem = new class_modul_user_sourcefactory();
+        $objSubsystem = new class_module_user_sourcefactory();
         $objUser = $objSubsystem->getUserByUsername($strName);
         if($objUser != null)
             return array($objUser);
@@ -294,7 +286,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 
     private function loadSourceObject() {
         if($this->objSourceUser == null) {
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUsersources = new class_module_user_sourcefactory();
             $this->setObjSourceUser($objUsersources->getSourceUser($this));
         }
     }

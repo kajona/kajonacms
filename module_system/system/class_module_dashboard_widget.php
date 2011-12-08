@@ -48,14 +48,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "dashboard widget ".$this->getSystemid();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

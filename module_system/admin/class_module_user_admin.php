@@ -70,11 +70,11 @@ class class_module_user_admin extends class_admin implements interface_admin {
             //merge with fields from source
             $objBlankUser = null;
             if($this->getSystemid() != "") {
-                $objUser = new class_modul_user_user($this->getSystemid());
+                $objUser = new class_module_user_user($this->getSystemid());
                 $objBlankUser = $objUser->getObjSourceUser();
             }
             else {
-                $objUsersources = new class_modul_user_sourcefactory();
+                $objUsersources = new class_module_user_sourcefactory();
                 $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
                 $objBlankUser = $objSubsystem->getNewUser();
             }
@@ -105,7 +105,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                 $objBlankGroup = $objUser->getObjSourceGroup();
             }
             else {
-                $objUsersources = new class_modul_user_sourcefactory();
+                $objUsersources = new class_module_user_sourcefactory();
                 $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
                 $objBlankGroup = $objSubsystem->getNewGroup();
             }
@@ -150,19 +150,19 @@ class class_module_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formClose();
             $strReturn .= $this->objToolkit->divider();
 
-            $objArraySectionIterator = new class_array_section_iterator(class_modul_user_user::getNumberOfUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
+            $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getNumberOfUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-            $objArraySectionIterator->setArraySection(class_modul_user_user::getAllUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+            $objArraySectionIterator->setArraySection(class_module_user_user::getAllUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "list");
             $arrUsers = $arrPageViews["elements"];
 
             $strReturn .= $this->objToolkit->listHeader();
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUsersources = new class_module_user_sourcefactory();
 
             $intI = 0;
-            /* @var $objOneUser class_modul_user_user */
+            /* @var $objOneUser class_module_user_user */
             foreach ($arrUsers as $objOneUser) 	{
                 $strActions = "";
                 if($this->getObjModule()->rightEdit())
@@ -215,7 +215,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
 
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendPasswordFinal"));
             $strReturn .= $this->objToolkit->getTextRow($this->getText("user_resend_password_hint"));
@@ -233,7 +233,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
     protected function actionSendPasswordFinal() {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
 
             //add a one-time token and reset the password
             $strToken = generateSystemid();
@@ -264,7 +264,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
     protected function actionSetUserStatus() {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
             if($objUser->getIntActive() == 1)
                 $objUser->setIntActive(0);
             else
@@ -316,7 +316,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             $arrSkins[$strSkin]	= $strSkin;
 
         //access to usersources
-        $objUsersources = new class_modul_user_sourcefactory();
+        $objUsersources = new class_module_user_sourcefactory();
 
 
         if($strAction == "new") {
@@ -410,7 +410,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             }
 
 
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
             $this->setParam("usersource", $objUser->getStrSubsystem());
             if($objSourceUser != null) {
@@ -475,7 +475,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
 
 
-        $objUsersources = new class_modul_user_sourcefactory();
+        $objUsersources = new class_module_user_sourcefactory();
         $strPasswordKey = "";
         $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
         $objBlankUser = $objSubsystem->getNewUser();
@@ -501,7 +501,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
             //create a new user and pass all relevant data
 
-            $objUser = new class_modul_user_user();
+            $objUser = new class_module_user_user();
 
             $objUser->setStrUsername($this->getParam("user_username"));
             $objUser->setIntActive(($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0);
@@ -547,7 +547,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             }
 
             //create a new user and pass all relevant data
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
 
             if(!$bitSelfedit) {
                 $objUser->setStrUsername($this->getParam("user_username"));
@@ -610,7 +610,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
     protected function actionDeleteUser() {
         if($this->getObjModule()->rightDelete()) {
             //The user itself
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
             $objUser->deleteObject();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
@@ -639,7 +639,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
             $strReturn = $this->objToolkit->listHeader();
 
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUsersources = new class_module_user_sourcefactory();
             $intI = 0;
             /* @var $objSingleGroup class_module_user_group */
             foreach($arrGroups as $objSingleGroup) {
@@ -695,7 +695,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
 
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUsersources = new class_module_user_sourcefactory();
 
 
             if($strMode == "new") {
@@ -911,7 +911,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             	$objGroup = new class_module_user_group($this->getSystemid());
                 $objSourceGroup = $objGroup->getObjSourceGroup();
             	$strReturn .= $this->objToolkit->formHeadline($this->getText("group_memberlist")."\"".$objGroup->getStrName()."\"");
-                $objUsersources = new class_modul_user_sourcefactory();
+                $objUsersources = new class_module_user_sourcefactory();
 
                 $objArraySectionIterator = new class_array_section_iterator($objSourceGroup->getNumberOfMembers());
                 $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -924,7 +924,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 foreach ($arrMembers as $strSingleMemberId) {
-                    $objSingleMember = new class_modul_user_user($strSingleMemberId);
+                    $objSingleMember = new class_module_user_user($strSingleMemberId);
 
                     $strAction = "";
                     if( $objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() ) {
@@ -952,7 +952,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->getObjModule()->rightDelete())	{
             $objGroup = new class_module_user_group($this->getParam("groupid"));
-            $objUser = new class_modul_user_user($this->getParam("userid"));
+            $objUser = new class_module_user_user($this->getParam("userid"));
             if($objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser()))
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupMember", "systemid=".$this->getParam("groupid")));
             else
@@ -998,12 +998,12 @@ class class_module_user_admin extends class_admin implements interface_admin {
             //open the form
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveMembership"));
             //Create a list of checkboxes
-            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUser = new class_module_user_user($this->getSystemid());
 
             $strReturn .= $this->objToolkit->formHeadline($this->getText("user_memberships")."\"".$objUser->getStrUsername()."\"");
 
             //Collect groups from the same source
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUsersources = new class_module_user_sourcefactory();
             $objSourcesytem = $objUsersources->getUsersource($objUser->getStrSubsystem());
 
             $arrGroups = $objSourcesytem->getAllGroupIds();
@@ -1038,8 +1038,8 @@ class class_module_user_admin extends class_admin implements interface_admin {
     protected function actionSaveMembership() {
         if($this->getObjModule()->rightEdit()) {
 
-            $objUser = new class_modul_user_user($this->getSystemid());
-            $objUsersources = new class_modul_user_sourcefactory();
+            $objUser = new class_module_user_user($this->getSystemid());
+            $objUsersources = new class_module_user_sourcefactory();
             $objSourcesytem = $objUsersources->getUsersource($objUser->getStrSubsystem());
 
             $arrGroups = $objSourcesytem->getAllGroupIds();
@@ -1160,7 +1160,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
                 foreach($arrUsers as $strSingleUser) {
-                    $objSingleUser = new class_modul_user_user($strSingleUser);
+                    $objSingleUser = new class_module_user_user($strSingleUser);
 
                     $strAction = "";
                     if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())
@@ -1199,7 +1199,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
      * @return bool
      */
     protected function checkUsernameNotExisting($strName) {
-        $arrUsers = class_modul_user_user::getAllUsersByName($strName);
+        $arrUsers = class_module_user_user::getAllUsersByName($strName);
         return (count($arrUsers) == 0);
     }
 
@@ -1220,7 +1220,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
         if(!$bitPass)
             $this->addValidationError("passwort", $this->getText("required_password_equal"));
 
-        $arrUsers = class_modul_user_user::getAllUsersByName($this->getParam("user_username"));
+        $arrUsers = class_module_user_user::getAllUsersByName($this->getParam("user_username"));
         if(count($arrUsers) > 0) {
             $objUser = $arrUsers[0];
             if($objUser->getSystemid() != $this->getSystemid()) {
@@ -1247,7 +1247,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             $strFilter = $this->getParam("filter");
 
             $arrElements = array();
-            $objSource = new class_modul_user_sourcefactory();
+            $objSource = new class_module_user_sourcefactory();
 
             if($this->getParam("user") == "true") {
                 $arrElements = $objSource->getUserlistByUserquery($strFilter);
@@ -1265,7 +1265,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                 if($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID())
                     continue;
 
-                if($objOneElement instanceof class_modul_user_user) {
+                if($objOneElement instanceof class_module_user_user) {
                     $strReturn .= "  <user>\n";
                     $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrUsername(). " (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )")."</title>\n";
                     $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";
@@ -1291,12 +1291,12 @@ class class_module_user_admin extends class_admin implements interface_admin {
 
 
     public static function sortUserAndGroups($objA, $objB) {
-        if($objA instanceof class_modul_user_user)
+        if($objA instanceof class_module_user_user)
             $strA = $objA->getStrUsername();
         else
             $strA = $objA->getStrName();
 
-        if($objB instanceof class_modul_user_user)
+        if($objB instanceof class_module_user_user)
             $strB = $objB->getStrUsername();
         else
             $strB = $objB->getStrName();

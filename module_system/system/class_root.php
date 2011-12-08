@@ -123,9 +123,14 @@ abstract class class_root {
     private $intRecordStatus;
     /**
      * Human readable comment describing the current record
-     * @var type
+     * @var string
      */
     private $strRecordComment;
+    /**
+     * Holds the current objects' class
+     * @var string
+     */
+    private $strRecordClass;
     /**
      * Long-based representation of the timestamp the record was created initially
      * @var long
@@ -140,7 +145,6 @@ abstract class class_root {
      * @return class_root
      */
 	public function __construct($strSystemid = "") {
-
 
 		//GET / POST / FILE Params
 		$this->arrParams = getAllPassedParams();
@@ -195,6 +199,7 @@ abstract class class_root {
                 $this->intRecordStatus = $arrRow["system_status"];
                 $this->strRecordComment = $arrRow["system_comment"];
                 $this->longCreateDate = $arrRow["system_create_date"];
+                $this->strRecordClass = $arrRow["system_class"];
 
                 $this->strOldPrevId = $this->strPrevId;
 
@@ -241,7 +246,7 @@ abstract class class_root {
         //current systemid given? if not, create a new record.
         if(!validateSystemid($this->getSystemid())) {
 
-            if($strPrevId == false) {
+            if($strPrevId === false) {
                 //try to find the current modules-one
                 if(isset($this->arrModule["modul"])) {
                     $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
@@ -253,7 +258,7 @@ abstract class class_root {
             }
 
             //create the new systemrecord
-            $this->createSystemRecord($strPrevId, $this->getObjectDescription());
+            $this->createSystemRecord($strPrevId, $this->getStrDisplayName());
 
             if(validateSystemid($this->getStrSystemid())) {
                 //$this->setStrSystemid($strNewSystemid);
@@ -291,7 +296,7 @@ abstract class class_root {
             $this->setStrPrevId($strPrevId);
 
         //new comment?
-        $this->setStrRecordComment($this->getObjectDescription());
+        $this->setStrRecordComment($this->getStrDisplayName());
 
         //save back to the database
         $bitCommit = $bitCommit && $this->updateSystemrecord();
@@ -347,6 +352,7 @@ abstract class class_root {
                             system_lock_time = ?,
                             system_status = ?,
                             system_comment = ?,
+                            system_class = ?,
                             system_create_date = ?
                       WHERE system_id = ? ";
 
@@ -361,6 +367,7 @@ abstract class class_root {
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
                     $this->getStrRecordComment(),
+                    $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
         ));
@@ -387,14 +394,18 @@ abstract class class_root {
      * @param int|string $intModuleNr Number of the module this record belongs to
      * @param string $strSystemId SystemID to be used
      * @param int $intStatus    Active (1)/Inactive (0)?
+     * @param null|string $strClass
      * @return string The ID used/generated
      */
-	public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1) {
+	public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1, $strClass = null) {
 		//Do we need a new SystemID?
 		if($strSystemId == "")
 			$strSystemId = generateSystemid();
 
         $this->setStrSystemid($strSystemId);
+
+        if($strClass === null)
+            $strClass = get_class($this);
 
 		//Given a ModuleNr?
 		if($intModuleNr == "")
@@ -403,7 +414,7 @@ abstract class class_root {
 		if($strPrevId == "")
 			$strPrevId = 0;
 
-        //determin the correct new sort-id - append by default
+        //determine the correct new sort-id - append by default
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
@@ -413,8 +424,9 @@ abstract class class_root {
 
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
-					 ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user, system_lm_time, system_status, system_comment, system_sort) VALUES
-					 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					 ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
+					   system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
+					 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		//Send the query to the db
 		$this->objDB->_pQuery($strQuery, array(
@@ -427,7 +439,8 @@ abstract class class_root {
             time(),
             (int)$intStatus,
             $strComment,
-            (int)($intSiblings+1)
+            (int)($intSiblings+1),
+            $strClass
         ));
 
 		//Do we need a Rights-Record?
@@ -1183,7 +1196,7 @@ abstract class class_root {
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         if(validateSystemid($this->getStrLmUser())) {
-            $objUser = new class_modul_user_user($this->getStrLmUser());
+            $objUser = new class_module_user_user($this->getStrLmUser());
             return $objUser->getStrUsername();
         }
 		else
@@ -1417,6 +1430,20 @@ abstract class class_root {
         $this->strRecordComment = $strRecordComment;
     }
 
+    /**
+     * @param string $strRecordClass
+     */
+    public function setStrRecordClass($strRecordClass) {
+        $this->strRecordClass = $strRecordClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrRecordClass() {
+        return $this->strRecordClass;
+    }
+
 
     /**
      * Writes a value to the params-array
@@ -1488,5 +1515,7 @@ abstract class class_root {
     public function setArrModuleEntry($strKey, $strValue) {
         $this->arrModule[$strKey] = $strValue;
     }
+
+
 
 }

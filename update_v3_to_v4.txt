@@ -31,6 +31,7 @@ General:
 - Updated signature of class_installer_base::__construct: public function __construct()
   Entries to $arrModule have to be set by class_root::setArrModuleEntry($strKey, $strValue)
 - Signature of interface_model was updated
+- class_root::getObjectDescription() was removed prior to interface_model::getStrDisplayName()
 
 Event-Handling
 - statusChanged events are no longer triggered by class_root::additionalCallsOnStatuschange / class_model::doAdditionalActionsOnStatusChange()

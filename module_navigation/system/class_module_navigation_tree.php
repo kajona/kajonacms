@@ -37,8 +37,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 		    $this->initObject();
     }
 
-
-   /**
+    /**
      * @see class_model::getObjectTables();
      * @return array
      */
@@ -46,13 +45,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
         return array(_dbprefix_."navigation" => "navigation_id");
     }
 
-    /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "navigation tree ".$this->getStrName();
-    }
+
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

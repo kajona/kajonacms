@@ -46,14 +46,6 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "system changelog";
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
@@ -336,7 +328,7 @@ final class class_changelog_container {
     }
 
     public function getStrUsername() {
-        $objUser = new class_modul_user_user($this->getStrUserId());
+        $objUser = new class_module_user_user($this->getStrUserId());
         return $objUser->getStrUsername();
     }
 

@@ -88,7 +88,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
      */
     protected function actionModuleStatus() {
         //status: for setting the status of modules, you have to be member of the admin-group
-        $objUser = new class_modul_user_user($this->objSession->getUserID());
+        $objUser = new class_module_user_user($this->objSession->getUserID());
         $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
         $objCommon = new class_module_system_common($this->getSystemid());
         if($objCommon->rightEdit() &&  in_array(_admins_group_id_, $arrGroups)) {
@@ -128,7 +128,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
 
                     //status: for setting the status of modules, you have to be member of the admin-group
-                    $objUser = new class_modul_user_user($this->objSession->getUserID());
+                    $objUser = new class_module_user_user($this->objSession->getUserID());
                     $arrGroups = array();
                     if($objUser->getObjSourceUser() != null )
                         $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
@@ -517,7 +517,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
                 $arrRowData = array();
                 $strUsername = "";
                 if($objOneSession->getStrUserid() != "") {
-                    $objUser = new class_modul_user_user($objOneSession->getStrUserid());
+                    $objUser = new class_module_user_user($objOneSession->getStrUserid());
                     $strUsername = $objUser->getStrUsername();
                 }
                 $arrRowData[0] = getImageAdmin("icon_user.gif");
@@ -977,7 +977,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
             return $this->actionMailForm();
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        $objUser = new class_modul_user_user($this->objSession->getUserID());
+        $objUser = new class_module_user_user($this->objSession->getUserID());
 
         $objEmail = new class_mail();
 

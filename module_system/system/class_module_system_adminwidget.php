@@ -44,14 +44,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
     }
 
     /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    public function getObjectDescription() {
-        return "adminwidget ".$this->getStrClass();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

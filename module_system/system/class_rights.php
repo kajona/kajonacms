@@ -308,7 +308,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -354,7 +354,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -401,7 +401,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -448,7 +448,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -496,7 +496,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -544,7 +544,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -591,7 +591,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -637,7 +637,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
@@ -685,7 +685,7 @@ class class_rights {
             }
         }
         else {
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_module_user_user($strUserid);
             $arrGroups = $objUser->getArrGroupIds();
         }
 
