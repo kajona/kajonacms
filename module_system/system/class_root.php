@@ -312,6 +312,16 @@ abstract class class_root {
     }
 
     /**
+     * Overwrite this method if you want to trigger additional commands during the insert
+     * of an object, e.g. to create additional objects / relations
+     *
+     * @return bool
+     */
+    protected function onInsertToDb() {
+        return true;
+    }
+
+    /**
      * Updates the current record to the database and saves all relevant fields.
      * Please note that this method is triggered internally.
      *

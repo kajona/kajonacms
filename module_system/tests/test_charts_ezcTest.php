@@ -3,7 +3,7 @@ require_once (dirname(__FILE__)."/../../module_system/system/class_testbase.php"
 
 class class_test_charts_ezcTest extends class_testbase  {
 
-    public function test() {
+    public function testCharts() {
 
 
         srand((double)microtime()*1000000);

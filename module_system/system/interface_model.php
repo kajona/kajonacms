@@ -41,6 +41,8 @@ interface interface_model {
      * Returns a human readable description of the current object. Used mainly for internal reasons, e.g. in database-descriptions
      * @abstract
      * @return string
+     *
+     * @deprecated will be removed
      */
     public function getObjectDescription();
 
