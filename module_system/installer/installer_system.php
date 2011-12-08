@@ -131,8 +131,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		$arrFields = array();
 		$arrFields["module_id"] 			    = array("char20", false);
-		$arrFields["module_nr"]					= array("int", false);
-		$arrFields["module_name"] 				= array("char254", false);
+		$arrFields["module_nr"]					= array("int", true);
+		$arrFields["module_name"] 				= array("char254", true);
 		$arrFields["module_filenameportal"] 	= array("char254", true);
 		$arrFields["module_xmlfilenameportal"] 	= array("char254", true);
 		$arrFields["module_filenameadmin"] 		= array("char254", true);
