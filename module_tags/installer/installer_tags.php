@@ -47,7 +47,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 	}
 
-   public function install() {
+    public function install() {
 		$strReturn = "";
 
 		//tags_tag --------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 	}
 
-	public function postInstall() {
+    public function postInstall() {
 
          //Register the element
 		$strReturn = "Registering tags-element...\n";
@@ -127,45 +127,19 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.3.1.1") {
-            $strReturn .= $this->update_3311_3318();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.3.1.8") {
-            $strReturn .= $this->update_3318_340();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_341();
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.1") {
+            $strReturn .= $this->update_341_349();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
-
-    private function update_3311_3318() {
-        $strReturn = "Updating 3.3.1.1 to 3.3.1.8...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->arrModule["name"], "3.3.1.8");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("tags", "3.3.1.8");
-        return $strReturn;
-    }
-
-    private function update_3318_340() {
-        $strReturn = "Updating 3.3.1.8 to 3.4.0...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->arrModule["name"], "3.4.0");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("tags", "3.4.0");
-        return $strReturn;
-    }
 
     private function update_340_341() {
         $strReturn = "Updating 3.4.0 to 3.4.1...\n";
@@ -177,6 +151,27 @@ class class_installer_tags extends class_installer_base implements interface_ins
         return $strReturn;
     }
 
+
+    private function update_341_349() {
+        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+
+        $strReturn .= "Adding classes for existing records...\n";
+
+
+        $strReturn .= "Tags\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."tags_tag, "._dbprefix_."system WHERE system_id = tags_tag_id AND (system_class IS NULL OR system_class = '')", array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_tags_tag', $arrOneRow["system_id"] ) );
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->arrModule["name"], "3.4.9");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "3.4.9");
+
+        return $strReturn;
+    }
 
 
 }
