@@ -7,11 +7,6 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 
-header("Content-Type: text/html; charset=utf-8");
-require_once("../system/bootstrap.php");
-
-
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -50,14 +45,14 @@ $arrFoldersToExclude = array(
     "/portal/scripts/yui"
 );
 
-$objFilesystem = new class_filesystem();
 
 function walkFolderRecursive($strStartFolder) {
     global $strYUICompressorCommand;
-	global $strTargetPathFull;
-	global $strTargetPathCompressed;
-	global $objFilesystem;
-	global $arrFoldersToExclude;
+    global $strTargetPathFull;
+    global $strTargetPathCompressed;
+    global $objFilesystem;
+    global $arrFoldersToExclude;
+    $objFilesystem = new class_filesystem();
 
 	$arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".js", ".css"), array(), array(".", "..", ".svn", ".settings", "debug"));
 	echo "<b>Scan folder ".$strStartFolder."</b><br/>";
@@ -125,6 +120,7 @@ foreach($arrFoldersToExclude as $strOneFolder) {
 echo "+-------------------------------------------------------------------------------+\n\n";
 
 //delete old files
+$objFilesystem = new class_filesystem();
 echo "Flushing target folders...\n\n";
 $objFilesystem->folderDeleteRecursive($strTargetPathFull);
 $objFilesystem->folderDeleteRecursive($strTargetPathCompressed);
@@ -152,6 +148,5 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
 
 

@@ -7,11 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-header("Content-Type: text/html; charset=utf-8");
-require_once("../system/bootstrap.php");
-
-
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -39,7 +34,7 @@ else {
 	echo "searching dbdumps available...\n";
 
 	$objFilesystem = new class_filesystem();
-	$arrFiles = $objFilesystem->getFilelist("/system/dbdumps/");
+	$arrFiles = $objFilesystem->getFilelist("/project/dbdumps/");
 	echo "found ".count($arrFiles)." dump(s)\n\n";
 
 	echo "<form method=\"post\">";
@@ -58,6 +53,5 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
 
 

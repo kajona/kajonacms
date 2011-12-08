@@ -7,11 +7,6 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 
-header("Content-Type: text/html; charset=utf-8");
-require_once("../system/bootstrap.php");
-
-
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -81,7 +76,6 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
 
 
 function printSingleLevel($strStartId, &$arrGlobalNodes) {
@@ -100,17 +94,19 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
     $arrChilds = $objCommon->getChildNodesAsIdArray();
 
 
-    echo "<div style=\"padding-bottom: 5px;\" onmouseover=\"this.style.backgroundColor='#cccccc';\" onmouseout=\"this.style.backgroundColor='#ffffff';\">";
-    $strStatus = "<span style=\"color: green;\">active</span>";
+    echo "<div style=\"padding-bottom: 5px; ".(count($arrChilds) > 0 ? " cursor: pointer; ": "" )."  \" onmouseover=\"this.style.backgroundColor='#cccccc';\" onmouseout=\"this.style.backgroundColor='#ffffff';\"
+            ".(count($arrChilds) > 0 ? " onclick=\"javascript:fold('".$strStartId."')\"  " : " " )."
+            >";
+    $strStatus = "<span style=\"color: green; \">active</span>";
     if($objCommon->getStatus() == 0)
         $strStatus = "<span style=\"color: red;\">inactive</span>";
 
     if(count($arrChilds) > 0)
-        echo    "<a href=\"javascript:fold('".$strStartId."')\">+</a> ";
+        echo    " + ";
     else
         echo    "  ";
 
-    echo $objCommon->getRecordComment()." / ".$objCommon->getSystemid()."\n";
+    echo $objCommon->getStrRecordClass()." / ".$objCommon->getRecordComment()." / ".$objCommon->getSystemid()."\n";
 
     echo "   state: ".$strStatus ." module nr: ".$arrRecord["system_module_nr"]." sort: ".$arrRecord["system_sort"]."\n";
 
