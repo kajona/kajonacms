@@ -46,9 +46,6 @@ class class_module_system_session extends class_model implements interface_model
 		//base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
@@ -64,7 +61,7 @@ class class_module_system_session extends class_model implements interface_model
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
 
         class_logger::getInstance()->addLogRow("init session ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "SELECT * FROM "._dbprefix_."session WHERE session_id = ?";
@@ -149,6 +146,8 @@ class class_module_system_session extends class_model implements interface_model
         }
     }
 
+
+
     /**
      * Returns a list of tables the current object is persisted to.
      * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
@@ -158,7 +157,7 @@ class class_module_system_session extends class_model implements interface_model
      *
      * @return array [table => primary row name]
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -169,7 +168,7 @@ class class_module_system_session extends class_model implements interface_model
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 
@@ -184,6 +183,17 @@ class class_module_system_session extends class_model implements interface_model
         //start with the modul-table
         $strQuery = "DELETE FROM "._dbprefix_."session WHERE session_id = ?";
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+    }
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return true;
     }
 
 

@@ -40,10 +40,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
 
 		parent::__construct( $strSystemid);
-
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
 
@@ -51,7 +47,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."page_element" => "page_element_id");
     }
 
@@ -68,7 +64,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
@@ -146,7 +142,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         $strQuery = "UPDATE "._dbprefix_."page_element
 							SET page_element_ph_title = ?,
 							    page_element_ph_language = ?,
@@ -405,9 +401,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * Helper, loads all elements registered at a single placeholder
      *
-     * @param string $strElementId
-     * @param string $strLanguage
-     * @param string $strPlaceholder
      * @return array
      */
     private function getSortedElementsAtPlaceholder() {
@@ -439,13 +432,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * Sets the position of an element using a given value.
      *
-     * @param <type> $intAbsolutePosition
-     * @return <type>
+     * @param $strIdToSet
+     * @param $intPosition
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
     public function setAbsolutePosition($strIdToSet, $intPosition) {
         class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new pos ".$intPosition, class_logger::$levelInfo);
-		$strReturn = "";
 
 		//to have a better array-like handling, decrease pos by one.
 		//remind to add at the end when saving to db
@@ -597,8 +589,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 	 *
 	 * @return bool
 	 */
-	public function deleteObject() {
-	    class_logger::getInstance()->addLogRow("deleted page-element ".$this->getSystemid(), class_logger::$levelInfo);
+    protected function deleteObjectInternal() {
 	    //Load the Element-Data
 		//Build the class-name
 		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
@@ -616,10 +607,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 		//Delete from page_element table
 		$strQuery = "DELETE FROM "._dbprefix_."page_element WHERE page_element_id= ?";
 		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-			return false;
-
-		//And now the system / right table
-		if(!$this->deleteSystemRecord($this->getSystemid()))
 			return false;
 
 		//Loading the data of the corresponding site

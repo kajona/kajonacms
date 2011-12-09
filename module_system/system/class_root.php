@@ -162,6 +162,9 @@ abstract class class_root {
 		$this->strAction = $this->getParam("action");
 
         $this->strSystemid = $strSystemid;
+
+        if($strSystemid != "")
+            $this->initObject();
 	}
 
     /**
@@ -169,7 +172,7 @@ abstract class class_root {
      * @todo: add dates?
      * @param string $strSystemid
      */
-    private function internalInit($strSystemid) {
+    private final function internalInit($strSystemid) {
 
         if($this->bitDetailsLoaded == true)
             return;
@@ -215,10 +218,75 @@ abstract class class_root {
      */
     public function loadDataFromDb() {
         $this->internalInit($this->getStrSystemid());
-        $this->initObject();
+        $this->initObjectInternal();
+    }
+
+    /**
+     * Method to invoke object initialization.
+     * In nearly all cases, this istriggered by the framework itself.
+     */
+    protected final function initObject() {
+        $this->initObjectInternal();
+    }
+
+    /**
+     * responsible to create a valid object. being called at time of
+     * object creation, if systemid given.
+     * Use this lifecycle-method in order to load
+     * all fields from the database.
+     *
+     */
+    protected abstract function initObjectInternal();
+
+
+
+   /**
+    * Deletes the current object from the system.
+    * Overwrite this method in order to remove the current object from the system.
+    * The system-record itself is being delete automatically.
+    *
+    * @abstract
+    * @return bool
+    */
+    protected abstract function deleteObjectInternal();
+
+    /**
+     * Removes the current object from the system.
+     *
+     * @return bool
+     */
+    public function deleteObject() {
+        $this->objDB->transactionBegin();
+
+        $bitReturn = $this->deleteObjectInternal();
+        $bitReturn .= $this->deleteSystemRecord($this->getSystemid());
+
+        if($bitReturn) {
+            class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            class_logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionRollback();
+            return false;
+        }
     }
 
     // --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @abstract
+     * @return array [table => primary row name]
+     */
+    protected abstract function getObjectTables();
+
 
     /**
      * Saves the current object to the database. Determines, whether the current object has to be inserted
@@ -315,6 +383,16 @@ abstract class class_root {
 
         return $bitReturn;
     }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize the current object with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @abstract
+     * @return bool
+     */
+    protected abstract function updateStateToDb();
 
     /**
      * Overwrite this method if you want to trigger additional commands during the insert
@@ -900,6 +978,8 @@ abstract class class_root {
 	 * @param bool $bitRight
 	 * @param bool $bitDate
 	 * @return bool
+     * @todo: remove first params, is always the current systemid. maybe mark as protected.
+     *
 	 */
 	public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
 

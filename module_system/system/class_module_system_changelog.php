@@ -32,16 +32,13 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -57,7 +54,7 @@ class class_module_system_changelog extends class_model implements interface_mod
     /**
      * Initalises the current object, if a systemid was given
      */
-    public function initObject() {
+    protected function initObjectInternal() {
     }
 
     /**
@@ -254,11 +251,24 @@ class class_module_system_changelog extends class_model implements interface_mod
 
     /**
      * Deletes the current object from the system
+     * Overwrite!
      * @return bool
      */
     public function deleteObject() {
         return true;
     }
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return false;
+    }
+
 
     /**
      * Called whenever a update-request was fired.
@@ -267,7 +277,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 

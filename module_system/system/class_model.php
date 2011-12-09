@@ -18,23 +18,18 @@
  *
  *
  */
-class class_model extends class_root {
-
-    public function __construct($strSystemid)  {
-
-        parent::__construct($strSystemid);
-    }
+abstract class class_model extends class_root {
 
 
-
-// --- RATING -------------------------------------------------------------------------------------------
-
+    // --- RATING -------------------------------------------------------------------------------------------
     /**
      * Rating of the current file, if module rating is installed.
      *
      * @param $bitRound Rounds the rating or disables rounding
      * @see interface_sortable_rating
      * @return float
+     *
+     * @todo: with php5.4, ths could be moved to traits
      */
     public function getFloatRating($bitRound = true) {
         $floatRating = null;
@@ -57,6 +52,8 @@ class class_model extends class_root {
      * Checks if the current user is allowed to rate the file
      *
      * @return bool
+     *
+     * @todo: with php5.4, ths could be moved to traits
      */
     public function isRateableByUser() {
         $bitReturn = false;
@@ -77,6 +74,8 @@ class class_model extends class_root {
      *
      * @see interface_sortable_rating
      * @return int
+     *
+     * @todo: with php5.4, ths could be moved to traits
      */
     public function getIntRatingHits() {
         $intHits = 0;

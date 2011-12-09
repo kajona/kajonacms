@@ -41,16 +41,12 @@ class class_module_languages_languageset extends class_model implements interfac
         //base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
-
     }
 
     /**
      * Inits the current object and loads the language-mappings
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."languages_languageset WHERE languageset_id = ?";
         $arrRow = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
@@ -111,7 +107,7 @@ class class_module_languages_languageset extends class_model implements interfac
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 
@@ -119,7 +115,7 @@ class class_module_languages_languageset extends class_model implements interfac
      * Deletes the current object from the system
      * @return bool
      */
-    public function deleteObject() {
+    protected function deleteObjectInternal() {
         return true;
     }
 
@@ -132,7 +128,7 @@ class class_module_languages_languageset extends class_model implements interfac
      *
      * @return array [table => primary row name]
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 

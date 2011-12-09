@@ -30,16 +30,13 @@ class class_module_system_adminwidget extends class_model implements interface_m
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."adminwidget" => "adminwidget_id");
     }
 
@@ -56,7 +53,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
      * Inits the object by loading the values from the db
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."adminwidget,
         						   "._dbprefix_."system
         				WHERE system_id = adminwidget_id
@@ -73,7 +70,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
      * Updates the values of the current widget to the db
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         $strQuery = "UPDATE "._dbprefix_."adminwidget
                    SET adminwidget_class = ?,
                        adminwidget_content = ?
@@ -86,14 +83,12 @@ class class_module_system_adminwidget extends class_model implements interface_m
      *
      * @return bool
      */
-    public function deleteObject() {
-        class_logger::getInstance()->addLogRow("deleted adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
+    protected function deleteObjectInternal() {
 	    $objRoot = new class_module_system_common();
 	    $strQuery = "DELETE FROM "._dbprefix_."adminwidget
                              WHERE adminwidget_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            if($objRoot->deleteSystemRecord($this->getSystemid()))
-                return true;
+            return true;
         }
         return false;
     }
@@ -108,8 +103,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
      */
     public function getListOfWidgetsAvailable() {
         $arrReturn = array();
-
-        $objFilesystem = new class_filesystem();
 
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"));
 

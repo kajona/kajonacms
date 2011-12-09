@@ -28,16 +28,13 @@ class class_module_system_worker extends class_model implements interface_model 
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -54,14 +51,14 @@ class class_module_system_worker extends class_model implements interface_model 
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
     }
 
     /**
      * Updates the current object to the database
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 
@@ -70,6 +67,17 @@ class class_module_system_worker extends class_model implements interface_model 
      * @return bool
      */
     public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
         return true;
     }
 

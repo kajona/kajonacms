@@ -30,21 +30,17 @@ class class_module_navigation_point extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "navigation");
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."navigation");
 
 		//base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."navigation" => "navigation_id");
     }
 
@@ -61,8 +57,8 @@ class class_module_navigation_point extends class_model implements interface_mod
      * Initialises the current object, if a systemid was given
      *
      */
-    public function initObject() {
-         $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system
+    protected function initObjectInternal() {
+         $strQuery = "SELECT * FROM "._dbprefix_."navigation, "._dbprefix_."system
 		             WHERE system_id = navigation_id
 		             AND system_module_nr = ?
 		             AND system_id = ?";
@@ -83,8 +79,8 @@ class class_module_navigation_point extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function updateStateToDb() {
-        $strQuery = "UPDATE  ".$this->arrModule["table"]."
+    protected function updateStateToDb() {
+        $strQuery = "UPDATE  "._dbprefix_."navigation
                         SET 	navigation_name= ?,
     							navigation_page_i= ?,
     							navigation_folder_i= ?,
@@ -173,11 +169,10 @@ class class_module_navigation_point extends class_model implements interface_mod
 	 *
 	 * @return bool
 	 */
-	public function deleteObject() {
-	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
+	protected function deleteObjectInternal() {
 
-       //Are there any childs?
-       $arrChild = class_module_navigation_point::getNaviLayer($this->getSystemid());
+        //Are there any childs?
+        $arrChild = class_module_navigation_point::getNaviLayer($this->getSystemid());
         if(count($arrChild) > 0) {
             //Call this method for each child
             foreach($arrChild as $objOneChild) {
@@ -190,12 +185,8 @@ class class_module_navigation_point extends class_model implements interface_mod
         //Now delete the current point
         //start in the navigation-table
         $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id=?";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            if($this->deleteSystemRecord($this->getSystemid())) {
-                return true;
-            }
-        }
-
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
+            return true;
         else
            return false;
 

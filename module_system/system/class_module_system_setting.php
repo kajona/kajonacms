@@ -69,16 +69,13 @@ class class_module_system_setting extends class_model implements interface_model
 		//base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."system_config WHERE system_config_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
@@ -99,6 +96,18 @@ class class_module_system_setting extends class_model implements interface_model
     }
 
     /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return true;
+    }
+
+
+    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
@@ -115,7 +124,7 @@ class class_module_system_setting extends class_model implements interface_model
      *
      * @return array [table => primary row name]
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -126,7 +135,7 @@ class class_module_system_setting extends class_model implements interface_model
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 

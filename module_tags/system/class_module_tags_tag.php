@@ -34,9 +34,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     public function getStrDisplayName() {
@@ -48,7 +45,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."tags_tag" => "tags_tag_id");
     }
 
@@ -56,7 +53,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * Initialises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT *
 		   			 FROM "._dbprefix_."tags_tag
 					 WHERE tags_tag_id = ?";
@@ -69,7 +66,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         $strQuery = "UPDATE "._dbprefix_."tags_tag SET
                     	    tags_tag_name = ?
@@ -83,33 +80,16 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @return bool
      */
-    public function deleteObject() {
-        class_logger::getInstance()->addLogRow("deleted ".$this->getStrDisplayName(), class_logger::$levelInfo);
-        $objDB = class_carrier::getInstance()->getObjDB();
-        //start a tx
-		$objDB->transactionBegin();
-		$bitCommit = false;
-
+    protected function deleteObjectInternal() {
         //delete memberships
         $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?";
 
         //delete the record itself
         $strQuery2 = "DELETE FROM "._dbprefix_."tags_tag WHERE tags_tag_id=?";
-	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid())) )    {
-	        if($this->deleteSystemRecord($this->getSystemid())) {
-	            $bitCommit = true;
-	        }
-	    }
+	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid())) )
+            return true;
 
-	    //End tx
-		if($bitCommit) {
-			$objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$objDB->transactionRollback();
-			return false;
-		}
+        return false;
     }
 
     /**

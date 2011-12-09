@@ -75,7 +75,7 @@ class class_module_user_user extends class_model implements interface_model  {
      *
      * @return array [table => primary row name]
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -85,7 +85,7 @@ class class_module_user_user extends class_model implements interface_model  {
      *
      * @param bool $bitPassword Should the password be loaded, too?
      */
-    public function initObject($bitPassword = false) {
+    protected function initObjectInternal($bitPassword = false) { //FIXME: $bitPAssword handling??
         $strQuery = "SELECT * FROM "._dbprefix_."user WHERE user_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
@@ -182,7 +182,7 @@ class class_module_user_user extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return false;
     }
 
@@ -257,6 +257,17 @@ class class_module_user_user extends class_model implements interface_model  {
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid());
 
         return $bitReturn;
+    }
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return false;
     }
 
 

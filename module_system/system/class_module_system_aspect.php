@@ -37,9 +37,6 @@ class class_module_system_aspect extends class_model implements interface_model 
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
 
@@ -47,7 +44,7 @@ class class_module_system_aspect extends class_model implements interface_model 
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."aspects" => "aspect_id");
     }
 
@@ -63,7 +60,7 @@ class class_module_system_aspect extends class_model implements interface_model 
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."aspects
                      WHERE system_id = aspect_id
                      AND system_id = ?";
@@ -81,7 +78,7 @@ class class_module_system_aspect extends class_model implements interface_model 
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         //if no other aspect exists, we have a new default aspect
         $arrObjAspects = class_module_system_aspect::getAllAspects();
@@ -155,17 +152,9 @@ class class_module_system_aspect extends class_model implements interface_model 
      *
      * @return bool
      */
-    public function deleteObject() {
-        //Start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        class_logger::getInstance()->addLogRow("deleted ".$this->getStrDisplayName(), class_logger::$levelInfo);
-        //start with the modul-table
+    protected function deleteObjectInternal() {
         $strQuery = "DELETE FROM "._dbprefix_."aspects WHERE aspect_id = ?";
-
-		//rights an systemrecords
-		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())) || !$this->deleteSystemRecord($this->getSystemid()))
-		    $bitCommit = false;
+		$this->objDB->_pQuery($strQuery, array($this->getSystemid())) ;
 
 		//if we have just one aspect remaining, set this one as default
         $arrObjAspects = class_module_system_aspect::getAllAspects();
@@ -175,15 +164,7 @@ class class_module_system_aspect extends class_model implements interface_model 
         	$objOneLanguage->updateObjectToDb();
         }
 
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
+        return true;
     }
 
 

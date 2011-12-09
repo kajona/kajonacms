@@ -34,16 +34,13 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -60,7 +57,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."user_group_kajona WHERE group_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
@@ -74,6 +71,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * Updates the current object to the database.
      * Overwrites class_roots' logic since a kajona group is not reflected in the system-table
      *
+     * @param bool $strPrevId
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -103,7 +101,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 
@@ -185,6 +183,17 @@ class class_usersources_group_kajona extends class_model implements interface_mo
         return $this->deleteObject();
     }
 
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return false;
+    }
+
 
     /**
 	 * Deletes all users from the current group
@@ -199,7 +208,8 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     /**
 	 * Adds a new member to the group - if possible
 	 * @param interface_usersources_user $objUser
-	 */
+     * @return bool
+     */
 	public function addMember(interface_usersources_user $objUser) {
          $strQuery = "INSERT INTO "._dbprefix_."user_kajona_members
                        (group_member_group_kajona_id, group_member_user_kajona_id) VALUES
@@ -220,7 +230,8 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     /**
 	 * Removes a member from the current group - if possible.
 	 * @param interface_usersources_user $objUser
-	 */
+     * @return bool
+     */
     public function removeMember(interface_usersources_user $objUser) {
         $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members
 						WHERE group_member_group_kajona_id=?
@@ -231,8 +242,8 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
     /**
 	 * Returns the list of form-entries allowed to be modified
-	 * @param class_usersources_form_entry $arrParams
-	 */
+     * @return array
+     */
     public function getEditFormEntries() {
         return array(new class_usersources_form_entry("desc", class_usersources_form_entry::$INT_TYPE_LONGTEXT, $this->getStrDesc(), false));
 
@@ -251,7 +262,6 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
     }
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrDesc() {
         return $this->strDesc;
     }

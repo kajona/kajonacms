@@ -35,16 +35,13 @@ class class_module_filemanager_repo extends class_model implements interface_mod
 		//base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."filemanager" => "filemanager_id");
     }
 
@@ -61,7 +58,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * initalizes the current object with proper values
      *
      */
-    public function  initObject() {
+    protected function  initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."filemanager,
                                    "._dbprefix_."system
 						WHERE system_id = filemanager_id
@@ -77,7 +74,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
         }
     }
 
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         $strQuery = "UPDATE "._dbprefix_."filemanager
                      SET filemanager_name = ?,
@@ -140,31 +137,14 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function deleteObject() {
-        class_logger::getInstance()->addLogRow("deleted repo ".$this->getSystemid(), class_logger::$levelInfo);
-
-
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //Delete from the system-table
+    protected function deleteObjectInternal() {
 
         //And the repo itself
         $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id=?";
-        if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-            $bitCommit = false;
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
+            return true;
 
-        if(!$this->deleteSystemRecord($this->getSystemid()))
-            $bitCommit = false;
-		//end tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			echo "Rollback";
-			return false;
-		}
+        return false;
     }
 
     /**
@@ -178,7 +158,6 @@ class class_module_filemanager_repo extends class_model implements interface_mod
             return false;
     }
 
-// --- GETTER / SETTER ----------------------------------------------------------------------------------
 
     public function getStrPath() {
         return $this->strPath;

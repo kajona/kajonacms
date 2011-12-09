@@ -42,9 +42,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
 		else
 		    $this->setStrLanguage($this->getStrPortalLanguage());
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
 
@@ -52,7 +49,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -69,7 +66,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         //load content language-dependant
         $strQuery = "SELECT *
                     FROM "._dbprefix_."page_folderproperties
@@ -91,7 +88,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         //create change-logs
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionEdit);
@@ -262,9 +259,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	 *
 	 * @return bool
 	 */
-	public function deleteObject() {
+	protected function deleteObjectInternal() {
 
-        //scan subfolders
         $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
             $objOneElement->deleteObject();
@@ -273,11 +269,9 @@ class class_module_pages_folder extends class_model implements interface_model, 
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
 
-	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
         //delete the folder-properties
         $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";
-
-        return $this->objDB->_pQuery($strQuery, array($this->getSystemid())) && $this->deleteSystemRecord($this->getSystemid());
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
 

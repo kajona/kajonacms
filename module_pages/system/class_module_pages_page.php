@@ -60,10 +60,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 		else
 		    $this->setStrLanguage($this->getStrPortalLanguage());
 
-
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
 
@@ -71,7 +67,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."page" => "page_id");
     }
 
@@ -88,7 +84,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
 		//language independant fields
 		$strQuery = "SELECT *
 					FROM "._dbprefix_."system,
@@ -160,7 +156,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         //Make texts db-safe
         $strName = $this->generateNonexistingPagename($this->getStrName());
@@ -320,7 +316,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 	/**
 	 * Checks, how many locked elements are on this page
 	 *
-	 * @param string $strSystemid
 	 * @return int
 	 */
 	public function getNumberOfLockedElementsOnPage() {
@@ -340,61 +335,40 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-	public function deleteObject() {
+	protected function deleteObjectInternal() {
+
+        $bitReturn = false;
 
         $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
             $objOneElement->deleteObject();
         }
 
-
-
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
-
-	    class_logger::getInstance()->addLogRow("deleted ".$this->getStrDisplayName(), class_logger::$levelInfo);
 
 	    //Get all Elements belonging to this page
 		$arrElements = class_module_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 
-		//Start the transaction
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-		$bitElements = true;
 		//Loop over the elements
 		foreach($arrElements as $objOneElement) {
 			//Deletion passed to the pages_content class
 			if(!$objOneElement->deleteObject()) {
-				$bitElements = false;
-				$bitCommit = false;
+				$bitReturn = false;
 				break;
 			}
 		}
 
-		if($bitElements) {
+		if($bitReturn) {
 			//Delete the page and the properties out of the tables
 			$strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";
 			$strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?";
 			if($this->objDB->_pQuery($strQuery, array($this->getSystemid()) ) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid()) )) {
-				$this->deleteSystemRecord($this->getSystemid());
+                $bitReturn =  true;
 			}
-			else {
-				$bitCommit = false;
-			}
-		}
-		else {
-			$bitCommit = false;
 		}
 
-		//End TX
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
+		return $bitReturn;
 	}
 
 	/**

@@ -37,16 +37,13 @@ class class_module_pages_element extends class_model implements interface_model 
 
         $this->setSystemid($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array();
     }
 
@@ -66,7 +63,7 @@ class class_module_pages_element extends class_model implements interface_model 
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."element WHERE element_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
@@ -84,6 +81,7 @@ class class_module_pages_element extends class_model implements interface_model 
     /**
      * Updates the current object to the database
      * @overwrites class_model::updateObjectToDb()
+     * @param bool $strPrevId
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -119,7 +117,7 @@ class class_module_pages_element extends class_model implements interface_model 
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         return true;
     }
 
@@ -158,6 +156,7 @@ class class_module_pages_element extends class_model implements interface_model 
 
 	/**
 	 * Deletes one element
+     * Overwrites the base-method, since there's no entry in the system-table
 	 *
 	 * @return bool
 	 */

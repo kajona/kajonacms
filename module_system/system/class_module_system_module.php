@@ -40,16 +40,13 @@ class class_module_system_module extends class_model implements interface_model 
 		//base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
     /**
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."system_module" => "module_id");
     }
 
@@ -66,7 +63,7 @@ class class_module_system_module extends class_model implements interface_model 
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
         $arrRow = array();
 		$arrModules = $this->objDB->getPArray($strQuery, array());
@@ -93,7 +90,7 @@ class class_module_system_module extends class_model implements interface_model 
      * Updates the current object to the database
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
 					  module_name =?,
 					  module_filenameportal =?,
@@ -115,6 +112,17 @@ class class_module_system_module extends class_model implements interface_model 
      * @return bool
      */
     public function deleteObject() {
+        return true;
+    }
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
         return true;
     }
 

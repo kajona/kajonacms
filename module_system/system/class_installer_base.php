@@ -561,7 +561,8 @@ abstract class class_installer_base extends class_root {
 	 * @param string $strValue
 	 * @param int $intType class_modul_system::int_TYPE_XX
 	 * @param int $intModule
-	 */
+     * @return bool
+     */
 	public function registerConstant($strName, $strValue, $intType, $intModule) {
 
 		//register to current runtime env?

@@ -34,9 +34,6 @@ class class_module_languages_language extends class_model implements interface_m
 		//base class
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
 
@@ -44,7 +41,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."languages" => "language_id");
     }
 
@@ -61,7 +58,7 @@ class class_module_languages_language extends class_model implements interface_m
      * Initalises the current object, if a systemid was given
      *
      */
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."system, ".$this->arrModule["table"]."
                      WHERE system_id = language_id
                      AND system_id = ?";
@@ -78,7 +75,7 @@ class class_module_languages_language extends class_model implements interface_m
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         //if no other language exists, we have a new default language
         $arrObjLanguages = class_module_languages_language::getAllLanguages();
@@ -171,19 +168,11 @@ class class_module_languages_language extends class_model implements interface_m
      *
      * @return bool
      */
-    public function deleteObject() {
-        //Start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        class_logger::getInstance()->addLogRow("deleted language ".$this->getSystemid(), class_logger::$levelInfo);
+    protected function deleteObjectInternal() {
         //start with the modul-table
         $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE language_id = ?";
-		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-		    $bitCommit = false;
+		$this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 
-		//rights an systemrecords
-		if(!$this->deleteSystemRecord($this->getSystemid()))
-		    $bitCommit = false;
 
 		 //if we have just one language remaining, set this one as default
         $arrObjLanguages = class_module_languages_language::getAllLanguages();
@@ -193,15 +182,7 @@ class class_module_languages_language extends class_model implements interface_m
         	$objOneLanguage->updateObjectToDb();
         }
 
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
+        return true;
     }
 
 

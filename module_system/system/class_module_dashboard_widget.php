@@ -33,9 +33,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
 
@@ -43,7 +40,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @see class_model::getObjectTables();
      * @return array
      */
-    public function getObjectTables() {
+    protected function getObjectTables() {
         return array(_dbprefix_."dashboard" => "dashboard_id");
     }
 
@@ -56,7 +53,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
-    public function initObject() {
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."dashboard,
         						   "._dbprefix_."system
         				WHERE system_id = dashboard_id
@@ -76,7 +73,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * Updates the current widget to the db
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         $strQuery = "UPDATE "._dbprefix_."dashboard
                    SET dashboard_user = ?,
@@ -92,16 +89,13 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function deleteObject() {
+    protected function deleteObjectInternal() {
         if($this->getWidgetmodelForCurrentEntry()->deleteObject()) {
-            class_logger::getInstance()->addLogRow("deleted dashboardentry ".$this->getSystemid(), class_logger::$levelInfo);
     	    $objRoot = new class_module_system_common();
     	    $strQuery = "DELETE FROM "._dbprefix_."dashboard
                                  WHERE dashboard_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-                if($objRoot->deleteSystemRecord($this->getSystemid()))
-                    return true;
-            }
+            if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
+                return true;
         }
 
         return false;
