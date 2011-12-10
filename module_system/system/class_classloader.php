@@ -42,9 +42,12 @@ class class_classloader {
     private function __construct() {
         $this->arrModules = scandir(_corepath_);
 
-        $this->arrModules = array_filter($this->arrModules, function($strValue) {
-            return preg_match("/(module|element|_)+.*/i", $strValue);
-        });
+        $this->arrModules = array_filter(
+            $this->arrModules,
+            function($strValue) {
+                return preg_match("/(module|element|_)+.*/i", $strValue);
+            }
+        );
 
     }
 
@@ -88,32 +91,32 @@ class class_classloader {
         //---ADMIN CLASSES-------------------------------------------------------------------------------
         //adminwidgets
         if(preg_match("/(class|interface)_adminwidget(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/widgets/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/widgets/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._adminpath_."/widgets/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/widgets/".$strClassName.".php")
                 return true;
         }
 
         //systemtasks
         if(preg_match("/(class|interface)(.*)systemtask(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/systemtasks/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/systemtasks/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._adminpath_."/systemtasks/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/systemtasks/".$strClassName.".php")
                 return true;
         }
 
         //statsreports
         if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php")
                 return true;
         }
 
         //admin elements
         if(preg_match("/(class_element)_(.*)_admin/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/elements/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/elements/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._adminpath_."/elements/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/elements/".$strClassName.".php")
                 return true;
         }
 
         //admin classes
         //TODO: wtf? why strpos needed? whats wrong with that regex?
         if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
-            if(is_file(_corepath_.$strModule._adminpath_."/".$strClassName.".php") && require(_corepath_.$strModule._adminpath_."/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._adminpath_."/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/".$strClassName.".php")
                 return true;
         }
 
@@ -122,44 +125,44 @@ class class_classloader {
 
         //search plugins
         if(preg_match("/interface_search(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php") && require(_corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php") && include _corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php")
                 return true;
         }
 
         //portal elements
         if(preg_match("/(class_element)_(.*)_portal/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._portalpath_."/elements/".$strClassName.".php") && require(_corepath_.$strModule._portalpath_."/elements/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._portalpath_."/elements/".$strClassName.".php") && include _corepath_.$strModule._portalpath_."/elements/".$strClassName.".php")
                 return true;
         }
 
         //portal classes
         if(preg_match("/(class|interface)_(.*)portal(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._portalpath_."/".$strClassName.".php") && require(_corepath_.$strModule._portalpath_."/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._portalpath_."/".$strClassName.".php") && include _corepath_.$strModule._portalpath_."/".$strClassName.".php")
                 return true;
         }
 
         //---SYSTEM CLASSES------------------------------------------------------------------------------
         //db-drivers
         if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/db/".$strClassName.".php") && require(_corepath_.$strModule._systempath_."/db/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._systempath_."/db/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/db/".$strClassName.".php")
                 return true;
         }
 
         //usersources
         if(preg_match("/(class|interface)_usersources_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/usersources/".$strClassName.".php") && require(_corepath_.$strModule._systempath_."/usersources/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._systempath_."/usersources/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/usersources/".$strClassName.".php")
                 return true;
         }
 
         //workflows
         if(preg_match("/class_workflow_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/workflows/".$strClassName.".php") && require(_corepath_.$strModule._systempath_."/workflows/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._systempath_."/workflows/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/workflows/".$strClassName.".php")
                 return true;
         }
 
         //system-classes
         if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/".$strClassName.".php") && require(_corepath_.$strModule._systempath_."/".$strClassName.".php"))
+            if(is_file(_corepath_.$strModule._systempath_."/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/".$strClassName.".php")
                 return true;
         }
 

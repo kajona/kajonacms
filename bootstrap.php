@@ -53,19 +53,21 @@ if(!@include_once _corepath_."/module_system/system/class_logger.php")
 
 //---The Path on web-------------------------------------------------------------------------------------
 
-include_once _corepath_."/module_system/system/class_config.php";
+require_once _corepath_."/module_system/system/class_config.php";
 $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
 $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
 if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
     //Determine the current path on the web
-    $strWeb = dirname ((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+    $strWeb = dirname((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
+        $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
     $strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));
     define("_webpath_", saveUrlEncode($strWeb));
 }
 else {
     //Determine the current path on the web
-    $strWeb = dirname ((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']);
+    $strWeb = dirname((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
+        (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']);
     $strWeb = saveUrlEncode($strWeb);
     define("_webpath_", $strWeb);
 }
@@ -87,7 +89,7 @@ require_once _corepath_."/module_system/system/class_classloader.php";
 spl_autoload_register(array (class_classloader::getInstance(), "loadClass"));
 
 //The Carrier-Class
-if(!@require_once _corepath_."/module_system/system/class_carrier.php")
+if(!@include_once _corepath_."/module_system/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 

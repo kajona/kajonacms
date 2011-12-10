@@ -24,8 +24,10 @@ if(function_exists("apache_setenv"))
     @apache_setenv('no-gzip', 1);
 @ini_set('zlib.output_compression', 0);
 @ini_set('implicit_flush', 1);
-for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
-    ob_implicit_flush(1);
+for ($i = 0; $i < ob_get_level(); $i++) {
+    ob_end_flush();
+}
+ob_implicit_flush(1);
 
 echo "Please note: Running tests manually does not replace running them via\n";
 echo "             the build-system or an IDE! The autotest-file simulates only parts of \n";
@@ -53,7 +55,7 @@ echo "</form>";
 if(issetPost("dotest")) {
     $intStart = time();
 
-	$strFilename = getPost("testname");
+    $strFilename = getPost("testname");
 
     $arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
 
@@ -81,19 +83,20 @@ if(issetPost("dotest")) {
 }
 
 function get_php_classes($php_code) {
-  $classes = array();
-  $tokens = token_get_all($php_code);
-  $count = count($tokens);
-  for ($i = 2; $i < $count; $i++) {
-    if (   $tokens[$i - 2][0] == T_CLASS
-        && $tokens[$i - 1][0] == T_WHITESPACE
-        && $tokens[$i][0] == T_STRING) {
+    $classes = array();
+    $tokens = token_get_all($php_code);
+    $count = count($tokens);
+    for ($i = 2; $i < $count; $i++) {
+        if (   $tokens[$i - 2][0] == T_CLASS
+            && $tokens[$i - 1][0] == T_WHITESPACE
+            && $tokens[$i][0] == T_STRING
+        ) {
 
-        $class_name = $tokens[$i][1];
-        $classes[] = $class_name;
+            $class_name = $tokens[$i][1];
+            $classes[] = $class_name;
+        }
     }
-  }
-  return $classes;
+    return $classes;
 }
 
 

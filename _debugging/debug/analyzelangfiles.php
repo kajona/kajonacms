@@ -32,7 +32,7 @@ flush();
 
 debug_get_soundex($arrEntries);
 
-usort($arrEntries,'debug_sort');
+usort($arrEntries, 'debug_sort');
 
 echo "<table border=\"1\">";
 echo "<tr>";
@@ -56,7 +56,7 @@ foreach($arrEntries as $objOneEntry) {
     $strStyle = "";
 
     if($objOneEntry->strHash == $strPrevHash)
-            $strStyle = "background-color: green;";
+        $strStyle = "background-color: green;";
 
     $strPrevHash = $objOneEntry->strHash;
 
@@ -82,28 +82,28 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
             continue;
 
         if(is_file(_realpath_.$strPath)) {
-           if(substr($strOneEntry, 0, 5) == "lang_" ) {
+            if(substr($strOneEntry, 0, 5) == "lang_" ) {
 
-               $arrTemp = explode("_", substr($strOneEntry, 0, -4));
-               //regular lang file found, parse contents
-               $lang = array();
-               require(_realpath_.$strPath);
+                $arrTemp = explode("_", substr($strOneEntry, 0, -4));
+                //regular lang file found, parse contents
+                $lang = array();
+                include _realpath_.$strPath;
 
-               foreach($lang as $strKey => $strValue) {
+                foreach($lang as $strKey => $strValue) {
 
-                   $strArea = strpos($strPath, "/admin/") !== false ? "admin" : "portal";
-                   $strModul = $arrTemp[1];
+                    $strArea = strpos($strPath, "/admin/") !== false ? "admin" : "portal";
+                    $strModul = $arrTemp[1];
 
-                   $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey, $strArea);
-                   if($arrTemp[2] == "de") $objTemp->strDe = $strValue;
-                   if($arrTemp[2] == "en") $objTemp->strEn = $strValue;
-                   if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
-                   if($arrTemp[2] == "bg") $objTemp->strBg = $strValue;
-                   if($arrTemp[2] == "ru") $objTemp->strRu = $strValue;
+                    $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey, $strArea);
+                    if($arrTemp[2] == "de") $objTemp->strDe = $strValue;
+                    if($arrTemp[2] == "en") $objTemp->strEn = $strValue;
+                    if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
+                    if($arrTemp[2] == "bg") $objTemp->strBg = $strValue;
+                    if($arrTemp[2] == "ru") $objTemp->strRu = $strValue;
 
 
-               }
-           }
+                }
+            }
         }
 
         if(is_dir(_realpath_.$strPath) && $strOneEntry != ".svn") {
@@ -115,8 +115,8 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
 function debug_get_langhelper(&$arrEntries, $strModul, $strKey, $strArea) {
     foreach($arrEntries as $objOneHelper) {
         if($objOneHelper->strModul == $strModul &&
-           $objOneHelper->strArea == $strArea &&
-           $objOneHelper->strKey == $strKey) {
+            $objOneHelper->strArea == $strArea &&
+            $objOneHelper->strKey == $strKey) {
 
             return $objOneHelper;
         }
@@ -143,7 +143,7 @@ function debug_get_soundex($arrEntries) {
 
 function debug_sort( $objA, $objB ) {
     if(  $objA->strSoundex ==  $objB->strSoundex ) {
-        if(  $objA->strEn ==  $objB->strEn ) {
+        if($objA->strEn ==  $objB->strEn ) {
             return 0 ;
         }
         return ($objA->strEn < $objB->strEn) ? -1 : 1;

@@ -16,7 +16,7 @@ echo "| Providing a tree-like view on your system-table.                        
 echo "+-------------------------------------------------------------------------------+\n";
 echo "|loading system kernel...                                                       |\n";
 
-        $objCarrier = class_carrier::getInstance();
+$objCarrier = class_carrier::getInstance();
 
 echo "|loaded.                                                                        |\n";
 echo "+-------------------------------------------------------------------------------+\n\n";
@@ -94,7 +94,8 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
     $arrChilds = $objCommon->getChildNodesAsIdArray();
 
 
-    echo "<div style=\"padding-bottom: 5px; ".(count($arrChilds) > 0 ? " cursor: pointer; ": "" )."  \" onmouseover=\"this.style.backgroundColor='#cccccc';\" onmouseout=\"this.style.backgroundColor='#ffffff';\"
+    echo "<div style=\"padding-bottom: 5px; ".(count($arrChilds) > 0 ? " cursor: pointer; ": "" )."  \"
+             onmouseover=\"this.style.backgroundColor='#cccccc';\" onmouseout=\"this.style.backgroundColor='#ffffff';\"
             ".(count($arrChilds) > 0 ? " onclick=\"javascript:fold('".$strStartId."')\"  " : " " )."
             >";
     $strStatus = "<span style=\"color: green; \">active</span>";
@@ -117,10 +118,10 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
     if(count($arrChilds) > 0) {
 
         echo "<div id=\"".$strStartId."\" style=\"border: 1px solid #cccccc; margin: 0 0 0px 20px; display: none;\" >";
-            for($intI = 0; $intI < count($arrChilds); $intI++ ) {
-                $strSingleId = $arrChilds[$intI];
-                printSingleLevel($strSingleId, $arrGlobalNodes);
-            }
+        for($intI = 0; $intI < count($arrChilds); $intI++ ) {
+            $strSingleId = $arrChilds[$intI];
+            printSingleLevel($strSingleId, $arrGlobalNodes);
+        }
         echo "</div>";
     }
 }
