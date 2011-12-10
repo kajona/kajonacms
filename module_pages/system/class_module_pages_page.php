@@ -359,14 +359,12 @@ class class_module_pages_page extends class_model implements interface_model, in
 			}
 		}
 
-		if($bitReturn) {
-			//Delete the page and the properties out of the tables
-			$strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";
-			$strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?";
-			if($this->objDB->_pQuery($strQuery, array($this->getSystemid()) ) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid()) )) {
-                $bitReturn =  true;
-			}
-		}
+        //Delete the page and the properties out of the tables
+        $strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";
+        $strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?";
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()) ) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid()) )) {
+            $bitReturn =  true;
+        }
 
 		return $bitReturn;
 	}

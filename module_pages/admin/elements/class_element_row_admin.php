@@ -67,7 +67,7 @@ class class_element_row_admin extends class_element_admin implements interface_a
 	 */
 	public function getContentTitle() {
 	    $arrData = $this->loadElementData();
-        return uniStrTrim(htmlStripTags($arrData["paragraph_title"]), 60);
+        return uniStrTrim(htmlStripTags(isset($arrData["paragraph_title"]) ? $arrData["paragraph_title"] : ""), 60);
 	}
 
 	/**

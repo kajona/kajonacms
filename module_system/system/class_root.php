@@ -314,7 +314,7 @@ abstract class class_root {
         //current systemid given? if not, create a new record.
         if(!validateSystemid($this->getSystemid())) {
 
-            if($strPrevId === false) {
+            if($strPrevId === false || $strPrevId === "") {
                 //try to find the current modules-one
                 if(isset($this->arrModule["modul"])) {
                     $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
