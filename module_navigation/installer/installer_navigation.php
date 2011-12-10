@@ -46,7 +46,6 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 
     public function install() {
-		//Nur installieren, wenn noch nicht vorhanden
 		if(count($this->objDB->getTables()) > 0) {
 			$arrModul = $this->getModuleData($this->arrModule["name"]);
 			if(count($arrModul) > 0)

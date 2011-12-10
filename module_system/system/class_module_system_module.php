@@ -100,11 +100,12 @@ class class_module_system_module extends class_model implements interface_model 
 					  module_version =?,
 					  module_date =?,
 					  module_navigation =?,
+					  module_nr =?,
 					  module_aspect=?
 					WHERE module_id = ?
 					";
         return$this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrNamePortal(), $this->getStrXmlNamePortal(), $this->getStrNameAdmin(),
-                                            $this->getStrXmlNameAdmin(), $this->getStrVersion(), $this->getIntDate(), $this->getIntNavigation(), $this->getStrAspect(), $this->getSystemid()));
+                                            $this->getStrXmlNameAdmin(), $this->getStrVersion(), $this->getIntDate(), $this->getIntNavigation(), $this->getIntNr(), $this->getStrAspect(), $this->getSystemid()));
     }
 
     /**

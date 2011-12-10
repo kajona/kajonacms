@@ -581,6 +581,51 @@ abstract class class_installer_base extends class_root {
 	       return false;
 	}
 
+    /**
+     * responsible to create a valid object. being called at time of
+     * object creation, if systemid given.
+     * Use this lifecycle-method in order to load
+     * all fields from the database.
+     *
+     */
+    protected function initObjectInternal() {
+        return;
+    }
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return false;
+    }
+
+    /**
+     * Returns a list of tables the current object is persisted to.
+     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array [table => primary row name]
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * Called whenever a update-request was fired.
+     * Use this method to synchronize the current object with the database.
+     * Use only updates, inserts are not required to be implemented.
+     *
+     * @return bool
+     */
+    protected function updateStateToDb() {
+        return false;
+    }
 
 
 }

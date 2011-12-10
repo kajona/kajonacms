@@ -21,7 +21,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
     /**
      * Does the hard work: installs the module and registers needed constants
-     *
+     * @return string
      */
     public function install() {
 

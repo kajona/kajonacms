@@ -31,27 +31,24 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     /**
      * The immutable password from the database.
-     * $strPass is not puglished with the information from the database, otherwise it would be
+     * $strPass is not published with the information from the database, otherwise it would be
      * overwritten.
      * @var string
      */
     private $strFinalPass = "";
 
+
     /**
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objects)
-     * @param bool $bitLoadPassword
      */
-    public function __construct($strSystemid = "", $bitLoadPassword = false) {
+    public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject($bitLoadPassword);
     }
 
     /**
@@ -66,7 +63,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     /**
      * Initialises the current object, if a systemid was given
      */
-    protected function initObjectInternal($bitPassword = false) { //FIXME
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString(_dbprefix_."user_kajona")." WHERE user_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
@@ -149,7 +146,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
                         user_pass=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
                         user_date=? WHERE user_id = ?";
                    $arrParams = array(
-                       ($this->getStrPass() != "" ? $this->getStrPass() : ""),
+                        $this->getStrPass(),
                         $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
                         $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getSystemid()
                    );
@@ -247,6 +244,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
+     * @return bool
      */
     public function isPasswortResetable() {
         return true;

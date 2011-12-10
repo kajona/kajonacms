@@ -36,6 +36,8 @@ class class_module_pages_element extends class_model implements interface_model 
 		parent::__construct("");
 
         $this->setSystemid($strSystemid);
+        if($strSystemid != "")
+            $this->initObjectInternal();
 
     }
 
@@ -164,6 +166,18 @@ class class_module_pages_element extends class_model implements interface_model 
 	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id=?";
 	    return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
+
+    /**
+     * Deletes the current object from the system.
+     * Overwrite this method in order to remove the current object from the system.
+     * The system-record itself is being delete automatically.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        return false;
+    }
+
 
     /**
      * Factory method, creates an instance of the admin-element represented by this page-element.

@@ -223,9 +223,9 @@ abstract class class_root {
 
     /**
      * Method to invoke object initialization.
-     * In nearly all cases, this istriggered by the framework itself.
+     * In nearly all cases, this is triggered by the framework itself.
      */
-    protected final function initObject() {
+    public final function initObject() {
         $this->initObjectInternal();
     }
 

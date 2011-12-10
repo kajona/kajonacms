@@ -40,18 +40,14 @@ class class_module_user_user extends class_model implements interface_model  {
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objects)
-     * @param bool $bitLoadPassword
      */
-    public function __construct($strSystemid = "", $bitLoadPassword = false) {
+    public function __construct($strSystemid = "") {
 
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
 		parent::__construct($strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject($bitLoadPassword);
     }
 
     /**
@@ -82,10 +78,8 @@ class class_module_user_user extends class_model implements interface_model  {
 
     /**
      * Initialises the current object, if a systemid was given
-     *
-     * @param bool $bitPassword Should the password be loaded, too?
      */
-    protected function initObjectInternal($bitPassword = false) { //FIXME: $bitPAssword handling??
+    protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."user WHERE user_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 

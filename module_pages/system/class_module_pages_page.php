@@ -51,8 +51,6 @@ class class_module_pages_page extends class_model implements interface_model, in
         $this->setArrModuleEntry("modul", "pages");
         $this->setArrModuleEntry("moduleId", _pages_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
 
 		//init the object with the language currently selected - admin or portal
 		if(defined("_admin_") && _admin_ === true)
@@ -60,6 +58,8 @@ class class_module_pages_page extends class_model implements interface_model, in
 		else
 		    $this->setStrLanguage($this->getStrPortalLanguage());
 
+		//base class
+		parent::__construct($strSystemid);
     }
 
 
