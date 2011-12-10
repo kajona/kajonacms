@@ -42,7 +42,7 @@ class class_test_generalModelTest extends class_testbase  {
         /** @var $objOneInstance class_model */
         foreach($arrClassInstances as $objOneInstance) {
 
-            $this->assertTrue($objOneInstance->updateObjectToDb(), "saving object");
+            $this->assertTrue($objOneInstance->updateObjectToDb(), "saving object ".get_class($objOneInstance));
             $arrSystemids[$objOneInstance->getSystemid()] = get_class($objOneInstance);
 
             echo "saved object of type ".get_class($objOneInstance)."@".$objOneInstance->getSystemid()."\n";
