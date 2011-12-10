@@ -84,7 +84,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
      * @return bool
      */
     protected function deleteObjectInternal() {
-	    $objRoot = new class_module_system_common();
 	    $strQuery = "DELETE FROM "._dbprefix_."adminwidget
                              WHERE adminwidget_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {

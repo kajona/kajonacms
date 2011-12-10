@@ -91,7 +91,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     protected function deleteObjectInternal() {
         if($this->getWidgetmodelForCurrentEntry()->deleteObject()) {
-    	    $objRoot = new class_module_system_common();
     	    $strQuery = "DELETE FROM "._dbprefix_."dashboard
                                  WHERE dashboard_id = ?";
             if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
@@ -115,11 +114,13 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @return bool
      */
     public function handleRecordDeletedEvent($strSystemid) {
-        $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
-        $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
-        foreach($arrRows as $arrOneRow) {
-            $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
-            $objWidget->deleteObject();
+        if(validateSystemid($strSystemid)) {
+            $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
+            $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
+            foreach($arrRows as $arrOneRow) {
+                $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
+                $objWidget->deleteObject();
+            }
         }
 
         return true;

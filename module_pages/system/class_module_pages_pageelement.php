@@ -112,15 +112,18 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         //Build the class-name
         $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
         //and finally create the object
-        $objElement = new $strElementClass();
-        $strForeignTable = $objElement->getTable();
+        if($strElementClass != "") {
+            $objElement = new $strElementClass();
+            $strForeignTable = $objElement->getTable();
 
 
-		//And create the row in the Element-Table, if given
-		if($strForeignTable != "") {
-		    $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES (?)";
-            $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-		}
+            //And create the row in the Element-Table, if given
+            if($strForeignTable != "") {
+                $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES (?)";
+                $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+            }
+
+        }
 
         //shift it to the first position by default
         //As a special feature, we set the element as the last
@@ -593,16 +596,19 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 	    //Load the Element-Data
 		//Build the class-name
 		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
-		//and finally create the object
-		$objElement = new $strElementClass();
-		//Fetch the table
-		$strElementTable = $objElement->getTable();
-		//Delete the entry in the Element-Table
-		if($strElementTable != "") {
-    		$strQuery = "DELETE FROM ".$strElementTable." WHERE content_id= ?";
-    		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-    			return false;
-		}
+
+        if($strElementClass != "") {
+            //and finally create the object
+            $objElement = new $strElementClass();
+            //Fetch the table
+            $strElementTable = $objElement->getTable();
+            //Delete the entry in the Element-Table
+            if($strElementTable != "") {
+                $strQuery = "DELETE FROM ".$strElementTable." WHERE content_id= ?";
+                if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
+                    return false;
+            }
+        }
 
 		//Delete from page_element table
 		$strQuery = "DELETE FROM "._dbprefix_."page_element WHERE page_element_id= ?";

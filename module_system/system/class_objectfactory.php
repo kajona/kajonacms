@@ -19,6 +19,9 @@
  */
 class class_objectfactory {
 
+    /**
+     * @var class_model[]
+     */
     private $arrObjectCache = array();
 
     /**
@@ -59,7 +62,7 @@ class class_objectfactory {
      *
      * @param string $strSystemid
      * @param bool $bitIgnoreCache
-     * @return null|interface_model
+     * @return null|class_model|interface_model
      */
     public function getObject($strSystemid, $bitIgnoreCache = false) {
 
@@ -67,7 +70,7 @@ class class_objectfactory {
             return $this->arrObjectCache[$strSystemid];
 
         //load the object itself
-        $strQuery = "SELECT * FROM "._dbprefix_."system where systemid = ?";
+        $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
         if(isset($arrRow["system_class"])) {
             $objReflection = new ReflectionClass($arrRow["system_class"]);
