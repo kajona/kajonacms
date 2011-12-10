@@ -152,8 +152,9 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 							    page_element_ph_placeholder = ?,
 							    page_element_ph_name = ?,
 							    page_element_ph_element = ?
-							WHERE page_element_id= ? ";
-        return $this->objDB->_pQuery($strQuery, array( $this->getStrTitle(false), $this->getStrLanguage(), $this->getStrPlaceholder(), $this->getStrName(), $this->getStrElement(), $this->getSystemid()  ));
+							WHERE page_element_id = ? ";
+        $bitReturn =  $this->objDB->_pQuery($strQuery, array( $this->strTitle, $this->getStrLanguage(), $this->getStrPlaceholder(), $this->getStrName(), $this->getStrElement(), $this->getSystemid()  ));
+        return $bitReturn;
     }
 
     /**

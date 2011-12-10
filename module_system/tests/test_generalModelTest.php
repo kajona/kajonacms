@@ -30,7 +30,8 @@ class class_test_generalModelTest extends class_testbase  {
                         "class_module_system_session",
                         "class_module_system_setting",
                         "class_module_user_group",
-                        "class_module_user_user")) ) {
+                        "class_module_user_user",
+                        "class_module_pages_pageelement")) ) {
 
                         $arrClassInstances[] = $objClass->newInstance();
                     }
