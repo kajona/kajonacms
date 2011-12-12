@@ -109,7 +109,7 @@ class class_filesystem {
 					//Folder
 					if(is_dir(_realpath_ . $strFolder ."/". $strEntry) && $bitFolders == true) {
 						//Folder excluded?
-						if(count($arrExcludeFolders) == 0 || !in_array($strEntry, $arrExcludeFolders)) 	{
+						if(count($arrExcludeFolders) == 0 || !in_array($strEntry, $arrExcludeFolders)) {
 							$arrReturn["folders"][$arrReturn["nrFolders"]++] = $strEntry;
 						}
 					}
@@ -343,7 +343,7 @@ class class_filesystem {
 	public function copyUpload($strTarget, $strTempfile) {
 		$bitReturn = false;
 		$strTarget = _realpath_.$strTarget;
-		if(is_uploaded_file($strTempfile)) 	{
+		if(is_uploaded_file($strTempfile)) {
 			if(@move_uploaded_file($strTempfile, $strTarget)) {
 				@unlink($strTempfile);
 				//set correct rights

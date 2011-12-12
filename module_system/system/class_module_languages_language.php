@@ -391,7 +391,6 @@ class class_module_languages_language extends class_model implements interface_m
     }
 
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function setStrName($strName) {
         $this->strName = $strName;

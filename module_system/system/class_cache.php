@@ -107,10 +107,11 @@ class class_cache  {
 
         //first run - search the internal cache
         foreach(self::$arrInternalCache as $arrSingleCacheEntry) {
-            if(   $arrSingleCacheEntry["cache_source"] == $strSourceName &&
-                  $arrSingleCacheEntry["cache_hash1"] == $strHash1 &&
-                  ($strHash2 == null || $arrSingleCacheEntry["cache_hash2"] == $strHash2) &&
-                  ($strLanguage == null || $arrSingleCacheEntry["cache_language"] == $strLanguage)  ) {
+            if($arrSingleCacheEntry["cache_source"] == $strSourceName &&
+                $arrSingleCacheEntry["cache_hash1"] == $strHash1 &&
+                ($strHash2 == null || $arrSingleCacheEntry["cache_hash2"] == $strHash2) &&
+                ($strLanguage == null || $arrSingleCacheEntry["cache_language"] == $strLanguage)
+            ) {
 
                 $objCacheEntry = new class_cache(
                     $arrSingleCacheEntry["cache_source"],
@@ -149,14 +150,14 @@ class class_cache  {
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         if(isset($arrRow["cache_id"])) {
             $objCacheEntry = new class_cache(
-                    $arrRow["cache_source"],
-                    $arrRow["cache_hash1"],
-                    $arrRow["cache_hash2"],
-                    $arrRow["cache_language"],
-                    $arrRow["cache_content"],
-                    $arrRow["cache_leasetime"],
-                    $arrRow["cache_id"]
-                );
+                $arrRow["cache_source"],
+                $arrRow["cache_hash1"],
+                $arrRow["cache_hash2"],
+                $arrRow["cache_language"],
+                $arrRow["cache_content"],
+                $arrRow["cache_leasetime"],
+                $arrRow["cache_id"]
+            );
 
             self::$intHits++;
             if(_cache_ === true)
@@ -266,6 +267,8 @@ class class_cache  {
      * more filters like parametrized
      *
      * @param string $strSource
+     * @param string $strHash1
+     * @param string $strHash2
      * @return bool
      * @static
      */
@@ -378,7 +381,7 @@ class class_cache  {
                        ORDER BY cache_leasetime DESC";
 
         if($intStart != null && $intEnd != null)
-            $arrCaches = class_carrier::getInstance()->getObjDB()->getPArraySection ($strQuery, array(), $intStart, $intEnd);
+            $arrCaches = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
         else
             $arrCaches = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
@@ -387,14 +390,14 @@ class class_cache  {
         foreach($arrCaches as $arrRow) {
             if(isset($arrRow["cache_id"])) {
                 $objCacheEntry = new class_cache(
-                        $arrRow["cache_source"],
-                        $arrRow["cache_hash1"],
-                        $arrRow["cache_hash2"],
-                        $arrRow["cache_language"],
-                        $arrRow["cache_content"],
-                        $arrRow["cache_leasetime"],
-                        $arrRow["cache_id"]
-                    );
+                    $arrRow["cache_source"],
+                    $arrRow["cache_hash1"],
+                    $arrRow["cache_hash2"],
+                    $arrRow["cache_language"],
+                    $arrRow["cache_content"],
+                    $arrRow["cache_leasetime"],
+                    $arrRow["cache_id"]
+                );
 
                 $objCacheEntry->setIntEntryHits($arrRow["cache_hits"]);
 
@@ -420,87 +423,84 @@ class class_cache  {
 
     private function increaseCacheEntryHits() {
         $strQuery = "UPDATE "._dbprefix_."cache SET cache_hits = cache_hits+1 WHERE cache_id=? ";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strCacheId) );
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strCacheId));
     }
 
 
-   public function getStrSourceName() {
-       return $this->strSourceName;
-   }
+    public function getStrSourceName() {
+        return $this->strSourceName;
+    }
 
-   public function setStrSourceName($strSourceName) {
-       $this->strSourceName = $strSourceName;
-   }
+    public function setStrSourceName($strSourceName) {
+        $this->strSourceName = $strSourceName;
+    }
 
-   public function getStrHash1() {
-       return $this->strHash1;
-   }
+    public function getStrHash1() {
+        return $this->strHash1;
+    }
 
-   public function setStrHash1($strHash1) {
-       if($strHash1 != null)
-           $this->strHash1 = $strHash1;
-   }
+    public function setStrHash1($strHash1) {
+        if($strHash1 != null)
+            $this->strHash1 = $strHash1;
+    }
 
-   public function getStrHash2() {
-       return $this->strHash2;
-   }
+    public function getStrHash2() {
+        return $this->strHash2;
+    }
 
-   public function setStrHash2($strHash2) {
-       if($strHash2 != null)
-           $this->strHash2 = $strHash2;
-   }
+    public function setStrHash2($strHash2) {
+        if($strHash2 != null)
+            $this->strHash2 = $strHash2;
+    }
 
-   public function getStrLanguage() {
-       return $this->strLanguage;
-   }
+    public function getStrLanguage() {
+        return $this->strLanguage;
+    }
 
-   public function setStrLanguage($strLanguage) {
-       if($strLanguage != null)
-           $this->strLanguage = $strLanguage;
-   }
+    public function setStrLanguage($strLanguage) {
+        if($strLanguage != null)
+            $this->strLanguage = $strLanguage;
+    }
 
-   public function getStrContent() {
-       return $this->strContent;
-   }
+    public function getStrContent() {
+        return $this->strContent;
+    }
 
-   public function setStrContent($strContent) {
-       $this->strContent = $strContent;
-   }
+    public function setStrContent($strContent) {
+        $this->strContent = $strContent;
+    }
 
-   public function getIntLeasetime() {
-       return $this->intLeasetime;
-   }
+    public function getIntLeasetime() {
+        return $this->intLeasetime;
+    }
 
-   public function setIntLeasetime($intLeasetime) {
-       $this->intLeasetime = $intLeasetime;
-   }
+    public function setIntLeasetime($intLeasetime) {
+        $this->intLeasetime = $intLeasetime;
+    }
 
-   public static function getIntHits() {
-       return self::$intHits;
-   }
+    public static function getIntHits() {
+        return self::$intHits;
+    }
 
-   public static function getIntRequests() {
-       return self::$intRequests;
-   }
+    public static function getIntRequests() {
+        return self::$intRequests;
+    }
 
-   public static function getIntSaves() {
-       return self::$intSaves;
-   }
+    public static function getIntSaves() {
+        return self::$intSaves;
+    }
 
-   public static function getIntCachesize() {
-       return count(self::$arrInternalCache);
-   }
+    public static function getIntCachesize() {
+        return count(self::$arrInternalCache);
+    }
 
-   public function getIntEntryHits() {
-       return $this->intEntryHits;
-   }
+    public function getIntEntryHits() {
+        return $this->intEntryHits;
+    }
 
-   public function setIntEntryHits($intEntryHits) {
-       $this->intEntryHits = $intEntryHits;
-   }
-
-
-
+    public function setIntEntryHits($intEntryHits) {
+        $this->intEntryHits = $intEntryHits;
+    }
 
 }
 

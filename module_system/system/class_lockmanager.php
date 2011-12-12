@@ -73,7 +73,8 @@ class class_lockmanager  {
 	 */
 	public function unlockRecord($bitForceUnlock = false)	{
         if($this->isLockedByCurrentUser() ||
-            ($bitForceUnlock && class_carrier::getInstance()->getObjRights()->userIsAdmin(class_carrier::getInstance()->getObjSession()->getUserID()) )) {
+            ($bitForceUnlock && class_carrier::getInstance()->getObjRights()->userIsAdmin(class_carrier::getInstance()->getObjSession()->getUserID()) )
+        ) {
 
 
             $strQuery = "UPDATE "._dbprefix_."system

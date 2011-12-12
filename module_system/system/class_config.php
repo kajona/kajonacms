@@ -31,17 +31,17 @@ class class_config {
 
 		//Include the config-File
         if($strConfigFile == "config.php") {
-            if(!@include(_corepath_."/module_system/system/config/".$strConfigFile))
+            if(!@include _corepath_."/module_system/system/config/".$strConfigFile)
                 die("Error reading config-file!");
 
             //overwrite with settings from project
             if(is_file(_realpath_."/project/system/config/".$strConfigFile) )
-                if(!@include(_realpath_."/project/system/config/".$strConfigFile))
+                if(!@include _realpath_."/project/system/config/".$strConfigFile)
                     die("Error reading config-file: ".$strConfigFile);
         }
         else {
             $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);
-            if(!@include(_realpath_.$strPath))
+            if(!@include _realpath_.$strPath)
                 die("Error reading config-file: ".$strConfigFile);
 
         }
@@ -94,10 +94,10 @@ class class_config {
         $config = array();
 
         if(is_file(dirname(__FILE__)."/../../../project/system/config/config.php") ) {
-            if(!@include(dirname(__FILE__)."/../../../project/system/config/config.php"))
+            if(!@include dirname(__FILE__)."/../../../project/system/config/config.php")
                 die("Error reading config-file!");
         }
-        else if(!@include(dirname(__FILE__)."/config/config.php"))
+        else if(!@include dirname(__FILE__)."/config/config.php")
             die("Error reading config-file!");
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";

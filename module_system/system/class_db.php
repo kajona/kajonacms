@@ -22,7 +22,7 @@
  *
  */
 class class_db {
-	private $objConfig = NULL;				    //Config-Objekt
+	private $objConfig = null;				    //Config-Objekt
 	private $arrQueryCache = array();		    //Array to cache queries
     private $arrTablesCache = array();
 	private $intNumber = 0;					    //Number of queries send to database
@@ -127,7 +127,13 @@ class class_db {
 	    if($this->objDbDriver !== null) {
 	        try {
                 class_logger::getInstance()->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), class_logger::$levelInfo);
-		        $this->objDbDriver->dbconnect($this->objConfig->getConfig("dbhost"), $this->objConfig->getConfig("dbusername"), $this->objConfig->getConfig("dbpassword"), $this->objConfig->getConfig("dbname"), $this->objConfig->getConfig("dbport"));
+		        $this->objDbDriver->dbconnect(
+                    $this->objConfig->getConfig("dbhost"),
+                    $this->objConfig->getConfig("dbusername"),
+                    $this->objConfig->getConfig("dbpassword"),
+                    $this->objConfig->getConfig("dbname"),
+                    $this->objConfig->getConfig("dbport")
+                );
 	        }
 	        catch (class_exception $objException) {
                 $objException->processException();
@@ -150,13 +156,13 @@ class class_db {
 		$bitReturn = false;
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery);
+	        $this->writeDbLog($strQuery);
 
 		//Increasing the counter
 		$this->intNumber++;
 
 		if($this->objDbDriver != null) {
-		  $bitReturn = $this->objDbDriver->_query($strQuery);
+		    $bitReturn = $this->objDbDriver->_query($strQuery);
 		}
 
 		if(!$bitReturn)
@@ -188,7 +194,7 @@ class class_db {
 		$this->intNumber++;
 
 		if($this->objDbDriver != null) {
-		  $bitReturn = $this->objDbDriver->_pQuery($strQuery, $this->dbsafeParams($arrParams, $arrEscapes));
+		    $bitReturn = $this->objDbDriver->_pQuery($strQuery, $this->dbsafeParams($arrParams, $arrEscapes));
 		}
 
 		if(!$bitReturn)
@@ -777,8 +783,8 @@ class class_db {
 	    while(count($arrFiles) >= _system_dbdump_amount_) {
 	        $strFile = array_shift($arrFiles);
 	        if(!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
-	           class_logger::getInstance()->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
-	           return false;
+	            class_logger::getInstance()->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
+	            return false;
 	        }
 	        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
 	    }
@@ -832,9 +838,9 @@ class class_db {
 	        $objGzip = new class_gzip();
 	        try {
 	        if($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename))
-	           $strFilename = substr($strFilename, 0, strlen($strFilename)-3);
+	            $strFilename = substr($strFilename, 0, strlen($strFilename)-3);
 	        else
-	           return false;
+	            return false;
 	        }
 	        catch (class_exception $objExc) {
 	            $objExc->processException();
@@ -864,20 +870,24 @@ class class_db {
 	private function processQuery($strQuery) {
 
         $strQuery = trim($strQuery);
-    	$arrSearch = array(		    "\r\n",
-    								"\n",
-    								"\r",
-    								"\t",
-    								"    ",
-    								"   ",
-    								"  ");
-		$arrReplace = array(		"",
-									"",
-									"",
-									" ",
-									" ",
-									" ",
-									" ");
+    	$arrSearch = array(
+            "\r\n",
+            "\n",
+            "\r",
+            "\t",
+            "    ",
+            "   ",
+            "  "
+        );
+		$arrReplace = array(
+            "",
+            "",
+            "",
+            " ",
+            " ",
+            " ",
+            " "
+        );
 
 		$strQuery = str_replace($arrSearch, $arrReplace, $strQuery);
 
@@ -957,11 +967,11 @@ class class_db {
         if($bitHtmlSpecialChars) {
 	    $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");
             $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8");
-         }
+        }
 
 	    //already escaped by php?
 	    if(get_magic_quotes_gpc() == 1) {
-	       $strString = stripslashes($strString);
+	        $strString = stripslashes($strString);
 	    }
 
         if($bitAddSlashes)

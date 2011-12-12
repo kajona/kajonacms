@@ -205,7 +205,7 @@ class class_module_languages_languageset extends class_model implements interfac
                        FROM "._dbprefix_."languages_languageset
                       WHERE languageset_systemid = ?";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid) );
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
 
         if(isset($arrRow["languageset_id"])) {
             $objReturn = new class_module_languages_languageset($arrRow["languageset_id"]);
