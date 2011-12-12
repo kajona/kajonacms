@@ -8,58 +8,18 @@
 ********************************************************************************************************/
 
 /*
-    NOTE:
+    PLEASE READ:
 
-    Since Kajona 2.1 it's possible to define all needed values using the installer.
-    This file allows to specify different server-configs via the server hostname.
-    !!!!!! Make sure that the live-server uses the default-section of this file !!!!!!
+    There's no need to change anything in this file.
+    All values and settings may be overridden by placing them in the projects' config-file at
+
+    /project/system/conig.php
+
+    A minimal config-file will be created during the installation of the system.
+
+
 */
 
-switch($_SERVER['SERVER_NAME']) {
-
-//--Server1----------------------------------------------------------------------------------------------
-case "testpage.mulchprod.intern":
-case "aquarium":
-case "mango":
-case "vserver":
-
-    //Database-Access
-    $config['dbhost']               = "localhost";                             //Server name
-    $config['dbusername']           = "kajona_v4";                                //Username
-    $config['dbpassword']           = "kajona_v4";                                //Password
-    $config['dbname']               = "kajona_v4";                                //Database name
-    $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3, oci8
-    $config['dbprefix']             = "kajona_";                               //table-prefix
-    $config['dbport']               = "";                                      //Database port, default: ""
-
-    break;
-
-
-//--Standard---------------------------------------------------------------------------------------------
-default:
-
-    //Database-Access
-    $config['dbhost']               = "%%defaulthost%%";                       //Server name
-    $config['dbusername']           = "%%defaultusername%%";                   //Username
-    $config['dbpassword']           = "%%defaultpassword%%";                   //Password
-    $config['dbname']               = "%%defaultdbname%%";                     //Database name
-    $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysqli, postgres, sqlite3, oci8
-    $config['dbprefix']             = "%%defaultprefix%%";                     //table-prefix
-    $config['dbport']               = "%%defaultport%%";                       //Database port, default: ""
-
-    break;
-
-}
-
-
-
-/*
-    NOTE:
-
-    Change the properties defined below only, if you now what you do!
-    In most cases, those should be left as they are.
-    Incorrect values could make the system unusable!
-*/
 
 //--common settings -------------------------------------------------------------------------------------
 
@@ -91,7 +51,7 @@ default:
     $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers
                                                                                //are queried in the order of appearance. The list is comma-separated, no blanks allowed.
 
-//--system settings--------------------------------------------------------------------------------------
+//--system settings -------------------------------------------------------------------------------------
 
     //Debug options
     $debug['time']                  = false;                                   //Calculates the time needed to create the requested page
@@ -110,3 +70,38 @@ default:
                                                                                    // 1: Errors are logged
                                                                                    // 2: Errors and warning
                                                                                    // 3: Errors, warnings and information are logged
+
+
+//--database access -------------------------------------------------------------------------------------
+
+switch($_SERVER['SERVER_NAME']) {
+
+    case "aquarium":
+    case "mango":
+
+        //Database-Access
+        $config['dbhost']               = "localhost";                             //Server name
+        $config['dbusername']           = "kajona_v4";                             //Username
+        $config['dbpassword']           = "kajona_v4";                             //Password
+        $config['dbname']               = "kajona_v4";                             //Database name
+        $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3, oci8
+        $config['dbprefix']             = "kajona_";                               //table-prefix
+        $config['dbport']               = "";                                      //Database port, default: ""
+
+        break;
+
+
+    default:
+
+        //Database-Access
+        $config['dbhost']               = "%%defaulthost%%";                       //Server name
+        $config['dbusername']           = "%%defaultusername%%";                   //Username
+        $config['dbpassword']           = "%%defaultpassword%%";                   //Password
+        $config['dbname']               = "%%defaultdbname%%";                     //Database name
+        $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysqli, postgres, sqlite3, oci8
+        $config['dbprefix']             = "%%defaultprefix%%";                     //table-prefix
+        $config['dbport']               = "%%defaultport%%";                       //Database port, default: ""
+
+        break;
+
+}

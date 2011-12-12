@@ -10,6 +10,8 @@
  * Classloader for all Kajona classes.
  * Implemented as a singleton.
  *
+ * @todo: add xml-based redefinition based on project-files
+ *
  * @package module_system
  * @author sidler@mulchprod.de
  */
@@ -22,12 +24,21 @@ class class_classloader {
 
     private $arrModules = array();
 
+    /**
+     * Cached index of class-files available
+     *
+     * @var String[]
+     * @todo: could be moved to the session or an apc var
+     */
+    private $arrFiles = array();
+
+
 
     /**
      * Factory method returning an instance of class_classloader.
      * The classloader implements the singleton pattern.
      * @static
-     * @return class_classloader|null
+     * @return class_classloader
      */
     public static function getInstance() {
         if(self::$objInstance == null)
@@ -49,125 +60,72 @@ class class_classloader {
             }
         );
 
+        $this->indexAvailableCodefiles();
     }
 
     private function __clone() {
     }
 
 
+
+    private function indexAvailableCodefiles() {
+
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/widgets/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/systemtasks/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/statsreports/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/elements/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/searchplugins/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/elements/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/db/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/usersources/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/workflows/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/"));
+
+    }
+
     /**
-     * The classloader itself. Scans the folders for the required class based on
-     * the passed classname.
+     * Loads all classes in a single folder.
+     * Internal helper.
+     * @param $strFolder
+     * @return String[]
+     */
+    private function getClassesInFolder($strFolder) {
+
+        $arrFiles = array();
+
+        foreach($this->arrModules as $strSingleModule) {
+            if(is_dir(_corepath_."/".$strSingleModule.$strFolder)) {
+                $arrTempFiles = scandir(_corepath_."/".$strSingleModule.$strFolder);
+                foreach($arrTempFiles as $strSingleFile) {
+                    if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
+                        $arrFiles[substr($strSingleFile, 0, -4)] = _corepath_."/".$strSingleModule.$strFolder.$strSingleFile;
+                    }
+                }
+            }
+        }
+
+        return $arrFiles;
+    }
+
+
+
+    /**
+     * The classloader itself. Loads the class, if existing. Otherwise the chain of class-loaders is triggered.
+     *
      * @param $strClassName
      * @return bool
      */
     public function loadClass($strClassName) {
 
-        //scan the system-folder as the first one, may produce the best hit
-        if($this->scanSingleModule("/module_system", $strClassName))
+        if(isset($this->arrFiles[$strClassName])) {
+            include $this->arrFiles[$strClassName];
             return true;
-
-        foreach($this->arrModules as $strSingleModule) {
-            if($this->scanSingleModule("/".$strSingleModule, $strClassName)) {
-                return true;
-            }
         }
 
         return false;
 
     }
-
-
-    /**
-     * Please note: Since require / include scans all of phps include-path vars, a is_file check is done before requiring the file.
-     * So the is_file is cheaper than calling require multiple times (especially with large PEAR-repositories).
-     * @param $strModule
-     * @param $strClassName
-     * @return bool
-     */
-    private function scanSingleModule($strModule, $strClassName) {
-
-
-        //---ADMIN CLASSES-------------------------------------------------------------------------------
-        //adminwidgets
-        if(preg_match("/(class|interface)_adminwidget(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/widgets/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/widgets/".$strClassName.".php")
-                return true;
-        }
-
-        //systemtasks
-        if(preg_match("/(class|interface)(.*)systemtask(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/systemtasks/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/systemtasks/".$strClassName.".php")
-                return true;
-        }
-
-        //statsreports
-        if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/statsreports/".$strClassName.".php")
-                return true;
-        }
-
-        //admin elements
-        if(preg_match("/(class_element)_(.*)_admin/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._adminpath_."/elements/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/elements/".$strClassName.".php")
-                return true;
-        }
-
-        //admin classes
-        //TODO: wtf? why strpos needed? whats wrong with that regex?
-        if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
-            if(is_file(_corepath_.$strModule._adminpath_."/".$strClassName.".php") && include _corepath_.$strModule._adminpath_."/".$strClassName.".php")
-                return true;
-        }
-
-
-        //---PORTAL CLASSES------------------------------------------------------------------------------
-
-        //search plugins
-        if(preg_match("/interface_search(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php") && include _corepath_.$strModule._portalpath_."/searchplugins/".$strClassName.".php")
-                return true;
-        }
-
-        //portal elements
-        if(preg_match("/(class_element)_(.*)_portal/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._portalpath_."/elements/".$strClassName.".php") && include _corepath_.$strModule._portalpath_."/elements/".$strClassName.".php")
-                return true;
-        }
-
-        //portal classes
-        if(preg_match("/(class|interface)_(.*)portal(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._portalpath_."/".$strClassName.".php") && include _corepath_.$strModule._portalpath_."/".$strClassName.".php")
-                return true;
-        }
-
-        //---SYSTEM CLASSES------------------------------------------------------------------------------
-        //db-drivers
-        if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/db/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/db/".$strClassName.".php")
-                return true;
-        }
-
-        //usersources
-        if(preg_match("/(class|interface)_usersources_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/usersources/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/usersources/".$strClassName.".php")
-                return true;
-        }
-
-        //workflows
-        if(preg_match("/class_workflow_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/workflows/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/workflows/".$strClassName.".php")
-                return true;
-        }
-
-        //system-classes
-        if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
-            if(is_file(_corepath_.$strModule._systempath_."/".$strClassName.".php") && include _corepath_.$strModule._systempath_."/".$strClassName.".php")
-                return true;
-        }
-
-        return false;
-    }
-
 
 }
