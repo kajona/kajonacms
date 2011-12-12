@@ -39,7 +39,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	protected function actionSetAbsolutePosition() {
 	    $strReturn = "";
 
-        $objCommon = new class_module_system_common($this->getSystemid());
+        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
 		//check permissions
 		if($objCommon->rightEdit()) {
 
@@ -78,7 +78,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	 */
 	protected function actionSetStatus() {
 	    $strReturn = "";
-        $objCommon = new class_module_system_common($this->getSystemid());
+        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
 	    if($objCommon->rightEdit()) {
     	    if(parent::setStatus()) {
     	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
@@ -102,66 +102,60 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      * <statusinfo></statusinfo><reloadurl></reloadurl>
      *
      * @return string
+     * @permissions right2
      */
     protected function actionExecuteSystemTask() {
         $strReturn = "";
         $strTaskOutput = "";
-        if($this->getObjModule()->rightRight2()) {
 
-            if($this->getParam("task") != "") {
-                //include the list of possible tasks
-                $objFilesystem = new class_filesystem();
-                $arrFiles = class_resourceloader::getInstance()->getFolderContent(_adminpath_."/systemtasks/", array(".php"));
-                asort($arrFiles);
-                //search for the matching task
-                foreach ($arrFiles as $strOneFile) {
-                    if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
+        if($this->getParam("task") != "") {
+            //include the list of possible tasks
+            $objFilesystem = new class_filesystem();
+            $arrFiles = class_resourceloader::getInstance()->getFolderContent(_adminpath_."/systemtasks/", array(".php"));
+            asort($arrFiles);
+            //search for the matching task
+            foreach ($arrFiles as $strOneFile) {
+                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
 
-                        //instantiate the current task
-                        $strClassname = uniStrReplace(".php", "", $strOneFile);
-                        $objTask = new $strClassname();
-                        if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+                    //instantiate the current task
+                    $strClassname = uniStrReplace(".php", "", $strOneFile);
+                    $objTask = new $strClassname();
+                    if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
-                            class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
+                        class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
 
-                            //let the work begin...
-                            $strTempOutput = trim($objTask->executeTask());
+                        //let the work begin...
+                        $strTempOutput = trim($objTask->executeTask());
 
-                            //progress information?
-                            if($objTask->getStrProgressInformation() != "")
-                                $strTaskOutput .= $objTask->getStrProgressInformation();
+                        //progress information?
+                        if($objTask->getStrProgressInformation() != "")
+                            $strTaskOutput .= $objTask->getStrProgressInformation();
 
-                            if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
-                                $strTaskOutput .= "<br />".$this->getText("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
-                            }
-                            else {
-                                $strTaskOutput .= $strTempOutput;
-                            }
-
-                            //create response-content
-                            $strReturn .= "<statusinfo>".$strTaskOutput."</statusinfo>\n";
-
-                            //reload requested by worker?
-                            if($objTask->getStrReloadUrl() != "")
-                                $strReturn .= "<reloadurl>".("&task=".$this->getParam("task").$objTask->getStrReloadParam())."</reloadurl>";
-
-                            break;
+                        if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
+                            $strTaskOutput .= "<br />".$this->getText("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
                         }
+                        else {
+                            $strTaskOutput .= $strTempOutput;
+                        }
+
+                        //create response-content
+                        $strReturn .= "<statusinfo>".$strTaskOutput."</statusinfo>\n";
+
+                        //reload requested by worker?
+                        if($objTask->getStrReloadUrl() != "")
+                            $strReturn .= "<reloadurl>".("&task=".$this->getParam("task").$objTask->getStrReloadParam())."</reloadurl>";
+
+                        break;
                     }
                 }
             }
-
-        }
-	    else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
         }
 
 	    return $strReturn;
     }
 
     /**
-     * Creates the lastest entries from the current systemlog.
+     * Fetches the latest entries from the current systemlog.
      * The entries can be limited by the optional param latestEntry.
      * If given, only entries created after the passed date will be returned.
      * The format of latestEntry is similar to the date returned, so YYYY-MM-DD HH:MM:SS
@@ -176,87 +170,79 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      * </entries>
      *
      * @return string
+     * @permissions right3
      */
     protected function actionSystemLog() {
         $strReturn = "";
 
-        if($this->getObjModule()->rightRight3()) {
+        $intStartDate = false;
+        if($this->getParam("latestEntry") != "")
+            $intStartDate = strtotime($this->getParam("latestEntry"));
 
+        //read the last few lines
+        $objFile = new class_filesystem();
+        $arrDetails = $objFile->getFileDetails("/system/debug/systemlog.log");
 
-            $intStartDate = false;
-            if($this->getParam("latestEntry") != "")
-                $intStartDate = strtotime($this->getParam("latestEntry"));
+        $intOffset = 0;
+        $bitSkip = false;
+        if($arrDetails["filesize"] > 20000) {
+            $intOffset = $arrDetails["filesize"] - 20000;
+            $bitSkip = true;
+        }
 
-            //read the last few lines
-            $objFile = new class_filesystem();
-            $arrDetails = $objFile->getFileDetails("/system/debug/systemlog.log");
+        $objFile->openFilePointer("/system/debug/systemlog.log", "r");
 
-            $intOffset = 0;
+        //forward to the new offset, skip entry
+        if($intOffset > 0)
+            $objFile->setFilePointerOffset($intOffset);
+
+        $arrRows = array();
+
+        $strRow = $objFile->readLineFromFile();
+        while($strRow !== false) {
+            if(!$bitSkip && trim($strRow) > 0)
+                $arrRows[] = $strRow;
+
             $bitSkip = false;
-            if($arrDetails["filesize"] > 20000) {
-                $intOffset = $arrDetails["filesize"] - 20000;
-                $bitSkip = true;
-            }
-
-            $objFile->openFilePointer("/system/debug/systemlog.log", "r");
-
-            //forward to the new offset, skip entry
-            if($intOffset > 0)
-                $objFile->setFilePointerOffset($intOffset);
-
-            $arrRows = array();
-
             $strRow = $objFile->readLineFromFile();
-            while($strRow !== false) {
-                if(!$bitSkip && trim($strRow) > 0)
-                    $arrRows[] = $strRow;
+        }
 
-                $bitSkip = false;
-                $strRow = $objFile->readLineFromFile();
+        $objFile->closeFilePointer();
+
+        $strReturn .= "<entries>\n";
+        $arrRows = array_reverse($arrRows);
+        foreach($arrRows as $strSingleRow) {
+
+            //parse entry
+            $strDate = uniSubstr($strSingleRow, 0, 19);
+            $strSingleRow = uniSubstr($strSingleRow, 20);
+
+            $intTempPos = uniStrpos($strSingleRow, " ");
+            $strLevel = uniSubstr($strSingleRow, 0, $intTempPos);
+            $strSingleRow = uniSubstr($strSingleRow, $intTempPos+1);
+
+            $intTempPos = uniStrpos($strSingleRow, ")")+1;
+            $strSession = uniSubstr($strSingleRow, 0, $intTempPos);
+
+            $strLogEntry = uniSubstr($strSingleRow, $intTempPos);
+
+            if($intStartDate !== false) {
+                $intCurDate = strtotime($strDate);
+                if($intStartDate >= $intCurDate)
+                    continue;
             }
 
-            $objFile->closeFilePointer();
+            $strReturn .= "\t<entry>\n";
+            $strReturn .= "\t\t<level>".$strLevel."</level>\n";
+            $strReturn .= "\t\t<date>".$strDate."</date>\n";
+            $strReturn .= "\t\t<session>".$strSession."</session>\n";
+            $strReturn .= "\t\t<content>".  xmlSafeString(strip_tags($strLogEntry))."</content>\n";
 
-            $strReturn .= "<entries>\n";
-            $arrRows = array_reverse($arrRows);
-            foreach($arrRows as $strSingleRow) {
-
-                //parse entry
-                $strDate = uniSubstr($strSingleRow, 0, 19);
-                $strSingleRow = uniSubstr($strSingleRow, 20);
-
-                $intTempPos = uniStrpos($strSingleRow, " ");
-                $strLevel = uniSubstr($strSingleRow, 0, $intTempPos);
-                $strSingleRow = uniSubstr($strSingleRow, $intTempPos+1);
-
-                $intTempPos = uniStrpos($strSingleRow, ")")+1;
-                $strSession = uniSubstr($strSingleRow, 0, $intTempPos);
-
-                $strLogEntry = uniSubstr($strSingleRow, $intTempPos);
-
-                if($intStartDate !== false) {
-                    $intCurDate = strtotime($strDate);
-                    if($intStartDate >= $intCurDate)
-                        continue;
-                }
-
-                $strReturn .= "\t<entry>\n";
-                $strReturn .= "\t\t<level>".$strLevel."</level>\n";
-                $strReturn .= "\t\t<date>".$strDate."</date>\n";
-                $strReturn .= "\t\t<session>".$strSession."</session>\n";
-                $strReturn .= "\t\t<content>".  xmlSafeString(strip_tags($strLogEntry))."</content>\n";
-
-                $strReturn .= "\t</entry>\n";
-            }
-
-            $strReturn .= "</entries>";
-
-
+            $strReturn .= "\t</entry>\n";
         }
-	    else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
-        }
+
+        $strReturn .= "</entries>";
+
 
         return $strReturn;
     }
@@ -276,62 +262,55 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      * </info>
      *
      * @return string
+     * @permissions edit
      */
     protected function actionSystemInfo() {
         $strReturn = "";
-        if($this->getObjModule()->rightEdit()) {
+        $objCommon = new class_module_system_common();
 
-            $objCommon = new class_module_system_common();
+        $strReturn .= "<info>";
 
-            $strReturn .= "<info>";
-
-            $arrInfos = $objCommon->getPHPInfo();
-            $strReturn .= "<infoset name=\"PHP\">";
-            foreach($arrInfos as $strKey => $strValue) {
-                $strReturn .= "<entry>";
-                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
-                $strReturn .= "</entry>";
-            }
-            $strReturn .= "</infoset>";
-
-            $arrInfos = $objCommon->getWebserverInfos();
-            $strReturn .= "<infoset name=\"Webserver\">";
-            foreach($arrInfos as $strKey => $strValue) {
-                $strReturn .= "<entry>";
-                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
-                $strReturn .= "</entry>";
-            }
-            $strReturn .= "</infoset>";
-
-            $arrInfos = $objCommon->getDatabaseInfos();
-            $strReturn .= "<infoset name=\"Database\">";
-            foreach($arrInfos as $strKey => $strValue) {
-                $strReturn .= "<entry>";
-                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
-                $strReturn .= "</entry>";
-            }
-            $strReturn .= "</infoset>";
-
-            $arrInfos = $objCommon->getGDInfos();
-            $strReturn .= "<infoset name=\"GD Lib\">";
-            foreach($arrInfos as $strKey => $strValue) {
-                $strReturn .= "<entry>";
-                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
-                $strReturn .= "</entry>";
-            }
-            $strReturn .= "</infoset>";
-
-            $strReturn .= "</info>";
-
+        $arrInfos = $objCommon->getPHPInfo();
+        $strReturn .= "<infoset name=\"PHP\">";
+        foreach($arrInfos as $strKey => $strValue) {
+            $strReturn .= "<entry>";
+            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "</entry>";
         }
-	    else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        $strReturn .= "</infoset>";
+
+        $arrInfos = $objCommon->getWebserverInfos();
+        $strReturn .= "<infoset name=\"Webserver\">";
+        foreach($arrInfos as $strKey => $strValue) {
+            $strReturn .= "<entry>";
+            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "</entry>";
         }
+        $strReturn .= "</infoset>";
+
+        $arrInfos = $objCommon->getDatabaseInfos();
+        $strReturn .= "<infoset name=\"Database\">";
+        foreach($arrInfos as $strKey => $strValue) {
+            $strReturn .= "<entry>";
+            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "</entry>";
+        }
+        $strReturn .= "</infoset>";
+
+        $arrInfos = $objCommon->getGDInfos();
+        $strReturn .= "<infoset name=\"GD Lib\">";
+        foreach($arrInfos as $strKey => $strValue) {
+            $strReturn .= "<entry>";
+            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "</entry>";
+        }
+        $strReturn .= "</infoset>";
+
+        $strReturn .= "</info>";
 
         return $strReturn;
     }
@@ -347,28 +326,22 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      * </modules>
      *
      * @return string
+     * @permissions view
      */
     protected function actionModuleList() {
         $strReturn = "";
 
-		if($this->getObjModule()->rightView()) {
-
-            $strReturn .= "<modules>";
-			//Loading the modules
-			$arrModules = class_module_system_module::getAllModules();
-			foreach($arrModules as $objSingleModule) {
-                $strReturn .= "<module>";
-                $strReturn .= "<name>".  xmlSafeString($objSingleModule->getStrName())."</name>";
-                $strReturn .= "<version>".  xmlSafeString($objSingleModule->getStrVersion())."</version>";
-                $strReturn .= "</module>";
-			}
-
-			$strReturn .= "</modules>";
-		}
-		else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        $strReturn .= "<modules>";
+        //Loading the modules
+        $arrModules = class_module_system_module::getAllModules();
+        foreach($arrModules as $objSingleModule) {
+            $strReturn .= "<module>";
+            $strReturn .= "<name>".  xmlSafeString($objSingleModule->getStrName())."</name>";
+            $strReturn .= "<version>".  xmlSafeString($objSingleModule->getStrVersion())."</version>";
+            $strReturn .= "</module>";
         }
+
+        $strReturn .= "</modules>";
 
 		return $strReturn;
     }
@@ -388,79 +361,71 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      * </sessions>
      *
      * @return string
+     * @permissions right1
      */
     protected function actionSystemSessions() {
         $strReturn = "";
         //check needed rights
-        if($this->getObjModule()->rightRight1()) {
 
-            $arrSessions = class_module_system_session::getAllActiveSessions();
+        $arrSessions = class_module_system_session::getAllActiveSessions();
+        $strReturn .= "<sessions>";
 
-            $strReturn .= "<sessions>";
+        foreach ($arrSessions as $objOneSession) {
 
-            foreach ($arrSessions as $objOneSession) {
+            $strReturn .= "<session>";
 
-                $strReturn .= "<session>";
-
-                $strUsername = "";
-                if($objOneSession->getStrUserid() != "") {
-                    $objUser = new class_module_user_user($objOneSession->getStrUserid());
-                    $strUsername = $objUser->getStrUsername();
-                }
-
-                $strLoginStatus = "";
-                if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                    $strLoginStatus = $this->getText("session_loggedin");
-                else
-                    $strLoginStatus = $this->getText("session_loggedout");
-
-                 //find out what the user is doing...
-                $strLastUrl = $objOneSession->getStrLasturl();
-                if(uniStrpos($strLastUrl, "?") !== false)
-                    $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
-                $strActivity = "";
-
-                if(uniStrpos($strLastUrl, "admin=1") !== false) {
-                    $strActivity .= $this->getText("session_admin");
-                    foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
-                        $arrUrlParam = explode("=", $strOneParam);
-                        if($arrUrlParam[0] == "module")
-                            $strActivity .= $arrUrlParam[1];
-                    }
-                }
-                else {
-                    $strActivity .= $this->getText("session_portal");
-                    if($strLastUrl == "")
-                        $strActivity .= _pages_indexpage_;
-                    else {
-                        foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
-                            $arrUrlParam = explode("=", $strOneParam);
-                            if($arrUrlParam[0] == "page")
-                                $strActivity .= $arrUrlParam[1];
-                        }
-
-                        if($strActivity == $this->getText("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
-                            $strActivity .= $this->getText("session_portal_imagegeneration");
-                        }
-                    }
-                }
-
-                $strReturn .= "<username>".  xmlSafeString($strUsername)."</username>";
-                $strReturn .= "<loginstatus>".  xmlSafeString($strLoginStatus)."</loginstatus>";
-                $strReturn .= "<releasetime>".  xmlSafeString(timeToString($objOneSession->getIntReleasetime()))."</releasetime>";
-                $strReturn .= "<activity>".  xmlSafeString($strActivity)."</activity>";
-
-                $strReturn .= "</session>";
+            $strUsername = "";
+            if($objOneSession->getStrUserid() != "") {
+                $objUser = new class_module_user_user($objOneSession->getStrUserid());
+                $strUsername = $objUser->getStrUsername();
             }
 
-            $strReturn .= "</sessions>";
+            $strLoginStatus = "";
+            if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
+                $strLoginStatus = $this->getText("session_loggedin");
+            else
+                $strLoginStatus = $this->getText("session_loggedout");
 
+             //find out what the user is doing...
+            $strLastUrl = $objOneSession->getStrLasturl();
+            if(uniStrpos($strLastUrl, "?") !== false)
+                $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
+            $strActivity = "";
 
+            if(uniStrpos($strLastUrl, "admin=1") !== false) {
+                $strActivity .= $this->getText("session_admin");
+                foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                    $arrUrlParam = explode("=", $strOneParam);
+                    if($arrUrlParam[0] == "module")
+                        $strActivity .= $arrUrlParam[1];
+                }
+            }
+            else {
+                $strActivity .= $this->getText("session_portal");
+                if($strLastUrl == "")
+                    $strActivity .= _pages_indexpage_;
+                else {
+                    foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                        $arrUrlParam = explode("=", $strOneParam);
+                        if($arrUrlParam[0] == "page")
+                            $strActivity .= $arrUrlParam[1];
+                    }
+
+                    if($strActivity == $this->getText("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                        $strActivity .= $this->getText("session_portal_imagegeneration");
+                    }
+                }
+            }
+
+            $strReturn .= "<username>".  xmlSafeString($strUsername)."</username>";
+            $strReturn .= "<loginstatus>".  xmlSafeString($strLoginStatus)."</loginstatus>";
+            $strReturn .= "<releasetime>".  xmlSafeString(timeToString($objOneSession->getIntReleasetime()))."</releasetime>";
+            $strReturn .= "<activity>".  xmlSafeString($strActivity)."</activity>";
+
+            $strReturn .= "</session>";
         }
-        else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
-        }
+
+        $strReturn .= "</sessions>";
 
         return $strReturn;
     }

@@ -19,7 +19,6 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 
 	/**
 	 * Constructor
-	 *
 	 */
 	public function __construct() {
         $this->setArrModuleEntry("modul", "tags");
@@ -28,16 +27,12 @@ class class_module_tags_admin extends class_admin implements interface_admin {
 
 	}
 
-
-
     public function getRequiredFields() {
         if($this->getAction() == "saveTag")
             return array("tag_name" => "string");
         else
             parent::getRequiredFields();
     }
-
-
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -51,49 +46,44 @@ class class_module_tags_admin extends class_admin implements interface_admin {
     /**
      * @return string
      * @autoTestable
+     * @permissions view
      */
     protected function actionList() {
         $strReturn = "";
-		//Check the rights
-		if($this->getObjModule()->rightView()) {
-			$intI = 0;
+        $intI = 0;
 
-			//showing a list using the pageview
-            $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getNumberOfTags());
-		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
-		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-		    $objArraySectionIterator->setArraySection(class_module_tags_tag::getAllTags($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        //showing a list using the pageview
+        $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getNumberOfTags());
+        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_tags_tag::getAllTags($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "list");
-            $arrTags = $arrPageViews["elements"];
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "list");
+        $arrTags = $arrPageViews["elements"];
 
-			foreach($arrTags as $objTag) {
-				$strActions = "";
+        foreach($arrTags as $objTag) {
+            $strActions = "";
 
-	    		if($objTag->rightEdit())
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editTag", "&systemid=".$objTag->getSystemid(), "", $this->getText("tag_edit"), "icon_pencil.gif"));
-	    		if($objTag->rightDelete())
-	    			$strActions.= $this->objToolkit->listDeleteButton($objTag->getStrName(), $this->getText("tag_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteTag", "&systemid=".$objTag->getSystemid()));
-	    		if($objTag->rightEdit())
-	    			$strActions.= $this->objToolkit->listStatusButton($objTag->getSystemid());
-	    		if($objTag->rightRight())
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objTag->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objTag->getSystemid())));
+            if($objTag->rightEdit())
+                $strActions.= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editTag", "&systemid=".$objTag->getSystemid(), "", $this->getText("tag_edit"), "icon_pencil.gif"));
+            if($objTag->rightDelete())
+                $strActions.= $this->objToolkit->listDeleteButton($objTag->getStrName(), $this->getText("tag_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteTag", "&systemid=".$objTag->getSystemid()));
+            if($objTag->rightEdit())
+                $strActions.= $this->objToolkit->listStatusButton($objTag->getSystemid());
+            if($objTag->rightRight())
+                $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objTag->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objTag->getSystemid())));
 
-	  			$strReturn .= $this->objToolkit->listRow3($objTag->getStrName(), count($objTag->getListOfAssignments())." ".$this->getText("tag_assignments"), $strActions, getImageAdmin("icon_dot.gif"), $intI++);
-			}
+            $strReturn .= $this->objToolkit->listRow3($objTag->getStrName(), count($objTag->getListOfAssignments())." ".$this->getText("tag_assignments"), $strActions, getImageAdmin("icon_dot.gif"), $intI++);
+        }
 
-			if(uniStrlen($strReturn) != 0)
-			    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
+        if(uniStrlen($strReturn) != 0)
+            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
 
-			if(count($arrTags) > 0)
-			    $strReturn .= $arrPageViews["pageview"];
+        if(count($arrTags) > 0)
+            $strReturn .= $arrPageViews["pageview"];
 
-			if(count($arrTags) == 0)
-				$strReturn .= $this->getText("list_tags_empty");
-
-		}
-		else
-			$strReturn .= $this->getText("commons_error_permissions");
+        if(count($arrTags) == 0)
+            $strReturn .= $this->getText("list_tags_empty");
 
 		return $strReturn;
     }
@@ -177,28 +167,24 @@ class class_module_tags_admin extends class_admin implements interface_admin {
      * @param string $strTargetSystemid the systemid to tag
      * @param string $strAttribute additional info used to differ between tag-sets for a single systemid
      * @return string
+     * @permissions edit
      */
     public function getTagForm($strTargetSystemid, $strAttribute = null) {
         $strReturn = "";
-        if($this->getObjModule()->rightEdit()) {
+        $strTagContent = "";
 
-            $strTagContent = "";
+        $strTagsWrapperId = generateSystemid();
 
-            $strTagsWrapperId = generateSystemid();
+        $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
+        $strTagContent .= $this->objToolkit->formTextRow($this->getText("tag_name_hint"));
+        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getText("tag_name"));
+        $strTagContent .= $this->objToolkit->formInputSubmit($this->getText("button_add"), $this->getText("button_add"), "");
+        $strTagContent .= $this->objToolkit->formClose();
 
-            $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
-            $strTagContent .= $this->objToolkit->formTextRow($this->getText("tag_name_hint"));
-            $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getText("tag_name"));
-            $strTagContent .= $this->objToolkit->formInputSubmit($this->getText("button_add"), $this->getText("button_add"), "");
-            $strTagContent .= $this->objToolkit->formClose();
+        $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
 
-            $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
-
-            $strReturn .= $this->objToolkit->divider();
-            $strReturn .= $this->objToolkit->getFieldset($this->getText("tagsection_header"), $strTagContent);
-        }
-        else
-            $strReturn .= $this->getText("commons_error_permissions");
+        $strReturn .= $this->objToolkit->divider();
+        $strReturn .= $this->objToolkit->getFieldset($this->getText("tagsection_header"), $strTagContent);
 
         return $strReturn;
     }

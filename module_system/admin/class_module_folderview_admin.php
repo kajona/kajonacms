@@ -37,6 +37,10 @@ class class_module_folderview_admin extends class_admin  implements interface_ad
         return $this->getText("moduleFolderviewTitle");
     }
 
+    /**
+     * @return string
+     * @permissions view
+     */
     protected function actionBrowserChooser() {
         $strReturn = "";
 

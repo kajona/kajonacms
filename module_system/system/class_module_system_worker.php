@@ -48,7 +48,7 @@ class class_module_system_worker extends class_model implements interface_model 
 
 
     /**
-     * Initalises the current object, if a systemid was given
+     * Initialises the current object, if a systemid was given
      *
      */
     protected function initObjectInternal() {
@@ -138,7 +138,6 @@ class class_module_system_worker extends class_model implements interface_model 
      * @return array
      */
     public function chekRightSystemRelations() {
-        $arrReturn = array();
         $strQuery = "SELECT right_id, system_comment
                        FROM "._dbprefix_."system_right
                        LEFT JOIN "._dbprefix_."system
@@ -156,7 +155,6 @@ class class_module_system_worker extends class_model implements interface_model 
      * @return array
      */
     public function checkDateSystemRelations() {
-        $arrReturn = array();
         $strQuery = "SELECT system_date_id
                        FROM "._dbprefix_."system_date
                        LEFT JOIN "._dbprefix_."system

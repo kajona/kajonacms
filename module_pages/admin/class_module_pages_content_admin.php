@@ -73,215 +73,202 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 * Returns a list of available placeholders & elements on this page
 	 *
 	 * @return string
+     * @permissions edit
 	 */
 	protected function actionList() {
 		$strReturn = "";
         $objPage = new class_module_pages_page($this->getSystemid());
-		if($objPage->rightEdit($this->getSystemid())) {
-            //get infos about the page
+        //get infos about the page
 
-            $arrToolbarEntries = array();
-            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
-            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
-            $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
+        $arrToolbarEntries = array();
+        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
+        $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+        $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
 
-            //if languages are installed, present a language switch right here
-            $objLanguages = new class_module_languages_admin();
-            $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
+        //if languages are installed, present a language switch right here
+        $objLanguages = new class_module_languages_admin();
+        $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
-            if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
-                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
+        if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
+            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
 
-			$arrTemplate = array();
-			$arrTemplate["pagetemplate"] = $objPage->getStrTemplate();
-			$arrTemplate["pagetemplateTitle"] = $this->getText("template");
+        $arrTemplate = array();
+        $arrTemplate["pagetemplate"] = $objPage->getStrTemplate();
+        $arrTemplate["pagetemplateTitle"] = $this->getText("template");
 
-			$arrTemplate["lastuserTitle"] = $this->getText("lastuserTitle");
-			$arrTemplate["lasteditTitle"] = $this->getText("lasteditTitle");
-			$arrTemplate["lastuser"] = $objPage->getLastEditUser();
+        $arrTemplate["lastuserTitle"] = $this->getText("lastuserTitle");
+        $arrTemplate["lasteditTitle"] = $this->getText("lasteditTitle");
+        $arrTemplate["lastuser"] = $objPage->getLastEditUser();
 
-            if(_system_changehistory_enabled_ != "false")
-                $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getText("show_history")).")";
+        if(_system_changehistory_enabled_ != "false")
+            $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getText("show_history")).")";
 
-			$arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
-			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
+        $arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
+        $strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
-            //try to load template, otherwise abort
-            $strTemplateID = null;
-			try {
-                $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
-			} catch (class_exception $objException) {
-                $strReturn .= $this->getText("templateNotLoaded")."<br />";
-            }
+        //try to load template, otherwise abort
+        $strTemplateID = null;
+        try {
+            $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
+        } catch (class_exception $objException) {
+            $strReturn .= $this->getText("templateNotLoaded")."<br />";
+        }
 
-			//Load elements on template, master-page special case!
-			if($objPage->getStrName() == "master")
-				$arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 1);
-			else
-				$arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 0);
+        //Load elements on template, master-page special case!
+        if($objPage->getStrName() == "master")
+            $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 1);
+        else
+            $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 0);
 
-			$arrElementsOnPage = array();
-			//Language-dependant loading of elements, if installed
-		    $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
-            //save a copy of the array to be able to check against all values later on
-            $arrElementsOnPageCopy = $arrElementsOnPage;
+        $arrElementsOnPage = array();
+        //Language-dependant loading of elements, if installed
+        $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
+        //save a copy of the array to be able to check against all values later on
+        $arrElementsOnPageCopy = $arrElementsOnPage;
 
-			//Loading all Elements installed on the system ("RAW"-Elements)
-			$arrElementsInSystem = class_module_pages_element::getAllElements();
-
-
-			//So, loop through the placeholders and check, if theres any element already belonging to this one
-            $intI = 0;
-			if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
-			    //Iterate over every single placeholder provided by the template
-				foreach($arrElementsOnTemplate as $intKeyElementOnTemplate => $arrOneElementOnTemplate) {
-				    //Iterate over every single element-type provided by the placeholder
-					$bitHit = false;
-					$bitOutputAtPlaceholder = false;
-
-					$strOutputAtPlaceholder = "";
-					//Do we have one or more elements already in db at this placeholder?
-					$bitHit = false;
-
-					foreach ($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
-					    //Check, if its the same placeholder
-					    $bitSamePlaceholder = false;
-					    if($arrOneElementOnTemplate["placeholder"] == $objOneElementOnPage->getStrPlaceholder()) {
-					        $bitSamePlaceholder = true;
-					    }
-					    else {
-					        //Check, if the current placeholder was modified?
-					        //corresponding to ticket 0000159, this functioniality is removed
-					        /*
-					        $arrPlaceholderDescriber = explode("_", $arrOneElementOnTemplate["placeholder"]);
-					        if($arrPlaceholderDescriber[0] == $objOneElementOnPage->getStrName())
-					            $bitSamePlaceholder = true;
-					        */
-					    }
-
-						if($bitSamePlaceholder) {
-							$bitHit = true;
-
-                            $objLockmanager = $objOneElementOnPage->getLockManager();
-
-							//Create a row to handle the element, check all necessary stuff such as locking etc
-							$strActions = "";
-							//First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
-							//won't be visible
-							if(!$objLockmanager->isAccessibleForCurrentUser()) {
-								//So, return a button, if we have an admin in front of us
-								if($objLockmanager->isUnlockableForCurrentUser() ) {
-									$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
-								}
-								//If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-								$strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_pencilLocked.gif"));
-								$strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_tonLocked.gif"));
-							}
-							else {
-								//if its the user who locked the record, unlock it now
-								if($objLockmanager->isLockedByCurrentUser())
-								    $objLockmanager->unlockRecord();
-
-								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-							}
-
-							//The Icons to sort the list and to copy the element
-    		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_copy"), "icon_copy.gif"));
-
-							//The status-icons
-    						$strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
-
-							//Rights - could be used, but not up to now not needed, so not yet implemented completely
-							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->getText("element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
-
-							//Put all Output together
-							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrReadableName() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
-							$bitOutputAtPlaceholder = true;
-
-							//remove the element from the array
-							unset($arrElementsOnPage[$intArrElementsOnPageKey]);
-						}
-
-					}
-
-					//Check, if one of the elements in the placeholder is allowed to be used multiple times
-					//$bitOneInstalled = false;
-					foreach ($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
-        				foreach($arrElementsInSystem as $objOneElementInSystem) {
-        					if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
-        						$objElement = $objOneElementInSystem;
-        						if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
-            						//So, the Row for a new element: element is repeatable or not yet created
-            						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
-            						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrReadableName() . ")", $strActions, $intI++);
-            						$bitOutputAtPlaceholder = true;
-            					}
-            					else {
-            						//element not repeatable.
-            					    //Is there already one element installed? if not, then it IS allowed to create a new one
-            					    $bitOneInstalled = false;
-            					    foreach($arrElementsOnPageCopy as $objOneElementToCheck) {
-            					        if($arrOneElementOnTemplate["placeholder"] == $objOneElementToCheck->getStrPlaceholder() && $arrSingleElementOnTemplateplaceholder["element"] == $objOneElementToCheck->getStrElement())
-            					           $bitOneInstalled = true;
-            					    }
-            					    if(!$bitOneInstalled) {
-            					        //So, the Row for a new element
-                						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
-                						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", $strActions, $intI++);
-                						$bitOutputAtPlaceholder = true;
-            					    }
-            					}
-        					}
-        				}
-					}
-
-					if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
-                        $strListId = generateSystemid();
-                        //$strReturn .= $this->objToolkit->listHeader();
-                        $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
-                        $strReturn .= $strOutputAtPlaceholder;
-                        //$strReturn .= $this->objToolkit->listFooter();
-                        $strReturn .= $this->objToolkit->dragableListFooter($strListId);
-					}
-
-					//Done with this placeholder, so its time to draw a divider or offer the possibility to add a new element
-					//but just, if the next placeholder isn't the same as the current, but a different element
-					if(isset($arrElementsOnTemplate[$intKeyElementOnTemplate+1])) {
-					   if($arrElementsOnTemplate[$intKeyElementOnTemplate]["placeholder"] != $arrElementsOnTemplate[$intKeyElementOnTemplate+1]["placeholder"]) {
-					       if((int)uniStrlen($strOutputAtPlaceholder) > 0)
-				              $strReturn .= $this->objToolkit->divider();
-					   }
-					}
-				}
+        //Loading all Elements installed on the system ("RAW"-Elements)
+        $arrElementsInSystem = class_module_pages_element::getAllElements();
 
 
-            } else {
-                $strReturn .= $this->getText("element_liste_leer");
-			}
+        //So, loop through the placeholders and check, if theres any element already belonging to this one
+        $intI = 0;
+        if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
+            //Iterate over every single placeholder provided by the template
+            foreach($arrElementsOnTemplate as $intKeyElementOnTemplate => $arrOneElementOnTemplate) {
+                //Iterate over every single element-type provided by the placeholder
+                $bitHit = false;
+                $bitOutputAtPlaceholder = false;
 
-            //if there are any pagelements remaining, print a warning and print the elements row
-            if(count($arrElementsOnPage) > 0) {
-                $strReturn .= $this->objToolkit->divider();
-                $strReturn .= $this->objToolkit->warningBox($this->getText("warning_elementsremaining"));
-                $strReturn .= $this->objToolkit->listHeader();
+                $strOutputAtPlaceholder = "";
+                //Do we have one or more elements already in db at this placeholder?
+                $bitHit = false;
 
-                //minimized actions now, plz. this ain't being a real element anymore!
-                foreach($arrElementsOnPage as $objOneElement) {
-                    $strActions = "";
-                    $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                foreach ($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
+                    //Check, if its the same placeholder
+                    $bitSamePlaceholder = false;
+                    if($arrOneElementOnTemplate["placeholder"] == $objOneElementOnPage->getStrPlaceholder()) {
+                        $bitSamePlaceholder = true;
+                    }
 
-                    //Put all Output together
-                    $strReturn .= $this->objToolkit->listRow2($objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), $strActions, $intI++);
+                    if($bitSamePlaceholder) {
+                        $bitHit = true;
+
+                        $objLockmanager = $objOneElementOnPage->getLockManager();
+
+                        //Create a row to handle the element, check all necessary stuff such as locking etc
+                        $strActions = "";
+                        //First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
+                        //won't be visible
+                        if(!$objLockmanager->isAccessibleForCurrentUser()) {
+                            //So, return a button, if we have an admin in front of us
+                            if($objLockmanager->isUnlockableForCurrentUser() ) {
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
+                            }
+                            //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
+                            $strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_pencilLocked.gif"));
+                            $strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_tonLocked.gif"));
+                        }
+                        else {
+                            //if its the user who locked the record, unlock it now
+                            if($objLockmanager->isLockedByCurrentUser())
+                                $objLockmanager->unlockRecord();
+
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
+                            $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                        }
+
+                        //The Icons to sort the list and to copy the element
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_copy"), "icon_copy.gif"));
+
+                        //The status-icons
+                        $strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
+
+                        //Rights - could be used, but not up to now not needed, so not yet implemented completely
+                        //$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->getText("element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
+
+                        //Put all Output together
+                        $strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrReadableName() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
+                        $bitOutputAtPlaceholder = true;
+
+                        //remove the element from the array
+                        unset($arrElementsOnPage[$intArrElementsOnPageKey]);
+                    }
+
                 }
-                $strReturn .= $this->objToolkit->listFooter();
+
+                //Check, if one of the elements in the placeholder is allowed to be used multiple times
+                //$bitOneInstalled = false;
+                foreach ($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
+                    foreach($arrElementsInSystem as $objOneElementInSystem) {
+                        if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
+                            $objElement = $objOneElementInSystem;
+                            if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
+                                //So, the Row for a new element: element is repeatable or not yet created
+                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
+                                $strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrReadableName() . ")", $strActions, $intI++);
+                                $bitOutputAtPlaceholder = true;
+                            }
+                            else {
+                                //element not repeatable.
+                                //Is there already one element installed? if not, then it IS allowed to create a new one
+                                $bitOneInstalled = false;
+                                foreach($arrElementsOnPageCopy as $objOneElementToCheck) {
+                                    if($arrOneElementOnTemplate["placeholder"] == $objOneElementToCheck->getStrPlaceholder() && $arrSingleElementOnTemplateplaceholder["element"] == $objOneElementToCheck->getStrElement())
+                                       $bitOneInstalled = true;
+                                }
+                                if(!$bitOneInstalled) {
+                                    //So, the Row for a new element
+                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
+                                    $strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", $strActions, $intI++);
+                                    $bitOutputAtPlaceholder = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
+                    $strListId = generateSystemid();
+                    //$strReturn .= $this->objToolkit->listHeader();
+                    $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
+                    $strReturn .= $strOutputAtPlaceholder;
+                    //$strReturn .= $this->objToolkit->listFooter();
+                    $strReturn .= $this->objToolkit->dragableListFooter($strListId);
+                }
+
+                //Done with this placeholder, so its time to draw a divider or offer the possibility to add a new element
+                //but just, if the next placeholder isn't the same as the current, but a different element
+                if(isset($arrElementsOnTemplate[$intKeyElementOnTemplate+1])) {
+                   if($arrElementsOnTemplate[$intKeyElementOnTemplate]["placeholder"] != $arrElementsOnTemplate[$intKeyElementOnTemplate+1]["placeholder"]) {
+                       if((int)uniStrlen($strOutputAtPlaceholder) > 0)
+                          $strReturn .= $this->objToolkit->divider();
+                   }
+                }
             }
 
 
+        } else {
+            $strReturn .= $this->getText("element_liste_leer");
+        }
 
-		} else {
-			$strReturn = $this->getText("commons_error_permissions");
-		}
+        //if there are any pagelements remaining, print a warning and print the elements row
+        if(count($arrElementsOnPage) > 0) {
+            $strReturn .= $this->objToolkit->divider();
+            $strReturn .= $this->objToolkit->warningBox($this->getText("warning_elementsremaining"));
+            $strReturn .= $this->objToolkit->listHeader();
+
+            //minimized actions now, plz. this ain't being a real element anymore!
+            foreach($arrElementsOnPage as $objOneElement) {
+                $strActions = "";
+                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+
+                //Put all Output together
+                $strReturn .= $this->objToolkit->listRow2($objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), $strActions, $intI++);
+            }
+            $strReturn .= $this->objToolkit->listFooter();
+        }
+
+
 
 		return $strReturn;
 	}
@@ -852,6 +839,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 * Helper to generate a small path-navigation
 	 *
 	 * @return string
+     * @permissions view
 	 */
 	private function getPathNavigation() {
 		$arrPath = $this->getPathArray();
@@ -860,18 +848,16 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
 
 		foreach($arrPath as $strOneSystemid) {
-            $objCommon = new class_module_system_common($strOneSystemid);
+            $objObject = class_objectfactory::getInstance()->getObject($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigation
-			if($objCommon->getIntModuleNr() == _pages_content_modul_id_)
+			if($objObject->getIntModuleNr() == _pages_content_modul_id_)
 				continue;
 
-            if($objCommon->getIntModuleNr() == _pages_folder_id_) {
-                $objFolder = new class_module_pages_folder($strOneSystemid);
-                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
+            if($objObject instanceof class_module_pages_folder) {
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrName());
             }
-            if($objCommon->getIntModuleNr() == _pages_modul_id_) {
-                $objPage = new class_module_pages_page($strOneSystemid);
-                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objPage->getStrBrowsername());
+            if($objObject instanceof class_module_pages_page) {
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrBrowsername());
             }
 
 		}

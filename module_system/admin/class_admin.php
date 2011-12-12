@@ -791,8 +791,13 @@ abstract class class_admin {
      * By default, the method to be called is set up out of the action-param passed.
      * Example: The action requested is names "newPage". Therefore, the framework tries to
      * call actionNewPage(). If no method matching the schema is found, an exception is being thrown.
-     * The actions' output is saved back to self::strOutput and, in is returned in addition.
+     * The actions' output is saved back to self::strOutput and, is returned in addition.
      * Returning the content is only implemented to remain backwards compatible with older implementations.
+     *
+     * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
+     * Therefore the list of permissions, named after the "permissions" annotation are validated against
+     * the module currently loaded.
+     * @see class_rights::validatePermissionString
      *
      *
      * @param string $strAction
@@ -811,10 +816,22 @@ abstract class class_admin {
 
         if(method_exists($this, $strMethodName)) {
 
+            //validate the permissions required to call this method, the xml-part is validated afterwards
+            $objAnnotations = new class_annotations(get_class($this));
+
+            $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
+            if($strPermissions !== false) {
+                if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $this->getObjModule())) {
+                    $this->strOutput = $this->getText("commons_error_permissions");
+                    throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                }
+            }
+
+
             //validate the loading channel - xml or regular
             if(_xmlLoader_ === true) {
                 //check it the method is allowed for xml-requests
-                $objAnnotations = new class_annotations(get_class($this));
+
                 if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && substr(get_class($this), -3) != "xml")
                     throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
 
@@ -824,12 +841,11 @@ abstract class class_admin {
                 }
             }
 
-
             $this->strOutput = $this->$strMethodName();
         }
         else {
             $objReflection = new ReflectionClass($this);
-            //if the pe was requested and the current module is a login-module, there are unsufficient permsissions given
+            //if the pe was requested and the current module is a login-module, there are insufficient permissions given
             if($this->arrModule["template"] == "/login.tpl" && $this->getParam("pe") != "")
                 throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
 

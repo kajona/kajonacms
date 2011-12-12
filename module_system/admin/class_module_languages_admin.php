@@ -42,43 +42,38 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 * Returns a list of the languages
 	 *
 	 * @return string
+     * @permissions view
 	 */
 	protected function actionList() {
 
 		$strReturn = "";
 		$intI = 0;
-		//rights
-		if($this->getObjModule()->rightView()) {
-		    $arrObjLanguages = class_module_languages_language::getAllLanguages();
+        $arrObjLanguages = class_module_languages_language::getAllLanguages();
 
-            foreach ($arrObjLanguages as $objOneLanguage) {
-                //Correct Rights?
-			    if($objOneLanguage->rightView()) {
-				    $strAction = "";
-					if($objOneLanguage->rightEdit())
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
-		    		if($objOneLanguage->rightDelete())
-		    		    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid()));
-		    		if($objOneLanguage->rightEdit())
-		    		    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
-		    		if($objOneLanguage->rightRight())
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneLanguage->getSystemid())));
+        foreach ($arrObjLanguages as $objOneLanguage) {
+            //Correct Rights?
+            if($objOneLanguage->rightView()) {
+                $strAction = "";
+                if($objOneLanguage->rightEdit())
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
+                if($objOneLanguage->rightDelete())
+                    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid()));
+                if($objOneLanguage->rightEdit())
+                    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
+                if($objOneLanguage->rightRight())
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneLanguage->getSystemid())));
 
-		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (".$this->getText("language_isDefault").")" : ""), $strAction, $intI++);
-				}
+                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (".$this->getText("language_isDefault").")" : ""), $strAction, $intI++);
             }
-            if($this->getObjModule()->rightEdit())
-                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
+        }
+        if($this->getObjModule()->rightEdit())
+            $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
 
-            if(uniStrlen($strReturn) != 0)
-                $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
+        if(uniStrlen($strReturn) != 0)
+            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
 
-		    if(count($arrObjLanguages) == 0)
-		        $strReturn .= $this->getText("liste_leer");
-
-		}
-		else
-			$strReturn = $this->getText("commons_error_permissions");
+        if(count($arrObjLanguages) == 0)
+            $strReturn .= $this->getText("liste_leer");
 
 		return $strReturn;
 	}
@@ -93,10 +88,10 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 *
 	 * @param string $strMode
 	 * @return string
+     * @permissions edit
 	 */
 	protected function actionNewLanguage($strMode = "new") {
 	    $strReturn = "";
-	    $arrLanguages = array();
 	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
 	    $objLang = new class_module_languages_language();
 	    $arrLanguages = $objLang->getAllLanguagesAvailable();
@@ -105,18 +100,14 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	       $arrLanguagesDD[$strLangShort] = $this->getText("lang_".$strLangShort);
 
         if($strMode == "new") {
-            if($this->getObjModule()->rightEdit()) {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"));
-                $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"));
-                $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
-                $strReturn .= $this->objToolkit->formClose();
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
+            $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"));
+            $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"));
+            $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formClose();
 
-                $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
-            }
-            else
-			    $strReturn = $this->getText("commons_error_permissions");
+            $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
         }
         elseif ($strMode == "edit") {
             $objLanguage = new class_module_languages_language($this->getSystemid());
@@ -143,31 +134,27 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 * saves the submitted form-data as a new language, oder updates the corresponding language
 	 *
 	 * @return string, "" in case of success
+     * @permissions edit
 	 */
 	protected function actionSaveLanguage() {
         $strReturn = "";
 	    if($this->getParam("mode") == "new") {
-	        if($this->getObjModule()->rightEdit()) {
+            //language already existing?
+            if(class_module_languages_language::getLanguageByName($this->getParam("language_name")) !== false)
+               return $this->getText("language_existing");
 
-	            //language already existing?
-	            if(class_module_languages_language::getLanguageByName($this->getParam("language_name")) !== false)
-	               return $this->getText("language_existing");
+            //reset the default languages?
+            if($this->getParam("language_default") == "1")
+                class_module_languages_language::resetAllDefaultLanguages();
 
-	            //reset the default languages?
-	            if($this->getParam("language_default") == "1")
-	                class_module_languages_language::resetAllDefaultLanguages();
+            $objLanguage = new class_module_languages_language();
+            $objLanguage->setStrName($this->getParam("language_name"));
+            $objLanguage->setBitDefault($this->getParam("language_default"));
 
-                $objLanguage = new class_module_languages_language();
-                $objLanguage->setStrName($this->getParam("language_name"));
-               	$objLanguage->setBitDefault($this->getParam("language_default"));
+            if(!$objLanguage->updateObjectToDb() )
+                throw new class_exception("Error creating new language", class_exception::$level_ERROR);
 
-                if(!$objLanguage->updateObjectToDb() )
-                    throw new class_exception("Error creating new language", class_exception::$level_ERROR);
-
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-	        }
-	        else
-			    $strReturn = $this->getText("commons_error_permissions");
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	    }
 	    elseif ($this->getParam("mode") == "edit") {
 	        $objLanguage = new class_module_languages_language($this->getSystemid());

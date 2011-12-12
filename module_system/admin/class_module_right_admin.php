@@ -41,6 +41,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 	 * Returns a form to modify the rights
 	 *
 	 * @return string
+     * @permissions view
 	 */
 	protected function actionChange() {
 

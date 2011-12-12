@@ -48,32 +48,28 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 *
 	 * @return string
      * @autoTestable
+     * @permissions view
 	 */
 	protected function actionList() {
 	    $strReturn = "";
-	    //check needed permissions
-	    if($this->getObjModule()->rightView()) {
-            $strReturn .= $this->objToolkit->jsDialog(1);
-	        //load the widgets for each column. currently supporting 3 columns on the dashboard.
-	        $objDashboardmodel = new class_module_dashboard_widget();
-	        $arrColumns = array();
-	        //build each row
-	        foreach($this->arrColumnsOnDashboard as $strColumnName) {
-	            $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
-    	        $strWidgetContent = "";
-	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName, class_module_system_aspect::getCurrentAspectId()) as $objOneSystemmodel) {
-    	            $strWidgetContent .= $this->layoutAdminWidget($objOneSystemmodel);
-    	        }
+        $strReturn .= $this->objToolkit->jsDialog(1);
+        //load the widgets for each column. currently supporting 3 columns on the dashboard.
+        $objDashboardmodel = new class_module_dashboard_widget();
+        $arrColumns = array();
+        //build each row
+        foreach($this->arrColumnsOnDashboard as $strColumnName) {
+            $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
+            $strWidgetContent = "";
+            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName, class_module_system_aspect::getCurrentAspectId()) as $objOneSystemmodel) {
+                $strWidgetContent .= $this->layoutAdminWidget($objOneSystemmodel);
+            }
 
-    	        $strColumnContent .= $strWidgetContent;
-    	        $strColumnContent .= $this->objToolkit->getDashboardColumnFooter();
-    	        $arrColumns[] = $strColumnContent;
-	        }
-	        $strReturn .= $this->objToolkit->getMainDashboard($arrColumns);
+            $strColumnContent .= $strWidgetContent;
+            $strColumnContent .= $this->objToolkit->getDashboardColumnFooter();
+            $arrColumns[] = $strColumnContent;
+        }
+        $strReturn .= $this->objToolkit->getMainDashboard($arrColumns);
 
-	    }
-	    else
-	        $strReturn = $this->getText("commons_error_permissions");
 
 	    return $strReturn;
 	}
@@ -157,107 +153,99 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
      * @return string
      * @since 3.4
      * @autoTestable
+     * @permissions view
      */
     protected function actionCalendar() {
         $strReturn = "";
-        if($this->getObjModule()->rightView()) {
 
-            //save dates to session
-            if($this->getParam("month") != "")
-                $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
-            if($this->getParam("year") != "")
-                $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
+        //save dates to session
+        if($this->getParam("month") != "")
+            $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
+        if($this->getParam("year") != "")
+            $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
 
-            $strContainerId = generateSystemid();
+        $strContainerId = generateSystemid();
 
-            $strContent = "<script type=\"text/javascript\">
-                            KAJONA.admin.loader.loadAjaxBase(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", {
-                                    success : function(o) {
-                                        var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
+        $strContent = "<script type=\"text/javascript\">
+                        KAJONA.admin.loader.loadAjaxBase(function() {
+                              KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", {
+                                success : function(o) {
+                                    var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
+                                    var objNode = document.getElementById(\"".$strContainerId."\");
+                                    document.getElementById(\"".$strContainerId."\").innerHTML=o.responseText.substr(
+                                      intStart, o.responseText.indexOf(\"]]\")-intStart
+                                    );
+                                    if(o.responseText.indexOf(\"[CDATA[\") < 0) {
+                                        var intStart = o.responseText.indexOf(\"<error>\")+7;
                                         var objNode = document.getElementById(\"".$strContainerId."\");
-                                        document.getElementById(\"".$strContainerId."\").innerHTML=o.responseText.substr(
-                                          intStart, o.responseText.indexOf(\"]]\")-intStart
+                                        objNode.innerHTML=o.responseText.substr(
+                                          intStart, o.responseText.indexOf(\"</error>\")-intStart
                                         );
-                                        if(o.responseText.indexOf(\"[CDATA[\") < 0) {
-                                            var intStart = o.responseText.indexOf(\"<error>\")+7;
-                                            var objNode = document.getElementById(\"".$strContainerId."\");
-                                            objNode.innerHTML=o.responseText.substr(
-                                              intStart, o.responseText.indexOf(\"</error>\")-intStart
-                                            );
-                                        }
-                                        KAJONA.util.evalScript(o.responseText);
-                                    },
-                                    failure : function(o) {
-                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
                                     }
-                                  })
-                            });
-                          </script>";
+                                    KAJONA.util.evalScript(o.responseText);
+                                },
+                                failure : function(o) {
+                                    KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                }
+                              })
+                        });
+                      </script>";
 
-
-            //fetch modules relevant for processing
-            $arrLegendEntries = array();
-            $arrFilterEntries = array();
-            $arrModules = class_module_system_module::getAllModules();
-            foreach($arrModules as $objSingleModule) {
-                $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
-                if($objSingleModule->getStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) {
-                    $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
-                    $arrFilterEntries = array_merge($arrFilterEntries, $objAdminInstance->getArrFilterEntries());
-                }
+        //fetch modules relevant for processing
+        $arrLegendEntries = array();
+        $arrFilterEntries = array();
+        $arrModules = class_module_system_module::getAllModules();
+        foreach($arrModules as $objSingleModule) {
+            $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
+            if($objSingleModule->getStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) {
+                $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
+                $arrFilterEntries = array_merge($arrFilterEntries, $objAdminInstance->getArrFilterEntries());
             }
-
-            $arrTemp = $this->getAllParams();
-            if($this->getParam("doCalendarFilter") != "") {
-                //update filter-criteria
-                foreach($arrFilterEntries as $strOneId => $strName) {
-                    if($this->getParam($strOneId) != "")
-                        $this->objSession->sessionUnset($strOneId);
-                    else
-                        $this->objSession->setSession($strOneId, "disabled");
-                }
-            }
-
-            //render the single rows. calculate the first day of the row
-            $objDate = new class_date();
-            $objDate->setIntDay(1);
-
-            if($this->objSession->getSession($this->strStartMonthKey) != "")
-                $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
-
-            if($this->objSession->getSession($this->strStartYearKey) != "")
-                $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
-
-            $intCurMonth = $objDate->getIntMonth();
-
-            //pager-setup
-            $objEndDate = clone $objDate;
-            while($objEndDate->getIntMonth() == $intCurMonth)
-                $objEndDate->setNextDay();
-            $objEndDate->setPreviousDay();
-
-            $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
-
-            $objEndDate->setNextDay();
-            $objPrevDate = clone $objDate;
-            $objPrevDate->setPreviousDay();
-
-            $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
-            $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
-
-
-
-            $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
-            $strReturn .= $strContent;
-            $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
-            $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
-            $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
-
-
         }
-	    else
-	        $strReturn = $this->getText("commons_error_permissions");
+
+        $arrTemp = $this->getAllParams();
+        if($this->getParam("doCalendarFilter") != "") {
+            //update filter-criteria
+            foreach($arrFilterEntries as $strOneId => $strName) {
+                if($this->getParam($strOneId) != "")
+                    $this->objSession->sessionUnset($strOneId);
+                else
+                    $this->objSession->setSession($strOneId, "disabled");
+            }
+        }
+
+        //render the single rows. calculate the first day of the row
+        $objDate = new class_date();
+        $objDate->setIntDay(1);
+
+        if($this->objSession->getSession($this->strStartMonthKey) != "")
+            $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
+
+        if($this->objSession->getSession($this->strStartYearKey) != "")
+            $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
+
+        $intCurMonth = $objDate->getIntMonth();
+
+        //pager-setup
+        $objEndDate = clone $objDate;
+        while($objEndDate->getIntMonth() == $intCurMonth)
+            $objEndDate->setNextDay();
+        $objEndDate->setPreviousDay();
+
+        $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
+
+        $objEndDate->setNextDay();
+        $objPrevDate = clone $objDate;
+        $objPrevDate->setPreviousDay();
+
+        $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
+        $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
+
+        $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
+        $strReturn .= $strContent;
+        $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
+        $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
+        $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
 
         return $strReturn;
     }
@@ -267,89 +255,84 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 *
 	 * @return string, "" in case of success
      * @autoTestable
+     * @permissions edit
 	 */
 	protected function actionAddWidgetToDashboard() {
 	    $strReturn = "";
-	    //check permissions
-	    if($this->getObjModule()->rightEdit()) {
+        //step 1: select a widget, plz
+        if($this->getParam("step") == "") {
+            $objSystemWidget = new class_module_system_adminwidget();
+            $arrWidgetsAvailable = $objSystemWidget->getListOfWidgetsAvailable();
 
-	        //step 1: select a widget, plz
-	        if($this->getParam("step") == "") {
-	            $objSystemWidget = new class_module_system_adminwidget();
-	            $arrWidgetsAvailable = $objSystemWidget->getListOfWidgetsAvailable();
+            $arrDD = array();
+            foreach ($arrWidgetsAvailable as $strOneWidget) {
+                $objWidget = new $strOneWidget();
+                $arrDD[$strOneWidget] = $objWidget->getWidgetName();
 
-	            $arrDD = array();
-	            foreach ($arrWidgetsAvailable as $strOneWidget) {
-	                $objWidget = new $strOneWidget();
-	            	$arrDD[$strOneWidget] = $objWidget->getWidgetName();
+            }
 
-	            }
-
-	            $arrColumnsAvailable = array();
-	            foreach ($this->arrColumnsOnDashboard as $strOneColumn)
-	                $arrColumnsAvailable[$strOneColumn] = $this->getText($strOneColumn);
+            $arrColumnsAvailable = array();
+            foreach ($this->arrColumnsOnDashboard as $strOneColumn)
+                $arrColumnsAvailable[$strOneColumn] = $this->getText($strOneColumn);
 
 
-	            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
-	            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getText("widget") );
-	            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getText("column") );
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
+            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getText("widget") );
+            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getText("column") );
 
-	            $strReturn .= $this->objToolkit->formInputHidden("step", "2");
-	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetNextStep"));
-	            $strReturn .= $this->objToolkit->formClose();
+            $strReturn .= $this->objToolkit->formInputHidden("step", "2");
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetNextStep"));
+            $strReturn .= $this->objToolkit->formClose();
 
-	            $strReturn .= $this->objToolkit->setBrowserFocus("widget");
-	        }
-	        //step 2: loading the widget and allow it to show a view fields
-	        else if($this->getParam("step") == "2") {
-	            $strWidgetClass = $this->getParam("widget");
-	            $objWidget = new $strWidgetClass();
+            $strReturn .= $this->objToolkit->setBrowserFocus("widget");
+        }
+        //step 2: loading the widget and allow it to show a view fields
+        else if($this->getParam("step") == "2") {
+            $strWidgetClass = $this->getParam("widget");
+            $objWidget = new $strWidgetClass();
 
-	            //ask the widget to generate its form-parts and wrap our elements around
-	            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
-	            $strReturn .= $objWidget->getEditForm();
-	            $strReturn .= $this->objToolkit->formInputHidden("step", "3");
-	            $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
-	            $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
-	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
-	            $strReturn .= $this->objToolkit->formClose();
-	        }
-	        //step 3: save all to the database
-	        else if($this->getParam("step") == "3") {
-	            //instantiate the concrete widget
-	            $strWidgetClass = $this->getParam("widget");
-	            $objWidget = new $strWidgetClass();
+            //ask the widget to generate its form-parts and wrap our elements around
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
+            $strReturn .= $objWidget->getEditForm();
+            $strReturn .= $this->objToolkit->formInputHidden("step", "3");
+            $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
+            $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formClose();
+        }
+        //step 3: save all to the database
+        else if($this->getParam("step") == "3") {
+            //instantiate the concrete widget
+            $strWidgetClass = $this->getParam("widget");
+            $objWidget = new $strWidgetClass();
 
-	            //let it process its fields
-	            $objWidget->loadFieldsFromArray($this->getAllParams());
+            //let it process its fields
+            $objWidget->loadFieldsFromArray($this->getAllParams());
 
-	            //instantiate a model-widget
-	            $objSystemWidget = new class_module_system_adminwidget();
-	            $objSystemWidget->setStrClass($strWidgetClass);
-	            $objSystemWidget->setStrContent($objWidget->getFieldsAsString());
+            //instantiate a model-widget
+            $objSystemWidget = new class_module_system_adminwidget();
+            $objSystemWidget->setStrClass($strWidgetClass);
+            $objSystemWidget->setStrContent($objWidget->getFieldsAsString());
 
-	            //and save the widget itself
-	            if($objSystemWidget->updateObjectToDb()) {
-                    $strWidgetId = $objSystemWidget->getSystemid();
-                    //and save the dashboard-entry
-                    $objDashboard = new class_module_dashboard_widget();
-                    $objDashboard->setStrColumn($this->getParam("column"));
-                    $objDashboard->setStrUser($this->objSession->getUserID());
-                    $objDashboard->setStrWidgetId($strWidgetId);
-                    $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
-                    if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-                    }
-                    else
-                        return $this->getText("errorSavingWidget");
+            //and save the widget itself
+            if($objSystemWidget->updateObjectToDb()) {
+                $strWidgetId = $objSystemWidget->getSystemid();
+                //and save the dashboard-entry
+                $objDashboard = new class_module_dashboard_widget();
+                $objDashboard->setStrColumn($this->getParam("column"));
+                $objDashboard->setStrUser($this->objSession->getUserID());
+                $objDashboard->setStrWidgetId($strWidgetId);
+                $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
+                if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
                 }
                 else
                     return $this->getText("errorSavingWidget");
-	        }
+            }
+            else
+                return $this->getText("errorSavingWidget");
+        }
 
-	    }
-	    else
-	        $strReturn = $this->getText("commons_error_permissions");
 
 	    return $strReturn;
 	}
@@ -358,19 +341,15 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 * Deletes a widget from the dashboard
 	 *
 	 * @return string "" in case of success
+     * @permissions delete
 	 */
 	protected function actionDeleteWidget() {
 	    $strReturn = "";
-		//Rights
-		if($this->getObjModule()->rightDelete()) {
-		    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
-		    if(!$objDashboardwidget->deleteObject())
-		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+        $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
+        if(!$objDashboardwidget->deleteObject())
+            throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-		}
-		else
-			$strReturn .= $this->getText("commons_error_permissions");
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 		return $strReturn;
 	}
@@ -379,42 +358,37 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 * Creates the form to edit a widget (NOT the dashboard entry!)
 	 *
 	 * @return string "" in case of success
+     * @permissions edit
 	 */
 	protected function actionEditWidget() {
 	    $strReturn = "";
-		//Rights
-		if($this->getObjModule()->rightEdit()) {
+        if($this->getParam("saveWidget") == "") {
+            $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
+            $objWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
 
-			if($this->getParam("saveWidget") == "") {
-			    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
-				$objWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
+            //ask the widget to generate its form-parts and wrap our elements around
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "editWidget"));
+            $strReturn .= $objWidget->getEditForm();
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formClose();
+        }
+        elseif($this->getParam("saveWidget") == "1") {
+            //the dashboard entry
+            $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
+            //widgets model
+            $objSystemWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry();
+            //the concrete widget
+            $objConcreteWidget = $objSystemWidget->getConcreteAdminwidget();
+            $objConcreteWidget->loadFieldsFromArray($this->getAllParams());
 
-	            //ask the widget to generate its form-parts and wrap our elements around
-	            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "editWidget"));
-	            $strReturn .= $objWidget->getEditForm();
-	            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-	            $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
-	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
-	            $strReturn .= $this->objToolkit->formClose();
-			}
-			elseif($this->getParam("saveWidget") == "1") {
-			    //the dashboard entry
-			    $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
-			    //widgets model
-			    $objSystemWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry();
-                //the concrete widget
-			    $objConcreteWidget = $objSystemWidget->getConcreteAdminwidget();
-			    $objConcreteWidget->loadFieldsFromArray($this->getAllParams());
+            $objSystemWidget->setStrContent($objConcreteWidget->getFieldsAsString());
+            if(!$objSystemWidget->updateObjectToDb())
+                throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
 
-	            $objSystemWidget->setStrContent($objConcreteWidget->getFieldsAsString());
-	            if(!$objSystemWidget->updateObjectToDb())
-	                throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
-
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-			}
-		}
-		else
-			$strReturn .= $this->getText("commons_error_permissions");
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        }
 
 		return $strReturn;
 	}

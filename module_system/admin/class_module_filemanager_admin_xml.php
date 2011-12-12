@@ -35,9 +35,9 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
      */
     protected function actionDeleteFile() {
         $strReturn = "";
-        if($this->objRights->rightDelete($this->getSystemid())) {
+        $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
+        if($objFmRepo->rightDelete()) {
             //create repo-instance
-            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $this->getParam("folder");
             $strFile = $this->getParam("file");
 
@@ -65,12 +65,11 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
      */
     protected function actionRenameFile() {
         $strReturn = "";
-        if($this->objRights->rightRight1($this->getSystemid())) {
+        $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
+        if($objFmRepo->rightRight1()) {
 
             //create repo-instance
-            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $objFmRepo->getStrPath()."/".$this->getParam("folder");
-
 
             $strFilename = createFilename($this->getParam("newFilename"));
             //Check existance of old  & new file
@@ -82,14 +81,12 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
                         $strReturn = "<message></message>";
                     else
                         $strReturn = "<error>".xmlSafeString($this->getText("datei_umbenennen_fehler"))."</error>";
-
                 }
                 else
                     $strReturn = "<error>".xmlSafeString($this->getText("datei_umbenennen_fehler_z"))."</error>";
             }
             else
                 $strReturn = "<error>an error occured</error>";
-
         }
         else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
@@ -105,10 +102,10 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
      */
     protected function actionCreateFolder() {
         $strReturn = "";
-        if($this->objRights->rightRight1($this->getSystemid())) {
+        $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
+        if($objFmRepo->rightRight1()) {
 
             //create repo-instance
-            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $this->getParam("folder");
 
             //Create the folder
@@ -146,9 +143,9 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
      */
     protected function actionDeleteFolder() {
         $strReturn = "";
-        if($this->objRights->rightDelete($this->getSystemid())) {
+        $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
+        if($objFmRepo->rightDelete()) {
             //create repo-instance
-            $objFmRepo = new class_module_filemanager_repo($this->getSystemid());
             $strFolder = $this->getParam("folder");
 
             //Delete from filesystem
@@ -188,39 +185,30 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
      * file = the file to crop
      * systemid = the repo-id
      * angle
+     * @return string
+     * @permissions edit
      */
     protected function actionRotate(){
     	$strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid()) || ($this->getSystemid() == "" && $this->getObjModule()->rightEdit()) ) {
-            //create repo instance
-            //$objRepo = new class_module_filemanager_repo($this->getSystemid());
-            //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
-            $strFile = $this->getParam("file");
+        $strFile = $this->getParam("file");
 
-            //pass to the image-class
-            $objImage = new class_image();
-            if($objImage->preLoadImage($strFile)) {
-                if($objImage->rotateImage($this->getParam("angle"))) {
-                    if($objImage->saveImage($strFile, false, 100)) {
-                        class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo);
-                        $strReturn .= "<message>".xmlSafeString($this->getText("xml_rotate_success"))."</message>";
-                    }
-                    else
-                        class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
+        //pass to the image-class
+        $objImage = new class_image();
+        if($objImage->preLoadImage($strFile)) {
+            if($objImage->rotateImage($this->getParam("angle"))) {
+                if($objImage->saveImage($strFile, false, 100)) {
+                    class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo);
+                    $strReturn .= "<message>".xmlSafeString($this->getText("xml_rotate_success"))."</message>";
                 }
+                else
+                    class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
             }
-            else {
-                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-                $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
-            }
-
         }
         else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
         }
-
 
         return $strReturn;
     }
@@ -236,39 +224,30 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
      * intY
      * intWidth
      * intHeight
+     * @return string
+     * @permissions edit
      */
     protected function actionSaveCropping() {
     	$strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid())  || ($this->getSystemid() == "" && $this->getObjModule()->rightEdit()) ) {
-            //create repo instance
-            //$objRepo = new class_module_filemanager_repo($this->getSystemid());
-            //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
-            $strFile = $this->getParam("file");
+        $strFile = $this->getParam("file");
 
-            //pass to the image-class
-            $objImage = new class_image();
-            if($objImage->preLoadImage($strFile)) {
-                if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
-                    if($objImage->saveImage($strFile, false, 100)) {
-                        class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);
-                        $strReturn .= "<message>".xmlSafeString($this->getText("xml_cropping_success"))."</message>";
-                    }
-                    else
-                        class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
+        //pass to the image-class
+        $objImage = new class_image();
+        if($objImage->preLoadImage($strFile)) {
+            if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
+                if($objImage->saveImage($strFile, false, 100)) {
+                    class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);
+                    $strReturn .= "<message>".xmlSafeString($this->getText("xml_cropping_success"))."</message>";
                 }
+                else
+                    class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
             }
-            else {
-                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-                $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
-            }
-
         }
         else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
         }
-
 
         return $strReturn;
     }
@@ -287,10 +266,9 @@ class class_module_filemanager_admin_xml extends class_admin implements interfac
 	protected function actionFileupload() {
 	    $strReturn = "";
 
-	    if($this->objRights->rightRight1($this->getSystemid())) {
+        $objRepo = new class_module_filemanager_repo($this->getSystemid());
+	    if($objRepo->rightRight1()) {
 	    	//create repo instance
-	        $objRepo = new class_module_filemanager_repo($this->getSystemid());
-
 	        $strFolder = $objRepo->getStrPath().$this->getParam("folder");
 
 	        //Handle the fileupload

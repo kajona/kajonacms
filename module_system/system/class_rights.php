@@ -844,6 +844,79 @@ class class_rights {
     }
 
 
+    /**
+     * Validates a set of permissions for a single object.
+     * The string of permissions is a comma-separated list, whereas the entries may be one of
+     * view, edit, delete, right, right1, right2, right3, right4, right5
+     * If at least a single permission is given, true is returned, otherwise false.
+     *
+     * @param $strPermissions
+     * @param class_model $objObject
+     * @return bool
+     * @throws class_exception
+     * @since 4.0
+     */
+    public function validatePermissionString($strPermissions, class_model $objObject) {
+
+        if(!$objObject instanceof class_model) {
+            throw new class_exception("automated permission-check only for instances of class_model", class_exception::$level_ERROR);
+            return false;
+        }
+
+        if(trim($strPermissions) == "")
+            return false;
+
+        $arrPermissions = explode(",", $strPermissions);
+
+        foreach($arrPermissions as $strOnePermissions) {
+            $strOnePermissions = trim($strOnePermissions);
+
+            switch (trim($strOnePermissions)) {
+                case "view":
+                    if($objObject->rightView())
+                        return true;
+                    break;
+                case "edit":
+                    if($objObject->rightEdit())
+                        return true;
+                    break;
+                case "delete":
+                    if($objObject->rightDelete())
+                        return true;;
+                    break;
+                case "right":
+                    if($objObject->rightRight())
+                        return true;;
+                    break;
+                case "right1":
+                    if($objObject->rightRight1())
+                        return true;;
+                    break;
+                case "right2":
+                    if($objObject->rightRight2())
+                        return true;;
+                    break;
+                case "right3":
+                    if($objObject->rightRight3())
+                        return true;;
+                    break;
+                case "right4":
+                    if($objObject->rightRight4())
+                        return true;;
+                    break;
+                case "right5":
+                    if($objObject->rightRight5())
+                        return true;;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return false;
+    }
+
+
 }
 
 
