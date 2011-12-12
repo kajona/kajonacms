@@ -29,7 +29,6 @@ class class_module_languages_language extends class_model implements interface_m
 
         $this->setArrModuleEntry("modul", "languages");
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."languages");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -59,7 +58,7 @@ class class_module_languages_language extends class_model implements interface_m
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system, ".$this->arrModule["table"]."
+        $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."languages
                      WHERE system_id = language_id
                      AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -83,7 +82,7 @@ class class_module_languages_language extends class_model implements interface_m
         	$this->setBitDefault(1);
         }
 
-        $strQuery = "UPDATE ".$this->arrModule["table"]."
+        $strQuery = "UPDATE "._dbprefix_."languages
                      SET language_name = ?,
                          language_default = ?
                      WHERE language_id = ?";
@@ -170,7 +169,7 @@ class class_module_languages_language extends class_model implements interface_m
      */
     protected function deleteObjectInternal() {
         //start with the modul-table
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE language_id = ?";
+        $strQuery = "DELETE FROM "._dbprefix_."languages WHERE language_id = ?";
 		$this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 
 

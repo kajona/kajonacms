@@ -35,7 +35,6 @@ class class_module_system_module extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("table", _dbprefix_."system_module");
 
 		//base class
 		parent::__construct($strSystemid);
@@ -64,7 +63,7 @@ class class_module_system_module extends class_model implements interface_model 
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
+        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
         $arrRow = array();
 		$arrModules = $this->objDB->getPArray($strQuery, array());
 
@@ -91,7 +90,7 @@ class class_module_system_module extends class_model implements interface_model 
      * @return bool
      */
     protected function updateStateToDb() {
-        $strQuery = "UPDATE ".$this->arrModule["table"]." SET
+        $strQuery = "UPDATE "._dbprefix_."system_module SET
 					  module_name =?,
 					  module_filenameportal =?,
 					  module_xmlfilenameportal =?,
@@ -280,7 +279,6 @@ class class_module_system_module extends class_model implements interface_model 
 
 
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
         return $this->strName;
     }
