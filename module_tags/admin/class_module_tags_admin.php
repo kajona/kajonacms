@@ -15,7 +15,7 @@
  * @package module_tags
  * @author sidler@mulchprod.de
  */
-class class_module_tags_admin extends class_admin implements interface_admin {
+class class_module_tags_admin extends class_admin_simple implements interface_admin {
 
 	/**
 	 * Constructor
@@ -31,7 +31,7 @@ class class_module_tags_admin extends class_admin implements interface_admin {
         if($this->getAction() == "saveTag")
             return array("tag_name" => "string");
         else
-            parent::getRequiredFields();
+            return parent::getRequiredFields();
     }
 
 	protected function getOutputModuleNavi() {
@@ -43,78 +43,33 @@ class class_module_tags_admin extends class_admin implements interface_admin {
         return $arrReturn;
 	}
 
+    protected function actionNew() {
+    }
+
     /**
      * @return string
      * @autoTestable
      * @permissions view
      */
     protected function actionList() {
-        $strReturn = "";
-        $intI = 0;
 
-        //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getNumberOfTags());
-        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_tags_tag::getAllTags($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "list");
-        $arrTags = $arrPageViews["elements"];
-
-        foreach($arrTags as $objTag) {
-            $strActions = "";
-
-            if($objTag->rightEdit())
-                $strActions.= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editTag", "&systemid=".$objTag->getSystemid(), "", $this->getText("tag_edit"), "icon_pencil.gif"));
-            if($objTag->rightDelete())
-                $strActions.= $this->objToolkit->listDeleteButton($objTag->getStrName(), $this->getText("tag_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteTag", "&systemid=".$objTag->getSystemid()));
-            if($objTag->rightEdit())
-                $strActions.= $this->objToolkit->listStatusButton($objTag->getSystemid());
-            if($objTag->rightRight())
-                $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objTag->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objTag->getSystemid())));
-
-            $strReturn .= $this->objToolkit->listRow3($objTag->getStrName(), count($objTag->getListOfAssignments())." ".$this->getText("tag_assignments"), $strActions, getImageAdmin("icon_dot.gif"), $intI++);
-        }
-
-        if(uniStrlen($strReturn) != 0)
-            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
-
-        if(count($arrTags) > 0)
-            $strReturn .= $arrPageViews["pageview"];
-
-        if(count($arrTags) == 0)
-            $strReturn .= $this->getText("list_tags_empty");
-
-		return $strReturn;
+        return $this->renderList($objArraySectionIterator);
     }
 
+    protected function getNewEntryAction() {
+        return "";
+    }
 
-    /**
-	 * Deletes a tag
-	 *
-	 * @return string "" in case of success
-	 */
-	protected function actionDeleteTag() {
-		$strReturn = "";
-        $objTag = new class_module_tags_tag($this->getSystemid());
-		if($objTag->rightDelete($this->getSystemid())) {
-            if(!$objTag->deleteObject())
-                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-		}
-		else
-			$strReturn .= $this->getText("commons_error_permissions");
-
-
-		return $strReturn;
-	}
 
     /**
      * Generates the form to edit an existing tag
      * @return string
      */
-    protected function actionEditTag() {
+    protected function actionEdit() {
         $strReturn = "";
         $objTag = new class_module_tags_tag($this->getSystemid());
 		if($objTag->rightEdit()) {
@@ -142,7 +97,7 @@ class class_module_tags_admin extends class_admin implements interface_admin {
     protected function actionSaveTag() {
 
         if(!$this->validateForm())
-            return $this->actionEditTag();
+            return $this->actionEdit();
 
         $strReturn = "";
         $objTag = new class_module_tags_tag($this->getSystemid());

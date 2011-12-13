@@ -18,7 +18,7 @@
  * @author sidler@mulchprod.de
  * @since 3.4
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener  {
+class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable  {
 
     private $strName;
 
@@ -38,6 +38,33 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
     public function getStrDisplayName() {
         return $this->getStrName();
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_dot.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return count($this->getListOfAssignments())." ".$this->getText("tag_assignments", "tags", "admin");
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
     }
 
 
@@ -95,9 +122,9 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * Returns a list of tags available
      *
-     * @param int $intStart
-     * @param int $intEnd
-     * @return class_module_tags_tag
+     * @param int|null $intStart
+     * @param int|null $intEnd
+     * @return class_module_tags_tag[]
      */
     public static function getAllTags($intStart = null, $intEnd = null) {
 
@@ -105,7 +132,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                        FROM "._dbprefix_."tags_tag
                    ORDER BY tags_tag_name ASC";
 
-        if($intStart != null && $intEnd != null)
+        if($intStart !== null && $intEnd !== null)
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
         else
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());

@@ -15,8 +15,26 @@
  */
 abstract class class_admin_simple extends class_admin {
 
+    /**
+     * Renders the form to create a new entry
+     * @abstract
+     * @return string
+     */
     protected abstract function actionNew();
+
+    /**
+     * Renders the form to edit an existing entry
+     * @abstract
+     * @return string
+     */
     protected abstract function actionEdit();
+
+    /**
+     * Renders the general list of records
+     * @abstract
+     * @return string
+     */
+    protected abstract function actionList();
 
 
     /**
