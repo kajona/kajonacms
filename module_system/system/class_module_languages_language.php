@@ -60,7 +60,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return "add info asd";
+        return "";
     }
 
     /**
