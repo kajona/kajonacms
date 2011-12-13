@@ -200,7 +200,7 @@ class class_toolkit_admin extends class_toolkit {
      * Creates a percent-beam to illustrate proportions
      *
      * @param float $floatPercent
-     * @param int $intLength
+     * @param int|string $intLength
      * @return string
      */
     public function percentBeam($floatPercent, $intLength = "300")  {
@@ -288,7 +288,7 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
-   /**
+    /**
      * Returns a regular text-input field
      *
      * @param string $strName
@@ -417,7 +417,7 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
-   /**
+    /**
      * Returns a regular text-input field with a file browser button.
      * Use $strRepositoryId to set a specific filemanager repository id
      *
@@ -819,14 +819,73 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Renders a simple admin-object, implementing interface_model
+     *
+     * @param interface_admin_listable|interface_model $objEntry
+     * @param $strActions
+     * @param $intCount
+     * @return string
+     *
+     * @todo: add checkbox functionality
+     */
+    public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount) {
+        return $this->genericAdminList(
+            $objEntry->getSystemid(),
+            $objEntry->getStrDisplayName(),
+            getImageAdmin($objEntry->getStrIcon()),
+            $strActions,
+            $intCount,
+            $objEntry->getStrAdditionalInfo(),
+            $objEntry->getStrLongDescription()
+        );
+    }
+
+    /**
+     * Renders a single admin-row, takes care of selecting the matching template-sections.
+     *
+     * @param $strId
+     * @param $strName
+     * @param $strIcon
+     * @param $strActions
+     * @param $intCount
+     * @param string $strAdditionalInfo
+     * @param string $strDescription
+     * @return string
+     *
+     * @todo: add checkbox functionality
+     */
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "") {
+
+        $arrTemplate = array();
+        $arrTemplate["listitemid"] = $strId;
+        $arrTemplate["checkbox"] = "";
+        $arrTemplate["image"] = $strIcon;
+        $arrTemplate["title"] = $strName;
+        $arrTemplate["center"] = $strAdditionalInfo;
+        $arrTemplate["actions"] = $strActions;
+        $arrTemplate["description"] = $strDescription;
+
+        if($strDescription != "")
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc_".(($intCount % 2)+1));
+        else
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_".(($intCount % 2)+1));
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+
+
+    /**
      * Returns a row in a list with 2 columns
      *
      * @param string $strName
      * @param string $strActions
-     * @param int $intCount, used to determing the class needed
+     * @param int $intCount, used to determine the class needed
      * @param string $strType to react on special cases
      * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
      * @return string
+     *
+     * @deprecated will be removed , replaced by self::genericAdminList
      */
     public function listRow2($strName, $strActions, $intCount, $strType = "", $strListitemID = "") {
         if($intCount % 2 == 0)
@@ -847,10 +906,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strImage
      * @param string $strName
      * @param string $strActions
-     * @param int $intCount, used to determing the class needed
+     * @param int $intCount, used to determine the class needed
      * @param string $strType to react on special cases
      * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
      * @return string
+     *
+     * @deprecated will be removed , replaced by self::genericAdminList
      */
     public function listRow2Image($strImage, $strName, $strActions, $intCount, $strType = "", $strListitemID = "") {
         if($intCount % 2 == 0)
@@ -876,6 +937,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param int $intCount, used to determing the class needed
      * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
      * @return string
+     *
+     * @deprecated will be removed , replaced by self::genericAdminList
      */
     public function listRow3($strName, $strCenter, $strActions, $strImage, $intCount, $strListitemID = "") {
         if($intCount % 2 == 0)
@@ -1264,7 +1327,7 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Generates the moduleaction-navigation in the admin-area
      *
-     * @param mixed $arrModules
+     * @param $arrActions
      * @return string
      */
     public function getAdminModuleActionNavi($arrActions) {
@@ -1286,8 +1349,8 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array("rows" => $strRows), $strTemplateID);
     }
 
-/*"*****************************************************************************************************/
-// --- Path Navigation ----------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Path Navigation ----------------------------------------------------------------------------------
 
     /**
      * Generates the layout for a small navigation
@@ -1306,8 +1369,8 @@ class class_toolkit_admin extends class_toolkit {
 
     }
 
-/*"*****************************************************************************************************/
-// --- Content Toolbar ----------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Content Toolbar ----------------------------------------------------------------------------------
 
     /**
      * A content toolbar can be used to group a subset of actions linking different views
@@ -1331,8 +1394,8 @@ class class_toolkit_admin extends class_toolkit {
 
     }
 
-/*"*****************************************************************************************************/
-// --- Validation Errors --------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Validation Errors --------------------------------------------------------------------------------
 
     /**
      * Generates a list of errors found by the form-validation
@@ -1381,8 +1444,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-/*"*****************************************************************************************************/
-// --- Pre-formatted ------------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Pre-formatted ------------------------------------------------------------------------------------
 
 
     /**
@@ -1405,8 +1468,8 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array("pretext" => $strRows), $strTemplateID);
     }
 
-/*"*****************************************************************************************************/
-// --- Language handling --------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Language handling --------------------------------------------------------------------------------
 
     /**
      * Creates the sourrounding code of a language switch, places the buttons
@@ -1442,8 +1505,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-/*"*****************************************************************************************************/
-// --- Pageview mechanism ------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Pageview mechanism ------------------------------------------------------------------------------
 
     /**
      * Creates a pageview
@@ -1602,8 +1665,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-/*"*****************************************************************************************************/
-// --- Adminwidget / Dashboard --------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Adminwidget / Dashboard --------------------------------------------------------------------------
 
 
     public function getMainDashboard($arrColumn) {
@@ -1660,6 +1723,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strContent
      * @param string $strEditLink
      * @param string $strDeleteLink
+     * @param string $strLayoutSection
      * @return string
      */
     public function getAdminwidget($strSystemid, $strName, $strContent, $strEditLink = "", $strDeleteLink = "", $strLayoutSection = "adminwidget_widget") {
@@ -1694,7 +1758,7 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array(""), $strTemplateID);
     }
 
-//--- modal dialog --------------------------------------------------------------------------------------
+    //--- modal dialog --------------------------------------------------------------------------------------
 
     /**
      * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
@@ -1746,7 +1810,7 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-//--- misc ----------------------------------------------------------------------------------------------
+    //--- misc ----------------------------------------------------------------------------------------------
 
     /**
      * Sets the users browser focus to the element with the given id
@@ -1945,7 +2009,7 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array("text" => $strText, "tooltip" => $strTooltip), $strTemplateID);
     }
 
-// --- Calendar Fields ----------------------------------------------------------------------------------
+    // --- Calendar Fields ----------------------------------------------------------------------------------
 
     /**
      * Renders a legend below the current calendar in order to illustrate the different event-types.
@@ -2056,6 +2120,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strContent
      * @param string $strDate
+     * @param string $strClass
      * @return string
      * @since 3.4
      */

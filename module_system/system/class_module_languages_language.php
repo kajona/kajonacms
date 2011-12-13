@@ -13,7 +13,7 @@
  * @package module_languages
  * @author sidler@mulchprod.de
  */
-class class_module_languages_language extends class_model implements interface_model  {
+class class_module_languages_language extends class_model implements interface_model, interface_admin_listable  {
 
     private $strName = "";
     private $bitDefault = false;
@@ -45,11 +45,39 @@ class class_module_languages_language extends class_model implements interface_m
     }
 
     /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return  "icon_language.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "add info asd";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
+    }
+
+
+    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrName();
+        return $this->getText("lang_".$this->getStrName(), "languages", "admin").($this->getBitDefault() == 1 ? " (".$this->getText("language_isDefault", "languages", "admin").")" : "");
     }
 
 
@@ -93,16 +121,22 @@ class class_module_languages_language extends class_model implements interface_m
      * Returns an array of all languages available
      *
      * @param bool $bitJustActive
+     * @param null $intStart
+     * @param null $intEnd
      * @return mixed
      * @static
      */
-    public static function getAllLanguages($bitJustActive = false) {
+    public static function getAllLanguages($bitJustActive = false, $intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."languages, "._dbprefix_."system
 		             WHERE system_id = language_id
 		             ".($bitJustActive ? "AND system_status != 0 ": "")."
 		             ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+
+        if($intStart !== null && $intEnd !== null)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_languages_language($arrOneId["system_id"]);

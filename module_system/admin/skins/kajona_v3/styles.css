@@ -705,6 +705,63 @@ h3 {
 
 
 /* L I S T S */
+.generalListSet1, .generalListSet2 {
+    height: 22px;
+}
+
+.generalListSet1 {
+    background-color: #f0f0f0;
+}
+
+.generalListSet2 {
+    background-color: #e3e3e3;
+}
+
+.generalListSet1 .image, .generalListSet2 .image {
+	padding-left: 2px;
+    width: 22px;
+}
+
+.generalListSet1:hover, .generalListSet2:hover {
+	background-color: #c4f3c4;
+	color: #000000;
+}
+
+.generalListSet1 .actions, .generalListSet2 .actions {
+	white-space: nowrap;
+	vertical-align: middle;
+    text-align: right;
+}
+
+.generalListSet1 .actions img, .generalListSet2 .actions img {
+	margin-right: 2px;
+}
+
+.generalListSet1 .title, .generalListSet2 .title {
+	width: 100%;
+    padding-left: 5px;
+	padding-right: 5px;
+    line-height: 22px;
+    vertical-align: top;
+}
+
+.generalListSet1 .center, .generalListSet2 .center {
+	white-space: nowrap;
+    padding-right: 5px;
+    line-height: 22px;
+    vertical-align: top;
+}
+
+.generalListSet1 .description, .generalListSet2 .description {
+    padding: 0 5px 0px 5px;
+    line-height: 22px;
+    vertical-align: top;
+}
+
+
+
+
+
 .adminList {
 	width: 100%;
 }
@@ -1111,7 +1168,7 @@ div.percentBeam {
 .contentToolbar td:last-child {
     width: 100%;
 }
-    
+
 
 /* L A N G U A G E S W I T C H */
 .languageSwitch {
@@ -1424,7 +1481,7 @@ div.percentBeam {
 }
 
 .mask {
-    z-index: 1; 
+    z-index: 1;
     display:none;
     position:absolute;
     top:0;
@@ -1460,7 +1517,7 @@ div.percentBeam {
 }
 
 
-/* 
+/*
    Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
    the Panel's content changes, to force Safari 2.x to redraw the underlay.
    We attempt to choose a CSS property which has no visual impact when added,
@@ -1516,11 +1573,11 @@ div.percentBeam {
 }
 
 .yui-resize-handle {
-    background-color: #FFFFFF;  
+    background-color: #FFFFFF;
 }
 
 .yui-crop-resize-mask {
-    border: 1px dashed #FFFFFF; 
+    border: 1px dashed #FFFFFF;
 }
 
 .yui-crop .yui-crop-mask {
@@ -1530,7 +1587,7 @@ div.percentBeam {
 }
 
 .yui-resize-status {
-    background-color: #CCCCCC;  
+    background-color: #CCCCCC;
 }
 
 

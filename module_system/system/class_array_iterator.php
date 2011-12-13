@@ -19,7 +19,7 @@ class class_array_iterator implements interface_iterator {
     protected $arrElements = array();
     protected $intArrCursor = 0;
 
-    protected $intElementsPerPage = 100;
+    protected $intElementsPerPage = 15;
 
     /**
      * Constructor
@@ -28,6 +28,8 @@ class class_array_iterator implements interface_iterator {
      *
      */
 	public function __construct($arrElements) {
+
+        $this->intElementsPerPage = _admin_nr_of_rows_;
 
         //Loop over elements to create numeric indices
         if(count($arrElements) > 0) {

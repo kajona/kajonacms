@@ -10,15 +10,9 @@
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
-echo "| DB Importer                                                                   |\n";
+echo "| GD Info                                                                       |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-        $objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 var_export(gd_info());
 

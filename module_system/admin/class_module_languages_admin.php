@@ -13,7 +13,7 @@
  * @package module_languages
  * @author sidler@mulchprod.de
  */
-class class_module_languages_admin extends class_admin implements interface_admin {
+class class_module_languages_admin extends class_admin_simple implements interface_admin {
 
     /**
      * Constructor
@@ -32,13 +32,13 @@ class class_module_languages_admin extends class_admin implements interface_admi
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("module_action_new"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		return $arrReturn;
 	}
 
 
-	/**
+    /**
 	 * Returns a list of the languages
 	 *
 	 * @return string
@@ -46,41 +46,20 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 */
 	protected function actionList() {
 
-		$strReturn = "";
-		$intI = 0;
-        $arrObjLanguages = class_module_languages_language::getAllLanguages();
+        $objArraySectionIterator = new class_array_section_iterator(class_module_languages_language::getNumberOfLanguagesAvailable());
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_languages_language::getAllLanguages(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        foreach ($arrObjLanguages as $objOneLanguage) {
-            //Correct Rights?
-            if($objOneLanguage->rightView()) {
-                $strAction = "";
-                if($objOneLanguage->rightEdit())
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
-                if($objOneLanguage->rightDelete())
-                    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid()));
-                if($objOneLanguage->rightEdit())
-                    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
-                if($objOneLanguage->rightRight())
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneLanguage->getSystemid())));
+        return $this->renderList($objArraySectionIterator);
 
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (".$this->getText("language_isDefault").")" : ""), $strAction, $intI++);
-            }
-        }
-        if($this->getObjModule()->rightEdit())
-            $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
-
-        if(uniStrlen($strReturn) != 0)
-            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
-
-        if(count($arrObjLanguages) == 0)
-            $strReturn .= $this->getText("liste_leer");
-
-		return $strReturn;
 	}
 
-
-    protected function actionEditLanguage() {
-        return $this->actionNewLanguage("edit");
+    /**
+     * @return string
+     * @permissions edit
+     */
+    protected function actionEdit() {
+        return $this->actionNew("edit");
     }
 
 	/**
@@ -90,7 +69,7 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 * @return string
      * @permissions edit
 	 */
-	protected function actionNewLanguage($strMode = "new") {
+	protected function actionNew($strMode = "new") {
 	    $strReturn = "";
 	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
 	    $objLang = new class_module_languages_language();
@@ -194,8 +173,9 @@ class class_module_languages_admin extends class_admin implements interface_admi
 	 * Deletes the language
 	 *
 	 * @return string
+     * @permissions delete
 	 */
-	protected function actionDeleteLanguageFinal() {
+	protected function actionDelete() {
 	    $strReturn = "";
         $objLang = new class_module_languages_language($this->getSystemid());
         if($objLang->rightDelete()) {

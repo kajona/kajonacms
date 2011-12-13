@@ -51,6 +51,64 @@ Optional Element to close a list
 </dragable_list_footer>
 
 
+The general list will replace all other list types in the future.
+It is responsible for rendering the different admin-lists.
+Currently, there are two modes: with and without a description.
+<generallist_1>
+    <tbody class="generalListSet1">
+        <tr id="%%listitemid%%">
+            <td >%%checkbox%%</td>
+            <td class="image">%%image%%</td>
+            <td class="title">%%title%%</td>
+            <td class="center">%%center%%</td>
+            <td class="actions">%%actions%%</td>
+        </tr>
+    </tbody>
+</generallist_1>
+
+<generallist_2>
+    <tbody class="generalListSet2">
+        <tr id="%%listitemid%%">
+            <td >%%checkbox%%</td>
+            <td class="image">%%image%%</td>
+            <td class="title">%%title%%</td>
+            <td class="center">%%center%%</td>
+            <td class="actions">%%actions%%</td>
+        </tr>
+    </tbody>
+</generallist_2>
+
+<generallist_desc_1>
+    <tbody class="generalListSet1">
+        <tr id="%%listitemid%%">
+            <td rowspan="2">%%checkbox%%</td>
+            <td rowspan="2" class="image">%%image%%</td>
+            <td class="title">%%title%%</td>
+            <td class="center">%%center%%</td>
+            <td class="actions">%%actions%%</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="description">%%description%%</td>
+        </tr>
+    </tbody>
+</generallist_desc_1>
+
+<generallist_desc_2>
+    <tbody class="generalListSet2">
+        <tr id="%%listitemid%%">
+            <td rowspan="2">%%checkbox%%</td>
+            <td rowspan="2" class="image">%%image%%</td>
+            <td class="title">%%title%%</td>
+            <td class="center">%%center%%</td>
+            <td class="actions">%%actions%%</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="description">%%description%%</td>
+        </tr>
+    </tbody>
+</generallist_desc_2>
+
+
 Row in a list containing 2 Elements, NO leading picture
 Part 1 - every 2nd entry
 <list_row_2_1>
@@ -250,10 +308,10 @@ Upload-Field for multiple files with progress bar
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
 	</div>
-	
+
     %%modalDialog%%
     %%javascript%%
-    
+
 	<div id="kajonaUploadDialog" style="display: none;">
 		<div class="kajonaUploadFilesContainer">
 			<ul id="kajonaUploadFiles" class="kajonaUploadFilesList">
@@ -274,7 +332,7 @@ Upload-Field for multiple files with progress bar
 		<input type="submit" name="kajonaUploadUploadLink" id="kajonaUploadUploadLink" value="%%upload_multiple_uploadFiles%%" class="inputSubmit" /> <input type="submit" name="kajonaUploadCancelLink" id="kajonaUploadCancelLink" value="%%upload_multiple_cancel%%" class="inputSubmitShort" />
 		<br />
 	</div>
-	
+
 	<div id="kajonaUploadFallbackContainer" style="display: none;">
 		%%fallbackContent%%
 	</div>
@@ -513,7 +571,7 @@ The following sections specify the layout of the rights-mgmt
 
 UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame are removed since no longer needed.
                Replaced by the section folderview_image_details
-               
+
 <folderview_image_details>
 <div class="folderview_image_details">
     %%file_pathnavi%% %%file_name%%
@@ -700,7 +758,7 @@ pe_iconbar, pe_disable
             display: none;
         }
     </style>
-    
+
 	<div class="peDialog" id="peDialog">
 	    <div class="hd" id="peDialog_title">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
 	    <div class="bd" id="peDialog_content">
@@ -915,7 +973,7 @@ The language switch surrounds the buttons
             arrayListIds[(arrayListIds.length +0)] = "%%column_id%%";
 		}
 	</script>
-	
+
 	<ul id="%%column_id%%" class="adminwidgetColumn">
 </dashboard_column_header>
 
