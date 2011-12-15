@@ -55,27 +55,23 @@ The general list will replace all other list types in the future.
 It is responsible for rendering the different admin-lists.
 Currently, there are two modes: with and without a description.
 <generallist_1>
-    <tbody class="generalListSet1">
-        <tr id="%%listitemid%%">
+        <tr id="%%listitemid%%" class="generalListSet1">
             <td >%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
         </tr>
-    </tbody>
 </generallist_1>
 
 <generallist_2>
-    <tbody class="generalListSet2">
-        <tr id="%%listitemid%%">
+        <tr id="%%listitemid%%" class="generalListSet2">
             <td >%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
         </tr>
-    </tbody>
 </generallist_2>
 
 <generallist_desc_1>

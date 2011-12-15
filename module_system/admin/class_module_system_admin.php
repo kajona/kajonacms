@@ -14,7 +14,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_module_system_admin extends class_admin implements interface_admin {
+class class_module_system_admin extends class_admin_simple implements interface_admin {
 
     private $strUpdateServer = "updatecheck.kajona.de";
     private $strUpdateUrl = "/updates.php";
@@ -28,9 +28,6 @@ class class_module_system_admin extends class_admin implements interface_admin {
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 		parent::__construct();
 
-
-        if($this->getAction() == "list")
-            $this->setAction("moduleList");
 	}
 
 
@@ -39,7 +36,7 @@ class class_module_system_admin extends class_admin implements interface_admin {
 	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0",  $this->getText("modul_rechte_root"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-  	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "moduleList", "", $this->getText("module_liste"), "", "", true, "adminnavi"));
+  	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("module_liste"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getText("system_info"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getText("systemTasks"), "", "", true, "adminnavi"));
@@ -97,61 +94,90 @@ class class_module_system_admin extends class_admin implements interface_admin {
         }
     }
 
-	/**
+    /**
+     * Renders the form to create a new entry
+     * @return string
+     */
+    protected function actionNew() {
+        // TODO: Implement actionNew() method.
+    }
+
+    /**
+     * Renders the form to edit an existing entry
+     * @return string
+     */
+    protected function actionEdit() {
+        // TODO: Implement actionEdit() method.
+    }
+
+
+
+    /**
 	 * Creates a list of all installed modules
 	 *
 	 * @return string
      * @permissions view
      * @autoTestable
 	 */
-	protected function actionModuleList() {
-		$strReturn = "";
-		$strListId = generateSystemid();
+	protected function actionList() {
 
-        //Loading the modules
-        $arrModules = class_module_system_module::getAllModules();
-        $intI = 0;
-        $strReturn .= $this->objToolkit->dragableListHeader($strListId);
-        foreach($arrModules as $objSingleModule) {
-            $strActions = "";
-            $strCenter = "V ".$objSingleModule->getStrVersion()." &nbsp;(".timeToString($objSingleModule->getIntDate(), true).")";
+        $objIterator = new class_array_section_iterator(class_module_system_module::getAllModulesCount());
+        $objIterator->setPageNumber($this->getParam("pv"));
+        $objIterator->setArraySection(class_module_system_module::getAllModules($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-            $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
-            if($objAdminInstance != null)
-                $strDescription = $objAdminInstance->getModuleDescription();
-            else
-                $strDescription = "";
-            $strDescription .= ($strDescription != "" ? "<br />" : "");
-            $strDescription .= $objSingleModule->getStrName()." <br /> ".$objSingleModule->getStrVersion();
+        return $this->renderList($objIterator, true, "moduleList");
 
-            if($objSingleModule->getSystemid() != "") {
-                if($objSingleModule->rightRight5())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
-
-                //status: for setting the status of modules, you have to be member of the admin-group
-                $objUser = new class_module_user_user($this->objSession->getUserID());
-                $arrGroups = array();
-                if($objUser->getObjSourceUser() != null )
-                    $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
-
-                if($objSingleModule->rightEdit() && in_array(_admins_group_id_, $arrGroups)) {
-                    if($objSingleModule->getStrName() == "system")
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
-                    else if($objSingleModule->getStatus() == 0)
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_status_disabled"), "icon_disabled.gif"));
-                    else
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objSingleModule->getSystemid(), "", $this->getText("modul_status_enabled"), "icon_enabled.gif"));
-                }
-                //rights
-                if($objSingleModule->rightRight())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("commons_module_permissions"), getRightsImageAdminName($objSingleModule->getSystemid())));
-            }
-            $strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif", $strDescription), $intI++, $objSingleModule->getSystemid());
-        }
-        $strReturn .= $this->objToolkit->dragableListFooter($strListId);
-
-		return $strReturn;
 	}
+
+    protected function renderAdditionalActions(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_system_module) {
+            $arrReturn = array();
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
+
+            if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+                if($objListEntry->getStrName() == "system")
+                    $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
+                else if($objListEntry->getStatus() == 0)
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("modul_status_disabled"), "icon_disabled.gif"));
+                else
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("modul_status_enabled"), "icon_enabled.gif"));
+            }
+
+            return $arrReturn;
+        }
+        return parent::renderAdditionalActions($objListEntry);
+    }
+
+    protected function renderStatusAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_system_module)
+            return "";
+
+        return parent::renderStatusAction($objListEntry);
+    }
+
+
+    protected function renderEditAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_system_module)
+            return "";
+
+        return parent::renderEditAction($objListEntry);
+    }
+
+
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry instanceof class_module_system_module)
+            return "";
+
+        return parent::renderDeleteAction($objListEntry);
+    }
+
+    protected function getNewEntryAction($strListIdentifier) {
+        if($strListIdentifier == "moduleList")
+            return "";
+
+        return parent::getNewEntryAction($strListIdentifier);
+    }
+
 
     /**
      * Creates the form to manipulate the aspects of a single module

@@ -59,11 +59,15 @@ abstract class class_admin_simple extends class_admin {
      * Renders a list of items, target is the common admin-list.
      *
      * @param class_array_section_iterator $objArraySectionIterator
+     * @param bool $bitSortable
+     * @param $strListIdentifier an internal identifier to check the current parent-list
      * @return string
      */
-    protected function renderList(class_array_section_iterator $objArraySectionIterator) {
+    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "") {
         $strReturn = "";
         $intI = 0;
+
+        $strListId = generateSystemid();
 
         $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
         $arrIterables = $arrPageViews["elements"];
@@ -71,7 +75,11 @@ abstract class class_admin_simple extends class_admin {
         if(count($arrIterables) == 0)
             $strReturn .= $this->objToolkit->getTextRow($this->getText("commons_list_empty"));
 
-        $strReturn .= $this->objToolkit->listHeader();
+        if($bitSortable)
+            $strReturn .= $this->objToolkit->dragableListHeader($strListId);
+        else
+            $strReturn .= $this->objToolkit->listHeader();
+
         if(count($arrIterables) > 0) {
 
             /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
@@ -95,12 +103,16 @@ abstract class class_admin_simple extends class_admin {
 
         }
 
-        if($this->getNewEntryAction() != "") {
+        if($this->getNewEntryAction($strListIdentifier) != "") {
             //$strReturn .= $this->objToolkit->listRow2Image("", "", $this->objToolkit->listButton($this->getNewEntryAction()), $intI);
-            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->getNewEntryAction()), $intI);
+            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->getNewEntryAction($strListIdentifier)), $intI);
         }
 
-        $strReturn .= $this->objToolkit->listFooter();
+        if($bitSortable)
+            $strReturn .= $this->objToolkit->dragableListFooter($strListId);
+        else
+            $strReturn .= $this->objToolkit->listFooter();
+
         $strReturn .= $arrPageViews["pageview"];
 
         return $strReturn;
@@ -163,9 +175,10 @@ abstract class class_admin_simple extends class_admin {
     /**
      * Renders the action to add a new record to the end of the list.
      * Make sure you have the lang-key "module_action_new" in the modules' lang-file.
+     * @param $strListIdentifier an internal identifier to check the current parent-list
      * @return string
      */
-    protected function getNewEntryAction() {
+    protected function getNewEntryAction($strListIdentifier) {
         if($this->getObjModule()->rightEdit()) {
             return getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif");
         }

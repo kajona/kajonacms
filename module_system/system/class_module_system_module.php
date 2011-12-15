@@ -13,7 +13,7 @@
  *
  * @package module_system
  */
-class class_module_system_module extends class_model implements interface_model  {
+class class_module_system_module extends class_model implements interface_model, interface_admin_listable  {
 
     private $strName = "";
     private $strNamePortal = "";
@@ -57,9 +57,42 @@ class class_module_system_module extends class_model implements interface_model 
         return $this->getStrName();
     }
 
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_module.gif";
+    }
 
     /**
-     * Initalises the current object, if a systemid was given
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "V ".$this->getStrVersion()." &nbsp;(".timeToString($this->getIntDate(), true).")";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        $objAdminInstance = $this->getAdminInstanceOfConcreteModule();
+       if($objAdminInstance != null)
+           $strDescription = $objAdminInstance->getModuleDescription();
+       else
+           $strDescription = "";
+
+        return $strDescription;
+    }
+
+
+    /**
+     * Initialises the current object, if a systemid was given
      *
      */
     protected function initObjectInternal() {
@@ -129,17 +162,23 @@ class class_module_system_module extends class_model implements interface_model 
 
     /**
      * Loads an array containing all installed modules from database
-	 *
-	 * @return mixed
-	 * @static
-	 */
-	public static function getAllModules() {
+     *
+     * @param bool $intStart
+     * @param bool $intEnd
+     * @return mixed
+     * @static
+     */
+	public static function getAllModules($intStart = false, $intEnd = false) {
 		$strQuery = "SELECT module_id
 		               FROM "._dbprefix_."system_module,
 		                    "._dbprefix_."system
 		              WHERE module_id = system_id
 		           ORDER BY system_sort ASC, system_comment ASC";
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        if($intStart !== false && $intEnd !== false)
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
+        else
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_module_system_module($arrOneId["module_id"]);
@@ -147,8 +186,23 @@ class class_module_system_module extends class_model implements interface_model 
 		return $arrReturn;
 	}
 
+    /**
+     * Counts the number of modules available
+     * @static
+     * @return int
+     */
+    public static function getAllModulesCount() {
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."system_module,
+                            "._dbprefix_."system
+                      WHERE module_id = system_id
+                   ORDER BY system_sort ASC, system_comment ASC";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+        return $arrRow["COUNT(*)"];
+    }
+
 	/**
-     * Tries to look up an module using the given name
+     * Tries to look up a module using the given name
 	 *
 	 * @param string $strName
 	 * @param bool $bitIgnoreStatus

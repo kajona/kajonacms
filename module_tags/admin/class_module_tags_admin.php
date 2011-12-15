@@ -60,7 +60,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         return $this->renderList($objArraySectionIterator);
     }
 
-    protected function getNewEntryAction() {
+    protected function getNewEntryAction($strListIdentifier) {
         return "";
     }
 
