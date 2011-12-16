@@ -35,6 +35,7 @@ General:
 - Signature of interface_model / class_root was updated
 - class_root::getObjectDescription() was removed prior to interface_model::getStrDisplayName()
 - When deleting a record, the systemid is removed automatically, objects should only remove its' own data
+-dirname(__FILE__) is replaces by __DIR__
 
 Event-Handling
 - statusChanged events are no longer triggered by class_root::additionalCallsOnStatuschange / class_model::doAdditionalActionsOnStatusChange()

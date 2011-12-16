@@ -24,8 +24,8 @@ function rawIncludeError($strFileMissed) {
 
 //---The Path on the filesystem------------------------------------------------------------------------------
 //Determine the current path on the filesystem. Use the dir-name of the current file
-define("_realpath_", substr(dirname(__FILE__), 0, -5));
-define("_corepath_", dirname(__FILE__));
+define("_realpath_", substr(__DIR__, 0, -5));
+define("_corepath_", __DIR__);
 
 //--- Loader pre-configuration
 if(!defined("_xmlLoader_"))

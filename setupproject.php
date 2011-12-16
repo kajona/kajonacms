@@ -12,7 +12,7 @@ class class_project_setup {
 
         echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
 
-        $strCurFolder = dirname(__FILE__);
+        $strCurFolder = __DIR__;
 
         echo "core-path: ".$strCurFolder.", ".substr($strCurFolder, -4)."\n";
 
@@ -25,7 +25,7 @@ class class_project_setup {
 
 
         echo "loading core...\n\n";
-        include dirname(__FILE__)."/bootstrap.php";
+        include __DIR__."/bootstrap.php";
 
         $arrModules = scandir(_corepath_);
 

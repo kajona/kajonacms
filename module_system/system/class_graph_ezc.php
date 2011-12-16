@@ -7,7 +7,7 @@
 *	$Id$                                             *
 ********************************************************************************************************/
 
-require_once(dirname(__FILE__)."/ezcomponents/Base/src/base.php");
+require_once(__DIR__."/ezcomponents/Base/src/base.php");
 spl_autoload_register( array( 'ezcBase', 'autoload' ) );
 
 

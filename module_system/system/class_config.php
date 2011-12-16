@@ -93,11 +93,11 @@ class class_config {
 
         $config = array();
 
-        if(is_file(dirname(__FILE__)."/../../../project/system/config/config.php") ) {
-            if(!@include dirname(__FILE__)."/../../../project/system/config/config.php")
+        if(is_file(__DIR__."/../../../project/system/config/config.php") ) {
+            if(!@include __DIR__."/../../../project/system/config/config.php")
                 die("Error reading config-file!");
         }
-        else if(!@include dirname(__FILE__)."/config/config.php")
+        else if(!@include __DIR__."/config/config.php")
             die("Error reading config-file!");
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
