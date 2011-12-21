@@ -65,12 +65,11 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			//Get groups
 			$arrGroups = class_module_user_group::getAllGroups();
 
-			//Determin name of the record
+			//Determine name of the record
 			if($objCommon->getStrRecordComment() == "")
 				$strTitle = $this->getText("titel_leer");
 			else
 				$strTitle = $objCommon->getStrRecordComment() . " ";
-			$strUrlHistory = $this->getHistory(0);
 
 			//Load the rights header-row
 			if($objCommon->getIntModuleNr() == 0)

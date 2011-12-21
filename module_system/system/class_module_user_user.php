@@ -14,7 +14,7 @@
  * @package module_user
  * @author sidler@mulchprod.de
  */
-class class_module_user_user extends class_model implements interface_model  {
+class class_module_user_user extends class_model implements interface_model, interface_admin_listable  {
 
     private $strSubsystem = "kajona";
 
@@ -63,6 +63,39 @@ class class_module_user_user extends class_model implements interface_model  {
     }
 
     /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_user.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        if($this->rightRight1()) {
+            return $this->getText("user_logins", "user", "admin")." ".$this->getIntLogins()." ".$this->getText("user_lastlogin", "user", "admin")." ".timeToString($this->getIntLastLogin(), false);
+        }
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        $objUsersources = new class_module_user_sourcefactory();
+        if(count($objUsersources->getArrUsersources()) > 1) {
+            return $this->getText("user_list_source", "user", "admin")." ".$this->getStrSubsystem();
+        }
+    }
+
+
+    /**
      * Returns a list of tables the current object is persisted to.
      * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
      * The array should contain the name of the table as the key and the name
@@ -73,6 +106,22 @@ class class_module_user_user extends class_model implements interface_model  {
      */
     protected function getObjectTables() {
         return array();
+    }
+
+    public function rightView() {
+        return class_module_system_module::getModuleByName("user")->rightView();
+    }
+
+    public function rightEdit() {
+        return class_module_system_module::getModuleByName("user")->rightEdit();
+    }
+
+    public function rightDelete() {
+        return class_module_system_module::getModuleByName("user")->rightDelete();
+    }
+
+    public function rightRight1() {
+        return class_module_system_module::getModuleByName("user")->rightRight1();
     }
 
 

@@ -14,7 +14,7 @@
  * @package module_user
  * @author sidler@mulchprod.de
  */
-class class_module_user_admin extends class_admin implements interface_admin {
+class class_module_user_admin extends class_admin_simple implements interface_admin {
 
     private $STR_FILTER_SESSION_KEY = "USERLIST_FILTER_SESSION_KEY";
 
@@ -129,6 +129,21 @@ class class_module_user_admin extends class_admin implements interface_admin {
         return $arrReturn;
     }
 
+    /**
+     * Renders the form to create a new entry
+     * @return string
+     */
+    protected function actionNew() {
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "newUser"));
+    }
+
+    /**
+     * Renders the form to edit an existing entry
+     * @return string
+     */
+    protected function actionEdit() {
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editUser", "&systemid=".$this->getSystemid()));
+    }
 
 
     /**
@@ -150,56 +165,79 @@ class class_module_user_admin extends class_admin implements interface_admin {
         $strReturn .= $this->objToolkit->divider();
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getNumberOfUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
-        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_user_user::getAllUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "list");
-        $arrUsers = $arrPageViews["elements"];
-
-        $strReturn .= $this->objToolkit->listHeader();
-        $objUsersources = new class_module_user_sourcefactory();
-
-        $intI = 0;
-        /* @var $objOneUser class_module_user_user */
-        foreach ($arrUsers as $objOneUser) 	{
-            $strActions = "";
-            if($this->getObjModule()->rightEdit())
-                $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "editUser", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
-            if($this->getObjModule()->rightEdit() && $objUsersources->getUsersource($objOneUser->getStrSubsystem())->getMembersEditable())
-                $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "editMemberships", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
-
-            if($objOneUser->getObjSourceUser()->isEditable() && $objOneUser->getObjSourceUser()->isPasswortResetable() &&   $this->getObjModule()->rightEdit() && checkEmailaddress($objOneUser->getStrEmail()))
-                $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_password_resend"), "icon_mail.gif"));
-
-            if($this->getObjModule()->rightDelete())
-                $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")", $this->getText("user_loeschen_frage"),
-                               getLinkAdminHref($this->arrModule["modul"], "deleteUser", "&systemid=".$objOneUser->getSystemid()));
-
-            if($this->getObjModule()->rightEdit()) {
-                if($objOneUser->getIntActive() == 1)
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_active"), "icon_enabled.gif"));
-                else
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
-            }
-            if($this->getObjModule()->rightRight1())
-                $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin(), false);
-            else
-                $strCenter = "";
-
-            if(count($objUsersources->getArrUsersources()) > 1)
-                $strCenter = $this->getText("user_list_source")." ".$objOneUser->getStrSubsystem()." ".$strCenter;
-
-            $strReturn .= $this->objToolkit->listRow3($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename() . " " . $objOneUser->getStrName().")", $strCenter, $strActions, getImageAdmin("icon_user.gif"), $intI++);
-        }
-
-        //And one row to create a new one
-        if($this->getObjModule()->rightEdit())
-            $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_new.gif")), "", $intI++);
-
-        $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
+        $strReturn .= $this->renderList($objArraySectionIterator, false, "userList");
         return $strReturn;
     }
+
+    protected function renderStatusAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
+            if($objListEntry->getIntActive() == 1)
+                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("user_active"), "icon_enabled.gif"));
+            else
+                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
+        }
+    }
+
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry instanceof class_module_user_user && $objListEntry->rightDelete())
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getText("user_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteUser", "&systemid=".$objListEntry->getSystemid()));
+
+        if($objListEntry instanceof class_module_user_group) {
+            if($objListEntry->getSystemid() != _guests_group_id_  && $objListEntry->getSystemid() != _admins_group_id_) {
+                if($objListEntry->rightDelete())
+                    return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getText("gruppe_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "groupDelete", "&systemid=".$objListEntry->getSystemid()));
+            }
+            else {
+                return $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
+            }
+        }
+        return "";
+    }
+
+    protected function getNewEntryAction($strListIdentifier) {
+        if($strListIdentifier == "userList" && $this->getObjModule()->rightEdit())
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_new.gif"));
+
+        if($strListIdentifier == "groupList" && $this->getObjModule()->rightEdit())
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_new.gif"));
+    }
+
+
+    /**
+     * @param class_model|class_module_user_user $objListEntry
+     * @return array
+     */
+    protected function renderAdditionalActions(class_model $objListEntry) {
+        $objUsersources = new class_module_user_sourcefactory();
+
+        $arrReturn = array();
+        if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable())
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "editMemberships", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
+
+        if($objListEntry instanceof class_module_user_user && $objListEntry->getObjSourceUser()->isEditable() && $objListEntry->getObjSourceUser()->isPasswortResetable() && $objListEntry->rightEdit() && checkEmailaddress($objListEntry->getStrEmail()))
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("user_password_resend"), "icon_mail.gif"));
+
+        if($objListEntry instanceof class_module_user_group && $objListEntry->rightEdit())
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
+
+        return $arrReturn;
+    }
+
+    protected function renderEditAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_user_group) {
+            if($objListEntry->getSystemid() != _guests_group_id_  && $objListEntry->getSystemid() != _admins_group_id_) {
+                if($objListEntry->rightEdit())
+                    return $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
+            }
+            else
+                return $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.gif", $this->getText("gruppe_bearbeiten_x")));
+        }
+        return parent::renderEditAction($objListEntry);
+    }
+
 
     /**
      * Shows a form in order to start the process of resetting a users password.
@@ -609,52 +647,11 @@ class class_module_user_admin extends class_admin implements interface_admin {
      * @permissions view
 	 */
     protected function actionGroupList() {
-        $strReturn = "";
         $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getNumberOfGroups());
-        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupList");
-        $arrGroups = $arrPageViews["elements"];
-
-        $strReturn = $this->objToolkit->listHeader();
-
-        $objUsersources = new class_module_user_sourcefactory();
-        $intI = 0;
-        /* @var $objSingleGroup class_module_user_group */
-        foreach($arrGroups as $objSingleGroup) {
-            $strAction = "";
-            if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admins_group_id_) {
-
-                if($this->getObjModule()->rightEdit() )
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
-                if($this->getObjModule()->rightEdit() )
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
-                if($this->getObjModule()->rightDelete() )
-                    $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
-                              getLinkAdminHref($this->arrModule["modul"], "groupDelete", "&systemid=".$objSingleGroup->getSystemid()));
-            }
-            else {
-
-                $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.gif", $this->getText("gruppe_bearbeiten_x")));
-                if($this->getObjModule()->rightEdit() /*&& $objUsersources->getUsersource($objSingleGroup->getStrSubsystem())->getMembersEditable()*/)
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
-                $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
-            }
-
-            $strCenter = "";
-            if(count($objUsersources->getArrUsersources()) > 1)
-                $strCenter = $this->getText("user_list_source")." ".$objSingleGroup->getStrSubsystem()." ".$strCenter;
-
-            $strReturn .= $this->objToolkit->listRow3($objSingleGroup->getStrName()." (".$objSingleGroup->getNumberOfMembers().")", $strCenter, $strAction, getImageAdmin("icon_group.gif"), $intI++);
-        }
-        if($this->getObjModule()->rightEdit() )
-            $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_new.gif"), "", $intI++);
-
-        $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
-
-        return $strReturn;
+        return $this->renderList($objArraySectionIterator, false, "groupList");
     }
 
 
@@ -905,7 +902,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                              ,$this->getText("mitglied_loeschen_frage")
                              ,getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
                 }
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user.gif"), $strAction, $intI++);
             }
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
@@ -1100,7 +1097,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                 if($this->getParam("allowGroup") == "1")
                     $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("group_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
 
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName(), $strAction, $intI++);
+                $strReturn .= $this->objToolkit->simpleAdminList($objSingleGroup, $strAction, $intI++);
 
             }
         }
@@ -1111,7 +1108,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->listHeader();
             $intI = 0;
 
-            $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif")), $intI++);
             foreach($arrUsers as $strSingleUser) {
                 $objSingleUser = new class_module_user_user($strSingleUser);
 
@@ -1120,7 +1117,7 @@ class class_module_user_admin extends class_admin implements interface_admin {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled.gif"));
                 else
                     $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("user_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleUser->getStrUsername(). "(".$objSingleUser->getStrForename()." ".$objSingleUser->getStrName().")", $strAction, $intI++);
+                $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction, $intI++);
 
             }
         }

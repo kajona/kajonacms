@@ -14,7 +14,7 @@
  * @package module_user
  * @author sidler@mulchprod.de
  */
-class class_module_user_group extends class_model implements interface_model  {
+class class_module_user_group extends class_model implements interface_model, interface_admin_listable  {
 
     private $strSubsystem = "kajona";
     private $strName = "";
@@ -55,9 +55,52 @@ class class_module_user_group extends class_model implements interface_model  {
         return $this->getStrName();
     }
 
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_group.gif";
+    }
 
     /**
-     * Initalises the current object, if a systemid was given
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return $this->getNumberOfMembers();
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        $objUsersources = new class_module_user_sourcefactory();
+        if(count($objUsersources->getArrUsersources()) > 1) {
+            return $this->getText("user_list_source", "user", "admin")." ".$this->getStrSubsystem();
+        }
+    }
+
+
+    public function rightView() {
+        return class_module_system_module::getModuleByName("user")->rightView();
+    }
+
+    public function rightEdit() {
+        return class_module_system_module::getModuleByName("user")->rightEdit();
+    }
+
+    public function rightDelete() {
+        return class_module_system_module::getModuleByName("user")->rightDelete();
+    }
+
+
+    /**
+     * Initialises the current object, if a systemid was given
      *
      */
     protected function initObjectInternal() {
