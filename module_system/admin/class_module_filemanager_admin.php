@@ -14,7 +14,7 @@
  * @package module_filemanager
  * @author sidler@mulchprod.de
  */
-class class_module_filemanager_admin extends class_admin implements  interface_admin {
+class class_module_filemanager_admin extends class_admin_simple implements  interface_admin {
 	private $strFolder;
 	private $strFolderOld;
 
@@ -35,18 +35,18 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "newRepo", "", $this->getText("modul_neu"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("module_action_new"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
 	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
-        if($strAction == "newRepo") {
+        if($strAction == "new") {
             $arrReturn["filemanager_name"] = "string";
             $arrReturn["filemanager_path"] = "folder";
         }
-        if($strAction == "editRepo") {
+        if($strAction == "edit") {
             $arrReturn["filemanager_name"] = "string";
             $arrReturn["filemanager_path"] = "folder";
         }
@@ -55,8 +55,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
     }
 
 
-
-	/**
+    /**
 	 * Returns a list of all repos known to the system
 	 *
 	 * @return string
@@ -64,44 +63,46 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
      * @permissions view
 	 */
 	protected function actionList() {
-		$strReturn = "";
-		//Check rights
-        //Load the repos
-        $arrObjRepos = class_module_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
-        $intI = 0;
-        //Print every repo
-        foreach($arrObjRepos as $objOneRepo) {
-            //check rights
-            if($objOneRepo->rightView()) {
-                $strActions = "";
-                if($objOneRepo->rightView())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
-                if($objOneRepo->rightRight2())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editRepo", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_bearbeiten"), "icon_folderProperties.gif"));
-                if($objOneRepo->rightRight2())
-                    $strActions .= $this->objToolkit->listDeleteButton($objOneRepo->getStrName(), $this->getText("repo_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteRepo", "&systemid=".$objOneRepo->getSystemid()));
-                if($objOneRepo->rightRight())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneRepo->getSystemid())));
 
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneRepo->getStrName(), $strActions, $intI++);
-            }
-        }
-        if($this->getObjModule()->rightRight2())
-            $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newRepo", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"), $intI++);
+        $objIterator = new class_array_section_iterator(class_module_filemanager_repo::getAllReposCount(_filemanager_show_foreign_));
+        $objIterator->setPageNumber($this->getParam("pv"));
+        $objIterator->setArraySection(class_module_filemanager_repo::getAllRepos(_filemanager_show_foreign_, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-
-        if(uniStrlen($strReturn) != 0)
-            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
-
-        if(count($arrObjRepos) == 0)
-            $strReturn .= $this->getText("liste_leer");
-
-		return $strReturn;
+        return $this->renderList($objIterator);
 	}
 
+    protected function getNewEntryAction($strListIdentifier) {
+        if($this->getObjModule()->rightRight2()) {
+            return getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif");
+        }
+    }
 
 
-	/**
+    protected function renderAdditionalActions(class_model $objListEntry) {
+
+        if($objListEntry->rightView())
+            return array(
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"))
+            );
+
+        return parent::renderAdditionalActions($objListEntry);
+    }
+
+
+    protected function renderEditAction(class_model $objListEntry) {
+        if($objListEntry->rightRight2()) {
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getText("repo_bearbeiten"), $this->getText("repo_bearbeiten"), "icon_folderProperties.gif"));
+        }
+    }
+
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry->rightRight2())
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteRepo", "&systemid=".$objListEntry->getSystemid()));
+
+    }
+
+
+    /**
 	 * Deltes a repo or shows the warning box
 	 *
 	 * @return string "" in case of success
@@ -127,7 +128,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 	 * @return string
      * @permissions right2
 	 */
-	protected function actionNewRepo() {
+	protected function actionNew() {
 		$strReturn = "";
         //validate Form, if passed
         $bitValidated = true;
@@ -141,8 +142,8 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
         //save or new?
         if($this->getParam("repoSaveNew") == ""){
             //create the form
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
+            $strReturn .= $this->objToolkit->getValidationErrors($this, "new");
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "new", "repoSaveNew=1"));
             $strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $this->getParam("filemanager_name"));
             $strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
             $strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
@@ -177,7 +178,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 	 *
 	 * @return string "" in case of success
 	 */
-	protected function actionEditRepo() {
+	protected function actionEdit() {
 		$strReturn = "";
         $objRepo = new class_module_filemanager_repo($this->getSystemid());
 		if($objRepo->rightRight2()) {
@@ -191,9 +192,9 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 			//Form or update?
 			if($this->getParam("repoSaveEdit") == "") {
 
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "editRepo");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "edit");
 				//create the form
-    			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
+    			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "edit", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $objRepo->getStrName());
     			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
@@ -287,11 +288,11 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 	  		if($this->strFolderOld != "") {
 	  			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
 	  			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
 	  		}
 	  		else {
 	  		    //Link back to the repos
-	  		    $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "", "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "", "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
 	  		}
 			if(count($arrFiles["folders"]) > 0) {
 				foreach($arrFiles["folders"] as $strFolder) {
@@ -306,7 +307,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
     				else
     					$strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loeschen_fehler_l")));
 
-		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
+                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolder, getImageAdmin("icon_folderOpen.gif"), $strAction, $intI++, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""));
 				}
 			}
 			$strReturn .= $this->objToolkit->listFooter();
@@ -394,6 +395,7 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
             $arrObjRepos = class_module_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
             $intI = 0;
             //Print every repo
+            /** @var class_module_filemanager_repo $objOneRepo */
             foreach($arrObjRepos as $objOneRepo) {
                 //check rights
                 if($objOneRepo->rightView()) {
@@ -735,8 +737,6 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 				//Handle the fileupload
 				$arrSource = $this->getParam("filemanager_upload");
 
-				$bitSuccess = false;
-
                 $strTarget = $this->strFolder."/".createFilename($arrSource["name"]);
                 $objFilesystem = new class_filesystem();
                 //Check file for correct filters
@@ -745,7 +745,6 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
                 if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
                         $strReturn .= $this->getText("upload_erfolg");
-                        $bitSuccess = true;
 
                         class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
                     }
@@ -819,9 +818,6 @@ class class_module_filemanager_admin extends class_admin implements  interface_a
 			//Generate Dimensions
 			$intHeight = $arrSize[1];
 			$intWidth = $arrSize[0];
-			$strPath = $strFile;
-			if(uniStrpos($strPath, _realpath_) !== false)
-				$strPath = str_replace(_realpath_, _webpath_, $strPath);
 
 			while($intWidth > 500 || $intHeight > 400) {
 				$intWidth *= 0.8;

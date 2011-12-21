@@ -1270,7 +1270,8 @@ function uniEreg($strPattern, $strString) {
  * @param mixed $mixedSearch array or string
  * @param mixed $mixedReplace array or string
  * @param string $strSubject
- * @deprecated str_replace is utf8-aware!
+ * @param bool $bitUnicodesafe
+ * @return mixed
  */
 function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false) {
     if($bitUnicodesafe) {

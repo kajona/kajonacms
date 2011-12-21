@@ -14,7 +14,7 @@
  * @package module_filemanager
  * @author sidler@mulchprod.de
  */
-class class_module_filemanager_repo extends class_model implements interface_model  {
+class class_module_filemanager_repo extends class_model implements interface_model, interface_admin_listable  {
 
     private $strPath = "";
     private $strName = "";
@@ -53,9 +53,36 @@ class class_module_filemanager_repo extends class_model implements interface_mod
         return $this->getStrName();
     }
 
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_folderOpen.gif";
+    }
 
     /**
-     * initalizes the current object with proper values
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
+    }
+
+
+    /**
+     * initializes the current object with proper values
      *
      */
     protected function  initObjectInternal() {
@@ -94,23 +121,47 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * Loads all repos currently available
      *
      * @param boolean $bitLoadForeign Indicates weather foreign repos should be hidden or not
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
      * @return mixed Array of objects
      * @static
      */
-    public static function getAllRepos($bitLoadForeign = false) {
+    public static function getAllRepos($bitLoadForeign = false, $intStart = false, $intEnd = false) {
         $arrReturn = array();
         $objDB = class_carrier::getInstance()->getObjDB();
 
 
         $strQuery = "SELECT system_id FROM "._dbprefix_."filemanager AS filem, "._dbprefix_."system AS system
 						WHERE system_id = filemanager_id
-                    ".(!$bitLoadForeign || $bitLoadForeign == "false" ? " AND (filemanager_foreign_id IS NULL OR filemanager_foreign_id = '')" : "")."";
-        $arrIds = $objDB->getPArray($strQuery, array());
+                    ".(!$bitLoadForeign || $bitLoadForeign == "false" ? " AND (filemanager_foreign_id IS NULL OR filemanager_foreign_id = '')" : "")." ";
+
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = $objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
+        else
+            $arrIds = $objDB->getPArray($strQuery, array());
 
         foreach ($arrIds as $arrOneID)
             $arrReturn[] = new class_module_filemanager_repo($arrOneID["system_id"]);
 
         return $arrReturn;
+    }
+
+    /**
+     * Returns the number of repos available
+     * @static
+     * @param bool $bitLoadForeign
+     * @return mixed
+     */
+    public static function getAllReposCount($bitLoadForeign = false) {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."filemanager AS filem, "._dbprefix_."system AS system
+                        WHERE system_id = filemanager_id
+                    ".(!$bitLoadForeign || $bitLoadForeign == "false" ? " AND (filemanager_foreign_id IS NULL OR filemanager_foreign_id = '')" : "")."";
+
+        $arrRow = $objDB->getPRow($strQuery, array());
+        return $arrRow["COUNT(*)"];
+
     }
 
     /**

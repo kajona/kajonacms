@@ -63,7 +63,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
         }
     }
 
-    // -- Module --------------------------------------------------------------------------------------------
 
     /**
      * Sorts a module upwards.
@@ -107,7 +106,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
      * @return string
      */
     protected function actionEdit() {
-        // TODO: Implement actionEdit() method.
+
+        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objInstance instanceof class_module_system_aspect)
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editAspect", "&systemid=".$objInstance->getSystemid()));
     }
 
 
@@ -168,12 +170,18 @@ class class_module_system_admin extends class_admin_simple implements interface_
         if($objListEntry instanceof class_module_system_module)
             return "";
 
+        if($objListEntry instanceof class_module_system_aspect && $objListEntry->rightDelete())
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getText("aspect_delete_question"), getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
+
         return parent::renderDeleteAction($objListEntry);
     }
 
     protected function getNewEntryAction($strListIdentifier) {
         if($strListIdentifier == "moduleList")
             return "";
+
+        if($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit())
+            return getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif");
 
         return parent::getNewEntryAction($strListIdentifier);
     }
@@ -451,10 +459,13 @@ class class_module_system_admin extends class_admin_simple implements interface_
                                                                                       "icon_accept.gif");
                 }
 
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"),
-                                                                   $objOneTask->getStrTaskname(),
-                                                                   $this->objToolkit->listButton($strLink),
-                                                                   $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList(
+                    generateSystemid(),
+                    $objOneTask->getStrTaskname(),
+                    getImageAdmin("icon_dot.gif"),
+                    $this->objToolkit->listButton($strLink),
+                    $intI++
+                );
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
@@ -768,36 +779,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionAspects() {
 
-	    $strReturn = "";
-		$intI = 0;
-        $arrObjAspects = class_module_system_aspect::getAllAspects();
+        $objIterator = new class_array_section_iterator(class_module_system_aspect::getNumberOfAspectsAvailable());
+        $objIterator->setPageNumber($this->getParam("pv"));
+        $objIterator->setArraySection(class_module_system_aspect::getAllAspects(false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-        foreach ($arrObjAspects as $objOneAspect) {
-            //Correct Rights?
-            if($objOneAspect->rightView()) {
-                $strAction = "";
-                if($objOneAspect->rightEdit())
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editAspect", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("aspect_edit"), "icon_pencil.gif"));
-                if($objOneAspect->rightDelete())
-                    $strAction .= $this->objToolkit->listDeleteButton($objOneAspect->getStrName(), $this->getText("aspect_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteAspect", "&systemid=".$objOneAspect->getSystemid()));
-                if($objOneAspect->rightEdit())
-                    $strAction .= $this->objToolkit->listStatusButton($objOneAspect->getSystemid());
-                if($objOneAspect->rightRight())
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneAspect->getSystemid())));
-
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_aspect.gif"), $objOneAspect->getStrName().($objOneAspect->getBitDefault() == 1 ? " (".$this->getText("aspect_isDefault").")" : ""), $strAction, $intI++);
-            }
-        }
-        if($this->getObjModule()->rightEdit())
-            $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif"), $intI++);
-
-        if(uniStrlen($strReturn) != 0)
-            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
-
-        if(count($arrObjAspects) == 0)
-            $strReturn .= $this->getText("aspect_list_empty");
-
-		return $strReturn;
+        return $this->renderList($objIterator, false, "aspectList");
 	}
 
     /**

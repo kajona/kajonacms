@@ -18,7 +18,7 @@
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class class_module_system_aspect extends class_model implements interface_model  {
+class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable  {
 
     private $strName = "";
     private $bitDefault = false;
@@ -55,6 +55,34 @@ class class_module_system_aspect extends class_model implements interface_model 
     public function getStrDisplayName() {
         return $this->getStrName();
     }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_aspect.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return $this->getBitDefault() == 1 ? " (".$this->getText("aspect_isDefault", "system", "admin").")" : "";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
+    }
+
 
     /**
      * Initalises the current object, if a systemid was given
@@ -98,16 +126,21 @@ class class_module_system_aspect extends class_model implements interface_model 
      * Returns an array of all aspects available
      *
      * @param bool $bitJustActive
-     * @return class_module_system_aspect
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
+     * @return class_module_system_aspect[]
      * @static
      */
-    public static function getAllAspects($bitJustActive = false) {
+    public static function getAllAspects($bitJustActive = false, $intStart = false, $intEnd = false) {
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
 		             WHERE system_id = aspect_id
 		             ".($bitJustActive ? "AND system_status != 0 ": "")."
 		             ORDER BY system_sort ASC, aspect_name ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_system_aspect($arrOneId["system_id"]);

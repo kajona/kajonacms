@@ -403,7 +403,7 @@ class class_db {
 
     /**
      * Returns just a part of a recordset, defined by the start- and the end-rows,
-     * defined by the params. Makes use of preprared statements
+     * defined by the params. Makes use of prepared statements
      * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!
      *
@@ -415,6 +415,10 @@ class class_db {
      * @return array
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true) {
+
+        if($intStart > $intEnd)
+            throw new class_exception("end may not be greater then start index", class_exception::$level_ERROR);
+
         if(!$this->bitConnected)
             $this->dbconnect();
 

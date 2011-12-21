@@ -85,6 +85,9 @@ abstract class class_admin_simple extends class_admin {
             /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
             foreach($arrIterables as $objOneIterable) {
 
+                if(!$objOneIterable->rightView())
+                    continue;
+
                 $strActions = "";
                 $strActions .= $this->renderEditAction($objOneIterable);
 
