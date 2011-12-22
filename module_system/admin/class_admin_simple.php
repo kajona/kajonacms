@@ -15,10 +15,21 @@
  */
 abstract class class_admin_simple extends class_admin {
 
+    private $strPeAddon = "";
+
+    public function __construct($strSystemid = "") {
+        parent::__construct($strSystemid);
+
+        if($this->getParam("pe") == "1")
+            $this->strPeAddon = "&pe=1";
+    }
+
+
     /**
      * Renders the form to create a new entry
      * @abstract
      * @return string
+     * @permissions edit
      */
     protected abstract function actionNew();
 
@@ -26,6 +37,7 @@ abstract class class_admin_simple extends class_admin {
      * Renders the form to edit an existing entry
      * @abstract
      * @return string
+     * @permissions edit
      */
     protected abstract function actionEdit();
 
@@ -33,6 +45,7 @@ abstract class class_admin_simple extends class_admin {
      * Renders the general list of records
      * @abstract
      * @return string
+     * @permissions view
      */
     protected abstract function actionList();
 
@@ -57,6 +70,8 @@ abstract class class_admin_simple extends class_admin {
 
     /**
      * Renders a list of items, target is the common admin-list.
+     * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
+     * As soon as the list is sortable, the page-size should be at least the same as the number of elements
      *
      * @param class_array_section_iterator $objArraySectionIterator
      * @param bool $bitSortable
@@ -67,9 +82,13 @@ abstract class class_admin_simple extends class_admin {
         $strReturn = "";
         $intI = 0;
 
+        if($bitSortable && $objArraySectionIterator->getNrOfPages() > 1) {
+            throw new class_exception("sortable lists with more than one page are not supported!", class_exception::$level_ERROR);
+        }
+
         $strListId = generateSystemid();
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon);
         $arrIterables = $arrPageViews["elements"];
 
         if(count($arrIterables) == 0)
@@ -79,6 +98,10 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->dragableListHeader($strListId);
         else
             $strReturn .= $this->objToolkit->listHeader();
+
+        if($this->renderLevelUpAction($strListIdentifier) != "") {
+            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier)), $intI++);
+        }
 
         if(count($arrIterables) > 0) {
 
@@ -107,7 +130,6 @@ abstract class class_admin_simple extends class_admin {
         }
 
         if($this->getNewEntryAction($strListIdentifier) != "") {
-            //$strReturn .= $this->objToolkit->listRow2Image("", "", $this->objToolkit->listButton($this->getNewEntryAction()), $intI);
             $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->getNewEntryAction($strListIdentifier)), $intI);
         }
 
@@ -122,13 +144,24 @@ abstract class class_admin_simple extends class_admin {
     }
 
     /**
+     * Renders the action to jump a level upwards.
+     * Overwrite this method if you want to provide such an action.
+     *
+     * @param $strListIdentifier
+     * @return string
+     */
+    protected function renderLevelUpAction($strListIdentifier) {
+        return "";
+    }
+
+    /**
      * Renders the edit action button for the current record.
      * @param class_model $objListEntry
      * @return string
      */
     protected function renderEditAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getText("commons_list_edit"), $this->getText("commons_list_edit"), "icon_pencil.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getText("commons_list_edit"), $this->getText("commons_list_edit"), "icon_pencil.gif"));
         }
     }
 
@@ -139,7 +172,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getText("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid()));
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getText("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon));
         }
     }
 
@@ -149,7 +182,7 @@ abstract class class_admin_simple extends class_admin {
      * @return string
      */
     protected function renderStatusAction(class_model $objListEntry) {
-        if($objListEntry->rightEdit()) {
+        if($objListEntry->rightEdit() && $this->strPeAddon == "") {
             return $this->objToolkit->listStatusButton($objListEntry->getSystemid(), false);
         }
     }
@@ -160,8 +193,8 @@ abstract class class_admin_simple extends class_admin {
      * @return string
      */
     protected function renderPermissionsAction(class_model $objListEntry) {
-        if($objListEntry->rightRight()) {
-            return $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid())));
+        if($objListEntry->rightRight() && $this->strPeAddon == "") {
+            return $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid())));
         }
     }
 
@@ -183,7 +216,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function getNewEntryAction($strListIdentifier) {
         if($this->getObjModule()->rightEdit()) {
-            return getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif");
+            return getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif");
         }
     }
 

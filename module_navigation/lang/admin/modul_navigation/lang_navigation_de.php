@@ -12,15 +12,14 @@
 //editable entries
 $lang["error_folder_and_page"]           = "Es kann entweder eine Seite oder ein Ordner ausgewählt werden, nicht beides.";
 $lang["liste_leer"]                      = "Keine Navigation angelegt";
-$lang["modul_anlegen"]                   = "Neue Navigation";
+$lang["module_action_new"]                   = "Neue Navigation";
 $lang["modul_anlegenpunkt"]              = "Neuer Unterpunkt";
 $lang["modul_titel"]                     = "Navigationen";
 $lang["navigation_anzeigen"]             = "Unterpunkte anzeigen";
-$lang["navigation_bearbeiten"]           = "Navigation bearbeiten";
 $lang["navigation_erf_loeschen"]         = "Navigation erfolgreich gelöscht";
 $lang["navigation_erfolg"]               = "Navigation erfolgreich angelegt";
 $lang["navigation_folder_i"]             = "Ordner:";
-$lang["navigation_loeschen_frage"]       = "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
+$lang["delete_question"]       = "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
 $lang["navigation_page_e"]               = "Externer Verweis / Datei:";
 $lang["navigation_page_i"]               = "Interne Seite:";
 $lang["navigation_parent"]               = "Übergeordneter Knoten:";
@@ -30,9 +29,6 @@ $lang["navigation_tagetblank"]           = "_blank (Neues Browserfenster)";
 $lang["navigation_tagetself"]            = "_self (Selbes Browserfenster)";
 $lang["navigation_target"]               = "Ziel:";
 $lang["navigationp_anzeigen"]            = "Unterpunkte anzeigen";
-$lang["navigationp_bearbeiten"]          = "Navigationspunkt bearbeiten";
-$lang["navigationp_hoch"]                = "Punkt nach oben verschieben";
-$lang["navigationp_runter"]              = "Punkt nach unten verschieben";
 $lang["quickhelp_deleteNavi"]            = "Mit dieser Aktion wird eine Navigation oder ein Navigationspunkt mit allen Unterpunkten aus dem System gelöscht. Dieser Schritt kann nicht rückgängig gemacht werden.";
 $lang["quickhelp_editNavi"]              = "Für eine neue Navigation muss lediglich der Titel des Navigationsbaumes vergeben werden. Über die Aktion 'bearbeiten' kann dieser später wieder verändert werden.";
 $lang["quickhelp_editNaviPoint"]         = "Beim Anlegen oder Bearbeiten eines Navigationspunktes können dessen Eigenschaften verändert werden. Hierzu gehören der Name der Punktes, sowie die Seite, auf welche der Punkt zeigen soll. Für externe Seiten kann das Feld 'externer Verweis' verwendet werden. Soll statt des Namens ein Bild geladen werden, so kann dies unter 'Bild' angegeben werden. Das Ziel gibt das spätere Link-Target an.";

@@ -177,6 +177,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 	 * Returns the form to edit the repo and saves the data
 	 *
 	 * @return string "" in case of success
+     * @permissions right2
 	 */
 	protected function actionEdit() {
 		$strReturn = "";

@@ -11,23 +11,19 @@
 
 //editable entries
 $lang["liste_leer"]                      = "Няма налична навигация";
-$lang["modul_anlegen"]                   = "Създай навигация";
+$lang["module_action_new"]                   = "Създай навигация";
 $lang["modul_anlegenpunkt"]              = "Създай връзка в навигацията";
 $lang["modul_titel"]                     = "Навигации";
 $lang["navigation_anzeigen"]             = "Покажи връзките в навигацията";
-$lang["navigation_bearbeiten"]           = "Редактирай навигация";
 $lang["navigation_erf_loeschen"]         = "Навигацията беше изтрита успешно";
 $lang["navigation_erfolg"]               = "Навигацията беше създадена успешно";
-$lang["navigation_loeschen_frage"]       = "Наистина ли искате да премахнете навигацията &quot;<b>%%element_name%%</b>&quot; със всички връзки?";
+$lang["delete_question"]       = "Наистина ли искате да премахнете навигацията &quot;<b>%%element_name%%</b>&quot; със всички връзки?";
 $lang["navigation_page_e"]               = "Външен връзки / Картотекирам";
 $lang["navigation_page_i"]               = "Страница";
 $lang["navigation_tagetblank"]           = "_blank (отваря се в нов прозорец)";
 $lang["navigation_tagetself"]            = "_self (отваря се в същия прозорец)";
 $lang["navigation_target"]               = "Цел:";
 $lang["navigationp_anzeigen"]            = "Покажи връзките в навигацията";
-$lang["navigationp_bearbeiten"]          = "Промени връзка";
-$lang["navigationp_hoch"]                = "Премести връзката нагоре";
-$lang["navigationp_runter"]              = "Премести връзката надолу";
 $lang["quickhelp_deleteNavi"]            = "След изпълнението на 'премахни' функцията избраната навигация или навигационни връзки и всички под-връзки ще бъдат премахнати. Тази стъпка е необратима.";
 $lang["quickhelp_editNavi"]              = "Редактирайте настройките на навигацията от тук.";
 $lang["quickhelp_editNaviPoint"]         = "Чрез създаване и редактиране на навигационна връзка можете да промените свойствата му. Свойствата включват име и съответната препратка. За външни сайтове можете да използвате полето 'Външни Сайтове'. Ако искате вместо име да се показва изображение, избирате полето 'изображение'. Можете да изберете целта на препратката чрез падащото меню.";

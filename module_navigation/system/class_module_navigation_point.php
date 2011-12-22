@@ -13,7 +13,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  */
-class class_module_navigation_point extends class_model implements interface_model  {
+class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable  {
 
     private $strName = "";
     private $strPageE = "";
@@ -50,6 +50,41 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     public function getStrDisplayName() {
         return $this->getStrName();
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_treeLeaf.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        $strNameInternal = $this->getStrPageI();
+        $strNameExternal = $this->getStrPageE();
+        $strNameFolder = "";
+        if(validateSystemid($this->getStrFolderI())) {
+            $objFolder = new class_module_pages_folder($this->getStrFolderI());
+            $strNameFolder = $objFolder->getStrName();
+        }
+
+        return $strNameInternal.$strNameExternal.$strNameFolder;
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
     }
 
 
@@ -124,6 +159,26 @@ class class_module_navigation_point extends class_model implements interface_mod
 
         return $arrReturn;
 	}
+
+    /**
+     * Loads the number of navigation points one layer under the given systemid
+     *
+     * @param string $strSystemid
+     * @param bool
+     * @return int
+     * @static
+     */
+    public static function getNaviLayerCount($strSystemid, $bitJustActive = false) {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."navigation, "._dbprefix_."system
+                             WHERE system_id = navigation_id
+                             AND system_prev_id = ?
+                             AND system_module_nr = ?
+                             ".($bitJustActive ? " AND system_status = 1 ": "")."
+                             ORDER BY system_sort ASC, system_comment ASC";
+
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid, _navigation_modul_id_));
+        return $arrReturn["COUNT(*)"];
+    }
 
     /**
      * Generates a navigation layer for the portal.

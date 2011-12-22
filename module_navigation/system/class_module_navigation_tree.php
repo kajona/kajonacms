@@ -13,7 +13,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  */
-class class_module_navigation_tree extends class_model implements interface_model  {
+class class_module_navigation_tree extends class_model implements interface_model, interface_admin_listable  {
 
     private $strName = "";
     private $strFolderId = "";
@@ -51,9 +51,36 @@ class class_module_navigation_tree extends class_model implements interface_mode
         return $this->getStrName();
     }
 
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_treeRoot.gif";
+    }
 
     /**
-     * Initalises the current object, if a systemid was given
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
+    }
+
+
+    /**
+     * Initialises the current object, if a systemid was given
      *
      */
     protected function initObjectInternal() {
@@ -84,22 +111,47 @@ class class_module_navigation_tree extends class_model implements interface_mode
     /**
      * Returns an array of all navigation-trees available
      *
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
      * @return mixed
      * @static
      */
-    public static function getAllNavis() {
+    public static function getAllNavis($intStart = false, $intEnd = false) {
         $strQuery = "SELECT system_id
                        FROM "._dbprefix_."navigation, "._dbprefix_."system
 		             WHERE system_id = navigation_id
 		               AND system_prev_id = ?
 		               AND system_module_nr = ?
 		          ORDER BY system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
+
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_), $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_navigation_tree($arrOneId["system_id"]);
 
         return $arrReturn;
+    }
+
+
+    /**
+     * Returns the number of navigation available
+     *
+     * @return int
+     * @static
+     */
+    public static function getAllNavisCount() {
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."navigation, "._dbprefix_."system
+                     WHERE system_id = navigation_id
+                       AND system_prev_id = ?
+                       AND system_module_nr = ?
+                  ORDER BY system_comment ASC";
+
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
+        return $arrReturn["COUNT(*)"];
     }
 
 

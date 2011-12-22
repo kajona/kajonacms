@@ -11,23 +11,19 @@
 
 //editable entries
 $lang["liste_leer"]                      = "Нет доступной навигации";
-$lang["modul_anlegen"]                   = "Создать навигацию";
+$lang["module_action_new"]                   = "Создать навигацию";
 $lang["modul_anlegenpunkt"]              = "Создать пункт";
 $lang["modul_titel"]                     = "Навигация";
 $lang["navigation_anzeigen"]             = "Показать пункты навигации";
-$lang["navigation_bearbeiten"]           = "Изменить навигацию";
 $lang["navigation_erf_loeschen"]         = "Навигация успешно удалена";
 $lang["navigation_erfolg"]               = "Навигация успешно создана";
-$lang["navigation_loeschen_frage"]       = "Вы действительно хотите удалить навигацию &quot;<b>%%element_name%%</b>&quot; со всеми пунктами?";
+$lang["delete_question"]       = "Вы действительно хотите удалить навигацию &quot;<b>%%element_name%%</b>&quot; со всеми пунктами?";
 $lang["navigation_page_e"]               = "Внешняя ссылка / Файл:";
 $lang["navigation_page_i"]               = "Страница:";
 $lang["navigation_tagetblank"]           = "_бланк (в новом окне браузера)";
 $lang["navigation_tagetself"]            = "_self (в том же окне браузера)";
 $lang["navigation_target"]               = "Цель:";
 $lang["navigationp_anzeigen"]            = "Показать пункты навигации";
-$lang["navigationp_bearbeiten"]          = "Изменить пункт навигации";
-$lang["navigationp_hoch"]                = "Поднять пункт вверх";
-$lang["navigationp_runter"]              = "Опустить пункт вниз";
 $lang["quickhelp_deleteNavi"]            = "При совершение действия \"удалить\" выбранное дерево навигации или его пункт и все под пункты будут удалены. Этот шаг необратим.";
 $lang["quickhelp_editNavi"]              = "Вы можете изменить настройки дерева навигации здесь.";
 $lang["quickhelp_editNaviPoint"]         = "При создании и изменении пункта навигации вы также можете изменить его настройки. Настройки включают в себя название пункта и соответствующую ссылку. Для внешних веб-сайтов вы можете использовать поле \"Внешняя ссылка\". Если вы хотите, чтобы вместо названия пункта показывалась картинка, вы можете использовать поле \"Картинка\". Вы также можете выбрать цель ссылки с соответствующим drop down.";

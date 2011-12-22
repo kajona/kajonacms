@@ -275,6 +275,7 @@ abstract class class_admin {
 	 *
 	 * @param string $strSystemid
 	 * @return string
+     * @deprecated
 	 */
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")

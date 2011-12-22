@@ -12,15 +12,14 @@
 //editable entries
 $lang["error_folder_and_page"]           = "Only a page or a folder can be selected, not both.";
 $lang["liste_leer"]                      = "No navigations available";
-$lang["modul_anlegen"]                   = "Create navigation";
+$lang["module_action_new"]                   = "Create navigation";
 $lang["modul_anlegenpunkt"]              = "Create navigation item";
 $lang["modul_titel"]                     = "Navigations";
 $lang["navigation_anzeigen"]             = "Show navigation items";
-$lang["navigation_bearbeiten"]           = "Edit navigation";
 $lang["navigation_erf_loeschen"]         = "Navigation was deleted succesfully";
 $lang["navigation_erfolg"]               = "Navigation was created succesfully";
 $lang["navigation_folder_i"]             = "Folder:";
-$lang["navigation_loeschen_frage"]       = "Do you really want to delete the navigation &quot;<b>%%element_name%%</b>&quot; with all items?";
+$lang["delete_question"]       = "Do you really want to delete the navigation &quot;<b>%%element_name%%</b>&quot; with all items?";
 $lang["navigation_page_e"]               = "External link / file:";
 $lang["navigation_page_i"]               = "Page:";
 $lang["navigation_parent"]               = "Parent node:";
@@ -30,9 +29,6 @@ $lang["navigation_tagetblank"]           = "_blank (in a new browser window)";
 $lang["navigation_tagetself"]            = "_self (in the same browser window)";
 $lang["navigation_target"]               = "Target:";
 $lang["navigationp_anzeigen"]            = "Show navigation items";
-$lang["navigationp_bearbeiten"]          = "Edit navigation item";
-$lang["navigationp_hoch"]                = "Move item up";
-$lang["navigationp_runter"]              = "Move item down";
 $lang["quickhelp_deleteNavi"]            = "By executing the 'delete' function the selected navigation tree or navigation tree item and all sub items will be deleted. This step is irreversible.";
 $lang["quickhelp_editNavi"]              = "You can edit the properties of the navigation tree here.";
 $lang["quickhelp_editNaviPoint"]         = "By creating and editing a navigation item you can change its properties. The properties include the item name and the corresponding link. For external websites you can use the field 'External link'. If you want to have an image to be shown instead of the item name, you can use the field 'Image'. You can choose the target of the link with the corresponding drop down.";

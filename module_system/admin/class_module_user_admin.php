@@ -132,6 +132,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     /**
      * Renders the form to create a new entry
      * @return string
+     * @permissions edit
      */
     protected function actionNew() {
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "newUser"));
@@ -140,6 +141,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     /**
      * Renders the form to edit an existing entry
      * @return string
+     * @permissions edit
      */
     protected function actionEdit() {
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editUser", "&systemid=".$this->getSystemid()));

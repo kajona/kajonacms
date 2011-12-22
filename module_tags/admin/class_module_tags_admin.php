@@ -68,6 +68,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     /**
      * Generates the form to edit an existing tag
      * @return string
+     * @permissions edit
      */
     protected function actionEdit() {
         $strReturn = "";
