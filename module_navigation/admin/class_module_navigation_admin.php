@@ -135,7 +135,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             if(validateSystemid($objListEntry->getStrFolderId()))
                 $arrReturn[] = $this->objToolkit->listButton(getImageAdmin("icon_treeBranchOpenDisabled.gif", $this->getText("navigation_show_disabled")));
             else
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
+                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
 
         }
 
@@ -177,11 +177,11 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     protected function actionEdit() {
         $objEditObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objEditObject instanceof class_module_navigation_tree) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNavi", "&systemid=".$objEditObject->getSystemid()));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNavi", "&systemid=".$objEditObject->getSystemid().$this->strPeAddon));
         }
 
         if($objEditObject instanceof class_module_navigation_point) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNaviPoint", "&systemid=".$objEditObject->getSystemid()));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNaviPoint", "&systemid=".$objEditObject->getSystemid().$this->strPeAddon));
         }
     }
 
