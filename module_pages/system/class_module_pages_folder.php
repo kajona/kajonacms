@@ -14,7 +14,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_folder extends class_model implements interface_model, interface_versionable  {
+class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
 
     private $strActionEdit = "editFolder";
     private $strActionDelete = "deleteFolder";
@@ -59,6 +59,33 @@ class class_module_pages_folder extends class_model implements interface_model, 
      */
     public function getStrDisplayName() {
         return $this->getStrName();
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_folderClosed.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
     }
 
 
