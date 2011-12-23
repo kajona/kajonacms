@@ -16,7 +16,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_admin extends class_admin implements interface_admin  {
+class class_module_pages_admin extends class_admin_simple implements interface_admin  {
 
 	/**
 	 * Constructor
@@ -100,7 +100,26 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         return $strReturn;
     }
 
-	/**
+    /**
+     * Renders the form to create a new entry
+     * @return string
+     * @permissions edit
+     */
+    protected function actionNew() {
+        // TODO: Implement actionNew() method.
+    }
+
+    /**
+     * Renders the form to edit an existing entry
+     * @return string
+     * @permissions edit
+     */
+    protected function actionEdit() {
+        // TODO: Implement actionEdit() method.
+    }
+
+
+    /**
 	 * Creates a list of sites in the current folder
 	 *
 	 * @return string
@@ -247,8 +266,60 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 		return $strReturn;
 	}
 
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry instanceof class_module_pages_page && $objListEntry->rightDelete()) {
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objListEntry->getSystemid()));
+        }
+        else
+            return parent::renderDeleteAction($objListEntry);
+    }
 
-	/**
+    protected function renderEditAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_pages_page && $objListEntry->rightEdit()) {
+            if($objListEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
+                return $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_pencil.gif"));
+            else
+                return $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_pencil.gif"));
+        }
+        else
+            return parent::renderEditAction($objListEntry);
+    }
+
+    protected function renderAdditionalActions(class_model $objListEntry) {
+
+        if($objListEntry instanceof class_module_pages_page) {
+            $arrReturn = array();
+            if($objListEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
+                $objTargetPage = class_module_pages_page::getPageByName($objListEntry->getStrAlias());
+                if($objTargetPage->rightEdit())
+                    $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid(), "", $this->getText("seite_inhalte"), "icon_page.gif"));
+            }
+            else if($objListEntry->rightEdit()) {
+                $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_page.gif"));
+                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
+            }
+
+            return $arrReturn;
+        }
+        else
+            return parent::renderAdditionalActions($objListEntry);
+    }
+
+    protected function getNewEntryAction($strListIdentifier) {
+        if($this->getObjModule()->rightEdit()) {
+            $arrReturn = array();
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newAlias", "", $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif"));
+
+            return $arrReturn;
+        }
+        else
+            return "";
+
+    }
+
+
+    /**
 	 * Returns a list of all pages in the system, not worrying about the folders -> Flat List
 	 *
 	 * @return string The complete List
@@ -257,76 +328,12 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionListAll() {
 		$strReturn = "";
-		//Check the rights
-        $intI = 0;
 
-        //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator(class_module_pages_page::getNumberOfPagesAvailable());
-        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $strReturn .= $this->renderList($objArraySectionIterator);
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "pages", "listAll");
-        $arrPages = $arrPageViews["elements"];
-
-        /** @var class_module_pages_page $objPage */
-        foreach($arrPages as $objPage) {
-            $strActions = "";
-
-            if($objPage->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
-                $objTargetPage = class_module_pages_page::getPageByName($objPage->getStrAlias());
-
-                if($objPage->rightEdit())
-                    $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                if($objTargetPage->rightEdit())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                if($objPage->rightDelete()) {
-                    if(count(class_module_pages_folder::getPagesAndFolderList($objPage->getSystemid())) != 0)
-                        $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
-                    else
-                        $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrBrowsername(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
-                }
-                if($objPage->rightEdit())
-                    $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
-                if($objPage->rightRight(	))
-                    $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objPage->getSystemid())));
-
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objPage->getStrBrowsername()." (-> ".uniStrTrim($objPage->getStrAlias(), 20).")", $strActions, $intI++);
-            }
-            else {
-                if($objPage->rightEdit())
-                    $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                if($objPage->rightEdit())
-                    $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                if($objPage->rightEdit())
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-                if($objPage->rightDelete())
-                    $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrBrowsername(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
-                if($objPage->rightEdit())
-                    $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
-                if($objPage->rightRight())
-                    $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objPage->getSystemid())));
-
-
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrBrowsername()." (".$objPage->getStrName().")", $strActions, $intI++);
-            }
-        }
-        if($this->getObjModule()->rightEdit()) {
-            $strAddPageButtons  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"));
-            $strAddPageButtons .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newAlias", "", $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif"));
-            $strReturn .= $this->objToolkit->listRow2Image("", "", $strAddPageButtons, $intI++);
-        }
-
-        if(uniStrlen($strReturn) != 0)
-            $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
-
-        if(count($arrPages) > 0)
-            $strReturn .= $arrPageViews["pageview"];
-
-        if(count($arrPages) == 0)
-            $strReturn .= $this->getText("liste_seiten_leer");
-
-        //if languages are installed, present a language switch right here
         $strPathNavi = "";
         if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
             $arrToolbarEntries = array();
@@ -335,9 +342,7 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
             $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
         }
 
-        $strReturn = $strPathNavi.$strReturn;
-
-		return $strReturn;
+        return $strPathNavi.$strReturn;
 	}
 
 

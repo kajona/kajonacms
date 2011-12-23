@@ -149,7 +149,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     protected function getNewEntryAction($strListIdentifier) {
         if($strListIdentifier == "naviPoints") {
             if($this->getObjModule()->rightEdit()) {
-                return getLinkAdmin($this->getArrModule("modul"), "newNaviPoint", "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_new.gif");
+                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNaviPoint", "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_new.gif"));
             }
         }
         else if($strListIdentifier == "browserList")

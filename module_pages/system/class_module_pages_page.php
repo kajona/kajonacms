@@ -13,7 +13,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_page extends class_model implements interface_model, interface_versionable  {
+class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
 
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
@@ -76,7 +76,40 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return string
      */
     public function getStrDisplayName() {
-        $this->getStrName();
+        return $this->getStrBrowsername();
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        if($this->getIntType() == self::$INT_TYPE_ALIAS)
+            return "icon_page_alias.gif";
+        else
+            return "icon_page.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        if($this->getIntType() == self::$INT_TYPE_ALIAS)
+            return "-> ".uniStrTrim($this->getStrAlias(), 20);
+        else
+            return $this->getStrName();
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        // TODO: Implement getStrLongDescription() method.
     }
 
 
@@ -266,7 +299,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 	 * Fetches the total number of pages available
 	 *
      * @param bool $bitIncludeAlias
-	 * @return unknown
+	 * @return int
 	 */
 	public static function getNumberOfPagesAvailable( $bitIncludeAlias = true) {
 	    $strQuery = "SELECT COUNT(*)
@@ -593,7 +626,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
     	return $this->strName;
     }

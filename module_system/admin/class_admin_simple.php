@@ -113,24 +113,21 @@ abstract class class_admin_simple extends class_admin {
 
                 $strActions = "";
                 $strActions .= $this->renderEditAction($objOneIterable);
-
-                foreach($this->renderAdditionalActions($objOneIterable) as $strOneEntry) {
-                    $strActions .= $strOneEntry;
-                }
-
+                $strActions .= implode("", $this->renderAdditionalActions($objOneIterable));
                 $strActions .= $this->renderDeleteAction($objOneIterable);
                 $strActions .= $this->renderStatusAction($objOneIterable);
                 $strActions .= $this->renderPermissionsAction($objOneIterable);
 
-                //$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin($objOneIterable->getStrIcon()), $objOneIterable->getStrDisplayName(), $strActions, $intI++);
                 $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++);
             }
-
-
         }
 
-        if($this->getNewEntryAction($strListIdentifier) != "") {
-            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->getNewEntryAction($strListIdentifier)), $intI);
+        if(is_array($this->getNewEntryAction($strListIdentifier)) || $this->getNewEntryAction($strListIdentifier) != "") {
+            if(is_array($this->getNewEntryAction($strListIdentifier))) {
+                $strReturn .= $this->objToolkit->genericAdminList("", "", "", implode("", $this->getNewEntryAction($strListIdentifier)), $intI);
+            }
+            else
+                $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->getNewEntryAction($strListIdentifier), $intI);
         }
 
         if($bitSortable)
@@ -211,12 +208,15 @@ abstract class class_admin_simple extends class_admin {
     /**
      * Renders the action to add a new record to the end of the list.
      * Make sure you have the lang-key "module_action_new" in the modules' lang-file.
+     * If you overwrite this method, you can either return a string containing the new-link or an array if you want to
+     * provide multiple new-action.
+     *
      * @param $strListIdentifier an internal identifier to check the current parent-list
-     * @return string
+     * @return string|array
      */
     protected function getNewEntryAction($strListIdentifier) {
         if($this->getObjModule()->rightEdit()) {
-            return getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif");
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif"));
         }
     }
 

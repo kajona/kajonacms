@@ -182,7 +182,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             return "";
 
         if($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit())
-            return getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif");
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif"));
 
         return parent::getNewEntryAction($strListIdentifier);
     }

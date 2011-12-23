@@ -73,7 +73,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
     protected function getNewEntryAction($strListIdentifier) {
         if($this->getObjModule()->rightRight2()) {
-            return getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif");
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif"));
         }
     }
 
