@@ -34,6 +34,9 @@ class class_project_setup {
         });
 
 
+        self::checkDir("/admin");
+        self::createAdminRedirect();
+
         self::checkDir("/project");
         self::checkDir("/project/log");
         self::checkDir("/project/dbdumps");
@@ -93,6 +96,17 @@ class class_project_setup {
 
 
 
+    private static function createAdminRedirect() {
+        $strContent  = "<html>\n";
+        $strContent .= " <head>\n";
+        $strContent .= "  <title>Loading</title>\n";
+        $strContent .= "  <meta http-equiv='refresh' content='0; URL=../index.php?admin=1'>\n";
+        $strContent .= " </head>\n";
+        $strContent .= " <body>Loading...</body>\n";
+        $strContent .= "</html>\n";
+
+        file_put_contents(_realpath_."/admin/index.html", $strContent);
+    }
 
     private static function checkDir($strFolder) {
         echo "checking dir "._realpath_.$strFolder."\n";
