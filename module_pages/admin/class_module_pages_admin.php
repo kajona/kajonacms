@@ -125,29 +125,28 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
         }
 
         //So, lets loop through the folders
-        if(count($arrFolder) > 0) {
-            foreach($arrFolder as $objOneEntry) {
-                //Correct Rights?
+        /** @var class_module_pages_folder $objOneEntry */
+        foreach($arrFolder as $objOneEntry) {
+            //Correct Rights?
+            if($objOneEntry->rightView()) {
+                $strActions = "";
+
+                if($objOneEntry->rightEdit())
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
                 if($objOneEntry->rightView()) {
-                    $strActions = "";
-
-                    if($objOneEntry->rightEdit())
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
-                    if($objOneEntry->rightView()) {
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
-                        if(_system_changehistory_enabled_ != "false")
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
-                    }
-                    if($objOneEntry->rightDelete())
-                        $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
-                    if($objOneEntry->rightEdit()) {
-                        $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
-                    }
-                    if($objOneEntry->rightRight())
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
-
-                    $strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderClosed.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
+                    if(_system_changehistory_enabled_ != "false")
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
                 }
+                if($objOneEntry->rightDelete())
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
+                if($objOneEntry->rightEdit()) {
+                    $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
+                }
+                if($objOneEntry->rightRight())
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
+
+                $strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderClosed.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
             }
         }
 
@@ -215,8 +214,6 @@ class class_module_pages_admin extends class_admin implements interface_admin  {
 
                     }
                 }
-
-
             }
         }
 

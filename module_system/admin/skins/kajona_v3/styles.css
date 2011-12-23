@@ -738,15 +738,16 @@ h3 {
 }
 
 .generalListSet1 .title, .generalListSet2 .title {
-	width: 100%;
+	width: 30%;
     padding-left: 5px;
 	padding-right: 5px;
     line-height: 22px;
     vertical-align: top;
+    white-space: nowrap;
 }
 
 .generalListSet1 .center, .generalListSet2 .center {
-	white-space: nowrap;
+	/*white-space: nowrap;*/
     padding-right: 5px;
     line-height: 22px;
     vertical-align: top;

@@ -244,7 +244,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         $strPHP = $this->objToolkit->listHeader();
         foreach($arrPHP as $strKey => $strValue) {
-            $strPHP .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
+            $strPHP .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
         }
         $strPHP .= $this->objToolkit->listFooter();
         //And put it into a fieldset
@@ -255,7 +255,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         $strServer = $this->objToolkit->listHeader();
         foreach($arrWebserver as $strKey => $strValue) {
-            $strServer .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
+            $strServer .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
         }
         $strServer .= $this->objToolkit->listFooter();
         //And put it into a fieldset
@@ -266,7 +266,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         $strDB = $this->objToolkit->listHeader();
         foreach($arrDatabase as $strKey => $strValue) {
-            $strDB .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
+            $strDB .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
         }
         $strDB .= $this->objToolkit->listFooter();
         //And put it into a fieldset
@@ -277,7 +277,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         $strGD = $this->objToolkit->listHeader();
         foreach($arrGd as $strKey => $strValue) {
-            $strGD .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
+            $strGD .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
         }
         $strGD .= $this->objToolkit->listFooter();
         //And put it into a fieldset
