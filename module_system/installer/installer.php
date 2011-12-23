@@ -129,9 +129,10 @@ class class_installer {
 	    $arrFilesAndFolders = array("/project/system/config",
 	                                "/project/dbdumps",
 	                                "/project/log",
-	                                "/portal/pics/cache",
-	                                "/portal/pics/upload",
-	                                "/portal/downloads");
+	                                "/files/cache",
+	                                "/files/images/upload",
+	                                "/files/images/public",
+	                                "/files/downloads");
 
 	    $arrModules = array("mbstring",
 	                        "gd",
