@@ -141,20 +141,19 @@ class class_resourceloader {
      * No caching is done for lang-files, since the entries are cached by the lang-class, too.
      *
      * @param $strFolder
-     * @param $strArea deprecated, will be removed FIXME: remove param when admin & portal files are merged
      * @return array
      */
-    public function getLanguageFiles($strFolder, $strArea) {
+    public function getLanguageFiles($strFolder) {
         $arrReturn = array();
 
         //loop all given modules
         foreach($this->arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule._langpath_."/".$strArea."/".$strFolder)) {
-                $arrContent = scandir(_corepath_."/".$strSingleModule._langpath_."/".$strArea."/".$strFolder);
+            if(is_dir(_corepath_."/".$strSingleModule._langpath_."/".$strFolder)) {
+                $arrContent = scandir(_corepath_."/".$strSingleModule._langpath_."/".$strFolder);
                 foreach($arrContent as $strSingleEntry) {
 
                     if(substr($strSingleEntry, -4) == ".php") {
-                        $arrReturn["/core/".$strSingleModule._langpath_."/".$strArea."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        $arrReturn["/core/".$strSingleModule._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 					}
 
                 }
@@ -162,8 +161,8 @@ class class_resourceloader {
         }
 
         //check if the same is available in the projects-folder
-        if(is_dir(_realpath_._projectpath_._langpath_."/".$strArea."/".$strFolder)) {
-            $arrContent = scandir(_realpath_._projectpath_._langpath_."/".$strArea."/".$strFolder);
+        if(is_dir(_realpath_._projectpath_._langpath_."/".$strFolder)) {
+            $arrContent = scandir(_realpath_._projectpath_._langpath_."/".$strFolder);
             foreach($arrContent as $strSingleEntry) {
 
                 if(substr($strSingleEntry, 0, -4) == ".php") {
@@ -171,7 +170,7 @@ class class_resourceloader {
                     $strKey = array_search($strSingleEntry, $arrReturn);
                     if($strKey !== false) {
                         unset($arrReturn[$strKey]);
-                        $arrReturn[_projectpath_._langpath_."/".$strArea."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        $arrReturn[_projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
 
                 }

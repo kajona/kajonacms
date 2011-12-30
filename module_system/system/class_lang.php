@@ -100,32 +100,32 @@ class class_lang {
      *
      * @param string $strText
      * @param $strModule
-     * @param string $strArea
+     * @param string $strArea @deprecated
      *
      * @return string
      */
 	public function getText($strText, $strModule, $strArea) {
 
 		//Did we already load this text?
-		if(!isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
-			$this->loadText($strModule, $strArea);
+		if(!isset($this->arrTexts[$this->strLanguage][$strModule]))
+			$this->loadText($strModule);
 
 		//Searching for the text
-		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText])) {
-			$strReturn = $this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText];
+		if(isset($this->arrTexts[$this->strLanguage][$strModule][$strText])) {
+			$strReturn = $this->arrTexts[$this->strLanguage][$strModule][$strText];
 		}
 		else {
 
             //try to load the entry in the commons-list
-            if(!isset($this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName]))
-                $this->loadText($this->strCommonsName, $strArea);
+            if(!isset($this->arrTexts[$this->strLanguage][$this->strCommonsName]))
+                $this->loadText($this->strCommonsName);
 
-            if(isset($this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText])) {
-                $strReturn = $this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText];
+            if(isset($this->arrTexts[$this->strLanguage][$this->strCommonsName][$strText])) {
+                $strReturn = $this->arrTexts[$this->strLanguage][$this->strCommonsName][$strText];
             }
             else {
                 //Try to find the text using the fallback language
-                $strReturn = $this->loadFallbackPlaceholder($strModule, $strArea, $strText);
+                $strReturn = $this->loadFallbackPlaceholder($strModule, $strText);
             }
 		}
 
@@ -133,28 +133,28 @@ class class_lang {
 	}
 
 
-    private function loadFallbackPlaceholder($strModule, $strArea, $strText) {
+    private function loadFallbackPlaceholder($strModule, $strText) {
 
-        if(isset($this->arrTexts[$strArea.$this->strFallbackLanguage][$strModule][$strText])) {
-            $strReturn = $this->arrTexts[$strArea.$this->strFallbackLanguage][$strModule][$strText];
+        if(isset($this->arrTexts[$this->strFallbackLanguage][$strModule][$strText])) {
+            $strReturn = $this->arrTexts[$this->strFallbackLanguage][$strModule][$strText];
         }
         else {
             //try to load the fallback-files
             $objFilesystem = new class_filesystem();
             //load files
-            $arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
+            $arrFiles = $objFilesystem->getFilelist(_langpath_."/module_".$strModule);
             if(is_array($arrFiles)) {
                 foreach($arrFiles as $strFile) {
                     $strTemp = str_replace(".php", "", $strFile);
                     $arrName = explode("_", $strTemp);
 
                     if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
-                        $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
+                        $this->loadAndMergeTextfile($strModule, $strFile, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
                     }
                 }
             }
-            if(isset($this->arrFallbackTextEntrys[$strArea.$this->strFallbackLanguage][$strModule][$strText])) {
-                $strReturn = $this->arrFallbackTextEntrys[$strArea.$this->strFallbackLanguage][$strModule][$strText];
+            if(isset($this->arrFallbackTextEntrys[$this->strFallbackLanguage][$strModule][$strText])) {
+                $strReturn = $this->arrFallbackTextEntrys[$this->strFallbackLanguage][$strModule][$strText];
             }
             else
                 $strReturn = "!".$strText."!";
@@ -168,16 +168,15 @@ class class_lang {
      * Loading texts from textfiles
      *
      * @param string $strModule
-     * @param $strArea
      * @return void
      */
-	private function loadText($strModule, $strArea) {
+	private function loadText($strModule) {
 
 	    $bitFileMatched = false;
 		$objFilesystem = new class_filesystem();
 
 		//load files
-        $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("modul_".$strModule, $strArea);
+        $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("module_".$strModule);
 
 		if(is_array($arrFiles)) {
 			foreach($arrFiles as $strPath => $strFilename) {
@@ -187,7 +186,7 @@ class class_lang {
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
-                    $this->loadAndMergeTextfile($strArea, $strModule, $strPath, $this->strLanguage, $this->arrTexts);
+                    $this->loadAndMergeTextfile($strModule, $strPath, $this->strLanguage, $this->arrTexts);
 
 			 	}
 			}
@@ -200,7 +199,7 @@ class class_lang {
 			 	$arrName = explode("_", $strTemp);
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
-                    $this->loadAndMergeTextfile($strArea, $strModule, $strPath, $this->strFallbackLanguage, $this->arrTexts);
+                    $this->loadAndMergeTextfile($strModule, $strPath, $this->strFallbackLanguage, $this->arrTexts);
 			 	}
 			}
 		}
@@ -209,23 +208,22 @@ class class_lang {
     /**
      * Includes the file from the filesystem and merges the contents to the passed array.
      * NOTE: this array is used as a reference!!!
-     * @param string $strArea
      * @param string $strModule
      * @param string $strFilename
      * @param string $strLanguage
      * @param array $arrTargetArray
      */
-    private function loadAndMergeTextfile($strArea, $strModule, $strFilename, $strLanguage, &$arrTargetArray) {
+    private function loadAndMergeTextfile($strModule, $strFilename, $strLanguage, &$arrTargetArray) {
         $lang = array();
         include_once _realpath_.$strFilename;
 
-        if(!isset($arrTargetArray[$strArea.$strLanguage]))
-            $arrTargetArray[$strArea.$strLanguage] = array();
+        if(!isset($arrTargetArray[$strLanguage]))
+            $arrTargetArray[$strLanguage] = array();
 
-        if(isset($arrTargetArray[$strArea.$strLanguage][$strModule]))
-            $arrTargetArray[$strArea.$strLanguage][$strModule] = array_merge($arrTargetArray[$strArea.$strLanguage][$strModule], $lang);
+        if(isset($arrTargetArray[$strLanguage][$strModule]))
+            $arrTargetArray[$strLanguage][$strModule] = array_merge($arrTargetArray[$strLanguage][$strModule], $lang);
         else
-            $arrTargetArray[$strArea.$strLanguage][$strModule] = $lang;
+            $arrTargetArray[$strLanguage][$strModule] = $lang;
     }
 
 
