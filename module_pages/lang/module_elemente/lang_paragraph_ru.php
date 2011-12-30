@@ -14,3 +14,4 @@ $lang["page_element_ph_title"]           = "Внутреннее имя";
 $lang["paragraph_content"]               = "Текст:";
 $lang["paragraph_link"]                  = "Ссылка:";
 $lang["quickhelp_element_paragraph"]     = "Здесь Вы можете ввести содержание параграфа, используя удобный и мощный редактор.";
+$lang["link_more_title"]                 = "Дополнительная информация:";

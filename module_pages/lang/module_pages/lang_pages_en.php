@@ -164,6 +164,11 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
+$lang["fehler_captcha"]                  = "Please enter the correct verification code";
+$lang["fehler_email"]                    = "Please provide a valid email address";
+$lang["fehler_nachricht"]                = "Please provide a message";
+$lang["fehler_name"]                     = "Please provide a name";
+$lang["fehler_seite"]                    = "Start page not existing";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");

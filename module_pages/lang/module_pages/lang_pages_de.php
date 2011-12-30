@@ -164,6 +164,11 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
+$lang["fehler_captcha"]                  = "Bitte geben Sie den korrekten Sicherheits-Code an";
+$lang["fehler_email"]                    = "Bitte geben Sie eine gültige E-Mail Adresse an";
+$lang["fehler_nachricht"]                = "Bitte geben Sie eine Nachricht an";
+$lang["fehler_name"]                     = "Bitte geben Sie einen Namen an";
+$lang["fehler_seite"]                    = "Startseite nicht vorhanden";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");

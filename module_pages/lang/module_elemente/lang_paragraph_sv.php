@@ -20,3 +20,4 @@ $lang["paragraph_title"]                 = "Titel:";
 $lang["quickhelp_element_paragraph"]     = "Här kan du skriva in innehållet i ett textstycke. För detta finns en omfångsrik textredigerare till buds.";
 $lang["required_paragraph_title"]        = "Titel";
 $lang["submit"]                          = "Spara";
+$lang["link_more_title"]                 = "Ytterligare information";
