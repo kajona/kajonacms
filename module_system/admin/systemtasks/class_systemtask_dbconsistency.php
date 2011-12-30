@@ -63,16 +63,17 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
         if(count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("systemtask_dbconsistency_firstlevel_error"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_firstlevel_error"), getImageAdmin("icon_disabled.gif"), "", ++$intI);
             foreach($arrCorruptedRecords as $arrRow)  {
-                $strReturn .= $this->objToolkit->listRow2Image("", $arrRow["system_id"]." (".uniStrTrim($arrRow["system_comment"], 20).")" , "", 0);
+                $objRecord = class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_firstlevel_ok"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_firstlevel_ok"), getImageAdmin("icon_enabled.gif"), "", ++$intI);
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -83,16 +84,16 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
         if(count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("systemtask_dbconsistency_curprev_error"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_curprev_error"), getImageAdmin("icon_disabled.gif"), "", ++$intI);
             foreach($arrCorruptedRecords as $strID => $strComment)  {
-                $strReturn .= $this->objToolkit->listRow2Image("", $strID." (".$strComment.")" , "", 0);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strID." (".$strComment.")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_curprev_ok"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_curprev_ok"), getImageAdmin("icon_enabled.gif"), "", ++$intI);
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -102,16 +103,17 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
         if(count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("systemtask_dbconsistency_right_error"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled.gif"), "", ++$intI);
             foreach($arrCorruptedRecords as $arrOneRecords)  {
-                $strReturn .= $this->objToolkit->listRow2Image("", $arrOneRecords["right_id"]." (".$arrOneRecords["system_comment"].")" , "", $intI++);
+                $objRecord = class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_right_ok"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_right_ok"), getImageAdmin("icon_enabled.gif"), "", ++$intI);
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -121,16 +123,16 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
         if(count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("systemtask_dbconsistency_date_error"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_date_error"), getImageAdmin("icon_disabled.gif"), "", ++$intI);
             foreach($arrCorruptedRecords as $arrOneRecords)  {
-                $strReturn .= $this->objToolkit->listRow2Image("", $arrOneRecords["system_date_id"], "", $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["system_date_id"], "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_date_ok"), "", $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("systemtask_dbconsistency_date_ok"), getImageAdmin("icon_enabled.gif"), "", ++$intI);
             $strReturn .= $this->objToolkit->listFooter();
         }
 

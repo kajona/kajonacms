@@ -42,3 +42,6 @@ Event-Handling
   instead, model-objects should implement interface_statuschanged_listener
 - recordDeleted events are no longer triggered by class_root::additionalCallsOnDeletion / class_model::doAdditionalCleanupsOnDeletion()
   instead, model-objects should implement interface_recorddeleted_listener
+
+Toolkit-Changes:
+- formDateSimple() removed, use formDateSingle() instead

@@ -14,7 +14,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_element extends class_model implements interface_model  {
+class class_module_pages_element extends class_model implements interface_model, interface_admin_listable  {
 
     private $strName = "";
     private $strClassPortal = "";
@@ -49,6 +49,14 @@ class class_module_pages_element extends class_model implements interface_model 
         return array();
     }
 
+    public function rightView() {
+        return true;
+    }
+
+    public function rightEdit() {
+        return true;
+    }
+
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
@@ -57,7 +65,37 @@ class class_module_pages_element extends class_model implements interface_model 
         $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
         if($strName == "!element_".$this->getStrName()."_name!")
             $strName = $this->getStrName();
+        else
+            $strName .= " (".$this->getStrName().")";
         return $strName;
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_dot.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return " V ".$this->getStrVersion()." (".($this->getIntCachetime() == "-1" ? "<b>".$this->getIntCachetime()."</b>" : $this->getIntCachetime()).")";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        $objAdminInstance = $this->getAdminElementInstance();
+        return $objAdminInstance->getElementDescription();
     }
 
 
@@ -125,21 +163,38 @@ class class_module_pages_element extends class_model implements interface_model 
 
 
     /**
-	 * Loads all installed Elements
-	 *
-	 * @return class_module_pages_element
-	 * @static
-	 */
-	public static function getAllElements() {
+     * Loads all installed Elements
+     *
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
+     * @return class_module_pages_element[]
+     * @static
+     */
+	public static function getAllElements($intStart = false, $intEnd = false) {
 		$strQuery = "SELECT element_id FROM "._dbprefix_."element ORDER BY element_name";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+		if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_module_pages_element($arrOneId["element_id"]);
 
 		return $arrReturn;
 	}
+
+    /**
+     * Counts the number of elements available
+     * @static
+     * @return int
+     */
+    public static function getElementCount() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element";
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+        return $arrReturn["COUNT(*)"];
+    }
 
 	/**
 	 * Returns the element using the given element-name

@@ -13,7 +13,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_pageelement extends class_model implements interface_model  {
+class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable  {
 
     private $strPlaceholder = "";
     private $strName = "";
@@ -57,6 +57,33 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public function getStrDisplayName() {
         return $this->getStrTitle(true);
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     */
+    public function getStrIcon() {
+        return "icon_dot.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
     }
 
 
@@ -272,7 +299,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strPageId
      * @param bool $bitJustActive
      * @param string $strLanguage
-     * @return mixed
+     * @return class_module_pages_pageelement[]
      * @static
      */
     public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {

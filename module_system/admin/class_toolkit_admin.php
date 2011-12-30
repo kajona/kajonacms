@@ -25,59 +25,6 @@ class class_toolkit_admin extends class_toolkit {
         parent::__construct();
     }
 
-
-    /**
-     * Returns a simple Date-Form
-     *
-     * @param string $strName
-     * @param int|string $intDay
-     * @param int|string $intMonth
-     * @param int|string $intYear
-     * @param string $strTitle
-     * @param bool $bitToday If set true, the current date will be inserted, if no date is passed
-     * @param string $strClass
-     * @return string
-     * @deprecated will be removed in 3.3.x Use formDateSingle() instead.
-     */
-    public function formDateSimple($strName = "", $intDay = "", $intMonth = "", $intYear = "", $strTitle = "", $bitToday = true, $strClass = "inputDate") {
-        //no given values, use today
-        if($bitToday) {
-            if($intDay == "")
-                $intDay = strftime("%d", time());
-            if($intMonth == "")
-                $intMonth = strftime("%m", time());
-            if($intYear == "")
-                $intYear = strftime("%Y", time());
-        }
-        if($strName != "")
-            $strName .= "_";
-
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
-        $arrTemplate = array();
-        $arrTemplate["class"] = $strClass;
-        $arrTemplate["titleDay"] = $strName."_day";
-        $arrTemplate["titleMonth"] = $strName."_month";
-        $arrTemplate["titleYear"] = $strName."_year";
-        $arrTemplate["title"] = $strTitle;
-        $arrTemplate["valueDay"] = $intDay;
-        $arrTemplate["valueMonth"] = $intMonth;
-        $arrTemplate["valueYear"] = $intYear;
-
-        //set up the container div
-        $arrTemplate["calendarId"] = $strName;
-        $strContainerId = $strName."_calendarContainer";
-        $arrTemplate["calendarContainerId"] = $strContainerId;
-
-        //commands and values for the calendar
-        $arrTemplate["calendarCommands"]  ="<script type=\"text/javascript\">\n";
-        $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarWeekday = [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarWeekday", "system", "admin")."];\n";
-        $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarMonth = [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarMonth", "system", "admin")."];\n";
-        $arrTemplate["calendarCommands"] .="</script>\n";
-
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-
     /**
      * Returns a simple date-form element. By default used to enter a date without a time.
      *
