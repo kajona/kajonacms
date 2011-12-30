@@ -36,7 +36,6 @@ usort($arrEntries, 'debug_sort');
 
 echo "<table border=\"1\">";
 echo "<tr>";
-echo "  <th>Area</th>";
 echo "  <th>Module</th>";
 echo "  <th>Key</th>";
 echo "  <th>Soundex</th>";
@@ -61,7 +60,6 @@ foreach($arrEntries as $objOneEntry) {
     $strPrevHash = $objOneEntry->strHash;
 
     echo "<tr style=\"".$strStyle."\">";
-    echo "  <td>".$objOneEntry->strArea."</td>";
     echo "  <td>".$objOneEntry->strModul."</td>";
     echo "  <td>".$objOneEntry->strKey."</td>";
     echo "  <td>".$objOneEntry->strSoundex."</td>";
@@ -91,10 +89,9 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
 
                 foreach($lang as $strKey => $strValue) {
 
-                    $strArea = strpos($strPath, "/admin/") !== false ? "admin" : "portal";
                     $strModul = $arrTemp[1];
 
-                    $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey, $strArea);
+                    $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey);
                     if($arrTemp[2] == "de") $objTemp->strDe = $strValue;
                     if($arrTemp[2] == "en") $objTemp->strEn = $strValue;
                     if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
@@ -112,10 +109,9 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
     }
 }
 
-function debug_get_langhelper(&$arrEntries, $strModul, $strKey, $strArea) {
+function debug_get_langhelper(&$arrEntries, $strModul, $strKey) {
     foreach($arrEntries as $objOneHelper) {
         if($objOneHelper->strModul == $strModul &&
-            $objOneHelper->strArea == $strArea &&
             $objOneHelper->strKey == $strKey) {
 
             return $objOneHelper;
@@ -125,7 +121,6 @@ function debug_get_langhelper(&$arrEntries, $strModul, $strKey, $strArea) {
 
     $objOneHelper = new debug_class_lang_helper();
     $objOneHelper->strModul = $strModul;
-    $objOneHelper->strArea = $strArea;
     $objOneHelper->strKey = $strKey;
     $arrEntries[] = $objOneHelper;
     return $objOneHelper;
@@ -156,7 +151,6 @@ function debug_sort( $objA, $objB ) {
 
 class debug_class_lang_helper {
     public $strModul;
-    public $strArea;
     public $strKey;
     public $strDe;
     public $strEn;
