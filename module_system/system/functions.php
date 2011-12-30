@@ -442,19 +442,6 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
 }
 
 /**
- * Generates a tooltip for an image, but doesn't generate a a-tag surrounding the image
- * Located in functions.php since used by the portaleditor
- *
- * @param string $strText
- * @param string $strImage
- * @return string
- * @todo combine with getImageAdmin()?
- */
-function getNoticeAdminWithoutAhref($strText, $strImage) {
-	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strText."');\" alt=\"\" title=\"\" />";
-}
-
-/**
  * Returns an image-tag with surrounding tooltip
  *
  * @param string $strImage

@@ -130,19 +130,17 @@ class class_module_pages_content_admin extends class_admin implements interface_
         $arrElementsInSystem = class_module_pages_element::getAllElements();
 
 
-        //So, loop through the placeholders and check, if theres any element already belonging to this one
+        //So, loop through the placeholders and check, if there's any element already belonging to this one
         $intI = 0;
         if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
             //Iterate over every single placeholder provided by the template
             foreach($arrElementsOnTemplate as $intKeyElementOnTemplate => $arrOneElementOnTemplate) {
-                //Iterate over every single element-type provided by the placeholder
-                $bitHit = false;
-                $bitOutputAtPlaceholder = false;
 
                 $strOutputAtPlaceholder = "";
                 //Do we have one or more elements already in db at this placeholder?
                 $bitHit = false;
 
+                //Iterate over every single element-type provided by the placeholder
                 foreach ($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
                     //Check, if its the same placeholder
                     $bitSamePlaceholder = false;
@@ -165,11 +163,11 @@ class class_module_pages_content_admin extends class_admin implements interface_
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
                             }
                             //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                            $strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_pencilLocked.gif"));
-                            $strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_tonLocked.gif"));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.gif", $this->getText("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.gif", $this->getText("ds_gesperrt")));
                         }
                         else {
-                            //if its the user who locked the record, unlock it now
+                            //if it's the user who locked the record, unlock it now
                             if($objLockmanager->isLockedByCurrentUser())
                                 $objLockmanager->unlockRecord();
 
@@ -183,12 +181,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
                         //The status-icons
                         $strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
 
-                        //Rights - could be used, but not up to now not needed, so not yet implemented completely
-                        //$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->getText("element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
-
                         //Put all Output together
-                        $strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrReadableName() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
-                        $bitOutputAtPlaceholder = true;
+                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, $intI++);
 
                         //remove the element from the array
                         unset($arrElementsOnPage[$intArrElementsOnPageKey]);
@@ -197,7 +191,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
                 }
 
                 //Check, if one of the elements in the placeholder is allowed to be used multiple times
-                //$bitOneInstalled = false;
                 foreach ($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
                     foreach($arrElementsInSystem as $objOneElementInSystem) {
                         if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
@@ -205,8 +198,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
                                 //So, the Row for a new element: element is repeatable or not yet created
                                 $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
-                                $strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrReadableName() . ")", $strActions, $intI++);
-                                $bitOutputAtPlaceholder = true;
+                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrDisplayName() . ")", "", $strActions, $intI++);
                             }
                             else {
                                 //element not repeatable.
@@ -219,8 +211,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
                                     $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
-                                    $strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", $strActions, $intI++);
-                                    $bitOutputAtPlaceholder = true;
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", "", $strActions, $intI++);
                                 }
                             }
                         }
@@ -229,10 +220,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
                 if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
                     $strListId = generateSystemid();
-                    //$strReturn .= $this->objToolkit->listHeader();
                     $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
                     $strReturn .= $strOutputAtPlaceholder;
-                    //$strReturn .= $this->objToolkit->listFooter();
                     $strReturn .= $this->objToolkit->dragableListFooter($strListId);
                 }
 
@@ -251,7 +240,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $strReturn .= $this->getText("element_liste_leer");
         }
 
-        //if there are any pagelements remaining, print a warning and print the elements row
+        //if there are any page-elements remaining, print a warning and print the elements row
         if(count($arrElementsOnPage) > 0) {
             $strReturn .= $this->objToolkit->divider();
             $strReturn .= $this->objToolkit->warningBox($this->getText("warning_elementsremaining"));
@@ -263,7 +252,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                 $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
-                $strReturn .= $this->objToolkit->listRow2($objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), $strActions, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }

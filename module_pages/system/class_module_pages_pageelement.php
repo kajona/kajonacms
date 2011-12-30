@@ -56,7 +56,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrTitle(true);
+        return $this->getStrName() . " (".$this->getStrReadableName() . ")" ." - ". $this->getStrTitle();
     }
 
     /**
@@ -67,7 +67,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_dot.gif";
+        return "";
     }
 
     /**

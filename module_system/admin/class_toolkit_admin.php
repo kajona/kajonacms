@@ -802,7 +802,6 @@ class class_toolkit_admin extends class_toolkit {
      * @todo: add checkbox functionality
      */
     public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "") {
-
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
         $arrTemplate["checkbox"] = "";
@@ -817,88 +816,6 @@ class class_toolkit_admin extends class_toolkit {
         else
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_".(($intCount % 2)+1));
 
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-
-
-    /**
-     * Returns a row in a list with 2 columns
-     *
-     * @param string $strName
-     * @param string $strActions
-     * @param int $intCount, used to determine the class needed
-     * @param string $strType to react on special cases
-     * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
-     * @return string
-     *
-     * @deprecated will be removed , replaced by self::genericAdminList
-     */
-    public function listRow2($strName, $strActions, $intCount, $strType = "", $strListitemID = "") {
-        if($intCount % 2 == 0)
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_1".$strType);
-        else
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_2".$strType);
-
-        $arrTemplate = array();
-        $arrTemplate["title"] = $strName;
-        $arrTemplate["actions"] = $strActions;
-        $arrTemplate["listitemid"] = $strListitemID;
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
-     * Returns a row in a list with 2 columns and a leading image
-     *
-     * @param string $strImage
-     * @param string $strName
-     * @param string $strActions
-     * @param int $intCount, used to determine the class needed
-     * @param string $strType to react on special cases
-     * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
-     * @return string
-     *
-     * @deprecated will be removed , replaced by self::genericAdminList
-     */
-    public function listRow2Image($strImage, $strName, $strActions, $intCount, $strType = "", $strListitemID = "") {
-        if($intCount % 2 == 0)
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2image_1".$strType);
-        else
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2image_2".$strType);
-
-        $arrTemplate = array();
-        $arrTemplate["image"] = $strImage;
-        $arrTemplate["title"] = $strName;
-        $arrTemplate["actions"] = $strActions;
-        $arrTemplate["listitemid"] = $strListitemID;
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
-     * Returns a row in a list with 3 columns, with leading image
-     *
-     * @param string $strName
-     * @param string $strCenter
-     * @param string $strActions
-     * @param string $strImage
-     * @param int $intCount, used to determing the class needed
-     * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
-     * @return string
-     *
-     * @deprecated will be removed , replaced by self::genericAdminList
-     */
-    public function listRow3($strName, $strCenter, $strActions, $strImage, $intCount, $strListitemID = "") {
-        if($intCount % 2 == 0)
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_3_1");
-        else
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_3_2");
-
-        $arrTemplate = array();
-        $arrTemplate["image"] = $strImage;
-        $arrTemplate["title"] = $strName;
-        $arrTemplate["center"] = $strCenter;
-        $arrTemplate["actions"] = $strActions;
-        $arrTemplate["listitemid"] = $strListitemID;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

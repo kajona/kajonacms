@@ -45,3 +45,9 @@ Event-Handling
 
 Toolkit-Changes:
 - formDateSimple() removed, use formDateSingle() instead
+- removed listRow2()
+- removed listRow2Image()
+- removed listRow3()
+
+functions.php:
+- removed getNoticeAdminWithoutAhref(), use getImageAdmin() instead

@@ -77,10 +77,13 @@ class class_resourceloader {
 
         $strFilename = null;
         //first try: load the file in the current template-pack
+        //FIXME add current pack
 
 
         //second try: load the file from the default-pack
-
+        if(is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
+            return _templatepath_."/default/tpl".$strTemplateName;
+        }
 
         //third try: try to load the file from a given module
         foreach($this->arrModules as $strOneModule) {

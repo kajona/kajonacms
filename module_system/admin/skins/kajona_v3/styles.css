@@ -760,87 +760,8 @@ h3 {
 }
 
 
-
-
-
 .adminList {
 	width: 100%;
-}
-
-.adminListRow1 {
-	height: 22px;
-	background-color: #f0f0f0;
-}
-
-.adminListRow1:hover, .adminListRow1:hover td {
-	background-color: #c4f3c4;
-	color: #000000;
-}
-
-.adminListRow2 {
-	height: 22px;
-	background-color: #e3e3e3;
-}
-
-.adminListRow2:hover, .adminListRow2:hover td {
-	background-color: #c4f3c4;
-	color: #000000;
-}
-
-.adminListRow1 td, .adminListRow2 td{
-	vertical-align: middle;
-}
-
-.adminListRow1 .image, .adminListRow2 .image {
-	padding-left: 2px;
-}
-
-.adminListRow1 .title, .adminListRow2 .title {
-	width: 100%;
-    padding-left: 5px;
-	padding-right: 5px;
-    line-height: 22px;
-    vertical-align: top;
-}
-
-.adminListRow1 .center, .adminListRow2 .center {
-	white-space: nowrap;
-	padding-right: 5px;
-}
-
-.adminListRow1 .centerWrap, .adminListRow2 .centerWrap {
-    padding-right: 5px;
-}
-
-.adminListRow1 .actions, .adminListRow2 .actions {
-	white-space: nowrap;
-	vertical-align: middle;
-    text-align: right;
-}
-
-.adminListRow1 .actions img, .adminListRow2 .actions img {
-	margin-right: 2px;
-	width: 20px;
-	height: 20px;
-}
-
-
-.adminListRow1 .dataTitle, .adminListRow2 .dataTitle {
-	padding-left: 2px;
-    padding-right: 5px;
-    line-height: 22px;
-    vertical-align: top;
-}
-
-.adminListRow1 .dataValue, .adminListRow2 .dataValue {
-    padding-left: 2px;
-    padding-right: 5px;
-    line-height: 22px;
-    vertical-align: top;
-}
-
-.adminListRow1 div, .adminListRow2 div {
-    line-height: 11px;
 }
 
 

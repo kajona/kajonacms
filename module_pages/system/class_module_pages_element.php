@@ -277,7 +277,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * Searches the lang-file for an entry element_NAME_name.
      *
      * @return string
-     * @deprecated
+     * @deprecated use getStrDisplayName()
      *
      * @fixme remove me
      */
