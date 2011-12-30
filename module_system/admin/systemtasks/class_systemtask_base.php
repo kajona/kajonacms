@@ -27,7 +27,7 @@ abstract class class_systemtask_base {
     /**
      * Instance of class_text
      *
-     * @var class_texte
+     * @var class_lang
      */
     private $objTexte;
 

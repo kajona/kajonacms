@@ -157,12 +157,12 @@ class class_carrier {
 	 * Managing access to the text object. Use ONLY this method to
 	 * get an instance!
 	 *
-	 * @return class_texte
+	 * @return class_lang
 	 */
 	public function getObjText() {
 		//Do we have to generate the object?
 		if($this->objText == null) {
-			$this->objText = class_texte::getInstance();
+			$this->objText = class_lang::getInstance();
 		}
 		return $this->objText;
 	}

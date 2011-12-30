@@ -9,7 +9,7 @@
 
 
 /**
- * Class managing access to textfiles
+ * Class managing access to lang-files
  *
  * @package module_system
  */
@@ -17,7 +17,7 @@ class class_lang_wrapper {
     /**
      * the wrapped object
      *
-     * @var class_texte
+     * @var class_lang
      */
     private $objLang;
 
@@ -29,7 +29,7 @@ class class_lang_wrapper {
     /**
      * Creates a new instance, identified by the area / module combination
      *
-     * @param class_texte $objLang
+     * @param class_lang $objLang
      * @param string $strArea
      * @param string $strModule
      */

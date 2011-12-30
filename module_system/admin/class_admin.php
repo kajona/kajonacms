@@ -47,9 +47,9 @@ abstract class class_admin {
 	 */
 	protected $objTemplate = null;			//Object to handle templates
 	/**
-	 * Instance of class_texte
+	 * Instance of class_lang
 	 *
-	 * @var class_texte
+	 * @var class_lang
 	 */
 	private   $objText = null;				//Object managing the lang-files
 

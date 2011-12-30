@@ -42,9 +42,9 @@ abstract class class_root {
 	protected $objRights = null;			//Object handling the right-stuff
 
 	/**
-	 * Instance of class_texte
+	 * Instance of class_lang
 	 *
-	 * @var class_texte
+	 * @var class_lang
 	 */
 	private   $objText = null;				//Object managing the textfiles
 

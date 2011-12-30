@@ -35,9 +35,9 @@ abstract class class_adminwidget {
     protected $objToolkit;
 
     /**
-     * instance of class_texte
+     * instance of class_lang
      *
-     * @var class_texte
+     * @var class_lang
      */
     private $objTexte;
 

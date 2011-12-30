@@ -9,12 +9,12 @@
 
 
 /**
- * Class managing access to textfiles
+ * Class managing access to lang-files
  *
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_texte {
+class class_lang {
 
 	/**
 	 * This is the default language.
@@ -47,7 +47,7 @@ class class_texte {
     private $arrFallbackTextEntrys = array();
 
 
-	private static $objText = null;
+	private static $objLang = null;
 
 	/**
 	 * Constructor, singleton
@@ -78,23 +78,21 @@ class class_texte {
 
 	/**
 	 * Singleton
-	 *
 	 */
 	private function __clone() {
-
 	}
 
 	/**
-	 * Returning an instance of class_texte
+	 * Returning an instance of class_lang
 	 *
-	 * @return class_texte
+	 * @return class_lang
 	 */
 	public static function getInstance() {
-		if(self::$objText == null) {
-			self::$objText = new class_texte();
+		if(self::$objLang == null) {
+			self::$objLang = new class_lang();
 		}
 
-		return self::$objText;
+		return self::$objLang;
 	}
 
     /**
@@ -107,7 +105,6 @@ class class_texte {
      * @return string
      */
 	public function getText($strText, $strModule, $strArea) {
-		$strReturn = "";
 
 		//Did we already load this text?
 		if(!isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
@@ -127,7 +124,6 @@ class class_texte {
                 $strReturn = $this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText];
             }
             else {
-
                 //Try to find the text using the fallback language
                 $strReturn = $this->loadFallbackPlaceholder($strModule, $strArea, $strText);
             }
@@ -138,7 +134,6 @@ class class_texte {
 
 
     private function loadFallbackPlaceholder($strModule, $strArea, $strText) {
-        $strReturn = "";
 
         if(isset($this->arrTexts[$strArea.$this->strFallbackLanguage][$strModule][$strText])) {
             $strReturn = $this->arrTexts[$strArea.$this->strFallbackLanguage][$strModule][$strText];
@@ -150,14 +145,11 @@ class class_texte {
             $arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
             if(is_array($arrFiles)) {
                 foreach($arrFiles as $strFile) {
-                    $lang = array();
                     $strTemp = str_replace(".php", "", $strFile);
                     $arrName = explode("_", $strTemp);
 
                     if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
-                        $bitFileMatched = true;
                         $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
-
                     }
                 }
             }
@@ -185,8 +177,6 @@ class class_texte {
 		$objFilesystem = new class_filesystem();
 
 		//load files
-		$arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
-
         $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("modul_".$strModule, $strArea);
 
 		if(is_array($arrFiles)) {
@@ -194,7 +184,6 @@ class class_texte {
 				$lang = array();
 				$strTemp = str_replace(".php", "", $strFilename);
 			 	$arrName = explode("_", $strTemp);
-
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
@@ -207,13 +196,11 @@ class class_texte {
 
 			//if we reach up here, no matching file was found. search for fallback file (fallback language)
 			foreach($arrFiles as $strFilename) {
-				$lang = array();
 				$strTemp = str_replace(".php", "", $strFilename);
 			 	$arrName = explode("_", $strTemp);
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
                     $this->loadAndMergeTextfile($strArea, $strModule, $strPath, $this->strFallbackLanguage, $this->arrTexts);
-
 			 	}
 			}
 		}
@@ -230,7 +217,7 @@ class class_texte {
      */
     private function loadAndMergeTextfile($strArea, $strModule, $strFilename, $strLanguage, &$arrTargetArray) {
         $lang = array();
-        include_once(_realpath_.$strFilename);
+        include_once _realpath_.$strFilename;
 
         if(!isset($arrTargetArray[$strArea.$strLanguage]))
             $arrTargetArray[$strArea.$strLanguage] = array();
@@ -255,7 +242,7 @@ class class_texte {
 	}
 
 	/**
-	 * Gets the current language set to the class_texte
+	 * Gets the current language set to the class_lang
 	 *
 	 * @return string
 	 */

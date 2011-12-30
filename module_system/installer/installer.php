@@ -38,7 +38,7 @@ class class_installer {
 	/**
 	 * text-object
 	 *
-	 * @var class_texte
+	 * @var class_lang
 	 */
 	private $objTexte;
 
