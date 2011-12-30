@@ -39,3 +39,6 @@ $lang["commons_result_page"]             = "Страница с резултат
 $lang["commons_save"]                    = "Запази";
 $lang["commons_title"]                   = "Име:";
 $lang["commons_yes"]                     = "Да";
+$lang["commons_captcha"]                 = "Код за сигурност:";
+$lang["commons_captcha_reload"]          = "Кодексът не се чете?";
+$lang["commons_next"]                    = "напред";

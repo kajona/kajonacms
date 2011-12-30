@@ -17,3 +17,6 @@ $lang["commons_module_permissions"]      = "Permissões do Módulo";
 $lang["commons_no"]                      = "Não";
 $lang["commons_save"]                    = "Guardar";
 $lang["commons_yes"]                     = "Sim";
+$lang["commons_captcha"]                 = "Código de segurança:";
+$lang["commons_captcha_reload"]          = "O código não é legível?";
+$lang["commons_next"]                    = "próxima";

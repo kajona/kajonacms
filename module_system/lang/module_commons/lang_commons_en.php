@@ -42,3 +42,6 @@ $lang["commons_yes"]                     = "Yes";
 $lang["commons_list_empty"]              = "No record created";
 $lang["commons_list_new"]                = "Create new record";
 $lang["commons_list_edit"]               = "Edit";
+$lang["commons_captcha"]                 = "Security code:";
+$lang["commons_captcha_reload"]          = "Code not readable?";
+$lang["commons_next"]                    = "next";

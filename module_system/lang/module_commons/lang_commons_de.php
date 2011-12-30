@@ -42,3 +42,7 @@ $lang["commons_yes"]                     = "Ja";
 $lang["commons_list_empty"]              = "Kein Datensatz vorhanden";
 $lang["commons_list_new"]                = "Neuen Datensatz anlegen";
 $lang["commons_list_edit"]               = "Bearbeiten";
+
+$lang["commons_captcha"]                 = "Sicherheits-Code:";
+$lang["commons_captcha_reload"]          = "Code nicht lesbar?";
+$lang["commons_next"]                    = "weiter";

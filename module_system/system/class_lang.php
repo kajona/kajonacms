@@ -171,9 +171,7 @@ class class_lang {
      * @return void
      */
 	private function loadText($strModule) {
-
 	    $bitFileMatched = false;
-		$objFilesystem = new class_filesystem();
 
 		//load files
         $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("module_".$strModule);
