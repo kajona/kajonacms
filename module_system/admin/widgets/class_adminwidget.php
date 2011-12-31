@@ -12,13 +12,13 @@
  * Holds a few methods to create a framework-like behaviour
  *
  * @package module_dashboard
+ * @author sidler@mulchprod.de
  */
 abstract class class_adminwidget {
 
-    private $arrModule = array();
     private $arrFields = array();
     private $arrPersistenceKeys = array();
-    private $strSytemid = "";
+    private $strSystemid = "";
 
     /**
      * instance of class_db
@@ -41,13 +41,7 @@ abstract class class_adminwidget {
      */
     private $objLang;
 
-    public function __construct($arrModule = array()) {
-        $this->arrModule["p_name"] 				= "module_system";
-    	$this->arrModule["p_author"] 			= "sidler@mulchprod.de";
-    	$this->arrModule["p_moduleId"] 			= _system_modul_id_;
-    	$this->arrModule["p_modul"]				= "system";
-
-    	$this->arrModule = array_merge($this->arrModule, $arrModule);
+    public function __construct() {
 
     	$this->objDb = class_carrier::getInstance()->getObjDB();
     	$this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
@@ -170,7 +164,7 @@ abstract class class_adminwidget {
      * @param string $strSystemid
      */
     public final function setSystemid($strSystemid) {
-        $this->strSytemid = $strSystemid;
+        $this->strSystemid = $strSystemid;
     }
 
     /**
@@ -179,7 +173,7 @@ abstract class class_adminwidget {
      * @return string
      */
     public final function getSystemid() {
-        return $this->strSytemid;
+        return $this->strSystemid;
     }
 
     /**
@@ -194,7 +188,7 @@ abstract class class_adminwidget {
         return "adminwidget_widget";
     }
 
-//--- Layout/Content functions --------------------------------------------------------------------------
+    //--- Layout/Content functions --------------------------------------------------------------------------
 
     /**
      * Use this method to place a formatted text in the widget
