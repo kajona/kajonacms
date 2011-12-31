@@ -32,7 +32,7 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputText("nrofrows", $this->getText("syslog_nrofrows"), $this->getFieldValue("nrofrows"));
+        $strReturn .= $this->objToolkit->formInputText("nrofrows", $this->getLang("syslog_nrofrows"), $this->getFieldValue("nrofrows"));
         return $strReturn;
     }
 
@@ -79,7 +79,7 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
      * @return string
      */
     public function getWidgetName() {
-        return $this->getText("syslog_name");
+        return $this->getLang("syslog_name");
     }
 
 }

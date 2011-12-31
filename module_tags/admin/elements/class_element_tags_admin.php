@@ -46,12 +46,12 @@ class class_element_tags_admin extends class_element_admin implements interface_
 			}
 		}
 
-        $strReturn .= $this->objToolkit->warningBox($this->getText("tags_hint"));
+        $strReturn .= $this->objToolkit->warningBox($this->getLang("tags_hint"));
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 

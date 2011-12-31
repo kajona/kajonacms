@@ -72,7 +72,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return $this->getBitDefault() == 1 ? " (".$this->getText("aspect_isDefault", "system").")" : "";
+        return $this->getBitDefault() == 1 ? " (".$this->getLang("aspect_isDefault", "system").")" : "";
     }
 
     /**

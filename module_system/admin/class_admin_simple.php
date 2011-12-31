@@ -92,7 +92,7 @@ abstract class class_admin_simple extends class_admin {
         $arrIterables = $arrPageViews["elements"];
 
         if(count($arrIterables) == 0)
-            $strReturn .= $this->objToolkit->getTextRow($this->getText("commons_list_empty"));
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
 
         if($bitSortable)
             $strReturn .= $this->objToolkit->dragableListHeader($strListId);
@@ -158,7 +158,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderEditAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getText("commons_list_edit"), $this->getText("commons_list_edit"), "icon_pencil.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
         }
     }
 
@@ -169,7 +169,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getText("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon));
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon));
         }
     }
 
@@ -191,7 +191,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderPermissionsAction(class_model $objListEntry) {
         if($objListEntry->rightRight() && $this->strPeAddon == "") {
-            return $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid())));
+            return $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid())));
         }
     }
 
@@ -216,7 +216,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function getNewEntryAction($strListIdentifier) {
         if($this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
         }
     }
 

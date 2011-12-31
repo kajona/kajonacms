@@ -568,9 +568,9 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     public function getActionName($strAction) {
         if($strAction == $this->strActionEdit)
-            return $this->getText("seite_bearbeiten", "pages");
+            return $this->getLang("seite_bearbeiten", "pages");
         else if($strAction == $this->strActionDelete)
-            return $this->getText("seite_loeschen", "pages");
+            return $this->getLang("seite_loeschen", "pages");
 
         return $strAction;
     }

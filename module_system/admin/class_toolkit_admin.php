@@ -1300,9 +1300,9 @@ class class_toolkit_admin extends class_toolkit {
         }
         $arrTemplate = array();
         $arrTemplate["errorrows"] = $strRows;
-        $arrTemplate["errorintro"] = $objCalling->getText("errorintro");
+        $arrTemplate["errorintro"] = $objCalling->getLang("errorintro");
         if($arrTemplate["errorintro"] == "!errorintro!")
-            $arrTemplate["errorintro"] = $objCalling->getText("errorintro", "system");
+            $arrTemplate["errorintro"] = $objCalling->getLang("errorintro", "system");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID).$strRendercode;
     }
 

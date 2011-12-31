@@ -38,7 +38,7 @@ class class_element_row_admin extends class_element_admin implements interface_a
 	 */
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
-		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
+		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getLang("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
 
         //load templates
 		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_row");
@@ -50,9 +50,9 @@ class class_element_row_admin extends class_element_admin implements interface_a
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
 
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");

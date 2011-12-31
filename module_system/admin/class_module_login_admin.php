@@ -44,17 +44,17 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 		$arrTemplate = array();
 		$strForm = "";
 		$strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "adminLogin"));
-		$strForm .= $this->objToolkit->formInputText("name", $this->getText("login_loginUser", "user"), "", "inputTextShort");
-		$strForm .= $this->objToolkit->formInputPassword("passwort", $this->getText("login_loginPass", "user"), "", "inputTextShort");
-		$strForm .= $this->objToolkit->formInputSubmit($this->getText("login_loginButton", "user"), "", "", "inputSubmitShort");
+		$strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
+		$strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
+		$strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"), "", "", "inputSubmitShort");
 		$strForm .= $this->objToolkit->formClose();
 		$arrTemplate["form"] = $strForm;
-		$arrTemplate["loginTitle"] = $this->getText("login_loginTitle", "user");
-		$arrTemplate["loginJsInfo"] = $this->getText("login_loginJsInfo", "user");
-		$arrTemplate["loginCookiesInfo"] = $this->getText("login_loginCookiesInfo", "user");
+		$arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
+		$arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
+		$arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
 		//An error occurred?
 		if($this->getParam("loginerror") == 1)
-			$arrTemplate["error"] = $this->getText("login_loginError", "user");
+			$arrTemplate["error"] = $this->getLang("login_loginError", "user");
 
 		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
@@ -71,7 +71,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 		$strReturn = "";
 
         if(!validateSystemid($this->getParam("systemid")))
-            return $this->getText("login_change_error", "user");
+            return $this->getLang("login_change_error", "user");
 
         $objUser = new class_module_user_user($this->getParam("systemid"));
 
@@ -81,23 +81,23 @@ class class_module_login_admin extends class_admin implements interface_admin  {
                 $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
                 $arrTemplate = array();
                 $strForm = "";
-                $strForm .= $this->objToolkit->getTextRow($this->getText("login_password_form_intro", "user"));
+                $strForm .= $this->objToolkit->getTextRow($this->getLang("login_password_form_intro", "user"));
                 $strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "pwdReset"));
-                $strForm .= $this->objToolkit->formInputText("username", $this->getText("login_loginUser", "user"), "", "inputTextShort");
-                $strForm .= $this->objToolkit->formInputPassword("password1", $this->getText("login_loginPass", "user"), "", "inputTextShort");
-                $strForm .= $this->objToolkit->formInputPassword("password2", $this->getText("login_loginPass2", "user"), "", "inputTextShort");
-                $strForm .= $this->objToolkit->formInputSubmit($this->getText("login_changeButton", "user"), "", "", "inputSubmitShort");
+                $strForm .= $this->objToolkit->formInputText("username", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
+                $strForm .= $this->objToolkit->formInputPassword("password1", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
+                $strForm .= $this->objToolkit->formInputPassword("password2", $this->getLang("login_loginPass2", "user"), "", "inputTextShort");
+                $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_changeButton", "user"), "", "", "inputSubmitShort");
                 $strForm .= $this->objToolkit->formInputHidden("reset", "reset");
                 $strForm .= $this->objToolkit->formInputHidden("authcode", $this->getParam("authcode"));
                 $strForm .= $this->objToolkit->formInputHidden("systemid", $this->getParam("systemid"));
                 $strForm .= $this->objToolkit->formClose();
                 $arrTemplate["form"] = $strForm;
-                $arrTemplate["loginTitle"] = $this->getText("login_loginTitle", "user");
-                $arrTemplate["loginJsInfo"] = $this->getText("login_loginJsInfo", "user");
-                $arrTemplate["loginCookiesInfo"] = $this->getText("login_loginCookiesInfo", "user");
+                $arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
+                $arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
+                $arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
                 //An error occured?
                 if($this->getParam("loginerror") == 1)
-                    $arrTemplate["error"] = $this->getText("login_loginError", "user");
+                    $arrTemplate["error"] = $this->getLang("login_loginError", "user");
 
                 $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
             }
@@ -115,14 +115,14 @@ class class_module_login_admin extends class_admin implements interface_admin  {
                     $objUser->updateObjectToDb();
                     class_logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
 
-                    $strReturn .= $this->getText("login_change_success", "user");
+                    $strReturn .= $this->getLang("login_change_success", "user");
                 }
                 else
-                    $strReturn .= $this->getText("login_change_error", "user");
+                    $strReturn .= $this->getLang("login_change_error", "user");
             }
         }
         else
-            $strReturn .= $this->getText("login_change_error", "user");
+            $strReturn .= $this->getLang("login_change_error", "user");
 
 
 		return $strReturn;
@@ -139,11 +139,11 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
 		$arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
 		$arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
-		$arrTemplate["statusTitle"] = $this->getText("login_statusTitle", "user");
-		$arrTemplate["profileTitle"] = $this->getText("login_profileTitle", "user");
-		$arrTemplate["logoutTitle"] = $this->getText("login_logoutTitle", "user");
-		$arrTemplate["dashboardTitle"] = $this->getText("login_dashboard", "user");
-		$arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getText("login_printview", "user"));
+		$arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
+		$arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
+		$arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
+		$arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
+		$arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getLang("login_printview", "user"));
 
 		return $this->objToolkit->getLoginStatus($arrTemplate);
 	}

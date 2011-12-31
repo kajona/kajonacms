@@ -61,7 +61,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$objPage = new class_module_pages_page($this->getSystemid());
 		if($objPage->getStrName() == "")
 			$objPage = new class_module_pages_page($objPage->getPrevId());
-		return $this->getText("modul_titel") . " (".$objPage->getStrName().")";
+		return $this->getLang("modul_titel") . " (".$objPage->getStrName().")";
 	}
 
 	protected function getOutputModuleNavi() {
@@ -81,9 +81,9 @@ class class_module_pages_content_admin extends class_admin implements interface_
         //get infos about the page
 
         $arrToolbarEntries = array();
-        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
-        $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
-        $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
+        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
+        $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getLang("contentToolbar_content")."</a>";
+        $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getLang("contentToolbar_preview")."</a>";
 
         //if languages are installed, present a language switch right here
         $objLanguages = new class_module_languages_admin();
@@ -94,14 +94,14 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
         $arrTemplate = array();
         $arrTemplate["pagetemplate"] = $objPage->getStrTemplate();
-        $arrTemplate["pagetemplateTitle"] = $this->getText("template");
+        $arrTemplate["pagetemplateTitle"] = $this->getLang("template");
 
-        $arrTemplate["lastuserTitle"] = $this->getText("lastuserTitle");
-        $arrTemplate["lasteditTitle"] = $this->getText("lasteditTitle");
+        $arrTemplate["lastuserTitle"] = $this->getLang("lastuserTitle");
+        $arrTemplate["lasteditTitle"] = $this->getLang("lasteditTitle");
         $arrTemplate["lastuser"] = $objPage->getLastEditUser();
 
         if(_system_changehistory_enabled_ != "false")
-            $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getText("show_history")).")";
+            $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getLang("show_history")).")";
 
         $arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
         $strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
@@ -111,7 +111,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
         try {
             $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
         } catch (class_exception $objException) {
-            $strReturn .= $this->getText("templateNotLoaded")."<br />";
+            $strReturn .= $this->getLang("templateNotLoaded")."<br />";
         }
 
         //Load elements on template, master-page special case!
@@ -160,23 +160,23 @@ class class_module_pages_content_admin extends class_admin implements interface_
                         if(!$objLockmanager->isAccessibleForCurrentUser()) {
                             //So, return a button, if we have an admin in front of us
                             if($objLockmanager->isUnlockableForCurrentUser() ) {
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.gif"));
                             }
                             //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.gif", $this->getText("ds_gesperrt")));
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.gif", $this->getText("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.gif", $this->getLang("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.gif", $this->getLang("ds_gesperrt")));
                         }
                         else {
                             //if it's the user who locked the record, unlock it now
                             if($objLockmanager->isLockedByCurrentUser())
                                 $objLockmanager->unlockRecord();
 
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-                            $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+                            $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                         }
 
                         //The Icons to sort the list and to copy the element
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_copy"), "icon_copy.gif"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.gif"));
 
                         //The status-icons
                         $strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
@@ -197,7 +197,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             $objElement = $objOneElementInSystem;
                             if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
+                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrDisplayName() . ")", "", $strActions, $intI++);
                             }
                             else {
@@ -210,7 +210,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                                 }
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
+                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
                                     $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", "", $strActions, $intI++);
                                 }
                             }
@@ -237,22 +237,22 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 
         } else {
-            $strReturn .= $this->getText("element_liste_leer");
+            $strReturn .= $this->getLang("element_liste_leer");
         }
 
         //if there are any page-elements remaining, print a warning and print the elements row
         if(count($arrElementsOnPage) > 0) {
             $strReturn .= $this->objToolkit->divider();
-            $strReturn .= $this->objToolkit->warningBox($this->getText("warning_elementsremaining"));
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("warning_elementsremaining"));
             $strReturn .= $this->objToolkit->listHeader();
 
             //minimized actions now, plz. this ain't being a real element anymore!
             foreach($arrElementsOnPage as $objOneElement) {
                 $strActions = "";
-                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
-                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
@@ -287,7 +287,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
     		$strReturn = $objElement->actionEdit("new");
 		}
 		else
-		    $strReturn .= $this->getText("commons_error_permissions");
+		    $strReturn .= $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -320,11 +320,11 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
     		}
     		else {
-    			$strReturn .= $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
+    			$strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
     		}
 		}
 		else
-		    $strReturn .= $this->getText("commons_error_permissions");
+		    $strReturn .= $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -509,7 +509,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 		}
 		else  {
-			$strReturn = $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
+			$strReturn = $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
 		}
 		return $strReturn;
 	}
@@ -617,7 +617,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		}
 		else  {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-			$strReturn = "<message><error>".$this->getText("ds_gesperrt").".".$this->getText("commons_error_permissions")."</error></message>";
+			$strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
 		}
 		return $strReturn;
 	}
@@ -632,14 +632,14 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$strReturn = "";
         $objElement = new class_module_pages_pageelement($this->getSystemid());
 		if($objElement->rightDelete()) {
-            $strQuestion = uniStrReplace("%%element_name%%", htmlToString($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" ), true), $this->getText("element_loeschen_frage"));
+            $strQuestion = uniStrReplace("%%element_name%%", htmlToString($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" ), true), $this->getLang("element_loeschen_frage"));
 
 			$strReturn .= $this->objToolkit->warningBox($strQuestion
 			             ." <br /><a href=\"".getLinkAdminHref("pages_content", "deleteElementFinal", "systemid=".$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")))."\">"
-			             .$this->getText("commons_delete"));
+			             .$this->getLang("commons_delete"));
 		}
 		else
-			$strReturn .= $this->getText("commons_error_permissions");
+			$strReturn .= $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -667,11 +667,11 @@ class class_module_pages_content_admin extends class_admin implements interface_
                 $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 			}
 			else  {
-				$strReturn .= $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
+				$strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
 			}
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -710,20 +710,20 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_doCopy", 1);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 
-            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement()." (".$objSourceElement->getStrTitle().")");
+            $strReturn .= $this->objToolkit->formHeadline($this->getLang("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement()." (".$objSourceElement->getStrTitle().")");
 
 
             //step one: language selection
             $arrLanguages = class_module_languages_language::getAllLanguages(true);
             $arrLanguageDD = array();
             foreach($arrLanguages as $objSingleLanguage)
-                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getText("lang_".$objSingleLanguage->getStrName(), "languages");
+                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getLang("lang_".$objSingleLanguage->getStrName(), "languages");
 
-            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
+            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getLang("copyElement_language"), $objLang->getSystemid());
 
 
             //step two: page selection
-            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page", $this->getText("copyElement_page"), $objPage->getStrName(), "inputText", false);
+            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page", $this->getLang("copyElement_page"), $objPage->getStrName(), "inputText", false);
 
 
             //step three: placeholder-selection
@@ -764,17 +764,17 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
             $bitCopyingAllowed = true;
             if(count($arrPlaceholdersDD) == 0) {
-                $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_err_placeholder"));
+                $strReturn .= $this->objToolkit->formTextRow($this->getLang("copyElement_err_placeholder"));
                 $bitCopyingAllowed = false;
             }
             else {
-                $strReturn .= $this->objToolkit->formInputDropdown("copyElement_placeholder", $arrPlaceholdersDD, $this->getText("copyElement_placeholder"));
+                $strReturn .= $this->objToolkit->formInputDropdown("copyElement_placeholder", $arrPlaceholdersDD, $this->getLang("copyElement_placeholder"));
             }
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_template")." ".$strTemplate);
+            $strReturn .= $this->objToolkit->formTextRow($this->getLang("copyElement_template")." ".$strTemplate);
 
             $strReturn .= $this->objToolkit->divider();
 
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("copyElement_submit"), "Submit", "", "inputSubmit", $bitCopyingAllowed);
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("copyElement_submit"), "Submit", "", "inputSubmit", $bitCopyingAllowed);
             $strReturn .= $this->objToolkit->formClose();
 
 
@@ -819,7 +819,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
         }
         else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
         return $strReturn;
     }
 

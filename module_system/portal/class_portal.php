@@ -51,7 +51,7 @@ abstract class class_portal  {
 	 *
 	 * @var class_lang
 	 */
-	private  $objText = null;				//Object managing the lang-files
+	private $objLang = null;				//Object managing the lang-files
 
 	/**
 	 * Instance of class_module_system_common
@@ -70,7 +70,6 @@ abstract class class_portal  {
 	private   $strAction;			        //current action to perform (GET/POST)
 	private   $strSystemid;			        //current systemid
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
-	private   $strArea;				        //String containing the current Area - admin or portal or installer or download
 	private   $arrHistory;			        //Stack containing the 5 urls last visited
 	protected $arrModule = array();	        //Array containing info about the current module
 	protected $strTemplateArea;		        //String containing the current Area for the templateobject
@@ -84,9 +83,6 @@ abstract class class_portal  {
      * @param string $strSystemid
      */
 	public function __construct($arrElementData = array(), $strSystemid = "") {
-
-        //saving area
-		$this->strArea = "portal";
 
 		//GET / POST / FILE Params
 		$this->arrParams = getAllPassedParams();
@@ -106,9 +102,9 @@ abstract class class_portal  {
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
-	    $this->objToolkit = $objCarrier->getObjToolkit($this->strArea);
+	    $this->objToolkit = $objCarrier->getObjToolkit("portal");
 		$this->objSession = $objCarrier->getObjSession();
-	    $this->objText = $objCarrier->getObjLang();
+	    $this->objLang = $objCarrier->getObjLang();
 	    $this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objSystemCommon = new class_module_system_common($strSystemid);
 
@@ -129,7 +125,7 @@ abstract class class_portal  {
 		//set the correct language
         $objLanguage = new class_module_languages_language();
         //set current language to the texts-object
-        $this->objText->setStrTextLanguage($objLanguage->getStrPortalLanguage());
+        $this->objLang->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
         $this->arrElementData = $arrElementData;
 
@@ -392,7 +388,7 @@ abstract class class_portal  {
 	 */
 	protected function setHistory() {
 	    //Loading the current history from session
-		$this->arrHistory = $this->objSession->getSession($this->strArea."History");
+		$this->arrHistory = $this->objSession->getSession("portalHistory");
 
 		$strQueryString = getServer("QUERY_STRING");
 		//Clean Querystring of emtpy actions
@@ -412,7 +408,7 @@ abstract class class_portal  {
 			$this->arrHistory[] = $strQueryString;
 		}
 		//saving the new array to session
-		$this->objSession->setSession($this->strArea."History", $this->arrHistory);
+		$this->objSession->setSession("portalHistory", $this->arrHistory);
 
 		return;
 	}
@@ -437,18 +433,14 @@ abstract class class_portal  {
 	 *
 	 * @param string $strName
 	 * @param string $strModule
-	 * @param string $strArea
 	 * @return string
 	 */
-	public function getText($strName, $strModule = "", $strArea = "") {
+	public function getLang($strName, $strModule = "") {
 		if($strModule == "")
 			$strModule = $this->arrModule["modul"];
 
-		if($strArea == "")
-			$strArea = $this->strArea;
-
 		//Now we have to ask the Text-Object to return the text
-		return $this->objText->getText($strName, $strModule, $strArea);
+		return $this->objLang->getLang($strName, $strModule);
 	}
 
 	/**
@@ -456,8 +448,8 @@ abstract class class_portal  {
 	 *
 	 * @return obj
 	 */
-	protected function getObjText() {
-	    return $this->objText;
+	protected function getObjLang() {
+	    return $this->objLang;
 	}
 
     /**
@@ -476,7 +468,7 @@ abstract class class_portal  {
      * @return class_lang_wrapper
      */
     public final function getLangWrapper() {
-        return new class_lang_wrapper($this->objText, $this->strArea, $this->arrModule["modul"]);
+        return new class_lang_wrapper($this->objLang, $this->arrModule["modul"]);
     }
 
     /**

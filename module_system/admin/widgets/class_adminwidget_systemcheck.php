@@ -32,8 +32,8 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputCheckbox("php", $this->getText("systemcheck_checkboxphp"), $this->getFieldValue("php"));
-        $strReturn .= $this->objToolkit->formInputCheckbox("kajona", $this->getText("systemcheck_checkboxkajona"), $this->getFieldValue("kajona"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("php", $this->getLang("systemcheck_checkboxphp"), $this->getFieldValue("php"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("kajona", $this->getLang("systemcheck_checkboxkajona"), $this->getFieldValue("kajona"));
         return $strReturn;
     }
 
@@ -57,32 +57,32 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
 
         //check wich infos to produce
         if($this->getFieldValue("php") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("systemcheck_php_safemode").(ini_get("safe_mode") ? $this->getText("commons_yes") : $this->getText("commons_no") ));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_php_urlfopen").(ini_get("allow_url_fopen") ? $this->getText("commons_yes") : $this->getText("commons_no") ));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_php_regglobal").(ini_get("register_globals") ?
-                         "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
-                         "<span class=\"ok\">".$this->getText("commons_no")."</span>" ));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_php_safemode").(ini_get("safe_mode") ? $this->getLang("commons_yes") : $this->getLang("commons_no") ));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_php_urlfopen").(ini_get("allow_url_fopen") ? $this->getLang("commons_yes") : $this->getLang("commons_no") ));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_php_regglobal").(ini_get("register_globals") ?
+                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
+                         "<span class=\"ok\">".$this->getLang("commons_no")."</span>" ));
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_installer").(is_dir(_realpath_."/installer") ?
-                        "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getText("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_debug").(is_dir(_realpath_."/debug") ?
-                        "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getText("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_configper").( is_writable(_systempath_."/config/config.php") ?
-                        "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getText("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_debugper").( is_writable(_systempath_."/debug/") ?
-                        "<span class=\"ok\">".$this->getText("commons_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getText("commons_no")."</span>" ));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_dbdumpsper").( is_writable(_systempath_."/dbdumps/") ?
-                        "<span class=\"ok\">".$this->getText("commons_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getText("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._images_cachepath_) ?
-                        "<span class=\"ok\">".$this->getText("commons_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getText("commons_no")."</span>"));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_installer").(is_dir(_realpath_."/installer") ?
+                        "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_debug").(is_dir(_realpath_."/debug") ?
+                        "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_configper").( is_writable(_systempath_."/config/config.php") ?
+                        "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_debugper").( is_writable(_systempath_."/debug/") ?
+                        "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>" ));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_dbdumpsper").( is_writable(_systempath_."/dbdumps/") ?
+                        "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>"));
+            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._images_cachepath_) ?
+                        "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>"));
 
         }
         return "<div class=\"adminwidget_systemcheck\">".$strReturn."</div>";
@@ -95,7 +95,7 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
      * @return
      */
     public function getWidgetName() {
-        return $this->getText("systemcheck_name");
+        return $this->getLang("systemcheck_name");
     }
 
 }

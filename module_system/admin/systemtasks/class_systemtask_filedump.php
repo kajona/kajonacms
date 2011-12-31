@@ -57,7 +57,7 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getText("systemtask_filedump_name");
+    	return $this->getLang("systemtask_filedump_name");
     }
 
     /**
@@ -79,9 +79,9 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
         }
 
         if($objZip->closeArchive())
-            return $this->getText("systemtask_filedump_success").$strFilename;
+            return $this->getLang("systemtask_filedump_success").$strFilename;
         else
-            return $this->getText("systemtask_filedump_error");
+            return $this->getLang("systemtask_filedump_error");
     }
 
 

@@ -51,11 +51,11 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 		    $objWidget->setStrColumn($strNewColumn);
 		    $objWidget->updateObjectToDb();
 
-		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";
+		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setDashboardPosition")."</message>";
 		}
 		else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-		    $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+		    $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
@@ -77,7 +77,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         }
         else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-		    $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+		    $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
@@ -107,7 +107,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         }
 
         //the header row
-        $arrWeekdays = explode(",", $this->getText("calendar_weekday"));
+        $arrWeekdays = explode(",", $this->getLang("calendar_weekday"));
         foreach($arrWeekdays as $intKey => $strValue)
             $arrWeekdays[$intKey] = trim(uniStrReplace("\"", "", $strValue));
 

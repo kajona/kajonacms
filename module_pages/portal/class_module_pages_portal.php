@@ -222,7 +222,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     //pe is enabled --> regenerate the funky contents
                     if($objElement->getStatus() == 0) {
                         $arrPeElement = array();
-                        $arrPeElement["title"] = $this->getText("pe_inactiveElement", "pages"). " (".$objOneElementOnPage->getStrElement().")";
+                        $arrPeElement["title"] = $this->getLang("pe_inactiveElement", "pages"). " (".$objOneElementOnPage->getStrElement().")";
                         $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
                         $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $objElement->getSystemid(), array());
                     }
@@ -366,31 +366,31 @@ class class_module_pages_portal extends class_portal implements interface_portal
             if($this->objSession->getSession("pe_disable") != "true" ) {
     		    $strPeToolbar = "";
     		    $arrPeContents = array();
-    		    $arrPeContents["pe_status_page"] = $this->getText("pe_status_page", "pages");
-    		    $arrPeContents["pe_status_status"] = $this->getText("pe_status_status", "pages");
-    		    $arrPeContents["pe_status_autor"] = $this->getText("pe_status_autor", "pages");
-    		    $arrPeContents["pe_status_time"] = $this->getText("pe_status_time", "pages");
+    		    $arrPeContents["pe_status_page"] = $this->getLang("pe_status_page", "pages");
+    		    $arrPeContents["pe_status_status"] = $this->getLang("pe_status_status", "pages");
+    		    $arrPeContents["pe_status_autor"] = $this->getLang("pe_status_autor", "pages");
+    		    $arrPeContents["pe_status_time"] = $this->getLang("pe_status_time", "pages");
                 $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
     		    $arrPeContents["pe_status_status_val"] = ($objPageData->getStatus() == 1 ? "active" : "inactive" );
     		    $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
     		    $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getIntLmTime(), false);
-    		    $arrPeContents["pe_dialog_close_warning"] = $this->getText("pe_dialog_close_warning", "pages");
+    		    $arrPeContents["pe_dialog_close_warning"] = $this->getLang("pe_dialog_close_warning", "pages");
 
                 //Add an iconbar
     		    $arrPeContents["pe_iconbar"] = "";
-    		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getText("pe_icon_edit"), $this->getText("pe_icon_edit", "pages"), "icon_pencil.gif");
+    		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"), $this->getLang("pe_icon_edit", "pages"), "icon_pencil.gif");
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
 
                 $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_page.gif", $this->getText("pe_icon_page", "pages"))."</a>";
+                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_page.gif", $this->getLang("pe_icon_page", "pages"))."</a>";
 
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
                 $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_new.gif", $this->getText("pe_icon_new", "pages"))."</a>";
+                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_new.gif", $this->getLang("pe_icon_new", "pages"))."</a>";
 
 
 
-    		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getImageAdmin("icon_enabled.gif", $this->getText("pe_disable", "pages"))."</a>";
+    		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getImageAdmin("icon_enabled.gif", $this->getLang("pe_disable", "pages"))."</a>";
 
     		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
@@ -410,7 +410,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
             }
             else {
                 //Button to enable the toolbar & pe
-                $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">".getImageAdmin("icon_disabled.gif", $this->getText("pe_enable", "pages"))."</a></div>";
+                $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">".getImageAdmin("icon_disabled.gif", $this->getLang("pe_enable", "pages"))."</a></div>";
     		    //Load YUI and portaleditor javascript
     		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
     		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";

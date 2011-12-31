@@ -32,7 +32,7 @@ class class_adminwidget_note extends class_adminwidget implements interface_admi
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputTextArea("content", $this->getText("note_content"), $this->getFieldValue("content"));
+        $strReturn .= $this->objToolkit->formInputTextArea("content", $this->getLang("note_content"), $this->getFieldValue("content"));
         return $strReturn;
     }
 
@@ -55,7 +55,7 @@ class class_adminwidget_note extends class_adminwidget implements interface_admi
      * @return
      */
     public function getWidgetName() {
-        return $this->getText("note_name");
+        return $this->getLang("note_name");
     }
 
 }

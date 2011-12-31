@@ -36,9 +36,9 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
 
         return $arrReturn;
 	}
@@ -77,15 +77,15 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "saveTag");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
-			$strReturn .= $this->objToolkit->formInputText("tag_name", $this->getText("tag_name"), ($this->getParam("tag_name") != "" ? $this->getParam("tag_name") : $objTag->getStrName()) );
+			$strReturn .= $this->objToolkit->formInputText("tag_name", $this->getLang("tag_name"), ($this->getParam("tag_name") != "" ? $this->getParam("tag_name") : $objTag->getStrName()) );
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $objTag->getSystemid());
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
 
 			$strReturn .= $this->objToolkit->setBrowserFocus("tag_name");
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
     }
@@ -109,7 +109,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
     }
@@ -132,15 +132,15 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         $strTagsWrapperId = generateSystemid();
 
         $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
-        $strTagContent .= $this->objToolkit->formTextRow($this->getText("tag_name_hint"));
-        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getText("tag_name"));
-        $strTagContent .= $this->objToolkit->formInputSubmit($this->getText("button_add"), $this->getText("button_add"), "");
+        $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
+        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("tag_name"));
+        $strTagContent .= $this->objToolkit->formInputSubmit($this->getLang("button_add"), $this->getLang("button_add"), "");
         $strTagContent .= $this->objToolkit->formClose();
 
         $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
 
         $strReturn .= $this->objToolkit->divider();
-        $strReturn .= $this->objToolkit->getFieldset($this->getText("tagsection_header"), $strTagContent);
+        $strReturn .= $this->objToolkit->getFieldset($this->getLang("tagsection_header"), $strTagContent);
 
         return $strReturn;
     }

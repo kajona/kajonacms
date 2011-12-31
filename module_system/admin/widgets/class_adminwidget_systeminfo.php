@@ -32,9 +32,9 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputCheckbox("php", $this->getText("sysinfo_checkboxphp"), $this->getFieldValue("php"));
-        $strReturn .= $this->objToolkit->formInputCheckbox("server", $this->getText("sysinfo_checkboxserver"), $this->getFieldValue("server"));
-        $strReturn .= $this->objToolkit->formInputCheckbox("kajona", $this->getText("sysinfo_checkboxkajona"), $this->getFieldValue("kajona"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("php", $this->getLang("sysinfo_checkboxphp"), $this->getFieldValue("php"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("server", $this->getLang("sysinfo_checkboxserver"), $this->getFieldValue("server"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("kajona", $this->getLang("sysinfo_checkboxkajona"), $this->getFieldValue("kajona"));
         return $strReturn;
     }
 
@@ -49,22 +49,22 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         $strReturn = "";
         //check wich infos to produce
         if($this->getFieldValue("php") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("sysinfo_php_version").PHP_VERSION);
-            $strReturn .= $this->widgetText($this->getText("sysinfo_php_memlimit").bytesToString(ini_get("memory_limit"), true));
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_php_version").PHP_VERSION);
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_php_memlimit").bytesToString(ini_get("memory_limit"), true));
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("server") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("sysinfo_server_system").php_uname("s")." ".php_uname("r"));
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_system").php_uname("s")." ".php_uname("r"));
             if (@disk_total_space(_realpath_)) {
-	            $strReturn .= $this->widgetText($this->getText("sysinfo_server_diskspace").bytesToString(@disk_total_space(_realpath_)));
-	            $strReturn .= $this->widgetText($this->getText("sysinfo_server_diskspacef").bytesToString(@disk_free_space(_realpath_)));
+	            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_diskspace").bytesToString(@disk_total_space(_realpath_)));
+	            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_diskspacef").bytesToString(@disk_free_space(_realpath_)));
             }
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_version").class_module_system_module::getModuleByName("system")->getStrVersion());
-            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_versionAvail").$this->getLatestKernelVersion());
-            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_nrOfModules").count(class_module_system_module::getAllModules()));
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_version").class_module_system_module::getModuleByName("system")->getStrVersion());
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_versionAvail").$this->getLatestKernelVersion());
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_nrOfModules").count(class_module_system_module::getAllModules()));
         }
         return $strReturn;
     }
@@ -76,7 +76,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      * @return string
      */
     public function getWidgetName() {
-        return $this->getText("sysinfo_name");
+        return $this->getLang("sysinfo_name");
     }
 
     /**

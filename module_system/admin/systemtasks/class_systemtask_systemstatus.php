@@ -45,7 +45,7 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
      * @return string
      */
     public function getStrTaskName() {
-        return $this->getText("systemtask_systemstatus_name");
+        return $this->getLang("systemtask_systemstatus_name");
     }
 
     /**
@@ -58,10 +58,10 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
             $objRecord = new class_module_system_common($this->getParam("systemstatus_systemid"));
             $objRecord->setIntRecordStatus($this->getParam("systemstatus_status"));
 
-            return $this->objToolkit->getTextRow($this->getText("systemtask_status_success"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_status_success"));
         }
 
-        return $this->objToolkit->getTextRow($this->getText("systemtask_status_error"));
+        return $this->objToolkit->getTextRow($this->getLang("systemtask_status_error"));
     }
 
     /**
@@ -72,12 +72,12 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
     	$strReturn = "";
 
         $arrDropdown = array(
-            1 => $this->getText("systemtask_systemstatus_active"),
-            0 => $this->getText("systemtask_systemstatus_inactive")
+            1 => $this->getLang("systemtask_systemstatus_active"),
+            0 => $this->getLang("systemtask_systemstatus_inactive")
         );
 
-        $strReturn .= $this->objToolkit->formInputText("systemstatus_systemid", $this->getText("systemtask_systemstatus_systemid"));
-        $strReturn .= $this->objToolkit->formInputDropdown("systemstatus_status", $arrDropdown, $this->getText("systemtask_systemstatus_status"));
+        $strReturn .= $this->objToolkit->formInputText("systemstatus_systemid", $this->getLang("systemtask_systemstatus_systemid"));
+        $strReturn .= $this->objToolkit->formInputDropdown("systemstatus_status", $arrDropdown, $this->getLang("systemtask_systemstatus_status"));
 
         return $strReturn;
     }

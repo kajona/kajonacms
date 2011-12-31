@@ -29,10 +29,10 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("module_action_new"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		return $arrReturn;
 	}
@@ -71,19 +71,19 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 	 */
 	protected function actionNew($strMode = "new") {
 	    $strReturn = "";
-	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
+	    $arrDefault = array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes"));
 	    $objLang = new class_module_languages_language();
 	    $arrLanguages = $objLang->getAllLanguagesAvailable();
 	    $arrLanguagesDD = array();
 	    foreach ($arrLanguages as $strLangShort)
-	       $arrLanguagesDD[$strLangShort] = $this->getText("lang_".$strLangShort);
+	       $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
 
         if($strMode == "new") {
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-            $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"));
-            $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"));
+            $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getLang("commons_language_field"));
+            $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getLang("language_default"));
             $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
@@ -92,17 +92,17 @@ class class_module_languages_admin extends class_admin_simple implements interfa
             $objLanguage = new class_module_languages_language($this->getSystemid());
             if($objLanguage->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"), $objLanguage->getStrName());
-                $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"), $objLanguage->getBitDefault());
+                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getLang("commons_language_field"), $objLanguage->getStrName());
+                $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getLang("language_default"), $objLanguage->getBitDefault());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objLanguage->getSystemid());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
 
                 $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
             }
             else
-			    $strReturn = $this->getText("commons_error_permissions");
+			    $strReturn = $this->getLang("commons_error_permissions");
 
         }
         return $strReturn;
@@ -120,7 +120,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 	    if($this->getParam("mode") == "new") {
             //language already existing?
             if(class_module_languages_language::getLanguageByName($this->getParam("language_name")) !== false)
-               return $this->getText("language_existing");
+               return $this->getLang("language_existing");
 
             //reset the default languages?
             if($this->getParam("language_default") == "1")
@@ -142,7 +142,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 	            //language already existing?
 	            $objTestLang = class_module_languages_language::getLanguageByName($this->getParam("language_name"));
 	            if($objTestLang !== false && $objTestLang->getSystemid() != $this->getSystemid())
-	               return $this->getText("language_existing");
+	               return $this->getLang("language_existing");
 
 	            //reset the default languages?
 	            if($this->getParam("language_default") == "1")
@@ -163,7 +163,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             }
             else
-			    $strReturn = $this->getText("commons_error_permissions");
+			    $strReturn = $this->getLang("commons_error_permissions");
 	    }
 
         return $strReturn;
@@ -194,7 +194,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
-		    $strReturn = $this->getText("commons_error_permissions");
+		    $strReturn = $this->getLang("commons_error_permissions");
 		return $strReturn;
 	}
 
@@ -214,7 +214,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
             foreach ($arrObjLanguages as $objOneLanguage) {
             	$strButtons .= $this->objToolkit->getLanguageButton(
                     $objOneLanguage->getStrName(),
-                    $this->getText("lang_".$objOneLanguage->getStrName()),
+                    $this->getLang("lang_".$objOneLanguage->getStrName()),
             	    ($objOneLanguage->getStrName() == $this->getLanguageToWorkOn() ? true : false)
                 );
             }

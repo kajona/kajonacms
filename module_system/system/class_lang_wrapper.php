@@ -21,8 +21,6 @@ class class_lang_wrapper {
      */
     private $objLang;
 
-    private $strArea = "";
-
     private $strModule = "";
 
 
@@ -30,12 +28,10 @@ class class_lang_wrapper {
      * Creates a new instance, identified by the area / module combination
      *
      * @param class_lang $objLang
-     * @param string $strArea
      * @param string $strModule
      */
-    public function __construct($objLang, $strArea, $strModule) {
+    public function __construct($objLang, $strModule) {
         $this->objLang = $objLang;
-        $this->strArea = $strArea;
         $this->strModule = $strModule;
     }
 
@@ -46,7 +42,7 @@ class class_lang_wrapper {
      * @return string
      */
     public function getLang($strKey) {
-        return $this->objLang->getText($strKey, $this->strModule, $this->strArea);
+        return $this->objLang->getLang($strKey, $this->strModule);
     }
 
 }

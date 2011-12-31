@@ -46,7 +46,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 		  $strNaviName = "";
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("commons_name"), $strNaviName, "inputText", getLinkAdminDialog("navigation", "navigationBrowser", "", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")), true);
+		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getLang("commons_name"), $strNaviName, "inputText", getLinkAdminDialog("navigation", "navigationBrowser", "", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")), true);
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
@@ -59,13 +59,13 @@ class class_element_navigation_admin extends class_element_admin implements inte
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
 
         //and finally offer the different modes
-        $arrModes = array("tree" => $this->getText("modus_baum"), "sitemap" => $this->getText("modus_sitemap"));
-        $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getText("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));
+        $arrModes = array("tree" => $this->getLang("modus_baum"), "sitemap" => $this->getLang("modus_sitemap"));
+        $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getLang("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));
 
         $strReturn .= $this->objToolkit->setBrowserFocus("navigation_template");
 

@@ -306,9 +306,9 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     public function getActionName($strAction) {
         if($strAction == $this->strActionEdit)
-            return $this->getText("pages_ordner_edit", "pages");
+            return $this->getLang("pages_ordner_edit", "pages");
         else if($strAction == $this->strActionDelete)
-            return $this->getText("pages_ordner_delete", "pages");
+            return $this->getLang("pages_ordner_delete", "pages");
 
         return $strAction;
     }

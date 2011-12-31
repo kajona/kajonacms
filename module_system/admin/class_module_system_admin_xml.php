@@ -60,12 +60,12 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             }
 
 
-		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setAbsolutePosOk")."</message>";
+		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setAbsolutePosOk")."</message>";
 		    $this->flushCompletePagesCache();
 		}
 		else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
@@ -81,15 +81,15 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
 	    if($objCommon->rightEdit()) {
     	    if(parent::setStatus()) {
-    	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
+    	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
     	    }
     	    else
-                $strReturn .= "<error>".$this->getSystemid()." - ".$this->getText("setStatusError")."</error>";
+                $strReturn .= "<error>".$this->getSystemid()." - ".$this->getLang("setStatusError")."</error>";
 	    }
 	    else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
 	    return $strReturn;
@@ -132,7 +132,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                             $strTaskOutput .= $objTask->getStrProgressInformation();
 
                         if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
-                            $strTaskOutput .= "<br />".$this->getText("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
+                            $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
                         }
                         else {
                             $strTaskOutput .= $strTempOutput;
@@ -382,9 +382,9 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
             $strLoginStatus = "";
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                $strLoginStatus = $this->getText("session_loggedin");
+                $strLoginStatus = $this->getLang("session_loggedin");
             else
-                $strLoginStatus = $this->getText("session_loggedout");
+                $strLoginStatus = $this->getLang("session_loggedout");
 
              //find out what the user is doing...
             $strLastUrl = $objOneSession->getStrLasturl();
@@ -393,7 +393,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             $strActivity = "";
 
             if(uniStrpos($strLastUrl, "admin=1") !== false) {
-                $strActivity .= $this->getText("session_admin");
+                $strActivity .= $this->getLang("session_admin");
                 foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                     $arrUrlParam = explode("=", $strOneParam);
                     if($arrUrlParam[0] == "module")
@@ -401,7 +401,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 }
             }
             else {
-                $strActivity .= $this->getText("session_portal");
+                $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
                     $strActivity .= _pages_indexpage_;
                 else {
@@ -411,8 +411,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                             $strActivity .= $arrUrlParam[1];
                     }
 
-                    if($strActivity == $this->getText("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
-                        $strActivity .= $this->getText("session_portal_imagegeneration");
+                    if($strActivity == $this->getLang("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                        $strActivity .= $this->getLang("session_portal_imagegeneration");
                     }
                 }
             }

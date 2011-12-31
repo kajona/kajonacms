@@ -39,10 +39,10 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 
 		$strReturn = "";
 
-		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
-		$strReturn .= $this->objToolkit->formWysiwygEditor("paragraph_content", $this->getText("paragraph_content"), (isset($arrElementData["paragraph_content"]) ? $arrElementData["paragraph_content"] : ""));
-		$strReturn .= $this->objToolkit->formInputImageSelector("paragraph_image", $this->getText("commons_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""));
-		$strReturn .= $this->objToolkit->formInputPageSelector("paragraph_link", $this->getText("paragraph_link"), (isset($arrElementData["paragraph_link"]) ? $arrElementData["paragraph_link"] : ""));
+		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getLang("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
+		$strReturn .= $this->objToolkit->formWysiwygEditor("paragraph_content", $this->getLang("paragraph_content"), (isset($arrElementData["paragraph_content"]) ? $arrElementData["paragraph_content"] : ""));
+		$strReturn .= $this->objToolkit->formInputImageSelector("paragraph_image", $this->getLang("commons_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""));
+		$strReturn .= $this->objToolkit->formInputPageSelector("paragraph_link", $this->getLang("paragraph_link"), (isset($arrElementData["paragraph_link"]) ? $arrElementData["paragraph_link"] : ""));
 
         //load templates
 		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_paragraph");
@@ -54,9 +54,9 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");
 		return $strReturn;

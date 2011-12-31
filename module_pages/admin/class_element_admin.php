@@ -91,21 +91,21 @@ abstract class class_element_admin extends class_admin {
         if($strInternalTitle != "")
             $bitShow = true;
 
-		$strSystemFields .= $this->objToolkit->formInputText("page_element_ph_title", $this->getText("page_element_ph_title", "pages"), $strInternalTitle);
+		$strSystemFields .= $this->objToolkit->formInputText("page_element_ph_title", $this->getLang("page_element_ph_title", "pages"), $strInternalTitle);
 
-        $strSystemFields .= $this->objToolkit->formDateSingle("start", $this->getText("page_element_start", "pages"), $objStartDate);
-		$strSystemFields .= $this->objToolkit->formDateSingle("end", $this->getText("page_element_end", "pages"), $objEndDate);
+        $strSystemFields .= $this->objToolkit->formDateSingle("start", $this->getLang("page_element_start", "pages"), $objStartDate);
+		$strSystemFields .= $this->objToolkit->formDateSingle("end", $this->getLang("page_element_end", "pages"), $objEndDate);
 
         //add content from sub-classes
         $strSystemFields .= $this->strSystemFormElements;
 
-        $strReturn .= $this->objToolkit->formOptionalElementsWrapper($strSystemFields, $this->getText("page_element_system_folder", "pages"), $bitShow);
+        $strReturn .= $this->objToolkit->formOptionalElementsWrapper($strSystemFields, $this->getLang("page_element_system_folder", "pages"), $bitShow);
 
 		//If its going to be a new element, allow to choose the position
 		if($strMode == "new") {
-    		$arrDropdown = array("first" => $this->getText("element_first", "pages"),
-    		                     "last" => $this->getText("element_last", "pages"));
-    		$strReturn .= $this->objToolkit->formInputDropdown("element_pos", $arrDropdown, $this->getText("element_pos", "pages"), "last");
+    		$arrDropdown = array("first" => $this->getLang("element_first", "pages"),
+    		                     "last" => $this->getLang("element_last", "pages"));
+    		$strReturn .= $this->objToolkit->formInputDropdown("element_pos", $arrDropdown, $this->getLang("element_pos", "pages"), "last");
 		}
 
 		//Adding the element-stuff
@@ -127,7 +127,7 @@ abstract class class_element_admin extends class_admin {
 		if($this->getParam("pe") == 1) {
 		    $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
 		}
-		$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"), "Submit", $strEventhandler);
+		$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"), "Submit", $strEventhandler);
 		$strReturn .= $this->objToolkit->formClose();
 		//and close the element
 
@@ -203,7 +203,7 @@ abstract class class_element_admin extends class_admin {
      * @since 3.2.1
      */
     public function getElementDescription() {
-        $strDesc = $this->getText($this->arrModule["name"]."_description");
+        $strDesc = $this->getLang($this->arrModule["name"]."_description");
         if($strDesc == "!".$this->arrModule["name"]."_description!")
             $strDesc = "";
         return $strDesc;

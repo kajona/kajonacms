@@ -77,7 +77,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getText("lang_".$this->getStrName(), "languages").($this->getBitDefault() == 1 ? " (".$this->getText("language_isDefault", "languages").")" : "");
+        return $this->getLang("lang_".$this->getStrName(), "languages").($this->getBitDefault() == 1 ? " (".$this->getLang("language_isDefault", "languages").")" : "");
     }
 
 

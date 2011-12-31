@@ -24,7 +24,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
         $this->setArrModuleEntry("modul", "right");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 		parent::__construct();
-		$this->setStrTextBase("system");
+		$this->setStrLangBase("system");
 
 
         if($this->getAction() == "list")
@@ -33,7 +33,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 
 
     protected function getOutputModuleTitle() {
-        return $this->getText("moduleRightsTitle");
+        return $this->getLang("moduleRightsTitle");
     }
 
 
@@ -54,7 +54,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		if($this->getParam("changemodule") != "")
 			$strSystemID = $this->getModuleSystemid($this->getParam("changemodule"));
 		if($strSystemID == "")
-			return $this->getText("commons_error_permissions");
+			return $this->getLang("commons_error_permissions");
 
         $objCommon = new class_module_system_common($strSystemID);
         $objRights = class_carrier::getInstance()->getObjRights();
@@ -67,7 +67,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 
 			//Determine name of the record
 			if($objCommon->getStrRecordComment() == "")
-				$strTitle = $this->getText("titel_leer");
+				$strTitle = $this->getLang("titel_leer");
 			else
 				$strTitle = $objCommon->getStrRecordComment() . " ";
 
@@ -82,13 +82,13 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			    $strModule = $objModule->getStrName();
 			}
 
-			$arrHeaderRow = $this->getText("permissions_header", $strModule);
+			$arrHeaderRow = $this->getLang("permissions_header", $strModule);
 
 			if($arrHeaderRow == "!permissions_header!")
-			    $arrHeaderRow = $this->getText("permissions_default_header", "system");
+			    $arrHeaderRow = $this->getLang("permissions_default_header", "system");
 
 			if($strSystemID == "0")
-			    $arrHeaderRow = $this->getText("permissions_root_header", "system");
+			    $arrHeaderRow = $this->getLang("permissions_root_header", "system");
 
 
 			$arrTitles = $arrHeaderRow;
@@ -199,7 +199,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			//Build the inherit-box
 			$strTemplateInheritID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_inherit");
             $arrTemplateInherit = array();
-			$arrTemplateInherit["title"] = $this->getText("titel_erben");
+			$arrTemplateInherit["title"] = $this->getLang("titel_erben");
 			$arrTemplateInherit["name"] = "inherit";
 			if(isset($arrRights["inherit"]) && $arrRights["inherit"] == 1)
 				$arrTemplateInherit["checked"] = "checked=\"checked\"";
@@ -216,8 +216,8 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			$strUrlHistory = $this->getHistory(0);
 			//Buliding the right-matrix
 			$arrHistory = explode("&", $strUrlHistory);
-			$arrTemplate["backlink"] = getLinkAdminRaw("".$arrHistory[0]."&".$arrHistory[1], $this->getText("commons_back"));
-			$arrTemplate["desc"] = $this->getText("desc");
+			$arrTemplate["backlink"] = getLinkAdminRaw("".$arrHistory[0]."&".$arrHistory[1], $this->getLang("commons_back"));
+			$arrTemplate["desc"] = $this->getLang("desc");
 			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 			//Followed by the form
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saverights"), "rightsForm");
@@ -250,12 +250,12 @@ class class_module_right_admin extends class_admin implements interface_admin {
             }
 
 			//Close the form
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
 			$strReturn .= "<script type=\"text/javascript\">KAJONA.admin.checkRightMatrix();</script>";
 		}
 		else
-			$strReturn .= $this->getText("commons_error_permissions");
+			$strReturn .= $this->getLang("commons_error_permissions");
 		return $strReturn;
 	}
 
@@ -355,10 +355,10 @@ class class_module_right_admin extends class_admin implements interface_admin {
 				return "";
 			}
 			else
-			    throw new class_exception($this->getText("fehler_setzen"), class_exception::$level_ERROR);
+			    throw new class_exception($this->getLang("fehler_setzen"), class_exception::$level_ERROR);
 		}
 		else
-			$strReturn .= $this->getText("commons_error_permissions");
+			$strReturn .= $this->getLang("commons_error_permissions");
 		return $strReturn;
 	}
 }

@@ -81,7 +81,7 @@ class class_module_user_group extends class_model implements interface_model, in
     public function getStrLongDescription() {
         $objUsersources = new class_module_user_sourcefactory();
         if(count($objUsersources->getArrUsersources()) > 1) {
-            return $this->getText("user_list_source", "user")." ".$this->getStrSubsystem();
+            return $this->getLang("user_list_source", "user")." ".$this->getStrSubsystem();
         }
     }
 

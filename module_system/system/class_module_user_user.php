@@ -79,7 +79,7 @@ class class_module_user_user extends class_model implements interface_model, int
      */
     public function getStrAdditionalInfo() {
         if($this->rightRight1()) {
-            return $this->getText("user_logins", "user")." ".$this->getIntLogins()." ".$this->getText("user_lastlogin", "user")." ".timeToString($this->getIntLastLogin(), false);
+            return $this->getLang("user_logins", "user")." ".$this->getIntLogins()." ".$this->getLang("user_lastlogin", "user")." ".timeToString($this->getIntLastLogin(), false);
         }
     }
 
@@ -90,7 +90,7 @@ class class_module_user_user extends class_model implements interface_model, int
     public function getStrLongDescription() {
         $objUsersources = new class_module_user_sourcefactory();
         if(count($objUsersources->getArrUsersources()) > 1) {
-            return $this->getText("user_list_source", "user")." ".$this->getStrSubsystem();
+            return $this->getLang("user_list_source", "user")." ".$this->getStrSubsystem();
         }
     }
 

@@ -32,10 +32,10 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("module_action_new"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
@@ -73,7 +73,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
     protected function getNewEntryAction($strListIdentifier) {
         if($this->getObjModule()->rightRight2()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getText("module_action_new"), $this->getText("module_action_new"), "icon_new.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
         }
     }
 
@@ -82,7 +82,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
         if($objListEntry->rightView())
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"))
             );
 
         return parent::renderAdditionalActions($objListEntry);
@@ -91,13 +91,13 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
     protected function renderEditAction(class_model $objListEntry) {
         if($objListEntry->rightRight2()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getText("repo_bearbeiten"), $this->getText("repo_bearbeiten"), "icon_folderProperties.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("repo_bearbeiten"), $this->getLang("repo_bearbeiten"), "icon_folderProperties.gif"));
         }
     }
 
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightRight2())
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteRepo", "&systemid=".$objListEntry->getSystemid()));
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteRepo", "&systemid=".$objListEntry->getSystemid()));
 
     }
 
@@ -117,7 +117,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -144,13 +144,13 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             //create the form
             $strReturn .= $this->objToolkit->getValidationErrors($this, "new");
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "new", "repoSaveNew=1"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $this->getParam("filemanager_name"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/files", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getText("filemanager_view_filter"), $this->getParam("filemanager_view_filter"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getLang("commons_name"), $this->getParam("filemanager_name"));
+            $strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getLang("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/files", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
+            $strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_upload_filter_h"));
+            $strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getLang("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
+            $strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_view_filter_h"));
+            $strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getLang("filemanager_view_filter"), $this->getParam("filemanager_view_filter"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
@@ -163,7 +163,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             $objRepo->setStrUploadFilter($this->getParam("filemanager_upload_filter"));
             $objRepo->setStrViewFilter($this->getParam("filemanager_view_filter"));
             if(!$objRepo->updateObjectToDb())
-                throw new class_exception($this->getText("fehler_repo"), class_exception::$level_ERROR);
+                throw new class_exception($this->getLang("fehler_repo"), class_exception::$level_ERROR);
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
@@ -196,14 +196,14 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "edit");
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "edit", "repoSaveEdit=1"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $objRepo->getStrName());
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/files", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
-    			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
-    			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getText("filemanager_view_filter"), $objRepo->getStrViewFilter());
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getLang("commons_name"), $objRepo->getStrName());
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getLang("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/files", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
+    			$strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_upload_filter_h"));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getLang("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
+    			$strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_view_filter_h"));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getLang("filemanager_view_filter"), $objRepo->getStrViewFilter());
     			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-    			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+    			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
@@ -220,13 +220,13 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 				if($objRepo->updateObjectToDb())
 					$strReturn = "";
 				else
-				    throw new class_exception($this->getText("repo_bearbeiten_fehler"), class_exception::$level_ERROR);
+				    throw new class_exception($this->getLang("repo_bearbeiten_fehler"), class_exception::$level_ERROR);
 
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -261,7 +261,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             $strActions = "";
             if($objRepo->rightRight1()) {
                 $strActions .= $this->generateNewFolderDialogCode();
-                $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
+                $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "inputSubmit");
                 $strActions .= $this->actionUploadFileInternal();
             }
             $strActions .= $this->generateRenameFileDialogCode();
@@ -276,9 +276,9 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 		   	$arrInfobox["folders"] = $arrFiles["nrFolders"];
 		   	$arrInfobox["actions"] = $strActions;
 
-		   	$arrInfobox["foldertitle"] = $this->getText("commons_path");
-		   	$arrInfobox["nrfilestitle"] = $this->getText("nrfilestitle");
-		   	$arrInfobox["nrfoldertitle"] = $this->getText("nrfoldertitle");
+		   	$arrInfobox["foldertitle"] = $this->getLang("commons_path");
+		   	$arrInfobox["nrfilestitle"] = $this->getLang("nrfilestitle");
+		   	$arrInfobox["nrfoldertitle"] = $this->getLang("nrfoldertitle");
 		   	$strReturn .= $this->objToolkit->getFilemanagerInfoBox($arrInfobox);
 		   	$strReturn .= $this->objToolkit->divider();
 
@@ -289,24 +289,24 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 	  		if($this->strFolderOld != "") {
 	  			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
 	  			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
 	  		}
 	  		else {
 	  		    //Link back to the repos
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "", "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "", "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
 	  		}
 			if(count($arrFiles["folders"]) > 0) {
 				foreach($arrFiles["folders"] as $strFolder) {
                     $strAction = "";
-		   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
+		   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
 
     				$objFilesystem = new class_filesystem();
     				$arrFilesSub = $objFilesystem->getCompleteList($this->strFolder."/".$strFolder, array(), array(), array(".", ".."));
     				if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
-    					$strAction .= $this->objToolkit->listDeleteButton($strFolder, $this->getText("ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strFolder));
+    					$strAction .= $this->objToolkit->listDeleteButton($strFolder, $this->getLang("ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strFolder));
     				}
     				else
-    					$strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loeschen_fehler_l")));
+    					$strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getLang("ordner_loeschen_fehler_l")));
 
                     $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolder, getImageAdmin("icon_folderOpen.gif"), $strAction, $intI++, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""));
 				}
@@ -317,9 +317,9 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             $arrHeader = array();
             $arrHeader[0] = "&nbsp;";
             $arrHeader[1] = "&nbsp;";
-            $arrHeader[2] = $this->getText("datei_groesse");
-            $arrHeader[3] = $this->getText("datei_erstell");
-            $arrHeader[4] = $this->getText("datei_bearbeit");
+            $arrHeader[2] = $this->getLang("datei_groesse");
+            $arrHeader[3] = $this->getLang("datei_erstell");
+            $arrHeader[4] = $this->getLang("datei_bearbeit");
             $arrHeader[5] = "";
             $arrFilesTemplate = array();
 	  		if(count($arrFiles["files"]) > 0) {
@@ -337,12 +337,12 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
 					$strActions = "";
 					if(!$bitImage)
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getLang("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 		   			else
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminDialog($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_crop.gif"));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminDialog($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getLang("datei_oeffnen"), "icon_crop.gif"));
 
-		   			$strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_renameFile_dialog('".$arrOneFile["filename"]."');\"", $this->getText("datei_umbenennen"), $this->getText("datei_umbenennen"), "icon_pencil.gif"));
-		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"]));
+		   			$strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_renameFile_dialog('".$arrOneFile["filename"]."');\"", $this->getLang("datei_umbenennen"), $this->getLang("datei_umbenennen"), "icon_pencil.gif"));
+		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"], $this->getLang("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"]));
 
 		   			// if an image, attach a thumbnail-tooltip
 		   			if ($bitImage) {
@@ -361,7 +361,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 	  		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
 		}
 		else
-			$this->getText("commons_error_permissions");
+			$this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -402,7 +402,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                 if($objOneRepo->rightView()) {
                     $strActions = "";
                     if($objOneRepo->rightView())
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
 
                     $strReturn .= $this->objToolkit->simpleAdminList($objOneRepo, $strActions, $intI++);
                 }
@@ -412,7 +412,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                 $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
 
             if(count($arrObjRepos) == 0)
-                $strReturn .= $this->getText("liste_leer");
+                $strReturn .= $this->getLang("liste_leer");
 		}
 		else {
             $objRepo = new class_module_filemanager_repo($this->getSystemid());
@@ -429,7 +429,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                 $strActions = "";
                 if($strAddonAction == "") {
                     $strActions .= $this->generateNewFolderDialogCode();
-                    $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
+                    $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "inputSubmit");
                     $strActions .= $this->actionUploadFileInternal();
                 }
     		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
@@ -442,9 +442,9 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
     		   	$arrInfobox["folders"] = $arrFiles["nrFolders"];
     		   	$arrInfobox["actions"] = $strActions;
 
-    		   	$arrInfobox["foldertitle"] = $this->getText("commons_path");
-    		   	$arrInfobox["nrfilestitle"] = $this->getText("nrfilestitle");
-    		   	$arrInfobox["nrfoldertitle"] = $this->getText("nrfoldertitle");
+    		   	$arrInfobox["foldertitle"] = $this->getLang("commons_path");
+    		   	$arrInfobox["nrfilestitle"] = $this->getLang("nrfilestitle");
+    		   	$arrInfobox["nrfoldertitle"] = $this->getLang("nrfoldertitle");
     		   	$strReturn .= $this->objToolkit->getFilemanagerInfoBox($arrInfobox);
 
 
@@ -457,16 +457,16 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
           		if($this->strFolderOld != "") {
           			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
           			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
+                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
           		}
           		else {
           		    //Link up to repo list
-          		    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
+          		    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
           		}
         		if(count($arrFiles["folders"]) > 0) {
         			foreach($arrFiles["folders"] as $strFolder) {
                             $strAction = "";
-        	   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
+        	   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
         	   			$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolder, getImageAdmin("icon_folderOpen.gif"), $strAction, $intI++, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""));
         			}
         		}
@@ -503,7 +503,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                         } else {
                             $strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
                         }
-        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
+        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
 
 			   			// if an image, attach a thumbnail-tooltip
 			   			if ($bitImage) {
@@ -520,7 +520,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
           		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
     		}
     		else
-    			$this->getText("commons_error_permissions");
+    			$this->getLang("commons_error_permissions");
 		}
 
 		return $strReturn;
@@ -575,8 +575,8 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 		$arrContent = $objFilesystem->getCompleteList($strFolder, $arrSuffix, $arrExclude, $arrExcludeFolder, $bitFolder, false);
 
 		$strReturn .= $this->objToolkit->listHeader();
-		$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("commons_path"), "", $strFolder, 1);
-		$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText("ordner_anz"), "", $arrContent["nrFolders"], 1);
+		$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("commons_path"), "", $strFolder, 1);
+		$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("ordner_anz"), "", $arrContent["nrFolders"], 1);
 		$strReturn .= $this->objToolkit->listFooter();
 		$strReturn .= $this->objToolkit->divider();
 
@@ -587,7 +587,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 		$bitHit = false;
 		if(!in_array($strFolder, $arrFolderStart) && $bitHit == false) {
 			$strReturn .= $this->objToolkit->listHeader();
-			$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFile."&form_element=".$strFormElement, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif"));
+			$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFile."&form_element=".$strFormElement, $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif"));
 			$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
 			$bitHit = true;
 		}
@@ -596,8 +596,8 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 				$strReturn .= $this->objToolkit->listHeader();
 			$bitHit = true;
 			foreach($arrContent["folders"] as $strFolderCur) {
-				$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".$strFolder."/".$strFolderCur."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFile."&form_element=".$strFormElement, $this->getText("ordner_oeffnen"), $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
-				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
+				$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".$strFolder."/".$strFolderCur."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFile."&form_element=".$strFormElement, $this->getLang("ordner_oeffnen"), $this->getLang("ordner_oeffnen"), "icon_folderActionOpen.gif"));
+				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
 			}
 		}
@@ -619,7 +619,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 		if($objCommon->rightDelete()) {
 			$objFilesystem = new class_filesystem();
 			if(!$objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
-				$strReturn .= $this->getText("datei_loeschen_fehler");
+				$strReturn .= $this->getLang("datei_loeschen_fehler");
             else {
                 if($this->getParam("galleryId") != "")
                     $this->adminReload(getLinkAdminHref("gallery", "showGallery", "systemid=".$this->getParam("galleryId")."&resync=true"));
@@ -629,7 +629,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -647,12 +647,12 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 			$objFilesystem = new class_filesystem();
 
 			if(!$objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
-				$strReturn .= $this->getText("ordner_loeschen_fehler");
+				$strReturn .= $this->getLang("ordner_loeschen_fehler");
             else
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -666,13 +666,13 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
         $strReturn = "";
 
         //Build code for create-dialog
-		$strDialog = $this->objToolkit->formInputText("folderName", $this->getText("ordner_name"));
+		$strDialog = $this->objToolkit->formInputText("folderName", $this->getLang("ordner_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
                         function init_fm_newfolder_dialog() {
-                            jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader")."');
+                            jsDialog_1.setTitle('".$this->getLang("ordner_anlegen_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
-                                                  '".$this->getText("commons_create_folder")."',
+                                                  '".$this->getLang("commons_create_folder")."',
                                                   'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
                                     jsDialog_1.init(); }\n
                       ";
@@ -691,14 +691,14 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
         $strReturn = "";
 
         //Build code for create-dialog
-		$strDialog = $this->objToolkit->formInputText("fileName", $this->getText("datei_name"));
+		$strDialog = $this->objToolkit->formInputText("fileName", $this->getLang("datei_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
 
                         function init_fm_renameFile_dialog(strFilename) {
-                            jsDialog_1.setTitle('".$this->getText("datei_umbenennen")."');
+                            jsDialog_1.setTitle('".$this->getLang("datei_umbenennen")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
-                                                  '".$this->getText("rename")."',
+                                                  '".$this->getLang("rename")."',
                                                   'javascript:KAJONA.admin.filemanager.renameFile(\'fileName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \''+strFilename+'\', \'\', \'\' ); jsDialog_1.hide();');
                                                                                        //strInputId,          strRepoId,                     strRepoFolder, strOldName, strSourceModule, strSourceAction
                                     jsDialog_1.init();
@@ -731,7 +731,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 			$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $this->strFolderOld);
 
-			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload", $this->getText("filemanager_upload"), $objRepo->getStrUploadFilter(), true, true);
+			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload", $this->getLang("filemanager_upload"), $objRepo->getStrUploadFilter(), true, true);
 			$strReturn .= $this->objToolkit->formClose();
 
 			if($this->getParam("datei_upload_final") != "") {
@@ -745,21 +745,21 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                 $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
                 if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                        $strReturn .= $this->getText("upload_erfolg");
+                        $strReturn .= $this->getLang("upload_erfolg");
 
                         class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
                     }
                     else
-                        $strReturn .= $this->getText("upload_fehler");
+                        $strReturn .= $this->getLang("upload_fehler");
                 }
                 else {
                     @unlink($arrSource["tmp_name"]);
-                    $strReturn .= $this->getText("upload_fehler_filter");
+                    $strReturn .= $this->getLang("upload_fehler_filter");
                 }
 			}
 		}
 		else
-			$strReturn = $this->getText("commons_error_permissions");
+			$strReturn = $this->getLang("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -804,17 +804,17 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
 			$arrTemplate["file_name"] = $arrDetails["filename"];
 			$arrTemplate["file_path"] = $arrDetails["filepath"];
-			$arrTemplate["file_path_title"] = $this->getText("commons_path");
+			$arrTemplate["file_path_title"] = $this->getLang("commons_path");
 
 			$arrSize = getimagesize($strFile);
 			$arrTemplate["file_dimensions"] = $arrSize[0]." x ".$arrSize[1];
-            $arrTemplate["file_dimensions_title"] = $this->getText("bild_groesse");
+            $arrTemplate["file_dimensions_title"] = $this->getLang("bild_groesse");
 
             $arrTemplate["file_size"] = bytesToString($arrDetails["filesize"]);
-            $arrTemplate["file_size_title"] = $this->getText("datei_groesse");
+            $arrTemplate["file_size_title"] = $this->getLang("datei_groesse");
 
             $arrTemplate["file_lastedit"] = timeToString($arrDetails["filechange"]);
-            $arrTemplate["file_lastedit_title"] = $this->getText("datei_bearbeit");
+            $arrTemplate["file_lastedit_title"] = $this->getLang("datei_bearbeit");
 
 			//Generate Dimensions
 			$intHeight = $arrSize[1];
@@ -831,12 +831,12 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
             $arrTemplate["file_actions"] = "";
 
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showRealSize(); return false;\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showPreview(); return false;\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(90); return false;\"", "", $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(270); return false;\"", "", $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showCropping(); return false;\"", "", $this->getText("cropImage"), "icon_crop.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.saveCropping(); return false;\"", "", $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showPreview(); return false;\"", "", $this->getLang("showPreview"), "icon_zoom_out.gif"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right.gif"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
 
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
@@ -850,9 +850,9 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
                 var fm_repo_id = '".$this->getSystemid()."';
                 var fm_file = '".$strPlainImage."' ;
                 var fm_folder = '".$this->getParam("folder")."';
-                var fm_warning_unsavedHint = '".$this->getText("cropWarningUnsavedHint")."';
+                var fm_warning_unsavedHint = '".$this->getLang("cropWarningUnsavedHint")."';
 
-                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getText("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:KAJONA.admin.filemanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
+                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:KAJONA.admin.filemanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 

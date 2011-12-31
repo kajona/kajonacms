@@ -46,7 +46,7 @@ abstract class class_root {
 	 *
 	 * @var class_lang
 	 */
-	private   $objText = null;				//Object managing the textfiles
+	private   $objLang = null;				//Object managing the langfiles
 
 	private   $strAction;			        //current action to perform (GET/POST)
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
@@ -155,7 +155,7 @@ abstract class class_root {
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
 		$this->objSession = $objCarrier->getObjSession();
-   	    $this->objText = $objCarrier->getObjLang();
+   	    $this->objLang = $objCarrier->getObjLang();
 		$this->objRights = $objCarrier->getObjRights();
 
 		//And keep the action
@@ -1081,15 +1081,14 @@ abstract class class_root {
 	 *
 	 * @param string $strName
 	 * @param string $strModule
-	 * @param string $strArea
 	 * @return string
 	 */
-	public function getText($strName, $strModule = "", $strArea = "") {
+	public function getLang($strName, $strModule = "") {
 		if($strModule == "")
 			$strModule = $this->arrModule["modul"];
 
 		//Now we have to ask the Text-Object to return the text
-		return $this->objText->getText($strName, $strModule, $strArea);
+		return $this->objLang->getLang($strName, $strModule);
 	}
 
 	/**
@@ -1097,8 +1096,8 @@ abstract class class_root {
 	 *
 	 * @return obj
 	 */
-	protected function getObjText() {
-	    return $this->objText;
+	protected function getObjLang() {
+	    return $this->objLang;
 	}
 
 

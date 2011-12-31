@@ -39,7 +39,7 @@ abstract class class_adminwidget {
      *
      * @var class_lang
      */
-    private $objTexte;
+    private $objLang;
 
     public function __construct($arrModule = array()) {
         $this->arrModule["p_name"] 				= "module_system";
@@ -51,7 +51,7 @@ abstract class class_adminwidget {
 
     	$this->objDb = class_carrier::getInstance()->getObjDB();
     	$this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-    	$this->objTexte = class_carrier::getInstance()->getObjLang();
+    	$this->objLang = class_carrier::getInstance()->getObjLang();
 
     }
 
@@ -137,8 +137,8 @@ abstract class class_adminwidget {
      * @param string $strKey
      * @return string
      */
-    public final function getText($strKey) {
-        return $this->objTexte->getLang($strKey, "adminwidget");
+    public final function getLang($strKey) {
+        return $this->objLang->getLang($strKey, "adminwidget");
     }
 
     /**

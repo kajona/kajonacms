@@ -33,21 +33,21 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0",  $this->getText("modul_rechte_root"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0",  $this->getLang("modul_rechte_root"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-  	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("module_liste"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getText("system_info"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getText("systemTasks"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi"));
+  	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("module_liste"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getLang("system_info"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getLang("system_settings"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getLang("systemTasks"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getLang("systemlog"), "", "", true, "adminnavi"));
         if(_system_changehistory_enabled_ != "false")
-            $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "", $this->getText("changelog"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getText("aspects"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getText("system_sessions"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getText("updatecheck"), "", "", true, "adminnavi"));
+            $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "", $this->getLang("changelog"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getLang("aspects"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("system_sessions"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getLang("updatecheck"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-		$arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getText("about"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getLang("about"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
@@ -135,15 +135,15 @@ class class_module_system_admin extends class_admin_simple implements interface_
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_system_module) {
             $arrReturn = array();
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect.gif"));
 
             if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
                 if($objListEntry->getStrName() == "system")
-                    $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
+                    $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled.gif"));
                 else if($objListEntry->getStatus() == 0)
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("modul_status_disabled"), "icon_disabled.gif"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled.gif"));
                 else
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("modul_status_enabled"), "icon_enabled.gif"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled.gif"));
             }
 
             return $arrReturn;
@@ -172,7 +172,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             return "";
 
         if($objListEntry instanceof class_module_system_aspect && $objListEntry->rightDelete())
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getText("aspect_delete_question"), getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("aspect_delete_question"), getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
 
         return parent::renderDeleteAction($objListEntry);
     }
@@ -182,7 +182,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             return "";
 
         if($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit())
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new.gif"));
 
         return parent::getNewEntryAction($strListIdentifier);
     }
@@ -204,7 +204,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $strReturn .= $this->objToolkit->formInputCheckbox("aspect_".$objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
 
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-        $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();
 
         return $strReturn;
@@ -244,44 +244,44 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         $strPHP = $this->objToolkit->listHeader();
         foreach($arrPHP as $strKey => $strValue) {
-            $strPHP .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
+            $strPHP .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
         }
         $strPHP .= $this->objToolkit->listFooter();
         //And put it into a fieldset
-        $strPHP = $this->objToolkit->getFieldset($this->getText("php"), $strPHP);
+        $strPHP = $this->objToolkit->getFieldset($this->getLang("php"), $strPHP);
 
         //Webserver
         $arrWebserver = $objCommon->getWebserverInfos();
         $intI = 0;
         $strServer = $this->objToolkit->listHeader();
         foreach($arrWebserver as $strKey => $strValue) {
-            $strServer .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
+            $strServer .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
         }
         $strServer .= $this->objToolkit->listFooter();
         //And put it into a fieldset
-        $strServer = $this->objToolkit->getFieldset($this->getText("server"), $strServer);
+        $strServer = $this->objToolkit->getFieldset($this->getLang("server"), $strServer);
 
         //database
         $arrDatabase = $objCommon->getDatabaseInfos();
         $intI = 0;
         $strDB = $this->objToolkit->listHeader();
         foreach($arrDatabase as $strKey => $strValue) {
-            $strDB .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
+            $strDB .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
         }
         $strDB .= $this->objToolkit->listFooter();
         //And put it into a fieldset
-        $strDB = $this->objToolkit->getFieldset($this->getText("db"), $strDB);
+        $strDB = $this->objToolkit->getFieldset($this->getLang("db"), $strDB);
 
         //GD-Lib info
         $arrGd = $objCommon->getGDInfos();
         $intI = 0;
         $strGD = $this->objToolkit->listHeader();
         foreach($arrGd as $strKey => $strValue) {
-            $strGD .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getText($strKey), "", "", $intI++, $strValue);
+            $strGD .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
         }
         $strGD .= $this->objToolkit->listFooter();
         //And put it into a fieldset
-        $strGD = $this->objToolkit->getFieldset($this->getText("gd"), $strGD);
+        $strGD = $this->objToolkit->getFieldset($this->getLang("gd"), $strGD);
 
         $strReturn .= $strPHP.$strServer.$strDB.$strGD;
 		return $strReturn;
@@ -301,7 +301,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         //Check for needed rights
         if($this->getParam("save") != "true") {
             //Create a warning before doing s.th.
-            $strReturn .= $this->objToolkit->warningBox($this->getText("warnung_settings"));
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("warnung_settings"));
 
             $arrSettings = class_module_system_setting::getAllConfigValues();
             $objCurrentModule = null;
@@ -316,9 +316,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
                             $strFieldset = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "systemSettings"));
                             $strFieldset .= $strRows;
                             $strFieldset .= $this->objToolkit->formInputHidden("save", "true");
-                            $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                            $strFieldset .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                             $strFieldset .= $this->objToolkit->formClose();
-                            $strReturn .= $this->objToolkit->getFieldset($this->getText("modul_titel", $objCurrentModule->getStrName()), $strFieldset);
+                            $strReturn .= $this->objToolkit->getFieldset($this->getLang("modul_titel", $objCurrentModule->getStrName()), $strFieldset);
                         }
                         $strRows = "";
                         $objCurrentModule = $objTemp;
@@ -326,32 +326,32 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 }
                 //Build the rows
                 //Print a help-text?
-                $strHelper = $this->getText($objOneSetting->getStrName()."hint", $objCurrentModule->getStrName());
+                $strHelper = $this->getLang($objOneSetting->getStrName()."hint", $objCurrentModule->getStrName());
                 if($strHelper != "!".$objOneSetting->getStrName()."hint!")
                     $strRows .= $this->objToolkit->formTextRow($strHelper);
 
                 //The input element itself
                 if($objOneSetting->getIntType() ==  0) {
                     $arrDD = array();
-                    $arrDD["true"] = $this->getText("commons_yes");
-                    $arrDD["false"] = $this->getText("commons_no");
-                    $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                    $arrDD["true"] = $this->getLang("commons_yes");
+                    $arrDD["false"] = $this->getLang("commons_no");
+                    $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                 }
                 elseif ($objOneSetting->getIntType() == 3) {
-                    $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                    $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                 }
                 else {
-                    $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                    $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                 }
             }
             //Build a form to return -> include the last module
             $strFieldset = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "systemSettings"));
             $strFieldset .= $strRows;
             $strFieldset .= $this->objToolkit->formInputHidden("save", "true");
-            $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strFieldset .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strFieldset .= $this->objToolkit->formClose();
 
-            $strReturn .= $this->objToolkit->getFieldset($this->getText("modul_titel", $objCurrentModule->getStrName()), $strFieldset);
+            $strReturn .= $this->objToolkit->getFieldset($this->getLang("modul_titel", $objCurrentModule->getStrName()), $strFieldset);
             $strRows = "";
         }
         else {
@@ -362,7 +362,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $objSetting->setStrValue($strValue);
                 $objSetting->updateObjectToDb();
             }
-            $strReturn .= $this->objToolkit->warningBox($this->getText("settings_updated"));
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("settings_updated"));
         }
 
 		return $strReturn;
@@ -402,7 +402,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                                    KAJONA.admin.loader.loadDialogBase( function() {
                                    KAJONA.admin.loader.loadAjaxBase( function() {
                                        KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-                                       KAJONA.admin.systemtask.setName('".$this->getText("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
+                                       KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
                                     })
                                  })   ;
                                 </script>";
@@ -441,7 +441,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $strGroupName = "default";
 
 
-            $strReturn .= $this->objToolkit->formHeadline($this->getText("systemtask_group_".$strGroupName));
+            $strReturn .= $this->objToolkit->formHeadline($this->getLang("systemtask_group_".$strGroupName));
             $strReturn .= $this->objToolkit->listHeader();
             foreach($arrTasks as $objOneTask) {
 
@@ -450,13 +450,13 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 if($objOneTask->generateAdminForm() != "") {
                     $strLink = getLinkAdmin("system", "systemTasks", "&task=".$objOneTask->getStrInternalTaskName(),
                                                                                       $objOneTask->getStrTaskname(),
-                                                                                      $this->getText("systemtask_run"),
+                                                                                      $this->getLang("systemtask_run"),
                                                                                       "icon_accept.gif");
                 }
                 else {
-                    $strLink = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getText("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
+                    $strLink = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
                                                                                       "",
-                                                                                      $this->getText("systemtask_run"),
+                                                                                      $this->getLang("systemtask_run"),
                                                                                       "icon_accept.gif");
                 }
 
@@ -474,11 +474,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn .= $this->objToolkit->jsDialog(0);
 
         //include js-code & stuff to handle executions
-        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" /><br />";
+        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$this->getLang("systemtask_cancel_execution")."\" class=\"inputSubmit\" /><br />";
         $strReturn .= "<script type=\"text/javascript\">
-            var KAJONA_SYSTEMTASK_TITLE = '".$this->getText("systemtask_dialog_title")."';
-            var KAJONA_SYSTEMTASK_TITLE_DONE = '".$this->getText("systemtask_dialog_title_done")."';
-            var KAJONA_SYSTEMTASK_CLOSE = '".$this->getText("systemtask_close_dialog")."';
+            var KAJONA_SYSTEMTASK_TITLE = '".$this->getLang("systemtask_dialog_title")."';
+            var KAJONA_SYSTEMTASK_TITLE_DONE = '".$this->getLang("systemtask_dialog_title_done")."';
+            var KAJONA_SYSTEMTASK_CLOSE = '".$this->getLang("systemtask_close_dialog")."';
             var kajonaSystemtaskDialogContent = '".$strDialogContent."';
             </script>";
         $strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
@@ -519,10 +519,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrData = array();
         $arrHeader = array();
         $arrHeader[0] = "";
-        $arrHeader[1] = $this->getText("session_username");
-        $arrHeader[2] = $this->getText("session_valid");
-        $arrHeader[3] = $this->getText("session_status");
-        $arrHeader[4] = $this->getText("session_activity");
+        $arrHeader[1] = $this->getLang("session_username");
+        $arrHeader[2] = $this->getLang("session_valid");
+        $arrHeader[3] = $this->getLang("session_status");
+        $arrHeader[4] = $this->getLang("session_activity");
         $arrHeader[5] = "";
         foreach ($arrSessions as $objOneSession) {
             $arrRowData = array();
@@ -535,9 +535,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $arrRowData[1] = $strUsername;
             $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                $arrRowData[3] = $this->getText("session_loggedin");
+                $arrRowData[3] = $this->getLang("session_loggedin");
             else
-                $arrRowData[3] = $this->getText("session_loggedout");
+                $arrRowData[3] = $this->getLang("session_loggedout");
 
             //find out what the user is doing...
             $strLastUrl = $objOneSession->getStrLasturl();
@@ -546,7 +546,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $strActivity = "";
 
             if(uniStrpos($strLastUrl, "admin=1") !== false) {
-                $strActivity .= $this->getText("session_admin");
+                $strActivity .= $this->getLang("session_admin");
                 foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                     $arrUrlParam = explode("=", $strOneParam);
                     if($arrUrlParam[0] == "module")
@@ -554,7 +554,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 }
             }
             else {
-                $strActivity .= $this->getText("session_portal");
+                $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
                     $strActivity .= _pages_indexpage_;
                 else {
@@ -564,15 +564,15 @@ class class_module_system_admin extends class_admin_simple implements interface_
                             $strActivity .= $arrUrlParam[1];
                     }
 
-                    if($strActivity == $this->getText("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
-                        $strActivity .= $this->getText("session_portal_imagegeneration");
+                    if($strActivity == $this->getLang("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                        $strActivity .= $this->getLang("session_portal_imagegeneration");
                     }
                 }
             }
 
             $arrRowData[4] = $strActivity;
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getText("session_logout"), "icon_ton.gif");
+                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_ton.gif");
             else
                 $arrRowData[5] = getImageAdmin("icon_tonDisabled.gif");
             $arrData[] = $arrRowData;
@@ -611,7 +611,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 25);
         }
         else
-            $strReturn .= $this->getText("log_empty");
+            $strReturn .= $this->getLang("log_empty");
 
         if($strPhpLogContent != "") {
             $arrLogEntries = explode("\r", $strPhpLogContent);
@@ -639,7 +639,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn = "";
         //check needed rights - done twice since public
         if(!class_carrier::getInstance()->getObjRights()->validatePermissionString("right3", $this->getObjModule()))
-            return $this->getText("commons_error_permissions");
+            return $this->getLang("commons_error_permissions");
 
         //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
@@ -652,16 +652,16 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         $arrData = array();
         $arrHeader = array();
-        $arrHeader[] = $this->getText("commons_date");
-        $arrHeader[] = $this->getText("change_user");
+        $arrHeader[] = $this->getLang("commons_date");
+        $arrHeader[] = $this->getLang("change_user");
         if($strSystemid == "")
-            $arrHeader[] = $this->getText("change_module");
+            $arrHeader[] = $this->getLang("change_module");
         if($strSystemid == "")
-            $arrHeader[] = $this->getText("change_record");
-        $arrHeader[] = $this->getText("change_action");
-        $arrHeader[] = $this->getText("change_property");
-        $arrHeader[] = $this->getText("change_oldvalue");
-        $arrHeader[] = $this->getText("change_newvalue");
+            $arrHeader[] = $this->getLang("change_record");
+        $arrHeader[] = $this->getLang("change_action");
+        $arrHeader[] = $this->getLang("change_property");
+        $arrHeader[] = $this->getLang("change_oldvalue");
+        $arrHeader[] = $this->getLang("change_newvalue");
 
         foreach ($arrLogs as /** @var $objOneEntry class_changelog_container */ $objOneEntry) {
             $arrRowData = array();
@@ -723,7 +723,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         }
 
         if($strXmlVersionList === false) {
-            return $this->objToolkit->warningBox($this->getText("update_nofilefound"));
+            return $this->objToolkit->warningBox($this->getLang("update_nofilefound"));
         }
 
         try {
@@ -738,9 +738,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 //Get all installed modules
                 $arrModules = class_module_system_module::getAllModules();
                 $arrHeader = array();
-                $arrHeader[] = $this->getText("update_module_name");
-                $arrHeader[] = $this->getText("update_module_localversion");
-                $arrHeader[] = $this->getText("update_module_remoteversion");
+                $arrHeader[] = $this->getLang("update_module_name");
+                $arrHeader[] = $this->getLang("update_module_localversion");
+                $arrHeader[] = $this->getLang("update_module_remoteversion");
                 $arrHeader[] = "";
 
                 $arrRows = array();
@@ -751,7 +751,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                     $arrRows[$intRowCounter][] = $objOneModule->getStrVersion();
                     $arrRows[$intRowCounter][] = (key_exists($objOneModule->getStrName(), $arrCleanModules) ? $arrCleanModules[$objOneModule->getStrName()] : "n.a." );
                     if(key_exists($objOneModule->getStrName(), $arrCleanModules) && version_compare($objOneModule->getStrVersion(), $arrCleanModules[$objOneModule->getStrName()]) < 0)
-                        $arrRows[$intRowCounter][] = $this->getText("update_available");
+                        $arrRows[$intRowCounter][] = $this->getLang("update_available");
                     else
                         $arrRows[$intRowCounter][] = "";
                     $intRowCounter++;
@@ -760,11 +760,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
             }
             else
-                $strReturn .= $this->objToolkit->warningBox($this->getText("update_invalidXML"));
+                $strReturn .= $this->objToolkit->warningBox($this->getLang("update_invalidXML"));
 
         }
         catch (class_exception $objException) {
-            $strReturn .= $this->objToolkit->warningBox($this->getText("update_nodom"));
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("update_nodom"));
         }
 
         return $strReturn;
@@ -805,14 +805,14 @@ class class_module_system_admin extends class_admin_simple implements interface_
 	 */
 	protected function actionNewAspect($strMode = "new") {
 	    $strReturn = "";
-	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
+	    $arrDefault = array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes"));
 
         if($strMode == "new") {
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
-            $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("commons_name"), $this->getParam("aspect_name"));
-            $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $this->getParam("aspect_default"));
+            $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getLang("commons_name"), $this->getParam("aspect_name"));
+            $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getLang("aspect_default"), $this->getParam("aspect_default"));
             $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
@@ -821,17 +821,17 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $objAspect = new class_module_system_aspect($this->getSystemid());
             if($objAspect->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
-                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("commons_name"), $objAspect->getStrName());
-                $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $objAspect->getBitDefault());
+                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getLang("commons_name"), $objAspect->getStrName());
+                $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getLang("aspect_default"), $objAspect->getBitDefault());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objAspect->getSystemid());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
 
                 $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
             }
             else
-			    $strReturn = $this->getText("commons_error_permissions");
+			    $strReturn = $this->getLang("commons_error_permissions");
 
         }
         return $strReturn;
@@ -878,7 +878,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
         }
         else
-		    return $this->getText("commons_error_permissions");
+		    return $this->getLang("commons_error_permissions");
 	}
 
 
@@ -891,11 +891,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionAbout() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("about"));
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part1"));
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part2"));
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part3"));
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part4"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part1"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part3"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part4"));
         return $strReturn;
     }
 
@@ -915,11 +915,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendMail"));
         $strReturn .= $this->objToolkit->getValidationErrors($this, "sendMail");
-        $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getText("mail_recipient"), $this->getParam("mail_recipient"));
-        $strReturn .= $this->objToolkit->formInputText("mail_cc", $this->getText("mail_cc"), $this->getParam("mail_cc"));
-        $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getText("mail_subject"), $this->getParam("mail_subject"));
-        $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getText("mail_body"), $this->getParam("mail_body"), "inputTextareaLarge");
-        $strReturn .= $this->objToolkit->formInputSubmit($this->getText("send"));
+        $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getLang("mail_recipient"), $this->getParam("mail_recipient"));
+        $strReturn .= $this->objToolkit->formInputText("mail_cc", $this->getLang("mail_cc"), $this->getParam("mail_cc"));
+        $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getLang("mail_subject"), $this->getParam("mail_subject"));
+        $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getLang("mail_body"), $this->getParam("mail_body"), "inputTextareaLarge");
+        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("send"));
         $strReturn .= $this->objToolkit->formClose();
 
         $strReturn .= $this->objToolkit->setBrowserFocus("mail_body");
@@ -961,9 +961,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objEmail->setText($this->getParam("mail_body"));
 
         if($objEmail->sendMail())
-            return $this->getText("mail_send_success");
+            return $this->getLang("mail_send_success");
         else
-            return $this->getText("mail_send_success");
+            return $this->getLang("mail_send_success");
     }
 
 

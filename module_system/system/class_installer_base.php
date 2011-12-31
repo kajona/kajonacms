@@ -77,7 +77,7 @@ abstract class class_installer_base extends class_root {
         }
 
         if($strNeeded != "") {
-            return $this->getText("installer_modules_needed", "system").substr($strNeeded, 0, -2);
+            return $this->getLang("installer_modules_needed", "system").substr($strNeeded, 0, -2);
         }
 
         //check, if a min version of the system is needed
@@ -85,7 +85,7 @@ abstract class class_installer_base extends class_root {
             //the systems version to compare to
             $objSystem = class_module_system_module::getModuleByName("system");
             if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-                return $this->getText("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
+                return $this->getLang("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
             }
         }
 
@@ -104,12 +104,12 @@ abstract class class_installer_base extends class_root {
             //updates available?
             if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
                 if($this->arrModule["name"] == "samplecontent")
-                    return "<a href=\""._webpath_."/installer.php?step=samplecontent&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                    return "<a href=\""._webpath_."/installer.php?step=samplecontent&update=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
                 else
-                    return "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                    return "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
             }
             elseif(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "=="))
-                return $this->getText("installer_versioninstalled", "system").$objModule->getStrVersion();
+                return $this->getLang("installer_versioninstalled", "system").$objModule->getStrVersion();
 
         }
         return "";
@@ -168,7 +168,7 @@ abstract class class_installer_base extends class_root {
 		}
 
 		if($strNeeded != "") {
-		    $strReturn .= $this->getText("installer_modules_needed", "system").substr($strNeeded, 0, -2);
+		    $strReturn .= $this->getLang("installer_modules_needed", "system").substr($strNeeded, 0, -2);
 		    return $strReturn."<br />";
 		}
 
@@ -177,7 +177,7 @@ abstract class class_installer_base extends class_root {
 		    //the systems version to compare to
 		    $objSystem = class_module_system_module::getModuleByName("system");
 		    if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-		        return $strReturn.$this->getText("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
+		        return $strReturn.$this->getLang("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
 		    }
 		}
 
@@ -193,15 +193,15 @@ abstract class class_installer_base extends class_root {
 		if($objModule == null) {
 		    //install link
 		    if($this->arrModule["name"] == "samplecontent")
-		        $strReturn .= "<a href=\""._webpath_."/installer.php?step=samplecontent&install=installer_".$this->arrModule["name"]."\">".$this->getText("installer_install", "system")."</a>";
+		        $strReturn .= "<a href=\""._webpath_."/installer.php?step=samplecontent&install=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_install", "system")."</a>";
 		    else
-		        $strReturn .= "<a href=\""._webpath_."/installer.php?step=install&install=installer_".$this->arrModule["name"]."\">".$this->getText("installer_install", "system")."</a>";
+		        $strReturn .= "<a href=\""._webpath_."/installer.php?step=install&install=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_install", "system")."</a>";
 		    return $strReturn."<br />";
 		}
 		else {
 		    //updates available?
 		    if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
-                $strReturn .= "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                $strReturn .= "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
             }
 
 			return $strReturn."<br />";
@@ -284,7 +284,7 @@ abstract class class_installer_base extends class_root {
             //the systems version to compare to
             $objSystem = class_module_system_module::getModuleByName("system");
             if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-                return $this->getText("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
+                return $this->getLang("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
             }
         }
 
@@ -305,7 +305,7 @@ abstract class class_installer_base extends class_root {
         }
 
         if($strNeeded != "") {
-            return $this->getText("installer_modules_needed", "system").substr($strNeeded, 0, -2);
+            return $this->getLang("installer_modules_needed", "system").substr($strNeeded, 0, -2);
         }
 
         if($objModule != null && $this->hasPostInstalls()) {
@@ -313,12 +313,12 @@ abstract class class_installer_base extends class_root {
             return "";
         }
         else if($objModule == null) {
-            return $this->getText("installer_module_notinstalled", "system");
+            return $this->getLang("installer_module_notinstalled", "system");
         }
 
         //Update-Link?
         if($this->hasPostUpdates()) {
-            return "<a href=\""._webpath_."/installer.php?step=postInstall&postUpdate=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system").$this->arrModule["version"]."</a>";
+            return "<a href=\""._webpath_."/installer.php?step=postInstall&postUpdate=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]."</a>";
         }
 
         return "";

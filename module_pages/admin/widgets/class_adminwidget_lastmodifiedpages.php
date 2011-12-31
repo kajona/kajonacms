@@ -32,7 +32,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputText("nrofrows", $this->getText("syslog_nrofrows"), $this->getFieldValue("nrofrows"));
+        $strReturn .= $this->objToolkit->formInputText("nrofrows", $this->getLang("syslog_nrofrows"), $this->getFieldValue("nrofrows"));
         return $strReturn;
     }
 
@@ -68,7 +68,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
      * @return string
      */
     public function getWidgetName() {
-        return $this->getText("lmpages_name");
+        return $this->getLang("lmpages_name");
     }
 
 }

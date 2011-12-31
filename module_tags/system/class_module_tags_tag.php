@@ -56,7 +56,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return count($this->getListOfAssignments())." ".$this->getText("tag_assignments", "tags");
+        return count($this->getListOfAssignments())." ".$this->getLang("tag_assignments", "tags");
     }
 
     /**

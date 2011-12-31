@@ -47,7 +47,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getText("systemtask_dbexport_name");
+    	return $this->getLang("systemtask_dbexport_name");
     }
 
     /**
@@ -61,9 +61,9 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
             $arrToExclude = $this->arrTablesToExlucde;
 
     	if(class_carrier::getInstance()->getObjDB()->dumpDb($arrToExclude))
-            return $this->objToolkit->getTextRow($this->getText("systemtask_dbexport_success"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_success"));
         else
-            return $this->objToolkit->getTextRow($this->getText("systemtask_dbexport_error"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_error"));
     }
 
     /**
@@ -72,8 +72,8 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
      */
     public function getAdminForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formTextRow($this->getText("systemtask_dbexport_exclude_intro"));
-        $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes")), $this->getText("systemtask_dbexport_excludetitle") );
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("systemtask_dbexport_exclude_intro"));
+        $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes")), $this->getLang("systemtask_dbexport_excludetitle") );
     	return $strReturn;
     }
 

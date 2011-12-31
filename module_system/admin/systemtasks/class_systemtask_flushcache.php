@@ -43,7 +43,7 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
      * @return string
      */
     public function getStrTaskName() {
-        return $this->getText("systemtask_flushcache_name");
+        return $this->getLang("systemtask_flushcache_name");
     }
 
     /**
@@ -58,9 +58,9 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
         $objCachebuster->updateObjectToDb();
 
         if(class_cache::flushCache($this->getParam("cacheSource")))
-            return $this->objToolkit->getTextRow($this->getText("systemtask_flushcache_success"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
         else
-            return $this->objToolkit->getTextRow($this->getText("systemtask_flushcache_error"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_error"));
     }
 
     /**
@@ -72,11 +72,11 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
         //show dropdown to select db-dump
         $arrSources = class_cache::getCacheSources();
         $arrOptions = array();
-        $arrOptions[""] = $this->getText("systemtask_flushcache_all");
+        $arrOptions[""] = $this->getLang("systemtask_flushcache_all");
         foreach($arrSources as $strOneSource)
             $arrOptions[$strOneSource] = $strOneSource;
 
-        $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getText("systemtask_cacheSource_source"));
+        $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
 
         return $strReturn;
     }

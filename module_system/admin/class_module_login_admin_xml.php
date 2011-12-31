@@ -41,11 +41,11 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
 		        $this->objSession->logout();
 		    }
 
-			return "<message><success>".xmlSafeString($this->getText("login_xml_succeess", "system"))."</success></message>";
+			return "<message><success>".xmlSafeString($this->getLang("login_xml_succeess", "system"))."</success></message>";
 		}
 		else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-			return "<message><error>".xmlSafeString($this->getText("login_xml_error", "system"))."</error></message>";
+			return "<message><error>".xmlSafeString($this->getLang("login_xml_error", "system"))."</error></message>";
 		}
 	}
 
@@ -56,7 +56,7 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
 	 */
 	protected function actionLogout() {
 		$this->objSession->logout();
-        return "<message><success>".xmlSafeString($this->getText("logout_xml", "system"))."</success></message>";
+        return "<message><success>".xmlSafeString($this->getLang("logout_xml", "system"))."</success></message>";
 	}
 
 

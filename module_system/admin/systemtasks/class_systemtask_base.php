@@ -12,6 +12,7 @@
  * Base class for all systemtasks. Provides a few methods to be used by the concrete tasks.
  *
  * @package module_system
+ * @autor sidler@mulchprod.de
  */
 abstract class class_systemtask_base {
 
@@ -29,7 +30,7 @@ abstract class class_systemtask_base {
      *
      * @var class_lang
      */
-    private $objTexte;
+    private $objLang;
 
     /**
      * Instance of class_toolkit
@@ -65,12 +66,11 @@ abstract class class_systemtask_base {
 
     public function __construct() {
         $arrModule = array();
-        $arrModule["author"]        = "sidler@mulchprod.de";
         $arrModule["moduleId"]      = _system_modul_id_;
 
         //load the external objects
         $this->objDB = class_carrier::getInstance()->getObjDB();
-        $this->objTexte = class_carrier::getInstance()->getObjLang();
+        $this->objLang = class_carrier::getInstance()->getObjLang();
         $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $this->objSystemCommon = new class_module_system_common();
 
@@ -80,11 +80,11 @@ abstract class class_systemtask_base {
     /**
      * Delegate requests for strings to the text-subsystem
      *
-     * @param string $strTextKey
+     * @param string $strLangKey
      * @return string
      */
-    protected function getText($strTextKey) {
-        return $this->objTexte->getLang($strTextKey, $this->strTextbase);
+    protected function getLang($strLangKey) {
+        return $this->objLang->getLang($strLangKey, $this->strTextbase);
     }
 
     /**
@@ -105,7 +105,7 @@ abstract class class_systemtask_base {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm");
     		$strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
-    		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getLang("systemtask_run", "system"));
+    		$strReturn .= $this->objToolkit->formInputSubmit($this->objLang->getLang("systemtask_run", "system"));
     		$strReturn .= $this->objToolkit->formClose();
 
     	}

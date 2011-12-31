@@ -55,7 +55,7 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getText("systemtask_compresspicuploads_name");
+    	return $this->getLang("systemtask_compresspicuploads_name");
     }
 
     /**
@@ -71,9 +71,9 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
     	$this->recursiveImageProcessing($this->strPicsPath);
 
     	//build the return string
-    	$strReturn .= $this->getText("systemtask_compresspicuploads_done")."<br />";
-    	$strReturn .= $this->getText("systemtask_compresspicuploads_found").": ".$this->intFilesTotal."<br />";
-    	$strReturn .= $this->getText("systemtask_compresspicuploads_processed").": ".$this->intFilesProcessed;
+    	$strReturn .= $this->getLang("systemtask_compresspicuploads_done")."<br />";
+    	$strReturn .= $this->getLang("systemtask_compresspicuploads_found").": ".$this->intFilesTotal."<br />";
+    	$strReturn .= $this->getLang("systemtask_compresspicuploads_processed").": ".$this->intFilesProcessed;
     	return $strReturn;
     }
 
@@ -152,10 +152,10 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         $strReturn = "";
 
         //show input fields to choose maximal width and height
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("systemtask_compresspicuploads_hint"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("systemtask_compresspicuploads_hint"));
         $strReturn .= $this->objToolkit->divider();
-        $strReturn .= $this->objToolkit->formInputText("intMaxWidth", $this->getText("systemtask_compresspicuploads_width"), $this->intMaxWidth);
-        $strReturn .= $this->objToolkit->formInputText("intMaxHeight", $this->getText("systemtask_compresspicuploads_height"), $this->intMaxHeight);
+        $strReturn .= $this->objToolkit->formInputText("intMaxWidth", $this->getLang("systemtask_compresspicuploads_width"), $this->intMaxWidth);
+        $strReturn .= $this->objToolkit->formInputText("intMaxHeight", $this->getLang("systemtask_compresspicuploads_height"), $this->intMaxHeight);
 
         return $strReturn;
     }

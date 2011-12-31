@@ -43,7 +43,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string
      */
     public function getStrTaskName() {
-        return $this->getText("systemtask_dbimport_name");
+        return $this->getLang("systemtask_dbimport_name");
     }
 
     /**
@@ -52,9 +52,9 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      */
     public function executeTask() {
         if(class_carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile")))
-            return $this->objToolkit->getTextRow($this->getText("systemtask_dbimport_success"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_success"));
         else
-            return $this->objToolkit->getTextRow($this->getText("systemtask_dbimport_error"));
+            return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_error"));
     }
 
     /**
@@ -70,7 +70,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
         foreach($arrFiles as $strOneFile)
             $arrOptions[$strOneFile] = $strOneFile;
 
-        $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getText("systemtask_dbimport_file"));
+        $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getLang("systemtask_dbimport_file"));
 
         return $strReturn;
     }

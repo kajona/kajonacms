@@ -34,10 +34,10 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("moduleRights"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("moduleRights"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getText("addWidget"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getText("module_calendar"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("addWidget"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("module_calendar"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
@@ -118,9 +118,9 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                                         $strWidgetId,
                                         $strWidgetName,
                                         $strGeneratedContent,
-                                        ($objDashboardWidget->rightEdit() ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
+                                        ($objDashboardWidget->rightEdit() ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.gif") : ""),
                                         ($objDashboardWidget->rightDelete() ?
-                                        		$this->objToolkit->listDeleteButton($objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName(), $this->getText("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
+                                        		$this->objToolkit->listDeleteButton($objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName(), $this->getLang("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
                                                  : ""),
                                         $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getLayoutSection()
                                 )
@@ -238,8 +238,8 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         $objPrevDate = clone $objDate;
         $objPrevDate->setPreviousDay();
 
-        $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
-        $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
+        $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getLang("calendar_prev"));
+        $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getLang("calendar_next"));
 
         $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
         $strReturn .= $strContent;
@@ -273,15 +273,15 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
             $arrColumnsAvailable = array();
             foreach ($this->arrColumnsOnDashboard as $strOneColumn)
-                $arrColumnsAvailable[$strOneColumn] = $this->getText($strOneColumn);
+                $arrColumnsAvailable[$strOneColumn] = $this->getLang($strOneColumn);
 
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
-            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getText("widget") );
-            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getText("column") );
+            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getLang("widget") );
+            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getLang("column") );
 
             $strReturn .= $this->objToolkit->formInputHidden("step", "2");
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetNextStep"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("addWidgetNextStep"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("widget");
@@ -297,7 +297,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             $strReturn .= $this->objToolkit->formInputHidden("step", "3");
             $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
             $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
         //step 3: save all to the database
@@ -327,10 +327,10 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                     $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
                 }
                 else
-                    return $this->getText("errorSavingWidget");
+                    return $this->getLang("errorSavingWidget");
             }
             else
-                return $this->getText("errorSavingWidget");
+                return $this->getLang("errorSavingWidget");
         }
 
 
@@ -371,7 +371,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             $strReturn .= $objWidget->getEditForm();
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
         elseif($this->getParam("saveWidget") == "1") {

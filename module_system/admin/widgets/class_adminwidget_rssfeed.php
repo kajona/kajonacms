@@ -32,8 +32,8 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputText("feedurl", $this->getText("rssfeed_feedurl"), $this->getFieldValue("feedurl"));
-        $strReturn .= $this->objToolkit->formInputText("posts", $this->getText("rssfeed_posts"), $this->getFieldValue("posts"));
+        $strReturn .= $this->objToolkit->formInputText("feedurl", $this->getLang("rssfeed_feedurl"), $this->getFieldValue("feedurl"));
+        $strReturn .= $this->objToolkit->formInputText("posts", $this->getLang("rssfeed_posts"), $this->getFieldValue("posts"));
         return $strReturn;
     }
 
@@ -103,12 +103,12 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
                 }
             }
             else {
-                $strContent = $this->getText("rssfeed_errorparsing");
+                $strContent = $this->getLang("rssfeed_errorparsing");
             }
 
         }
         else
-            $strReturn .= $this->getText("rssfeed_errorloading");
+            $strReturn .= $this->getLang("rssfeed_errorloading");
 
 
 
@@ -122,7 +122,7 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
      * @return
      */
     public function getWidgetName() {
-        return $this->getText("rssfeed_name");
+        return $this->getLang("rssfeed_name");
     }
 
 }

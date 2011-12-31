@@ -44,7 +44,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getText("systemtask_flushpiccache_name");
+    	return $this->getLang("systemtask_flushpiccache_name");
     }
 
     /**
@@ -64,9 +64,9 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     	}
 
     	//build the return string
-    	$strReturn .= $this->getText("systemtask_flushpiccache_done");
-    	$strReturn .= $this->getText("systemtask_flushpiccache_deleted").$intFilesDeleted;
-    	$strReturn .= $this->getText("systemtask_flushpiccache_skipped").($intTotalFiles - $intFilesDeleted);
+    	$strReturn .= $this->getLang("systemtask_flushpiccache_done");
+    	$strReturn .= $this->getLang("systemtask_flushpiccache_deleted").$intFilesDeleted;
+    	$strReturn .= $this->getLang("systemtask_flushpiccache_skipped").($intTotalFiles - $intFilesDeleted);
     	return $strReturn;
     }
 
