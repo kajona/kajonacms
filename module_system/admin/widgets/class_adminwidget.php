@@ -51,7 +51,7 @@ abstract class class_adminwidget {
 
     	$this->objDb = class_carrier::getInstance()->getObjDB();
     	$this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-    	$this->objTexte = class_carrier::getInstance()->getObjText();
+    	$this->objTexte = class_carrier::getInstance()->getObjLang();
 
     }
 

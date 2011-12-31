@@ -538,9 +538,9 @@ function timeToString($intTime, $bitLong = true) {
 	$strReturn = "";
 	if($intTime > 0) {
 		if($bitLong)
-			$strReturn = date(class_carrier::getInstance()->getObjText()->getText("dateStyleLong", "system", "admin"), $intTime);
+			$strReturn = date(class_carrier::getInstance()->getObjLang()->getText("dateStyleLong", "system", "admin"), $intTime);
 		else
-			$strReturn = date(class_carrier::getInstance()->getObjText()->getText("dateStyleShort", "system", "admin"), $intTime);
+			$strReturn = date(class_carrier::getInstance()->getObjLang()->getText("dateStyleShort", "system", "admin"), $intTime);
 	}
 	return $strReturn;
 }
@@ -557,9 +557,9 @@ function dateToString($objDate, $bitLong = true) {
 	if($objDate != null) {
         //convert to a current date
 		if($bitLong)
-			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleLong", "system", "admin"));
+			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getText("dateStyleLong", "system", "admin"));
 		else
-			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleShort", "system", "admin"));
+			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getText("dateStyleShort", "system", "admin"));
 
         //"d.m.Y H:i:s";
         $strReturn = uniStrReplace("d", $objDate->getIntDay(), $strReturn);
@@ -583,8 +583,8 @@ function dateToString($objDate, $bitLong = true) {
  * @return string
  */
 function numberFormat($floatNumber, $intNrOfDecimals = 2) {
-    $strDecChar = class_carrier::getInstance()->getObjText()->getText("numberStyleDecimal", "system", "admin");
-    $strThousandsChar = class_carrier::getInstance()->getObjText()->getText("numberStyleThousands", "system", "admin");
+    $strDecChar = class_carrier::getInstance()->getObjLang()->getText("numberStyleDecimal", "system", "admin");
+    $strThousandsChar = class_carrier::getInstance()->getObjLang()->getText("numberStyleThousands", "system", "admin");
     return number_format((float)$floatNumber, $intNrOfDecimals, $strDecChar, $strThousandsChar);
 }
 

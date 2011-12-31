@@ -155,7 +155,7 @@ abstract class class_root {
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
 		$this->objSession = $objCarrier->getObjSession();
-   	    $this->objText = $objCarrier->getObjText();
+   	    $this->objText = $objCarrier->getObjLang();
 		$this->objRights = $objCarrier->getObjRights();
 
 		//And keep the action

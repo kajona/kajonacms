@@ -62,7 +62,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * @return string
      */
     public function getStrDisplayName() {
-        $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
+        $strName = class_carrier::getInstance()->getObjLang()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
         if($strName == "!element_".$this->getStrName()."_name!")
             $strName = $this->getStrName();
         else
@@ -282,7 +282,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * @fixme remove me
      */
     public function getStrReadableName() {
-        $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
+        $strName = class_carrier::getInstance()->getObjLang()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
         if($strName == "!element_".$this->getStrName()."_name!")
             $strName = $this->getStrName();
         return $strName;

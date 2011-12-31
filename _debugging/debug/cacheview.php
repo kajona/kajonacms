@@ -20,7 +20,7 @@ $arrEntries = class_cache::getAllCacheEntries();
 $arrData = array();
 $arrHeader = array();
 
-$objText = class_carrier::getInstance()->getObjText();
+$objText = class_carrier::getInstance()->getObjLang();
 
 $arrHeader[] = "Leasetime";
 $arrHeader[] = "Source";

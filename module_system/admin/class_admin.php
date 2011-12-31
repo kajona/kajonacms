@@ -107,7 +107,7 @@ abstract class class_admin {
 		$this->objDB = $objCarrier->getObjDB();
 		$this->objToolkit = $objCarrier->getObjToolkit($this->strArea);
 		$this->objSession = $objCarrier->getObjSession();
-		$this->objText = $objCarrier->getObjText();
+		$this->objText = $objCarrier->getObjLang();
 		$this->objTemplate = $objCarrier->getObjTemplate();
 
 		//Writing to the history
@@ -632,7 +632,7 @@ abstract class class_admin {
             //and finally create the object
             $objElement = new $strElementClass();
             $strTextname = "quickhelp_".$objElement->getArrModule("name");
-            $strText = class_carrier::getInstance()->getObjText()->getText($strTextname, $objElement->getArrModule("modul"), "admin");
+            $strText = class_carrier::getInstance()->getObjLang()->getText($strTextname, $objElement->getArrModule("modul"), "admin");
         }
         else {
             $strTextname = "quickhelp_".$this->strAction;

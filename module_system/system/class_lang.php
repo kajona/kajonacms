@@ -54,9 +54,7 @@ class class_lang {
 	 *
 	 */
 	private function __construct() 	{
-
         //load texts from session
-
         if(class_config::getInstance()->getConfig("cache_texts") === true) {
             $this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
             if($this->arrTexts === false)
@@ -96,15 +94,25 @@ class class_lang {
 	}
 
     /**
-     * Returning the searched text
+     * @param $strText
+     * @param $strModule
+     * @param $strArea
+     * @return string
+     *
+     * @deprecated use getLang() instead
+     */
+    public function getText($strText, $strModule, $strArea) {
+        return $this->getLang($strText, $strModule);
+    }
+
+    /**
+     * Returning the searched text-entry
      *
      * @param string $strText
      * @param $strModule
-     * @param string $strArea @deprecated
-     *
      * @return string
      */
-	public function getText($strText, $strModule, $strArea) {
+	public function getLang($strText, $strModule) {
 
 		//Did we already load this text?
 		if(!isset($this->arrTexts[$this->strLanguage][$strModule]))

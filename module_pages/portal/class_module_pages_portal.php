@@ -360,8 +360,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
     		    define("_skinwebpath_", _webpath_."/core/module_system/admin/skins/".$this->objSession->getAdminSkin());
 
     		//save back the current portal text language and set the admin-one
-    		$strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
-    		class_carrier::getInstance()->getObjText()->setStrTextLanguage($this->objSession->getAdminLanguage());
+    		$strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
+    		class_carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
 
             if($this->objSession->getSession("pe_disable") != "true" ) {
     		    $strPeToolbar = "";
@@ -427,7 +427,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
             }
 
             //reset the portal texts language
-            class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
+            class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
         }
 
         //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.

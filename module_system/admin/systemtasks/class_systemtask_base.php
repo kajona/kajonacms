@@ -70,7 +70,7 @@ abstract class class_systemtask_base {
 
         //load the external objects
         $this->objDB = class_carrier::getInstance()->getObjDB();
-        $this->objTexte = class_carrier::getInstance()->getObjText();
+        $this->objTexte = class_carrier::getInstance()->getObjLang();
         $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $this->objSystemCommon = new class_module_system_common();
 

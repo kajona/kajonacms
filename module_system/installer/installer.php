@@ -54,7 +54,7 @@ class class_installer {
 	    //start up system
 		class_carrier::getInstance();
 		$this->objTemplates = class_carrier::getInstance()->getObjTemplate();
-		$this->objTexte = class_carrier::getInstance()->getObjText();
+		$this->objTexte = class_carrier::getInstance()->getObjLang();
 		//init session-support
 		$this->objSession = class_carrier::getInstance()->getObjSession();
 
@@ -145,7 +145,7 @@ class class_installer {
 	    $arrLangs = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
 	    $intLangCount = 1;
 	    foreach ($arrLangs as $strOneLang) {
-            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjText()->getText("lang_".$strOneLang, "user", "admin")."</a>";
+            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjLang()->getText("lang_".$strOneLang, "user", "admin")."</a>";
             if ($intLangCount++ < count($arrLangs)) {
                 $strReturn .= " | ";
             }

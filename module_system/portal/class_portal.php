@@ -108,7 +108,7 @@ abstract class class_portal  {
 		$this->objDB = $objCarrier->getObjDB();
 	    $this->objToolkit = $objCarrier->getObjToolkit($this->strArea);
 		$this->objSession = $objCarrier->getObjSession();
-	    $this->objText = $objCarrier->getObjText();
+	    $this->objText = $objCarrier->getObjLang();
 	    $this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objSystemCommon = new class_module_system_common($strSystemid);
 

@@ -21,13 +21,12 @@ class class_carrier {
      */
     private static $arrParams = null;
 
-    private $arrModule;
 	private $objDB = null;
 	private $objConfig = null;
 	private $objSession = null;
 	private $objTemplate = null;
 	private $objRights = null;
-	private $objText = null;
+	private $objLang = null;
 	private $objToolkitAdmin = null;
 	private $objToolkitPortal = null;
 
@@ -82,7 +81,6 @@ class class_carrier {
 	public function getObjDB() {
 		//Do we have to generate the object?
 		if($this->objDB == null) {
-		    //require_once(_realpath_."/module_system/system/class_db.php");
 		    $this->objDB = class_db::getInstance();
 			//Now we have to set up the database connection
             //SIR 2010/03: connection is established on request, lazy loading
@@ -159,12 +157,12 @@ class class_carrier {
 	 *
 	 * @return class_lang
 	 */
-	public function getObjText() {
+	public function getObjLang() {
 		//Do we have to generate the object?
-		if($this->objText == null) {
-			$this->objText = class_lang::getInstance();
+		if($this->objLang == null) {
+			$this->objLang = class_lang::getInstance();
 		}
-		return $this->objText;
+		return $this->objLang;
 	}
 
 

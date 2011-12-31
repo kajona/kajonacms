@@ -621,7 +621,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
     public function getRecordName() {
-        return class_carrier::getInstance()->getObjText()->getText("change_object_page", "pages", "admin");
+        return class_carrier::getInstance()->getObjLang()->getText("change_object_page", "pages", "admin");
     }
 
 

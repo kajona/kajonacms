@@ -59,7 +59,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
 
-        $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjText()->getText("titleTime", "system", "admin");
+        $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjLang()->getText("titleTime", "system", "admin");
 
         //set up the container div
         $arrTemplate["calendarId"] = $strName;
@@ -68,8 +68,8 @@ class class_toolkit_admin extends class_toolkit {
 
         //commands and values for the calendar
         $arrTemplate["calendarCommands"]  ="<script type=\"text/javascript\">\n";
-	    $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarWeekday = [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarWeekday", "system", "admin")."];\n";
-	    $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarMonth = [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarMonth", "system", "admin")."];\n";
+	    $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarWeekday = [".class_carrier::getInstance()->getObjLang()->getText("toolsetCalendarWeekday", "system", "admin")."];\n";
+	    $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarMonth = [".class_carrier::getInstance()->getObjLang()->getText("toolsetCalendarMonth", "system", "admin")."];\n";
         $arrTemplate["calendarCommands"] .="</script>\n";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -255,10 +255,10 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["opener"] = getLinkAdminDialog("pages",
                                                    "pagesFolderBrowser",
                                                    "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
-                                                   class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
-                                                   class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
+                                                   class_carrier::getInstance()->getObjLang()->getText("select_page", "pages", "admin"),
+                                                   class_carrier::getInstance()->getObjLang()->getText("select_page", "pages", "admin"),
                                                    "icon_externalBrowser.gif",
-                                                   class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"));
+                                                   class_carrier::getInstance()->getObjLang()->getText("select_page", "pages", "admin"));
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
@@ -313,10 +313,10 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["opener"] = getLinkAdminDialog("user",
                                               "userBrowser",
                                                "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
-                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"),
-                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"),
+                                               class_carrier::getInstance()->getObjLang()->getText("user_browser", "user", "admin"),
+                                               class_carrier::getInstance()->getObjLang()->getText("user_browser", "user", "admin"),
                                                "icon_externalBrowser.gif",
-                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"));
+                                               class_carrier::getInstance()->getObjLang()->getText("user_browser", "user", "admin"));
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
@@ -380,10 +380,10 @@ class class_toolkit_admin extends class_toolkit {
         $strOpener = getLinkAdminDialog("filemanager",
 										"folderContentFolderviewMode",
 										"&form_element=".$strName."&systemid=".$strRepositoryId,
-										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
-										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
+										class_carrier::getInstance()->getObjLang()->getText("filebrowser", "system", "admin"),
+										class_carrier::getInstance()->getObjLang()->getText("filebrowser", "system", "admin"),
 										"icon_externalBrowser.gif",
-										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"));
+										class_carrier::getInstance()->getObjLang()->getText("filebrowser", "system", "admin"));
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
@@ -405,18 +405,18 @@ class class_toolkit_admin extends class_toolkit {
         $strOpener = getLinkAdminDialog("filemanager",
 										"folderContentFolderviewMode",
 										"&form_element=".$strName."&systemid="._filemanager_default_imagesrepoid_,
-										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
-										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
+										class_carrier::getInstance()->getObjLang()->getText("filebrowser", "system", "admin"),
+										class_carrier::getInstance()->getObjLang()->getText("filebrowser", "system", "admin"),
 										"icon_externalBrowser.gif",
-										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"));
+										class_carrier::getInstance()->getObjLang()->getText("filebrowser", "system", "admin"));
 
         $strOpener .= " ".getLinkAdminDialog("filemanager",
                                          "imageDetails",
                                          "imageFile='+document.getElementById('".$strName."').value+'",
-                                         class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
-                                         class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
+                                         class_carrier::getInstance()->getObjLang()->getText("cropImage", "filemanager", "admin"),
+                                         class_carrier::getInstance()->getObjLang()->getText("cropImage", "filemanager", "admin"),
                                          "icon_crop.gif",
-                                         class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
+                                         class_carrier::getInstance()->getObjLang()->getText("cropImage", "filemanager", "admin"),
                                          true, false,
                                          " (function() {
                                              if(document.getElementById('".$strName."').value != '') {
@@ -507,7 +507,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
 
-        $objText = class_carrier::getInstance()->getObjText();
+        $objText = class_carrier::getInstance()->getObjLang();
         $arrTemplate["maxSize"] = $objText->getText("max_size", "filemanager", "admin")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
 
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -530,7 +530,7 @@ class class_toolkit_admin extends class_toolkit {
         //upload works with session.use_only_cookies=disabled only. if set to enabled, use the fallback upload
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("session.use_only_cookies") == "1") {
             $strReturn = $this->formInputUpload($strName, $strTitle);
-            $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjText()->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
+            $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjLang()->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
             return $strReturn;
         }
 
@@ -544,7 +544,7 @@ class class_toolkit_admin extends class_toolkit {
             $strAllowedFileTypes = "*.*";
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
-        $objText = class_carrier::getInstance()->getObjText();
+        $objText = class_carrier::getInstance()->getObjLang();
 
         $arrTemplate["javascript"] = "
             <script type=\"text/javascript\">
@@ -918,9 +918,9 @@ class class_toolkit_admin extends class_toolkit {
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
         //create the list-button and the js code to show the dialog
-        $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
+        $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getText("dialog_deleteHeader", "system", "admin")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
                                          "",
-                                         class_carrier::getInstance()->getObjText()->getText("commons_delete", "system", "admin"),
+                                         class_carrier::getInstance()->getObjLang()->getText("commons_delete", "system", "admin"),
                                          "icon_ton.gif" );
 
         return $this->listButton($strButton).$strDialog;
@@ -943,12 +943,12 @@ class class_toolkit_admin extends class_toolkit {
         if($objRecord->getStatus() == 1) {
             $strImage = "icon_enabled.gif";
             $strNewImage = "icon_disabled.gif";
-            $strText = class_carrier::getInstance()->getObjText()->getText("status_active", "system", "admin");
+            $strText = class_carrier::getInstance()->getObjLang()->getText("status_active", "system", "admin");
         }
         else {
             $strImage = "icon_disabled.gif";
             $strNewImage = "icon_enabled.gif";
-            $strText = class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin");
+            $strText = class_carrier::getInstance()->getObjLang()->getText("status_inactive", "system", "admin");
         }
 
         $strJavascript = "";
@@ -956,8 +956,8 @@ class class_toolkit_admin extends class_toolkit {
         //output texts and image paths only once
         if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
-                var strActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_active", "system", "admin")."';
-                var strInActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin")."';
+                var strActiveText = '".class_carrier::getInstance()->getObjLang()->getText("status_active", "system", "admin")."';
+                var strInActiveText = '".class_carrier::getInstance()->getObjLang()->getText("status_inactive", "system", "admin")."';
                 var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.gif';
                 var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.gif';
 
@@ -1440,13 +1440,13 @@ class class_toolkit_admin extends class_toolkit {
             $intCounter2++;
         }
         $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
-        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjText()->getText("pageview_total", "system", "admin");
+        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getText("pageview_total", "system", "admin");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if($intCurrentpage < $intNrOfPages)
-            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjText()->getText("pageview_forward", "system", "admin"),
+            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getText("pageview_forward", "system", "admin"),
                                                                                  "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID);
         if($intCurrentpage > 1)
-            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjText()->getText("commons_back", "commons", "admin"),
+            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getText("commons_back", "commons", "admin"),
                                                                                   "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID);
 
 
@@ -1514,13 +1514,13 @@ class class_toolkit_admin extends class_toolkit {
             $intCounter2++;
         }
         $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
-        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjText()->getText("pageview_total", "system", "admin");
+        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getText("pageview_total", "system", "admin");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if($intCurrentpage < $intNrOfPages)
-            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjText()->getText("pageview_forward", "system", "admin"),
+            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getText("pageview_forward", "system", "admin"),
                                                                                  "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID);
         if($intCurrentpage > 1)
-            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjText()->getText("commons_back", "commons", "admin"),
+            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getText("commons_back", "commons", "admin"),
                                                                                   "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID);
 
 
@@ -1645,7 +1645,7 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
         else if($intDialogType == 1 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $arrTemplate["dialog_cancelButton"] = class_carrier::getInstance()->getObjText()->getText("dialog_cancelButton", "system", "admin");
+            $arrTemplate["dialog_cancelButton"] = class_carrier::getInstance()->getObjLang()->getText("dialog_cancelButton", "system", "admin");
 
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
@@ -1655,7 +1655,7 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
         else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $arrTemplate["dialog_title"] = class_carrier::getInstance()->getObjText()->getText("dialog_loadingHeader", "system", "admin");
+            $arrTemplate["dialog_title"] = class_carrier::getInstance()->getObjLang()->getText("dialog_loadingHeader", "system", "admin");
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogLoadingContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
@@ -1732,14 +1732,14 @@ class class_toolkit_admin extends class_toolkit {
         $strReturn = "";
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
         $arrTemplate = array();
-        $arrTemplate["title"] = class_carrier::getInstance()->getObjText()->getText("quickhelp_title", "system", "admin");
+        $arrTemplate["title"] = class_carrier::getInstance()->getObjLang()->getText("quickhelp_title", "system", "admin");
         $arrTemplate["text"] = $strText;
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         //and the button
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp_button");
         $arrTemplate = array();
-        $arrTemplate["text"] = class_carrier::getInstance()->getObjText()->getText("quickhelp_title", "system", "admin");
+        $arrTemplate["text"] = class_carrier::getInstance()->getObjLang()->getText("quickhelp_title", "system", "admin");
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         return $strReturn;
@@ -1778,7 +1778,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["strTagId"] = $strTagId;
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
-        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.gif", class_carrier::getInstance()->getObjText()->getText("commons_delete", "tags", "admin"));
+        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.gif", class_carrier::getInstance()->getObjLang()->getText("commons_delete", "tags", "admin"));
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

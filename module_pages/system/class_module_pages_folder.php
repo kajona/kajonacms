@@ -343,7 +343,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
     }
 
     public function getRecordName() {
-        return class_carrier::getInstance()->getObjText()->getText("change_object_folder", "pages", "admin");
+        return class_carrier::getInstance()->getObjLang()->getText("change_object_folder", "pages", "admin");
     }
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
