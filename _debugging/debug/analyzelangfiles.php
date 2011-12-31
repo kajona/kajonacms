@@ -114,9 +114,7 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
 
 function debug_get_langhelper(&$arrEntries, $strModul, $strKey) {
     foreach($arrEntries as $objOneHelper) {
-        if($objOneHelper->strModul == $strModul &&
-            $objOneHelper->strKey == $strKey) {
-
+        if($objOneHelper->strModul == $strModul && $objOneHelper->strKey == $strKey) {
             return $objOneHelper;
         }
 

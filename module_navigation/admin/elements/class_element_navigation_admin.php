@@ -20,7 +20,6 @@ class class_element_navigation_admin extends class_element_admin implements inte
 	 *
 	 */
 	public function __construct() {
-
         $this->setArrModuleEntry("name", "element_navigation");
         $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
         $this->setArrModuleEntry("tableColumns", "navigation_id|char,navigation_template|char,navigation_mode|char");
@@ -28,28 +27,26 @@ class class_element_navigation_admin extends class_element_admin implements inte
 	}
 
 
-   /**
+    /**
 	 * Returns a form to edit the element-data
 	 *
 	 * @param mixed $arrElementData
 	 * @return string
 	 */
-	public function getEditForm($arrElementData)	{
+    public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all navigations available
 		if(isset($arrElementData["navigation_id"]) && $arrElementData["navigation_id"] != '') {
-		  $objNavigation = new class_module_navigation_admin();
-		  $objNavi = new class_module_navigation_tree($arrElementData["navigation_id"]);
-		  $strNaviName = $objNavi->getStrName();
+		    $objNavi = new class_module_navigation_tree($arrElementData["navigation_id"]);
+		    $strNaviName = $objNavi->getStrName();
 		}
 		else
-		  $strNaviName = "";
+		    $strNaviName = "";
 
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getLang("commons_name"), $strNaviName, "inputText", getLinkAdminDialog("navigation", "navigationBrowser", "", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")), true);
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
-		$objFilesystem = new class_filesystem();
 		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_navigation");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {

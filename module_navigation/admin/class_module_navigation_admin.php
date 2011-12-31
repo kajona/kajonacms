@@ -91,7 +91,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $intI = 0;
         //Decide, whether to return the list of navigation or the layer of a navigation
-        if($this->getSystemid() == "" || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"]))  {
+        if($this->getSystemid() == "" || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])) {
 
             $objIterator = new class_array_section_iterator(class_module_navigation_tree::getAllNavisCount());
             $objIterator->setPageNumber($this->getParam("pv"));
@@ -205,13 +205,15 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 	protected function actionNewNavi($strMode = "new") {
 		$strReturn = "";
 
-        $strFolderBrowser = getLinkAdminDialog("pages",
-                                               "pagesFolderBrowser",
-                                               "&form_element=navigation_folder_i&folder=1",
-                                               $this->getLang("commons_open_browser"),
-                                               $this->getLang("commons_open_browser"),
-                                               "icon_externalBrowser.gif",
-                                               $this->getLang("commons_open_browser"));
+        $strFolderBrowser = getLinkAdminDialog(
+            "pages",
+            "pagesFolderBrowser",
+            "&form_element=navigation_folder_i&folder=1",
+            $this->getLang("commons_open_browser"),
+            $this->getLang("commons_open_browser"),
+            "icon_externalBrowser.gif",
+            $this->getLang("commons_open_browser")
+        );
 
         if($strMode == "edit")
             $objNavi = new class_module_navigation_tree($this->getSystemid());
@@ -291,19 +293,15 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 	protected function actionNewNaviPoint($strMode = "new") {
 		$strReturn = "";
 
-        $strNodeBrowser = getLinkAdminDialog(  $this->arrModule["modul"],
-                                               "navigationPointBrowser",
-                                               "&form_element=navigation_parent&systemid=".$this->getPrevId(),
-                                               $this->getLang("commons_open_browser"),
-                                               $this->getLang("commons_open_browser"),
-                                               "icon_externalBrowser.gif",
-                                               $this->getLang("commons_open_browser"));
-
-        $strFoldername = "";
-        if(validateSystemid($this->getParam("navigation_folder_i_id"))) {
-            $objFolder = new class_module_pages_folder($this->getParam("navigation_folder_i_id"));
-            $strFoldername = $objFolder->getStrName();
-        }
+        $strNodeBrowser = getLinkAdminDialog(
+            $this->arrModule["modul"],
+            "navigationPointBrowser",
+            "&form_element=navigation_parent&systemid=".$this->getPrevId(),
+            $this->getLang("commons_open_browser"),
+            $this->getLang("commons_open_browser"),
+            "icon_externalBrowser.gif",
+            $this->getLang("commons_open_browser")
+        );
 
         $strParentname = "";
         $objParentPoint = null;
