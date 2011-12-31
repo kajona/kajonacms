@@ -410,64 +410,13 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great
-            //FIXME in eigene methode auslagern
-			$strElementTableColumns = $objElement->getArrModule("tableColumns");
-			if($strElementTableColumns != "") {
+            $this->updateForeignElement($objElement);
 
-			    //open new tx
-			    $this->objDB->transactionBegin();
-
-                $arrElementParams = $objElement->getArrParamData();
-
-                $arrTableRows = explode(",", $strElementTableColumns);
-                if(count($arrTableRows) > 0) {
-                    $arrInserts = array();
-                    foreach($arrTableRows as $strOneTableColumnConf) {
-
-
-                        //explode to get tableColumnName and tableColumnDatatype
-                        //currently, datatypes are 'number' and 'char' -> casts!
-                        $arrTemp = explode("|", $strOneTableColumnConf);
-                        $strTableColumnName = $arrTemp[0];
-                        $strTableColumnDatatype = $arrTemp[1];
-
-                        $strColumnValue = "";
-                        if(isset($arrElementParams[$strTableColumnName]))
-                            $strColumnValue = $arrElementParams[$strTableColumnName];
-
-
-                        if ($strTableColumnDatatype == "number")
-                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($strColumnValue)." ";
-                        elseif ($strTableColumnDatatype == "char")
-                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($strColumnValue)."' ";
-                    }
-
-                    $strRowUpdates = implode(", ", $arrInserts);
-                    $strUpdateQuery =
-                    " UPDATE ".$objElement->getTable()." SET "
-                      .$strRowUpdates.
-                    " WHERE content_id='".$this->getSystemid()."'";
-
-                    if(!$this->objDB->_query($strUpdateQuery)) {
-                        $strReturn .= "Error updating element data.";
-                        $this->objDB->transactionRollback();
-                    }
-                    else
-                        $this->objDB->transactionCommit();
-                }
-                else
-                    throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
-			}
-			else {
-			    //To remain backwards-compatible:
-			    //Call the save-method of the element instead or if the element wants to update its data specially
-			    if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
-                    throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
-			}
 			//Edit Date of page & unlock
             $objCommons = new class_module_system_common($strPageSystemid);
             $objCommons->updateObjectToDb();
 			$objLockmanager->unlockRecord();
+
 			//And update the internal comment and language
 			$objElementData->setStrTitle($this->getParam("page_element_ph_title"));
 			$objElementData->setStrLanguage($this->getParam("page_element_ph_language"));
@@ -502,10 +451,10 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 
 			//Loading the data of the corresponding site
-			$objPage = new class_module_pages_page($this->getPrevId());
+			$objPage = new class_module_pages_page($strPageSystemid);
 			$this->flushPageFromPagesCache($objPage->getStrName());
 
-            $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId()));
+            $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
 
 		}
 		else  {
@@ -549,58 +498,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great
-            //FIXME: in eigene methode aulagern
-			$strElementTableColumns = $objElement->getArrModule("tableColumns");
-			if($strElementTableColumns != "") {
+			$this->updateForeignElement($objElement);
 
-			    //open new tx
-			    $this->objDB->transactionBegin();
-
-                $arrElementParams = $objElement->getArrParamData();
-
-                $arrTableRows = explode(",", $strElementTableColumns);
-                if(count($arrTableRows) > 0) {
-                    $arrInserts = array();
-                    foreach($arrTableRows as $strOneTableColumnConf) {
-
-                        //explode to get tableColumnName and tableColumnDatatype
-                        //currently, datatypes are 'number' and 'char' -> casts!
-                        $arrTemp = explode("|", $strOneTableColumnConf);
-                        $strTableColumnName = $arrTemp[0];
-                        $strTableColumnDatatype = $arrTemp[1];
-
-                        $strColumnValue = "";
-                        if(isset($arrElementParams[$strTableColumnName]))
-                            $strColumnValue = $arrElementParams[$strTableColumnName];
-
-                        if ($strTableColumnDatatype == "number")
-                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($strColumnValue)." ";
-                        elseif ($strTableColumnDatatype == "char")
-                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($strColumnValue)."' ";
-                    }
-
-                    $strRowUpdates = implode(", ", $arrInserts);
-                    $strUpdateQuery =
-                    " UPDATE ".$objElement->getTable()." SET "
-                      .$strRowUpdates.
-                    " WHERE content_id='".$this->getSystemid()."'";
-
-                    if(!$this->objDB->_query($strUpdateQuery)) {
-                        $strReturn .= "Error updating element data.";
-                        $this->objDB->transactionRollback();
-                    }
-                    else
-                        $this->objDB->transactionCommit();
-                }
-                else
-                    throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
-			}
-			else {
-			    //To remain backwards-compatible:
-			    //Call the save-method of the element instead or if the element wants to update its data specially
-			    if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
-				    throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
-			}
 			//Edit Date of page & unlock
             $objCommons = new class_module_system_common($strPageSystemid);
             $objCommons->updateObjectToDb();
@@ -610,7 +509,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $objElement->doAfterSaveToDb();
 
 			//Loading the data of the corresp site
-			$objPage = new class_module_pages_page($this->getPrevId());
+			$objPage = new class_module_pages_page($strPageSystemid);
 			$this->flushPageFromPagesCache($objPage->getStrName());
 
             $strReturn = "<message><success>update succeeded</success></message>";
@@ -622,6 +521,65 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
+    /**
+     * Triggers the update of the foreign element.
+     * Therefore the elements metadata is queried for a foreign table.
+     *
+     * @param interface_admin_element|class_element_admin $objElement
+     * @throws class_exception
+     */
+    private function updateForeignElement(interface_admin_element $objElement) {
+        $strElementTableColumns = $objElement->getArrModule("tableColumns");
+        if($strElementTableColumns != "") {
+
+            //open new tx
+            $this->objDB->transactionBegin();
+
+            $arrElementParams = $objElement->getArrParamData();
+
+            $arrTableRows = explode(",", $strElementTableColumns);
+            if(count($arrTableRows) > 0) {
+                $arrInserts = array();
+                foreach($arrTableRows as $strOneTableColumnConf) {
+
+                    //explode to get tableColumnName and tableColumnDatatype
+                    //currently, datatypes are 'number' and 'char' -> casts!
+                    $arrTemp = explode("|", $strOneTableColumnConf);
+                    $strTableColumnName = $arrTemp[0];
+                    $strTableColumnDatatype = $arrTemp[1];
+
+                    $strColumnValue = "";
+                    if(isset($arrElementParams[$strTableColumnName]))
+                        $strColumnValue = $arrElementParams[$strTableColumnName];
+
+                    if ($strTableColumnDatatype == "number")
+                        $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($strColumnValue)." ";
+                    elseif ($strTableColumnDatatype == "char")
+                        $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($strColumnValue)."' ";
+                }
+
+                $strRowUpdates = implode(", ", $arrInserts);
+                $strUpdateQuery =
+                " UPDATE ".$objElement->getTable()." SET "
+                  .$strRowUpdates.
+                " WHERE content_id='".$this->getSystemid()."'";
+
+                if(!$this->objDB->_query($strUpdateQuery)) {
+                    $this->objDB->transactionRollback();
+                }
+                else
+                    $this->objDB->transactionCommit();
+            }
+            else
+                throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
+        }
+        else {
+            //To remain backwards-compatible:
+            //Call the save-method of the element instead or if the element wants to update its data specially
+            if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
+                throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
+        }
+    }
 
 	/**
 	 * Shows the warning box before deleteing a element
