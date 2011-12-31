@@ -568,9 +568,9 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     public function getActionName($strAction) {
         if($strAction == $this->strActionEdit)
-            return $this->getText("seite_bearbeiten", "pages", "admin");
+            return $this->getText("seite_bearbeiten", "pages");
         else if($strAction == $this->strActionDelete)
-            return $this->getText("seite_loeschen", "pages", "admin");
+            return $this->getText("seite_loeschen", "pages");
 
         return $strAction;
     }
@@ -621,7 +621,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
     public function getRecordName() {
-        return class_carrier::getInstance()->getObjLang()->getText("change_object_page", "pages", "admin");
+        return class_carrier::getInstance()->getObjLang()->getLang("change_object_page", "pages");
     }
 
 

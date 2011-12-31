@@ -84,7 +84,7 @@ abstract class class_systemtask_base {
      * @return string
      */
     protected function getText($strTextKey) {
-        return $this->objTexte->getText($strTextKey, $this->strTextbase, "admin");
+        return $this->objTexte->getLang($strTextKey, $this->strTextbase);
     }
 
     /**
@@ -92,6 +92,7 @@ abstract class class_systemtask_base {
      *
      * @param string $strTargetModule
      * @param string $strTargetAction
+     * @return string
      */
     public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks") {
     	$strReturn = "";
@@ -104,7 +105,7 @@ abstract class class_systemtask_base {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm");
     		$strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
-    		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"));
+    		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getLang("systemtask_run", "system"));
     		$strReturn .= $this->objToolkit->formClose();
 
     	}

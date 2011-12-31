@@ -82,13 +82,13 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			    $strModule = $objModule->getStrName();
 			}
 
-			$arrHeaderRow = $this->getText("permissions_header", $strModule, "admin");
+			$arrHeaderRow = $this->getText("permissions_header", $strModule);
 
 			if($arrHeaderRow == "!permissions_header!")
-			    $arrHeaderRow = $this->getText("permissions_default_header", "system", "admin");
+			    $arrHeaderRow = $this->getText("permissions_default_header", "system");
 
 			if($strSystemID == "0")
-			    $arrHeaderRow = $this->getText("permissions_root_header", "system", "admin");
+			    $arrHeaderRow = $this->getText("permissions_root_header", "system");
 
 
 			$arrTitles = $arrHeaderRow;

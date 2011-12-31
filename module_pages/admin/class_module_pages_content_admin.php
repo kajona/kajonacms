@@ -717,7 +717,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $arrLanguages = class_module_languages_language::getAllLanguages(true);
             $arrLanguageDD = array();
             foreach($arrLanguages as $objSingleLanguage)
-                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getText("lang_".$objSingleLanguage->getStrName(), "languages", "admin");
+                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getText("lang_".$objSingleLanguage->getStrName(), "languages");
 
             $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
 

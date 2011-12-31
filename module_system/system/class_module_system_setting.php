@@ -256,7 +256,7 @@ class class_module_system_setting extends class_model implements interface_model
     }
 
     public function getRecordName() {
-        return class_carrier::getInstance()->getObjLang()->getText("change_type_setting", "system", "admin");
+        return class_carrier::getInstance()->getObjLang()->getLang("change_type_setting", "system");
     }
 
     public function getModuleName() {

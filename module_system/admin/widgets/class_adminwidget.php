@@ -138,7 +138,7 @@ abstract class class_adminwidget {
      * @return string
      */
     public final function getText($strKey) {
-        return $this->objTexte->getText($strKey, "adminwidget", "admin");
+        return $this->objTexte->getLang($strKey, "adminwidget");
     }
 
     /**

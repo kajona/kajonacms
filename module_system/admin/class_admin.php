@@ -632,7 +632,7 @@ abstract class class_admin {
             //and finally create the object
             $objElement = new $strElementClass();
             $strTextname = "quickhelp_".$objElement->getArrModule("name");
-            $strText = class_carrier::getInstance()->getObjLang()->getText($strTextname, $objElement->getArrModule("modul"), "admin");
+            $strText = class_carrier::getInstance()->getObjLang()->getLang($strTextname, $objElement->getArrModule("modul"));
         }
         else {
             $strTextname = "quickhelp_".$this->strAction;

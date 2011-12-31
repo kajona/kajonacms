@@ -145,7 +145,7 @@ class class_installer {
 	    $arrLangs = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
 	    $intLangCount = 1;
 	    foreach ($arrLangs as $strOneLang) {
-            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjLang()->getText("lang_".$strOneLang, "user", "admin")."</a>";
+            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjLang()->getLang("lang_".$strOneLang, "user")."</a>";
             if ($intLangCount++ < count($arrLangs)) {
                 $strReturn .= " | ";
             }
@@ -681,7 +681,7 @@ class class_installer {
 	 * @return string
 	 */
 	public function getText($strKey) {
-	    return $this->objTexte->getText($strKey, "system", "admin");
+	    return $this->objTexte->getLang($strKey, "system");
 	}
 }
 

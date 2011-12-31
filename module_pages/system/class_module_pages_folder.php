@@ -306,9 +306,9 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     public function getActionName($strAction) {
         if($strAction == $this->strActionEdit)
-            return $this->getText("pages_ordner_edit", "pages", "admin");
+            return $this->getText("pages_ordner_edit", "pages");
         else if($strAction == $this->strActionDelete)
-            return $this->getText("pages_ordner_delete", "pages", "admin");
+            return $this->getText("pages_ordner_delete", "pages");
 
         return $strAction;
     }
@@ -343,7 +343,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
     }
 
     public function getRecordName() {
-        return class_carrier::getInstance()->getObjLang()->getText("change_object_folder", "pages", "admin");
+        return class_carrier::getInstance()->getObjLang()->getLang("change_object_folder", "pages");
     }
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------

@@ -271,12 +271,12 @@ class class_module_system_common extends class_model implements interface_model 
 		$arrReturn["inputtimeout" ] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_input_time") ."s";
 		$arrReturn["memorylimit" ] = bytesToString(ini_get("memory_limit"), true);
 		$arrReturn["errorlevel" ] = class_carrier::getInstance()->getObjConfig()->getPhpIni("error_reporting");
-        $arrReturn["systeminfo_php_safemode"] = (ini_get("safe_mode") ? $this->getText("commons_yes", "system", "admin")  : $this->getText("commons_no", "system", "admin") );
-        $arrReturn["systeminfo_php_urlfopen"] = (ini_get("allow_url_fopen") ? $this->getText("commons_yes", "system", "admin")  : $this->getText("commons_no", "system", "admin") );
-        $arrReturn["systeminfo_php_regglobal"] = (ini_get("register_globals") ? $this->getText("commons_yes", "system", "admin")  : $this->getText("commons_no", "system", "admin") );
+        $arrReturn["systeminfo_php_safemode"] = (ini_get("safe_mode") ? $this->getText("commons_yes", "system")  : $this->getText("commons_no", "system") );
+        $arrReturn["systeminfo_php_urlfopen"] = (ini_get("allow_url_fopen") ? $this->getText("commons_yes", "system")  : $this->getText("commons_no", "system") );
+        $arrReturn["systeminfo_php_regglobal"] = (ini_get("register_globals") ? $this->getText("commons_yes", "system")  : $this->getText("commons_no", "system") );
 		$arrReturn["postmaxsize"] = bytesToString(ini_get("post_max_size"), true);
 		$arrReturn["uploadmaxsize"] = bytesToString(ini_get("upload_max_filesize"), true);
-		$arrReturn["uploads"] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getText("commons_yes" , "system", "admin") : $this->getText("commons_no", "system", "admin") );
+		$arrReturn["uploads"] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getText("commons_yes" , "system") : $this->getText("commons_no", "system") );
 
         return $arrReturn;
     }
@@ -294,7 +294,7 @@ class class_module_system_common extends class_model implements interface_model 
             $arrReturn["systeminfo_webserver_modules"] = implode(", ", @apache_get_modules());
         }
 	    if (@disk_total_space(_realpath_)) {
-            $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free", "system", "admin");
+            $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free", "system");
         }
 		return $arrReturn;
 	}
@@ -310,10 +310,10 @@ class class_module_system_common extends class_model implements interface_model 
 		if(function_exists("gd_info")) 	{
 			$arrGd = gd_info();
 			$arrReturn["version"] = $arrGd["GD Version"];
-			$arrReturn["gifread"] = (isset($arrGd["GIF Read Support"]) && $arrGd["GIF Read Support"] ? $this->getText("commons_yes", "system", "admin") : $this->getText("commons_no", "system", "admin"));
-			$arrReturn["gifwrite"] = (isset($arrGd["GIF Create Support"]) && $arrGd["GIF Create Support"] ? $this->getText("commons_yes", "system", "admin") : $this->getText("commons_no", "system", "admin"));
-			$arrReturn["jpg"] = (( (isset($arrGd["JPG Support"]) && $arrGd["JPG Support"]) || (isset($arrGd["JPEG Support"]) && $arrGd["JPEG Support"]) ) ? $this->getText("commons_yes", "system", "admin") : $this->getText("commons_no", "system", "admin"));
-			$arrReturn["png"] = (isset($arrGd["PNG Support"]) && $arrGd["PNG Support"] ? $this->getText("commons_yes", "system", "admin") : $this->getText("commons_no", "system", "admin"));
+			$arrReturn["gifread"] = (isset($arrGd["GIF Read Support"]) && $arrGd["GIF Read Support"] ? $this->getText("commons_yes", "system") : $this->getText("commons_no", "system"));
+			$arrReturn["gifwrite"] = (isset($arrGd["GIF Create Support"]) && $arrGd["GIF Create Support"] ? $this->getText("commons_yes", "system") : $this->getText("commons_no", "system"));
+			$arrReturn["jpg"] = (( (isset($arrGd["JPG Support"]) && $arrGd["JPG Support"]) || (isset($arrGd["JPEG Support"]) && $arrGd["JPEG Support"]) ) ? $this->getText("commons_yes", "system") : $this->getText("commons_no", "system"));
+			$arrReturn["png"] = (isset($arrGd["PNG Support"]) && $arrGd["PNG Support"] ? $this->getText("commons_yes", "system") : $this->getText("commons_no", "system"));
 		}
 		else
 			$arrReturn[""] = $this->getText("keinegd");
