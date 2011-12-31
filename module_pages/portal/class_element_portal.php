@@ -33,7 +33,7 @@ abstract class class_element_portal extends class_portal {
 	public function __construct($objElementData) {
 		parent::__construct();
 
-        $this->setArrModuleEntry("modul", "elemente");
+        $this->setArrModuleEntry("modul", "elements");
         $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
 
 

@@ -44,6 +44,7 @@ echo "  <th>DE</th>";
 echo "  <th>PT</th>";
 echo "  <th>BG</th>";
 echo "  <th>RU</th>";
+echo "  <th>SV</th>";
 echo "</tr>";
 
 $strPrevHash = "";
@@ -68,6 +69,7 @@ foreach($arrEntries as $objOneEntry) {
     echo "  <td>".htmlentities($objOneEntry->strPt, ENT_COMPAT, "UTF-8")."</td>";
     echo "  <td>".htmlentities($objOneEntry->strBg, ENT_COMPAT, "UTF-8")."</td>";
     echo "  <td>".htmlentities($objOneEntry->strRu, ENT_COMPAT, "UTF-8")."</td>";
+    echo "  <td>".htmlentities($objOneEntry->strSv, ENT_COMPAT, "UTF-8")."</td>";
     echo "</tr>";
 }
 echo "</table>";
@@ -97,6 +99,7 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
                     if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
                     if($arrTemp[2] == "bg") $objTemp->strBg = $strValue;
                     if($arrTemp[2] == "ru") $objTemp->strRu = $strValue;
+                    if($arrTemp[2] == "sv") $objTemp->strSv = $strValue;
 
 
                 }
@@ -157,6 +160,7 @@ class debug_class_lang_helper {
     public $strPt;
     public $strBg;
     public $strRu;
+    public $strSv;
 
     public $strSoundex;
     public $strHash;
