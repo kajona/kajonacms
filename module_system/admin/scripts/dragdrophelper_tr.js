@@ -1,5 +1,5 @@
 //   (c) 2004-2006 by MulchProductions, www.mulchprod.de
-//   (c) 2007-2011 by Kajona, www.kajona.de
+//   (c) 2007-2012 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 //       $Id$
 
@@ -28,7 +28,7 @@ KAJONA.admin.dragndroplist = {};
 
 	//Basic functions
 	KAJONA.admin.dragndroplist.DDApp = {
-	
+
     	init: function() {
 		   //iterate over all lists available
 		   for(var l=0; l<arrayTableIds.length; l++) {
@@ -101,7 +101,7 @@ KAJONA.admin.dragndroplist = {};
 	        var clickEl = this.getEl();
 			//save the start-pos
 			posBeforeMove = KAJONA.admin.dragndroplist.DDApp.getCurrentPos(clickEl.id);
-			
+
 	        Dom.setStyle(clickEl, "visibility", "hidden");
 	        dragEl.innerHTML = clickEl.innerHTML;
 			//jump the inner element up until an tr-element
@@ -169,7 +169,7 @@ KAJONA.admin.dragndroplist = {};
 	                if(destEl != null && destEl.nodeName.toLowerCase() == "table") {
 	                   return;
 	                }
-	                   
+
 	                destEl.appendChild(this.getEl());
 	                destDD.isEmpty = false;
 	                DDM.refreshCache();

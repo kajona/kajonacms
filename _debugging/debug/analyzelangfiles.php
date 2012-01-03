@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
@@ -138,8 +138,8 @@ function debug_get_soundex($arrEntries) {
 
 
 function debug_sort( $objA, $objB ) {
-    if(  $objA->strSoundex ==  $objB->strSoundex ) {
-        if($objA->strEn ==  $objB->strEn ) {
+    if($objA->strSoundex == $objB->strSoundex) {
+        if($objA->strEn == $objB->strEn) {
             return 0 ;
         }
         return ($objA->strEn < $objB->strEn) ? -1 : 1;
