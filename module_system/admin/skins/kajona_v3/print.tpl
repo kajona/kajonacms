@@ -16,10 +16,10 @@
 
 <table cellspacing="0" cellpadding="0">
 	<tbody>
-		
-		
+
+
 		<tr>
-		
+
 			<td id="contentMain" style="">
 				<h1>%%moduletitle%%</h1>
 				<div id="contentBox">
@@ -27,9 +27,9 @@
 				</div>
 			</td>
 		</tr>
-		
+
 		<tr>
-			<td  id="copyright">&copy; 2011 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
+			<td  id="copyright">&copy; 2012 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
 		</tr>
 	</tbody>
 </table>
