@@ -206,7 +206,7 @@ abstract class class_systemtask_base {
      * @return void
      */
     public function setParam($strKey, $strValue) {
-        return $this->objSystemCommon->setParam($strKey, $strValue);
+        $this->objSystemCommon->setParam($strKey, $strValue);
     }
 
     /**

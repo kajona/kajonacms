@@ -69,7 +69,6 @@ abstract class class_portal  {
 
 	private   $strAction;			        //current action to perform (GET/POST)
 	private   $strSystemid;			        //current systemid
-	private   $arrParams;			        //array containing other GET / POST / FILE variables
 	private   $arrHistory;			        //Stack containing the 5 urls last visited
 	protected $arrModule = array();	        //Array containing info about the current module
 	protected $strTemplateArea;		        //String containing the current Area for the templateobject
@@ -84,16 +83,9 @@ abstract class class_portal  {
      */
 	public function __construct($arrElementData = array(), $strSystemid = "") {
 
-		//GET / POST / FILE Params
-		$this->arrParams = getAllPassedParams();
-
 		//Setting SystemID
-		if($strSystemid == "") {
-			if(isset($this->arrParams["systemid"]))
-				$this->setSystemid($this->arrParams["systemid"]);
-			else
-				$this->strSystemid = "";
-		}
+		if($strSystemid == "")
+            $this->setSystemid(class_carrier::getInstance()->getParam("systemid"));
 		else
 			$this->setSystemid($strSystemid);
 
@@ -198,7 +190,8 @@ abstract class class_portal  {
      * @param mixed $mixedValue Value
      */
 	public function setParam($strKey, $mixedValue) {
-		$this->arrParams[$strKey] = $mixedValue;
+        class_carrier::getInstance()->setParam($strKey, $mixedValue);
+//		$this->arrParams[$strKey] = $mixedValue;
 	}
 
 	/**
@@ -208,10 +201,11 @@ abstract class class_portal  {
 	 * @return string else ""
 	 */
 	public function getParam($strKey) {
-		if(isset($this->arrParams[$strKey]))
-			return $this->arrParams[$strKey];
-		else
-			return "";
+        return class_carrier::getInstance()->getParam($strKey);
+//		if(isset($this->arrParams[$strKey]))
+//			return $this->arrParams[$strKey];
+//		else
+//			return "";
 	}
 
 	/**
@@ -220,7 +214,8 @@ abstract class class_portal  {
 	 * @return mixed
 	 */
 	public final function getAllParams() {
-	    return $this->arrParams;
+        return class_carrier::getAllParams();
+//	    return $this->arrParams;
 	}
 
 	/**

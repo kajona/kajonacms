@@ -136,6 +136,8 @@ function getServer($strKey) {
  * Returns all params passed during startup by get, post or files
  *
  * @return array
+ * @deprecated use class_carrier::getAllParams() instead
+ * @todo remove
  */
 function getAllPassedParams() {
     return class_carrier::getAllParams();

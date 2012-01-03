@@ -62,7 +62,6 @@ abstract class class_admin {
 
 	private   $strAction;			            //current action to perform (GET/POST)
 	private   $strSystemid;			            //current systemid
-	private   $arrParams;			            //array containing other GET / POST / FILE variables
 	private   $strLangBase;                     //String containing the current module to be used to load texts
 	private   $arrHistory;			            //Stack containing the 5 urls last visited
 	protected $arrModule = array();	            //Array containing information about the current module
@@ -82,19 +81,11 @@ abstract class class_admin {
         if(!isset($this->arrModule["template"]))
             $this->setArrModuleEntry("template", "/main.tpl");
 
-		//GET / POST / FILE Params
-		$this->arrParams = getAllPassedParams();
-
 		//Setting SystemID
-		if($strSystemid == "") {
-			if(isset($this->arrParams["systemid"]))
-				$this->setSystemid($this->arrParams["systemid"]);
-			else
-				$this->strSystemid = "";
-		}
+		if($strSystemid == "")
+            $this->setSystemid(class_carrier::getInstance()->getParam("systemid"));
 		else
 			$this->setSystemid($strSystemid);
-
 
 		//Generating all the needed Objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
@@ -142,7 +133,8 @@ abstract class class_admin {
      * @return void
 	 */
 	public function setParam($strKey, $mixedValue) {
-		$this->arrParams[$strKey] = $mixedValue;
+        class_carrier::getInstance()->setParam($strKey, $mixedValue);
+//		$this->arrParams[$strKey] = $mixedValue;
 	}
 
 	/**
@@ -152,12 +144,13 @@ abstract class class_admin {
 	 * @return string else ""
 	 */
 	public function getParam($strKey) {
-		if(isset($this->arrParams[$strKey])) {
-			return $this->arrParams[$strKey];
-        }
-		else {
-			return "";
-        }
+        return class_carrier::getInstance()->getParam($strKey);
+//		if(isset($this->arrParams[$strKey])) {
+//			return $this->arrParams[$strKey];
+//        }
+//		else {
+//			return "";
+//        }
 	}
 
 	/**
@@ -167,7 +160,8 @@ abstract class class_admin {
 	 * @final
 	 */
 	public final function getAllParams() {
-	    return $this->arrParams;
+        return class_carrier::getAllParams();
+//	    return $this->arrParams;
 	}
 
 	/**

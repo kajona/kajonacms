@@ -212,6 +212,50 @@ class class_toolkit_admin extends class_toolkit {
 
 
     /**
+     * Renders a single input-text-field. The value is taken from the object passed, whereas the property is
+     * accessed by its getter (bean-style accessors required).
+     *
+     * @param class_model $objEditable
+     * @param $strProperty
+     * @param $strTitle
+     * @return string
+     * @throws class_exception
+     *
+     * @todo: comments, plz!
+     */
+    public function formInputTextSimple(class_model $objEditable, $strProperty, $strTitle) {
+        if(!method_exists($objEditable, "get".$strProperty))
+            throw new class_exception("instance of ".get_class($objEditable)." does not support getter for ".$strProperty, class_exception::$level_ERROR);
+
+        $strName = uniStrtolower("form_".$strProperty);
+        $arrParams = class_carrier::getAllParams();
+        $strValue = isset($arrParams[$strName]) ? $arrParams[$strName] : call_user_func(array($objEditable, "get".$strProperty));
+
+        return $this->formInputText($strName, $strTitle, $strValue);
+    }
+
+    /**
+     * Writes a value from the params-array into a property of the passed object. The property is accessed
+     * by its setter (bean-style accessors required).
+     *
+     * @param class_model $objEditable
+     * @param $strProperty
+     * @throws class_exception
+     *
+     * @todo: comments, plz!
+     */
+    public function setValueFromForm(class_model $objEditable, $strProperty) {
+        if(!method_exists($objEditable, "set".$strProperty))
+            throw new class_exception("instance of ".get_class($objEditable)." does not support setter for ".$strProperty, class_exception::$level_ERROR);
+
+        $arrParams = class_carrier::getAllParams();
+        $strName = uniStrtolower("form_".$strProperty);
+        if(isset($arrParams[$strName]))
+            call_user_func(array($objEditable, "set".$strProperty), $arrParams[$strName]);
+    }
+
+
+    /**
      * Returns a regular text-input field
      *
      * @param string $strName
@@ -701,13 +745,14 @@ class class_toolkit_admin extends class_toolkit {
      * Returns the tags to close an open form.
      * Includes the hidden fields for a passed pe param and a passed pv param by default.
      *
+     * @param bool $bitIncludePeFields
      * @return string
      */
     public function formClose($bitIncludePeFields = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_close");
         $strPeFields = "";
         if($bitIncludePeFields) {
-            $arrParams = getAllPassedParams();
+            $arrParams = class_carrier::getAllParams();
             if(array_key_exists("pe", $arrParams))
                 $strPeFields .= $this->formInputHidden("pe", $arrParams["pe"]);
             if(array_key_exists("pv", $arrParams))
@@ -717,8 +762,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-/*"*****************************************************************************************************/
-// --- LIST-Elements ------------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- LIST-Elements ------------------------------------------------------------------------------------
 
     /**
      * Returns the htmlcode needed to start a proper list

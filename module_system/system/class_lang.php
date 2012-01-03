@@ -197,10 +197,10 @@ class class_lang {
 			 	}
 			}
 			if($bitFileMatched)
-		        return true;
+		        return;
 
 			//if we reach up here, no matching file was found. search for fallback file (fallback language)
-			foreach($arrFiles as $strFilename) {
+			foreach($arrFiles as $strPath => $strFilename) {
 				$strTemp = str_replace(".php", "", $strFilename);
 			 	$arrName = explode("_", $strTemp);
 

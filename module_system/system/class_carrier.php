@@ -199,13 +199,45 @@ class class_carrier {
 
     /**
      * Returns all params passed to the system, including $_GET, $_POST; $_FILES
+     * This array may be modified, changes made are available during the whole request!
      * @return array
      */
     public static function getAllParams() {
-        if(self::$arrParams == null)
-            self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
-
+        self::initParamsArray();
         return self::$arrParams;
     }
+
+    /**
+     * Writes a param to the current set of params sent with the current requests.
+     *
+     * @param $strKey
+     * @param $strValue
+     * @return void
+     */
+    public function setParam($strKey, $strValue) {
+        self::initParamsArray();
+        self::$arrParams[$strKey] = $strValue;
+    }
+
+    /**
+     * Returns the value of a param sent with the current request.
+     * @param $strKey
+     * @return string
+     */
+    public function getParam($strKey) {
+        self::initParamsArray();
+        return (isset(self::$arrParams[$strKey]) ? self::$arrParams[$strKey] : "");
+    }
+
+    /**
+     * Internal helper, loads and merges all params passed with the current request.
+     * @static
+     *
+     */
+    private static function initParamsArray() {
+        if(self::$arrParams == null)
+            self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
+    }
+
 
 }

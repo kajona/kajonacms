@@ -49,7 +49,6 @@ abstract class class_root {
 	private   $objLang = null;				//Object managing the langfiles
 
 	private   $strAction;			        //current action to perform (GET/POST)
-	private   $arrParams;			        //array containing other GET / POST / FILE variables
 	protected $arrModule = array();	        //Array containing information about the current module
 
 
@@ -145,9 +144,6 @@ abstract class class_root {
      * @return class_root
      */
 	public function __construct($strSystemid = "") {
-
-		//GET / POST / FILE Params
-		$this->arrParams = getAllPassedParams();
 
 		//Generating all the needed objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
@@ -1531,7 +1527,8 @@ abstract class class_root {
      * @param mixed $mixedValue Value
      */
 	public function setParam($strKey, $mixedValue) {
-		$this->arrParams[$strKey] = $mixedValue;
+        class_carrier::getInstance()->setParam($strKey, $mixedValue);
+//		$this->arrParams[$strKey] = $mixedValue;
 	}
 
 	/**
@@ -1541,10 +1538,11 @@ abstract class class_root {
 	 * @return string else ""
 	 */
 	public function getParam($strKey) {
-		if(isset($this->arrParams[$strKey]))
-			return $this->arrParams[$strKey];
-		else
-			return "";
+        return class_carrier::getInstance()->getParam($strKey);
+//		if(isset($this->arrParams[$strKey]))
+//			return $this->arrParams[$strKey];
+//		else
+//			return "";
 	}
 
 	/**
@@ -1553,7 +1551,8 @@ abstract class class_root {
 	 * @return mixed
 	 */
 	public final function getAllParams() {
-	    return $this->arrParams;
+        return class_carrier::getAllParams();
+//	    return $this->arrParams;
 	}
 
 	/**
