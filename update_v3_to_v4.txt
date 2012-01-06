@@ -38,6 +38,11 @@ General:
 - dirname(__FILE__) is replaces by __DIR__
 - lang-files (admin & portal) are merged into a single file
 
+Removed Constants:
+- _systempath_
+- _portalpath_
+- _adminpath_
+
 Event-Handling
 - statusChanged events are no longer triggered by class_root::additionalCallsOnStatuschange / class_model::doAdditionalActionsOnStatusChange()
   instead, model-objects should implement interface_statuschanged_listener
