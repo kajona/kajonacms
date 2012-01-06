@@ -264,13 +264,14 @@ class class_resourceloader {
      * If the file can't be found, false is returned instead.
      *
      * @param string $strFile the relative path
+     * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      * @return string|false the absolute path
      */
-    public function getPathForFile($strFile) {
+    public function getPathForFile($strFile, $bitCheckProject = true) {
         $strReturn = array();
 
         //check if the same is available in the projects-folder
-        if(is_file(_realpath_._projectpath_."/".$strFile)) {
+        if($bitCheckProject && is_file(_realpath_._projectpath_."/".$strFile)) {
             return _projectpath_."/".$strFile;
         }
 

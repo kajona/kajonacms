@@ -8,7 +8,11 @@
 ********************************************************************************************************/
 
 /**
- * Class to manage and access config-values
+ * Class to manage and access config-values.
+ * By default, the config-file has to be placed in the modules /system/config folder.
+ * When reading the file, the system merges the entries with identically named config-files
+ * located at /project/system/config/.
+ * This avoids that the original file has to be changed and may get invalid on system-updates.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -26,57 +30,66 @@ class class_config {
 	 */
 	private function __construct($strConfigFile = "config.php") 	{
 
-		$config = array();
-		$debug = array();
-
-		//Include the config-File
+        $this->readConfigFile($strConfigFile);
         if($strConfigFile == "config.php") {
-            if(!@include _corepath_."/module_system/system/config/".$strConfigFile)
-                die("Error reading config-file!");
-
-            //overwrite with settings from project
-            if(is_file(_realpath_."/project/system/config/".$strConfigFile) )
-                if(!@include _realpath_."/project/system/config/".$strConfigFile)
-                    die("Error reading config-file: ".$strConfigFile);
-        }
-        else {
-            $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);
-            if(!@include _realpath_.$strPath)
-                die("Error reading config-file: ".$strConfigFile);
-
-        }
-
-		$this->arrConfig = $config;
-		$this->arrDebug = $debug;
-
-		//Now we have to set up some more constants...
-        if($strConfigFile == "config.php") {
-            define("_dbprefix_" , 		$this->getConfig("dbprefix"));
-            define("_systempath_" , 	$this->getConfig("dirsystem"));
-            define("_portalpath_" , 	$this->getConfig("dirportal"));
-            define("_adminpath_" , 		$this->getConfig("diradmin"));
-            define("_templatepath_" , 	$this->getConfig("dirtemplates"));
-            define("_projectpath_" , 	$this->getConfig("dirproject"));
-            define("_filespath_" , 	    $this->getConfig("dirfiles"));
-            define("_langpath_" , 		$this->getConfig("dirlang"));
-            define("_skinpath_" , 		$this->getConfig("dirskins"));
-            define("_indexpath_",		_webpath_."/index.php");
-            define("_xmlpath_",         _webpath_."/xml.php");
-            define("_dblog_", 			$this->getDebug("dblog"));
-            define("_timedebug_", 		$this->getDebug("time"));
-            define("_dbnumber_", 		$this->getDebug("dbnumber"));
-            define("_templatenr_", 		$this->getDebug("templatenr"));
-            define("_memory_",          $this->getDebug("memory"));
-            define("_cache_",           $this->getDebug("cache"));
-
-
-            if($this->getConfig("images_cachepath") != "")
-                define("_images_cachepath_", $this->getConfig("images_cachepath"));
-            else
-                define("_images_cachepath_", "/portal/pics/cache/");
+            $this->setUpConstants();
         }
 
 	}
+
+    /**
+     * Resolves, reads and merges the config-files
+     * @param $strConfigFile
+     */
+    private function readConfigFile($strConfigFile) {
+        $config = array();
+        $debug = array();
+
+        //Include the config-File
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile, false);
+        if($strPath === false || !@include _corepath_."/module_system/system/config/".$strConfigFile)
+            die("Error reading config-file!");
+
+        //overwrite with settings from project
+        if(is_file(_realpath_."/project/system/config/".$strConfigFile) )
+            if(!@include _realpath_."/project/system/config/".$strConfigFile)
+                die("Error reading config-file: ".$strConfigFile);
+
+        $this->arrConfig = $config;
+        $this->arrDebug = $debug;
+}
+
+
+
+    /**
+     * Internal helper, sets up a few system-wide constants.
+     * Being called on instantiation mapped to config.pgp automatically.
+     */
+    private function setUpConstants() {
+        define("_dbprefix_" , 		$this->getConfig("dbprefix"));
+        define("_systempath_" , 	$this->getConfig("dirsystem"));
+        define("_portalpath_" , 	$this->getConfig("dirportal"));
+        define("_adminpath_" , 		$this->getConfig("diradmin"));
+        define("_templatepath_" , 	$this->getConfig("dirtemplates"));
+        define("_projectpath_" , 	$this->getConfig("dirproject"));
+        define("_filespath_" , 	    $this->getConfig("dirfiles"));
+        define("_langpath_" , 		$this->getConfig("dirlang"));
+        define("_skinpath_" , 		$this->getConfig("dirskins"));
+        define("_indexpath_",		_webpath_."/index.php");
+        define("_xmlpath_",         _webpath_."/xml.php");
+        define("_dblog_", 			$this->getDebug("dblog"));
+        define("_timedebug_", 		$this->getDebug("time"));
+        define("_dbnumber_", 		$this->getDebug("dbnumber"));
+        define("_templatenr_", 		$this->getDebug("templatenr"));
+        define("_memory_",          $this->getDebug("memory"));
+        define("_cache_",           $this->getDebug("cache"));
+
+
+        if($this->getConfig("images_cachepath") != "")
+            define("_images_cachepath_", $this->getConfig("images_cachepath"));
+        else
+            define("_images_cachepath_", "/files/cache/");
+    }
 
 
     /**
