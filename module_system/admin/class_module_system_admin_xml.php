@@ -111,7 +111,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         if($this->getParam("task") != "") {
             //include the list of possible tasks
             $objFilesystem = new class_filesystem();
-            $arrFiles = class_resourceloader::getInstance()->getFolderContent(_adminpath_."/systemtasks/", array(".php"));
+            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
             asort($arrFiles);
             //search for the matching task
             foreach ($arrFiles as $strOneFile) {

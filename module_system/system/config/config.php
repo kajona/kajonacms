@@ -23,10 +23,7 @@
 
 //--common settings -------------------------------------------------------------------------------------
 
-    $config['diradmin']             = "/admin";                                //Path containing the admin-classes
-    $config['dirportal']            = "/portal";                               //Path containing the portal-classes
     $config['dirtemplates']         = "/templates";                            //Path containing the templates
-    $config['dirsystem']            = "/system";                               //Path containing the system classes
     $config['dirlang']              = "/lang";                                 //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
     $config['dirproject']           = "/project";                              //Path containing the project-files

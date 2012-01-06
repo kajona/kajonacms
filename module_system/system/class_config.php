@@ -67,9 +67,6 @@ class class_config {
      */
     private function setUpConstants() {
         define("_dbprefix_" , 		$this->getConfig("dbprefix"));
-        define("_systempath_" , 	$this->getConfig("dirsystem"));
-        define("_portalpath_" , 	$this->getConfig("dirportal"));
-        define("_adminpath_" , 		$this->getConfig("diradmin"));
         define("_templatepath_" , 	$this->getConfig("dirtemplates"));
         define("_projectpath_" , 	$this->getConfig("dirproject"));
         define("_filespath_" , 	    $this->getConfig("dirfiles"));

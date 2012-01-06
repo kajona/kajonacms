@@ -388,7 +388,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strTaskOutput = "";
 
         //include the list of possible tasks
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent(_adminpath_."/systemtasks/", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
         asort($arrFiles);
 
         //react on special task-commands?

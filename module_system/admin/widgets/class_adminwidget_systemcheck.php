@@ -65,6 +65,8 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
+            $strReturn .= "FIXME";
+            /*
             $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_installer").(is_dir(_realpath_."/installer") ?
                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
                         "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
@@ -83,6 +85,7 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
             $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._images_cachepath_) ?
                         "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
                         "<span class=\"nok\">".$this->getLang("commons_no")."</span>"));
+            */
 
         }
         return "<div class=\"adminwidget_systemcheck\">".$strReturn."</div>";

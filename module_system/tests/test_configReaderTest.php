@@ -16,9 +16,9 @@ class class_test_configReaderTest extends class_testbase  {
 
 TXT;
 
-        file_put_contents(_corepath_."/module_system"._systempath_."/config/test1.php", $strSimpleConfigFile);
+        file_put_contents(_corepath_."/module_system/system/config/test1.php", $strSimpleConfigFile);
 
-        $this->assertFileExists(_corepath_."/module_system"._systempath_."/config/test1.php");
+        $this->assertFileExists(_corepath_."/module_system/system/config/test1.php");
 
         $objConfig = class_config::getInstance("test1.php");
 
@@ -26,9 +26,9 @@ TXT;
         $this->assertEquals("testval2", $objConfig->getConfig("testkey2"));
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete("/core/module_system"._systempath_."/config/test1.php");
+        $objFilesystem->fileDelete("/core/module_system/system/config/test1.php");
 
-        $this->assertFileNotExists(_corepath_."/module_system"._systempath_."/config/test1.php");
+        $this->assertFileNotExists(_corepath_."/module_system/system/config/test1.php");
 
     }
 
@@ -50,11 +50,11 @@ TXT;
 TXT;
 
 
-        file_put_contents(_corepath_."/module_system"._systempath_."/config/test2.php", $strSimpleConfigFile);
-        file_put_contents(_realpath_._projectpath_._systempath_."/config/test2.php", $strMergingConfigFile);
+        file_put_contents(_corepath_."/module_system/system/config/test2.php", $strSimpleConfigFile);
+        file_put_contents(_realpath_._projectpath_."/system/config/test2.php", $strMergingConfigFile);
 
-        $this->assertFileExists(_corepath_."/module_system"._systempath_."/config/test2.php");
-        $this->assertFileExists(_realpath_._projectpath_._systempath_."/config/test2.php");
+        $this->assertFileExists(_corepath_."/module_system/system/config/test2.php");
+        $this->assertFileExists(_realpath_._projectpath_."/system/config/test2.php");
 
         $objConfig = class_config::getInstance("test2.php");
 
@@ -62,11 +62,11 @@ TXT;
         $this->assertEquals("otherval", $objConfig->getConfig("testkey2"));
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete("/core/module_system"._systempath_."/config/test2.php");
-        $objFilesystem->fileDelete(_projectpath_._systempath_."/config/test2.php");
+        $objFilesystem->fileDelete("/core/module_system/system/config/test2.php");
+        $objFilesystem->fileDelete(_projectpath_."/system/config/test2.php");
 
-        $this->assertFileNotExists(_corepath_."/module_system"._systempath_."/config/test2.php");
-        $this->assertFileNotExists(_realpath_._projectpath_._systempath_."/config/test2.php");
+        $this->assertFileNotExists(_corepath_."/module_system/system/config/test2.php");
+        $this->assertFileNotExists(_realpath_._projectpath_."/system/config/test2.php");
     }
 
 }

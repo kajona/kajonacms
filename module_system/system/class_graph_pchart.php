@@ -7,8 +7,8 @@
 *	$Id$                                             *
 ********************************************************************************************************/
 
-require_once(_systempath_."/pChart/pChart.class");
-require_once(_systempath_."/pChart/pData.class");
+require_once(_corepath_."/module_system/system/pChart/pChart.class");
+require_once(_corepath_."/module_system/system/pChart/pData.class");
 
 
 /**
@@ -327,7 +327,7 @@ class class_graph_pchart implements interface_graph {
         }
 
         $arrFontColors = hex2rgb($this->strFontColor);
-        $this->objChart->setFontProperties(_systempath_.$this->strFont, 8);
+        $this->objChart->setFontProperties(_corepath_."/module_system/system".$this->strFont, 8);
 
         //set up the axis-titles
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR ||
@@ -371,7 +371,7 @@ class class_graph_pchart implements interface_graph {
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR) {
 
             //the zero-line
-            $this->objChart->setFontProperties(_systempath_.$this->strFont, 6);
+            $this->objChart->setFontProperties(_corepath_."/module_system/system".$this->strFont, 6);
             $this->objChart->drawBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), TRUE);
             $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);
 
@@ -387,7 +387,7 @@ class class_graph_pchart implements interface_graph {
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
 
             //the zero-line
-            $this->objChart->setFontProperties(_systempath_.$this->strFont, 6);
+            $this->objChart->setFontProperties(_corepath_."/module_system/system".$this->strFont, 6);
             $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);
             $this->objChart->drawStackedBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 75);
         }
@@ -404,7 +404,7 @@ class class_graph_pchart implements interface_graph {
 
 
         // Finish the graph
-        $this->objChart->setFontProperties(_systempath_.$this->strFont, 7);
+        $this->objChart->setFontProperties(_corepath_."/module_system/system".$this->strFont, 7);
 
         //set up the legend
         if($this->bitRenderLegend) {
@@ -425,7 +425,7 @@ class class_graph_pchart implements interface_graph {
 
         //draw the title
         if($this->strGraphTitle != "") {
-        $this->objChart->setFontProperties(_systempath_.$this->strFont, 10);
+        $this->objChart->setFontProperties(_corepath_."/module_system/system".$this->strFont, 10);
             $this->objChart->drawTitle(0, $intTopMargin, $this->strGraphTitle, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], $this->intWidth, 10);
         }
 

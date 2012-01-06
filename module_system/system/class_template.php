@@ -90,8 +90,8 @@ class class_template {
             catch (class_exception $objEx) {
                 if($strName == "/elements.tpl" || _admin_) {
                     //try to resolve the file in the current skin
-                    if(is_file(_corepath_."/module_system"._adminpath_."/skins/".class_session::getInstance()->getAdminSkin().$strName))
-                        $strName = "/core/module_system"._adminpath_."/skins/".class_session::getInstance()->getAdminSkin().$strName;
+                    if(is_file(_corepath_."/module_system/admin/skins/".class_session::getInstance()->getAdminSkin().$strName))
+                        $strName = "/core/module_system/admin/skins/".class_session::getInstance()->getAdminSkin().$strName;
                 }
                 else
                     throw $objEx;

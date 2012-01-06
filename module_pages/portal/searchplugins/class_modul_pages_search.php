@@ -36,6 +36,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
         $arrSearch["pages_elements"] = array();
         $arrSearch["page"] = array();
 
+        //FIXME load plugins
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_portalpath_."/searchplugins/", array(".php"));
 

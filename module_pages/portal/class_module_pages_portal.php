@@ -345,7 +345,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 		$arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
 		//Include the $arrGlobal Elements
 		$arrGlobal = array();
-        $strPath = class_resourceloader::getInstance()->getPathForFile(_portalpath_."/global_includes.php");
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");
         if($strPath !== false)
 		    include(_realpath_.$strPath);
 

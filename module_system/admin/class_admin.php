@@ -551,7 +551,7 @@ abstract class class_admin {
 		    }
 		}
 		else
-		    $strTemplateID = $this->objTemplate->readTemplate("/core/module_system"._adminpath_."/skins/".$this->objSession->getAdminSkin().$this->arrModule["template"], "", true);
+		    $strTemplateID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$this->objSession->getAdminSkin().$this->arrModule["template"], "", true);
 		return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
 	}
 

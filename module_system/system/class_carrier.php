@@ -183,14 +183,14 @@ class class_carrier {
                 if($strAdminToolkitClass == "")
                     $strAdminToolkitClass = "class_toolkit_admin";
 
-				require_once(_corepath_."/module_system"._adminpath_."/".$strAdminToolkitClass.".php");
+				require_once(_corepath_."/module_system/admin/".$strAdminToolkitClass.".php");
 				$this->objToolkitAdmin = new $strAdminToolkitClass();
 			}
 			return $this->objToolkitAdmin;
 		}
 		elseif ($strArea == "portal") {
 			if($this->objToolkitPortal == null) {
-				require_once(_corepath_."/module_system"._portalpath_."/class_toolkit_portal.php");
+				require_once(_corepath_."/module_system/portal/class_toolkit_portal.php");
 				$this->objToolkitPortal = new class_toolkit_portal();
 			}
 			return $this->objToolkitPortal;

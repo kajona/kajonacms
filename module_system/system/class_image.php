@@ -619,10 +619,10 @@ class class_image {
         }
 
 		//load font
-        if(is_file(_systempath_."/fonts/".$strFont) && function_exists("imagefttext")) {
+        if(is_file(_corepath_."/module_system/system/fonts/".$strFont) && function_exists("imagefttext")) {
             $strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
             imagealphablending($this->objImage, true);
-			@imagefttext($this->objImage, $intSize, $intAngle, $intX, $intY, $intColor, _systempath_."/fonts/".$strFont, $strText);
+			@imagefttext($this->objImage, $intSize, $intAngle, $intX, $intY, $intColor, _corepath_."/module_system/system/fonts/".$strFont, $strText);
 			imagealphablending($this->objImage, false);
 		}
 
@@ -882,8 +882,8 @@ class class_image {
      * @return array or false in case of errors
      */
     public function getBoundingTextbox($intFontSize, $floatAngle, $strFont, $strText){
-        if(is_file(_systempath_."/fonts/".$strFont)) {
-            return @ImageTTFBBox($intFontSize, $floatAngle, _systempath_."/fonts/".$strFont, $strText);
+        if(is_file(_corepath_."/module_system/system/fonts/".$strFont)) {
+            return @ImageTTFBBox($intFontSize, $floatAngle, _corepath_."/module_system/system/fonts/".$strFont, $strText);
         }
         return false;
     }
