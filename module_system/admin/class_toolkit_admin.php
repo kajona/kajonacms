@@ -639,6 +639,18 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
+
+    public function formInputDropdownSimple(class_model $objEditable, $strProperty, $strTitle, $arrValues) {
+        if(!method_exists($objEditable, "get".$strProperty))
+                throw new class_exception("instance of ".get_class($objEditable)." does not support getter for ".$strProperty, class_exception::$level_ERROR);
+
+        $strName = uniStrtolower("form_".$strProperty);
+        $arrParams = class_carrier::getAllParams();
+        $strValue = isset($arrParams[$strName]) ? $arrParams[$strName] : call_user_func(array($objEditable, "get".$strProperty));
+
+        return $this->formInputDropdown($strName, $arrValues, $strTitle, $strValue);
+    }
+
     /**
      * Returning a complete Dropdown
      *

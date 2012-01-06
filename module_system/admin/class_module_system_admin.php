@@ -56,9 +56,16 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strAction = $this->getAction();
         if($strAction == "sendMail") {
             return array(
-              "mail_recipient" => "string",
-              "mail_subject" => "string",
-              "mail_body" => "string"
+                "mail_recipient" => "string",
+                "mail_subject" => "string",
+                "mail_body" => "string"
+            );
+        }
+
+        if($strAction == "saveAspect") {
+            return array(
+                "form_strname" => "string",
+                "form_bitdefault" => "number"
             );
         }
     }
@@ -807,41 +814,36 @@ class class_module_system_admin extends class_admin_simple implements interface_
 	    $strReturn = "";
 	    $arrDefault = array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes"));
 
+        $objAspect = null;
         if($strMode == "new") {
             $objAspect = new class_module_system_aspect();
+        }
+        else if($strMode == "edit") {
+            $objAspect = new class_module_system_aspect($this->getSystemid());
+            if(!$objAspect->rightEdit())
+                $objAspect = null;
+        }
 
+        if($objAspect != null) {
+            $strReturn .= $this->objToolkit->getValidationErrors($this, "saveAspect");
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
-//            $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getLang("commons_name"), $this->getParam("aspect_name"));
             //TODO: comments, plz
             $strReturn .= $this->objToolkit->formInputTextSimple($objAspect, "strName", $this->getLang("commons_name"));
+            $strReturn .= $this->objToolkit->formInputDropdownSimple($objAspect, "bitDefault", $this->getLang("aspect_default"), $arrDefault);
 
-            $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getLang("aspect_default"), $this->getParam("aspect_default"));
-            $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
+//            $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getLang("commons_name"), $this->getParam("aspect_name"));
+//            $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getLang("aspect_default"), $this->getParam("aspect_default"));
+
+            $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $objAspect->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
         }
-        elseif ($strMode == "edit") {
-            $objAspect = new class_module_system_aspect($this->getSystemid());
-            if($objAspect->rightEdit()) {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
-//                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getLang("commons_name"), $objAspect->getStrName());
-                //TODO: comments, plz
-                $strReturn .= $this->objToolkit->formInputTextSimple($objAspect, "strName", $this->getLang("commons_name"));
+        else
+            $strReturn = $this->getLang("commons_error_permissions");
 
-                $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getLang("aspect_default"), $objAspect->getBitDefault());
-                $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
-                $strReturn .= $this->objToolkit->formInputHidden("systemid", $objAspect->getSystemid());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-                $strReturn .= $this->objToolkit->formClose();
-
-                $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
-            }
-            else
-			    $strReturn = $this->getLang("commons_error_permissions");
-
-        }
         return $strReturn;
 	}
 
@@ -854,21 +856,24 @@ class class_module_system_admin extends class_admin_simple implements interface_
 	protected function actionSaveAspect() {
         $objAspect = null;
 
+        if(!$this->validateForm()) {
+            return $this->actionNewAspect($this->getParam("mode"));
+        }
+
+
         if($this->getParam("mode") == "new")
             $objAspect = new class_module_system_aspect();
         else if($this->getParam("mode") == "edit")
             $objAspect = new class_module_system_aspect($this->getSystemid());
 
         if($objAspect != null) {
-            //reset the default aspect?
-            if($this->getParam("aspect_default") == "1")
-                class_module_system_aspect::resetDefaultAspect();
 
             //TODO: comments, plz
             $this->objToolkit->setValueFromForm($objAspect, "strName");
+            $this->objToolkit->setValueFromForm($objAspect, "bitDefault");
 
 //            $objAspect->setStrName($this->getParam("aspect_name"));
-            $objAspect->setBitDefault($this->getParam("aspect_default"));
+//            $objAspect->setBitDefault($this->getParam("aspect_default"));
             if(!$objAspect->updateObjectToDb() )
                 throw new class_exception("Error creating new aspect", class_exception::$level_ERROR);
         }

@@ -114,6 +114,9 @@ class class_module_system_aspect extends class_model implements interface_model,
         	$this->setBitDefault(1);
         }
 
+        if($this->getBitDefault() == 1)
+            self::resetDefaultAspect();
+
         $strQuery = "UPDATE "._dbprefix_."aspects
                         SET aspect_name = ?,
                             aspect_default = ?
