@@ -69,5 +69,12 @@ TXT;
         $this->assertFileNotExists(_realpath_._projectpath_."/system/config/test2.php");
     }
 
+
+
+    public function testStaticReader() {
+
+        $this->assertEquals(class_config::readPlainConfigsFromFilesystem("https_header"), "HTTPS");
+    }
+
 }
 

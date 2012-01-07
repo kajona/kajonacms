@@ -103,12 +103,15 @@ class class_config {
 
         $config = array();
 
+        if(!@include __DIR__."/config/config.php")
+            die("Error reading config-file!");
+
+        //merge with projects-file
         if(is_file(__DIR__."/../../../project/system/config/config.php") ) {
             if(!@include __DIR__."/../../../project/system/config/config.php")
                 die("Error reading config-file!");
         }
-        else if(!@include __DIR__."/config/config.php")
-            die("Error reading config-file!");
+
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
 
