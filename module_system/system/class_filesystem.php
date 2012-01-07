@@ -425,7 +425,8 @@ class class_filesystem {
 
     /**
      * Reads a section from the end of a file.
-     * This is done with pointers, reducing the amounf of memory consumed.
+     * This is done with pointers, reducing the amount of memory consumed.
+     * Open the file by openFilePointer() before.
      *
      * @param int $intNrOfLines
      * @return string

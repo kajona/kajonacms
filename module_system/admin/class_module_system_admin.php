@@ -604,29 +604,21 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionSystemlog() {
         $strReturn = "";
-        //check needed rights
-        $strLogContent = class_logger::getInstance()->getLogFileContent();
-        $strPhpLogContent = class_logger::getInstance()->getPhpLogFileContent();
 
-        if($strLogContent != "") {
-            //create columns with same width
+        //load logfiles available
+        $objFilesystem = new class_filesystem();
+        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/log", array(".log"));
+        foreach($arrFiles as $strName) {
+            $strReturn .= $this->objToolkit->formHeadline($strName);
+            $objFilesystem->openFilePointer(_projectpath_."/log/".$strName, "r");
+            $strLogContent = $objFilesystem->readLastLinesFromFile();
             $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
             $arrLogEntries = explode("\n", $strLogContent);
-            //Reverse array
-            $arrLogEntries = array_reverse($arrLogEntries);
-            //and print the log to buffer
-            $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 25);
-        }
-        else
-            $strReturn .= $this->getLang("log_empty");
-
-        if($strPhpLogContent != "") {
-            $arrLogEntries = explode("\r", $strPhpLogContent);
-            $arrLogEntries = array_reverse($arrLogEntries);
-            $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 25);
+            $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries);
+            $objFilesystem->closeFilePointer();
         }
 
-    return $strReturn;
+        return $strReturn;
     }
 
     /**

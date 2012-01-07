@@ -26,7 +26,7 @@ final class class_logger {
      * @var int
      * @static
      */
-    public static $levelError = 0;
+    public static $levelError = 1;
 
     /**
      * Level to be used for warnings
@@ -34,7 +34,7 @@ final class class_logger {
      * @var int
      * @static
      */
-    public static $levelWarning = 1;
+    public static $levelWarning = 2;
 
     /**
      * Level to be used for infos
@@ -42,7 +42,7 @@ final class class_logger {
      * @var int
      * @static
      */
-    public static $levelInfo = 2;
+    public static $levelInfo = 3;
 
 
     /**
@@ -143,6 +143,9 @@ final class class_logger {
      */
     public function getLogFileContent() {
         $objFile = new class_filesystem();
+        if(!is_file(_realpath_._projectpath_."/log/".$this->strFilename))
+            return "";
+
         $objFile->openFilePointer(_projectpath_."/log/".$this->strFilename, "r");
         return $objFile->readLastLinesFromFile(25);
     }
@@ -158,6 +161,15 @@ final class class_logger {
         $objFile->openFilePointer(_projectpath_."/log/php.log", "r");
         return $objFile->readLastLinesFromFile(25);
     }
+
+    /**
+     * Sets the loggers logging-level aka. the granularity
+     * @param $intLogLevel
+     */
+    public function setIntLogLevel($intLogLevel) {
+        $this->intLogLevel = $intLogLevel;
+    }
+
 }
 
 

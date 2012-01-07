@@ -104,7 +104,8 @@ class class_module_user_sourcefactory {
      * Creates a list of all users matching the current query.
      * Only active users may be returned!
      *
-     * @param string $strQuery
+     * @param $strParam
+     * @internal param string $strQuery
      * @return class_module_user_user
      */
     public function getUserlistByUserquery($strParam) {
