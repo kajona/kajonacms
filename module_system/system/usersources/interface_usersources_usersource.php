@@ -17,13 +17,14 @@
  */
 interface interface_usersources_usersource {
 
-	/**
-	 * Tries to authenticate a user with the given credentials.
+    /**
+     * Tries to authenticate a user with the given credentials.
      * The password is unencrypted, each source should take care of its own encryption.
      *
-	 * @param interface_usersources_user $objUser
+     * @param interface_usersources_user $objUser
+     * @param string $strPassword
      * @return bool
-	 */
+     */
 	public function authenticateUser(interface_usersources_user $objUser, $strPassword);
 
     /**

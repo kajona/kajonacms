@@ -4,7 +4,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
+*	$Id$                           *
 ********************************************************************************************************/
 
 /**
@@ -121,7 +121,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
-            class_logger::getInstance()->addLogRow("new kajona user: ".$this->getStrEmail(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -164,7 +164,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
             }
 
-            class_logger::getInstance()->addLogRow("updated user ".$this->getStrEmail(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
@@ -188,7 +188,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * @return bool
      */
     public function deleteUser() {
-        class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUserMemberships();
         $strQuery = "DELETE FROM "._dbprefix_."user_kajona WHERE user_id=?";
         //call other models that may be interested

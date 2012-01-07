@@ -95,12 +95,12 @@ class class_db {
 	    if($this->intNumberOfOpenTransactions != 0) {
 	        //something bad happened. rollback, plz
 	        $this->objDbDriver->transactionRollback();
-	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
+	        class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }
 
 
 	    if($this->objDbDriver !== null && $this->bitConnected) {
-            class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::$DBLOG)->addLogRow("closing database-connection", class_logger::$levelInfo);
 	        $this->objDbDriver->dbclose();
         }
 
@@ -126,7 +126,7 @@ class class_db {
 	public function dbconnect() {
 	    if($this->objDbDriver !== null) {
 	        try {
-                class_logger::getInstance()->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), class_logger::$levelInfo);
+                class_logger::getInstance(class_logger::$DBLOG)->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), class_logger::$levelInfo);
 		        $this->objDbDriver->dbconnect(
                     $this->objConfig->getConfig("dbhost"),
                     $this->objConfig->getConfig("dbusername"),
@@ -529,7 +529,7 @@ class class_db {
 		}
 		else {
 		    //send a warning to the logger
-		    class_logger::getInstance()->addLogRow("Error in Query: ".$strQuery, class_logger::$levelWarning);
+		    class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Error in Query: ".$strQuery, class_logger::$levelWarning);
 		}
 
 	}
@@ -787,7 +787,7 @@ class class_db {
 	    while(count($arrFiles) >= _system_dbdump_amount_) {
 	        $strFile = array_shift($arrFiles);
 	        if(!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
-	            class_logger::getInstance()->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
+	            class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
 	            return false;
 	        }
 	        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
@@ -818,9 +818,9 @@ class class_db {
 	        }
 	    }
         if($bitDump)
-            class_logger::getInstance()->addLogRow("DB-Dump ".basename($strTargetFilename)." created", class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::$DBLOG)->addLogRow("DB-Dump ".basename($strTargetFilename)." created", class_logger::$levelInfo);
         else
-            class_logger::getInstance()->addLogRow("Error creating ".basename($strTargetFilename), class_logger::$levelError);
+            class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Error creating ".basename($strTargetFilename), class_logger::$levelError);
 	    return $bitDump;
 	}
 
@@ -859,9 +859,9 @@ class class_db {
             $objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFilename);
         }
         if($bitImport)
-            class_logger::getInstance()->addLogRow("DB-DUMP ".$strFilename." was restored", class_logger::$levelWarning);
+            class_logger::getInstance(class_logger::$DBLOG)->addLogRow("DB-DUMP ".$strFilename." was restored", class_logger::$levelWarning);
         else
-            class_logger::getInstance()->addLogRow("Error restoring DB-DUMP ".$strFilename, class_logger::$levelError);
+            class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Error restoring DB-DUMP ".$strFilename, class_logger::$levelError);
 	    return $bitImport;
 	}
 
@@ -989,7 +989,7 @@ class class_db {
 	 *
 	 */
 	public function flushQueryCache() {
-        //class_logger::getInstance()->addLogRow("Flushing query cache", class_logger::$levelInfo);
+        //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
 	    $this->arrQueryCache = array();
         $this->arrTablesCache = array();
 	}

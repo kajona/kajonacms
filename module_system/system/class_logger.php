@@ -16,6 +16,10 @@
  */
 final class class_logger {
 
+    public static $SYSTEMLOG = "systemlog.log";
+    public static $DBLOG = "dblayer.log";
+    public static $USERSOURCES = "usersources.log";
+
     /**
      * Level to be used for real errors
      *
@@ -40,40 +44,48 @@ final class class_logger {
      */
     public static $levelInfo = 2;
 
+
     /**
-     * Instance of the logger
+     * Array of logger-instances
      *
-     * @var class_logger
+     * @var class_logger[]
      */
-    private static $objInstance = null;
+    private static $arrInstances = array();
 
     /**
      * Constant defining the filename
      *
      * @var string
      */
-    private $strFilename = "systemlog.log";
+    private $strFilename = "";
 
     private $intLogLevel = 0;
 
     /**
      * Doing nothing but being private
-     *
+     * @param $strLogfile
      */
-    private function __construct() {
+    private function __construct($strLogfile) {
+        $this->strFilename = $strLogfile;
         $this->intLogLevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglogging");
     }
 
     /**
      * returns the current instance of this class
      *
+     * @param string $strLogfile
      * @return class_logger
      */
-    public static function getInstance() {
-        if (class_logger::$objInstance == null)
-            class_logger::$objInstance = new class_logger();
+    public static function getInstance($strLogfile = "") {
+        if($strLogfile == "")
+            $strLogfile = self::$SYSTEMLOG;
 
-        return self::$objInstance;
+        if(!isset(self::$arrInstances[$strLogfile])) {
+            self::$arrInstances[$strLogfile] = new class_logger($strLogfile);
+        }
+
+        return self::$arrInstances[$strLogfile];
+
     }
 
     /**
