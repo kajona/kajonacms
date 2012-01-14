@@ -311,7 +311,7 @@ class class_request_dispatcher {
 
     		//memory
     		if(_memory_ === true) {
-    		    $strDebug .= "<b>Memory:</b> ".bytesToString(memory_get_usage())." ";
+                $strDebug .= "<b>Memory/Max Memory:</b> ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." ";
     		}
 
             //and check the cache-stats

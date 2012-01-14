@@ -113,7 +113,7 @@ class class_template {
 
 		if(!$bitKnownTemplate) {
 			//We have to read the whole template from the filesystem
-            if(uniSubstr($strName, -4) == ".tpl" ) {
+            if(uniSubstr($strName, -4) == ".tpl" && is_file(_realpath_."/".$strName) ) {
 				$strTemplate = file_get_contents(_realpath_."/".$strName);
 				//Saving to the cache
 				$this->arrCacheTemplates[$strCacheTemplate] = $strTemplate;

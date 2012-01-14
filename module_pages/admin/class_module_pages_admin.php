@@ -746,17 +746,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderEditSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getLang("ordner_name"), $objFolder->getStrName());
 
-			if($objFolder->getPrevId() != $this->getModuleSystemid("pages")) {
-			    $objFolder2 = new class_module_pages_folder($objFolder->getPrevId());
-				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $objFolder2->getSystemid());
-				$strReturn .= $this->objToolkit->formInputText("folder", $this->getLang("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminDialog("pages", "pagesFolderBrowser", "&form_element=folder", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")), true);
-			}
-			else {
-				$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
-				$strReturn .= $this->objToolkit->formInputText("folder", $this->getLang("ordner_name_parent"), "", "inputText", getLinkAdminDialog("pages", "pagesFolderBrowser", "&form_element=folder", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
-			}
-
-
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
@@ -804,7 +793,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
 			$objFolder->setStrName($this->getParam("ordner_name"));
             $objFolder->setStrLanguage($this->getLanguageToWorkOn());
-            $objFolder->updateObjectToDb($this->getParam("folder_id"));
+            $objFolder->updateObjectToDb();
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objFolder->getPrevId()));
 		}

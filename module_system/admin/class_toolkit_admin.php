@@ -1766,7 +1766,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["loadNodeDataFunction"] = $strLoadNodeDataFunction;
         $arrTemplate["sideContent"] = $strSideContent;
         $arrTemplate["rootNodeTitle"] = $strRootNodeTitle;
-        $arrTemplate["rootNodeLink"] = $strRootNodeLink;
+        $arrTemplate["rootNodeLink"] = uniStrReplace("&amp;", "&", $strRootNodeLink);
         $arrTemplate["treeviewExpanders"] = "";
         for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";

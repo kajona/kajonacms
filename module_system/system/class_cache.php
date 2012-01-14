@@ -380,7 +380,7 @@ class class_cache  {
                        FROM "._dbprefix_."cache
                        ORDER BY cache_leasetime DESC";
 
-        if($intStart != null && $intEnd != null)
+        if($intStart !== null && $intEnd !== null)
             $arrCaches = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
         else
             $arrCaches = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());

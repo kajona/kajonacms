@@ -160,7 +160,7 @@ class class_module_system_changelog extends class_model implements interface_mod
         if($strSystemidFilter != "")
             $arrParams[] = $strSystemidFilter;
 
-        if($intStart != null && $intEnd != null)
+        if($intStart !== null && $intEnd !== null)
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
         else
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);

@@ -888,7 +888,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-            $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupMember", "system=".$this->getSystemid());
+            $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupMember", "systemid=".$this->getSystemid());
             $arrMembers = $arrPageViews["elements"];
 
             $strReturn .= $this->objToolkit->listHeader();
