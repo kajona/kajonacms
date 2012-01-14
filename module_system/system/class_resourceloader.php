@@ -287,4 +287,32 @@ class class_resourceloader {
     }
 
 
+    /**
+     * Converts a relative path to a real path on the filesystem.
+     * If the file can't be found, false is returned instead.
+     *
+     * @param string $strFolder the relative path
+     * @param bool $bitCheckProject en- or disables the lookup in the /project folder
+     * @return string|false the absolute path
+     */
+    public function getPathForFolder($strFolder, $bitCheckProject = true) {
+        $strReturn = array();
+
+        //check if the same is available in the projects-folder
+        if($bitCheckProject && is_dir(_realpath_._projectpath_."/".$strFolder)) {
+            return _projectpath_."/".$strFolder;
+        }
+
+        //loop all given modules
+        foreach($this->arrModules as $strSingleModule) {
+            if(is_dir(_corepath_."/".$strSingleModule."/".$strFolder)) {
+                return "/core/".$strSingleModule."/".$strFolder;
+
+            }
+        }
+
+        return false;
+    }
+
+
 }

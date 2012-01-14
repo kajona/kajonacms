@@ -71,7 +71,6 @@ class class_config {
         define("_projectpath_" , 	$this->getConfig("dirproject"));
         define("_filespath_" , 	    $this->getConfig("dirfiles"));
         define("_langpath_" , 		$this->getConfig("dirlang"));
-        define("_skinpath_" , 		$this->getConfig("dirskins"));
         define("_indexpath_",		_webpath_."/index.php");
         define("_xmlpath_",         _webpath_."/xml.php");
         define("_dblog_", 			$this->getDebug("dblog"));

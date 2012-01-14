@@ -42,6 +42,7 @@ Removed Constants:
 - _systempath_
 - _portalpath_
 - _adminpath_
+- _skinpath_
 
 Event-Handling
 - statusChanged events are no longer triggered by class_root::additionalCallsOnStatuschange / class_model::doAdditionalActionsOnStatusChange()

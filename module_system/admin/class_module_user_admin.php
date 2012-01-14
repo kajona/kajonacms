@@ -335,9 +335,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrLang[$strLanguage] = $this->getLang("lang_".$strLanguage);
 
         //skins
-        $objFilesystem = new class_filesystem();
-        $arrSkinsTemp = $objFilesystem->getCompleteList(_skinpath_, array(), array(), array(".", ".."), true, false);
-        $arrSkinsTemp = $arrSkinsTemp["folders"];
+        $arrSkinsTemp = class_adminskin_helper::getListOfAdminskinsAvailable();
         $arrSkins = array();
         foreach ($arrSkinsTemp as $strSkin)
             $arrSkins[$strSkin]	= $strSkin;

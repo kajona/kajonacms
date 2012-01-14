@@ -192,8 +192,8 @@ class class_toolkit_portal extends class_toolkit {
 		return $arrReturn;
 	}
 
-// ******************************************************************************************************
-// --- PORTALEDITOR -------------------------------------------------------------------------------------
+    // ******************************************************************************************************
+    // --- PORTALEDITOR -------------------------------------------------------------------------------------
 
     /**
      * Creates the portaleditor toolbar at top of the page
@@ -203,7 +203,7 @@ class class_toolkit_portal extends class_toolkit {
      */
     public function getPeToolbar($arrContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$strAdminSkin."/elements.tpl", "pe_toolbar", true);
+        $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar", true);
 		$strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
 
 		return $strReturn;
@@ -215,11 +215,12 @@ class class_toolkit_portal extends class_toolkit {
      * @param string $strSystemid
      * @param array $arrLinks
      * @param string $strContent
+     * @return string
      */
     public function getPeActionToolbar($strSystemid, $arrLinks, $strContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionToolbar", true);
-        $strTemplateRowID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionToolbar_link", true);
+        $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionToolbar", true);
+        $strTemplateRowID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionToolbar_link", true);
 
         $arrTemplate = array();
         $arrTemplate["actionlinks"] = "";
@@ -243,11 +244,15 @@ class class_toolkit_portal extends class_toolkit {
 
     /**
      * Loads the link-content to be used when generating a new-icon-link
+     * @param $strPlaceholder
+     * @param $strElement
+     * @param $strElementName
+     * @param $strElementHref
      * @return string
      */
     public function getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNew", true);
+        $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionNew", true);
         $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "element" => $strElement, "elementName" => $strElementName, "elementHref" => $strElementHref), $strTemplateID);
         return $strReturn;
     }
@@ -255,13 +260,15 @@ class class_toolkit_portal extends class_toolkit {
     /**
      * Generates the icon / link to create a new element at an empty placeholder using the portaleditor
      *
-     * @param string $strElementName
-     * @param string $strNewLink
+     * @param $strPlaceholder
+     * @param $strPlaceholderName
+     * @param $strLabel
+     * @param $strContentElements
      * @return string
      */
     public function getPeNewButtonWrapper($strPlaceholder, $strPlaceholderName, $strLabel, $strContentElements) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateWrapperID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNewWrapper", true);
+        $strTemplateWrapperID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionNewWrapper", true);
         $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "placeholderName" => $strPlaceholderName, "label" => $strLabel, "contentElements" => $strContentElements), $strTemplateWrapperID);
         return $strReturn;
     }
@@ -275,7 +282,7 @@ class class_toolkit_portal extends class_toolkit {
      */
     public function getPeInactiveElement($arrContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$strAdminSkin."/elements.tpl", "pe_inactiveElement", true);
+        $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_inactiveElement", true);
 		$strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
 
 		return $strReturn;

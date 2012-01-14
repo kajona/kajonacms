@@ -25,7 +25,6 @@
 
     $config['dirtemplates']         = "/templates";                            //Path containing the templates
     $config['dirlang']              = "/lang";                                 //Path containing the language-files
-    $config['dirskins']             = "/skins";                                //Path containing the skin-files
     $config['dirproject']           = "/project";                              //Path containing the project-files
     $config['dirfiles']             = "/files";                                //Path containing the files-directory
 

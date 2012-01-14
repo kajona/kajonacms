@@ -118,8 +118,7 @@ abstract class class_admin {
 
 
         //FIXME: find proper position
-        if(!defined("_skinwebpath_"))
-            define("_skinwebpath_", _webpath_."/core/module_system/admin/skins/".$this->objSession->getAdminSkin());
+        class_adminskin_helper::defineSkinWebpath();
 	}
 
     // --- Common Methods -----------------------------------------------------------------------------------
@@ -551,7 +550,7 @@ abstract class class_admin {
 		    }
 		}
 		else
-		    $strTemplateID = $this->objTemplate->readTemplate("/core/module_system/admin/skins/".$this->objSession->getAdminSkin().$this->arrModule["template"], "", true);
+		    $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($this->objSession->getAdminSkin()).$this->arrModule["template"], "", true);
 		return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
 	}
 
