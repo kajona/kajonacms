@@ -52,7 +52,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
     /**
-     * Initalises the current object, if a systemid was given
+     * Initialises the current object, if a systemid was given
      */
     protected function initObjectInternal() {
     }
@@ -247,6 +247,48 @@ class class_module_system_changelog extends class_model implements interface_mod
                            $arrRow["change_class"], $arrRow["change_action"], $arrRow["change_property"], $arrRow["change_oldvalue"], $arrRow["change_newvalue"]);
 
         return $arrReturn;
+    }
+
+    /**
+     * Shifts the entries for a given system-id to a new date.
+     * Please be aware of the consequences when shifting change-records!
+     *
+     * @static
+     * @param $strSystemid
+     * @param class_date $objNewDate
+     * @return bool
+     */
+    public static function shiftLogEntries($strSystemid, $objNewDate) {
+        $strQuery = "UPDATE "._dbprefix_."changelog
+                        SET change_date = ?
+                      WHERE change_systemid = ? ";
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($objNewDate->getLongTimestamp(), $strSystemid));
+
+    }
+
+
+    /**
+     * Fetches a single value from the change-sets, if not unique the latest value for the specified date is returned.
+     *
+     * @static
+     * @param $strSystemid
+     * @param $strProperty
+     * @param class_date $objDate
+     * @return bool
+     */
+    public static function getValueForDate($strSystemid, $strProperty, class_date $objDate) {
+        $strQuery = "SELECT change_newvalue
+                       FROM "._dbprefix_."changelog
+                      WHERE change_systemid = ?
+                        AND change_property = ?
+                        AND change_date <= ?
+                   ORDER BY change_date DESC ";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strSystemid, $strProperty, $objDate->getLongTimestamp()), 0, 1);
+        if(isset($arrRow[0]["change_newvalue"]))
+            return $arrRow[0]["change_newvalue"];
+        else
+            return false;
     }
 
     /**

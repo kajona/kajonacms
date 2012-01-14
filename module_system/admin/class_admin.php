@@ -952,6 +952,15 @@ abstract class class_admin {
     }
 
     /**
+     * Removes a validation error from the array of errors
+     *
+     * @param string $strField
+     */
+    public function removeValidationError($strField) {
+        unset($this->arrValidationErrors[$strField]);
+    }
+
+    /**
      * Use this method to reload a specific url.
      * <b>Use ONLY this method and DO NOT use header("Location: ...");</b>
      *

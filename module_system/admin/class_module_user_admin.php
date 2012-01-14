@@ -897,7 +897,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $objSingleMember = new class_module_user_user($strSingleMemberId);
 
                 $strAction = "";
-                if( $objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() ) {
+                if($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
                     $strAction .= $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
                              ,$this->getLang("mitglied_loeschen_frage")
                              ,getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
@@ -967,7 +967,19 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $arrGroups = $objSourcesytem->getAllGroupIds();
         $arrUserGroups = $objUser->getArrGroupIds();
+
+        //to avoid privilege escalation, the admin-group has to be treated in a special manner
+        //only render the group, if the current user is member of this group
+        $bitShowAdmin = false;
+        if(in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray()))
+            $bitShowAdmin = true;
+
         foreach($arrGroups as $strSingleGroup) {
+
+            if($strSingleGroup == _admins_group_id_ && !$bitShowAdmin)
+                continue;
+
+
             $objSingleGroup = new class_module_user_group($strSingleGroup);
             if(in_array($strSingleGroup, $arrUserGroups)) {
                 //user in group, checkbox checked
@@ -1019,6 +1031,16 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
             }
         }
+
+        //check, if the current user is member of the admin-group.
+        //if not, remain the admin-group as-is
+        if(!in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+            $intKey = array_search(_admins_group_id_, $arrUserGroups);
+            if($intKey !== false) {
+                $arrUserGroups[$intKey] = null;
+            }
+        }
+
 
         //loop the users' list in order to remove unwanted relations
         foreach($arrUserGroups as $strValue) {

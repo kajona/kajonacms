@@ -144,6 +144,8 @@ class class_csv {
 	        $objFilesystem = new class_filesystem();
 	        //open file
             if($bitStreamToBrowser) {
+                header('Pragma: private');
+                header('Cache-control: private, must-revalidate');
                 header("Content-type: text/csv");
                 header("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($this->strFilename))));
             }

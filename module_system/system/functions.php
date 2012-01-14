@@ -409,18 +409,24 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  * @param string $strTitle
  * @param bool $bitTooltip
  * @param bool $bitPortalEditor
- * @param bool $strOnClick
+ * @param bool|string $strOnClick
+ * @param null|int $intWidth
+ * @param null|int $intHeight
  * @return string
  */
-function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "") {
+function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null) {
     $strLink = "";
 
     //urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
 
-    if($strOnClick == "")
-        $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
+    if($strOnClick == "") {
+        if($intWidth !== null && $intHeight !== null)
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init('".$intWidth."px', '".$intHeight."px'); return false;";
+        else
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
+    }
 
     if($bitPortalEditor)
         $strParams .= "&pe=1";

@@ -10,7 +10,9 @@
 
 # if you want to use mod_rewrite for nice-urls, set RewriteEngine on and enable all following RewriteRules.
 # Please note to enable URL-Rewriting in Kajona's system-settings, too!
+#Options -Multiviews
 #RewriteEngine on
+
 
 # enable only in case of errors
 #RewriteBase /

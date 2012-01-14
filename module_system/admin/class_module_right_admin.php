@@ -115,6 +115,11 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			  	$arrTemplateRow["group"] = $objSingleGroup->getStrName();
 			  	$arrSingleGroup["group_id"] = $objSingleGroup->getSystemid();
 
+                //hide the superglobal admin-row from non-members
+                if($objSingleGroup->getSystemid() == _admins_group_id_ && !in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray()))
+                    continue;
+
+
 			  	//Building Checkboxes
 			  	if(in_array($arrSingleGroup["group_id"], $arrRights["view"]))
 			  		$arrTemplateRow["box0"] = "<input type=\"checkbox\" name=\"1,".$arrSingleGroup["group_id"]."\" id=\"1,".$arrSingleGroup["group_id"]."\" value=\"1\" checked=\"checked\" />";
@@ -290,26 +295,24 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			if($strSystemid == "0")
 				$intInherit = 0;
 
-			//Get AdminID
-			$strAdminId = _admins_group_id_;
-
 			//Get Groups
-			$arrGroups = class_module_user_group::getAllGroups();
+            $arrGroups = class_modul_user_group::getAllGroups();
 
-			$strView = $strAdminId;
-			$strEdit = $strAdminId;
-			$strDelete = $strAdminId;
-			$strRight = $strAdminId;
-			$strRight1 = $strAdminId;
-			$strRight2 = $strAdminId;
-			$strRight3 = $strAdminId;
-			$strRight4 = $strAdminId;
-			$strRight5 = $strAdminId;
+            $strView = _admins_group_id_;
+            $strEdit = _admins_group_id_;
+            $strDelete = _admins_group_id_;
+            $strRight = _admins_group_id_;
+            $strRight1 = _admins_group_id_;
+            $strRight2 = _admins_group_id_;
+            $strRight3 = _admins_group_id_;
+            $strRight4 = _admins_group_id_;
+            $strRight5 = _admins_group_id_;
 
-			foreach($arrGroups as $objSingleGroup) {
-				$strGroupId = $objSingleGroup->getSystemid();
-				if($strGroupId == $strAdminId)
-					continue;
+            foreach($arrGroups as $objSingleGroup) {
+                $strGroupId = $objSingleGroup->getSystemid();
+                if($strGroupId == _admins_group_id_)
+                    continue;
+
 
 				if($this->getParam("1,".$strGroupId) == 1)
 					$strView .= ",".$strGroupId;
