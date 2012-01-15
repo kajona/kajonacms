@@ -277,7 +277,7 @@ class class_module_system_aspect extends class_model implements interface_model,
             return class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT);
         }
         else {
-            $objAspect = class_modul_system_aspect::getDefaultAspect();
+            $objAspect = class_module_system_aspect::getDefaultAspect();
             if($objAspect != null)
                 self::setCurrentAspectId($objAspect->getSystemid());
             return $objAspect;
