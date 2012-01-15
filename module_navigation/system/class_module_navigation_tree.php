@@ -89,6 +89,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 		             AND system_module_nr = ?
 		             AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array(_navigation_modul_id_, $this->getSystemid()));
+        $this->setArrInitRow($arrRow);
         $this->setStrName($arrRow["navigation_name"]);
         $this->setStrFolderId($arrRow["navigation_folder_i"]);
     }

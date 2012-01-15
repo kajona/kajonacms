@@ -60,6 +60,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
         				  AND system_id = ? ";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $this->setArrInitRow($arrRow);
         if(count($arrRow) > 0) {
             $this->setStrClass($arrRow["adminwidget_class"]);
             $this->setStrContent($arrRow["adminwidget_content"]);

@@ -93,7 +93,7 @@ class class_module_system_aspect extends class_model implements interface_model,
                      WHERE system_id = aspect_id
                      AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
+        $this->setArrInitRow($arrRow);
         if(count($arrRow) > 1) {
             $this->setBitDefault($arrRow["aspect_default"]);
             $this->setStrName($arrRow["aspect_name"]);

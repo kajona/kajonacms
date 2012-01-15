@@ -98,6 +98,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 		             AND system_module_nr = ?
 		             AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array(_navigation_modul_id_, $this->getSystemid()));
+        $this->setArrInitRow($arrRow);
         if(count($arrRow)> 0) {
             $this->setStrName($arrRow["navigation_name"]);
             $this->setStrImage($arrRow["navigation_image"]);

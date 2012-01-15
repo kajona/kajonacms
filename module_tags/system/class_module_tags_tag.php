@@ -85,6 +85,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 		   			 FROM "._dbprefix_."tags_tag
 					 WHERE tags_tag_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $this->setArrInitRow($arrRow);
         $this->setStrName($arrRow["tags_tag_name"]);
     }
 

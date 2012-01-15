@@ -104,6 +104,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $this->setArrInitRow($arrRow);
 		if(count($arrRow) > 1) {
     		$this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
     		$this->setStrName($arrRow["page_element_ph_name"]);

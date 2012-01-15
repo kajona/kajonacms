@@ -60,6 +60,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         				  AND system_id = ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $this->setArrInitRow($arrRow);
         if(count($arrRow) > 0) {
             $this->setStrUser($arrRow["dashboard_user"]);
             $this->setStrColumn($arrRow["dashboard_column"]);

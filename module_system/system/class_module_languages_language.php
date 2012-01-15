@@ -90,6 +90,7 @@ class class_module_languages_language extends class_model implements interface_m
                      WHERE system_id = language_id
                      AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $this->setArrInitRow($arrRow);
 
         if(count($arrRow) > 1) {
             $this->setBitDefault($arrRow["language_default"]);

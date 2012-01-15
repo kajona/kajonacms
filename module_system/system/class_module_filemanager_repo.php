@@ -91,7 +91,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
 						WHERE system_id = filemanager_id
 						AND system_id = ? ";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
+        $this->setArrInitRow($arrRow);
         if(isset($arrRow["filemanager_name"])) {
             $this->setStrName($arrRow["filemanager_name"]);
             $this->setStrPath($arrRow["filemanager_path"]);
