@@ -989,10 +989,15 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strSystemid
      * @return string
      */
-    public function listStatusButton($strSystemid) {
+    public function listStatusButton($strSystemid, $objInstance = false) {
         //read the current status
         $strButton = "";
         $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
+
+        if($objRecord == null) {
+            throw new class_exception("failed loading instance for ".$strSystemid.($objInstance != false ? " @ ".get_class($objInstance) : ""), class_exception::$level_ERROR);
+        }
+
         $strImage = "";
         $strNewImage = "";
         $strText = "";
@@ -1027,8 +1032,8 @@ class class_toolkit_admin extends class_toolkit {
         return $this->listButton($strButton).$strJavascript;
     }
 
-/*"*****************************************************************************************************/
-// --- Misc-Elements ------------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Misc-Elements ------------------------------------------------------------------------------------
 
     /**
      * Returns a warning box, e.g. shown before deleting a record

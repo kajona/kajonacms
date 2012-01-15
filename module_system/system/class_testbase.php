@@ -37,6 +37,7 @@ class class_testbase extends PHPUnit_Framework_TestCase {
 
         $objCarrier->getObjDB()->_query($strSQL);
         $objCarrier->getObjDB()->flushQueryCache();
+        class_apc_cache::getInstance()->flushCache();
 
         class_config::getInstance()->loadConfigsDatabase(class_db::getInstance());
     }
