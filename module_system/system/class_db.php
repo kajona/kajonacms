@@ -211,6 +211,7 @@ class class_db {
 	 * @param int $intNr
 	 * @param bool $bitCache
 	 * @return array
+     * @deprecated use getPRow() instead
 	 */
 	public function getRow($strQuery, $intNr = 0, $bitCache = true) {
         $arrTemp = $this->getArray($strQuery, $bitCache);
@@ -246,6 +247,7 @@ class class_db {
 	 * @param string $strQuery
 	 * @param bool $bitCache
 	 * @return array
+     * @deprecated use getPArraySection() instead
 	 */
 	public function getArray($strQuery, $bitCache = true) {
         if(!$this->bitConnected)
@@ -274,6 +276,8 @@ class class_db {
 
 		if(_dblog_)
 			$this->writeDbLog($strQuery);
+
+        class_logger::getInstance(class_logger::$DBLOG)->addLogRow("deprecated getArray call: ".$strQuery, class_logger::$levelWarning);
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getArray($strQuery);
@@ -350,6 +354,7 @@ class class_db {
      * @param int $intEnd
      * @param bool $bitCache
      * @return array
+     * @deprecated use getPArraySection() instead
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
         if(!$this->bitConnected)
@@ -386,6 +391,8 @@ class class_db {
 
 		if(_dblog_)
 			$this->writeDbLog($strQuery);
+
+        class_logger::getInstance(class_logger::$DBLOG)->addLogRow("deprecated getArraySection call: ".$strQuery, class_logger::$levelWarning);
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getArraySection($strQuery, $intStart, $intEnd);
