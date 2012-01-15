@@ -114,17 +114,19 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 
     /**
-     * Initalises the current object, if a systemid was given
+     * Initialises the current object, if a systemid was given
      *
      */
     protected function initObjectInternal() {
-		//language independant fields
+		//language independent fields
 		$strQuery = "SELECT *
 					FROM "._dbprefix_."system,
 					     "._dbprefix_."page
 					WHERE system_id = page_id
 					  AND system_id = ?";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()) );
+
+        $this->setArrInitRow($arrRow);
 
 		//language dependant fields
 		if(count($arrRow) > 0) {

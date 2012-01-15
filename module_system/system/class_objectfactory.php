@@ -66,19 +66,31 @@ class class_objectfactory {
      */
     public function getObject($strSystemid, $bitIgnoreCache = false) {
 
+
         if(!$bitIgnoreCache && isset($this->arrObjectCache[$strSystemid]))
             return $this->arrObjectCache[$strSystemid];
 
-        //load the object itself
-        $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
-        if(isset($arrRow["system_class"])) {
-            $objReflection = new ReflectionClass($arrRow["system_class"]);
+        $strCacheKey = __CLASS__."class".$strSystemid;
+        //check if the class is known
+        $strClass = class_apc_cache::getInstance()->getValue($strCacheKey);
+        if($strClass === false) {
+
+            //load the object itself
+            $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
+            $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+            if(isset($arrRow["system_class"])) {
+                $strClass = $arrRow["system_class"];
+            }
+        }
+
+        if($strClass !== false) {
+            $objReflection = new ReflectionClass($strClass);
 
             $objObject = $objReflection->newInstance($strSystemid);
 
             $this->arrObjectCache[$strSystemid] = $objObject;
 
+            class_apc_cache::getInstance()->addValue($strCacheKey, $strClass, 120);
             return $objObject;
         }
 

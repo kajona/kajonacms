@@ -221,8 +221,8 @@ abstract class class_root {
      * @see interface_model::initObject()
      */
     public function loadDataFromDb() {
-        $this->internalInit($this->getStrSystemid());
         $this->initObjectInternal();
+        $this->internalInit($this->getStrSystemid());
     }
 
     /**

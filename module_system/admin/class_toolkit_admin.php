@@ -992,11 +992,11 @@ class class_toolkit_admin extends class_toolkit {
     public function listStatusButton($strSystemid) {
         //read the current status
         $strButton = "";
-        $objRecord = new class_module_system_common($strSystemid);
+        $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
         $strImage = "";
         $strNewImage = "";
         $strText = "";
-        if($objRecord->getStatus() == 1) {
+        if($objRecord->getIntRecordStatus() == 1) {
             $strImage = "icon_enabled.gif";
             $strNewImage = "icon_disabled.gif";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
