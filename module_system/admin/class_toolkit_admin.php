@@ -986,29 +986,28 @@ class class_toolkit_admin extends class_toolkit {
      * Generates a button allowing to change the status of the record passed.
      * Therefore an ajax-method is called.
      *
-     * @param string $strSystemid
+     * @param class_model|string $objInstance or a systemid
      * @return string
      */
-    public function listStatusButton($strSystemid, $objInstance = false) {
-        //read the current status
-        $strButton = "";
-        $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
+    public function listStatusButton($objInstance) {
 
-        if($objRecord == null) {
-            throw new class_exception("failed loading instance for ".$strSystemid.($objInstance != false ? " @ ".get_class($objInstance) : ""), class_exception::$level_ERROR);
-        }
+        if(is_object($objInstance) && $objInstance instanceof class_model )
+            $objRecord = $objInstance;
+
+        else if(validateSystemid($objInstance))
+            $objRecord = class_objectfactory::getInstance()->getObject($objInstance);
+
+        else
+            throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
         $strImage = "";
-        $strNewImage = "";
         $strText = "";
         if($objRecord->getIntRecordStatus() == 1) {
             $strImage = "icon_enabled.gif";
-            $strNewImage = "icon_disabled.gif";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
         }
         else {
             $strImage = "icon_disabled.gif";
-            $strNewImage = "icon_enabled.gif";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
         }
 
@@ -1027,7 +1026,7 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
         }
 
-        $strButton = getLinkAdminManual("href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$strSystemid."');\"", "", $strText, $strImage, "statusImage_".$strSystemid, "statusLink_".$strSystemid);
+        $strButton = getLinkAdminManual("href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."');\"", "", $strText, $strImage, "statusImage_".$objRecord->getSystemid(), "statusLink_".$objRecord->getSystemid());
 
         return $this->listButton($strButton).$strJavascript;
     }

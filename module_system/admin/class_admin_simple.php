@@ -180,7 +180,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            return $this->objToolkit->listStatusButton($objListEntry->getSystemid(), $objListEntry);
+            return $this->objToolkit->listStatusButton($objListEntry);
         }
     }
 
