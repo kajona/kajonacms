@@ -24,6 +24,10 @@
  * $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
  * $objMail->sendMail();
  *
+ * The subject and the receipients name are encoded by a chunked utf-8 byte string.
+ * If your system runs on php >= 5.3, all text-based content will be encoded by quoted printables.
+ *
+ *
  * @package module_system
  * @author sidler@mulchprod.de
  */
@@ -97,7 +101,7 @@ class class_mail {
 	 * @param string $strText
 	 */
 	public function setText($strText) {
-		$this->strText = $strText;
+		$this->strText = html_entity_decode($strText);
 	}
 
 	/**
@@ -206,9 +210,9 @@ class class_mail {
 			if($this->strSender != "") {
 			    //build the from-arguments
 			    if($this->strSenderName != "")
-			       $strFrom = $this->strSenderName." <".$this->strSender.">";
+                    $strFrom = $this->encodeText($this->strSenderName)." <".$this->strSender.">";
 			    else
-			       $strFrom = $this->strSender;
+ 			        $strFrom = $this->strSender;
 
 				$this->arrHeader[] = "From: ".$strFrom.$this->strEndOfLine;
 				$this->arrHeader[] = "Reply-To: ".$this->strSender.$this->strEndOfLine;
@@ -264,9 +268,19 @@ class class_mail {
                 //text-version
                 $strBody .= "--".$strBoundaryAlt.$this->strEndOfLine;
                 $strBody .= "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
-                $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
-                $strBody .= strip_tags(($this->strText == "" ? str_replace(array("<br />", "<br />"), array("\n", "\n"), $this->strHtml) : $this->strText));
+
+                $strText = strip_tags(($this->strText == "" ? str_replace(array("<br />", "<br />"), array("\n", "\n"), $this->strHtml) : $this->strText));
+                if(function_exists("quoted_printable_encode")) {
+                    $strBody .= "Content-Transfer-Encoding: quoted-printable".$this->strEndOfLine.$this->strEndOfLine;
+                    $strBody .= quoted_printable_encode($strText);
+                }
+                else {
+                    $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
+                    $strBody .= $strText;
+                }
+
                 $strBody .= $this->strEndOfLine.$this->strEndOfLine;
+
 
                 //html-version
                 if($this->strHtml != "") {
@@ -282,8 +296,16 @@ class class_mail {
             }
             else {
                 $this->arrHeader[] = "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
-                $strBody .= $this->strText;
+
+                if(function_exists("quoted_printable_encode")) {
+                    $this->arrHeader[] = "Content-Transfer-Encoding: quoted-printable".$this->strEndOfLine.$this->strEndOfLine;
+                    $strBody .= quoted_printable_encode($this->strText);
+                }
+                else {
+                    $strBody .= $this->strText;;
+                }
             }
+
 
 
             //any files to place in the mail body?
@@ -310,12 +332,42 @@ class class_mail {
                 $strBody .= "--".$strBoundary."--".$this->strEndOfLine.$this->strEndOfLine;
 
 			//send mail
+            // in some cases, the optional param "-f test@kajona.de" may be added as mail()s' 5th param
 			class_logger::getInstance()->addLogRow("sent mail to ".$strTo, class_logger::$levelInfo);
-			$bitReturn = mail($strTo, $this->strSubject, $strBody, implode("", $this->arrHeader));
+            $bitReturn = mail(
+                $strTo,
+                $this->encodeText($this->strSubject),
+                $strBody,
+                implode("", $this->arrHeader)
+            );
+
 		}
 
 		return $bitReturn;
 	}
+
+
+   /**
+    * Encodes some text to be places as encoded, chunked text-stream.
+    * All input must be encoded in UTF-8
+    * @param $strText
+    * @return string
+    * @see http://www.php.net/manual/en/function.mail.php#27997, credits got to gordon at kanazawa-gu dot ac dot jp
+    */
+    private function encodeText($strText) {
+        $strStart = "=?UTF-8?B?";
+        $strEnd = "?=";
+        $strSpacer = $strEnd."\r\n".$strStart;
+        $intLength = 75 - strlen($strStart) - strlen($strEnd);
+        $intLength = $intLength - ($intLength % 4);
+
+        $strText = chunk_split(base64_encode($strText), $intLength, $strSpacer);
+        $strText = preg_replace("/" . preg_quote($strSpacer) . "$/", "", $strText);
+        $strText = $strStart . $strText . $strEnd;
+
+        return $strText;
+    }
+
 
 }
 

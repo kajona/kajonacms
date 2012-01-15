@@ -85,6 +85,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	    $objConcreteWidget = $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
 
         $strGeneratedContent = "<script type=\"text/javascript\">
+                        window.setTimeout( function() {
                             KAJONA.admin.loader.loadAjaxBase(function() {
                                   KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", {
                                     success : function(o) {
@@ -104,7 +105,8 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                                     }
                                   })
                             });
-                          </script>";
+                        }, 500);
+                    </script>";
 
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();

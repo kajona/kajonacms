@@ -52,6 +52,8 @@ abstract class class_root {
 	protected $arrModule = array();	        //Array containing information about the current module
 
 
+    private $arrInitRow = null;             //array to be used when loading details from the database. could reduce the amount of queries if populated.
+
     //--- fields to be synchronized with the database ---
 
     /**
@@ -180,10 +182,16 @@ abstract class class_root {
 
             $this->strSystemid = $strSystemid;
 
-            $strQuery = "SELECT *
-                           FROM "._dbprefix_."system
-                          WHERE system_id = ? ";
-            $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+            if(is_array($this->arrInitRow)) {
+                $arrRow = $this->arrInitRow;
+            }
+            else {
+                $strQuery = "SELECT *
+                               FROM "._dbprefix_."system
+                              WHERE system_id = ? ";
+                $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+            }
+
 
             if(count($arrRow) > 3) {
                 //$this->setStrSystemid($arrRow["system_id"]);
@@ -351,10 +359,6 @@ abstract class class_root {
             $this->objDB->flushQueryCache();
         }
 
-        //update ourselves to the database
-        if(!$this->updateStateToDb())
-            $bitCommit = false;
-
         //new prev-id?
         if($strPrevId !== false && $this->getSystemid() != $strPrevId && (validateSystemid($strPrevId) || $strPrevId = "0")) {
             //validate the new prev id - it is not allowed to set a parent-node as a sub-node of its own child
@@ -362,12 +366,15 @@ abstract class class_root {
                 $this->setStrPrevId($strPrevId);
         }
 
-
         //new comment?
         $this->setStrRecordComment($this->getStrDisplayName());
 
         //save back to the database
-        $bitCommit = $bitCommit && $this->updateSystemrecord();
+        $bitCommit = $this->updateSystemrecord();
+
+        //update ourselves to the database
+        if(!$this->updateStateToDb())
+            $bitCommit = false;
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
@@ -382,6 +389,15 @@ abstract class class_root {
 
 
         return $bitReturn;
+    }
+
+    /**
+     * Overwrite this callback if your object should be notified if the current objects systemid was changed.
+     * @param $strOldPrevid
+     * @param $strNewPrevId
+     */
+    protected function onPrevIdChange($strOldPrevid, $strNewPrevId) {
+
     }
 
 
@@ -477,6 +493,8 @@ abstract class class_root {
             $this->objDB->flushQueryCache();
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
+
+            $this->onPrevIdChange($this->strOldPrevId, $this->strOldPrevId);
         }
 
         return $bitReturn;
@@ -1246,6 +1264,11 @@ abstract class class_root {
         return $this->strPrevId;
     }
 
+    public function getStrOldPrevId() {
+        $this->internalInit($this->strSystemid);
+        return $this->strOldPrevId;
+    }
+
     public function setStrPrevId($strPrevId) {
         $this->internalInit($this->strSystemid);
         $this->strPrevId = $strPrevId;
@@ -1619,6 +1642,26 @@ abstract class class_root {
         $this->arrModule[$strKey] = $strValue;
     }
 
+    /**
+     * Use this method to set an array of values, e.g. fetched by your own init-method.
+     * If given, the root-class uses this array to set the internal fields instead of
+     * triggering another query to the database.
+     * On high-performance systems or large object-nets, this could reduce the amount of database-queries
+     * fired drastically.
+     *
+     * @param $arrInitRow
+     */
+    public function setArrInitRow($arrInitRow) {
+        $this->arrInitRow = $arrInitRow;
+    }
+
+    /**
+     * Returns the set of internal values marked as init-values
+     * @return null|array
+     */
+    public function getArrInitRow() {
+        return $this->arrInitRow;
+    }
 
 
 }

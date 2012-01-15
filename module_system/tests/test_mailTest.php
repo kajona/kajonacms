@@ -13,11 +13,11 @@ class class_test_mail extends class_testbase  {
 
         $objMail = new class_mail();
         $objMail->setSender("test@kajona.de");
-        $objMail->setSenderName("Kajona System");
+        $objMail->setSenderName("Kajona System a ö ü ");
         $objMail->addTo($strTo);
-        $objMail->setSubject("Kajona test mail");
-        $objMail->setText("This is the plain text");
-        $objMail->setHtml("This is<br />the <b>html-content</b><br /><img src=\"cid:kajona_poweredby.png\" />");
+        $objMail->setSubject("Kajona test mail ä ö ü Kajona test mail ä ö ü Kajona test mail ä ö ü Kajona test mail ä ö ü Kajona test mail ä ö ü ");
+        $objMail->setText("This is the plain text ä ö ü");
+        $objMail->setHtml("This is<br />the <b>html-content ä ö ü</b><br /><img src=\"cid:kajona_poweredby.png\" />");
         $objMail->addAttachement("/portal/pics/kajona/login_logo.gif");
         $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
 

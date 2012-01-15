@@ -4,9 +4,9 @@ Mergeinfo with v3 head codeline (v3 -> v4)
 Please note that merging is done manually, there's no automatic way.
 Revision is inclusive.
 
-module_navigation                   4417
-module_pages                        4417
-module_samplecontent                4417
-module_system                       4417
-module_tags                         4417
-module_v3skin (v3: module_system)   4417
+module_navigation                   4438
+module_pages                        4438
+module_samplecontent                4438
+module_system                       4438
+module_tags                         4438
+module_v3skin (v3: module_system)   4438

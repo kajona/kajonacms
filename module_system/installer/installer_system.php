@@ -104,7 +104,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_class"]          = array("char254", true);
 		$arrFields["system_comment"]        = array("char254", true);
 
-		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr")))
+		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Rights table ----------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_date_end"] 		= array("long", true);
 		$arrFields["system_date_special"] 	= array("long", true);
 
-		if(!$this->objDB->createTable("system_date", $arrFields, array("system_date_id")))
+		if(!$this->objDB->createTable("system_date", $arrFields, array("system_date_id"), array("system_date_start", "system_date_end", "system_date_special")))
 			$strReturn .= "An error occured! ...\n";
 
 		// Config table ---------------------------------------------------------------------------------
@@ -372,7 +372,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["change_oldvalue"]       = array("text", true);
 		$arrFields["change_newvalue"]       = array("text", true);
 
-		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id"), array(), false))
+		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id"), array("change_date", "change_user", "change_systemid", "change_property"), false))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -790,6 +790,27 @@ class class_installer_system extends class_installer_base implements interface_i
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( 'class_module_system_aspect', $arrOneRow["system_id"] ) );
         }
+
+
+
+        $strReturn .= "Adding index to table system\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_sort")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_owner")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_create_date")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_status")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_lm_time")." ) ", array());
+
+        $strReturn .= "Adding index to table system_date\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_start")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_end")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_special")." ) ", array());
+
+        $strReturn .= "Adding index to table changelog\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_date")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_user")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_systemid")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_property")." ) ", array());
+
 
 
         $strReturn .= "Updating module-versions...\n";

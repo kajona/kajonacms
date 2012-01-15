@@ -39,6 +39,9 @@ final class class_session {
      */
 	private $objUser = null;
 
+    private $bitClosed = false;
+
+
 
 	private function __construct() 	{
 
@@ -83,6 +86,21 @@ final class class_session {
 		return $bitReturn;
 	}
 
+    /**
+     * Finalizes the current threads session-access.
+     * This means that afterwards, all values saved to the session will
+     * be lost of throw an error.
+     * Make sure you know explicitely what you do before calling
+     * this method.
+     *
+     * @return void
+     */
+    public function sessionClose() {
+        $this->bitClosed = true;
+        session_write_close();
+    }
+
+
 	/**
 	 * Writes a value to the session
 	 *
@@ -98,6 +116,10 @@ final class class_session {
 		    return true;
 		}
 		else {
+
+            if($this->bitClosed)
+                throw new class_exception("attempt to write to session after calling sessionClose()", class_exception::$level_FATALERROR);
+
             //yes, it is wanted to have only one =. The condition checks the assignment.
 			if($_SESSION[$this->strKey][$strKey] = $strValue)
 				return true;
