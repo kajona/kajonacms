@@ -566,7 +566,7 @@ abstract class class_admin {
 
         $objModule = $this->getObjModule();
         $strCurrentAspect = class_module_system_aspect::getCurrentAspectId();
-        if($objModule->getStrAspect() != "") {
+        if($objModule != null && $objModule->getStrAspect() != "") {
             $arrAspects = explode(",", $objModule->getStrAspect());
             if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
                 class_module_system_aspect::setCurrentAspectId($arrAspects[0]);

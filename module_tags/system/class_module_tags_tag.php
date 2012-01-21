@@ -130,7 +130,11 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public static function getAllTags($intStart = null, $intEnd = null) {
 
         $strQuery = "SELECT tags_tag_id
-                       FROM "._dbprefix_."tags_tag
+                       FROM "._dbprefix_."tags_tag,
+                            "._dbprefix_."system,
+                            "._dbprefix_."system_right
+                     WHERE tags_tag_id = system_id
+                       AND system_id = right_id
                    ORDER BY tags_tag_name ASC";
 
         if($intStart !== null && $intEnd !== null)

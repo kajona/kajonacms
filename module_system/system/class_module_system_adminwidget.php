@@ -55,8 +55,10 @@ class class_module_system_adminwidget extends class_model implements interface_m
      */
     protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."adminwidget,
-        						   "._dbprefix_."system
+        						   "._dbprefix_."system,
+        						   "._dbprefix_."system_right
         				WHERE system_id = adminwidget_id
+        				  AND system_id = right_id
         				  AND system_id = ? ";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));

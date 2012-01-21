@@ -89,8 +89,9 @@ class class_module_system_aspect extends class_model implements interface_model,
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."aspects
+        $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."aspects, "._dbprefix_."system_right
                      WHERE system_id = aspect_id
+                     AND system_id = right_id
                      AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         $this->setArrInitRow($arrRow);

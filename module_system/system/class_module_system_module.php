@@ -96,7 +96,7 @@ class class_module_system_module extends class_model implements interface_model,
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
+        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system, "._dbprefix_."system_right WHERE system_id=module_id AND system_id = right_id ORDER BY module_nr";
         $arrRow = array();
 		$arrModules = $this->objDB->getPArray($strQuery, array());
 

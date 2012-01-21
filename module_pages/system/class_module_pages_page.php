@@ -121,8 +121,10 @@ class class_module_pages_page extends class_model implements interface_model, in
 		//language independent fields
 		$strQuery = "SELECT *
 					FROM "._dbprefix_."system,
+					     "._dbprefix_."system_right,
 					     "._dbprefix_."page
 					WHERE system_id = page_id
+					  AND system_id = right_id
 					  AND system_id = ?";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()) );
 

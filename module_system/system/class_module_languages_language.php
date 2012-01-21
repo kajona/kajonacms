@@ -86,8 +86,11 @@ class class_module_languages_language extends class_model implements interface_m
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."languages
+        $strQuery = "SELECT * FROM "._dbprefix_."system,
+                                   "._dbprefix_."languages,
+                                   "._dbprefix_."system_right
                      WHERE system_id = language_id
+                     AND system_id = right_id
                      AND system_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         $this->setArrInitRow($arrRow);

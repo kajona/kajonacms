@@ -55,8 +55,10 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
     protected function initObjectInternal() {
         $strQuery = "SELECT * FROM "._dbprefix_."dashboard,
-        						   "._dbprefix_."system
+        						   "._dbprefix_."system,
+        						   "._dbprefix_."system_right
         				WHERE system_id = dashboard_id
+        				  AND system_id = right_id
         				  AND system_id = ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));

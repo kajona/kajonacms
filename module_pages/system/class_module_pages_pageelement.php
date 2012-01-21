@@ -95,12 +95,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
+						      "._dbprefix_."system_right,
 						      "._dbprefix_."system
 						  LEFT JOIN "._dbprefix_."system_date
 						    ON (system_id = system_date_id)
 						 WHERE system_id= ?
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
+						   AND system_id = right_id
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));

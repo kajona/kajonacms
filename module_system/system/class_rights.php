@@ -28,7 +28,7 @@ class class_rights {
 	 * @var class_session
 	 */
 	private $objSession = null;				//Session Object
-	private $arrRightsCache = array();		//Array, caching rights
+	private $arrRightRowsCache = array();		//Array, caching database-rows with permission-entries
 
 	private static $objRights = null;
 
@@ -112,7 +112,7 @@ class class_rights {
         if($this->objDb->_pQuery($strQuery, $arrParams) ) {
             //Flush the cache so later lookups will match the new rights
             $this->objDb->flushQueryCache();
-            $this->arrRightsCache = array();
+            $this->arrRightRowsCache = array();
             return true;
         }
         else
@@ -233,25 +233,45 @@ class class_rights {
      */
 	private function getPlainRightRow($strSystemid) {
 
-        $strQuery = "SELECT *
-						FROM "._dbprefix_."system,
-							 "._dbprefix_."system_right
-						WHERE system_id = ?
-							AND right_id = system_id ";
+        if(isset($this->arrRightRowsCache[$strSystemid]))
+            $arrRow = $this->arrRightRowsCache[$strSystemid];
+        else {
+            $strQuery = "SELECT *
+                            FROM "._dbprefix_."system,
+                                 "._dbprefix_."system_right
+                            WHERE system_id = ?
+                                AND right_id = system_id ";
 
-        $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
+            $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
+            $this->arrRightRowsCache[$strSystemid] = $arrRow;
+        }
 
         $arrRights = array();
-        $arrRights["view"]   = isset($arrRow["right_view"]) ? $arrRow["right_view"] : "";
-        $arrRights["edit"]   = isset($arrRow["right_edit"]) ? $arrRow["right_edit"] : "";
-        $arrRights["delete"] = isset($arrRow["right_delete"]) ? $arrRow["right_delete"] : "";
-        $arrRights["right"]  = isset($arrRow["right_right"]) ? $arrRow["right_right"] : "";
-        $arrRights["right1"] = isset($arrRow["right_right1"]) ? $arrRow["right_right1"] : "";
-        $arrRights["right2"] = isset($arrRow["right_right2"]) ? $arrRow["right_right2"] : "";
-        $arrRights["right3"] = isset($arrRow["right_right3"]) ? $arrRow["right_right3"] : "";
-        $arrRights["right4"] = isset($arrRow["right_right4"]) ? $arrRow["right_right4"] : "";
-        $arrRights["right5"] = isset($arrRow["right_right5"]) ? $arrRow["right_right5"] : "";
-        $arrRights["inherit"]= isset($arrRow["right_inherit"]) ? (int)$arrRow["right_inherit"] : 1;
+        if(isset($arrRow["right_id"]) && validateSystemid($arrRow["right_id"])) {
+            $arrRights["view"]   = $arrRow["right_view"];
+            $arrRights["edit"]   = $arrRow["right_edit"];
+            $arrRights["delete"] = $arrRow["right_delete"];
+            $arrRights["right"]  = $arrRow["right_right"];
+            $arrRights["right1"] = $arrRow["right_right1"];
+            $arrRights["right2"] = $arrRow["right_right2"];
+            $arrRights["right3"] = $arrRow["right_right3"];
+            $arrRights["right4"] = $arrRow["right_right4"];
+            $arrRights["right5"] = $arrRow["right_right5"];
+            $arrRights["inherit"]= (int)$arrRow["right_inherit"];
+        }
+        else {
+            $arrRights["view"]   = "";
+            $arrRights["edit"]   = "";
+            $arrRights["delete"] = "";
+            $arrRights["right"]  = "";
+            $arrRights["right1"] = "";
+            $arrRights["right2"] = "";
+            $arrRights["right3"] = "";
+            $arrRights["right4"] = "";
+            $arrRights["right5"] = "";
+            $arrRights["inherit"]= 1;
+        }
+
 
         return $arrRights;
 	}
@@ -752,10 +772,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function addGroupToRight($strGroupId, $strSystemid, $strRight) {
-	    $bitReturn = true;
 
 	    $this->objDb->flushQueryCache();
-        $this->arrRightsCache = array();
+        $this->arrRightRowsCache = array();
 
 	    //Load the current rights
 	    $arrRights = $this->getArrayRights($strSystemid, false);
@@ -794,10 +813,9 @@ class class_rights {
 	 * @return bool
 	 */
 	public function removeGroupFromRight($strGroupId, $strSystemid, $strRight) {
-	    $bitReturn = true;
 
 	    $this->objDb->flushQueryCache();
-        $this->arrRightsCache = array();
+        $this->arrRightRowsCache = array();
 
 	    //Load the current rights
 	    $arrRights = $this->getArrayRights($strSystemid, false);
@@ -836,7 +854,7 @@ class class_rights {
      * @return void
      */
     public function flushRightsCache() {
-        $this->arrRightsCache = array();
+        $this->arrRightRowsCache = array();
     }
 
     public function setBitTestMode($bitTestMode) {
@@ -882,31 +900,31 @@ class class_rights {
                     break;
                 case "delete":
                     if($objObject->rightDelete())
-                        return true;;
+                        return true;
                     break;
                 case "right":
                     if($objObject->rightRight())
-                        return true;;
+                        return true;
                     break;
                 case "right1":
                     if($objObject->rightRight1())
-                        return true;;
+                        return true;
                     break;
                 case "right2":
                     if($objObject->rightRight2())
-                        return true;;
+                        return true;
                     break;
                 case "right3":
                     if($objObject->rightRight3())
-                        return true;;
+                        return true;
                     break;
                 case "right4":
                     if($objObject->rightRight4())
-                        return true;;
+                        return true;
                     break;
                 case "right5":
                     if($objObject->rightRight5())
-                        return true;;
+                        return true;
                     break;
                 default:
                     break;
@@ -916,7 +934,16 @@ class class_rights {
         return false;
     }
 
-
+    /**
+     * Adds a row to the internal cache.
+     * Only to be used in combination with class_roots setArrInitRow.
+     *
+     * @param $arrRow
+     */
+    public function addRowToCache($arrRow) {
+        if(isset($arrRow["right_id"]))
+            $this->arrRightRowsCache[$arrRow["right_id"]] = $arrRow;
+    }
 }
 
 
