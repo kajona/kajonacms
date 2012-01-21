@@ -482,6 +482,8 @@ class class_installer_system extends class_installer_base implements interface_i
 					   	WHERE right_id='0'";
 
 		$this->objDB->_query($strQuery);
+        $this->objDB->flushQueryCache();
+
 		$strReturn .= "Modified root-rights....\n";
         $this->objRights->rebuildRightsStructure();
         $strReturn .= "Rebuilded rights structures...\n";

@@ -68,6 +68,7 @@ class class_rights {
      * @return bool
      */
     public function rebuildRightsStructure($strStartId = "0") {
+        $this->flushRightsCache();
         //load rights from root-node
         $arrRootRights = $this->getPlainRightRow($strStartId);
         return $this->setRights($arrRootRights, $strStartId);
@@ -131,6 +132,7 @@ class class_rights {
 	 */
 	public function setRights($arrRights, $strSystemid) 	{
 	    //start a new tx
+        $this->flushRightsCache();
         $this->objDb->transactionBegin();
 
         $bitSave = $this->setRightsRecursive($arrRights, $strSystemid);
@@ -160,6 +162,7 @@ class class_rights {
      */
     private function setRightsRecursive($arrRights, $strSystemid) 	{
         $bitReturn = true;
+        $this->flushRightsCache();
 
 	    //check against root-record: here no inheritance
 	    if($strSystemid == "" || $strSystemid == "0")
@@ -233,8 +236,9 @@ class class_rights {
      */
 	private function getPlainRightRow($strSystemid) {
 
-        if(isset($this->arrRightRowsCache[$strSystemid]))
+        if(validateSystemid($strSystemid) && isset($this->arrRightRowsCache[$strSystemid])) {
             $arrRow = $this->arrRightRowsCache[$strSystemid];
+        }
         else {
             $strQuery = "SELECT *
                             FROM "._dbprefix_."system,
@@ -247,7 +251,7 @@ class class_rights {
         }
 
         $arrRights = array();
-        if(isset($arrRow["right_id"]) && validateSystemid($arrRow["right_id"])) {
+        if(isset($arrRow["right_id"])) {
             $arrRights["view"]   = $arrRow["right_view"];
             $arrRights["edit"]   = $arrRow["right_edit"];
             $arrRights["delete"] = $arrRow["right_delete"];
