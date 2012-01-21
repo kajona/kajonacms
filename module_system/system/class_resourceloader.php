@@ -28,7 +28,7 @@ class class_resourceloader {
 
     private $arrModules = array();
 
-    //FIXME: caches may be moved to the session. validate if this makes sense. (invalidation, size, ...)
+    //FIXME: caches may be moved to the session/apc. validate if this makes sense. (invalidation, size, ...)
     private $arrTemplates = array();
     private $arrFoldercontent = array();
 
@@ -119,6 +119,12 @@ class class_resourceloader {
 
 
         //second try: load the file from the default-pack
+        if(is_dir(_corepath_._templatepath_."/default/tpl".$strFolder)) {
+            $arrFiles = scandir(_corepath_._templatepath_."/default/tpl".$strFolder);
+            foreach($arrFiles as $strOneFile)
+                if(substr($strOneFile, -4) == ".tpl")
+                    $arrReturn[] = $strOneFile;
+        }
 
 
         //third try: try to load the file from given modules

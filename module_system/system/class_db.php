@@ -188,7 +188,7 @@ class class_db {
 		$bitReturn = false;
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery." ".implode(", ", $arrParams));
+			$this->writeDbLog($strQuery."\r\n params: ".implode(", ", $arrParams));
 
 		//Increasing the counter
 		$this->intNumber++;
@@ -491,7 +491,7 @@ class class_db {
 		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
 		                 "\r\n"
 		              . $strText . "\r\n\r\n\r\n";
-		$handle = fopen(_projectpath_."/debug/querylog.log", "a");
+		$handle = fopen(_realpath_._projectpath_."/log/querylog.log", "a");
 		fwrite($handle, $strText);
 		fclose($handle);
 	}

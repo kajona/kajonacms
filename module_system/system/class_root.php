@@ -985,7 +985,7 @@ abstract class class_root {
 	 * @return mixed
 	 */
 	public function getModuleData($strName, $bitCache = true) {
-		$strQuery = "SELECT * FROM "._dbprefix_."system_module ORDER BY module_nr";
+		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
 		$arrModules = $this->objDB->getPArray($strQuery, array(), $bitCache);
 
 		foreach($arrModules as $arrOneModule) {
