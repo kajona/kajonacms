@@ -317,13 +317,13 @@ abstract class class_admin {
 
 	/**
 	 * Returns the data for a registered module
+     * FIXME: validate if still required
 	 *
 	 * @param string $strName
 	 * @param bool $bitCache
 	 * @return mixed
      *
      * @deprecated
-     * FIXME: validate if still required
 	 */
 	public function getModuleData($strName, $bitCache = true) {
         $objSystemCommon = new class_module_system_common();
@@ -564,10 +564,10 @@ abstract class class_admin {
         if(_xmlLoader_ === true || $this->arrModule["template"] == "/folderview.tpl")
             return;
 
-        $arrModule = $this->getModuleData($this->arrModule["modul"]);
+        $objModule = $this->getObjModule();
         $strCurrentAspect = class_module_system_aspect::getCurrentAspectId();
-        if(isset($arrModule["module_aspect"]) && $arrModule["module_aspect"] != "") {
-            $arrAspects = explode(",", $arrModule["module_aspect"]);
+        if($objModule->getStrAspect() != "") {
+            $arrAspects = explode(",", $objModule->getStrAspect());
             if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
                 class_module_system_aspect::setCurrentAspectId($arrAspects[0]);
             }
