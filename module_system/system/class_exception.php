@@ -75,7 +75,7 @@ class class_exception extends Exception {
             $strMailtext .= $this->getTraceAsString();
             $strMailtext .= "\n\n";
             $strMailtext .= "User: ".  class_carrier::getInstance()->getObjSession()->getUserID()." (".class_carrier::getInstance()->getObjSession()->getUsername().")\n";
-            $strMailtext .= "Source host: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
+            $strMailtext .= "Source host: ".getServer("REMOTE_ADDR")." (".@gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
             $strMailtext .= "Query string: ".getServer("REQUEST_URI")."\n";
 			$strMailtext .= "POST data (selective):\n";
             foreach ($arrPostParams as $strParam) {
