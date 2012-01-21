@@ -10,8 +10,6 @@
  * Classloader for all Kajona classes.
  * Implemented as a singleton.
  *
- * @todo: add xml-based redefinition based on project-files
- *
  * @package module_system
  * @author sidler@mulchprod.de
  */
@@ -51,6 +49,7 @@ class class_classloader {
      * Constructor, initializes the internal fields
      */
     private function __construct() {
+
         $this->arrModules = scandir(_corepath_);
 
         $this->arrModules = array_filter(
@@ -61,13 +60,53 @@ class class_classloader {
         );
 
         $this->indexAvailableCodefiles();
+        $this->loadClassloaderConfig();
+
     }
 
     private function __clone() {
     }
 
+    /**
+     * Loads an merges all class-mappings as defined in the class-loader config-file.
+     *
+     * @see /project/system/classes/classloader.xml
+     */
+    private function loadClassloaderConfig() {
+        if(is_file(_realpath_."/project/system/classes/classloader.xml")) {
+            $objReader = new XMLReader();
+            $objReader->open(_realpath_."/project/system/classes/classloader.xml");
+
+            while($objReader->read() && $objReader->name !== "class");
+
+            while($objReader->name === "class") {
+
+                $strName = "";
+                $strPath = "";
+
+                while($objReader->read() && $objReader->name !== 'name');
+
+                if($objReader->name === "name")
+                    $strName = $objReader->readString();
+
+                while($objReader->read() && $objReader->name !== 'path');
+
+                if($objReader->name === "path")
+                    $strPath = $objReader->readString();
 
 
+                if($strName != "" && $strPath != "")
+                    $this->arrFiles[$strName] = _realpath_.$strPath;
+
+                while($objReader->read() && $objReader->name !== "class");
+            }
+        }
+    }
+
+    /**
+     * Indexes all available code-files, so classes.
+     * Therefore, all relevant folders are traversed.
+     */
     private function indexAvailableCodefiles() {
 
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/widgets/"));
@@ -86,7 +125,7 @@ class class_classloader {
     }
 
     /**
-     * Loads all classes in a single folder.
+     * Loads all classes in a single folder, but traversing each module available.
      * Internal helper.
      * @param $strFolder
      * @return String[]

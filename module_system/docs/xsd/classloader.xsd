@@ -1,0 +1,25 @@
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+<!--
+    (c) 2004-2006 by MulchProductions, www.mulchprod.de
+    (c) 2007-2012 by Kajona, www.kajona.de
+    Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+-->
+
+    <xs:element name="classloader" type="classloaderType" />
+
+
+    <xs:complexType name="classloaderType">
+        <xs:sequence>
+            <xs:element type="classType" name="class" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="classType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:string" name="path"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

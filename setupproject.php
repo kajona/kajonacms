@@ -14,7 +14,7 @@ class class_project_setup {
 
         $strCurFolder = __DIR__;
 
-        echo "core-path: ".$strCurFolder.", ".substr($strCurFolder, -4)."\n";
+        echo "core-path: ".$strCurFolder.", folder found: ".substr($strCurFolder, -4)."\n";
 
         if(substr($strCurFolder, -4) != "core") {
             echo "current folder must be named core!";
@@ -43,6 +43,7 @@ class class_project_setup {
         self::checkDir("/project/lang");
         self::checkDir("/project/system");
         self::checkDir("/project/system/config");
+        self::checkDir("/project/system/classes");
         self::checkDir("/project/portal");
         self::checkDir("/templates");
         self::checkDir("/files");
@@ -56,6 +57,8 @@ class class_project_setup {
         self::checkDir("/templates/default/css");
         self::checkDir("/templates/default/tpl");
         self::checkDir("/templates/default/pics");
+
+        self::createClassloaderConfig();
 
 
         echo "searching for files on root-path...\n";
@@ -73,7 +76,7 @@ class class_project_setup {
         }
 
 
-        echo "<b>Kajona V4 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
+        echo "\n<b>Kajona V4 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
         echo "Files already existing are NOT overwritten.\n";
 
 
@@ -86,7 +89,7 @@ class class_project_setup {
         }
 
 
-        echo "<b>Kajona V4 htaccess setup</b>\n";
+        echo "\n<b>Kajona V4 htaccess setup</b>\n";
         self::createAllowHtaccess("/files/.htaccess");
         self::createAllowHtaccess("/templates/.htaccess");
 
@@ -94,6 +97,36 @@ class class_project_setup {
 
     }
 
+
+    private static function createClassloaderConfig() {
+        $strContent = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Kajona V4 class-loader configuration.
+
+   By default, the Kajona class-loader scans the core-folder for classes not yet known to the class-loader.
+   In some cases, it might get necessary to add new classes or overwrite existing classes to your projects'
+   needs. Therefore, this file may define classes explicitly.
+
+   Example: If you want to provide your own implementation for class_session, add an entry as following:
+
+    <classloader>
+        <class>
+            <name>class_session</name>
+            <path>/project/system/classes/class_session_test.php</path>
+        </class>
+    </classloader>
+
+-->
+<classloader
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/classloader.xsd"
+        >
+</classloader>
+XML;
+
+        file_put_contents(_realpath_."/project/system/classes/classloader.xml", $strContent);
+    }
 
 
     private static function createAdminRedirect() {
