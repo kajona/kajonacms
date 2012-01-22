@@ -818,8 +818,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         if($objAspect != null) {
 
+            //TODO: wip!
             $objFormManager = new class_admin_formgenerator("aspect", $objAspect);
             $objFormManager->addDynamicField("name");
+            $objFormManager->addField(new class_formentry_hidden("aspect", "mode"))->setStrEntryName("mode")->setStrValue($strMode);
+
             $strReturn .= $objFormManager->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
 
 
@@ -855,11 +858,11 @@ class class_module_system_admin extends class_admin_simple implements interface_
 	protected function actionSaveAspect() {
         $objAspect = null;
 
-        if(!$this->validateForm()) {
-            return $this->actionNewAspect($this->getParam("mode"));
-        }
+//    if(!$this->validateForm()) {
+//            return $this->actionNewAspect($this->getParam("mode"));
+//        }
 
-
+        //TODO wip
         if($this->getParam("mode") == "new")
             $objAspect = new class_module_system_aspect();
         else if($this->getParam("mode") == "edit")
@@ -867,14 +870,24 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         if($objAspect != null) {
 
+
+            $objFormManager = new class_admin_formgenerator("aspect", $objAspect);
+            $objFormManager->addDynamicField("name");
+            if(!$objFormManager->validateForm())
+                return $this->actionNewAspect($this->getParam("mode"));
+
+            $objFormManager->updateSourceObject();
+            $objAspect->updateObjectToDb();
+
+
             //TODO: comments, plz
-            $this->objToolkit->setValueFromForm($objAspect, "strName");
-            $this->objToolkit->setValueFromForm($objAspect, "bitDefault");
+//            $this->objToolkit->setValueFromForm($objAspect, "strName");
+//            $this->objToolkit->setValueFromForm($objAspect, "bitDefault");
 
 //            $objAspect->setStrName($this->getParam("aspect_name"));
 //            $objAspect->setBitDefault($this->getParam("aspect_default"));
-            if(!$objAspect->updateObjectToDb() )
-                throw new class_exception("Error creating new aspect", class_exception::$level_ERROR);
+//            if(!$objAspect->updateObjectToDb() )
+//                throw new class_exception("Error creating new aspect", class_exception::$level_ERROR);
         }
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
 	}

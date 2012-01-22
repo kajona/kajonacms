@@ -7,13 +7,15 @@
 ********************************************************************************************************/
 
 /**
+ * A hidden field
+ *
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_system
  */
-class class_formentry_text extends class_formentry_base implements interface_formentry {
+class class_formentry_hidden extends class_formentry_base implements interface_formentry {
 
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject) {
+    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
@@ -28,6 +30,12 @@ class class_formentry_text extends class_formentry_base implements interface_for
      */
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        return $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue());
+        return $objToolkit->formInputHidden($this->getStrEntryName(), $this->getStrValue());
     }
+
+    protected function updateLabel() {
+        return "";
+    }
+
+
 }

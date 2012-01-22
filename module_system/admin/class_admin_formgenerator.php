@@ -23,7 +23,12 @@ class class_admin_formgenerator {
     private static $STR_VALIDATOR_ANNOTATION = "@fieldValidator";
     private static $STR_MANDATORY_ANNOTATION = "@fieldMandatory";
 
+    public static $BIT_BUTTON_SUBMIT = 2;
+    public static $BIT_BUTTON_CLOSE = 4;
+    public static $BIT_BUTTON_CANCEL = 8;
 
+
+    private $intButtonConfig = 2;
 
     /**
      * The list of form-entries
@@ -45,7 +50,7 @@ class class_admin_formgenerator {
     private $objSourceobject = null;
 
 
-    private $arrValidationErrors = array();
+    private $arrValidationErrors = null;
 
     /**
      * Creates a new instance of the form-generator.
@@ -58,7 +63,19 @@ class class_admin_formgenerator {
         $this->objSourceobject = $objSourceobject;
     }
 
+    /**
+     * Stores the values saved with the params-array back to the currently associated object.
+     * Afterwards, the object may be persisted.
+     */
+    public function updateSourceObject() {
+        foreach($this->arrFields as $objOneField)
+            $objOneField->setValueToObject();
+    }
 
+    /**
+     * Returns an array of required fields.
+     * @return string[] where string[fielName] = type
+     */
     public function getRequiredFields() {
         $arrReturn = array();
         foreach($this->arrFields as $objOneField)
@@ -68,17 +85,58 @@ class class_admin_formgenerator {
         return $arrReturn;
     }
 
+    /**
+     * Validates the current form.
+     * @return bool
+     */
+    public function validateForm() {
+        $this->arrValidationErrors = array();
+        foreach($this->arrFields as $objOneField)
+            if($objOneField->getBitMandatory() && !$objOneField->validateValue())
+                $this->arrValidationErrors[$objOneField->getStrEntryName()] = $objOneField->getStrLabel();
 
-    public function renderForm($strTargetURI) {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        return count($this->arrValidationErrors) == 0;
+    }
+
+    /**
+     * @param $strTargetURI
+     * @param int $intButtonConfig a list of buttons to attach to the end of the form. if you need more then the obligatory save-button,
+     *                             pass them combined by a bitwise or, e.g. class_admin_formgenerator::$BIT_BUTTON_SUBMIT | class_admin_formgenerator::$BIT_BUTTON_CANCEL
+     * @return string
+     */
+    public function renderForm($strTargetURI, $intButtonConfig = 2) {
         $strReturn = "";
+
+        //add a hidden systemid-field
+        $objField = new class_formentry_hidden($this->strFormname, "systemid");
+        $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
+        $this->addField($objField);
+
+        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $strReturn .= $objToolkit->formHeader($strTargetURI);
         $strReturn .= $objToolkit->getValidationErrors($this);
 
         foreach($this->arrFields as $objOneField)
             $strReturn .= $objOneField->renderField();
 
+        if($intButtonConfig & self::$BIT_BUTTON_SUBMIT)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submit");
+
+        if($intButtonConfig & self::$BIT_BUTTON_CANCEL)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancel");
+
+        if($intButtonConfig & self::$BIT_BUTTON_CLOSE)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submit");
+
+
+
         $strReturn .= $objToolkit->formClose();
+
+        if(count($this->arrFields) > 0) {
+            $objField = $this->arrFields[0];
+            $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
+        }
+
         return $strReturn;
     }
 
@@ -132,7 +190,7 @@ class class_admin_formgenerator {
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
         }
 
-        $this->arrFields[] = $objField;
+        $this->addField($objField);
 
         return $objField;
     }
@@ -174,12 +232,24 @@ class class_admin_formgenerator {
     }
 
     public function getArrValidationErrors() {
+        if($this->arrValidationErrors == null)
+            $this->validateForm();
+
         return $this->arrValidationErrors;
     }
 
     public function getValidationErrors() {
-        return $this->arrValidationErrors;
+        return $this->getArrValidationErrors();
     }
 
+    /**
+     * @param class_formentry_base $objField
+     * @return class_formentry_base
+     */
+    public function addField(class_formentry_base $objField) {
+        $this->arrFields[] = $objField;
+
+        return $objField;
+    }
 
 }
