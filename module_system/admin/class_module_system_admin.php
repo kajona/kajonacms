@@ -817,6 +817,13 @@ class class_module_system_admin extends class_admin_simple implements interface_
         }
 
         if($objAspect != null) {
+
+            $objFormManager = new class_admin_formgenerator("aspect", $objAspect);
+            $objFormManager->addDynamicField("name");
+            $strReturn .= $objFormManager->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
+
+
+
             $strReturn .= $this->objToolkit->getValidationErrors($this, "saveAspect");
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
             //TODO: comments, plz

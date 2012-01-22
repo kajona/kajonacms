@@ -28,9 +28,12 @@ class class_annotations {
 	/**
 	 * Creates an instance of the annotations-class, parametrized with the class to inspect
      *
-     * @param string $strSourceClass
+     * @param string|object $strSourceClass
 	 */
 	public function __construct($strSourceClass) {
+
+        if(is_object($strSourceClass))
+            $strSourceClass = get_class($strSourceClass);
 
         if(!class_exists($strSourceClass))
             throw new class_exception("class ".$strSourceClass." not found", class_exception::$level_ERROR);

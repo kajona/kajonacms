@@ -1054,6 +1054,9 @@ function checkFolder($strPath) {
  * @param int $intMin
  * @param int $intMax
  * @return bool
+ *
+ * @deprecated replaced by @link{class_text_validator}
+ * @see interfave_validator
  */
 function checkText($strText, $intMin = 1, $intMax = 0) {
 	$bitReturn = false;

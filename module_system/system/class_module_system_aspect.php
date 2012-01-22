@@ -312,9 +312,9 @@ class class_module_system_aspect extends class_model implements interface_model,
     }
 
 
-
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
-
+    /**
+     * @param $strName
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
@@ -323,6 +323,13 @@ class class_module_system_aspect extends class_model implements interface_model,
         $this->bitDefault = $bitDefault;
     }
 
+    /**
+     * @return string
+     *
+     * @fieldType text
+     * @fieldValidator text
+     * @fieldMandatory
+     */
     public function getStrName() {
         return $this->strName;
     }

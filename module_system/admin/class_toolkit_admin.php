@@ -1331,12 +1331,16 @@ class class_toolkit_admin extends class_toolkit {
     public function getValidationErrors($objCalling, $strTargetAction = null) {
         $strRendercode = "";
         //render mandatory fields?
-        if($strTargetAction != null && is_callable(array($objCalling, "getRequiredFields")) ) {
-            $strTempAction = $objCalling->getAction();
-            $objCalling->setAction($strTargetAction);
-            $arrFields = $objCalling->getRequiredFields();
-
-            $objCalling->setAction($strTempAction);
+        if(method_exists($objCalling, "getRequiredFields") && is_callable(array($objCalling, "getRequiredFields")) ) {
+            if($objCalling instanceof class_admin_formgenerator) {
+                $arrFields = $objCalling->getRequiredFields();
+            }
+            else {
+                $strTempAction = $objCalling->getAction();
+                $objCalling->setAction($strTargetAction);
+                $arrFields = $objCalling->getRequiredFields();
+                $objCalling->setAction($strTempAction);
+            }
 
             if(count($arrFields) > 0 ) {
 
