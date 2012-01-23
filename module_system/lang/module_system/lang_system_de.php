@@ -44,7 +44,8 @@ $lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />
 $lang["about_part4"]                     = "<h2>Spenden</h2><p>Wenn Ihnen Kajona gefällt und Sie das Projekt unterstützen möchten können Sie hier an das Projekt spenden: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Spenden via PayPal\" class=\"inputSubmit\" /></form>";
 $lang["anzahltabellen"]                  = "Anzahl Tabellen";
 $lang["aspect_create"]                   = "Neuer Aspekt";
-$lang["aspect_default"]                  = "Standard-Aspekt:";
+$lang["form_aspect_default"]                  = "Standard-Aspekt:";
+$lang["form_aspect_name"]                = "Name:";
 $lang["aspect_delete_question"]          = "Möchten Sie den Aspekt &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["aspect_edit"]                     = "Aspekt bearbeiten";
 $lang["aspect_isDefault"]                = "Standard Aspekt";

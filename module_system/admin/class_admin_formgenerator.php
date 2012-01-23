@@ -49,8 +49,7 @@ class class_admin_formgenerator {
      */
     private $objSourceobject = null;
 
-
-    private $arrValidationErrors = null;
+    private $arrValidationErrors = array();
 
     /**
      * Creates a new instance of the form-generator.
@@ -133,7 +132,8 @@ class class_admin_formgenerator {
         $strReturn .= $objToolkit->formClose();
 
         if(count($this->arrFields) > 0) {
-            $objField = $this->arrFields[0];
+            reset($this->arrFields);
+            $objField = current($this->arrFields);
             $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
         }
 
@@ -232,9 +232,6 @@ class class_admin_formgenerator {
     }
 
     public function getArrValidationErrors() {
-        if($this->arrValidationErrors == null)
-            $this->validateForm();
-
         return $this->arrValidationErrors;
     }
 
@@ -247,7 +244,7 @@ class class_admin_formgenerator {
      * @return class_formentry_base
      */
     public function addField(class_formentry_base $objField) {
-        $this->arrFields[] = $objField;
+        $this->arrFields[$objField->getStrEntryName()] = $objField;
 
         return $objField;
     }

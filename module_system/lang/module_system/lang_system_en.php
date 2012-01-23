@@ -44,7 +44,8 @@ $lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />
 $lang["about_part4"]                     = "<h2>Donate</h2><p>If you like to work with Kajona and want to support the project, feel free to donate: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Donate via PayPal\" class=\"inputSubmit\" /></form>";
 $lang["anzahltabellen"]                  = "Number of tables";
 $lang["aspect_create"]                   = "New aspect";
-$lang["aspect_default"]                  = "Default aspect:";
+$lang["form_aspect_default"]                  = "Default aspect:";
+$lang["form_aspect_name"]                = "Name:";
 $lang["aspect_delete_question"]          = "Do you really want to delete the aspect &quot;<b>%%element_name%%</b>&quot;?";
 $lang["aspect_edit"]                     = "Edit aspect";
 $lang["aspect_isDefault"]                = "default aspect";

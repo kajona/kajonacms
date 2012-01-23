@@ -210,51 +210,6 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
-
-    /**
-     * Renders a single input-text-field. The value is taken from the object passed, whereas the property is
-     * accessed by its getter (bean-style accessors required).
-     *
-     * @param class_model $objEditable
-     * @param $strProperty
-     * @param $strTitle
-     * @return string
-     * @throws class_exception
-     *
-     * @todo: comments, plz!
-     */
-    public function formInputTextSimple(class_model $objEditable, $strProperty, $strTitle) {
-        if(!method_exists($objEditable, "get".$strProperty))
-            throw new class_exception("instance of ".get_class($objEditable)." does not support getter for ".$strProperty, class_exception::$level_ERROR);
-
-        $strName = uniStrtolower("form_".$strProperty);
-        $arrParams = class_carrier::getAllParams();
-        $strValue = isset($arrParams[$strName]) ? $arrParams[$strName] : call_user_func(array($objEditable, "get".$strProperty));
-
-        return $this->formInputText($strName, $strTitle, $strValue);
-    }
-
-    /**
-     * Writes a value from the params-array into a property of the passed object. The property is accessed
-     * by its setter (bean-style accessors required).
-     *
-     * @param class_model $objEditable
-     * @param $strProperty
-     * @throws class_exception
-     *
-     * @todo: comments, plz!
-     */
-    public function setValueFromForm(class_model $objEditable, $strProperty) {
-        if(!method_exists($objEditable, "set".$strProperty))
-            throw new class_exception("instance of ".get_class($objEditable)." does not support setter for ".$strProperty, class_exception::$level_ERROR);
-
-        $arrParams = class_carrier::getAllParams();
-        $strName = uniStrtolower("form_".$strProperty);
-        if(isset($arrParams[$strName]))
-            call_user_func(array($objEditable, "set".$strProperty), $arrParams[$strName]);
-    }
-
-
     /**
      * Returns a regular text-input field
      *
@@ -637,18 +592,6 @@ class class_toolkit_admin extends class_toolkit {
         }
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-
-    public function formInputDropdownSimple(class_model $objEditable, $strProperty, $strTitle, $arrValues) {
-        if(!method_exists($objEditable, "get".$strProperty))
-                throw new class_exception("instance of ".get_class($objEditable)." does not support getter for ".$strProperty, class_exception::$level_ERROR);
-
-        $strName = uniStrtolower("form_".$strProperty);
-        $arrParams = class_carrier::getAllParams();
-        $strValue = isset($arrParams[$strName]) ? $arrParams[$strName] : call_user_func(array($objEditable, "get".$strProperty));
-
-        return $this->formInputDropdown($strName, $arrValues, $strTitle, $strValue);
     }
 
     /**
