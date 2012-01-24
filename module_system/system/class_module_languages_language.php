@@ -114,6 +114,9 @@ class class_module_languages_language extends class_model implements interface_m
         	$this->setBitDefault(1);
         }
 
+        if($this->getBitDefault() == 1)
+            self::resetAllDefaultLanguages();
+
         $strQuery = "UPDATE "._dbprefix_."languages
                      SET language_name = ?,
                          language_default = ?
@@ -443,9 +446,20 @@ class class_module_languages_language extends class_model implements interface_m
         $this->bitDefault = $bitDefault;
     }
 
+    /**
+     * @return string
+     * @fieldType dropdown
+     * @fieldMandatory
+     */
     public function getStrName() {
         return $this->strName;
     }
+
+    /**
+     * @return bool
+     * @fieldType yesno
+     * @fieldMandatory
+     */
     public function getBitDefault() {
         return $this->bitDefault;
     }

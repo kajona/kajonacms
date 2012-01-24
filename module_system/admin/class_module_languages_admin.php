@@ -62,52 +62,55 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         return $this->actionNew("edit");
     }
 
-	/**
-	 * Creates the form to edit an existing language, or to create a new language
-	 *
-	 * @param string $strMode
-	 * @return string
+    /**
+     * Creates the form to edit an existing language, or to create a new language
+     *
+     * @param string $strMode
+     * @return string
      * @permissions edit
-	 */
+     */
 	protected function actionNew($strMode = "new") {
-	    $strReturn = "";
-	    $arrDefault = array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes"));
+
 	    $objLang = new class_module_languages_language();
 	    $arrLanguages = $objLang->getAllLanguagesAvailable();
 	    $arrLanguagesDD = array();
 	    foreach ($arrLanguages as $strLangShort)
 	       $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
 
-        if($strMode == "new") {
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-            $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getLang("commons_language_field"));
-            $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getLang("language_default"));
-            $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
-
-            $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
-        }
-        elseif ($strMode == "edit") {
+        if($strMode == "new")
+            $objLanguage = new class_module_languages_language();
+        else {
             $objLanguage = new class_module_languages_language($this->getSystemid());
-            if($objLanguage->rightEdit()) {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getLang("commons_language_field"), $objLanguage->getStrName());
-                $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getLang("language_default"), $objLanguage->getBitDefault());
-                $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
-                $strReturn .= $this->objToolkit->formInputHidden("systemid", $objLanguage->getSystemid());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-                $strReturn .= $this->objToolkit->formClose();
-
-                $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
-            }
-            else
-			    $strReturn = $this->getLang("commons_error_permissions");
-
+            if(!$objLanguage->rightEdit())
+                return $this->getLang("commons_error_permissions");
         }
-        return $strReturn;
+
+        $objForm = $this->getAdminForm($objLanguage);
+
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
+
 	}
 
+    /**
+     * Creates the admin-form object
+     * @param class_module_languages_language $objLanguage
+     * @return class_admin_formgenerator
+     */
+    private function getAdminForm(class_module_languages_language $objLanguage) {
+
+        $objLang = new class_module_languages_language();
+        $arrLanguages = $objLang->getAllLanguagesAvailable();
+        $arrLanguagesDD = array();
+        foreach ($arrLanguages as $strLangShort)
+           $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
+
+        $objForm = new class_admin_formgenerator("language", $objLanguage);
+        $objForm->addDynamicField("name")->setArrKeyValues($arrLanguagesDD);
+        $objForm->addDynamicField("default");
+
+        return $objForm;
+    }
 
 	/**
 	 * saves the submitted form-data as a new language, oder updates the corresponding language
@@ -116,57 +119,44 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      * @permissions edit
 	 */
 	protected function actionSaveLanguage() {
-        $strReturn = "";
+        $strOldLang = "";
+	    if($this->getParam("mode") == "new") {
+            $objLanguage = new class_module_languages_language();
+        }
+        else {
+            $objLanguage = new class_module_languages_language($this->getSystemid());
+            $strOldLang = $objLanguage->getStrName();
+            if(!$objLanguage->rightEdit())
+                return $this->getLang("commons_error_permissions");
+        }
+
+        $objForm = $this->getAdminForm($objLanguage);
+        $objForm->updateSourceObject();
+
+
 	    if($this->getParam("mode") == "new") {
             //language already existing?
-            if(class_module_languages_language::getLanguageByName($this->getParam("language_name")) !== false)
+            if(class_module_languages_language::getLanguageByName($objLanguage->getStrName()) !== false)
                return $this->getLang("language_existing");
+        }
+        elseif ($this->getParam("mode") == "edit") {
+            $objTestLang = class_module_languages_language::getLanguageByName($objLanguage->getStrName());
+            if($objTestLang !== false && $objTestLang->getSystemid() != $objLanguage->getSystemid())
+               return $this->getLang("language_existing");
+        }
 
-            //reset the default languages?
-            if($this->getParam("language_default") == "1")
-                class_module_languages_language::resetAllDefaultLanguages();
+        if(!$objLanguage->updateObjectToDb() )
+            throw new class_exception("Error creating new language", class_exception::$level_ERROR);
 
-            $objLanguage = new class_module_languages_language();
-            $objLanguage->setStrName($this->getParam("language_name"));
-            $objLanguage->setBitDefault($this->getParam("language_default"));
-
-            if(!$objLanguage->updateObjectToDb() )
-                throw new class_exception("Error creating new language", class_exception::$level_ERROR);
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-	    }
-	    elseif ($this->getParam("mode") == "edit") {
-	        $objLanguage = new class_module_languages_language($this->getSystemid());
-	        $strOldLanguage = $objLanguage->getStrName();
-	        if($objLanguage->rightEdit()) {
-	            //language already existing?
-	            $objTestLang = class_module_languages_language::getLanguageByName($this->getParam("language_name"));
-	            if($objTestLang !== false && $objTestLang->getSystemid() != $this->getSystemid())
-	               return $this->getLang("language_existing");
-
-	            //reset the default languages?
-	            if($this->getParam("language_default") == "1")
-	                class_module_languages_language::resetAllDefaultLanguages();
-
-
-                $objLanguage->setStrName($this->getParam("language_name"));
-                $objLanguage->setBitDefault($this->getParam("language_default"));
-                if(!$objLanguage->updateObjectToDb())
-                    throw new class_exception("Error updating language", class_exception::$level_ERROR);
-
-                //move contents to a new language
-                if($strOldLanguage != $objLanguage->getStrName()) {
-                    if(!$objLanguage->moveContentsToCurrentLanguage($strOldLanguage))
-                        throw new class_exception("Error moving contents to new language", class_exception::$level_ERROR);
-                }
-
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        if ($this->getParam("mode") == "edit") {
+            //move contents to a new language
+            if($strOldLang != $objLanguage->getStrName()) {
+                if(!$objLanguage->moveContentsToCurrentLanguage($strOldLang))
+                    throw new class_exception("Error moving contents to new language", class_exception::$level_ERROR);
             }
-            else
-			    $strReturn = $this->getLang("commons_error_permissions");
-	    }
+        }
 
-        return $strReturn;
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	}
 
 	/**

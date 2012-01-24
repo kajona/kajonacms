@@ -50,7 +50,10 @@ class class_formentry_base {
         $this->objSourceObject = $objSourceObject;
         $this->strFormName = $strFormName;
 
-        $this->strEntryName = uniStrtolower($strFormName."_".$strSourceProperty);
+        if($strFormName != "")
+            $strFormName .= "_";
+
+        $this->strEntryName = uniStrtolower($strFormName.$strSourceProperty);
 
         if($objSourceObject != null) {
             $this->updateLabel();

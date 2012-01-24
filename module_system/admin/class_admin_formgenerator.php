@@ -190,7 +190,7 @@ class class_admin_formgenerator {
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
         }
 
-        $this->addField($objField);
+        $this->addField($objField, $strPropertyName);
 
         return $objField;
     }
@@ -241,10 +241,14 @@ class class_admin_formgenerator {
 
     /**
      * @param class_formentry_base $objField
+     * @param string $strKey
      * @return class_formentry_base
      */
-    public function addField(class_formentry_base $objField) {
-        $this->arrFields[$objField->getStrEntryName()] = $objField;
+    public function addField(class_formentry_base $objField, $strKey = "") {
+        if($strKey == "")
+            $strKey = $objField->getStrEntryName();
+
+        $this->arrFields[$strKey] = $objField;
 
         return $objField;
     }

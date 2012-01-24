@@ -820,7 +820,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             if($objFormManager == null)
                 $objFormManager = $this->getFormForAspect($objAspect);
 
-            $objFormManager->addField(new class_formentry_hidden("aspect", "mode"))->setStrEntryName("mode")->setStrValue($strMode);
+            $objFormManager->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
             $strReturn = $objFormManager->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
 
         }
