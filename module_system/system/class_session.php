@@ -614,6 +614,9 @@ final class class_session {
         return $this->bitLazyLoaded;
     }
 
+    public function getBitClosed() {
+        return $this->bitClosed;
+    }
 
 
 }

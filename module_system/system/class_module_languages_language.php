@@ -288,7 +288,8 @@ class class_module_languages_language extends class_model implements interface_m
                         $arrRow = $this->objDB->getPRow($strQuery, array($strOneLanguage));
                         if(count($arrRow) > 0) {
                             //save to session
-                            $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
+                            if(!$this->objSession->getBitClosed())
+                                $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
                             return $arrRow["language_name"];
                         }
                     }
@@ -304,7 +305,8 @@ class class_module_languages_language extends class_model implements interface_m
             $arrRow = $this->objDB->getPRow($strQuery, array());
             if(count($arrRow) > 0) {
                 //save to session
-                $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
+                if(!$this->objSession->getBitClosed())
+                    $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
                 return $arrRow["language_name"];
             }
             else {
@@ -317,7 +319,8 @@ class class_module_languages_language extends class_model implements interface_m
                 $arrRow = $this->objDB->getPRow($strQuery, array());
                 if(count($arrRow) > 0) {
                     //save to session
-                    $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
+                    if(!$this->objSession->getBitClosed())
+                        $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
                     return $arrRow["language_name"];
                 }
                 else {
@@ -350,7 +353,8 @@ class class_module_languages_language extends class_model implements interface_m
             $arrRow = $this->objDB->getPRow($strQuery, array());
             if(count($arrRow) > 0) {
                 //save to session
-                $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
+                if(!$this->objSession->getBitClosed())
+                    $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
                 return $arrRow["language_name"];
             }
             else {
@@ -362,7 +366,8 @@ class class_module_languages_language extends class_model implements interface_m
                 $arrRow = $this->objDB->getPRow($strQuery, array());
                 if(count($arrRow) > 0) {
                     //save to session
-                    $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
+                    if(!$this->objSession->getBitClosed())
+                        $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
                     return $arrRow["language_name"];
                 }
                 else {
@@ -408,7 +413,8 @@ class class_module_languages_language extends class_model implements interface_m
         $objLanguage = class_module_languages_language::getLanguageByName($strLanguage);
         if($objLanguage !== false) {
             if($objLanguage->getStatus() != 0) {
-                $this->objSession->setSession("portalLanguage", $objLanguage->getStrName());
+                if(!$this->objSession->getBitClosed())
+                    $this->objSession->setSession("portalLanguage", $objLanguage->getStrName());
             }
         }
     }
@@ -422,7 +428,8 @@ class class_module_languages_language extends class_model implements interface_m
         $objLanguage = class_module_languages_language::getLanguageByName($strLanguage);
         if($objLanguage !== false) {
             if($objLanguage->getStatus() != 0) {
-                $this->objSession->setSession("adminLanguage", $objLanguage->getStrName());
+                if(!$this->objSession->getBitClosed())
+                    $this->objSession->setSession("adminLanguage", $objLanguage->getStrName());
             }
         }
     }
