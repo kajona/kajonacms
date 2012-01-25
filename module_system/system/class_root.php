@@ -1653,8 +1653,10 @@ abstract class class_root {
      * @param $arrInitRow
      */
     public function setArrInitRow($arrInitRow) {
-        $this->arrInitRow = $arrInitRow;
-        $this->objRights->addRowToCache($arrInitRow);
+        if(isset($arrInitRow["system_id"])) {
+            $this->arrInitRow = $arrInitRow;
+            $this->objRights->addRowToCache($arrInitRow);
+        }
     }
 
     /**

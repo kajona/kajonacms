@@ -67,51 +67,53 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
     /**
      * Generates the form to edit an existing tag
+     * @param \class_admin_formgenerator|null $objForm
      * @return string
      * @permissions edit
      */
-    protected function actionEdit() {
-        $strReturn = "";
+    protected function actionEdit(class_admin_formgenerator $objForm = null) {
         $objTag = new class_module_tags_tag($this->getSystemid());
 		if($objTag->rightEdit()) {
 
-			$strReturn .= $this->objToolkit->getValidationErrors($this, "saveTag");
-			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
-			$strReturn .= $this->objToolkit->formInputText("tag_name", $this->getLang("tag_name"), ($this->getParam("tag_name") != "" ? $this->getParam("tag_name") : $objTag->getStrName()) );
-			$strReturn .= $this->objToolkit->formInputHidden("systemid", $objTag->getSystemid());
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-			$strReturn .= $this->objToolkit->formClose();
+            if($objForm == null)
+                $objForm = $this->getAdminForm($objTag);
 
-			$strReturn .= $this->objToolkit->setBrowserFocus("tag_name");
+            return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
 		}
 		else
-			$strReturn = $this->getLang("commons_error_permissions");
+			return $this->getLang("commons_error_permissions");
 
-		return $strReturn;
+    }
+
+    private function getAdminForm(class_module_tags_tag $objTag) {
+        $objForm = new class_admin_formgenerator("tag", $objTag);
+        $objForm->addDynamicField("name");
+
+        return $objForm;
     }
 
 
     /**
      * Saves the passed tag-data back to the database.
      * @return string "" in case of success
+     * @permissions edit
      */
     protected function actionSaveTag() {
 
-        if(!$this->validateForm())
-            return $this->actionEdit();
-
-        $strReturn = "";
         $objTag = new class_module_tags_tag($this->getSystemid());
+        $objForm = $this->getAdminForm($objTag);
+
+        if(!$objForm->validateForm())
+            return $this->actionEdit($objForm);
+
 		if($objTag->rightEdit()) {
-			//Collect data to save to db
-			$objTag->setStrName($this->getParam("tag_name"), true);
+            $objForm->updateSourceObject();
             $objTag->updateObjectToDb();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+            return "";
 		}
 		else
-			$strReturn = $this->getLang("commons_error_permissions");
-
-		return $strReturn;
+			return $this->getLang("commons_error_permissions");
     }
 
 
@@ -133,7 +135,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
         $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
-        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("tag_name"));
+        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tag_name"));
         $strTagContent .= $this->objToolkit->formInputSubmit($this->getLang("button_add"), $this->getLang("button_add"), "");
         $strTagContent .= $this->objToolkit->formClose();
 
