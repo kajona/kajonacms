@@ -35,6 +35,7 @@ class class_formentry_base {
     private $strEntryName = null;
     private $bitMandatory = false;
     private $strValue = null;
+    private $strHint = null;
 
 
 
@@ -228,5 +229,19 @@ class class_formentry_base {
     public function getStrValue() {
         return $this->strValue;
     }
+
+    /**
+     * @param $strHint
+     * @return class_formentry_base
+     */
+    public function setStrHint($strHint) {
+        $this->strHint = $strHint;
+        return $this;
+    }
+
+    public function getStrHint() {
+        return $this->strHint;
+    }
+
 
 }

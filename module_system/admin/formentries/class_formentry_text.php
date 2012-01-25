@@ -13,6 +13,8 @@
  */
 class class_formentry_text extends class_formentry_base implements interface_formentry {
 
+    private $strOpener = "";
+
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
@@ -28,6 +30,21 @@ class class_formentry_text extends class_formentry_base implements interface_for
      */
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        return $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue());
+        $strReturn = "";
+        if($this->getStrHint() != null)
+            $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+
+        $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "inputText", $this->strOpener);
+
+        return $strReturn;
     }
+
+    public function setStrOpener($strOpener) {
+        $this->strOpener = $strOpener;
+    }
+
+    public function getStrOpener() {
+        return $this->strOpener;
+    }
+
 }

@@ -39,22 +39,6 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 		return $arrReturn;
 	}
 
-	public function getRequiredFields() {
-        $strAction = $this->getAction();
-        $arrReturn = array();
-        if($strAction == "new") {
-            $arrReturn["filemanager_name"] = "string";
-            $arrReturn["filemanager_path"] = "folder";
-        }
-        if($strAction == "edit") {
-            $arrReturn["filemanager_name"] = "string";
-            $arrReturn["filemanager_path"] = "folder";
-        }
-
-        return $arrReturn;
-    }
-
-
     /**
 	 * Returns a list of all repos known to the system
 	 *
@@ -122,55 +106,30 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 		return $strReturn;
 	}
 
-	/**
-	 * returns the form for a new repo
-	 *
-	 * @return string
+    /**
+     * returns the form for a new repo
+     *
+     * @param string $strMode
+     * @param class_admin_formgenerator|null $objForm
+     * @return string
      * @permissions right2
-	 */
-	protected function actionNew() {
-		$strReturn = "";
-        //validate Form, if passed
-        $bitValidated = true;
-        if($this->getParam("repoSaveNew") != "") {
-            if(!$this->validateForm()) {
-                $bitValidated = false;
-                $this->setParam("repoSaveNew", "");
-            }
+     */
+	protected function actionNew($strMode = "new", class_admin_formgenerator $objForm = null) {
+
+        $objRepo = new class_module_filemanager_repo();
+        if($strMode == "edit") {
+            $objRepo = new class_module_filemanager_repo($this->getSystemid());
+
+            if(!$objRepo->rightEdit())
+                return $this->getLang("commons_error_permissions");
         }
 
-        //save or new?
-        if($this->getParam("repoSaveNew") == ""){
-            //create the form
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "new");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "new", "repoSaveNew=1"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getLang("commons_name"), $this->getParam("filemanager_name"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getLang("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/files", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
-            $strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_upload_filter_h"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getLang("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
-            $strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_view_filter_h"));
-            $strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getLang("filemanager_view_filter"), $this->getParam("filemanager_view_filter"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
+        if($objForm == null)
+            $objForm = $this->getAdminForm($objRepo);
 
-            $strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
-        }
-        else {
-            //save the passed data to database
-            $objRepo = new class_module_filemanager_repo();
-            $objRepo->setStrName($this->getParam("filemanager_name"));
-            $objRepo->setStrPath($this->getParam("filemanager_path"));
-            $objRepo->setStrUploadFilter($this->getParam("filemanager_upload_filter"));
-            $objRepo->setStrViewFilter($this->getParam("filemanager_view_filter"));
-            if(!$objRepo->updateObjectToDb())
-                throw new class_exception($this->getLang("fehler_repo"), class_exception::$level_ERROR);
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-        }
-
-		return $strReturn;
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveRepo"));
 	}
-
 
 
 	/**
@@ -180,60 +139,54 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
      * @permissions right2
 	 */
 	protected function actionEdit() {
-		$strReturn = "";
-        $objRepo = new class_module_filemanager_repo($this->getSystemid());
-		if($objRepo->rightRight2()) {
-		    $bitValidated = true;
-	        if($this->getParam("repoSaveEdit") != "") {
-                if(!$this->validateForm()) {
-                    $bitValidated = false;
-                    $this->setParam("repoSaveEdit", "");
-                }
-	        }
-			//Form or update?
-			if($this->getParam("repoSaveEdit") == "") {
-
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "edit");
-				//create the form
-    			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "edit", "repoSaveEdit=1"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getLang("commons_name"), $objRepo->getStrName());
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getLang("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/files", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
-    			$strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_upload_filter_h"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getLang("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
-    			$strReturn .= $this->objToolkit->formTextRow($this->getLang("filemanager_view_filter_h"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getLang("filemanager_view_filter"), $objRepo->getStrViewFilter());
-    			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-    			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-				$strReturn .= $this->objToolkit->formClose();
-
-				$strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
-			}
-			else {
-				//Update the databse
-				$objRepo = new class_module_filemanager_repo($this->getSystemid());
-				$objRepo->setStrName($this->getParam("filemanager_name"));
-				$objRepo->setStrPath($this->getParam("filemanager_path"));
-				$objRepo->setStrUploadFilter($this->getParam("filemanager_upload_filter"));
-				$objRepo->setStrViewFilter($this->getParam("filemanager_view_filter"));
-
-
-				if($objRepo->updateObjectToDb())
-					$strReturn = "";
-				else
-				    throw new class_exception($this->getLang("repo_bearbeiten_fehler"), class_exception::$level_ERROR);
-
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-			}
-		}
-		else
-			$strReturn = $this->getLang("commons_error_permissions");
-
-		return $strReturn;
+		return $this->actionNew("edit");
 	}
 
 
+    private function getAdminForm(class_module_filemanager_repo $objRepo) {
+        $objForm = new class_admin_formgenerator("repo", $objRepo);
+        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
+        $objField = $objForm->addDynamicField("path")->setStrLabel($this->getLang("commons_path"));
+        $objField->setStrOpener(getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=".$objField->getStrEntryName()."&folder=/files", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
+        $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("filemanager_upload_filter_h"));
+        $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("filemanager_view_filter_h"));
 
 
+        return $objForm;
+
+    }
+
+
+    /**
+     * @return string
+     * @permissions right2
+     */
+    protected function actionSaveRepo() {
+
+        $objRepo = null;
+
+        if($this->getParam("mode") == "new") {
+            $objRepo = new class_module_filemanager_repo();
+        }
+        else if($this->getParam("mode") == "edit") {
+            $objRepo = new class_module_filemanager_repo($this->getSystemid());
+        }
+
+        if($objRepo != null) {
+
+            $objForm = $this->getAdminForm($objRepo);
+            if(!$objForm->validateForm())
+                return $this->actionNew($this->getParam("mode"), $objForm);
+
+            $objForm->updateSourceObject();
+            $objRepo->updateObjectToDb();
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+            return "";
+        }
+
+        return $this->getLang("commons_error_permissions");
+    }
 
     protected function actionUploadFile() {
         return $this->actionOpenFolder();

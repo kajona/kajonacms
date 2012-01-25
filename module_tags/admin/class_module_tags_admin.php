@@ -27,13 +27,6 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
 	}
 
-    public function getRequiredFields() {
-        if($this->getAction() == "saveTag")
-            return array("tag_name" => "string");
-        else
-            return parent::getRequiredFields();
-    }
-
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));

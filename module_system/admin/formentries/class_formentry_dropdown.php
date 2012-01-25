@@ -33,7 +33,11 @@ class class_formentry_dropdown extends class_formentry_base implements interface
      */
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        return $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue());
+        $strReturn = "";
+        if($this->getStrHint() != null)
+            $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue());
+        return $strReturn;
     }
 
     public function setArrKeyValues($arrKeyValues) {

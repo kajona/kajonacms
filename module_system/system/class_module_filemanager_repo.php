@@ -212,9 +212,19 @@ class class_module_filemanager_repo extends class_model implements interface_mod
     }
 
 
+    /**
+     * @return string
+     * @fieldMandatory
+     * @fieldValidator folder
+     */
     public function getStrPath() {
         return $this->strPath;
     }
+
+    /**
+     * @return string
+     * @fieldMandatory
+     */
     public function getStrName() {
         return $this->strName;
     }
