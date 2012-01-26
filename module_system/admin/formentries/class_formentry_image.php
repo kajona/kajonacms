@@ -11,9 +11,7 @@
  * @since 4.0
  * @package module_system
  */
-class class_formentry_text extends class_formentry_base implements interface_formentry {
-
-    private $strOpener = "";
+class class_formentry_image extends class_formentry_base implements interface_formentry {
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -34,22 +32,10 @@ class class_formentry_text extends class_formentry_base implements interface_for
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "inputText", $this->strOpener, $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputImageSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue());
 
         return $strReturn;
     }
 
-    /**
-     * @param $strOpener
-     * @return class_formentry_text
-     */
-    public function setStrOpener($strOpener) {
-        $this->strOpener = $strOpener;
-        return $this;
-    }
-
-    public function getStrOpener() {
-        return $this->strOpener;
-    }
 
 }

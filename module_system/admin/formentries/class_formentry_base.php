@@ -36,6 +36,7 @@ class class_formentry_base {
     private $bitMandatory = false;
     private $strValue = null;
     private $strHint = null;
+    private $bitReadonly = false;
 
 
 
@@ -101,6 +102,9 @@ class class_formentry_base {
      */
     protected function getValueFromObject() {
 
+        if($this->objSourceObject == null)
+            return;
+
         //try to get the matching getter
         $strGetter = "getStr".$this->strSourceProperty;
 
@@ -131,6 +135,9 @@ class class_formentry_base {
      * @return mixed
      */
     public function setValueToObject() {
+
+        if($this->objSourceObject == null)
+            return;
 
         //try to get the matching getter
         $strSetter = "setStr".$this->strSourceProperty;
@@ -241,6 +248,19 @@ class class_formentry_base {
 
     public function getStrHint() {
         return $this->strHint;
+    }
+
+    /**
+     * @param $bitReadonly
+     * @return class_formentry_base
+     */
+    public function setBitReadonly($bitReadonly) {
+        $this->bitReadonly = $bitReadonly;
+        return $this;
+    }
+
+    public function getBitReadonly() {
+        return $this->bitReadonly;
     }
 
 

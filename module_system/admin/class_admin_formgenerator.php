@@ -253,4 +253,16 @@ class class_admin_formgenerator {
         return $objField;
     }
 
+    /**
+     * Returns a single entry form the fields, identified by its form-entry-name.
+     * @param $strName
+     * @return class_formentry_base|interface_formentry|null
+     */
+    public function getField($strName) {
+        if(isset($this->arrFields[$strName]))
+            return $this->arrFields[$strName];
+        else
+            return null;
+    }
+
 }

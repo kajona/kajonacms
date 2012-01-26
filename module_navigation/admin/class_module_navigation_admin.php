@@ -23,7 +23,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      *
      */
 	public function __construct() {
-
         $this->setArrModuleEntry("modul", "navigation");
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
 		parent::__construct();
@@ -31,7 +30,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
 	}
-
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -41,20 +39,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
-
-
-	public function getRequiredFields() {
-        $strAction = $this->getAction();
-        $arrReturn = array();
-        if($strAction == "saveNavi") {
-            $arrReturn["navigation_name"] = "string";
-        }
-        if($strAction == "saveNaviPoint") {
-            $arrReturn["navigation_name"] = "string";
-        }
-
-        return $arrReturn;
-    }
 
     protected final function validateForm() {
         $arrReturn = array();
@@ -195,54 +179,57 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     }
 
     /**
-	 * Creates the form to edit / create a navi
-	 *
-	 * @param string $strMode
-	 * @return string
+     * Creates the form to edit / create a navi
+     *
+     * @param string $strMode
+     * @param class_admin_formgenerator|null $objForm
+     * @return string
      * @autoTestable
      * @permissions edit
-	 */
-	protected function actionNewNavi($strMode = "new") {
-		$strReturn = "";
+     */
+	protected function actionNewNavi($strMode = "new", class_admin_formgenerator $objForm = null) {
+
+        $objNavi = new class_module_navigation_tree();
+
+        if($strMode == "edit") {
+            $objNavi = new class_module_navigation_tree($this->getSystemid());
+            if(!$objNavi->rightEdit())
+                return $this->getLang("commons_error_permissions");
+        }
+
+        if($objForm == null)
+            $objForm = $this->getNaviAdminForm($objNavi);
+
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+
+        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
+
+	}
+
+
+    private function getNaviAdminForm(class_module_navigation_tree $objTree) {
 
         $strFolderBrowser = getLinkAdminDialog(
             "pages",
             "pagesFolderBrowser",
-            "&form_element=navigation_folder_i&folder=1",
+            "&form_element=navi_folder_i&folder=1",
             $this->getLang("commons_open_browser"),
             $this->getLang("commons_open_browser"),
             "icon_externalBrowser.gif",
             $this->getLang("commons_open_browser")
         );
 
-        if($strMode == "edit")
-            $objNavi = new class_module_navigation_tree($this->getSystemid());
-        else
-            $objNavi = new class_module_navigation_tree("");
 
-        $strFoldername = "";
-        $strFolderid = "";
-        if(validateSystemid($objNavi->getStrFolderId())) {
-            $objFolder = new class_module_pages_folder($objNavi->getStrFolderId());
-            $strFoldername = $objFolder->getStrName();
-            $strFolderid = $objFolder->getSystemid();
-        }
+        $objForm = new class_admin_formgenerator("navi", $objTree);
 
-        //Build the form
-        $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNavi");
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
-        $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getLang("commons_name"), ($objNavi->getStrName() != "" ? $objNavi->getStrName() : ""));
-        $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getLang("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
-        $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $strFolderid);
-        $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
-        $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-        $strReturn .= $this->objToolkit->formClose();
+        $objFolder = new class_module_pages_folder($objTree->getStrFolderId());
 
-        $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
+        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
+        $objForm->addField(new class_formentry_text("navi", "folder_i", null))->setStrValue($objFolder->getStrName())->setBitReadonly(true)->setStrOpener($strFolderBrowser)->setStrLabel($this->getLang("navigation_folder_i"));
+        $objForm->addField(new class_formentry_hidden("navi", "folder_i_id"))->setStrValue($objFolder->getSystemid());
 
-		return $strReturn;
-	}
+        return $objForm;
+    }
 
 	/**
 	 * Saves or updates a navigation
@@ -253,26 +240,23 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 	protected function actionSaveNavi() {
 		$strReturn = "";
 
-        if(!$this->validateForm())
-            return $this->actionNewNavi($this->getParam("mode"));
-
-        // new navi or edit exising?
-        if($this->getParam("mode") == "new") {
-            $objNavi = new class_module_navigation_tree("");
-            $objNavi->setStrName($this->getParam("navigation_name"));
-            $objNavi->setStrFolderId($this->getParam("navigation_folder_i_id"));
-            if(!$objNavi->updateObjectToDb())
-                throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-
-        }
-        elseif($this->getParam("mode") == "edit") {
-            //Just update the record
+        $objNavi = new class_module_navigation_tree();
+        if($this->getParam("mode") == "edit") {
             $objNavi = new class_module_navigation_tree($this->getSystemid());
-            $objNavi->setStrName($this->getParam("navigation_name"));
-            $objNavi->setStrFolderId($this->getParam("navigation_folder_i_id"));
-            if(!$objNavi->updateObjectToDb())
-                throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+            if(!$objNavi->rightEdit())
+                return $this->getLang("commons_error_permissions");
         }
+
+        $objForm = $this->getNaviAdminForm($objNavi);
+        if(!$objForm->validateForm())
+            return $this->actionNewNavi($this->getParam("mode"), $objForm);
+
+        $objForm->updateSourceObject();
+        $objNavi->setStrFolderId($this->getParam("navi_folder_i_id"));
+
+        if(!$objNavi->updateObjectToDb())
+            throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+
 
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
@@ -283,14 +267,16 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     protected function actionEditNaviPoint() {
         return $this->actionNewNaviPoint("edit");
     }
-	/**
-	 * Creates the form to edit / create a new navi-point
-	 *
-	 * @param string $strMode new || edit
-	 * @return string
+
+    /**
+     * Creates the form to edit / create a new navi-point
+     *
+     * @param string $strMode new || edit
+     * @param class_admin_formgenerator|null $objForm
+     * @return string
      * @permissions edit
-	 */
-	protected function actionNewNaviPoint($strMode = "new") {
+     */
+	protected function actionNewNaviPoint($strMode = "new", class_admin_formgenerator $objForm = null) {
 		$strReturn = "";
 
         $strNodeBrowser = getLinkAdminDialog(
@@ -310,54 +296,65 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $strParentname = $objParentPoint->getStrName();
         }
 
-		if($strMode == "new") {
-            //Build the form
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNaviPoint");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
-            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-            $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getLang("commons_name"), $this->getParam("navigation_name"));
-            $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getLang("navigation_page_i"), $this->getParam("navigation_page_i"));
-            $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getLang("navigation_page_e"), $this->getParam("navigation_page_e"), _filemanager_default_filesrepoid_);
-            $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getLang("commons_image"), $this->getParam("navigation_image"));
-            $arrTargets = array("_self" => $this->getLang("navigation_tagetself"), "_blank" => $this->getLang("navigation_tagetblank"));
-            $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getLang("navigation_target"), $this->getParam("navigation_target"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
 
-            $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
-		}
-		elseif ($strMode == "edit") {
+        $objPoint = new class_module_navigation_point();
+        if ($strMode == "edit") {
             //Load Point data
             $objPoint = new class_module_navigation_point($this->getSystemid());
+        }
 
-            if($strParentname == "" && validateSystemid($objPoint->getPrevId())) {
-                $objParentPoint = new class_module_navigation_point($objPoint->getPrevId());
-                $strParentname = $objParentPoint->getStrName();
-            }
+        if($objForm == null)
+            $objForm = $this->getPointAdminForm($objPoint, $strMode);
 
-            //Build the form
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNaviPoint");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
-            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
-            $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getLang("commons_name"), $objPoint->getStrName());
-            $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getLang("navigation_page_i"), $objPoint->getStrPageI());
-            $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getLang("navigation_page_e"), $objPoint->getStrPageE(), _filemanager_default_filesrepoid_);
-            $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getLang("commons_image"), $objPoint->getStrImage());
-
-            $strReturn .= $this->objToolkit->formInputText("navigation_parent", $this->getLang("navigation_parent"), $strParentname, "inputText", $strNodeBrowser, true);
-            $strReturn .= $this->objToolkit->formInputHidden("navigation_parent_id", $objParentPoint->getSystemid());
-
-            $arrTargets = array("_self" => $this->getLang("navigation_tagetself"), "_blank" => $this->getLang("navigation_tagetblank"));
-            $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getLang("navigation_target"), $objPoint->getStrTarget());
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
-
-            $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
-		}
-		return $strReturn;
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
 	}
+
+
+    private function getPointAdminForm(class_module_navigation_point $objPoint, $strMode) {
+
+        $arrTargets = array("_self" => $this->getLang("navigation_tagetself"), "_blank" => $this->getLang("navigation_tagetblank"));
+
+        if(validateSystemid($this->getParam("point_parent_id")))
+            $objParent = class_objectfactory::getInstance()->getObject($this->getParam("point_parent_id"));
+        else
+            $objParent = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+
+        $objParentPoint = null;
+        if(validateSystemid($this->getParam("point_parent_id"))) {
+            $objParentPoint = new class_module_navigation_point($this->getParam("point_parent_id"));
+        }
+        else if($strMode == "new" ) {
+            $objParentPoint = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        }
+        else if($strMode == "edit") {
+            $objParentPoint = new class_module_navigation_point($objParent->getPrevId());
+        }
+
+        $strNodeBrowser = getLinkAdminDialog(
+                    $this->arrModule["modul"],
+                    "navigationPointBrowser",
+                    "&form_element=point_parent&systemid=".$objParent->getPrevId(),
+                    $this->getLang("commons_open_browser"),
+                    $this->getLang("commons_open_browser"),
+                    "icon_externalBrowser.gif",
+                    $this->getLang("commons_open_browser")
+                );
+
+        $objForm = new class_admin_formgenerator("point", $objPoint);
+        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
+        $objForm->addDynamicField("pagei");
+        $objForm->addDynamicField("pagee");
+        $objForm->addDynamicField("image");
+
+        $objForm->addField(new class_formentry_text("point", "parent"))->setStrOpener($strNodeBrowser)->setBitReadonly(true)->setStrValue($objParentPoint->getStrName())->setStrLabel($this->getLang("navigation_parent"));
+        $objForm->addField(new class_formentry_hidden("point", "parent_id"))->setStrValue($objParentPoint->getSystemid());
+
+        $objForm->addDynamicField("target")->setArrKeyValues($arrTargets);
+
+        return $objForm;
+    }
 
 	/**
 	 * Saves or updates a navi-point
@@ -367,50 +364,28 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 	 */
 	protected function actionSaveNaviPoint() {
 		$strReturn = "";
+        $objPoint = new class_module_navigation_point();
+        if($this->getParam("mode") == "edit") {
+            $objPoint = new class_module_navigation_point($this->getSystemid());
+        }
 
-        if(!$this->validateForm())
-            return $this->actionNewNaviPoint($this->getParam("mode"));
+        $objForm = $this->getPointAdminForm($objPoint, $this->getParam("mode"));
+        if(!$objForm->validateForm())
+            return $this->actionNewNaviPoint($this->getParam("mode"), $objForm);
 
-        $strExternalLink = $this->getParam("navigation_page_e");
+        $objForm->updateSourceObject();
+
+        $strExternalLink = $objPoint->getStrPageE();
         $strExternalLink = uniStrReplace(_indexpath_, "_indexpath_", $strExternalLink);
         $strExternalLink = uniStrReplace(_webpath_, "_webpath_", $strExternalLink);
+        $objPoint->setStrPageE($strExternalLink);
 
-		//Insert or update?
-		if($this->getParam("mode") == "new") {
-            $objPoint = new class_module_navigation_point("");
-            //and the navigation-table
-            $objPoint->setStrImage($this->getParam("navigation_image"));
-            $objPoint->setStrName($this->getParam("navigation_name"));
-            $objPoint->setStrPageE($strExternalLink);
-            $objPoint->setStrPageI($this->getParam("navigation_page_i"));
-            $objPoint->setStrTarget($this->getParam("navigation_target"));
-            if(!$objPoint->updateObjectToDb($this->getSystemid()))
-                throw new class_exception("Error saving point-object to db", class_exception::$level_ERROR);
-            //To load a correct list, set the points id as current id
-            $this->setSystemid($objPoint->getSystemid());
-		}
-		elseif ($this->getParam("mode") == "edit") {
-            $objPoint = new class_module_navigation_point($this->getSystemid());
-            //and the navigation-table
-            $objPoint->setStrImage($this->getParam("navigation_image"));
-            $objPoint->setStrName($this->getParam("navigation_name"));
-            $objPoint->setStrPageE($strExternalLink);
-            $objPoint->setStrPageI($this->getParam("navigation_page_i"));
-            $objPoint->setStrTarget($this->getParam("navigation_target"));
+        $objPoint->updateObjectToDb($this->getParam("point_parent_id"));
 
-            $strPrevid = $objPoint->getPrevId();
-            if(validateSystemid($this->getParam("navigation_parent_id")) && $this->getParam("navigation_parent_id") != $this->getSystemid())
-                $strPrevid = $this->getParam("navigation_parent_id");
-
-            if(!$objPoint->updateObjectToDb($strPrevid))
-                throw new class_exception("Error updating point-object to db", class_exception::$level_ERROR);
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-		}
-		//Flush pages cache
-		$this->flushCompletePagesCache();
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-		return $strReturn;
+        //Flush pages cache
+        $this->flushCompletePagesCache();
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objPoint->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        return $strReturn;
 	}
 
 

@@ -326,20 +326,43 @@ class class_module_navigation_point extends class_model implements interface_mod
     }
 
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
+    /**
+     * @return string
+     * @fieldMandatory
+     */
     public function getStrName() {
         return $this->strName;
     }
+
+    /**
+     * @return string
+     * @fieldType file
+     */
     public function getStrPageE() {
         return $this->strPageE;
     }
+
+    /**
+     * @return string
+     * @fieldType page
+     */
     public function getStrPageI() {
         return $this->strPageI;
     }
+
+    /**
+     * @return string
+     * @fieldType dropdown
+     */
     public function getStrTarget() {
         return $this->strTarget != "" ? $this->strTarget : "_self";
     }
+
+    /**
+     * @return string
+     * @fieldType image
+     */
     public function getStrImage() {
         return $this->strImage;
     }
