@@ -104,10 +104,12 @@ class class_module_pages_folder extends class_model implements interface_model, 
             $arrPropRow["folderproperties_name"] = "";
             $arrPropRow["folderproperties_language"] = "";
         }
+        else {
 
-        $this->setStrName($arrPropRow["folderproperties_name"]);
-        $this->strOldName = $arrPropRow["folderproperties_name"];
-        $this->setStrLanguage($arrPropRow["folderproperties_language"]);
+            $this->setStrName($arrPropRow["folderproperties_name"]);
+            $this->strOldName = $arrPropRow["folderproperties_name"];
+            $this->setStrLanguage($arrPropRow["folderproperties_language"]);
+        }
     }
 
     /**
@@ -346,13 +348,15 @@ class class_module_pages_folder extends class_model implements interface_model, 
         return class_carrier::getInstance()->getObjLang()->getLang("change_object_folder", "pages");
     }
 
-    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    /**
+     * @return string
+     * @fieldMandatory
+     */
     public function getStrName() {
         return $this->strName;
     }
 
     public function setStrName($strName) {
-
         $this->strName = $strName;
     }
 

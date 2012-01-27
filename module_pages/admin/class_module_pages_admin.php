@@ -56,9 +56,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
-        if($strAction == "folderNewSave" || $strAction == "folderEditSave") {
-            $arrReturn["ordner_name"] = "string";
-        }
         if($strAction == "savePage" || $strAction == "changePage") {
             $arrReturn["name"] = "string";
             $arrReturn["browsername"] = "string";
@@ -703,59 +700,54 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 	}
 
 
-
-	/**
-	 * Returns a form to create a new folder
-	 *
-	 * @return string
+    /**
+     * Returns a form to create a new folder
+     *
+     * @param string $strMode
+     * @param class_admin_formgenerator|null $objForm
+     * @return string
      * @permissions right2
-	 */
-	protected function actionNewFolder() {
-		$strReturn = "";
-        $strReturn = $this->generateFolderNavigation().$strReturn;
-        $strReturn .= $this->objToolkit->getValidationErrors($this, "folderNewSave");
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderNewSave"));
-        $strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getLang("ordner_name"), $this->getParam("ordner_name"));
-        $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-        $strReturn .= $this->objToolkit->formClose();
+     * @autoTestable
+     */
+	protected function actionNewFolder($strMode = "new", class_admin_formgenerator $objForm = null) {
 
-        $strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
+        //if languages are installed, present a language switch right here
+        $objLanguages = new class_module_languages_admin();
+        $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
 
-		return $strReturn;
+        $strReturn = $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+
+
+        if($strMode == "new")
+            $objFolder = new class_module_pages_folder();
+        else {
+            $objFolder = new class_module_pages_folder($this->getSystemid());
+            if(!$objFolder->rightEdit())
+                return $this->getLang("commons_error_permissions");
+        }
+
+        if($objForm == null)
+            $objForm = $this->getFolderForm($objFolder);
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+
+        return $strReturn.$objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "folderSave"));
 	}
+
+    private function getFolderForm(class_module_pages_folder $objFolder) {
+        $objForm = new class_admin_formgenerator("folder", $objFolder);
+        $objForm->addDynamicField("name")->setStrLabel($this->getLang("ordner_name"));
+
+        return $objForm;
+    }
 
 	/**
 	 * Creates a form to edit a folder (rename it)
 	 *
-	 * @return unknown
+	 * @return string
+     * @permissions right2
 	 */
 	protected function actionEditFolder() {
-		$strReturn = "";
-        $objFolder = new class_module_pages_folder($this->getSystemid());
-		if($objFolder->rightEdit()) {
-            $strReturn = $this->generateFolderNavigation().$strReturn;
-            $arrToolbarEntries = array();
-
-            //if languages are installed, present a language switch right here
-            $objLanguages = new class_module_languages_admin();
-            $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
-
-            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
-			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderEditSave");
-			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderEditSave"));
-			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getLang("ordner_name"), $objFolder->getStrName());
-
-			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-			$strReturn .= $this->objToolkit->formClose();
-
-			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
-		}
-		else
-			$strReturn = $this->getLang("commons_error_permissions");
-
-		return $strReturn;
+        return $this->actionNewFolder("edit");
 	}
 
 	/**
@@ -764,45 +756,27 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 	 * @return String, "" in case of success
      * @permissions right2
 	 */
-	protected function actionFolderNewSave() {
+	protected function actionFolderSave() {
 
-        if(!$this->validateForm())
-            return $this->actionNewFolder();
+        if($this->getParam("mode") == "new")
+            $objFolder = new class_module_pages_folder();
+        else {
+            $objFolder = new class_module_pages_folder($this->getSystemid());
+            if(!$objFolder->rightEdit())
+                return $this->getLang("commons_error_permissions");
+        }
 
-        //Collect data to save to db
-        $objFolder = new class_module_pages_folder();
-        $objFolder->setStrName($this->getParam("ordner_name"));
-        $objFolder->setStrLanguage($this->getLanguageToWorkOn());
+        $objForm = $this->getFolderForm($objFolder);
+        if(!$objForm->validateForm())
+            return $this->actionNewFolder($this->getParam("mode"), $objForm);
+
+        $objForm->updateSourceObject();
+
         $objFolder->updateObjectToDb();
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
 
         return "";
 	}
-
-	/**
-	 * Updates the posted Folder to database
-	 *
-	 * @return String, "" in case of success
-	 */
-	protected function actionFolderEditSave() {
-		$strReturn = "";
-        $objFolder = new class_module_pages_folder($this->getSystemid());
-		if($objFolder->rightRight2()) {
-            if(!$this->validateForm())
-                return $this->actionEditFolder();
-
-			$objFolder->setStrName($this->getParam("ordner_name"));
-            $objFolder->setStrLanguage($this->getLanguageToWorkOn());
-            $objFolder->updateObjectToDb();
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objFolder->getPrevId()));
-		}
-		else
-			$strReturn = $this->getLang("commons_error_permissions");
-
-		return $strReturn;
-	}
-
 
 	/**
 	 * Deletes a folder from Database. All subpages & subfolders turn up to top-level
