@@ -629,7 +629,10 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
 
-
+    /**
+     * @return string
+     * @fieldMandatory
+     */
     public function getStrName() {
     	return $this->strName;
     }
@@ -639,9 +642,19 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function getStrDesc() {
     	return $this->strDescription;
     }
+
+    /**
+     * @return string
+     * @fieldType dropdown
+     */
     public function getStrTemplate() {
     	return $this->strTemplate;
     }
+
+    /**
+     * @return string
+     * @fieldMandatory
+     */
     public function getStrBrowsername() {
     	return $this->strBrowsername;
     }
@@ -686,6 +699,10 @@ class class_module_pages_page extends class_model implements interface_model, in
         $this->intType = $intType;
     }
 
+    /**
+     * @return string
+     * @fieldType page
+     */
     public function getStrAlias() {
         return $this->strAlias;
     }

@@ -52,30 +52,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		return $arrReturn;
 	}
 
-
-    public function getRequiredFields() {
-        $strAction = $this->getAction();
-        $arrReturn = array();
-        if($strAction == "savePage" || $strAction == "changePage") {
-            $arrReturn["name"] = "string";
-            $arrReturn["browsername"] = "string";
-        }
-        if($strAction == "saveElement") {
-            $arrReturn["element_name"] = "string";
-            $arrReturn["element_cachetime"] = "number";
-        }
-        if($strAction == "saveAlias" || $strAction == "changeAlias") {
-            $arrReturn["name"] = "string";
-            $arrReturn["browsername"] = "string";
-            $arrReturn["alias"] = "string";
-        }
-
-        return $arrReturn;
-    }
-
-
-
-
     protected function actionSortUp() {
         $this->setPositionAndReload($this->getSystemid(), "upwards");
     }
@@ -173,7 +149,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         if($strListIdentifier == "pagesList") {
             if(validateSystemid($this->getSystemid()) && $this->getSystemid() != $this->getObjModule()->getSystemid()  ) {
                 $objPrevFolder = new class_module_pages_folder($this->getSystemid());
-                return $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objPrevFolder->getPrevId(), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif"));
+                return $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objPrevFolder->getPrevId(), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif"));
             }
         }
         return parent::renderLevelUpAction($strListIdentifier);
@@ -309,12 +285,65 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      *
      * @param string $strMode
      * @param bool $bitAlias
+     * @param class_admin_formgenerator|null $objForm
      * @return string The form
      * @autoTestable
+     * @permissions edit
      */
-	protected function actionNewPage($strMode = "new", $bitAlias = false) {
+	protected function actionNewPage($strMode = "new", $bitAlias = false, class_admin_formgenerator $objForm = null) {
 		$strReturn = "";
 
+        $objPage = new class_module_pages_page();
+        if($strMode == "edit") {
+            $objPage = new class_module_pages_page($this->getSystemid());
+            if(!$objPage->rightEdit($this->getSystemid()))
+                return $this->getLang("commons_error_permissions");
+        }
+
+        //add a pathnavigation when not in pe mode
+        if($this->getParam("pe") != 1) {
+            $strReturn = $this->generateFolderNavigation().$strReturn;
+        }
+
+        $arrToolbarEntries = array();
+        if(!$bitAlias) {
+            if($strMode == "edit") {
+                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
+                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getLang("contentToolbar_content")."</a>";
+                $arrToolbarEntries[] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getLang("contentToolbar_preview")."</a>";
+            }
+            $objLanguages = new class_module_languages_admin();
+            $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
+            if($this->getParam("pe") != 1)
+                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+        }
+
+        if($objForm == null)
+            $objForm = $this->getPageForm($bitAlias, $objPage, $strMode);
+
+
+        if($bitAlias)
+            $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveAlias"));
+        else
+            $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "savePage"));
+
+        if($strMode == "edit") {
+            //include the tags, if present
+            $objTags = class_module_system_module::getModuleByName("tags");
+            if($objTags != null) {
+                /**
+                 * @var class_module_tags_admin
+                 */
+                $objTagsInstance = $objTags->getAdminInstanceOfConcreteModule();
+                $strReturn .= $objTagsInstance->getTagForm($objPage->getSystemid(), $objPage->getStrLanguage());
+            }
+        }
+
+		return $strReturn;
+	}
+
+
+    private function getPageForm($bitAlias, class_module_pages_page $objPage, $strMode) {
 
         //Load all the Templates available
         $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_pages");
@@ -326,214 +355,75 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         //remove template of master-page when editing a regular page
         $objMasterPage = class_module_pages_page::getPageByName("master");
-        if($this->getSystemid() == "" || ($objMasterPage->getSystemid() != $this->getSystemid() ) ) {
+        if($objPage->getSystemid() == "" || ($objMasterPage->getSystemid() != $objPage->getSystemid() ) ) {
             unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
         }
 
-        $strPagesBrowser = getLinkAdminDialog("pages", "pagesFolderBrowser", "&form_element=folder&pages=1&elements=false&folder=1&pagealiases=1", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser"));
+        $strPagesBrowser = getLinkAdminDialog(
+            "pages",
+            "pagesFolderBrowser",
+            "&form_element=page_folder_name&pages=1&elements=false&folder=1&pagealiases=1",
+            $this->getLang("commons_open_browser"),
+            $this->getLang("commons_open_browser"),
+            "icon_externalBrowser.gif",
+            $this->getLang("commons_open_browser")
+        );
 
-        //add a pathnavigation when not in pe mode
-        if($this->getParam("pe") != 1) {
-            $strReturn = $this->generateFolderNavigation().$strReturn;
+
+        $objForm = new class_admin_formgenerator("page", $objPage);
+        if($bitAlias)
+            $objForm->addField(new class_formentry_hidden("page", "name"))->setStrValue(generateSystemid())->setStrLabel($this->getLang("name"));
+        else
+            $objForm->addDynamicField("name")->setStrLabel($this->getLang("name"));
+
+        $objForm->addDynamicField("browsername")->setStrLabel($this->getLang("browsername"));
+
+        if(!$bitAlias) {
+            $objForm->addDynamicField("seostring")->setStrLabel($this->getLang("seostring"));
+            $objForm->addDynamicField("desc")->setStrLabel($this->getLang("commons_description"));
+            $objForm->addDynamicField("keywords")->setStrLabel($this->getLang("keywords"));
         }
 
-        //edit mode
-		if($strMode == "edit") {
-            $objPage = new class_module_pages_page($this->getSystemid());
+        $strParentId = $objPage->getPrevId();
+        if(!validateSystemid($strParentId) && $strMode == "new")
+            $strParentId = $this->getSystemid();
 
-			if($objPage->rightEdit($this->getSystemid())) {
-                //Load data of the page
+        $strFolderId = $this->getParam("page_folder_name_id");
+        $strFolderName = $this->getParam("page_folder_name");
+        if(!validateSystemid($strFolderId) && validateSystemid($strParentId)) {
+            $objParent = class_objectfactory::getInstance()->getObject($strParentId);
+            $strFolderId = $objParent->getSystemid();
+            $strFolderName = $objParent->getStrDisplayName();
+        }
+        $objForm->addField(new class_formentry_text("page", "folder_name"))->setStrValue($strFolderName)->setBitReadonly(true)->setStrOpener($strPagesBrowser)->setStrLabel($this->getLang("page_folder_name"));
+        $objForm->addField(new class_formentry_hidden("page", "folder_name_id"))->setStrValue($strFolderId);
 
-                $arrToolbarEntries = array();
-                if(!$bitAlias) {
-	                $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
-	                $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getLang("contentToolbar_content")."</a>";
-	                $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getLang("contentToolbar_preview")."</a>";
-                }
-                //if languages are installed, present a language switch right here
-                $objLanguages = new class_module_languages_admin();
-                $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
+        if(!$bitAlias) {
 
-                if($this->getParam("pe") != 1)
-                    $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+            /** @var $objField class_formentry_base */
+            $objField = $objForm->addDynamicField("template")->setArrKeyValues($arrTemplatesDD)->setStrLabel($this->getLang("template"));
+            if($strMode == "edit" && $objPage->getStrTemplate() == "")
+                $objField->setStrHint( $this->getLang("templateNotSelectedBefore"));
 
-				//Start form
-                if(!$bitAlias) {
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "changePage");
-                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changePage"));
-                    $strReturn .= $this->objToolkit->formInputText("name", $this->getLang("name"), $objPage->getStrName());
-                    $strReturn .= $this->objToolkit->divider();
-                }
-                else {
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "changeAlias");
-                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changeAlias"));
-                    $strReturn .= $this->objToolkit->formInputHidden("name", $objPage->getStrName());
-                }
+            $bitReadonly = false;
+            if(_pages_templatechange_ == "false") {
+                if($objPage->getNumberOfElementsOnPage() != 0)
+                    $bitReadonly = true;
+            }
+            $objField->setBitReadonly($bitReadonly);
 
-				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getLang("browsername"), $objPage->getStrBrowsername());
+            if($strMode == "new" && $this->getParam("page_template") == "")
+                $objField->setStrValue(_pages_defaulttemplate_);
 
-                if(!$bitAlias) {
-                    $strReturn .= $this->objToolkit->formInputText("seostring", $this->getLang("seostring"), $objPage->getStrSeostring());
-                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getLang("commons_description"), $objPage->getStrDesc());
-                    $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getLang("keywords"), $objPage->getStrKeywords());
-                }
+        }
+        else {
+            $objForm->addDynamicField("alias")->setStrHint($this->getLang("page_alias_hint"))->setBitMandatory(true)->setStrLabel($this->getLang("page_alias"));
+        }
 
-				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+        return $objForm;
+    }
 
-                    //check if folder or page given as prev-id
-                    $objSystemCommons = new class_module_system_common($objPage->getPrevId());
-                    $strFoldername = "";
-                    $strFolderid = "";
-                    if($objSystemCommons->getIntModuleNr() == _pages_folder_id_) {
-                        $objFolder = new class_module_pages_folder($objPage->getPrevId());
-                        $strFoldername = $objFolder->getStrName();
-                        $strFolderid = $objFolder->getSystemid();
-                    }
-                    else {
-                        $objParentPage = new class_module_pages_page($objPage->getPrevId());
-                        $strFoldername = $objParentPage->getStrBrowsername();
-                        $strFolderid = $objParentPage->getSystemid();
-                    }
-
-					$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
-					$strReturn .= $this->objToolkit->formInputText("folder", $this->getLang("page_folder_name"), $strFoldername, "inputText", $strPagesBrowser, true);
-				}
-				else {
-					$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
-					$strReturn .= $this->objToolkit->formInputText("folder", $this->getLang("page_folder_name"), "", "inputText", $strPagesBrowser, true);
-				}
-				//Load the available templates
-				//If set on, the dropdown could be disabled
-				$bitEnabled = true;
-				if(_pages_templatechange_ == "false") {
-					if($objPage->getNumberOfElementsOnPage() != 0)
-						$bitEnabled = false;
-				}
-
-                if(!$bitAlias) {
-				//if no template was selected before, show a warning. can occur when having created new languages
-                    if($objPage->getStrTemplate() == "")
-                        $strReturn .= $this->objToolkit->formTextRow($this->getLang("templateNotSelectedBefore"));
-                    $strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getLang("template"), $objPage->getStrTemplate(), "inputDropdown", $bitEnabled);
-                }
-                else {
-                    $strReturn .= $this->objToolkit->formTextRow($this->getLang("page_alias_hint"));
-                    $strReturn .= $this->objToolkit->formInputPageSelector("alias", $this->getLang("page_alias"), $objPage->getStrAlias());
-                }
-
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-                $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
-                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-
-                if($this->getParam("pe") != "")
-                    $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
-
-				$strReturn .= $this->objToolkit->formClose();
-
-				$strReturn .= $this->objToolkit->setBrowserFocus("name");
-
-                //include the tags, if present
-                $objTags = class_module_system_module::getModuleByName("tags");
-                if($objTags != null) {
-                    /**
-                     * @var class_module_tags_admin
-                     */
-                    $objTagsInstance = $objTags->getAdminInstanceOfConcreteModule();
-                    $strReturn .= $objTagsInstance->getTagForm($objPage->getSystemid(), $objPage->getStrLanguage());
-                }
-			}
-			else
-				$strReturn .= $this->getLang("commons_error_permissions");
-		}
-		else {
-			//Mode: Create a new Page
-			if($this->getObjModule()->rightEdit()) {
-                $arrToolbarEntries = array();
-
-                //if languages are installed, present a language switch right here
-                $objLanguages = new class_module_languages_admin();
-                $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
-
-                if($this->getParam("pe") != 1)
-                    $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
-
-				//start form
-                if(!$bitAlias) {
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "savePage");
-                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePage"));
-                    $strReturn .= $this->objToolkit->formInputText("name", $this->getLang("name"), $this->getParam("name"));
-	                $strReturn .= $this->objToolkit->divider();
-                }
-                else {
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveAlias");
-                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAlias"));
-                    $strReturn .= $this->objToolkit->formInputHidden("name", $this->getParam("name") == '' ? generateSystemid() : $this->getParam("name"));
-                }
-
-				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getLang("browsername"), $this->getParam("browsername"));
-
-                if(!$bitAlias) {
-                    $strReturn .= $this->objToolkit->formInputText("seostring", $this->getLang("seostring"), $this->getParam("seostring"));
-                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getLang("commons_description"), $this->getParam("beschreibung"));
-                    $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getLang("keywords"), $this->getParam("keywords"));
-                }
-
-                $strFolderid = "";
-                $strFolder = "";
-                //initial prev-id
-                if($this->getSystemid() != "") {
-                    $objCommon = new class_module_system_common($this->getSystemid());
-                    if($objCommon->getIntModuleNr() == _pages_folder_id_) {
-                        $objFolder = new class_module_pages_folder($this->getSystemid());
-                        $strFolder = $objFolder->getStrName();
-                        $strFolderid = $objFolder->getSystemid();
-                    }
-                    else {
-                        $objParentPage = new class_module_pages_page($this->getSystemid());
-                        $strFolder = $objParentPage->getStrBrowsername();
-                        $strFolderid = $objParentPage->getSystemid();
-                    }
-
-				}
-                //maybe overriden manually / by page-reload
-				if($this->getParam("folder_id") != "") {
-                    $objCommon = new class_module_system_common($this->getParam("folder_id"));
-                    if($objCommon->getIntModuleNr() == _pages_folder_id_) {
-                        $objFolder = new class_module_pages_folder($this->getParam("folder_id"));
-                        $strFolder = $objFolder->getStrName();
-                        $strFolderid = $objFolder->getSystemid();
-                    }
-                    else {
-                        $objParentPage = new class_module_pages_page($this->getParam("folder_id"));
-                        $strFolder = $objParentPage->getStrBrowsername();
-                        $strFolderid = $objParentPage->getSystemid();
-                    }
-				}
-
-				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
-				$strReturn .= $this->objToolkit->formInputText("folder", $this->getLang("page_folder_name"), $strFolder, "inputText", $strPagesBrowser, true);
-
-                if(!$bitAlias) {
-                    $strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getLang("template"), _pages_defaulttemplate_);
-                }
-                else {
-                    $strReturn .= $this->objToolkit->formTextRow($this->getLang("page_alias_hint"));
-                    $strReturn .= $this->objToolkit->formInputPageSelector("alias", $this->getLang("page_alias"), $this->getParam("alias"));
-                }
-
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-
-                $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
-                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-				$strReturn .= $this->objToolkit->formClose();
-
-				$strReturn .= $this->objToolkit->setBrowserFocus("name");
-			}
-			else
-				$strReturn .= $this->getLang("commons_error_permissions");
-		}
-		return $strReturn;
-	}
 
     protected function actionSaveAlias() {
         return $this->actionSavePage(true);
@@ -547,108 +437,40 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * @permissions edit
      */
 	protected function actionSavePage($bitAlias = false) {
-		$strReturn = "";
 
-        if(!$this->validateForm())
-            return $this->actionNewPage("new", $bitAlias);
+        $objPage = new class_module_pages_page();
+        if($this->getParam("mode") == "edit")
+            $objPage = new class_module_pages_page($this->getSystemid());
 
-        $strName = $this->getParam("name");
+        $objForm = $this->getPageForm($bitAlias, $objPage, $this->getParam("mode"));
 
-        if($strName != "" && $strName != " ") {
-            $objPage = new class_module_pages_page("");
-            $objPage->setStrBrowsername($this->getParam("browsername"));
-            $objPage->setStrDesc($this->getParam("description"));
-            $objPage->setStrName($strName);
-            $objPage->setStrTemplate($this->getParam("template"));
-            $objPage->setStrKeywords($this->getParam("keywords"));
-            $objPage->setStrSeostring($this->getParam("seostring"));
-            $objPage->setStrLanguage($this->getLanguageToWorkOn());
-            $objPage->setStrAlias($this->getParam("alias"));
-            $strPrevid = $this->getParam("folder_id");
 
-            if($bitAlias)
-                $objPage->setIntType(class_module_pages_page::$INT_TYPE_ALIAS);
-
-            if(!validateSystemid($strPrevid))
-                $strPrevid = "";
-
-            if(!$objPage->updateObjectToDb($strPrevid))
-                throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
-
-            if($this->getParam("pe") != "")
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&peClose=1&peRefreshPage=".$objPage->getStrName()));
-            else
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
-
+        if(!$objForm->validateForm()) {
+            return $this->actionNewPage($this->getParam("mode"), $bitAlias, $objForm);
         }
-        else
-            $strReturn .= $this->getLang("fehler_name");
 
-		return $strReturn;
+
+        $objForm->updateSourceObject();
+
+        if($bitAlias)
+            $objPage->setIntType(class_module_pages_page::$INT_TYPE_ALIAS);
+
+        if(!$objPage->updateObjectToDb($this->getParam("page_folder_name_id")))
+            throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
+
+        if($this->getParam("pe") != "")
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&peRefreshPage=".$objPage->getStrName()));
+        else
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "systemid=".$objPage->getPrevId()));
+
+
+        return "";
 	}
 
 
     protected function actionChangeAlias() {
-        return $this->actionChangePage(true);
+        return $this->actionNewPage("edit", true);
     }
-
-    /**
-     * Saves the edited, submitted page
-     *
-     * @param bool $bitAlias
-     * @return string, "" in case of success
-     */
-	protected function actionChangePage($bitAlias = false) {
-		$strReturn = "";
-
-        if(!$this->validateForm())
-            return $this->actionNewPage("edit", $bitAlias);
-
-		if($this->getParam("template")!= "")
-			$strTemplate = $this->getParam("template");
-		else
-			$strTemplate = false;
-
-		$strKeywords = $this->getParam("keywords");
-
-        $objPage = new class_module_pages_page($this->getSystemid());
-		if($objPage->rightEdit()) {
-			$strName = $this->getParam("name");
-			if($strName != "" && $strName != " ") {
-
-			    $objPage->setStrBrowsername($this->getParam("browsername"));
-			    $objPage->setStrDesc($this->getParam("description"));
-			    $objPage->setStrName($strName);
-			    $objPage->setStrKeywords($strKeywords);
-			    $objPage->setStrSeostring($this->getParam("seostring"));
-			    $objPage->setStrLanguage($this->getLanguageToWorkOn());
-			    $objPage->setStrAlias($this->getParam("alias"));
-
-			    if($strTemplate !== false)
-			        $objPage->setStrTemplate($strTemplate);
-
-				$strPrevId = $this->getParam("folder_id");
-
-                if(!validateSystemid($strPrevId) && $strPrevId != $this->getSystemid())
-                    $strPrevId = "";
-
-				if(!$objPage->updateObjectToDb($strPrevId))
-					throw new class_exception("Error updating page to db", class_exception::$level_ERROR);
-
-				//Flush the cache
-				$this->flushPageFromPagesCache($strName);
-
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevId));
-			}
-			else
-				$strReturn = $this->getLang("fehler_name");
-		}
-		else
-			$strReturn = $this->getLang("commons_error_permissions");
-
-		return $strReturn;
-	}
-
 
 	/**
 	 * Delete a page and all associated elements
@@ -1149,26 +971,26 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $bitPageAliases = ($this->getParam("pagealiases") != "" ? true : false);
         $bitPageelements = ($this->getParam("elements") == "false" ? false : true);
         $bitFolder = ($this->getParam("folder") != "" ? true : false);
-        $strFolder = ($this->getParam("folderid") != "" ? $this->getParam("folderid") : $this->getModuleSystemid("pages") );
+        $strSystemid = ($this->getSystemid() != "" ? $this->getSystemid() : $this->getModuleSystemid("pages") );
         $strElement = ($this->getParam("form_element") != "" ? $this->getParam("form_element") : "ordner_name");
         $strPageid = ($this->getParam("pageid") != "" ? $this->getParam("pageid") : "0" );
 
 
-		$arrFolder = class_module_pages_folder::getFolderList($strFolder);
-        $objFolder = new class_module_pages_folder($strFolder);
+		$arrFolder = class_module_pages_folder::getFolderList($strSystemid);
+        $objFolder = new class_module_pages_folder($strSystemid);
 		$strLevelUp = "";
 
-		if(validateSystemid($strFolder) && $strFolder != $this->getModuleSystemid($this->arrModule["modul"]))
+		if(validateSystemid($strSystemid) && $strSystemid != $this->getModuleSystemid($this->arrModule["modul"]))
 			$strLevelUp = $objFolder->getPrevId();
 		//but: when browsing pages the current level should be kept
 		iF($strPageid != "0")
-		   $strLevelUp = $strFolder;
+		   $strLevelUp = $strSystemid;
 
 		$strReturn .= $this->objToolkit->listHeader();
 		//Folder to jump one level up
 		if(!$bitPages || $strLevelUp != "" || $bitFolder) {
-			$strAction = $this->objToolkit->listButton(($strFolder != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&folderid=".$strLevelUp.($bitFolder ? "&folder=1" : "").($bitPages ? "&pages=1" : "").(!$bitPageelements ? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif") :  " " );
-			if($strFolder == $this->getModuleSystemid($this->arrModule["modul"]) && (!$bitPages || $bitFolder))
+			$strAction = $this->objToolkit->listButton(($strSystemid != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$strLevelUp.($bitFolder ? "&folder=1" : "").($bitPages ? "&pages=1" : "").(!$bitPageelements ? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif") :  " " );
+			if($strSystemid == $this->getModuleSystemid($this->arrModule["modul"]) && (!$bitPages || $bitFolder))
 				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getModuleSystemid($this->arrModule["modul"])."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.gif"));
 
 			$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
@@ -1177,11 +999,11 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		if(count($arrFolder) > 0 && $strPageid == "0") {
 			foreach($arrFolder as $objSingleFolder) {
 				if($bitPages && !$bitFolder) {
-					$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&folderid=".$objSingleFolder->getSystemid().($bitPages ? "&pages=1" : "")."&form_element=".$strElement.($bitFolder ? "&folder=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "")."", $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
+					$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$objSingleFolder->getSystemid().($bitPages ? "&pages=1" : "")."&form_element=".$strElement.($bitFolder ? "&folder=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "")."", $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
                     $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction, $intCounter++);
 				}
 				else {
-				    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&folderid=".$objSingleFolder->getSystemid()."&form_element=".$strElement.($bitPages ? "&pages=1" : "").($bitFolder ? "&folder=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
+				    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$objSingleFolder->getSystemid()."&form_element=".$strElement.($bitPages ? "&pages=1" : "").($bitFolder ? "&folder=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
 					$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".getImageAdmin("icon_accept.gif"));
                     $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction, $intCounter++);
 				}
@@ -1193,7 +1015,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		//Pages could be sent too
 		if($bitPages && $strPageid == "0") {
 			$strReturn .= $this->objToolkit->divider();
-			$arrPages = class_module_pages_folder::getPagesInFolder($strFolder);
+			$arrPages = class_module_pages_folder::getPagesInFolder($strSystemid);
 			if(count($arrPages) > 0) {
 				$strReturn .= $this->objToolkit->listHeader();
 				foreach($arrPages as $objSinglePage) {
@@ -1205,16 +1027,16 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 						$arrSinglePage["name2"] = $objSinglePage->getStrName();
 
                     if ($objSinglePage->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
-	                    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&folderid=".$objSinglePage->getSystemid()."&form_element=".$strElement.($bitPages ? "&pages=1" : "").($bitFolder ? "&folder=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("page_sublist"), $this->getLang("page_sublist"), "icon_treeBranchOpen.gif"));
+	                    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$objSinglePage->getSystemid()."&form_element=".$strElement.($bitPages ? "&pages=1" : "").($bitFolder ? "&folder=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("page_sublist"), $this->getLang("page_sublist"), "icon_treeBranchOpen.gif"));
 	                    if ($bitPageAliases)
 	                    	$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("select_page")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
 
 						$strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
                     }
                     else {
-                        $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&folderid=".$objSinglePage->getSystemid()."&form_element=".$strElement.($bitPages ? "&pages=1" : "").($bitFolder ? "&folder=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("page_sublist"), $this->getLang("page_sublist"), "icon_treeBranchOpen.gif"));
+                        $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$objSinglePage->getSystemid()."&form_element=".$strElement.($bitPages ? "&pages=1" : "").($bitFolder ? "&folder=1" : "").($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").(!$bitPageelements? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("page_sublist"), $this->getLang("page_sublist"), "icon_treeBranchOpen.gif"));
                         if($bitPageelements)
-                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&folderid=".$strFolder."&form_element=".$strElement."&pageid=".$objSinglePage->getSystemid().($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").($bitPages ? "&pages=1" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("seite_oeffnen"), $this->getLang("seite_oeffnen"), "icon_folderActionOpen.gif"));
+                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$strSystemid."&form_element=".$strElement."&pageid=".$objSinglePage->getSystemid().($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").($bitPages ? "&pages=1" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("seite_oeffnen"), $this->getLang("seite_oeffnen"), "icon_folderActionOpen.gif"));
                         $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("select_page")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
                         $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
 

@@ -40,8 +40,13 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         return $strReturn;
     }
 
+    /**
+     * @param $arrKeyValues
+     * @return class_formentry_dropdown
+     */
     public function setArrKeyValues($arrKeyValues) {
         $this->arrKeyValues = $arrKeyValues;
+        return $this;
     }
 
     public function getArrKeyValues() {
