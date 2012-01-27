@@ -181,7 +181,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
     protected function renderEditAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_pages_element) {
-            return $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objListEntry->getSystemid(), $this->getLang("element_bearbeiten"), $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&systemid=".$objListEntry->getSystemid(), $this->getLang("element_bearbeiten"), $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
         }
         else
             return parent::renderEditAction($objListEntry);
@@ -938,93 +938,57 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     protected function actionEditElement() {
         return $this->actionNewElement("edit");
     }
-	/**
-	 * Returns the form to edit / create an element
-	 *
-	 * @param string $strMode new || edit
-	 * @return string
+
+    /**
+     * Returns the form to edit / create an element
+     *
+     * @param string $strMode new || edit
+     * @param class_admin_formgenerator $objForm
+     * @return string
      * @autoTestable
      * @permissions right1
-	 */
-	protected function actionNewElement($strMode = "new") {
-		$strReturn = "";
+     *
+     */
+	protected function actionNewElement($strMode = "new", class_admin_formgenerator $objForm = null) {
 
-        if($strMode == "new") {
-            //Build the form
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
-            $strReturn .= $this->objToolkit->formInputText("element_name", $this->getLang("commons_name"), $this->getParam("element_name"));
-            $strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getLang("element_cachetime"), $this->getParam("element_cachetime"));
-            $strReturn .= $this->objToolkit->formTextRow($this->getLang("element_cachetime_hint"));
-            $strReturn .= $this->objToolkit->divider();
+        if($strMode == "new")
+            $objElement = new class_module_pages_element();
+        else
+            $objElement = new class_module_pages_element($this->getSystemid());
 
-            $strReturn .= $this->objToolkit->formInputHidden("elementid", 0);
-            $strReturn .= $this->objToolkit->formInputHidden("modus", "new");
-            //Fetch Admin classes
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"));
-            $arrClassesAdmin = array();
-            foreach($arrClasses as $strClass)
-                $arrClassesAdmin[$strClass] = $strClass;
-            $strReturn .= $this->objToolkit->formInputDropdown("element_admin", $arrClassesAdmin, $this->getLang("element_admin"), $this->getParam("element_admin"));
+        if($objForm == null)
+            $objForm = $this->getElementForm($objElement);
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
 
-            //Fetch Portal-Classes
-            $arrClassesPortal = array();
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent("/portal/elements", array(".php"));
-            foreach($arrClasses as $strClass)
-                $arrClassesPortal[$strClass] = $strClass;
-            $strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getLang("element_portal"), $this->getParam("element_portal"));
-
-            $strReturn .= $this->objToolkit->divider();
-
-            //Repeatable?
-            $arrRepeat = array();
-            $arrRepeat[1] = $this->getLang("commons_yes");
-            $arrRepeat[0] = $this->getLang("commons_no");
-            $strReturn .= $this->objToolkit->formInputDropdown("element_repeat", $arrRepeat, $this->getLang("element_repeat"), $this->getParam("element_repeat"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
-        }
-        elseif ($strMode == "edit") {
-            //Load data of the element
-            $objData = new class_module_pages_element($this->getParam("elementid"));
-
-            //Build the form
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
-            $strReturn .= $this->objToolkit->formInputText("element_name", $this->getLang("commons_name"), $objData->getStrName());
-            $strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getLang("element_cachetime"), $objData->getIntCachetime());
-            $strReturn .= $this->objToolkit->formTextRow($this->getLang("element_cachetime_hint"));
-            $strReturn .= $this->objToolkit->divider();
-
-            $strReturn .= $this->objToolkit->formInputHidden("elementid", $this->getParam("elementid"));
-            $strReturn .= $this->objToolkit->formInputHidden("modus", "edit");
-            //Fetch Admin classes
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"));
-            $arrClassesAdmin = array();
-            foreach($arrClasses as $strClass)
-                $arrClassesAdmin[$strClass] = $strClass;
-            $strReturn .= $this->objToolkit->formInputDropdown("element_admin", $arrClassesAdmin, $this->getLang("element_admin"), $objData->getStrClassAdmin());
-
-            //Fetch Portal-Classes
-            $arrClassesPortal = array();
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent("/portal/elements", array(".php"));
-            foreach($arrClasses as $strClass)
-                $arrClassesPortal[$strClass] = $strClass;
-            $strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getLang("element_portal"), $objData->getStrClassPortal());
-
-            $strReturn .= $this->objToolkit->divider();
-
-            //Repeatable?
-            $arrRepeat = array();
-            $arrRepeat[1] = $this->getLang("commons_yes");
-            $arrRepeat[0] = $this->getLang("commons_no");
-            $strReturn .= $this->objToolkit->formInputDropdown("element_repeat", $arrRepeat, $this->getLang("element_repeat"), $objData->getIntRepeat());
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
-        }
-
-		return $strReturn;
+        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveElement"));
 	}
+
+    private function getElementForm(class_module_pages_element $objElement) {
+
+        //Fetch Admin classes
+        $arrClasses = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"));
+        $arrClassesAdmin = array();
+        foreach($arrClasses as $strClass)
+            $arrClassesAdmin[$strClass] = $strClass;
+
+        //Fetch Portal-Classes
+        $arrClassesPortal = array();
+        $arrClasses = class_resourceloader::getInstance()->getFolderContent("/portal/elements", array(".php"));
+        foreach($arrClasses as $strClass)
+            $arrClassesPortal[$strClass] = $strClass;
+
+
+        $objForm = new class_admin_formgenerator("element", $objElement);
+        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
+        $objForm->addDynamicField("cachetime")->setStrHint($this->getLang("element_cachetime_hint"));
+        $objForm->addField(new class_formentry_divider());
+        $objForm->addDynamicField("classadmin")->setArrKeyValues($arrClassesAdmin);
+        $objForm->addDynamicField("classportal")->setArrKeyValues($arrClassesPortal);
+        $objForm->addField(new class_formentry_divider());
+        $objForm->addDynamicField("repeat");
+
+        return $objForm;
+    }
 
 	/**
 	 * Tries to install the passed element by using the elements' installer placed in the
@@ -1065,49 +1029,25 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * @permissions right1
 	 */
 	protected function actionSaveElement() {
-		$strReturn = "";
 
-        if(!$this->validateForm() | $this->checkElementExisting()) {
-            if($this->getParam("modus") == "edit")
-                return $this->actionNewElement("edit");
-            else
-                return $this->actionNewElement();
-        }
+        if($this->getParam("mode") == "new")
+            $objElement = new class_module_pages_element();
+        else
+            $objElement = new class_module_pages_element($this->getSystemid());
 
+        $objForm = $this->getElementForm($objElement);
 
-        //Mode
-        if($this->getParam("modus") == "edit") {
-            //Update
-            $objElement = new class_module_pages_element($this->getParam("elementid"));
-            $objElement->setStrName($this->getParam("element_name"));
-            $objElement->setStrClassAdmin($this->getParam("element_admin"));
-            $objElement->setStrClassPortal($this->getParam("element_portal"));
-            $objElement->setIntCachetime($this->getParam("element_cachetime"));
-            $objElement->setIntRepeat($this->getParam("element_repeat"));
+        if(!$objForm->validateForm())
+            return $this->actionNewElement($this->getParam("mode"), $objForm);
 
-            if(!$objElement->updateObjectToDb())
-                throw new class_exception($this->getLang("element_bearbeiten_fehler"), class_exception::$level_ERROR);
+        $objForm->updateSourceObject();
 
-            $this->flushCompletePagesCache();
-        }
-        elseif ($this->getParam("modus") == "new") {
-            //Insert
-            $objElement = new class_module_pages_element("");
-            $objElement->setStrName($this->getParam("element_name"));
-            $objElement->setStrClassAdmin($this->getParam("element_admin"));
-            $objElement->setStrClassPortal($this->getParam("element_portal"));
-            $objElement->setIntCachetime($this->getParam("element_cachetime"));
-            $objElement->setIntRepeat($this->getParam("element_repeat"));
+        if(!$objElement->updateObjectToDb())
+            throw new class_exception($this->getLang("element_anlegen_fehler"), class_exception::$level_ERROR);
 
-            if(!$objElement->updateObjectToDb())
-                throw new class_exception($this->getLang("element_anlegen_fehler"), class_exception::$level_ERROR);
-
-            $this->flushCompletePagesCache();
-        }
-
+        $this->flushCompletePagesCache();
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
-
-		return $strReturn;
+        return "";
 	}
 
 	/**

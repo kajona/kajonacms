@@ -254,20 +254,44 @@ class class_module_pages_element extends class_model implements interface_model,
         }
     }
 
-    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
+    /**
+     * @fieldMandatory
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
+
+    /**
+     * @return string
+     * @fieldType dropdown
+     */
     public function getStrClassPortal() {
         return $this->strClassPortal;
     }
+
+    /**
+     * @return string
+     * @fieldType dropdown
+     */
     public function getStrClassAdmin() {
         return $this->strClassAdmin;
     }
+
+    /**
+     * @return int
+     * @fieldType yesno
+     */
     public function getIntRepeat() {
         return (int)$this->intRepeat;
     }
+
+    /**
+     * @fieldMandatory
+     * @fieldValidator numeric
+     * @return string
+     */
     public function getIntCachetime() {
         return $this->intCachetime;
     }
