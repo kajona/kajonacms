@@ -241,27 +241,9 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
 
     /**
-	 * Returns the list of form-entries allowed to be modified
-     * @return array
+     * @return string
+     * @fieldType textarea
      */
-    public function getEditFormEntries() {
-        return array(new class_usersources_form_entry("desc", class_usersources_form_entry::$INT_TYPE_LONGTEXT, $this->getStrDesc(), false));
-
-    }
-
-
-    /**
-     * Writes a set of properties to the current group.
-     * @param class_usersources_form_entry $arrParams
-     */
-    public function setEditFormEntries($arrParams) {
-        foreach($arrParams as $objOneField) {
-            if($objOneField->getStrName() == "desc")
-                $this->setStrDesc($objOneField->getStrValue());
-        }
-
-    }
-
     public function getStrDesc() {
         return $this->strDesc;
     }

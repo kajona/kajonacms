@@ -22,18 +22,6 @@ interface interface_usersources_group {
 	 */
 	public function addMember(interface_usersources_user $objUser);
 
-	/**
-	 * Returns the list of form-entries allowed to be modified
-     * return class_usersources_form_entry
-	 */
-	public function getEditFormEntries();
-
-    /**
-     * Writes a set of properties to the current group.
-     * @param class_usersources_form_entry $arrParams
-     */
-	public function setEditFormEntries($arrParams);
-
     /**
      * Returns an array of user-ids associated with the current group.
      * If possible, pageing should be supported

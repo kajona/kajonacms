@@ -663,12 +663,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * Edits or creates a group (displays form)
      *
      * @param string $strMode
+     * @param \class_admin_formgenerator|null $objForm
      * @return string
      * @permissions edit
      * @autoTestable
      */
-    protected function actionGroupNew($strMode = "new") {
-        $strReturn = "";
+    protected function actionGroupNew($strMode = "new", class_admin_formgenerator $objForm = null) {
 
         $objUsersources = new class_module_user_sourcefactory();
 
@@ -699,42 +699,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objSource = $objUsersources->getUsersource($this->getParam("usersource"));
             $objNewGroup = $objSource->getNewGroup();
 
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "groupSave");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupSave"));
-            $strReturn .= $this->objToolkit->formInputText("group_name", $this->getLang("group_name"), $this->getParam("group_name"));
+            if($objForm == null)
+                $objForm = $this->getGroupForm($objNewGroup);
+            $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
+            $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
 
-            //load the elements provided by the login-provider
-
-            //Fetch the fields from the source
-            if($objNewGroup->isEditable()) {
-                $arrFields = $objNewGroup->getEditFormEntries();
-                /* @var $objOneField class_usersources_form_entry */
-                foreach($arrFields as $objOneField) {
-                    if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
-                        $strReturn .= $this->objToolkit->formDateSingle("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
-                        $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_LONGTEXT)
-                        $strReturn .= $this->objToolkit->formInputTextArea("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
-                        $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
-                        $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()) );
-                        $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName()."2", $this->getLang("group_".$objOneField->getStrName()."2") );
-                    }
-                }
-            }
-
-            $strReturn .= $this->objToolkit->formInputHidden("systemid");
-            $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-            $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
-
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
+            return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "groupSave"));
         }
 
         else {
@@ -742,128 +712,90 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objNewGroup = new class_module_user_group($this->getSystemid());
             $this->setParam("usersource", $objNewGroup->getStrSubsystem());
 
-            $strReturn .= $this->objToolkit->getValidationErrors($this, "groupSave");
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupSave"));
-            $strReturn .= $this->objToolkit->formInputText("group_name", $this->getLang("group_name"), $this->getParam("group_name") != "" ? $this->getParam("group_name") : $objNewGroup->getStrName());
-
-            //load the elements provided by the login-provider
-
-            //Fetch the fields from the source
-            if($objNewGroup->getObjSourceGroup()->isEditable()) {
-                $arrFields = $objNewGroup->getObjSourceGroup()->getEditFormEntries();
-                /* @var $objOneField class_usersources_form_entry */
-                foreach($arrFields as $objOneField) {
-                    if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
-                        $strReturn .= $this->objToolkit->formDateSingle("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
-                        $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_LONGTEXT)
-                        $strReturn .= $this->objToolkit->formInputTextArea("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
-                        $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                    else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
-                        $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName(), $this->getLang("group_".$objOneField->getStrName()) );
-                        $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName()."2", $this->getLang("group_".$objOneField->getStrName()."2") );
-                    }
-                }
-            }
-
-            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
-            $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
-
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
+            if($objForm == null)
+                $objForm = $this->getGroupForm($objNewGroup->getObjSourceGroup());
+            $objForm->getField("group_name")->setStrValue($objNewGroup->getStrName());
+            $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
+            $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
+            return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "groupSave"));
         }
 
-        return $strReturn;
+    }
+
+
+    /**
+     * @param interface_usersources_group|class_model $objGroup
+     * @return class_admin_formgenerator
+     */
+    private function getGroupForm(interface_usersources_group $objGroup) {
+
+        $objForm = new class_admin_formgenerator("group", $objGroup);
+
+        //add the global group-name
+
+        $objForm->addField(new class_formentry_text("group", "name"))->setBitMandatory(true)->setStrLabel($this->getLang("group_name"))->setStrValue($this->getParam("group_name"));
+
+        if($objGroup->isEditable()) {
+            //adding elements is more generic right here - load ll methods
+            $objReflection = new ReflectionClass($objGroup);
+            $objAnnotations = new class_annotations($objGroup);
+
+            $arrMethods = $objReflection->getMethods();
+            foreach($arrMethods as $objOneMethod) {
+                if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType"))
+                    $objForm->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit"), array(), $objOneMethod->name)));
+            }
+
+        }
+
+        return $objForm;
     }
 
     /**
 	 * Saves a new group to database
 	 *
 	 * @return string "" in case of success
+     * @permissions edit
 	 */
     protected function actionGroupSave() {
-        if(!$this->validateForm())
-            return $this->actionGroupNew($this->getParam("mode"));
 
-
+        if(!$this->getObjModule()->rightEdit())
+            return $this->getLang("commons_error_permissions");
 
         if($this->getParam("mode") == "new") {
-
-            if(!$this->getObjModule()->rightEdit())
-                return $this->getLang("commons_error_permissions");
-
-            //create a new group and pass all relevant data
-
-            $objGroup = new class_module_user_group();
-            $objGroup->setStrName($this->getParam("group_name"));
-            $objGroup->setStrSubsystem($this->getParam("usersource"));
-            $objGroup->updateObjectToDb();
-
-            $objSourceGroup = $objGroup->getObjSourceGroup();
-            //pass fields to new source-object
-            $arrSourceFields = $objSourceGroup->getEditFormEntries();
-            foreach($arrSourceFields as $objOneField) {
-                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
-                    $strName = "group_".$objOneField->getStrName();
-                    if($this->getParam($strName."_year") != "") {
-                        $objDate = new class_date();
-                        $objDate->generateDateFromParams($strName, $this->getAllParams());
-                        $objOneField->setStrValue($objDate->getLongTimestamp());
-                    }
-                }
-                else {
-                    $objOneField->setStrValue($this->getParam("group_".$objOneField->getStrName()));
-                }
-            }
-
-            $objSourceGroup->setEditFormEntries($arrSourceFields);
-            $objSourceGroup->updateObjectToDb();
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
-            return;
+            $objUsersources = new class_module_user_sourcefactory();
+            $objSource = $objUsersources->getUsersource($this->getParam("usersource"));
+            $objNewGroup = $objSource->getNewGroup();
+            $objForm = $this->getGroupForm($objNewGroup);
         }
         else {
-
-            if(!$this->getObjModule()->rightEdit())
-                return $this->getLang("commons_error_permissions");
-
-            //create a new group and pass all relevant data
-
-            $objGroup = new class_module_user_group($this->getSystemid());
-            $objGroup->setStrName($this->getParam("group_name"));
-            $objGroup->updateObjectToDb();
-
-            $objSourceGroup = $objGroup->getObjSourceGroup();
-            //pass fields to new source-object
-            $arrSourceFields = $objSourceGroup->getEditFormEntries();
-            foreach($arrSourceFields as $objOneField) {
-                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
-                    $strName = "group_".$objOneField->getStrName();
-                    if($this->getParam($strName."_year") != "") {
-                        $objDate = new class_date();
-                        $objDate->generateDateFromParams($strName, $this->getAllParams());
-                        $objOneField->setStrValue($objDate->getLongTimestamp());
-                    }
-                }
-                else {
-                    $objOneField->setStrValue($this->getParam("group_".$objOneField->getStrName()));
-                }
-            }
-
-            $objSourceGroup->setEditFormEntries($arrSourceFields);
-            $objSourceGroup->updateObjectToDb();
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
-            return;
+            $objNewGroup = new class_module_user_group($this->getSystemid());
+            $objForm = $this->getGroupForm($objNewGroup->getObjSourceGroup());
         }
 
+        if(!$objForm->validateForm())
+            return $this->actionGroupNew($this->getParam("mode"), $objForm);
+
+        if($this->getParam("mode") == "new") {
+            $objGroup = new class_module_user_group();
+            $objGroup->setStrSubsystem($this->getParam("usersource"));
+        }
+        else {
+            $objGroup = new class_module_user_group($this->getSystemid());
+        }
+
+        $objGroup->setStrName($this->getParam("group_name"));
+        $objGroup->updateObjectToDb();
+
+        $objSourceGroup = $objGroup->getObjSourceGroup();
+
+        $objForm = $this->getGroupForm($objSourceGroup);
+        $objForm->updateSourceObject();
+
+        $objSourceGroup->updateObjectToDb();
+
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
+        return "";
 
     }
 
