@@ -7,22 +7,17 @@
 ********************************************************************************************************/
 
 /**
- * A yes-no field renders a dropdown containing a list of entries.
- * Make sure to pass the list of possible entries before rendering the form.
- *
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_system
  */
-class class_formentry_dropdown extends class_formentry_base implements interface_formentry {
-
-    private $arrKeyValues = array();
+class class_formentry_date extends class_formentry_base implements interface_formentry {
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new class_date_validator());
    }
 
     /**
@@ -36,21 +31,35 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue());
+
+        $objDate = null;
+        if($this->getStrValue() != "")
+            $objDate = new class_date($this->getStrValue());
+
+        $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate);
+
         return $strReturn;
     }
 
-    /**
-     * @param $arrKeyValues
-     * @return class_formentry_dropdown
-     */
-    public function setArrKeyValues($arrKeyValues) {
-        $this->arrKeyValues = $arrKeyValues;
-        return $this;
+
+
+    protected function updateValue() {
+        $arrParams = class_carrier::getAllParams();
+        if(isset($arrParams[$this->getStrEntryName()."_day"]) && $arrParams[$this->getStrEntryName()."_day"] != "") {
+
+            $objDate = new class_date();
+            $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
+            $this->setStrValue($objDate->getLongTimestamp());
+        }
+        else
+            $this->setStrValue = $this->getValueFromObject();
+
     }
 
-    public function getArrKeyValues() {
-        return $this->arrKeyValues;
+    public function validateValue() {
+        $objDate = new class_date("0");
+        $objDate->generateDateFromParams($this->getStrEntryName(), class_carrier::getAllParams());
+        return $this->getObjValidator()->validate($objDate);
     }
 
 

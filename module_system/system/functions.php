@@ -1013,13 +1013,11 @@ function createFilename($strName, $bitFolder = false) {
  *
  * @param string $strAddress
  * @return bool
+ * @deprecated use class_email_validator instead
  */
 function checkEmailaddress($strAddress) {
-	$intTest = uniEreg("([A-Za-z0-9])([A-Za-z0-9]|_|-|\.)*@([A-Za-z0-9]|_|-|\.)+\.([A-Za-z])([A-Za-z])+", $strAddress);
-	if($intTest === false || $intTest <= 0)
-		return false;
-	else
-		return true;
+    $objValidator = new class_email_validator();
+    return $objValidator->validate($strAddress);
 }
 
 /**
@@ -1027,10 +1025,11 @@ function checkEmailaddress($strAddress) {
  *
  * @param int $intNumber
  * @return bool
+ * @deprecated use class_numeric_validator instead
  */
 function checkNumber($intNumber) {
-    $bitReturn = is_numeric($intNumber);
-    return $bitReturn;
+    $objValidator = new class_numeric_validator();
+    return $objValidator->validate($intNumber);
 }
 
 /**
@@ -1056,20 +1055,11 @@ function checkFolder($strPath) {
  * @return bool
  *
  * @deprecated replaced by @link{class_text_validator}
- * @see interfave_validator
+ * @see interface_validator
  */
 function checkText($strText, $intMin = 1, $intMax = 0) {
-	$bitReturn = false;
-	$intLen = strlen($strText);
-	if($intMax == 0) {
-		if($intLen >= $intMin)
-			$bitReturn = true;
-	}
-	else {
-		if($intLen >= $intMin && $intLen <= $intMax)
-			$bitReturn = true;
-	}
-	return $bitReturn;
+    $objValidator = new class_text_validator();
+    return $objValidator->validate($strText);
 }
 
 

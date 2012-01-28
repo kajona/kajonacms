@@ -363,15 +363,47 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
+    /**
+     * @return string
+     * @fieldType password
+     */
     public function getStrPass() {
         return $this->strPass;
     }
+
+    /**
+     * @return string
+     * @fieldType password
+     */
+    public function getStrPass2() {
+        return "";
+    }
+
+    public function setStrPass2($strValue) {
+    }
+
+    /**
+     * @return string
+     * @fieldType text
+     * @fieldValidator email
+     * @fieldMandatory
+     */
     public function getStrEmail() {
         return $this->strEmail;
     }
+
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrForename() {
         return $this->strForename;
     }
+
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrName() {
         return $this->strName;
     }
@@ -403,6 +435,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strName = $strName;
     }
 
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrStreet() {
         return $this->strStreet;
     }
@@ -411,6 +447,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strStreet = $strStreet;
     }
 
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrPostal() {
         return $this->strPostal;
     }
@@ -419,6 +459,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strPostal = $strPostal;
     }
 
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrCity() {
         return $this->strCity;
     }
@@ -427,6 +471,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strCity = $strCity;
     }
 
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrTel() {
         return $this->strTel;
     }
@@ -435,6 +483,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strTel = $strTel;
     }
 
+    /**
+     * @return string
+     * @fieldType text
+     */
     public function getStrMobile() {
         return $this->strMobile;
     }
@@ -443,6 +495,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strMobile = $strMobile;
     }
 
+    /**
+     * @return int
+     * @fieldType date
+     */
     public function getLongDate() {
         return $this->longDate;
     }

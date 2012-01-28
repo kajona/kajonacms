@@ -118,6 +118,9 @@ class class_formentry_base {
             $strGetter = "getBit".$this->strSourceProperty;
 
         if(!method_exists($this->objSourceObject, $strGetter))
+            $strGetter = "getLong".$this->strSourceProperty;
+
+        if(!method_exists($this->objSourceObject, $strGetter))
             $strGetter = "get".$this->strSourceProperty;
 
         if(!method_exists($this->objSourceObject, $strGetter))
@@ -150,6 +153,9 @@ class class_formentry_base {
 
         if(!method_exists($this->objSourceObject, $strSetter))
             $strSetter = "setBit".$this->strSourceProperty;
+
+        if(!method_exists($this->objSourceObject, $strSetter))
+            $strSetter = "setLong".$this->strSourceProperty;
 
         if(!method_exists($this->objSourceObject, $strSetter))
             $strSetter = "set".$this->strSourceProperty;

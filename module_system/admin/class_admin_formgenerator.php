@@ -89,7 +89,6 @@ class class_admin_formgenerator {
      * @return bool
      */
     public function validateForm() {
-        $this->arrValidationErrors = array();
         foreach($this->arrFields as $objOneField)
             if($objOneField->getBitMandatory() && !$objOneField->validateValue())
                 $this->arrValidationErrors[$objOneField->getStrEntryName()] = $objOneField->getStrLabel();
@@ -163,6 +162,9 @@ class class_admin_formgenerator {
 
         if(!method_exists($this->objSourceobject, $strGetter))
             $strGetter = "getBit".$strPropertyName;
+
+        if(!method_exists($this->objSourceobject, $strGetter))
+            $strGetter = "getLong".$strPropertyName;
 
         if(!method_exists($this->objSourceobject, $strGetter))
             throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
@@ -239,6 +241,10 @@ class class_admin_formgenerator {
         return $this->getArrValidationErrors();
     }
 
+    public function addValidationError($strEntry, $strMessage) {
+        $this->arrValidationErrors[$strEntry] = $strMessage;
+    }
+
     /**
      * @param class_formentry_base $objField
      * @param string $strKey
@@ -256,7 +262,7 @@ class class_admin_formgenerator {
     /**
      * Returns a single entry form the fields, identified by its form-entry-name.
      * @param $strName
-     * @return class_formentry_base|interface_formentry|null
+     * @return class_formentry_base|interface_formentry
      */
     public function getField($strName) {
         if(isset($this->arrFields[$strName]))

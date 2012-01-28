@@ -318,10 +318,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * Creates a new user or edits a already existing one
      *
      * @param string $strAction
+     * @param class_admin_formgenerator|null $objForm
      * @return string
      * @autoTestable
      */
-    protected function actionNewUser($strAction = "new") {
+    protected function actionNewUser($strAction = "new", class_admin_formgenerator $objForm = null) {
         $strReturn = "";
 
         //parse userid-param to remain backwards compatible
@@ -342,7 +343,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //access to usersources
         $objUsersources = new class_module_user_sourcefactory();
-
 
         if($strAction == "new") {
             //easy one - provide the form to create a new user. validate if there are multiple user-sources available
@@ -377,50 +377,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
             $objBlankUser = $objSubsystem->getNewUser();
             if($objBlankUser != null) {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "saveUser");
-                $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_personaldata"));
-                //globally required
-                $strReturn .= $this->objToolkit->formInputText("user_username", $this->getLang("user_username"), $this->getParam("user_username"));
 
-                if($objBlankUser->isEditable()) {
-                    //Fetch the fields from the source
-                    $arrFields = $objBlankUser->getEditFormEntries();
-                    /* @var $objOneField class_usersources_form_entry */
-                    foreach($arrFields as $objOneField) {
-                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
-                            $strReturn .= $this->objToolkit->formDateSingle("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
+                if($objForm == null)
+                    $objForm = $this->getUserForm($objBlankUser, false, "new");
 
-                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
-                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+                $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
 
-                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_LONGTEXT)
-                            $strReturn .= $this->objToolkit->formInputTextArea("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
-                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
-
-                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
-                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()) );
-                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName()."2", $this->getLang("user_".$objOneField->getStrName()."2") );
-                        }
-                    }
-                }
-
-                //system-internal fields
-                $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_system"));
-                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getLang("user_skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
-                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getLang("user_language"), $this->getParam("language"));
-                $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getLang("user_admin"), ($this->getParam("adminlogin") != "" ? true : false ));
-                $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getLang("user_portal"), ($this->getParam("portal") != "" ? true : false ));
-                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getLang("user_aktiv"), ($this->getParam("aktiv") != "" ? true : false ));
-
-                $strReturn .= $this->objToolkit->formInputHidden("systemid");
-                $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-                $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-                $strReturn .= $this->objToolkit->formClose();
-
+                return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
             }
         }
         else {
@@ -435,55 +398,29 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
 
 
+
             $objUser = new class_module_user_user($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
-            $this->setParam("usersource", $objUser->getStrSubsystem());
-            if($objSourceUser != null) {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "saveUser");
-                $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_personaldata"));
-                //globally required
-                if(!$bitSelfedit)
-                    $strReturn .= $this->objToolkit->formInputText("user_username", $this->getLang("user_username"), $this->getParam("user_username") != "" ? $this->getParam("user_username") : $objUser->getStrUsername(), "inputText", "", ($bitSelfedit ) );
 
-                //Fetch the fields from the source
-                if($objSourceUser->isEditable()) {
-                    $arrFields = $objSourceUser->getEditFormEntries();
-                    /* @var $objOneField class_usersources_form_entry */
-                    foreach($arrFields as $objOneField) {
-                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
-                            $strReturn .= $this->objToolkit->formDateSingle("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
+            if($objForm == null)
+                $objForm = $this->getUserForm($objSourceUser, $bitSelfedit, "edit");
 
-                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
-                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+            $objForm->getField("user_username")->setStrValue($objUser->getStrUsername());
+            if($bitSelfedit)
+                $objForm->getField("user_username")->setBitReadonly(true);
 
-                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
-                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+            $objForm->getField("user_skin")->setStrValue($objUser->getStrAdminskin());
+            $objForm->getField("user_language")->setStrValue($objUser->getStrAdminlanguage());
 
-                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
-                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName(), $this->getLang("user_".$objOneField->getStrName()) );
-                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName()."2", $this->getLang("user_".$objOneField->getStrName()."2") );
-                        }
-                    }
-                }
-
-                //system-internal fields
-                $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_system"));
-                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getLang("user_skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
-                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getLang("user_language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
-                if(!$bitSelfedit) {
-                    $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getLang("user_admin"), ( issetPost("skin") ? ($this->getParam("adminlogin") != "" ? true : false ) :  $objUser->getIntAdmin() ));
-                    $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getLang("user_portal"), ( issetPost("skin") ? ($this->getParam("portal") != "" ? true : false) : $objUser->getIntPortal() ));
-                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getLang("user_aktiv"), ( issetPost("skin") ?  ($this->getParam("aktiv") != "" ? true : false ) : $objUser->getIntActive() ));
-                }
-
-                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-                $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
-                $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-                $strReturn .= $this->objToolkit->formClose();
-
+            if(!$bitSelfedit) {
+                $objForm->getField("user_adminlogin")->setStrValue($objUser->getIntAdmin());
+                $objForm->getField("user_portal")->setStrValue($objUser->getIntPortal());
+                $objForm->getField("user_active")->setStrValue($objUser->getIntActive());
             }
+
+            $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
+
+            return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
         }
 
 
@@ -491,6 +428,69 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
     }
 
+    /**
+     * @param interface_usersources_user $objUser
+     * @param bool $bitSelfedit
+     * @param $strMode
+     * @return class_admin_formgenerator|class_model
+     */
+    private function getUserForm(interface_usersources_user $objUser, $bitSelfedit, $strMode) {
+
+        //load a few default values
+        //languages
+        $arrLang = array();
+        foreach ($this->arrLanguages as $strLanguage)
+            $arrLang[$strLanguage] = $this->getLang("lang_".$strLanguage);
+
+        //skins
+        $arrSkinsTemp = class_adminskin_helper::getListOfAdminskinsAvailable();
+        $arrSkins = array();
+        foreach ($arrSkinsTemp as $strSkin)
+            $arrSkins[$strSkin]	= $strSkin;
+
+
+
+        $objForm = new class_admin_formgenerator("user", $objUser);
+        $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("user_personaldata"));
+
+        //globals
+        $objName = $objForm->addField(new class_formentry_text("user", "username"))->setBitMandatory(true)->setStrLabel($this->getLang("user_username"))->setStrValue($this->getParam("user_username"));
+        if($bitSelfedit)
+            $objName->setBitReadonly(true);
+
+        //generic
+        //adding elements is more generic right here - load all methods
+        if($objUser->isEditable()) {
+            $objReflection = new ReflectionClass($objUser);
+            $objAnnotations = new class_annotations($objUser);
+
+            $arrMethods = $objReflection->getMethods();
+            foreach($arrMethods as $objOneMethod) {
+                if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType")) {
+                    $objField = $objForm->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit", "getLong"), array(), $objOneMethod->name)));
+                    if($objField->getStrEntryName() == "user_pass" && $strMode == "new")
+                        $objField->setBitMandatory(true);
+                }
+            }
+        }
+
+        //system-settings
+        $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("user_system"));
+
+        $objForm->addField(new class_formentry_dropdown("user", "skin"))->setArrKeyValues($arrSkins)->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : _admin_skin_default_))->setStrLabel($this->getLang("user_skin"));
+        $objForm->addField(new class_formentry_dropdown("user", "language"))->setArrKeyValues($arrLang)->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))->setStrLabel($this->getLang("user_language"));
+
+
+        if(!$bitSelfedit) {
+            $objForm->addField(new class_formentry_checkbox("user", "adminlogin"))->setStrLabel($this->getLang("user_admin"));
+            $objForm->addField(new class_formentry_checkbox("user", "portal"))->setStrLabel($this->getLang("user_portal"));
+            $objForm->addField(new class_formentry_checkbox("user", "active"))->setStrLabel($this->getLang("user_aktiv"));
+        }
+
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+
+        return $objForm;
+    }
 
     /**
      * Stores the submitted data to the backend / the loginprovider
@@ -498,113 +498,75 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function actionSaveUser() {
         $strReturn = "";
-
+        $bitSelfedit = false;
 
         $objUsersources = new class_module_user_sourcefactory();
-        $strPasswordKey = "";
-        $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
-        $objBlankUser = $objSubsystem->getNewUser();
-        if($objBlankUser != null) {
-            $arrFields = $objBlankUser->getEditFormEntries();
-            /* @var $objOneField class_usersources_form_entry */
-            foreach($arrFields as $objOneField) {
-                if($objOneField->getBitRequired() && $objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD)
-                    $strPasswordKey = "user_".$objOneField->getStrName();
-            }
-        }
-
-        if(!$this->validateForm()
-                | ($this->getParam("mode") == "new" && !$this->checkAdditionalNewData($strPasswordKey))
-                | ($this->getParam("mode") == "edit" && !$this->checkAdditionalEditData($strPasswordKey)) ) {
-            return $this->actionNewUser($this->getParam("mode"));
-        }
-
         if($this->getParam("mode") == "new") {
-
             if(!$this->getObjModule()->rightEdit())
                 return $this->getLang("commons_error_permissions");
 
-            //create a new user and pass all relevant data
-
-            $objUser = new class_module_user_user();
-
-            $objUser->setStrUsername($this->getParam("user_username"));
-            $objUser->setIntActive(($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0);
-            $objUser->setIntAdmin(($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0);
-            $objUser->setIntPortal(($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0);
-            $objUser->setStrAdminskin($this->getParam("skin"));
-            $objUser->setStrAdminlanguage($this->getParam("language"));
-            $objUser->setStrSubsystem($this->getParam("usersource"));
-
-            $objUser->updateObjectToDb();
-
-            $objSourceUser = $objUser->getObjSourceUser();
-            //pass fields to new source-object
-            $arrSourceFields = $objSourceUser->getEditFormEntries();
-            foreach($arrSourceFields as $objOneField) {
-                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
-                    $strName = "user_".$objOneField->getStrName();
-                    if($this->getParam($strName."_year") != "") {
-                        $objDate = new class_date();
-                        $objDate->generateDateFromParams($strName, $this->getAllParams());
-                        $objOneField->setStrValue($objDate->getLongTimestamp());
-                    }
-                }
-                else {
-                    $objOneField->setStrValue($this->getParam("user_".$objOneField->getStrName()));
-                }
-            }
-
-            $objSourceUser->setEditFormEntries($arrSourceFields);
-            $objSourceUser->updateObjectToDb();
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+            $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
+            $objBlankUser = $objSubsystem->getNewUser();
+            $objForm = $this->getUserForm($objBlankUser, false, "new");
         }
-        else if($this->getParam("mode") == "edit") {
-
-            $bitSelfedit = false;
+        else {
             if(!$this->getObjModule()->rightEdit()) {
-
                 if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true")
                     $bitSelfedit = true;
                 else
                     return $this->getLang("commons_error_permissions");
             }
 
+            $objUser = new class_module_user_user($this->getSystemid());
+            $objSourceUser = $objUsersources->getSourceUser($objUser);
+            $objForm = $this->getUserForm($objSourceUser, $bitSelfedit, "edit");
+        }
+
+
+        if(   ($this->getParam("mode") == "new" && !$this->checkAdditionalNewData($objForm))
+            | ($this->getParam("mode") == "edit" && !$this->checkAdditionalEditData($objForm))
+            | !$objForm->validateForm()
+        ) {
+            return $this->actionNewUser($this->getParam("mode"), $objForm);
+        }
+
+
+        if($this->getParam("mode") == "new") {
+
+            //create a new user and pass all relevant data
+            $objUser = new class_module_user_user();
+            $objUser->setStrSubsystem($this->getParam("usersource"));
+
+            $objUser->setStrUsername($this->getParam("user_username"));
+            $objUser->setIntActive(($this->getParam("user_active") != "" && $this->getParam("user_active") == "checked") ?  1 :  0);
+            $objUser->setIntAdmin(($this->getParam("user_adminlogin") != "" && $this->getParam("user_adminlogin") == "checked") ?  1 :  0);
+            $objUser->setIntPortal(($this->getParam("user_portal") != "" && $this->getParam("user_portal") == "checked") ?  1 :  0);
+
+        }
+        else if($this->getParam("mode") == "edit") {
+
             //create a new user and pass all relevant data
             $objUser = new class_module_user_user($this->getSystemid());
 
             if(!$bitSelfedit) {
                 $objUser->setStrUsername($this->getParam("user_username"));
-                $objUser->setIntActive(($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0);
-                $objUser->setIntAdmin(($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0);
-                $objUser->setIntPortal(($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0);
+                $objUser->setIntActive(($this->getParam("user_active") != "" && $this->getParam("user_active") == "checked") ?  1 :  0);
+                $objUser->setIntAdmin(($this->getParam("user_adminlogin") != "" && $this->getParam("user_adminlogin") == "checked") ?  1 :  0);
+                $objUser->setIntPortal(($this->getParam("user_portal") != "" && $this->getParam("user_portal") == "checked") ?  1 :  0);
             }
-            $objUser->setStrAdminskin($this->getParam("skin"));
-            $objUser->setStrAdminlanguage($this->getParam("language"));
+        }
 
-            $objUser->updateObjectToDb();
+        $objUser->setStrAdminskin($this->getParam("user_skin"));
+        $objUser->setStrAdminlanguage($this->getParam("user_language"));
 
-            $objSourceUser = $objUser->getObjSourceUser();
-            //pass fields to new source-object
-            $arrSourceFields = $objSourceUser->getEditFormEntries();
-            foreach($arrSourceFields as $objOneField) {
-                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
-                    $strName = "user_".$objOneField->getStrName();
-                    if($this->getParam($strName."_year") != "") {
-                        $objDate = new class_date();
-                        $objDate->generateDateFromParams($strName, $this->getAllParams());
-                        $objOneField->setStrValue($objDate->getLongTimestamp());
-                    }
-                }
-                else {
-                    $objOneField->setStrValue($this->getParam("user_".$objOneField->getStrName()));
-                }
-            }
+        $objUser->updateObjectToDb();
+        $objSourceUser = $objUser->getObjSourceUser();
+        $objForm = $this->getUserForm($objSourceUser, $bitSelfedit, $this->getParam("mode"));
+        $objForm->updateSourceObject();
+        $objSourceUser->updateObjectToDb();
 
-            $objSourceUser->setEditFormEntries($arrSourceFields);
-            $objSourceUser->updateObjectToDb();
 
+        if($this->getParam("mode") == "edit") {
             //Reset the admin-skin cookie to force the new skin
             $objCookie = new class_cookie();
             //flush the db-cache
@@ -614,11 +576,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
             //update language set before
             $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
-
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
 
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
 
 
         return $strReturn;
@@ -736,14 +696,14 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objForm->addField(new class_formentry_text("group", "name"))->setBitMandatory(true)->setStrLabel($this->getLang("group_name"))->setStrValue($this->getParam("group_name"));
 
         if($objGroup->isEditable()) {
-            //adding elements is more generic right here - load ll methods
+            //adding elements is more generic right here - load all methods
             $objReflection = new ReflectionClass($objGroup);
             $objAnnotations = new class_annotations($objGroup);
 
             $arrMethods = $objReflection->getMethods();
             foreach($arrMethods as $objOneMethod) {
                 if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType"))
-                    $objForm->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit"), array(), $objOneMethod->name)));
+                    $objForm->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit", "getLong"), array(), $objOneMethod->name)));
             }
 
         }
@@ -1103,28 +1063,31 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         return (count($arrUsers) == 0);
     }
 
-    protected function checkAdditionalNewData($strPasswordKey) {
-        $bitPass = $strPasswordKey == "" || $this->checkPasswords($this->getParam($strPasswordKey), $this->getParam($strPasswordKey."2"));
+    protected function checkAdditionalNewData(class_admin_formgenerator $objForm) {
+
+        $bitPass =  $this->checkPasswords($this->getParam("user_pass"), $this->getParam("user_pass2"));
         if(!$bitPass)
-            $this->addValidationError("user_password", $this->getLang("required_password_equal"));
+            $objForm->addValidationError("user_password", $this->getLang("required_password_equal"));
+
 
         $bitUsername = $this->checkUsernameNotExisting($this->getParam("user_username"));
         if(!$bitUsername)
-            $this->addValidationError("user_username", $this->getLang("required_user_existing"));
+            $objForm->addValidationError("user_username", $this->getLang("required_user_existing"));
 
         return $bitPass && $bitUsername;
     }
 
-    protected function checkAdditionalEditData($strPasswordKey) {
-        $bitPass = $this->checkPasswords($this->getParam($strPasswordKey), $this->getParam($strPasswordKey."2"));
+    protected function checkAdditionalEditData(class_admin_formgenerator $objForm) {
+
+        $bitPass = $this->checkPasswords($this->getParam("user_pass"), $this->getParam("user_pass2"));
         if(!$bitPass)
-            $this->addValidationError("passwort", $this->getLang("required_password_equal"));
+            $objForm->addValidationError("password", $this->getLang("required_password_equal"));
 
         $arrUsers = class_module_user_user::getAllUsersByName($this->getParam("user_username"));
         if(count($arrUsers) > 0) {
             $objUser = $arrUsers[0];
             if($objUser->getSystemid() != $this->getSystemid()) {
-                $this->addValidationError("user_username", $this->getLang("required_user_existing"));
+                $objForm->addValidationError("user_username", $this->getLang("required_user_existing"));
                 $bitPass = false;
             }
         }
