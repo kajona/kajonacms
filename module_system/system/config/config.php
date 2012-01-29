@@ -56,9 +56,10 @@
     $debug['memory']                = false;                                   //Displays the memory used by Kajona to generate the current page
     $debug['cache']                 = false;                                   //Counts the internal cache-hits and requests to save s.th. to the cache
 
-    $debug['dblog']                 = false;                                   //Logs all queries sent to the db into a logfile
+    $debug['dblog']                 = false;                                   //Logs all queries sent to the db into a logfile. If set to true, the
+                                                                               //debuglogging has to be set to 3, since queries are leveled as information
 
-    $debug['debuglevel']            = 1; //FIXME dev settings                                     //Current level of debugging. There are several states:
+    $debug['debuglevel']            = 0;                                       //Current level of debugging. There are several states:
                                                                                    // 0: fatal errors will be displayed
                                                                                    // 1: fatal and regular errors will be displayed
     $debug['debuglogging']          = 2;                                       //Configures the logging-engine:

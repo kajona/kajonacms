@@ -19,6 +19,7 @@ final class class_logger {
     public static $SYSTEMLOG = "systemlog.log";
     public static $DBLOG = "dblayer.log";
     public static $USERSOURCES = "usersources.log";
+    public static $QUERIES = "dbqueries.log";
 
     /**
      * Level to be used for real errors
@@ -94,8 +95,12 @@ final class class_logger {
      *
      * @param string $strMessage
      * @param int $intLevel
+     * @param bool $bitSkipSessionData
+     * @return
      */
-    public function addLogRow($strMessage, $intLevel) {
+    public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false) {
+
+        $arrStack = debug_backtrace();
 
         //check, if there someting to write
         if($this->intLogLevel == 0)
@@ -122,14 +127,18 @@ final class class_logger {
             $strLevel = "WARNING";
 
         $strSessid = "";
-        if(class_carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
+        if(!$bitSkipSessionData && class_carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
             $strSessid = class_carrier::getInstance()->getObjSession()->getInternalSessionId();
             $strSessid .= " (".class_carrier::getInstance()->getObjSession()->getUsername().")";
         }
 
         $strMessage = uniStrReplace(array("\r", "\n"), array(" ", " "), $strMessage);
 
-        $strText = $strDate." ".$strLevel." ".$strSessid." ".$strMessage."\r\n";
+        $strFileInfo = "";
+        if(isset($arrStack[1]) && isset($arrStack[1]["file"]))
+            $strFileInfo = basename($arrStack[1]["file"]).":".$arrStack[1]["function"].":".$arrStack[1]["line"];
+
+        $strText = $strDate." ".$strLevel." ".$strSessid." ".$strFileInfo." ".$strMessage."\r\n";
 
 		$handle = fopen(_realpath_._projectpath_."/log/".$this->strFilename, "a");
 		fwrite($handle, $strText);

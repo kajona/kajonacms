@@ -155,8 +155,10 @@ class class_db {
 
 		$bitReturn = false;
 
+        $strQuery = $this->processQuery($strQuery);
+
 		if(_dblog_)
-	        $this->writeDbLog($strQuery);
+            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery, class_logger::$levelInfo, true);
 
 		//Increasing the counter
 		$this->intNumber++;
@@ -187,8 +189,10 @@ class class_db {
 
 		$bitReturn = false;
 
+        $strQuery = $this->processQuery($strQuery);
+
 		if(_dblog_)
-			$this->writeDbLog($strQuery."\r\n params: ".implode(", ", $arrParams));
+            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
 
 		//Increasing the counter
 		$this->intNumber++;
@@ -275,7 +279,7 @@ class class_db {
 		$arrReturn = array();
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery);
+            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery, class_logger::$levelInfo, true);
 
         class_logger::getInstance(class_logger::$DBLOG)->addLogRow("deprecated getArray call: ".$strQuery, class_logger::$levelWarning);
 
@@ -329,7 +333,7 @@ class class_db {
 		$arrReturn = array();
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery."\r\n params: ".implode(", ", $arrParams));
+            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
@@ -390,7 +394,7 @@ class class_db {
 		}
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery);
+            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery, class_logger::$levelInfo, true);
 
         class_logger::getInstance(class_logger::$DBLOG)->addLogRow("deprecated getArraySection call: ".$strQuery, class_logger::$levelWarning);
 
@@ -460,7 +464,7 @@ class class_db {
 		}
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery."\r\n params: ".implode(", ", $arrParams));
+            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
@@ -474,27 +478,6 @@ class class_db {
 
 		return $arrReturn;
     }
-
-
-	/**
-	 * Writes a message to the dblog
-	 *
-	 * @param string $strText
-	 */
-	private function writeDbLog($strText) {
-	    $arrStack = debug_backtrace();
-
-        //foreach($arrStack as $arrSingle)
-        //    $strText .= $arrSingle["file"]."@".$arrSingle["function"]."\n";
-
-		$strText = date("G:i:s, d-m-y"). "\t\t".
-		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
-		                 "\r\n"
-		              . $strText . "\r\n\r\n\r\n";
-		$handle = fopen(_realpath_._projectpath_."/log/querylog.log", "a");
-		fwrite($handle, $strText);
-		fclose($handle);
-	}
 
 	/**
 	 * Writes the last DB-Error to the screen
@@ -659,13 +642,13 @@ class class_db {
                 else {
                     $arrTemp = $this->objDbDriver->getTables();
                     if(_dblog_)
-                        $this->writeDbLog($strFakeQuery);
+                        class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
                 }
             }
             else {
                 $arrTemp = $this->objDbDriver->getTables();
                 if(_dblog_)
-                    $this->writeDbLog($strFakeQuery);
+                    class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
             }
 
             if($bitCache)
