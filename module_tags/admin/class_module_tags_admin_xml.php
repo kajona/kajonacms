@@ -72,7 +72,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
     }
 
     /**
-     * Loads the lost of tags assigned to the passed system-record and renders them using the toolkit.
+     * Loads the list of tags assigned to the passed system-record and renders them using the toolkit.
      *
      * @return string
      * @permissions view

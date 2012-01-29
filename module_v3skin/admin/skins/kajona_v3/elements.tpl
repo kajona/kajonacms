@@ -1012,11 +1012,7 @@ otherwise the JavaScript will fail!
 </tags_wrapper>
 
 <tags_tag>
-    <div class="tag">%%tagname%%
-        <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');">
-            %%deleteIcon%%
-        </a>
-    </div>
+    <div class="tag">%%tagname%%<a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');">%%deleteIcon%%</a></div>
 </tags_tag>
 
 A tag-selector.
