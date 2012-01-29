@@ -1065,10 +1065,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
     protected function checkAdditionalNewData(class_admin_formgenerator $objForm) {
 
-        $bitPass =  $this->checkPasswords($this->getParam("user_pass"), $this->getParam("user_pass2"));
-        if(!$bitPass)
-            $objForm->addValidationError("user_password", $this->getLang("required_password_equal"));
-
+        $arrParams = class_carrier::getAllParams();
+        $bitPass = true;
+        if(isset($arrParams["user_pass"])) {
+            $bitPass =  $this->checkPasswords($this->getParam("user_pass"), $this->getParam("user_pass2"));
+            if(!$bitPass)
+                $objForm->addValidationError("user_password", $this->getLang("required_password_equal"));
+        }
 
         $bitUsername = $this->checkUsernameNotExisting($this->getParam("user_username"));
         if(!$bitUsername)
@@ -1079,9 +1082,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
     protected function checkAdditionalEditData(class_admin_formgenerator $objForm) {
 
-        $bitPass = $this->checkPasswords($this->getParam("user_pass"), $this->getParam("user_pass2"));
-        if(!$bitPass)
-            $objForm->addValidationError("password", $this->getLang("required_password_equal"));
+        $arrParams = class_carrier::getAllParams();
+        $bitPass = true;
+        if(isset($arrParams["user_pass"])) {
+            $bitPass = $this->checkPasswords($this->getParam("user_pass"), $this->getParam("user_pass2"));
+            if(!$bitPass)
+                $objForm->addValidationError("password", $this->getLang("required_password_equal"));
+        }
 
         $arrUsers = class_module_user_user::getAllUsersByName($this->getParam("user_username"));
         if(count($arrUsers) > 0) {

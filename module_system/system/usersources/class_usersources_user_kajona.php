@@ -250,30 +250,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         return true;
     }
 
-    /**
-	 * Returns the list of editable fields
-	 * @return class_usersources_form_entry $arrParams
-	 */
-	public function getEditFormEntries() {
-        $arrTemp = array();
-        if($this->getSystemid() == "")
-            $arrTemp[] = new class_usersources_form_entry("password", class_usersources_form_entry::$INT_TYPE_PASSWORD, "", true );
-        else
-            $arrTemp[] = new class_usersources_form_entry("password", class_usersources_form_entry::$INT_TYPE_PASSWORD, "", false );
-        $arrTemp[] = new class_usersources_form_entry("email", class_usersources_form_entry::$INT_TYPE_EMAIL, $this->getStrEmail(), true );
-        $arrTemp[] = new class_usersources_form_entry("forename", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrForename(), false );
-        $arrTemp[] = new class_usersources_form_entry("name", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrName(), false );
-        $arrTemp[] = new class_usersources_form_entry("street", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrStreet(), false );
-        $arrTemp[] = new class_usersources_form_entry("postal", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrPostal(), false );
-        $arrTemp[] = new class_usersources_form_entry("city", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrCity(), false );
-        $arrTemp[] = new class_usersources_form_entry("tel", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrTel(), false );
-        $arrTemp[] = new class_usersources_form_entry("mobile", class_usersources_form_entry::$INT_TYPE_TEXT, $this->getStrMobile(), false );
-        $arrTemp[] = new class_usersources_form_entry("date", class_usersources_form_entry::$INT_TYPE_DATE, $this->getLongDate(), false );
-
-        return $arrTemp;
-    }
-
-    /**
+        /**
      * Returns the list of group-ids the current user is assigned to
      * @return array
      */
@@ -301,64 +278,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 	public function isEditable() {
         return true;
     }
-
-    /**
-     * Sets the list of fields in order to be written to the database
-     * @param class_admin_form_entry $arrParams
-     */
-	public function setEditFormEntries($arrParams) {
-        foreach($arrParams as $objOneParam) {
-            if($objOneParam->getStrName() == "password")
-                $this->setStrPass($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "email")
-                $this->setStrEmail($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "forename")
-                $this->setStrForename($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "name")
-                $this->setStrName($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "street")
-                $this->setStrStreet($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "postal")
-                $this->setStrPostal($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "city")
-                $this->setStrCity($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "tel")
-                $this->setStrTel($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "mobile")
-                $this->setStrMobile($objOneParam->getStrValue());
-            if($objOneParam->getStrName() == "date")
-                $this->setLongDate($objOneParam->getStrValue());
-        }
-    }
-
-    /**
-     * Writes a single field to the user
-     * @param string $strName
-     * @param string $strValue
-     */
-    public function setField($strName, $strValue) {
-        if($strName == "password")
-            $this->setStrPass($strValue);
-        if($strName == "email")
-            $this->setStrEmail($strValue);
-        if($strName == "forename")
-            $this->setStrForename($strValue);
-        if($strName == "name")
-            $this->setStrName($strValue);
-        if($strName == "street")
-            $this->setStrStreet($strValue);
-        if($strName == "postal")
-            $this->setStrPostal($strValue);
-        if($strName == "city")
-            $this->setStrCity($strValue);
-        if($strName == "tel")
-            $this->setStrTel($strValue);
-        if($strName == "mobile")
-            $this->setStrMobile($strValue);
-        if($strName == "date")
-            $this->setLongDate($strValue);
-    }
-
 
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------

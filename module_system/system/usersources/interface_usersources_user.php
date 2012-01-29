@@ -4,7 +4,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
+*	$Id$                              *
 ********************************************************************************************************/
 
 
@@ -18,12 +18,6 @@
 interface interface_usersources_user {
 
 	/**
-	 * Returns the list of editable fields
-	 * @return array $arrParams
-	 */
-	public function getEditFormEntries();
-
-    /**
      * Returns the list of group-ids the current user is assigned to
      * @return array
      */
@@ -41,18 +35,6 @@ interface interface_usersources_user {
      */
 	public function isEditable();
 
-    /**
-     * Sets the list of fields in order to be written to the database
-     * @param class_admin_form_entry $arrParams
-     */
-	public function setEditFormEntries($arrParams);
-
-    /**
-     * Writes a single field to the user
-     * @param string $strName
-     * @param string $strValue
-     */
-    public function setField($strName, $strValue);
 
     /**
      * Returns the forename
