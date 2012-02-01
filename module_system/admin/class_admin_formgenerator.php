@@ -15,7 +15,7 @@
  *
  * @author sidler@mulchprod.de
  * @since 4.0
- * @module module_system
+ * @module module_formgenerator
  */
 class class_admin_formgenerator {
 

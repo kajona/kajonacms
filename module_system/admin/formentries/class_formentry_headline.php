@@ -11,7 +11,7 @@
  *
  * @author sidler@mulchprod.de
  * @since 4.0
- * @package module_system
+ * @package module_sysmodule_formgeneratortem
  */
 class class_formentry_headline extends class_formentry_base implements interface_formentry {
 
