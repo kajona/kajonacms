@@ -74,6 +74,7 @@
 switch($_SERVER['SERVER_NAME']) {
 
     case "aquarium":
+    case "terrarium":
     case "mango":
 
         //Database-Access
