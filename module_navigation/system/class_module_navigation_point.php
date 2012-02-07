@@ -330,17 +330,10 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @return string
      * @fieldMandatory
+     * @fieldType text
      */
     public function getStrName() {
         return $this->strName;
-    }
-
-    /**
-     * @return string
-     * @fieldType file
-     */
-    public function getStrPageE() {
-        return $this->strPageE;
     }
 
     /**
@@ -349,6 +342,14 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     public function getStrPageI() {
         return $this->strPageI;
+    }
+
+    /**
+     * @return string
+     * @fieldType file
+     */
+    public function getStrPageE() {
+        return $this->strPageE;
     }
 
     /**

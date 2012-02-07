@@ -80,7 +80,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
     private function getAdminForm(class_module_tags_tag $objTag) {
         $objForm = new class_admin_formgenerator("tag", $objTag);
-        $objForm->addDynamicField("name");
+        $objForm->generateFieldsFromObject();
 
         return $objForm;
     }

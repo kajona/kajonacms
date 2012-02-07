@@ -13,6 +13,12 @@
  * and more is done by reflection and code-inspection. Therefore, especially the annotations on the extending
  * class_model-objects are analyzed.
  *
+ * There are three ways of adding entries to the current form, each representing a different level of
+ * automation.
+ * 1. generateFieldsFromObject(), everything is rendered automatically
+ * 2. addDynamicField(), adds a single field based on its name
+ * 3. addField(), pass a field to add it explicitely
+ *
  * @author sidler@mulchprod.de
  * @since 4.0
  * @module module_formgenerator
@@ -140,6 +146,32 @@ class class_admin_formgenerator {
     }
 
     /**
+     * This is the most dynamically way to build a form.
+     * Using this method, the current object is analyzed regarding its
+     * methods and annotation. As soon as a matching property is found, the field
+     * is added to the current list of form-entries.
+     * Therefore the internal method addDynamicField is used.
+     * In order to identify a field as relevant, the getter has to be marked with a fieldType annotation.
+     *
+     * @return void
+     */
+    public function generateFieldsFromObject() {
+
+        //load all methods
+        $objReflection = new ReflectionClass($this->objSourceobject);
+        $objAnnotations = new class_annotations($this->objSourceobject);
+
+        $arrMethods = $objReflection->getMethods();
+        foreach($arrMethods as $objOneMethod) {
+            if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType")) {
+                $this->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit", "getLong"), array(), $objOneMethod->name)));
+            }
+        }
+
+        return;
+    }
+
+    /**
      * Adds a new field to the current form.
      * Therefore, the current source-object is inspected regarding the passed propertyname.
      * So it is essential to provide the matching getters and setters in order to have all
@@ -233,19 +265,38 @@ class class_admin_formgenerator {
             throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
     }
 
+    /**
+     * Returns an array of validation-errors
+     * @return array
+     */
     public function getArrValidationErrors() {
         return $this->arrValidationErrors;
     }
 
+    /**
+     * Returns an array of validation-errors.
+     * Alias for getArrValidationErrors due to backwards compatibility.
+     * @return array
+     * @see getArrValidationErrors
+     */
     public function getValidationErrors() {
         return $this->getArrValidationErrors();
     }
 
+    /**
+     * Adds an additional, user-specific validation-error to the current list of errors.
+     *
+     * @param $strEntry
+     * @param $strMessage
+     */
     public function addValidationError($strEntry, $strMessage) {
         $this->arrValidationErrors[$strEntry] = $strMessage;
     }
 
     /**
+     * Adds a single field to the current form, the hard, manual way.
+     * Use this method if you want to add custom fields to the current form.
+     *
      * @param class_formentry_base $objField
      * @param string $strKey
      * @return class_formentry_base

@@ -837,8 +837,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     private function getFormForAspect(class_module_system_aspect $objAspect) {
         $objFormManager = new class_admin_formgenerator("aspect", $objAspect);
-        $objFormManager->addDynamicField("name");
-        $objFormManager->addDynamicField("default");
+        $objFormManager->generateFieldsFromObject();
         return $objFormManager;
     }
 

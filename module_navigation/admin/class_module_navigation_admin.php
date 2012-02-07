@@ -343,15 +343,18 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                 );
 
         $objForm = new class_admin_formgenerator("point", $objPoint);
-        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
-        $objForm->addDynamicField("pagei");
-        $objForm->addDynamicField("pagee");
-        $objForm->addDynamicField("image");
+
+        $objForm->generateFieldsFromObject();
+
+        $objForm->getField("name")->setStrLabel($this->getLang("commons_name"));
+        $objForm->getField("pagei")->setStrLabel($this->getLang("navigation_page_i"));
+        $objForm->getField("pagee")->setStrLabel($this->getLang("navigation_page_e"));;
+        $objForm->getField("image")->setStrLabel($this->getLang("commons_image"));
 
         $objForm->addField(new class_formentry_text("point", "parent"))->setStrOpener($strNodeBrowser)->setBitReadonly(true)->setStrValue($objParentPoint->getStrName())->setStrLabel($this->getLang("navigation_parent"));
         $objForm->addField(new class_formentry_hidden("point", "parent_id"))->setStrValue($objParentPoint->getSystemid());
 
-        $objForm->addDynamicField("target")->setArrKeyValues($arrTargets);
+        $objForm->getField("target")->setArrKeyValues($arrTargets)->setStrLabel($this->getLang("navigation_target"));;
 
         return $objForm;
     }
