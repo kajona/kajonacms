@@ -258,14 +258,16 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @param string $strAction
  * @param string $strParams
  * @param bool $bitEncodedAmpersand
+ * @param bool $bitBlockPrintview
  * @return string
  */
-function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
+function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitBlockPrintview = false) {
     $strLink = "";
 
     //add print-view param?
-    if(getGet("printView") != "" || getPost("printView") != "")
+    if(!$bitBlockPrintview && (getGet("printView") != "" || getPost("printView") != ""))
         $strParams .= "&printView=1";
+
 
     //systemid in params?
     $strSystemid = "";
@@ -558,16 +560,22 @@ function timeToString($intTime, $bitLong = true) {
  *
  * @param class_date $objDate
  * @param bool $bitLong
+ * @param string $strFormat if given, the passed format will be used, otherwise the format defined in the i18n files
+ *                          usable placeholders are: d, m, y, h, i, s
  * @return string
  */
-function dateToString($objDate, $bitLong = true) {
-	$strReturn = "";
-	if($objDate != null) {
+function dateToString($objDate, $bitLong = true, $strFormat = "") {
+    $strReturn = "";
+    if($objDate != null) {
         //convert to a current date
-		if($bitLong)
-			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
-		else
-			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
+        if($strFormat == "") {
+            if($bitLong)
+                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleLong", "system", "admin"));
+            else
+                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleShort", "system", "admin"));
+        }
+        else
+            $strReturn = $strFormat;
 
         //"d.m.Y H:i:s";
         $strReturn = uniStrReplace("d", $objDate->getIntDay(), $strReturn);
@@ -577,8 +585,8 @@ function dateToString($objDate, $bitLong = true) {
         $strReturn = uniStrReplace("i", $objDate->getIntMin(), $strReturn);
         $strReturn = uniStrReplace("s", $objDate->getIntSec(), $strReturn);
 
-	}
-	return $strReturn;
+    }
+    return $strReturn;
 }
 
 /**

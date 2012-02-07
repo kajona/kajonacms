@@ -355,14 +355,19 @@ class class_mail {
     * @see http://www.php.net/manual/en/function.mail.php#27997, credits got to gordon at kanazawa-gu dot ac dot jp
     */
     private function encodeText($strText) {
+
+        if(function_exists("mb_encode_mimeheader")) {
+            return mb_encode_mimeheader($strText, "UTF-8", "Q", "\r\n", strlen("subject: "));
+        }
+
         $strStart = "=?UTF-8?B?";
         $strEnd = "?=";
-        $strSpacer = $strEnd."\r\n".$strStart;
-        $intLength = 75 - strlen($strStart) - strlen($strEnd);
+        $strSpacer = $strEnd."\r\n ".$strStart;
+        $intLength = 74 - strlen($strStart) - strlen($strEnd) - strlen("subject: ");
         $intLength = $intLength - ($intLength % 4);
 
+
         $strText = chunk_split(base64_encode($strText), $intLength, $strSpacer);
-        $strText = preg_replace("/" . preg_quote($strSpacer) . "$/", "", $strText);
         $strText = $strStart . $strText . $strEnd;
 
         return $strText;

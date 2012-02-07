@@ -112,7 +112,7 @@ class class_module_user_sourcefactory {
 
         //validate if a group with the given name is available
         $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username LIKE ? AND user_active = 1";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParam."%"));
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strParam."%"));
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {

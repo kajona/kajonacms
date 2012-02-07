@@ -256,7 +256,11 @@ define("_block_config_db_loading_", true);
 define("_autotesting_", false);
 
 $objImage = new class_flyimage();
-if($objImage->getImageFilename() == "kajonaCaptcha")
+if($objImage->getImageFilename() == "kajonaCaptcha") {
     $objImage->generateCaptchaImage();
-else
+}
+else {
+    class_carrier::getInstance()->getObjSession()->sessionClose();
     $objImage->generateImage();
+}
+

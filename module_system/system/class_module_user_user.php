@@ -244,9 +244,9 @@ class class_module_user_user extends class_model implements interface_model, int
 
 
         if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strUsernameFilter."%"), $intStart, $intEnd);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array("%".$strUsernameFilter."%"), $intStart, $intEnd);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUsernameFilter."%"));
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strUsernameFilter."%"));
 
 
 		$arrReturn = array();
@@ -325,17 +325,26 @@ class class_module_user_user extends class_model implements interface_model, int
 
     public function getStrEmail() {
         $this->loadSourceObject();
-        return $this->objSourceUser->getStrEmail();
+        if($this->objSourceUser != null)
+            return $this->objSourceUser->getStrEmail();
+        else
+            return "n.a.";
     }
 
     public function getStrForename() {
         $this->loadSourceObject();
-        return $this->objSourceUser->getStrForename();
+        if($this->objSourceUser != null)
+            return $this->objSourceUser->getStrForename();
+        else
+            return "n.a.";
     }
 
     public function getStrName() {
         $this->loadSourceObject();
-        return $this->objSourceUser->getStrName();
+        if($this->objSourceUser != null)
+            return $this->objSourceUser->getStrName();
+        else
+            return "n.a.";
     }
 
     private function loadSourceObject() {
@@ -348,7 +357,7 @@ class class_module_user_user extends class_model implements interface_model, int
 
 
 
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
 
     public function getLongDate() {

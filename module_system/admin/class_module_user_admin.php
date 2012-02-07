@@ -40,6 +40,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($this->getParam("doFilter") != "") {
             $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("userlist_filter"));
             $this->setParam("pv", 1);
+
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
+
         }
     }
 
