@@ -570,9 +570,9 @@ function dateToString($objDate, $bitLong = true, $strFormat = "") {
         //convert to a current date
         if($strFormat == "") {
             if($bitLong)
-                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleLong", "system", "admin"));
+                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system", "admin"));
             else
-                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleShort", "system", "admin"));
+                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system", "admin"));
         }
         else
             $strReturn = $strFormat;
