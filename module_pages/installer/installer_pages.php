@@ -24,11 +24,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 	}
 
 	public function getNeededModules() {
-	    return array("system");
+	    return array("system", "templatemanager");
 	}
 
     public function getMinSystemVersion() {
-	    return "3.4.1";
+	    return "3.4.9";
 	}
 
 	public function hasPostInstalls() {
