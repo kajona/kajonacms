@@ -320,5 +320,13 @@ class class_resourceloader {
         return false;
     }
 
+    /**
+     * Returns the list of modules and elements under the /core folder
+     * @return array
+     */
+    public function getArrModules() {
+        return $this->arrModules;
+    }
+
 
 }

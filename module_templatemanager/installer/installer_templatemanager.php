@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: installer_tags.php 4413 2012-01-03 19:38:11Z sidler $                                *
+*	$Id: installer_tags.php 4413 2012-01-03 19:38:11Z sidler $                                          *
 ********************************************************************************************************/
 
 /**
@@ -37,6 +37,16 @@ class class_installer_templatemanager extends class_installer_base implements in
 
     public function install() {
 		$strReturn = "";
+
+
+        $strReturn .= "Installing table templatepacks...\n";
+
+        $arrFields = array();
+        $arrFields["templatepack_id"] 		    = array("char20", false);
+        $arrFields["templatepack_name"] 	    = array("char254", true);
+
+        if(!$this->objDB->createTable("templatepacks", $arrFields, array("templatepack_id")))
+            $strReturn .= "An error occured! ...\n";
 
 		//register the module
 		$this->registerModule(

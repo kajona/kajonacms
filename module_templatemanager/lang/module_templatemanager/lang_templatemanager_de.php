@@ -11,3 +11,9 @@
 
 //editable entries
 $lang["modul_titel"]                     = "Templates";
+$lang["_templatemanager_defaultpack_"]   = "Aktiviertes Template-Pack:";
+$lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
+$lang["action_download"]                 = "Template-Pack herunterladen";
+$lang["pack_copy_include"]                 = "Zu verwendende Basis-Module:";
+$lang["pack_name"]                 = "Name des Packs:";
+$lang["pack_folder_existing"]           = "Name bereits vergeben";

@@ -477,7 +477,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitEnabled
      * @return string
      */
-    public function formInputSubmit($strValue = "Submit", $strName = "Submit", $strEventhandler = "", $strClass = "inputSubmit", $bitEnabled = true) {
+    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "inputSubmit", $bitEnabled = true) {
+        if($strValue === null)
+            $strValue = class_carrier::getInstance()->getObjLang()->getLang("commons_save", "system");
+
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_submit");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;

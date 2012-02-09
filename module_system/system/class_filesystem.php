@@ -89,7 +89,7 @@ class class_filesystem {
 	 * @param bool $bitFiles
 	 * @return mixed
 	 */
-	public function getCompleteList($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(), $bitFolders = true, $bitFiles = true) {
+	public function getCompleteList($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(".", ".."), $bitFolders = true, $bitFiles = true) {
 		$arrReturn =  array( "nrFiles"  	=>  0,
 							 "nrFolders"	=>	0,
 							 "files"		=>	array(),
@@ -277,6 +277,32 @@ class class_filesystem {
 
         return $bitReturn;
 	}
+
+    /**
+     * Copies a folder recursive, including all files and folders
+     *
+     * @param $strSourceDir
+     * @param $strTargetDir
+     * @since 4.0
+     */
+    public function folderCopyRecursive($strSourceDir, $strTargetDir) {
+
+        $arrEntries = scandir(_realpath_.$strSourceDir);
+        foreach($arrEntries as $strOneEntry) {
+            if($strOneEntry == "." || $strOneEntry == "..")
+                continue;
+
+            if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && !is_file(_realpath_.$strTargetDir."/".$strOneEntry)) {
+                copy(_realpath_.$strSourceDir."/".$strOneEntry, _realpath_.$strTargetDir."/".$strOneEntry);
+            }
+            else if(is_dir(_realpath_.$strSourceDir."/".$strOneEntry)) {
+                if(!is_dir(_realpath_.$strTargetDir."/".$strOneEntry))
+                    mkdir(_realpath_.$strTargetDir."/".$strOneEntry);
+
+                $this->folderCopyRecursive($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry);
+            }
+        }
+    }
 
 	/**
 	 * Creates a folder in the filesystem. Use $bitRecursive if you want to create a whole folder tree
