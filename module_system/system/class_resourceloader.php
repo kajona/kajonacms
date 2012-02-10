@@ -119,8 +119,8 @@ class class_resourceloader {
 
 
         //second try: load the file from the default-pack
-        if(is_dir(_corepath_._templatepath_."/default/tpl".$strFolder)) {
-            $arrFiles = scandir(_corepath_._templatepath_."/default/tpl".$strFolder);
+        if(is_dir(_realpath_._templatepath_."/default/tpl".$strFolder)) {
+            $arrFiles = scandir(_realpath_._templatepath_."/default/tpl".$strFolder);
             foreach($arrFiles as $strOneFile)
                 if(substr($strOneFile, -4) == ".tpl")
                     $arrReturn[] = $strOneFile;
