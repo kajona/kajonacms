@@ -271,6 +271,7 @@ abstract class class_portal  {
 	 *
 	 * @param string $strSystemid
 	 * @return bool
+     * @deprecated call setStatus on a model-object directly
 	 */
 	public function setStatus($strSystemid = "") {
 		if($strSystemid == "")
@@ -284,6 +285,7 @@ abstract class class_portal  {
 	 *
 	 * @param string $strSystemid
 	 * @return int
+     * @deprecated call getStatus on a model-object directly
 	 */
 	public function getStatus($strSystemid = "") {
 		if($strSystemid == "")

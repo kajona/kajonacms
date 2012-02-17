@@ -1471,8 +1471,6 @@ abstract class class_root {
      */
 	public function setStatus($strSystemid = "", $intStatus = false) {
         $this->internalInit($this->strSystemid);
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
 
         $intNewStatus = $intStatus;
         if($intStatus === false) {
@@ -1490,7 +1488,7 @@ abstract class class_root {
 	}
 
     /**
-     * Sets the internal status. Triggers a db-update and fires a status-changed event
+     * Sets the internal status. Fires a status-changed event.
      *
      * @param int $intRecordStatus
      * @param bool $bitFireStatusChangeEvent

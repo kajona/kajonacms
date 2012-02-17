@@ -933,9 +933,10 @@ class class_toolkit_admin extends class_toolkit {
      * Therefore an ajax-method is called.
      *
      * @param class_model|string $objInstance or a systemid
+     * @param bool $bitReload triggers a page-reload afterwards
      * @return string
      */
-    public function listStatusButton($objInstance) {
+    public function listStatusButton($objInstance, $bitReload = false) {
 
         if(is_object($objInstance) && $objInstance instanceof class_model )
             $objRecord = $objInstance;
@@ -972,7 +973,7 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
         }
 
-        $strButton = getLinkAdminManual("href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."');\"", "", $strText, $strImage, "statusImage_".$objRecord->getSystemid(), "statusLink_".$objRecord->getSystemid());
+        $strButton = getLinkAdminManual("href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"", "", $strText, $strImage, "statusImage_".$objRecord->getSystemid(), "statusLink_".$objRecord->getSystemid());
 
         return $this->listButton($strButton).$strJavascript;
     }

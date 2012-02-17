@@ -1046,13 +1046,16 @@ KAJONA.admin.ajax = {
 		}
 	},
 
-	setSystemStatus : function(strSystemIdToSet) {
+	setSystemStatus : function(strSystemIdToSet, bitReload) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setStatus';
 		var postBody = 'systemid=' + strSystemIdToSet;
 
         var objCallback = {
             success: function(o) {
 				KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
+
+                if(bitReload !== null && bitReload === true)
+                    location.reload();
 
 				if (o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
 					var image = document.getElementById('statusImage_' + strSystemIdToSet);

@@ -112,6 +112,11 @@ class class_module_templatemanager_template extends class_model implements inter
      * @return bool
      */
     protected function deleteObjectInternal() {
+
+        //delete all files from the filesystem
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->folderDeleteRecursive(_templatepath_."/".$this->getStrName());
+
         $strQuery = "DELETE FROM "._dbprefix_."templatepacks
                            WHERE templatepack_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
@@ -183,6 +188,7 @@ class class_module_templatemanager_template extends class_model implements inter
                 $objPack = new class_module_templatemanager_template();
                 $objPack->setStrName($strOneFolder);
                 $objPack->updateObjectToDb();
+                $objPack->setIntRecordStatus(0);
             }
         }
 
@@ -193,11 +199,28 @@ class class_module_templatemanager_template extends class_model implements inter
         }
     }
 
+    public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
+        if($intRecordStatus == 1) {
+            //if set to active, mark all other packs as invalid
+            $strQuery = "SELECT templatepack_id
+                          FROM "._dbprefix_."templatepacks,
+                               "._dbprefix_."system
+                         WHERE system_id = templatepack_id
+                           AND system_status = 1";
+            $arrRows = $this->objDB->getPArray($strQuery, array());
+            foreach($arrRows as $arrSingleRow) {
+                $objPack = new class_module_templatemanager_template($arrSingleRow["templatepack_id"]);
+                $objPack->setIntRecordStatus(0);
+            }
 
-    public function rightEdit() {
-        return false;
+            //update the active-pack constant
+            $objSetting = class_module_system_setting::getConfigByName("_templatemanager_defaultpack_");
+            $objSetting->setStrValue($this->getStrName());
+            $objSetting->updateObjectToDb();
+        }
+
+        return parent::setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent);
     }
-
 
 
     public function setStrName($strName) {

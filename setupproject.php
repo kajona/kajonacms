@@ -45,6 +45,7 @@ class class_project_setup {
         self::checkDir("/project/system/config");
         self::checkDir("/project/system/classes");
         self::checkDir("/project/portal");
+        self::checkDir("/project/temp");
         self::checkDir("/templates");
         self::checkDir("/files");
         self::checkDir("/files/cache");

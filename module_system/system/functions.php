@@ -463,7 +463,7 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @todo move to toolkit
  */
 function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $strStyle="") {
-	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
+	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"KAJONA.admin.tooltip.add(this, '".addslashes($strAlt)."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
 }
 
 /**

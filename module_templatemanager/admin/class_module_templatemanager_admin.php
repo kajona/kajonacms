@@ -70,6 +70,27 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
         return $strReturn;
     }
 
+    protected function renderEditAction(class_model $objListEntry) {
+        return "";
+    }
+
+    protected function renderStatusAction(class_model $objListEntry) {
+        if($objListEntry->rightEdit()) {
+            return $this->objToolkit->listStatusButton($objListEntry, true);
+        }
+    }
+
+
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry->rightDelete()) {
+            if(_templatemanager_defaultpack_ == $objListEntry->getStrName()) {
+                return $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getLang("pack_active_no_delete")));
+            }
+            else
+                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid()));
+        }
+    }
+
 
     /**
      * @return string
@@ -112,7 +133,10 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
     protected function actionCopyPack() {
         $objForm = $this->getPackAdminForm();
 
-        if(is_dir(_realpath_._templatepath_."/".$this->getParam("pack_name")))
+        $strPackName = $this->getParam("pack_name");
+        $strPackName = createFilename($strPackName, true);
+
+        if(is_dir(_realpath_._templatepath_."/".$strPackName))
             $objForm->addValidationError("name", $this->getLang("pack_folder_existing"));
 
         if(!$objForm->validateForm())
@@ -120,12 +144,12 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
 
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->folderCreate(_templatepath_."/".$this->getParam("pack_name"));
+        $objFilesystem->folderCreate(_templatepath_."/".$strPackName);
 
         $arrModules = $this->getParam("pack_modules");
         foreach($arrModules as $strName => $strValue) {
             if($strValue != "") {
-                $objFilesystem->folderCopyRecursive("/core/".$strName."/templates", _templatepath_."/".$this->getParam("pack_name"));
+                $objFilesystem->folderCopyRecursive("/core/".$strName."/templates", _templatepath_."/".$strPackName);
             }
         }
 

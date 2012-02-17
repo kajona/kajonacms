@@ -80,7 +80,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	    $strReturn = "";
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
 	    if($objCommon->rightEdit()) {
-    	    if(parent::setStatus()) {
+    	    if($objCommon->setStatus()) {
     	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
     	    }
