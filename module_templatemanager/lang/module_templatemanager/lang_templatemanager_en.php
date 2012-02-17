@@ -19,3 +19,4 @@ $lang["pack_name"]                 = "Name of the pack:";
 $lang["pack_folder_existing"]           = "Name already in use";
 $lang["delete_question"]            = "Do you really want to remove the template-pack &quot;<b>%%element_name%%</b>&quot;?";
 $lang["pack_active_no_delete"] = "The can't be deleted since it's currently marked as active";
+$lang["pack_active_no_status"] = "The can't be set inactive since it's currently marked as active";

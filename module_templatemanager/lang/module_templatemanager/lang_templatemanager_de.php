@@ -19,3 +19,4 @@ $lang["pack_name"]                 = "Name des Packs:";
 $lang["pack_folder_existing"]           = "Name bereits vergeben";
 $lang["delete_question"]            = "Möchten Sie das Template-Pack &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 $lang["pack_active_no_delete"] = "Template-Pack ist aktiv und kann deshalb nicht gelöscht werden";
+$lang["pack_active_no_status"] = "Template-Pack ist aktiv und kann deshalb nicht deaktiviert werden";

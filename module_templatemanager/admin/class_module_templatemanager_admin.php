@@ -76,7 +76,11 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
 
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listStatusButton($objListEntry, true);
+            if(_templatemanager_defaultpack_ == $objListEntry->getStrName()) {
+                return $this->objToolkit->listButton(getImageAdmin("icon_enabled.gif", $this->getLang("pack_active_no_status")));
+            }
+            else
+                return $this->objToolkit->listStatusButton($objListEntry, true);
         }
     }
 
