@@ -153,7 +153,7 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
         $arrModules = $this->getParam("pack_modules");
         foreach($arrModules as $strName => $strValue) {
             if($strValue != "") {
-                $objFilesystem->folderCopyRecursive("/core/".$strName."/templates", _templatepath_."/".$strPackName);
+                $objFilesystem->folderCopyRecursive("/core/".$strName."/templates/default", _templatepath_."/".$strPackName);
             }
         }
 

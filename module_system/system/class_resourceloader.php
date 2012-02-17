@@ -77,8 +77,9 @@ class class_resourceloader {
 
         $strFilename = null;
         //first try: load the file in the current template-pack
-        //FIXME add current pack
-
+        if(is_file(_realpath_._templatepath_."/"._templatemanager_defaultpack_."/tpl".$strTemplateName)) {
+            return _templatepath_."/"._templatemanager_defaultpack_."/tpl".$strTemplateName;
+        }
 
         //second try: load the file from the default-pack
         if(is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
@@ -91,10 +92,7 @@ class class_resourceloader {
                 $strFilename = "/core/".$strOneModule."/templates/default/tpl".$strTemplateName;
                 break;
             }
-
         }
-
-
 
         if($strFilename === null)
             throw new class_exception("Required file ".$strTemplateName." could not be mapped on the filesystem.", class_exception::$level_ERROR);
@@ -114,9 +112,13 @@ class class_resourceloader {
 
         $arrReturn = array();
 
-
         //first try: load the file in the current template-pack
-
+        if(is_dir(_realpath_._templatepath_."/"._templatemanager_defaultpack_."/tpl".$strFolder)) {
+            $arrFiles = scandir(_realpath_._templatepath_."/"._templatemanager_defaultpack_."/tpl".$strFolder);
+            foreach($arrFiles as $strOneFile)
+                if(substr($strOneFile, -4) == ".tpl")
+                    $arrReturn[] = $strOneFile;
+        }
 
         //second try: load the file from the default-pack
         if(is_dir(_realpath_._templatepath_."/default/tpl".$strFolder)) {
@@ -125,7 +127,6 @@ class class_resourceloader {
                 if(substr($strOneFile, -4) == ".tpl")
                     $arrReturn[] = $strOneFile;
         }
-
 
         //third try: try to load the file from given modules
         foreach($this->arrModules as $strOneModule) {
@@ -161,7 +162,6 @@ class class_resourceloader {
                     if(substr($strSingleEntry, -4) == ".php") {
                         $arrReturn["/core/".$strSingleModule._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 					}
-
                 }
             }
         }
@@ -232,7 +232,6 @@ class class_resourceloader {
             $arrContent = scandir(_realpath_._projectpath_."/".$strFolder);
             foreach($arrContent as $strSingleEntry) {
 
-
                 //Wanted Type?
                 if(count($arrExtensionFilter)==0) {
 
@@ -271,10 +270,9 @@ class class_resourceloader {
      *
      * @param string $strFile the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
-     * @return string|false the absolute path
+     * @return string|bool the absolute path
      */
     public function getPathForFile($strFile, $bitCheckProject = true) {
-        $strReturn = array();
 
         //check if the same is available in the projects-folder
         if($bitCheckProject && is_file(_realpath_._projectpath_."/".$strFile)) {
@@ -299,10 +297,9 @@ class class_resourceloader {
      *
      * @param string $strFolder the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
-     * @return string|false the absolute path
+     * @return string|bool the absolute path
      */
     public function getPathForFolder($strFolder, $bitCheckProject = true) {
-        $strReturn = array();
 
         //check if the same is available in the projects-folder
         if($bitCheckProject && is_dir(_realpath_._projectpath_."/".$strFolder)) {

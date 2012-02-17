@@ -217,6 +217,7 @@ class class_module_templatemanager_template extends class_model implements inter
             $objSetting = class_module_system_setting::getConfigByName("_templatemanager_defaultpack_");
             $objSetting->setStrValue($this->getStrName());
             $objSetting->updateObjectToDb();
+            $this->flushCompletePagesCache();
         }
 
         return parent::setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent);
