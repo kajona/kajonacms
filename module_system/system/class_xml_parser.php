@@ -15,6 +15,9 @@
  */
 class class_xml_parser {
 
+    /**
+     * @var DOMDocument
+     */
 	private $objDocument = null;
 	private $strFile = "";
 
@@ -86,7 +89,7 @@ class class_xml_parser {
 	/**
 	 * Walks through the document to create an array
 	 *
-	 * @param node $domNode
+	 * @param DOMNode $domNode
 	 * @param array $arrXML
 	 */
 	private function parseXmlToArray($domNode, &$arrXML) {

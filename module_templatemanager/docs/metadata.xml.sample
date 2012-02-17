@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Kajona V4 class-loader configuration.
+
+-->
+<templatepack
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/templatepack.xsd"
+        >
+    <name>Samplepack</name>
+    <author>Demo Author</author>
+    <licence>BSD</licence>
+    <version>0.1</version>
+    <description>This is a sample file, may be used to create a new file</description>
+    <url>http://www.kajonabase.net</url>
+</templatepack>

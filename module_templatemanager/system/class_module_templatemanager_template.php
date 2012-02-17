@@ -19,6 +19,8 @@ class class_module_templatemanager_template extends class_model implements inter
 
     private $strName = "";
 
+    private $arrMetadata = array();
+
     /**
      * Constructor to create a valid object
      *
@@ -54,7 +56,15 @@ class class_module_templatemanager_template extends class_model implements inter
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return "";
+        $strReturn = "";
+
+        if($this->arrMetadata["version"] != "")
+            $strReturn .= $this->getLang("pack_version")." ".$this->arrMetadata["version"];
+
+        if($this->arrMetadata["author"] != "")
+            $strReturn .= " ".$this->getLang("pack_author")." ".$this->arrMetadata["author"];
+
+        return $strReturn;
     }
 
     /**
@@ -62,7 +72,7 @@ class class_module_templatemanager_template extends class_model implements inter
      * @return string
      */
     public function getStrLongDescription() {
-        return "";
+        return $this->arrMetadata["description"];
     }
 
 
@@ -91,6 +101,8 @@ class class_module_templatemanager_template extends class_model implements inter
         $this->setArrInitRow($arrRow);
 
         $this->setStrName($arrRow["templatepack_name"]);
+
+        $this->arrMetadata = $this->getMetadata();
     }
 
     /**
@@ -223,6 +235,32 @@ class class_module_templatemanager_template extends class_model implements inter
         return parent::setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent);
     }
 
+
+    public function getMetadata() {
+        $arrMetadata = array();
+        $arrMetadata["name"] = "";
+        $arrMetadata["author"] = "";
+        $arrMetadata["description"] = "";
+        $arrMetadata["version"] = "";
+        $arrMetadata["licence"] = "";
+        $arrMetadata["url"] = "";
+
+        //try to load the metadata.xml file
+        if(is_file(_realpath_._templatepath_."/".$this->strName."/metadata.xml")) {
+            $objXML = new class_xml_parser();
+            $objXML->loadFile(_templatepath_."/".$this->strName."/metadata.xml");
+            $arrTree = $objXML->xmlToArray();
+
+            $arrMetadata["name"]        = $arrTree["templatepack"]["0"]["name"]["0"]["value"];
+            $arrMetadata["author"]      = $arrTree["templatepack"]["0"]["author"]["0"]["value"];
+            $arrMetadata["description"] = $arrTree["templatepack"]["0"]["description"]["0"]["value"];
+            $arrMetadata["version"]     = $arrTree["templatepack"]["0"]["version"]["0"]["value"];
+            $arrMetadata["licence"]     = $arrTree["templatepack"]["0"]["licence"]["0"]["value"];
+            $arrMetadata["url"]         = $arrTree["templatepack"]["0"]["url"]["0"]["value"];
+        }
+
+        return $arrMetadata;
+    }
 
     public function setStrName($strName) {
         $this->strName = $strName;
