@@ -48,8 +48,9 @@ class class_zip {
      * Adds a file to the zip-archive.
      * The second, optional param indicates the filename inside the archive
      *
-     * @param type $strSourceFile
-     * @param type $strTargetFile
+     * @param string $strSourceFile
+     * @param string $strTargetFile
+     *
      * @return bool
      */
     public function addFile($strSourceFile, $strTargetFile = "") {
@@ -108,6 +109,25 @@ class class_zip {
         $bitReturn = $this->objArchive->extractTo(_realpath_.$strTarget);
         $this->objArchive->close();
         return $bitReturn;
+    }
+
+    /**
+     * Loads a single file from the passed archive.
+     * If not found, false is returned instead.
+     *
+     * @param $strSourceArchive
+     * @param $strFilename
+     * @return mixed|bool
+     */
+    public function getFileFromArchive($strSourceArchive, $strFilename) {
+
+        if($strFilename[0] == "/")
+            $strFilename = uniSubstr($strFilename, 1);
+
+        $this->objArchive->open(_realpath_.$strSourceArchive);
+        $strReturn = $this->objArchive->getFromName($strFilename);
+        $this->objArchive->close();
+        return $strReturn;
     }
 
     /**

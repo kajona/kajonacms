@@ -62,7 +62,7 @@ class class_test_zip extends class_testbase  {
         echo "\ttesting class_zip...\n";
 
         $objZip = new class_zip();
-        echo "\topening "._realpath_."/test.zip\n";
+        echo "\topening test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__." openArchive");
         $this->assertTrue($objZip->addFolder("/files/cache/ziptest"), __FILE__." addFolder");
         $this->assertTrue($objZip->closeArchive(), __FILE__." closeArchive");
@@ -81,7 +81,7 @@ class class_test_zip extends class_testbase  {
 
 
 
-        echo "\tremoving testfile";
+        echo "\tremoving testfile\n";
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__." deleteFile");
         $this->assertFileNotExists(_realpath_."/files/cache/test.zip", __FILE__." checkFileNotExists");
 
@@ -92,5 +92,30 @@ class class_test_zip extends class_testbase  {
         $this->assertFileNotExists(_realpath_."/files/cache/zipextract", __FILE__." checkFileNotExists");
     }
 
+
+    public function testZipFileread() {
+        $objFileSystem = new class_filesystem();
+
+        echo "\ttesting class_zip file-reading...\n";
+
+        $objZip = new class_zip();
+        echo "\topening "._realpath_."/test.zip\n";
+        $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__." openArchive");
+        $this->assertTrue($objZip->addFile("/core/module_system/system/tables.txt"), __FILE__." addFile");
+        $this->assertTrue($objZip->closeArchive(), __FILE__." closeArchive");
+
+        $this->assertFileExists(_realpath_."/files/cache/test.zip", __FILE__." checkFileExists");
+
+        echo "\treading files\n";
+        $strTables = $objZip->getFileFromArchive("/files/cache/test.zip", "/core/module_system/system/tables.txt");
+        $this->assertTrue(uniStrpos($strTables, "www.kajona.de") !== false);
+
+        echo "\tremoving testfile\n";
+        $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__." deleteFile");
+        $this->assertFileNotExists(_realpath_."/files/cache/test.zip", __FILE__." checkFileNotExists");
+
+        $objFileSystem->folderDeleteRecursive("/files/cache/zipextract");
+        $this->assertFileNotExists(_realpath_."/files/cache/zipextract", __FILE__." checkFileNotExists");
+    }
 }
 
