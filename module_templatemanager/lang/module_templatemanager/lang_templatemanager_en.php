@@ -22,3 +22,16 @@ $lang["pack_active_no_delete"] = "The can't be deleted since it's currently mark
 $lang["pack_active_no_status"] = "The can't be set inactive since it's currently marked as active";
 $lang["pack_version"] = "Version:";
 $lang["pack_author"] = "Author:";
+$lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
+
+$lang["import_filename"] = "File to import:";
+$lang["import_hint"] = "The ZIP-File must be named according to the packs name.";
+
+$lang["import_uploaderror"] = "Error while uploading the template-pack.";
+
+$lang["import_step_metadata"] = "Analyzing the metadata...";
+$lang["import_error_metadata"] = "Error reading the metadata, aborting.";
+$lang["import_error_metadatacontent"] = "Erroneous metadata, aborting.";
+$lang["import_step_filecheck"] = "Testing the filesystem...";
+$lang["import_finished"] = "Import finished successfully.";
+$lang["import_failed"] = "Error extracting the file.";

@@ -22,3 +22,16 @@ $lang["pack_active_no_delete"] = "Template-Pack ist aktiv und kann deshalb nicht
 $lang["pack_active_no_status"] = "Template-Pack ist aktiv und kann deshalb nicht deaktiviert werden";
 $lang["pack_version"] = "Version:";
 $lang["pack_author"] = "Autor:";
+$lang["systemtask_templatepackimport_name"] = "Template-Pack importieren";
+
+$lang["import_filename"] = "Zu importierende Datei:";
+$lang["import_hint"] = "Der Name der Zip-Datei muss entsprechend des Pack-Namens lauten.";
+
+$lang["import_uploaderror"] = "Fehler beim Upload des Packs.";
+
+$lang["import_step_metadata"] = "Analyse der Metadaten...";
+$lang["import_error_metadata"] = "Metadaten konnte nicht gelesen werden, Abbruch.";
+$lang["import_error_metadatacontent"] = "Fehlerhafte Metadaten, Abbruch.";
+$lang["import_step_filecheck"] = "Test des Dateisystems...";
+$lang["import_finished"] = "Import erfolgreich abgeschlossen.";
+$lang["import_failed"] = "Fehler beim Extrahieren der Datei.";
