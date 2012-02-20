@@ -59,9 +59,9 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
         if($this->getFieldValue("php") == "checked") {
             $strReturn .= $this->widgetText($this->getLang("systemcheck_php_safemode").(ini_get("safe_mode") ? $this->getLang("commons_yes") : $this->getLang("commons_no") ));
             $strReturn .= $this->widgetText($this->getLang("systemcheck_php_urlfopen").(ini_get("allow_url_fopen") ? $this->getLang("commons_yes") : $this->getLang("commons_no") ));
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_php_regglobal").(ini_get("register_globals") ?
-                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
-                         "<span class=\"ok\">".$this->getLang("commons_no")."</span>" ));
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_php_regglobal").(ini_get("register_globals") ? "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" : "<span class=\"ok\">".$this->getLang("commons_no")."</span>" )
+            );
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {

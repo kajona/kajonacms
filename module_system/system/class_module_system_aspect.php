@@ -111,7 +111,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
         //if no other aspect exists, we have a new default aspect
         $arrObjAspects = class_module_system_aspect::getAllAspects();
-        if(count($arrObjAspects) == 0 ) {
+        if(count($arrObjAspects) == 0) {
         	$this->setBitDefault(1);
         }
 
@@ -191,7 +191,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      */
     protected function deleteObjectInternal() {
         $strQuery = "DELETE FROM "._dbprefix_."aspects WHERE aspect_id = ?";
-		$this->objDB->_pQuery($strQuery, array($this->getSystemid())) ;
+		$this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 
 		//if we have just one aspect remaining, set this one as default
         $arrObjAspects = class_module_system_aspect::getAllAspects();

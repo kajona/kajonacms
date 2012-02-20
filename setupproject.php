@@ -22,16 +22,17 @@ class class_project_setup {
         }
 
 
-
-
         echo "loading core...\n\n";
         include __DIR__."/bootstrap.php";
 
         $arrModules = scandir(_corepath_);
 
-        $arrModules = array_filter($arrModules, function($strValue) {
-            return preg_match("/(module|element|_)+.*/i", $strValue);
-        });
+        $arrModules = array_filter(
+            $arrModules,
+            function($strValue) {
+                return preg_match("/(module|element|_)+.*/i", $strValue);
+            }
+        );
 
 
         self::checkDir("/admin");

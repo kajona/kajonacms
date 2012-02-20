@@ -92,7 +92,7 @@ class class_array_iterator implements interface_iterator {
         return count($this->arrElements);
     }
 
-// --- PageViewStuff ------------------------------------------------------------------------------------
+    // --- PageViewStuff ------------------------------------------------------------------------------------
 
     /**
      * Set the number of elements per page

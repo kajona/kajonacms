@@ -31,7 +31,7 @@ class class_db_oci8 implements interface_db_driver {
 
     private $bitTxOpen = false;
 
-   /**
+    /**
      * This method makes sure to connect to the database properly
      *
      * @param string $strHost
@@ -113,7 +113,7 @@ class class_db_oci8 implements interface_db_driver {
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
-        $bitResult = oci_execute($objStatement, $bitAddon) ;
+        $bitResult = oci_execute($objStatement, $bitAddon);
         @oci_free_statement($objStatement);
         return $bitResult;
     }
@@ -258,8 +258,7 @@ class class_db_oci8 implements interface_db_driver {
      * @return mixed
      */
     public function getTables() {
-		$arrTemp = $this->getArray(
-				"SELECT table_name AS name FROM ALL_TABLES");
+		$arrTemp = $this->getArray("SELECT table_name AS name FROM ALL_TABLES");
 
         foreach($arrTemp as $intKey => $strValue)
             $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
@@ -397,20 +396,7 @@ class class_db_oci8 implements interface_db_driver {
 
     	//primary keys
         $strQuery .= " CONSTRAINT pk_".  generateSystemid()." primary key ( ".implode(" , ", $arrKeys)." ) \n";
-
-
     	$strQuery .= ") ";
-
-
-
-//        $arrStack = debug_backtrace();
-//		$strText = date("G:i:s, d-m-y"). "\t\t".
-//		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
-//		                 "\r\n"
-//		              . $strQuery. "\r\n\r\n\r\n";
-//		$handle = fopen(_systempath_."/debug/dblog.log", "a");
-//		fwrite($handle, $strText);
-//		fclose($handle);
 
         $bitCreate = $this->_query($strQuery);
 
@@ -485,6 +471,7 @@ class class_db_oci8 implements interface_db_driver {
      *
      * @param string $strFilename
      * @param array $arrTables
+     * @return bool
      */
     public function dbExport($strFilename, $arrTables) {
 
@@ -515,11 +502,6 @@ class class_db_oci8 implements interface_db_driver {
     public function dbImport($strFilename) {
 
         $strFilename = _realpath_.$strFilename;
-		/*
-        if ($this->strPass != "") {
-            $strParamPass = " -p".$this->strPass;
-        }
-		*/
         $strCommand = $this->strRestoreBin." ".$this->strUsername."/".$this->strPass." FILE='".$strFilename."'";
         $intTemp = "";
         system($strCommand, $intTemp);
@@ -557,27 +539,7 @@ class class_db_oci8 implements interface_db_driver {
             $strQuery = uniStrReplace(array(" as ", " AS "), array(" ", " "), $strQuery);
         }
 
-//        $arrStack = debug_backtrace();
-//		$strText = date("G:i:s, d-m-y"). "\t\t".
-//		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
-//		                 "\r\n"
-//		              . $strQuery. "\r\n\r\n\r\n";
-//		$handle = fopen(_systempath_."/debug/dblog.log", "a");
-//		fwrite($handle, $strText);
-//		fclose($handle);
-
-
-//        $strSum = md5($strQuery);
-//        if(array_key_exists($strSum, $this->arrStatementsCache))
-//            return $this->arrStatementsCache[$strSum];
-
         $objStatement = oci_parse($this->linkDB, $strQuery);
-
-//        if($objStatement)
-//            $this->arrStatementsCache[$strSum] = $objStatement;
-//        else
-//            return false;
-
         return $objStatement;
     }
 

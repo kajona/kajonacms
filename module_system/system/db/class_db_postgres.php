@@ -26,7 +26,7 @@ class class_db_postgres implements interface_db_driver {
 
     private $arrStatementsCache = array();
 
-   /**
+    /**
      * This method makes sure to connect to the database properly
      *
      * @param string $strHost
@@ -206,10 +206,7 @@ class class_db_postgres implements interface_db_driver {
      * @return mixed
      */
     public function getTables() {
-		$arrTemp = $this->getArray(
-				"SELECT *, table_name as name
-				   FROM information_schema.tables
-				   ");
+		$arrTemp = $this->getArray("SELECT *, table_name as name FROM information_schema.tables");
 
         $arrReturn = array();
         foreach($arrTemp as $arrOneRow) {
@@ -428,13 +425,14 @@ class class_db_postgres implements interface_db_driver {
     }
 
 
-//--- DUMP & RESTORE ------------------------------------------------------------------------------------
+    //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 
     /**
      * Dumps the current db
      *
      * @param string $strFilename
      * @param array $arrTables
+     * @return bool
      */
     public function dbExport($strFilename, $arrTables) {
 

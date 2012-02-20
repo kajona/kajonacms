@@ -90,13 +90,13 @@ class class_db_sqlite3 implements interface_db_driver {
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
             if($strOneParam == null)
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_NULL);
+                $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
 //            else if(is_double($strOneParam))
 //                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
 //            else if(is_numeric($strOneParam))
 //                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
             else
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_TEXT);
+                $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
         }
 
         if ($objStmt->execute() === false)
@@ -143,13 +143,13 @@ class class_db_sqlite3 implements interface_db_driver {
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
             if($strOneParam == null)
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_NULL);
+                $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
 //            else if(is_double($strOneParam))
 //                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
 //            else if(is_numeric($strOneParam))
 //                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
             else
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_TEXT);
+                $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
         }
 
         $arrResult = array();
@@ -243,9 +243,8 @@ class class_db_sqlite3 implements interface_db_driver {
      */
     public function getColumnsOfTable($strTableName)  {
         $arrColumns = array();
-        $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master".
-            " WHERE type='table' and name='".$strTableName."'");
-        if (!empty($arrTableInfo)) {
+        $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master WHERE type='table' and name='".$strTableName."'");
+        if(!empty($arrTableInfo)) {
             $strTableDef = $arrTableInfo[0]["sql"];
 
             // Extract the column definitions from the create statement
@@ -262,7 +261,8 @@ class class_db_sqlite3 implements interface_db_driver {
             foreach ($arrMatch as $arrColumnInfo)
                 $arrColumns[] = array(
                     "columnName" => $arrColumnInfo[1],
-                    "columnType" => $arrColumnInfo[2]);
+                    "columnType" => $arrColumnInfo[2]
+                );
         }
         return $arrColumns;
     }

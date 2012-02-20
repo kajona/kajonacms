@@ -7,5 +7,5 @@
 ********************************************************************************************************/
 
 //ID of the templatemanager-module
-define( "_templatemanager_module_id_",							125);
+define("_templatemanager_module_id_", 125);
 

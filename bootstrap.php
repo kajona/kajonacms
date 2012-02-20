@@ -59,15 +59,19 @@ $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https
 
 if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
     //Determine the current path on the web
-    $strWeb = dirname((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
-        $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+    $strWeb = dirname(
+        (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
+        $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
+    );
     $strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));
     define("_webpath_", saveUrlEncode($strWeb));
 }
 else {
     //Determine the current path on the web
-    $strWeb = dirname((isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
-        (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']);
+    $strWeb = dirname(
+        (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
+        (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']
+    );
     $strWeb = saveUrlEncode($strWeb);
     define("_webpath_", $strWeb);
 }

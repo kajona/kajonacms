@@ -178,7 +178,7 @@ class class_mail {
 	}
 
 
-	/**
+    /**
 	 * Sends, finally, the mail
 	 *
 	 * @return bool
@@ -347,13 +347,13 @@ class class_mail {
 	}
 
 
-   /**
-    * Encodes some text to be places as encoded, chunked text-stream.
-    * All input must be encoded in UTF-8
-    * @param $strText
-    * @return string
-    * @see http://www.php.net/manual/en/function.mail.php#27997, credits got to gordon at kanazawa-gu dot ac dot jp
-    */
+    /**
+     * Encodes some text to be places as encoded, chunked text-stream.
+     * All input must be encoded in UTF-8
+     * @param $strText
+     * @return string
+     * @see http://www.php.net/manual/en/function.mail.php#27997, credits got to gordon at kanazawa-gu dot ac dot jp
+     */
     private function encodeText($strText) {
 
         if(function_exists("mb_encode_mimeheader")) {

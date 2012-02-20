@@ -78,7 +78,7 @@ class class_module_system_adminwidget extends class_model implements interface_m
                    SET adminwidget_class = ?,
                        adminwidget_content = ?
                  WHERE adminwidget_id = ? ";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrClass(), $this->getStrContent(), $this->getSystemid()), array(true, false, true) );
+        return $this->objDB->_pQuery($strQuery, array($this->getStrClass(), $this->getStrContent(), $this->getSystemid()), array(true, false, true));
     }
 
     /**

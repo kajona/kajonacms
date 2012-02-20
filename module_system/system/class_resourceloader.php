@@ -52,9 +52,12 @@ class class_resourceloader {
     private function __construct() {
         $this->arrModules = scandir(_corepath_);
 
-        $this->arrModules = array_filter($this->arrModules, function($strValue) {
-            return preg_match("/(module|element|_)+.*/i", $strValue);
-        });
+        $this->arrModules = array_filter(
+            $this->arrModules,
+            function($strValue) {
+                return preg_match("/(module|element|_)+.*/i", $strValue);
+            }
+        );
 
     }
 

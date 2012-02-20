@@ -26,7 +26,7 @@ class class_db_mysqli implements interface_db_driver {
 
     private $strErrorMessage = "";
 
-   /**
+    /**
      * This method makes sure to connect to the database properly
      *
      * @param string $strHost
@@ -103,10 +103,6 @@ class class_db_mysqli implements interface_db_driver {
             $strTypes = "";
             foreach($arrParams as $strOneParam) {
                 $strType = "s";
-//                if(is_numeric($strOneParam))
-//                    $strType = "i";
-//                if(is_float($strOneParam) || is_long($strOneParam))
-//                    $strType = "d";
 
                 $strTypes .= $strType;
             }
@@ -117,7 +113,6 @@ class class_db_mysqli implements interface_db_driver {
             }
 
             $bitReturn = @mysqli_stmt_execute($objStatement);
-            //mysqli_stmt_close($objStatement);
         }
 
         return $bitReturn;
@@ -157,12 +152,6 @@ class class_db_mysqli implements interface_db_driver {
             $strTypes = "";
             foreach($arrParams as $strOneParam) {
                 $strType = "s";
-//                if(is_numeric($strOneParam))
-//                    $strType = "i";
-//                if(is_float($strOneParam) || is_long($strOneParam))
-//                    $strType = "d";
-
-
                 $strTypes .= $strType;
             }
 
@@ -194,7 +183,6 @@ class class_db_mysqli implements interface_db_driver {
                 $arrReturn[] = $arrSingleRow;
             }
 
-            //mysqli_stmt_close($objStatement);
         }
         else
             return false;
@@ -518,12 +506,12 @@ class class_db_mysqli implements interface_db_driver {
 
     /**
      * Converts a simple array into a an array of references.
-     * Required fpr PHP > 5.3
+     * Required for PHP > 5.3
      * @param array $arrValues
      * @return array
      */
     private function refValues($arrValues){
-        if (strnatcmp(phpversion(),'5.3') >= 0) { //Reference is required for PHP 5.3+
+        if (strnatcmp(phpversion(), '5.3') >= 0) { //Reference is required for PHP 5.3+
             $refs = array();
             foreach($arrValues as $key => $value)
                 $refs[$key] = &$arrValues[$key];
@@ -546,7 +534,7 @@ class class_db_mysqli implements interface_db_driver {
             return $this->arrStatementsCache[$strName];
 
         $objStatement = mysqli_stmt_init($this->linkDB);
-        if(!mysqli_stmt_prepare($objStatement , $strQuery)) {
+        if(!mysqli_stmt_prepare($objStatement, $strQuery)) {
             $this->strErrorMessage = $objStatement->error;
             return false;
         }
