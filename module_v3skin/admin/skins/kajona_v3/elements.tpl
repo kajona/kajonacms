@@ -365,12 +365,11 @@ Needed Elements: %%error%%, %%form%%
 
 Part to display the login status, user is logged in
 <logout_form>
-<div>
-	<div class="boxContent">
-		<strong>%%name%%</strong>
-		<ul><li><a href="%%dashboard%%">%%dashboardTitle%%</a></li><li><a href="%%profile%%">%%profileTitle%%</a></li><li><a href="%%logout%%">%%logoutTitle%%</a></li></ul>
-	</div>
-</div>
+<ul>
+    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
+    <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
+    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
+</ul>
 </logout_form>
 
 Shown, wherever the attention of the user is needed

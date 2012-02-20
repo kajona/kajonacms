@@ -40,18 +40,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		}
 	}
 
-    /**
-     * Adds the global path-navigation to the output created by the module
-     *
-     * @return string
-     * @overwrites
-     */
-	public function getOutputContent() {
-        if($this->getParam("pe") != 1) {
-            $this->strOutput = $this->getPathNavigation().$this->strOutput;
-        }
-		return $this->strOutput;
-	}
+
 
     /**
      * Adds the current page-name to the module-title
@@ -785,14 +774,14 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	/**
 	 * Helper to generate a small path-navigation
 	 *
-	 * @return string
-     * @permissions view
+	 * @return array
 	 */
-	private function getPathNavigation() {
+	protected function getArrOutputNaviEntries() {
 		$arrPath = $this->getPathArray();
 
-		$arrPathLinks = array();
-		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
+		$arrPathLinks = parent::getArrOutputNaviEntries();
+        array_pop($arrPathLinks);
+		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), $this->getLang("modul_titel", "pages"));
 
 		foreach($arrPath as $strOneSystemid) {
             $objObject = class_objectfactory::getInstance()->getObject($strOneSystemid);
@@ -808,7 +797,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             }
 
 		}
-		return $this->objToolkit->getPathNavigation($arrPathLinks);
+		return $arrPathLinks;
 	}
 
 

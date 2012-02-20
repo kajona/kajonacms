@@ -92,9 +92,9 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $strReturn .= $this->renderList($objIterator, true, "naviPoints");
 
             if($this->strPeAddon != "")
-                $strReturn = $this->getPathNavigation().$strReturn;
+                $strReturn = $strReturn;
             else
-                $strReturn = $this->getPathNavigation().$this->generateTreeView($strReturn);
+                $strReturn = $this->generateTreeView($strReturn);
 
             return $strReturn;
         }
@@ -480,23 +480,24 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 		return $strReturn;
 	}
 
+   /**
+	* Helper to generate a small path-navigation
+	*
+	* @return array
+	*/
+	protected function getArrOutputNaviEntries() {
+        $arrEntries = parent::getArrOutputNaviEntries();
 
+        $arrPath = $this->getPathArray();
 
-	/**
-	 * Helper to generate a small path-navigation
-	 *
-	 * @return string
-	 */
-	private function getPathNavigation() {
-		$arrPath = $this->getPathArray();
-		$arrPathLinks = array();
+        foreach($arrPath as $strOneSystemid) {
+            $objPoint = new class_module_navigation_point($strOneSystemid);
+            $arrEntries[] = getLinkAdmin("navigation", "list", "&systemid=".$strOneSystemid, $objPoint->getStrName(), $objPoint->getStrName());
+        }
 
-		foreach($arrPath as $strOneSystemid) {
-			$objPoint = new class_module_navigation_point($strOneSystemid);
-			$arrPathLinks[] = getLinkAdmin("navigation", "list", "&systemid=".$strOneSystemid, $objPoint->getStrName(), $objPoint->getStrName());
-		}
-		return $this->objToolkit->getPathNavigation($arrPathLinks);
-	}
+        return $arrEntries;
+    }
+
 
     /**
      * Generates the code needed to render the nodes as a tree-view element.

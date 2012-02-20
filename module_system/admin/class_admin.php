@@ -520,6 +520,7 @@ abstract class class_admin {
 	 *
 	 * @return string
 	 * @final
+     * @todo could be moved to a general admin-skin helper
 	 */
 	public final function getModuleOutput() {
 
@@ -528,6 +529,7 @@ abstract class class_admin {
 		//Calling the contentsetter
 		$this->arrOutput["content"] = $this->getOutputContent();
 		$this->arrOutput["mainnavi"] = $this->getOutputMainNavi();
+		$this->arrOutput["path"] = $this->getOutputPathNavi();
 		$this->arrOutput["modulenavi"] = $this->getOutputModuleActionsNavi();
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
         if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
@@ -667,6 +669,17 @@ abstract class class_admin {
 			return $this->objToolkit->getAdminModuleNavi($arrModuleRows, $strCurrent);
 		}
 	}
+
+    protected function getOutputPathNavi() {
+        return $this->objToolkit->getPathNavigation($this->getArrOutputNaviEntries());
+    }
+
+    protected function getArrOutputNaviEntries() {
+        return array(
+            getLinkAdmin("dashboard", "", "", $this->getLang("modul_titel", "dashboard")),
+            getLinkAdmin($this->getArrModule("modul"), "", "", $this->getOutputModuleTitle())
+        );
+    }
 
 	/**
 	 * Writes the navigation to represent the action-navigation.

@@ -131,7 +131,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator->setArraySection($arrPages);
         $strPages = $this->renderList($objArraySectionIterator, true, "pagesList");
 
-        $strPathNavi = $this->generateFolderNavigation();
+        $strPathNavi = "";
 
         if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
             $arrToolbarEntries = array();
@@ -298,11 +298,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $objPage = new class_module_pages_page($this->getSystemid());
             if(!$objPage->rightEdit($this->getSystemid()))
                 return $this->getLang("commons_error_permissions");
-        }
-
-        //add a pathnavigation when not in pe mode
-        if($this->getParam("pe") != 1) {
-            $strReturn = $this->generateFolderNavigation().$strReturn;
         }
 
         $arrToolbarEntries = array();
@@ -621,19 +616,17 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		return $strReturn;
 	}
 
-	/**
-	 * Creates a pathnavigation through all folders till the current page / folder
-	 *
-     * @return string
-     * @permissions view
+
+    /**
+     * Creates a pathnavigation through all folders till the current page / folder
+     *
+     * @return array
      */
-	private function generateFolderNavigation() {
-		//Provide a small path-navigation to know where we are...
-		$arrPath = $this->getPathArray($this->getSystemid());
-		$arrPathLinks = array();
-		//Link to root-folder
-        $arrPathLinks[] = getLinkAdmin("pages", "list", "", "&nbsp;/&nbsp;");
-		foreach($arrPath as $strOneFolderID) {
+    protected function getArrOutputNaviEntries() {
+        $arrPathLinks = parent::getArrOutputNaviEntries();
+        $arrPath = $this->getPathArray($this->getSystemid());
+        //Link to root-folder
+        foreach($arrPath as $strOneFolderID) {
             $objInstance = class_objectfactory::getInstance()->getObject($strOneFolderID);
 
             if($objInstance instanceof class_module_pages_folder) {
@@ -642,10 +635,10 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             if($objInstance instanceof class_module_pages_page) {
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID."&unlockid=".$this->getSystemid(), $objInstance->getStrBrowsername());
             }
-		}
+        }
 
-		return $this->objToolkit->getPathNavigation($arrPathLinks);
-	}
+        return $arrPathLinks;
+    }
 
     /**
      * Generates the code needed to render the pages and folder as a tree-view element.

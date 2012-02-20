@@ -217,6 +217,47 @@ td {
 }
 
 
+/* T O P B A R */
+#topBar {
+    height: 45px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+
+    background-image: url("pe_back.png");
+    /*box-shadow: 0px 0px 4px 4px #FFFFFF ;*/
+    z-index: 1000;
+}
+
+#topBar td {
+    white-space: nowrap;
+    vertical-align: middle;
+    height: 30px;
+}
+
+#topBar td#globalPath {
+    white-space: normal;
+}
+
+#topBar td a {
+    text-decoration: none;
+    font-weight: bold;
+}
+#topBar img {
+    margin: 0 1px 0 0px;
+}
+
+#topBar ul {
+    padding: 5px 0 0 0;
+    margin: 0;
+}
+
+#topBar ul li {
+    display: inline;
+    vertical-align: middle;
+}
+
 /* S T A T U S B O X */
 
 #statusBoxHeader {
@@ -228,7 +269,7 @@ td {
 #statusBox {
 	background-image: url(statusbox_back.gif);
 	width: 150px;
-	height: 70px;
+	height: 13px;
 }
 
 #statusBox .boxContent {

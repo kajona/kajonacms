@@ -13,8 +13,16 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body>
-
-<table cellspacing="0" cellpadding="0">
+<div id="topBar">
+    <table >
+        <tr>
+            <td>SEARCHBOX</td>
+            <td width="100%" id="globalPath">%%path%%</td>
+            <td align="right">%%login%%</td>
+        </tr>
+    </table>
+</div>
+<table cellspacing="0" cellpadding="0" style="padding-top: 30px;">
 	<tbody>
 		<tr>
 			<td colspan="2" rowspan="2" id="logo"></td>
@@ -36,7 +44,7 @@
 			<td id="moduleActionNaviThree"><div></div></td>
 			<td id="naviContainer">
 			    <div id="statusBoxHeader"></div>
-			    <div id="statusBox">%%login%%</div>
+			    <div id="statusBox"></div>
 			    <div id="moduleActionNavi">%%modulenavi%%</div>
 			</td>
 			<td id="contentMain" style="background-image: url('_skinwebpath_/header/%%module_id%%.png');">
