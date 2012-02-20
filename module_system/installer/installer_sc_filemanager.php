@@ -38,7 +38,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         else
             $objRepo->setStrName("Picture uploads");
 
-        $objRepo->setStrPath(_projectpath_."/pics/upload");
+        $objRepo->setStrPath(_filespath_."/images/upload");
         $objRepo->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
         $objRepo->setStrViewFilter(".jpg,.png,.gif,.jpeg");
         $objRepo->updateObjectToDb();
@@ -61,7 +61,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
         else
             $objRepo->setStrName("File uploads");
 
-        $objRepo->setStrPath(_projectpath_."/downloads/public");
+        $objRepo->setStrPath(_filespath_."/downloads");
         $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
         $objRepo->setStrViewFilter(".zip,.pdf,.txt");
         $objRepo->updateObjectToDb();

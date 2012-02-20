@@ -41,8 +41,14 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 		return $arrReturn;
 	}
 
+    protected function getArrOutputNaviEntries() {
+        $arrReturn = parent::getArrOutputNaviEntries();
+        array_pop($arrReturn);
+        return $arrReturn;
+    }
 
-	/**
+
+    /**
 	 * Generates the dashboard itself.
 	 * Loads all widgets placed on the dashboard
 	 *

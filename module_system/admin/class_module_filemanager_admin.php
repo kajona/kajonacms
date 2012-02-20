@@ -223,7 +223,6 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 
 		   	//Building a status-bar, using the toolkit
 		   	$arrInfobox = array();
-		   	$arrInfobox["folder"] = $this->generatePathNavi($this->strFolder);
 		   	$arrInfobox["extraactions"] = $strExtra;
 		   	$arrInfobox["files"] = $arrFiles["nrFiles"];
 		   	$arrInfobox["folders"] = $arrFiles["nrFolders"];
@@ -851,13 +850,13 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
 	/**
 	 * Generates a path-navigation
 	 *
-	 * @param string $strPath
-	 * @return string
+	 * @return array
 	 */
-	private function generatePathNavi($strPath) {
-        $arrPaths = array();
+	protected function getArrOutputNaviEntries() {
+        $arrPaths = parent::getArrOutputNaviEntries();
         $objRepo = new class_module_filemanager_repo($this->getSystemid());
 
+        $strPath = $this->strFolder;
         //remove repo-folder
         $strPath = uniStrReplace($objRepo->getStrPath(), "", $strPath);
 
@@ -867,7 +866,8 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
         }
 
         //the first entry is the repo itself
-        $arrPaths[] = getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid(), $objRepo->getStrPath());
+        if($this->getSystemid() != "")
+            $arrPaths[] = getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid(), $objRepo->getStrDisplayName());
 
         if(uniStrlen($strPath) > 0 ) {
             $arrTempFolders = explode("/", $strPath);
@@ -883,7 +883,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             }
         }
 
-        return $this->objToolkit->getPathNavigation($arrPaths);
+        return $arrPaths;
 	}
 
 

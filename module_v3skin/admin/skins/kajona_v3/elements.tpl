@@ -412,7 +412,7 @@ Infobox used by the filemanager
 <filemanager_infobox>
 <table cellpadding="0" cellspacing="0" class="statusFilemanager">
   <tr>
-    <td style="padding-bottom: 5px;">%%foldertitle%% %%folder%%</td>
+    <td style="padding-bottom: 5px;"></td>
     <td style="text-align: right; white-space: nowrap;" rowspan="2">%%nrfilestitle%% %%files%%<br />%%nrfoldertitle%% %%folders%%</td>
   </tr>
   <tr>
