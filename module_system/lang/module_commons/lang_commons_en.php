@@ -22,6 +22,7 @@ $lang["commons_delete"]                  = "Delete";
 $lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_description"]             = "Description:";
 $lang["commons_edit_permissions"]        = "Change permissions";
+$lang["commons_edit_tags"]        = "Edit Tags";
 $lang["commons_error_permissions"]       = "Not enough permissions to perform this action";
 $lang["commons_hits_header"]             = "Hits";
 $lang["commons_image"]                   = "Image:";

@@ -322,17 +322,18 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         else
             $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "savePage"));
 
-        if($strMode == "edit") {
-            //include the tags, if present
-            $objTags = class_module_system_module::getModuleByName("tags");
-            if($objTags != null) {
-                /**
-                 * @var class_module_tags_admin
-                 */
-                $objTagsInstance = $objTags->getAdminInstanceOfConcreteModule();
-                $strReturn .= $objTagsInstance->getTagForm($objPage->getSystemid(), $objPage->getStrLanguage());
-            }
-        }
+        //sir: removed, no longer included directly. now included by overlay.
+//        if($strMode == "edit") {
+//            //include the tags, if present
+//            $objTags = class_module_system_module::getModuleByName("tags");
+//            if($objTags != null) {
+//                /**
+//                 * @var class_module_tags_admin
+//                 */
+//                $objTagsInstance = $objTags->getAdminInstanceOfConcreteModule();
+//                $strReturn .= $objTagsInstance->getTagForm($objPage->getSystemid(), $objPage->getStrLanguage());
+//            }
+//        }
 
 		return $strReturn;
 	}

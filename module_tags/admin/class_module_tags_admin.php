@@ -57,6 +57,25 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         return "";
     }
 
+    protected function renderAdditionalActions(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_tags_tag) {
+            return array(
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.gif"))
+            );
+        }
+        else
+            return array();
+    }
+
+    protected function renderEditAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_tags_tag) {
+            return parent::renderEditAction($objListEntry);
+        }
+        else {
+            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+        }
+    }
+
 
     /**
      * Generates the form to edit an existing tag
@@ -109,6 +128,34 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 			return $this->getLang("commons_error_permissions");
     }
 
+    /**
+     * @permissions edit
+     * @return string
+     */
+    protected function actionShowAssignedRecords() {
+        //load tag
+        $objTag = new class_module_tags_tag($this->getSystemid());
+        //get assigned record-ids
+
+        $objArraySectionIterator = new class_array_section_iterator($objTag->getIntAssignments());
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection($objTag->getArrAssignedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        return $this->renderList($objArraySectionIterator);
+    }
+
+    /**
+     * Renders the generic tag-form, in case to be embedded from external.
+     * Therefore, two params are evaluated:
+     *  - the param "systemid"
+     *  - the param "attribute"
+     * @return string
+     * @permissions edit
+     */
+    protected function actionGenericTagForm() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        return $this->getTagForm($this->getSystemid(), $this->getParam("attribute"));
+    }
 
     /**
      * Generates a form to add tags to the passed systemid.
@@ -126,6 +173,8 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
         $strTagsWrapperId = generateSystemid();
 
+        $objTarget = class_objectfactory::getInstance()->getObject($strTargetSystemid);
+
         $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tag_name"));
@@ -135,9 +184,20 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
 
         $strReturn .= $this->objToolkit->divider();
-        $strReturn .= $this->objToolkit->getFieldset($this->getLang("tagsection_header"), $strTagContent);
+        $strReturn .= $this->objToolkit->getFieldset($this->getLang("tagsection_header")." ".$objTarget->getStrDisplayName(), $strTagContent);
 
         return $strReturn;
+    }
+
+    protected function getArrOutputNaviEntries() {
+        $arrEntries =  parent::getArrOutputNaviEntries();
+
+        if($this->getAction() == "showAssignedRecords") {
+            $objListEntry = new class_module_tags_tag($this->getSystemid());
+            $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $objListEntry->getStrName());
+        }
+
+        return $arrEntries;
     }
 
 

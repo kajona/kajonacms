@@ -48,7 +48,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_dot.gif";
+        return "icon_tag.gif";
     }
 
     /**
@@ -56,7 +56,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return count($this->getListOfAssignments())." ".$this->getLang("tag_assignments", "tags");
+        return $this->getIntAssignments()." ".$this->getLang("tag_assignments", "tags");
     }
 
     /**
@@ -280,6 +280,46 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                         AND system.system_status = 1";
 
         return $this->objDB->getPArray($strQuery, array($this->getSystemid()));
+    }
+
+    /**
+     * Counts the number of assignments
+     *
+     * @return int
+     */
+    public function getIntAssignments() {
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."tags_member as member,
+                            "._dbprefix_."system as system
+                      WHERE tags_tagid = ?
+                        AND system.system_id = member.tags_systemid";
+
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        return $arrRow["COUNT(*)"];
+    }
+
+    /**
+     * Loads a list of assigned records and creates the concrete instances.
+     *
+     * @param $intStart
+     * @param $intEnd
+     * @return class_model[]
+     */
+    public function getArrAssignedRecords($intStart, $intEnd) {
+        $strQuery = "SELECT system.system_id
+                       FROM "._dbprefix_."tags_member as member,
+                            "._dbprefix_."system as system
+                      WHERE tags_tagid = ?
+                        AND system.system_id = member.tags_systemid
+                   ORDER BY system_comment ASC";
+
+        $arrRecords = $this->objDB->getPArraySection($strQuery, array($this->getSystemid()), $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRecords as $arrOneRecord)
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
+
+        return $arrReturn;
     }
 
     /**

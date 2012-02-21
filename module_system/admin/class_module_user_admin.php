@@ -210,6 +210,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getLang("gruppen_anlegen"), $this->getLang("gruppen_anlegen"), "icon_new.gif"));
     }
 
+    protected function renderTagAction(class_model $objListEntry) {
+        return "";
+    }
+
 
     /**
      * @param class_model|class_module_user_user $objListEntry

@@ -44,7 +44,7 @@
 			<td id="moduleActionNaviThree"><div></div></td>
 			<td id="naviContainer">
 			    <div id="statusBoxHeader"></div>
-			    <div id="statusBox"></div>
+			    <div id="statusBox" style="text-align: center"><div>La Revolution. V4.</div></div>
 			    <div id="moduleActionNavi">%%modulenavi%%</div>
 			</td>
 			<td id="contentMain" style="background-image: url('_skinwebpath_/header/%%module_id%%.png');">
