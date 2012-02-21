@@ -675,10 +675,18 @@ abstract class class_admin {
     }
 
     protected function getArrOutputNaviEntries() {
-        return array(
+        $arrReturn = array(
             getLinkAdmin("dashboard", "", "", $this->getLang("modul_titel", "dashboard")),
             getLinkAdmin($this->getArrModule("modul"), "", "", $this->getOutputModuleTitle())
         );
+
+        //see, if the current action may be mapped
+        $strActionName = "action".ucfirst($this->getAction());
+        $strAction = $this->getLang($strActionName);
+        if($strAction != "!".$strActionName."!")
+            $arrReturn[] = getLinkAdmin($this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid(), $strAction);
+
+        return $arrReturn;
     }
 
 	/**
