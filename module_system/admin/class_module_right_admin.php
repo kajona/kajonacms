@@ -346,7 +346,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 							"right5"		=> $strRight5);
 
 			//Pass to right-class
-			if($objRights->setRights($arrReturn, $strSystemid))	{
+	   		if($objRights->setRights($arrReturn, $strSystemid)) {
 
                 //Redirecting
                 $strUrlHistory = $this->getHistory(0);
