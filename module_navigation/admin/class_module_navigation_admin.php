@@ -31,7 +31,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $this->strPeAddon = "&pe=1";
 	}
 
-	protected function getOutputModuleNavi() {
+    public function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");

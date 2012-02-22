@@ -53,11 +53,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $this->getLang("modul_titel") . " (".$objPage->getStrName().")";
 	}
 
-	protected function getOutputModuleNavi() {
-	    return array();
-	}
-
-
 	/**
 	 * Returns a list of available placeholders & elements on this page
 	 *

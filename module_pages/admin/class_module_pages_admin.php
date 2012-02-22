@@ -36,7 +36,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 	}
 
 
-	protected function getOutputModuleNavi() {
+    public function getOutputModuleNavi() {
 	    $arrReturn = array();
 		$arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");

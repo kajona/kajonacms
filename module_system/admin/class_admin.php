@@ -354,6 +354,7 @@ abstract class class_admin {
 	 * @param string $strSystemid
      * @param string $strStopSystemid
 	 * @return mixed
+     * @deprecated should be handled by the model-classes instead
 	 */
 	public function getPathArray($strSystemid = "", $strStopSystemid = "") {
 		if($strSystemid == "")
@@ -528,9 +529,9 @@ abstract class class_admin {
 
 		//Calling the contentsetter
 		$this->arrOutput["content"] = $this->getOutputContent();
-		$this->arrOutput["mainnavi"] = $this->getOutputMainNavi();
+		$this->arrOutput["mainnavi"] = class_admin_helper::getOutputMainNavi($this->getArrModule("modul"));
 		$this->arrOutput["path"] = $this->getOutputPathNavi();
-		$this->arrOutput["modulenavi"] = $this->getOutputModuleActionsNavi();
+		$this->arrOutput["modulenavi"] = class_admin_helper::getModuleActionNavi($this);
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
         if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
             $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
@@ -637,39 +638,6 @@ abstract class class_admin {
         return $strReturn;
 	}
 
-	/**
-	 * Writes the Main Navi, overwrite if needed ;)
-	 * Creates a list of all installed modules
-	 *
-	 * @return string
-	 */
-	protected function getOutputMainNavi() {
-		if($this->objSession->isLoggedin()) {
-			//Loading all Modules
-			$arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
-			$intI = 0;
-			$arrModuleRows = array();
-			foreach ($arrModules as $arrModule) {
-                $objCommon = new class_module_system_common($arrModule["module_id"]);
-				if($objCommon->rightView()) {
-					//Generate a view infos
-				    $arrModuleRows[$intI]["rawName"] = $arrModule["module_name"];
-					$arrModuleRows[$intI]["name"] = $this->getLang("modul_titel", $arrModule["module_name"]);
-					$arrModuleRows[$intI]["link"] = getLinkAdmin($arrModule["module_name"], "", "", $arrModule["module_name"], $arrModule["module_name"], "", true, "adminModuleNavi");
-					$arrModuleRows[$intI]["href"] = getLinkAdminHref($arrModule["module_name"], "");
-					$intI++;
-				}
-			}
-			//NOTE: Some special Modules need other highlights
-			if($this->arrModule["modul"] == "elemente")
-			    $strCurrent = "pages";
-			else
-			    $strCurrent = $this->arrModule["modul"];
-
-			return $this->objToolkit->getAdminModuleNavi($arrModuleRows, $strCurrent);
-		}
-	}
-
     protected function getOutputPathNavi() {
         return $this->objToolkit->getPathNavigation($this->getArrOutputNaviEntries());
     }
@@ -690,75 +658,6 @@ abstract class class_admin {
     }
 
 	/**
-	 * Writes the navigation to represent the action-navigation.
-	 * Each module can create its own actions
-	 *
-	 * @return string
-	 */
-	private function getOutputModuleActionsNavi() {
-		if($this->objSession->isLoggedin()) {
-		    $arrItems = $this->getOutputModuleNavi();
-		    $arrFinalItems = array();
-
-            $objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
-		    //build array of final items
-		    foreach($arrItems as $arrOneItem) {
-		        $bitAdd = false;
-		        switch ($arrOneItem[0]) {
-            	case "view":
-                    if($objModule->rightView())
-                        $bitAdd = true;
-	        		break;
-	        	case "edit":
-                    if($objModule->rightEdit())
-                        $bitAdd = true;
-                    break;
-                case "delete":
-                    if($objModule->rightDelete())
-                        $bitAdd = true;
-                    break;
-                case "right":
-                    if($objModule->rightRight())
-                        $bitAdd = true;
-                    break;
-                case "right1":
-                    if($objModule->rightRight1())
-                        $bitAdd = true;
-                    break;
-                case "right2":
-                    if($objModule->rightRight2())
-                        $bitAdd = true;
-                    break;
-                case "right3":
-                    if($objModule->rightRight3())
-                        $bitAdd = true;
-                    break;
-                case "right4":
-                    if($objModule->rightRight4())
-                        $bitAdd = true;
-                    break;
-                case "right5":
-                    if($objModule->rightRight5())
-                        $bitAdd = true;
-                    break;
-                case "":
-                    $bitAdd = true;
-                    break;
-                default:
-                    break;
-		        }
-
-		        if($bitAdd || $arrOneItem[1] == "")
-                    $arrFinalItems[] = $arrOneItem[1];
-		    }
-
-			//Pass to the skin-object
-            return $this->objToolkit->getAdminModuleActionNavi($arrFinalItems);
-		}
-	}
-
-
-	/**
 	 * Writes the ModuleNavi, overwrite if needed
 	 * Use two-dim arary:
 	 * array[
@@ -768,7 +667,7 @@ abstract class class_admin {
 	 *
 	 * @return array array containing all links
 	 */
-	protected function getOutputModuleNavi() {
+	public function getOutputModuleNavi() {
 		return array();
 	}
 
@@ -1014,7 +913,7 @@ abstract class class_admin {
      * Lazy-loading, so loaded on first access.
      * @return class_module_system_module|null
      */
-    protected function getObjModule() {
+    public function getObjModule() {
 
         if($this->objModule == null)
             $this->objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);

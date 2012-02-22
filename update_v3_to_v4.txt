@@ -37,6 +37,7 @@ General:
 - When deleting a record, the systemid is removed automatically, objects should only remove its' own data
 - dirname(__FILE__) is replaces by __DIR__
 - lang-files (admin & portal) are merged into a single file
+- Signature of class_admin::getOutputModuleNavi() changed from protected to public
 
 Removed Constants:
 - _systempath_
