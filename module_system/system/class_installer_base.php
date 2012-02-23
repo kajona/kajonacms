@@ -504,7 +504,8 @@ abstract class class_installer_base extends class_root {
         $objModule->setStrXmlNamePortal($strXmlPortal);
         $objModule->setStrXmlNameAdmin($strXmlAdmin);
         $objModule->setIntDate(time());
-
+        $objModule->setIntModuleNr($intModuleNr);
+        $objModule->setArrModuleEntry("moduleId", $intModuleNr);
         $objModule->updateObjectToDb($strPrevId);
 
 		class_logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", class_logger::$levelInfo);

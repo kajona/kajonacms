@@ -56,29 +56,27 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		if($strSystemID == "")
 			return $this->getLang("commons_error_permissions");
 
-        $objCommon = new class_module_system_common($strSystemID);
+        $objModule = new class_module_system_module($strSystemID);
         $objRights = class_carrier::getInstance()->getObjRights();
 
-		if($objCommon->rightRight()) {
+		if($objModule->rightRight()) {
 			//Get Rights
 			$arrRights = $objRights->getArrayRights($strSystemID);
 			//Get groups
 			$arrGroups = class_module_user_group::getAllGroups();
 
 			//Determine name of the record
-			if($objCommon->getStrRecordComment() == "")
+			if($objModule->getStrRecordComment() == "")
 				$strTitle = $this->getLang("titel_leer");
 			else
-				$strTitle = $objCommon->getStrRecordComment() . " ";
+				$strTitle = $objModule->getStrRecordComment() . " ";
 
 			//Load the rights header-row
-			if($objCommon->getIntModuleNr() == 0)
+			if($objModule->getIntModuleNr() == 0)
 			    $strModule = "system";
-            else if(defined("_pages_folder_id_") && $objCommon->getIntModuleNr() == _pages_folder_id_)
+            else if(defined("_pages_folder_id_") && $objModule->getIntModuleNr() == _pages_folder_id_)
                 $strModule = "pages";
 			else {
-			    $strTempId = class_module_system_module::getModuleIdByNr($objCommon->getIntModuleNr());
-			    $objModule = new class_module_system_module($strTempId);
 			    $strModule = $objModule->getStrName();
 			}
 
@@ -89,7 +87,6 @@ class class_module_right_admin extends class_admin implements interface_admin {
 
 			if($strSystemID == "0")
 			    $arrHeaderRow = $this->getLang("permissions_root_header", "system");
-
 
 			$arrTitles = $arrHeaderRow;
 			$arrTemplateTotal = array();
@@ -231,7 +228,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
 			//place all inheritance-rights as hidden-fields to support the change-js script
-            $strPrevId = $objCommon->getPrevId();
+            $strPrevId = $objModule->getPrevId();
             $arrRightsInherited = $objRights->getArrayRights($strPrevId);
 
             foreach ($arrRightsInherited as $strRightName => $arrRightsPerAction) {

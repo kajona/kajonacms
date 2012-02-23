@@ -172,7 +172,7 @@ abstract class class_root {
      */
     private final function internalInit($strSystemid) {
 
-        if($this->bitDetailsLoaded == true)
+        if($this->bitDetailsLoaded === true)
             return;
 
 
