@@ -239,6 +239,8 @@ abstract class class_root {
      * Use this lifecycle-method in order to load
      * all fields from the database.
      *
+     * @todo default implementation possible? based on row-names matched to
+     *       setter names? evaluate!
      */
     protected abstract function initObjectInternal();
 
@@ -251,6 +253,7 @@ abstract class class_root {
     *
     * @abstract
     * @return bool
+    * @todo provide a default implementation based on the objects table-config
     */
     protected abstract function deleteObjectInternal();
 

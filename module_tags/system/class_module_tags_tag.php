@@ -116,6 +116,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         //delete memberships
         $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?";
 
+        //delete matching favorites
+        $arrFavorites = class_module_tags_favorite::getAllFavoritesForTag($this->getSystemid());
+        foreach($arrFavorites as $objOneFavorite) {
+            $objOneFavorite->deleteObject();
+        }
+
         //delete the record itself
         $strQuery2 = "DELETE FROM "._dbprefix_."tags_tag WHERE tags_tag_id=?";
 	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid())) )

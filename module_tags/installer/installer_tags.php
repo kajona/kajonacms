@@ -16,7 +16,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.1");
+        $this->setArrModuleEntry("version", "3.4.9");
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
         $this->setArrModuleEntry("name", "tags");
         $this->setArrModuleEntry("name_lang", "Module Tags");
@@ -71,6 +71,18 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_systemid", "tags_tagid", "tags_attribute")))
 			$strReturn .= "An error occured! ...\n";
 
+
+
+        //tags_favorite ---------------------------------------------------------------------------------
+        $strReturn .= "Installing table tags_favorite...\n";
+
+        $arrFields = array();
+        $arrFields["tags_fav_id"] 	        = array("char20", false);
+        $arrFields["tags_fav_tagid"]        = array("char20", true);
+        $arrFields["tags_fav_userid"]       = array("char20", true);
+
+        if(!$this->objDB->createTable("tags_favorite", $arrFields, array("tags_fav_id")))
+            $strReturn .= "An error occured! ...\n";
 
 		//register the module
 		$this->registerModule("tags",
@@ -164,6 +176,16 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( 'class_module_tags_tag', $arrOneRow["system_id"] ) );
         }
+
+        $strReturn .= "Installing table tags_favorite...\n";
+
+        $arrFields = array();
+        $arrFields["tags_fav_id"] 	        = array("char20", false);
+        $arrFields["tags_fav_tagid"]        = array("char20", true);
+        $arrFields["tags_fav_userid"]       = array("char20", true);
+
+        if(!$this->objDB->createTable("tags_favorite", $arrFields, array("tags_fav_id")))
+            $strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->arrModule["name"], "3.4.9");

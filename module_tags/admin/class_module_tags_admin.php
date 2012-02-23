@@ -32,6 +32,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listFavorites", "", $this->getLang("actionListFavorites"), "", "", true, "adminnavi"));
 
         return $arrReturn;
 	}
@@ -40,6 +41,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     }
 
     /**
+     * Renders the list of tags available
      * @return string
      * @autoTestable
      * @permissions view
@@ -60,7 +62,8 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.gif"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.gif")),
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionAddToFavorites"), $this->getLang("actionAddToFavorites"), "icon_favorite.gif"))
             );
         }
         else
@@ -68,12 +71,20 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     }
 
     protected function renderEditAction(class_model $objListEntry) {
-        if($objListEntry instanceof class_module_tags_tag) {
+        if($objListEntry instanceof class_module_tags_tag)
             return parent::renderEditAction($objListEntry);
-        }
-        else {
+        else if($objListEntry->rightEdit())
             return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+    }
+
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry instanceof class_module_tags_tag) {
+            if($objListEntry->rightDelete()) {
+                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid()));
+            }
         }
+        else if($objListEntry instanceof class_module_tags_favorite)
+            return parent::renderDeleteAction($objListEntry);
     }
 
 
@@ -201,4 +212,35 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     }
 
 
+
+    /**
+     * Renders the list of favorites created by the current user
+     * @return string
+     * @autoTestable
+     * @permissions right1
+     */
+    protected function actionListFavorites() {
+
+        $objArraySectionIterator = new class_array_section_iterator(class_module_tags_favorite::getNumberOfFavoritesForUser($this->objSession->getUserID()));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_tags_favorite::getAllFavoritesForUser($this->objSession->getUserID(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        return $this->renderList($objArraySectionIterator);
+    }
+
+    /**
+     * Adds a single tag to a users list of favorites
+     * @permissons right1
+     */
+    protected function actionAddToFavorites() {
+        if(count(class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) == 0) {
+            $objFavorite = new class_module_tags_favorite();
+            $objFavorite->setStrUserId($this->objSession->getUserID());
+            $objFavorite->setStrTagId($this->getSystemid());
+
+            $objFavorite->updateObjectToDb();
+        }
+
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listFavorites"));
+    }
 }
