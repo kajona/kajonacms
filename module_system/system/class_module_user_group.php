@@ -223,18 +223,6 @@ class class_module_user_group extends class_model implements interface_model, in
 	}
 
     /**
-     * Deletes the current object from the system.
-     * Overwrite this method in order to remove the current object from the system.
-     * The system-record itself is being delete automatically.
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        return true;
-    }
-
-
-    /**
      * Loads the mapped source-object
      */
     private function loadSourceObject() {

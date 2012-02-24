@@ -190,8 +190,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return bool
      */
     protected function deleteObjectInternal() {
-        $strQuery = "DELETE FROM "._dbprefix_."aspects WHERE aspect_id = ?";
-		$this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        parent::deleteObjectInternal();
 
 		//if we have just one aspect remaining, set this one as default
         $arrObjAspects = class_module_system_aspect::getAllAspects();

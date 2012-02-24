@@ -81,21 +81,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
         return $this->objDB->_pQuery($strQuery, array($this->getStrClass(), $this->getStrContent(), $this->getSystemid()), array(true, false, true));
     }
 
-    /**
-     * Deletes the current object from the database
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-	    $strQuery = "DELETE FROM "._dbprefix_."adminwidget
-                             WHERE adminwidget_id = ?";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            return true;
-        }
-        return false;
-    }
-
-
 
     /**
      * Looks up all widgets available in the filesystem.

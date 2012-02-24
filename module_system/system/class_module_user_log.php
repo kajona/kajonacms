@@ -61,18 +61,6 @@ class class_module_user_log extends class_model implements interface_model  {
     }
 
     /**
-     * Deletes the current object from the system.
-     * Overwrite this method in order to remove the current object from the system.
-     * The system-record itself is being delete automatically.
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        return true;
-    }
-
-
-    /**
      * Called whenever a update-request was fired.
      * Use this method to synchronize yourselves with the database.
      * Use only updates, inserts are not required to be implemented.

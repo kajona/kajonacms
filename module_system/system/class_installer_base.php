@@ -594,17 +594,6 @@ abstract class class_installer_base extends class_root {
     }
 
     /**
-     * Deletes the current object from the system.
-     * Overwrite this method in order to remove the current object from the system.
-     * The system-record itself is being delete automatically.
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        return false;
-    }
-
-    /**
      * Returns a list of tables the current object is persisted to.
      * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
      * The array should contain the name of the table as the key and the name

@@ -642,9 +642,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         }
 
 		//Delete from page_element table
-		$strQuery = "DELETE FROM "._dbprefix_."page_element WHERE page_element_id= ?";
-		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-			return false;
+        parent::deleteObjectInternal();
 
 		//Loading the data of the corresponding site
 		$objPage = new class_module_pages_page($this->getPrevId());

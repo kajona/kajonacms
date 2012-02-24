@@ -209,10 +209,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @return bool
      */
     protected function deleteObjectInternal() {
-        //start with the modul-table
-        $strQuery = "DELETE FROM "._dbprefix_."languages WHERE language_id = ?";
-		$this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-
+        parent::deleteObjectInternal();
 
 		 //if we have just one language remaining, set this one as default
         $arrObjLanguages = class_module_languages_language::getAllLanguages();

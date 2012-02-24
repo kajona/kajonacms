@@ -112,14 +112,6 @@ class class_module_languages_languageset extends class_model implements interfac
     }
 
     /**
-     * Deletes the current object from the system
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        return true;
-    }
-
-    /**
      * Returns a list of tables the current object is persisted to.
      * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
      * The array should contain the name of the table as the key and the name

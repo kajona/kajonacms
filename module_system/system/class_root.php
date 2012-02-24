@@ -248,14 +248,25 @@ abstract class class_root {
 
    /**
     * Deletes the current object from the system.
-    * Overwrite this method in order to remove the current object from the system.
-    * The system-record itself is being delete automatically.
+    * By default, all entries are delete from  all tables returned by "getObjectTables()".
+    * If you want to trigger additional deletes, overwrite this method.
+    * The system-record itself is being deleted automatically, too.
     *
-    * @abstract
     * @return bool
-    * @todo provide a default implementation based on the objects table-config
     */
-    protected abstract function deleteObjectInternal();
+    protected function deleteObjectInternal() {
+        $bitReturn = true;
+        $arrDefaultTables = $this->getObjectTables();
+        if(is_array($arrDefaultTables)) {
+            foreach($arrDefaultTables as $strOneTable => $strKey) {
+                $strQuery = "DELETE FROM ".$strOneTable."
+                                   WHERE ".$strKey." = ? ";
+
+                $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+            }
+        }
+        return $bitReturn;
+    }
 
     /**
      * Removes the current object from the system.
@@ -1020,7 +1031,8 @@ abstract class class_root {
 	 * @param bool $bitRight
 	 * @param bool $bitDate
 	 * @return bool
-     * @todo: remove first params, is always the current systemid. maybe mark as protected.
+     * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only
+     *        called by the test-classes
      *
 	 */
 	public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {

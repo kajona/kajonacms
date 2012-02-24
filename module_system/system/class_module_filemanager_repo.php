@@ -186,21 +186,6 @@ class class_module_filemanager_repo extends class_model implements interface_mod
     }
 
     /**
-     * Deletes the record with the given systemid
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-
-        //And the repo itself
-        $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id=?";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-            return true;
-
-        return false;
-    }
-
-    /**
      * Checks if the current repo is used as a foreign-repo by another module
      * @return bool
      */

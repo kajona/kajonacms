@@ -150,17 +150,6 @@ class class_module_system_module extends class_model implements interface_model,
         return true;
     }
 
-    /**
-     * Deletes the current object from the system.
-     * Overwrite this method in order to remove the current object from the system.
-     * The system-record itself is being delete automatically.
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        return true;
-    }
-
 
     /**
      * Loads an array containing all installed modules from database

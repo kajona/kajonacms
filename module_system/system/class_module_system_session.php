@@ -185,16 +185,6 @@ class class_module_system_session extends class_model implements interface_model
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
-    /**
-     * Deletes the current object from the system.
-     * Overwrite this method in order to remove the current object from the system.
-     * The system-record itself is being delete automatically.
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        return true;
-    }
 
 
     /**

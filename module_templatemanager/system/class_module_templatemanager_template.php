@@ -129,9 +129,7 @@ class class_module_templatemanager_template extends class_model implements inter
         $objFilesystem = new class_filesystem();
         $objFilesystem->folderDeleteRecursive(_templatepath_."/".$this->getStrName());
 
-        $strQuery = "DELETE FROM "._dbprefix_."templatepacks
-                           WHERE templatepack_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        return parent::deleteObjectInternal();
     }
 
     /**

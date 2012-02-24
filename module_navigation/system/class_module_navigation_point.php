@@ -239,14 +239,7 @@ class class_module_navigation_point extends class_model implements interface_mod
             }
         }
 
-        //Now delete the current point
-        //start in the navigation-table
-        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id=?";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-            return true;
-        else
-           return false;
-
+        return parent::deleteObjectInternal();
 	}
 
 

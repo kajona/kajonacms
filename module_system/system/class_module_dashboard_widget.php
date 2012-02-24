@@ -94,10 +94,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     protected function deleteObjectInternal() {
         if($this->getWidgetmodelForCurrentEntry()->deleteObject()) {
-    	    $strQuery = "DELETE FROM "._dbprefix_."dashboard
-                                 WHERE dashboard_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))
-                return true;
+            return parent::deleteObjectInternal();
         }
 
         return false;

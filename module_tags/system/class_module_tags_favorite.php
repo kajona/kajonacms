@@ -109,19 +109,6 @@ class class_module_tags_favorite extends class_model implements interface_model,
     }
 
 
-    /**
-     * Deletes the tag with the given systemid from the system
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        //delete the record itself
-        $strQuery = "DELETE FROM "._dbprefix_."tags_favorite WHERE tags_fav_id=?";
-	    if($this->objDB->_pQuery($strQuery, array($this->getSystemid())) )
-            return true;
-
-        return false;
-    }
 
     /**
      * Returns a list of tags available
