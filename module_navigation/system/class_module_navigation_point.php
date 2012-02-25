@@ -93,21 +93,13 @@ class class_module_navigation_point extends class_model implements interface_mod
      *
      */
     protected function initObjectInternal() {
-         $strQuery = "SELECT * FROM "._dbprefix_."navigation, "._dbprefix_."system, "._dbprefix_."system_right
-		             WHERE system_id = navigation_id
-		             AND system_id = right_id
-		             AND system_module_nr = ?
-		             AND system_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array(_navigation_modul_id_, $this->getSystemid()));
-        $this->setArrInitRow($arrRow);
+        parent::initObjectInternal();
+
+        $arrRow = $this->getArrInitRow();
         if(count($arrRow)> 0) {
-            $this->setStrName($arrRow["navigation_name"]);
-            $this->setStrImage($arrRow["navigation_image"]);
             $this->setStrPageE($arrRow["navigation_page_e"]);
             $this->setStrPageI($arrRow["navigation_page_i"]);
             $this->setStrFolderI($arrRow["navigation_folder_i"]);
-            $this->setStrTarget($arrRow["navigation_target"]);
-            $this->setStrImage($arrRow["navigation_image"]);
         }
     }
 

@@ -48,27 +48,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
         return $this->getStrClass();
     }
 
-
-    /**
-     * Inits the object by loading the values from the db
-     *
-     */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."adminwidget,
-        						   "._dbprefix_."system,
-        						   "._dbprefix_."system_right
-        				WHERE system_id = adminwidget_id
-        				  AND system_id = right_id
-        				  AND system_id = ? ";
-
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-        if(count($arrRow) > 0) {
-            $this->setStrClass($arrRow["adminwidget_class"]);
-            $this->setStrContent($arrRow["adminwidget_content"]);
-        }
-    }
-
     /**
      * Updates the values of the current widget to the db
      * @return bool

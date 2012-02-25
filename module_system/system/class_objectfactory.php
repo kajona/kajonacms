@@ -13,6 +13,8 @@
  * Instantiations are cached, so recreating instances is a rather cheap operation.
  * To ensure a proper caching, the factory itself reflects the singleton pattern.
  *
+ * In addition, common helper-methods regarding objects are placed right here.
+ *
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.0
@@ -97,5 +99,70 @@ class class_objectfactory {
         return null;
     }
 
+    /**
+     * Searches an object for a given properties' setter method.
+     * If not found, null is returned instead.
+     * @static
+     * @param $objSourceObject
+     * @param string $strPropertyName
+     * @return null|string
+     */
+    public static function getSetter($objSourceObject, $strPropertyName) {
+
+        $strSetter = "setStr".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setInt".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setFloat".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setBit".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setLong".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        return null;
+    }
+
+    /**
+     * Searches an object for a given properties' getter method.
+     * If not found, null is returned instead.
+     * @static
+     * @param $objSourceObject
+     * @param string $strPropertyName
+     * @return null|string
+     */
+    public static function getGetter($objSourceObject, $strPropertyName) {
+
+        $strSetter = "getStr".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getInt".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getFloat".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getBit".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getLong".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
+        return null;
+    }
 }
 

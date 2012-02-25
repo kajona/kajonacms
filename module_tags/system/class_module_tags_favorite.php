@@ -76,23 +76,6 @@ class class_module_tags_favorite extends class_model implements interface_model,
         return array(_dbprefix_."tags_favorite" => "tags_fav_id");
     }
 
-    /**
-     * Initialises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT *
-		   			 FROM "._dbprefix_."tags_favorite,
-		   			      "._dbprefix_."system,
-		   			      "._dbprefix_."system_right
-					 WHERE tags_fav_id = ?
-					  AND tags_fav_id = system_id
-					  AND system_id = right_id ";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-        $this->setStrTagId($arrRow["tags_fav_tagid"]);
-        $this->setStrUserId($arrRow["tags_fav_userid"]);
-    }
 
     /**
      * saves the current object with all its params back to the database

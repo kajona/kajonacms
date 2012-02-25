@@ -86,21 +86,11 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      *
      */
     protected function  initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."filemanager,
-                                   "._dbprefix_."system,
-                                   "._dbprefix_."system_right
-						WHERE system_id = filemanager_id
-						AND system_id = right_id
-						AND system_id = ? ";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-        if(isset($arrRow["filemanager_name"])) {
-            $this->setStrName($arrRow["filemanager_name"]);
-            $this->setStrPath($arrRow["filemanager_path"]);
-            $this->setStrUploadFilter($arrRow["filemanager_upload_filter"]);
-            $this->setStrViewFilter($arrRow["filemanager_view_filter"]);
-            $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
-        }
+        parent::initObjectInternal();
+        $arrRow = $this->getArrInitRow();
+        $this->setStrUploadFilter($arrRow["filemanager_upload_filter"]);
+        $this->setStrViewFilter($arrRow["filemanager_view_filter"]);
+        $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
     }
 
     protected function updateStateToDb() {

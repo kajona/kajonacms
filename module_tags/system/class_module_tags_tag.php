@@ -77,23 +77,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     }
 
     /**
-     * Initialises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT *
-		   			 FROM "._dbprefix_."tags_tag,
-		   			      "._dbprefix_."system,
-		   			      "._dbprefix_."system_right
-					 WHERE tags_tag_id = ?
-					  AND tags_tag_id = system_id
-					  AND system_id = right_id ";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-        $this->setStrName($arrRow["tags_tag_name"]);
-    }
-
-    /**
      * saves the current object with all its params back to the database
      *
      * @return bool

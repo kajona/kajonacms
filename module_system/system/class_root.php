@@ -234,15 +234,56 @@ abstract class class_root {
     }
 
     /**
-     * responsible to create a valid object. being called at time of
-     * object creation, if systemid given.
-     * Use this lifecycle-method in order to load
-     * all fields from the database.
+     * InitObjectInternal is called during an objects instantiation.
+     * The default implementation tries to map all database-fields to the objects fields
+     * and sets the values automatically.
      *
-     * @todo default implementation possible? based on row-names matched to
-     *       setter names? evaluate!
+     * If you have a different column-property mapping or additional
+     * setters to call, overwrite this method.
+     * The row loaded from the database is available by calling $this->getArrInitRow().
      */
-    protected abstract function initObjectInternal();
+    protected function initObjectInternal() {
+        //try to do a default init
+        $arrTables = $this->getObjectTables();
+        if(is_array($arrTables) && validateSystemid($this->getSystemid())) {
+
+            $strWhere = "";
+            foreach($arrTables as $strOneColumn)
+                $strWhere .= "AND system_id=".$strOneColumn." ";
+
+            $strQuery = "SELECT *
+                          FROM "._dbprefix_."system,
+                               ".implode(", ", array_keys($arrTables))." ,
+                               "._dbprefix_."system_right
+                         WHERE system_id = right_id
+                            ".$strWhere."
+                           AND system_id = ? ";
+
+            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+
+            $this->setArrInitRow($arrRow);
+
+
+
+            //try to set all values
+            $strTable = array_values($arrTables);
+            $strTable = $strTable[0];
+            $strPrefix = uniSubstr($strTable, 0, uniStrrpos($strTable, "_"));
+
+            foreach($arrRow as $strKey => $strValue) {
+                if(!in_array($strKey, $arrTables) &&  uniStrpos($strKey, $strPrefix) !== false) {
+                    //try to get the properties' name
+                    $strPropertyName = uniSubstr($strKey, uniStrrpos($strKey, "_")+1);
+
+                    $strSetter = class_objectfactory::getSetter($this, $strPropertyName);
+
+                    if($strSetter !== null)
+                        call_user_func(array($this, $strSetter), $strValue);
+
+                }
+            }
+        }
+    }
 
 
 

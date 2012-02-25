@@ -106,24 +106,8 @@ class class_formentry_base {
             return;
 
         //try to get the matching getter
-        $strGetter = "getStr".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strGetter))
-            $strGetter = "getInt".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strGetter))
-            $strGetter = "getFloat".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strGetter))
-            $strGetter = "getBit".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strGetter))
-            $strGetter = "getLong".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strGetter))
-            $strGetter = "get".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strGetter))
+        $strGetter = class_objectfactory::getGetter($this->objSourceObject, $this->strSourceProperty);
+        if($strGetter === null)
             throw new class_exception("unable to find getter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
 
         return call_user_func(array($this->objSourceObject, $strGetter));
@@ -142,25 +126,8 @@ class class_formentry_base {
         if($this->objSourceObject == null)
             return;
 
-        //try to get the matching getter
-        $strSetter = "setStr".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strSetter))
-            $strSetter = "setInt".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strSetter))
-            $strSetter = "setFloat".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strSetter))
-            $strSetter = "setBit".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strSetter))
-            $strSetter = "setLong".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strSetter))
-            $strSetter = "set".$this->strSourceProperty;
-
-        if(!method_exists($this->objSourceObject, $strSetter))
+        $strSetter = class_objectfactory::getSetter($this->objSourceObject, $this->strSourceProperty);
+        if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
 
         return call_user_func(array($this->objSourceObject, $strSetter), $this->getStrValue());

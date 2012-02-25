@@ -53,25 +53,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."dashboard,
-        						   "._dbprefix_."system,
-        						   "._dbprefix_."system_right
-        				WHERE system_id = dashboard_id
-        				  AND system_id = right_id
-        				  AND system_id = ?";
-
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-        if(count($arrRow) > 0) {
-            $this->setStrUser($arrRow["dashboard_user"]);
-            $this->setStrColumn($arrRow["dashboard_column"]);
-            $this->setStrWidgetId($arrRow["dashboard_widgetid"]);
-            $this->setStrAspect($arrRow["dashboard_aspect"]);
-        }
-
-    }
-
     /**
      * Updates the current widget to the db
      * @return bool

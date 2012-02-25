@@ -83,25 +83,6 @@ class class_module_system_aspect extends class_model implements interface_model,
         return "";
     }
 
-
-    /**
-     * Initalises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system, "._dbprefix_."aspects, "._dbprefix_."system_right
-                     WHERE system_id = aspect_id
-                     AND system_id = right_id
-                     AND system_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-        if(count($arrRow) > 1) {
-            $this->setBitDefault($arrRow["aspect_default"]);
-            $this->setStrName($arrRow["aspect_name"]);
-        }
-    }
-
-
     /**
      * saves the current object with all its params back to the database
      *

@@ -184,23 +184,9 @@ class class_admin_formgenerator {
     public function addDynamicField($strPropertyName) {
 
         //try to get the matching getter
-        $strGetter = "getStr".$strPropertyName;
-
-        if(!method_exists($this->objSourceobject, $strGetter))
-            $strGetter = "getInt".$strPropertyName;
-
-        if(!method_exists($this->objSourceobject, $strGetter))
-            $strGetter = "getFloat".$strPropertyName;
-
-        if(!method_exists($this->objSourceobject, $strGetter))
-            $strGetter = "getBit".$strPropertyName;
-
-        if(!method_exists($this->objSourceobject, $strGetter))
-            $strGetter = "getLong".$strPropertyName;
-
-        if(!method_exists($this->objSourceobject, $strGetter))
+        $strGetter = class_objectfactory::getGetter($this->objSourceobject, $strPropertyName);
+        if($strGetter === null)
             throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
-
 
 
         $objAnnotation = new class_annotations($this->objSourceobject);
