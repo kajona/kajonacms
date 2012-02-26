@@ -1834,6 +1834,34 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
+    /**
+     * Generates the ui-elements to access the users favorite tags
+     * @return string
+     * @todo: load favorites by ajax
+     */
+    public function getAdminskinTagSelector() {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminskin_tagselector");
+        //adminskin_tagselector
+        $strMenuId = generateSystemid();
+        $arrTemplate = array();
+        $arrTemplate["icon_tooltip"] = class_carrier::getInstance()->getObjLang()->getLang("adminskin_tooltip", "tags");
+
+        $arrMenuEntries = array();
+        $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
+
+        foreach($arrFavorites as $objOneFavorite)
+            $arrMenuEntries[] = array(
+                "name" => $objOneFavorite->getStrDisplayName(),
+                "onclick" => "location.href='".getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)."'"
+            );
+
+        $arrTemplate["favorites_menu"] = $this->registerMenu($strMenuId, $arrMenuEntries);
+
+
+        $arrTemplate["favorites_menu_id"] = $strMenuId;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
     public function getAspectChooser($strLastModule, $strLastAction, $strLastSystemid) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "aspect_chooser");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "aspect_chooser_entry");

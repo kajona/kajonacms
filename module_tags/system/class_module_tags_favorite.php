@@ -203,6 +203,14 @@ class class_module_tags_favorite extends class_model implements interface_model,
         return $arrRow["COUNT(*)"];
     }
 
+    /**
+     * Returns the systemid of the tag mapped by the current favorite
+     * @return string
+     */
+    public function getMappedTagSystemid() {
+        return $this->objTag->getSystemid();
+    }
+
     public function rightEdit() {
         return false;
     }

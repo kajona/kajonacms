@@ -22,5 +22,6 @@ $lang["tag_name_hint"]                   = "A set of tags may be submitted as a 
 $lang["tagsection_header"]               = "Tags";
 $lang["actionShowAssignedRecords"]      = "Show assigned records";
 $lang["actionAddToFavorites"]            = "Marks as favorite";
+$lang["adminskin_tooltip"]              = "Show favorites";
 
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Favorites",  5 => "",	6 => "", 7 => "", 8 => "" );

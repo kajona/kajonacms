@@ -16,6 +16,33 @@
  */
 class class_admin_helper {
 
+    /**
+     * Adds a menu-button to the second entry of the path-array. The menu renders the list of all modules installed,
+     * including a quick-jump link.
+     *
+     * @static
+     * @param $arrPathEntries
+     * @return string
+     */
+    public static function getAdminPathNavi($arrPathEntries) {
+        //modify some of the entries
+        $strModuleMenuId = generateSystemid();
+        $arrMenuEntries = array();
+        $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
+        foreach($arrModules as $arrOneModule) {
+            $arrMenuEntries[] = array(
+                "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
+                "onclick" => "location.href='".getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'"
+            );
+        }
+
+        $arrPathEntries[1] = "<a href=\"#\" onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a> ".$arrPathEntries[1];
+
+        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries).
+           class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries);
+
+    }
+
 
     /**
      * Writes the main backend navigation, so collects

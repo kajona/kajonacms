@@ -530,12 +530,13 @@ abstract class class_admin {
 		//Calling the contentsetter
 		$this->arrOutput["content"] = $this->getOutputContent();
 		$this->arrOutput["mainnavi"] = class_admin_helper::getOutputMainNavi($this->getArrModule("modul"));
-		$this->arrOutput["path"] = $this->getOutputPathNavi();
+		$this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries());
 		$this->arrOutput["modulenavi"] = class_admin_helper::getModuleActionNavi($this);
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
         if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
             $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
 		$this->arrOutput["login"] = $this->getOutputLogin();
+		$this->arrOutput["tagSelector"] = $this->objToolkit->getAdminskinTagSelector();
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
 		$this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
@@ -638,9 +639,7 @@ abstract class class_admin {
         return $strReturn;
 	}
 
-    protected function getOutputPathNavi() {
-        return $this->objToolkit->getPathNavigation($this->getArrOutputNaviEntries());
-    }
+
 
     protected function getArrOutputNaviEntries() {
         $arrReturn = array(

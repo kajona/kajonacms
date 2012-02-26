@@ -18,7 +18,7 @@
         <tr>
             <td>SEARCHBOX</td>
             <td width="100%" id="globalPath">%%path%%</td>
-            <td align="right">%%login%%</td>
+            <td align="right"><ul>%%tagSelector%% %%login%%</ul></td>
         </tr>
     </table>
 </div>

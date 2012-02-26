@@ -365,11 +365,9 @@ Needed Elements: %%error%%, %%form%%
 
 Part to display the login status, user is logged in
 <logout_form>
-<ul>
     <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
     <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
     <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
-</ul>
 </logout_form>
 
 Shown, wherever the attention of the user is needed
@@ -1026,6 +1024,12 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
   </div><br />
 %%ajaxScript%%
 </input_tagselector>
+
+Part of the admin-skin, quick-access to the users favorite tags
+<adminskin_tagselector>
+%%favorites_menu%%
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this);"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
+</adminskin_tagselector>
 
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.
 It containes a list of aspects and provides the possibility to switch the different aspects.
