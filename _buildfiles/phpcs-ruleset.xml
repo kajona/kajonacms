@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<ruleset name="KAJONA">
+
+
+ <description>Kajona default CodeSniffs</description>
+
+ <!--
+          You can hard-code ignore patterns directly into your
+              custom standard so you don't have to specify the
+                  patterns on the command line.
+
+ -->
+ <exclude-pattern>*tests*</exclude-pattern>
+ <exclude-pattern>*installer*</exclude-pattern>
+ <exclude-pattern>*docs*</exclude-pattern>
+ <exclude-pattern>*yui*</exclude-pattern>
+ <exclude-pattern>*pChart*</exclude-pattern>
+ <exclude-pattern>*tcpdf*</exclude-pattern>
+ <exclude-pattern>*fonts*</exclude-pattern>
+ <exclude-pattern>*ezcomponents*</exclude-pattern>
+ <exclude-pattern>*.js</exclude-pattern>
+ <exclude-pattern>*phpexcel*</exclude-pattern>
+ <exclude-pattern>*/lang/*</exclude-pattern>
+
+ <!--
+          Some sniffs have public member vars that allow you to
+              customise specific elements of the sniff. In the case of
+                  the Generic LineLength sniff, you can customise the limit
+                      at which the sniff will throw warnings and the limit at
+                          which it will throw errors.
+
+ -->
+ <rule ref="Generic.Files.LineLength">
+   <properties>
+      <property name="lineLimit" value="200"/>
+      <property name="absoluteLineLimit" value="300"/>
+   </properties>
+   <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase" />
+   <exclude name="Generic.ControlStructures.InlineControlStructure.Discouraged" />
+ </rule>
+
+ 
+ <rule ref="PEAR">
+   <exclude name="PEAR.Classes.ClassDeclaration"/>
+   <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
+   <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
+   <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
+   <exclude name="PEAR.Commenting.ClassComment.InvalidPackage" />
+   <exclude name="PEAR.Commenting.FileComment.WrongStyle" />
+   <exclude name="PEAR.ControlStructures.ControlSignature" />
+   <exclude name="PEAR.NamingConventions.ValidClassName.StartWithCaptial" />
+   <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+   <exclude name="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned" />
+   <exclude name="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned" />
+  </rule>
+
+
+
+ <!--
+          There is a special internal error message produced by PHP_CodeSniffer
+              when it is unable to detect code in a file, possible due to
+                  the use of short open tags even though php.ini disables them.
+                      You can disable this message in the same way as sniff messages.
+
+    Again, the code here will be displayed in the PHP_CodeSniffer
+        output when using the -s command line argument while checking a file.
+         -->
+ <rule ref="Internal.NoCodeFound">
+   <severity>0</severity>
+ </rule>
+
+
+
+
+
+</ruleset>
+

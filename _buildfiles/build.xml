@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     01.03.2012 22:03:21                                                        
+
+     Kajona Head Build    
+     Buildfile to perform additional actions such as phpunit-tests, phpdoc generation, ...
+     Called by the buildserver, so change with care :)
+     Note: the svn update is triggered by cruisecontrol directly.
+                   
+     Author: sidler   
+     $Id$                                                             
+     ====================================================================== -->
+<project name="Kajona Head Build" default="buildSqlite" basedir=".">
+	
+    <description>
+            Buildfile to run common tasks.
+    </description>
+	
+	<!--
+	    CONFIG VALUES BELOW 
+	-->    
+	
+	
+	<!-- target dir for the sources from the svn repo -->
+	<property name="sourcesPath"  value="/../" />
+	<!-- target dir to install the system to -->
+	<property name="projectPath"  value="/project" />
+	<!-- artifacts such as logs and reports will be stored here -->
+	<property name="buildPath"    value="/build" />
+	<!-- generated zips will be placed here (full, light) -->
+	<property name="packagesPath" value="/packages" />
+	<!-- temp-folder, required to build the packages -->
+	<property name="tempPath"     value="/temp" />
+	
+	
+	
+	
+	<!--
+		    No need to change anything below! 
+	-->   
+
+	
+	<!-- internal initialization -->
+	<target name="init">
+		<tstamp />
+		
+		<exec executable="svn" output="${basedir}${buildPath}/svn.properties">
+		    <arg line="info '${basedir}${sourcesPath}'" />
+	   </exec>
+	   <property prefix="svn" file="${basedir}${buildPath}/svn.properties"/>
+	   <echo>Revision found: ${svn.Revision}</echo>
+		
+	</target>
+	
+	
+	
+	
+    <target name="buildSqlite" depends=" init,
+		    								cleanFilesystem, 
+					    					buildProject, installProjectSqlite, 
+					    					runPhpUnitTests, runPhpMD, runPhpCodeSniffer, runPhpCPD, runPDepend, generatePhpDocs,
+					    					buildFullZip, buildLightZip" />
+	
+	<target name="buildMysql" depends="	init,
+		    								cleanFilesystem, 
+					    					buildProject, installProjectMysql, 
+					    					runPhpUnitTests" />
+	
+	<target name="buildOracle" depends=" init,
+		    								cleanFilesystem, 
+					    					buildProject, installProjectOracle, 
+					    					runPhpUnitTests" />
+
+   
+	<!-- removes existing folders and creates them again -->
+	<target name="cleanFilesystem">
+		<delete dir="${basedir}${packagesPath}"/>
+		<mkdir  dir="${basedir}${packagesPath}"/>
+		
+		<delete dir="${basedir}${tempPath}"/>
+		<mkdir  dir="${basedir}${tempPath}"/>
+		<mkdir  dir="${basedir}${tempPath}/core"/>
+		
+		<delete dir="${basedir}${projectPath}"/>
+		<mkdir  dir="${basedir}${projectPath}"/>
+		<mkdir  dir="${basedir}${projectPath}/core"/>
+		
+		<delete dir="${basedir}${buildPath}"/>
+		<mkdir  dir="${basedir}${buildPath}"/>
+		<mkdir  dir="${basedir}${buildPath}/logs"/>
+		<mkdir  dir="${basedir}${buildPath}/coverage"/>
+		<mkdir  dir="${basedir}${buildPath}/api"/>
+		<mkdir  dir="${basedir}${buildPath}/graph"/>
+	</target>	
+	
+	<!-- performes a complete checkout from svn -->
+	<target name="checkout">
+		
+		<delete dir="${basedir}${sourcesPath}"/>
+		<mkdir  dir="${basedir}${sourcesPath}"/>
+		
+		<exec executable="svn">
+			<arg value="checkout" />
+			<arg value="${svnPath}" />
+			<arg value="${basedir}${sourcesPath}" />
+			<arg line=" --username ${svnUsername} --password ${svnPassword} --non-interactive" />
+		</exec>
+		
+		<!-- retrigger svn rev -->
+		<antcall target="init" />
+	</target>
+	
+	<!-- updates the sources from svn -->
+	<target name="update">
+		<exec executable="svn">
+			<arg value="update" />
+			<arg value="${basedir}${sourcesPath}" />
+			<arg line=" --username ${svnUsername} --password ${svnPassword} --non-interactive" />
+		</exec>
+		
+		<!-- retrigger svn rev -->
+		<antcall target="init" />
+	</target>
+	
+
+	<!-- builds the project, aka creates a project out of the sources -->
+	<target name="buildProject">
+		<copy todir="${basedir}${projectPath}/core" overwrite="true"  includeEmptyDirs="true" >
+			<fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+				<exclude name=".svn"/>
+				<include name="element_*/**"/>
+				<include name="module_*/*/**"/>
+				<include name="widget_*/*/**"/>
+				<include name="template_*/*/**"/>
+				<include name="_debugging/*/**"/>
+				<include name="*.php"/>
+			</fileset>
+			
+		</copy>
+	</target>
+	
+	<!-- creates the full-zip including all modules and elements -->
+	<target name="buildFullZip" depends="init" >
+		<delete dir="${basedir}${tempPath}"/>
+		<mkdir  dir="${basedir}${tempPath}"/>
+		<mkdir  dir="${basedir}${tempPath}/core"/>
+		
+		<copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
+			<fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+				<exclude name=".svn"/>
+				<include name="element_*/**"/>
+				<include name="module_*/*/**"/>
+				<include name="widget_*/*/**"/>
+				<include name="template_*/*/**"/>
+				<include name="_debugging/*/**"/>
+				<include name="*.php"/>
+			</fileset>
+			
+		</copy>
+		
+		<exec executable="php" dir="${basedir}"  failonerror="on" >
+			   <arg line="-f buildProject.php ${tempPath} onlySetup"/>
+	    </exec>
+		
+		<zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+			<fileset dir="${basedir}${tempPath}" />
+		</zip>
+	</target>
+		
+	<!-- creates the light-zip, only a limited set of modules included -->
+	<target name="buildLightZip" depends="init">
+		<delete dir="${basedir}${tempPath}"/>
+		<mkdir  dir="${basedir}${tempPath}"/>
+		<mkdir  dir="${basedir}${tempPath}/core"/>
+		
+		<copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true"  >
+			<fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+				<exclude name=".svn"/> 
+				<include name="module_navigation/*/**"/>
+				<include name="module_pages/*/**"/>
+				<include name="module_samplecontent/*/**"/>
+				<include name="module_system/**"/>
+				<include name="*.php"/>
+			</fileset>
+			
+		</copy>
+		
+		<exec executable="php" dir="${basedir}"  failonerror="on" >
+		   <arg line="-f buildProject.php ${tempPath} onlySetup"/>
+	    </exec>
+		
+		<zip destfile="${basedir}${packagesPath}/kajona_v4_light_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+			<fileset dir="${basedir}${tempPath}" />
+		</zip>
+	</target>
+	
+	
+	<!-- triggers the installation of the project aka. creating the db-structure -->
+	
+	<!-- sqlite3 config file -->
+	<target name="installProjectSqlite">
+		<echo>Creating full Kajona installation</echo>
+		<exec executable="php" dir="${basedir}"  failonerror="on" >
+		   <arg line="-f buildProject.php ${projectPath} false config_sqlite3.php"/>
+		 </exec>
+	</target>
+	
+	<!-- mysql config file -->
+	<target name="installProjectMysql">
+		<echo>Creating full Kajona installation</echo>
+		<exec executable="php" dir="${basedir}"  failonerror="on" >
+		   <arg line="-f buildProject.php ${projectPath} false config_mysql.php"/>
+		 </exec>
+	</target>
+	
+	<!-- oracle config file -->
+	<target name="installProjectOracle">
+		<echo>Creating full Kajona installation</echo>
+		<exec executable="php" dir="${basedir}"  failonerror="on" >
+		   <arg line="-f buildProject.php ${projectPath} false config_oracle.php"/>
+		 </exec>
+	</target>
+
+
+
+
+     <!-- requires phpDocumentor, binary phpdoc -->
+	<target name="generatePhpDocs">
+		<echo>Generating PHP API Docs</echo>
+			<exec executable="phpdoc" dir="${basedir}${projectPath}/core">
+			   <arg line=" -ue on -t '${basedir}${buildPath}/api'
+			           -i *tcpdf*,*pchart*,*yui*,*ezcomponents*,*phpexcel*
+			          -ti 'Kajona API Docs'
+			          -dn module_system
+			       -d ."/>
+		</exec>
+	</target>
+
+
+		
+	<!-- requires phpUnit, binary phpunit -->
+	<target name="runPhpUnitTests">
+		<echo>Running PHPUnitTests</echo>
+		<exec executable="phpunit" dir="${basedir}${projectPath}" failonerror="on">
+		    <arg line="--log-junit '${basedir}${buildPath}/logs/junit.xml' 
+		    	       --coverage-clover '${basedir}${buildPath}/logs/clover.xml' 
+		    	       --coverage-html '${basedir}${buildPath}/coverage' 
+			           core" />
+		  </exec>
+	</target>	
+	
+
+<!-- requires php PEAR code sniffer -->
+	<target name="runPhpCodeSniffer" >
+		<echo>Running PHP Code Sniffer: --report=checkstyle  --tab-width=4 --standard='${basedir}/phpcs-ruleset.xml'  .</echo>
+		<exec executable="phpcs" dir="${basedir}${projectPath}/core"  output="${basedir}${buildPath}/logs/checkstyle.xml">
+		    <arg line="--report=checkstyle  --tab-width=4 --standard='${basedir}/phpcs-ruleset.xml'  ."/>
+    		</exec>
+	</target>
+
+
+	
+	<!-- requires php PEAR Mess detector being available -->
+	<target name="runPhpMD" >
+		<echo>Running PHP Mess Detector</echo><!--output="${basedir}${buildPath}/logs/pmd.xml"-->
+		<exec executable="phpmd" dir="${basedir}${projectPath}/core" > 
+		     <arg line=". xml codesize,unusedcode,naming --exclude *yui*,*tcpdf*,*fonts*,*pchart*,*ezcomponents*,*phpexcel* --reportfile '${basedir}${buildPath}/logs/pmd.xml'  "/> 
+		 </exec> 
+	</target>
+	
+	
+	<!-- requires php PEAR CopyPaste detector being available -->
+	<target name="runPhpCPD" >
+		<echo>Running PHP Copy Paste Detector</echo>
+		<exec executable="phpcpd" dir="${basedir}${projectPath}/core"> 
+		     <arg line="--log-pmd '${basedir}${buildPath}/logs/pmd-cpd.xml' . "/> 
+		 </exec> 
+	</target>
+	
+	<!-- requires php PEAR CopyPaste detector being available -->
+	<target name="runPDepend">
+		<echo>Running PHP Dependency Detector</echo>
+		<exec executable="pdepend" dir="${basedir}${projectPath}/core"> 
+		     <arg line="--jdepend-xml='${basedir}${buildPath}/logs/jdepend.xml'
+		     			--phpunit-xml='${basedir}${buildPath}/logs/pdepend.xml'
+		     	        --jdepend-chart='${basedir}${buildPath}/graph/10-dependencies.svg'
+		     			--summary-xml='${basedir}${buildPath}/logs/pdepend.xml'
+		     	        --overview-pyramid='${basedir}${buildPath}/graph/11-software-metrics-pyramid.svg'
+		     			 . "/> 
+		 </exec> 
+	</target>
+
+</project>
