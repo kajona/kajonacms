@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ======================================================================
-     01.03.2012 22:03:21
 
      Kajona Head Build
      Buildfile to perform additional actions such as phpunit-tests, phpdoc generation, ...
      Called by the buildserver, so change with care :)
      Note: the svn update is triggered by cruisecontrol directly.
+
+     This buid-file may be migrated to phing, feel free to start the migration
+
 
      Author: sidler
      $Id$
@@ -41,7 +43,7 @@
 
 
 	<!-- internal initialization -->
-	<target name="init">
+	<target name="init" depends="cleanFilesystem">
 		<tstamp />
 
 		<exec executable="svn" output="${basedir}${buildPath}/svn.properties">
@@ -91,35 +93,6 @@
 		<mkdir  dir="${basedir}${buildPath}/coverage"/>
 		<mkdir  dir="${basedir}${buildPath}/api"/>
 		<mkdir  dir="${basedir}${buildPath}/graph"/>
-	</target>
-
-	<!-- performes a complete checkout from svn -->
-	<target name="checkout">
-
-		<delete dir="${basedir}${sourcesPath}"/>
-		<mkdir  dir="${basedir}${sourcesPath}"/>
-
-		<exec executable="svn">
-			<arg value="checkout" />
-			<arg value="${svnPath}" />
-			<arg value="${basedir}${sourcesPath}" />
-			<arg line=" --username ${svnUsername} --password ${svnPassword} --non-interactive" />
-		</exec>
-
-		<!-- retrigger svn rev -->
-		<antcall target="init" />
-	</target>
-
-	<!-- updates the sources from svn -->
-	<target name="update">
-		<exec executable="svn">
-			<arg value="update" />
-			<arg value="${basedir}${sourcesPath}" />
-			<arg line=" --username ${svnUsername} --password ${svnPassword} --non-interactive" />
-		</exec>
-
-		<!-- retrigger svn rev -->
-		<antcall target="init" />
 	</target>
 
 
