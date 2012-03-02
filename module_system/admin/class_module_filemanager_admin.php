@@ -55,7 +55,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
         return $this->renderList($objIterator);
 	}
 
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($this->getObjModule()->rightRight2()) {
             return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
         }
@@ -73,7 +73,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
     }
 
 
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry->rightRight2()) {
             return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("repo_bearbeiten"), $this->getLang("repo_bearbeiten"), "icon_folderProperties.gif"));
         }

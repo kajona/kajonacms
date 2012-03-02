@@ -55,7 +55,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         return $this->renderList($objArraySectionIterator);
     }
 
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         return "";
     }
 
@@ -70,7 +70,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
             return array();
     }
 
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_tags_tag)
             return parent::renderEditAction($objListEntry);
         else if($objListEntry->rightEdit())

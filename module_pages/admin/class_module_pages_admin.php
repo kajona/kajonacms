@@ -155,9 +155,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         return parent::renderLevelUpAction($strListIdentifier);
     }
 
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_pages_element) {
-            return $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&systemid=".$objListEntry->getSystemid(), $this->getLang("element_bearbeiten"), $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+            if($objListEntry->rightEdit())
+                return $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&systemid=".$objListEntry->getSystemid(), $this->getLang("element_bearbeiten"), $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+        }
+        else if($objListEntry instanceof class_module_pages_folder) {
+            return parent::renderEditAction($objListEntry, true);
         }
         else
             return parent::renderEditAction($objListEntry);
@@ -219,7 +223,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             return parent::renderAdditionalActions($objListEntry);
     }
 
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier != "folderList" && $strListIdentifier != "elementList" && $this->getObjModule()->rightEdit()) {
             $arrReturn = array();
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newPage", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu"), $this->getLang("modul_neu"), "icon_new.gif"));
@@ -229,7 +233,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else if($strListIdentifier == "folderList" && $this->getObjModule()->rightRight2()) {
             if((!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getObjModule()->getSystemid()))
-                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new.gif"));
+                return $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new.gif"));
 
         }
         else if($strListIdentifier == "elementList" && $this->getObjModule()->rightRight1()) {
@@ -528,12 +532,14 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * @autoTestable
      */
 	protected function actionNewFolder($strMode = "new", class_admin_formgenerator $objForm = null) {
+        $strReturn = "";
+        $this->setArrModuleEntry("template", "/folderview.tpl");
 
         //if languages are installed, present a language switch right here
-        $objLanguages = new class_module_languages_admin();
-        $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
-
-        $strReturn = $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+//        $objLanguages = new class_module_languages_admin();
+//        $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
+//
+//        $strReturn = $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 
         if($strMode == "new")
@@ -591,7 +597,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objForm->updateSourceObject();
 
         $objFolder->updateObjectToDb();
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1"));
 
         return "";
 	}

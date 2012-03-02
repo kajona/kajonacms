@@ -154,12 +154,19 @@ abstract class class_admin_simple extends class_admin {
 
     /**
      * Renders the edit action button for the current record.
+     *
      * @param class_model $objListEntry
+     * @param bool $bitDialog opens the linked page in a js-based dialog
+     *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+
+            if($bitDialog)
+                return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+            else
+                return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
         }
     }
 
@@ -224,11 +231,16 @@ abstract class class_admin_simple extends class_admin {
      * provide multiple new-action.
      *
      * @param $strListIdentifier an internal identifier to check the current parent-list
+     * @param bool $bitDialog opens the linked pages in a dialog
+     *
      * @return string|array
      */
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
+            if($bitDialog)
+                return $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
+            else
+                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
         }
     }
 

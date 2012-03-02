@@ -166,7 +166,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
     }
 
 
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_system_module)
             return "";
 
@@ -184,7 +184,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         return parent::renderDeleteAction($objListEntry);
     }
 
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == "moduleList")
             return "";
 

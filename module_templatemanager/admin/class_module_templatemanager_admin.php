@@ -60,7 +60,7 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
         return $this->renderList($objArraySectionIterator);
     }
 
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
             //$strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "download", "", $this->getLang("action_download"), $this->getLang("action_download"), "icon_install.gif"));
@@ -70,7 +70,7 @@ class class_module_templatemanager_admin extends class_admin_simple implements i
         return $strReturn;
     }
 
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         return "";
     }
 

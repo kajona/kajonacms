@@ -202,7 +202,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         return "";
     }
 
-    protected function getNewEntryAction($strListIdentifier) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == "userList" && $this->getObjModule()->rightEdit())
             return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getLang("user_anlegen"), $this->getLang("user_anlegen"), "icon_new.gif"));
 
@@ -235,7 +235,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         return $arrReturn;
     }
 
-    protected function renderEditAction(class_model $objListEntry) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_user_group) {
             if($objListEntry->getSystemid() != _guests_group_id_  && $objListEntry->getSystemid() != _admins_group_id_) {
                 if($objListEntry->rightEdit())
