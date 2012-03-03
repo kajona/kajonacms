@@ -252,7 +252,7 @@ abstract class class_root {
                 $strWhere .= "AND system_id=".$strOneColumn." ";
 
             $strQuery = "SELECT *
-                          FROM "._dbprefix_."system,
+                          FROM ".$this->objDB->encloseTableName(_dbprefix_."system").",
                                ".implode(", ", array_keys($arrTables))." ,
                                "._dbprefix_."system_right
                          WHERE system_id = right_id
@@ -263,8 +263,24 @@ abstract class class_root {
 
             $this->setArrInitRow($arrRow);
 
+            //get the mapped properties
+            $objAnnotations = new class_annotations($this);
+            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+
+            foreach($arrProperties as $strPropertyName => $strColumn) {
+
+                if(!isset($arrRow[$strColumn])) {
+                    //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
+                    continue;
+                }
+
+                $strSetter = class_objectfactory::getSetter($this, $strPropertyName);
+                if($strSetter !== null)
+                    call_user_func(array($this, $strSetter), $arrRow[$strColumn]);
+            }
 
 
+            /*
             //try to set all values
             $strTable = array_values($arrTables);
             $strTable = $strTable[0];
@@ -282,6 +298,7 @@ abstract class class_root {
 
                 }
             }
+            */
         }
     }
 
@@ -481,10 +498,60 @@ abstract class class_root {
      * Use this method to synchronize the current object with the database.
      * Use only updates, inserts are not required to be implemented.
      *
-     * @abstract
+     * Provides a default implementation based on the current objects column mappings.
+     * Override thie method, whenever you want to perform additional actions or escapings.
+     *
      * @return bool
      */
-    protected abstract function updateStateToDb();
+    protected function updateStateToDb() {
+        $arrTables = $this->getObjectTables();
+        if(is_array($arrTables) && validateSystemid($this->getSystemid()) && count($arrTables) == 1) {
+
+            //fetch all columns and values
+            $arrColValues = array();
+            $arrEscapes = array();
+
+            //get the mapped properties
+            $objAnnotations = new class_annotations($this);
+            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+
+            foreach($arrProperties as $strPropertyName => $strColumn) {
+
+                $strGetter = class_objectfactory::getGetter($this, $strPropertyName);
+                if($strGetter !== null) {
+                    $arrColValues[$strColumn] = call_user_func(array($this, $strGetter));
+                    $arrEscapes[] = !$objAnnotations->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
+                }
+            }
+
+            if(count($arrColValues) > 0) {
+                $arrValues = array();
+
+
+                $arrTableNames = array_keys($arrTables);
+                $strPrimaryCol = $arrTables[$arrTableNames[0]];
+                $strQuery = "UPDATE ".$this->objDB->encloseTableName($arrTableNames[0])." SET ";
+
+                $intI = 0;
+                foreach($arrColValues as $strColumn => $objValue) {
+                    $strQuery .= $this->objDB->encloseColumnName($strColumn)." = ? ";
+                    $arrValues[] = $objValue;
+
+                    if(++$intI < count($arrColValues))
+                        $strQuery .= ", ";
+                }
+
+                $strQuery .= " WHERE ".$this->objDB->encloseColumnName($strPrimaryCol)." = ? ";
+                $arrValues[] = $this->getSystemid();
+
+                return $this->objDB->_pQuery($strQuery, $arrValues, $arrEscapes);
+            }
+
+
+            return true;
+        }
+        return true;
+    }
 
     /**
      * Overwrite this method if you want to trigger additional commands during the insert

@@ -15,11 +15,40 @@
  */
 class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn navigation_name
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @tableColumn navigation_page_e
+     */
     private $strPageE = "";
+
+    /**
+     * @var string
+     * @tableColumn navigation_page_i
+     */
     private $strPageI = "";
+
+    /**
+     * @var string
+     * @tableColumn navigation_folder_i
+     */
     private $strFolderI = "";
+
+    /**
+     * @var string
+     * @tableColumn navigation_target
+     */
     private $strTarget = "";
+
+    /**
+     * @var string
+     * @tableColumn navigation_image
+     */
     private $strImage = "";
 
     /**
@@ -85,47 +114,6 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     public function getStrLongDescription() {
         return "";
-    }
-
-
-    /**
-     * Initialises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        parent::initObjectInternal();
-
-        $arrRow = $this->getArrInitRow();
-        if(count($arrRow)> 0) {
-            $this->setStrPageE($arrRow["navigation_page_e"]);
-            $this->setStrPageI($arrRow["navigation_page_i"]);
-            $this->setStrFolderI($arrRow["navigation_folder_i"]);
-        }
-    }
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $strQuery = "UPDATE  "._dbprefix_."navigation
-                        SET 	navigation_name= ?,
-    							navigation_page_i= ?,
-    							navigation_folder_i= ?,
-    							navigation_page_e= ?,
-    							navigation_target= ?,
-    							navigation_image= ?
-    					WHERE navigation_id= ?";
-        return $this->objDB->_pQuery($strQuery, array(
-            $this->getStrName(),
-    		uniStrtolower($this->getStrPageI()),
-    		$this->getStrFolderI(),
-    		$this->getStrPageE(),
-    		$this->getStrTarget(),
-    		$this->getStrImage(),
-    		$this->getSystemid()
-        ));
     }
 
 
@@ -326,7 +314,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @fieldType page
      */
     public function getStrPageI() {
-        return $this->strPageI;
+        return uniStrtolower($this->strPageI);
     }
 
     /**
@@ -365,6 +353,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     public function setStrTarget($strTarget) {
         $this->strTarget = $strTarget;
     }
+
     public function setStrImage($strImage) {
         $strImage = uniStrReplace(_webpath_, "", $strImage);
         $this->strImage = $strImage;

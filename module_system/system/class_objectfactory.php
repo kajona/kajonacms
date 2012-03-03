@@ -109,6 +109,10 @@ class class_objectfactory {
      */
     public static function getSetter($objSourceObject, $strPropertyName) {
 
+        $strSetter = "set".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
+
         $strSetter = "setStr".$strPropertyName;
         if(method_exists($objSourceObject, $strSetter))
             return $strSetter;
@@ -141,6 +145,10 @@ class class_objectfactory {
      * @return null|string
      */
     public static function getGetter($objSourceObject, $strPropertyName) {
+
+        $strSetter = "get".$strPropertyName;
+        if(method_exists($objSourceObject, $strSetter))
+            return $strSetter;
 
         $strSetter = "getStr".$strPropertyName;
         if(method_exists($objSourceObject, $strSetter))

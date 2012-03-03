@@ -22,8 +22,18 @@ class class_module_pages_page extends class_model implements interface_model, in
     private $strActionDelete = "deletePageProperties";
 
 
+    /**
+     * @var string
+     * @tableColumn page_name
+     */
 	private $strName = "";
+
+    /**
+     * @var int
+     * @tableColumn page_type
+     */
 	private $intType = 0;
+
 	private $strKeywords = "";
 	private $strDescription = "";
 	private $strTemplate = "";
@@ -118,17 +128,10 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      */
     protected function initObjectInternal() {
-		//language independent fields
-		$strQuery = "SELECT *
-					FROM "._dbprefix_."system,
-					     "._dbprefix_."system_right,
-					     "._dbprefix_."page
-					WHERE system_id = page_id
-					  AND system_id = right_id
-					  AND system_id = ?";
-		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()) );
 
-        $this->setArrInitRow($arrRow);
+
+        parent::initObjectInternal();
+        $arrRow = $this->getArrInitRow();
 
 		//language dependant fields
 		if(count($arrRow) > 0) {
@@ -152,8 +155,6 @@ class class_module_pages_page extends class_model implements interface_model, in
     		$this->setStrBrowsername($arrRow["pageproperties_browsername"]);
     		$this->setStrDesc($arrRow["pageproperties_description"]);
     		$this->setStrKeywords($arrRow["pageproperties_keywords"]);
-    		$this->setStrName($arrRow["page_name"]);
-    		$this->setIntType($arrRow["page_type"]);
     		$this->setStrTemplate($arrRow["pageproperties_template"]);
     		$this->setStrSeostring($arrRow["pageproperties_seostring"]);
     		$this->setStrLanguage($arrRow["pageproperties_language"]);
@@ -163,8 +164,8 @@ class class_module_pages_page extends class_model implements interface_model, in
             $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
     		$this->strOldDescription = $arrRow["pageproperties_description"];
     		$this->strOldKeywords = $arrRow["pageproperties_keywords"];
-    		$this->strOldName = $arrRow["page_name"];
-    		$this->intOldType = $arrRow["page_type"];
+    		$this->strOldName = $this->strName;
+    		$this->intOldType = $this->intType;
     		$this->strOldTemplate = $arrRow["pageproperties_template"];
     		$this->strOldSeostring = $arrRow["pageproperties_seostring"];
     		$this->strOldLanguage = $arrRow["pageproperties_language"];
@@ -204,10 +205,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $objChanges->createLogEntry($this, $this->strActionEdit);
 
 		//Update the baserecord
-		$strQuery = "UPDATE  "._dbprefix_."page
-					SET page_name= ?,
-                        page_type= ?
-				       WHERE page_id= ?";
+        $bitBaseUpdate = parent::updateStateToDb();
 
 		//and the properties record
 		//properties for this language already existing?
@@ -258,7 +256,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             );
 		}
 
-        return ($this->objDB->_pQuery($strQuery, array( $strName, $this->getIntType(), $this->getSystemid() ) ) && $this->objDB->_pQuery($strQuery2, $arrParams)) ;
+        return ($bitBaseUpdate && $this->objDB->_pQuery($strQuery2, $arrParams)) ;
 
     }
 

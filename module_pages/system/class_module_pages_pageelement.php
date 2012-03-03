@@ -15,10 +15,34 @@
  */
 class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn page_element_ph_placeholder
+     */
     private $strPlaceholder = "";
+
+    /**
+     * @var string
+     * @tableColumn page_element_ph_name
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @tableColumn page_element_ph_element
+     */
     private $strElement = "";
+
+    /**
+     * @var string
+     * @tableColumn page_element_ph_title
+     */
     private $strTitle = "";
+
+    /**
+     * @var string
+     * @tableColumn page_element_ph_language
+     */
     private $strLanguage = "";
 
     private $strClassAdmin = "";
@@ -168,24 +192,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         return true;
     }
 
-
-    /**
-     * Updates the current object to the database
-     * currently just updateing the internal title and the language
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $strQuery = "UPDATE "._dbprefix_."page_element
-							SET page_element_ph_title = ?,
-							    page_element_ph_language = ?,
-							    page_element_ph_placeholder = ?,
-							    page_element_ph_name = ?,
-							    page_element_ph_element = ?
-							WHERE page_element_id = ? ";
-        $bitReturn =  $this->objDB->_pQuery($strQuery, array( $this->strTitle, $this->getStrLanguage(), $this->getStrPlaceholder(), $this->getStrName(), $this->getStrElement(), $this->getSystemid()  ));
-        return $bitReturn;
-    }
 
     /**
      * Makes a copy of the current element and saves it attached to the given page.

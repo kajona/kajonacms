@@ -10,6 +10,7 @@
 /**
  * Model for a single session. Session are managed by class_session, so there should be no need
  * to create instances directly.
+ * Session-Entries have are not reflected by a systemrecord
  *
  * @package module_system
  * @author sidler@mulchprod.de

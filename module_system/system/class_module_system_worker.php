@@ -46,22 +46,6 @@ class class_module_system_worker extends class_model implements interface_model 
         return "";
     }
 
-
-    /**
-     * Initialises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-    }
-
-    /**
-     * Updates the current object to the database
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
     /**
      * Deletes the current object from the system
      * @return bool
@@ -69,7 +53,6 @@ class class_module_system_worker extends class_model implements interface_model 
     public function deleteObject() {
         return true;
     }
-
 
 
     /**

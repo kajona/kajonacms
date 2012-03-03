@@ -15,7 +15,17 @@
  */
 class class_module_system_adminwidget extends class_model implements interface_model {
 
+    /**
+     * @var string
+     * @tableColumn adminwidget_class
+     */
     private $strClass = "";
+
+    /**
+     * @var string
+     * @tableColumn adminwidget_content
+     * @blockEscaping
+     */
     private $strContent = "";
 
 
@@ -48,17 +58,6 @@ class class_module_system_adminwidget extends class_model implements interface_m
         return $this->getStrClass();
     }
 
-    /**
-     * Updates the values of the current widget to the db
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $strQuery = "UPDATE "._dbprefix_."adminwidget
-                   SET adminwidget_class = ?,
-                       adminwidget_content = ?
-                 WHERE adminwidget_id = ? ";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrClass(), $this->getStrContent(), $this->getSystemid()), array(true, false, true));
-    }
 
 
     /**

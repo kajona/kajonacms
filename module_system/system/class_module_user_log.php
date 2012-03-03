@@ -44,14 +44,6 @@ class class_module_user_log extends class_model implements interface_model  {
         return "";
     }
 
-
-    /**
-     * Initalises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-    }
-
     /**
      * Deletes the current object from the system
      * @return bool
@@ -60,19 +52,7 @@ class class_module_user_log extends class_model implements interface_model  {
         return true;
     }
 
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
-
-    /**
+        /**
      * Generates a login-log-entry
      *
      * @param int $intStatus

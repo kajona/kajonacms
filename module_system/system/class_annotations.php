@@ -54,6 +54,20 @@ class class_annotations {
         return $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
     }
 
+
+    /**
+     * searches an annotation (e.g. @version) in the doccomment of a passed property and validates
+     * the existence of this method
+     *
+     * @param string $strPropertyName
+     * @param string $strAnnotation
+     * @return bool
+     */
+    public function hasPropertyAnnotation($strPropertyName, $strAnnotation) {
+        $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
+        return $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+    }
+
     /**
      * Searches an annotation (e.g. @version) in the doccomment of a passed method
      * and passes the value, so anything behind the @name part.
@@ -76,6 +90,28 @@ class class_annotations {
 
         //strip the annotation parts
         return trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
+    }
+
+    /**
+     * Searches the current class for properties marked with a given annotation.
+     * If found, the name of the propery plus the (optional) value of the property is returned.
+     *
+     * @param $strAnnotation
+     * @return array ["propertyname" => "annotationvalue"]
+     */
+    public function getPropertiesWithAnnotation($strAnnotation) {
+        $arrProperties = $this->objReflectionClass->getProperties();
+
+        $arrReturn = array();
+
+        foreach($arrProperties as $objOneProperty) {
+            $strLine = $this->searchAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+            if($strLine !== false) {
+                $arrReturn[$objOneProperty->getName()] = trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
+            }
+        }
+
+        return $arrReturn;
     }
 
     /**

@@ -20,7 +20,16 @@
  */
 class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn aspect_name
+     */
     private $strName = "";
+
+    /**
+     * @var bool
+     * @tableColumn aspect_default
+     */
     private $bitDefault = false;
 
     private static $STR_SESSION_ASPECT_KEY = "STR_SESSION_ASPECT_KEY";
@@ -99,11 +108,7 @@ class class_module_system_aspect extends class_model implements interface_model,
         if($this->getBitDefault() == 1)
             self::resetDefaultAspect();
 
-        $strQuery = "UPDATE "._dbprefix_."aspects
-                        SET aspect_name = ?,
-                            aspect_default = ?
-                      WHERE aspect_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getBitDefault(), $this->getSystemid()));
+        return parent::updateStateToDb();
     }
 
 

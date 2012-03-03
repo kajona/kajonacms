@@ -15,7 +15,16 @@
  */
 class class_module_navigation_tree extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn navigation_name
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @tableColumn navigation_folder_i
+     */
     private $strFolderId = "";
 
     /**
@@ -77,32 +86,6 @@ class class_module_navigation_tree extends class_model implements interface_mode
     public function getStrLongDescription() {
         return "";
     }
-
-
-    /**
-     * Initialises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        parent::initObjectInternal();
-        $arrRow = $this->getArrInitRow();
-        $this->setStrFolderId($arrRow["navigation_folder_i"]);
-    }
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        $strQuery = "UPDATE "._dbprefix_."navigation
-                     SET navigation_name= ?,
-                         navigation_folder_i=?
-                     WHERE navigation_id=?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrFolderId(), $this->getSystemid()));
-    }
-
 
     /**
      * Returns an array of all navigation-trees available

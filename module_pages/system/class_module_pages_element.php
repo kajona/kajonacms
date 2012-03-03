@@ -13,14 +13,45 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @todo make real records out of the element-records, so with a matching systemid
  */
 class class_module_pages_element extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn element_name
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @tableColumn element_class_portal
+     */
     private $strClassPortal = "";
+
+    /**
+     * @var string
+     * @tableColumn element_class_admin
+     */
     private $strClassAdmin = "";
+
+    /**
+     * @var string
+     * @tableColumn element_repeat
+     */
     private $intRepeat = "";
+
+    /**
+     * @var string
+     * @tableColumn element_cachetime
+     */
     private $intCachetime = "";
+
+    /**
+     * @var string
+     * @tableColumn element_version
+     */
     private $strVersion = "";
 
     /**

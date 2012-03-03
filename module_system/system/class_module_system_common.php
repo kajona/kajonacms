@@ -33,15 +33,6 @@ class class_module_system_common extends class_model implements interface_model 
 
 
     /**
-     * Initalises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-
-    }
-
-
-    /**
      * Deletes an entry from the dates-records
      *
      * @return bool
@@ -303,7 +294,7 @@ class class_module_system_common extends class_model implements interface_model 
     /**
 	 * Creates Infos about the GDLib
 	 *
-	 * @return unknown
+	 * @return string
 	 */
 	public function getGDInfos() {
 		$arrReturn = array();
@@ -430,17 +421,5 @@ class class_module_system_common extends class_model implements interface_model 
     protected function getObjectTables() {
         return array();
     }
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
 
 }

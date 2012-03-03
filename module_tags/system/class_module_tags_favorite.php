@@ -16,7 +16,16 @@
  */
 class class_module_tags_favorite extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn tags_fav_tagid
+     */
     private $strTagId;
+
+    /**
+     * @var string
+     * @tableColumn tags_fav_userid
+     */
     private $strUserId;
 
     private $objTag = null;
@@ -67,7 +76,6 @@ class class_module_tags_favorite extends class_model implements interface_model,
         return "";
     }
 
-
     /**
      * @see class_model::getObjectTables();
      * @return array
@@ -75,23 +83,6 @@ class class_module_tags_favorite extends class_model implements interface_model,
     protected function getObjectTables() {
         return array(_dbprefix_."tags_favorite" => "tags_fav_id");
     }
-
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        $strQuery = "UPDATE "._dbprefix_."tags_favorite SET
-                    	    tags_fav_tagid = ?,
-                    	    tags_fav_userid = ?
-					  WHERE tags_fav_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrTagId(), $this->getStrUserId(), $this->getSystemid()));
-    }
-
-
 
     /**
      * Returns a list of tags available

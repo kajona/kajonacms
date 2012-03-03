@@ -15,9 +15,28 @@
  */
 class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener {
 
+    /**
+     * @var string
+     * @tableColumn dashboard_column
+     */
     private $strColumn = "";
+
+    /**
+     * @var string
+     * @tableColumn dashboard_user
+     */
     private $strUser = "";
+
+    /**
+     * @var string
+     * @tableColumn dashboard_widgetid
+     */
     private $strWidgetId = "";
+
+    /**
+     * @var string
+     * @tableColumn dashboard_aspect
+     */
     private $strAspect = "";
 
 
@@ -50,22 +69,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     public function getStrDisplayName() {
         return "dashboard widget ".$this->getSystemid();
-    }
-
-
-    /**
-     * Updates the current widget to the db
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        $strQuery = "UPDATE "._dbprefix_."dashboard
-                   SET dashboard_user = ?,
-                       dashboard_column = ?,
-                       dashboard_widgetid = ?,
-                       dashboard_aspect = ?
-                 WHERE dashboard_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrUser(), $this->getStrColumn(), $this->getStrWidgetId(), $this->getStrAspect(), $this->getSystemid()));
     }
 
     /**

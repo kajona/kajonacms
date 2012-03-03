@@ -16,10 +16,34 @@
  */
 class class_module_filemanager_repo extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn filemanager_path
+     */
     private $strPath = "";
+
+    /**
+     * @var string
+     * @tableColumn filemanager_name
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @tableColumn filemanager_upload_filter
+     */
     private $strUploadFilter = "";
+
+    /**
+     * @var string
+     * @tableColumn filemanager_view_filter
+     */
     private $strViewFilter = "";
+
+    /**
+     * @var string
+     * @tableColumn filemanager_foreign_id
+     */
     private $strForeignId = "";
 
      /**
@@ -79,35 +103,6 @@ class class_module_filemanager_repo extends class_model implements interface_mod
     public function getStrLongDescription() {
         return "";
     }
-
-
-    /**
-     * initializes the current object with proper values
-     *
-     */
-    protected function  initObjectInternal() {
-        parent::initObjectInternal();
-        $arrRow = $this->getArrInitRow();
-        $this->setStrUploadFilter($arrRow["filemanager_upload_filter"]);
-        $this->setStrViewFilter($arrRow["filemanager_view_filter"]);
-        $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
-    }
-
-    protected function updateStateToDb() {
-
-        $strQuery = "UPDATE "._dbprefix_."filemanager
-                     SET filemanager_name = ?,
-                         filemanager_path = ?,
-                         filemanager_upload_filter = ?,
-                         filemanager_view_filter = ?,
-                         filemanager_foreign_id = ?
-                     WHERE filemanager_id = ?";
-        return $this->objDB->_pQuery($strQuery, array(
-            $this->getStrName(), $this->getStrPath(), $this->getStrUploadFilter(), $this->getStrViewFilter(), $this->getStrForeignId(), $this->getSystemid()
-        ));
-
-    }
-
 
     /**
      * Loads all repos currently available

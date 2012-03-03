@@ -17,6 +17,10 @@
  */
 class class_module_templatemanager_template extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn templatepack_name
+     */
     private $strName = "";
 
     private $arrMetadata = array();
@@ -89,34 +93,9 @@ class class_module_templatemanager_template extends class_model implements inter
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT *
-                      FROM "._dbprefix_."templatepacks,
-                           "._dbprefix_."system,
-                           "._dbprefix_."system_right
-                     WHERE templatepack_id = system_id
-                       AND system_id = right_id
-                       AND templatepack_id = ?";
-
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        $this->setArrInitRow($arrRow);
-
-        $this->setStrName($arrRow["templatepack_name"]);
-
+        parent::initObjectInternal();
         $this->arrMetadata = $this->getMetadata();
     }
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $strQuery = "UPDATE "._dbprefix_."templatepacks
-                        SET templatepack_name = ?
-                      WHERE templatepack_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
-    }
-
 
     /**
      * Deletes the tag with the given systemid from the system

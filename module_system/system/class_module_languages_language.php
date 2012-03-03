@@ -15,7 +15,16 @@
  */
 class class_module_languages_language extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn language_name
+     */
     private $strName = "";
+
+    /**
+     * @var bool
+     * @tableColumn language_default
+     */
     private $bitDefault = false;
 
     private $strLanguagesAvailable = "ar,bg,cs,da,de,el,en,es,fi,fr,ga,he,hr,hu,hy,id,it,ja,ko,nl,no,pl,pt,ro,ru,sk,sl,sv,th,tr,uk,zh";
@@ -96,11 +105,7 @@ class class_module_languages_language extends class_model implements interface_m
         if($this->getBitDefault() == 1)
             self::resetAllDefaultLanguages();
 
-        $strQuery = "UPDATE "._dbprefix_."languages
-                     SET language_name = ?,
-                         language_default = ?
-                     WHERE language_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getBitDefault(), $this->getSystemid() ));
+        return parent::updateStateToDb();
     }
 
     /**

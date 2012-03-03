@@ -20,6 +20,10 @@
  */
 class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn tags_tag_name
+     */
     private $strName;
 
     /**
@@ -75,20 +79,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     protected function getObjectTables() {
         return array(_dbprefix_."tags_tag" => "tags_tag_id");
     }
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        $strQuery = "UPDATE "._dbprefix_."tags_tag SET
-                    	    tags_tag_name = ?
-					  WHERE tags_tag_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
-    }
-
 
     /**
      * Deletes the tag with the given systemid from the system
