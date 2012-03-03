@@ -246,7 +246,7 @@
 	<target name="runPhpCPD" >
 		<echo>Running PHP Copy Paste Detector</echo>
 		<exec executable="phpcpd" dir="${basedir}${projectPath}/core">
-		     <arg line="--log-pmd '${basedir}${buildPath}/logs/pmd-cpd.xml' . "/>
+		     <arg line=" --exclude ${basedir}${projectPath}/core/module_system/system/ezcomponents --exclude ${basedir}${projectPath}/core/module_system/system/pchart --exclude ${basedir}${projectPath}/core/module_system/system/tcpdf --exclude ${basedir}${projectPath}/core/module_system/system/phpexcel   --log-pmd '${basedir}${buildPath}/logs/pmd-cpd.xml' . "/>
 		 </exec>
 	</target>
 
