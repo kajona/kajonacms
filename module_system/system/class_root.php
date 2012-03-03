@@ -245,7 +245,7 @@ abstract class class_root {
     protected function initObjectInternal() {
         //try to do a default init
         $arrTables = $this->getObjectTables();
-        if(is_array($arrTables) && validateSystemid($this->getSystemid())) {
+        if(is_array($arrTables) && validateSystemid($this->getSystemid()) && count($arrTables) > 0 ) {
 
             $strWhere = "";
             foreach($arrTables as $strOneColumn)
