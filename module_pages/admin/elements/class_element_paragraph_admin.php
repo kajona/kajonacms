@@ -78,14 +78,28 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 
 		//and save to database
 		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
-				paragraph_title = '".dbsafeString($this->arrParamData["paragraph_title"])."',
-				paragraph_content = '".dbsafeString($strContent, false)."',
-				paragraph_link = '".dbsafeString($this->arrParamData["paragraph_link"])."',
-				paragraph_image = '".dbsafeString($strImage)."',
-				paragraph_template = '".dbsafeString($this->arrParamData["paragraph_template"])."'
-				WHERE content_id='".dbsafeString($strSystemid)."'";
+				paragraph_title = ?,
+				paragraph_content = ?,
+				paragraph_link = ?,
+				paragraph_image = ?,
+				paragraph_template = ?
+				WHERE content_id= ? ";
 
-		if($this->objDB->_query($strQuery))
+		if($this->objDB->_pQuery(
+            $strQuery,
+            array(
+                $this->arrParamData["paragraph_title"],
+                $strContent,
+                $this->arrParamData["paragraph_link"],
+                $strImage,
+                $this->arrParamData["paragraph_template"],
+                $strSystemid
+            ),
+            array(
+                true,
+                false
+            )
+        ))
 			return true;
 		else
 			return false;

@@ -18,6 +18,7 @@ Element Update
 - portal classes should extended by _portal (class_element_image_portal.php)
 - admin classes should extended by _admin (class_element_image_admin.php)
 - the folder /elemente is renamed to /elements
+- table column definitions no longer require a datatype, only the column-name is required
 
 General:
 - Updated signature of class_portal::__construct: public function __construct($arrElementData = array(), $strSystemid = "")

@@ -71,8 +71,6 @@ abstract class class_element_admin extends class_admin {
 
 		//add a folder containing optional system-fields
         $strSystemFields = "";
-        $arrStart = array("", "", "");
-        $arrEnd = array("", "", "");
         $bitShow = false;
 
         $objStartDate = null;
@@ -135,8 +133,6 @@ abstract class class_element_admin extends class_admin {
 		return $strReturn;
 	}
 
-
-
 	/**
 	 * Loads the data of the current element
 	 *
@@ -155,7 +151,7 @@ abstract class class_element_admin extends class_admin {
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = content_id
     					   AND system_id = content_id
-    					   AND system_id = '".dbsafeString($this->getSystemid())."'";
+    					   AND system_id = ? ";
 	    }
 	    else {
 	        $strQuery = "SELECT *
@@ -166,13 +162,63 @@ abstract class class_element_admin extends class_admin {
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = system_id
-    					   AND system_id = '".dbsafeString($this->getSystemid())."'";
+    					   AND system_id = ? ";
 
 	    }
-		$arrElement = $this->objDB->getRow($strQuery);
+		$arrElement = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
 		return $arrElement;
 	}
+
+
+    public function updateForeignElement() {
+        $strElementTableColumns = $this->getArrModule("tableColumns");
+        if($strElementTableColumns != "") {
+
+            //open new tx
+            $this->objDB->transactionBegin();
+
+            $arrElementParams = $this->getArrParamData();
+
+            $arrTableRows = explode(",", $strElementTableColumns);
+            if(count($arrTableRows) > 0) {
+                $arrInserts = array();
+                $arrParams = array();
+
+                foreach($arrTableRows as $strTableColumnName) {
+
+                    $strColumnValue = "";
+                    if(isset($arrElementParams[$strTableColumnName]))
+                        $strColumnValue = $arrElementParams[$strTableColumnName];
+
+                    $arrParams[] = $strColumnValue;
+                    $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ? ";
+                }
+
+                $strRowUpdates = implode(", ", $arrInserts);
+                $strUpdateQuery =
+                    " UPDATE ".$this->getTable()." SET "
+                        .$strRowUpdates.
+                        " WHERE content_id= ? ";
+
+                $arrParams[] = $this->getSystemid();
+
+                if(!$this->objDB->_pQuery($strUpdateQuery, $arrParams)) {
+                    $this->objDB->transactionRollback();
+                }
+                else
+                    $this->objDB->transactionCommit();
+            }
+            else
+                throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
+        }
+        else {
+            //To remain backwards-compatible:
+            //Call the save-method of the element instead or if the element wants to update its data specially
+            if(method_exists($this, "actionSave") && !$this->actionSave($this->getSystemid()))
+                throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
+        }
+    }
 
 	/**
 	 * returns the table used by the element
@@ -180,7 +226,7 @@ abstract class class_element_admin extends class_admin {
 	 * @return string
 	 */
 	public function getTable() {
-		return $this->arrModule["table"];
+		return $this->getArrModule("table");
 	}
 
 

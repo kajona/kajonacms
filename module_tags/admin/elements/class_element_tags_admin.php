@@ -24,7 +24,7 @@ class class_element_tags_admin extends class_element_admin implements interface_
 
         $this->setArrModuleEntry("name", "element_tags");
         $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1|char");
+        $this->setArrModuleEntry("tableColumns", "char1");
 		parent::__construct();
 	}
 

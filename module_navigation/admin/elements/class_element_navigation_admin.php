@@ -22,7 +22,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 	public function __construct() {
         $this->setArrModuleEntry("name", "element_navigation");
         $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
-        $this->setArrModuleEntry("tableColumns", "navigation_id|char,navigation_template|char,navigation_mode|char");
+        $this->setArrModuleEntry("tableColumns", "navigation_id,navigation_template,navigation_mode");
 		parent::__construct();
 	}
 

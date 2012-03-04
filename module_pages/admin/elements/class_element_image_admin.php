@@ -20,7 +20,7 @@ class class_element_image_admin extends class_element_admin implements interface
 
         $this->setArrModuleEntry("name", "element_image");
         $this->setArrModuleEntry("table", _dbprefix_."element_image");
-        $this->setArrModuleEntry("tableColumns", "image_title|char,image_link|char,image_image|char,image_x|number,image_y|number,image_template|char");
+        $this->setArrModuleEntry("tableColumns", "image_title,image_link,image_image,image_x,image_y,image_template");
 		parent::__construct();
 	}
 

@@ -61,8 +61,8 @@ abstract class class_element_portal extends class_portal {
 	    if($this->arrModule["table"] != "") {
     		$strQuery = "SELECT *
     						FROM ".$this->arrModule["table"]."
-    						WHERE content_id = '".$strSystemid."'";
-    		return $this->objDB->getRow($strQuery);
+    						WHERE content_id = ? ";
+    		return $this->objDB->getPRow($strQuery, array($strSystemid));
 	    }
 	    else
 	       return array();
@@ -429,9 +429,12 @@ abstract class class_element_portal extends class_portal {
 
     /**
      * Generates the link to create an element at a placeholder not yet existing
+     *
      * @param string $strSystemid
      * @param string $strPlaceholder
      * @param string $strElement
+     * @param string $strElementName
+     *
      * @return string
      * @static
      */
@@ -455,11 +458,11 @@ abstract class class_element_portal extends class_portal {
         return $strReturn;
     }
 
-	/**
+    /**
      * Generates a wrapper for the single new-buttons at a given placeholder
      *
      * @param string $strPlaceholder
-     * @param string $strContent
+     * @param string $strContentElements
      * @return string
      * @static
      */
@@ -501,6 +504,8 @@ abstract class class_element_portal extends class_portal {
      * Use this method to set additional cache-key-addons.
      * E.g. if you want to cache depending on your own params like a rating history,
      * this is the place to go.
+     *
+     * @param string $strCacheAddon
      */
     public function setStrCacheAddon($strCacheAddon) {
         $this->strCacheAddon .= $strCacheAddon;

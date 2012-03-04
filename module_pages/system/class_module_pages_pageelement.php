@@ -80,7 +80,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrName() . " (".$this->getStrReadableName() . ")" ." - ". $this->getStrTitle();
+        return $this->getStrName() . " (".$this->getStrReadableName() . ")" ." - ". $this->getStrTitle(true);
     }
 
     /**
@@ -760,7 +760,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param bool $bitClever disables the loading by using an instance of the element
      * @return string
      */
-    public function getStrTitle($bitClever = true) {
+    public function getStrTitle($bitClever = false) {
         if($this->strTitle != "" || !$bitClever || $this->getStrClassAdmin() == "")
             return $this->strTitle;
         //Create an instance of the object and let it serve the comment...

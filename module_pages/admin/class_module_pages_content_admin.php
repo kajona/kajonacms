@@ -155,7 +155,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             if($objLockmanager->isLockedByCurrentUser())
                                 $objLockmanager->unlockRecord();
 
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
                             $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                         }
 
@@ -320,7 +320,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 */
 	protected function actionSaveElement() {
 		$strReturn = "";
-		//There are two modes - edit an new
+		//There are two modes - edit and new
 		//The element itself just knows the edit mode, so in case of new, we have to create a dummy element - before
 		//passing control to the element
 		if($this->getParam("mode") == "new") {
@@ -381,6 +381,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
 			$objElement = new $strElementClass();
+            $objElement->setSystemid($this->getSystemid());
 
 			//really continue? try to validate the passed data.
 			if(!$objElement->validateForm()) {
@@ -394,7 +395,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great
-            $this->updateForeignElement($objElement);
+            $objElement->updateForeignElement();
 
 			//Edit Date of page & unlock
             $objCommons = new class_module_system_common($strPageSystemid);
@@ -469,6 +470,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 			//and finally create the object
             /** @var class_element_admin $objElement  */
 			$objElement = new $strElementClass();
+            $objElement->setSystemid($this->getSystemid());
             $arrElementData = $objElement->loadElementData();
 
             //see if we could set the param to the element
@@ -482,7 +484,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great
-			$this->updateForeignElement($objElement);
+            $objElement->updateForeignElement();
 
 			//Edit Date of page & unlock
             $objCommons = new class_module_system_common($strPageSystemid);
@@ -505,65 +507,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
-    /**
-     * Triggers the update of the foreign element.
-     * Therefore the elements metadata is queried for a foreign table.
-     *
-     * @param interface_admin_element|class_element_admin $objElement
-     * @throws class_exception
-     */
-    private function updateForeignElement(interface_admin_element $objElement) {
-        $strElementTableColumns = $objElement->getArrModule("tableColumns");
-        if($strElementTableColumns != "") {
-
-            //open new tx
-            $this->objDB->transactionBegin();
-
-            $arrElementParams = $objElement->getArrParamData();
-
-            $arrTableRows = explode(",", $strElementTableColumns);
-            if(count($arrTableRows) > 0) {
-                $arrInserts = array();
-                foreach($arrTableRows as $strOneTableColumnConf) {
-
-                    //explode to get tableColumnName and tableColumnDatatype
-                    //currently, datatypes are 'number' and 'char' -> casts!
-                    $arrTemp = explode("|", $strOneTableColumnConf);
-                    $strTableColumnName = $arrTemp[0];
-                    $strTableColumnDatatype = $arrTemp[1];
-
-                    $strColumnValue = "";
-                    if(isset($arrElementParams[$strTableColumnName]))
-                        $strColumnValue = $arrElementParams[$strTableColumnName];
-
-                    if ($strTableColumnDatatype == "number")
-                        $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($strColumnValue)." ";
-                    elseif ($strTableColumnDatatype == "char")
-                        $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($strColumnValue)."' ";
-                }
-
-                $strRowUpdates = implode(", ", $arrInserts);
-                $strUpdateQuery =
-                " UPDATE ".$objElement->getTable()." SET "
-                  .$strRowUpdates.
-                " WHERE content_id='".$this->getSystemid()."'";
-
-                if(!$this->objDB->_query($strUpdateQuery)) {
-                    $this->objDB->transactionRollback();
-                }
-                else
-                    $this->objDB->transactionCommit();
-            }
-            else
-                throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
-        }
-        else {
-            //To remain backwards-compatible:
-            //Call the save-method of the element instead or if the element wants to update its data specially
-            if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
-                throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
-        }
-    }
 
 	/**
 	 * Shows the warning box before deleteing a element
@@ -589,17 +532,16 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	/**
 	 * Deletes an Element
 	 *
-	 * @param string $strSystemid
 	 * @return string, "" in case of success
 	 */
-	protected function actionDeleteElementFinal($strSystemid) {
+	protected function actionDeleteElementFinal() {
 		$strReturn = "";
 
         $objPageElement = new class_module_pages_pageelement($this->getSystemid());
-		if($objPageElement->rightDelete($strSystemid)) {
+		if($objPageElement->rightDelete()) {
 			//Locked?
 			$objLockmanager = new class_lockmanager($this->getSystemid());
-			$strPrevId = $this->getPrevId();
+			$strPrevId = $objPageElement->getPrevId();
 
 			if($objLockmanager->isAccessibleForCurrentUser()) {
 			    //delete object
