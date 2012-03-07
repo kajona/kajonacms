@@ -213,11 +213,7 @@ class class_module_system_session extends class_model implements interface_model
     public static function getAllActiveSessions($intStart = null, $intEnd = null) {
 
         $strQuery = "SELECT session_id FROM "._dbprefix_."session WHERE session_releasetime > ? ORDER BY session_releasetime DESC, session_id ASC";
-
-        if($intStart !== null && $intEnd !== null)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(time()), $intStart, $intEnd);
-        else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(time()));
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(time()), $intStart, $intEnd);
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId)

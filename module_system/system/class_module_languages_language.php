@@ -124,10 +124,7 @@ class class_module_languages_language extends class_model implements interface_m
 		             ".($bitJustActive ? "AND system_status != 0 ": "")."
 		             ORDER BY system_sort ASC, system_comment ASC";
 
-        if($intStart !== null && $intEnd !== null)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_languages_language($arrOneId["system_id"]);

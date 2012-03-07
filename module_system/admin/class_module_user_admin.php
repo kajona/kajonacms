@@ -967,7 +967,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
         $objArraySectionIterator->setIntElementsPerPage(_user_log_nrofrecords_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection($objLogbook->getLoginLogsSection($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_user_log::getLoginLogs($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "loginlog");
         $arrLogs = $arrPageViews["elements"];

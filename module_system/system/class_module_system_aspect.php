@@ -121,16 +121,13 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return class_module_system_aspect[]
      * @static
      */
-    public static function getAllAspects($bitJustActive = false, $intStart = false, $intEnd = false) {
+    public static function getAllAspects($bitJustActive = false, $intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
 		             WHERE system_id = aspect_id
 		             ".($bitJustActive ? "AND system_status != 0 ": "")."
 		             ORDER BY system_sort ASC, aspect_name ASC";
-        if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_system_aspect($arrOneId["system_id"]);

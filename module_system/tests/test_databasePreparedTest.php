@@ -77,7 +77,7 @@ class class_test_databasePrepared extends class_testbase  {
 
         echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
-        $arrRow = $objDB->getPArraySection($strQuery, array(), 0, 9);
+        $arrRow = $objDB->getPArray($strQuery, array(), 0, 9);
         $this->assertEquals(count($arrRow) , 10, "testDataBase getArraySection count");
 
         $intI = 1;
@@ -87,7 +87,7 @@ class class_test_databasePrepared extends class_testbase  {
         $this->flushDBCache();
         echo "\tgetArraySection param test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char10 LIKE ? ORDER BY temp_long ASC";
-        $arrRow = $objDB->getPArraySection($strQuery, array("%"), 0, 9);
+        $arrRow = $objDB->getPArray($strQuery, array("%"), 0, 9);
         $this->assertEquals(count($arrRow) , 10, "testDataBase getArraySection param count");
 
         $intI = 1;

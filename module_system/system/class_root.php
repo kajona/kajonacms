@@ -925,7 +925,7 @@ abstract class class_root {
 						 ORDER BY system_sort ASC, system_comment ASC";
 
 		//No caching here to allow mutliple shiftings per request
-		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), false);
+		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), null, null, false);
 
 		//Iterate to move the element
 		$bitSaveToDb = false;
@@ -998,7 +998,7 @@ abstract class class_root {
 						 ORDER BY system_sort ASC, system_comment ASC";
 
 		//No caching here to allow mutliple shiftings per request
-		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), false);
+		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), null, null, false);
 
 		//more than one record to set?
 		if(count($arrElements) <= 1)
@@ -1108,7 +1108,7 @@ abstract class class_root {
 	 */
 	public function getModuleData($strName, $bitCache = true) {
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-		$arrModules = $this->objDB->getPArray($strQuery, array(), $bitCache);
+		$arrModules = $this->objDB->getPArray($strQuery, array(),null, null, $bitCache);
 
 		foreach($arrModules as $arrOneModule) {
 		    if($arrOneModule["module_name"] == $strName)

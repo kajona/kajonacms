@@ -87,16 +87,19 @@ class class_module_user_log extends class_model implements interface_model  {
     /**
      * Returns all login-logs as an array
      *
+     * @param null $intStart
+     * @param null $intEnd
+     *
      * @return mixed
      * @static
      */
-    public static function getLoginLogs() {
+    public static function getLoginLogs($intStart = null, $intEnd = null) {
         $strQuery = "SELECT *
 				       FROM "._dbprefix_."user_log as log
 			      LEFT JOIN "._dbprefix_."user as user
 						ON log.user_log_userid = user.user_id
 				   ORDER BY log.user_log_date DESC";
-		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
     }
 
     /**
@@ -112,21 +115,4 @@ class class_module_user_log extends class_model implements interface_model  {
 		return $arrRow["COUNT(*)"];
     }
 
-    /**
-     * Returns a section of the login-logs as an array
-     *
-     * @param int $intStart
-     * @param int $intEnd
-     * @return mixed
-     * @static
-     */
-    public function getLoginLogsSection($intStart, $intEnd) {
-        $strQuery = "SELECT *
-						FROM "._dbprefix_."user_log as log
-							LEFT JOIN "._dbprefix_."user as user
-								ON log.user_log_userid = user.user_id
-						ORDER BY log.user_log_date DESC";
-
-		return $this->objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
-    }
 }

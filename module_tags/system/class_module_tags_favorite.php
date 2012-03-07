@@ -106,10 +106,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
                        AND tags_fav_tagid = ?
                   ORDER BY tags_tag_name ASC";
 
-        if($intStart !== null && $intEnd !== null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strUserid, $strTagId), $intStart, $intEnd);
-        else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid, $strTagId));
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid, $strTagId), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_module_tags_favorite($arrSingleRow["tags_fav_id"]);
@@ -165,10 +162,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
                        AND tags_fav_tagid = tags_tag_id
                   ORDER BY tags_tag_name ASC";
 
-        if($intStart !== null && $intEnd !== null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strUserid), $intStart, $intEnd);
-        else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid));
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_module_tags_favorite($arrSingleRow["tags_fav_id"]);

@@ -349,7 +349,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 		system_sort ASC";
 
         //since theres the time as an parameter, theres no need for querying the cache...
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, false);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, null, null, false);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -456,7 +456,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
-		$arrElementsOnPage = $this->objDB->getPArray($strQuery, array( $this->getPrevId(), $this->getStrLanguage() ), false);
+		$arrElementsOnPage = $this->objDB->getPArray($strQuery, array( $this->getPrevId(), $this->getStrLanguage() ), null, null, false);
 
 		//Iterate over all elements to sort out
 		$arrElementsOnPlaceholder = array();

@@ -103,10 +103,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 		               AND system_module_nr = ?
 		          ORDER BY system_comment ASC";
 
-        if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_), $intStart, $intEnd);
-        else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_navigation_tree($arrOneId["system_id"]);

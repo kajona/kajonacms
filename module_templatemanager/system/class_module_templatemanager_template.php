@@ -124,10 +124,7 @@ class class_module_templatemanager_template extends class_model implements inter
                        FROM "._dbprefix_."templatepacks
                    ORDER BY templatepack_name ASC ";
 
-        if($intStart !== null && $intEnd !== null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow)

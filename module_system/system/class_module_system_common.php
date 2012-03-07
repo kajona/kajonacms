@@ -240,7 +240,7 @@ class class_module_system_common extends class_model implements interface_model 
         if($intModuleFilter !== false)
             $arrParams[] = (int)$intModuleFilter;
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, 0, $intMaxNrOfRecords-1);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, 0, $intMaxNrOfRecords-1);
         foreach($arrIds as $arrSingleRow) {
             $arrReturn[] = new class_module_system_common($arrSingleRow["system_id"]);
         }

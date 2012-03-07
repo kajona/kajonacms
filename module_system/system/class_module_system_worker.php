@@ -89,7 +89,7 @@ class class_module_system_worker extends class_model implements interface_model 
         $strQuery = "SELECT system_id, system_prev_id, system_comment
                        FROM "._dbprefix_."system
                       WHERE system_id != '0'";
-        $arrRecords = $this->objDB->getPArray($strQuery, array(), false);
+        $arrRecords = $this->objDB->getPArray($strQuery, array(), null, null, false);
         //Check every record for its prev_id. To get valid results, flush the db-cache
         $this->objDB->flushQueryCache();
         foreach ($arrRecords as $arrOneRecord) {

@@ -201,13 +201,10 @@ class class_module_pages_element extends class_model implements interface_model,
      * @return class_module_pages_element[]
      * @static
      */
-	public static function getAllElements($intStart = false, $intEnd = false) {
+	public static function getAllElements($intStart = null, $intEnd = null) {
 		$strQuery = "SELECT element_id FROM "._dbprefix_."element ORDER BY element_name";
 
-		if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

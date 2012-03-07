@@ -119,10 +119,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                        AND system_id = right_id
                    ORDER BY tags_tag_name ASC";
 
-        if($intStart !== null && $intEnd !== null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tag_id"]);
@@ -291,7 +288,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                         AND system.system_id = member.tags_systemid
                    ORDER BY system_comment ASC";
 
-        $arrRecords = $this->objDB->getPArraySection($strQuery, array($this->getSystemid()), $intStart, $intEnd);
+        $arrRecords = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
 
         $arrReturn = array();
         foreach($arrRecords as $arrOneRecord)

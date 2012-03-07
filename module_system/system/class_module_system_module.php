@@ -159,16 +159,13 @@ class class_module_system_module extends class_model implements interface_model,
      * @return mixed
      * @static
      */
-	public static function getAllModules($intStart = false, $intEnd = false) {
+	public static function getAllModules($intStart = null, $intEnd = null) {
 		$strQuery = "SELECT module_id
 		               FROM "._dbprefix_."system_module,
 		                    "._dbprefix_."system
 		              WHERE module_id = system_id
 		           ORDER BY system_sort ASC, system_comment ASC";
-        if($intStart !== false && $intEnd !== false)
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

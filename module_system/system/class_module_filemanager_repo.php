@@ -113,7 +113,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * @return mixed Array of objects
      * @static
      */
-    public static function getAllRepos($bitLoadForeign = false, $intStart = false, $intEnd = false) {
+    public static function getAllRepos($bitLoadForeign = false, $intStart = null, $intEnd = null) {
         $arrReturn = array();
         $objDB = class_carrier::getInstance()->getObjDB();
 
@@ -122,10 +122,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
 						WHERE system_id = filemanager_id
                     ".(!$bitLoadForeign || $bitLoadForeign == "false" ? " AND (filemanager_foreign_id IS NULL OR filemanager_foreign_id = '')" : "")." ";
 
-        if($intStart !== false && $intEnd !== false)
-            $arrIds = $objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
-        else
-            $arrIds = $objDB->getPArray($strQuery, array());
+        $arrIds = $objDB->getPArray($strQuery, array(), $intStart, $intEnd);
 
         foreach ($arrIds as $arrOneID)
             $arrReturn[] = new class_module_filemanager_repo($arrOneID["system_id"]);

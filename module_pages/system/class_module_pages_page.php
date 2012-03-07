@@ -271,7 +271,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return mixed class_module_pages_page
      * @static
      */
-	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "", $bitIncludeAlias = true) {
+	public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "", $bitIncludeAlias = true) {
         $arrParams = array();
 
         if($strFilter != "")
@@ -285,10 +285,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                     ".($bitIncludeAlias ? "" : " AND page_type = 0 ")."
 					ORDER BY page_name ASC";
 
-		if($intStart == 0 && $intEnd == 0)
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-		else
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

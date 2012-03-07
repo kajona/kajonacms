@@ -237,7 +237,7 @@ class class_db {
 	 * @return array
 	 */
 	public function getPRow($strQuery, $arrParams, $intNr = 0, $bitCache = true) {
-        $arrTemp = $this->getPArray($strQuery, $arrParams, $bitCache);
+        $arrTemp = $this->getPArray($strQuery, $arrParams, null, null, $bitCache);
         if(count($arrTemp) > 0)
             return $arrTemp[$intNr];
         else
@@ -297,18 +297,29 @@ class class_db {
 
 
     /**
-	 * Method to get an array of rows for a given query from the database.
+     * Method to get an array of rows for a given query from the database.
      * Makes use of prepared statements.
-	 *
-	 * @param string $strQuery
+     *
+     * @param string $strQuery
      * @param array $arrParams
-	 * @param bool $bitCache
-	 * @return array
+     * @param int|null $intStart
+     * @param int|null $intEnd
+     * @param bool $bitCache
+     *
+     * @return array
      * @since 3.4
-	 */
-	public function getPArray($strQuery, $arrParams, $bitCache = true) {
+     */
+	public function getPArray($strQuery, $arrParams, $intStart = null, $intEnd = null, $bitCache = true) {
         if(!$this->bitConnected)
             $this->dbconnect();
+
+        //param validation
+        if((int)$intStart < 0)
+            $intStart = null;
+
+        if((int)$intEnd < 0)
+            $intEnd = null;
+
 
 		$strQuery = $this->processQuery($strQuery);
 		//Increasing global counter
@@ -336,7 +347,11 @@ class class_db {
             class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
 
 		if($this->objDbDriver != null) {
-    		$arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
+            if( $intStart !== null && $intEnd !== null && $intStart !== false && $intEnd !== false )
+    		    $arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
+            else
+    		    $arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
+
     		if($arrReturn === false) {
     		    $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
     		    return array();
@@ -424,59 +439,11 @@ class class_db {
      * @param int $intEnd
      * @param bool $bitCache
      * @return array
+     * @deprecated use getPArray() instead
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true) {
-
-        if($intStart > $intEnd)
-            throw new class_exception("end may not be greater then start index", class_exception::$level_ERROR);
-
-        if(!$this->bitConnected)
-            $this->dbconnect();
-
-        $arrReturn = array();
-        //param validation
-        if((int)$intStart < 0)
-            $intStart = 0;
-
-        if((int)$intEnd < 0)
-            $intEnd = 0;
-        //process query
-        $strQuery = $this->processQuery($strQuery);
-
-        //Increasing global counter
-		$this->intNumber++;
-
-        if(defined("_system_use_dbcache_")) {
-		    if(_system_use_dbcache_ == "false") {
-		        $bitCache = false;
-		    }
-		}
-
-        //generate a hash-value
-        $strQueryMd5 = null;
-		if($bitCache) {
-            $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd.implode(",", $arrParams));
-			if(isset($this->arrQueryCache[$strQueryMd5])) {
-				//Increasing Cache counter
-				$this->intNumberCache++;
-				return $this->arrQueryCache[$strQueryMd5];
-			}
-		}
-
-		if(_dblog_)
-            class_logger::getInstance(class_logger::$QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
-
-		if($this->objDbDriver != null) {
-    		$arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
-    		if($arrReturn === false) {
-    		    $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
-    		    return array();
-    		}
-    		if($bitCache)
-    			$this->arrQueryCache[$strQueryMd5] = $arrReturn;
-		}
-
-		return $arrReturn;
+        class_logger::getInstance(class_logger::$DBLOG)->addLogRow("deprecated getPArraySection call: ".$strQuery, class_logger::$levelWarning);
+        return $this->getPArray($strQuery, $arrParams, $intStart, $intEnd, $bitCache);
     }
 
 	/**

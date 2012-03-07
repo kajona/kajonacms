@@ -160,10 +160,7 @@ class class_module_system_changelog extends class_model implements interface_mod
         if($strSystemidFilter != "")
             $arrParams[] = $strSystemidFilter;
 
-        if($intStart !== null && $intEnd !== null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
-        else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
         $arrReturn = array();
         foreach($arrRows as $arrRow)
@@ -284,7 +281,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                         AND change_date <= ?
                    ORDER BY change_date DESC ";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strSystemid, $strProperty, $objDate->getLongTimestamp()), 0, 1);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strProperty, $objDate->getLongTimestamp()), 0, 1);
         if(isset($arrRow[0]["change_newvalue"]))
             return $arrRow[0]["change_newvalue"];
         else

@@ -138,10 +138,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
                                      AND k_user.user_id = user2.user_id
                                    ORDER BY user2.user_username ASC  ";
 
-        if($intStart !== null && $intEnd !== null)
-            $arrIds = $this->objDB->getPArraySection($strQuery, array($this->getSystemid()), $intStart, $intEnd);
-        else
-            $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
+        $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
