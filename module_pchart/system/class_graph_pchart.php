@@ -7,8 +7,8 @@
 *	$Id$                                             *
 ********************************************************************************************************/
 
-require_once(_corepath_."/module_system/system/pChart/pChart.class");
-require_once(_corepath_."/module_system/system/pChart/pData.class");
+require_once(_corepath_."/module_pchart/system/pChart/pChart.class");
+require_once(_corepath_."/module_pchart/system/pChart/pData.class");
 
 
 /**

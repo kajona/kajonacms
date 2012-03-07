@@ -121,12 +121,15 @@
 		<copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
 			<fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
 				<exclude name=".svn"/>
+
 				<include name="element_*/**"/>
 				<include name="module_*/*/**"/>
 				<include name="widget_*/*/**"/>
 				<include name="template_*/*/**"/>
 				<include name="_debugging/*/**"/>
 				<include name="*.php"/>
+
+                <exclude name="module_ezcchart"/>
 			</fileset>
 
 		</copy>
