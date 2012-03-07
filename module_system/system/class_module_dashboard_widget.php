@@ -29,15 +29,22 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn dashboard_widgetid
-     */
-    private $strWidgetId = "";
-
-    /**
-     * @var string
      * @tableColumn dashboard_aspect
      */
     private $strAspect = "";
+
+    /**
+     * @var string
+     * @tableColumn dashboard_class
+     */
+    private $strClass = "";
+
+    /**
+     * @var string
+     * @tableColumn dashboard_content
+     * @blockEscaping
+     */
+    private $strContent = "";
 
 
 	/**
@@ -48,7 +55,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
 
         $this->setArrModuleEntry("modul", "dashboard");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("moduleId", _dashboard_modul_id_);
 
 		parent::__construct($strSystemid);
 
@@ -71,18 +78,42 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         return "dashboard widget ".$this->getSystemid();
     }
 
+
     /**
-     * Deletes the current object and the assigned widget from the db
+     * Looks up all widgets available in the filesystem.
+     * ATTENTION: returns the class-name representation of a file, NOT the filename itself.
      *
-     * @return bool
+     * @return array
      */
-    protected function deleteObjectInternal() {
-        if($this->getWidgetmodelForCurrentEntry()->deleteObject()) {
-            return parent::deleteObjectInternal();
+    public function getListOfWidgetsAvailable() {
+        $arrReturn = array();
+
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"));
+
+        foreach($arrFiles as $strOneFile) {
+            if($strOneFile != "interface_adminwidget.php" && $strOneFile != "class_adminwidget.php") {
+                $arrReturn[] = uniStrReplace(".php", "", $strOneFile);
+            }
         }
 
-        return false;
+        return $arrReturn;
     }
+
+
+    /**
+     * Creates the concrete widget represented by this model-element
+     *
+     * @return interface_adminwidget|class_adminwidget
+     */
+    public function getConcreteAdminwidget() {
+        $objWidget = new $this->strClass();
+        //Pass the field-values
+        $objWidget->setFieldsAsString($this->getStrContent());
+        $objWidget->setSystemid($this->getSystemid());
+        return $objWidget;
+    }
+
+
 
     /**
      * Implementing callback to react on user-delete events
@@ -116,7 +147,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      *
      * @param string $strColumn
      * @param string $strAspectFilter
-     * @return array of class_module_system_adminwidget
+     * @return array of class_module_dashboard_widget
      */
     public function getWidgetsForColumn($strColumn, $strAspectFilter = "") {
 
@@ -142,6 +173,34 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         if(count($arrRows) > 0) {
             foreach ($arrRows as $arrOneRow) {
             	$arrReturn[] = new class_module_dashboard_widget($arrOneRow["system_id"]);
+            }
+
+        }
+        return $arrReturn;
+    }
+
+
+    /**
+     * Looks up the widgets placed in a given column and
+     * returns a list of instances
+     *
+     * @return class_module_dashboard_widget[]
+     */
+    public static function getAllWidgets() {
+
+        $arrParams = array();
+
+        $strQuery = "SELECT system_id
+        			  FROM "._dbprefix_."dashboard,
+        			  	   "._dbprefix_."system
+        			 WHERE dashboard_id = system_id
+        	     ORDER BY system_sort ASC ";
+
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrReturn = array();
+        if(count($arrRows) > 0) {
+            foreach ($arrRows as $arrOneRow) {
+                $arrReturn[] = new class_module_dashboard_widget($arrOneRow["system_id"]);
             }
 
         }
@@ -183,20 +242,15 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
 
         foreach($arrWidgets as $arrOneWidget) {
-            $objSystemWidget = new class_module_system_adminwidget();
-            $objSystemWidget->setStrClass($arrOneWidget[0]);
-            $objSystemWidget->setStrContent($arrOneWidget[1]);
 
-            if($objSystemWidget->updateObjectToDb()) {
-                $strWidgetId = $objSystemWidget->getSystemid();
-                $objDashboard = new class_module_dashboard_widget();
-                $objDashboard->setStrColumn($arrOneWidget[2]);
-                $objDashboard->setStrUser($strUserid);
-                $objDashboard->setStrWidgetId($strWidgetId);
-                $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
-                if(!$objDashboard->updateObjectToDb())
-                    $bitReturn = false;
-            }
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrColumn($arrOneWidget[2]);
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrClass($arrOneWidget[0]);
+            $objDashboard->setStrContent($arrOneWidget[1]);
+            $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
+            if(!$objDashboard->updateObjectToDb())
+                $bitReturn = false;
         }
 
 
@@ -234,6 +288,33 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         $this->strAspect = $strAspect;
     }
 
+    /**
+     * @param string $strClass
+     */
+    public function setStrClass($strClass) {
+        $this->strClass = $strClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrClass() {
+        return $this->strClass;
+    }
+
+    /**
+     * @param string $strContent
+     */
+    public function setStrContent($strContent) {
+        $this->strContent = $strContent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrContent() {
+        return $this->strContent;
+    }
 
 
 }

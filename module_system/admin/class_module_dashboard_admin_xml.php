@@ -73,7 +73,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         class_carrier::getInstance()->getObjSession()->sessionClose();
 
         $strReturn = "";
-        $objWidgetModel = new class_module_system_adminwidget($this->getSystemid());
+        $objWidgetModel = new class_module_dashboard_widget($this->getSystemid());
         if($objWidgetModel->rightView()) {
             $strReturn = "<content>";
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();

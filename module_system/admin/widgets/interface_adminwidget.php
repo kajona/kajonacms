@@ -35,7 +35,7 @@ interface interface_adminwidget {
     /**
      * Return a short (!) name of the widget.
      *
-     * @return
+     * @return string
      */
     public function getWidgetName();
 }

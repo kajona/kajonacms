@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9");
+        $this->setArrModuleEntry("version", "3.4.9.1");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
         $this->setArrModuleEntry("name", "system");
         $this->setArrModuleEntry("name_lang", "System Kernel");
@@ -309,20 +309,11 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["dashboard_id"] 			= array("char20", false);
 		$arrFields["dashboard_column"]		= array("char254", true);
 		$arrFields["dashboard_user"] 		= array("char20", true);
-		$arrFields["dashboard_widgetid"] 	= array("char20", true);
 		$arrFields["dashboard_aspect"] 	    = array("char254", true);
+		$arrFields["dashboard_class"] 	    = array("char254", true);
+		$arrFields["dashboard_content"] 	= array("text", true);
 
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Installing table adminwidget...\n";
-
-		$arrFields = array();
-		$arrFields["adminwidget_id"] 		= array("char20", false);
-		$arrFields["adminwidget_class"]		= array("char254", true);
-		$arrFields["adminwidget_content"] 	= array("text", true);
-
-		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
 			$strReturn .= "An error occured! ...\n";
 
         //languages -------------------------------------------------------------------------------------
@@ -517,6 +508,14 @@ class class_installer_system extends class_installer_base implements interface_i
 		//the admin-language
 		$strAdminLanguage = $this->objSession->getAdminLanguage();
 
+        //creating a new default-aspect
+        $strReturn .= "Registering new default aspect...\n";
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName("default");
+        $objAspect->setBitDefault(true);
+        $objAspect->updateObjectToDb();
+        class_module_system_aspect::setCurrentAspectId($objAspect->getSystemid());
+
         $objUser = new class_module_user_user();
         $objUser->setStrUsername($strUsername);
         $objUser->setIntActive(1);
@@ -532,12 +531,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $objAdminGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 		$strReturn .= "Registered Admin in Admin-Group...\n";
 
-        //creating a new default-aspect
-        $strReturn .= "Registering new default aspect...\n";
-        $objAspect = new class_module_system_aspect();
-        $objAspect->setStrName("default");
-        $objAspect->setBitDefault(true);
-        $objAspect->updateObjectToDb();
+
 
 
 
@@ -582,6 +576,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_341_349();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_3491();
             $this->objDB->flushQueryCache();
         }
 
@@ -765,13 +765,6 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->_pQuery($strQuery, array( get_class($objOneEntry), $objOneEntry->getSystemid() ) );
         }
 
-        $strReturn .= "Widgets\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."adminwidget, "._dbprefix_."system WHERE system_id = adminwidget_id", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_system_adminwidget', $arrOneRow["system_id"] ) );
-        }
-
         $strReturn .= "Dashboard\n";
         $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."dashboard, "._dbprefix_."system WHERE system_id = dashboard_id", array());
         foreach($arrRows as $arrOneRow) {
@@ -819,6 +812,63 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.4.9");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.4.9");
+        return $strReturn;
+    }
+
+    private function update_349_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
+
+
+        //drop widget id
+        //add class, content
+        $strReturn .= "Updating dashboard table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
+                            ADD ".$this->objDB->encloseColumnName("dashboard_class")." ".$this->objDB->getDatatype("char254")." NULL,
+                            ADD ".$this->objDB->encloseColumnName("dashboard_content")." ".$this->objDB->getDatatype("text")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Migrating existing records...\n";
+        $arrWidgetContent = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."adminwidget", array());
+
+        foreach($arrWidgetContent as $arrOneWidget) {
+
+            $strQuery = "UPDATE "._dbprefix_."dashboard
+                            SET dashboard_class = ?,
+                                dashboard_content = ?
+                          WHERE dashboard_widgetid = ?";
+
+            $this->objDB->_pQuery($strQuery, array($arrOneWidget["adminwidget_class"], $arrOneWidget["adminwidget_content"], $arrOneWidget["adminwidget_id"]), array(true, false));
+
+            //delete old records
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."adminwidget WHERE adminwidget_id = ?", array($arrOneWidget["adminwidget_id"]));
+            $this->deleteSystemRecord($arrOneWidget["adminwidget_id"]);
+
+            $strReturn .= "Migrated and deleted dashboard entry ".$arrOneWidget["adminwidget_id"]."\n";
+        }
+
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
+                            DROP ".$this->objDB->encloseColumnName("dashboard_widgetid")." ";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strQuery = "DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_."adminwidget")."";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $this->objDB->flushQueryCache();
+
+        $strReturn .= "Moving all dashboard entries to the correct module-node\n";
+        $arrWidgets = class_module_dashboard_widget::getAllWidgets();
+        foreach($arrWidgets as $objOneWidget)
+            $objOneWidget->updateObjectToDb(_dashboard_modul_id_);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.9.1");
         return $strReturn;
     }
 }

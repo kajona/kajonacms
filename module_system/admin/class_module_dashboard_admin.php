@@ -88,7 +88,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	 */
 	protected function layoutAdminWidget($objDashboardWidget) {
 	    $strWidgetContent = "";
-	    $objConcreteWidget = $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
+	    $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
 
         $strGeneratedContent = "<script type=\"text/javascript\">
                         window.setTimeout( function() {
@@ -128,9 +128,9 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                                         $strGeneratedContent,
                                         ($objDashboardWidget->rightEdit() ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.gif") : ""),
                                         ($objDashboardWidget->rightDelete() ?
-                                        		$this->objToolkit->listDeleteButton($objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName(), $this->getLang("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
+                                        		$this->objToolkit->listDeleteButton($objDashboardWidget->getConcreteAdminwidget()->getWidgetName(), $this->getLang("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
                                                  : ""),
-                                        $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getLayoutSection()
+                                        $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
                                 )
                              );
 
@@ -269,7 +269,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	    $strReturn = "";
         //step 1: select a widget, plz
         if($this->getParam("step") == "") {
-            $objSystemWidget = new class_module_system_adminwidget();
+            $objSystemWidget = new class_module_dashboard_widget();
             $arrWidgetsAvailable = $objSystemWidget->getListOfWidgetsAvailable();
 
             $arrDD = array();
@@ -317,26 +317,15 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             //let it process its fields
             $objWidget->loadFieldsFromArray($this->getAllParams());
 
-            //instantiate a model-widget
-            $objSystemWidget = new class_module_system_adminwidget();
-            $objSystemWidget->setStrClass($strWidgetClass);
-            $objSystemWidget->setStrContent($objWidget->getFieldsAsString());
-
-            //and save the widget itself
-            if($objSystemWidget->updateObjectToDb()) {
-                $strWidgetId = $objSystemWidget->getSystemid();
-                //and save the dashboard-entry
-                $objDashboard = new class_module_dashboard_widget();
-                $objDashboard->setStrColumn($this->getParam("column"));
-                $objDashboard->setStrUser($this->objSession->getUserID());
-                $objDashboard->setStrWidgetId($strWidgetId);
-                $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
-                if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-                }
-                else
-                    return $this->getLang("errorSavingWidget");
-            }
+            //and save the dashboard-entry
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrClass($strWidgetClass);
+            $objDashboard->setStrContent($objWidget->getFieldsAsString());
+            $objDashboard->setStrColumn($this->getParam("column"));
+            $objDashboard->setStrUser($this->objSession->getUserID());
+            $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
+            if($objDashboard->updateObjectToDb())
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             else
                 return $this->getLang("errorSavingWidget");
         }
@@ -372,7 +361,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	    $strReturn = "";
         if($this->getParam("saveWidget") == "") {
             $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
-            $objWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
+            $objWidget = $objDashboardwidget->getConcreteAdminwidget();
 
             //ask the widget to generate its form-parts and wrap our elements around
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "editWidget"));
@@ -385,14 +374,12 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         elseif($this->getParam("saveWidget") == "1") {
             //the dashboard entry
             $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
-            //widgets model
-            $objSystemWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry();
             //the concrete widget
-            $objConcreteWidget = $objSystemWidget->getConcreteAdminwidget();
+            $objConcreteWidget = $objDashboardwidget->getConcreteAdminwidget();
             $objConcreteWidget->loadFieldsFromArray($this->getAllParams());
 
-            $objSystemWidget->setStrContent($objConcreteWidget->getFieldsAsString());
-            if(!$objSystemWidget->updateObjectToDb())
+            $objDashboardwidget->setStrContent($objConcreteWidget->getFieldsAsString());
+            if(!$objDashboardwidget->updateObjectToDb())
                 throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
