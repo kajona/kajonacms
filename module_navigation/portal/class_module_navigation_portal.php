@@ -22,8 +22,6 @@
 class class_module_navigation_portal extends class_portal implements interface_portal {
 
 	private $strCurrentSite = "";
-	private $arrTree = array();
-	private $intLevelMax = 0;
 
     private $arrNodeTempHelper = array();
 
@@ -57,12 +55,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
         $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
         $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
 
-
-        //Which kind of navigation do we want to load?
-		if($this->arrElementData["navigation_mode"] == "tree")
-			$this->setAction("navigationTree");
-		if($this->arrElementData["navigation_mode"] == "sitemap")
-			$this->setAction("navigationSitemap");
+        //set the default navigation mode
+        $this->setAction("navigationSitemap");
 	}
 
     /**
@@ -97,133 +91,6 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	}
 
 
-    // --- Tree-Functions -----------------------------------------------------------------------------------
-
-	/**
-	 * Creates a common tree-view of the navigation
-	 *
-	 * @return string
-     * @permissions view
-	 */
-	protected function actionNavigationTree() {
-		$strReturn = "";
-        $objPagePointData = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]);
-        $strStack = $this->getActiveIdStack($objPagePointData);
-
-		//path created, build the tree using recursion
-        $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
-        if($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1)
-            $this->createTree($strStack, 0, $this->arrTempNodes[$this->arrElementData["navigation_id"]]);
-
-		//Create the tree
-		$intCounter = -1;
-		$arrTree = array();
-		foreach($this->arrTree as $arrContents) {
-			$arrTree[++$intCounter] = (isset($arrContents) ? $arrContents : "");
-		}
-		//Create tree from bottom
-		$arrTemp = array();
-		while($intCounter > 1) {
-			$strLevel = $arrTree[$intCounter];
-
-			//include into a wrapper?
-			$strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-			$strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID);
-			if(uniStrlen($strWrappedLevel) > 0)
-			    $strLevel = $strWrappedLevel;
-
-			$arrTemp["level".$intCounter] = $strLevel;
-
-			$this->objTemplate->setTemplate($arrTree[$intCounter-1]);
-			$arrTree[$intCounter-1] = $this->objTemplate->fillCurrentTemplate($arrTemp);
-			$intCounter--;
-		}
-
-		//and add level 1 wrapper
-        if($intCounter != -1) {
-            $strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-            $strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
-            if(uniStrlen($strWrappedLevel) > 0)
-                $arrTree[$intCounter] = $strWrappedLevel;
-
-
-            $this->objTemplate->setTemplate($arrTree[$intCounter]);
-            $this->objTemplate->deletePlaceholder();
-            $strReturn = $this->objTemplate->getTemplate();
-        }
-
-        $strReturn = $this->addPortaleditorCode($strReturn);
-		return $strReturn;
-
-	}
-
-
-
-	/**
-	 * Creates the tree recursive
-	 *
-	 * @param string $strStack
-	 * @param int $intLevel
-	 * @param array $arrNodes
-	 * @param bool $bitFirst
-	 * @param bool $bitLast
-	 */
-	private function createTree($strStack, $intLevel, $arrNodes, $bitFirst = false, $bitLast = false) {
-
-		//build an array out of the stack
-		$arrStack = explode(",", $strStack);
-
-		//Hold the level
-		if($intLevel > $this->intLevelMax)
-			$this->intLevelMax = $intLevel;
-
-        //any childs?
-        $arrChilds = $arrNodes["subnodes"];
-
-		//Add the current point
-		//active or inactive
-        if($arrNodes["node"] != null) {
-            if(in_array($arrNodes["node"]->getSystemid(), $arrStack)) {
-                if(!isset($this->arrTree[$intLevel]))
-                    $this->arrTree[$intLevel] = "";
-
-                $this->arrTree[$intLevel] .= $this->createNavigationPoint($arrNodes["node"], true, $intLevel, $bitFirst, $bitLast);
-            }
-            else {
-                if(!isset($this->arrTree[$intLevel]))
-                    $this->arrTree[$intLevel] = "";
-
-                $this->arrTree[$intLevel] .= $this->createNavigationPoint($arrNodes["node"], false, $intLevel, $bitFirst, $bitLast);
-            }
-        }
-        else {
-            $this->arrTree[$intLevel] = "";
-        }
-
-		//Let the childs present themselfes
-		$intNumberOfChilds = count($arrChilds);
-
-		if($intNumberOfChilds > 0) {
-			//First and last are handled special
-			$intJ = 1;
-			foreach($arrChilds as $arrOneChild) {
-
-				if($intLevel == 0 || in_array($arrNodes["node"]->getSystemid(), $arrStack)) {
-
-    				if($intJ == 1)                           // first node
-    					$this->createTree($strStack, $intLevel+1, $arrOneChild, true, false);
-    				elseif ($intJ == $intNumberOfChilds)     // last node
-    					$this->createTree($strStack, $intLevel+1, $arrOneChild, false, true);
-    				else                                     // regualar node
-    					$this->createTree($strStack, $intLevel+1, $arrOneChild);
-    		    }
-
-				$intJ++;
-			}
-		}
-	}
-
-
 	/**
 	 * creates the code for a sitemap
 	 *
@@ -236,7 +103,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
         $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
 		if($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1) {
             //create a stack to highlight the points being active
-            $strStack = $this->getActiveIdStack($this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]));
+            $objActivePoint = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]);
+            $strStack = $this->getActiveIdStack($objActivePoint);
 
             //build the navigation
             $strReturn = $this->sitemapRecursive(1, $this->arrTempNodes[$this->arrElementData["navigation_id"]], $strStack);
