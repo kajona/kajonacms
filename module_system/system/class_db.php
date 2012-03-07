@@ -333,7 +333,7 @@ class class_db {
 
         $strQueryMd5 = null;
 		if($bitCache) {
-            $strQueryMd5 = md5($strQuery.implode(",",$arrParams));
+            $strQueryMd5 = md5($strQuery.implode(",",$arrParams).$intStart.$intEnd);
 			if(isset($this->arrQueryCache[$strQueryMd5])) {
 				//Increasing Cache counter
 				$this->intNumberCache++;
