@@ -73,6 +73,10 @@
 					    					buildProject, installProjectOracle,
 					    					runPhpUnitTests" />
 
+    <target name="buildFullZipOnly" depends="
+                                            cleanFilesystem, init,
+                                            buildProject, buildFullZip" />
+
 
 	<!-- removes existing folders and creates them again -->
 	<target name="cleanFilesystem">
@@ -121,6 +125,7 @@
 		<copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
 			<fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
 				<exclude name=".svn"/>
+                <exclude name="module_pchart/" />
 
 				<include name="element_*/**"/>
 				<include name="module_*/*/**"/>
@@ -129,7 +134,6 @@
 				<include name="_debugging/*/**"/>
 				<include name="*.php"/>
 
-                <exclude name="module_ezcchart"/>
 			</fileset>
 
 		</copy>
