@@ -260,7 +260,7 @@ if($objImage->getImageFilename() == "kajonaCaptcha") {
     $objImage->generateCaptchaImage();
 }
 else {
-    class_carrier::getInstance()->getObjSession()->sessionClose();
+   // class_carrier::getInstance()->getObjSession()->sessionClose();
     $objImage->generateImage();
 }
 
