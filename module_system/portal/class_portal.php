@@ -135,6 +135,10 @@ abstract class class_portal  {
      * an exception is thrown. But since there could be many modules on a single page, not each module
      * may be triggered.
      *
+     * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
+     * Therefore the list of permissions, named after the "permissions" annotation are validated against
+     * the module currently loaded.
+     * @see class_rights::validatePermissionString
      *
      * @param string $strAction
      * @return string
@@ -150,7 +154,17 @@ abstract class class_portal  {
         //search for the matching method - build method name
         $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
 
+        $objAnnotations = new class_annotations(get_class($this));
         if(method_exists($this, $strMethodName)) {
+
+            //validate the permissions required to call this method, the xml-part is validated afterwards
+            $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
+            if($strPermissions !== false) {
+                if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $this->getObjModule())) {
+                    $this->strOutput = $this->getLang("commons_error_permissions");
+                    throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                }
+            }
 
             if(_xmlLoader_ === true) {
                 //check it the method is allowed for xml-requests
@@ -171,6 +185,15 @@ abstract class class_portal  {
             //try to load the list-method
             $strListMethodName = "actionList";
             if(method_exists($this, $strListMethodName)) {
+
+                $strPermissions = $objAnnotations->getMethodAnnotationValue($strListMethodName, "@permissions");
+                if($strPermissions !== false) {
+                    if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $this->getObjModule())) {
+                        $this->strOutput = $this->getLang("commons_error_permissions");
+                        throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                    }
+                }
+
                 $this->strOutput = $this->$strListMethodName();
             }
             else {

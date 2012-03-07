@@ -103,6 +103,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	 * Creates a common tree-view of the navigation
 	 *
 	 * @return string
+     * @permissions view
 	 */
 	protected function actionNavigationTree() {
 		$strReturn = "";
@@ -227,6 +228,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	 * creates the code for a sitemap
 	 *
 	 * @return string
+     * @permissions view
 	 */
 	protected function actionNavigationSitemap() {
 		$strReturn = "";
