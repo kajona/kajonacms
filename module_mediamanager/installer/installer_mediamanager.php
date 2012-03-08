@@ -153,8 +153,8 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		if($objElement == null) {
 		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("gallery");
-		    $objElement->setStrClassAdmin("class_element_gallery.php");
-		    $objElement->setStrClassPortal("class_element_gallery.php");
+		    $objElement->setStrClassAdmin("class_element_gallery_admin.php");
+		    $objElement->setStrClassPortal("class_element_gallery_portal.php");
 		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
@@ -177,8 +177,8 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		if($objElement == null) {
 		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("galleryRandom");
-		    $objElement->setStrClassAdmin("class_element_galleryRandom.php");
-		    $objElement->setStrClassPortal("class_element_gallery.php");
+		    $objElement->setStrClassAdmin("class_element_galleryRandom_admin.php");
+		    $objElement->setStrClassPortal("class_element_gallery_portal.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
