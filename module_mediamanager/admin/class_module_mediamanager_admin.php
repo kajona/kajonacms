@@ -315,7 +315,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         if($objCurFile instanceof class_module_mediamanager_repo)
             $strPath = $objCurFile->getStrPath();
 
-        while(!$objCurFile instanceof class_module_mediamanager_repo)
+        while(!$objCurFile instanceof class_module_mediamanager_repo && validateSystemid($this->getSystemid()))
             $objCurFile = class_objectfactory::getInstance()->getObject($objCurFile->getPrevId());
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getAction(), "datei_upload_final=1"), "formUpload", "multipart/form-data");
@@ -550,6 +550,124 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
         return $arrEntries;
 
+    }
+
+
+
+
+
+
+
+    /**
+     * Loads the content of a folder
+     * If requested, loads subactions,too
+     *
+     * SPECIAL MODE FOR MODULE FOLDERVIEW
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionFolderContentFolderviewMode() {
+        $strReturn = "";
+
+        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
+        //so we don't have to pass through the param with all requests
+        if ($this->getParam("CKEditorFuncNum") != "") {
+            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
+        }
+
+
+        $strTargetfield = $this->getParam("form_element");
+
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+
+        //list repos or contents?
+        if($this->getSystemid() == "") {
+            //Load the repos
+            $arrObjRepos = class_module_mediamanager_repo::getAllRepos();
+            $intI = 0;
+            //Print every repo
+            /** @var class_module_filemanager_repo $objOneRepo */
+            foreach($arrObjRepos as $objOneRepo) {
+                //check rights
+                if($objOneRepo->rightView()) {
+                    $strActions = "";
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
+
+                    $strReturn .= $this->objToolkit->simpleAdminList($objOneRepo, $strActions, $intI++);
+                }
+            }
+
+            if(uniStrlen($strReturn) != 0)
+                $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
+
+            if(count($arrObjRepos) == 0)
+                $strReturn .= $this->getLang("liste_leer");
+        }
+        else {
+            $objFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            if($objFile->rightView()) {
+
+                $arrSubfiles = class_module_mediamanager_file::loadFilesDB($this->getSystemid());
+                $intI = 0;
+
+                if($objFile instanceof class_module_mediamanager_repo)
+                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
+                else
+                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objFile->getPrevId(), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
+
+
+                foreach($arrSubfiles as $objOneFile) {
+
+
+                    if($objOneFile->rightView()) {
+                        $strActions = "";
+
+                        if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
+
+                        $strValue = $objOneFile->getStrFilename();
+
+                        $arrMime  = $this->objToolkit->mimeType($strValue);
+                        $bitImage = false;
+                        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
+                            $bitImage = true;
+
+                        //add image.php if it's an image and file will be passed to CKEditor
+                        //further processing is done in processWysiwygHtmlContent() when saving the content edited via CKEditor
+                        if ($bitImage && $strTargetfield == "ckeditor") {
+                            $strValue = _webpath_."/image.php?image=".$strValue;
+                        } else {
+                            $strValue = _webpath_.$strValue;
+                        }
+
+
+                        if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
+                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
+
+                        $strReturn .= $this->objToolkit->simpleAdminList($objOneFile, $strActions, $intI++);
+                    }
+                }
+
+
+
+                if(uniStrlen($strReturn) != 0)
+                    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
+
+                $strAddons = $this->generateNewFolderDialogCode();
+                $strAddons .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "inputSubmit");
+                $strAddons .= $this->actionUploadFileInternal();
+
+                $strReturn = $strAddons.$strReturn;
+
+                if(count($arrSubfiles) == 0)
+                    $strReturn .= $this->getLang("commons_list_empty");
+            }
+            else
+                $strReturn = $this->getLang("commons_error_permissions");
+        }
+
+        return $strReturn;
     }
 
 

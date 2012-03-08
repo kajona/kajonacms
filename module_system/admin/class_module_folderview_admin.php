@@ -54,7 +54,7 @@ class class_module_folderview_admin extends class_admin  implements interface_ad
         $strAction = $this->objToolkit->listButton(getLinkAdmin("pages", "pagesFolderBrowser", "&pages=1&form_element=".$this->getParam("form_element")."&bit_link=1", $this->getLang("wysiwygPagesBrowser"), $this->getLang("wysiwygPagesBrowser"), "icon_folderActionOpen.gif"));
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
 
-        $strAction = $this->objToolkit->listButton(getLinkAdmin("filemanager", "folderContentFolderviewMode", "&systemid="._filemanager_default_filesrepoid_."&form_element=".$this->getParam("form_element")."&bit_link=1", $this->getLang("wysiwygFilesBrowser"), $this->getLang("wysiwygFilesBrowser"), "icon_folderActionOpen.gif"));
+        $strAction = $this->objToolkit->listButton(getLinkAdmin("mediamanager", "folderContentFolderviewMode", "&systemid="._mediamanager_default_filesrepoid_."&form_element=".$this->getParam("form_element")."&bit_link=1", $this->getLang("wysiwygFilesBrowser"), $this->getLang("wysiwygFilesBrowser"), "icon_folderActionOpen.gif"));
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
 
         $strReturn .= $this->objToolkit->listFooter();

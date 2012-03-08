@@ -9,6 +9,12 @@
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 337
 
+
+$lang["_mediamanager_default_filesrepoid_"] = "Standard Dateien-Repository:";
+$lang["_mediamanager_default_imagesrepoid_"] = "Standard Bilder-Repository:";
+$lang["_gallery_search_resultpage_"]     = "Treffer-Seite:";
+$lang["_gallery_search_resultpage_hint"] = "Auf dieser Seite erfolgt die Detailansicht der Bilder, die in der Suche gefunden wurden.";
+
 $lang["modul_titel"]                     = "Medien-Manager";
 $lang["actionNew"]                       = "Neues Repository";
 $lang["actionMassSync"]                = "Alle synchronisieren";

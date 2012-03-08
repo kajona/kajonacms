@@ -26,6 +26,8 @@ class class_installer_sc_gallery implements interface_sc_installer  {
      * @return string
      */
     public function install() {
+
+
         $strReturn = "";
 
         //fetch navifolder-id
@@ -37,11 +39,18 @@ class class_installer_sc_gallery implements interface_sc_installer  {
 
 
         $strReturn .= "Creating new gallery...\n";
-        $objGallery = new class_modul_gallery_gallery();
+        $objGallery = new class_module_mediamanager_repo();
         $objGallery->setStrTitle("Sample Gallery");
-        $objGallery->setStrPath("/portal/pics/upload");
+        $objGallery->setStrPath(_filespath_."/images/samples");
+        $objGallery->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
+        $objGallery->setStrViewFilter(".jpg,.png,.gif,.jpeg");
         $objGallery->updateObjectToDb();
+        $objGallery->syncRepo();
         $strGalleryID = $objGallery->getSystemid();
+
+        return;
+
+        //FIXME
 
         $strReturn .= "Sync gallery..\n";
         class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());

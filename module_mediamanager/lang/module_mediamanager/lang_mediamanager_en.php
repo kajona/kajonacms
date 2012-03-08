@@ -10,6 +10,11 @@
 //Kajona Language Editor Core Build 337
 
 
+$lang["_mediamanager_default_filesrepoid_"] = "Default file-repository:";
+$lang["_mediamanager_default_imagesrepoid_"] = "Default images-respository:";
+$lang["_gallery_search_resultpage_"]     = "Result page:";
+$lang["_gallery_search_resultpage_hint"] = "This page shows the list of pictures found by the search";
+
 $lang["modul_titel"]                     = "Mediamananger";
 $lang["actionNew"]                       = "New repository";
 $lang["actionMasssync"]                = "Synchronize all";

@@ -119,7 +119,7 @@ class class_toolkit_admin extends class_toolkit {
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("filemanager", "folderContentFolderviewMode", "systemid="._filemanager_default_imagesrepoid_."&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1"))."'
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace('".$strName."', ckeditorConfig);
         ";
@@ -376,7 +376,7 @@ class class_toolkit_admin extends class_toolkit {
      * @since 3.3.4
      */
     public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "inputText") {
-        $strOpener = getLinkAdminDialog("filemanager",
+        $strOpener = getLinkAdminDialog("mediamanager",
 										"folderContentFolderviewMode",
 										"&form_element=".$strName."&systemid=".$strRepositoryId,
 										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
@@ -401,9 +401,9 @@ class class_toolkit_admin extends class_toolkit {
      * @since 3.4.0
      */
     public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
-        $strOpener = getLinkAdminDialog("filemanager",
+        $strOpener = getLinkAdminDialog("mediamanager",
 										"folderContentFolderviewMode",
-										"&form_element=".$strName."&systemid="._filemanager_default_imagesrepoid_,
+										"&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
 										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
 										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
 										"icon_externalBrowser.gif",

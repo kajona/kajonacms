@@ -199,13 +199,16 @@ class class_module_system_setting extends class_model implements interface_model
      * Fetches a Configs selected by name
      *
      * @param $strName
-     * @return class_module_system_setting
+     * @return class_module_system_setting|null
      * @static
      */
 	public static function getConfigByName($strName) {
 	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config WHERE system_config_name = ?";
         $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-		return new class_module_system_setting($arrId["system_config_id"]);
+        if(isset($arrId["system_config_id"]))
+		    return new class_module_system_setting($arrId["system_config_id"]);
+        else
+            return null;
 	}
 
 	/**

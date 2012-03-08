@@ -92,11 +92,24 @@ class class_installer_mediamanager extends class_installer_base implements inter
             "class_module_mediamanager_admin.php",
             $this->arrModule["version"],
             true, "",
-            "class_modul_mediamanager_admin_xml.php");
+            "class_module_mediamanager_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
-		$this->registerConstant("_gallery_search_resultpage_", "gallery", class_module_system_setting::$int_TYPE_PAGE, _mediamanager_module_id_);
+
+        //FIXME: remove
+//        if(class_module_system_setting::getConfigByName("_gallery_imagetypes_") === null)
+//		    $this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
+
+        if(class_module_system_setting::getConfigByName("_gallery_search_resultpage_") === null)
+		    $this->registerConstant("_gallery_search_resultpage_", "gallery", class_module_system_setting::$int_TYPE_PAGE, _mediamanager_module_id_);
+
+
+        $this->registerConstant("_mediamanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
+        $this->registerConstant("_mediamanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
+
+
+
+
 
 		return $strReturn;
 
