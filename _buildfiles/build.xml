@@ -253,11 +253,11 @@
 	<target name="runPhpCPD" >
 		<echo>Running PHP Copy Paste Detector</echo>
 		<exec executable="phpcpd" dir="${basedir}${projectPath}/core">
-		     <arg line=" --exclude ${basedir}${projectPath}/core/module_system/system/ezcomponents --exclude ${basedir}${projectPath}/core/module_system/system/pchart --exclude ${basedir}${projectPath}/core/module_system/system/tcpdf --exclude ${basedir}${projectPath}/core/module_system/system/phpexcel   --log-pmd '${basedir}${buildPath}/logs/pmd-cpd.xml' . "/>
+		     <arg line=" --exclude ${basedir}${projectPath}/core/module_ezcchart/system/ezcomponents --exclude ${basedir}${projectPath}/core/module_pchart/system/pchart --exclude ${basedir}${projectPath}/core/module_system/system/tcpdf --exclude ${basedir}${projectPath}/core/module_system/system/phpexcel   --log-pmd '${basedir}${buildPath}/logs/pmd-cpd.xml' . "/>
 		 </exec>
 	</target>
 
-	<!-- requires php PEAR CopyPaste detector being available -->
+	<!-- requires php PEAR Pdepend being available -->
 	<target name="runPDepend">
 		<echo>Running PHP Dependency Detector</echo>
 		<exec executable="pdepend" dir="${basedir}${projectPath}/core">
