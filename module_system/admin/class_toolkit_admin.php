@@ -409,9 +409,9 @@ class class_toolkit_admin extends class_toolkit {
 										"icon_externalBrowser.gif",
 										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"));
 
-        $strOpener .= " ".getLinkAdminDialog("filemanager",
+        $strOpener .= " ".getLinkAdminDialog("mediamanager",
                                          "imageDetails",
-                                         "imageFile='+document.getElementById('".$strName."').value+'",
+                                         "file='+document.getElementById('".$strName."').value+'",
                                          class_carrier::getInstance()->getObjLang()->getLang("cropImage", "filemanager"),
                                          class_carrier::getInstance()->getObjLang()->getLang("cropImage", "filemanager"),
                                          "icon_crop.gif",
@@ -419,7 +419,7 @@ class class_toolkit_admin extends class_toolkit {
                                          true, false,
                                          " (function() {
                                              if(document.getElementById('".$strName."').value != '') {
-                                                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("filemanager", "imageDetails", "imageFile='+document.getElementById('".$strName."').value+'")."');
+                                                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'")."');
                                                  KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
                                                  KAJONA.admin.folderview.dialog.init();
                                              }
@@ -531,7 +531,7 @@ class class_toolkit_admin extends class_toolkit {
         //upload works with session.use_only_cookies=disabled only. if set to enabled, use the fallback upload
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("session.use_only_cookies") == "1") {
             $strReturn = $this->formInputUpload($strName, $strTitle);
-            $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjLang()->getLang("upload_multiple_uploadFiles", "filemanager"));
+            $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjLang()->getLang("upload_multiple_uploadFiles", "mediamanager"));
             return $strReturn;
         }
 
@@ -552,8 +552,8 @@ class class_toolkit_admin extends class_toolkit {
                 var uploader;
 
                 function initUploader() {
-                    YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\";
-                    uploader = new KAJONA.admin.filemanager.Uploader({
+                    YAHOO.widget.Uploader.SWFURL = \""._webpath_."/core/module_system/admin/scripts/yui/uploader/assets/uploader.swf\";
+                    uploader = new KAJONA.admin.mediamanager.Uploader({
                         \"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
                         \"selectLinkId\": \"kajonaUploadSelectLink\",
                         \"uploadLinkId\": \"kajonaUploadUploadLink\",
@@ -563,9 +563,8 @@ class class_toolkit_admin extends class_toolkit {
                         \"allowedFileTypesDescription\": \"".$strAllowedFileTypes."\",
                         \"maxFileSize\": ".$objConfig->getPhpMaxUploadSize().",
                         \"warningNotComplete\": \"".$objText->getLang("upload_multiple_warningNotComplete", "filemanager")."\",
-                        \"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
+                        \"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=mediamanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
                         \"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
-                                              \"folder\" : document.getElementById(\"flashuploadFolder\").value,
                                               \"inputElement\" : \"".$strName."\"}, //create valid input-name element. no array needed!
                         \"uploadInputName\": \"".$strName."\"
                     });
@@ -573,25 +572,25 @@ class class_toolkit_admin extends class_toolkit {
                 }
                 KAJONA.admin.loader.loadUploaderBase(initUploader);
 
-                jsDialog_0.setTitle('".$objText->getLang("upload_multiple_dialogHeader", "filemanager")."');
+                jsDialog_0.setTitle('".$objText->getLang("upload_multiple_dialogHeader", "mediamanager")."');
             </script>";
 
-        $arrTemplate["upload_fehler_filter"] = $objText->getLang("upload_fehler_filter", "filemanager");
-        $arrTemplate["upload_multiple_uploadFiles"] = $objText->getLang("upload_multiple_uploadFiles", "filemanager");
-        $arrTemplate["upload_multiple_cancel"] = $objText->getLang("upload_multiple_cancel", "filemanager");
-        $arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getLang("upload_multiple_totalFilesAndSize", "filemanager");
-        $arrTemplate["upload_multiple_errorFilesize"] = $objText->getLang("upload_multiple_errorFilesize", "filemanager")." ".bytesToString($objConfig->getPhpMaxUploadSize());
-        $arrTemplate["upload_multiple_pleaseWait"] = $objText->getLang("upload_multiple_pleaseWait", "filemanager");
+        $arrTemplate["upload_fehler_filter"] = $objText->getLang("upload_fehler_filter", "mediamanager");
+        $arrTemplate["upload_multiple_uploadFiles"] = $objText->getLang("upload_multiple_uploadFiles", "mediamanager");
+        $arrTemplate["upload_multiple_cancel"] = $objText->getLang("upload_multiple_cancel", "mediamanager");
+        $arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getLang("upload_multiple_totalFilesAndSize", "mediamanager");
+        $arrTemplate["upload_multiple_errorFilesize"] = $objText->getLang("upload_multiple_errorFilesize", "mediamanager")." ".bytesToString($objConfig->getPhpMaxUploadSize());
+        $arrTemplate["upload_multiple_pleaseWait"] = $objText->getLang("upload_multiple_pleaseWait", "mediamanager");
 
         $arrTemplate["modalDialog"] = $this->jsDialog(0);
 
         //Fallback code if no or old Flash Player available
         if ($bitFallback) {
             $strFallbackForm = $this->formInputUpload($strName, $strTitle);
-            $strFallbackForm .= $this->formInputSubmit($objText->getLang("upload_multiple_uploadFiles", "filemanager"));
+            $strFallbackForm .= $this->formInputSubmit($objText->getLang("upload_multiple_uploadFiles", "mediamanager"));
             $arrTemplate["fallbackContent"] = $strFallbackForm;
         } else {
-            $arrTemplate["fallbackContent"] = $objText->getLang("upload_multiple_errorFlash", "filemanager");
+            $arrTemplate["fallbackContent"] = $objText->getLang("upload_multiple_errorFlash", "mediamanager");
         }
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -778,10 +777,15 @@ class class_toolkit_admin extends class_toolkit {
      * @todo: add checkbox functionality
      */
     public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount) {
+        $strImage = $objEntry->getStrIcon();
+        if(is_array($strImage))
+            $strImage = getImageAdmin($strImage[0], $strImage[1]);
+        else
+            $strImage = getImageAdmin($strImage);
         return $this->genericAdminList(
             $objEntry->getSystemid(),
             $objEntry->getStrDisplayName(),
-            getImageAdmin($objEntry->getStrIcon()),
+            $strImage,
             $strActions,
             $intCount,
             $objEntry->getStrAdditionalInfo(),
@@ -1072,6 +1076,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param mixed $arrContent
      * @return string
+     * @deprecated
      */
     public function getFilemanagerInfoBox($arrContent) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "filemanager_infobox");
@@ -1086,8 +1091,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param array $arrContent
      * @return string
      */
-    public function getFilemanagerImageDetails($arrContent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "folderview_image_details");
+    public function getMediamanagerImageDetails($arrContent) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "mediamanager_image_details");
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 

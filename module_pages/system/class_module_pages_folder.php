@@ -159,7 +159,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	 * Returns a list of folders under the given systemid
 	 *
 	 * @param string $strSystemid
-	 * @return mixed
+	 * @return class_module_pages_folder[]
 	 * @static
 	 */
 	public static function getFolderList($strSystemid = "") {

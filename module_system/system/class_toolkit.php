@@ -40,7 +40,7 @@ class class_toolkit  {
 	 * Looks up the MIME-Type fot the passed filename
 	 *
 	 * @param string $strFilename
-	 * @return mixed
+	 * @return array[type, suffix, icon]
 	 */
 	public function mimeType($strFilename) {
 		$arrMime = array();

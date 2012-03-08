@@ -1086,11 +1086,9 @@ KAJONA.admin.ajax = {
 		}
 	},
 
-	saveImageCropping : function(intX, intY, intWidth, intHeight, strRepoId,
-			strFolder, strFile, objCallback) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=filemanager&action=saveCropping';
-		var postBody = 'systemid=' + strRepoId + '&folder=' + strFolder
-				+ '&file=' + strFile + '&intX=' + intX + '&intY=' + intY
+	saveImageCropping : function(intX, intY, intWidth, intHeight, strFile, objCallback) {
+		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=mediamanager&action=saveCropping';
+		var postBody = 'file=' + strFile + '&intX=' + intX + '&intY=' + intY
 				+ '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';
 
 		if (KAJONA.admin.ajax.cropConn == null
@@ -1101,11 +1099,9 @@ KAJONA.admin.ajax = {
 		}
 	},
 
-	saveImageRotating : function(intAngle, strRepoId, strFolder, strFile,
-			objCallback) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=filemanager&action=rotate';
-		var postBody = 'systemid=' + strRepoId + '&folder=' + strFolder
-				+ '&file=' + strFile + '&angle=' + intAngle + '';
+	saveImageRotating : function(intAngle, strFile, objCallback) {
+		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=mediamanager&action=rotate';
+		var postBody = 'file=' + strFile + '&angle=' + intAngle + '';
 
 		if (KAJONA.admin.ajax.rotateConn == null
 				|| !YAHOO.util.Connect
@@ -1115,34 +1111,16 @@ KAJONA.admin.ajax = {
 		}
 	},
 
-    deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule, strSourceModuleAction, strSourceSystemId) {
-        KAJONA.admin.ajax.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
-                success : function(o) {
-                    KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, strSourceSystemId, {
-							success : function(o) {
-								location.reload();
-							},
-							failure : function(o) {
-								KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-							}
-						}
-						);
-                },
-                failure : function(o) {
-                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-                }
-            });
-    },
 
-    deleteFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
-        KAJONA.admin.ajax.genericAjaxCall("filemanager", "deleteFolder", strFmRepoId+"&folder="+strFolder, {
+    createFolder : function (strFmRepoId, strFolder) {
+        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
                         KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     }
                     else {
-                        KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "partialSyncRepo", strFmRepoId, {
                                 success : function(o) {
                                     location.reload();
                                 },
@@ -1151,6 +1129,7 @@ KAJONA.admin.ajax = {
                                 }
                             }
                         );
+
                     }
                 },
                 failure : function(o) {
@@ -1159,65 +1138,7 @@ KAJONA.admin.ajax = {
             });
     },
 
-    createFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction, strSourceSystemId) {
-        KAJONA.admin.ajax.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
-                success : function(o) {
-                    //check if answer contains an error
-                    if(o.responseText.indexOf("<error>") != -1) {
-                        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
-                    }
-                    else {
-                        if(strSourceModule != "" && strSourceModuleAction != "") {
-                            KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, strSourceSystemId, {
-                                    success : function(o) {
-                                        location.reload();
-                                    },
-                                    failure : function(o) {
-                                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-                                    }
-                                }
-                            );
-                        }
-                        else {
-                            location.reload();
-                        }
-                    }
-                },
-                failure : function(o) {
-                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-                }
-            });
-    },
 
-    renameFile : function (strFmRepoId, strNewFilename, strOldFilename, strFolder, strSourceModule, strSourceModuleAction) {
-        KAJONA.admin.ajax.genericAjaxCall("filemanager", "renameFile", strFmRepoId+"&folder="+strFolder+"&oldFilename="+strOldFilename+"&newFilename="+strNewFilename  , {
-                success : function(o) {
-                    //check if answer contains an error
-                    if(o.responseText.indexOf("<error>") != -1) {
-                        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
-                    }
-                    else {
-                        if(strSourceModule != "" && strSourceModuleAction != "") {
-                            KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
-                                    success : function(o) {
-                                        location.reload();
-                                    },
-                                    failure : function(o) {
-                                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-                                    }
-                                }
-                            );
-                        }
-                        else {
-                            location.reload();
-                        }
-                    }
-                },
-                failure : function(o) {
-                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-                }
-            });
-    },
 
     loadPagesTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
@@ -1372,24 +1293,17 @@ KAJONA.admin.ajax = {
 
 };
 
-// --- FILEMANAGER ----------------------------------------------------------------------
-KAJONA.admin.filemanager = {
-	createFolder : function(strInputId, strRepoId, strRepoFolder, strSourceModule, strSourceAction, strSourceSystemid) {
+// --- mediamanager ----------------------------------------------------------------------
+KAJONA.admin.mediamanager = {
+	createFolder : function(strInputId, strRepoId) {
 	    var strNewFoldername = document.getElementById(strInputId).value;
 	    if(strNewFoldername != "") {
-	        KAJONA.admin.ajax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction, strSourceSystemid);
-	    }
-	},
-
-	renameFile : function(strInputId, strRepoId, strRepoFolder, strOldName, strSourceModule, strSourceAction) {
-	    var strNewFilename = document.getElementById(strInputId).value;
-	    if(strNewFilename != "") {
-	        KAJONA.admin.ajax.renameFile(strRepoId, strNewFilename, strOldName, strRepoFolder, strSourceModule, strSourceAction);
+	        KAJONA.admin.ajax.createFolder(strRepoId, strNewFoldername);
 	    }
 	}
 };
 
-KAJONA.admin.filemanager.Uploader = function(config) {
+KAJONA.admin.mediamanager.Uploader = function(config) {
 	var self = this;
 
 	this.config = config;
@@ -1447,8 +1361,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 		}));
 
 		//load sample file row for file list
-		listElementSample = document.getElementById('kajonaUploadFileSample')
-				.cloneNode(true);
+		listElementSample = document.getElementById('kajonaUploadFileSample').cloneNode(true);
 	}
 
 	this.onFileSelect = function(event) {
@@ -1460,8 +1373,7 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 		self.createFileList();
 
 		jsDialog_0.init();
-		YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('kajonaUploadDialog'),
-				'display', "block");
+		YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('kajonaUploadDialog'), 'display', "block");
 	}
 
 	this.createFileList = function() {
@@ -1619,13 +1531,13 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 
 
 //--- image-editor ----------------------------------------------------------------------
-KAJONA.admin.filemanager.imageEditor = {
+KAJONA.admin.mediamanager.imageEditor = {
     cropArea : null,
     fm_cropObj : null,
     fm_image_isScaled : true,
 
     showRealSize : function () {
-        document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "&x="
+        document.getElementById('fm_mediamanagerPic').src = fm_image_rawurl + "&x="
             + (new Date()).getMilliseconds();
 
         this.fm_image_isScaled = false;
@@ -1634,7 +1546,7 @@ KAJONA.admin.filemanager.imageEditor = {
     },
 
     showPreview : function () {
-        document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
+        document.getElementById('fm_mediamanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
             + "&x=" + (new Date()).getMilliseconds();
         this.fm_image_isScaled = true;
 
@@ -1644,15 +1556,15 @@ KAJONA.admin.filemanager.imageEditor = {
     showCropping : function () {
         // init the cropping
         if (this.fm_cropObj == null) {
-        	this.fm_cropObj = new YAHOO.widget.ImageCropper('fm_filemanagerPic', {
+        	this.fm_cropObj = new YAHOO.widget.ImageCropper('fm_mediamanagerPic', {
                 status :true
             });
             document.getElementById("accept_icon").src = document
                     .getElementById("accept_icon").src.replace(
                     "icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
 
-            YAHOO.util.Event.addListener("fm_filemanagerPic_wrap", 'dblclick', function (event) {
-            	KAJONA.admin.filemanager.imageEditor.saveCropping();
+            YAHOO.util.Event.addListener("fm_mediamanagerPic_wrap", 'dblclick', function (event) {
+            	KAJONA.admin.mediamanager.imageEditor.saveCropping();
             });
 
             //show confirm box when existing the page without saving the cropping
@@ -1690,8 +1602,8 @@ KAJONA.admin.filemanager.imageEditor = {
         this.cropArea = this.fm_cropObj.getCropCoords();
         if (fm_image_isScaled) {
             // recalculate the "real" crop-coordinates
-            var intScaledWidth = document.getElementById('fm_filemanagerPic').width;
-            var intScaledHeight = document.getElementById('fm_filemanagerPic').height;
+            var intScaledWidth = document.getElementById('fm_mediamanagerPic').width;
+            var intScaledHeight = document.getElementById('fm_mediamanagerPic').height;
             var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
             var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
 
@@ -1703,7 +1615,7 @@ KAJONA.admin.filemanager.imageEditor = {
 
         var callback = {
             success : function(o) {
-        		var iE = KAJONA.admin.filemanager.imageEditor;
+        		var iE = KAJONA.admin.mediamanager.imageEditor;
                 KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                 iE.fm_cropObj.destroy();
                 iE.fm_cropObj = null;
@@ -1734,7 +1646,7 @@ KAJONA.admin.filemanager.imageEditor = {
         };
 
         KAJONA.admin.ajax.saveImageCropping(this.cropArea.left, this.cropArea.top,
-        		this.cropArea.width, this.cropArea.height, fm_repo_id, fm_folder, fm_file, callback);
+        		this.cropArea.width, this.cropArea.height, fm_file, callback);
     },
 
     rotate : function (intAngle) {
@@ -1742,7 +1654,7 @@ KAJONA.admin.filemanager.imageEditor = {
 
         var callback = {
             success : function(o) {
-        		var iE = KAJONA.admin.filemanager.imageEditor;
+        		var iE = KAJONA.admin.mediamanager.imageEditor;
                 KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
 
                 if (iE.fm_cropObj != null) {
@@ -1781,7 +1693,7 @@ KAJONA.admin.filemanager.imageEditor = {
             }
         };
 
-        KAJONA.admin.ajax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file, callback);
+        KAJONA.admin.ajax.saveImageRotating(intAngle, fm_file, callback);
     }
 
 };

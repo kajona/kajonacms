@@ -24,7 +24,7 @@ class class_folder_validator implements interface_validator {
      */
     public function validate($objValue) {
 
-        if(!is_string($objValue))
+        if(!is_string($objValue) || uniStrlen($objValue) == 0)
             return false;
 
         return is_dir(_realpath_.$objValue);

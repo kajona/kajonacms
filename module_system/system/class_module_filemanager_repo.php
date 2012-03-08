@@ -110,7 +110,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * @param boolean $bitLoadForeign Indicates weather foreign repos should be hidden or not
      * @param bool|int $intStart
      * @param bool|int $intEnd
-     * @return mixed Array of objects
+     * @return class_module_filemanager_repo[]
      * @static
      */
     public static function getAllRepos($bitLoadForeign = false, $intStart = null, $intEnd = null) {
@@ -134,7 +134,7 @@ class class_module_filemanager_repo extends class_model implements interface_mod
      * Returns the number of repos available
      * @static
      * @param bool $bitLoadForeign
-     * @return mixed
+     * @return int
      */
     public static function getAllReposCount($bitLoadForeign = false) {
         $objDB = class_carrier::getInstance()->getObjDB();

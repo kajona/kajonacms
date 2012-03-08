@@ -494,7 +494,7 @@ The following sections specify the layout of the rights-mgmt
 UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame are removed since no longer needed.
                Replaced by the section folderview_image_details
 
-<folderview_image_details>
+<mediamanager_image_details>
 <div class="folderview_image_details">
     %%file_pathnavi%% %%file_name%%
     <div class="imageContainer">
@@ -524,7 +524,7 @@ UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame 
 </div>
 %%filemanager_internal_code%%
 %%filemanager_image_js%%
-</folderview_image_details>
+</mediamanager_image_details>
 
 ---------------------------------------------------------------------------------------------------------
 -- WYSIWYG EDITOR ---------------------------------------------------------------------------------------

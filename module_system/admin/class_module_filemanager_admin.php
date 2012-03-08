@@ -128,7 +128,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             $objForm = $this->getAdminForm($objRepo);
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveRepo"));
+        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveRepo"));
 	}
 
 
@@ -818,7 +818,7 @@ class class_module_filemanager_admin extends class_admin_simple implements  inte
             $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"galleryId\" id=\"galleryId\" value=\"".$this->getParam("galleryId")."\" />";
 
 		}
-		$strReturn .= $this->objToolkit->getFilemanagerImageDetails($arrTemplate);
+		$strReturn .= $this->objToolkit->getMediamanagerImageDetails($arrTemplate);
 		return $strReturn;
 	}
 

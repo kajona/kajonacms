@@ -23,7 +23,8 @@ interface interface_admin_listable {
      * done afterwards.
      *
      * @abstract
-     * @return string the name of the icon, not yet wrapped by getImageAdmin()
+     * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
+     *         [the image name, the alt-title]
      */
     public function getStrIcon();
 
