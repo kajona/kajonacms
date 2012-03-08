@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9.1");
+        $this->setArrModuleEntry("version", "3.4.9.2");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
         $this->setArrModuleEntry("name", "system");
         $this->setArrModuleEntry("name_lang", "System Kernel");
@@ -543,7 +543,6 @@ class class_installer_system extends class_installer_base implements interface_i
 		parent::updateModuleVersion("system", $strVersion);
         parent::updateModuleVersion("right", $strVersion);
         parent::updateModuleVersion("user", $strVersion);
-        parent::updateModuleVersion("filemanager", $strVersion);
         parent::updateModuleVersion("dashboard", $strVersion);
         parent::updateModuleVersion("languages", $strVersion);
 	}
@@ -582,6 +581,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_3492();
             $this->objDB->flushQueryCache();
         }
 
@@ -869,6 +874,95 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.4.9.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.4.9.1");
+        return $strReturn;
+    }
+
+    private function update_3491_3492() {
+        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
+
+        $strReturn .= "Checking installation state of mediamanager...\n";
+        if(!in_array(_dbprefix_."mediamanager_repo", $this->objDB->getTables())) {
+            $strReturn .= "<b>Install the module mediamanager before proceeding the upgrade. Aborting.</b>";
+            return $strReturn;
+        }
+
+
+        //now theres the tricky part, all based on manual db-operations...
+        $strOldDefaultImagesRepo = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array("_filemanager_default_imagesrepoid_"));
+        $strOldDefaultImagesRepo = $strOldDefaultImagesRepo["system_config_value"];
+
+        $strOldDefaultFilesRepo = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array("_filemanager_default_filesrepoid_"));
+        $strOldDefaultFilesRepo = $strOldDefaultFilesRepo["system_config_value"];
+
+
+        $strReturn .= "Migrating old filemanager repos to new mediamanager repos...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."filemanager";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrOneRow) {
+            if(!validateSystemid($arrOneRow["filemanager_foreign_id"])) {
+                //convert the path
+                $strPath = $arrOneRow["filemanager_path"];
+                if(uniStrpos($strPath, "/downloads") !== false) {
+                    $strPath = _filespath_.uniSubstr($strPath, uniStrpos($strPath, "/downloads"));
+                }
+
+                if(uniStrpos($strPath, "/pics/upload") !== false) {
+                    $strPath = _filespath_."/images/upload";
+                }
+
+                $objRepo = new class_module_mediamanager_repo();
+                $objRepo->setStrPath($strPath);
+                $objRepo->setStrTitle($arrOneRow["filemanager_name"]);
+                $objRepo->setStrViewFilter($arrOneRow["filemanager_view_filter"]);
+                $objRepo->setStrUploadFilter($arrOneRow["filemanager_upload_filter"]);
+
+                $objRepo->updateObjectToDb();
+
+                $objRepo->syncRepo();
+
+                if($arrOneRow["filemanager_id"] == $strOldDefaultFilesRepo) {
+                    $objSetting = class_module_system_setting::getConfigByName("_mediamanager_default_filesrepoid_");
+                    $objSetting->setStrValue($objRepo->getSystemid());
+                    $objSetting->updateObjectToDb();
+                }
+
+                if($arrOneRow["filemanager_id"] == $strOldDefaultImagesRepo) {
+                    $objSetting = class_module_system_setting::getConfigByName("_mediamanager_default_imagesrepoid_");
+                    $objSetting->setStrValue($objRepo->getSystemid());
+                    $objSetting->updateObjectToDb();
+                }
+
+
+            }
+
+            $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id = ?";
+            $this->objDB->_pQuery($strQuery, array($arrOneRow["filemanager_id"]));
+            $this->deleteSystemRecord($arrOneRow["filemanager_id"]);
+        }
+
+
+        $strReturn .= "Deleting filemanager module...\n";
+
+        $strQuery = "SELECT * FROM "._dbprefix_."system_module WHERE module_name = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array('filemanager'));
+
+        $strQuery = "DELETE FROM "._dbprefix_."system_module WHERE module_id = ?";
+        $this->objDB->_pQuery($strQuery, array($arrRow["module_id"]));
+        $this->deleteSystemRecord($arrRow["module_id"]);
+
+        $strQuery = "DROP TABLE "._dbprefix_."filemanager";
+        $this->objDB->_pQuery($strQuery, array());
+
+        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array("_filemanager_default_imagesrepoid_"));
+        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array("_filemanager_default_filesrepoid_"));
+        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array("_filemanager_foldersize_"));
+        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array("_filemanager_show_foreign_"));
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.9.2");
         return $strReturn;
     }
 }
