@@ -31,3 +31,6 @@ $lang["hint_preview"]                    = "If the picture exceeds one of the va
 $lang["hint_text"]                       = "Places a text at the position (X, Y) into the image when in detail-mode";
 $lang["mode_random"]                     = "Random-mode";
 $lang["mode_standard"]                   = "Standard-mode";
+
+$lang["download_amount"]                 = "Downloads per page:";
+$lang["download_id"]                     = "Archive:";

@@ -22,10 +22,10 @@
     </table>
 </folderlist>
 
-    <!-- the following section is used to wrap a list of files, e.g. in order to build a table.
+<!-- the following section is used to wrap a list of files, e.g. in order to build a table.
 If you'd like to have a behaviour like rendering an unlimited list of files per row, use s.th.
 like < filelist >%%file_0%%</ filelist > -->
-    <!-- available placeholders: file_(nr) -->
+<!-- available placeholders: file_(nr) -->
 <filelist>
 <table width="100%" cellspacing="0">
     <tr>
@@ -39,8 +39,10 @@ like < filelist >%%file_0%%</ filelist > -->
 </table>
 </filelist>
 
-<!-- represents a single image
-     available placeholders: image_detail_src, file_filename, file_name, file_subtitle, file_description, file_size, file_hits, file_details_href -->
+<!-- represents a single file
+     available placeholders: image_detail_src, file_filename, file_name, file_subtitle, file_description, file_size, file_hits, file_details_href,
+                             file_owner, file_lmtime, file_link, file_link_href
+-->
 <filelist_file>
     <div style="text-align: center;">
         <div><a href="%%file_details_href%%"><img src="_webpath_/image.php?image=%%file_filename%%&amp;maxWidth=100&amp;maxHeight=100" alt="%%file_subtitle%%" /></a></div>
@@ -51,7 +53,8 @@ like < filelist >%%file_0%%</ filelist > -->
 
 <!-- available placeholders:
     image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
-    file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed)
+    file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed),
+    file_owner, file_lmtime, file_link, file_link_href
  -->
 <filedetail>
     <p>%%pathnavigation%%</p>

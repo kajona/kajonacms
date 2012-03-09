@@ -71,3 +71,14 @@ $lang["file_size"] = "Dategröße:";
 $lang["file_editdate"] = "Letzte Änderung:";
 
 $lang["overview"]                      = "Übersicht";
+$lang["download_link"] = "Download";
+
+
+$lang["header_amount"]                   = "Anzahl";
+$lang["header_file"]                     = "Datei";
+$lang["header_id"]                       = "Download-ID";
+$lang["header_ip"]                       = "IP/Hostname";
+$lang["header_user"]                     = "Benutzer";
+$lang["actionLogbook"]                         = "Logbuch";
+$lang["actionLogbookFlush"]           = "Logbuch leeren";
+$lang["logbook_hint_date"]                      = "Löscht alle Eintraege des Logbuchs, die älter als das angegeben Datum sind.";

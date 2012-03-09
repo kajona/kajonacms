@@ -31,10 +31,10 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
 		parent::__construct($arrElementData);
 
-        if($this->getAction() == "mediaFolder" || $this->getAction() == "imageFolder")
+        if($this->getAction() == "mediaFolder" || $this->getAction() == "imageFolder" || $this->getAction() == "openDlFolder")
             $this->setAction("list");
 
-        if($this->getAction() == "detailImage")
+        if($this->getAction() == "detailImage" || $this->getAction() == "detailDownload")
             $this->setAction("fileDetails");
 
 
@@ -117,7 +117,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
 		$arrWrappingTemplate["filelist"] = "";
 
 		if(count($arrFiles) > 0) {
-		    $intImageCounter = 0;
+		    $intFileCounter = 0;
 
             $arrRemainingFiles = array();
 
@@ -146,12 +146,21 @@ class class_module_mediamanager_portal extends class_portal implements interface
                         $arrFileTemplate["file_description"] = $objOneFile->getStrDescription();
                         $arrFileTemplate["file_size"] = bytesToString($objOneFile->getIntFileSize());
                         $arrFileTemplate["file_hits"] = $objOneFile->getIntHits();
+                        $arrFileTemplate["file_lmtime"] = timeToString(filemtime(_realpath_.$objOneFile->getStrFilename()));
+                        if(validateSystemid($objOneFile->getOwnerId())) {
+                            $objUser = new class_module_user_user($objOneFile->getOwnerId());
+                            $arrFileTemplate["file_owner"] = $objUser->getStrUsername();
+                        }
+                        $arrFileTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
+                        $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+
+
                         $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getPortalLanguage(), $objOneFile->getStrName());
 
                         //render the single file
                         $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist_file");
                         $strCurrentImage = $this->objTemplate->fillTemplate($arrFileTemplate, $strTemplateID);
-                        $arrRemainingFiles["file_".$intImageCounter % $intNrOfFilesPerRow] = $strCurrentImage;
+                        $arrRemainingFiles["file_".$intFileCounter % $intNrOfFilesPerRow] = $strCurrentImage;
 
                         //already rendered enough files?
                         if(count($arrRemainingFiles) == $intNrOfFilesPerRow) {
@@ -160,7 +169,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                             $arrRemainingFiles = array();
                         }
 
-                        $intImageCounter++;
+                        $intFileCounter++;
 
 					}
 
@@ -237,6 +246,14 @@ class class_module_mediamanager_portal extends class_portal implements interface
         $arrDetailsTemplate["file_size"] = bytesToString($objFile->getIntFileSize());
         $arrDetailsTemplate["file_hits"] = $objFile->getIntHits();
         $arrDetailsTemplate["file_systemid"] = $objFile->getSystemid();
+
+        $arrDetailsTemplate["file_lmtime"] = timeToString(filemtime(_realpath_.$objFile->getStrFilename()));
+        if(validateSystemid($objFile->getOwnerId())) {
+            $objUser = new class_module_user_user($objFile->getOwnerId());
+            $arrDetailsTemplate["file_owner"] = $objUser->getStrUsername();
+        }
+        $arrDetailsTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objFile->getSystemid();
+        $arrDetailsTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
 
         //if its am image, provide additional information
         $strSuffix = uniStrtolower(uniSubstr($objFile->getStrFilename(), uniStrrpos($objFile->getStrFilename(), ".")));

@@ -36,3 +36,15 @@ $lang["gallery_rating_voted"]            = "Du har redan poängsatt denna bild."
 
 
 $lang["overview"]                      = "Översikt";
+
+$lang["download_link"] = "Download";
+
+$lang["header_amount"]                   = "Antal";
+$lang["header_date"]                     = "Datum";
+$lang["header_file"]                     = "Fil";
+$lang["header_id"]                       = "Nedladdning-ID";
+$lang["header_ip"]                       = "IP/värdnamn";
+$lang["header_user"]                     = "Användare";
+$lang["actionLogbook"]                         = "Loggbok";
+$lang["actionLogbookFlush"]           = "Töm loggbok";
+$lang["logbook_hint_date"]                      = "Radera alla poster i loggboken äldre än i angivna datum.";

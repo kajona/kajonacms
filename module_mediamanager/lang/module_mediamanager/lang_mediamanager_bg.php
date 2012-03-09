@@ -24,3 +24,13 @@ $lang["delete_question"]            = "Наистина ли искате да �
 
 $lang["overview"]                      = "Преглед";
 
+$lang["download_link"] = "Download";
+
+$lang["header_amount"]                   = "Количество";
+$lang["header_file"]                     = "Файл";
+$lang["header_id"]                       = "Download-ID";
+$lang["header_ip"]                       = "IP/Hostname";
+$lang["header_user"]                     = "Потребител";
+$lang["actionLogbook"]                         = "Дневник";
+$lang["actionLogbookFlush"]           = "Изчисти дневника";
+$lang["logbook_hint_date"]                      = "Изтрива всички вписвания в дневника преди дадената дата.";

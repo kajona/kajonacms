@@ -122,8 +122,6 @@ class class_installer_element_gallery extends class_installer_base implements in
             $this->objDB->flushQueryCache();
         }
 
-
-
         return $strReturn;
     }
 

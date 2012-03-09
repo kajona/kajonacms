@@ -75,6 +75,20 @@ class class_installer_mediamanager extends class_installer_base implements inter
 			$strReturn .= "An error occured! ...\n";
 
 
+        //downloads_log----------------------------------------------------------------------------------
+        $strReturn .= "Installing table mediamanager_dllog...\n";
+
+        $arrFields = array();
+        $arrFields["downloads_log_id"] 		= array("char20", false);
+        $arrFields["downloads_log_date"] 	= array("int", true);
+        $arrFields["downloads_log_file"] 	= array("char254", true);
+        $arrFields["downloads_log_user"] 	= array("char20", true);
+        $arrFields["downloads_log_ip"] 		= array("char20", true);
+
+        if(!$this->objDB->createTable("mediamanager_dllog", $arrFields, array("downloads_log_id")))
+            $strReturn .= "An error occured! ...\n";
+
+
 		//register the module
 		$this->registerModule(
             "mediamanager",
@@ -87,19 +101,14 @@ class class_installer_mediamanager extends class_installer_base implements inter
 
 		$strReturn .= "Registering system-constants...\n";
 
-        //FIXME: remove
-//        if(class_module_system_setting::getConfigByName("_gallery_imagetypes_") === null)
-//		    $this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
-
         if(class_module_system_setting::getConfigByName("_gallery_search_resultpage_") === null)
 		    $this->registerConstant("_gallery_search_resultpage_", "gallery", class_module_system_setting::$int_TYPE_PAGE, _mediamanager_module_id_);
+
+        $this->registerConstant("_downloads_search_resultpage_", "downloads", class_module_system_setting::$int_TYPE_PAGE, _mediamanager_module_id_);
 
 
         $this->registerConstant("_mediamanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
         $this->registerConstant("_mediamanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
-
-
-
 
 
 		return $strReturn;
@@ -113,15 +122,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 
 
 	public function update() {
-	    $strReturn = "";
-        //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
-
-
-
-        return $strReturn."\n\n";
+	    return "";
 	}
 
 

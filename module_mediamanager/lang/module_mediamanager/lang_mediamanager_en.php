@@ -71,3 +71,13 @@ $lang["file_size"] = "Filesize:";
 $lang["file_editdate"] = "Last modified:";
 
 $lang["overview"]                      = "Overview";
+$lang["download_link"] = "Download";
+
+$lang["header_amount"]                   = "Amount";
+$lang["header_file"]                     = "File";
+$lang["header_id"]                       = "Download-ID";
+$lang["header_ip"]                       = "IP/Hostname";
+$lang["header_user"]                     = "User";
+$lang["actionLogbook"]                         = "Logfile";
+$lang["actionLogbookFlush"]           = "Flush logfile";
+$lang["logbook_hint_date"]                      = "Deletes all logbook entries recorded before the given date.";

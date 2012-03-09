@@ -31,3 +31,7 @@ $lang["hint_preview"]                    = "Om bildens mått överskrider något
 $lang["hint_text"]                       = "Placerar en text i postion (X,Y)  när bilden visas i detaljläge";
 $lang["mode_random"]                     = "Slumpmässigt läge";
 $lang["mode_standard"]                   = "Standardläge";
+
+
+$lang["download_amount"]                 = "Poster per sida:";
+$lang["download_id"]                     = "Arkiv:";

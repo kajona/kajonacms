@@ -43,22 +43,9 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
      	$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("actionNew"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
      	$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getLang("actionMassSync"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "logbook", "", $this->getLang("actionLogbook"), "", "", true, "adminnavi"));
      	return $arrReturn;
     }
-
-
-    //FIXME needed?
-    protected function actionSortUp() {
-        $this->setPositionAndReload($this->getSystemid(), "upwards");
-    }
-
-
-    //FIXME needed?
-    protected function actionSortDown() {
-        $this->setPositionAndReload($this->getSystemid(), "downwards");
-    }
-
-
 
 
 
@@ -741,5 +728,76 @@ HTML;
         return $strReturn;
     }
 
+
+    /**
+     * Show a logbook of all downloads
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionLogbook() {
+        $strReturn = "";
+
+        $intNrOfRecordsPerPage = 25;
+
+        $strReturn .= $this->objToolkit->getTextRow(getLinkAdmin($this->getArrModule("modul"), "logbookFlush", "", $this->getLang("actionLogbookFlush"), "")."<br />");
+
+        $objLogbook = new class_module_mediamanager_logbook();
+        $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLogbookDataCount());
+        $objArraySectionIterator->setIntElementsPerPage($intNrOfRecordsPerPage);
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection($objLogbook->getLogbookData($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "downloads", "logbook");
+
+        $arrLogsRaw = $arrPageViews["elements"];
+        $arrLogs = array();
+        foreach($arrLogsRaw as $intKey => $arrOneLog) {
+            $arrLogs[$intKey][0] = $arrOneLog["downloads_log_id"];
+            $arrLogs[$intKey][1] = timeToString($arrOneLog["downloads_log_date"]);
+            $arrLogs[$intKey][2] = $arrOneLog["downloads_log_file"];
+            $arrLogs[$intKey][3] = $arrOneLog["downloads_log_user"];
+            $arrLogs[$intKey][4] = $arrOneLog["downloads_log_ip"];
+        }
+        //Create a data-table
+        $arrHeader = array();
+        $arrHeader[0] = $this->getLang("header_id");
+        $arrHeader[1] = $this->getLang("commons_date");
+        $arrHeader[2] = $this->getLang("header_file");
+        $arrHeader[3] = $this->getLang("header_user");
+        $arrHeader[4] = $this->getLang("header_ip");
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
+        $strReturn .= $arrPageViews["pageview"];
+
+        return $strReturn;
+    }
+
+    /**
+     * Shows a form or deltes a timeintervall from the logs
+     *
+     * @return string "" in case of success
+     * @permissions edit
+     */
+    protected function actionLogbookFlush() {
+        $strReturn = "";
+        if($this->getParam("flush") == "") {
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "logbookFlush", "flush=1"));
+            $strReturn .= $this->objToolkit->formTextRow($this->getLang("logbook_hint_date"));
+            $strReturn .= $this->objToolkit->formDateSingle("date", $this->getLang("commons_date"), new class_date());
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
+            $strReturn .= $this->objToolkit->formClose();
+        }
+        elseif ($this->getParam("flush") == "1") {
+            //Build the date
+            $objDate = new class_date();
+            $objDate->generateDateFromParams("date", $this->getAllParams());
+
+            if(!class_module_mediamanager_logbook::deleteFromLogs($objDate->getTimeInOldStyle()))
+                throw new class_exception("Error deleting log-rows", class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "logbook"));
+        }
+        return $strReturn;
+    }
 }
 

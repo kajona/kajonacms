@@ -94,7 +94,9 @@
 
 
 <!-- represents a single file within a filelist
-     available placeholders: image_detail_src, file_name, file_filename, file_subtitle, file_description, file_size, file_hits, file_details_href -->
+     available placeholders: image_detail_src, file_name, file_filename, file_subtitle, file_description, file_size, file_hits, file_details_href,
+     file_owner, file_lmtime, file_link, file_link_href
+-->
 <filelist_file>
     <div style="text-align: center;">
         <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="_webpath_/image.php?image=%%file_filename%%&amp;maxWidth=100&amp;maxHeight=100" alt="%%file_subtitle%%" /></a></div>
@@ -105,7 +107,8 @@
 
 <!-- available placeholders:
    image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
-   file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed)
+   file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed),
+   file_owner, file_lmtime, file_link, file_link_href
 -->
 <filedetail>
     <!-- not used for imagelightbox -->

@@ -31,3 +31,6 @@ $lang["hint_preview"]                    = "Wenn das Bild einen der Werte übers
 $lang["hint_text"]                       = "Legt in das Bild der Detailansicht an Stelle (X, Y) einen Text";
 $lang["mode_random"]                     = "Zufalls-Modus";
 $lang["mode_standard"]                   = "Standard-Modus";
+
+$lang["download_amount"]                 = "Datensätze pro Seite:";
+$lang["download_id"]                     = "Archiv:";

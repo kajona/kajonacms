@@ -26,3 +26,13 @@ $lang["delete_question"]            = "Вы действительно хоти�
 
 
 
+$lang["download_link"] = "Download";
+
+$lang["header_amount"]                   = "Количество";
+$lang["header_file"]                     = "Файл";
+$lang["header_id"]                       = "ID скачивания";
+$lang["header_ip"]                       = "IP/Имя хоста";
+$lang["header_user"]                     = "Пользователь";
+$lang["actionLogbook"]                         = "Системный журнал";
+$lang["actionLogbookFlush"]           = "Очистить системный журнал";
+$lang["logbook_hint_date"]                      = "Удаляет всю историю logbook до заданной даты.";
