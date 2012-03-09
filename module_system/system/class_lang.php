@@ -34,7 +34,7 @@ class class_lang {
      * The commons-name indicates the fake-module-name of lang-files bundled for common usage (in order to
      * reduce duplicate lang-entries).
      *
-     * @var type
+     * @var string
      */
     private $strCommonsName = "commons";
 	private $arrTexts;
@@ -150,14 +150,14 @@ class class_lang {
             //try to load the fallback-files
             $objFilesystem = new class_filesystem();
             //load files
-            $arrFiles = $objFilesystem->getFilelist(_langpath_."/module_".$strModule);
+            $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("module_".$strModule);
             if(is_array($arrFiles)) {
-                foreach($arrFiles as $strFile) {
-                    $strTemp = str_replace(".php", "", $strFile);
+                foreach($arrFiles as $strPath => $strFilename) {
+                    $strTemp = str_replace(".php", "", $strFilename);
                     $arrName = explode("_", $strTemp);
 
                     if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
-                        $this->loadAndMergeTextfile($strModule, $strFile, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
+                        $this->loadAndMergeTextfile($strModule, $strPath, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
                     }
                 }
             }

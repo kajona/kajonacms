@@ -289,6 +289,10 @@ $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
 
+
+$lang["installer_finish_hints_update"]    = "<b>Attention: If you updated from a v3 system, please make sure to run the post-update scripts as soon as all modules have been upgraded.</b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Run post-update</a><<br /><br />";
+
+
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Settings", 5 => "Systemtasks", 6 => "Systemlog", 7 => "Updates", 8 => "Aspects");

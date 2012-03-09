@@ -138,8 +138,8 @@ class class_installer {
 	                        "gd",
 	                        "xml");
 
-	    $strReturn .= $this->getText("installer_phpcheck_intro");
-	    $strReturn .= $this->getText("installer_phpcheck_lang");
+	    $strReturn .= $this->getLang("installer_phpcheck_intro");
+	    $strReturn .= $this->getLang("installer_phpcheck_lang");
 
 	    //link to different languages
 	    $arrLangs = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
@@ -151,22 +151,22 @@ class class_installer {
             }
 	    }
 
-	    $strReturn .= "<br />".$this->getText("installer_phpcheck_intro2");
+	    $strReturn .= "<br />".$this->getLang("installer_phpcheck_intro2");
 
 	    foreach ($arrFilesAndFolders as $strOneFile) {
-    	    $strReturn .= $this->getText("installer_phpcheck_folder").$strOneFile."...<br />";
+    	    $strReturn .= $this->getLang("installer_phpcheck_folder").$strOneFile."...<br />";
     	    if(is_writable(_realpath_.$strOneFile))
-    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"green\">".$this->getText("installer_given")."</span>.<br />";
+    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"green\">".$this->getLang("installer_given")."</span>.<br />";
     	    else
-    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getText("installer_missing")."</span>!<br />";
+    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getLang("installer_missing")."</span>!<br />";
 	    }
 
 	    foreach($arrModules as $strOneModule) {
-    	    $strReturn .= $this->getText("installer_phpcheck_module").$strOneModule."...<br />";
+    	    $strReturn .= $this->getLang("installer_phpcheck_module").$strOneModule."...<br />";
     	    if(in_array($strOneModule, get_loaded_extensions()))
-    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"green\">".$this->getText("installer_loaded")."</span>.<br />";
+    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"green\">".$this->getLang("installer_loaded")."</span>.<br />";
     	    else
-    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getText("installer_nloaded")."</span>!<br />";
+    	       $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getLang("installer_nloaded")."</span>!<br />";
 	    }
 
 	    $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=config");
@@ -190,36 +190,36 @@ class class_installer {
             //check for available modules
             $strMysqliInfo = ""; $strSqlite3Info = ""; $strPostgresInfo = ""; $strOci8Info = "";
             if(!in_array("mysqli", get_loaded_extensions())) {
-                $strMysqliInfo = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." mysqli</div>";
+                $strMysqliInfo = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
             }
             if(!in_array("pgsql", get_loaded_extensions())) {
-                $strPostgresInfo = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." postgres</div>";
+                $strPostgresInfo = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
             }
             if(in_array("sqlite3", get_loaded_extensions())) {
-                $strSqlite3Info = "<div class=\"info\">".$this->getText("installer_dbdriver_sqlite3")."</div>";
+                $strSqlite3Info = "<div class=\"info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
             }
             else {
-                $strSqlite3Info = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." sqlite3</div>";
+                $strSqlite3Info = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
             }
             if(in_array("oci8", get_loaded_extensions())) {
-                $strOci8Info = "<div class=\"info\">".$this->getText("installer_dbdriver_oci8")."</div>";
+                $strOci8Info = "<div class=\"info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
             }
             else {
-                $strOci8Info = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." oci8</div>";
+                $strOci8Info = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
             }
 
             //configwizard_form
             $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "configwizard_form", true);
-	        $strReturn .= $this->objTemplates->fillTemplate(array("config_intro" => $this->getText("installer_config_intro"),
-	                                                              "config_hostname"  => $this->getText("installer_config_dbhostname"),
-                                                                  "config_username"  => $this->getText("installer_config_dbusername"),
-                                                                  "config_password"  => $this->getText("installer_config_dbpassword"),
-                                                                  "config_port"  => $this->getText("installer_config_dbport"),
-                                                                  "config_portinfo"  => $this->getText("installer_config_dbportinfo"),
-                                                                  "config_driver"  => $this->getText("installer_config_dbdriver"),
-                                                                  "config_dbname"  => $this->getText("installer_config_dbname"),
-                                                                  "config_prefix"  => $this->getText("installer_config_dbprefix"),
-                                                                  "config_save"  => $this->getText("installer_config_write"),
+	        $strReturn .= $this->objTemplates->fillTemplate(array("config_intro" => $this->getLang("installer_config_intro"),
+	                                                              "config_hostname"  => $this->getLang("installer_config_dbhostname"),
+                                                                  "config_username"  => $this->getLang("installer_config_dbusername"),
+                                                                  "config_password"  => $this->getLang("installer_config_dbpassword"),
+                                                                  "config_port"  => $this->getLang("installer_config_dbport"),
+                                                                  "config_portinfo"  => $this->getLang("installer_config_dbportinfo"),
+                                                                  "config_driver"  => $this->getLang("installer_config_dbdriver"),
+                                                                  "config_dbname"  => $this->getLang("installer_config_dbname"),
+                                                                  "config_prefix"  => $this->getLang("installer_config_dbprefix"),
+                                                                  "config_save"  => $this->getLang("installer_config_write"),
                                                                   "mysqliInfo" => $strMysqliInfo,
                                                                   "sqlite3Info" => $strSqlite3Info,
                                                                   "postgresInfo" => $strPostgresInfo,
@@ -264,7 +264,7 @@ class class_installer {
 	public function adminLoginData() {
         $bitUserInstalled = false;
 	    $bitShowForm = true;
-	    $this->strOutput .= $this->getText("installer_login_intro");
+	    $this->strOutput .= $this->getLang("installer_login_intro");
 
 	    //if user-module is already installed, skip this step
 	    try {
@@ -279,7 +279,7 @@ class class_installer {
 
         if($bitUserInstalled) {
             $bitShowForm = false;
-            $this->strOutput .= "<span class=\"green\">".$this->getText("installer_login_installed")."</span>";
+            $this->strOutput .= "<span class=\"green\">".$this->getLang("installer_login_installed")."</span>";
         }
 	    if(isset($_POST["write"]) && $_POST["write"] == "true") {
             $strUsername = $_POST["username"];
@@ -297,10 +297,10 @@ class class_installer {
 
 	    if($bitShowForm){
 	        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "loginwizard_form", true);
-	        $this->strOutput .= $this->objTemplates->fillTemplate(array("login_username" => $this->getText("installer_login_username"),
-	                                                                    "login_password" => $this->getText("installer_login_password"),
-	                                                                    "login_email" => $this->getText("installer_login_email"),
-	                                                                    "login_save" => $this->getText("installer_login_save")
+	        $this->strOutput .= $this->objTemplates->fillTemplate(array("login_username" => $this->getLang("installer_login_username"),
+	                                                                    "login_password" => $this->getLang("installer_login_password"),
+	                                                                    "login_email" => $this->getLang("installer_login_email"),
+	                                                                    "login_save" => $this->getLang("installer_login_save")
 	                                                              ), $strTemplateID);
 	    }
 
@@ -356,7 +356,7 @@ class class_installer {
 
 
         $this->strLogfile = $strInstallLog;
-		$strReturn .= $this->getText("installer_modules_found");
+		$strReturn .= $this->getLang("installer_modules_found");
 
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row", true);
@@ -387,7 +387,7 @@ class class_installer {
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_form", true);
-        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
@@ -427,7 +427,7 @@ class class_installer {
 
 
         $this->strLogfile = $strInstallLog;
-		$strReturn .= $this->getText("installer_elements_found");
+		$strReturn .= $this->getLang("installer_elements_found");
 
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_elements_row", true);
@@ -457,7 +457,7 @@ class class_installer {
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_elements_form", true);
-        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=install");
@@ -495,7 +495,7 @@ class class_installer {
         }
 
         $this->strLogfile = $strInstallLog;
-		$strReturn .= $this->getText("installer_samplecontent");
+		$strReturn .= $this->getLang("installer_samplecontent");
 
 		//Loading each installer
         $strRows = "";
@@ -529,7 +529,7 @@ class class_installer {
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_samplecontent_form", true);
-        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=postInstall");
@@ -546,9 +546,10 @@ class class_installer {
 	    $this->objSession->sessionUnset("install_username");
 	    $this->objSession->sessionUnset("install_password");
 
-	    $strReturn .= $this->getText("installer_finish_intro");
-	    $strReturn .= $this->getText("installer_finish_hints");
-	    $strReturn .= $this->getText("installer_finish_closer");
+	    $strReturn .= $this->getLang("installer_finish_intro");
+	    $strReturn .= $this->getLang("installer_finish_hints");
+	    $strReturn .= $this->getLang("installer_finish_hints_update");
+	    $strReturn .= $this->getLang("installer_finish_closer");
 
 	    $this->strOutput = $strReturn;
 	    $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=samplecontent");
@@ -565,7 +566,7 @@ class class_installer {
 	    if($this->strLogfile != "") {
 	        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_log", true);
 	        $this->strLogfile = $this->objTemplates->fillTemplate(array("log_content" => $this->strLogfile,
-                                                                        "systemlog" => $this->getText("installer_systemlog")
+                                                                        "systemlog" => $this->getLang("installer_systemlog")
                                                                   ), $strTemplateID);
 	    }
 
@@ -576,13 +577,13 @@ class class_installer {
 	       $strCurrentCommand = "phpsettings";
 
 	    $arrProgressEntries = array(
-	       "phpsettings" => $this->getText("installer_step_phpsettings"),
-	       "config" => $this->getText("installer_step_dbsettings"),
-	       "loginData" => $this->getText("installer_step_adminsettings"),
-	       "install" => $this->getText("installer_step_modules"),
-	       "postInstall" => $this->getText("installer_step_elements"),
-	       "samplecontent" => $this->getText("installer_step_samplecontent"),
-	       "finish" => $this->getText("installer_step_finish"),
+	       "phpsettings" => $this->getLang("installer_step_phpsettings"),
+	       "config" => $this->getLang("installer_step_dbsettings"),
+	       "loginData" => $this->getLang("installer_step_adminsettings"),
+	       "install" => $this->getLang("installer_step_modules"),
+	       "postInstall" => $this->getLang("installer_step_elements"),
+	       "samplecontent" => $this->getLang("installer_step_samplecontent"),
+	       "finish" => $this->getLang("installer_step_finish"),
 	    );
 
 	    $strProgress = "";
@@ -660,7 +661,7 @@ class class_installer {
 	 */
 	public function getForwardLink($strHref) {
 	    $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_forward_link", true);
-		return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getText("installer_next")), $strTemplateID);
+		return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_next")), $strTemplateID);
 	}
 
 	/**
@@ -671,7 +672,7 @@ class class_installer {
 	 */
 	public function getBackwardLink($strHref) {
 	    $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_backward_link", true);
-		return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getText("installer_prev")), $strTemplateID);
+		return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_prev")), $strTemplateID);
 	}
 
 	/**
@@ -679,10 +680,21 @@ class class_installer {
 	 *
 	 * @param string $strKey
 	 * @return string
+     * @deprecated use getLang instead
 	 */
 	public function getText($strKey) {
 	    return $this->objTexte->getLang($strKey, "system");
 	}
+
+    /**
+     * Loads a text
+     *
+     * @param string $strKey
+     * @return string
+     */
+    public function getLang($strKey) {
+        return $this->objTexte->getLang($strKey, "system");
+    }
 }
 
 

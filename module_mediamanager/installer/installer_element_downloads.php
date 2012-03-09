@@ -43,6 +43,19 @@ class class_installer_element_downloads extends class_installer_base implements 
 		return "";
 	}
 
+    public function hasPostUpdates() {
+        $objElement = null;
+        try {
+            $objElement = class_module_pages_element::getElement("downloads");
+            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
+                return true;
+        }
+        catch (class_exception $objEx)  {
+        }
+
+        return false;
+    }
+
 	public function postInstall() {
 		$strReturn = "";
 

@@ -48,6 +48,19 @@ class class_installer_element_gallery extends class_installer_base implements in
         return "";
 	}
 
+    public function hasPostUpdates() {
+        $objElement = null;
+        try {
+            $objElement = class_module_pages_element::getElement("gallery");
+            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
+                return true;
+        }
+        catch (class_exception $objEx)  {
+        }
+
+        return false;
+    }
+
 	public function postInstall() {
 		$strReturn = "";
 

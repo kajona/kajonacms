@@ -1,0 +1,404 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: bootstrap.php 4206 2011-11-13 15:47:22Z sidler $                                               *
+********************************************************************************************************/
+
+
+require_once './core/bootstrap.php';
+
+
+class class_v3_v4_postupdate {
+
+    /**
+     * @var class_db
+     */
+    private $objDB;
+
+    public function postUpdate() {
+
+        $this->objDB = class_carrier::getInstance()->getObjDB();
+
+        echo "<pre>";
+        echo "<b>Kajona v4 Post Update</b>\n\n";
+        echo "Running post-update scripts to finalize a v3 to v4 update\n\n";
+
+        echo "Checking installation state of mediamanager...\n";
+        if(!in_array(_dbprefix_."mediamanager_repo", $this->objDB->getTables())) {
+            echo "<b>Install the module mediamanager before proceeding the upgrade. Aborting.</b>";
+            return false;
+        }
+        echo ".. installed.\n";
+
+        //FIXME: gallery update
+        echo "\n\n<b>Galleries</b>\n";
+        if(!$this->updateGalleries())
+            return false;
+
+        //FIXME: downloads update
+        echo "\n\n<b>Downloads</b>\n";
+        if(!$this->updateDownloads())
+            return false;
+
+
+        echo "\n\n<b>Filemanager</b>\n";
+        if(!$this->updateFilemanager())
+            return false;
+
+
+        echo "\n\n<b>Update succeeded. \nPlease remove the file ".__FILE__." from the filesystem.</b>\n";
+
+        echo "</pre>";
+    }
+
+
+
+
+
+    private function updateDownloads() {
+        echo "Updating downloads to new mediamanager structure...\n";
+
+        if(!in_array(_dbprefix_."downloads_archive", $this->objDB->getTables())) {
+            echo "Downloads table missing, no update required.\n";
+            return true;
+        }
+
+        echo "Migrating old archives to new mediamanager repos...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."downloads_archive";
+        $arrArchives = $this->objDB->getPArray($strQuery, array());
+        foreach($arrArchives as $arrOneArchive) {
+            //load foreign repo data
+            $strQuery = "SELECT * FROM "._dbprefix_."filemanager WHERE filemanager_foreign_id = ?";
+            $arrRepoData = $this->objDB->getPRow($strQuery, array($arrOneArchive["archive_id"]));
+
+            echo "migrating old archive ".$arrOneArchive["archive_title"]."\n";
+            echo "  old path: ".$arrRepoData["filemanager_path"]."\n";
+
+            //convert the path
+            $strPath = $this->convertOldPath($arrRepoData["filemanager_path"]);
+            echo "  new path: ".$strPath."\n";
+            $objRepo = new class_module_mediamanager_repo();
+            $objRepo->setStrPath($strPath);
+            $objRepo->setStrTitle($arrOneArchive["archive_title"]);
+            $objRepo->setStrViewFilter($arrRepoData["filemanager_view_filter"]);
+            $objRepo->setStrUploadFilter($arrRepoData["filemanager_upload_filter"]);
+            $objRepo->updateObjectToDb();
+            $objRepo->syncRepo();
+
+            echo "deleting old filemanager repo...\n";
+            $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id = ?";
+            $this->objDB->_pQuery($strQuery, array($arrRepoData["filemanager_id"]));
+            $this->deleteSystemRecord($arrRepoData["filemanager_id"]);
+
+            echo "migrating downloads data...\n";
+            $this->updateDownloadsLevel($objRepo->getSystemid(), $arrOneArchive["archive_id"]);
+
+            echo "updateing existing downloads-elements...\n";
+            $strQuery = "UPDATE "._dbprefix_."element_downloads SET download_id = ? WHERE download_id = ?";
+            $this->objDB->_pQuery($strQuery, array($objRepo->getSystemid(), $arrOneArchive["archive_id"]));
+
+            echo "deleting archive and contained downloads data...\n";
+            $this->deleteDownloadsLevel($arrOneArchive["archive_id"]);
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."downloads_archive WHERE archive_id = ?", array($arrOneArchive["archive_id"]));
+            $this->deleteSystemRecord($arrOneArchive["archive_id"]);
+
+        }
+
+        echo "Deleting downloads module...\n";
+        $this->removeModule("downloads");
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."downloads_archive", array());
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."downloads_file", array());
+        $this->removeSetting("_downloads_suche_seite_");
+
+        return true;
+    }
+
+
+    private function updateDownloadsLevel($strNewPrevid, $strOldPrevid) {
+        $arrFiles = class_module_mediamanager_file::loadFilesDB($strNewPrevid);
+        $arrOldFiles = $this->objDB->getPArray("SELECT * FROM  "._dbprefix_."system, "._dbprefix_."downloads_file WHERE system_id = downloads_id AND system_prev_id = ?", array($strOldPrevid));
+
+        foreach($arrFiles as $objOneFile) {
+            $strNewFilename = basename($objOneFile->getStrFilename());
+            echo "  searching file/folder ".$strNewFilename."\n";
+
+            foreach($arrOldFiles as $arrOneOldFile) {
+                if(basename($arrOneOldFile["downloads_filename"]) == $strNewFilename) {
+                    $objOneFile->setStrName($arrOneOldFile["downloads_name"]);
+                    $objOneFile->setStrDescription($arrOneOldFile["downloads_description"]);
+                    $objOneFile->setIntHits($arrOneOldFile["downloads_hits"]);
+                    $objOneFile->updateObjectToDb();
+
+                    echo "...update succeeded\n";
+
+                    if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+                        $this->updateDownloadsLevel($objOneFile->getSystemid(), $arrOneOldFile["downloads_id"]);
+                }
+            }
+        }
+    }
+
+    private function deleteDownloadsLevel($strOldPrevid) {
+        $arrOldFiles = $this->objDB->getPArray("SELECT * FROM  "._dbprefix_."system, "._dbprefix_."downloads_file WHERE system_id = downloads_id AND system_prev_id = ?", array($strOldPrevid));
+
+        foreach($arrOldFiles as $arrOneFile) {
+            $this->deleteDownloadsLevel($arrOneFile["downloads_id"]);
+
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."downloads_file WHERE downloads_id = ?", array($arrOneFile["downloads_id"]));
+            $this->deleteSystemRecord($arrOneFile["downloads_id"]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private function updateGalleries() {
+        echo "Updating galleries to new mediamanager structure...\n";
+
+        if(!in_array(_dbprefix_."gallery_gallery", $this->objDB->getTables())) {
+            echo "Gallery table missing, no update required.\n";
+            return true;
+        }
+
+        echo "Migrating old galleries to new mediamanager repos...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."gallery_gallery";
+        $arrGalleries = $this->objDB->getPArray($strQuery, array());
+        foreach($arrGalleries as $arrOneGallery) {
+            //load foreign repo data
+            $strQuery = "SELECT * FROM "._dbprefix_."filemanager WHERE filemanager_foreign_id = ?";
+            $arrRepoData = $this->objDB->getPRow($strQuery, array($arrOneGallery["gallery_id"]));
+
+            echo "migrating old gallery ".$arrOneGallery["gallery_title"]."\n";
+            echo "  old path: ".$arrRepoData["filemanager_path"]."\n";
+
+            //convert the path
+            $strPath = $this->convertOldPath($arrRepoData["filemanager_path"]);
+            echo "  new path: ".$strPath."\n";
+            $objRepo = new class_module_mediamanager_repo();
+            $objRepo->setStrPath($strPath);
+            $objRepo->setStrTitle($arrOneGallery["gallery_title"]);
+            $objRepo->setStrViewFilter($arrRepoData["filemanager_view_filter"]);
+            $objRepo->setStrUploadFilter($arrRepoData["filemanager_upload_filter"]);
+            $objRepo->updateObjectToDb();
+            $objRepo->syncRepo();
+
+            echo "deleting old filemanager repo...\n";
+            $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id = ?";
+            $this->objDB->_pQuery($strQuery, array($arrRepoData["filemanager_id"]));
+            $this->deleteSystemRecord($arrRepoData["filemanager_id"]);
+
+            echo "migrating image data...\n";
+            $this->updateGalleryLevel($objRepo->getSystemid(), $arrOneGallery["gallery_id"]);
+
+            echo "updateing existing gallery-elements...\n";
+            $strQuery = "UPDATE "._dbprefix_."element_gallery SET gallery_id = ? WHERE gallery_id = ?";
+            $this->objDB->_pQuery($strQuery, array($objRepo->getSystemid(), $arrOneGallery["gallery_id"]));
+
+            echo "deleting gallery and contained-image data...\n";
+            $this->deleteGalleryLevel($arrOneGallery["gallery_id"]);
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."gallery_gallery WHERE gallery_id = ?", array($arrOneGallery["gallery_id"]));
+            $this->deleteSystemRecord($arrOneGallery["gallery_id"]);
+
+        }
+
+        echo "Deleting gallery module...\n";
+        $this->removeModule("gallery");
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."gallery_gallery", array());
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."gallery_pic", array());
+        $this->removeSetting("_gallery_search_resultpage_");
+
+        echo "updating setting _gallery_search_resultpage_\n";
+        $objSetting = class_module_system_setting::getConfigByName("_gallery_search_resultpage_");
+        if($objSetting != null) {
+            $objSetting->setIntModule(_mediamanager_module_id_);
+            $objSetting->updateObjectToDb();
+        }
+
+        return true;
+    }
+
+
+    private function updateGalleryLevel($strNewPrevid, $strOldPrevid) {
+        $arrFiles = class_module_mediamanager_file::loadFilesDB($strNewPrevid);
+        $arrOldFiles = $this->objDB->getPArray("SELECT * FROM  "._dbprefix_."system, "._dbprefix_."gallery_pic WHERE system_id = pic_id AND system_prev_id = ?", array($strOldPrevid));
+
+        foreach($arrFiles as $objOneFile) {
+            $strNewFilename = basename($objOneFile->getStrFilename());
+            echo "  searching image/folder ".$strNewFilename."\n";
+
+            foreach($arrOldFiles as $arrOneOldFile) {
+                if(basename($arrOneOldFile["pic_filename"]) == $strNewFilename) {
+                    $objOneFile->setStrName($arrOneOldFile["pic_name"]);
+                    $objOneFile->setStrDescription($arrOneOldFile["pic_description"]);
+                    $objOneFile->setStrSubtitle($arrOneOldFile["pic_subtitle"]);
+                    $objOneFile->setIntHits($arrOneOldFile["pic_hits"]);
+                    $objOneFile->updateObjectToDb();
+
+                    echo "...update succeeded\n";
+
+                    if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+                        $this->updateGalleryLevel($objOneFile->getSystemid(), $arrOneOldFile["pic_id"]);
+                }
+            }
+        }
+    }
+
+    private function deleteGalleryLevel($strOldPrevid) {
+        $arrOldFiles = $this->objDB->getPArray("SELECT * FROM  "._dbprefix_."system, "._dbprefix_."gallery_pic WHERE system_id = pic_id AND system_prev_id = ?", array($strOldPrevid));
+
+        foreach($arrOldFiles as $arrOneFile) {
+            $this->deleteGalleryLevel($arrOneFile["pic_id"]);
+
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."gallery_pic WHERE pic_id = ?", array($arrOneFile["pic_id"]));
+            $this->deleteSystemRecord($arrOneFile["pic_id"]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private function updateFilemanager() {
+        echo "Updating filemanager to new mediamanager structure...\n";
+        echo "Checking installation state of mediamanager...\n";
+
+        if(!in_array(_dbprefix_."filemanager", $this->objDB->getTables())) {
+            echo "Filemanager table missing, no update required.\n";
+            return true;
+        }
+
+        $strOldDefaultImagesRepo = $this->getValueOfSetting("_filemanager_default_imagesrepoid_");
+        $strOldDefaultFilesRepo = $this->getValueOfSetting("_filemanager_default_filesrepoid_");
+
+        echo "Migrating old filemanager repos to new mediamanager repos...\n";
+
+        $strQuery = "SELECT * FROM "._dbprefix_."filemanager";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrOneRow) {
+            if(!validateSystemid($arrOneRow["filemanager_foreign_id"])) {
+
+                echo "migrating old repo ".$arrOneRow["filemanager_name"]."\n";
+                echo "  old path: ".$arrOneRow["filemanager_path"]."\n";
+
+                //convert the path
+                $strPath = $this->convertOldPath($arrOneRow["filemanager_path"]);
+                echo "  new path: ".$strPath."\n";
+
+                $objRepo = new class_module_mediamanager_repo();
+                $objRepo->setStrPath($strPath);
+                $objRepo->setStrTitle($arrOneRow["filemanager_name"]);
+                $objRepo->setStrViewFilter($arrOneRow["filemanager_view_filter"]);
+                $objRepo->setStrUploadFilter($arrOneRow["filemanager_upload_filter"]);
+                $objRepo->updateObjectToDb();
+                $objRepo->syncRepo();
+
+                if($arrOneRow["filemanager_id"] == $strOldDefaultFilesRepo) {
+                    $objSetting = class_module_system_setting::getConfigByName("_mediamanager_default_filesrepoid_");
+                    $objSetting->setStrValue($objRepo->getSystemid());
+                    $objSetting->updateObjectToDb();
+                    echo "  setting as default files repo\n";
+                }
+
+                if($arrOneRow["filemanager_id"] == $strOldDefaultImagesRepo) {
+                    $objSetting = class_module_system_setting::getConfigByName("_mediamanager_default_imagesrepoid_");
+                    $objSetting->setStrValue($objRepo->getSystemid());
+                    $objSetting->updateObjectToDb();
+                    echo "  setting as default images repo\n";
+                }
+            }
+
+            echo "  deleting repo from tables\n";
+            $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id = ?";
+            $this->objDB->_pQuery($strQuery, array($arrOneRow["filemanager_id"]));
+            $this->deleteSystemRecord($arrOneRow["filemanager_id"]);
+        }
+
+
+        echo "Deleting filemanager module...\n";
+        $this->removeModule("filemanager");
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."filemanager", array());
+        $this->removeSetting("_filemanager_default_imagesrepoid_");
+        $this->removeSetting("_filemanager_default_filesrepoid_");
+        $this->removeSetting("_filemanager_foldersize_");
+        $this->removeSetting("_filemanager_show_foreign_");
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private function removeModule($strModuleName) {
+        $strQuery = "SELECT * FROM "._dbprefix_."system_module WHERE module_name = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($strModuleName));
+
+        $strQuery = "DELETE FROM "._dbprefix_."system_module WHERE module_id = ?";
+        $this->objDB->_pQuery($strQuery, array($arrRow["module_id"]));
+        $this->deleteSystemRecord($arrRow["module_id"]);
+    }
+
+    private function removeSetting($strName) {
+        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array($strName));
+    }
+
+    private function getValueOfSetting($strName) {
+        $strValue = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_config WHERE system_config_name = ? ", array($strName));
+        $strValue = $strValue["system_config_value"];
+        return $strValue;
+    }
+
+    private function deleteSystemRecord($strSystemid) {
+        //Start a tx before deleting anything
+        $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
+        $this->objDB->_pQuery($strQuery, array($strSystemid));
+
+        $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
+        $this->objDB->_pQuery($strQuery, array($strSystemid));
+
+        $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
+        $this->objDB->_pQuery($strQuery, array($strSystemid));
+    }
+
+    private function convertOldPath($strOldPath) {
+        if(uniStripos($strOldPath, "/downloads") !== false) {
+            return _filespath_.uniSubstr($strOldPath, uniStripos($strOldPath, "/downloads"));
+        }
+
+        if(uniStripos($strOldPath, "/pics") !== false) {
+            return _filespath_."/images".uniSubstr($strOldPath, uniStripos($strOldPath, "/pics")+5 );
+        }
+
+        return $strOldPath;
+    }
+}
+
+$objUpdate = new class_v3_v4_postupdate();
+$objUpdate->postUpdate();
