@@ -412,10 +412,10 @@ class class_toolkit_admin extends class_toolkit {
         $strOpener .= " ".getLinkAdminDialog("mediamanager",
                                          "imageDetails",
                                          "file='+document.getElementById('".$strName."').value+'",
-                                         class_carrier::getInstance()->getObjLang()->getLang("cropImage", "filemanager"),
-                                         class_carrier::getInstance()->getObjLang()->getLang("cropImage", "filemanager"),
+                                         class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
+                                         class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
                                          "icon_crop.gif",
-                                         class_carrier::getInstance()->getObjLang()->getLang("cropImage", "filemanager"),
+                                         class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
                                          true, false,
                                          " (function() {
                                              if(document.getElementById('".$strName."').value != '') {
@@ -509,7 +509,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["class"] = $strClass;
 
         $objText = class_carrier::getInstance()->getObjLang();
-        $arrTemplate["maxSize"] = $objText->getLang("max_size", "filemanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+        $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
 
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
@@ -562,7 +562,7 @@ class class_toolkit_admin extends class_toolkit {
                         \"allowedFileTypes\": \"".$strAllowedFileTypes."\",
                         \"allowedFileTypesDescription\": \"".$strAllowedFileTypes."\",
                         \"maxFileSize\": ".$objConfig->getPhpMaxUploadSize().",
-                        \"warningNotComplete\": \"".$objText->getLang("upload_multiple_warningNotComplete", "filemanager")."\",
+                        \"warningNotComplete\": \"".$objText->getLang("upload_multiple_warningNotComplete", "mediamanager")."\",
                         \"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=mediamanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
                         \"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
                                               \"inputElement\" : \"".$strName."\"}, //create valid input-name element. no array needed!

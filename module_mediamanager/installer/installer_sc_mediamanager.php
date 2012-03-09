@@ -87,7 +87,7 @@ class class_installer_sc_mediamanager implements interface_sc_installer  {
     }
 
     public function getCorrespondingModule() {
-        return "filemanager";
+        return "mediamanager";
     }
 
 }

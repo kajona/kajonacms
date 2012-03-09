@@ -157,14 +157,6 @@
 	navigation_target		= Target of the link
 	navigation_image		= Image to use for this navigation point
 
-//--_filemananger----------------------------------------------------------------------------------------
-	filemanager_id                 = Table primary key
-	filemanager_path               = Path to repo
-	filemanager_name               = Title of repo
-	filemanager_upload_filter      = Files allowedfor upload
-	filemanager_view_filter        = Files allowed to view
-    filemanager_foreign_id         = ID of a foreign entry. Set when another module uses this repo.
-
 //--_guestbook_book--------------------------------------------------------------------------------------
 	guestbook_id			= table primary key
 	guestbook_title		    = title of the guestbook

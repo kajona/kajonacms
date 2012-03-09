@@ -38,9 +38,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      */
     private $strViewFilter = "";
 
-    public static $strFilemanagerViewFilter = ".jpg,.png,.gif,.jpeg";
-    public static $strFilemanagerUploadFilter = ".jpg,.png,.gif,.jpeg";
-
     /**
      * Constructor to create a valid object
      *

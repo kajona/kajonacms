@@ -28,7 +28,7 @@ class class_module_folderview_admin extends class_admin  implements interface_ad
         $this->setArrModuleEntry("moduleId", _filesystem_modul_id_);
         $this->setArrModuleEntry("template", "/folderview.tpl");
 		parent::__construct();
-		$this->setStrLangBase("filemanager");
+		$this->setStrLangBase("mediamanager");
 
 	}
 

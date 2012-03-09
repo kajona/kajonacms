@@ -288,21 +288,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language")))
 			$strReturn .= "An error occured! ...\n";
 
-		//Filemanager -----------------------------------------------------------------------------------
-		$strReturn .= "Installing table filemanager...\n";
-
-		$arrFields = array();
-		$arrFields["filemanager_id"] 			= array("char20", false);
-		$arrFields["filemanager_path"]			= array("char254", true);
-		$arrFields["filemanager_name"] 			= array("char254", true);
-		$arrFields["filemanager_upload_filter"] = array("char254", true);
-		$arrFields["filemanager_view_filter"] 	= array("char254", true);
-        $arrFields["filemanager_foreign_id"] 	= array("char20", true);
-
-		if(!$this->objDB->createTable("filemanager", $arrFields, array("filemanager_id")))
-			$strReturn .= "An error occured! ...\n";
-
-        //dashboard & widgets ---------------------------------------------------------------------------
+		//dashboard & widgets ---------------------------------------------------------------------------
 		$strReturn .= "Installing table dashboard...\n";
 
 		$arrFields = array();
@@ -375,8 +361,6 @@ class class_installer_system extends class_installer_base implements interface_i
 		$this->registerModule("right", _system_modul_id_, "", "class_module_right_admin.php", $this->arrModule["version"], false );
 		//The Usermodule
 		$this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->arrModule["version"], true );
-        //The filemanagermodule
-		$this->registerModule("filemanager", _filemanager_modul_id_, "", "class_module_filemanager_admin.php", $this->arrModule["version"], true, "", "class_module_filemanager_admin_xml.php");
         //the dashboard
         $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_module_dashboard_admin.php", $this->arrModule["version"], false, "", "class_module_dashboard_admin_xml.php");
         //languages
@@ -402,8 +386,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_system_mod_rewrite_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
         //New Constant: Max time to lock records
 	    $this->registerConstant("_system_lock_maxtime_", 7200, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
-        //Filemanger settings
-        $this->registerConstant("_filemanager_foldersize_", "true", class_module_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
         //Email to send error-reports
 	    $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
@@ -420,13 +402,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //3.2: max session duration
         $this->registerConstant("_system_release_time_", 3600, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
-        //3.2: filemanager hidden repos
-        $this->registerConstant("_filemanager_show_foreign_", "false", class_module_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
-
-        //3.3: filemanager repo-ids for an image- and a file-browser - values set lateron via the filemanager samplecontent installer
-        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
-        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
-
         //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
         $this->registerConstant("_system_browser_cachebuster_", 0, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.4: Adding constant _system_graph_type_ indicating the chart-engine to use
@@ -762,12 +737,6 @@ class class_installer_system extends class_installer_base implements interface_i
         foreach(class_module_system_module::getAllModules() as $objOneModule) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( get_class($objOneModule), $objOneModule->getSystemid() ) );
-        }
-
-        $strReturn .= "Filemanager\n";
-        foreach(class_module_filemanager_repo::getAllRepos(true) as $objOneEntry) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( get_class($objOneEntry), $objOneEntry->getSystemid() ) );
         }
 
         $strReturn .= "Dashboard\n";
