@@ -1,14 +1,17 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: pic_url, systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed) -->
-<picdetail>
+<!-- available placeholders:
+    image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
+    file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed)
+ -->
+<filedetail>
     <div class="galleryRandom">
-        %%pic_name%% %%pic_subtitle%%<br />
-        <img src="%%pic_url%%" alt="%%pic_name%%" /><br />
-        %%pic_rating%%<br />
-        %%pic_description%%
+        %%file_name%% %%file_subtitle%%<br />
+        <img src="%%image_src%%" alt="%%file_name%%" /><br />
+        %%file_rating%%<br />
+        %%file_description%%
     </div>
-</picdetail>
+</filedetail>
 
 
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_ratingPercent, system_id -->
