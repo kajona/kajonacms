@@ -69,7 +69,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     protected function renderAdditionalActions(class_model $objListEntry) {
 
         if($objListEntry instanceof class_module_mediamanager_repo)
-            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif")));
+            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif")));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
             return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif")));
@@ -105,8 +105,12 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_mediamanager_file) {
-            if($objListEntry->rightEdit())
-                return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+            if($objListEntry->rightEdit()) {
+                if($this->strPeAddon != "")
+                    return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+                else
+                    return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+            }
         }
         else
             return parent::renderEditAction($objListEntry, $bitDialog);
@@ -197,7 +201,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         $objForm = new class_admin_formgenerator("repo", $objRepo);
         $objForm->addDynamicField("title")->setStrLabel($this->getLang("commons_title"));
         $objField = $objForm->addDynamicField("path")->setStrLabel($this->getLang("commons_path"));
-        $objField->setStrOpener(getLinkAdminDialog("filemanager", "folderListFolderview", "&form_element=".$objField->getStrEntryName()."&folder=/files", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
+        $objField->setStrOpener(getLinkAdminDialog("mediamanager", "folderListFolderview", "&form_element=".$objField->getStrEntryName(), $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
         $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
         $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
 
@@ -248,6 +252,19 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
      */
     protected function actionOpenFolder() {
 
+        $strJsCode = "";
+        if($this->getParam("sync") == "true") {
+            $strSystemid = $this->getSystemid();
+            $strJsCode = <<<HTML
+            <script type="text/javascript">
+            KAJONA.admin.loader.loadAjaxBase(function syncRepo() {
+                KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", KAJONA.admin.ajax.regularCallback);
+            });
+            </script>
+HTML;
+
+        }
+
 
         $strActions = "";
         $strActions .= $this->generateNewFolderDialogCode();
@@ -259,7 +276,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
 
-        return $strActions.$this->objToolkit->divider().$this->renderList($objIterator, true, self::$INT_LISTTYPE_FOLDER);
+        return $strJsCode.$strActions.$this->objToolkit->divider().$this->renderList($objIterator, true, self::$INT_LISTTYPE_FOLDER);
 
 
     }
@@ -394,7 +411,8 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
      * @return string
      */
     protected function actionEditFile(class_admin_formgenerator $objForm = null) {
-        $this->setArrModuleEntry("template", "/folderview.tpl");
+        if($this->strPeAddon == "")
+            $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $objFile = new class_module_mediamanager_file($this->getSystemid());
 
@@ -670,6 +688,58 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         return $strReturn;
     }
 
+
+
+    /**
+     * Generates a view to browse the filesystem directly.
+     * By default, the methods takes two params into account: folder and form_element
+     *
+     * @return string
+     */
+    protected function actionFolderListFolderview() {
+
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        $strReturn = "";
+
+        //param inits
+        $strFolder = "/files";
+        if($this->getParam("folder") != "")
+            $strFolder = $this->getParam("folder");
+
+        $arrExcludeFolder = array(0 => ".", 1 => "..");
+        $strFormElement = $this->getParam("form_element");
+
+
+        $objFilesystem = new class_filesystem();
+        $arrContent = $objFilesystem->getCompleteList($strFolder, array(), array(), $arrExcludeFolder, true, false);
+
+        $strReturn .= $this->objToolkit->listHeader();
+        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("commons_path"), "", $strFolder, 1);
+        $strReturn .= $this->objToolkit->listFooter();
+        $strReturn .= $this->objToolkit->divider();
+
+        $intCounter = 0;
+        //Show Folders
+        //Folder to jump one back up
+        $arrFolderStart = array("/files");
+        $strReturn .= $this->objToolkit->listHeader();
+        $bitHit = false;
+        if(!in_array($strFolder, $arrFolderStart) && $bitHit == false) {
+            $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&form_element=".$strFormElement, $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif"));
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
+        }
+        if($arrContent["nrFolders"] != 0) {
+            foreach($arrContent["folders"] as $strFolderCur) {
+                $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".$strFolder."/".$strFolderCur."&form_element=".$strFormElement, $this->getLang("actionOpenFolder"), $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif"));
+                $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
+            }
+        }
+        if($bitHit)
+            $strReturn .= $this->objToolkit->listFooter();
+
+        return $strReturn;
+    }
 
 }
 

@@ -17,6 +17,7 @@ $lang["_gallery_search_resultpage_hint"] = "This page shows the list of pictures
 
 $lang["modul_titel"]                     = "Mediamananger";
 $lang["actionNew"]                       = "New repository";
+$lang["module_action_new"]                       = "New repository";
 $lang["actionMasssync"]                = "Synchronize all";
 $lang["actionOpenFolder"]                    = "Show folder";
 
@@ -68,6 +69,8 @@ $lang["actionEditImage"] = "Edit image";
 $lang["image_dimensions"] = "Image dimensions:";
 $lang["file_size"] = "Filesize:";
 $lang["file_editdate"] = "Last modified:";
+
+$lang["overview"]                      = "Overview";
 
 ////editable entries
 //$lang["_gallery_imagetypes_"]            = "Picture-types:";

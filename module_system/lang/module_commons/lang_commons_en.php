@@ -46,3 +46,4 @@ $lang["commons_list_edit"]               = "Edit";
 $lang["commons_captcha"]                 = "Security code:";
 $lang["commons_captcha_reload"]          = "Code not readable?";
 $lang["commons_next"]                    = "next";
+$lang["commons_accept"]                  = "Accept";

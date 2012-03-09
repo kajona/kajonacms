@@ -17,7 +17,7 @@
                             id: arrViewers[i],
                             grow: 0.2,
                             fade: 0.2,
-                            modal: true, 
+                            modal: true,
                             dragable: false,
                             fixedcenter: true,
                             loadFrom: "html",
@@ -42,18 +42,18 @@
                     };
                 }
             });
-            
+
             KAJONA.portal.loader.load(
                 ["dragdrop", "animation", "container"],
-            	[KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.js",
-            	 KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/kajona/kajona.css"]
+            	[KAJONA_WEBPATH+"/templates/default/js/photoviewer/build/photoviewer_base.js",
+            	 KAJONA_WEBPATH+"/templates/default/js/photoviewer/assets/skins/kajona/kajona.css"]
             );
         }
 
         //add viewer
         arrViewers.push("pv_%%systemid%%");
     </script>
-    
+
     <p>%%pathnavigation%%</p>
     %%folderlist%%
     <div id="pv_%%systemid%%">%%piclist%%</div>
@@ -92,7 +92,7 @@
     </table>
 </piclist>
 
-<!-- represents a single image 
+<!-- represents a single image
      available placeholders: pic, pic_href, name, subtitle, pic_detail, pic_description, pic_size, pic_hits -->
 <piclist_pic>
     <div style="text-align: center;">

@@ -253,6 +253,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
      * Syncs the repo partially
      *
      * @return string
+     * @permissions edit
      */
     protected function actionPartialSyncRepo() {
         $strReturn = "";
@@ -278,6 +279,36 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         class_logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
 
 		return $strReturn;
+    }
+
+    /**
+     * Syncs the repo partially
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionSyncRepo() {
+        $strReturn = "";
+        $strResult = "";
+
+        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        //close the session to avoid a blocking behaviour
+        $this->objSession->sessionClose();
+        if($objInstance instanceof class_module_mediamanager_repo)
+            $arrSyncs = $objInstance->syncRepo();
+
+        else
+            return "<error>mediamanager repo could not be loaded</error>";
+
+
+        $strResult .= $this->getLang("sync_end")."<br />";
+        $strResult .= $this->getLang("sync_add").$arrSyncs["insert"]."<br />".$this->getLang("sync_del").$arrSyncs["delete"];
+
+        $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
+
+        class_logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
+
+        return $strReturn;
     }
 
 

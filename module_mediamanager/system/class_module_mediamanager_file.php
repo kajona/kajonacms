@@ -214,19 +214,26 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     }
 
 
-
-	/**
-	 * Syncs the files in the db with the files in the filesystem
-	 *
-	 * @param string $strPrevID
-	 * @param string $strPath
+    /**
+     * Syncs the files in the db with the files in the filesystem
+     *
+     * @param string $strPrevID
+     * @param string $strPath
      * @param bool $bitRecursive
-	 * @return array [insert, delete]
-	 */
-	public static function syncRecursive($strPrevID, $strPath, $bitRecursive = true) {
+     * @param \class_module_mediamanager_repo|null $objRepo
+     *
+     * @return array [insert, delete]
+     */
+	public static function syncRecursive($strPrevID, $strPath, $bitRecursive = true, class_module_mediamanager_repo $objRepo = null) {
         $arrReturn = array();
 	    $arrReturn["insert"] = 0;
 	    $arrReturn["delete"] = 0;
+
+        if($objRepo == null) {
+            $objRepo = class_objectfactory::getInstance()->getObject($strPrevID);
+            while(!$objRepo instanceof class_module_mediamanager_repo)
+                $objRepo = class_objectfactory::getInstance()->getObject($objRepo->getPrevId());
+        }
 
 	    $objDB = class_carrier::getInstance()->getObjDB();
 
@@ -234,7 +241,14 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 		$arrObjDB = class_module_mediamanager_file::loadFilesDB($strPrevID);
 		//Load files and folder from filesystem
 		$objFilesystem = new class_filesystem();
-		$arrFilesystem = $objFilesystem->getCompleteList($strPath, array(), array(), array(".", "..", ".svn"));
+
+        //if the repo defines a view-filter, take that one into account
+        $arrViewFilter = array();
+        if($objRepo->getStrViewFilter() != "") {
+            $arrViewFilter = explode(",", $objRepo->getStrViewFilter());
+        }
+
+		$arrFilesystem = $objFilesystem->getCompleteList($strPath, $arrViewFilter, array(), array(".", "..", ".svn"));
 
 		//So, lets sync those two arrays
 		//At first the files
@@ -306,7 +320,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         if($bitRecursive) {
             $objFolders = class_module_mediamanager_file::loadFilesDB($strPrevID, self::$INT_TYPE_FOLDER);
             foreach($objFolders as $objOneFolderDB) {
-                $arrTemp = class_module_mediamanager_file::syncRecursive($objOneFolderDB->getSystemid(), $objOneFolderDB->getStrFilename());
+                $arrTemp = class_module_mediamanager_file::syncRecursive($objOneFolderDB->getSystemid(), $objOneFolderDB->getStrFilename(), $bitRecursive, $objRepo);
                 $arrReturn["insert"] += $arrTemp["insert"];
                 $arrReturn["delete"] += $arrTemp["delete"];
             }
@@ -315,6 +329,10 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 		return $arrReturn;
 	}
 
+
+    public function getIntFileSize() {
+        return filesize(_realpath_.$this->getStrFilename());
+    }
 
 
     public function setStrName($strName) {

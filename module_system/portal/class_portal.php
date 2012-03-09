@@ -335,6 +335,7 @@ abstract class class_portal  {
 	 *
 	 * @param string $strSystemid
 	 * @return string
+     * @deprecated
 	 */
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")

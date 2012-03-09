@@ -17,6 +17,7 @@ $lang["_gallery_search_resultpage_hint"] = "Auf dieser Seite erfolgt die Detaila
 
 $lang["modul_titel"]                     = "Medien-Manager";
 $lang["actionNew"]                       = "Neues Repository";
+$lang["module_action_new"]                       = "Neues Repository";
 $lang["actionMassSync"]                = "Alle synchronisieren";
 $lang["actionOpenFolder"]                    = "Ordner anzeigen";
 
@@ -68,6 +69,8 @@ $lang["actionEditImage"] = "Bild bearbeiten";
 $lang["image_dimensions"] = "Bildabmessungen:";
 $lang["file_size"] = "Dategröße:";
 $lang["file_editdate"] = "Letzte Änderung:";
+
+$lang["overview"]                      = "Übersicht";
 
 //editable entries
 //$lang["_gallery_imagetypes_"]            = "Bildtypen:";

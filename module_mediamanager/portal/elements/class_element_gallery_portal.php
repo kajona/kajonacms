@@ -10,22 +10,19 @@
  * Portal-part of the gallery-element
  *
  * @package module_mediamanager
+ * @author sidler@mulchprod.de
  */
-class class_element_gallery extends class_element_portal implements interface_portal_element {
+class class_element_gallery_portal extends class_element_portal implements interface_portal_element {
 
 
     /**
      * Contructor
      *
-     * @param mixed $arrElementData
+     * @param $objElementData
      */
 	public function __construct($objElementData) {
-        $arrModule = array();
-		$arrModule["name"] 			= "element_gallery";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
-		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]  		= _dbprefix_."element_gallery";
-		parent::__construct($arrModule, $objElementData);
+		parent::__construct($objElementData);
+		$this->setArrModuleEntry("table", _dbprefix_."element_gallery");
 
         //we support ratings, so add cache-busters
         $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
@@ -40,9 +37,12 @@ class class_element_gallery extends class_element_portal implements interface_po
 	public function loadData() {
 		$strReturn = "";
 
-        $objGalleryModule = class_modul_system_module::getModuleByName("gallery");
-		if($objGalleryModule != null) {
-    		$objGallery = $objGalleryModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+        $objMediamanagerModule = class_module_system_module::getModuleByName("mediamanager");
+		if($objMediamanagerModule != null) {
+
+            $this->arrElementData["repo_id"] = $this->arrElementData["gallery_id"];
+
+    		$objGallery = $objMediamanagerModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objGallery->action();
 		}
 
