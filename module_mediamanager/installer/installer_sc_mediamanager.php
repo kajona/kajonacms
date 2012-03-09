@@ -56,7 +56,6 @@ class class_installer_sc_mediamanager implements interface_sc_installer  {
 
         $strReturn .= "Creating new file repository\n";
         $objRepo = new class_module_mediamanager_repo();
-        $objRepo->syncRepo();
 
         if($this->strContentLanguage == "de")
             $objRepo->setStrTitle("Hochgeladene Dateien");
@@ -67,6 +66,7 @@ class class_installer_sc_mediamanager implements interface_sc_installer  {
         $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
         $objRepo->setStrViewFilter(".zip,.pdf,.txt");
         $objRepo->updateObjectToDb();
+        $objRepo->syncRepo();
         $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
 
         $strReturn .= "Setting the repository as the default files repository\n";

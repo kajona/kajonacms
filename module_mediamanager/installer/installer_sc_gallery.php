@@ -48,15 +48,9 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objGallery->syncRepo();
         $strGalleryID = $objGallery->getSystemid();
 
-        return;
-
-        //FIXME
-
-        $strReturn .= "Sync gallery..\n";
-        class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());
-
-        $strReturn .= "Modify rights to allow guests to rate images...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objGallery->getSystemid(), "right2");
+        //FIXME reintrodruce
+//        $strReturn .= "Modify rights to allow guests to rate images...\n";
+//        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objGallery->getSystemid(), "right2");
 
 
         $strReturn .= "Creating new gallery page...\n";
@@ -82,18 +76,14 @@ class class_installer_sc_gallery implements interface_sc_installer  {
                             SET gallery_id = ?,
                                 gallery_mode = ?,
                                 gallery_template = ?,
-                                gallery_maxh_p = ?,
                                 gallery_maxh_d = ?,
-                                gallery_maxw_p = ?,
                                 gallery_maxw_d = ?,
-                                gallery_maxh_m = ?,
-                                gallery_maxw_m = ?,
                                 gallery_imagesperpage = ?,
                                 gallery_text = ?,
                                 gallery_text_x = ?,
                                 gallery_text_y = ?
                             WHERE content_id = ? ";
-            if($this->objDB->_pQuery($strQuery, array($strGalleryID, 0, "gallery_imagelightbox.tpl", 110, 600, 150, 600, 45, 70, 0, "(c) kajona.de", 5, 15, $strElementId)))
+            if($this->objDB->_pQuery($strQuery, array($strGalleryID, 0, "gallery_imagelightbox.tpl", 600, 600, 0, "(c) kajona.de", 5, 15, $strElementId)))
                 $strReturn .= "Gallery element created.\n";
             else
                 $strReturn .= "Error creating Gallery element.\n";

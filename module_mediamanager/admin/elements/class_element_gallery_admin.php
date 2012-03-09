@@ -21,7 +21,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
 
         $this->setArrModuleEntry("name", "element_gallery");
         $this->setArrModuleEntry("table", _dbprefix_."element_gallery");
-        $this->setArrModuleEntry("tableColumns", "gallery_id,gallery_mode,gallery_template,gallery_maxh_p,gallery_maxh_d,gallery_maxh_m,gallery_maxw_p,gallery_maxw_d,gallery_maxw_m,gallery_text,gallery_text_x,gallery_text_y,gallery_imagesperpage,gallery_overlay");
+        $this->setArrModuleEntry("tableColumns", "gallery_id,gallery_mode,gallery_template,gallery_maxh_d,gallery_maxw_d,gallery_text,gallery_text_x,gallery_text_y,gallery_imagesperpage,gallery_overlay");
 
 		parent::__construct();
 	}
@@ -61,8 +61,6 @@ class class_element_gallery_admin extends class_element_admin implements interfa
 		//And a lot of inputs
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("headline_list"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_preview"));
-		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_p", $this->getLang("gallery_maxw_p"), (isset($arrElementData["gallery_maxw_p"]) ? $arrElementData["gallery_maxw_p"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_p", $this->getLang("gallery_maxh_p"), (isset($arrElementData["gallery_maxh_p"]) ? $arrElementData["gallery_maxh_p"] : ""));
 		$strReturn .= $this->objToolkit->formTextRow($this->getLang("gallery_imagesperpage_hint"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_imagesperpage", $this->getLang("gallery_imagesperpage"), (isset($arrElementData["gallery_imagesperpage"]) ? $arrElementData["gallery_imagesperpage"] : ""));
 
@@ -70,11 +68,6 @@ class class_element_gallery_admin extends class_element_admin implements interfa
 		$strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_detail"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_d", $this->getLang("gallery_maxw_d"), (isset($arrElementData["gallery_maxw_d"]) ? $arrElementData["gallery_maxw_d"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_d", $this->getLang("gallery_maxh_d"), (isset($arrElementData["gallery_maxh_d"]) ? $arrElementData["gallery_maxh_d"] : ""));
-
-		$strReturn .= $this->objToolkit->formHeadline($this->getLang("headline_moviestrip"));
-		$strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_movie"));
-		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_m", $this->getLang("gallery_maxw_m"), (isset($arrElementData["gallery_maxw_m"]) ? $arrElementData["gallery_maxw_m"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_m", $this->getLang("gallery_maxh_m"), (isset($arrElementData["gallery_maxh_m"]) ? $arrElementData["gallery_maxh_m"] : ""));
 
 		$strReturn .= $this->objToolkit->formHeadline($this->getLang("headline_overlay"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_text"));

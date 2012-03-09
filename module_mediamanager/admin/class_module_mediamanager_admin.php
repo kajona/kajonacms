@@ -610,7 +610,7 @@ HTML;
                 //check rights
                 if($objOneRepo->rightView()) {
                     $strActions = "";
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif"));
 
                     $strReturn .= $this->objToolkit->simpleAdminList($objOneRepo, $strActions, $intI++);
                 }
@@ -642,7 +642,7 @@ HTML;
                         $strActions = "";
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("repo_oeffnen"), "icon_folderActionOpen.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif"));
 
                         $strValue = $objOneFile->getStrFilename();
 
@@ -661,7 +661,7 @@ HTML;
 
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
-                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
+                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
 
                         $strReturn .= $this->objToolkit->simpleAdminList($objOneFile, $strActions, $intI++);
                     }

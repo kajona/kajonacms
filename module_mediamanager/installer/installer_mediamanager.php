@@ -28,15 +28,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
 
 	public function hasPostInstalls() {
 
-        $objElement = class_module_pages_element::getElement("gallery");
-        if($objElement === null)
-            return true;
-
-        $objElement = class_module_pages_element::getElement("galleryRandom");
-        if($objElement === null)
-            return true;
-
-
         return false;
 	}
 
@@ -116,80 +107,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 	}
 
 	public function postInstall() {
-		$strReturn = "";
-
-		//Table for page-element
-		$strReturn .= "Installing gallery-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 			= array("char20", false);
-		$arrFields["gallery_id"] 			= array("char20", true);
-		$arrFields["gallery_mode"] 			= array("int", true);
-		$arrFields["gallery_template"] 		= array("char254", true);
-		$arrFields["gallery_maxh_p"] 		= array("int", true);
-		$arrFields["gallery_maxh_d"] 		= array("int", true);
-		$arrFields["gallery_maxw_p"] 		= array("int", true);
-		$arrFields["gallery_maxw_d"] 		= array("int", true);
-		$arrFields["gallery_maxh_m"] 		= array("int", true);
-		$arrFields["gallery_maxw_m"] 		= array("int", true);
-		$arrFields["gallery_imagesperpage"] = array("int", true);
-		$arrFields["gallery_text"] 			= array("char254", true);
-		$arrFields["gallery_overlay"]    	= array("char254", true);
-		$arrFields["gallery_text_x"] 		= array("int", true);
-		$arrFields["gallery_text_y"] 		= array("int", true);
-
-		if(!$this->objDB->createTable("element_gallery", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		//Register the element
-		$strReturn .= "Registering gallery-element...\n";
-		//check, if not already existing
-        $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("gallery");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("gallery");
-		    $objElement->setStrClassAdmin("class_element_gallery_admin.php");
-		    $objElement->setStrClassPortal("class_element_gallery_portal.php");
-		    $objElement->setIntCachetime(3600);
-		    $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
-
-
-		$strReturn .= "Registering galleryRandom-element...\n";
-		//check, if not already existing
-        $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("galleryRandom");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("galleryRandom");
-		    $objElement->setStrClassAdmin("class_element_galleryRandom_admin.php");
-		    $objElement->setStrClassPortal("class_element_gallery_portal.php");
-		    $objElement->setIntCachetime(-1);
-		    $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
-
-		return $strReturn;
+		return "";
 	}
 
 
