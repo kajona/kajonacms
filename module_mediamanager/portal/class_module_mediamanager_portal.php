@@ -17,6 +17,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
     public static $INT_MODE_GALLERY = 0;
     public static $INT_MODE_DOWNLOADS = 1;
 
+    private $arrImageTypes = array(".png", ".gif", ".jpg", ".jpeg");
 
 
 	/**
@@ -33,8 +34,11 @@ class class_module_mediamanager_portal extends class_portal implements interface
         if($this->getAction() == "mediaFolder" || $this->getAction() == "imageFolder")
             $this->setAction("list");
 
+        if($this->getAction() == "detailImage")
+            $this->setAction("fileDetails");
 
-        if($this->arrElementData["gallery_mode"] == 1)
+
+        if(isset($this->arrElementData["gallery_mode"]) && $this->arrElementData["gallery_mode"] == 1)
             $this->setAction("random");
 
 	}
@@ -78,226 +82,245 @@ class class_module_mediamanager_portal extends class_portal implements interface
 		$strReturn = "";
 
 		//Determin the prev_id to load
-		if(!validateSystemid($this->getSystemid()) || $this->getParam("action") != "imageFolder" || !$this->checkIfRequestedIdIsInElementsTree()) {
+		if(!validateSystemid($this->getSystemid()) || !$this->checkIfRequestedIdIsInElementsTree()) {
 		    $this->setSystemid($this->arrElementData["repo_id"]);
 		}
 
 		$bitPageview = false;
 		//load using the pageview?
-        $arrTempImages = array();
-        $arrImages = array();
-		if($this->arrElementData["gallery_imagesperpage"] > 0) {
+        $arrPagerContent = array();
+		if($this->arrElementData["repo_elementsperpage"] > 0) {
 		    $bitPageview = true;
             $objArraySectionIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, true));
-            $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["gallery_imagesperpage"]);
-            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["repo_elementsperpage"]);
+            $objArraySectionIterator->setPageNumber($this->getParam("pv"));
             $objArraySectionIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-		    $arrTempImages = $this->objToolkit->simplePager($objArraySectionIterator,
+		    $arrPagerContent = $this->objToolkit->simplePager($objArraySectionIterator,
 		                                              $this->getLang("commons_next"),
 		                                              $this->getLang("commons_back"),
 		                                              $this->getParam("action"),
 		                                              $this->getPagename(),
 		                                              "&systemid=".$this->getSystemid());
-		    $arrImages = $arrTempImages["arrData"];
+		    $arrFiles = $arrPagerContent["arrData"];
 		}
 		else {
 		    //Load all Images & Folder
-            $arrImages = class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, true);
+            $arrFiles = class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, true);
 		}
 
 		//Loop over every item and collect them
-		$arrTemplate = array();
-		$arrTemplate["systemid"] = $this->arrElementData["content_id"];
-		$arrTemplate["folderlist"] = "";
-		$arrTemplate["piclist"] = "";
+		$arrWrappingTemplate = array();
+		$arrWrappingTemplate["systemid"] = $this->arrElementData["content_id"];
 
-		if(count($arrImages) > 0) {
+		$arrWrappingTemplate["folderlist"] = "";
+		$arrWrappingTemplate["filelist"] = "";
+
+		if(count($arrFiles) > 0) {
 		    $intImageCounter = 0;
 
-            $arrRemainingImages = array();
+            $arrRemainingFiles = array();
 
             //calc number of images outside the loop
-            $intNrOfPicsPerRow = $this->getImagesPerRow($this->arrElementData["gallery_template"]);
+            $intNrOfFilesPerRow = $this->getFilesPerRow($this->arrElementData["repo_template"]);
 
-			foreach ($arrImages as $objOneImage) {
+			foreach ($arrFiles as $objOneFile) {
 				//Check rights and the existance of placeholders
-				if($intNrOfPicsPerRow > 0 && $objOneImage->rightView()) {
-					//Folder or image?
-					if($objOneImage->getIntType() == 0) {
-                        $arrTemplateImage = array();
+				if($intNrOfFilesPerRow > 0 && $objOneFile->rightView()) {
+					//Folder or file?
 
-                        //create the template-entries for the single image
-                        $arrTemplateImage["pic"] = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
-                        $arrTemplateImage["pic_href"] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
-                        $arrTemplateImage["name"] = $objOneImage->getStrName();
-                        $arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
-                        $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
-                        $arrTemplateImage["pic_description"] = $objOneImage->getStrDescription();
-				        $arrTemplateImage["pic_size"] = $objOneImage->getIntFileSize();
-				        $arrTemplateImage["pic_hits"] = $objOneImage->getIntHits();
+                    //file
+					if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+                        $arrFileTemplate = array();
 
-                        //render the single image
-                        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "piclist_pic");
-                        $strCurrentImage = $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
+                        //check, if it's an image
+                        $strSuffix = uniStrtolower(uniSubstr($objOneFile->getStrFilename(), uniStrrpos($objOneFile->getStrFilename(), ".")));
+                        if(in_array($strSuffix, $this->arrImageTypes)) {
+                            //provide image placeholders
+                            $arrFileTemplate["image_detail_src"]  = $this->generateImage($objOneFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
+                        }
 
-                        $arrRemainingImages["pic_".$intImageCounter % $intNrOfPicsPerRow] = $strCurrentImage;
+                        $arrFileTemplate["file_name"] = $objOneFile->getStrName();
+                        $arrFileTemplate["file_filename"] = $objOneFile->getStrFilename();
+                        $arrFileTemplate["file_subtitle"] = $objOneFile->getStrSubtitle();
+                        $arrFileTemplate["file_description"] = $objOneFile->getStrDescription();
+                        $arrFileTemplate["file_size"] = bytesToString($objOneFile->getIntFileSize());
+                        $arrFileTemplate["file_hits"] = $objOneFile->getIntHits();
+                        $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getPortalLanguage(), $objOneFile->getStrName());
 
-                        //already rendered enough images?
-                        if(count($arrRemainingImages) == $intNrOfPicsPerRow) {
-                            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "piclist");
-                            $arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrRemainingImages, $strTemplateID);
-                            $arrRemainingImages = array();
+                        //render the single file
+                        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist_file");
+                        $strCurrentImage = $this->objTemplate->fillTemplate($arrFileTemplate, $strTemplateID);
+                        $arrRemainingFiles["file_".$intImageCounter % $intNrOfFilesPerRow] = $strCurrentImage;
+
+                        //already rendered enough files?
+                        if(count($arrRemainingFiles) == $intNrOfFilesPerRow) {
+                            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist");
+                            $arrWrappingTemplate["filelist"] .= $this->objTemplate->fillTemplate($arrRemainingFiles, $strTemplateID);
+                            $arrRemainingFiles = array();
                         }
 
                         $intImageCounter++;
 
 					}
 
-					if($objOneImage->getIntType() == 1) {
-						//Folder
+                    //Folder
+					if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER) {
 						$arrFolder = array();
-						$arrFolder["folder_name"] = $objOneImage->getStrName();
-						$arrFolder["folder_description"] = $objOneImage->getStrDescription();
-						$arrFolder["folder_subtitle"] = $objOneImage->getStrSubtitle();
-						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getLang("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
-						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
+						$arrFolder["folder_name"] = $objOneFile->getStrName();
+						$arrFolder["folder_description"] = $objOneFile->getStrDescription();
+						$arrFolder["folder_subtitle"] = $objOneFile->getStrSubtitle();
+						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getStrName());
 
-                        $objFirstImage = $this->getFirstImageInFolder($objOneImage->getSystemid());
-                        if($objFirstImage != null) {
-                            $arrFolder["folder_preview"] = $this->generateImage($objFirstImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
+                        $objFirstFile = $this->getFirstFileInFolder($objOneFile->getSystemid());
+                        if($objFirstFile != null) {
+                            $strSuffix = uniStrtolower(uniSubstr($objFirstFile->getStrFilename(), uniStrrpos($objFirstFile->getStrFilename(), ".")));
+                            if(in_array($strSuffix, array(".jpg", ".jpeg", ".gif", ".png"))) {
+                                //provide image placeholders
+                                $arrFolder["folder_preview_image_src"] = $objFirstFile->getStrFilename();
+                            }
                         }
 
-						$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "folderlist");
-						$arrTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID, false);
+						$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "folderlist");
+						$arrWrappingTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID, false);
 
 					}
 				}
 			}
-			//Print remaining images
-			if(count($arrRemainingImages) > 0) {
-				$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "piclist");
-				$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrRemainingImages, $strTemplateID, false);
-				$arrRemainingImages= array();
+			//Print remaining files
+			if(count($arrRemainingFiles) > 0) {
+				$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "piclist");
+				$arrWrappingTemplate["filelist"] .= $this->objTemplate->fillTemplate($arrRemainingFiles, $strTemplateID, false);
 			}
 		}
 		else
-			$strReturn = $this->getLang("liste_leer");
+			$strReturn = $this->getLang("commons_list_empty");
 
 		//and load the sourrounding template
 		if($bitPageview) {
-		    $arrTemplate["link_forward"] = $arrTempImages["strForward"];
-            $arrTemplate["link_pages"] = $arrTempImages["strPages"];
-            $arrTemplate["link_back"] = $arrTempImages["strBack"];
+		    $arrWrappingTemplate["link_forward"] = $arrPagerContent["strForward"];
+            $arrWrappingTemplate["link_pages"] = $arrPagerContent["strPages"];
+            $arrWrappingTemplate["link_back"] = $arrPagerContent["strBack"];
 		}
-		$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "list");
-		$arrTemplate["pathnavigation"] = $this->generatePathnavi();
-		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+		$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "list");
+		$arrWrappingTemplate["pathnavigation"] = $this->generatePathnavi();
+		$strReturn .= $this->fillTemplate($arrWrappingTemplate, $strTemplateID);
 
         $strReturn = $this->addPortaleditorCode($strReturn);
 		return $strReturn;
 	}
 
-    //---Detailfunktionen------------------------------------------------------------------------------------
+
+
 
 	/**
-	 * Prints a image as a detailed-view
-	 * and generates forward / backward links
+	 * Prints a file as a detailed-view
+	 * and generates forward / backward links + a strip of prev / next files
 	 *
      * @param bool $bitRegisterAdditionalTitle
 	 * @return string
 	 */
-	protected function actionDetailImage($bitRegisterAdditionalTitle = true) {
+	protected function actionFileDetails($bitRegisterAdditionalTitle = true) {
 
         if(!$this->checkIfRequestedIdIsInElementsTree())
             return $this->actionList();
 
-
-		$strReturn = "";
 		//Load record
-		$objImage = new class_module_mediamanager_file($this->getSystemid());
-		$arrImage = $this->getNextPrevIds();
+		$objFile = new class_module_mediamanager_file($this->getSystemid());
 
-		//Load template
-		$strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "picdetail");
-		//Collect Data
-		$arrImage["pic_url"] = $this->generateImage($objImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
+        //common fields
+        $arrDetailsTemplate = array();
+        $arrDetailsTemplate["file_name"] = $objFile->getStrName();
+        $arrDetailsTemplate["file_description"] = $objFile->getStrDescription();
+        $arrDetailsTemplate["file_subtitle"] = $objFile->getStrSubtitle();
+        $arrDetailsTemplate["file_filename"] = $objFile->getStrFilename();
+        $arrDetailsTemplate["file_size"] = bytesToString($objFile->getIntFileSize());
+        $arrDetailsTemplate["file_hits"] = $objFile->getIntHits();
+        $arrDetailsTemplate["file_systemid"] = $objFile->getSystemid();
 
-		//previous 3 images
-		$arrImage["backlink"] = ($arrImage["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_back"), "detailImage", "", $arrImage["backward_1"] ) : "" );
+        //if its am image, provide additional information
+        $strSuffix = uniStrtolower(uniSubstr($objFile->getStrFilename(), uniStrrpos($objFile->getStrFilename(), ".")));
+        if(in_array($strSuffix, $this->arrImageTypes)) {
+            $arrDetailsTemplate["image_src"] = $this->generateImage($objFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
+        }
+
+		$arrStripIds = $this->getNextPrevIds();
+        $arrDetailsTemplate["backlink"]    = ($arrStripIds["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_back"), "fileDetails", "", $arrStripIds["backward_1"] ) : "" );
+        $arrDetailsTemplate["forwardlink"] = ($arrStripIds["forward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_next"), "fileDetails", "", $arrStripIds["forward_1"] ) : "" );
+
+        //next /prev 3 files
         for($intI = 1; $intI <= 3; $intI++) {
-    		if($arrImage["backward_".$intI] != "") {
-                $objImageBack = new class_module_mediamanager_file($arrImage["backward_".$intI]);
-                $arrImage["backlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageBack->getStrFilename()."&amp;maxWidth=".$this->arrElementData["gallery_maxw_m"]."&amp;maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageBack->getSystemid(), "", "", $objImageBack->getStrName());
-                $arrImage["backlink_image_filename_".$intI] = urlencode($objImageBack->getStrFilename());
-                $arrImage["backlink_image_systemid_".$intI] = $objImageBack->getSystemid();
+    		if($arrStripIds["forward_".$intI] != "") {
+                $objCurFile = new class_module_mediamanager_file($arrStripIds["forward_".$intI]);
+                $arrDetailsTemplate["forwardlink_".$intI] = $this->renderFileStripEntry($objCurFile);
+            }
+
+            if($arrStripIds["backward_".$intI] != "") {
+                $objCurFile = new class_module_mediamanager_file($arrStripIds["backward_".$intI]);
+                $arrDetailsTemplate["backlink_".$intI] = $this->renderFileStripEntry($objCurFile);
             }
         }
 
-        //next 3 images
-        $arrImage["forwardlink"] = ($arrImage["forward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_next"), "detailImage", "", $arrImage["forward_1"] ) : "" );
-        for($intI = 1; $intI <= 3; $intI++) {
-    		if($arrImage["forward_".$intI] != "") {
-                $objImageFwd = new class_module_mediamanager_file($arrImage["forward_".$intI]);
-                $arrImage["forwardlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageFwd->getStrFilename()."&amp;maxWidth=".$this->arrElementData["gallery_maxw_m"]."&amp;maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageFwd->getSystemid(), "", "", $objImageFwd->getStrName());
-                $arrImage["forwardlink_image_filename_".$intI] = urlencode($objImageFwd->getStrFilename());
-                $arrImage["forwardlink_image_systemid_".$intI] = $objImageFwd->getSystemid();
-            }
-        }
+        //current file
+        $arrDetailsTemplate["filestrip_current"] = $this->renderFileStripEntry($objFile);
 
-        //current image
-        $arrImage["pic_small"] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImage->getStrFilename()."&amp;maxWidth=".$this->arrElementData["gallery_maxw_m"]."&amp;maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImage->getSystemid(), "currentPic");
-
-		$arrImage["overview"] = getLinkPortal($this->getPagename(), "", "",  $this->getLang("overview"), "imageFolder", "", $objImage->getPrevId());
-		$arrImage["pathnavigation"] = $this->generatePathnavi(true);
-		$arrImage["systemid"] = $this->getSystemid();
-		$arrImage["pic_name"] = $objImage->getStrName();
-		$arrImage["pic_description"] = $objImage->getStrDescription();
-        $arrImage["pic_subtitle"] = $objImage->getStrSubtitle();
-		$arrImage["pic_filename"] = $objImage->getStrFilename();
-		$arrImage["pic_size"] = bytesToString($objImage->getIntFileSize());
-		$arrImage["pic_hits"] = $objImage->getIntHits();
+        $arrDetailsTemplate["overview"] = getLinkPortal($this->getPagename(), "", "",  $this->getLang("overview"), "imageFolder", "", $objFile->getPrevId());
+        $arrDetailsTemplate["pathnavigation"] = $this->generatePathnavi(true);
 
 		//ratings available?
-		if($objImage->getFloatRating() !== null) {
-		    $arrImage["pic_rating"] = $this->buildRatingBar($objImage->getFloatRating(), $objImage->getIntRatingHits(), $objImage->getSystemid(), $objImage->isRateableByUser(), $objImage->rightRight2());
+		if($objFile->getFloatRating() !== null) {
+            $arrDetailsTemplate["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objFile->getIntRatingHits(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
 		}
 
-		$strReturn = $this->fillTemplate($arrImage, $strTemplateID);
+        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail");
+		$strReturn = $this->fillTemplate($arrDetailsTemplate, $strTemplateID);
 
         //Add pe code
         $arrPeConfig = array(
-			"pe_module" => "gallery",
-			"pe_action_edit" => "editImage",
-			"pe_action_edit_params" => "&systemid=".$objImage->getSystemid()
+			"pe_module" => "mediamanager",
+			"pe_action_edit" => "editFile",
+			"pe_action_edit_params" => "&systemid=".$objFile->getSystemid()
 		);
-        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig);
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objFile->getSystemid(), $arrPeConfig);
 
         //set the name of the current image to the page title via class_pages
         if($bitRegisterAdditionalTitle)
-            class_module_pages_portal::registerAdditionalTitle($objImage->getStrName());
+            class_module_pages_portal::registerAdditionalTitle($objFile->getStrName());
 
 		//Update view counter
-		$objImage->setIntHits($objImage->getIntHits()+1);
-		$objImage->updateObjectToDb(false);
+		$objFile->setIntHits($objFile->getIntHits()+1);
+		$objFile->updateObjectToDb();
 
-        $strReturn = $this->addPortaleditorCode($strReturn);
-		return $strReturn;
+        return $this->addPortaleditorCode($strReturn);
 	}
 
-    //---Random----------------------------------------------------------------------------------------------
 
     /**
-     * Selects a random image out of the selected gallery and creates a detail-view
+     * Renders a single elementn of the file-strip
+     * @param class_module_mediamanager_file $objCurFile
+     * @return string
+     */
+    private function renderFileStripEntry(class_module_mediamanager_file $objCurFile) {
+        $arrTemplate = array(
+            "file_detail_href" => getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objCurFile->getSystemid(), $this->getPortalLanguage(), $objCurFile->getStrName()),
+            "file_name" => $objCurFile->getStrName(),
+            "file_systemid" => $objCurFile->getStrSystemid(),
+            "file_filename" => $objCurFile->getStrFilename()
+        );
+        $strStripTemplate = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail_strip");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strStripTemplate);
+    }
+
+
+    /**
+     * Selects a random file out of the selected repo and creates a detail-view
      *
      * @return string
      */
     protected function actionRandom() {
         //Fetch all images of the selected category
-        $arrRandom = array();
-        $arrRandom = $this->loadImagesRecursive($this->arrElementData["repo_id"]);
-
-        //Count images
+        $arrRandom = $this->loadFilesRecursive($this->arrElementData["repo_id"]);
+        //Count files
         $intNumber = count($arrRandom)-1;
         //and a random number
         srand ((double)microtime()*1000000);
@@ -306,7 +329,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
         if(isset($arrRandom[$intRand]))
             $this->setSystemid($arrRandom[$intRand]);
         //and load all
-        $strReturn = $this->actionDetailImage(false);
+        $strReturn = $this->actionFileDetails(false);
         $strReturn = $this->addPortaleditorCode($strReturn);
         return $strReturn;
     }
@@ -317,7 +340,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * @param string $strStartID
      * @return mixed
      */
-    private function loadImagesRecursive($strStartID) {
+    private function loadFilesRecursive($strStartID) {
         $arrRandom = array();
         $arrCurrLevel = class_module_mediamanager_file::loadFilesDB($strStartID, false, true);
         if(count($arrCurrLevel) > 0) {
@@ -326,7 +349,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                     $arrRandom[] = $objOneImage->getSystemid();
 
                 //Load all childs
-                $arrTemp = $this->loadImagesRecursive($objOneImage->getSystemid());
+                $arrTemp = $this->loadFilesRecursive($objOneImage->getSystemid());
                 foreach ($arrTemp as $strOneTemp) {
                 	$arrRandom[] = $strOneTemp;
                 }
@@ -335,23 +358,23 @@ class class_module_mediamanager_portal extends class_portal implements interface
         return $arrRandom;
     }
 
-    //---Bildfunktionen--------------------------------------------------------------------------------------
 
-	/**
-	 * Generates an image an returns the complete html-image-tag. Uses caching!
-	 *
-	 * @param string $strImage
-	 * @param int $intHeight
-	 * @param int $intWidth
-	 * @param string $strText
-	 * @param int $intTextSize
-	 * @param int $intTextX
-	 * @param int $intTextY
-	 * @param string $strFont
-	 * @param string $strFontColor
+    /**
+     * Generates an image an returns the complete url. Uses caching!
+     *
+     * @param string $strImage
+     * @param int $intHeight
+     * @param int $intWidth
+     * @param string $strText
+     * @param int|string $intTextSize
+     * @param int $intTextX
+     * @param int $intTextY
+     * @param string $strFont
+     * @param string $strFontColor
      * @param string $strOverlayImage
-	 * @return string the complete html-img tag
-	 */
+     *
+     * @return string the url
+     */
 	private function generateImage($strImage, $intHeight, $intWidth, $strText = "", $intTextSize = "20", $intTextX = 20, $intTextY= 20, $strFont = "dejavusans.ttf", $strFontColor= "255,255,255", $strOverlayImage = "") {
 	    $strReturn = "No image defined!!";
 		$intWidthNew = 0;
@@ -372,7 +395,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
     			}
     			else if($arrImageData[0] > $intWidth || $arrImageData[1] > $intHeight)	{
     			    $bitResize = true;
-    				$floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = breite, 1 = hoehe
+    				$floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = width, 1 = height
 
     				//chose more restricitve values
     			    $intHeightNew = $intHeight;
@@ -431,13 +454,12 @@ class class_module_mediamanager_portal extends class_portal implements interface
 				    $strReturn = "Error manipulating image!";
 			}
 		}
-		else 	//Nichts zu tun, Bild so ausgeben
+		else
 			$strReturn = "_webpath_".$strImage;
 
 		return $strReturn;
 	}
 
-//---Pfadfunktionen--------------------------------------------------------------------------------------
 
 	/**
 	 * Generates a litte path-navigation across the folders
@@ -460,14 +482,14 @@ class class_module_mediamanager_portal extends class_portal implements interface
             else
                 $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "imageFolder", "", $objData->getSystemid(), "", "", $objData->getStrDisplayName());
 
-            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "pathnavigation_level");
+            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
             $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
             while(!$objData instanceof class_module_mediamanager_repo) {
                 $objData = class_objectfactory::getInstance()->getObject($objData->getPrevId());
 
                 $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "imageFolder", "", $objData->getSystemid());
-                $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "pathnavigation_level");
+                $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
                 $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID). $strReturn;
             }
 
@@ -485,7 +507,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * @param string $strFolderId
      * @return class_module_mediamanager_file
      */
-    private function getFirstImageInFolder($strFolderId) {
+    private function getFirstFileInFolder($strFolderId) {
         //load the files in the passed folder
         $arrSubLevel = class_module_mediamanager_file::loadFilesDB($strFolderId, false, true);
         if(count($arrSubLevel) > 0) {
@@ -500,7 +522,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
     }
 
 	/**
-	 * Determins the systemids of the previous / next image
+	 * Determins the systemids of the previous / next file
 	 *
 	 * @return mixed
 	 */
@@ -549,7 +571,8 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
 
 	/**
-	 * Validates if the systemid requested is a valid element of the gallery-tree selected via the pageeelement
+	 * Validates if the systemid requested is a valid element of the mediamanager-tree selected via the pageeelement.
+     * Avoids, that the element reacts on systemids not being present in the current tree.
 	 *
 	 * @return bool
 	 */
@@ -570,16 +593,19 @@ class class_module_mediamanager_portal extends class_portal implements interface
 		return $bitReturn;
 	}
 
-	/**
-	 * Builds the rating bar available for every image-detailview.
-	 * Creates the needed js-links and image-tags as defined by the template.
-	 *
-	 * @param float $floatRating
+    /**
+     * Builds the rating bar available for every image-detailview.
+     * Creates the needed js-links and image-tags as defined by the template.
+     *
+     * @param float $floatRating
      * @param int $intRatings
-	 * @param string $strSystemid
-	 * @param bool $bitRatingAllowed
-	 * @return string
-	 */
+     * @param string $strSystemid
+     * @param bool $bitRatingAllowed
+     * @param bool $bitPermissions
+     *
+     * @return string
+     * @todo adopt implementation as soon as ratings are back on
+     */
 	private function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
 		$strIcons = "";
 		$strRatingBarTitle = "";
@@ -587,10 +613,10 @@ class class_module_mediamanager_portal extends class_portal implements interface
 		$intNumberOfIcons = class_module_rating_rate::$intMaxRatingValue;
 
 		//read the templates
-		$strTemplateBarId = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "rating_bar");
+		$strTemplateBarId = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "rating_bar");
 
 		if($bitRatingAllowed && $bitPermissions) {
-			$strTemplateIconId = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["gallery_template"], "rating_icon");
+			$strTemplateIconId = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "rating_icon");
 
 			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
 				$arrTemplate = array();
@@ -620,9 +646,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * @param string $strTemplate
      * @return int
      */
-    private function getImagesPerRow($strTemplate) {
+    private function getFilesPerRow($strTemplate) {
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$strTemplate, "piclist");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$strTemplate, "filelist");
         $arrElements = $this->objTemplate->getElements($strTemplateID);
         return count($arrElements);
 

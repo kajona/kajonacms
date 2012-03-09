@@ -1,6 +1,6 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: systemid, folderlist, piclist, pathnavigation, link_back, link_pages, link_forward -->
+<!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <script type="text/javascript">
         if (YAHOO.lang.isUndefined(arrViewers)) {
@@ -56,65 +56,77 @@
 
     <p>%%pathnavigation%%</p>
     %%folderlist%%
-    <div id="pv_%%systemid%%">%%piclist%%</div>
+    <div id="pv_%%systemid%%">%%filelist%%</div>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
-<!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_link, folder_href, folder_preview -->
+<!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_href, folder_preview_image_src -->
 <folderlist>
     <table cellspacing="0" class="portalList">
         <tr class="portalListRow1">
-            <td class="image"><img src="_webpath_/portal/pics/kajona/icon_folderClosed.gif" /></td>
+            <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.gif" /></td>
             <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
-            <td class="actions">%%folder_link%%</td>
         </tr>
         <tr class="portalListRow2">
-            <td></td>
-            <td colspan="2" class="description">%%folder_description%%</td>
+            <td><img src="_webpath_/image.php?image=%%folder_preview_image_src%%&amp;maxWidth=50&amp;maxHeight=50" /></td>
+            <td class="description">%%folder_description%%</td>
         </tr>
     </table>
 </folderlist>
 
-<!-- the following section is used to wrap a list of images, e.g. in order to build a table.
-     If you'd like to have a behaviour like rendering an unlimited list of images per row, use s.th.
-     like < piclist >%%pic_0%%</ piclist > -->
-<!-- available placeholders: pic_(nr) -->
-<piclist>
+<!-- the following section is used to wrap a list of files, e.g. in order to build a table.
+     If you'd like to have a behaviour like rendering an unlimited list of files per row, use s.th.
+     like < filelist >%%file_0%%</ filelist > -->
+<!-- available placeholders: file_(nr) -->
+<filelist>
     <table width="100%" cellspacing="0">
         <tr>
             <td colspan="3">&nbsp;</td>
         </tr>
         <tr style="text-align: center;">
-            <td width="33%">%%pic_0%%</td>
-            <td width="33%">%%pic_1%%</td>
-            <td width="33%">%%pic_2%%</td>
+            <td width="33%">%%file_0%%</td>
+            <td width="33%">%%file_1%%</td>
+            <td width="33%">%%file_2%%</td>
         </tr>
     </table>
-</piclist>
+</filelist>
 
-<!-- represents a single image
-     available placeholders: pic, pic_href, name, subtitle, pic_detail, pic_description, pic_size, pic_hits -->
-<piclist_pic>
+
+
+<!-- represents a single file within a filelist
+     available placeholders: image_detail_src, file_name, file_filename, file_subtitle, file_description, file_size, file_hits, file_details_href -->
+<filelist_file>
     <div style="text-align: center;">
-        <div><a href="%%pic_detail%%" title="%%name%%" class="photoViewer"><img src="%%pic%%" alt="%%subtitle%%" /></a></div>
-        <div>%%name%%</div>
+        <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="_webpath_/image.php?image=%%file_filename%%&amp;maxWidth=100&amp;maxHeight=100" alt="%%file_subtitle%%" /></a></div>
+        <div>%%file_name%%</div>
     </div>
-</piclist_pic>
+</filelist_file>
 
 
-
-<!-- available placeholders: pic_url, backlink, backlink_image_(1..3), backlink_image_filename_(1..3), backlink_image_systemid_(1..3),
-    fowardlink, forwardlink_image_(1..3), forwardlink_image_filename_(1..3), forwardlink_image_systemid_(1..3), overview, pathnavigation,
-    systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
- -->
-<picdetail>
+<!-- available placeholders:
+   image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
+   file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed)
+-->
+<filedetail>
     <!-- not used for imagelightbox -->
-</picdetail>
+</filedetail>
+
+
+<!-- available placeholder:
+    file_name, file_system, file_detail_href
+-->
+<filedetail_strip>
+    <!-- not used for imagelightbox -->
+</filedetail_strip>
 
 <!-- available placeholders: pathnavigation_point -->
 <pathnavigation_level>
 %%pathnavigation_point%% >
 </pathnavigation_level>
+
+
+
+
 
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_hits, rating_ratingPercent, system_id -->
 <rating_bar>

@@ -231,11 +231,9 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         if($objRepo == null) {
             $objRepo = class_objectfactory::getInstance()->getObject($strPrevID);
-            while(!$objRepo instanceof class_module_mediamanager_repo)
+            while($objRepo != null && !$objRepo instanceof class_module_mediamanager_repo)
                 $objRepo = class_objectfactory::getInstance()->getObject($objRepo->getPrevId());
         }
-
-	    $objDB = class_carrier::getInstance()->getObjDB();
 
 	    //Load the files in the DB
 		$arrObjDB = class_module_mediamanager_file::loadFilesDB($strPrevID);

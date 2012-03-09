@@ -41,6 +41,8 @@ class class_element_gallery_portal extends class_element_portal implements inter
 		if($objMediamanagerModule != null) {
 
             $this->arrElementData["repo_id"] = $this->arrElementData["gallery_id"];
+            $this->arrElementData["repo_elementsperpage"] = $this->arrElementData["gallery_imagesperpage"];
+            $this->arrElementData["repo_template"] = $this->arrElementData["gallery_template"];
 
     		$objGallery = $objMediamanagerModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objGallery->action();
