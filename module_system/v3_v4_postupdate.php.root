@@ -10,6 +10,14 @@
 require_once './core/bootstrap.php';
 
 
+
+/*
+ * TODO: Migrate Ratings (Downloads, Gallery)
+ * TODO: Migrate Postacommment (Downloads, Gallery)
+ */
+
+
+
 class class_v3_v4_postupdate {
 
     /**
@@ -106,10 +114,14 @@ class class_v3_v4_postupdate {
 
         }
 
+        echo "Migrating old log-table...\n";
+        $this->objDB->_pQuery("INSERT INTO "._dbprefix_."mediamanager_dllog SELECT * FROM "._dbprefix_."downloads_log", array());
+
         echo "Deleting downloads module...\n";
         $this->removeModule("downloads");
         $this->objDB->_pQuery("DROP TABLE "._dbprefix_."downloads_archive", array());
         $this->objDB->_pQuery("DROP TABLE "._dbprefix_."downloads_file", array());
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."downloads_log", array());
         $this->removeSetting("_downloads_suche_seite_");
 
         return true;
