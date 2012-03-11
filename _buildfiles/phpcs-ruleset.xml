@@ -39,7 +39,7 @@
    <exclude name="Generic.ControlStructures.InlineControlStructure.Discouraged" />
  </rule>
 
- 
+
  <rule ref="PEAR">
    <exclude name="PEAR.Classes.ClassDeclaration"/>
    <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
@@ -53,6 +53,8 @@
    <exclude name="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned" />
    <exclude name="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned" />
   </rule>
+
+
 
 
 

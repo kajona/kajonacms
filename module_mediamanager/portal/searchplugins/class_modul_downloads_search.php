@@ -10,7 +10,7 @@
 /**
  * Search plugin of the downloads-module.
  *
- * @package modul_downloads
+ * @package module_mediamanager
  */
 class class_modul_downloads_search extends class_portal implements interface_search_plugin  {
 

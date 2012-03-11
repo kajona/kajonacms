@@ -7,8 +7,8 @@
 *	$Id$                                             *
 ********************************************************************************************************/
 
-require_once(__DIR__."/ezcomponents/Base/src/base.php");
-spl_autoload_register( array( 'ezcBase', 'autoload' ) );
+require_once __DIR__."/ezcomponents/Base/src/base.php";
+spl_autoload_register(array('ezcBase', 'autoload'));
 
 
 
@@ -457,11 +457,12 @@ class class_graph_ezc implements interface_graph {
         $this->objGraph->renderToOutput($this->intWidth, $this->intHeight);
 	}
 
-	/**
-	 * Does the magic. Creates all necessary stuff and finally
-	 * saves the graph to the specified filename
-	 *
-	 */
+    /**
+     * Does the magic. Creates all necessary stuff and finally
+     * saves the graph to the specified filename
+     *
+     * @param $strFilename
+     */
 	public function saveGraph($strFilename) {
 		$this->preGraphCreation();
 
@@ -621,7 +622,7 @@ class class_graph_ezc implements interface_graph {
     /**
      * Sets the angle to be used for rendering the x-axis lables
      *
-     * @aram int $intXAxisAngle
+     * @param $intXAxisAngle
      */
     public function setIntXAxisAngle($intXAxisAngle) {
         $this->intXAxisAngle = $intXAxisAngle;

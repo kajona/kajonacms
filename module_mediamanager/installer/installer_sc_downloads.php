@@ -10,7 +10,7 @@
 /**
  * Installer of the downloads samplecontent
  *
- * @package modul_downloads
+ * @package module_mediamanager
  */
 class class_installer_sc_downloads implements interface_sc_installer  {
 
