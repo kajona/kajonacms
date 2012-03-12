@@ -192,9 +192,10 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->objDB->flushQueryCache();
 
             //intial dashboard widgets
-            $objDashboard = new class_module_dashboard_widget();
-            $objDashboard->createInitialWidgetsForUser($this->getSystemid());
-
+            if(class_module_system_module::getModuleByName("dashboard") != null) {
+                $objDashboard = new class_module_dashboard_widget();
+                $objDashboard->createInitialWidgetsForUser($this->getSystemid());
+            }
             return $bitReturn;
         }
         else {
@@ -236,7 +237,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @param string $strUsernameFilter
      * @param bool|int $intStart
      * @param bool|int $intEnd
-     * @return mixed
+     * @return class_module_user_user[]
      */
     public static function getAllUsers($strUsernameFilter = "", $intStart = null, $intEnd = null) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
@@ -342,10 +343,6 @@ class class_module_user_user extends class_model implements interface_model, int
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
-
-    public function getLongDate() {
-        return $this->longDate;
-    }
     public function getIntLogins() {
         return $this->intLogins;
     }

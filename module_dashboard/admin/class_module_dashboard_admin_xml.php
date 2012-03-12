@@ -26,7 +26,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 	public function __construct() {
 
         $this->setArrModuleEntry("modul", "dashboard");
-        $this->setArrModuleEntry("moduleId", _dashboard_modul_id_);
+        $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
 		parent::__construct();
 	}
 

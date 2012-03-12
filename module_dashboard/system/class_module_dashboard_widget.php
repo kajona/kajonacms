@@ -55,7 +55,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
 
         $this->setArrModuleEntry("modul", "dashboard");
-        $this->setArrModuleEntry("moduleId", _dashboard_modul_id_);
+        $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
 
 		parent::__construct($strSystemid);
 

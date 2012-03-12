@@ -7,15 +7,5 @@
 *	$Id$                                         *
 ********************************************************************************************************/
 
-	define(	"_system_modul_id_", 						0);
-
-	define(	"_login_modul_id_", 						0);
-
-	define( "_filesystem_modul_id_",					0);
-
-	define(	"_user_modul_id_",							15);
-
-	define(	"_rechte_modul_id_",						20);
-
-    define( "_languages_modul_id_",                     65);
+    define( "_dashboard_module_id_",                     90);
 

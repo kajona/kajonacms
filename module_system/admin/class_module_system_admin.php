@@ -613,7 +613,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $objFilesystem->openFilePointer(_projectpath_."/log/".$strName, "r");
             $strLogContent = $objFilesystem->readLastLinesFromFile();
             $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
-            $arrLogEntries = explode("\n", $strLogContent);
+            $arrLogEntries = explode("\r", $strLogContent);
             $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries);
             $objFilesystem->closeFilePointer();
         }
