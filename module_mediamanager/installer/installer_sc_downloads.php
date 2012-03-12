@@ -45,6 +45,8 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $strDownloadsID = $objDownloads->getSystemid();
         $objDownloads->syncRepo();
 
+        $strReturn .= "Adding download-permissions for guests...\n";
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objDownloads->getSystemid(), "right2");
 
         $strReturn .= "Creating new downloads page...\n";
 

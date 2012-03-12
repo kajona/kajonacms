@@ -285,7 +285,7 @@ class class_admin_formgenerator {
      *
      * @param class_formentry_base $objField
      * @param string $strKey
-     * @return class_formentry_base
+     * @return class_formentry_base|interface_formentry
      */
     public function addField(class_formentry_base $objField, $strKey = "") {
         if($strKey == "")

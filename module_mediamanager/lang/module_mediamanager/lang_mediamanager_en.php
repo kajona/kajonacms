@@ -81,3 +81,5 @@ $lang["header_user"]                     = "User";
 $lang["actionLogbook"]                         = "Logfile";
 $lang["actionLogbookFlush"]           = "Flush logfile";
 $lang["logbook_hint_date"]                      = "Deletes all logbook entries recorded before the given date.";
+
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Download", 6 => "", 7 => "", 8 => "");

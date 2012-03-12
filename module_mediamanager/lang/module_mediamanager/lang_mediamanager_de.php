@@ -82,3 +82,5 @@ $lang["header_user"]                     = "Benutzer";
 $lang["actionLogbook"]                         = "Logbuch";
 $lang["actionLogbookFlush"]           = "Logbuch leeren";
 $lang["logbook_hint_date"]                      = "Löscht alle Eintraege des Logbuchs, die älter als das angegeben Datum sind.";
+
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Download", 6 => "", 7 => "", 8 => "");

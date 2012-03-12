@@ -27,47 +27,19 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
 	}
 
 
-
-//    /**
-//     * Deletes the given file from the filesystem
-//     * @return string
-//     */
-//    protected function actionDeleteFile() {
-//        $strReturn = "";
-//
-//        $objFile = new class_module_mediamanager_file($this->getSystemid());
-//
-//        if($objFile->rightDelete()) {
-//
-//            //Delete from filesystem
-//            $objFilesystem = new class_filesystem();
-//            class_logger::getInstance()->addLogRow("deleted file ".$objFile->getStrFilename(), class_logger::$levelInfo);
-//            if($objFilesystem->fileDelete($objFile->getStrFilename()))
-//                $strReturn .= "<message>".xmlSafeString($this->getLang("file_delete_success"))."</message>";
-//            else
-//                $strReturn .= "<error>".xmlSafeString($this->getLang("file_delete_error"))."</error>";
-//        }
-//        else {
-//            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-//            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
-//        }
-//
-//        return $strReturn;
-//    }
-
-
     /**
      * Create a new folder using the combi of folder & systemid passed
      * @return string
+     * @permissions edit
      */
     protected function actionCreateFolder() {
         $strReturn = "";
 
+        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objInstance */
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objInstance->rightEdit()) {
 
-            $strPrevPath = "";
             if($objInstance instanceof class_module_mediamanager_file && $objInstance->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
                 $strPrevPath = $objInstance->getStrFilename();
 
@@ -121,13 +93,17 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
      * inputElement = name of the inputElement
      *
      * @return string
+     * @permissions right1
      */
     protected function actionFileupload() {
         $strReturn = "";
 
+        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objFile */
         $objFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        $strFolder = "";
 
+        /**
+         * @var class_module_mediamanager_repo
+         */
         $objRepo = null;
 
         if($objFile instanceof class_module_mediamanager_file) {
@@ -142,7 +118,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             while(!$objRepo instanceof class_module_mediamanager_repo)
                 $objRepo = class_objectfactory::getInstance()->getObject($objRepo->getPrevId());
         }
-        elseif($objFile instanceof class_module_filemanager_repo) {
+        elseif($objFile instanceof class_module_mediamanager_repo) {
             $objRepo = $objFile;
             $strFolder = $objFile->getStrPath();
             if(!$objFile->rightEdit()) {
@@ -197,58 +173,6 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         return $strReturn;
     }
 
-
-
-
-//	/**
-//	 * Syncs the gallery and creates a small report
-//	 *
-//	 * @return string
-//     * @permissions edit
-//	 */
-//	protected function actionSyncRepo() {
-//		$strReturn = "";
-//		$strResult = "";
-//
-//		$objRepo = new class_module_mediamanager_repo($this->getSystemid());
-//        $arrSyncs = $objRepo->syncRepo();
-//        $strResult .= $this->getLang("sync_end")."<br />";
-//        $strResult .= $this->getLang("sync_add").$arrSyncs["insert"]."<br />".$this->getLang("sync_del").$arrSyncs["delete"];
-//
-//        $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
-//
-//        class_logger::getInstance()->addLogRow("synced repo ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
-//
-//		return $strReturn;
-//	}
-
-//    /**
-//     * Syncs the gallery and creates a small report
-//     *
-//     * @return string
-//     */
-//    protected function actionMassSyncRepos() {
-//        $strReturn = "";
-//        $strResult = "";
-//
-//        $arrRepos = class_module_mediamanager_repo::getAllRepos();
-//        $arrSyncs = array( "insert" => 0, "delete" => 0);
-//        foreach($arrRepos as $objOneRepo) {
-//            if($objOneRepo->rightEdit()) {
-//                $arrTemp = $objOneRepo->syncRepo();
-//                $arrSyncs["insert"] += $arrTemp["insert"];
-//                $arrSyncs["delete"] += $arrTemp["delete"];
-//            }
-//        }
-//        $strResult .= $this->getLang("sync_end")."<br />";
-//        $strResult .= $this->getLang("sync_add").$arrSyncs["insert"]."<br />".$this->getLang("sync_del").$arrSyncs["delete"];
-//
-//        $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
-//
-//        class_logger::getInstance()->addLogRow("mass synced repos: ".$strResult, class_logger::$levelInfo);
-//        return $strReturn;
-//    }
-
     /**
      * Syncs the repo partially
      *
@@ -259,6 +183,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         $strReturn = "";
 		$strResult = "";
 
+        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objInstance */
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
 		if($objInstance instanceof class_module_mediamanager_file)
@@ -291,6 +216,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         $strReturn = "";
         $strResult = "";
 
+        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objInstance */
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
         //close the session to avoid a blocking behaviour
         $this->objSession->sessionClose();

@@ -274,9 +274,14 @@ HTML;
      * @return string
      */
     private function generateNewFolderDialogCode() {
+
+        if(!$this->getObjModule()->rightRight1())
+            return "";
+
         $strReturn = "";
 
         $strPath = "";
+        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objCurFile */
         $objCurFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objCurFile instanceof class_module_mediamanager_file)
@@ -309,9 +314,15 @@ HTML;
      * @return string
      */
     private function actionUploadFileInternal() {
+
+        if(!$this->getObjModule()->rightRight1())
+            return "";
+
         $strReturn = "";
 
         $strPath = "";
+
+        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objCurFile */
         $objCurFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objCurFile instanceof class_module_mediamanager_file)
@@ -592,7 +603,7 @@ HTML;
             $arrObjRepos = class_module_mediamanager_repo::getAllRepos();
             $intI = 0;
             //Print every repo
-            /** @var class_module_filemanager_repo $objOneRepo */
+            /** @var class_module_mediamanager_repo $objOneRepo */
             foreach($arrObjRepos as $objOneRepo) {
                 //check rights
                 if($objOneRepo->rightView()) {

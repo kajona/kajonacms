@@ -57,7 +57,7 @@ class class_download_manager extends class_root {
 			//Succeeded?
 			if($objFile instanceof class_module_mediamanager_file && $objFile->getStatus() == "1" && $objFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
 				//Check rights
-				if($objFile->rightView()) {
+				if($objFile->rightRight2) {
 				    //Log the download
 					class_module_mediamanager_logbook::generateDlLog($objFile);
 					//Send the data to the browser

@@ -151,9 +151,11 @@ class class_module_mediamanager_portal extends class_portal implements interface
                             $objUser = new class_module_user_user($objOneFile->getOwnerId());
                             $arrFileTemplate["file_owner"] = $objUser->getStrUsername();
                         }
-                        $arrFileTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
-                        $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
 
+                        if($objOneFile->rightRight2()) {
+                            $arrFileTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
+                            $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+                        }
 
                         $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getPortalLanguage(), $objOneFile->getStrName());
 
@@ -252,8 +254,11 @@ class class_module_mediamanager_portal extends class_portal implements interface
             $objUser = new class_module_user_user($objFile->getOwnerId());
             $arrDetailsTemplate["file_owner"] = $objUser->getStrUsername();
         }
-        $arrDetailsTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objFile->getSystemid();
-        $arrDetailsTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+
+        if($objFile->rightRight2()) {
+            $arrDetailsTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objFile->getSystemid();
+            $arrDetailsTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+        }
 
         //if its am image, provide additional information
         $strSuffix = uniStrtolower(uniSubstr($objFile->getStrFilename(), uniStrrpos($objFile->getStrFilename(), ".")));
