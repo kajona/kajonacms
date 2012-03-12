@@ -586,7 +586,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                 $objPage->setStrLanguage($objLang->getStrName());
                 $objPage->initObject();
             } else {
-                $objPage = new class_module_pages_page($this->getPrevId());
+                $objPage = new class_module_pages_page($objSourceElement->getPrevId());
             }
 
             //form header
@@ -615,7 +615,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $strTemplate = $objPage->getStrTemplate();
 
             //load the placeholders
-            $strTemplateId = $this->objTemplate->readTemplate("/templates/module_pages/".$strTemplate, "", true);
+            $strTemplateId = $this->objTemplate->readTemplate("/module_pages/".$strTemplate);
             $arrPlaceholders = $this->objTemplate->getElements($strTemplateId);
             $arrPlaceholdersDD = array();
 

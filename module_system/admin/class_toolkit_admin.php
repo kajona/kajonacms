@@ -945,7 +945,7 @@ class class_toolkit_admin extends class_toolkit {
         if(is_object($objInstance) && $objInstance instanceof class_model )
             $objRecord = $objInstance;
 
-        else if(validateSystemid($objInstance))
+        else if(validateSystemid($objInstance) && class_objectfactory::getInstance()->getObject($objInstance) !== null)
             $objRecord = class_objectfactory::getInstance()->getObject($objInstance);
 
         else

@@ -256,7 +256,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * under a given systemid.
      *
      * @param string $strFolderid
-     * @return class_module_pages_page | class_module_pages_folder
+     * @return class_module_pages_page[] | class_module_pages_folder[]
      */
     public static function getPagesAndFolderList($strFolderid = "") {
         if(!validateSystemid($strFolderid))

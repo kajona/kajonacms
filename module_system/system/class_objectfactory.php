@@ -85,7 +85,7 @@ class class_objectfactory {
             }
         }
 
-        if($strClass !== false) {
+        if($strClass !== false && $strClass != "") {
             $objReflection = new ReflectionClass($strClass);
 
             $objObject = $objReflection->newInstance($strSystemid);

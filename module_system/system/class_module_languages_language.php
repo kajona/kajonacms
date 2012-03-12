@@ -114,7 +114,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @param bool $bitJustActive
      * @param null $intStart
      * @param null $intEnd
-     * @return mixed
+     * @return class_module_languages_language[]
      * @static
      */
     public static function getAllLanguages($bitJustActive = false, $intStart = null, $intEnd = null) {

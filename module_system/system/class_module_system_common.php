@@ -157,8 +157,8 @@ class class_module_system_common extends class_model implements interface_model 
         $this->objDB->transactionBegin();
         //start by inserting the new systemrecords
         $strQuerySystem = "INSERT INTO "._dbprefix_."system
-        (system_id, system_prev_id, system_module_nr, system_sort, system_owner, system_create_date, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES
-        	(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (system_id, system_prev_id, system_module_nr, system_sort, system_owner, system_create_date, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment, system_class) VALUES
+        	(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if($this->objDB->_pQuery($strQuerySystem, array(
                 $strNewSystemid,
@@ -172,7 +172,8 @@ class class_module_system_common extends class_model implements interface_model 
                 $arrSystemRow["system_lock_id"],
                ($arrSystemRow["system_lock_time"] != "" ? $arrSystemRow["system_lock_time"] : 0),
                 $arrSystemRow["system_status"],
-                $arrSystemRow["system_comment"]
+                $arrSystemRow["system_comment"],
+                $arrSystemRow["system_class"]
             ))) {
 
             if(count($arrRightsRow) > 0) {

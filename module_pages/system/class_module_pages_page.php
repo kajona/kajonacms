@@ -411,7 +411,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 	public static function assignNullProperties($strTargetLanguage) {
         //Load all non-assigned props
         $strQuery = "SELECT pageproperties_id FROM "._dbprefix_."page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
-        $arrPropIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrPropIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         foreach ($arrPropIds as $arrOneId) {
             $strId = $arrOneId["pageproperties_id"];

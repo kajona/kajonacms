@@ -364,7 +364,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * Loads all Elements on the given ignoring both, status and language
      *
      * @param string $strPageId
-     * @return mixed
+     * @return class_module_pages_pageelement[]
      * @static
      */
     public static function getAllElementsOnPage($strPageId) {

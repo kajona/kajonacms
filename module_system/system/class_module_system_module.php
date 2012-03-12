@@ -9,21 +9,69 @@
 
 /**
  * Model for a single system-module
- * Modules are not represented in the system-table directly. so a moduleid is being used instead
  *
  * @package module_system
  */
 class class_module_system_module extends class_model implements interface_model, interface_admin_listable  {
 
+    /**
+     * @var string
+     * @tableColumn module_name
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @tableColumn module_filenameportal
+     */
     private $strNamePortal = "";
+
+    /**
+     * @var string
+     * @tableColumn module_xmlfilenameportal
+     */
     private $strXmlNamePortal = "";
+
+    /**
+     * @var string
+     * @tableColumn module_filenameadmin
+     */
     private $strNameAdmin = "";
+
+    /**
+     * @var string
+     * @tableColumn module_xmlfilenameadmin
+     */
     private $strXmlNameAdmin = "";
+
+    /**
+     * @var string
+     * @tableColumn module_version
+     */
     private $strVersion = "";
+
+    /**
+     * @var string
+     * @tableColumn module_date
+     */
     private $intDate = "";
+
+    /**
+     * @var string
+     * @tableColumn module_navigation
+     */
     private $intNavigation = "";
+
+    /**
+     * @var string
+     * @tableColumn module_nr
+     */
     private $intNr = "";
+
+    /**
+     * @var string
+     * @tableColumn module_aspect
+     */
     private $strAspect = "";
 
 
@@ -91,64 +139,36 @@ class class_module_system_module extends class_model implements interface_model,
     }
 
 
-    /**
-     * Initialises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system, "._dbprefix_."system_right WHERE system_id=module_id AND system_id = right_id ORDER BY module_nr";
-        $arrRow = array();
-		$arrModules = $this->objDB->getPArray($strQuery, array());
+//    /**
+//     * Initialises the current object, if a systemid was given
+//     *
+//     */
+//    protected function initObjectInternal() {
+//        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system, "._dbprefix_."system_right WHERE system_id=module_id AND system_id = right_id ORDER BY module_nr";
+//        $arrRow = array();
+//		$arrModules = $this->objDB->getPArray($strQuery, array());
+//
+//		foreach($arrModules as $arrOneModule) {
+//		    if($arrOneModule["module_id"] == $this->getSystemid())
+//		       $arrRow = $arrOneModule;
+//		}
+//
+//        $this->setArrInitRow($arrRow);
+//
+//        $this->setStrName($arrRow["module_name"]);
+//        $this->setStrNamePortal($arrRow["module_filenameportal"]);
+//        $this->setStrXmlNamePortal($arrRow["module_xmlfilenameportal"]);
+//        $this->setStrNameAdmin($arrRow["module_filenameadmin"]);
+//        $this->setStrXmlNameAdmin($arrRow["module_xmlfilenameadmin"]);
+//        $this->setStrVersion($arrRow["module_version"]);
+//        $this->setIntDate($arrRow["module_date"]);
+//        $this->setIntNavigation($arrRow["module_navigation"]);
+//        $this->setIntNr($arrRow["module_nr"]);
+//        if(isset($arrRow["module_aspect"]))
+//            $this->setStrAspect($arrRow["module_aspect"]);
+//    }
 
-		foreach($arrModules as $arrOneModule) {
-		    if($arrOneModule["module_id"] == $this->getSystemid())
-		       $arrRow = $arrOneModule;
-		}
 
-        $this->setArrInitRow($arrRow);
-
-        $this->setStrName($arrRow["module_name"]);
-        $this->setStrNamePortal($arrRow["module_filenameportal"]);
-        $this->setStrXmlNamePortal($arrRow["module_xmlfilenameportal"]);
-        $this->setStrNameAdmin($arrRow["module_filenameadmin"]);
-        $this->setStrXmlNameAdmin($arrRow["module_xmlfilenameadmin"]);
-        $this->setStrVersion($arrRow["module_version"]);
-        $this->setIntDate($arrRow["module_date"]);
-        $this->setIntNavigation($arrRow["module_navigation"]);
-        $this->setIntNr($arrRow["module_nr"]);
-        if(isset($arrRow["module_aspect"]))
-            $this->setStrAspect($arrRow["module_aspect"]);
-    }
-
-    /**
-     * Updates the current object to the database
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $strQuery = "UPDATE "._dbprefix_."system_module SET
-					  module_name =?,
-					  module_filenameportal =?,
-					  module_xmlfilenameportal =?,
-					  module_filenameadmin =?,
-					  module_xmlfilenameadmin =?,
-					  module_version =?,
-					  module_date =?,
-					  module_navigation =?,
-					  module_nr =?,
-					  module_aspect=?
-					WHERE module_id = ?
-					";
-        return$this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrNamePortal(), $this->getStrXmlNamePortal(), $this->getStrNameAdmin(),
-                                            $this->getStrXmlNameAdmin(), $this->getStrVersion(), $this->getIntDate(), $this->getIntNavigation(), $this->getIntNr(), $this->getStrAspect(), $this->getSystemid()));
-    }
-
-    /**
-     * Deletes the current object from the system
-     * @return bool
-     */
-    public function deleteObject() {
-        return true;
-    }
 
 
     /**
