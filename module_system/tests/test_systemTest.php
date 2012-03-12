@@ -219,7 +219,7 @@ class class_test_system extends class_testbase  {
         $arrCopiedRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id = ?", array($strNewId));
 
         foreach($arrSourceRow as $strKey => $strValue) {
-            if(!in_array($strKey, array("system_id", "system_sort")))
+            if(!in_array($strKey, array("system_id", "system_sort")) && !is_numeric($strKey))
                 $this->assertEquals($strValue, $arrCopiedRow[$strKey], __FILE__." key ".$strKey." copy sysrecord");
         }
 
