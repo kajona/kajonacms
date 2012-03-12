@@ -334,8 +334,21 @@ abstract class class_root {
     public function deleteObject() {
         $this->objDB->transactionBegin();
 
+        //validate, if there are subrecords, so child nodes to be deleted
+
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
+        foreach($arrChilds as $arrOneChild) {
+            if(validateSystemid($arrOneChild["system_id"])) {
+                $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
+                if($objInstance !== null)
+                    $objInstance->deleteObject();
+            }
+        }
+
         $bitReturn = $this->deleteObjectInternal();
         $bitReturn .= $this->deleteSystemRecord($this->getSystemid());
+
+        $this->objDB->flushQueryCache();
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);

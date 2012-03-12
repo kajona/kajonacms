@@ -228,5 +228,30 @@ class class_test_system extends class_testbase  {
         $objCommon->deleteSystemRecord($strNewId);
 
     }
+
+    public function testTreeDelete() {
+        $objCommon = new class_module_system_common("0");
+
+        $strRootNodeId = $objCommon->createSystemRecord("0", "autotest");
+        $strSub1Node1Id = $objCommon->createSystemRecord($strRootNodeId, "autotest");
+        $strSub1Node2Id = $objCommon->createSystemRecord($strRootNodeId, "autotest");
+        $strSub1Node2Id = $objCommon->createSystemRecord($strRootNodeId, "autotest");
+
+        $strSub2Node1aId = $objCommon->createSystemRecord($strSub1Node1Id, "autotest");
+        $strSub2Node1bId = $objCommon->createSystemRecord($strSub1Node1Id, "autotest");
+        $strSub2Node1cId = $objCommon->createSystemRecord($strSub1Node1Id, "autotest");
+
+        $this->assertEquals(3, count($objCommon->getChildNodesAsIdArray($strRootNodeId)));
+
+        $this->assertEquals(3, count($objCommon->getChildNodesAsIdArray($strSub1Node1Id)));
+
+        $objCommon->setSystemid($strRootNodeId);
+        $objCommon->deleteObject();
+
+
+        $this->assertEquals(0, count($objCommon->getChildNodesAsIdArray($strRootNodeId)));
+
+        $this->assertEquals(0, count($objCommon->getChildNodesAsIdArray($strSub1Node1Id)));
+    }
 }
 

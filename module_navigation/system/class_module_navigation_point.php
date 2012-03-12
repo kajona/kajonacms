@@ -201,27 +201,6 @@ class class_module_navigation_point extends class_model implements interface_mod
         return $arrReturn;
     }
 
-	/**
-	 * Deletes a navigation / a point and all childs
-	 *
-	 * @return bool
-	 */
-	protected function deleteObjectInternal() {
-
-        //Are there any childs?
-        $arrChild = class_module_navigation_point::getNaviLayer($this->getSystemid());
-        if(count($arrChild) > 0) {
-            //Call this method for each child
-            foreach($arrChild as $objOneChild) {
-                if(!$objOneChild->deleteObject()) {
-                    return false;
-                }
-            }
-        }
-
-        return parent::deleteObjectInternal();
-	}
-
 
 	/**
 	 * Loads all navigation-points linking on the passed page

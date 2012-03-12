@@ -137,16 +137,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
         return $arrRow["COUNT(*)"];
     }
 
-    protected function deleteObjectInternal() {
-
-        //check for subrecords
-        $arrFiles = class_module_mediamanager_file::loadFilesDB($this->getSystemid());
-        foreach($arrFiles as $objOneFile)
-            $objOneFile->deleteObject();
-
-        return parent::deleteObjectInternal();
-    }
-
     /**
      * Syncs the complete repo with the filesystem. Adds new files and removes delete files to and
      * from the db.

@@ -135,11 +135,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     protected function deleteObjectInternal() {
 
-        //check for subrecords
-        $arrFiles = self::loadFilesDB($this->getSystemid());
-        foreach($arrFiles as $objOneFile)
-            $objOneFile->deleteObject();
-
         //delete the current file
         $objFilesystem = new class_filesystem();
         if($this->getIntType() == self::$INT_TYPE_FILE)

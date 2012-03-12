@@ -393,16 +393,6 @@ class class_module_system_common extends class_model implements interface_model 
 	}
 
     /**
-     * Deletes the current object from the system
-     * @return bool
-     */
-    public function deleteObject() {
-        return true;
-    }
-
-
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

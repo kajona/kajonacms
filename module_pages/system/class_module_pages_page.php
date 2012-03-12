@@ -371,25 +371,8 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         $bitReturn = false;
 
-        $arrSubElements = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
-        foreach($arrSubElements as $objOneElement) {
-            $objOneElement->deleteObject();
-        }
-
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
-
-	    //Get all Elements belonging to this page
-		$arrElements = class_module_pages_pageelement::getAllElementsOnPage($this->getSystemid());
-
-		//Loop over the elements
-		foreach($arrElements as $objOneElement) {
-			//Deletion passed to the pages_content class
-			if(!$objOneElement->deleteObject()) {
-				$bitReturn = false;
-				break;
-			}
-		}
 
         //Delete the page and the properties out of the tables
         $strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";

@@ -195,28 +195,6 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
 
     /**
-	 * Deletes a navigation / a point and all childs
-	 *
-	 * @return bool
-	 */
-	protected function deleteObjectInternal() {
-
-        //Are there any childs?
-        $arrChild = class_module_navigation_point::getNaviLayer($this->getSystemid());
-        if(count($arrChild) > 0) {
-            //Call this method for each child
-            foreach($arrChild as $objOneChild) {
-                if(!$objOneChild->deleteObject()) {
-                    return false;
-                }
-            }
-        }
-
-        return parent::deleteObjectInternal();
-	}
-
-
-    /**
      * @return string
      * @fieldMandatory
      */
