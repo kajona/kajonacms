@@ -301,7 +301,7 @@ class class_module_system_module extends class_model implements interface_model,
      * The object returned is being initialized with a systemid optionally.
      *
      * @param string $strSystemid
-     * @return interface_admin
+     * @return interface_admin|class_admin
      */
     public function getAdminInstanceOfConcreteModule($strSystemid = "") {
         if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {

@@ -49,6 +49,7 @@ $lang["login_changeButton"]              = "Passwort ändern";
 $lang["login_change_error"]              = "Fehler beim Verarbeiten der Anfrage.";
 $lang["login_change_success"]            = "Passwort erfolgreich geändert. Sie können sich nun am System <a href=\"_webpath_/admin\">anmelden</a>.";
 $lang["login_dashboard"]                 = "Startseite";
+$lang["login_sitemap"]                 = "Sitemap";
 $lang["login_ip"]                        = "IP-Adresse";
 $lang["login_loginButton"]               = "Anmelden";
 $lang["login_loginCookiesInfo"]          = "Bitte aktivieren Sie Cookies in Ihrem Browser und laden Sie die Seite neu, um alle Funktionen nutzen zu können.";

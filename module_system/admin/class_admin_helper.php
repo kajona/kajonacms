@@ -49,13 +49,35 @@ class class_admin_helper {
     /**
      * Writes the main backend navigation, so collects
      * all modules of the current aspect
-     * Creates a list of all installed modules
+     * Creates a list of all installed modules.
+     * Prepares the rendering via the toolkit.
      *
      * @param $strCurrentModule
      *
      * @return string
      */
     public static function getOutputMainNavi($strCurrentModule) {
+        if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
+
+            //NOTE: Some special Modules need other highlights
+            if($strCurrentModule == "elemente")
+                $strCurrentModule = "pages";
+
+            $arrModuleRows = self::getOutputMainNaviHelper();
+
+            return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleNavi($arrModuleRows, $strCurrentModule);
+        }
+    }
+
+    /**
+     * Writes the main backend navigation, so collects
+     * all modules of the current aspect
+     * Creates a list of all installed modules
+     * Internal helper, collects all modules and prepares the lins
+     *
+     * @return array
+     */
+    public static function getOutputMainNaviHelper() {
         if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
             //Loading all Modules
             $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
@@ -72,16 +94,35 @@ class class_admin_helper {
                     $intI++;
                 }
             }
-            //NOTE: Some special Modules need other highlights
-            if($strCurrentModule == "elemente")
-                $strCurrentModule = "pages";
-
-            return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleNavi($arrModuleRows, $strCurrentModule);
+            return $arrModuleRows;
         }
+
+        return array();
     }
 
 
+    /**
+     * Creates the list of actions available for a single module,
+     * rendered by the toolkit
+     * @static
+     * @param class_admin $objAdminModule
+     * @return string
+     */
     public static function getModuleActionNavi(class_admin $objAdminModule) {
+        if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
+            $arrFinalItems = self::getModuleActionNaviHelper($objAdminModule);
+            //Pass to the skin-object
+            return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleActionNavi($arrFinalItems);
+        }
+    }
+
+    /**
+     * Fetches the list of action for a single module
+     * @static
+     * @param class_admin $objAdminModule
+     * @return array
+     */
+    public static function getModuleActionNaviHelper(class_admin $objAdminModule) {
         if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
             $objModule = $objAdminModule->getObjModule();
             $arrItems = $objAdminModule->getOutputModuleNavi();
@@ -137,9 +178,9 @@ class class_admin_helper {
                     $arrFinalItems[] = $arrOneItem[1];
             }
 
-            //Pass to the skin-object
-            return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleActionNavi($arrFinalItems);
+            return $arrFinalItems;
         }
+        return array();
     }
 
 

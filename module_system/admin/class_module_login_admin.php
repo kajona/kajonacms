@@ -31,7 +31,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 	/**
 	 * Creates a small login-field
 	 *
-	 * @return unknown
+	 * @return string
 	 */
 	protected function actionLogin() {
 
@@ -65,7 +65,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
     /**
 	 * Creates a form in order to change the password - if the authcode is valid
 	 *
-	 * @return unknown
+	 * @return string
 	 */
 	protected function actionPwdReset() {
 		$strReturn = "";
@@ -139,10 +139,12 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
 		$arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
 		$arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
+		$arrTemplate["sitemap"] = getLinkAdminHref("dashboard", "sitemap");
 		$arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
 		$arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
 		$arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
 		$arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
+		$arrTemplate["sitemapTitle"] = $this->getLang("login_sitemap", "user");
 		$arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getLang("login_printview", "user"));
 
 		return $this->objToolkit->getLoginStatus($arrTemplate);

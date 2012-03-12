@@ -366,6 +366,7 @@ Needed Elements: %%error%%, %%form%%
 Part to display the login status, user is logged in
 <logout_form>
     <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
+    <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.gif" title="%%sitemapTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
     <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
     <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
 </logout_form>
@@ -1125,3 +1126,15 @@ It containes a list of aspects and provides the possibility to switch the differ
     </script>
     <div id="menuContainer_%%id%%" class="yui-skin-sam"></div>
 </contextmenu_wrapper>
+
+<sitemap_wrapper>
+    <ul>%%level%%</ul>
+</sitemap_wrapper>
+
+<sitemap_module_wrapper>
+    <li>%%module%%<ul>%%actions%%</ul></li>
+</sitemap_module_wrapper>
+
+<sitemap_action_entry>
+    <li>%%action%%</li>
+</sitemap_action_entry>

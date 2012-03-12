@@ -1225,6 +1225,32 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array("rows" => $strRows), $strTemplateID);
     }
 
+    public function getAdminSitemap() {
+        $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_wrapper");
+        $strModuleID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper");
+        $strActionID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_action_entry");
+
+        $strModules = "";
+
+        $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
+        foreach ($arrModules as $arrModule) {
+            $objModule = new class_module_system_module($arrModule["module_id"]);
+            if($objModule->rightView()) {
+                $arrActions = class_admin_helper::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
+
+                $strActions = "";
+                foreach($arrActions as $strOneAction)
+                    if(trim($strOneAction) != "")
+                        $strActions .= $this->objTemplate->fillTemplate(array("action" => $strOneAction), $strActionID);
+
+
+                $strModules .= $this->objTemplate->fillTemplate(array("module" => getLinkAdmin($objModule->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objModule->getStrName())), "actions" => $strActions), $strModuleID);
+            }
+        }
+
+        return $this->objTemplate->fillTemplate(array("level" => $strModules), $strWrapperID);
+    }
+
     /*"*****************************************************************************************************/
     // --- Path Navigation ----------------------------------------------------------------------------------
 
