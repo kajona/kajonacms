@@ -51,4 +51,25 @@ class class_element_gallery_portal extends class_element_portal implements inter
 		return $strReturn;
 	}
 
+    public function getNavigationEntries() {
+        $arrData = $this->getElementContent($this->getSystemid());
+
+        $arrData["repo_id"] = $arrData["gallery_id"];
+        $arrData["repo_elementsperpage"] = $arrData["gallery_imagesperpage"];
+        $arrData["repo_template"] = $arrData["gallery_template"];
+
+        $objDownloadsModule = class_module_system_module::getModuleByName("mediamanager");
+
+        if($objDownloadsModule != null) {
+
+            /** @var $objDownloads class_module_mediamanager_portal */
+            $objDownloads = $objDownloadsModule->getPortalInstanceOfConcreteModule($arrData);
+            $arrReturn = $objDownloads->getNavigationNodes();
+
+            return $arrReturn;
+        }
+
+        return false;
+    }
+
 }

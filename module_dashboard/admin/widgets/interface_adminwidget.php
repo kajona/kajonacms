@@ -24,7 +24,7 @@ interface interface_adminwidget {
     public function getEditForm();
 
     /**
-     * This method is called, when the widget should generate it's content.
+     * This method is called, when the widget should generate its' content.
      * Return the complete content using the methods provided by the base class.
      * Do NOT use the toolkit right here!
      *

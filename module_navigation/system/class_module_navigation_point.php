@@ -52,6 +52,18 @@ class class_module_navigation_point extends class_model implements interface_mod
     private $strImage = "";
 
     /**
+     * Internal field, used for navigation nodes added by other modules
+     * @var string
+     */
+    private $strLinkAction = "";
+
+    /**
+     * Internal field, used for navigation nodes added by other modules
+     * @var string
+     */
+    private $strLinkSystemid = "";
+
+    /**
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objects)
@@ -177,21 +189,22 @@ class class_module_navigation_point extends class_model implements interface_mod
         $arrReturn = array();
 
         //split modes  - regular navigation or generated out of the pages / folders
-        $objCommon = new class_module_system_common($strSystemid);
+
+        /** @var $objNode class_module_navigation_point|class_module_navigation_tree */
+        $objNode = class_objectfactory::getInstance()->getObject($strSystemid);
 
         //current node is a navigation-node
-        if($objCommon->getIntModuleNr() == _navigation_modul_id_) {
+        if($objNode instanceof class_module_navigation_point || $objNode instanceof class_module_navigation_tree) {
 
             //check where the point links to - navigation-point or pages-entry
-            $objNavigationPoint = new class_module_navigation_point($strSystemid);
-            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
-                $arrReturn = self::loadPageLevelToNavigationNodes($objNavigationPoint->getStrFolderI());
+            if($objNode instanceof class_module_navigation_tree && validateSystemid($objNode->getStrFolderId())) {
+                $arrReturn = self::loadPageLevelToNavigationNodes($objNode->getStrFolderId());
             }
             else
                 $arrReturn = self::getNaviLayer($strSystemid, true);
         }
         //current node belongs to pages
-        else if($objCommon->getIntModuleNr() == _pages_folder_id_ || $objCommon->getIntModuleNr() == _pages_modul_id_) {
+        else if($objNode instanceof class_module_pages_page || $objNode instanceof class_module_pages_folder) {
             //load the page-level below
             $arrReturn = self::loadPageLevelToNavigationNodes($strSystemid);
         }
@@ -232,7 +245,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * This node is used for portal-actions only, so there's no way to edit the node.
      *
      * @param string $strSourceId
-     * @return class_module_navigation_point
+     * @return class_module_navigation_point[]|array
      * @since 3.4
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
@@ -261,17 +274,63 @@ class class_module_navigation_point extends class_model implements interface_mod
                         if(uniStrpos($strAlias, "http") !== false) {
                             $objPoint->setStrPageE($objOneEntry->getStrAlias());
                         }
-                        else
+                        else {
                             $objPoint->setStrPageI($objOneEntry->getStrAlias());
+                        }
                     }
-                    else
+                    else {
                         $objPoint->setStrPageI($objOneEntry->getStrName());
+                    }
 
                     $objPoint->setSystemid($objOneEntry->getSystemid());
 
                     $arrReturn[] = $objPoint;
                 }
             }
+        }
+
+        //merge with elements on the page - if given
+        /** @var $objInstance class_module_pages_page */
+        $objInstance = class_objectfactory::getInstance()->getObject($strSourceId);
+        if($objInstance instanceof class_module_pages_page) {
+
+            if($objInstance->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
+                $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage(class_module_pages_page::getPageByName($objInstance->getStrAlias())));
+            else
+                $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage($objInstance));
+
+        }
+
+        return $arrReturn;
+    }
+
+
+    /**
+     * Triggers all subelements in order to fetch the additional navigation
+     * entries.
+     *
+     * @see class_element_portal::getNavigationEntries()
+     * @param class_module_pages_page $objPage
+     * @return class_module_navigation_point[]|array
+     * @since 4.0
+     */
+    private static function getAdditionalEntriesForPage(class_module_pages_page $objPage) {
+        $arrReturn = array();
+        $objLanguage = new class_module_languages_language();
+        $arrElements =  class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
+
+        foreach($arrElements as $objOneElementOnPage) {
+            //Build the class-name for the object
+            $strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
+            /** @var  class_element_portal $objElement  */
+            $objElement = new $strClassname($objOneElementOnPage);
+            $objElement->setParam("page", $objPage->getStrName());
+
+            $arrNavigationPoints = $objElement->getNavigationEntries();
+            if($arrNavigationPoints !== false) {
+                $arrReturn = array_merge($arrReturn, $arrNavigationPoints);
+            }
+
         }
 
         return $arrReturn;
@@ -344,6 +403,33 @@ class class_module_navigation_point extends class_model implements interface_mod
         $this->strFolderI = $strFolderI;
     }
 
+    /**
+     * @param string $strLinkAction
+     */
+    public function setStrLinkAction($strLinkAction) {
+        $this->strLinkAction = $strLinkAction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrLinkAction() {
+        return $this->strLinkAction;
+    }
+
+    /**
+     * @param string $strLinkSystemid
+     */
+    public function setStrLinkSystemid($strLinkSystemid) {
+        $this->strLinkSystemid = $strLinkSystemid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrLinkSystemid() {
+        return $this->strLinkSystemid;
+    }
 
 
 }

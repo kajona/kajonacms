@@ -511,6 +511,31 @@ abstract class class_element_portal extends class_portal {
         $this->strCacheAddon .= $strCacheAddon;
     }
 
+    /**
+     * This method may be used, if the current module is able to
+     * register own levels in the navigation.
+     * See the module mediamanager (gallery, downloads) on how to use
+     * this special feature.
+     * The array returned by this method should be structured like:
+     * array(
+     *    node => class_module_navigation_point ,
+     *    subnodes => array(
+     *        array( node => class_module_navigation_point, subnodes => array(...)),
+     *        array( node => class_module_navigation_point, subnodes => array(...))
+     *    )
+     * )
+     *
+     * If you don' want to create additional navigation entries, don't overwrite this method.
+     *
+     * @see class_module_navigation_tree::getCompleteNaviStructure()
+     * @see class_module_navigation_point::getDynamicNaviLayer()
+     *
+     * @return array|bool
+     * @since 4.0
+     */
+    public function getNavigationEntries() {
+        return false;
+    }
 
 }
 

@@ -62,7 +62,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                             );
 
         //open a subfolder?
-        if($this->getParam("action") == "imageFolder" && validateSystemid($this->getSystemid()))
+        if($this->getParam("action") == "mediaFolder" && validateSystemid($this->getSystemid()))
             $arrPeConfig["pe_action_edit_params"] = "&systemid=".$this->getSystemid();
 
         $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["repo_id"], $arrPeConfig);
@@ -181,7 +181,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
 						$arrFolder["folder_name"] = $objOneFile->getStrName();
 						$arrFolder["folder_description"] = $objOneFile->getStrDescription();
 						$arrFolder["folder_subtitle"] = $objOneFile->getStrSubtitle();
-						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getStrName());
+						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "mediaFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getStrName());
 
                         $objFirstFile = $this->getFirstFileInFolder($objOneFile->getSystemid());
                         if($objFirstFile != null) {
@@ -286,7 +286,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
         //current file
         $arrDetailsTemplate["filestrip_current"] = $this->renderFileStripEntry($objFile);
 
-        $arrDetailsTemplate["overview"] = getLinkPortal($this->getPagename(), "", "",  $this->getLang("overview"), "imageFolder", "", $objFile->getPrevId());
+        $arrDetailsTemplate["overview"] = getLinkPortal($this->getPagename(), "", "",  $this->getLang("overview"), "mediaFolder", "", $objFile->getPrevId());
         $arrDetailsTemplate["pathnavigation"] = $this->generatePathnavi(true);
 
 		//ratings available?
@@ -502,7 +502,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
             if($bitCurrentViewIsDetail)
                 $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "detailImage", "", $objData->getSystemid(), "", "", $objData->getStrDisplayName());
             else
-                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "imageFolder", "", $objData->getSystemid(), "", "", $objData->getStrDisplayName());
+                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "mediaFolder", "", $objData->getSystemid(), "", "", $objData->getStrDisplayName());
 
             $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
             $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
@@ -510,7 +510,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
             while(!$objData instanceof class_module_mediamanager_repo) {
                 $objData = class_objectfactory::getInstance()->getObject($objData->getPrevId());
 
-                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "imageFolder", "", $objData->getSystemid());
+                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "mediaFolder", "", $objData->getSystemid());
                 $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
                 $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID). $strReturn;
             }
@@ -674,5 +674,53 @@ class class_module_mediamanager_portal extends class_portal implements interface
         $arrElements = $this->objTemplate->getElements($strTemplateID);
         return count($arrElements);
 
+    }
+
+
+
+    public function getNavigationNodes() {
+
+        $arrReturn = array();
+
+        $objRepo = new class_module_mediamanager_repo($this->arrElementData["repo_id"]);
+
+        $objPoint = new class_module_navigation_point();
+        $objPoint->setIntRecordStatus(1, false);
+        $objPoint->setStrName($objRepo->getStrTitle());
+        $objPoint->setStrPageI($this->getPagename());
+        $objPoint->setSystemid($objRepo->getSystemid());
+        $objPoint->setStrLinkSystemid($objRepo->getSystemid());
+        $objPoint->setStrLinkAction("mediaFolder");
+
+        $arrReturn["node"] = $objPoint;
+        $arrReturn["subnodes"] = $this->getNavigationNodesHelper($objPoint->getSystemid());
+
+        return $arrReturn;
+
+    }
+
+    private function getNavigationNodesHelper($strParentId) {
+
+        $arrFoldersDB = class_module_mediamanager_file::loadFilesDB($strParentId, class_module_mediamanager_file::$INT_TYPE_FOLDER, true);
+
+        $arrReturn = array();
+        foreach($arrFoldersDB as $objOneFolder) {
+            $objPoint = new class_module_navigation_point();
+            $objPoint->setIntRecordStatus(1, false);
+            $objPoint->setStrName($objOneFolder->getStrName());
+            $objPoint->setStrPageI($this->getPagename());
+            $objPoint->setSystemid($objOneFolder->getSystemid());
+            $objPoint->setStrLinkSystemid($objOneFolder->getSystemid());
+            $objPoint->setStrLinkAction("mediaFolder");
+
+            $arrTemp = array(
+                "node" => $objPoint,
+                "subnodes" => $this->getNavigationNodesHelper($objOneFolder->getSystemid())
+            );
+
+            $arrReturn[] = $arrTemp;
+        }
+
+        return $arrReturn;
     }
 }

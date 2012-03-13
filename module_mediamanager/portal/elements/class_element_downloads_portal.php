@@ -53,5 +53,26 @@ class class_element_downloads_portal extends class_element_portal implements int
 		return $strReturn;
 	}
 
+    public function getNavigationEntries() {
+        $arrData = $this->getElementContent($this->getSystemid());
+
+        $arrData["repo_id"] = $arrData["download_id"];
+        $arrData["repo_elementsperpage"] = $arrData["download_amount"];
+        $arrData["repo_template"] = $arrData["download_template"];
+
+        $objDownloadsModule = class_module_system_module::getModuleByName("mediamanager");
+
+        if($objDownloadsModule != null) {
+
+            /** @var $objDownloads class_module_mediamanager_portal */
+            $objDownloads = $objDownloadsModule->getPortalInstanceOfConcreteModule($arrData);
+            $arrReturn = $objDownloads->getNavigationNodes();
+
+            return $arrReturn;
+        }
+
+        return false;
+    }
+
 
 }

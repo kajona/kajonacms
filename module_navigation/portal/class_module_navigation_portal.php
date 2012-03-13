@@ -57,6 +57,11 @@ class class_module_navigation_portal extends class_portal implements interface_p
 
         //set the default navigation mode
         $this->setAction("navigationSitemap");
+
+
+        //foreach($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $objOneNode)
+        //    $this->printTreeLevel(1, $objOneNode);
+
 	}
 
     /**
@@ -66,10 +71,6 @@ class class_module_navigation_portal extends class_portal implements interface_p
      * @return string
      */
 	private function addPortaleditorCode($strReturn) {
-
-        //        foreach($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $objOneNode)
-        //                $this->printTreeLevel(1, $objOneNode);
-
 
         //Add pe code
         $arrPeConfig = array(
@@ -98,12 +99,15 @@ class class_module_navigation_portal extends class_portal implements interface_p
      * @permissions view
 	 */
 	protected function actionNavigationSitemap() {
+
+
+
 		$strReturn = "";
 		//check rights on the navigation
         $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
 		if($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1) {
             //create a stack to highlight the points being active
-            $objActivePoint = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]);
+            $objActivePoint = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"], $this->getParam("systemid"), $this->getParam("action"));
             $strStack = $this->getActiveIdStack($objActivePoint);
 
             //build the navigation
@@ -244,9 +248,11 @@ class class_module_navigation_portal extends class_portal implements interface_p
      *
      * @param string $strPagename
      * @param string $strNavigationId
+     * @param string $strCheckId systemid to check, only used to get active id stack
+     * @param string $strCheckAction action to check, only used to get active id stack
      * @return class_module_navigation_point or null
      */
-    private function searchPageInNavigationTree($strPagename, $strNavigationId) {
+    private function searchPageInNavigationTree($strPagename, $strNavigationId, $strCheckId = "", $strCheckAction = "") {
 
         $this->arrNodeTempHelper = array();
 
@@ -259,7 +265,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
         //process the hierarchy
         $arrNodes = $this->arrTempNodes[$strNavigationId];
         foreach($arrNodes["subnodes"] as $arrOneNode)
-            $this->searchPageInNavigationTreeHelper(1, $strPagename, $arrOneNode);
+            $this->searchPageInNavigationTreeHelper(1, $strPagename, $arrOneNode, $strCheckId, $strCheckAction);
 
         //process the nodes found
         $intMaxLevel = 0;
@@ -281,7 +287,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
 			    if($strFallbackPage !== false) {
                     $this->arrNodeTempHelper = array();
                     foreach($this->arrTempNodes[$strNavigationId]["subnodes"] as $arrOneNode)
-                        $this->searchPageInNavigationTreeHelper(1, $strFallbackPage, $arrOneNode);
+                        $this->searchPageInNavigationTreeHelper(1, $strFallbackPage, $arrOneNode, $strCheckId, $strCheckAction);
 
                     $intMaxLevel = 0;
                     $objEntry = null;
@@ -309,16 +315,32 @@ class class_module_navigation_portal extends class_portal implements interface_p
      * @param int $intLevel
      * @param string $strPage page to search
      * @param array $arrNodes
+     * @param string $strCheckId systemid to check, only used to get active id stack
+     * @param string $strCheckAction action to check, only used to get active id stack
      */
-    private function searchPageInNavigationTreeHelper($intLevel, $strPage, $arrNodes) {
+    private function searchPageInNavigationTreeHelper($intLevel, $strPage, $arrNodes, $strCheckId = "", $strCheckAction = "") {
         if(!isset($this->arrNodeTempHelper[$intLevel]))
             $this->arrNodeTempHelper[$intLevel] = array();
 
-        if($arrNodes["node"]->getStrPageI() == $strPage)
-            $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+        if($arrNodes["node"]->getStrPageI() == $strPage) {
+
+            //systemid & ation given
+            if(validateSystemid($strCheckId) && $strCheckAction != "") {
+                if($arrNodes["node"]->getStrLinkSystemid() == $strCheckId && $arrNodes["node"]->getStrLinkAction() == $strCheckAction)
+                    $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+            }
+            //only systemid given
+            else if(validateSystemid($strCheckId)) {
+                if($arrNodes["node"]->getStrLinkSystemid() == $strCheckId)
+                    $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+            }
+            //nothing given
+            else
+                $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+        }
 
         foreach($arrNodes["subnodes"] as $arrOneSubnode) {
-            $this->searchPageInNavigationTreeHelper($intLevel+1, $strPage, $arrOneSubnode);
+            $this->searchPageInNavigationTreeHelper($intLevel+1, $strPage, $arrOneSubnode, $strCheckId, $strCheckAction);
         }
     }
 
@@ -412,17 +434,17 @@ class class_module_navigation_portal extends class_portal implements interface_p
 	 * @param bool $bitLast
 	 * @return string
 	 */
-	private function createNavigationPoint($objPointData, $bitActive, $intLevel, $bitFirst= false, $bitLast = false) {
+	private function createNavigationPoint(class_module_navigation_point $objPointData, $bitActive, $intLevel, $bitFirst= false, $bitLast = false) {
 		//and start to create a link and all needed stuff
         $arrTemp = array();
 		$arrTemp["page_intern"] = $objPointData->getStrPageI();
 		$arrTemp["page_extern"] = $objPointData->getStrPageE();
 		$arrTemp["text"] = $objPointData->getStrName();
-		$arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"]);
-		$arrTemp["href"] = getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], "", "", "");
+		$arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"], $objPointData->getStrLinkAction(), "", $objPointData->getStrSystemid());
+		$arrTemp["href"] = getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
 		$arrTemp["target"] = $objPointData->getStrTarget();
 		if($objPointData->getStrImage() != "") {
-			$arrTemp["image"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" alt=\"".$arrTemp["text"]."\"/>");
+			$arrTemp["image"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" alt=\"".$arrTemp["text"]."\"/>", $objPointData->getStrLinkAction(), "", $objPointData->getStrSystemid());
             $arrTemp["image_src"] = $objPointData->getStrImage();
         }
 
