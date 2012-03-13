@@ -377,6 +377,7 @@ HTML;
 	 *
 	 * @return string
      * @permission edit
+     * @autoTestable
 	 */
 	protected function actionMassSync() {
 
@@ -400,7 +401,7 @@ HTML;
 
 
     /**
-     * Creates a form to edit / create a gallery
+     * Creates a form to edit / create a repo
      *
      * @param \class_admin_formgenerator|null $objForm
      *
@@ -582,6 +583,7 @@ HTML;
      *
      * @return string
      * @permissions view
+     * @autoTestable
      */
     protected function actionFolderContentFolderviewMode() {
         $strReturn = "";
@@ -693,6 +695,7 @@ HTML;
      * By default, the methods takes two params into account: folder and form_element
      *
      * @return string
+     * @autoTestable
      */
     protected function actionFolderListFolderview() {
 
@@ -745,6 +748,7 @@ HTML;
      *
      * @return string
      * @permissions edit
+     * @autoTestable
      */
     protected function actionLogbook() {
         $strReturn = "";
@@ -788,6 +792,7 @@ HTML;
      *
      * @return string "" in case of success
      * @permissions edit
+     * @autoTestable
      */
     protected function actionLogbookFlush() {
         $strReturn = "";
