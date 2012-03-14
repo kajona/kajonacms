@@ -181,12 +181,19 @@ class class_module_navigation_tree extends class_model implements interface_mode
         $arrCurLevel = class_module_navigation_point::getDynamicNaviLayer($strParentNode);
 
         if(isset($arrCurLevel["node"]) && isset($arrCurLevel["subnodes"])) {
-            $arrReturn[] = $arrCurLevel;
-        }
-        else {
+            //switch between added nodes and "real" nodes
+            $arrTemp = array();
+            $arrTemp["node"] = $arrCurLevel["node"];
+            $arrTemp["subnodes"] = $arrCurLevel["subnodes"];
 
-            /** @var class_module_navigation_point $objOneNode */
-            foreach($arrCurLevel as $objOneNode) {
+            $arrReturn[] = $arrCurLevel;
+
+        }
+
+        /** @var class_module_navigation_point $objOneNode */
+        foreach($arrCurLevel as $strKey => $objOneNode) {
+
+            if($strKey !== "node" && $strKey !== "subnodes") {
 
                 if($objOneNode->getStatus() == 1 && $objOneNode->rightView()) {
                     $arrTemp = array();

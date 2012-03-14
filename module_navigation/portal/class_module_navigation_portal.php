@@ -325,12 +325,12 @@ class class_module_navigation_portal extends class_portal implements interface_p
         if($arrNodes["node"]->getStrPageI() == $strPage) {
 
             //systemid & ation given
-            if(validateSystemid($strCheckId) && $strCheckAction != "") {
+            if(validateSystemid($arrNodes["node"]->getStrLinkSystemid()) && $arrNodes["node"]->getStrLinkAction() != "") {
                 if($arrNodes["node"]->getStrLinkSystemid() == $strCheckId && $arrNodes["node"]->getStrLinkAction() == $strCheckAction)
                     $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
             }
             //only systemid given
-            else if(validateSystemid($strCheckId)) {
+            else if(validateSystemid($arrNodes["node"]->getStrLinkSystemid())) {
                 if($arrNodes["node"]->getStrLinkSystemid() == $strCheckId)
                     $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
             }
