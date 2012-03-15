@@ -72,6 +72,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
      */
 	private function addPortaleditorCode($strReturn) {
 
+        $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+
         //Add pe code
         $arrPeConfig = array(
                               "pe_module" => "navigation",
@@ -83,10 +85,22 @@ class class_module_navigation_portal extends class_portal implements interface_p
                               "pe_action_delete_params" => ""
                             );
 
+        $arrPeConfigAutoNavigation = array(
+            "pe_module" => "pages",
+            "pe_action_edit" => "list",
+            "pe_action_edit_params" => "&systemid=".$objNavigation->getStrFolderId(),
+            "pe_action_new" => "",
+            "pe_action_new_params" => "",
+            "pe_action_delete" => "",
+            "pe_action_delete_params" => ""
+        );
+
+
         //only add the code, if not auto-generated
-        $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
         if(!validateSystemid($objNavigation->getStrFolderId()))
             $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
+        else
+            $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfigAutoNavigation);
 
 		return $strReturn;
 	}
