@@ -18,42 +18,15 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
     private $objDB;
     private $strContentLanguage;
 
-    private $strMasterID = "";
 
     /**
+     *
      * Does the hard work: installs the module and registers needed constants
      *
+     * @return string
      */
     public function install() {
         $strReturn = "";
-
-        //search the master page
-        $objMaster = class_module_pages_page::getPageByName("master");
-        if($objMaster != null)
-            $this->strMasterID = $objMaster->getSystemid();
-
-        if($this->strMasterID != "") {
-            $strReturn .= "Adding languageswitch to master page\n";
-            $strReturn .= "ID of master page: ".$this->strMasterID."\n";
-
-            if(class_module_pages_element::getElement("languageswitch") != null) {
-                $objPagelement = new class_module_pages_pageelement();
-                $objPagelement->setStrPlaceholder("masterlanguageswitch_languageswitch");
-                $objPagelement->setStrName("masterswitch");
-                $objPagelement->setStrElement("languageswitch");
-                $objPagelement->updateObjectToDb($this->strMasterID);
-                $strElementId = $objPagelement->getSystemid();
-                $strReturn .= "ID of element: ".$strElementId."\n";
-                $strReturn .= "Element created.\n";
-
-                $strReturn .= "Setting languageswitch template...\n";
-                $strQuery = "UPDATE "._dbprefix_."element_universal
-                            SET char1 = ?
-                            WHERE content_id = ? ";
-                $this->objDB->_pQuery($strQuery, array("languageswitch.tpl", $strElementId));
-            }
-         }
-
 
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {

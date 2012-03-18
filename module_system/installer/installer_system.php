@@ -40,46 +40,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 	public function hasPostInstalls() {
-        //check, if not already existing
-	    $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("languageswitch");
-		}
-		catch (class_exception $objEx)  {
-		}
-        if($objElement == null)
-            return true;
-
         return false;
 	}
 
 	public function postInstall() {
-	    //Register the element
-		$strReturn = "Registering languageswitch-element...\n";
-
-        //check, if not already existing
-        $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("languageswitch");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("languageswitch");
-		    $objElement->setStrClassAdmin("class_element_languageswitch_admin.php");
-		    $objElement->setStrClassPortal("class_element_languageswitch_portal.php");
-		    $objElement->setIntCachetime(3600*24*30);
-		    $objElement->setIntRepeat(0);
-            $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
-
-		return $strReturn;
+	    return "";
 	}
 
 
@@ -553,8 +518,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.0.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("languageswitch", "3.4.0.1");
         return $strReturn;
     }
 
@@ -659,8 +622,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.0.2");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("languageswitch", "3.4.0.2");
         return $strReturn;
     }
 
@@ -668,8 +629,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 3.4.0.2 to 3.4.1...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("languageswitch", "3.4.1");
         return $strReturn;
     }
 
@@ -751,8 +710,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("languageswitch", "3.4.9");
         return $strReturn;
     }
 
