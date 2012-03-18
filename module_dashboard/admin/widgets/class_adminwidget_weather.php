@@ -31,8 +31,15 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
      */
     public function getEditForm() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputDropdown("unit", array("f" => $this->getLang("weather_fahrenheit"), "c" => $this->getLang("weather_celsius")),
-                        $this->getLang("weather_unit"), $this->getFieldValue("unit"));
+        $strReturn .= $this->objToolkit->formInputDropdown(
+            "unit",
+            array(
+                "f" => $this->getLang("weather_fahrenheit"),
+                "c" => $this->getLang("weather_celsius")
+            ),
+            $this->getLang("weather_unit"),
+            $this->getFieldValue("unit")
+        );
         $strReturn .= $this->objToolkit->formTextRow($this->getLang("weather_location_finder"));
         $strReturn .= $this->objToolkit->formInputText("location", $this->getLang("weather_location"), $this->getFieldValue("location"));
         return $strReturn;
@@ -64,7 +71,7 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
             $objXmlparser->loadString($strContent);
 
             $arrWeather = $objXmlparser->xmlToArray();
-	            if(isset($arrWeather["rss"])) {
+            if(isset($arrWeather["rss"])) {
 	            if(isset($arrWeather["rss"][0]["channel"][0]["yweather:location"][0]["attributes"]["city"]))
 	                $strReturn .= $this->widgetText($this->getLang("weather_location_string").$arrWeather["rss"][0]["channel"][0]["yweather:location"][0]["attributes"]["city"]);
 
@@ -100,7 +107,7 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
     /**
      * Return a short (!) name of the widget.
      *
-     * @return
+     * @return string
      */
     public function getWidgetName() {
         return $this->getLang("weather_name");

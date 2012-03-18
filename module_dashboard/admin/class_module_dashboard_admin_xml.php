@@ -139,7 +139,11 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 
         $strEntries = "";
         $intRowEntryCount = 0;
-        while( ($objDate->getIntMonth() <= $intCurMonth && $objDate->getIntYear() <= $intCurYear) || ($objDate->getIntMonth() == 12 && $objDate->getIntYear() < $intCurYear) || $intRowEntryCount % 7 != 0 ) {
+        while(
+            ($objDate->getIntMonth() <= $intCurMonth && $objDate->getIntYear() <= $intCurYear) ||
+            ($objDate->getIntMonth() == 12 && $objDate->getIntYear() < $intCurYear) ||
+            $intRowEntryCount % 7 != 0
+        ) {
             $intRowEntryCount++;
 
             $strDate = $objDate->getIntDay();
@@ -189,10 +193,12 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
                 $bitBlocked = true;
 
             $strToday = "";
-            if($objToday->getIntYear() == $objDate->getIntYear() &&
-               $objToday->getIntMonth() == $objDate->getIntMonth() &&
-               $objToday->getIntDay() == $objDate->getIntDay())
-                    $strToday = " calendarDateToday";
+            if(
+                $objToday->getIntYear() == $objDate->getIntYear() &&
+                $objToday->getIntMonth() == $objDate->getIntMonth() &&
+                $objToday->getIntDay() == $objDate->getIntDay()
+            )
+                $strToday = " calendarDateToday";
 
 
             if($objDate->getIntMonth() != $intCurMonth)
@@ -218,13 +224,12 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 
         //build js-arrays
         $strJs = "<script type=\"text/javascript\">";
-            foreach($arrJsHighlights as $strCommonId => $arrEntries) {
-                $strJs .= " var kj_cal_".$strCommonId." = new Array();";
-                foreach($arrEntries as $strOneIdentifier) {
-                    $strJs .= "kj_cal_".$strCommonId.".push('".$strOneIdentifier."');";
-                }
+        foreach($arrJsHighlights as $strCommonId => $arrEntries) {
+            $strJs .= " var kj_cal_".$strCommonId." = new Array();";
+            foreach($arrEntries as $strOneIdentifier) {
+                $strJs .= "kj_cal_".$strCommonId.".push('".$strOneIdentifier."');";
             }
-
+        }
         $strJs .= "</script>";
 
         $strReturn .= $strJs;

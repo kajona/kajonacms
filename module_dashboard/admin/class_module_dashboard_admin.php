@@ -126,17 +126,18 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         }
 
         $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
-                                $objDashboardWidget->getSystemid(), $this->objToolkit->getAdminwidget(
-                                        $strWidgetId,
-                                        $strWidgetName,
-                                        $strGeneratedContent,
-                                        ($objDashboardWidget->rightEdit() ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.gif") : ""),
-                                        ($objDashboardWidget->rightDelete() ?
-                                        		$this->objToolkit->listDeleteButton($objDashboardWidget->getConcreteAdminwidget()->getWidgetName(), $this->getLang("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
-                                                 : ""),
-                                        $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
-                                )
-                             );
+            $objDashboardWidget->getSystemid(),
+            $this->objToolkit->getAdminwidget(
+                $strWidgetId,
+                $strWidgetName,
+                $strGeneratedContent,
+                ($objDashboardWidget->rightEdit() ?
+                    getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.gif") : ""),
+                ($objDashboardWidget->rightDelete() ?
+                    $this->objToolkit->listDeleteButton($objDashboardWidget->getConcreteAdminwidget()->getWidgetName(), $this->getLang("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))  : ""),
+                $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
+            )
+         );
 
         return $strWidgetContent;
 	}
@@ -289,8 +290,8 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
-            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getLang("widget") );
-            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getLang("column") );
+            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getLang("widget"));
+            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getLang("column"));
 
             $strReturn .= $this->objToolkit->formInputHidden("step", "2");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("addWidgetNextStep"));
