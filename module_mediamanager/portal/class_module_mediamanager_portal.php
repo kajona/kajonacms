@@ -342,11 +342,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
     protected function actionRandom() {
         //Fetch all images of the selected category
         $arrRandom = $this->loadFilesRecursive($this->arrElementData["repo_id"]);
-        //Count files
-        $intNumber = count($arrRandom)-1;
-        //and a random number
-        srand ((double)microtime()*1000000);
-        $intRand = rand(0, $intNumber);
+        $intRand = array_rand($arrRandom);
         //set the systemid as current
         if(isset($arrRandom[$intRand]))
             $this->setSystemid($arrRandom[$intRand]);
@@ -398,83 +394,80 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * @return string the url
      */
 	private function generateImage($strImage, $intHeight, $intWidth, $strText = "", $intTextSize = "20", $intTextX = 20, $intTextY= 20, $strFont = "dejavusans.ttf", $strFontColor= "255,255,255", $strOverlayImage = "") {
-	    $strReturn = "No image defined!!";
 		$intWidthNew = 0;
 		$intHeightNew = 0;
 		if(is_file(_realpath_.$strImage)) {
 			//If theres text to put over the image, manipulate image "inline",
 			//otherwise let the work do image.php -> kinda multithreading ;)
-			if($strText == "") {
-				$strReturn = "image.php?image=".urlencode($strImage)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight;
-			}
-			else {
-			    //do everything right now
-			    $arrImageData = getimagesize(_realpath_.$strImage);
-			    //check, if resizing is needed
-			    $bitResize = false;
-			    if($intHeight == 0 && $intWidth == 0) {
-			        $bitResize = false;
-    			}
-    			else if($arrImageData[0] > $intWidth || $arrImageData[1] > $intHeight)	{
-    			    $bitResize = true;
-    				$floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = width, 1 = height
+			if($strText == "")
+				return "image.php?image=".urlencode($strImage)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight;
 
-    				//chose more restricitve values
-    			    $intHeightNew = $intHeight;
-                    $intWidthNew = $intHeight * $floatRelation;
+            //do everything right now
+            $arrImageData = getimagesize(_realpath_.$strImage);
+            //check, if resizing is needed
+            $bitResize = false;
+            if($intHeight == 0 && $intWidth == 0) {
+                $bitResize = false;
+            }
+            else if($arrImageData[0] > $intWidth || $arrImageData[1] > $intHeight)	{
+                $bitResize = true;
+                $floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = width, 1 = height
 
-                    if($intHeight == 0) {
-                        if($intWidth < $arrImageData[0]) {
-                            $intWidthNew = $intWidth;
-                            $intHeightNew = $intWidthNew / $floatRelation;
-                        }
-                        else
-                            $bitResize = false;
-                    }
-                    elseif ($intWidth == 0) {
-                        if($intHeight < $arrImageData[1]) {
-                            $intHeightNew = $intHeight;
-                            $intWidthNew = $intHeightNew * $floatRelation;
-                        }
-                        else
-                            $bitResize = false;
-                    }
-                    elseif ($intHeightNew && $intHeightNew > $intHeight || $intWidthNew > $intWidth) {
-        				$intHeightNew = $intWidth / $floatRelation;
+                //chose more restricitve values
+                $intHeightNew = $intHeight;
+                $intWidthNew = $intHeight * $floatRelation;
+
+                if($intHeight == 0) {
+                    if($intWidth < $arrImageData[0]) {
                         $intWidthNew = $intWidth;
+                        $intHeightNew = $intWidthNew / $floatRelation;
                     }
-                    //round to integers
-                    $intHeightNew = (int)$intHeightNew;
-                    $intWidthNew = (int)$intWidthNew;
-                    //avoid 0-sizes
-                    if($intHeightNew < 1)
-                        $intHeightNew = 1;
-                    if($intWidthNew < 1)
-                        $intWidthNew = 1;
-    			}
+                    else
+                        $bitResize = false;
+                }
+                elseif ($intWidth == 0) {
+                    if($intHeight < $arrImageData[1]) {
+                        $intHeightNew = $intHeight;
+                        $intWidthNew = $intHeightNew * $floatRelation;
+                    }
+                    else
+                        $bitResize = false;
+                }
+                elseif ($intHeightNew && $intHeightNew > $intHeight || $intWidthNew > $intWidth) {
+                    $intHeightNew = $intWidth / $floatRelation;
+                    $intWidthNew = $intWidth;
+                }
+                //round to integers
+                $intHeightNew = (int)$intHeightNew;
+                $intWidthNew = (int)$intWidthNew;
+                //avoid 0-sizes
+                if($intHeightNew < 1)
+                    $intHeightNew = 1;
+                if($intWidthNew < 1)
+                    $intWidthNew = 1;
+            }
 
-				$objImage = new class_image($strText.$strOverlayImage);
-				//Edit Picture
-				if($objImage->preLoadImage($strImage)) {
-					//resize the image
-					if($bitResize)
-					    $objImage->resizeImage($intWidthNew, $intHeightNew, 0, true);
-					//Inlay text
-					if($strText != "")
-						$objImage->imageText($strText, $intTextX, $intTextY, $intTextSize, $strFontColor, $strFont, true);
-                    //overlay image
-                    if($strOverlayImage != "")
-                        $objImage->overlayImage($strOverlayImage, $intTextX, $intTextY, true);
+            $objImage = new class_image($strText.$strOverlayImage);
+            //Edit Picture
+            if($objImage->preLoadImage($strImage)) {
+                //resize the image
+                if($bitResize)
+                    $objImage->resizeImage($intWidthNew, $intHeightNew, 0, true);
+                //Inlay text
+                if($strText != "")
+                    $objImage->imageText($strText, $intTextX, $intTextY, $intTextSize, $strFontColor, $strFont, true);
+                //overlay image
+                if($strOverlayImage != "")
+                    $objImage->overlayImage($strOverlayImage, $intTextX, $intTextY, true);
 
-					$objImage->saveImage("", true);
-					$strImageName = $objImage->getCachename();
-					$strReturn = "_webpath_"._images_cachepath_.$strImageName;
-					//and release memory
-					$objImage->releaseResources();
-				}
-			    else
-				    $strReturn = "Error manipulating image!";
-			}
+                $objImage->saveImage("", true);
+                $strImageName = $objImage->getCachename();
+                $strReturn = "_webpath_"._images_cachepath_.$strImageName;
+                //and release memory
+                $objImage->releaseResources();
+            }
+            else
+                $strReturn = "Error manipulating image!";
 		}
 		else
 			$strReturn = "_webpath_".$strImage;
@@ -561,23 +554,13 @@ class class_module_mediamanager_portal extends class_portal implements interface
 		}
 
 		//make array-keys numeric
-		$arrTemp = $arrImagesLevel;
-		$arrImagesLevel = array();
-		foreach ($arrTemp as $objOneElement)
-		    $arrImagesLevel[] = $objOneElement;
-		//Search the previous, current and next image
-		$bitHit = false;
-		$intKeyHit = 0;
-		foreach ($arrImagesLevel as $intKey => $objOneImage) {
-			if(!$bitHit) {
-				if($objOneImage->getSystemid() == $this->getSystemid()) {
-					$bitHit = true;
-					$intKeyHit = $intKey;
-				}
-			}
-			else {
-				break;
-			}
+		$arrImagesLevel = array_values($arrImagesLevel);
+		//Search the current image
+        $intKeyHit = 0;
+		foreach ($arrImagesLevel as $intKeyHit => $objOneImage) {
+            if($objOneImage->getSystemid() == $this->getSystemid()) {
+                break;
+            }
 		}
 
 		$arrReturn["forward_1"] = (isset($arrImagesLevel[$intKeyHit+1]) ? $arrImagesLevel[$intKeyHit+1]->getSystemid() : "");
@@ -603,7 +586,6 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
         //check if requested systemid is part of the elements tree
         $objData = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        $objGallery = new class_module_mediamanager_repo($this->arrElementData["repo_id"]);
 
         while(!$objData instanceof class_module_mediamanager_repo)
             $objData = class_objectfactory::getInstance()->getObject($objData->getPrevId());
