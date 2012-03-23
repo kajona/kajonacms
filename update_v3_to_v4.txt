@@ -46,6 +46,10 @@ Removed Constants:
 - _adminpath_
 - _skinpath_
 
+- _module_filesystem_id_
+- _rechte_modul_id_
+- _login_modul_id_
+
 Event-Handling
 - statusChanged events are no longer triggered by class_root::additionalCallsOnStatuschange / class_model::doAdditionalActionsOnStatusChange()
   instead, model-objects should implement interface_statuschanged_listener
