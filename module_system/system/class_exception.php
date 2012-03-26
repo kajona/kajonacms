@@ -105,6 +105,10 @@ class class_exception extends Exception {
             $objMail->setText($strMailtext);
             $objMail->addTo(_system_admin_email_);
             $objMail->sendMail();
+
+
+            $objMessageHandler = new class_module_messaging_messagehandler();
+            $objMessageHandler->sendMessage($strMailtext, new class_module_user_group(_admins_group_id_), new class_messageprovider_exceptions());
         }
 
         if($this->intErrorlevel == class_exception::$level_FATALERROR) {

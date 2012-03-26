@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9");
+        $this->setArrModuleEntry("version", "3.4.9.1");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
         $this->setArrModuleEntry("name", "system");
         $this->setArrModuleEntry("name_lang", "System Kernel");
@@ -304,6 +304,32 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";
 
 
+        //messages
+        $strReturn .= "Installing table messages...\n";
+
+        $arrFields = array();
+        $arrFields["message_id"]                    = array("char20", false);
+        $arrFields["message_title"]                 = array("char254", true);
+        $arrFields["message_body"]                  = array("text", true);
+        $arrFields["message_read"]                  = array("int", true);
+        $arrFields["message_user"]                  = array("char20", true);
+        $arrFields["message_provider"]              = array("char254", true);
+        $arrFields["message_internalidentifier"]    = array("char254", true);
+
+        if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
+            $strReturn .= "An error occured! ...\n";
+
+        $arrFields = array();
+        $arrFields["config_id"]                    = array("char20", false);
+        $arrFields["config_provider"]              = array("char254", true);
+        $arrFields["config_user"]                  = array("char20", true);
+        $arrFields["config_enabled"]               = array("int", true);
+        $arrFields["config_bymail"]                = array("int", true);
+
+        if(!$this->objDB->createTable("messages_cfg", $arrFields, array("config_id")))
+            $strReturn .= "An error occured! ...\n";
+
+
 		//Now we have to register module by module
 
 		//The Systemkernel
@@ -314,6 +340,8 @@ class class_installer_system extends class_installer_base implements interface_i
 		$this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->arrModule["version"], true );
         //languages
         $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_module_languages_admin.php", $this->arrModule["version"] , true);
+        //messaging
+        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->arrModule["version"] , true);
 
 
 
@@ -501,6 +529,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.1.1") {
             $strReturn .= $this->update_341_349();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_3491();
             $this->objDB->flushQueryCache();
         }
 
@@ -713,6 +747,43 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
 
+
+    private function update_349_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
+
+
+        //messages
+        $strReturn .= "Installing table messages...\n";
+
+        $arrFields = array();
+        $arrFields["message_id"]                    = array("char20", false);
+        $arrFields["message_title"]                 = array("char254", true);
+        $arrFields["message_body"]                  = array("text", true);
+        $arrFields["message_read"]                  = array("int", true);
+        $arrFields["message_user"]                  = array("char20", true);
+        $arrFields["message_provider"]              = array("char254", true);
+        $arrFields["message_internalidentifier"]    = array("char254", true);
+
+        if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
+            $strReturn .= "An error occured! ...\n";
+
+        $arrFields = array();
+        $arrFields["config_id"]                    = array("char20", false);
+        $arrFields["config_provider"]              = array("char254", true);
+        $arrFields["config_user"]                  = array("char20", true);
+        $arrFields["config_enabled"]               = array("int", true);
+        $arrFields["config_bymail"]                = array("int", true);
+
+        if(!$this->objDB->createTable("messages_cfg", $arrFields, array("config_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Registering module...\n";
+        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->arrModule["version"] , true);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.1");
+        return $strReturn;
+    }
 
 
 

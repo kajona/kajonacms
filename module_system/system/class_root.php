@@ -252,9 +252,11 @@ abstract class class_root {
                 $strWhere .= "AND system_id=".$strOneColumn." ";
 
             $strQuery = "SELECT *
-                          FROM ".$this->objDB->encloseTableName(_dbprefix_."system").",
+                          FROM "._dbprefix_."system_right,
                                ".implode(", ", array_keys($arrTables))." ,
-                               "._dbprefix_."system_right
+                               ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                          WHERE system_id = right_id
                             ".$strWhere."
                            AND system_id = ? ";

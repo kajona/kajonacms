@@ -289,6 +289,7 @@ $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
 
+$lang["messageprovider_exceptions_name"] = "System-Exceptions";
 
 $lang["installer_finish_hints_update"]    = "<b>Attention: If you updated from a v3 system, please make sure to run the post-update scripts as soon as all modules have been upgraded.</b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Run post-update</a><<br /><br />";
 

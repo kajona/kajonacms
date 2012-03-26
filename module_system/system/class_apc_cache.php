@@ -32,7 +32,7 @@ class class_apc_cache  {
 
     private $strSystemKey = "";
 
-    function __construct() {
+    private function __construct() {
         $this->bitAPCInstalled = function_exists("apc_store") && function_exists("apc_fetch");
         $this->strSystemKey = class_module_system_module::getModuleByName("system")->getSystemid();
     }

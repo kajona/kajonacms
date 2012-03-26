@@ -13,3 +13,5 @@
 
     define( "_languages_modul_id_",                     65);
 
+    define( "_messaging_module_id_",                    135);
+
