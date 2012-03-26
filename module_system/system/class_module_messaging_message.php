@@ -92,10 +92,13 @@ class class_module_messaging_message extends class_model implements interface_mo
         $this->updateDateRecord($this->getSystemid(), $this->getObjDate());
         $bitReturn = parent::updateStateToDb();
 
-        $strHandler = $this->getStrMessageProvider();
-        /** @var $objHandler interface_messageprovider */
-        $objHandler = new $strHandler();
-        $objHandler->onSetRead($this);
+        if($this->bitOnReadTrigger && $this->getStrMessageProvider() != "") {
+            $this->bitOnReadTrigger = false;
+            $strHandler = $this->getStrMessageProvider();
+            /** @var $objHandler interface_messageprovider */
+            $objHandler = new $strHandler();
+            $objHandler->onSetRead($this);
+        }
 
         return $bitReturn;
     }
