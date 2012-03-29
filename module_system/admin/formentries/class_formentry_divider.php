@@ -20,7 +20,7 @@ class class_formentry_divider extends class_formentry_base implements interface_
 
         //set the default validator
         $this->setObjValidator(new class_dummy_validator());
-   }
+    }
 
     /**
      * Renders the field itself.
