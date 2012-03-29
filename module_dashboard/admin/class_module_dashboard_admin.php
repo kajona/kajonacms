@@ -134,10 +134,14 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                 ($objDashboardWidget->rightEdit() ?
                     getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.gif") : ""),
                 ($objDashboardWidget->rightDelete() ?
-                    $this->objToolkit->listDeleteButton($objDashboardWidget->getConcreteAdminwidget()->getWidgetName(), $this->getLang("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))  : ""),
+                    $this->objToolkit->listDeleteButton(
+                        $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
+                        $this->getLang("widgetDeleteQuestion"),
+                        getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
+                    )  : ""),
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
             )
-         );
+        );
 
         return $strWidgetContent;
 	}

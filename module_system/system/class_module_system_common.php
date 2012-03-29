@@ -340,7 +340,7 @@ class class_module_system_common extends class_model implements interface_model 
 			$arrReturn["anzahltabellen"] = $intNumber;
 			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
 			$arrReturn["groessedaten"] = bytesToString($intSizeData);
-			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
+			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 
 		case "mysqli":
@@ -357,7 +357,7 @@ class class_module_system_common extends class_model implements interface_model 
 			$arrReturn["anzahltabellen"] = $intNumber;
 			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
 			$arrReturn["groessedaten"] = bytesToString($intSizeData);
-			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
+			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 
 		case "postgres":
@@ -374,7 +374,7 @@ class class_module_system_common extends class_model implements interface_model 
 			$arrReturn["anzahltabellen"] = $intNumber;
 			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
 			$arrReturn["groessedaten"] = bytesToString($intSizeData);
-			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
+			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 
 		default:
