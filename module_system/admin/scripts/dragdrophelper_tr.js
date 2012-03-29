@@ -29,6 +29,8 @@ KAJONA.admin.dragndroplist = {};
 	//Basic functions
 	KAJONA.admin.dragndroplist.DDApp = {
 
+        targetModule: null,
+
     	init: function() {
 		   //iterate over all lists available
 		   for(var l=0; l<arrayTableIds.length; l++) {
@@ -154,7 +156,7 @@ KAJONA.admin.dragndroplist = {};
 	        //save new pos to backend?
 			var posAfterMove = KAJONA.admin.dragndroplist.DDApp.getCurrentPos(this.id);
 			if(posAfterMove != posBeforeMove) {
-	        	KAJONA.admin.ajax.setAbsolutePosition(this.id, posAfterMove, KAJONA.admin.dragndroplist.DDApp.getCurrentList(this.id));
+                KAJONA.admin.ajax.setAbsolutePosition(this.id, posAfterMove, KAJONA.admin.dragndroplist.DDApp.getCurrentList(this.id), null, KAJONA.admin.dragndroplist.DDApp.targetModule);
 			}
 	    },
 

@@ -738,12 +738,16 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strListId
      * @param bool $bitOnlySameTable dropping only allowed within the same table or also in other tables
+     * @param string $strTargetModule
+     *
      * @return string
      */
-    public function dragableListHeader($strListId, $bitOnlySameTable = false) {
+    public function dragableListHeader($strListId, $bitOnlySameTable = false, $strTargetModule = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_header");
-        return $this->objTemplate->fillTemplate(array("listid" => $strListId, "sameTable" => $bitOnlySameTable? "true" : "false"), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array("listid" => $strListId, "sameTable" => $bitOnlySameTable? "true" : "false", "targetModule" => $strTargetModule), $strTemplateID);
     }
+
+
 
     /**
      * Returns the code to finish the opened list

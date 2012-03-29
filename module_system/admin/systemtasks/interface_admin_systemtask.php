@@ -34,7 +34,7 @@ interface interface_admin_systemtask {
 	 * Starts the execution of the task.
      * The return value can have different meanings. If you return a number between 0 and 100,
      * the system generates a percent-beam indicating the progress. In this case, make sure to set the
-     * reload url via $thjis->setStrReloadParam().
+     * reload url via $this->setStrReloadParam().
      * If you return anything different than a number between 0 and 100, the returned text is
      * rendered as given.
 	 *

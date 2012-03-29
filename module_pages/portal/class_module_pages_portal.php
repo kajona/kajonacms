@@ -308,7 +308,10 @@ class class_module_pages_portal extends class_portal implements interface_portal
                                 $arrPeNewButtons[$strPeNewPlaceholder] = "";
 
                             $strElementReadableName = $objPeNewElement->getStrReadableName() != $objPeNewElement->getStrName() ? ($objPeNewElement->getStrReadableName()." (".$objPeNewElement->getStrName().")") : $objPeNewElement->getStrName();
-                            $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+                            if(uniStripos($strArrayKey, "master") !== false)
+                                $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+                            else
+                                $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
 
                             $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
 
@@ -324,7 +327,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 if(!isset($arrTemplate[$strPlaceholderName]))
                     $arrTemplate[$strPlaceholderName] = "";
 
-                $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);
+                if($strNewButtons != "")
+                    $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);
                 $arrTemplate[$strPlaceholderName] .= $strNewButtons;
             }
         }
@@ -436,8 +440,14 @@ class class_module_pages_portal extends class_portal implements interface_portal
         $strHeader .= "-->\n";
 
         $intBodyPos = uniStripos($strPageContent, "</head>");
+        $intPosXml = uniStripos($strPageContent, "<?xml");
         if($intBodyPos !== false) {
             $intBodyPos += 0;
+            $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
+        }
+        else if($intPosXml !== false) {
+            $intBodyPos = uniStripos($strPageContent, "?>");
+            $intBodyPos += 2;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
         }
         else {

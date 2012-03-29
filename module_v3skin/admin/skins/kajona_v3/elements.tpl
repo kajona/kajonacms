@@ -28,6 +28,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
 	KAJONA.admin.loader.loadDragNDropBase(function () {
 		KAJONA.admin.loader.loadDragNDropBase(function() {
             KAJONA.admin.dragndroplist.DDApp.init();
+            KAJONA.admin.dragndroplist.DDApp.targetModule = '%%targetModule%%';
         }, "dragdrophelper_tr.js");
 	});
 	if(arrayTableIds == null) {

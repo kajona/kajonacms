@@ -440,21 +440,22 @@ abstract class class_element_portal extends class_portal {
      */
     public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, $strElement, $strElementName) {
         $strReturn = "";
-        //switch the text-language temporary
-        $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
+        if(class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
+            //switch the text-language temporary
+            $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
+            class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
 
-        //fetch the language to set the correct admin-lang
-        $objLanguages = new class_module_languages_language();
-        $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
+            //fetch the language to set the correct admin-lang
+            $objLanguages = new class_module_languages_language();
+            $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
-        $strElementHref = getLinkAdminHref("pages_content", "newElement", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");
+            $strElementHref = getLinkAdminHref("pages_content", "newElement", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");
 
-        $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref);
+            $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref);
 
-        //reset the portal texts language
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-
+            //reset the portal texts language
+            class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
+        }
         return $strReturn;
     }
 

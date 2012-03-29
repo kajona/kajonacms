@@ -1018,9 +1018,13 @@ KAJONA.admin.ajax = {
                 'POST', postTarget, objCallback, postBody);
 	},
 
-	setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList, objCallback) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition';
-		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos;
+    setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList, objCallback, strTargetModule) {
+        if(strTargetModule == null || strTargetModule == "")
+            strTargetModule = "system";
+
+        var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+strTargetModule+'&action=setAbsolutePosition';
+        var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos;
+
 
         if(typeof objCallback == 'undefined' || objCallback == null)
             objCallback = KAJONA.admin.ajax.regularCallback;

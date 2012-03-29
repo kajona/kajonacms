@@ -621,6 +621,26 @@ function hex2rgb($color){
     return $rgb;
 }
 
+/**
+ * Converts an array of R,G,B values to its matching hex-pendant
+ * @param $arrRGB
+ * @return string
+ */
+function rgb2hex($arrRGB) {
+    $strHex = "";
+    foreach ($arrRGB as $intColor) {
+        if($intColor > 255)
+            $intColor = 255;
+
+        $strHexVal = dechex($intColor);
+        if(uniStrlen($strHexVal) == 1)
+            $strHexVal = '0'.$strHexVal;
+        $strHex .= $strHexVal;
+    }
+    return  "#".$strHex;
+}
+
+
 
 /**
  * Creates a Link for the portal

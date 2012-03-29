@@ -116,10 +116,12 @@ class class_date {
      * PHPs' time() returns 32Bit ints, too.
      *
      * @param int $intTimestamp
+     * @return \class_date
      */
     public function setTimeInOldStyle($intTimestamp) {
         //parse timestamp in order to get schema.
         $this->longTimestamp = date($this->strParseFormat, (int)$intTimestamp);
+        return $this;
     }
 
     /**
@@ -154,9 +156,11 @@ class class_date {
      * Includes the handling of month / year shifts.
      *
      * @since 3.4
+     * @return \class_date
      */
     public function setPreviousDay() {
         $this->setTimeInOldStyle($this->getTimeInOldStyle()-24*3600);
+        return $this;
     }
 
     /**
@@ -164,15 +168,18 @@ class class_date {
      * Includes the handling of month / year shifts.
      *
      * @since 3.4
+     * @return \class_date
      */
     public function setNextDay() {
         $this->setTimeInOldStyle($this->getTimeInOldStyle()+24*3600);
+        return $this;
     }
 
     /**
      * Swap the year part
      *
      * @param int $intYear
+     * @return \class_date
      */
     public function setIntYear($intYear) {
         if(uniStrlen($intYear) == 2)
@@ -182,12 +189,14 @@ class class_date {
 
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
+        return $this;
     }
 
     /**
      * Swap the month part
      *
-     * @param int $intYear
+     * @param int $intMonth
+     * @return \class_date
      */
     public function setIntMonth($intMonth) {
         if($intMonth < 1 || $intMonth > 12)
@@ -195,12 +204,14 @@ class class_date {
 
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
+        return $this;
     }
 
     /**
      * Swap the day part
      *
-     * @param int $intYear
+     * @param int $intDay
+     * @return \class_date
      */
     public function setIntDay($intDay) {
         if($intDay < 1 || $intDay > 31)
@@ -208,12 +219,16 @@ class class_date {
 
         $strDay = sprintf("%02s", $intDay);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strDay, 6, 2);
+        return $this;
     }
 
     /**
      * Swap the hour part
      *
-     * @param int $intYear
+     * @param int $intHour
+     * @param bool $bitForce
+     *
+     * @return \class_date
      */
     public function setIntHour($intHour, $bitForce = false) {
         if(!$bitForce && ($intHour < 0 || $intHour > 23))
@@ -221,12 +236,16 @@ class class_date {
 
         $strHour = sprintf("%02s", $intHour);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strHour, 8, 2);
+        return $this;
     }
 
     /**
      * Swap the minutes part
      *
-     * @param int $intYear
+     * @param int $intMin
+     * @param bool $bitForce
+     *
+     * @return \class_date
      */
     public function setIntMin($intMin, $bitForce = false) {
         if(!$bitForce && ($intMin < 0 || $intMin > 59))
@@ -234,12 +253,16 @@ class class_date {
 
         $strMin = sprintf("%02s", $intMin);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMin, 10, 2);
+        return $this;
     }
 
     /**
      * Swap the seconds part
      *
-     * @param int $intYear
+     * @param int $intSec
+     * @param bool $bitForce
+     *
+     * @return \class_date
      */
     public function setIntSec($intSec, $bitForce = false) {
         if(!$bitForce && ($intSec < 0 || $intSec > 59))
@@ -247,6 +270,7 @@ class class_date {
 
         $strSec = sprintf("%02s", $intSec);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strSec, 12, 2);
+        return $this;
     }
 
     /**
@@ -316,10 +340,13 @@ class class_date {
      * Set the current timestamp
      *
      * @param long $longTimestamp
+     * @return \class_date
      */
     public function setLongTimestamp($longTimestamp) {
         if(uniEreg("([0-9]){14}", $longTimestamp))
             $this->longTimestamp = $longTimestamp;
+
+        return $this;
     }
 
 
