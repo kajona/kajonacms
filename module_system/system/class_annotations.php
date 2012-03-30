@@ -19,6 +19,16 @@
  */
 class class_annotations {
 
+    private static $arrAnnotationsCache = array();
+
+    private static $STR_METHOD_CACHE = "methods";
+    private static $STR_HASMETHOD_CACHE = "hasmethods";
+
+    private static $STR_PROPERTIES_CACHE = "properties";
+    private static $STR_HASPROPERTY_CACHE = "hasproperty";
+
+    private $arrCurrentCache;
+
     /**
      *
      * @var ReflectionClass
@@ -38,6 +48,10 @@ class class_annotations {
         if(!class_exists($strSourceClass))
             throw new class_exception("class ".$strSourceClass." not found", class_exception::$level_ERROR);
 
+        if(!isset(self::$arrAnnotationsCache[$strSourceClass]))
+            self::$arrAnnotationsCache[$strSourceClass] = array(self::$STR_METHOD_CACHE, self::$STR_PROPERTIES_CACHE, self::$STR_HASMETHOD_CACHE, self::$STR_HASPROPERTY_CACHE);
+
+        $this->arrCurrentCache = &self::$arrAnnotationsCache[$strSourceClass];
         $this->objReflectionClass = new ReflectionClass($strSourceClass);
 	}
 
@@ -50,8 +64,14 @@ class class_annotations {
      * @return bool
      */
     public function hasMethodAnnotation($strMethodName, $strAnnotation) {
+        if(isset($this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation];
+
         $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
-        return $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        $bitReturn = $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+
+        $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
+        return $bitReturn;
     }
 
 
@@ -64,8 +84,14 @@ class class_annotations {
      * @return bool
      */
     public function hasPropertyAnnotation($strPropertyName, $strAnnotation) {
+        if(isset($this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation];
+
         $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
-        return $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        $bitReturn = $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+
+        $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
+        return $bitReturn;
     }
 
     /**
@@ -80,16 +106,24 @@ class class_annotations {
      *
      * @param string $strMethodName
      * @param string $strAnnotation
-     * @return string|false
+     * @return string|bool
      */
     public function getMethodAnnotationValue($strMethodName, $strAnnotation) {
+
+        if(isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation];
+
         $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
         $strLine = $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
-        if($strLine === false)
+        if($strLine === false) {
+            $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation] = false;
             return false;
+        }
 
         //strip the annotation parts
-        return trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
+        $strReturn = trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
+        $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation] = $strReturn;
+        return $strReturn;
     }
 
     /**
@@ -100,6 +134,10 @@ class class_annotations {
      * @return array ["propertyname" => "annotationvalue"]
      */
     public function getPropertiesWithAnnotation($strAnnotation) {
+
+        if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation];
+
         $arrProperties = $this->objReflectionClass->getProperties();
 
         $arrReturn = array();
@@ -111,6 +149,7 @@ class class_annotations {
             }
         }
 
+        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
         return $arrReturn;
     }
 
@@ -124,8 +163,9 @@ class class_annotations {
     private function searchAnnotationInDoc($strDoc, $strAnnotation) {
         $arrLines = explode("\n", $strDoc);
         foreach($arrLines as $strOneLine) {
-            if(uniStrpos($strOneLine, $strAnnotation) !== false)
+            if(uniStrpos($strOneLine, $strAnnotation) !== false) {
                 return $strOneLine;
+            }
         }
 
         return false;
