@@ -57,13 +57,6 @@ abstract class class_root {
     //--- fields to be synchronized with the database ---
 
     /**
-     * Boolean indicator to trigger the loading of the current records details.
-     * If not accessed, they won't be loaded: lazy loading.
-     * @var bool
-     */
-    private $bitDetailsLoaded = false;
-
-    /**
      * The records current systemid
      * @var string
      */
@@ -75,7 +68,7 @@ abstract class class_root {
     private $strPrevId = -1;
     /**
      * The old prev-id, used to track hierarchical changes -> requires a rebuild of the rights-table
-     * @var type
+     * @var string
      */
     private $strOldPrevId = -1;
     /**
@@ -95,7 +88,7 @@ abstract class class_root {
     private $strOwner;
     /**
      * The id of the user last who did the last changes to the current record
-     * @var type
+     * @var string
      */
     private $strLmUser;
     /**
@@ -168,19 +161,10 @@ abstract class class_root {
     /**
      * Init the current record with the system-fields
      * @todo: add dates?
-     * @param string $strSystemid
      */
-    private final function internalInit($strSystemid) {
+    private final function internalInit() {
 
-        if($this->bitDetailsLoaded === true)
-            return;
-
-
-        if(validateSystemid($strSystemid)) {
-
-            $this->bitDetailsLoaded = true;
-
-            $this->strSystemid = $strSystemid;
+        if(validateSystemid($this->getSystemid())) {
 
             if(is_array($this->arrInitRow)) {
                 $arrRow = $this->arrInitRow;
@@ -189,7 +173,7 @@ abstract class class_root {
                 $strQuery = "SELECT *
                                FROM "._dbprefix_."system
                               WHERE system_id = ? ";
-                $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+                $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
             }
 
 
@@ -210,7 +194,6 @@ abstract class class_root {
 
                 $this->strOldPrevId = $this->strPrevId;
 
-
             }
         }
     }
@@ -219,10 +202,10 @@ abstract class class_root {
      * Forces to reinit the object from the database
      *
      * @see interface_model::initObject()
+     * @deprecated use initObject() instead
      */
     public function loadDataFromDb() {
-        $this->initObjectInternal();
-        $this->internalInit($this->getStrSystemid());
+        $this->initObject();
     }
 
     /**
@@ -231,6 +214,8 @@ abstract class class_root {
      */
     public final function initObject() {
         $this->initObjectInternal();
+        $this->internalInit();
+
     }
 
     /**
@@ -281,26 +266,6 @@ abstract class class_root {
                     call_user_func(array($this, $strSetter), $arrRow[$strColumn]);
             }
 
-
-            /*
-            //try to set all values
-            $strTable = array_values($arrTables);
-            $strTable = $strTable[0];
-            $strPrefix = uniSubstr($strTable, 0, uniStrrpos($strTable, "_"));
-
-            foreach($arrRow as $strKey => $strValue) {
-                if(!in_array($strKey, $arrTables) &&  uniStrpos($strKey, $strPrefix) !== false) {
-                    //try to get the properties' name
-                    $strPropertyName = uniSubstr($strKey, uniStrrpos($strKey, "_")+1);
-
-                    $strSetter = class_objectfactory::getSetter($this, $strPropertyName);
-
-                    if($strSetter !== null)
-                        call_user_func(array($this, $strSetter), $strValue);
-
-                }
-            }
-            */
         }
     }
 
@@ -711,7 +676,7 @@ abstract class class_root {
 		class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
 
         $this->objDB->flushQueryCache();
-        $this->internalInit($this->getSystemid());
+        $this->internalInit();
 
 		return $strSystemId;
 
@@ -987,7 +952,7 @@ abstract class class_root {
 
         if($strIdToShift == $this->getSystemid()) {
             $this->objDB->flushQueryCache();
-            $this->internalInit($this->getSystemid());
+            $this->internalInit();
         }
 	}
 
@@ -1092,7 +1057,7 @@ abstract class class_root {
 
         if($strIdToSet == $this->getSystemid()) {
             $this->objDB->flushQueryCache();
-            $this->internalInit($this->getSystemid());
+            $this->internalInit();
         }
 	}
 
@@ -1271,7 +1236,7 @@ abstract class class_root {
 	/**
 	 * Returns the current Text-Object Instance
 	 *
-	 * @return obj
+	 * @return class_lang
 	 */
 	protected function getObjLang() {
 	    return $this->objLang;
@@ -1342,9 +1307,6 @@ abstract class class_root {
 	 */
 	public function setSystemid($strID) {
 		if(validateSystemid($strID)) {
-            if($this->strSystemid != $strID)
-                $this->bitDetailsLoaded = false;
-
 			$this->strSystemid = $strID;
 			return true;
 		}
@@ -1357,7 +1319,6 @@ abstract class class_root {
      */
     protected function unsetSystemid() {
         $this->strSystemid = "";
-        $this->bitDetailsLoaded = false;
     }
 
 	/**
@@ -1375,9 +1336,6 @@ abstract class class_root {
 
     public function setStrSystemid($strSystemid) {
         if(validateSystemid($strSystemid)) {
-            if($this->strSystemid != $strSystemid)
-                $this->bitDetailsLoaded = false;
-
             $this->strSystemid = $strSystemid;
         }
     }
@@ -1389,7 +1347,6 @@ abstract class class_root {
 	 * @return string
 	 */
 	public function getPrevId($strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1398,17 +1355,14 @@ abstract class class_root {
 
 
     public function getStrPrevId() {
-        $this->internalInit($this->strSystemid);
         return $this->strPrevId;
     }
 
     public function getStrOldPrevId() {
-        $this->internalInit($this->strSystemid);
         return $this->strOldPrevId;
     }
 
     public function setStrPrevId($strPrevId) {
-        $this->internalInit($this->strSystemid);
         $this->strPrevId = $strPrevId;
     }
 
@@ -1419,7 +1373,6 @@ abstract class class_root {
 	 * @return int
 	 */
 	public function getRecordModuleNr($strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1427,22 +1380,18 @@ abstract class class_root {
 	}
 
     public function getIntModuleNr() {
-        $this->internalInit($this->strSystemid);
         return $this->intModuleNr;
     }
 
     public function setIntModuleNr($intModuleNr) {
-        $this->internalInit($this->strSystemid);
         $this->intModuleNr = $intModuleNr;
     }
 
     public function getIntSort() {
-        $this->internalInit($this->strSystemid);
         return $this->intSort;
     }
 
     public function setIntSort($intSort) {
-        $this->internalInit($this->strSystemid);
         $this->intSort = $intSort;
     }
 
@@ -1465,58 +1414,47 @@ abstract class class_root {
 	}
 
     public function getStrLmUser() {
-        $this->internalInit($this->strSystemid);
         return $this->strLmUser;
     }
 
     /**
 	 * Returns the id of the user who last edited the record
 	 *
-	 * @param string $strSystemid
 	 * @return string
 	 */
 	public function getLastEditUserId() {
-        $this->internalInit($this->strSystemid);
         return $this->getStrLmUser();
 	}
 
     public function setStrLmUser($strLmUser) {
-        $this->internalInit($this->strSystemid);
         $this->strLmUser = $strLmUser;
     }
 
     public function getIntLmTime() {
-        $this->internalInit($this->strSystemid);
         return $this->intLmTime;
     }
 
     public function setIntLmTime($strLmTime) {
-        $this->internalInit($this->strSystemid);
         $this->intLmTime = $strLmTime;
     }
 
     public function getStrLockId() {
-        $this->internalInit($this->strSystemid);
         return $this->strLockId;
     }
 
     public function setStrLockId($strLockId) {
-        $this->internalInit($this->strSystemid);
         $this->strLockId = $strLockId;
     }
 
     public function getIntLockTime() {
-        $this->internalInit($this->strSystemid);
         return $this->intLockTime;
     }
 
     public function setIntLockTime($intLockTime) {
-        $this->internalInit($this->strSystemid);
         $this->intLockTime = $intLockTime;
     }
 
     public function getLongCreateDate() {
-        $this->internalInit($this->strSystemid);
         return $this->longCreateDate;
     }
 
@@ -1527,7 +1465,6 @@ abstract class class_root {
      * @return class_date
      */
     public function getObjCreateDate($strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1535,17 +1472,14 @@ abstract class class_root {
     }
 
     public function setLongCreateDate($longCreateDate) {
-        $this->internalInit($this->strSystemid);
         $this->longCreateDate = $longCreateDate;
     }
 
     public function getStrOwner() {
-        $this->internalInit($this->strSystemid);
         return $this->strOwner;
     }
 
     public function setStrOwner($strOwner) {
-        $this->internalInit($this->strSystemid);
         $this->strOwner = $strOwner;
     }
 
@@ -1556,7 +1490,6 @@ abstract class class_root {
      * @return string
      */
     public final function getOwnerId($strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1571,7 +1504,6 @@ abstract class class_root {
      * @return bool
      */
     public final function setOwnerId($strOwner, $strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1580,7 +1512,6 @@ abstract class class_root {
     }
 
     public function getIntRecordStatus() {
-        $this->internalInit($this->strSystemid);
         return $this->intRecordStatus;
     }
 
@@ -1591,7 +1522,6 @@ abstract class class_root {
 	 * @return int
 	 */
 	public function getStatus($strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1608,7 +1538,9 @@ abstract class class_root {
      * @todo: systemid param handling
      */
 	public function setStatus($strSystemid = "", $intStatus = false) {
-        $this->internalInit($this->strSystemid);
+
+        if($strSystemid != "")
+            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         $intNewStatus = $intStatus;
         if($intStatus === false) {
@@ -1633,7 +1565,6 @@ abstract class class_root {
      * @return bool
      */
     public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
-        $this->internalInit($this->strSystemid);
         $intPrevStatus = $this->intRecordStatus;
         $this->intRecordStatus = $intRecordStatus;
 
@@ -1657,7 +1588,6 @@ abstract class class_root {
 	 * @return string
 	 */
 	public function getRecordComment($strSystemid = "") {
-        $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1672,18 +1602,15 @@ abstract class class_root {
      * @deprecated
 	 */
 	public function setRecordComment($strNewComment) {
-        $this->internalInit($this->strSystemid);
         $this->setStrRecordComment($strNewComment);
         return $this->updateSystemrecord();
 	}
 
     public function getStrRecordComment() {
-        $this->internalInit($this->strSystemid);
         return $this->strRecordComment;
     }
 
     public function setStrRecordComment($strRecordComment) {
-        $this->internalInit($this->strSystemid);
         if(uniStrlen($strRecordComment) > 254)
             $strRecordComment = uniStrTrim($strRecordComment, 250);
         $this->strRecordComment = $strRecordComment;
@@ -1712,7 +1639,6 @@ abstract class class_root {
      */
 	public function setParam($strKey, $mixedValue) {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
-//		$this->arrParams[$strKey] = $mixedValue;
 	}
 
 	/**
@@ -1723,10 +1649,6 @@ abstract class class_root {
 	 */
 	public function getParam($strKey) {
         return class_carrier::getInstance()->getParam($strKey);
-//		if(isset($this->arrParams[$strKey]))
-//			return $this->arrParams[$strKey];
-//		else
-//			return "";
 	}
 
 	/**
@@ -1736,7 +1658,6 @@ abstract class class_root {
 	 */
 	public final function getAllParams() {
         return class_carrier::getAllParams();
-//	    return $this->arrParams;
 	}
 
 	/**
@@ -1784,7 +1705,7 @@ abstract class class_root {
      * triggering another query to the database.
      * On high-performance systems or large object-nets, this could reduce the amount of database-queries
      * fired drastically.
-     * For best performance, include the matching row of the tables system and system_rights
+     * For best performance, include the matching row of the tables system, system_date and system_rights
      *
      * @param $arrInitRow
      */
