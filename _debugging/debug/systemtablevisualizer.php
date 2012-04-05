@@ -28,7 +28,7 @@ $objDb = class_carrier::getInstance()->getObjDB();
 
 echo "scanning system-table...\n";
 $strQuery = "SELECT system_id FROM "._dbprefix_."system";
-$arrSystemids = $objDb->getArray($strQuery);
+$arrSystemids = $objDb->getPArray($strQuery, array());
 
 echo "  found ".count($arrSystemids)." systemrecords.\n";
 

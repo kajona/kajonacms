@@ -52,14 +52,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		return $arrReturn;
 	}
 
-    protected function actionSortUp() {
-        $this->setPositionAndReload($this->getSystemid(), "upwards");
-    }
-
-    protected function actionSortDown() {
-        $this->setPositionAndReload($this->getSystemid(), "downwards");
-    }
-
     protected function actionShowHistory() {
         $strReturn = "";
         $objCommon = new class_module_system_common($this->getSystemid());

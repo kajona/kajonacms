@@ -99,16 +99,8 @@ abstract class class_element_admin extends class_admin {
 
         $strReturn .= $this->objToolkit->formOptionalElementsWrapper($strSystemFields, $this->getLang("page_element_system_folder", "pages"), $bitShow);
 
-		//If its going to be a new element, allow to choose the position
-		if($strMode == "new") {
-    		$arrDropdown = array("first" => $this->getLang("element_first", "pages"),
-    		                     "last" => $this->getLang("element_last", "pages"));
-    		$strReturn .= $this->objToolkit->formInputDropdown("element_pos", $arrDropdown, $this->getLang("element_pos", "pages"), "last");
-		}
-
 		//Adding the element-stuff
 		$strReturn .= $strFormElement;
-		//system-stuff systemid, mode
 
 		//Language is placed right here instead as a hidden field
 		if($strMode == "edit")

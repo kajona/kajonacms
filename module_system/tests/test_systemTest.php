@@ -155,15 +155,17 @@ class class_test_system extends class_testbase  {
         }
 
         //initial movings
-        $objSystemCommon->setPosition($arrNodes[1], "upwards");
+        $objSystemCommon = new class_module_system_common($arrNodes[1]);
+        $objSystemCommon->setPosition("upwards");
         $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         echo "\trelative shiftings...\n";
         //move the third to the first pos
-        $objSystemCommon->setPosition($arrNodes[2]["system_id"], "upwards");
-        $objSystemCommon->setPosition($arrNodes[2]["system_id"], "upwards");
-        $objSystemCommon->setPosition($arrNodes[2]["system_id"], "upwards");
+        $objSystemCommon = new class_module_system_common($arrNodes[2]["system_id"]);
+        $objSystemCommon->setPosition("upwards");
+        $objSystemCommon->setPosition("upwards");
+        $objSystemCommon->setPosition("upwards");
         //next one should be with no effect
-        $objSystemCommon->setPosition($arrNodes[2]["system_id"], "upwards");
+        $objSystemCommon->setPosition("upwards");
         $objDB->flushQueryCache();
         $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
 
@@ -176,14 +178,16 @@ class class_test_system extends class_testbase  {
         $objDB->flushQueryCache();
         $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $objDB->flushQueryCache();
-        $objSystemCommon->setAbsolutePosition($arrNodes[2]["system_id"], 1);
+        $objSystemCommon = new class_module_system_common($arrNodes[2]["system_id"]);
+        $objSystemCommon->setAbsolutePosition(1);
         $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         //and back...
         $objDB->flushQueryCache();
-        $objSystemCommon->setAbsolutePosition($arrNodes[2]["system_id"], 3);
+        $objSystemCommon = new class_module_system_common($arrNodes[2]["system_id"]);
+        $objSystemCommon->setAbsolutePosition(3);
         $objDB->flushQueryCache();
         $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");

@@ -9,6 +9,7 @@ Module Update
 - the folder /elemente is renamed to /elements
 - rename /config/modul_xx_id.php to /config/module_xx_id.php
 - rename modul_ files to module_ (and entries of table system_module)
+- class_admin::setPositionAndReload(), class_admin::setPosition() and class_admin::setAbsolutePosition() are no longer availabe, the matching methods have to be called on the target objects instead
 
 - admin and portal calls to $this->objRights are no longer supported, use $this->getObjModule instead.
   A second option is to use the new annotation @permissions, validating the permissions for the current object (only for
@@ -35,10 +36,13 @@ General:
   Entries to $arrModule have to be set by class_root::setArrModuleEntry($strKey, $strValue)
 - Signature of interface_model / class_root was updated
 - class_root::getObjectDescription() was removed prior to interface_model::getStrDisplayName()
+- class_root::loadDataFromDb() was removed prior to class_root::initObject()
 - When deleting a record, the systemid is removed automatically, objects should only remove its' own data
 - dirname(__FILE__) is replaces by __DIR__
 - lang-files (admin & portal) are merged into a single file
 - Signature of class_admin::getOutputModuleNavi() changed from protected to public
+- Signatures of class_root::setPosition() and class_root::setAbsolutePosition() changed, no longer including an id-param
+
 
 Removed Constants:
 - _systempath_

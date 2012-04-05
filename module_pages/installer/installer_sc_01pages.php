@@ -30,8 +30,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
         $strReturn .= "Shifting pages to first position...\n";
         $objPagesModule = class_module_system_module::getModuleByName("pages");
-        $objCommon = new class_module_system_common();
-        $objCommon->setAbsolutePosition($objPagesModule->getSystemid(), 1);
+        $objPagesModule->setAbsolutePosition(1);
 
         $strReturn .= "Setting default template...\n";
         $objConstant = class_module_system_setting::getConfigByName("_pages_defaulttemplate_");

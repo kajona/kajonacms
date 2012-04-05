@@ -133,7 +133,6 @@ abstract class class_admin {
 	 */
 	public function setParam($strKey, $mixedValue) {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
-//		$this->arrParams[$strKey] = $mixedValue;
 	}
 
 	/**
@@ -144,12 +143,6 @@ abstract class class_admin {
 	 */
 	public function getParam($strKey) {
         return class_carrier::getInstance()->getParam($strKey);
-//		if(isset($this->arrParams[$strKey])) {
-//			return $this->arrParams[$strKey];
-//        }
-//		else {
-//			return "";
-//        }
 	}
 
 	/**
@@ -211,21 +204,12 @@ abstract class class_admin {
 	}
 
 	/**
-	 * Returns the current instance of the class_rights
-	 *
-	 * @return object
-	 * @final
-	 */
-	public final  function getObjRights() {
-	    return $this->objRights;
-	}
-
-	/**
 	 * Negates the status of a systemRecord
 	 *
 	 * @param string $strSystemid
 	 * @return bool
      * @deprecated call setStatus on a model-object directly
+     * @todo remove before 4.0 release
 	 */
 	public function setStatus($strSystemid = "") {
 		if($strSystemid == "")
@@ -240,6 +224,7 @@ abstract class class_admin {
 	 * @param string $strSystemid
 	 * @return int
      * @deprecated call getStatus on a model-object directly
+     * @todo remove before 4.0 release
 	 */
 	public function getStatus($strSystemid = "") {
 		if($strSystemid == "0" || $strSystemid == "")
@@ -253,6 +238,8 @@ abstract class class_admin {
 	 *
 	 * @param string $strSystemid
 	 * @return string
+     * @deprecated
+     * @todo remove before 4.0 release
 	 */
 	public function getLastEditUser($strSystemid = "") {
 		if($strSystemid == 0 || $strSystemid == "")
@@ -267,6 +254,7 @@ abstract class class_admin {
 	 * @param string $strSystemid
 	 * @return string
      * @deprecated
+     * @todo remove before 4.0 release
 	 */
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")
@@ -274,47 +262,6 @@ abstract class class_admin {
         $objCommon = new class_module_system_common($strSystemid);
 		return $objCommon->getPrevId();
 
-	}
-
-	/**
-	 * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
-	 *
-	 * @param string $strIdToShift
-	 * @param string $strDirection upwards || downwards
-	 * @return void
-	 */
-	public function setPosition($strIdToShift, $strDirection = "upwards") {
-        $objSystemCommon = new class_module_system_common();
-	    $objSystemCommon->setPosition($strIdToShift, $strDirection);
-        $this->flushCompletePagesCache();
-	}
-
-    /**
-	 * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
-     * and reloads the page viewed before
-	 *
-	 * @param string $strIdToShift
-	 * @param string $strDirection upwards || downwards
-     * @since 3.4.0
-	 * @return void
-	 */
-	public function setPositionAndReload($strIdToShift, $strDirection = "upwards") {
-        $objSystemCommon = new class_module_system_common();
-	    $objSystemCommon->setPosition($strIdToShift, $strDirection);
-        $this->flushCompletePagesCache();
-        $this->adminReload(_indexpath_."?".$this->getHistory(1));
-	}
-
-	/**
-	 * Sets the position of systemid using a given value.
-	 *
-	 * @param string $strIdToSet
-	 * @param int $intPosition
-	 */
-	public function setAbsolutePosition($strIdToSet, $intPosition) {
-        $objSystemCommon = new class_module_system_common();
-		$objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
-        $this->flushCompletePagesCache();
 	}
 
 	/**
@@ -509,9 +456,6 @@ abstract class class_admin {
         //flushed instead only the current page
 	    return class_cache::flushCache("class_element_portal");
 	}
-
-
-
 
     // --- OutputMethods ------------------------------------------------------------------------------------
 

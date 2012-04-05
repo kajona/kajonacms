@@ -158,6 +158,69 @@ abstract class class_root {
             $this->initObject();
 	}
 
+
+
+    /**
+     * Method to invoke object initialization.
+     * In nearly all cases, this is triggered by the framework itself.
+     */
+    public final function initObject() {
+        $this->initObjectInternal();
+        $this->internalInit();
+
+    }
+
+    /**
+     * InitObjectInternal is called during an objects instantiation.
+     * The default implementation tries to map all database-fields to the objects fields
+     * and sets the values automatically.
+     *
+     * If you have a different column-property mapping or additional
+     * setters to call, overwrite this method.
+     * The row loaded from the database is available by calling $this->getArrInitRow().
+     */
+    protected function initObjectInternal() {
+        //try to do a default init
+        $arrTables = $this->getObjectTables();
+
+        if(is_array($arrTables) && validateSystemid($this->getSystemid()) && count($arrTables) > 0 ) {
+            $strWhere = "";
+            foreach($arrTables as $strOneColumn)
+                $strWhere .= "AND system_id=".$strOneColumn." ";
+
+            $strQuery = "SELECT *
+                          FROM "._dbprefix_."system_right,
+                               ".implode(", ", array_keys($arrTables))." ,
+                               ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
+                         WHERE system_id = right_id
+                            ".$strWhere."
+                           AND system_id = ? ";
+
+            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+
+            $this->setArrInitRow($arrRow);
+
+            //get the mapped properties
+            $objAnnotations = new class_annotations($this);
+            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+
+            foreach($arrProperties as $strPropertyName => $strColumn) {
+
+                if(!isset($arrRow[$strColumn])) {
+                    //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
+                    continue;
+                }
+
+                $strSetter = class_objectfactory::getSetter($this, $strPropertyName);
+                if($strSetter !== null)
+                    call_user_func(array($this, $strSetter), $arrRow[$strColumn]);
+            }
+
+        }
+    }
+
     /**
      * Init the current record with the system-fields
      * @todo: add dates?
@@ -198,77 +261,6 @@ abstract class class_root {
         }
     }
 
-    /**
-     * Forces to reinit the object from the database
-     *
-     * @see interface_model::initObject()
-     * @deprecated use initObject() instead
-     */
-    public function loadDataFromDb() {
-        $this->initObject();
-    }
-
-    /**
-     * Method to invoke object initialization.
-     * In nearly all cases, this is triggered by the framework itself.
-     */
-    public final function initObject() {
-        $this->initObjectInternal();
-        $this->internalInit();
-
-    }
-
-    /**
-     * InitObjectInternal is called during an objects instantiation.
-     * The default implementation tries to map all database-fields to the objects fields
-     * and sets the values automatically.
-     *
-     * If you have a different column-property mapping or additional
-     * setters to call, overwrite this method.
-     * The row loaded from the database is available by calling $this->getArrInitRow().
-     */
-    protected function initObjectInternal() {
-        //try to do a default init
-        $arrTables = $this->getObjectTables();
-        if(is_array($arrTables) && validateSystemid($this->getSystemid()) && count($arrTables) > 0 ) {
-
-            $strWhere = "";
-            foreach($arrTables as $strOneColumn)
-                $strWhere .= "AND system_id=".$strOneColumn." ";
-
-            $strQuery = "SELECT *
-                          FROM "._dbprefix_."system_right,
-                               ".implode(", ", array_keys($arrTables))." ,
-                               ".$this->objDB->encloseTableName(_dbprefix_."system")."
-                     LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-                         WHERE system_id = right_id
-                            ".$strWhere."
-                           AND system_id = ? ";
-
-            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
-            $this->setArrInitRow($arrRow);
-
-            //get the mapped properties
-            $objAnnotations = new class_annotations($this);
-            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
-
-            foreach($arrProperties as $strPropertyName => $strColumn) {
-
-                if(!isset($arrRow[$strColumn])) {
-                    //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
-                    continue;
-                }
-
-                $strSetter = class_objectfactory::getSetter($this, $strPropertyName);
-                if($strSetter !== null)
-                    call_user_func(array($this, $strSetter), $arrRow[$strColumn]);
-            }
-
-        }
-    }
-
 
 
    /**
@@ -302,7 +294,6 @@ abstract class class_root {
         $this->objDB->transactionBegin();
 
         //validate, if there are subrecords, so child nodes to be deleted
-
         $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
         foreach($arrChilds as $arrOneChild) {
             if(validateSystemid($arrOneChild["system_id"])) {
@@ -507,7 +498,6 @@ abstract class class_root {
             if(count($arrColValues) > 0) {
                 $arrValues = array();
 
-
                 $arrTableNames = array_keys($arrTables);
                 $strPrimaryCol = $arrTables[$arrTableNames[0]];
                 $strQuery = "UPDATE ".$this->objDB->encloseTableName($arrTableNames[0])." SET ";
@@ -639,7 +629,6 @@ abstract class class_root {
         $intSiblings = $arrRow["COUNT(*)"];
 
         $strComment = uniStrTrim($strComment, 253);
-
 
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
@@ -891,93 +880,43 @@ abstract class class_root {
 	/**
 	 * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
 	 *
-	 * @param string $strIdToShift
 	 * @param string $strDirection upwards || downwards
 	 * @return void
+     * @deprecated
 	 */
-	public function setPosition($strIdToShift, $strDirection = "upwards") {
-		//Load all elements on the same level, so at first get the prev id
-        $objCommon = new class_module_system_common($strIdToShift);
-		$strPrevID = $objCommon->getPrevId();
-		$strQuery = "SELECT *
-						 FROM "._dbprefix_."system
-						 WHERE system_prev_id=?
-						 ORDER BY system_sort ASC, system_comment ASC";
+	public function setPosition($strDirection = "upwards") {
 
-		//No caching here to allow mutliple shiftings per request
-		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), null, null, false);
+        //get the old pos
+        $intPos = $this->getIntSort();
+        if($strDirection == "upwards")
+            $intPos--;
+        else
+            $intPos++;
 
-		//Iterate to move the element
-		$bitSaveToDb = false;
-		for($intI = 0; $intI < count($arrElements); $intI++) {
-			if($arrElements[$intI]["system_id"] == $strIdToShift) {
-				//Shift the elements around
-				if($strDirection == "upwards") {
-					//Valid action requested?
-					if($intI != 0 || $arrElements[$intI]["system_sort"] == 0) {
-						//Shift it one position up
-						$arrTemp = $arrElements[$intI-1];
-						$arrElements[$intI-1] = $arrElements[$intI];
-						$arrElements[$intI] = $arrTemp;
-						$bitSaveToDb = true;
-						break;
-					}
-				}
-				elseif ($strDirection == "downwards") {
-					//Valid Action requested
-					if($intI != (count($arrElements)-1) || $arrElements[$intI]["system_sort"] == 0) {
-						//Shift it one position down
-						$arrTemp = $arrElements[$intI+1];
-						$arrElements[$intI+1] = $arrElements[$intI];
-						$arrElements[$intI] = $arrTemp;
-						$bitSaveToDb = true;
-						break;
-					}
-				}
-			}
-		}
-		//Do we have to save to the db?
-		if($bitSaveToDb) {
-			foreach($arrElements as $intKey => $arrOneElement) {
-				//$intKey+1 forces new elements to be at the top of lists
-				$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=?
-								WHERE system_id=?";
-				$this->objDB->_pQuery($strQuery, array( (((int)$intKey)+1), $arrOneElement["system_id"]));
-			}
-		}
-
-        //flush the cache
-        $this->flushCompletePagesCache();
-
-        if($strIdToShift == $this->getSystemid()) {
-            $this->objDB->flushQueryCache();
-            $this->internalInit();
-        }
+        $this->setAbsolutePosition($intPos);
 	}
 
 	/**
 	 * Sets the position of systemid using a given value.
 	 *
-	 * @param string $strIdToSet
 	 * @param int $intPosition
 	 */
-	public function setAbsolutePosition($strIdToSet, $intPosition) {
-	    class_logger::getInstance()->addLogRow("move ".$strIdToSet." to new pos ".$intPosition, class_logger::$levelInfo);
+	public function setAbsolutePosition($intPosition) {
+	    class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intPosition, class_logger::$levelInfo);
 
 		//to have a better array-like handling, decrease pos by one.
 		//remind to add at the end when saving to db
 		$intPosition--;
 
 		//Load all elements on the same level, so at first get the prev id
-        $objCommon = new class_module_system_common($strIdToSet);
+        $objCommon = new class_module_system_common($this->getSystemid());
 		$strPrevID = $objCommon->getPrevId();
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
 						 WHERE system_prev_id=?
 						 ORDER BY system_sort ASC, system_comment ASC";
 
-		//No caching here to allow mutliple shiftings per request
+		//No caching here to allow multiple shiftings per request
 		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), null, null, false);
 
 		//more than one record to set?
@@ -989,11 +928,11 @@ abstract class class_root {
 		    return;
 
 		//create inital sorts?
-		if($arrElements[0]["system_sort"] == 0) {
-		    $this->setPosition($arrElements[0]["system_id"], "downwards");
-		    $this->setPosition($arrElements[0]["system_id"], "upwards");
-		    $this->objDB->flushQueryCache();
-		}
+//		if($arrElements[0]["system_sort"] == 0) {
+//		    $this->setPosition($arrElements[0]["system_id"], "downwards");
+//		    $this->setPosition($arrElements[0]["system_id"], "upwards");
+//		    $this->objDB->flushQueryCache();
+//		}
 
 		//searching the current element to get to know if element should be
 		//sorted up- or downwards
@@ -1001,7 +940,7 @@ abstract class class_root {
 		$bitSortUp = false;
 		$intHitKey = 0;
 		for($intI = 0; $intI < count($arrElements); $intI++) {
-			if($arrElements[$intI]["system_id"] == $strIdToSet) {
+			if($arrElements[$intI]["system_id"] == $this->getSystemid()) {
 				if($intI < $intPosition)
 					$bitSortDown = true;
 				if($intI >= $intPosition+1)
@@ -1017,7 +956,7 @@ abstract class class_root {
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=?
 								WHERE system_id=?";
-			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $strIdToSet));
+			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $this->getSystemid()));
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
@@ -1037,7 +976,7 @@ abstract class class_root {
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=?
 								WHERE system_id=?";
-			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $strIdToSet));
+			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $this->getSystemid()));
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
@@ -1054,11 +993,8 @@ abstract class class_root {
 
         //flush the cache
         $this->flushCompletePagesCache();
-
-        if($strIdToSet == $this->getSystemid()) {
-            $this->objDB->flushQueryCache();
-            $this->internalInit();
-        }
+        $this->objDB->flushQueryCache();
+        $this->internalInit();
 	}
 
 	/**

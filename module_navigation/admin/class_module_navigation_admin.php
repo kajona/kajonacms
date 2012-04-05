@@ -55,14 +55,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     }
 
 
-    protected function actionNaviPointMoveUp() {
-        $this->setPositionAndReload($this->getSystemid(), "upwards");
-    }
-
-    protected function actionNaviPointMoveDown() {
-        $this->setPositionAndReload($this->getSystemid(), "downwards");
-    }
-
 	/**
 	 * Returns a list of the current level
 	 *
@@ -73,7 +65,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 	protected function actionList() {
 		$strReturn = "";
 
-        $intI = 0;
         //Decide, whether to return the list of navigation or the layer of a navigation
         if($this->getSystemid() == "" || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])) {
 
@@ -91,9 +82,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $objIterator->setArraySection(class_module_navigation_point::getNaviLayer($this->getSystemid()));
             $strReturn .= $this->renderList($objIterator, true, "naviPoints");
 
-            if($this->strPeAddon != "")
-                $strReturn = $strReturn;
-            else
+            if($this->strPeAddon == "")
                 $strReturn = $this->generateTreeView($strReturn);
 
             return $strReturn;

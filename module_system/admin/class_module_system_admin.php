@@ -72,20 +72,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
 
     /**
-     * Sorts a module upwards.
-     */
-    protected function actionModuleSortUp() {
-        $this->setPositionAndReload($this->getSystemid(), "upwards");
-    }
-
-    /**
-     * Sorts a module downwards.
-     */
-    protected function actionModuleSortDown() {
-        $this->setPositionAndReload($this->getSystemid(), "downwards");
-    }
-
-    /**
      * Sets the status of a module.
      * Therefore you have to be member of the admin-group.
      */

@@ -472,11 +472,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * Sets the position of an element using a given value.
      *
-     * @param $strIdToSet
      * @param $intPosition
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
-    public function setAbsolutePosition($strIdToSet, $intPosition) {
+    public function setAbsolutePosition( $intPosition) {
         class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new pos ".$intPosition, class_logger::$levelInfo);
 
 		//to have a better array-like handling, decrease pos by one.
@@ -561,65 +560,23 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * Creates an initial sorting.
 	 * Note: Could be optimized!
 	 *
-     * @param string  $strIdToShift  no effect
 	 * @param string $strMode up || down
 	 * @return string "" in case of success
-     * @see class_root::setPosition($strIdToShift, $strDirection = "upwards")
+     * @see class_root::setPosition($strDirection = "upwards")
+     * @deprecated
 	 */
-	public function setPosition($strIdToShift, $strMode = "up") {
-        class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new direction ".$strMode, class_logger::$levelInfo);
-		$strReturn = "";
-		//Iterate over all elements to sort out
-		$arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();
+	public function setPosition($strMode = "up") {
 
+        $arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();
 
-		//Iterate again to move the element
-		$arrElementsSorted = array();
-		$bitSaveToDb = false;
-		for($intI = 0; $intI < count($arrElementsOnPlaceholder); $intI++) {
-			if($arrElementsOnPlaceholder[$intI]["system_id"] == $this->getSystemid()) {
-				//Shift the elements around
-				if($strMode == "up") {
-					//Valid action requested?
-					if($intI != 0) {
-						//Shift it one position up
-						$arrTemp = $arrElementsOnPlaceholder[$intI-1];
-						$arrElementsOnPlaceholder[$intI-1] = $arrElementsOnPlaceholder[$intI];
-						$arrElementsOnPlaceholder[$intI] = $arrTemp;
-						$bitSaveToDb = true;
-						break;
-					}
-				}
-				elseif ($strMode == "down") {
-					//Valid Action requested
-					if($intI != (count($arrElementsOnPlaceholder)-1)) {
-						//Shift it one position down
-						$arrTemp = $arrElementsOnPlaceholder[$intI+1];
-						$arrElementsOnPlaceholder[$intI+1] = $arrElementsOnPlaceholder[$intI];
-						$arrElementsOnPlaceholder[$intI] = $arrTemp;
-						$bitSaveToDb = true;
-						break;
-					}
-				}
-			}
-		}
-		//Do we have to save to the db?
-		if($bitSaveToDb) {
-			foreach($arrElementsOnPlaceholder as $intKey => $arrOneElementOnPlaceholder) {
-				//$intKey+1 forces new elements to be at the top of lists
-				$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort= ?
-								WHERE system_id= ?";
-				$this->objDB->_pQuery($strQuery, array( (int)$intKey, $arrOneElementOnPlaceholder["system_id"] ));
-			}
-		}
-
-		//Loading the data of the corresp site
-        $this->objDB->flushQueryCache();
-		$objPage = new class_module_pages_page($this->getPrevId());
-        class_cache::flushCache("class_element_portal", $objPage->getStrName());
-
-		return $strReturn;
+        for($intI = 1; $intI <= count($arrElementsOnPlaceholder); $intI++) {
+            if($arrElementsOnPlaceholder[$intI-1]["system_id"] == $this->getSystemid()) {
+                if($strMode == "up")
+                    return $this->setAbsolutePosition($intI-1);
+                else
+                    return $this->setAbsolutePosition($intI+1);
+            }
+        }
 	}
 
 

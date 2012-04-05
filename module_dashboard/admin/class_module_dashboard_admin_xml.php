@@ -46,7 +46,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 		    $intNewPos = $this->getParam("listPos");
 		    $strNewColumn = $this->getParam("listId");
 		    if($intNewPos != "")
-		        $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
+                $objWidget->setAbsolutePosition($intNewPos);
 
 		    $objWidget->setStrColumn($strNewColumn);
 		    $objWidget->updateObjectToDb();

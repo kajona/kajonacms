@@ -344,7 +344,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 			}
 
 			//So, lets do the magic - create the records
-			$objPageElement = new class_module_pages_pageelement("");
+			$objPageElement = new class_module_pages_pageelement();
 			$objPageElement->setStrName($strPlaceholderName);
 			$objPageElement->setStrPlaceholder($strPlaceholder);
 			$objPageElement->setStrElement($strPlaceholderElement);
@@ -353,15 +353,10 @@ class class_module_pages_content_admin extends class_admin implements interface_
 			    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
 			$strElementSystemId = $objPageElement->getSystemid();
 
-            //shift to last position? first is default.
-            if($this->getParam("element_pos") == "first")
-                $objPageElement->setAbsolutePosition($objPageElement->getSystemid(), 1);
-
             $objLockmanager = new class_lockmanager($strElementSystemId);
             $objLockmanager->lockRecord();
 
 			//To have the element working as expected, set the systemid
-			//Note: in the param-Array still remains the "wrong" systemid!!
 			$this->setSystemid($strElementSystemId);
 		}
 
@@ -744,7 +739,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
     protected function actionElementSortUp() {
         //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
-		$objElement->setPosition($this->getSystemid(), "up");
+		$objElement->setPosition("up");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
     }
@@ -755,7 +750,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
     protected function actionElementSortDown() {
         //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
-		$objElement->setPosition($this->getSystemid(), "down");
+		$objElement->setPosition("down");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
 

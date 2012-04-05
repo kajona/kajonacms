@@ -23,7 +23,6 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      *
      */
 	public function __construct() {
-
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 		parent::__construct();
@@ -31,8 +30,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
 
 	/**
-	 * saves a post in the database an returns the post as html.
-	 * In case of missing fields, the form is returned again
+	 * Updates the aboslute position of a single record, relative to its siblings
 	 *
 	 * @return string
 	 */
@@ -40,25 +38,22 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	    $strReturn = "";
 
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $intNewPos = $this->getParam("listPos");
 		//check permissions
-		if($objCommon->rightEdit()) {
+		if($objCommon->rightEdit() && $intNewPos != "") {
 
-            $intNewPos = $this->getParam("listPos");
 
             //there is a different mode for page-elements, catch now
             //store edit date
             $objCommon->updateObjectToDb();
 
-            if($objCommon->getRecordModuleNr() == _pages_content_modul_id_ && $intNewPos != "") {
+            if($objCommon->getRecordModuleNr() == _pages_content_modul_id_) {
                 $objElement = new class_module_pages_pageelement($this->getSystemid());
-                $objElement->setAbsolutePosition($this->getSystemid(), $intNewPos);
+                $objElement->setAbsolutePosition($intNewPos);
             }
             else {
-
-                if($intNewPos != "")
-                    $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
+                $objCommon->setAbsolutePosition($intNewPos);
             }
-
 
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setAbsolutePosOk")."</message>";
 		    $this->flushCompletePagesCache();

@@ -30,7 +30,7 @@ $arrStart = gettimeofday();
 $objDb = class_carrier::getInstance()->getObjDB();
 for($i = 0; $i<100; $i++) {
     $strQuery = "SELECT * FROM "._dbprefix_."system WHERE system_id = '0'";
-    $objDb->getArray($strQuery);
+    $objDb->getPArray($strQuery, array());
     $objDb->getTables();
 }
 $arrEnd = gettimeofday();
