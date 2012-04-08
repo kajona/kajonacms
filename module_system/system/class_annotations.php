@@ -57,7 +57,7 @@ class class_annotations {
 
     /**
      * searches an annotation (e.g. @version) in the doccomment of a passed method and validates
-     * the existence of this method
+     * the existence of this method.
      *
      * @param string $strMethodName
      * @param string $strAnnotation
@@ -129,6 +129,7 @@ class class_annotations {
     /**
      * Searches the current class for properties marked with a given annotation.
      * If found, the name of the propery plus the (optional) value of the property is returned.
+     * The base classes are queried, too.
      *
      * @param $strAnnotation
      * @return array ["propertyname" => "annotationvalue"]
@@ -150,6 +151,14 @@ class class_annotations {
         }
 
         $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
+
+        //check if there's a base-class -> inheritance
+        $objBaseClass = $this->objReflectionClass->getParentClass();
+        if($objBaseClass !== false) {
+            $objBaseAnnotations = new class_annotations($objBaseClass->getName());
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation));
+        }
+
         return $arrReturn;
     }
 

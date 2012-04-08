@@ -927,15 +927,7 @@ abstract class class_root {
 		if($intPosition < 0 || $intPosition >= count($arrElements))
 		    return;
 
-		//create inital sorts?
-//		if($arrElements[0]["system_sort"] == 0) {
-//		    $this->setPosition($arrElements[0]["system_id"], "downwards");
-//		    $this->setPosition($arrElements[0]["system_id"], "upwards");
-//		    $this->objDB->flushQueryCache();
-//		}
-
-		//searching the current element to get to know if element should be
-		//sorted up- or downwards
+		//searching the current element to get to know if element should be sorted up- or downwards
 		$bitSortDown = false;
 		$bitSortUp = false;
 		$intHitKey = 0;
