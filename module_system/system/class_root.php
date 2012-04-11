@@ -181,16 +181,22 @@ abstract class class_root {
      */
     protected function initObjectInternal() {
         //try to do a default init
-        $arrTables = $this->getObjectTables();
+        $objAnnotations = new class_annotations($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
 
-        if(is_array($arrTables) && validateSystemid($this->getSystemid()) && count($arrTables) > 0 ) {
+        if(validateSystemid($this->getSystemid()) && count($arrTargetTables) > 0 ) {
             $strWhere = "";
-            foreach($arrTables as $strOneColumn)
-                $strWhere .= "AND system_id=".$strOneColumn." ";
+            $arrTables = array();
+            foreach($arrTargetTables as $strOneTable) {
+                $arrOneTable = explode(".", $strOneTable);
+                $strWhere .= "AND system_id=".$arrOneTable[1]." ";
+                $arrTables[] = _dbprefix_.$arrOneTable[0];
+            }
+
 
             $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
-                               ".implode(", ", array_keys($arrTables))." ,
+                               ".implode(", ", $arrTables)." ,
                                ".$this->objDB->encloseTableName(_dbprefix_."system")."
                      LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
@@ -207,6 +213,11 @@ abstract class class_root {
             $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
 
             foreach($arrProperties as $strPropertyName => $strColumn) {
+
+                $arrColumn = explode(".", $strColumn);
+
+                if(count($arrColumn) == 2)
+                    $strColumn = $arrColumn[1];
 
                 if(!isset($arrRow[$strColumn])) {
                     //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
@@ -265,7 +276,7 @@ abstract class class_root {
 
    /**
     * Deletes the current object from the system.
-    * By default, all entries are delete from  all tables returned by "getObjectTables()".
+    * By default, all entries are delete from  all tables indicated by the class-doccomment.
     * If you want to trigger additional deletes, overwrite this method.
     * The system-record itself is being deleted automatically, too.
     *
@@ -273,11 +284,15 @@ abstract class class_root {
     */
     protected function deleteObjectInternal() {
         $bitReturn = true;
-        $arrDefaultTables = $this->getObjectTables();
-        if(is_array($arrDefaultTables)) {
-            foreach($arrDefaultTables as $strOneTable => $strKey) {
-                $strQuery = "DELETE FROM ".$strOneTable."
-                                   WHERE ".$strKey." = ? ";
+
+        $objAnnotations = new class_annotations($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+
+        if(count($arrTargetTables) > 0) {
+            foreach($arrTargetTables as  $strOneTable) {
+                $arrSingleTable = explode(".", $strOneTable);
+                $strQuery = "DELETE FROM ".$this->objDB->encloseTableName(_dbprefix_.$arrSingleTable[0])."
+                                   WHERE ".$this->objDB->encloseColumnName($arrSingleTable[1])." = ? ";
 
                 $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
             }
@@ -322,26 +337,14 @@ abstract class class_root {
 
     // --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
 
-    /**
-     * Returns a list of tables the current object is persisted to.
-     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
-     * The array should contain the name of the table as the key and the name
-     * of the primary-key (so the column name) as the matching value.
-     * E.g.: array(_dbprefix_."pages" => "page_id)
-     *
-     * @abstract
-     * @return array [table => primary row name]
-     */
-    protected abstract function getObjectTables();
-
 
     /**
      * Saves the current object to the database. Determines, whether the current object has to be inserted
      * or updated to the database.
      * In case of an update, the objects' updateStateToDb() method is being called (as required by class_model).
-     * In the case of a new object, a blank record is being created. Therefore, all tables returned by the
-     * objects' getObjectTables() method will be filled with a new record (using the same new systemid as the
-     * primary key). The newly created systemid is being set as the current objects' one and can be used in the afterwards
+     * In the case of a new object, a blank record is being created. Therefore, all tables returned by class' doc comment
+     * will be filled with a new record (using the same new systemid as the primary key).
+     * The newly created systemid is being set as the current objects' one and can be used in the afterwards
      * called updateStateToDb() method to reference the correct rows.
      *
      * @param string|bool $strPrevId The prev-id of the records, either to be used for the insert or to be used during the update of the record
@@ -376,14 +379,15 @@ abstract class class_root {
             $this->createSystemRecord($strPrevId, $this->getStrDisplayName());
 
             if(validateSystemid($this->getStrSystemid())) {
-                //$this->setStrSystemid($strNewSystemid);
 
                 //Create the foreign records
-                $arrTables = $this->getObjectTables();
-                if(is_array($arrTables)) {
-                    foreach($arrTables as $strTable => $strColumn) {
-                        $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($strTable)."
-                                                (".$this->objDB->encloseColumnName($strColumn).") VALUES
+                $objAnnotations = new class_annotations($this);
+                $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+                if(count($arrTargetTables) > 0) {
+                    foreach($arrTargetTables as $strOneConfig) {
+                        $arrSingleTable = explode(".", $strOneConfig);
+                        $strQuery = "INSERT INTO ".$this->objDB->encloseTableName(_dbprefix_.$arrSingleTable[0])."
+                                                (".$this->objDB->encloseColumnName($arrSingleTable[1]).") VALUES
                                                 (?) ";
 
                         if(!$this->objDB->_pQuery($strQuery, array($this->getStrSystemid()) ))
@@ -470,57 +474,95 @@ abstract class class_root {
      * Use only updates, inserts are not required to be implemented.
      *
      * Provides a default implementation based on the current objects column mappings.
-     * Override thie method, whenever you want to perform additional actions or escapings.
+     * Override this method whenever you want to perform additional actions or escaping.
      *
      * @return bool
      */
     protected function updateStateToDb() {
-        $arrTables = $this->getObjectTables();
-        if(is_array($arrTables) && validateSystemid($this->getSystemid()) && count($arrTables) == 1) {
 
-            //fetch all columns and values
-            $arrColValues = array();
-            $arrEscapes = array();
-
-            //get the mapped properties
+        if(validateSystemid($this->getSystemid())) {
+            //fetch properties with annotations
             $objAnnotations = new class_annotations($this);
-            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+            $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+            if(count($arrTargetTables) > 0) {
+                $bitReturn = true;
 
-            foreach($arrProperties as $strPropertyName => $strColumn) {
+                foreach($arrTargetTables as $strOneTable) {
+                    $arrTableDef = explode(".", $strOneTable);
 
-                $strGetter = class_objectfactory::getGetter($this, $strPropertyName);
-                if($strGetter !== null) {
-                    $arrColValues[$strColumn] = call_user_func(array($this, $strGetter));
-                    $arrEscapes[] = !$objAnnotations->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
+                    //scan all properties
+                    $arrColValues = array();
+                    $arrEscapes = array();
+
+                    //get the mapped properties
+                    $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+
+                    foreach($arrProperties as $strPropertyName => $strColumn) {
+
+                        //check if there are table annotation available
+                        $arrColumnDef = explode(".", $strColumn);
+
+                        //if the column doesn't declare a target table whereas the class defines more then one - skip it.
+                        if(count($arrColumnDef) == 1 && count($arrTargetTables) > 1 )
+                            throw new class_exception("property ".$strPropertyName." declares no target table, class ".get_class($this)." declare more than one target table.", class_exception::$level_FATALERROR);
+
+
+                        //skip if property targets another table
+                        if(count($arrColumnDef) == 2 && $arrColumnDef[0] != $arrTableDef[0])
+                            continue;
+
+                        if(count($arrColumnDef) == 2)
+                            $strColumn = $arrColumnDef[1];
+
+                        //all prerequisites match, start creating query
+                        $strGetter = class_objectfactory::getGetter($this, $strPropertyName);
+                        if($strGetter !== null) {
+                            $arrColValues[$strColumn] = call_user_func(array($this, $strGetter));
+                            $arrEscapes[] = !$objAnnotations->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
+                        }
+                    }
+
+                    //update table
+                    if(count($arrColValues) > 0)
+                        $bitReturn = $bitReturn && $this->updateSingleTable($arrColValues, $arrEscapes, $arrTableDef[0], $arrTableDef[1]);
+
+
                 }
+
+                return $bitReturn;
             }
 
-            if(count($arrColValues) > 0) {
-                $arrValues = array();
-
-                $arrTableNames = array_keys($arrTables);
-                $strPrimaryCol = $arrTables[$arrTableNames[0]];
-                $strQuery = "UPDATE ".$this->objDB->encloseTableName($arrTableNames[0])." SET ";
-
-                $intI = 0;
-                foreach($arrColValues as $strColumn => $objValue) {
-                    $strQuery .= $this->objDB->encloseColumnName($strColumn)." = ? ";
-                    $arrValues[] = $objValue;
-
-                    if(++$intI < count($arrColValues))
-                        $strQuery .= ", ";
-                }
-
-                $strQuery .= " WHERE ".$this->objDB->encloseColumnName($strPrimaryCol)." = ? ";
-                $arrValues[] = $this->getSystemid();
-
-                return $this->objDB->_pQuery($strQuery, $arrValues, $arrEscapes);
-            }
-
-
+            //no table mapping found - skip
             return true;
+
         }
+
+        //no update required - skip
         return true;
+
+    }
+
+
+    private function updateSingleTable($arrColValues, $arrEscapes, $strTargetTable, $strPrimaryCol) {
+
+        $arrValues = array();
+
+        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_.$strTargetTable)." SET ";
+
+        $intI = 0;
+        foreach($arrColValues as $strColumn => $objValue) {
+            $strQuery .= $this->objDB->encloseColumnName($strColumn)." = ? ";
+            $arrValues[] = $objValue;
+
+            if(++$intI < count($arrColValues))
+                $strQuery .= ", ";
+        }
+
+        $strQuery .= " WHERE ".$this->objDB->encloseColumnName($strPrimaryCol)." = ? ";
+        $arrValues[] = $this->getSystemid();
+
+        return $this->objDB->_pQuery($strQuery, $arrValues, $arrEscapes);
+
     }
 
     /**

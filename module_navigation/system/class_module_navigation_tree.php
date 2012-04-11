@@ -12,6 +12,8 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
+ *
+ * @targetTable navigation.navigation_id
  */
 class class_module_navigation_tree extends class_model implements interface_model, interface_admin_listable  {
 
@@ -41,16 +43,6 @@ class class_module_navigation_tree extends class_model implements interface_mode
 		parent::__construct($strSystemid);
 
     }
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."navigation" => "navigation_id");
-    }
-
-
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

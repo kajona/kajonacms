@@ -21,6 +21,8 @@ class class_annotations {
 
     private static $arrAnnotationsCache = array();
 
+    private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
+
     private static $STR_METHOD_CACHE = "methods";
     private static $STR_HASMETHOD_CACHE = "hasmethods";
 
@@ -54,6 +56,38 @@ class class_annotations {
         $this->arrCurrentCache = &self::$arrAnnotationsCache[$strSourceClass];
         $this->objReflectionClass = new ReflectionClass($strSourceClass);
 	}
+
+
+    /**
+     * Fetches a list of annotations from the class-doc-comment.
+     * Please be aware that this method returns an array and not only a single line.
+     * Parent classes are evaluated, too.
+     *
+     * @param $strAnnotation
+     * @return array
+     */
+    public function getAnnotationValuesFromClass($strAnnotation) {
+        if(isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation];
+
+        $strClassDoc = $this->objReflectionClass->getDocComment();
+        $arrValues = $this->searchAllAnnotationsInDoc($strClassDoc, $strAnnotation);
+
+        $arrReturn = array();
+        foreach($arrValues as $strOneProperty) {
+            $arrReturn[] = trim(uniSubstr($strOneProperty, uniStrpos($strOneProperty, $strAnnotation)+uniStrlen($strAnnotation)));
+        }
+
+        //check if there's a base-class -> inheritance
+        $objBaseClass = $this->objReflectionClass->getParentClass();
+        if($objBaseClass !== false) {
+            $objBaseAnnotations = new class_annotations($objBaseClass->getName());
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationValuesFromClass($strAnnotation));
+        }
+
+        $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
+        return $arrReturn;
+    }
 
     /**
      * searches an annotation (e.g. @version) in the doccomment of a passed method and validates
@@ -163,7 +197,8 @@ class class_annotations {
     }
 
     /**
-     * Internal helper, does the parsing of the comment
+     * Internal helper, does the parsing of the comment.
+     * Returns the first annotation matching the passed name.
      *
      * @param string $strDoc
      * @param string $strAnnotation
@@ -180,5 +215,25 @@ class class_annotations {
         return false;
     }
 
+
+    /**
+     * Internal helper, does the parsing of the comment.
+     * Returns an array of all matching annotations.
+     *
+     * @param string $strDoc
+     * @param string $strAnnotation
+     * @return array
+     */
+    private function searchAllAnnotationsInDoc($strDoc, $strAnnotation) {
+        $arrReturn = array();
+        $arrLines = explode("\n", $strDoc);
+        foreach($arrLines as $strOneLine) {
+            if(uniStrpos($strOneLine, $strAnnotation) !== false) {
+                $arrReturn[] = $strOneLine;
+            }
+        }
+
+        return $arrReturn;
+    }
 }
 

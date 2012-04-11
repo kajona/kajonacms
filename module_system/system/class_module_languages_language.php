@@ -12,6 +12,8 @@
  *
  * @package module_languages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable languages.language_id
  */
 class class_module_languages_language extends class_model implements interface_model, interface_admin_listable  {
 
@@ -42,15 +44,6 @@ class class_module_languages_language extends class_model implements interface_m
 		//base class
 		parent::__construct($strSystemid);
 
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."languages" => "language_id");
     }
 
     /**

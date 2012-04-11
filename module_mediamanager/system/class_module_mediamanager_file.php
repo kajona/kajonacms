@@ -11,6 +11,8 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @targetTable mediamanager_file.file_id
  */
 class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_listable {
 
@@ -70,15 +72,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
 		//base class
 		parent::__construct($strSystemid);
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."mediamanager_file" => "file_id");
     }
 
     /**

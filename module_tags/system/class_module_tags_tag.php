@@ -17,6 +17,8 @@
  * @package module_tags
  * @author sidler@mulchprod.de
  * @since 3.4
+ *
+ * @targetTable tags_tag.tags_tag_id
  */
 class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable  {
 
@@ -69,15 +71,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public function getStrLongDescription() {
         return "";
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."tags_tag" => "tags_tag_id");
     }
 
     /**

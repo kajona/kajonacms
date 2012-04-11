@@ -206,20 +206,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     }
 
     /**
-     * Returns a list of tables the current object is persisted to.
-     * A new record is created in each table, as soon as a save-/update-request was triggered by the framework.
-     * The array should contain the name of the table as the key and the name
-     * of the primary-key (so the column name) as the matching value.
-     * E.g.: array(_dbprefix_."pages" => "page_id)
-     *
-     * @return array [table => primary row name]
-     */
-    protected function getObjectTables() {
-        return array();
-    }
-
-
-    /**
 	 * Deletes all memberships of the given USER from ALL groups
 	 *
 	 * @return bool

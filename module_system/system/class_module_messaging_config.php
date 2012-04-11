@@ -14,6 +14,8 @@
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_messaging
+ *
+ * @targetTable messages_cfg.config_id
  */
 class class_module_messaging_config extends class_model implements interface_model  {
 
@@ -51,14 +53,6 @@ class class_module_messaging_config extends class_model implements interface_mod
         $this->setArrModuleEntry("moduleId", _messaging_module_id_);
 		parent::__construct($strSystemid);
 
-    }
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."messages_cfg" => "config_id");
     }
 
     /**

@@ -13,6 +13,8 @@
  * @package module_tags
  * @author sidler@mulchprod.de
  * @since 4.0
+ *
+ * @targetTable tags_favorite.tags_fav_id
  */
 class class_module_tags_favorite extends class_model implements interface_model, interface_admin_listable  {
 
@@ -74,14 +76,6 @@ class class_module_tags_favorite extends class_model implements interface_model,
      */
     public function getStrLongDescription() {
         return "";
-    }
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."tags_favorite" => "tags_fav_id");
     }
 
     /**

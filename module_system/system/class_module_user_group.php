@@ -40,14 +40,6 @@ class class_module_user_group extends class_model implements interface_model, in
     }
 
     /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */

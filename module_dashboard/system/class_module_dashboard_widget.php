@@ -12,6 +12,8 @@
  *
  * @package module_dashboard
  * @author sidler@mulchprod.de
+ *
+ * @targetTable dashboard.dashboard_id
  */
 class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener {
 
@@ -59,15 +61,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
 		parent::__construct($strSystemid);
 
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."dashboard" => "dashboard_id");
     }
 
     /**

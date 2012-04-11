@@ -11,6 +11,8 @@
  * Model for a single system-module
  *
  * @package module_system
+ *
+ * @targetTable system_module.module_id
  */
 class class_module_system_module extends class_model implements interface_model, interface_admin_listable  {
 
@@ -87,14 +89,6 @@ class class_module_system_module extends class_model implements interface_model,
 		//base class
 		parent::__construct($strSystemid);
 
-    }
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."system_module" => "module_id");
     }
 
     /**

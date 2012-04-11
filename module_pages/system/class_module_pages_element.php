@@ -72,14 +72,6 @@ class class_module_pages_element extends class_model implements interface_model,
 
     }
 
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array();
-    }
-
     public function rightView() {
         return true;
     }

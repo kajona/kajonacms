@@ -42,6 +42,7 @@ General:
 - lang-files (admin & portal) are merged into a single file
 - Signature of class_admin::getOutputModuleNavi() changed from protected to public
 - Signatures of class_root::setPosition() and class_root::setAbsolutePosition() changed, no longer including an id-param
+- class_root::getObjectTables() was removed, table declarations are now stored within the class' doc-comment
 
 
 Removed Constants:

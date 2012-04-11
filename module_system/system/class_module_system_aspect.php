@@ -17,6 +17,8 @@
  * @package module_system
  * @since 3.4
  * @author sidler@mulchprod.de
+ *
+ * @targetTable aspects.aspect_id
  */
 class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable  {
 
@@ -46,15 +48,6 @@ class class_module_system_aspect extends class_model implements interface_model,
 
 		parent::__construct($strSystemid);
 
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."aspects" => "aspect_id");
     }
 
     /**

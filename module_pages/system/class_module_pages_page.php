@@ -12,6 +12,8 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable page.page_id
  */
 class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
 
@@ -70,15 +72,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 		//base class
 		parent::__construct($strSystemid);
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."page" => "page_id");
     }
 
     /**

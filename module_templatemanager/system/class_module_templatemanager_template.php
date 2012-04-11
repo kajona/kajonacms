@@ -14,6 +14,8 @@
  * @package module_templatemanager
  * @author sidler@mulchprod.de
  * @since 4.0
+ *
+ * @targetTable templatepacks.templatepack_id
  */
 class class_module_templatemanager_template extends class_model implements interface_model, interface_admin_listable  {
 
@@ -77,15 +79,6 @@ class class_module_templatemanager_template extends class_model implements inter
      */
     public function getStrLongDescription() {
         return $this->arrMetadata["description"];
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."templatepacks" => "templatepack_id");
     }
 
     /**

@@ -14,6 +14,8 @@
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_messaging
+ *
+ * @targetTable messages.message_id
  */
 class class_module_messaging_message extends class_model implements interface_model, interface_admin_listable  {
 
@@ -101,15 +103,6 @@ class class_module_messaging_message extends class_model implements interface_mo
         }
 
         return $bitReturn;
-    }
-
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."messages" => "message_id");
     }
 
     /**

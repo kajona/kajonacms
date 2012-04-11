@@ -11,30 +11,32 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @targetTable mediamanager_repo.repo_id
  */
 class class_module_mediamanager_repo extends class_model implements interface_model, interface_admin_listable  {
 
     /**
      * @var string
-     * @tableColumn repo_path
+     * @tableColumn mediamanager_repo.repo_path
      */
     private $strPath = "";
 
     /**
      * @var string
-     * @tableColumn repo_title
+     * @tableColumn mediamanager_repo.repo_title
      */
     private $strTitle = "";
 
     /**
      * @var string
-     * @tableColumn repo_upload_filter
+     * @tableColumn mediamanager_repo.repo_upload_filter
      */
     private $strUploadFilter = "";
 
     /**
      * @var string
-     * @tableColumn repo_view_filter
+     * @tableColumn mediamanager_repo.repo_view_filter
      */
     private $strViewFilter = "";
 
@@ -49,14 +51,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
 		//base class
 		parent::__construct($strSystemid);
-    }
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."mediamanager_repo" => "repo_id");
     }
 
     /**

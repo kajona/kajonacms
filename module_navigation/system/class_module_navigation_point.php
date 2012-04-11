@@ -12,6 +12,8 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
+ *
+ * @targetTable navigation.navigation_id
  */
 class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable  {
 
@@ -75,14 +77,6 @@ class class_module_navigation_point extends class_model implements interface_mod
 		//base class
 		parent::__construct($strSystemid);
 
-    }
-
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array(_dbprefix_."navigation" => "navigation_id");
     }
 
     /**

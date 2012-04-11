@@ -31,14 +31,6 @@ class class_module_system_worker extends class_model implements interface_model 
     }
 
     /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array();
-    }
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
