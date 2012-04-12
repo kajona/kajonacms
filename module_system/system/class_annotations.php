@@ -51,7 +51,13 @@ class class_annotations {
             throw new class_exception("class ".$strSourceClass." not found", class_exception::$level_ERROR);
 
         if(!isset(self::$arrAnnotationsCache[$strSourceClass]))
-            self::$arrAnnotationsCache[$strSourceClass] = array(self::$STR_METHOD_CACHE, self::$STR_PROPERTIES_CACHE, self::$STR_HASMETHOD_CACHE, self::$STR_HASPROPERTY_CACHE);
+            self::$arrAnnotationsCache[$strSourceClass] = array(
+                self::$STR_CLASS_PROPERTIES_CACHE,
+                self::$STR_METHOD_CACHE,
+                self::$STR_HASMETHOD_CACHE,
+                self::$STR_PROPERTIES_CACHE,
+                self::$STR_HASPROPERTY_CACHE
+            );
 
         $this->arrCurrentCache = &self::$arrAnnotationsCache[$strSourceClass];
         $this->objReflectionClass = new ReflectionClass($strSourceClass);
@@ -91,7 +97,7 @@ class class_annotations {
 
     /**
      * searches an annotation (e.g. @version) in the doccomment of a passed method and validates
-     * the existence of this method.
+     * the existence of this annotation.
      *
      * @param string $strMethodName
      * @param string $strAnnotation
@@ -101,8 +107,13 @@ class class_annotations {
         if(isset($this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation]))
             return $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation];
 
-        $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
-        $bitReturn = $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        try {
+            $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
+            $bitReturn = false !== $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        }
+        catch(ReflectionException $objEx) {
+            $bitReturn = false;
+        }
 
         $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
         return $bitReturn;
@@ -111,7 +122,7 @@ class class_annotations {
 
     /**
      * searches an annotation (e.g. @version) in the doccomment of a passed property and validates
-     * the existence of this method
+     * the existence of this annotation
      *
      * @param string $strPropertyName
      * @param string $strAnnotation
@@ -122,7 +133,7 @@ class class_annotations {
             return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation];
 
         $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
-        $bitReturn = $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        $bitReturn = false !== $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
 
         $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
         return $bitReturn;
@@ -136,7 +147,8 @@ class class_annotations {
      * then only
      *   value1, value2
      * are returned.
-     * If the annotation could not be found, false is returned instead.
+     * If the annotation could not be found, false is returned instead. If there are multiple annotations
+     * matching the passed pattern, only the first one is returned.
      *
      * @param string $strMethodName
      * @param string $strAnnotation
@@ -162,7 +174,7 @@ class class_annotations {
 
     /**
      * Searches the current class for properties marked with a given annotation.
-     * If found, the name of the propery plus the (optional) value of the property is returned.
+     * If found, the name of the property plus the (optional) value of the property is returned.
      * The base classes are queried, too.
      *
      * @param $strAnnotation
@@ -184,7 +196,6 @@ class class_annotations {
             }
         }
 
-        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
 
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
@@ -193,6 +204,7 @@ class class_annotations {
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation));
         }
 
+        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
         return $arrReturn;
     }
 
