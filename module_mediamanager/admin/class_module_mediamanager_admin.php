@@ -22,7 +22,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     private $strPeAddon = "";
 
 	/**
-	 * Construcut
+	 * Constructor
 	 *
 	 */
 	public function __construct() {

@@ -32,9 +32,9 @@ class class_installer_navigation extends class_installer_base implements interfa
 	}
 
 	public function hasPostInstalls() {
-	    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='navigation'";
-	    $arrRow = $this->objDB->getRow($strQuery);
-        if($arrRow["COUNT(*)"] == 0)
+
+        $objElement = class_module_pages_element::getElement("navigation");
+        if($objElement === null)
             return true;
 
         return false;
@@ -123,7 +123,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->getArrModule("name"), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
