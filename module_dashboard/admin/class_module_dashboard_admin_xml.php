@@ -193,11 +193,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
                 $bitBlocked = true;
 
             $strToday = "";
-            if(
-                $objToday->getIntYear() == $objDate->getIntYear()
-                && $objToday->getIntMonth() == $objDate->getIntMonth()
-                && $objToday->getIntDay() == $objDate->getIntDay()
-            )
+            if($objToday->getIntYear() == $objDate->getIntYear() && $objToday->getIntMonth() == $objDate->getIntMonth() && $objToday->getIntDay() == $objDate->getIntDay())
                 $strToday = " calendarDateToday";
 
 

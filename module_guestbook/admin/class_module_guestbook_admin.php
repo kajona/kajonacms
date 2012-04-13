@@ -123,7 +123,9 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_guestbook_guestbook) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "viewGuestbook", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionViewGuestbook"), "icon_bookLens.gif"))
+                $this->objToolkit->listButton(
+                    getLinkAdmin($this->arrModule["modul"], "viewGuestbook", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionViewGuestbook"), "icon_bookLens.gif")
+                )
             );
         }
     }
@@ -135,7 +137,11 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_guestbook_post) {
             if($objListEntry->rightDelete()) {
-                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("post_loeschen_frage", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid()));
+                return $this->objToolkit->listDeleteButton(
+                    $objListEntry->getStrDisplayName(),
+                    $this->getLang("post_loeschen_frage", $objListEntry->getArrModule("modul")),
+                    getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid())
+                );
             }
         }
         else

@@ -45,8 +45,12 @@ class class_element_guestbook_admin extends class_element_admin implements inter
             $arrGuestbooks[$objOneGuestbook->getSystemid()] = $objOneGuestbook->getStrGuestbookTitle();
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputDropdown("guestbook_id", $arrGuestbooks, $this->getLang("guestbook_id"), (isset($arrElementData["guestbook_id"]) ? $arrElementData["guestbook_id"] : "" ));
-		$strReturn .= $this->objToolkit->formInputText("guestbook_amount", $this->getLang("guestbook_amount"), (isset($arrElementData["guestbook_amount"]) ? $arrElementData["guestbook_amount"] : ""));
+		$strReturn .= $this->objToolkit->formInputDropdown(
+            "guestbook_id", $arrGuestbooks, $this->getLang("guestbook_id"), (isset($arrElementData["guestbook_id"]) ? $arrElementData["guestbook_id"] : "" )
+        );
+		$strReturn .= $this->objToolkit->formInputText(
+            "guestbook_amount", $this->getLang("guestbook_amount"), (isset($arrElementData["guestbook_amount"]) ? $arrElementData["guestbook_amount"] : "")
+        );
 		//Load the available templates
         $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_guestbook");
 		$arrTemplatesDD = array();
@@ -57,9 +61,15 @@ class class_element_guestbook_admin extends class_element_admin implements inter
 		}
 		
         if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("guestbook_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )));
+            $this->addOptionalFormElement(
+                $this->objToolkit->formInputDropdown(
+                    "guestbook_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )
+                )
+            );
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("guestbook_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown(
+                "guestbook_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )
+            );
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_id");
 

@@ -44,14 +44,16 @@ class class_module_guestbook_portal extends class_portal implements interface_po
 	    $objArraySectionIterator = new class_array_section_iterator(class_module_guestbook_post::getPostsCount($this->arrElementData["guestbook_id"], true));
 	    $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["guestbook_amount"]);
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-	    $objArraySectionIterator->setArraySection(class_module_guestbook_post::getPosts($this->arrElementData["guestbook_id"], true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+	    $objArraySectionIterator->setArraySection(
+            class_module_guestbook_post::getPosts($this->arrElementData["guestbook_id"], true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+        );
 
 		$arrObjPosts = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename());
 
 		//and put posts into a template
         /** @var class_module_guestbook_post $objOnePost */
 		foreach($arrObjPosts["arrData"] as $objOnePost) {
-			if($objOnePost->rightView()){
+			if($objOnePost->rightView()) {
 				$strTemplatePostID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "post");
 				$arrTemplatePost = array();
 				$arrTemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getStrGuestbookPostEmail()."\">".$objOnePost->getStrGuestbookPostName()."</a>";
@@ -59,7 +61,7 @@ class class_module_guestbook_portal extends class_portal implements interface_po
 				$arrTemplatePost["post_email"] = $objOnePost->getStrGuestbookPostEmail();
 				$arrTemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getStrGuestbookPostPage()."\">".$objOnePost->getStrGuestbookPostPage()."</a>";
 				//replace encoded newlines
-				$arrTemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $objOnePost->getStrGuestbookPostText());
+				$arrTemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />", $objOnePost->getStrGuestbookPostText());
 				$arrTemplatePost["post_date"] = timeToString($objOnePost->getIntGuestbookPostDate());
 				$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrTemplatePost, $strTemplatePostID, false);
 			}
