@@ -19,7 +19,7 @@ class class_rights {
     public static $STR_RIGHT_VIEW = "view";
     public static $STR_RIGHT_EDIT = "edit";
     public static $STR_RIGHT_DELETE = "delete";
-    public static $STR_RIGHT_RIGHT = "rights";
+    public static $STR_RIGHT_RIGHT = "right";
     public static $STR_RIGHT_RIGHT1 = "right1";
     public static $STR_RIGHT_RIGHT2 = "right2";
     public static $STR_RIGHT_RIGHT3 = "right3";
@@ -433,7 +433,7 @@ class class_rights {
      * @param $strSystemid
      * @return bool
      */
-    public function checkPermissionForUserId($strUserid ,$strPermission, $strSystemid) {
+    public function checkPermissionForUserId($strUserid, $strPermission, $strSystemid) {
         if($strSystemid == "")
             return false;
 
@@ -442,7 +442,11 @@ class class_rights {
 
         $arrGroupIds = array();
 
-        if($strUserid == "" && validateSystemid($this->objSession->getUserID())) {
+        if(validateSystemid($strUserid)) {
+            $objUser = new class_module_user_user($strUserid);
+            $arrGroupIds = $objUser->getArrGroupIds();
+        }
+        else if(validateSystemid($this->objSession->getUserID())) {
             $objUser = new class_module_user_user($this->objSession->getUserID());
             $arrGroupIds = $objUser->getArrGroupIds();
         }
@@ -489,9 +493,9 @@ class class_rights {
 						FROM "._dbprefix_."user_group_members AS member,
 						     "._dbprefix_."user as users
 						WHERE member.group_member_user_id = users.user_id
-							AND member.group_member_group_id = '"._admins_group_id_."'
-							AND users.user_id='".dbsafeString($strUserid)."'";
-		$arrRow = $this->objDb->getRow($strQuery);
+							AND member.group_member_group_id = ?
+							AND users.user_id= ? ";
+		$arrRow = $this->objDb->getPRow($strQuery, array(_admins_group_id_, $strUserid));
 
 		if($arrRow["COUNT(*)"] == 1)
 			$bitReturn = true;
