@@ -37,7 +37,7 @@ class class_download_manager extends class_root {
 
 		$bitRedirectToErrorPage = false;
 
-		if(validateSystemid($this->getSystemid() )) {
+		if(validateSystemid($this->getSystemid())) {
 
             /** @var $objFile class_module_mediamanager_file */
 		    $objFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
@@ -55,7 +55,10 @@ class class_download_manager extends class_root {
 						header("Content-type: application/x-ms-download");
 		        		header("Content-type: x-type/subtype\n");
 						header("Content-type: application/force-download");
-						header("Content-Disposition: attachment; filename=".preg_replace('/\./', '%2e', saveUrlEncode(trim(basename($objFile->getStrFilename()))), substr_count(basename($objFile->getStrFilename()), '.') - 1));
+						header("Content-Disposition: attachment; filename=".preg_replace(
+                            '/\./', '%2e',
+                            saveUrlEncode(trim(basename($objFile->getStrFilename()))), substr_count(basename($objFile->getStrFilename()), '.') - 1
+                        ));
 					}
 					else {
 						//Good: another browser vendor
