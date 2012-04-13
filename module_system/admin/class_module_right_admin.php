@@ -47,38 +47,45 @@ class class_module_right_admin extends class_admin implements interface_admin {
 
 		$strReturn = "";
 		$strSystemID = "";
-		//Determing the systemid
-		if($this->getParam("systemid") != "")
-			$strSystemID = $this->getParam("systemid");
+        $objTargetRecord = null;
+
+		//Determine the systemid
+		if($this->getParam("systemid") != "") {
+            $objTargetRecord = class_objectfactory::getInstance()->getObject($this->getParam("systemid"));
+        }
 		//Edit a module?
-		if($this->getParam("changemodule") != "")
-			$strSystemID = $this->getModuleSystemid($this->getParam("changemodule"));
-		if($strSystemID == "")
+		if($this->getParam("changemodule") != "") {
+            $objTargetRecord = class_module_system_module::getModuleByName($this->getParam("changemodule"));
+        }
+
+		if($objTargetRecord == null)
 			return $this->getLang("commons_error_permissions");
 
-        $objModule = new class_module_system_module($strSystemID);
         $objRights = class_carrier::getInstance()->getObjRights();
 
-		if($objModule->rightRight()) {
+		if($objTargetRecord->rightRight()) {
 			//Get Rights
-			$arrRights = $objRights->getArrayRights($strSystemID);
+			$arrRights = $objRights->getArrayRights($objTargetRecord->getSystemid());
 			//Get groups
 			$arrGroups = class_module_user_group::getAllGroups();
 
 			//Determine name of the record
-			if($objModule->getStrRecordComment() == "")
+			if($objTargetRecord->getStrRecordComment() == "")
 				$strTitle = $this->getLang("titel_leer");
 			else
-				$strTitle = $objModule->getStrRecordComment() . " ";
+				$strTitle = $objTargetRecord->getStrDisplayName() . " ";
 
 			//Load the rights header-row
-			if($objModule->getIntModuleNr() == 0)
+			if($objTargetRecord->getIntModuleNr() == 0)
 			    $strModule = "system";
-            else if(defined("_pages_folder_id_") && $objModule->getIntModuleNr() == _pages_folder_id_)
+            else if($objTargetRecord instanceof class_module_system_module)
+                $strModule = $objTargetRecord->getStrName();
+            else if(defined("_pages_folder_id_") && $objTargetRecord->getIntModuleNr() == _pages_folder_id_)
                 $strModule = "pages";
-			else {
-			    $strModule = $objModule->getStrName();
-			}
+			else
+			    $strModule = $objTargetRecord->getArrModule("modul");
+
+
 
 			$arrHeaderRow = $this->getLang("permissions_header", $strModule);
 
@@ -228,7 +235,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
 			//place all inheritance-rights as hidden-fields to support the change-js script
-            $strPrevId = $objModule->getPrevId();
+            $strPrevId = $objTargetRecord->getPrevId();
             $arrRightsInherited = $objRights->getArrayRights($strPrevId);
 
             foreach ($arrRightsInherited as $strRightName => $arrRightsPerAction) {
