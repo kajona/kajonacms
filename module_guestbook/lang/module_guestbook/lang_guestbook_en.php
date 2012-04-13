@@ -35,5 +35,8 @@ $lang["form_post_guestbookpostname"] = "Name:";
 $lang["form_post_guestbookpostpage"] = "Page:";
 $lang["form_post_guestbookposttext"] = "Message:";
 
+$lang["messageprovider_guestbook_name"]= "Guestbooks";
+$lang["new_post_mail"]          = "A new post was added to a guestbook.\n\n";
+
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sign", 5 => "", 6 => "", 7 => "", 8 => "");

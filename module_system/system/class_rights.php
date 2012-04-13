@@ -15,6 +15,18 @@
  */
 class class_rights {
 
+    public static $STR_RIGHT_INHERIT = "inherit";
+    public static $STR_RIGHT_VIEW = "view";
+    public static $STR_RIGHT_EDIT = "edit";
+    public static $STR_RIGHT_DELETE = "delete";
+    public static $STR_RIGHT_RIGHT = "rights";
+    public static $STR_RIGHT_RIGHT1 = "right1";
+    public static $STR_RIGHT_RIGHT2 = "right2";
+    public static $STR_RIGHT_RIGHT3 = "right3";
+    public static $STR_RIGHT_RIGHT4 = "right4";
+    public static $STR_RIGHT_RIGHT5 = "right5";
+
+
 	/**
 	 * class_db
 	 *
@@ -47,7 +59,7 @@ class class_rights {
 	/**
 	 * Returns one Instance of the Rights-Object, using a singleton pattern
 	 *
-	 * @return object The Rights-Object
+	 * @return class_rights
 	 */
 	public static function getInstance() {
 		if(self::$objRights == null) {
@@ -85,16 +97,16 @@ class class_rights {
     private function writeSingleRecord($strSystemid, $arrRights) {
         //Splitting up the rights
         $arrParams   = array();
-        $arrParams[] = (int)$arrRights["inherit"];
-        $arrParams[] = $arrRights["view"];
-        $arrParams[] = $arrRights["edit"];
-        $arrParams[] = $arrRights["delete"];
-        $arrParams[] = $arrRights["right"];
-        $arrParams[] = $arrRights["right1"];
-        $arrParams[] = $arrRights["right2"];
-        $arrParams[] = $arrRights["right3"];
-        $arrParams[] = $arrRights["right4"];
-        $arrParams[] = $arrRights["right5"];
+        $arrParams[] = (int)$arrRights[self::$STR_RIGHT_INHERIT];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_VIEW];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_EDIT];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_DELETE];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT1];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT2];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT3];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT4];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT5];
         $arrParams[] = $strSystemid;
 
         $strQuery = "UPDATE "._dbprefix_."system_right
@@ -151,7 +163,6 @@ class class_rights {
 
 	}
 
-
     /**
      * Set the rights of the passed systemrecord.
      * Writes the rights down to all records inheriting from the current one.
@@ -166,7 +177,7 @@ class class_rights {
 
 	    //check against root-record: here no inheritance
 	    if($strSystemid == "" || $strSystemid == "0")
-	        $arrRights["inherit"] = 0;
+	        $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
 
         $objCommon = new class_module_system_common($strSystemid);
@@ -175,9 +186,9 @@ class class_rights {
 
         //separate the two possible modes: inheritance or no inheritance
         //if set to inheritance, set the flag, load the rights from one level above and write the rights down.
-        if(isset($arrRights["inherit"]) && $arrRights["inherit"] == 1) {
+        if(isset($arrRights[self::$STR_RIGHT_INHERIT]) && $arrRights[self::$STR_RIGHT_INHERIT] == 1) {
             $arrRights = $this->getPlainRightRow($strPrevSystemid);
-            $arrRights["inherit"] = 1;
+            $arrRights[self::$STR_RIGHT_INHERIT] = 1;
         }
 
         $bitReturn &= $this->writeSingleRecord($strSystemid, $arrRights);
@@ -190,9 +201,9 @@ class class_rights {
 
                 $arrChildRights = $this->getPlainRightRow($strOneChildId);
 
-                if($arrChildRights["inherit"] == 1) {
+                if($arrChildRights[self::$STR_RIGHT_INHERIT] == 1) {
                     $arrChildRights = $arrRights;
-                    $arrChildRights["inherit"] = 1;
+                    $arrChildRights[self::$STR_RIGHT_INHERIT] = 1;
                 }
                 $bitReturn &= $this->setRightsRecursive($arrChildRights, $strOneChildId);
             }
@@ -212,7 +223,7 @@ class class_rights {
      */
 	public function isInherited($strSystemid) {
         $arrRights = $this->getPlainRightRow($strSystemid);
-        return $arrRights["inherit"] == 1;
+        return $arrRights[self::$STR_RIGHT_INHERIT] == 1;
 	}
 
     /**
@@ -224,7 +235,7 @@ class class_rights {
      */
 	public function setInherited($bitIsInherited, $strSystemid) {
         $arrRights = $this->getPlainRightRow($strSystemid);
-        $arrRights["inherit"] = ($bitIsInherited ? 1 : 0);
+        $arrRights[self::$STR_RIGHT_INHERIT] = ($bitIsInherited ? 1 : 0);
         return $this->setRights($arrRights, $strSystemid);
 	}
 
@@ -252,28 +263,28 @@ class class_rights {
 
         $arrRights = array();
         if(isset($arrRow["right_id"])) {
-            $arrRights["view"]   = $arrRow["right_view"];
-            $arrRights["edit"]   = $arrRow["right_edit"];
-            $arrRights["delete"] = $arrRow["right_delete"];
-            $arrRights["right"]  = $arrRow["right_right"];
-            $arrRights["right1"] = $arrRow["right_right1"];
-            $arrRights["right2"] = $arrRow["right_right2"];
-            $arrRights["right3"] = $arrRow["right_right3"];
-            $arrRights["right4"] = $arrRow["right_right4"];
-            $arrRights["right5"] = $arrRow["right_right5"];
-            $arrRights["inherit"]= (int)$arrRow["right_inherit"];
+            $arrRights[self::$STR_RIGHT_VIEW]   = $arrRow["right_view"];
+            $arrRights[self::$STR_RIGHT_EDIT]   = $arrRow["right_edit"];
+            $arrRights[self::$STR_RIGHT_DELETE] = $arrRow["right_delete"];
+            $arrRights[self::$STR_RIGHT_RIGHT]  = $arrRow["right_right"];
+            $arrRights[self::$STR_RIGHT_RIGHT1] = $arrRow["right_right1"];
+            $arrRights[self::$STR_RIGHT_RIGHT2] = $arrRow["right_right2"];
+            $arrRights[self::$STR_RIGHT_RIGHT3] = $arrRow["right_right3"];
+            $arrRights[self::$STR_RIGHT_RIGHT4] = $arrRow["right_right4"];
+            $arrRights[self::$STR_RIGHT_RIGHT5] = $arrRow["right_right5"];
+            $arrRights[self::$STR_RIGHT_INHERIT]= (int)$arrRow["right_inherit"];
         }
         else {
-            $arrRights["view"]   = "";
-            $arrRights["edit"]   = "";
-            $arrRights["delete"] = "";
-            $arrRights["right"]  = "";
-            $arrRights["right1"] = "";
-            $arrRights["right2"] = "";
-            $arrRights["right3"] = "";
-            $arrRights["right4"] = "";
-            $arrRights["right5"] = "";
-            $arrRights["inherit"]= 1;
+            $arrRights[self::$STR_RIGHT_VIEW]    = "";
+            $arrRights[self::$STR_RIGHT_EDIT]    = "";
+            $arrRights[self::$STR_RIGHT_DELETE]  = "";
+            $arrRights[self::$STR_RIGHT_RIGHT]   = "";
+            $arrRights[self::$STR_RIGHT_RIGHT1]  = "";
+            $arrRights[self::$STR_RIGHT_RIGHT2]  = "";
+            $arrRights[self::$STR_RIGHT_RIGHT3]  = "";
+            $arrRights[self::$STR_RIGHT_RIGHT4]  = "";
+            $arrRights[self::$STR_RIGHT_RIGHT5]  = "";
+            $arrRights[self::$STR_RIGHT_INHERIT]= 1;
         }
 
 
@@ -293,17 +304,17 @@ class class_rights {
 		$arrRow = $this->getPlainRightRow($strSystemid);
 
 		//Exploding the array
-		$arrReturn["view"]   = explode(",",$arrRow["view"]);
-		$arrReturn["edit"]   = explode(",",$arrRow["edit"]);
-		$arrReturn["delete"] = explode(",",$arrRow["delete"]);
-		$arrReturn["right"]  = explode(",",$arrRow["right"]);
-		$arrReturn["right1"] = explode(",",$arrRow["right1"]);
-		$arrReturn["right2"] = explode(",",$arrRow["right2"]);
-		$arrReturn["right3"] = explode(",",$arrRow["right3"]);
-		$arrReturn["right4"] = explode(",",$arrRow["right4"]);
-		$arrReturn["right5"] = explode(",",$arrRow["right5"]);
+		$arrReturn[self::$STR_RIGHT_VIEW]  = explode(",",$arrRow[self::$STR_RIGHT_VIEW]);
+		$arrReturn[self::$STR_RIGHT_EDIT]  = explode(",",$arrRow[self::$STR_RIGHT_EDIT]) ;
+		$arrReturn[self::$STR_RIGHT_DELETE] = explode(",",$arrRow[self::$STR_RIGHT_DELETE]);
+		$arrReturn[self::$STR_RIGHT_RIGHT] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT]);
+		$arrReturn[self::$STR_RIGHT_RIGHT1] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT1]);
+		$arrReturn[self::$STR_RIGHT_RIGHT2] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT2]);
+		$arrReturn[self::$STR_RIGHT_RIGHT3] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT3]);
+		$arrReturn[self::$STR_RIGHT_RIGHT4] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT4]);
+		$arrReturn[self::$STR_RIGHT_RIGHT5] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT5]);
 
-		$arrReturn["inherit"] = (int)$arrRow["inherit"];
+		$arrReturn[self::$STR_RIGHT_INHERIT] = (int)$arrRow[self::$STR_RIGHT_INHERIT];
 
 		return $arrReturn;
 	}
@@ -316,42 +327,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightView($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["view"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["view"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_VIEW, $strSystemid);
 	}
 
 	/**
@@ -362,42 +338,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightEdit($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["edit"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["edit"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_EDIT, $strSystemid);
 	}
 
 
@@ -409,42 +350,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightDelete($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["delete"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["delete"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_DELETE, $strSystemid);
 	}
 
 
@@ -456,42 +362,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["right"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["right"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT, $strSystemid);
 	}
 
 
@@ -504,42 +375,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight1($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["right1"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["right1"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT1, $strSystemid);
 	}
 
 
@@ -551,43 +387,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight2($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["right2"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["right2"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT2, $strSystemid);
 	}
 
 
@@ -599,42 +399,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight3($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["right3"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["right3"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT3, $strSystemid);
 	}
 
 	/**
@@ -645,42 +410,7 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight4($strSystemid, $strUserid = "") {
-
-        if($strSystemid == "")
-            return false;
-
-        if($this->bitTestMode)
-            return true;
-
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
-        }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
-
-		$arrRights = $this->getArrayRights($strSystemid);
-
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["right4"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["right4"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT4, $strSystemid);
 	}
 
 
@@ -692,56 +422,59 @@ class class_rights {
 	 * @return bool
 	 */
 	public function rightRight5($strSystemid, $strUserid = "") {
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT5, $strSystemid);
+	}
 
+    /**
+     * Checks if a given user-id is granted the passed permission for the passed systemid.
+     *
+     * @param $strUserid
+     * @param $strPermission
+     * @param $strSystemid
+     * @return bool
+     */
+    public function checkPermissionForUserId($strUserid ,$strPermission, $strSystemid) {
         if($strSystemid == "")
             return false;
 
         if($this->bitTestMode)
             return true;
 
+        $arrGroupIds = array();
 
-		$bitReturn = false;
-        $arrGroups = array();
-		if($strUserid == "") {
-			$strUserid = $this->objSession->getUserID();
-            if($strUserid != "") {
-                $arrGroups = $this->objSession->getGroupIdsAsArray();
-            }
+        if($strUserid == "" && validateSystemid($this->objSession->getUserID())) {
+            $objUser = new class_module_user_user($this->objSession->getUserID());
+            $arrGroupIds = $objUser->getArrGroupIds();
         }
-        else {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroups = $objUser->getArrGroupIds();
-        }
+        else
+            $arrGroupIds[] = _guests_group_id_;
 
-		$arrRights = $this->getArrayRights($strSystemid);
+        foreach($arrGroupIds as $strOneGroupId)
+            if($this->checkPermissionForGroup($strOneGroupId, $strPermission, $strSystemid))
+                return true;
 
-		if($strUserid != "") {
-			foreach($arrGroups as $strGroup) {
-				if(in_array($strGroup, $arrRights["right5"]))
-					$bitReturn = true;
-			}
-		}
-		else {
-			//Guest
-			$strGuestId = _guests_group_id_;
-
-			if(in_array($strGuestId, $arrRights["right5"]))
-				$bitReturn = true;
-		}
-		return $bitReturn;
-	}
+        return false;
+    }
 
 
-	/**
-	 * Looks up the systemid of a module
-	 *
-	 * @param int $intModuleNr
-	 * @return string
-	 */
-	public function getModuleSystemid($intModuleNr) {
-	    return class_module_system_module::getModuleIdByNr($intModuleNr);
-	}
+    /**
+     * Validates, if a single group is granted a permission for a given systemid.
+     *
+     * @param string $strGroupId
+     * @param $strPermission
+     * @param $strSystemid
+     * @return bool
+     */
+    public function checkPermissionForGroup($strGroupId, $strPermission, $strSystemid) {
+        if($strSystemid == "")
+            return false;
 
+        if($this->bitTestMode)
+            return true;
+
+        $arrRights = $this->getArrayRights($strSystemid);
+        return in_array($strGroupId, $arrRights[$strPermission]);
+    }
 
 	/**
 	 * Checks whether a user is in the admin-group or not
@@ -784,22 +517,23 @@ class class_rights {
 	    $arrRights = $this->getArrayRights($strSystemid, false);
 
 	    //rights not given, add now, disabling inheritance
-	    $arrRights["inherit"] = 0;
+	    $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
 	    //add the group to the row
 	    if(!in_array($strGroupId, $arrRights[$strRight]))
 	        $arrRights[$strRight][] = $strGroupId;
 
 	    //build a one-dim array
-	    $arrRights["view"] = implode(",", $arrRights["view"]);
-	    $arrRights["edit"] = implode(",", $arrRights["edit"]);
-	    $arrRights["delete"] = implode(",", $arrRights["delete"]);
-	    $arrRights["right"] = implode(",", $arrRights["right"]);
-	    $arrRights["right1"] = implode(",", $arrRights["right1"]);
-	    $arrRights["right2"] = implode(",", $arrRights["right2"]);
-	    $arrRights["right3"] = implode(",", $arrRights["right3"]);
-	    $arrRights["right4"] = implode(",", $arrRights["right4"]);
-	    $arrRights["right5"] = implode(",", $arrRights["right5"]);
+        $arrRights[self::$STR_RIGHT_VIEW]  = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
+        $arrRights[self::$STR_RIGHT_EDIT]  = implode(",", $arrRights[self::$STR_RIGHT_EDIT]) ;
+        $arrRights[self::$STR_RIGHT_DELETE] = implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
+        $arrRights[self::$STR_RIGHT_RIGHT] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
+        $arrRights[self::$STR_RIGHT_RIGHT1] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
+        $arrRights[self::$STR_RIGHT_RIGHT2] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT2]);
+        $arrRights[self::$STR_RIGHT_RIGHT3] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
+        $arrRights[self::$STR_RIGHT_RIGHT4] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
+        $arrRights[self::$STR_RIGHT_RIGHT5] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
+
 
 	    //and save the row
 	    $bitReturn = $this->setRights($arrRights, $strSystemid);
@@ -825,7 +559,7 @@ class class_rights {
 	    $arrRights = $this->getArrayRights($strSystemid, false);
 
 	    //rights not given, add now, disabling inheritance
-	    $arrRights["inherit"] = 0;
+	    $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
 	    //remove the group
         if(in_array($strGroupId, $arrRights[$strRight])) {
@@ -836,15 +570,15 @@ class class_rights {
         }
 
 	    //build a one-dim array
-	    $arrRights["view"] = implode(",", $arrRights["view"]);
-	    $arrRights["edit"] = implode(",", $arrRights["edit"]);
-	    $arrRights["delete"] = implode(",", $arrRights["delete"]);
-	    $arrRights["right"] = implode(",", $arrRights["right"]);
-	    $arrRights["right1"] = implode(",", $arrRights["right1"]);
-	    $arrRights["right2"] = implode(",", $arrRights["right2"]);
-	    $arrRights["right3"] = implode(",", $arrRights["right3"]);
-	    $arrRights["right4"] = implode(",", $arrRights["right4"]);
-	    $arrRights["right5"] = implode(",", $arrRights["right5"]);
+        $arrRights[self::$STR_RIGHT_VIEW]  = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
+        $arrRights[self::$STR_RIGHT_EDIT]  = implode(",", $arrRights[self::$STR_RIGHT_EDIT]) ;
+        $arrRights[self::$STR_RIGHT_DELETE] = implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
+        $arrRights[self::$STR_RIGHT_RIGHT] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
+        $arrRights[self::$STR_RIGHT_RIGHT1] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
+        $arrRights[self::$STR_RIGHT_RIGHT2] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT2]);
+        $arrRights[self::$STR_RIGHT_RIGHT3] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
+        $arrRights[self::$STR_RIGHT_RIGHT4] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
+        $arrRights[self::$STR_RIGHT_RIGHT5] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
 
 	    //and save the row
 	    $bitReturn = $this->setRights($arrRights, $strSystemid);
@@ -882,7 +616,6 @@ class class_rights {
 
         if(!$objObject instanceof class_model) {
             throw new class_exception("automated permission-check only for instances of class_model", class_exception::$level_ERROR);
-            return false;
         }
 
         if(trim($strPermissions) == "")
@@ -894,39 +627,39 @@ class class_rights {
             $strOnePermissions = trim($strOnePermissions);
 
             switch (trim($strOnePermissions)) {
-                case "view":
+                case self::$STR_RIGHT_VIEW:
                     if($objObject->rightView())
                         return true;
                     break;
-                case "edit":
+                case self::$STR_RIGHT_EDIT:
                     if($objObject->rightEdit())
                         return true;
                     break;
-                case "delete":
+                case self::$STR_RIGHT_DELETE:
                     if($objObject->rightDelete())
                         return true;
                     break;
-                case "right":
+                case self::$STR_RIGHT_RIGHT:
                     if($objObject->rightRight())
                         return true;
                     break;
-                case "right1":
+                case self::$STR_RIGHT_RIGHT1:
                     if($objObject->rightRight1())
                         return true;
                     break;
-                case "right2":
+                case self::$STR_RIGHT_RIGHT2:
                     if($objObject->rightRight2())
                         return true;
                     break;
-                case "right3":
+                case self::$STR_RIGHT_RIGHT3:
                     if($objObject->rightRight3())
                         return true;
                     break;
-                case "right4":
+                case self::$STR_RIGHT_RIGHT4:
                     if($objObject->rightRight4())
                         return true;
                     break;
-                case "right5":
+                case self::$STR_RIGHT_RIGHT5:
                     if($objObject->rightRight5())
                         return true;
                     break;

@@ -46,5 +46,8 @@ $lang["form_post_guestbookpostname"] = "Name:";
 $lang["form_post_guestbookpostpage"] = "Seite:";
 $lang["form_post_guestbookposttext"] = "Nachricht:";
 
+$lang["messageprovider_guestbook_name"]= "Gästebücher";
+$lang["new_post_mail"]          = "Es ist ein neuer Gästebucheintrag erfasst worden.\n\n";
+
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");

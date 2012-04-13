@@ -139,6 +139,22 @@ class class_module_guestbook_portal extends class_portal implements interface_po
             if(!$objPost->updateObjectToDb($objBook->getSystemid()))
                 throw new class_exception("Error saving entry", class_exception::$level_ERROR);
 
+
+
+            $strMailtext = $this->getLang("new_post_mail");
+            $strMailtext .= getLinkAdminHref("guestbook", "edit", "&systemid=".$objPost->getSystemid(), false);
+            $objMessageHandler = new class_module_messaging_messagehandler();
+
+            $arrGroups = array();
+            $allGroups = class_module_user_group::getAllGroups();
+            foreach($allGroups as $objOneGroup) {
+                if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
+                    $arrGroups[] = $objOneGroup;
+            }
+
+            $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_guestbook());
+
+
 			//Flush the page from cache
             $this->flushPageFromPagesCache($this->getPagename());
             $this->portalReload(getLinkPortalHref($this->getPagename()));

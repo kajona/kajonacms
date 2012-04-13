@@ -897,7 +897,7 @@ abstract class class_root {
      * <b> Only the IDs are fetched since the current object-context is not available!!! </b>
 	 *
 	 * @param string $strSystemid
-	 * @return int
+	 * @return string[]
 	 */
 	public function getChildNodesAsIdArray($strSystemid = "") {
 	    if($strSystemid == "")

@@ -161,7 +161,7 @@ class class_module_user_group extends class_model implements interface_model, in
      *
      * @param bool|int $intStart
      * @param bool|int $intEnd
-     * @return array of class_module_user_group
+     * @return class_module_user_group[]
      * @static
      */
 	public static function getAllGroups($intStart = null, $intEnd = null) {
