@@ -174,7 +174,7 @@ class class_resourceloader {
             $arrContent = scandir(_realpath_._projectpath_._langpath_."/".$strFolder);
             foreach($arrContent as $strSingleEntry) {
 
-                if(substr($strSingleEntry, 0, -4) == ".php") {
+                if(substr($strSingleEntry, -4) == ".php") {
 
                     $strKey = array_search($strSingleEntry, $arrReturn);
                     if($strKey !== false) {

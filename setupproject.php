@@ -61,6 +61,7 @@ class class_project_setup {
         self::checkDir("/templates/default/pics");
 
         self::createClassloaderConfig();
+        self::createLangProjectEntry();
 
 
         echo "searching for files on root-path...\n";
@@ -84,7 +85,7 @@ class class_project_setup {
 
         foreach($arrModules as $strSingleModule) {
             if(is_dir(_corepath_."/".$strSingleModule."/templates"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates");
+                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates", array(".tpl"));
 
             if(is_dir(_corepath_."/".$strSingleModule."/files"))
                 self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_."/files");
@@ -131,6 +132,38 @@ XML;
     }
 
 
+    private static function createLangProjectEntry() {
+        $strContent = <<<TXT
+
+Kajona V4 lang subsystem.
+
+    Since Kajona V4, it is possible to change the default-lang files by deploying them inside the projects'
+    lang-folder.
+    This provides a way to change texts and lables without breaking them during the next system-update.
+
+    Example: By default, the Template-Manager is titled "Templates".
+    The entry is created by the file
+
+    /core/module_templatemanager/lang/module_templatemanager/lang_templatemanager_en.php -> \$lang["modul_titel"].
+
+    To change the entry to "Template Packs" or "Templatemanager" copy the original lang-file into the matching folder
+    under the project root. Using the example above, that would be:
+
+    /project/lang/module_templatemanager/lang_templatemanager_en.php
+
+    Now change the entry
+    \$lang["modul_titel"] = "Templates";
+    to
+    \$lang["modul_titel"] = "Templatemanager";
+
+    Reload your browser and enjoy the relabeled interface.
+
+
+TXT;
+        file_put_contents(_realpath_."/project/lang/readme.txt", $strContent);
+    }
+
+
     private static function createAdminRedirect() {
         $strContent  = "<html>\n";
         $strContent .= " <head>\n";
@@ -155,10 +188,10 @@ XML;
     }
 
 
-    private static function copyFolder($strSourceFolder, $strTargetFolder) {
+    private static function copyFolder($strSourceFolder, $strTargetFolder, $arrExcludeSuffix = array()) {
         $arrEntries = scandir($strSourceFolder);
         foreach($arrEntries as $strOneEntry) {
-            if($strOneEntry == "." || $strOneEntry == ".." || $strOneEntry == ".svn")
+            if($strOneEntry == "." || $strOneEntry == ".." || $strOneEntry == ".svn" || in_array(uniSubstr($strOneEntry, uniStrrpos($strOneEntry, ".")), $arrExcludeSuffix))
                 continue;
 
             if(is_file($strSourceFolder."/".$strOneEntry) && !is_file($strTargetFolder."/".$strOneEntry)) {
@@ -170,7 +203,7 @@ XML;
                 if(!is_dir($strTargetFolder."/".$strOneEntry))
                     mkdir($strTargetFolder."/".$strOneEntry, 0777);
 
-                self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
+                self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry, $arrExcludeSuffix);
             }
         }
     }
