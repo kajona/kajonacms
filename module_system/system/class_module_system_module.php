@@ -197,8 +197,7 @@ class class_module_system_module extends class_model implements interface_model,
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."system_module,
                             "._dbprefix_."system
-                      WHERE module_id = system_id
-                   ORDER BY system_sort ASC, system_comment ASC";
+                      WHERE module_id = system_id";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
     }
