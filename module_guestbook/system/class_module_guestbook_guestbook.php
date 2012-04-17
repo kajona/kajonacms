@@ -122,8 +122,7 @@ class class_module_guestbook_guestbook extends class_model implements interface_
     public static function getGuestbooksCount() {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."guestbook_book, "._dbprefix_."system
-						WHERE system_id = guestbook_id
-						ORDER BY guestbook_title";
+						WHERE system_id = guestbook_id";
 
         $arrRow =  class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];

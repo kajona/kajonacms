@@ -161,8 +161,7 @@ class class_module_navigation_point extends class_model implements interface_mod
                              WHERE system_id = navigation_id
                              AND system_prev_id = ?
                              AND system_module_nr = ?
-                             ".($bitJustActive ? " AND system_status = 1 ": "")."
-                             ORDER BY system_sort ASC, system_comment ASC";
+                             ".($bitJustActive ? " AND system_status = 1 ": "")."";
 
         $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid, _navigation_modul_id_));
         return $arrReturn["COUNT(*)"];

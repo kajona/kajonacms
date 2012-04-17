@@ -124,8 +124,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
         $strQuery = "SELECT COUNT(*)
 		               FROM "._dbprefix_."mediamanager_repo,
 						    "._dbprefix_."system
-				      WHERE repo_id = system_id
-		    	   ORDER BY repo_title ASC";
+				      WHERE repo_id = system_id";
         $objDB = class_carrier::getInstance()->getObjDB();
         $arrRow = $objDB->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];

@@ -129,8 +129,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public static function getNumberOfTags() {
 
         $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."tags_tag
-                   ORDER BY tags_tag_name ASC";
+                       FROM "._dbprefix_."tags_tag";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];

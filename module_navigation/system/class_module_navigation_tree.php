@@ -115,8 +115,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
                        FROM "._dbprefix_."navigation, "._dbprefix_."system
                      WHERE system_id = navigation_id
                        AND system_prev_id = ?
-                       AND system_module_nr = ?
-                  ORDER BY system_comment ASC";
+                       AND system_module_nr = ?";
 
         $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
         return $arrReturn["COUNT(*)"];

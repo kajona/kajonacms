@@ -171,8 +171,7 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static function getLogEntriesCount($strSystemidFilter = "") {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? ": "")."
-                   ORDER BY change_date DESC";
+                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? ": "")."";
 
         $arrParams = array();
         if($strSystemidFilter != "")

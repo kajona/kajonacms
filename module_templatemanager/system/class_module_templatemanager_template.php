@@ -134,8 +134,7 @@ class class_module_templatemanager_template extends class_model implements inter
      */
     public static function getAllTemplatepacksCount() {
         $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."templatepacks
-                   ORDER BY templatepack_name ASC ";
+                       FROM "._dbprefix_."templatepacks ";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
