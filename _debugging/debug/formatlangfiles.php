@@ -27,7 +27,7 @@ echo "+-------------------------------------------------------------------------
 //$strJavaCommand = "/opt/jdk1.6.0_22/jre/bin/java -jar '"._realpath_."/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
 
 
-$strJavaCommand = "java -jar '"._realpath_."/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
+$strJavaCommand = "java -jar '"._realpath_."/core/_debugging/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
 
 
 
