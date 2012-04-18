@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -31,7 +31,6 @@ $lang["element_anlegen"]                 = "Създай елемент";
 $lang["element_anlegen_fehler"]          = "Възникна грешка при създаването на елемент";
 $lang["element_bearbeiten"]              = "Редактирай елемент";
 $lang["element_bearbeiten_fehler"]       = "Възникна грешка при запазването на елемента";
-$lang["form_element_cachetime"]               = "Максимално време за кеширане:";
 $lang["element_cachetime_hint"]          = "в секунди (-1 = без кеширане)";
 $lang["element_first"]                   = "В началото";
 $lang["element_hoch"]                    = "Премести елемент нагоре";
@@ -43,12 +42,17 @@ $lang["element_loeschen_fehler"]         = "Възникна грешка при
 $lang["element_loeschen_frage"]          = "Наистина ли искате да премахнете елемента &quot;<b>%%element_name%%</b>&quot;?";
 $lang["element_portal"]                  = "Portal-class:";
 $lang["element_pos"]                     = "Позиция в контейнера:";
-$lang["form_element_repeat"]                  = "Повтарящ:";
 $lang["element_runter"]                  = "Премести елемент надолу";
 $lang["elemente_liste_leer"]             = "Няма инсталирани елементи";
 $lang["entry_down"]                      = "Премести надолу";
 $lang["entry_up"]                        = "Премести нагоре";
-$lang["fehler_name"]                     = "Няма установено име на страницата";
+$lang["fehler_captcha"]                  = "Моля попълнете правилно верификационния код";
+$lang["fehler_email"]                    = "Моля попълнете съществуваща електронна поща";
+$lang["fehler_nachricht"]                = "Моля напишете съобщение";
+$lang["fehler_name"]                     = "Моля попълнете име";
+$lang["fehler_seite"]                    = "Не съществува начална страница";
+$lang["form_element_cachetime"]          = "Максимално време за кеширане:";
+$lang["form_element_repeat"]             = "Повтарящ:";
 $lang["inhalte_element"]                 = "Управление на елементи на страницата";
 $lang["inhalte_liste"]                   = "Списък със страници";
 $lang["inhalte_navi2"]                   = "Страница:";
@@ -125,8 +129,3 @@ $lang["templateNotLoaded"]               = "ВНИМАНИЕ: Не беше из
 $lang["templateNotSelectedBefore"]       = "ВНИМАНИЕ: Няма избран шаблон за тази страница!";
 $lang["updatePlaceholder"]               = "Обнови контейнер";
 $lang["warning_elementsremaining"]       = "ВНИМАНИЕ<br /> Съществуват елементи към страници в системата, които не могат да бъдат прикрепени към контейнерите осигурени от шаблона. Това може да се случи, ако контейнера е преместен или преименуван. За преименуването на контейнер в системата можете да използвате функцията \"Обнови контейнер\". Следва списък на елементите след това предупреждение.";
-$lang["fehler_captcha"]                  = "Моля попълнете правилно верификационния код";
-$lang["fehler_email"]                    = "Моля попълнете съществуваща електронна поща";
-$lang["fehler_nachricht"]                = "Моля напишете съобщение";
-$lang["fehler_name"]                     = "Моля попълнете име";
-$lang["fehler_seite"]                    = "Не съществува начална страница";

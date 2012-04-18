@@ -7,11 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["link_more_title"]                 = "Допълнителна информация:";
 $lang["page_element_ph_title"]           = "Вътрешно име:";
 $lang["paragraph_content"]               = "Текст";
 $lang["paragraph_link"]                  = "Линк";
 $lang["quickhelp_element_paragraph"]     = "Тук можете да въведете съдържанието на параграфи с помощта на удобен редактор.";
-$lang["link_more_title"]                 = "Допълнителна информация:";

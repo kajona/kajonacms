@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Page-cache enabled:";
@@ -36,12 +36,10 @@ $lang["copyElement_template"]            = "Page template:";
 $lang["ds_entsperren"]                   = "Unlock record";
 $lang["ds_gesperrt"]                     = "The record is currently locked";
 $lang["ds_seite_gesperrt"]               = "The page can\'t be deleted, it contains locked records";
-$lang["form_element_classadmin"]                   = "Admin-class:";
 $lang["element_anlegen"]                 = "Create element";
 $lang["element_anlegen_fehler"]          = "An error occured while creating page element";
 $lang["element_bearbeiten"]              = "Edit element";
 $lang["element_bearbeiten_fehler"]       = "An error occured while saving page element";
-$lang["form_element_cachetime"]               = "Max. cache duration:";
 $lang["element_cachetime_hint"]          = "in seconds (-1 = no caching)";
 $lang["element_copy"]                    = "Copy element";
 $lang["element_first"]                   = "At the beginning";
@@ -52,14 +50,20 @@ $lang["element_last"]                    = "At the end";
 $lang["element_liste_leer"]              = "No page elements provided by page template";
 $lang["element_loeschen_fehler"]         = "An error occured while deleting page element";
 $lang["element_loeschen_frage"]          = "Do you really want to delete the page element &quot;<b>%%element_name%%</b>&quot;?";
-$lang["form_element_classportal"]                  = "Portal-class:";
 $lang["element_pos"]                     = "Position at placeholder:";
-$lang["form_element_repeat"]                  = "Repeatable:";
 $lang["element_runter"]                  = "Shift element down";
 $lang["elemente_liste_leer"]             = "No page elements installed";
 $lang["entry_down"]                      = "Shift down";
 $lang["entry_up"]                        = "Shift up";
-$lang["fehler_name"]                     = "No page name provided";
+$lang["fehler_captcha"]                  = "Please enter the correct verification code";
+$lang["fehler_email"]                    = "Please provide a valid email address";
+$lang["fehler_nachricht"]                = "Please provide a message";
+$lang["fehler_name"]                     = "Please provide a name";
+$lang["fehler_seite"]                    = "Start page not existing";
+$lang["form_element_cachetime"]          = "Max. cache duration:";
+$lang["form_element_classadmin"]         = "Admin-class:";
+$lang["form_element_classportal"]        = "Portal-class:";
+$lang["form_element_repeat"]             = "Repeatable:";
 $lang["inhalte_element"]                 = "Manage page elements";
 $lang["inhalte_liste"]                   = "List of pages";
 $lang["inhalte_navi2"]                   = "Page: ";
@@ -164,11 +168,6 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
-$lang["fehler_captcha"]                  = "Please enter the correct verification code";
-$lang["fehler_email"]                    = "Please provide a valid email address";
-$lang["fehler_nachricht"]                = "Please provide a message";
-$lang["fehler_name"]                     = "Please provide a name";
-$lang["fehler_seite"]                    = "Start page not existing";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");

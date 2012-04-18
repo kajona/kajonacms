@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Cacheminne för sida aktiverat:";
@@ -38,12 +38,10 @@ $lang["copyElement_template"]            = "Sidomall:";
 $lang["ds_entsperren"]                   = "Lås upp datapost";
 $lang["ds_gesperrt"]                     = "Dataposten är för närvarande låst";
 $lang["ds_seite_gesperrt"]               = "Sidan kan inte raderas, då den innehåller låsta dataposter";
-$lang["form_element_classadmin"]                   = "Adminklass:";
 $lang["element_anlegen"]                 = "Skapa element";
 $lang["element_anlegen_fehler"]          = "Fel vid skapande av element";
 $lang["element_bearbeiten"]              = "Redigera element";
 $lang["element_bearbeiten_fehler"]       = "Fel vid redigering av element";
-$lang["form_element_cachetime"]               = "Max cache tid";
 $lang["element_cachetime_hint"]          = "o sekunder (-1 = ingen cachning)";
 $lang["element_copy"]                    = "Kopiera element";
 $lang["element_first"]                   = "I början på platshållaren";
@@ -56,17 +54,23 @@ $lang["element_loeschen_fehler"]         = "Fel vid radering av element.";
 $lang["element_loeschen_frage"]          = "Vill du verkligen radera element &quot;<b>%%element_name%%</b>&quot;?";
 $lang["element_loeschen_link"]           = "Radera";
 $lang["element_name"]                    = "Namn:";
-$lang["form_element_classportal"]                  = "Portalklass:";
 $lang["element_pos"]                     = "Position i platshållare:";
-$lang["form_element_repeat"]                  = "Upprepningsbar:";
 $lang["element_runter"]                  = "Flytta element nedåt";
 $lang["element_status_aktiv"]            = "Ändra status (är aktiverad)";
 $lang["element_status_inaktiv"]          = "Ändra status (är inaktiverad)";
 $lang["elemente_liste_leer"]             = "Inga element är installerade";
 $lang["entry_down"]                      = "Nedåt";
 $lang["entry_up"]                        = "Uppåt";
-$lang["fehler_name"]                     = "Inget sidnamn angivet";
+$lang["fehler_captcha"]                  = "Vänligen ange korrekt säkerhetskod";
+$lang["fehler_email"]                    = "Vänligen ange giltig e-mail adress";
+$lang["fehler_nachricht"]                = "Vänligen skriv in ett meddelande";
+$lang["fehler_name"]                     = "Vänligen ange ett namn";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för att utföra denna handling";
+$lang["fehler_seite"]                    = "Startsida existerar inte";
+$lang["form_element_cachetime"]          = "Max cache tid";
+$lang["form_element_classadmin"]         = "Adminklass:";
+$lang["form_element_classportal"]        = "Portalklass:";
+$lang["form_element_repeat"]             = "Upprepningsbar:";
 $lang["inhalte_element"]                 = "Hantera sidoelement";
 $lang["inhalte_liste"]                   = "Lista på sidor";
 $lang["inhalte_navi2"]                   = "Sida:";
@@ -168,9 +172,3 @@ $lang["templateNotLoaded"]               = "VARNING: För denna sida har ingen m
 $lang["templateNotSelectedBefore"]       = "VARNING: För denna sida har ingen mall valts!";
 $lang["updatePlaceholder"]               = "Uppdatera platshållare";
 $lang["warning_elementsremaining"]       = "VARNING: <br />I systemet finns sidoelement, som inte kan tilldelas någon platshållare. Detta kan hända om en platshållare i mallen har bytt namn eller blivit raderad. För att byta namn på platshållaren också i systemet kan man använda funktionen \"uppdatera platshållare\". En lista med de element det gäller finns efter denna varning.";
-$lang["fehler_captcha"]                  = "Vänligen ange korrekt säkerhetskod";
-$lang["fehler_email"]                    = "Vänligen ange giltig e-mail adress";
-$lang["fehler_nachricht"]                = "Vänligen skriv in ett meddelande";
-$lang["fehler_name"]                     = "Vänligen ange ett namn";
-$lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för att utföra denna handling";
-$lang["fehler_seite"]                    = "Startsida existerar inte";

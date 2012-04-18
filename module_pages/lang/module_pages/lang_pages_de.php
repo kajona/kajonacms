@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Seitencache aktiv:";
@@ -36,12 +36,10 @@ $lang["copyElement_template"]            = "Seitentemplate:";
 $lang["ds_entsperren"]                   = "Datensatz entsperren";
 $lang["ds_gesperrt"]                     = "Der Datensatz ist momentan gesperrt";
 $lang["ds_seite_gesperrt"]               = "Die Seite kann nicht gelöscht werden, da sie gesperrte Datensätze beinhaltet";
-$lang["form_element_classadmin"]                   = "Admin-Klasse:";
 $lang["element_anlegen"]                 = "Element anlegen";
 $lang["element_anlegen_fehler"]          = "Fehler beim Anlegen des Elements";
 $lang["element_bearbeiten"]              = "Element bearbeiten";
 $lang["element_bearbeiten_fehler"]       = "Fehler beim Bearbeiten des Elements";
-$lang["form_element_cachetime"]               = "Max. Cachedauer:";
 $lang["element_cachetime_hint"]          = "in Sekunden (-1 = kein Caching)";
 $lang["element_copy"]                    = "Element kopieren";
 $lang["element_first"]                   = "Am Anfang des Platzhalters";
@@ -52,14 +50,20 @@ $lang["element_last"]                    = "Am Ende des Platzhalters";
 $lang["element_liste_leer"]              = "Keine Elemente im Template vorhanden";
 $lang["element_loeschen_fehler"]         = "Fehler beim Löschen des Elements";
 $lang["element_loeschen_frage"]          = "Möchten Sie das Element &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$lang["form_element_classportal"]                  = "Portal-Klasse:";
 $lang["element_pos"]                     = "Position am Platzhalter:";
-$lang["form_element_repeat"]                  = "Wiederholbar:";
 $lang["element_runter"]                  = "Element nach unten verschieben";
 $lang["elemente_liste_leer"]             = "Keine Elemente installiert";
 $lang["entry_down"]                      = "Nach unten";
 $lang["entry_up"]                        = "Nach oben";
-$lang["fehler_name"]                     = "Kein Seitenname angegeben";
+$lang["fehler_captcha"]                  = "Bitte geben Sie den korrekten Sicherheits-Code an";
+$lang["fehler_email"]                    = "Bitte geben Sie eine gültige E-Mail Adresse an";
+$lang["fehler_nachricht"]                = "Bitte geben Sie eine Nachricht an";
+$lang["fehler_name"]                     = "Bitte geben Sie einen Namen an";
+$lang["fehler_seite"]                    = "Startseite nicht vorhanden";
+$lang["form_element_cachetime"]          = "Max. Cachedauer:";
+$lang["form_element_classadmin"]         = "Admin-Klasse:";
+$lang["form_element_classportal"]        = "Portal-Klasse:";
+$lang["form_element_repeat"]             = "Wiederholbar:";
 $lang["inhalte_element"]                 = "Seitenelemente verwalten";
 $lang["inhalte_liste"]                   = "Liste der Seiten";
 $lang["inhalte_navi2"]                   = "Seite: ";
@@ -164,11 +168,6 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
-$lang["fehler_captcha"]                  = "Bitte geben Sie den korrekten Sicherheits-Code an";
-$lang["fehler_email"]                    = "Bitte geben Sie eine gültige E-Mail Adresse an";
-$lang["fehler_nachricht"]                = "Bitte geben Sie eine Nachricht an";
-$lang["fehler_name"]                     = "Bitte geben Sie einen Namen an";
-$lang["fehler_seite"]                    = "Startseite nicht vorhanden";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кэш страницы включен:";
@@ -32,7 +32,6 @@ $lang["element_anlegen"]                 = "Создать элемент";
 $lang["element_anlegen_fehler"]          = "Ошибка при создании элемента страницы";
 $lang["element_bearbeiten"]              = "Изменить элемент";
 $lang["element_bearbeiten_fehler"]       = "Ошибка при сохранении элемента страницы";
-$lang["form_element_cachetime"]               = "Максимальное время продолжительности кэша:";
 $lang["element_cachetime_hint"]          = "в секундах (-1 = нет кэша)";
 $lang["element_first"]                   = "В начало";
 $lang["element_hoch"]                    = "Переместить элемент наверх";
@@ -42,14 +41,15 @@ $lang["element_last"]                    = "В конец";
 $lang["element_liste_leer"]              = "Нет элементов страницы, предоставляемых этим шаблоном";
 $lang["element_loeschen_fehler"]         = "Ошибка при удалении элемента страницы";
 $lang["element_loeschen_frage"]          = "Вы действительно хотите удалить элемент страницы &quot;<b>%%element_name%%</b>&quot;?";
-$lang["form_element_classportal"]                  = "Портал-класс:";
 $lang["element_pos"]                     = "Позиция в держателе мест:";
-$lang["form_element_repeat"]                  = "Повторяющийся:";
 $lang["element_runter"]                  = "Переместить элемент вниз";
 $lang["elemente_liste_leer"]             = "Нет установленных элементов страницы";
 $lang["entry_down"]                      = "Опустить";
 $lang["entry_up"]                        = "Поднять";
 $lang["fehler_name"]                     = "Не предоставлено имя страницы";
+$lang["form_element_cachetime"]          = "Максимальное время продолжительности кэша:";
+$lang["form_element_classportal"]        = "Портал-класс:";
+$lang["form_element_repeat"]             = "Повторяющийся:";
 $lang["inhalte_element"]                 = "Управлять элементами страницы";
 $lang["inhalte_liste"]                   = "Список страниц";
 $lang["inhalte_navi2"]                   = "Страница:";
