@@ -7,9 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["actionCalendar"]                  = "Sitemap";
 $lang["addWidget"]                       = "Add widget";
 $lang["addWidgetNextStep"]               = "Next";
 $lang["calendar_next"]                   = "next month &gt;&gt;";
@@ -23,7 +24,6 @@ $lang["editWidget"]                      = "Edit widget";
 $lang["errorSavingWidget"]               = "Error saving the widget";
 $lang["modul_titel"]                     = "Overview";
 $lang["moduleRights"]                    = "Permissions";
-$lang["actionCalendar"]                 = "Sitemap";
 $lang["quickhelp_addWidgetToDashboard"]  = "To add a widget to the dashboard, you have to run a process consisting of two steps. In the first step, choose the widget to add and the column to pin it. In the second step, the widget itself can be configured.";
 $lang["quickhelp_list"]                  = "The dashboard is the place to pin every kind of widget. A widget is a small programm presenting a piece of information. The widgets can be sorted, edited and deleted right on the dashboard. To add new widgets, use the acion \"add widget\". ";
 $lang["setDashboardPosition"]            = "New position saved successful";

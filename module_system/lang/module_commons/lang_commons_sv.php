@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["commons_all_categories"]          = "Alla kategorier";
@@ -31,7 +31,6 @@ $lang["commons_list"]                    = "Lista";
 $lang["commons_module_permissions"]      = "Modulrättigheter";
 $lang["commons_name"]                    = "Namn:";
 $lang["commons_no"]                      = "Nej";
-$lang["commons_one_level_up"]            = "";
 $lang["commons_open_browser"]            = "Öppna filhanterare";
 $lang["commons_page_success"]            = "Sida i fall det har lyckats (valfri)";
 $lang["commons_path"]                    = "Sökväg:";

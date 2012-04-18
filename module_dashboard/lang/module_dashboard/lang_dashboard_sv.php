@@ -7,9 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["actionCalendar"]                  = "Kalender";
 $lang["addWidget"]                       = "Infoga widget";
 $lang["addWidgetNextStep"]               = "Nästa";
 $lang["addWidgetSave"]                   = "Spara";
@@ -25,7 +26,6 @@ $lang["errorSavingWidget"]               = "Fel vid sparande av widget";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter";
 $lang["modul_titel"]                     = "Översikt";
 $lang["moduleRights"]                    = "Rättigheter";
-$lang["actionCalendar"]                 = "Kalender";
 $lang["quickhelp_addWidgetToDashboard"]  = "Att infoga en widget i Instrumentpanelen är en tvåstegsprocess. I första steget väljs den widget som skall läggas till samt i vilken kolumn den skall vara. I andra steget kan man konfigurera widgeten.";
 $lang["quickhelp_list"]                  = "I instrumentpanelen kan alla sorters widgets läggas. En widget är ett litet program som presenterar någon information på skärmen. Dessa widgets kan sorteras, redigeras och tas bort direkt på instrumentpanelen. En ny widget läggs till med kommandot \"lägg till widget\".";
 $lang["setDashboardPosition"]            = "Sparande av ny position lyckades";

@@ -7,19 +7,19 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["delete_question"]                 = "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
 $lang["error_folder_and_page"]           = "Es kann entweder eine Seite oder ein Ordner ausgewählt werden, nicht beides.";
 $lang["liste_leer"]                      = "Keine Navigation angelegt";
-$lang["module_action_new"]                   = "Neue Navigation";
 $lang["modul_anlegenpunkt"]              = "Neuer Unterpunkt";
 $lang["modul_titel"]                     = "Navigationen";
+$lang["module_action_new"]               = "Neue Navigation";
 $lang["navigation_anzeigen"]             = "Unterpunkte anzeigen";
 $lang["navigation_erf_loeschen"]         = "Navigation erfolgreich gelöscht";
 $lang["navigation_erfolg"]               = "Navigation erfolgreich angelegt";
 $lang["navigation_folder_i"]             = "Ordner:";
-$lang["delete_question"]       = "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
 $lang["navigation_page_e"]               = "Externer Verweis / Datei:";
 $lang["navigation_page_i"]               = "Interne Seite:";
 $lang["navigation_parent"]               = "Übergeordneter Knoten:";

@@ -1,15 +1,16 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: lang_gallery_bg.php 3949 2011-06-25 10:46:38Z sidler $					    *
+*	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["download_id"]                     = "Архив";
 $lang["gallery_id"]                      = "Галерия:";
 $lang["gallery_imagesperpage"]           = "Изображения за страница:";
 $lang["gallery_imagesperpage_hint"]      = "Брой на изображенията за страница във вид на списък. 0 = неограничен.";
@@ -29,5 +30,3 @@ $lang["hint_preview"]                    = "Преглед<br />Ако сним�
 $lang["hint_text"]                       = "Поставя текст в позиция (X,Y) върху снимката (при детайлен преглед)";
 $lang["mode_random"]                     = "Произволен Режим";
 $lang["mode_standard"]                   = "Стандартен Режим";
-
-$lang["download_id"]                     = "Архив";

@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["delete_question"]                 = "Вы действительно хотите удалить язык &quot;<b>%%element_name%%</b>&quot;?";
+$lang["form_language_default"]           = "Язык по умолчанию:";
 $lang["lang_ar"]                         = "Арабский";
 $lang["lang_bg"]                         = "Болгарский";
 $lang["lang_cs"]                         = "Чешский";
@@ -44,12 +45,11 @@ $lang["lang_tr"]                         = "Турецкий";
 $lang["lang_uk"]                         = "Украинский";
 $lang["lang_zh"]                         = "Китайский";
 $lang["language_bearbeiten"]             = "Изменить язык";
-$lang["form_language_default"]                = "Язык по умолчанию:";
 $lang["language_existing"]               = "Язык уже существует";
 $lang["language_isDefault"]              = "Язык по умолчанию";
 $lang["liste_leer"]                      = "Нет доступных языков";
-$lang["module_action_new"]                   = "Создать язык";
 $lang["modul_titel"]                     = "Языки";
+$lang["module_action_new"]               = "Создать язык";
 $lang["quickhelp_editLanguage"]          = "Чтобы создать новый язык или изменить уже имеющийся, базовые данные могут быть установлены, используя эту форму.<br />Для создания языка, отсутствующего в этом списке, админ должен изменить соответствующие файлы.";
 $lang["quickhelp_list"]                  = "Все созданные языки могут быть найдены в этом списке. Чтобы изменить системный язык по умолчанию, базовые настройки будущего языка по умолчанию должны быть изменены.";
 $lang["quickhelp_newLanguage"]           = "Чтобы создать новый язык или изменить уже имеющийся, базовые данные могут быть установлены, используя эту форму.<br />Для создания языка, отсутствующего в этом списке, админ должен изменить соответствующие файлы.";

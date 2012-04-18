@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Скин админа по умолчанию:";
@@ -18,6 +18,18 @@ $lang["_user_log_nrofrecords_hint"]      = "Определяет количес�
 $lang["_user_selfedit_"]                 = "Личные данные:";
 $lang["_user_selfedit_hint"]             = "Устанавливает, может ли пользователь изменять свои собственные данные.";
 $lang["fehler_speichern"]                = "Ошибка при сохранении профайла!";
+$lang["form_user_city"]                  = "Город:";
+$lang["form_user_date"]                  = "Дата рождения:";
+$lang["form_user_email"]                 = "Email:";
+$lang["form_user_forename"]              = "Имя:";
+$lang["form_user_mobile"]                = "Мобильный телефон:";
+$lang["form_user_name"]                  = "Фамилия:";
+$lang["form_user_pass"]                  = "Пароль:";
+$lang["form_user_pass2"]                 = "Пароль:";
+$lang["form_user_postal"]                = "Индекс:";
+$lang["form_user_skin"]                  = "Админ скин:";
+$lang["form_user_street"]                = "Улица:";
+$lang["form_user_tel"]                   = "Телефон:";
 $lang["group_memberlist"]                = "Участники группы ";
 $lang["group_name"]                      = "Название группы:";
 $lang["gruppe_anlegen_erfolg"]           = "Группа была успешно сохранена";
@@ -87,16 +99,12 @@ $lang["user_admin"]                      = "Админ логин:";
 $lang["user_aktiv"]                      = "Активный:";
 $lang["user_anlegen"]                    = "Создать пользователя";
 $lang["user_bearbeiten"]                 = "Настройки пользователя";
-$lang["form_user_city"]                       = "Город:";
-$lang["form_user_date"]                       = "Дата рождения:";
-$lang["form_user_email"]                      = "Email:";
 $lang["user_erfolg"]                     = "Пользователь успешно сохранен";
 $lang["user_fehler"]                     = "Ошибка при сохранении пользователя";
 $lang["user_fehler_mail"]                = "Пожалуйста, введите действующий электронный адрес <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_name"]                = "Пожалуйста, введите имя пользователя <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_namedoppelt"]         = "Пользователь с таким именем уже существует, пожалуйста, введите другое <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_pass"]                = "Введенные пароли не совпадают <a href=\"javascript:history.back(-1)\">back</a>";
-$lang["form_user_forename"]                   = "Имя:";
 $lang["user_inactive"]                   = "Изменить статус (неактивный)";
 $lang["user_language"]                   = "Язык админа:";
 $lang["user_lastlogin"]                  = "Последний логин:";
@@ -106,17 +114,9 @@ $lang["user_loeschen_fehler"]            = "Ошибка при удалении
 $lang["user_loeschen_frage"]             = "Действительно удалить пользователя &quot;<b>%%element_name%%</b>&quot;?";
 $lang["user_logins"]                     = "Логины:";
 $lang["user_memberships"]                = "Участие пользователя в группах";
-$lang["form_user_mobile"]                     = "Мобильный телефон:";
-$lang["form_user_name"]                       = "Фамилия:";
-$lang["form_user_pass"]                   = "Пароль:";
-$lang["form_user_pass2"]                  = "Пароль:";
 $lang["user_personaldata"]               = "Личные данные";
 $lang["user_portal"]                     = "Логин портала:";
-$lang["form_user_postal"]                     = "Индекс:";
-$lang["form_user_skin"]                       = "Админ скин:";
-$lang["form_user_street"]                     = "Улица:";
 $lang["user_system"]                     = "Настройки системы";
-$lang["form_user_tel"]                        = "Телефон:";
 $lang["user_username"]                   = "Имя пользователя:";
 $lang["user_zugehoerigkeit"]             = "Участие в группах";
 

@@ -1,24 +1,24 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: lang_guestbook_ru.php 3952 2011-06-26 12:13:25Z sidler $					    *
+*	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_guestbook_search_resultpage_"]   = "Страница результата:";
 $lang["_guestbook_search_resultpage_hint"] = "На этой странице приведены ссылки результата поиска постов.";
-$lang["edit_post"]                       = "Изменить";
+$lang["actionNew"]                       = "Новая гостевая книга";
 $lang["actionViewGuestbook"]             = "Просмотр гостевой книги";
+$lang["delete_question"]                 = "Вы действительно хотите удалить гостевую книгу &quot;<b>%%element_name%%</b>&quot; with all entries?";
+$lang["edit_post"]                       = "Изменить";
+$lang["form_gb_guestbookmoderated"]      = "Новые посты деактевированы:";
 $lang["gaestebuch_bearbeiten"]           = "Изменить гостевую книгу";
 $lang["gaestebuch_listeleer"]            = "Нет гостевых книг в наличии";
-$lang["form_gb_guestbookmoderated"]              = "Новые посты деактевированы:";
-$lang["delete_question"]                  = "Вы действительно хотите удалить гостевую книгу &quot;<b>%%element_name%%</b>&quot; with all entries?";
-$lang["actionNew"]                   = "Новая гостевая книга";
 $lang["modul_titel"]                     = "Гостевые книги";
 $lang["post_liste_leer"]                 = "Нет постов в наличии";
 $lang["post_loeschen_frage"]             = "Вы действительно хотите удалить пост &quot;<b>%%element_name%%</b>&quot;?";

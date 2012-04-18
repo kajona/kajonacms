@@ -7,10 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["delete_question"]                 = "Möchten Sie die Sprache &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["form_language_default"]           = "Standardsprache:";
+$lang["form_language_name"]              = "Name:";
 $lang["lang_ar"]                         = "Arabisch";
 $lang["lang_bg"]                         = "Bulgarisch";
 $lang["lang_cs"]                         = "Tschechisch";
@@ -44,13 +46,11 @@ $lang["lang_tr"]                         = "Türkisch";
 $lang["lang_uk"]                         = "Ukrainisch";
 $lang["lang_zh"]                         = "Chinesisch";
 $lang["language_bearbeiten"]             = "Sprache bearbeiten";
-$lang["form_language_default"]                = "Standardsprache:";
-$lang["form_language_name"]                = "Name:";
 $lang["language_existing"]               = "Die Sprache wurde bereits angelegt";
 $lang["language_isDefault"]              = "Standardsprache";
 $lang["liste_leer"]                      = "Keine Sprachen angelegt";
-$lang["module_action_new"]                   = "Sprache anlegen";
 $lang["modul_titel"]                     = "Sprachen";
+$lang["module_action_new"]               = "Sprache anlegen";
 $lang["quickhelp_editLanguage"]          = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
 $lang["quickhelp_list"]                  = "Sämtliche Sprachen die im System angelegt wurden finden sich in dieser Liste wieder. Um die default-Sprache des Systems zu verändern, müssen die Grunddaten der zukünftigen Standardsprache bearbeitet werden.";
 $lang["quickhelp_newLanguage"]           = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";

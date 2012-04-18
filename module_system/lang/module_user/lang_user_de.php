@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Standard-Admin-Skin:";
@@ -18,8 +18,19 @@ $lang["_user_log_nrofrecords_hint"]      = "Definiert die Anzahl an Zeilen, die 
 $lang["_user_selfedit_"]                 = "Eigene Daten bearbeiten:";
 $lang["_user_selfedit_hint"]             = "Legt fest, ob ein Benutzer seine eigenen Daten bearbeiten darf";
 $lang["fehler_speichern"]                = "Beim Speichern des Benutzers ist ein Fehler aufgetreten!";
+$lang["form_group_desc"]                 = "Beschreibung:";
+$lang["form_user_city"]                  = "Ort:";
+$lang["form_user_date"]                  = "Geburtsdatum:";
+$lang["form_user_email"]                 = "E-Mail:";
+$lang["form_user_forename"]              = "Vorname:";
+$lang["form_user_mobile"]                = "Handy:";
+$lang["form_user_name"]                  = "Nachname:";
+$lang["form_user_pass"]                  = "Passwort:";
+$lang["form_user_pass2"]                 = "Passwort (Bestätigung):";
+$lang["form_user_postal"]                = "PLZ:";
+$lang["form_user_street"]                = "Straße:";
+$lang["form_user_tel"]                   = "Telefon:";
 $lang["group_accept"]                    = "Gruppe übernehmen";
-$lang["form_group_desc"]                      = "Beschreibung:";
 $lang["group_dn"]                        = "Distinguished-Name im Verzeichnis:";
 $lang["group_memberlist"]                = "Mitglieder der Gruppe ";
 $lang["group_name"]                      = "Gruppen-Name:";
@@ -49,7 +60,6 @@ $lang["login_changeButton"]              = "Passwort ändern";
 $lang["login_change_error"]              = "Fehler beim Verarbeiten der Anfrage.";
 $lang["login_change_success"]            = "Passwort erfolgreich geändert. Sie können sich nun am System <a href=\"_webpath_/admin\">anmelden</a>.";
 $lang["login_dashboard"]                 = "Startseite";
-$lang["login_sitemap"]                 = "Sitemap";
 $lang["login_ip"]                        = "IP-Adresse";
 $lang["login_loginButton"]               = "Anmelden";
 $lang["login_loginCookiesInfo"]          = "Bitte aktivieren Sie Cookies in Ihrem Browser und laden Sie die Seite neu, um alle Funktionen nutzen zu können.";
@@ -64,6 +74,7 @@ $lang["login_nr"]                        = "#";
 $lang["login_password_form_intro"]       = "Bitte vergeben Sie ein neues Passwort unter Angabe des zugehörigen Benutzernamens.<br />";
 $lang["login_printview"]                 = "Druckansicht öffnen";
 $lang["login_profileTitle"]              = "Benutzer bearbeiten";
+$lang["login_sitemap"]                   = "Sitemap";
 $lang["login_status"]                    = "Status";
 $lang["login_statusTitle"]               = "Angemeldet als:";
 $lang["login_status_0"]                  = "Login Fehler";
@@ -102,16 +113,12 @@ $lang["user_anlegen"]                    = "Neuer Benutzer";
 $lang["user_bearbeiten"]                 = "Benutzer bearbeiten";
 $lang["user_browser"]                    = "Benutzer suchen";
 $lang["user_browser_show"]               = "Benutzer anzeigen";
-$lang["form_user_city"]                       = "Ort:";
-$lang["form_user_date"]                       = "Geburtsdatum:";
-$lang["form_user_email"]                      = "E-Mail:";
 $lang["user_erfolg"]                     = "Benutzer erfolgreich gespeichert";
 $lang["user_fehler"]                     = "Fehler beim Speichern des Benutzers";
 $lang["user_fehler_mail"]                = "E-Mail Adresse angeben <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_fehler_name"]                = "Bitte Benutzername angeben <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_fehler_namedoppelt"]         = "Benutzername schon vorhanden, bitte wählen Sie einen anderen Benutzernamen <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_fehler_pass"]                = "Passwörter sind unterschiedlich <a href=\"javascript:history.back(-1)\">zurück</a>";
-$lang["form_user_forename"]                   = "Vorname:";
 $lang["user_inactive"]                   = "Status ändern (ist inaktiv)";
 $lang["user_language"]                   = "Admin-Sprache:";
 $lang["user_lastlogin"]                  = "Letzter Login:";
@@ -123,21 +130,14 @@ $lang["user_loeschen_fehler"]            = "Fehler beim Löschen des Benutzers";
 $lang["user_loeschen_frage"]             = "Möchten Sie den Benutzer &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["user_logins"]                     = "Logins:";
 $lang["user_memberships"]                = "Gruppenzugehörigkeit des Benutzers ";
-$lang["form_user_mobile"]                     = "Handy:";
-$lang["form_user_name"]                       = "Nachname:";
-$lang["form_user_pass"]                   = "Passwort:";
-$lang["form_user_pass2"]                  = "Passwort (Bestätigung):";
 $lang["user_password_resend"]            = "Neues Passwort zusenden";
 $lang["user_password_resend_body"]       = "Für Ihren Account wurde ein neues Passwort beantragt. Bitte verwenden Sie den untenstehenden Link um den Zugang freizuschalten.\n\n\n";
 $lang["user_password_resend_subj"]       = "Bestätigung der Account-Aktivierung";
 $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_portal"]                     = "Portal-Login:";
-$lang["form_user_postal"]                     = "PLZ:";
 $lang["user_resend_password_hint"]       = "Mit dem Zusenden eines neuen Passwortes erhält der Benutzer an die hinterlegte E-Mailadresse eine E-Mail mit einem neuen Passwort sowie einem Link zum Ändern des Passwortes. <br />Hierfür muss der Benutzer seinen Benutzernamen kennen.<br />";
 $lang["user_skin"]                       = "Admin-Skin:";
-$lang["form_user_street"]                     = "Straße:";
 $lang["user_system"]                     = "Systemeinstellungen";
-$lang["form_user_tel"]                        = "Telefon:";
 $lang["user_username"]                   = "Benutzername:";
 $lang["user_usersource"]                 = "Benutzerquelle:";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -34,11 +34,18 @@ $lang["_system_release_time_"]           = "Duração da sessão:";
 $lang["_system_release_time_hint"]       = "Depois deste tempo em segundos a sesão torna-se inválida.";
 $lang["_system_use_dbcache_"]            = "Memória Temporária da Base de Dados:";
 $lang["_system_use_dbcache_hint"]        = "Activa/Desactiva a memória temporária de pesquisa interna na base de dados(database query).";
-$lang["actionAbout"]                           = "Sobre Kajona";
 $lang["about_part1"]                     = "<h2>Kajona V3 - Sistema de Gestão de Conteúdos em Código Aberto</h2>Kajona V 3.4.1, Nome de código \"connectivity\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Para mais informações, suporte ou sugestões, Por favor visite o nosso endereço.<br />Suporte adicional é dado no nosso <a href=\"http://board.kajona.de/\" target=\"_blank\">fórum</a>.";
 $lang["about_part2"]                     = "<h2>Responsável do projecto</h2><ul><li><a href=\"https://www.xing.com/profile/Stefan_Idler\" target=\"_blank\">Stefan Idler</a>, <a href=\"mailto:sidler@kajona.de\">sidler@kajona.de</a> (gestão de projecto, administração técnica, desenvolvimento)</li><li><a href=\"https://www.xing.com/profile/Jakob_Schroeter\" target=\"_blank\">Jakob Schröter</a>, <a href=\"mailto:jschroeter@kajona.de\">jschroeter@kajona.de</a> (administração painel cliente, desenvolvimento)</li></ul><h2>Contribuições / Programadores</h2><ul><li><a href=\"https://www.xing.com/profile/Florian_Feigenbutz\" target=\"_blank\">Florian Feigenbutz</a></li><li>Thomas Hertwig</li><li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li><li>Mario Lange</li><li><a href=\"mailto:ph.wolfer@googlemail.com\" target=\"_blank\">Philipp Wolfer</a></li></ul><h2>Traduções</h2><ul><li>Búlgaro: <a href=\"mailto:contact@rudee.info\">Rumen Emilov</a></li><li>Português: <a href=\"http://www.nunocruz.com\" target=\"_blank\">Nuno Cruz</a></li><li>Russo: <a href=\"https://www.xing.com/profile/Ksenia_KramVinogradova\" target=\"_blank\">Ksenia Kram</a>, <a href=\"https://www.xing.com/profile/Michael_Kram\" target=\"_blank\">Michael Kram</a></li><li>Swedish: <a href=\"mailto:villa.carlberg@telia.com\">Per Gunnarsson</a></li></ul>";
 $lang["about_part3"]                     = "<h2>Créditos</h2><ul><li>Icones:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li><li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>CKEditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.ckeditor.com/\" target=\"_blank\">http://www.ckeditor.com/</a></li><li>ez components (charts):<br /><a href=\"http://ezcomponents.org\" target=\"_blank\">http://ezcomponents.org</a></li><li>Tipos de Letra DejaVu:<br />Equipa DejaVu, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li></ul>";
 $lang["about_part4"]                     = "<h2>Doação</h2><p>Se você gosta de trabalhar com Kajona e pretende apoiar o projeto, pode doar para o projeto: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Doar via PayPal\" class=\"inputSubmit\" /></form>";
+$lang["actionAbout"]                     = "Sobre Kajona";
+$lang["actionList"]                      = "Módulos instalados";
+$lang["actionSystemInfo"]                = "Informação Sistema";
+$lang["actionSystemSessions"]            = "Sessões";
+$lang["actionSystemSettings"]            = "Propriedades do sistema";
+$lang["actionSystemTasks"]               = "Tarefas Sistema";
+$lang["actionSystemlog"]                 = "Eventos do sistema";
+$lang["actionUpdatecheck"]               = "Verificar actualização";
 $lang["anzahltabellen"]                  = "Número de Tabelas";
 $lang["dateStyleLong"]                   = "d/m/Y H:i:s";
 $lang["dateStyleShort"]                  = "d/m/Y";
@@ -124,7 +131,6 @@ $lang["modul_status_enabled"]            = "Desactivar o módulo (está activo)"
 $lang["modul_status_system"]             = "Ooops, queres desactivar o kernel do sistema? Bem, para fazeres isto é melhor formates o teu computador! Mas na raiz c: para ele não fugir... eheheh ;-)";
 $lang["modul_titel"]                     = "Sistema";
 $lang["moduleRightsTitle"]               = "Permissões";
-$lang["actionList"]                    = "Módulos instalados";
 $lang["operatingsystem"]                 = "Sistema";
 $lang["pageview_forward"]                = "Seguinte";
 $lang["pageview_total"]                  = "Total:";
@@ -159,16 +165,11 @@ $lang["speichern"]                       = "Guardar";
 $lang["speicherplatz"]                   = "Espaço em disco";
 $lang["status_active"]                   = "Alterar estado (está activo)";
 $lang["status_inactive"]                 = "Alterar estado (está inactivo)";
-$lang["actionSystemTasks"]                     = "Tarefas Sistema";
-$lang["actionSystemInfo"]                     = "Informação Sistema";
-$lang["actionSystemSessions"]                 = "Sessões";
-$lang["actionSystemSettings"]                 = "Propriedades do sistema";
 $lang["systeminfo_php_regglobal"]        = "Register globals";
 $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_webserver_modules"]    = "Módulos carregados";
 $lang["systeminfo_webserver_version"]    = "Servidor de Internet";
-$lang["actionSystemlog"]                       = "Eventos do sistema";
 $lang["systemtask_dbconsistency_curprev_error"] = "As seguintes relações de nós (pai-filho) estão incorrectas (ligação pai em falta):";
 $lang["systemtask_dbconsistency_curprev_ok"] = "Todas as relações dos nós (pai-filho) estão correctas";
 $lang["systemtask_dbconsistency_date_error"] = "As seguintes datas de registo estão incorrectas (registos de sistema em falta)";
@@ -201,7 +202,6 @@ $lang["update_module_remoteversion"]     = "Disponível";
 $lang["update_nodom"]                    = "A instalação PHP não suporta XML-DOM. Esta funcionalidade é necessária para a verificar a actualização em funcionamento.";
 $lang["update_nofilefound"]              = "A lista de actualizações falhou no carregamento.<br />As razões possíveis podem estar relacionadas com o valor da função 'allow_url_fopen' no ficheiro php-config estar a 'off' ou então estar a usar um servidor, onde o sistema não tem suporte para ligações bidireccionais (mais conhecidas como 'sockets').";
 $lang["update_nourlfopen"]               = "Para fazer esta função funcionar, o valor &apos;allow_url_fopen&apos; precisa de ser estabelecido &apos;on&apos; no ficheiro php-config!";
-$lang["actionUpdatecheck"]                     = "Verificar actualização";
 $lang["uploadmaxsize"]                   = "Tamanho máximo do ficheiro";
 $lang["uploads"]                         = "Ficheiros carregados";
 $lang["version"]                         = "Versão";

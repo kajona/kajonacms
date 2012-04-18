@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["delete_question"]                 = "Наистина ли искате да премахнете езика &quot;<b>%%element_name%%</b>&quot;?";
+$lang["form_language_default"]           = "Начален";
 $lang["lang_ar"]                         = "Арабски";
 $lang["lang_bg"]                         = "Български";
 $lang["lang_cs"]                         = "Чешки";
@@ -44,12 +45,11 @@ $lang["lang_tr"]                         = "Турски";
 $lang["lang_uk"]                         = "Украински";
 $lang["lang_zh"]                         = "Китайски";
 $lang["language_bearbeiten"]             = "Редактирай език";
-$lang["form_language_default"]                = "Начален";
 $lang["language_existing"]               = "Езикът съществува";
 $lang["language_isDefault"]              = "Начален език";
 $lang["liste_leer"]                      = "Няма налични езици";
-$lang["module_action_new"]                   = "Създай език";
 $lang["modul_titel"]                     = "Езици";
+$lang["module_action_new"]               = "Създай език";
 $lang["quickhelp_editLanguage"]          = "Основните данни за създаване или редактиране на вече съществуващи езици са в тази форма.<br />За създаване на език, все още не съществуващ в падащото меню, администратора  трябва да редактира съответните файлове.";
 $lang["quickhelp_list"]                  = "Списъка съдържа всички създадени езици. За смяна на 'началния език' е нужна промяна на основните данни в 'следващия-начален'";
 $lang["quickhelp_newLanguage"]           = "Основните данни за създаване или редактиране на вече съществуващи езици са в тази форма.<br />За създаване на език, все още не съществуващ в падащото меню, администратора трябва да редактира съответните файлове.";

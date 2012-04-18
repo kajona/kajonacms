@@ -7,9 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["actionCalendar"]                  = "Kalender";
+$lang["actionSitemap"]                   = "Sitemap";
 $lang["addWidget"]                       = "Widget hinzufügen";
 $lang["calendar_next"]                   = "nächster Monat &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; vorheriger Monat";
@@ -22,8 +24,6 @@ $lang["editWidget"]                      = "Widget bearbeiten";
 $lang["errorSavingWidget"]               = "Fehler beim Speichern des Widgets";
 $lang["modul_titel"]                     = "Übersicht";
 $lang["moduleRights"]                    = "Rechte";
-$lang["actionCalendar"]                 = "Kalender";
-$lang["actionSitemap"]                 = "Sitemap";
 $lang["quickhelp_addWidgetToDashboard"]  = "Das Hinzufügen neuer Widgets zum Dashboard ist ein zweistufiger Prozess. Im ersten Schritt kann das hinzuzufügende Widget samt der Zielspalte bestimmt werden, im zweiten Schritt kann das anzulegende Widget konfiguriert werden.";
 $lang["quickhelp_list"]                  = "Das Dashboard dient als Ablage für Widgets jeglicher Art. Widgets stellen Miniprogramme dar, welche Informationen ausgeben. Diese Widgets können auf dem Dashboard sortiert, editiert und gelöscht werden. Das Hinzufügen neuer Widgets erfolgt über die Aktion \"Widget hinzufügen\". ";
 $lang["setDashboardPosition"]            = "Speichern der Position erfolgreich";

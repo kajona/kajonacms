@@ -1,15 +1,17 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["download_amount"]                 = "Poster per sida:";
+$lang["download_id"]                     = "Arkiv:";
 $lang["gallery_id"]                      = "Bildgalleri:";
 $lang["gallery_imagesperpage"]           = "Bilder per sida:";
 $lang["gallery_imagesperpage_hint"]      = "Bilder per sida i listvy (0=obegränsat)";
@@ -31,7 +33,3 @@ $lang["hint_preview"]                    = "Om bildens mått överskrider något
 $lang["hint_text"]                       = "Placerar en text i postion (X,Y)  när bilden visas i detaljläge";
 $lang["mode_random"]                     = "Slumpmässigt läge";
 $lang["mode_standard"]                   = "Standardläge";
-
-
-$lang["download_amount"]                 = "Poster per sida:";
-$lang["download_id"]                     = "Arkiv:";

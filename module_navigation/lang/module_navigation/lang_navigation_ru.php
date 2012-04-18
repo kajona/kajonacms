@@ -7,17 +7,17 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["delete_question"]                 = "Вы действительно хотите удалить навигацию &quot;<b>%%element_name%%</b>&quot; со всеми пунктами?";
 $lang["liste_leer"]                      = "Нет доступной навигации";
-$lang["module_action_new"]                   = "Создать навигацию";
 $lang["modul_anlegenpunkt"]              = "Создать пункт";
 $lang["modul_titel"]                     = "Навигация";
+$lang["module_action_new"]               = "Создать навигацию";
 $lang["navigation_anzeigen"]             = "Показать пункты навигации";
 $lang["navigation_erf_loeschen"]         = "Навигация успешно удалена";
 $lang["navigation_erfolg"]               = "Навигация успешно создана";
-$lang["delete_question"]       = "Вы действительно хотите удалить навигацию &quot;<b>%%element_name%%</b>&quot; со всеми пунктами?";
 $lang["navigation_page_e"]               = "Внешняя ссылка / Файл:";
 $lang["navigation_page_i"]               = "Страница:";
 $lang["navigation_tagetblank"]           = "_бланк (в новом окне браузера)";

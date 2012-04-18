@@ -7,25 +7,25 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["browser"]                         = "Öppna filhanterare";
+$lang["delete_question"]                 = "Vill du verkligen rader menyn &quot;<b>%%element_name%%</b>&quot; med alla undermenyer?";
 $lang["error_folder_and_page"]           = "Bara en sida eller en mapp kan väljas, inte båda.";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för att utföra denna handling";
 $lang["liste_leer"]                      = "Ingen meny tillgänglig";
-$lang["module_action_new"]                   = "Ny meny";
 $lang["modul_anlegenpunkt"]              = "Ny undermeny";
 $lang["modul_liste"]                     = "Lista";
 $lang["modul_rechte"]                    = "Modulrättigheter";
 $lang["modul_titel"]                     = "Menyer";
+$lang["module_action_new"]               = "Ny meny";
 $lang["navigation_anzeigen"]             = "Visa undermeny";
 $lang["navigation_ebene"]                = "En nivå upp";
 $lang["navigation_erf_loeschen"]         = "Radering av meny har lyckats";
 $lang["navigation_erfolg"]               = "Skapande av meny har lyckats";
 $lang["navigation_folder_i"]             = "Mapp:";
 $lang["navigation_image"]                = "Bild:";
-$lang["delete_question"]       = "Vill du verkligen rader menyn &quot;<b>%%element_name%%</b>&quot; med alla undermenyer?";
 $lang["navigation_name"]                 = "Namn:";
 $lang["navigation_page_e"]               = "Extern referens / fil:";
 $lang["navigation_page_i"]               = "Intern sida:";

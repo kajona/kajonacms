@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Standard administrations-skin";
@@ -18,11 +18,20 @@ $lang["_user_log_nrofrecords_hint"]      = "Definierar hur många rader som skal
 $lang["_user_selfedit_"]                 = "Redigera egna data:";
 $lang["_user_selfedit_hint"]             = "Bestämmer om en användare skall kunna redigeras sina egna data";
 $lang["admin"]                           = "Admin inloggning:";
-$lang["form_user_active"]                           = "Aktiverad:";
-$lang["form_user_email"]                           = "E-mail:";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för denna åtgärd";
 $lang["fehler_speichern"]                = "Ett fel uppstod vid sparande av användare!";
-$lang["form_user_date"]                        = "Födelsedatum:";
+$lang["form_user_active"]                = "Aktiverad:";
+$lang["form_user_city"]                  = "Ort:";
+$lang["form_user_date"]                  = "Födelsedatum:";
+$lang["form_user_email"]                 = "E-mail:";
+$lang["form_user_forename"]              = "Förnamn";
+$lang["form_user_mobile"]                = "Mobil:";
+$lang["form_user_name"]                  = "Efternamn:";
+$lang["form_user_pass"]                  = "Lösenord:";
+$lang["form_user_pass2"]                 = "Lösenord (bekräftelse)";
+$lang["form_user_postal"]                = "PLZ:";
+$lang["form_user_street"]                = "Gata:";
+$lang["form_user_tel"]                   = "Telefon:";
 $lang["group_accept"]                    = "Ta över grupp";
 $lang["group_memberlist"]                = "Gruppens medlemmar";
 $lang["gruppe"]                          = "Gruppens namn:";
@@ -39,7 +48,6 @@ $lang["gruppe_mitglieder"]               = "Visa gruppens medlemmar";
 $lang["gruppen"]                         = "Grupper:";
 $lang["gruppen_anlegen"]                 = "Ny grupp";
 $lang["gruppen_liste"]                   = "Alla grupper";
-$lang["form_user_mobile"]                           = "Mobil:";
 $lang["lang_bg"]                         = "Bulgariska";
 $lang["lang_de"]                         = "Tyska";
 $lang["lang_en"]                         = "Engelska";
@@ -47,7 +55,6 @@ $lang["lang_fr"]                         = "Franska";
 $lang["lang_pt"]                         = "Portugisiska";
 $lang["lang_ru"]                         = "Ryska";
 $lang["lang_sv"]                         = "Svenska";
-$lang["user_language"]                        = "Admin språk";
 $lang["log"]                             = "Logg:";
 $lang["login_changeButton"]              = "Ändra lösenord";
 $lang["login_change_error"]              = "Ett fel uppstod vid förfrågan";
@@ -81,11 +88,6 @@ $lang["mitglied_speichern_erfolg"]       = "Sparande av tillhörighet har lyckat
 $lang["mitglied_speichern_fehler"]       = "Ett fel uppstod vid sparande av tillhörighet";
 $lang["modul_rechte"]                    = "Modulrättigheter";
 $lang["modul_titel"]                     = "Användare";
-$lang["form_user_name"]                        = "Efternamn:";
-$lang["form_user_city"]                             = "Ort:";
-$lang["form_user_pass"]                        = "Lösenord:";
-$lang["form_user_pass2"]                       = "Lösenord (bekräftelse)";
-$lang["form_user_postal"]                             = "PLZ:";
 $lang["portal"]                          = "Portalinloggning:";
 $lang["quickhelp_edit"]                  = "Detta formulär används för att redigera eller skapa en ny användare.<br />Om användaren har aktiverats, då kan han i princip logga in på system.<br />I tillägg måste området i vilket användaren kan logga in definieras.";
 $lang["quickhelp_grouplist"]             = "På sidan \"alla  grupper\" visas alla existerande grupper. Dessa grupper kan redigeras, gruppmedlemmar tilläggas, raderad och nya grupper skapas.<br />Gästers liksom administratörers grupper kan inte redigeras, då dessa är förutsättningen för att systemet skall fungera.";
@@ -103,10 +105,7 @@ $lang["required_passwort"]               = "Lösenord";
 $lang["required_passwort2"]              = "Bekräfta lösenord";
 $lang["required_user_existing"]          = "Användarnamn finns redan";
 $lang["required_username"]               = "Användarnamn";
-$lang["user_skin"]                            = "Admin-skin:";
-$lang["form_user_street"]                         = "Gata:";
 $lang["submit"]                          = "Spara";
-$lang["form_user_tel"]                             = "Telefon:";
 $lang["user"]                            = "Användare";
 $lang["user_accept"]                     = "Välj användare";
 $lang["user_active"]                     = "Ändra status (är aktiverad)";
@@ -121,6 +120,7 @@ $lang["user_fehler_name"]                = "Ange användaranamn <a href=\"javasc
 $lang["user_fehler_namedoppelt"]         = "Användarnamn finns redan, vänligen använd ett annat namn <a href=\"javascript:history.back(-1)\">tillbaka</a>";
 $lang["user_fehler_pass"]                = "Lösenord är olika <a href=\"javascript:history.back(-1)\">tillbaka</a>";
 $lang["user_inactive"]                   = "Ändra status (är inaktiverad)";
+$lang["user_language"]                   = "Admin språk";
 $lang["user_lastlogin"]                  = "Senaste inloggning:";
 $lang["user_list_parent"]                = "Visa grupper";
 $lang["user_liste"]                      = "Alla användare";
@@ -134,7 +134,7 @@ $lang["user_password_resend_body"]       = "Ansökan om ett nytt lösenord till 
 $lang["user_password_resend_subj"]       = "Bekräfta aktivering av konto";
 $lang["user_personaldata"]               = "Personliga uppgifter";
 $lang["user_resend_password_hint"]       = "Vid skickandet av ett nytt lösenord, till adress som står i användarens profil, erhåller denna  ett nytt lösenord liksom en länk för att ändra lösenord. <br />För detta måste användaren känna till sitt användarnamn.<br />";
+$lang["user_skin"]                       = "Admin-skin:";
 $lang["user_system"]                     = "Systeminställningar";
 $lang["user_zugehoerigkeit"]             = "Grupptillhörigheter";
 $lang["username"]                        = "Användarnamn:";
-$lang["form_user_forename"]                         = "Förnamn";

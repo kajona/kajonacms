@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Number of records per page:";
@@ -37,20 +37,26 @@ $lang["_system_release_time_"]           = "Duration of a session:";
 $lang["_system_release_time_hint"]       = "After this amount of seconds a session gets invalid.";
 $lang["_system_use_dbcache_"]            = "Database cache:";
 $lang["_system_use_dbcache_hint"]        = "Enables/disables the internal database query cache.";
-$lang["actionAbout"]                           = "About Kajona";
 $lang["about_part1"]                     = "<h2>Kajona V3 - Open Source Content Management System</h2>Kajona V 3.4.1, Codename \"connectivity\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />For further information, support or proposals, please visit our website.<br />Additional support is given using our <a href=\"http://board.kajona.de/\" target=\"_blank\">board</a>.";
 $lang["about_part2"]                     = "<h2>Head developers</h2><ul><li><a href=\"https://www.xing.com/profile/Stefan_Idler\" target=\"_blank\">Stefan Idler</a>, <a href=\"mailto:sidler@kajona.de\">sidler@kajona.de</a> (project management, technical administration, development)</li><li><a href=\"https://www.xing.com/profile/Jakob_Schroeter\" target=\"_blank\">Jakob Schröter</a>, <a href=\"mailto:jschroeter@kajona.de\">jschroeter@kajona.de</a> (frontend administration, development)</li></ul><h2>Contributors / Developers</h2><ul><li><a href=\"https://www.xing.com/profile/Florian_Feigenbutz\" target=\"_blank\">Florian Feigenbutz</a></li><li>Thomas Hertwig</li><li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li><li>Mario Lange</li><li><a href=\"mailto:ph.wolfer@googlemail.com\" target=\"_blank\">Philipp Wolfer</a></li></ul><h2>Translations</h2><ul><li>Bulgarian: <a href=\"mailto:contact@rudee.info\">Rumen Emilov</a></li><li>Portuguese: <a href=\"http://www.nunocruz.com\" target=\"_blank\">Nuno Cruz</a></li><li>Russian: <a href=\"https://www.xing.com/profile/Ksenia_KramVinogradova\" target=\"_blank\">Ksenia Kram</a>, <a href=\"https://www.xing.com/profile/Michael_Kram\" target=\"_blank\">Michael Kram</a></li><li>Swedish: <a href=\"mailto:villa.carlberg@telia.com\">Per Gunnarsson</a></li></ul>";
 $lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li><li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>CKEditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.ckeditor.com/\" target=\"_blank\">http://www.ckeditor.com/</a></li><li>ez components (charts):<br /><a href=\"http://ezcomponents.org\" target=\"_blank\">http://ezcomponents.org</a></li><li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li></ul>";
 $lang["about_part4"]                     = "<h2>Donate</h2><p>If you like to work with Kajona and want to support the project, feel free to donate: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Donate via PayPal\" class=\"inputSubmit\" /></form>";
+$lang["actionAbout"]                     = "About Kajona";
+$lang["actionAspects"]                   = "Aspects";
+$lang["actionChangelog"]                 = "Change history";
+$lang["actionList"]                      = "Installed modules";
+$lang["actionSystemInfo"]                = "System information";
+$lang["actionSystemSessions"]            = "Sessions";
+$lang["actionSystemSettings"]            = "System settings";
+$lang["actionSystemTasks"]               = "System tasks";
+$lang["actionSystemlog"]                 = "System logfile";
+$lang["actionUpdatecheck"]               = "Update-Check";
 $lang["anzahltabellen"]                  = "Number of tables";
 $lang["aspect_create"]                   = "New aspect";
-$lang["form_aspect_default"]                  = "Default aspect:";
-$lang["form_aspect_name"]                = "Name:";
 $lang["aspect_delete_question"]          = "Do you really want to delete the aspect &quot;<b>%%element_name%%</b>&quot;?";
 $lang["aspect_edit"]                     = "Edit aspect";
 $lang["aspect_isDefault"]                = "default aspect";
 $lang["aspect_list_empty"]               = "No aspects created";
-$lang["actionAspects"]                         = "Aspects";
 $lang["cache_entry_size"]                = "Size";
 $lang["cache_hash1"]                     = "Hash 1";
 $lang["cache_hash2"]                     = "Hash 2";
@@ -64,7 +70,6 @@ $lang["change_property"]                 = "Property";
 $lang["change_record"]                   = "Object";
 $lang["change_type_setting"]             = "Setting";
 $lang["change_user"]                     = "User";
-$lang["actionChangelog"]                       = "Change history";
 $lang["dateStyleLong"]                   = "m/d/Y H:i:s";
 $lang["dateStyleShort"]                  = "m/d/Y";
 $lang["datenbankclient"]                 = "Database client";
@@ -83,6 +88,8 @@ $lang["errorlevel"]                      = "Error level";
 $lang["executiontimeout"]                = "Execution timeout";
 $lang["fehler_setzen"]                   = "Error saving permissions";
 $lang["filebrowser"]                     = "Select a file";
+$lang["form_aspect_default"]             = "Default aspect:";
+$lang["form_aspect_name"]                = "Name:";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Extensions loaded";
 $lang["gifread"]                         = "GIF read-support";
@@ -106,6 +113,7 @@ $lang["installer_dbdriver_sqlite3"]      = "The SQLite-driver creates a database
 $lang["installer_elements_found"]        = "<b>Installation of the page elements</b><br /><br />Select which of the found page elements you want to install:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Have fun using Kajona!";
 $lang["installer_finish_hints"]          = "You should set back the write permission on /system/config/config.php to read-only permission.<br />Additionally, you should remove the folder /installer/ completely out of security reasons.<br /><br /><br />The administation in now available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />The portal is available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
+$lang["installer_finish_hints_update"]   = "<b>Attention: If you updated from a v3 system, please make sure to run the post-update scripts as soon as all modules have been upgraded.</b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Run post-update</a><<br /><br />";
 $lang["installer_finish_intro"]          = "<b>Installation finshed</b><br /><br />";
 $lang["installer_given"]                 = "given";
 $lang["installer_install"]               = "Install";
@@ -154,6 +162,7 @@ $lang["mail_send_error"]                 = "Error sending the email. Please retr
 $lang["mail_send_success"]               = "Email sent successfully.";
 $lang["mail_subject"]                    = "Subject:";
 $lang["memorylimit"]                     = "Memory limit";
+$lang["messageprovider_exceptions_name"] = "System-Exceptions";
 $lang["modul_aspectedit"]                = "Edit aspects";
 $lang["modul_rechte_root"]               = "Rights root-record";
 $lang["modul_sortdown"]                  = "Shift down";
@@ -163,7 +172,6 @@ $lang["modul_status_enabled"]            = "Set module inactive (is active)";
 $lang["modul_status_system"]             = "Woops, you want to set the system-kernel inactive? To process, please execute format c: instead! ;-)";
 $lang["modul_titel"]                     = "System";
 $lang["moduleRightsTitle"]               = "Permissions";
-$lang["actionList"]                    = "Installed modules";
 $lang["numberStyleDecimal"]              = ".";
 $lang["numberStyleThousands"]            = ",";
 $lang["operatingsystem"]                 = "Operating system";
@@ -201,17 +209,12 @@ $lang["setzen_erfolg"]                   = "Permissions saved successfully";
 $lang["speicherplatz"]                   = "Disk space";
 $lang["status_active"]                   = "Change status (is active)";
 $lang["status_inactive"]                 = "Change status (is inactive)";
-$lang["actionSystemTasks"]                     = "System tasks";
 $lang["system_cache"]                    = "Cache";
-$lang["actionSystemInfo"]                     = "System information";
-$lang["actionSystemSessions"]                 = "Sessions";
-$lang["actionSystemSettings"]                 = "System settings";
 $lang["systeminfo_php_regglobal"]        = "Register globals";
 $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_webserver_modules"]    = "Modules loaded";
 $lang["systeminfo_webserver_version"]    = "Webserver";
-$lang["actionSystemlog"]                       = "System logfile";
 $lang["systemtask_cacheSource_source"]   = "Cache-Types:";
 $lang["systemtask_cancel_execution"]     = "Cancel execution";
 $lang["systemtask_close_dialog"]         = "OK";
@@ -283,16 +286,10 @@ $lang["update_module_remoteversion"]     = "Available";
 $lang["update_nodom"]                    = "This PHP-installation does not suppport XML-DOM. This is required for the update-check to work.";
 $lang["update_nofilefound"]              = "The list of updates failed to load.<br />Possible reasons can be having the php-config value 'allow_url_fopen' set to 'off' or using a system without support for sockets.";
 $lang["update_nourlfopen"]               = "To make this function work, the value &apos;allow_url_fopen&apos; must be set to &apos;on&apos; in the php-config file!";
-$lang["actionUpdatecheck"]                     = "Update-Check";
 $lang["uploadmaxsize"]                   = "Upload max size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
-
-$lang["messageprovider_exceptions_name"] = "System-Exceptions";
-
-$lang["installer_finish_hints_update"]    = "<b>Attention: If you updated from a v3 system, please make sure to run the post-update scripts as soon as all modules have been upgraded.</b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Run post-update</a><<br /><br />";
-
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");

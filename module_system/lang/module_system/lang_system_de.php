@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Anzahl Datensätze pro Seite:";
@@ -37,20 +37,26 @@ $lang["_system_release_time_"]           = "Dauer einer Session:";
 $lang["_system_release_time_hint"]       = "Nach dieser Dauer in Sekunden wird eine Session automatisch ungültig.";
 $lang["_system_use_dbcache_"]            = "Datenbankcache aktiv:";
 $lang["_system_use_dbcache_hint"]        = "Aktiviert/deaktiviert den systeminternen Cache für Datenbankabfragen.";
-$lang["actionAbout"]                           = "Über Kajona";
 $lang["about_part1"]                     = "<h2>Kajona V3 - Open Source Content Management System</h2>Kajona V 3.4.1, Codename \"connectivity\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
 $lang["about_part2"]                     = "<h2>Entwicklungsleitung</h2><ul><li><a href=\"https://www.xing.com/profile/Stefan_Idler\" target=\"_blank\">Stefan Idler</a>, <a href=\"mailto:sidler@kajona.de\">sidler@kajona.de</a> (Projektleitung, Technische Leitung, Entwicklung)</li><li><a href=\"https://www.xing.com/profile/Jakob_Schroeter\" target=\"_blank\">Jakob Schröter</a>, <a href=\"mailto:jschroeter@kajona.de\">jschroeter@kajona.de</a> (Leitung Frontend, Entwicklung)</li></ul><h2>Contributors / Entwickler</h2><ul><li><a href=\"https://www.xing.com/profile/Florian_Feigenbutz\" target=\"_blank\">Florian Feigenbutz</a></li><li>Thomas Hertwig</li><li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li><li>Mario Lange</li><li><a href=\"mailto:ph.wolfer@googlemail.com\" target=\"_blank\">Philipp Wolfer</a></li></ul><h2>Übersetzungen</h2><ul><li>Bulgarisch: <a href=\"mailto:contact@rudee.info\">Rumen Emilov</a></li><li>Portugiesisch: <a href=\"http://www.nunocruz.com\" target=\"_blank\">Nuno Cruz</a></li><li>Russisch: <a href=\"https://www.xing.com/profile/Ksenia_KramVinogradova\" target=\"_blank\">Ksenia Kram</a>, <a href=\"https://www.xing.com/profile/Michael_Kram\" target=\"_blank\">Michael Kram</a></li><li>Schwedisch: <a href=\"mailto:villa.carlberg@telia.com\">Per Gunnarsson</a></li></ul>";
 $lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li><li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>CKEditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.ckeditor.com/\" target=\"_blank\">http://www.ckeditor.com/</a></li><li>ez components (charts):<br /><a href=\"http://ezcomponents.org\" target=\"_blank\">http://ezcomponents.org</a></li><li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li></ul>";
 $lang["about_part4"]                     = "<h2>Spenden</h2><p>Wenn Ihnen Kajona gefällt und Sie das Projekt unterstützen möchten können Sie hier an das Projekt spenden: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Spenden via PayPal\" class=\"inputSubmit\" /></form>";
+$lang["actionAbout"]                     = "Über Kajona";
+$lang["actionAspects"]                   = "Aspekte";
+$lang["actionChangelog"]                 = "Änderungshistorie";
+$lang["actionList"]                      = "Installierte Module";
+$lang["actionSystemInfo"]                = "Systeminformationen";
+$lang["actionSystemSessions"]            = "Sessions";
+$lang["actionSystemSettings"]            = "Systemeinstellungen";
+$lang["actionSystemTasks"]               = "System-Tasks";
+$lang["actionSystemlog"]                 = "System-Log";
+$lang["actionUpdatecheck"]               = "Update-Check";
 $lang["anzahltabellen"]                  = "Anzahl Tabellen";
 $lang["aspect_create"]                   = "Neuer Aspekt";
-$lang["form_aspect_default"]                  = "Standard-Aspekt:";
-$lang["form_aspect_name"]                = "Name:";
 $lang["aspect_delete_question"]          = "Möchten Sie den Aspekt &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["aspect_edit"]                     = "Aspekt bearbeiten";
 $lang["aspect_isDefault"]                = "Standard Aspekt";
 $lang["aspect_list_empty"]               = "Keine Aspekete angelegt";
-$lang["actionAspects"]                         = "Aspekte";
 $lang["cache_entry_size"]                = "Größe";
 $lang["cache_hash1"]                     = "Hash 1";
 $lang["cache_hash2"]                     = "Hash 2";
@@ -64,7 +70,6 @@ $lang["change_property"]                 = "Eigenschaft";
 $lang["change_record"]                   = "Objekt";
 $lang["change_type_setting"]             = "Einstellung";
 $lang["change_user"]                     = "Benutzer";
-$lang["actionChangelog"]                       = "Änderungshistorie";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";
 $lang["datenbankclient"]                 = "Datenbankclient";
@@ -83,6 +88,8 @@ $lang["errorlevel"]                      = "Error Level";
 $lang["executiontimeout"]                = "Execution Timeout";
 $lang["fehler_setzen"]                   = "Fehler beim Speichern der Rechte";
 $lang["filebrowser"]                     = "Datei auswählen";
+$lang["form_aspect_default"]             = "Standard-Aspekt:";
+$lang["form_aspect_name"]                = "Name:";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Geladene Erweiterungen";
 $lang["gifread"]                         = "GIF Read Support";
@@ -106,6 +113,7 @@ $lang["installer_dbdriver_sqlite3"]      = "Der SQLite-Treiber legt die Datenban
 $lang["installer_elements_found"]        = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Wir wünschen viel Spaß mit Kajona!";
 $lang["installer_finish_hints"]          = "Sie sollten nun die Schreibrechte auf die Datei /system/config/config.php auf Leserechte zurücksetzen.<br />Zusätzlich sollte aus Sicherheitsgründen der Ordner /installer/ unbedingt komplett gelöscht werden.<br /><br /><br />Die Administrationsoberfläche erreichen Sie nun unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />Das Portal erreichen Sie unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
+$lang["installer_finish_hints_update"]   = "<b>Achtung: Wenn Sie eine Update eines v3 Systems durchführen, dann sollten Sie nach dem Upgrade aller Module die Post-Update Scripte ausführen. </b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Post-Update ausführen</a><br /><br />";
 $lang["installer_finish_intro"]          = "<b>Installation abgeschlossen</b><br /><br />";
 $lang["installer_given"]                 = "vorhanden";
 $lang["installer_install"]               = "Installieren";
@@ -154,6 +162,7 @@ $lang["mail_send_error"]                 = "Fehler beim Versenden der E-Mail. Bi
 $lang["mail_send_success"]               = "E-Mail erfolgreich verschickt.";
 $lang["mail_subject"]                    = "Betreff:";
 $lang["memorylimit"]                     = "Memory Limit";
+$lang["messageprovider_exceptions_name"] = "System-Fehlermeldungen";
 $lang["modul_aspectedit"]                = "Aspekte bearbeiten";
 $lang["modul_rechte_root"]               = "Root-Rechte";
 $lang["modul_sortdown"]                  = "Nach unten verschieben";
@@ -163,7 +172,6 @@ $lang["modul_status_enabled"]            = "Modul inaktiv schalten (ist aktiv)";
 $lang["modul_status_system"]             = "Hmmm. Den System-Kernel deaktivieren? Zuvor bitte format c: ausführen!";
 $lang["modul_titel"]                     = "System";
 $lang["moduleRightsTitle"]               = "Rechte";
-$lang["actionList"]                    = "Installierte Module";
 $lang["numberStyleDecimal"]              = ",";
 $lang["numberStyleThousands"]            = ".";
 $lang["operatingsystem"]                 = "Betriebssystem";
@@ -201,17 +209,12 @@ $lang["setzen_erfolg"]                   = "Rechte erfolgreich gespeichert";
 $lang["speicherplatz"]                   = "Speicherplatz";
 $lang["status_active"]                   = "Status ändern (ist aktiv)";
 $lang["status_inactive"]                 = "Status ändern (ist inaktiv)";
-$lang["actionSystemTasks"]                     = "System-Tasks";
 $lang["system_cache"]                    = "Cache";
-$lang["actionSystemInfo"]                     = "Systeminformationen";
-$lang["actionSystemSessions"]                 = "Sessions";
-$lang["actionSystemSettings"]                 = "Systemeinstellungen";
 $lang["systeminfo_php_regglobal"]        = "Register globals";
 $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_webserver_modules"]    = "Geladene Module";
 $lang["systeminfo_webserver_version"]    = "Webserver";
-$lang["actionSystemlog"]                       = "System-Log";
 $lang["systemtask_cacheSource_source"]   = "Cache-Arten:";
 $lang["systemtask_cancel_execution"]     = "Ausführung beenden";
 $lang["systemtask_close_dialog"]         = "OK";
@@ -283,15 +286,10 @@ $lang["update_module_remoteversion"]     = "Verfügbar";
 $lang["update_nodom"]                    = "Diese PHP-Installation unterstützt kein XML-DOM. Dies ist für den Update-Check erforderlich.";
 $lang["update_nofilefound"]              = "Die Liste der Updates konnte nicht geladen werden.<br />Gründe hierfür können sein, dass auf diesem System der PHP-Config-Wert 'allow_url_fopen' auf 'off' gesetzt wurde, oder das System keine Unterstützung für Sockets bietet.";
 $lang["update_nourlfopen"]               = "Für diese Funktion muss der Wert &apos;allow_url_fopen&apos; in der PHP-Konfiguration auf &apos;on&apos; gesetzt sein!";
-$lang["actionUpdatecheck"]                     = "Update-Check";
 $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
-
-$lang["messageprovider_exceptions_name"] = "System-Fehlermeldungen";
-
-$lang["installer_finish_hints_update"]    = "<b>Achtung: Wenn Sie eine Update eines v3 Systems durchführen, dann sollten Sie nach dem Upgrade aller Module die Post-Update Scripte ausführen. </b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Post-Update ausführen</a><br /><br />";
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");

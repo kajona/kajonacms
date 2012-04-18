@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Default admin skin:";
@@ -18,8 +18,19 @@ $lang["_user_log_nrofrecords_hint"]      = "Defines the number of rows to be sho
 $lang["_user_selfedit_"]                 = "Edit own profile:";
 $lang["_user_selfedit_hint"]             = "Defines, if the user is allowed to change its own profile.";
 $lang["fehler_speichern"]                = "An error occured while saving profile!";
+$lang["form_group_desc"]                 = "Description:";
+$lang["form_user_city"]                  = "City:";
+$lang["form_user_date"]                  = "Date of birth:";
+$lang["form_user_email"]                 = "Email:";
+$lang["form_user_forename"]              = "Forename:";
+$lang["form_user_mobile"]                = "Mobile:";
+$lang["form_user_name"]                  = "Surname:";
+$lang["form_user_pass"]                  = "Password:";
+$lang["form_user_pass2"]                 = "Password (Confirmation):";
+$lang["form_user_postal"]                = "Postal:";
+$lang["form_user_street"]                = "Street:";
+$lang["form_user_tel"]                   = "Phone:";
 $lang["group_accept"]                    = "Select group ";
-$lang["form_group_desc"]                      = "Description:";
 $lang["group_dn"]                        = "Distinguished-Name in the directory:";
 $lang["group_memberlist"]                = "Members of group ";
 $lang["group_name"]                      = "Group title:";
@@ -49,7 +60,6 @@ $lang["login_changeButton"]              = "Change password";
 $lang["login_change_error"]              = "Error processing your request.";
 $lang["login_change_success"]            = "Password changed successfully. You can now proceed to <a href=\"_webpath_/admin\">login</a>.";
 $lang["login_dashboard"]                 = "Welcome page";
-$lang["login_sitmap"]                 = "Sitemap";
 $lang["login_ip"]                        = "IP-Address";
 $lang["login_loginButton"]               = "Login";
 $lang["login_loginCookiesInfo"]          = "Please allow Cookies for this site and reload the current page to be able to use all functionalities.";
@@ -63,6 +73,7 @@ $lang["login_nr"]                        = "#";
 $lang["login_password_form_intro"]       = "Please choose a new password along with providing your username.<br />";
 $lang["login_printview"]                 = "Open print-view";
 $lang["login_profileTitle"]              = "Edit profile";
+$lang["login_sitmap"]                    = "Sitemap";
 $lang["login_status"]                    = "Status";
 $lang["login_statusTitle"]               = "Logged in as:";
 $lang["login_status_0"]                  = "Login Error";
@@ -101,16 +112,12 @@ $lang["user_anlegen"]                    = "Create user";
 $lang["user_bearbeiten"]                 = "Edit user";
 $lang["user_browser"]                    = "Search user";
 $lang["user_browser_show"]               = "Show users";
-$lang["form_user_city"]                       = "City:";
-$lang["form_user_date"]                       = "Date of birth:";
-$lang["form_user_email"]                      = "Email:";
 $lang["user_erfolg"]                     = "User was saved successfully";
 $lang["user_fehler"]                     = "An error occured while saving the user";
 $lang["user_fehler_mail"]                = "Pleae enter a valid mail-address <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_name"]                = "Please enter an username <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_namedoppelt"]         = "The username already exits, please choose another one <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_pass"]                = "Passwords provided are different <a href=\"javascript:history.back(-1)\">back</a>";
-$lang["form_user_forename"]                   = "Forename:";
 $lang["user_inactive"]                   = "Change statis (is inactive)";
 $lang["user_language"]                   = "Admin language:";
 $lang["user_lastlogin"]                  = "Last login:";
@@ -122,21 +129,14 @@ $lang["user_loeschen_fehler"]            = "An error occured while deleting user
 $lang["user_loeschen_frage"]             = "Do you really want to delete the user &quot;<b>%%element_name%%</b>&quot;?";
 $lang["user_logins"]                     = "Logins:";
 $lang["user_memberships"]                = "Group assignments of user ";
-$lang["form_user_mobile"]                     = "Mobile:";
-$lang["form_user_name"]                       = "Surname:";
-$lang["form_user_pass"]                   = "Password:";
-$lang["form_user_pass2"]                  = "Password (Confirmation):";
 $lang["user_password_resend"]            = "Sent a new password";
 $lang["user_password_resend_body"]       = "Für Ihren Account wurde ein neues Passwort beantrag. Bitte verwenden Sie den untenstehenden Link um den Zugang freizuschalten.\n\n\n";
 $lang["user_password_resend_subj"]       = "Confirming the account-activation";
 $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_portal"]                     = "Portal login:";
-$lang["form_user_postal"]                     = "Postal:";
 $lang["user_resend_password_hint"]       = "By sending the user a new password, an email is sent to the adress saved with the users profile containing a new password and a link to change the password.<br />The user must be aware of his username in order to finish the process.<br />";
 $lang["user_skin"]                       = "Admin skin:";
-$lang["form_user_street"]                     = "Street:";
 $lang["user_system"]                     = "Systemeinstellungen";
-$lang["form_user_tel"]                        = "Phone:";
 $lang["user_username"]                   = "Username:";
 $lang["user_usersource"]                 = "User-Source:";
 $lang["user_zugehoerigkeit"]             = "Group assignments";

@@ -7,19 +7,19 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["delete_question"]                 = "Do you really want to delete the navigation &quot;<b>%%element_name%%</b>&quot; with all items?";
 $lang["error_folder_and_page"]           = "Only a page or a folder can be selected, not both.";
 $lang["liste_leer"]                      = "No navigations available";
-$lang["module_action_new"]                   = "Create navigation";
 $lang["modul_anlegenpunkt"]              = "Create navigation item";
 $lang["modul_titel"]                     = "Navigations";
+$lang["module_action_new"]               = "Create navigation";
 $lang["navigation_anzeigen"]             = "Show navigation items";
 $lang["navigation_erf_loeschen"]         = "Navigation was deleted succesfully";
 $lang["navigation_erfolg"]               = "Navigation was created succesfully";
 $lang["navigation_folder_i"]             = "Folder:";
-$lang["delete_question"]       = "Do you really want to delete the navigation &quot;<b>%%element_name%%</b>&quot; with all items?";
 $lang["navigation_page_e"]               = "External link / file:";
 $lang["navigation_page_i"]               = "Page:";
 $lang["navigation_parent"]               = "Parent node:";
