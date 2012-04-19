@@ -706,6 +706,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator->setArraySection(class_module_pages_element::getAllElements($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator, false, "elementList");
 
+
+        /* TODO: will be moved to the package-manager
         // ------------------------------------------------------------------------------------------
         // any element-installers of elements not yet installed?
         $arrElementsToInstall = array();
@@ -726,7 +728,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     include_once(_realpath_.$strPath);
                     $strClass = "class_".str_replace(".php", "", $strInstaller);
 
-                    /** @var interface_installer $objInstaller  */
+
                     $objInstaller = new $strClass();
 
                     $objSystem = class_module_system_module::getModuleByName("system");
@@ -774,7 +776,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                 $strReturn .= $this->objToolkit->listFooter();
             }
-        }
+
+        }*/
 
 		return $strReturn;
 	}
@@ -841,7 +844,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 	 *
 	 * @return string, "" in case of success
      * @permissions right1
-	 */
+     * @todo will be moved to package-manager
+     */
 	protected function actionInstallElement() {
         $strReturn = "";
         $strElementToInstall = $this->getParam("elementName");

@@ -40,16 +40,9 @@ class class_installer_element_languageswitch extends class_installer_base implem
         return array("system", "pages", "languages");
     }
 
-    public function hasPostInstalls() {
-        //check, if not already existing
-        $objElement = class_module_pages_element::getElement("languageswitch");
-        if($objElement === null)
-            return true;
 
-        return false;
-    }
+    public function install() {
 
-    public function postInstall() {
         //Register the element
         $strReturn = "Registering languageswitch-element...\n";
 
@@ -74,51 +67,30 @@ class class_installer_element_languageswitch extends class_installer_base implem
     }
 
 
-    public function install() {
-        return "";
-    }
-
-    public function hasPostUpdates() {
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("languageswitch");
-            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
-                return true;
-        }
-        catch (class_exception $objEx)  {
-        }
-
-        return false;
-    }
-
     public function update() {
-        return "";
-    }
-
-    public function postUpdate() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.0") {
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.0") {
             $strReturn .= $this->update_340_3401();
             $this->objDB->flushQueryCache();
         }
 
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.0.1") {
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.0.1") {
             $strReturn .= $this->update_3401_3402();
             $this->objDB->flushQueryCache();
         }
 
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.0.2") {
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.0.2") {
             $strReturn .= $this->update_3402_341();
             $this->objDB->flushQueryCache();
         }
 
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.1") {
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.1") {
             $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.1.1") {
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.1.1") {
             $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 371
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Anzahl Datensätze pro Seite:";
@@ -140,7 +140,6 @@ $lang["installer_prev"]                  = "< Vorheriger Schritt";
 $lang["installer_samplecontent"]         = "<b>Installation der Beispielinhalte</b><br /><br />Das Modul Samplecontent erstellt einige Standard-Seiten und Navigationen.<br />Je nach installierten Modulen werden verschiedene Beispielinhalte installiert.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Administrationszugang";
 $lang["installer_step_dbsettings"]       = "Datenbankeinstellungen";
-$lang["installer_step_elements"]         = "Seitenelemente";
 $lang["installer_step_finish"]           = "Abschluss";
 $lang["installer_step_modules"]          = "Module";
 $lang["installer_step_phpsettings"]      = "PHP-Konfiguration";

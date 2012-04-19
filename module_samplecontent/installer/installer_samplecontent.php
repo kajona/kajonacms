@@ -41,14 +41,8 @@ class class_installer_samplecontent extends class_installer_base implements inte
 	    return "3.3.1.8";
 	}
 
-	public function hasPostInstalls() {
-        return false;
-	}
-
 
     public function install() {
-        $strReturn = "";
-
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
 
 		//Register the module
@@ -93,10 +87,6 @@ class class_installer_samplecontent extends class_installer_base implements inte
 		return $strReturn;
 	}
 
-	public function postInstall() {
-	}
-
-
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
@@ -111,7 +101,6 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
         return $strReturn;
 	}
-
 
 
     private function update_340_341() {

@@ -26,11 +26,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
 	    return array("system", "pages");
 	}
 
-	public function hasPostInstalls() {
-
-        return false;
-	}
-
     public function getMinSystemVersion() {
 	    return "3.4.9";
 	}
@@ -114,11 +109,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		return $strReturn;
 
 	}
-
-	public function postInstall() {
-		return "";
-	}
-
 
 
 	public function update() {

@@ -31,25 +31,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 	    return "3.4.9";
 	}
 
-	public function hasPostInstalls() {
-		//check, if elements not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='paragraph'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0)
-		    return true;
-
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='row'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0)
-		    return true;
-
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='image'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0)
-		    return true;
-
-		return false;
-	}
 
 	public function install() {
 		//Nur installieren, wenn noch nicht vorhanden
@@ -157,129 +138,128 @@ class class_installer_pages extends class_installer_base implements interface_in
         $objCommon->setAbsolutePosition(1);
 
 
+
+
+
+
+
+        //Table for paragraphes
+        $strReturn .= "Installing paragraph table...\n";
+
+        $arrFields = array();
+        $arrFields["content_id"]        = array("char20", false);
+        $arrFields["paragraph_title"]	= array("char254", true);
+        $arrFields["paragraph_content"] = array("text", true);
+        $arrFields["paragraph_link"]	= array("char254", true);
+        $arrFields["paragraph_image"]	= array("char254", true);
+        $arrFields["paragraph_template"]= array("char254", true);
+
+        if(!$this->objDB->createTable("element_paragraph", $arrFields, array("content_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        //Register the element
+        $strReturn .= "Registering paragraph...\n";
+        //check, if not already existing
+        $objElement = null;
+        try {
+            $objElement = class_module_pages_element::getElement("paragraph");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName("paragraph");
+            $objElement->setStrClassAdmin("class_element_paragraph_admin.php");
+            $objElement->setStrClassPortal("class_element_paragraph_portal.php");
+            $objElement->setIntCachetime(3600*24*30);
+            $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
+
+        $strReturn .= "Registering row...\n";
+        //check, if not already existing
+        $objElement = null;
+        try {
+            $objElement = class_module_pages_element::getElement("row");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName("row");
+            $objElement->setStrClassAdmin("class_element_row_admin.php");
+            $objElement->setStrClassPortal("class_element_row_portal.php");
+            $objElement->setIntCachetime(3600*24*30);
+            $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
+
+        //Table for images
+        $strReturn .= "Installing image table...\n";
+
+        $arrFields = array();
+        $arrFields["content_id"] 	 = array("char20", false);
+        $arrFields["image_title"]	 = array("char254", true);
+        $arrFields["image_link"] 	 = array("char254", true);
+        $arrFields["image_image"]	 = array("char254", true);
+        $arrFields["image_x"]        = array("int", true);
+        $arrFields["image_y"]        = array("int", true);
+        $arrFields["image_template"] = array("char254", true);
+
+        if(!$this->objDB->createTable("element_image", $arrFields, array("content_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        //Register the element
+        $strReturn .= "Registering image...\n";
+        //check, if not already existing
+        $objElement = null;
+        try {
+            $objElement = class_module_pages_element::getElement("image");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName("image");
+            $objElement->setStrClassAdmin("class_element_image_admin.php");
+            $objElement->setStrClassPortal("class_element_image_portal.php");
+            $objElement->setIntCachetime(3600*24*30);
+            $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
+
+        $strReturn .= "Installing universal element table...\n";
+
+        $arrFields = array();
+        $arrFields["content_id"]= array("char20", false);
+        $arrFields["char1"]		= array("char254", true);
+        $arrFields["char2"] 	= array("char254", true);
+        $arrFields["char3"]		= array("char254", true);
+        $arrFields["int1"]		= array("int", true);
+        $arrFields["int2"]		= array("int", true);
+        $arrFields["int3"]		= array("int", true);
+        $arrFields["text"]		= array("text", true);
+
+        if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
+            $strReturn .= "An error occured! ...\n";
+
 		return $strReturn;
 
-	}
-
-	public function postInstall() {
-		$strReturn = "";
-
-		//Table for paragraphes
-		$strReturn .= "Installing paragraph table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"]        = array("char20", false);
-		$arrFields["paragraph_title"]	= array("char254", true);
-		$arrFields["paragraph_content"] = array("text", true);
-		$arrFields["paragraph_link"]	= array("char254", true);
-		$arrFields["paragraph_image"]	= array("char254", true);
-		$arrFields["paragraph_template"]= array("char254", true);
-
-		if(!$this->objDB->createTable("element_paragraph", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		//Register the element
-		$strReturn .= "Registering paragraph...\n";
-		//check, if not already existing
-        $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("paragraph");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("paragraph");
-		    $objElement->setStrClassAdmin("class_element_paragraph_admin.php");
-		    $objElement->setStrClassPortal("class_element_paragraph_portal.php");
-		    $objElement->setIntCachetime(3600*24*30);
-		    $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
-
-		$strReturn .= "Registering row...\n";
-		//check, if not already existing
-        $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("row");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("row");
-		    $objElement->setStrClassAdmin("class_element_row_admin.php");
-		    $objElement->setStrClassPortal("class_element_row_portal.php");
-		    $objElement->setIntCachetime(3600*24*30);
-		    $objElement->setIntRepeat(0);
-            $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
-
-		//Table for images
-		$strReturn .= "Installing image table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 	 = array("char20", false);
-		$arrFields["image_title"]	 = array("char254", true);
-		$arrFields["image_link"] 	 = array("char254", true);
-		$arrFields["image_image"]	 = array("char254", true);
-		$arrFields["image_x"]        = array("int", true);
-		$arrFields["image_y"]        = array("int", true);
-		$arrFields["image_template"] = array("char254", true);
-
-		if(!$this->objDB->createTable("element_image", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		//Register the element
-		$strReturn .= "Registering image...\n";
-		//check, if not already existing
-        $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("image");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("image");
-		    $objElement->setStrClassAdmin("class_element_image_admin.php");
-		    $objElement->setStrClassPortal("class_element_image_portal.php");
-		    $objElement->setIntCachetime(3600*24*30);
-		    $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
-
-		$strReturn .= "Installing universal element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"]= array("char20", false);
-		$arrFields["char1"]		= array("char254", true);
-		$arrFields["char2"] 	= array("char254", true);
-		$arrFields["char3"]		= array("char254", true);
-		$arrFields["int1"]		= array("int", true);
-		$arrFields["int2"]		= array("int", true);
-		$arrFields["int3"]		= array("int", true);
-		$arrFields["text"]		= array("text", true);
-
-		if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		return $strReturn;
 	}
 
 

@@ -31,16 +31,6 @@ class class_installer_guestbook extends class_installer_base implements interfac
 	    return "3.4.1";
 	}
 
-	public function hasPostInstalls() {
-
-        $objElement = class_module_pages_element::getElement("guestbook");
-        if($objElement === null)
-            return true;
-
-        return false;
-	}
-
-
     public function install() {
 
         if(count($this->objDB->getTables()) > 0) {
@@ -84,46 +74,46 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_module_system_setting::$int_TYPE_PAGE, _guestbook_module_id_);
 
-		return $strReturn;
 
-	}
 
-    public function postInstall() {
-		$strReturn = "";
 
-		//Table for page-element
-		$strReturn .= "Installing guestbook-element table...\n";
+        //Table for page-element
+        $strReturn .= "Installing guestbook-element table...\n";
 
-		$arrFields = array();
-		$arrFields["content_id"]   		= array("char20", false);
-		$arrFields["guestbook_id"] 		= array("char20", true);
-		$arrFields["guestbook_template"]= array("char254", true);
-		$arrFields["guestbook_amount"] 	= array("int", true);
+        $arrFields = array();
+        $arrFields["content_id"]   		= array("char20", false);
+        $arrFields["guestbook_id"] 		= array("char20", true);
+        $arrFields["guestbook_template"]= array("char254", true);
+        $arrFields["guestbook_amount"] 	= array("int", true);
 
-		if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+        if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
+            $strReturn .= "An error occured! ...\n";
 
-		//Register the element
-		$strReturn .= "Registering guestbook-element...\n";
-		//check, if not already existing
+        //Register the element
+        $strReturn .= "Registering guestbook-element...\n";
+        //check, if not already existing
         $objElement = class_module_pages_element::getElement("guestbook");
-		if($objElement === null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("guestbook");
-		    $objElement->setStrClassAdmin("class_element_guestbook_admin.php");
-		    $objElement->setStrClassPortal("class_element_guestbook_portal.php");
-		    $objElement->setIntCachetime(3600);
-		    $objElement->setIntRepeat(1);
+        if($objElement === null) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName("guestbook");
+            $objElement->setStrClassAdmin("class_element_guestbook_admin.php");
+            $objElement->setStrClassPortal("class_element_guestbook_portal.php");
+            $objElement->setIntCachetime(3600);
+            $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
+
+
 
 		return $strReturn;
+
 	}
+
 
 	public function update() {
 	    $strReturn = "";

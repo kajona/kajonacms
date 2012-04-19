@@ -106,10 +106,6 @@ class class_installer {
             $this->createModuleInstalls();
         }
 
-        elseif ($_GET["step"] == "postInstall") {
-            $this->createModulePostInstalls();
-        }
-
         elseif ($_GET["step"] == "samplecontent") {
             $this->installSamplecontent();
         }
@@ -391,78 +387,10 @@ class class_installer {
 
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
-		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=postInstall");
-	}
-
-	/**
-     * Loads all installers and requests a post-install link, if available
-     *
-     */
-	public function createModulePostInstalls() {
-		$strReturn = "";
-		$strInstallLog = "";
-		$strReturn .= "";
-
-
-        //Is there a module to be post-updated?
-		if(isset($_GET["postUpdate"])) {
-			$strClass = $_GET["postUpdate"].".php";
-			include_once(_realpath_.array_search($strClass, $this->arrInstaller));
-		    $strClass = "class_".str_replace(".php", "", $strClass);
-		    $objInstaller = new $strClass();
-	        $strInstallLog .= $objInstaller->doModulePostUpdate();
-		}
-
-        //module-installs to loop?
-        if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
-            $arrModulesToInstall = $_POST["moduleInstallBox"];
-            foreach($arrModulesToInstall as $strOneModule => $strValue) {
-                $strClass = $strOneModule.".php";
-                include_once(_realpath_.array_search($strClass, $this->arrInstaller));
-                $strClass = "class_".str_replace(".php", "", $strClass);
-                $objInstaller = new $strClass();
-                $strInstallLog .= $objInstaller->doPostInstall()."";
-            }
-        }
-
-
-        $this->strLogfile = $strInstallLog;
-		$strReturn .= $this->getLang("installer_elements_found");
-
-        $strRows = "";
-        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_elements_row", true);
-        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_elements_row_installable", true);
-		//Loading each installer
-		foreach($this->arrInstaller as $strInstaller) {
-			include_once(_realpath_.array_search($strInstaller, $this->arrInstaller));
-			//Creating an object....
-			$strClass = "class_".str_replace(".php", "", $strInstaller);
-			$objInstaller = new $strClass();
-
-			if($objInstaller instanceof interface_installer ) {
-               $arrTemplate = array();
-               $arrTemplate["module_name"] = $objInstaller->getModuleName();
-               $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
-               $arrTemplate["module_version"] = $objInstaller->getVersion();
-               $arrTemplate["module_hint"] = $objInstaller->getModulePostInstallInfo();
-
-			   if ($objInstaller->isModulePostInstallable()) {
-					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
-               } else {
-					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
-               }
-
-            }
-		}
-
-        //wrap in form
-        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_elements_form", true);
-        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
-
-		$this->strOutput .= $strReturn;
-		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=install");
 		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=samplecontent");
 	}
+
+
 
 
 	/**
@@ -532,7 +460,7 @@ class class_installer {
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
-		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=postInstall");
+		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=install");
 		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=finish");
 	}
 
@@ -562,12 +490,14 @@ class class_installer {
 	 * @return string
 	 */
 	public function getOutput() {
-	    $arrTemp = array();
 	    if($this->strLogfile != "") {
 	        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_log", true);
-	        $this->strLogfile = $this->objTemplates->fillTemplate(array("log_content" => $this->strLogfile,
-                                                                        "systemlog" => $this->getLang("installer_systemlog")
-                                                                  ), $strTemplateID);
+	        $this->strLogfile = $this->objTemplates->fillTemplate(
+                array(
+                    "log_content" => $this->strLogfile,
+                    "systemlog" => $this->getLang("installer_systemlog")
+                ), $strTemplateID
+            );
 	    }
 
 
@@ -581,7 +511,6 @@ class class_installer {
 	       "config" => $this->getLang("installer_step_dbsettings"),
 	       "loginData" => $this->getLang("installer_step_adminsettings"),
 	       "install" => $this->getLang("installer_step_modules"),
-	       "postInstall" => $this->getLang("installer_step_elements"),
 	       "samplecontent" => $this->getLang("installer_step_samplecontent"),
 	       "finish" => $this->getLang("installer_step_finish"),
 	    );
@@ -630,27 +559,7 @@ class class_installer {
 	    //use return true to disable config-check
 	    //return true;
         //Load the config to parse it
-        //FIXME: add file-resolving
         return is_file($this->STR_PROJECT_CONFIG_FILE);
-
-        /*
-            $strConfig = file_get_contents($this->STR_PROJECT_CONFIG_FILE);
-        else
-            $strConfig = file_get_contents($this->STR_ORIG_CONFIG_FILE);
-
-        //check all needed values
-        if(   uniStrpos($strConfig, "%%defaulthost%%") !== false
-           || uniStrpos($strConfig, "%%defaultusername%%") !== false
-           || uniStrpos($strConfig, "%%defaultpassword%%") !== false
-           || uniStrpos($strConfig, "%%defaultdbname%%") !== false
-           || uniStrpos($strConfig, "%%defaultdriver%%") !== false
-           || uniStrpos($strConfig, "%%defaultprefix%%") !== false
-           || uniStrpos($strConfig, "%%defaultport%%") !== false
-          )
-            return false;
-        else
-            return true;
-        */
 	}
 
 	/**

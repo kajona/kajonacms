@@ -208,121 +208,6 @@ abstract class class_installer_base extends class_root {
 		}
 	}
 
-    /**
-     * checks if module post-installs are available and can be installed
-     *
-     * @since 3.2
-     * @return boolean
-     */
-    public final function isModulePostInstallable() {
-    	$bitReturn = false;
-
-        if($this->getModulePostInstallInfo() == "") {
-            $objModule = null;
-            try {
-                $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
-            }
-            catch (class_exception $objE) { }
-
-            if(strpos($this->arrModule["name"], "element") !== false)
-                $objModule = true;
-
-            if($objModule != null && $this->hasPostInstalls()) {
-            	$bitReturn = true;
-            }
-
-            //check if required modules are given
-            $arrModulesNeeded = $this->getNeededModules();
-            foreach($arrModulesNeeded as $strOneModule) {
-                try {
-                    $objModule = class_module_system_module::getModuleByName($strOneModule, true);
-                }
-                catch (class_exception $objException) {
-                    $objModule = null;
-                }
-                if($objModule == null) {
-                    $bitReturn = false;
-                }
-            }
-
-            //check, if a min version of the system is needed
-            if($this->getMinSystemVersion() != "") {
-                //the systems version to compare to
-                $objSystem = class_module_system_module::getModuleByName("system");
-                if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-                    $bitReturn = false;
-                }
-            }
-
-        }
-
-        return $bitReturn;
-    }
-
-    /**
-     * Creates text-based infos regarding the current installation.
-     * If a post-install is possible, an empty string is returned.
-     *
-     * @return string or ""
-     */
-    public final function getModulePostInstallInfo() {
-
-        //ok, all needed modules are installed. check if update or install-link should be generated
-        //or, no link ;)
-        //first check: current module installed?
-        $objModule = null;
-        try {
-            $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
-        }
-        catch (class_exception $objE) { }
-
-        if(strpos($this->arrModule["name"], "element") !== false)
-            $objModule = true;
-
-        //check, if a min version of the system is needed
-        if($this->getMinSystemVersion() != "") {
-            //the systems version to compare to
-            $objSystem = class_module_system_module::getModuleByName("system");
-            if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-                return $this->getLang("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
-            }
-        }
-
-
-        //check if required modules are given
-        $arrModulesNeeded = $this->getNeededModules();
-        $strNeeded = "";
-        foreach($arrModulesNeeded as $strOneModule) {
-            try {
-                $objTestModule = class_module_system_module::getModuleByName($strOneModule, true);
-            }
-            catch (class_exception $objException) {
-                $objTestModule = null;
-            }
-            if($objTestModule == null) {
-                $strNeeded .= $strOneModule.", ";
-            }
-        }
-
-        if($strNeeded != "") {
-            return $this->getLang("installer_modules_needed", "system").substr($strNeeded, 0, -2);
-        }
-
-        if($objModule != null && $this->hasPostInstalls()) {
-            //install link
-            return "";
-        }
-        else if($objModule == null) {
-            return $this->getLang("installer_module_notinstalled", "system");
-        }
-
-        //Update-Link?
-        if($this->hasPostUpdates()) {
-            return "<a href=\""._webpath_."/installer.php?step=postInstall&postUpdate=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]."</a>";
-        }
-
-        return "";
-    }
 
 	/**
 	 * Invokes the installation of the module
@@ -365,24 +250,6 @@ abstract class class_installer_base extends class_root {
         return "\n\n".$strReturn;
 	}
 
-	/**
-	 * Invokes the installation of the module
-	 *
-	 */
-	public final function doPostInstall() {
-	    $strReturn = "";
-        //check, if module has postinstalles
-        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
-        if($objModule == null && strpos($this->arrModule["name"], "element") === false) {
-            $strReturn .= "<b>No post-install options available!</b>";
-        }
-        else {
-            $strReturn .= "Post-Installing ".$this->arrModule["name_lang"]."...\n";
-            $strReturn .= $this->postInstall();
-            $this->objDB->flushQueryCache();
-        }
-        return "\n\n".$strReturn;
-	}
 
 	/**
 	 * Invokes the installation of the module
@@ -407,26 +274,6 @@ abstract class class_installer_base extends class_root {
         return "\n\n".$strReturn;
 	}
 
-    /**
-	 * Invokes the post-updates of the module
-	 *
-	 */
-	public final function doModulePostUpdate() {
-	    $strReturn = "";
-
-        $strReturn .= $this->postUpdate();
-        $this->objDB->flushQueryCache();
-
-        return "\n\n".$strReturn;
-	}
-
-	/**
-	 * Overwrite this function
-	 *
-	 */
-	protected function hasPostInstalls() {
-	}
-
 
 	/**
 	 * Overwrite this method. it should return an array of module-names
@@ -449,30 +296,6 @@ abstract class class_installer_base extends class_root {
 	 */
 	protected function update() {
 	}
-
-    /**
-	 * Overwrite this function!!!
-	 */
-	protected function postInstall() {
-	}
-
-
-    /**
-     * Used to update the elements installed by the postInstall method, e.g. page-elements
-     * Overwrite if needed
-     *
-     * @return bool
-     */
-    public function hasPostUpdates() {
-        return false;
-    }
-
-    /**
-     * Does all the updating of the installations done after the module-install
-     * Overwrite if needed
-     */
-    public function postUpdate() {
-    }
 
 
 	//--Helpers------------------------------------------------------------------------------------------

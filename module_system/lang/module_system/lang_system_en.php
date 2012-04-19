@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 371
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Number of records per page:";
@@ -140,7 +140,6 @@ $lang["installer_prev"]                  = "< Previous step";
 $lang["installer_samplecontent"]         = "<b>Installation of the samplecontent</b><br /><br />The module 'samplecontent' creates a few standard pages and navigation entries.<br />According to the modules installed, additional contents will be created.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Admin access";
 $lang["installer_step_dbsettings"]       = "Database settings";
-$lang["installer_step_elements"]         = "Page elements";
 $lang["installer_step_finish"]           = "Finalize";
 $lang["installer_step_modules"]          = "Modules";
 $lang["installer_step_phpsettings"]      = "PHP configuration";

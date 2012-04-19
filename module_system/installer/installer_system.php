@@ -39,15 +39,6 @@ class class_installer_system extends class_installer_base implements interface_i
 	    return array();
 	}
 
-	public function hasPostInstalls() {
-        return false;
-	}
-
-	public function postInstall() {
-	    return "";
-	}
-
-
 	public function install() {
 	    $strReturn = "";
 

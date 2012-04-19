@@ -39,15 +39,6 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	    return array("system");
 	}
 
-	public function hasPostInstalls() {
-        return false;
-	}
-
-	public function postInstall() {
-		return "";
-	}
-
-
 	public function install() {
 	    $strReturn = "";
 
@@ -76,7 +67,6 @@ class class_installer_dashboard extends class_installer_base implements interfac
         }
 
         return $strReturn;
-
 	}
 
 

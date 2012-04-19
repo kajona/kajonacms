@@ -32,20 +32,6 @@ class class_installer_tags extends class_installer_base implements interface_ins
 	    return "3.3.1.8";
 	}
 
-	public function hasPostInstalls() {
-        //check, if not already existing
-	    $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("tags");
-		}
-		catch (class_exception $objEx)  {
-		}
-        if($objElement == null)
-            return true;
-
-        return false;
-
-	}
 
     public function install() {
 		$strReturn = "";
@@ -96,38 +82,33 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 		$strReturn .= "Registering system-constants...\n";
 
-		return $strReturn;
-
-	}
-
-    public function postInstall() {
-
-         //Register the element
-		$strReturn = "Registering tags-element...\n";
+        //Register the element
+        $strReturn .= "Registering tags-element...\n";
 
         //check, if not already existing
         $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("tags");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("tags");
-		    $objElement->setStrClassAdmin("class_element_tags_admin.php");
-		    $objElement->setStrClassPortal("class_element_tags_portal.php");
-		    $objElement->setIntCachetime(3600*24*30);
-		    $objElement->setIntRepeat(0);
+        try {
+            $objElement = class_module_pages_element::getElement("tags");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName("tags");
+            $objElement->setStrClassAdmin("class_element_tags_admin.php");
+            $objElement->setStrClassPortal("class_element_tags_portal.php");
+            $objElement->setIntCachetime(3600*24*30);
+            $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
 
 		return $strReturn;
+
 	}
 
 

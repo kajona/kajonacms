@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 371
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -110,7 +110,6 @@ $lang["installer_prev"]                  = "< Предыдущий шаг";
 $lang["installer_samplecontent"]         = "<b>Установка образца</b><br /><br />Модуль \"Образец\" создает несколько стандартных страниц и пунктов навигации.<br />Согласно установленным модулям будет создано дополнительное содержание.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Доступ админа";
 $lang["installer_step_dbsettings"]       = "Настройки датабазы";
-$lang["installer_step_elements"]         = "Элементы страницы";
 $lang["installer_step_finish"]           = "Закончить";
 $lang["installer_step_modules"]          = "Модули";
 $lang["installer_step_phpsettings"]      = "Конфигурация PHP ";

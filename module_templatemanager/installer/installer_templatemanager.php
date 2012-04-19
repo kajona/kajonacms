@@ -31,9 +31,6 @@ class class_installer_templatemanager extends class_installer_base implements in
 	    return "3.4.9";
 	}
 
-	public function hasPostInstalls() {
-        return false;
-	}
 
     public function install() {
 		$strReturn = "";
@@ -63,10 +60,6 @@ class class_installer_templatemanager extends class_installer_base implements in
 
 		return $strReturn;
 
-	}
-
-    public function postInstall() {
-		return "";
 	}
 
 

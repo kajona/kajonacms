@@ -30,33 +30,9 @@ class class_installer_element_downloads extends class_installer_base implements 
 	    return "3.4.1";
 	}
 
-	public function hasPostInstalls() {
-        $objElement = class_module_pages_element::getElement("downloads");
-        if($objElement === null)
-            return true;
-
-        return false;
-	}
 
 
-    public function install() {
-		return "";
-	}
-
-    public function hasPostUpdates() {
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("downloads");
-            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
-                return true;
-        }
-        catch (class_exception $objEx)  {
-        }
-
-        return false;
-    }
-
-	public function postInstall() {
+	public function install() {
 		$strReturn = "";
 
 		//Table for page-element
@@ -91,16 +67,12 @@ class class_installer_element_downloads extends class_installer_base implements 
 	}
 
 
-	public function update() {
-	    return "";
-	}
 
-    public function postUpdate() {
-        $strReturn = "";
+    public function update() {
 
         $strReturn = "";
         if(class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.1") {
-            $strReturn .= $this->postUpdate_341_349();
+            $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
@@ -109,7 +81,7 @@ class class_installer_element_downloads extends class_installer_base implements 
     }
 
 
-    public function postUpdate_341_349() {
+    public function update_341_349() {
         $strReturn = "Updating element downloads to 3.4.9...\n";
 
         $this->updateElementVersion("downloads", "3.4.9");

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 371
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -111,7 +111,6 @@ $lang["installer_prev"]                  = "< Предишна стъпка";
 $lang["installer_samplecontent"]         = "<b>Инсталацията на пробно съдържание</b><br /><br />Модулът 'пробно съдържание' създава няколко стандартни страници и навигационни връзки.<br />Съдържанието ще бъде създадено в зависимост от инсталираните модули .<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Административен достъп";
 $lang["installer_step_dbsettings"]       = "Настройки база данни";
-$lang["installer_step_elements"]         = "Елементи към страници";
 $lang["installer_step_finish"]           = "Завърши";
 $lang["installer_step_modules"]          = "Модули";
 $lang["installer_step_phpsettings"]      = "PHP конфигурация";

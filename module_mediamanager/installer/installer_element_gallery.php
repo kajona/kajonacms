@@ -26,42 +26,12 @@ class class_installer_element_gallery extends class_installer_base implements in
 	    return array("system", "pages", "mediamanager");
 	}
 
-	public function hasPostInstalls() {
-
-        $objElement = class_module_pages_element::getElement("gallery");
-        if($objElement === null)
-            return true;
-
-        $objElement = class_module_pages_element::getElement("galleryRandom");
-        if($objElement === null)
-            return true;
-
-
-        return false;
-	}
 
     public function getMinSystemVersion() {
 	    return "3.4.9";
 	}
 
-    public function install() {
-        return "";
-	}
-
-    public function hasPostUpdates() {
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("gallery");
-            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
-                return true;
-        }
-        catch (class_exception $objEx)  {
-        }
-
-        return false;
-    }
-
-	public function postInstall() {
+	public function install() {
 		$strReturn = "";
 
 		//Table for page-element
@@ -123,22 +93,17 @@ class class_installer_element_gallery extends class_installer_base implements in
 
 
 
-	public function update() {
-	    return "";
-	}
-
-
-    public function postUpdate() {
+    public function update() {
         $strReturn = "";
         if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.1") {
-            $strReturn .= $this->postUpdate_341_349();
+            $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
     }
 
-    public function postUpdate_341_349() {
+    public function update_341_349() {
         $strReturn = "Updating element gallery to 3.4.9...\n";
 
         $strReturn .= "Migrating old gallery-element table...\n";

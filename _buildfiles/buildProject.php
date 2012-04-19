@@ -98,17 +98,17 @@ class Testmanager {
 
         }
 
-        echo "post-installs...\n";
-        foreach($arrInstallersToRun as $strPath => $strOneInstaller) {
-            echo "---------------------------------------------------------------\n";
-            echo "Installing ".$strOneInstaller."...\n\n";
-            include_once(_realpath_.$strPath);
-            $strClassname = "class_".str_replace(".php", "", $strOneInstaller, $strClassname);
-            $objInstaller = new $strClassname();
-            if($objInstaller->hasPostInstalls())
-                $objInstaller->postInstall();
-
-        }
+//        echo "post-installs...\n";
+//        foreach($arrInstallersToRun as $strPath => $strOneInstaller) {
+//            echo "---------------------------------------------------------------\n";
+//            echo "Installing ".$strOneInstaller."...\n\n";
+//            include_once(_realpath_.$strPath);
+//            $strClassname = "class_".str_replace(".php", "", $strOneInstaller, $strClassname);
+//            $objInstaller = new $strClassname();
+//            if($objInstaller->hasPostInstalls())
+//                $objInstaller->postInstall();
+//
+//        }
         
 
         echo "Installing samplecontent...\n\n";

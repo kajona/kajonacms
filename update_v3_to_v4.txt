@@ -44,6 +44,9 @@ General:
 - Signatures of class_root::setPosition() and class_root::setAbsolutePosition() changed, no longer including an id-param
 - class_root::getObjectTables() was removed, table declarations are now stored within the class' doc-comment
 
+Installers:
+- remove postInstall sections, elements should be handled by the regular install() methods
+
 
 Removed Constants:
 - _systempath_

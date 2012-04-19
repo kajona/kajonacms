@@ -46,17 +46,5 @@ interface interface_installer {
      */
     public function update();
 
-    /**
-     * Returns a boolean value
-     * Indicates, if the module has post-install options or not
-     *
-     */
-    public function hasPostInstalls();
-
-    /**
-     * Does the post-install tasks as creating page-elements
-     *
-     */
-    public function postInstall();
 
 }

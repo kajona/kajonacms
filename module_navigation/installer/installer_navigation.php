@@ -31,15 +31,6 @@ class class_installer_navigation extends class_installer_base implements interfa
 	    return "3.4.1";
 	}
 
-	public function hasPostInstalls() {
-
-        $objElement = class_module_pages_element::getElement("navigation");
-        if($objElement === null)
-            return true;
-
-        return false;
-	}
-
 	public function getVersion() {
 	    return $this->arrModule["version"];
 	}
@@ -74,49 +65,46 @@ class class_installer_navigation extends class_installer_base implements interfa
 		//register the module
 		$this->registerModule("navigation", _navigation_modul_id_, "class_module_navigation_portal.php", "class_module_navigation_admin.php", $this->arrModule["version"] , true);
 
-		return $strReturn;
 
-	}
 
-	public function postInstall() {
-		$strReturn = "";
+        $strReturn .= "Installing navigation-element table...\n";
 
-		$strReturn .= "Installing navigation-element table...\n";
+        $arrFields = array();
+        $arrFields["content_id"] 			= array("char20", false);
+        $arrFields["navigation_id"] 		= array("char20", true);
+        $arrFields["navigation_template"] 	= array("char254", true);
+        $arrFields["navigation_mode"] 		= array("char254", true);
 
-		$arrFields = array();
-		$arrFields["content_id"] 			= array("char20", false);
-		$arrFields["navigation_id"] 		= array("char20", true);
-		$arrFields["navigation_template"] 	= array("char254", true);
-		$arrFields["navigation_mode"] 		= array("char254", true);
+        if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
+            $strReturn .= "An error occured! ...\n";
 
-		if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		//Register the element
-		$strReturn .= "Registering navigation-element...\n";
-		//check, if not already existing
+        //Register the element
+        $strReturn .= "Registering navigation-element...\n";
+        //check, if not already existing
         $objElement = null;
-		try {
-		    $objElement = class_module_pages_element::getElement("navigation");
-		}
-		catch (class_exception $objEx)  {
-		}
-		if($objElement == null) {
-		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("navigation");
-		    $objElement->setStrClassAdmin("class_element_navigation_admin.php");
-		    $objElement->setStrClassPortal("class_element_navigation_portal.php");
-		    $objElement->setIntCachetime(3600);
-		    $objElement->setIntRepeat(0);
+        try {
+            $objElement = class_module_pages_element::getElement("navigation");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName("navigation");
+            $objElement->setStrClassAdmin("class_element_navigation_admin.php");
+            $objElement->setStrClassPortal("class_element_navigation_portal.php");
+            $objElement->setIntCachetime(3600);
+            $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
+
 
 		return $strReturn;
+
 	}
 
 
