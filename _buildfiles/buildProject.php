@@ -115,7 +115,6 @@ class Testmanager {
         include_once(_realpath_."/core/module_samplecontent/installer/installer_samplecontent.php");
         $objInstaller = new class_installer_samplecontent();
         echo $objInstaller->install();
-        echo $objInstaller->postInstall("element");
 
 
     }
