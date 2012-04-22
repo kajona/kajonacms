@@ -105,7 +105,7 @@ function issetPost($strKey) {
 
 /**
  * Returns the complete http-post-body as raw-data.
- * Please indicate wheter the source is encoded in "multipart/form-data", in this case
+ * Please indicate whether the source is encoded in "multipart/form-data", in this case
  * the data is read another way internally.
  *
  * @param bool $bitMultipart

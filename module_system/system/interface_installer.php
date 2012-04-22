@@ -15,14 +15,14 @@
 interface interface_installer {
 
     /**
-     * Constructor is needed to generate array containing infos
+     * Constructor is needed to generate array containing information
      *
      */
     public function __construct();
 
     /**
      * Returns an array of modules needed to install the current module
-     * This way can be used to check the existance of other modules
+     * This way can be used to check the existence of other modules
      *
      */
     public function getNeededModules();

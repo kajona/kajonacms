@@ -293,6 +293,10 @@ class class_filesystem {
                 continue;
 
             if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && !is_file(_realpath_.$strTargetDir."/".$strOneEntry)) {
+
+                if(!is_dir(_realpath_.$strTargetDir))
+                    mkdir(_realpath_.$strTargetDir);
+
                 copy(_realpath_.$strSourceDir."/".$strOneEntry, _realpath_.$strTargetDir."/".$strOneEntry);
             }
             else if(is_dir(_realpath_.$strSourceDir."/".$strOneEntry)) {
