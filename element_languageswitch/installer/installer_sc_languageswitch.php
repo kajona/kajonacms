@@ -11,7 +11,7 @@
 /**
  * Installer of the navigation languages
  *
- * @package element_languageswtich
+ * @package element_languageswitch
  */
 class class_installer_sc_languageswitch implements interface_sc_installer  {
 

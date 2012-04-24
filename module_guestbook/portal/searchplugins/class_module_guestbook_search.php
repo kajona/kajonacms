@@ -10,7 +10,7 @@
 /**
  * Search plugin of the guestbook-module.
  *
- * @package modul_guestbook
+ * @package module_guestbook
  */
 class class_modul_guestbook_search extends class_portal implements interface_search_plugin  {
 
