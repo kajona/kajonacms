@@ -15,22 +15,12 @@
 class class_installer_element_downloads extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$this->setArrModuleEntry("version", "3.4.9");
-		$this->setArrModuleEntry("name", "element_downloads");
-		$this->setArrModuleEntry("name_lang", "Element Downloads");
+
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 		parent::__construct();
 	}
-
-	public function getNeededModules() {
-	    return array("system", "pages", "mediamanager");
-	}
-
-    public function getMinSystemVersion() {
-	    return "3.4.1";
-	}
-
-
 
 	public function install() {
 		$strReturn = "";
@@ -56,7 +46,7 @@ class class_installer_element_downloads extends class_installer_base implements 
             $objElement->setStrClassPortal("class_element_downloads_portal.php");
             $objElement->setIntCachetime(3600);
             $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }

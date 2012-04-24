@@ -4,7 +4,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: installer_system.php 4552 2012-03-12 08:36:48Z sidler $                                        *
+*	$Id: class_installer_system.php 4552 2012-03-12 08:36:48Z sidler $                                   *
 ********************************************************************************************************/
 
 
@@ -20,24 +20,13 @@ class class_installer_element_languageswitch extends class_installer_base implem
 
     public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-        $this->setArrModuleEntry("name", "element_languageswitch");
-        $this->setArrModuleEntry("name_lang", "Element Languageswitch");
-
         parent::__construct();
 
         //set the correct language
         $this->strContentLanguage = $this->objSession->getAdminLanguage();
-    }
-
-
-    public function getMinSystemVersion() {
-        return "3.4.9";
-    }
-
-    public function getNeededModules() {
-        return array("system", "pages", "languages");
     }
 
 
@@ -55,7 +44,7 @@ class class_installer_element_languageswitch extends class_installer_base implem
             $objElement->setStrClassPortal("class_element_languageswitch_portal.php");
             $objElement->setIntCachetime(3600*24*30);
             $objElement->setIntRepeat(0);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }

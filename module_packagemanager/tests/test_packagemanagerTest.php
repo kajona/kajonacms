@@ -17,7 +17,7 @@ class class_test_packagemanager extends class_testbase  {
     public function testInstalledPackageList() {
 
         $objManager = new class_module_packagemanager_manager();
-        $arrModules = $objManager->getInstalledPackages();
+        $arrModules = $objManager->getAvailablePackages();
 
         foreach($arrModules as $intKey => $objOneModule) {
             echo "#".$intKey.": ".$objOneModule."\n";
@@ -57,10 +57,39 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertFileExists(_realpath_."/core/module_autotest/metadata.xml");
         $this->assertFileExists(_realpath_."/core/module_autotest/system/test.txt");
 
+        $objMetadata = new class_module_packagemanager_metadata();
+        $objMetadata->autoInit("/core/module_autotest/");
+
+        $this->assertEquals("Autotest", $objMetadata->getStrTitle());
+        $this->assertEquals("", $objMetadata->getStrDescription());
+        $this->assertEquals("3.9.1", $objMetadata->getStrVersion());
+        $this->assertEquals("Kajona Team", $objMetadata->getStrAuthor());
+        $this->assertEquals("module_autotest", $objMetadata->getStrTarget());
+        $this->assertEquals(class_module_packagemanager_manager::$STR_TYPE_MODULE, $objMetadata->getStrType());
+        $this->assertEquals(false, $objMetadata->getBitProvidesInstaller());
+        $this->assertEquals("system,pages", $objMetadata->getStrRequiredModules());
+        $this->assertEquals("3.4.1", $objMetadata->getStrMinVersion());
+
         $objFilesystem->folderDeleteRecursive("/core/module_autotest");
         $objFilesystem->fileDelete(_projectpath_."/temp/autotest.zip");
 
     }
+
+
+    public function testUpdateOrInstall() {
+        $objManager = new class_module_packagemanager_manager();
+
+        $objHandler = $objManager->getPackageManagerForPath("/core/module_packagemanager");
+
+        $this->assertTrue(!$objHandler->isInstallable());
+    }
+
+    /*public function testGuestbookInstaller() {
+        $objManager = new class_module_packagemanager_manager();
+
+        $objHandler = $objManager->getPackageManagerForPath("/core/module_guestbook");
+        echo $objHandler->installOrUpdate();
+    }*/
 
 
 
@@ -75,6 +104,8 @@ class class_test_packagemanager extends class_testbase  {
     <target>module_autotest</target>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
+    <requiredModules>system,pages</requiredModules>
+    <minSystemVersion>3.4.1</minSystemVersion>
 </package>
 XML;
     }

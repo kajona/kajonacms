@@ -50,4 +50,22 @@ interface interface_packagemanager_packagemanager {
      * @return class_module_packagemanager_metadata
      */
     public function getObjMetadata();
+
+    /**
+     * Validates, whether the current package is installable or not.
+     * In nearly all cases
+     *
+     * @abstract
+     * @return bool
+     */
+    public function isInstallable();
+
+    /**
+     * Gets the version of the package currently installed.
+     * If not installed, null should be returned instead.
+     *
+     * @abstract
+     * @return string|null
+     */
+    public function getVersionInstalled();
 }

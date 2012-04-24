@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+    <title>system</title>
+    <description></description>
+    <version>3.4.9.1</version>
+    <author>Kajona Team</author>
+    <target>module_system</target>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules></requiredModules>
+    <minSystemVersion></minSystemVersion>
+</package>

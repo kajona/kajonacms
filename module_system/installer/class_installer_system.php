@@ -19,24 +19,15 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9.1");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        $this->setArrModuleEntry("name", "system");
-        $this->setArrModuleEntry("name_lang", "System Kernel");
 
 		parent::__construct();
 
 		//set the correct language
 		$this->strContentLanguage = $this->objSession->getAdminLanguage();
-	}
-
-
-	public function getMinSystemVersion() {
-	    return "";
-	}
-
-	public function getNeededModules() {
-	    return array();
 	}
 
 	public function install() {
@@ -324,15 +315,15 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Now we have to register module by module
 
 		//The Systemkernel
-		$this->registerModule("system", _system_modul_id_, "", "class_module_system_admin.php", $this->arrModule["version"], true, "", "class_module_system_admin_xml.php" );
+		$this->registerModule("system", _system_modul_id_, "", "class_module_system_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_system_admin_xml.php" );
 		//The Rightsmodule
-		$this->registerModule("right", _system_modul_id_, "", "class_module_right_admin.php", $this->arrModule["version"], false );
+		$this->registerModule("right", _system_modul_id_, "", "class_module_right_admin.php", $this->objMetadata->getStrVersion(), false );
 		//The Usermodule
-		$this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->arrModule["version"], true );
+		$this->registerModule("user", _user_modul_id_, "", "class_module_user_admin.php", $this->objMetadata->getStrVersion(), true );
         //languages
-        $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_module_languages_admin.php", $this->arrModule["version"] , true);
+        $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_module_languages_admin.php", $this->objMetadata->getStrVersion() , true);
         //messaging
-        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->arrModule["version"] , true);
+        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->objMetadata->getStrVersion() , true);
 
 
 
@@ -489,41 +480,41 @@ class class_installer_system extends class_installer_base implements interface_i
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
 
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $strReturn .= "Version found:\n\t Module: ".$this->objMetadata->getStrTitle().", Version: ".$this->objMetadata->getStrVersion()."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.1") {
             $strReturn .= $this->update_3401_3402();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.2") {
             $strReturn .= $this->update_3402_341();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1.1") {
             $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
             $this->objDB->flushQueryCache();
@@ -769,7 +760,7 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Registering module...\n";
-        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->arrModule["version"] , true);
+        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->objMetadata->getStrVersion() , true);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.1");

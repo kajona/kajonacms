@@ -14,132 +14,44 @@
  * @abstract
  * @package module_system
  */
-abstract class class_installer_base extends class_root {
+abstract class class_installer_base extends class_root implements interface_installer {
 
     /**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
-	    //Call base constructor
-		parent::__construct();
-	}
+     * @var class_module_packagemanager_metadata
+     */
+    protected $objMetadata;
+
 
     /**
-     * Returns the version of the current module.
-     * $arrModule["version"]
-     *
+     * Generic implementation, triggers the update or the install method, depending on the parts already installed.
      * @return string
      */
-	public function getVersion() {
-	    return $this->arrModule["version"];
-	}
+    public function installOrUpdate() {
 
-	/**
-	 * Returns the value of $arrModule["name_lang"], the long name of the module
-	 *
-	 * @return string
-	 */
-	public function getModuleName() {
-        return $this->arrModule["name_lang"];
-	}
+        $strReturn = "";
 
-	/**
-	 * Returns the value of $arrModule["name"], the name of the module
-	 *
-	 * @return string
-	 */
-	public function getModuleNameShort() {
-        return $this->arrModule["name"];
-	}
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
 
-    /**
-     * Creates a text-based info. Update-Links are placed within those infos.
-     *
-     * @since 3.2
-     * @return string info or an empty string in case of now errors
-     */
-    public function getModuleInstallInfo() {
-
-        //check needed modules
-        $arrModulesNeeded = $this->getNeededModules();
-        $strNeeded = "";
-        foreach($arrModulesNeeded as $strOneModule) {
-            try {
-                $objModule = class_module_system_module::getModuleByName($strOneModule, true);
-            }
-            catch (class_exception $objException) {
-                $objModule = null;
-            }
-            if($objModule == null) {
-                $strNeeded .= $strOneModule.", ";
-            }
-        }
-
-        if($strNeeded != "") {
-            return $this->getLang("installer_modules_needed", "system").substr($strNeeded, 0, -2);
-        }
-
-        //check, if a min version of the system is needed
-        if($this->getMinSystemVersion() != "") {
-            //the systems version to compare to
-            $objSystem = class_module_system_module::getModuleByName("system");
-            if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-                return $this->getLang("installer_systemversion_needed", "system").$this->getMinSystemVersion()."<br />";
-            }
-        }
-
-        //ok, all needed modules are installed. check if update or install-link should be generated
-        //first check: current module installed?
-        try {
-            $objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
-        }
-        catch (class_exception $objException) {
-                $objModule = null;
-        }
-        if($objModule == null) {
-            return "";
+        if($objModule === null) {
+            class_logger::getInstance("triggering installation of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
+            $strReturn .= $this->install();
         }
         else {
-            //updates available?
-            if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
-                if($this->arrModule["name"] == "samplecontent")
-                    return "<a href=\""._webpath_."/installer.php?step=samplecontent&update=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
-                else
-                    return "<a href=\""._webpath_."/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getLang("installer_update", "system").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
-            }
-            elseif(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "=="))
-                return $this->getLang("installer_versioninstalled", "system").$objModule->getStrVersion();
+            $strVersionInstalled = $objModule->getStrVersion();
+            $strVersionAvailable = $this->objMetadata->getStrVersion();
 
+            if(version_compare($strVersionAvailable, $strVersionInstalled, ">")) {
+                class_logger::getInstance("triggering update of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
+                $strReturn .= $this->update();
+            }
         }
-        return "";
+
+        return $strReturn;
     }
 
-    /**
-     * checks if the module can be installed
-     *
-     * @since 3.2
-     * @return boolean
-     */
-    public function isModuleInstallable() {
-    	$bitReturn = false;
 
-    	if($this->getModuleInstallInfo() == "") {
-    		//check if module not yet installed
-            try {
-            	$objModule = class_module_system_module::getModuleByName($this->arrModule["name"], true);
-            }
-            catch (class_exception $objException) {
-				$objModule = null;
-            }
-            if($objModule == null) {
-                //not yet installed
-                $bitReturn = true;
-            }
-    	}
 
-    	return $bitReturn;
-    }
+
 
 
 	/**
@@ -213,6 +125,7 @@ abstract class class_installer_base extends class_root {
 	 * Invokes the installation of the module
 	 *
      * @return string
+     * @deprecated
      */
 	public final function doModuleInstall() {
 	    $strReturn = "";
@@ -254,6 +167,7 @@ abstract class class_installer_base extends class_root {
 	/**
 	 * Invokes the installation of the module
 	 *
+     * @deprecated
 	 */
 	public final function doModuleUpdate() {
 	    $strReturn = "";
@@ -274,28 +188,6 @@ abstract class class_installer_base extends class_root {
         return "\n\n".$strReturn;
 	}
 
-
-	/**
-	 * Overwrite this method. it should return an array of module-names
-	 * needed as dependencies for the current module
-	 *
-	 * @return  array
-	 */
-	protected function getNeededModules() {
-	    return array();
-	}
-
-	/**
-	 * Overwrite this function!!!
-	 */
-	protected function install() {
-	}
-
-	/**
-	 * Overwrite this function!!!
-	 */
-	protected function update() {
-	}
 
 
 	//--Helpers------------------------------------------------------------------------------------------
@@ -351,7 +243,7 @@ abstract class class_installer_base extends class_root {
 	    $strQuery = "UPDATE "._dbprefix_."system_module
 	                 SET module_version= ?,
 	                     module_date= ?
-	                 WHERE module_name= ?";
+	               WHERE module_name= ?";
 
 	    class_logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, class_logger::$levelInfo);
 
@@ -383,7 +275,7 @@ abstract class class_installer_base extends class_root {
 	 *
 	 * @param string $strName
 	 * @param string $strValue
-	 * @param int $intType class_modul_system::int_TYPE_XX
+	 * @param int $intType @link class_module_system_setting::int_TYPE_XX
 	 * @param int $intModule
      * @return bool
      */
@@ -394,7 +286,7 @@ abstract class class_installer_base extends class_root {
 			define($strName, $strValue);
 
 	    if(!class_module_system_setting::checkConfigExisting($strName)) {
-    	    $objConstant = new class_module_system_setting("");
+    	    $objConstant = new class_module_system_setting();
     	    $objConstant->setStrName($strName);
     	    $objConstant->setStrValue($strValue);
     	    $objConstant->setIntType($intType);
@@ -404,29 +296,6 @@ abstract class class_installer_base extends class_root {
 	    else
 	       return false;
 	}
-
-    /**
-     * responsible to create a valid object. being called at time of
-     * object creation, if systemid given.
-     * Use this lifecycle-method in order to load
-     * all fields from the database.
-     *
-     */
-    protected function initObjectInternal() {
-        return;
-    }
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize the current object with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return false;
-    }
-
 
 }
 

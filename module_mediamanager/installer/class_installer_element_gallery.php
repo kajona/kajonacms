@@ -14,9 +14,9 @@
 class class_installer_element_gallery extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$this->setArrModuleEntry("version", "3.4.9");
-		$this->setArrModuleEntry("name", "element_gallery");
-		$this->setArrModuleEntry("name_lang", "Element Gallery");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 
 		parent::__construct();
@@ -63,7 +63,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 		    $objElement->setStrClassPortal("class_element_gallery_portal.php");
 		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
 			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
@@ -80,7 +80,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 		    $objElement->setStrClassPortal("class_element_gallery_portal.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
 			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}

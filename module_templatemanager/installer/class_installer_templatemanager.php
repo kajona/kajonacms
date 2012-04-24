@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: installer_tags.php 4413 2012-01-03 19:38:11Z sidler $                                          *
+*	$Id: class_installer_tags.php 4413 2012-01-03 19:38:11Z sidler $                                          *
 ********************************************************************************************************/
 
 /**
@@ -15,22 +15,12 @@ class class_installer_templatemanager extends class_installer_base implements in
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9");
-        $this->setArrModuleEntry("moduleId", _templatemanager_module_id_);
-        $this->setArrModuleEntry("name", "templatemanager");
-        $this->setArrModuleEntry("name_lang", "Module Templatemanager");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
 
+        $this->setArrModuleEntry("moduleId", _templatemanager_module_id_);
 		parent::__construct();
 	}
-
-	public function getNeededModules() {
-	    return array("system");
-	}
-
-    public function getMinSystemVersion() {
-	    return "3.4.9";
-	}
-
 
     public function install() {
 		$strReturn = "";
@@ -51,7 +41,7 @@ class class_installer_templatemanager extends class_installer_base implements in
             _templatemanager_module_id_,
             "",
             "class_module_templatemanager_admin.php",
-            $this->arrModule["version"],
+            $this->objMetadata->getStrVersion(),
             true
         );
 
@@ -66,7 +56,7 @@ class class_installer_templatemanager extends class_installer_base implements in
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
 

@@ -21,11 +21,10 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 
 	public function __construct() {
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
 
-        $this->setArrModuleEntry("version", "3.4.1");
         $this->setArrModuleEntry("moduleId", _samplecontent_modul_id_);
-        $this->setArrModuleEntry("name", "samplecontent");
-        $this->setArrModuleEntry("name_lang", "Module Samplecontent");
 
 		parent::__construct();
 
@@ -33,21 +32,12 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->strContentLanguage = $this->objSession->getAdminLanguage();
 	}
 
-	public function getNeededModules() {
-	    return array("system", "pages");
-	}
-
-    public function getMinSystemVersion() {
-	    return "3.3.1.8";
-	}
-
-
     public function install() {
-		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
+		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
 
 		//Register the module
         $strReturn .= "\nRegistering module\n";
-        $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", $this->arrModule["version"] , false);
+        $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
 
 		//search for installers available
         $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
@@ -90,11 +80,11 @@ class class_installer_samplecontent extends class_installer_base implements inte
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_341();
         }

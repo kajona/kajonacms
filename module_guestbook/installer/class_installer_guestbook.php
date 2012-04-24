@@ -12,32 +12,20 @@
  *
  * @package module_guestbook
  */
-class class_installer_guestbook extends class_installer_base implements interface_installer {
+class class_installer_guestbook extends class_installer_base  {
 
 	public function __construct() {
-		$this->setArrModuleEntry("version", "3.4.9");
-		$this->setArrModuleEntry("name", "guestbook");
-		$this->setArrModuleEntry("name_lang", "Module Guestbook");
-		$this->setArrModuleEntry("moduleId", _guestbook_module_id_);
 
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+
+		$this->setArrModuleEntry("moduleId", _guestbook_module_id_);
 		parent::__construct();
 	}
 
-	public function getNeededModules() {
-	    return array("system", "pages");
-	}
 
-    public function getMinSystemVersion() {
-	    return "3.4.1";
-	}
 
     public function install() {
-
-        if(count($this->objDB->getTables()) > 0) {
-            $arrModul = $this->getModuleData($this->arrModule["name"]);
-            if(count($arrModul) > 0)
-                return "<strong>Module already installed!!!</strong><br /><br />";
-        }
 
 		$strReturn = "";
 		//Tabellen anlegen
@@ -69,12 +57,10 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 
 		//register the module
-		$this->registerModule("guestbook", _guestbook_module_id_, "class_module_guestbook_portal.php", "class_module_guestbook_admin.php", $this->arrModule["version"] , true);
+		$this->registerModule("guestbook", _guestbook_module_id_, "class_module_guestbook_portal.php", "class_module_guestbook_admin.php", $this->objMetadata->getStrVersion() , true);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_module_system_setting::$int_TYPE_PAGE, _guestbook_module_id_);
-
-
 
 
         //Table for page-element
@@ -100,7 +86,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
             $objElement->setStrClassPortal("class_element_guestbook_portal.php");
             $objElement->setIntCachetime(3600);
             $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
@@ -118,17 +104,17 @@ class class_installer_guestbook extends class_installer_base implements interfac
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->getArrModule("name"), false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_341();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_341_349();
         }

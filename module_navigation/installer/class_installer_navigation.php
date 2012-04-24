@@ -15,35 +15,18 @@
 class class_installer_navigation extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-        $this->setArrModuleEntry("version", "3.4.9");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
-        $this->setArrModuleEntry("name", "navigation");
-        $this->setArrModuleEntry("name_lang", "Module Navigation");
 
 		parent::__construct();
 	}
 
-	public function getNeededModules() {
-	    return array("system", "pages");
-	}
-
-    public function getMinSystemVersion() {
-	    return "3.4.1";
-	}
-
-	public function getVersion() {
-	    return $this->arrModule["version"];
-	}
-
 
     public function install() {
-		if(count($this->objDB->getTables()) > 0) {
-			$arrModul = $this->getModuleData($this->arrModule["name"]);
-			if(count($arrModul) > 0)
-				return "<strong>Module already installed!!!</strong><br /><br />";
-		}
 
-		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
+		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
 		//Tabellen anlegen
 
 		//navigation-------------------------------------------------------------------------------------
@@ -63,7 +46,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 
 		//register the module
-		$this->registerModule("navigation", _navigation_modul_id_, "class_module_navigation_portal.php", "class_module_navigation_admin.php", $this->arrModule["version"] , true);
+		$this->registerModule("navigation", _navigation_modul_id_, "class_module_navigation_portal.php", "class_module_navigation_admin.php", $this->objMetadata->getStrVersion() , true);
 
 
 
@@ -94,7 +77,7 @@ class class_installer_navigation extends class_installer_base implements interfa
             $objElement->setStrClassPortal("class_element_navigation_portal.php");
             $objElement->setIntCachetime(3600);
             $objElement->setIntRepeat(0);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
@@ -111,21 +94,21 @@ class class_installer_navigation extends class_installer_base implements interfa
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->getArrModule("name"), false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.1") {
             $strReturn .= $this->update_3401_341();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_341_349();
         }
@@ -142,7 +125,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         if(!$objFilesystem->fileDelete("/admin/class_modul_navigation_admin_xml.php"))
             $strReturn .= "Deletion of /admin/class_modul_navigation_admin_xml.php failed!\n";
 
-        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
         $objModule->setStrXmlNameAdmin("");
         $objModule->updateObjectToDb();
 

@@ -20,7 +20,10 @@ class class_installer {
     private $STR_ORIG_CONFIG_FILE = "";
     private $STR_PROJECT_CONFIG_FILE = "";
 
-	private $arrInstaller;
+    /**
+     * @var class_module_packagemanager_metadata[]
+     */
+	private $arrMetadata;
 	private $strOutput = "";
 	private $strLogfile = "";
 	private $strForwardLink = "";
@@ -311,14 +314,14 @@ class class_installer {
 	 */
 	public function loadInstaller() {
 
-        $this->arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
+        $objManager = new class_module_packagemanager_manager();
+        $arrModules = $objManager->getAvailablePackages();
 
-		foreach($this->arrInstaller as $strKey => $strFile) {
-			if($strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php" || $strFile == "index.php")
-				unset($this->arrInstaller[$strKey]);
-		}
+        $this->arrMetadata = array();
+        foreach($arrModules as $objOneModule)
+            if($objOneModule->getBitProvidesInstaller())
+                $this->arrMetadata[] = $objOneModule;
 
-		asort($this->arrInstaller);
 	}
 
     /**
@@ -329,24 +332,34 @@ class class_installer {
 		$strReturn = "";
 		$strInstallLog = "";
 
+        $objManager = new class_module_packagemanager_manager();
+
 		//Is there a module to be updated?
 		if(isset($_GET["update"])) {
-			$strClass = $_GET["update"].".php";
-			include_once(_realpath_.array_search($strClass, $this->arrInstaller));
-		    $strClass = "class_".str_replace(".php", "", $strClass);
-		    $objInstaller = new $strClass();
-	        $strInstallLog .= $objInstaller->doModuleUpdate();
+
+            //search the matching modules
+            foreach($this->arrMetadata as $objOneMetadata) {
+                if($_GET["update"] == "installer_".$objOneMetadata->getStrTitle()) {
+                    $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+                    $strInstallLog .= $objHandler->installOrUpdate();
+                }
+            }
+
 		}
 
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
             $arrModulesToInstall = $_POST["moduleInstallBox"];
             foreach($arrModulesToInstall as $strOneModule => $strValue) {
-                $strClass = $strOneModule.".php";
-                include_once(_realpath_.array_search($strClass, $this->arrInstaller));
-                $strClass = "class_".str_replace(".php", "", $strClass);
-                $objInstaller = new $strClass();
-                $strInstallLog .= $objInstaller->doModuleInstall()."";
+
+                //search the matching modules
+                foreach($this->arrMetadata as $objOneMetadata) {
+                    if($strOneModule == "installer_".$objOneMetadata->getStrTitle()) {
+                        $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+                        $strInstallLog .= $objHandler->installOrUpdate();
+                    }
+                }
+
             }
         }
 
@@ -359,26 +372,56 @@ class class_installer {
         $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row_installable", true);
 
 		//Loading each installer
-		foreach($this->arrInstaller as $strInstaller) {
-			include_once(_realpath_.array_search($strInstaller, $this->arrInstaller));
-			//Creating an object....
-			$strClass = "class_".str_replace(".php", "", $strInstaller);
-			$objInstaller = new $strClass();
 
-			if($objInstaller instanceof interface_installer && $strInstaller != "installer_samplecontent.php" && strpos($strInstaller, "element") === false ) {
-               $arrTemplate = array();
-               $arrTemplate["module_name"] = $objInstaller->getModuleName();
-               $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
-               $arrTemplate["module_version"] = $objInstaller->getVersion();
-               $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
+		foreach($this->arrMetadata as $objOneMetadata) {
 
-               if ($objInstaller->isModuleInstallable()) {
-					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
-               } else {
-					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
-               }
+            //skip samplecontent
+            if($objOneMetadata->getStrTitle() == "samplecontent")
+                continue;
 
+            $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+            $arrTemplate = array();
+            $arrTemplate["module_name"] = $objHandler->getObjMetadata()->getStrTitle();
+            $arrTemplate["module_nameShort"] = $objHandler->getObjMetadata()->getStrTitle();
+            $arrTemplate["module_version"] = $objHandler->getObjMetadata()->getStrVersion();
+
+            //generate the hint
+            $arrTemplate["module_hint"] = "";
+
+            if($objHandler->getVersionInstalled() !== null) {
+                $arrTemplate["module_hint"] = $this->getLang("installer_versioninstalled", "system").$objHandler->getVersionInstalled();
             }
+            else {
+                //check missing modules
+                $strRequired = "";
+                $arrModules = explode(",", $objHandler->getObjMetadata()->getStrRequiredModules());
+                foreach($arrModules as $strOneModule) {
+                    if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
+                        $strRequired .= $strOneModule.", ";
+                }
+
+                if(trim($strRequired) != "") {
+                    $arrTemplate["module_hint"] = $this->getLang("installer_modules_needed", "system").substr($strRequired, 0, -2);
+                }
+                else {
+                    //check, if a min version of the system is needed
+                    if($objOneMetadata->getStrMinVersion() != "") {
+                        //the systems version to compare to
+                        $objSystem = class_module_system_module::getModuleByName("system");
+                        if($objSystem == null || version_compare($objOneMetadata->getStrMinVersion(), $objSystem->getStrVersion(), ">")) {
+                            $arrTemplate["module_hint"] = $this->getLang("installer_systemversion_needed", "system").$objOneMetadata->getStrMinVersion()."<br />";
+                        }
+                    }
+                }
+            }
+
+            if ($objHandler->isInstallable()) {
+                $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
+            } else {
+                $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+            }
+
 		}
 
         //wrap in form
@@ -401,24 +444,27 @@ class class_installer {
         $strReturn = "";
 		$strInstallLog = "";
 
+        $objManager = new class_module_packagemanager_manager();
+
 		//Is there a module to be installed or updated?
 		if(isset($_GET["update"])) {
-		    $strClass = $_GET["update"].".php";
-			include_once(_realpath_.array_search($strClass, $this->arrInstaller));
-		    $strClass = "class_".str_replace(".php", "", $strClass);
-		    $objInstaller = new $strClass();
-	        $strInstallLog .= $objInstaller->doModuleUpdate();
+            foreach($this->arrMetadata as $objOneMetadata) {
+                if($objOneMetadata->getStrTitle() != "samplecontent")
+                    continue;
+
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+                $strInstallLog .= $objHandler->installOrUpdate();
+            }
 		}
 
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
-            $arrModulesToInstall = $_POST["moduleInstallBox"];
-            foreach($arrModulesToInstall as $strOneModule => $strValue) {
-                $strClass = $strOneModule.".php";
-                include_once(_realpath_.array_search($strClass, $this->arrInstaller));
-                $strClass = "class_".str_replace(".php", "", $strClass);
-                $objInstaller = new $strClass();
-                $strInstallLog .= $objInstaller->doModuleInstall()."";
+            foreach($this->arrMetadata as $objOneMetadata) {
+                if($objOneMetadata->getStrTitle() != "samplecontent")
+                    continue;
+
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+                $strInstallLog .= $objHandler->installOrUpdate();
             }
         }
 
@@ -429,28 +475,47 @@ class class_installer {
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row", true);
         $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row_installable", true);
-		$bitInstallerFound = false;
-		foreach($this->arrInstaller as $strInstaller) {
-			include_once(_realpath_.array_search($strInstaller, $this->arrInstaller));
-			//Creating an object....
-			$strClass = "class_".str_replace(".php", "", $strInstaller);
-			$objInstaller = new $strClass();
 
-			if($objInstaller instanceof interface_installer && $strInstaller == "installer_samplecontent.php" && strpos($strInstaller, "element") === false ) {
-			   $bitInstallerFound = true;
-               $arrTemplate = array();
-               $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
-               $arrTemplate["module_name"] = $objInstaller->getModuleName();
-               $arrTemplate["module_version"] = $objInstaller->getVersion();
-               $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
+        $bitInstallerFound = false;
+		foreach($this->arrMetadata as $objOneMetadata) {
 
-               if ($objInstaller->isModuleInstallable()) {
-					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
-               } else {
-					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
-               }
-			}
-		}
+            if($objOneMetadata->getStrTitle() != "samplecontent")
+                continue;
+
+            $bitInstallerFound = true;
+
+            $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+            $arrTemplate = array();
+            $arrTemplate["module_nameShort"] = $objOneMetadata->getStrTitle();
+            $arrTemplate["module_name"] = $objOneMetadata->getStrTitle();
+            $arrTemplate["module_version"] = $objOneMetadata->getStrVersion();
+
+            //generate the hint
+            $arrTemplate["module_hint"] = "";
+
+            if($objHandler->getVersionInstalled() !== null) {
+                $arrTemplate["module_hint"] = $this->getLang("installer_versioninstalled", "system").$objHandler->getVersionInstalled();
+            }
+            else {
+                //check missing modules
+                $strRequired = "";
+                $arrModules = explode(",", $objHandler->getObjMetadata()->getStrRequiredModules());
+                foreach($arrModules as $strOneModule) {
+                    if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
+                        $strRequired .= $strOneModule.", ";
+                }
+
+                if(trim($strRequired) != "")
+                    $arrTemplate["module_hint"] = $this->getLang("installer_modules_needed", "system").substr($strRequired, 0, -2);
+            }
+
+            if($objHandler->isInstallable())
+                $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
+            else
+                $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+
+        }
 
 		if(!$bitInstallerFound)
 		    header("Location: "._webpath_."/installer.php?step=finish");

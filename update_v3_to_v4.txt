@@ -15,11 +15,15 @@ Module Update
   A second option is to use the new annotation @permissions, validating the permissions for the current object (only for
   invocation via class_admin::action() )
 
+- added a new file metadata.xml, describing the current module
+
 Element Update
 - portal classes should extended by _portal (class_element_image_portal.php)
 - admin classes should extended by _admin (class_element_image_admin.php)
 - the folder /elemente is renamed to /elements
 - table column definitions no longer require a datatype, only the column-name is required
+
+- added a new file metadata.xml, describing the current element
 
 General:
 - Updated signature of class_portal::__construct: public function __construct($arrElementData = array(), $strSystemid = "")
@@ -45,7 +49,8 @@ General:
 - class_root::getObjectTables() was removed, table declarations are now stored within the class' doc-comment
 
 Installers:
-- remove postInstall sections, elements should be handled by the regular install() methods
+- remove postInstall sections, elements should be handled by the regular install() methods.
+- changed a lot of interface-methods. most properties are now set within the metadata.xml file
 
 
 Removed Constants:

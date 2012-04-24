@@ -23,12 +23,14 @@ class class_module_packagemanager_metadata {
     private $strAuthor;
     private $strType;
     private $bitProvidesInstaller;
+    private $strRequiredModules;
+    private $strMinVersion;
 
     private $strContentprovider;
     private $strPath;
 
     public function __toString() {
-        return "Title: ".$this->getStrTitle()." Version: ".$this->getStrVersion()." Type: ".$this->getStrType();
+        return "Title: ".$this->getStrTitle()." Version: ".$this->getStrVersion()." Type: ".$this->getStrType()." Target: ".$this->getStrTarget();
     }
 
     /**
@@ -95,6 +97,8 @@ class class_module_packagemanager_metadata {
         $this->setStrTarget($arrXml["package"]["0"]["target"]["0"]["value"]);
         $this->setStrType($arrXml["package"]["0"]["type"]["0"]["value"]);
         $this->setBitProvidesInstaller($arrXml["package"]["0"]["providesInstaller"]["0"]["value"] == "TRUE");
+        $this->setStrRequiredModules($arrXml["package"]["0"]["requiredModules"]["0"]["value"]);
+        $this->setStrMinVersion($arrXml["package"]["0"]["minSystemVersion"]["0"]["value"]);
     }
 
 
@@ -169,6 +173,22 @@ class class_module_packagemanager_metadata {
 
     public function getBitProvidesInstaller() {
         return $this->bitProvidesInstaller;
+    }
+
+    public function setStrMinVersion($strMinVersion) {
+        $this->strMinVersion = $strMinVersion;
+    }
+
+    public function getStrMinVersion() {
+        return $this->strMinVersion;
+    }
+
+    public function setStrRequiredModules($strRequiredModules) {
+        $this->strRequiredModules = $strRequiredModules;
+    }
+
+    public function getStrRequiredModules() {
+        return $this->strRequiredModules;
     }
 
 }

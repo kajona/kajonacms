@@ -19,25 +19,16 @@ class class_installer_dashboard extends class_installer_base implements interfac
 
 	public function __construct() {
 
-        $this->setArrModuleEntry("version", "3.4.9.1");
-        $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
-        $this->setArrModuleEntry("name", "dashboard");
-        $this->setArrModuleEntry("name_lang", "Module Dashboard");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
 
+        $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
 		parent::__construct();
 
 		//set the correct language
 		$this->strContentLanguage = $this->objSession->getAdminLanguage();
 	}
 
-
-	public function getMinSystemVersion() {
-	    return "";
-	}
-
-	public function getNeededModules() {
-	    return array("system");
-	}
 
 	public function install() {
 	    $strReturn = "";
@@ -57,7 +48,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
 			$strReturn .= "An error occured! ...\n";
         //the dashboard
-        $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->arrModule["version"], false, "", "class_module_dashboard_admin_xml.php");
+        $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), false, "", "class_module_dashboard_admin_xml.php");
 
         //up till now, the default widgets are still missing - create them.
         $arrUsers = class_module_user_user::getAllUsers();
@@ -73,41 +64,41 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.1") {
             $strReturn .= $this->update_3401_3402();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.2") {
             $strReturn .= $this->update_3402_341();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1.1") {
             $strReturn .= $this->update_341_349();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
             $this->objDB->flushQueryCache();

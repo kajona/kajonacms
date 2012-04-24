@@ -15,32 +15,16 @@
 class class_installer_pages extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-        $this->setArrModuleEntry("version", "3.4.9");
-        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-        $this->setArrModuleEntry("name", "pages");
-        $this->setArrModuleEntry("name_lang", "Module Pages");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
 
+        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
 		parent::__construct();
 	}
 
-	public function getNeededModules() {
-	    return array("system", "templatemanager");
-	}
-
-    public function getMinSystemVersion() {
-	    return "3.4.9";
-	}
-
-
 	public function install() {
-		//Nur installieren, wenn noch nicht vorhanden
-		if(count($this->objDB->getTables()) > 0) {
-			$arrModul = $this->getModuleData($this->arrModule["name"]);
-			if(count($arrModul) > 0)
-				return "<strong>Module already installed!!!</strong><br /><br />";
-		}
 
-		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
+		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
 		//Tabellen anlegen
 
 		//Pages -----------------------------------------------------------------------------------------
@@ -115,11 +99,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Now we have to register module by module
 
 		//the pages
-		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.php", "class_module_pages_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.php", "class_module_pages_admin.php", $this->objMetadata->getStrVersion() , true);
 		//The pages_content
-		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_admin.php", $this->arrModule["version"], false);
+		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_admin.php", $this->objMetadata->getStrVersion(), false);
 		//The folderview
-		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_module_folderview_admin.php", $this->arrModule["version"] , false);
+		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_module_folderview_admin.php", $this->objMetadata->getStrVersion() , false);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_pages_templatechange_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
@@ -127,7 +111,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$this->registerConstant("_pages_errorpage_", "error", class_module_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
 		$this->registerConstant("_pages_defaulttemplate_", "", class_module_system_setting::$int_TYPE_STRING, _pages_modul_id_);
 		//2.1.1: overall cachetime
-		$this->registerConstant("_pages_cacheenabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_); //FIXME: reenable
+		$this->registerConstant("_pages_cacheenabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_); //TODO: reenable
 		//2.1.1: possibility, to create new pages disabled
 		$this->registerConstant("_pages_newdisabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
 		//portaleditor
@@ -173,7 +157,7 @@ class class_installer_pages extends class_installer_base implements interface_in
             $objElement->setStrClassPortal("class_element_paragraph_portal.php");
             $objElement->setIntCachetime(3600*24*30);
             $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
@@ -196,7 +180,7 @@ class class_installer_pages extends class_installer_base implements interface_in
             $objElement->setStrClassPortal("class_element_row_portal.php");
             $objElement->setIntCachetime(3600*24*30);
             $objElement->setIntRepeat(0);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
@@ -235,7 +219,7 @@ class class_installer_pages extends class_installer_base implements interface_in
             $objElement->setStrClassPortal("class_element_image_portal.php");
             $objElement->setIntCachetime(3600*24*30);
             $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->getVersion());
+            $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
@@ -273,26 +257,26 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.1") {
             $strReturn .= $this->update_3401_3402();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.0.2") {
             $strReturn .= $this->update_3402_341();
         }
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_341_349();
         }
@@ -332,7 +316,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         if(!$objFilesystem->fileDelete("/admin/class_modul_pages_admin_xml.php"))
             $strReturn .= "Deletion of /admin/class_modul_pages_admin_xml.php failed!\n";
 
-        $objModule = class_module_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
         $objModule->setStrXmlNameAdmin("");
         $objModule->updateObjectToDb();
 

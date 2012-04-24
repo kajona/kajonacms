@@ -53,69 +53,51 @@ class Testmanager {
         $objDB->flushQueryCache();
         
         
-        $arrInstallersToRun = array(
-            "/core/module_system/installer/installer_system.php" => "installer_system.php",
-            "/core/module_templatemanager/installer/installer_templatemanager.php" => "installer_templatemanager.php",
-            "/core/module_pages/installer/installer_pages.php" => "installer_pages.php"
+        $objSystemData = new class_module_packagemanager_metadata();
+        $objSystemData->autoInit("/core/module_system");
+        $objTemplateData = new class_module_packagemanager_metadata();
+        $objTemplateData->autoInit("/core/module_templatemanager");
+        $objPagesData = new class_module_packagemanager_metadata();
+        $objPagesData->autoInit("/core/module_pages");
+        $arrPackagesToInstall = array(
+            $objSystemData, $objTemplateData, $objPagesData
         );
 
-
         echo "\n\n\n";
-        echo "Searching installers to run...\n";
-        
-        $arrInstallersOnFileystem = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
-        foreach($arrInstallersOnFileystem as $strPath => $strOneInstallerFile) {
-            if(substr($strOneInstallerFile, 0, 10) == "installer_" && substr($strOneInstallerFile, -4) == ".php" && strpos($strOneInstallerFile, "_sc_") === false) {
-                if(strpos($strOneInstallerFile, "_element_") === false && $strOneInstallerFile != "installer_samplecontent.php") {
-                    if(!in_array($strOneInstallerFile, $arrInstallersToRun))
-                        $arrInstallersToRun[$strPath] = $strOneInstallerFile;
-                }
-            }
+        echo "Searching for packages to be installed...";
+        $objManager = new class_module_packagemanager_manager();
+        $arrPackageMetadata = $objManager->getAvailablePackages();
+
+        foreach($arrPackageMetadata as $objOneMetadata) {
+            if(!in_array($objOneMetadata->getStrTitle(), array("system", "pages", "templatemanager", "samplecontent")))
+                $arrPackagesToInstall[] = $objOneMetadata;
         }
 
-        foreach($arrInstallersOnFileystem as $strPath => $strOneInstallerFile) {
-            if(substr($strOneInstallerFile, 0, 10) == "installer_" && substr($strOneInstallerFile, -4) == ".php" && strpos($strOneInstallerFile, "_sc_") === false) {
-                if(strpos($strOneInstallerFile, "_element_") !== false) {
-                    if(!in_array($strOneInstallerFile, $arrInstallersToRun))
-                        $arrInstallersToRun[$strPath] = $strOneInstallerFile;
-                }
-            }
-        }
-
-        echo "installers found to execute:\n";
-        echo implode(", ", $arrInstallersToRun);
+        echo "nr of packages found to install: ".count($arrPackagesToInstall)."\n";
         echo "\n\n";
 
-        echo "module-installs...\n";
-        foreach($arrInstallersToRun as $strPath => $strOneInstaller) {
-            echo "---------------------------------------------------------------\n";
-            echo "Installing ".$strOneInstaller."...\n\n";
-            include_once(_realpath_.$strPath);
-            $strClassname = "class_".str_replace(".php", "", $strOneInstaller, $strClassname);
-            $objInstaller = new $strClassname();
-            echo $objInstaller->install();
-            
+        echo "starting installations...\n";
+        foreach($arrPackagesToInstall as $objOneMetadata) {
 
+            echo "---------------------------------------------------------------\n";
+
+            if(!$objOneMetadata->getBitProvidesInstaller()) {
+                echo "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n\n";
+                continue;
+            }
+
+
+            echo "Installing ".$objOneMetadata->getStrTitle()."...\n\n";
+            $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+            echo $objHandler->installOrUpdate();
+            
+            echo "\n\n";
         }
 
-//        echo "post-installs...\n";
-//        foreach($arrInstallersToRun as $strPath => $strOneInstaller) {
-//            echo "---------------------------------------------------------------\n";
-//            echo "Installing ".$strOneInstaller."...\n\n";
-//            include_once(_realpath_.$strPath);
-//            $strClassname = "class_".str_replace(".php", "", $strOneInstaller, $strClassname);
-//            $objInstaller = new $strClassname();
-//            if($objInstaller->hasPostInstalls())
-//                $objInstaller->postInstall();
-//
-//        }
-        
 
         echo "Installing samplecontent...\n\n";
-        include_once(_realpath_."/core/module_samplecontent/installer/installer_samplecontent.php");
-        $objInstaller = new class_installer_samplecontent();
-        echo $objInstaller->install();
-
+        $objHandler = $objManager->getPackageManagerForPath("/core/module_samplecontent");
+        echo $objHandler->installOrUpdate();
 
     }
 }

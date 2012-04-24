@@ -68,7 +68,7 @@ class class_v3_v4_postupdate {
     private function updateDownloads() {
         echo "Updating downloads to new mediamanager structure...\n";
 
-        echo "<b>Please note: Permission-Settings can't be migrated. Please adopt the permissions, e.g. to download manually.</b>";
+        echo "<b>Please note: Permission-Settings can't be migrated. Please adopt the permissions, e.g. to download manually.</b>\n";
 
         if(!in_array(_dbprefix_."downloads_archive", $this->objDB->getTables())) {
             echo "Downloads table missing, no update required.\n";

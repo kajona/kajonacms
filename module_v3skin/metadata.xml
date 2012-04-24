@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+    <title>v3skin</title>
+    <description></description>
+    <version>3.4.9</version>
+    <author>Kajona Team</author>
+    <target>module_v3skin</target>
+    <type>MODULE</type>
+    <providesInstaller>FALSE</providesInstaller>
+    <requiredModules>system</requiredModules>
+    <minSystemVersion>3.4.9</minSystemVersion>
+</package>

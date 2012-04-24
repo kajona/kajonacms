@@ -8,7 +8,9 @@
 ********************************************************************************************************/
 
 /**
- * Interface for all installers
+ * Interface for all module installers.
+ *
+ * @todo may be moved to module packagemanager
  *
  * @package module_system
  */
@@ -19,20 +21,6 @@ interface interface_installer {
      *
      */
     public function __construct();
-
-    /**
-     * Returns an array of modules needed to install the current module
-     * This way can be used to check the existence of other modules
-     *
-     */
-    public function getNeededModules();
-
-    /**
-     * Returns the version of the system-module needed as a minimum
-     * Return an empty string, if no min version is needed
-     *
-     */
-    public function getMinSystemVersion();
 
     /**
      * Does the hard work: installs the module and registers needed constants
@@ -46,5 +34,13 @@ interface interface_installer {
      */
     public function update();
 
+    /**
+     * Method to switch between the update or the install mode.
+     * Called either by the installer or the packagemanager.
+     * The default implementation is handled by the base-class.
+     *
+     * @return string a log about the actions taken.
+     */
+    public function installOrUpdate();
 
 }

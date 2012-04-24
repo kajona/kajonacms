@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+    <title>mediamanager</title>
+    <description></description>
+    <version>3.4.9</version>
+    <author>Kajona Team</author>
+    <target>module_mediamanager</target>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>system,pages</requiredModules>
+    <minSystemVersion>3.4.9</minSystemVersion>
+</package>

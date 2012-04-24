@@ -24,7 +24,7 @@ class class_module_packagemanager_manager {
      *
      * @return class_module_packagemanager_metadata[]
      */
-    public function getInstalledPackages() {
+    public function getAvailablePackages() {
         $arrReturn = array();
 
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
@@ -51,11 +51,8 @@ class class_module_packagemanager_manager {
         }
 
 
-
         return $objManager;
     }
-
-
 
     /**
      * Extracts the zip-archive into a temp-folder.
@@ -66,6 +63,8 @@ class class_module_packagemanager_manager {
      */
     public function extractPackage($strPackagePath) {
         $strTargetFolder = generateSystemid();
+
+        class_logger::getInstance("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder, class_logger::$levelInfo);
 
         $objZip = new class_zip();
         $objZip->extractArchive($strPackagePath, _projectpath_."/temp/".$strTargetFolder);

@@ -14,34 +14,19 @@
 class class_installer_mediamanager extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$this->setArrModuleEntry("version", "3.4.9");
-		$this->setArrModuleEntry("name", "mediamanager");
-		$this->setArrModuleEntry("name_lang", "Module Mediamanager");
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 
 		parent::__construct();
 	}
 
-	public function getNeededModules() {
-	    return array("system", "pages");
-	}
-
-    public function getMinSystemVersion() {
-	    return "3.4.9";
-	}
-
     public function install() {
 
-        if(count($this->objDB->getTables()) > 0) {
-            $arrModul = $this->getModuleData($this->arrModule["name"]);
-            if(count($arrModul) > 0)
-                return "<strong>Module already installed!!!</strong><br /><br />";
-        }
-
-		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
+		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
 		//Tabellen anlegen
 
-		//gallery ---------------------------------------------------------------------------------------
 		$strReturn .= "Installing table mediamanager_repo...\n";
 
 		$arrFields = array();
@@ -54,7 +39,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		if(!$this->objDB->createTable("mediamanager_repo", $arrFields, array("repo_id")))
 			$strReturn .= "An error occured! ...\n";
 
-		//gallery_pic -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table mediamanager_file...\n";
 
 		$arrFields = array();
@@ -70,7 +54,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
 			$strReturn .= "An error occured! ...\n";
 
 
-        //downloads_log----------------------------------------------------------------------------------
         $strReturn .= "Installing table mediamanager_dllog...\n";
 
         $arrFields = array();
@@ -90,7 +73,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
             _mediamanager_module_id_,
             "class_module_mediamanager_portal.php",
             "class_module_mediamanager_admin.php",
-            $this->arrModule["version"],
+            $this->objMetadata->getStrVersion(),
             true, "",
             "class_module_mediamanager_admin_xml.php");
 

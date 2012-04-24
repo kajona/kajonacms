@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package>
-    <title>Packagemanager</title>
-    <description></description>
+    <title>packagemanager</title>
+    <description>The packagemanager wraps all logic to handle packages.</description>
     <version>3.9.1</version>
     <author>Kajona Team</author>
     <target>module_packagemanager</target>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
+    <requiredModules />
+    <minSystemVersion />
 </package>
