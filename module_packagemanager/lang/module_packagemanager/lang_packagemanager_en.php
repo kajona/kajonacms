@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_templatemanager_defaultpack_"]   = "Active template-pack:";
+$lang["_packagemanager_defaulttemplate_"]   = "Active template-pack:";
 $lang["action_download"]                 = "Download template-pack";
 $lang["action_new_copy"]                 = "Create a new template-pack";
 $lang["delete_question"]                 = "Do you really want to remove the template-pack &quot;<b>%%element_name%%</b>&quot;?";
@@ -23,7 +23,7 @@ $lang["import_hint"]                     = "The ZIP-File must be named according
 $lang["import_step_filecheck"]           = "Testing the filesystem...";
 $lang["import_step_metadata"]            = "Analyzing the metadata...";
 $lang["import_uploaderror"]              = "Error while uploading the template-pack.";
-$lang["modul_titel"]                     = "Templates";
+$lang["modul_titel"]                     = "Packages";
 $lang["pack_active_no_delete"]           = "The can't be deleted since it's currently marked as active";
 $lang["pack_active_no_status"]           = "The can't be set inactive since it's currently marked as active";
 $lang["pack_author"]                     = "Author:";

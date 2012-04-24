@@ -80,8 +80,8 @@ class class_resourceloader {
 
         $strFilename = null;
         //first try: load the file in the current template-pack
-        if(is_file(_realpath_._templatepath_."/"._templatemanager_defaultpack_."/tpl".$strTemplateName)) {
-            return _templatepath_."/"._templatemanager_defaultpack_."/tpl".$strTemplateName;
+        if(is_file(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName)) {
+            return _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
@@ -116,8 +116,8 @@ class class_resourceloader {
         $arrReturn = array();
 
         //first try: load the file in the current template-pack
-        if(is_dir(_realpath_._templatepath_."/"._templatemanager_defaultpack_."/tpl".$strFolder)) {
-            $arrFiles = scandir(_realpath_._templatepath_."/"._templatemanager_defaultpack_."/tpl".$strFolder);
+        if(is_dir(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strFolder)) {
+            $arrFiles = scandir(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strFolder);
             foreach($arrFiles as $strOneFile)
                 if(substr($strOneFile, -4) == ".tpl")
                     $arrReturn[] = $strOneFile;

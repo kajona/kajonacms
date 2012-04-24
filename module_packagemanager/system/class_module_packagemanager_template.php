@@ -11,13 +11,13 @@
  * Since not part of the regular system-table, it only acts as some kind of
  * wrapper.
  *
- * @package module_templatemanager
+ * @package module_packagemanager
  * @author sidler@mulchprod.de
  * @since 4.0
  *
  * @targetTable templatepacks.templatepack_id
  */
-class class_module_templatemanager_template extends class_model implements interface_model, interface_admin_listable  {
+class class_module_packagemanager_template extends class_model implements interface_model, interface_admin_listable  {
 
     /**
      * @var string
@@ -34,8 +34,8 @@ class class_module_templatemanager_template extends class_model implements inter
      */
     public function __construct($strSystemid = "") {
 
-        $this->setArrModuleEntry("modul", "templatemanager");
-        $this->setArrModuleEntry("moduleId", _templatemanager_module_id_);
+        $this->setArrModuleEntry("modul", "packagemanager");
+        $this->setArrModuleEntry("moduleId", _packagemanager_module_id_);
 
 		parent::__construct($strSystemid);
 
@@ -121,7 +121,7 @@ class class_module_templatemanager_template extends class_model implements inter
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow)
-            $arrReturn[] = new class_module_templatemanager_template($arrOneRow["templatepack_id"]);
+            $arrReturn[] = new class_module_packagemanager_template($arrOneRow["templatepack_id"]);
 
         return $arrReturn;
     }
@@ -163,7 +163,7 @@ class class_module_templatemanager_template extends class_model implements inter
                 }
             }
             if(!$bitFolderFound) {
-                $objPack = new class_module_templatemanager_template();
+                $objPack = new class_module_packagemanager_template();
                 $objPack->setStrName($strOneFolder);
                 $objPack->updateObjectToDb();
                 $objPack->setIntRecordStatus(0);
@@ -187,12 +187,12 @@ class class_module_templatemanager_template extends class_model implements inter
                            AND system_status = 1";
             $arrRows = $this->objDB->getPArray($strQuery, array());
             foreach($arrRows as $arrSingleRow) {
-                $objPack = new class_module_templatemanager_template($arrSingleRow["templatepack_id"]);
+                $objPack = new class_module_packagemanager_template($arrSingleRow["templatepack_id"]);
                 $objPack->setIntRecordStatus(0);
             }
 
             //update the active-pack constant
-            $objSetting = class_module_system_setting::getConfigByName("_templatemanager_defaultpack_");
+            $objSetting = class_module_system_setting::getConfigByName("_packagemanager_defaulttemplate_");
             $objSetting->setStrValue($this->getStrName());
             $objSetting->updateObjectToDb();
             $this->flushCompletePagesCache();

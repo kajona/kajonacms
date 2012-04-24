@@ -6,7 +6,7 @@
     <author>Kajona Team</author>
     <target>module_templatemanager</target>
     <type>MODULE</type>
-    <providesInstaller>TRUE</providesInstaller>
+    <providesInstaller>FALSE</providesInstaller>
     <requiredModules>system</requiredModules>
     <minSystemVersion>3.4.9</minSystemVersion>
 </package>

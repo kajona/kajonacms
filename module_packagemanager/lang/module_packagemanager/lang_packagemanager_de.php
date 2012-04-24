@@ -7,10 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 371
 
 //editable entries
-$lang["_templatemanager_defaultpack_"]   = "Aktiviertes Template-Pack:";
+$lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack:";
 $lang["action_download"]                 = "Template-Pack herunterladen";
 $lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
 $lang["delete_question"]                 = "Möchten Sie das Template-Pack &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
@@ -23,7 +23,7 @@ $lang["import_hint"]                     = "Der Name der Zip-Datei muss entsprec
 $lang["import_step_filecheck"]           = "Test des Dateisystems...";
 $lang["import_step_metadata"]            = "Analyse der Metadaten...";
 $lang["import_uploaderror"]              = "Fehler beim Upload des Packs.";
-$lang["modul_titel"]                     = "Templates";
+$lang["modul_titel"]                     = "Pakete";
 $lang["pack_active_no_delete"]           = "Template-Pack ist aktiv und kann deshalb nicht gelöscht werden";
 $lang["pack_active_no_status"]           = "Template-Pack ist aktiv und kann deshalb nicht deaktiviert werden";
 $lang["pack_author"]                     = "Autor:";

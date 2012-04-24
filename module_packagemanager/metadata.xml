@@ -6,7 +6,7 @@
     <author>Kajona Team</author>
     <target>module_packagemanager</target>
     <type>MODULE</type>
-    <providesInstaller>FALSE</providesInstaller>
-    <requiredModules />
-    <minSystemVersion />
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>system</requiredModules>
+    <minSystemVersion>3.4.9</minSystemVersion>
 </package>
