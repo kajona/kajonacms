@@ -47,11 +47,16 @@ class class_config {
 
         //Include the config-File
         $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile, false);
-        if($strPath === false || !@include _corepath_."/module_system/system/config/".$strConfigFile)
-            die("Error reading config-file!");
+        if($strPath !== false) {
+            @include(_realpath_.$strPath);
+        }
+        else {
+            if(!@include _corepath_."/module_system/system/config/".$strConfigFile)
+                die("Error reading config-file!");
+        }
 
         //overwrite with settings from project
-        if(is_file(_realpath_."/project/system/config/".$strConfigFile) )
+        if(is_file(_realpath_."/project/system/config/".$strConfigFile))
             if(!@include _realpath_."/project/system/config/".$strConfigFile)
                 die("Error reading config-file: ".$strConfigFile);
 

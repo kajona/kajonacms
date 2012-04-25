@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package>
     <title>system</title>
-    <description></description>
+    <description>Core of the Kajona framework. By default, the system-packages includes several modules, e.g. system, permissions, user, messaging and languages.</description>
     <version>3.4.9.1</version>
     <author>Kajona Team</author>
     <target>module_system</target>

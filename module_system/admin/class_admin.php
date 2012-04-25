@@ -135,15 +135,15 @@ abstract class class_admin {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
 	}
 
-	/**
-	 * Returns a value from the params-Array
-	 *
-	 * @param string $strKey
-	 * @return string else ""
-	 */
-	public function getParam($strKey) {
+    /**
+     * Returns a value from the params-Array
+     *
+     * @param string $strKey
+     * @return string|string[] else ""
+     */
+    public function getParam($strKey) {
         return class_carrier::getInstance()->getParam($strKey);
-	}
+    }
 
 	/**
 	 * Returns the complete Params-Array
@@ -648,10 +648,13 @@ abstract class class_admin {
      * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
      * Therefore the list of permissions, named after the "permissions" annotation are validated against
      * the module currently loaded.
+     *
      * @see class_rights::validatePermissionString
      *
      *
      * @param string $strAction
+     *
+     * @throws class_exception
      * @return string
      * @since 3.4
      */

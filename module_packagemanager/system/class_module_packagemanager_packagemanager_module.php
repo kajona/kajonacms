@@ -46,11 +46,15 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * to the target-folder.
      * In most cases, this is either located at /core or at /templates.
      * The original should be deleted afterwards.
+     *
+     * @throws class_exception
      */
     public function move2Filesystem() {
         $strSource = $this->objMetadata->getStrPath();
         $strTarget = $this->objMetadata->getStrTarget();
 
+        if(!is_dir(_realpath_.$strSource))
+            throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
 
         class_logger::getInstance("moving ".$strSource." to /core/".$strTarget, class_logger::$levelInfo);
 
@@ -66,6 +70,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * Invokes the installer, if given.
      * The installer itself is capable of detecting whether an update or a plain installation is required.
      *
+     * @throws class_exception
      * @return string
      */
     public function installOrUpdate() {

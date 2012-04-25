@@ -127,6 +127,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
      * This method may be overwritten by subclasses.
      *
      * @permissions delete
+     * @throws class_exception
      */
     protected function actionDelete() {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());

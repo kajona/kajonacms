@@ -55,6 +55,7 @@ abstract class class_admin_simple extends class_admin {
      * This method may be overwritten by subclasses.
      *
      * @permissions delete
+     * @throws class_exception
      */
     protected function actionDelete() {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
@@ -75,7 +76,9 @@ abstract class class_admin_simple extends class_admin {
      *
      * @param class_array_section_iterator $objArraySectionIterator
      * @param bool $bitSortable
-     * @param $strListIdentifier an internal identifier to check the current parent-list
+     * @param string $strListIdentifier an internal identifier to check the current parent-list
+     *
+     * @throws class_exception
      * @return string
      */
     protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "") {
@@ -232,7 +235,7 @@ abstract class class_admin_simple extends class_admin {
      * If you overwrite this method, you can either return a string containing the new-link or an array if you want to
      * provide multiple new-action.
      *
-     * @param $strListIdentifier an internal identifier to check the current parent-list
+     * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param bool $bitDialog opens the linked pages in a dialog
      *
      * @return string|array

@@ -71,4 +71,46 @@ class class_module_packagemanager_manager {
 
         return $this->getPackageManagerForPath(_projectpath_."/temp/".$strTargetFolder);
     }
+
+    /**
+     * Returns all content-providers as configured in the /config/packagemanager.php file.
+     *
+     * @return interface_packagemanager_contentprovider[]
+     */
+    public function getContentproviders() {
+        $objConfig = class_config::getInstance("packagemanager.php");
+
+        $strProvider = $objConfig->getConfig("contentproviders");
+
+        $arrProviders = explode(",", $strProvider);
+        $arrReturn = array();
+        foreach($arrProviders as $strOneProvider) {
+            $strOneProvider = trim($strOneProvider);
+            if($strOneProvider != "") {
+                $arrReturn[] = new $strOneProvider();
+            }
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Validates, if a given path represents a valid package
+     *
+     * @param $strPath
+     * @return bool
+     */
+    public function validatePackage($strPath) {
+        try {
+            $objMetadata = new class_module_packagemanager_metadata();
+            $objMetadata->autoInit($strPath);
+            return true;
+        }
+        catch(class_exception $objEx) {
+
+        }
+
+        return false;
+
+    }
 }

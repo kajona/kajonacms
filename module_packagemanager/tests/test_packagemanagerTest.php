@@ -76,21 +76,21 @@ class class_test_packagemanager extends class_testbase  {
     }
 
 
-    public function testUpdateOrInstall() {
+    public function testProviderConfig() {
         $objManager = new class_module_packagemanager_manager();
+        $arrProviders = $objManager->getContentproviders();
+        $this->assertEquals(1, count($arrProviders));
 
-        $objHandler = $objManager->getPackageManagerForPath("/core/module_packagemanager");
 
-        $this->assertTrue(!$objHandler->isInstallable());
+        $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[0]));
     }
 
-    /*public function testGuestbookInstaller() {
+
+    public function testUpdateOrInstall() {
         $objManager = new class_module_packagemanager_manager();
-
-        $objHandler = $objManager->getPackageManagerForPath("/core/module_guestbook");
-        echo $objHandler->installOrUpdate();
-    }*/
-
+        $objHandler = $objManager->getPackageManagerForPath("/core/module_packagemanager");
+        $this->assertTrue(!$objHandler->isInstallable());
+    }
 
 
     private function getStrMetadata() {

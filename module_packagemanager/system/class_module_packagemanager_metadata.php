@@ -14,7 +14,7 @@
  * @since 4.0
  * @package module_packagemanager
  */
-class class_module_packagemanager_metadata {
+class class_module_packagemanager_metadata implements interface_admin_listable{
 
     private $strTitle;
     private $strTarget;
@@ -28,6 +28,46 @@ class class_module_packagemanager_metadata {
 
     private $strContentprovider;
     private $strPath;
+
+
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
+     *         [the image name, the alt-title]
+     */
+    public function getStrIcon() {
+        return "icon_module.gif";
+    }
+
+    public function getStrDisplayName() {
+        return $this->getStrTitle();
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return $this->getStrVersion();
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return $this->getStrDescription();
+    }
+
+    public function getSystemid() {
+        return $this->getStrTitle();
+    }
+
 
     public function __toString() {
         return "Title: ".$this->getStrTitle()." Version: ".$this->getStrVersion()." Type: ".$this->getStrType()." Target: ".$this->getStrTarget();
@@ -190,5 +230,6 @@ class class_module_packagemanager_metadata {
     public function getStrRequiredModules() {
         return $this->strRequiredModules;
     }
+
 
 }
