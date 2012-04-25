@@ -13,8 +13,7 @@
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack:";
 $lang["actionList"]                      = "Installierte Pakete";
 $lang["actionListTemplates"]             = "Installierte Templates";
-$lang["actionRemotePackage"]             = "Entferntes Paket herunterladen";
-$lang["actionUploadPackage"]             = "Lokales Paket hochladen";
+$lang["actionUploadPackage"]             = "Neues / Aktualisiertes Paket installieren";
 $lang["action_download"]                 = "Template-Pack herunterladen";
 $lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
 $lang["delete_question"]                 = "Möchten Sie das Template-Pack &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";

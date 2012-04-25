@@ -63,8 +63,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, "", $intI++);
         }
 
-        $strAddActions = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_upload.gif"));
-        $strAddActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionRemotePackage"), $this->getLang("actionRemotePackage"), "icon_downloads.gif"));
+        $strAddActions = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.gif"));
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
 
 
