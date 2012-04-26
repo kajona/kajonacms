@@ -250,7 +250,14 @@ class class_module_system_aspect extends class_model implements interface_model,
 
         //aspect registered in session?
         if(validateSystemid(class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY))) {
-            return class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT);
+            if(class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT, class_session::$intScopeRequest) !== false) {
+                return class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT, class_session::$intScopeRequest);
+            }
+            else {
+                $objAspect = new class_module_system_aspect(class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY));
+                class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT, $objAspect, class_session::$intScopeRequest);
+                return $objAspect;
+            }
         }
         else {
             $objAspect = class_module_system_aspect::getDefaultAspect();
@@ -282,7 +289,6 @@ class class_module_system_aspect extends class_model implements interface_model,
     public static function setCurrentAspectId($strAspectId) {
         if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY) ) {
             class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
-            class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT, new class_module_system_aspect($strAspectId));
         }
     }
 
