@@ -8,4 +8,4 @@
 
 
 require_once './core/bootstrap.php';
-require_once './core/module_system/installer/installer.php';
+require_once './core/installer/installer.php';

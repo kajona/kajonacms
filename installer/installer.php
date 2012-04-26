@@ -208,7 +208,7 @@ class class_installer {
             }
 
             //configwizard_form
-            $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "configwizard_form", true);
+            $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "configwizard_form", true);
 	        $strReturn .= $this->objTemplates->fillTemplate(array("config_intro" => $this->getLang("installer_config_intro"),
 	                                                              "config_hostname"  => $this->getLang("installer_config_dbhostname"),
                                                                   "config_username"  => $this->getLang("installer_config_dbusername"),
@@ -295,7 +295,7 @@ class class_installer {
 	    }
 
 	    if($bitShowForm){
-	        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "loginwizard_form", true);
+	        $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "loginwizard_form", true);
 	        $this->strOutput .= $this->objTemplates->fillTemplate(array("login_username" => $this->getLang("installer_login_username"),
 	                                                                    "login_password" => $this->getLang("installer_login_password"),
 	                                                                    "login_email" => $this->getLang("installer_login_email"),
@@ -368,8 +368,8 @@ class class_installer {
 		$strReturn .= $this->getLang("installer_modules_found");
 
         $strRows = "";
-        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row", true);
-        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row_installable", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_modules_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_modules_row_installable", true);
 
 		//Loading each installer
 
@@ -425,7 +425,7 @@ class class_installer {
 		}
 
         //wrap in form
-        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_form", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_modules_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
@@ -473,8 +473,8 @@ class class_installer {
 
 		//Loading each installer
         $strRows = "";
-        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row", true);
-        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_modules_row_installable", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_modules_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_modules_row_installable", true);
 
         $bitInstallerFound = false;
 		foreach($this->arrMetadata as $objOneMetadata) {
@@ -521,7 +521,7 @@ class class_installer {
 		    header("Location: "._webpath_."/installer.php?step=finish");
 
         //wrap in form
-        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_samplecontent_form", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_samplecontent_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
@@ -556,7 +556,7 @@ class class_installer {
 	 */
 	public function getOutput() {
 	    if($this->strLogfile != "") {
-	        $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_log", true);
+	        $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_log", true);
 	        $this->strLogfile = $this->objTemplates->fillTemplate(
                 array(
                     "log_content" => $this->strLogfile,
@@ -581,9 +581,9 @@ class class_installer {
 	    );
 
 	    $strProgress = "";
-	    $strTemplateEntryTodoID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_progress_entry", true);
-	    $strTemplateEntryCurrentID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_progress_entry_current", true);
-	    $strTemplateEntryDoneID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_progress_entry_done", true);
+	    $strTemplateEntryTodoID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_progress_entry", true);
+	    $strTemplateEntryCurrentID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_progress_entry_current", true);
+	    $strTemplateEntryDoneID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_progress_entry_done", true);
 
 	    $strTemplateEntryID = $strTemplateEntryDoneID;
 	    foreach($arrProgressEntries as $strKey => $strValue) {
@@ -605,7 +605,7 @@ class class_installer {
 	    $arrTemplate["installer_forward"] = $this->strForwardLink;
 	    $arrTemplate["installer_backward"] = $this->strBackwardLink;
 	    $arrTemplate["installer_logfile"] = $this->strLogfile;
-	    $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_main", true);
+	    $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_main", true);
 
 		$strReturn = $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
 		$this->objTemplates->setTemplate($strReturn);
@@ -634,7 +634,7 @@ class class_installer {
 	 * @return string
 	 */
 	public function getForwardLink($strHref) {
-	    $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_forward_link", true);
+	    $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_forward_link", true);
 		return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_next")), $strTemplateID);
 	}
 
@@ -645,7 +645,7 @@ class class_installer {
 	 * @return string
 	 */
 	public function getBackwardLink($strHref) {
-	    $strTemplateID = $this->objTemplates->readTemplate("/core/module_system/installer/installer.tpl", "installer_backward_link", true);
+	    $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_backward_link", true);
 		return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_prev")), $strTemplateID);
 	}
 

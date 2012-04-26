@@ -8,7 +8,7 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="_webpath_/core/module_system/installer/installer.css" type="text/css" />
+	<link rel="stylesheet" href="_webpath_/core/installer/installer.css" type="text/css" />
 </head>
 <body>
 
