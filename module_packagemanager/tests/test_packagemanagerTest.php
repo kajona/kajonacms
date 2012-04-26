@@ -79,7 +79,7 @@ class class_test_packagemanager extends class_testbase  {
     public function testProviderConfig() {
         $objManager = new class_module_packagemanager_manager();
         $arrProviders = $objManager->getContentproviders();
-        $this->assertEquals(1, count($arrProviders));
+        $this->assertEquals(2, count($arrProviders));
 
 
         $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[0]));

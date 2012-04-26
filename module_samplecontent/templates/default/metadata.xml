@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Kajona V4 templatepack metadata
--->
-<templatepack
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/templatepack.xsd"
-        >
-    <name>Default Kajona Template-Pack</name>
-    <version>3.9</version>
-    <author>The Kajona Team</author>
-    <licence>LGPL</licence>
-    <description>A simple default set of templates</description>
-    <url>http://www.kajona.de</url>
-</templatepack>
+<package>
+    <title>default</title>
+    <description>The default template-pack.</description>
+    <version>3.9.1</version>
+    <author>Kajona Team</author>
+    <target>default</target>
+    <type>TEMPLATE</type>
+    <providesInstaller>FALSE</providesInstaller>
+    <requiredModules />
+    <minSystemVersion />
+</package>
