@@ -14,16 +14,14 @@
  * from a remote server. Tries to establish a connection via file_get_contents or via sockets.
  *
  * @package module_system
+ * @author sidler@mulchprod.de
  */
 class class_remoteloader {
 
-	/**
-	 * Name of the table working a a cache.
-	 * Being set in the constructor.
-	 *
-	 * @var string
-	 */
-	private $strCacheTable;
+    /**
+     * @var bool
+     */
+    private $bitCacheEnabled = true;
 
 	/**
 	 * The protocol to use, e.g. http://
@@ -36,7 +34,7 @@ class class_remoteloader {
 	 * The port to open the connection, e.g. 80,
 	 * especially to be used with sockets.
 	 *
-	 * @var unknown_type
+	 * @var int
 	 */
 	private $intPort = 80;
 
@@ -62,16 +60,9 @@ class class_remoteloader {
 	 */
 	private $intMaxCachetime = _remoteloader_max_cachetime_;
 
-	/**
-	 * Constructor, as usual ;)
-	 *
-	 */
-	public function __construct() {
-		$this->strCacheTable = _dbprefix_."remoteloader_cache";
-	}
 
 	/**
-	 * Builts the query and tries to get the remote content either by a cache-lookup
+	 * Builds the query and tries to get the remote content either by a cache-lookup
 	 * or via a remote-connection. Use $bitForceReload if you want to skip the cache-lookup.
 	 *
 	 * @param bool $bitForceReload
@@ -115,7 +106,7 @@ class class_remoteloader {
 
 
 		//in case of an error, save the result to the cache, too:
-		//the possibility of receiving a regular time within the next interval is rather small.
+		//the possibility of receiving a regular response within the next interval is rather small.
 		//BUT: reduce the max cachetime to a third of its' original value.
 		if($strReturn === false) {
 			$this->intMaxCachetime = (int)($this->intMaxCachetime/3);
@@ -152,6 +143,10 @@ class class_remoteloader {
 	 * @return string or false in case of no matching entry
 	 */
 	private function loadByCache() {
+
+        if(!$this->bitCacheEnabled)
+            return false;
+
 		$strReturn = false;
 
         //try to find an entry in the cache
@@ -348,6 +343,9 @@ class class_remoteloader {
 	 * @return bool
 	 */
 	private function saveResponseToCache($strResponse) {
+        if(!$this->bitCacheEnabled)
+            return true;
+
         //create a cache-instance
         $objCache = class_cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum(), "", "", true);
         $objCache->setStrContent($strResponse);
@@ -363,9 +361,7 @@ class class_remoteloader {
      * @return bool
      */
     public function flushCache() {
-        $strQuery = "DELETE FROM ".$this->strCacheTable."";
-
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        return class_cache::flushCache(__CLASS__);
     }
 
 	/**
@@ -403,6 +399,20 @@ class class_remoteloader {
 	public function setStrQueryParams($strQueryParams) {
 		$this->strQueryParams = $strQueryParams;
 	}
+
+    /**
+     * @param boolean $bitCacheEnabled
+     */
+    public function setBitCacheEnabled($bitCacheEnabled) {
+        $this->bitCacheEnabled = $bitCacheEnabled;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBitCacheEnabled() {
+        return $this->bitCacheEnabled;
+    }
 
 }
 
