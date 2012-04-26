@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+    <title>packageserver</title>
+    <description>The packageserver is used to provide the server-part of the kajona packages-system. It is based on the mediamanager.</description>
+    <version>3.9.1</version>
+    <author>Kajona Team</author>
+    <target>module_packageserver</target>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>system,mediamanager,packagemanager</requiredModules>
+    <minSystemVersion>3.4.9</minSystemVersion>
+</package>

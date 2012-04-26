@@ -104,8 +104,10 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public function getStrAdditionalInfo() {
         $strReturn = basename($this->getStrFilename());
-        if($this->getIntType() == self::$INT_TYPE_FILE)
+        if($this->getIntType() == self::$INT_TYPE_FILE) {
             $strReturn .= ",  ".bytesToString(filesize(_realpath_.$this->getStrFilename()));
+            $strReturn .= ", ".$this->getIntHits()." ".$this->getLang("file_hits", "mediamanager");
+        }
 
         return $strReturn;
     }

@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_gallery_search_resultpage_"]     = "Страница с резултати:";
 $lang["_downloads_search_resultpage_"]   = "Страница с резултати:";
+$lang["_gallery_search_resultpage_"]     = "Страница с резултати:";
 $lang["_gallery_search_resultpage_hint"] = "Тази страница показва списък на снимки намерени чрез 'търсене'";
 $lang["actionLogbook"]                   = "Дневник";
 $lang["actionLogbookFlush"]              = "Изчисти дневника";

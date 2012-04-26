@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_gallery_search_resultpage_"]     = "Result page:";
 $lang["_downloads_search_resultpage_"]   = "Result page:";
+$lang["_gallery_search_resultpage_"]     = "Result page:";
 $lang["_gallery_search_resultpage_hint"] = "This page shows the list of pictures found by the search";
 $lang["_mediamanager_default_filesrepoid_"] = "Default file-repository:";
 $lang["_mediamanager_default_imagesrepoid_"] = "Default images-respository:";
@@ -26,6 +26,7 @@ $lang["download_link"]                   = "Download";
 $lang["file_delete_error"]               = "Error deleting the file";
 $lang["file_delete_success"]             = "File deleted succesfully";
 $lang["file_editdate"]                   = "Last modified:";
+$lang["file_hits"]                       = "hits";
 $lang["file_size"]                       = "Filesize:";
 $lang["filemanager_upload_filter_h"]     = "A comma-separated list of file types allowed to be uploaded (e.g. &quot;.jpg,.gif,.png&quot;) ";
 $lang["filemanager_view_filter_h"]       = "A comma-separated list of file types allowed to be shown (e.g. &quot;.jpg,.gif,.png&quot;)";

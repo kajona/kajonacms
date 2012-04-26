@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_gallery_search_resultpage_"]     = "Treffer-Seite:";
 $lang["_downloads_search_resultpage_"]   = "Treffer-Seite:";
+$lang["_gallery_search_resultpage_"]     = "Treffer-Seite:";
 $lang["_gallery_search_resultpage_hint"] = "Auf dieser Seite erfolgt die Detailansicht der Bilder, die in der Suche gefunden wurden.";
 $lang["_mediamanager_default_filesrepoid_"] = "Standard Dateien-Repository:";
 $lang["_mediamanager_default_imagesrepoid_"] = "Standard Bilder-Repository:";
@@ -26,6 +26,7 @@ $lang["download_link"]                   = "Download";
 $lang["file_delete_error"]               = "Fehler beim Löschen der Datei";
 $lang["file_delete_success"]             = "Löschen der Datei erfolgreich";
 $lang["file_editdate"]                   = "Letzte Änderung:";
+$lang["file_hits"]                       = "Hits";
 $lang["file_size"]                       = "Dategröße:";
 $lang["folder_create_error"]             = "Fehler beim Anlegen des Ordners";
 $lang["folder_create_success"]           = "Anlegen des Ordners erfolgreich";

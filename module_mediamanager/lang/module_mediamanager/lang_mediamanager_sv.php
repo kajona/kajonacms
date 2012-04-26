@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_gallery_search_resultpage_"]     = "Resultatsida:";
 $lang["_downloads_search_resultpage_"]   = "Resultatsida:";
+$lang["_gallery_search_resultpage_"]     = "Resultatsida:";
 $lang["_gallery_search_resultpage_hint"] = "Den här sidan visar en lista av bilder som hittats vid sökningen.";
 $lang["actionLogbook"]                   = "Loggbok";
 $lang["actionLogbookFlush"]              = "Töm loggbok";

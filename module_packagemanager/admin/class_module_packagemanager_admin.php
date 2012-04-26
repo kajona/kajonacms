@@ -60,7 +60,17 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strReturn .= $this->objToolkit->listHeader();
         $intI = 0;
         foreach($arrPackages as $objOneMetadata) {
-            $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, "", $intI++);
+
+            $strActions = "";
+            $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+            if($objHandler->isInstallable()) {
+                $strActions .= $this->objToolkit->listButton(
+                    getLinkAdmin($this->getArrModule("modul"), "processPackage", "&package=".$objOneMetadata->getStrPath(), $this->getLang("package_install"), $this->getLang("package_installocally"), "icon_downloads.gif")
+                );
+            }
+
+            $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
 
         $strAddActions = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.gif"));
@@ -127,11 +137,16 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $objManager = new class_module_packagemanager_manager();
 
         if($objManager->validatePackage($strFile)) {
-            $objHandler = $objManager->extractPackage($strFile);
-            $objFilesystem = new class_filesystem();
-            $objFilesystem->fileDelete($strFile);
 
-            $strReturn .= $objHandler->move2Filesystem();
+            if(uniSubstr($strFile, -4) == ".zip") {
+                $objHandler = $objManager->extractPackage($strFile);
+                $objFilesystem = new class_filesystem();
+                $objFilesystem->fileDelete($strFile);
+
+                $strReturn .= $objHandler->move2Filesystem();
+            }
+            else
+                $objHandler = $objManager->getPackageManagerForPath($strFile);
 
             if($objHandler->getObjMetadata()->getBitProvidesInstaller())
                 $strReturn .= $objHandler->installOrUpdate();
