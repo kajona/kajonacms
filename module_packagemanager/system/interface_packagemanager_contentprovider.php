@@ -33,7 +33,7 @@ interface interface_packagemanager_contentprovider {
      * of the packageprovider.
      *
      * Whenever the provider is capable of uploading new packages, the copy & n upload process
-     * shoule be triggered by the admin-class again.
+     * should be triggered by the admin-class again.
      * So make sure links or forms point to
      * module = packagemanager
      * action = uploadPackage

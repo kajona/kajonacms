@@ -7,13 +7,14 @@
 ********************************************************************************************************/
 
 /**
- * A simple content-provider used to upload archives to the local filesytem.
+ * A simple content-provider used to upload archives from the official kajona-repo.
+ * Provides both, a search and a download-part.
  *
  * @module module_packagemanager
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class class_module_packagemanager_contentprovider_local implements interface_packagemanager_contentprovider {
+class class_module_packagemanager_contentprovider_kajona implements interface_packagemanager_contentprovider {
 
 
 
@@ -23,7 +24,7 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      * @return mixed
      */
     public function getDisplayTitle() {
-        return class_carrier::getInstance()->getObjLang()->getLang("provider_local", "packagemanager");
+        return class_carrier::getInstance()->getObjLang()->getLang("provider_kajona", "packagemanager");
     }
 
     /**
@@ -35,7 +36,7 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      * So make sure links or forms point to
      * module = packagemanager
      * action = uploadPackage
-     * provider = class_na,e
+     * provider = class_name
      * The provider will be called using the processPackageUpload method.
      *
      * @return string
@@ -45,14 +46,15 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
         $objLang = class_carrier::getInstance()->getObjLang();
         $strReturn = "";
 
-        $strReturn .= $objToolkit->getTextRow($objLang->getLang("provider_local_uploadhint", "packagemanager"));
-        $strReturn .= $objToolkit->divider();
+        $strReturn .= $objToolkit->listHeader();
 
-        $strReturn .= $objToolkit->formHeader(getLinkAdminHref("packagemanager", "uploadPackage"), generateSystemid(), "multipart/form-data");
-        $strReturn .= $objToolkit->formInputUpload("provider_local_file", $objLang->getLang("provider_local_file", "packagemanager"));
-        $strReturn .= $objToolkit->formInputHidden("provider", __CLASS__);
-        $strReturn .= $objToolkit->formInputSubmit();
-        $strReturn .= $objToolkit->formClose();
+        $strAction = $objToolkit->listButton(
+            getLinkAdmin("packagemanager", "uploadPackage", "provider=".__CLASS__."&file=test", $objLang->getLang("package_install", "packagemanager"), $objLang->getLang("package_install", "packagemanager"), "icon_downloads.gif")
+        );
+
+        $strReturn .= $objToolkit->genericAdminList(generateSystemid(), "test entry", getImageAdmin("icon_module.gif"), $strAction, 0);
+
+        $strReturn .= $objToolkit->listFooter();
 
         return $strReturn;
     }
@@ -65,23 +67,19 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      */
     public function processPackageUpload() {
 
-        //fetch the upload, validate a few settings and copy the package to /project/temp
-        $arrSource = class_carrier::getInstance()->getParam("provider_local_file");
+        $strFilename = generateSystemid().".zip";
 
-        $strTarget = "/project/temp/".generateSystemid().".zip";
-        $objFilesystem = new class_filesystem();
+        //stream the original package
+        $objRemoteloader = new class_remoteloader();
+        $objRemoteloader->setBitCacheEnabled(false);
 
-        //Check file for correct filters
-        $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-        if(in_array($strSuffix, array(".zip"))) {
-            if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                class_logger::getInstance()->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, class_logger::$levelInfo);
-                return $strTarget;
-            }
-        }
-        class_logger::getInstance()->addLogRow("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder", class_logger::$levelInfo);
-        @unlink($arrSource["tmp_name"]);
+        $objRemoteloader->setStrHost("localhost");
+        $objRemoteloader->setStrQueryParams("/pchart2.zip");
 
-        return null;
+        $strResponse = $objRemoteloader->getRemoteContent();
+        file_put_contents(_realpath_._projectpath_."/temp/".$strFilename, $strResponse);
+
+
+        return _projectpath_."/temp/".$strFilename;
     }
 }

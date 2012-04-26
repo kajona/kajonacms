@@ -14,4 +14,4 @@
 $config = array();
 
 //comma-separated list of registered content-providers
-$config["contentproviders"] = "class_module_packagemanager_contentprovider_local";
+$config["contentproviders"] = "class_module_packagemanager_contentprovider_local,class_module_packagemanager_contentprovider_kajona";

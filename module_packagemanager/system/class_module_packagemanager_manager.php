@@ -30,6 +30,9 @@ class class_module_packagemanager_manager {
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
         $arrReturn = array_merge($arrReturn, $objModuleProvider->getInstalledPackages());
 
+        $objPackageProvider = new class_module_packagemanager_packagemanager_template();
+        $arrReturn = array_merge($arrReturn, $objPackageProvider->getInstalledPackages());
+
         return $arrReturn;
     }
 
@@ -47,6 +50,11 @@ class class_module_packagemanager_manager {
 
         if($objMetadata->getStrType() == self::$STR_TYPE_MODULE) {
             $objManager = new class_module_packagemanager_packagemanager_module();
+            $objManager->setObjMetadata($objMetadata);
+        }
+
+        if($objMetadata->getStrType() == self::$STR_TYPE_TEMPLATE) {
+            $objManager = new class_module_packagemanager_packagemanager_template();
             $objManager->setObjMetadata($objMetadata);
         }
 

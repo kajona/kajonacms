@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package>
-    <title>guestbook</title>
-    <description>A simple module providing a guestbook. New posts may be visible immediately or after an admins' review, depending on the configuration.</description>
+    <title>ezcchart</title>
+    <description>ezComponents charting engine.</description>
     <version>3.9.1</version>
     <author>Kajona Team</author>
-    <target>module_guestbook</target>
+    <target>module_ezcchart</target>
     <type>MODULE</type>
-    <providesInstaller>TRUE</providesInstaller>
-    <requiredModules>system,pages</requiredModules>
+    <providesInstaller>FALSE</providesInstaller>
+    <requiredModules>system</requiredModules>
     <minSystemVersion>3.4.1</minSystemVersion>
 </package>

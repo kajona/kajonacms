@@ -6,6 +6,14 @@
 *	$Id: class_module_tags_admin.php 4485 2012-02-07 12:48:04Z sidler $                                  *
 ********************************************************************************************************/
 
+
+/**
+ * Implementation to handle module-packages. List all installed module-packages and starts the installation / update.
+ *
+ * @package module_packagemanager
+ * @author sidler@mulchprod.de
+ * @since 4.0
+ */
 class class_module_packagemanager_packagemanager_module implements interface_packagemanager_packagemanager {
 
     /**

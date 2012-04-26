@@ -25,7 +25,10 @@ class class_module_packagemanager_template extends class_model implements interf
      */
     private $strName = "";
 
-    private $arrMetadata = array();
+    /**
+     * @var class_module_packagemanager_metadata
+     */
+    private $objMetadata = null;
 
     /**
      * Constructor to create a valid object
@@ -63,12 +66,14 @@ class class_module_packagemanager_template extends class_model implements interf
      */
     public function getStrAdditionalInfo() {
         $strReturn = "";
+        if($this->objMetadata == null)
+            return "";
 
-        if($this->arrMetadata["version"] != "")
-            $strReturn .= $this->getLang("pack_version")." ".$this->arrMetadata["version"];
+        if($this->objMetadata->getStrVersion() != "")
+            $strReturn .= $this->getLang("pack_version")." ".$this->objMetadata->getStrVersion();
 
-        if($this->arrMetadata["author"] != "")
-            $strReturn .= " ".$this->getLang("pack_author")." ".$this->arrMetadata["author"];
+        if($this->objMetadata->getStrAuthor() != "")
+            $strReturn .= " ".$this->getLang("pack_author")." ".$this->objMetadata->getStrAuthor();
 
         return $strReturn;
     }
@@ -78,7 +83,9 @@ class class_module_packagemanager_template extends class_model implements interf
      * @return string
      */
     public function getStrLongDescription() {
-        return $this->arrMetadata["description"];
+        if($this->objMetadata == null)
+            return "";
+        return $this->objMetadata->getStrDescription();
     }
 
     /**
@@ -87,7 +94,7 @@ class class_module_packagemanager_template extends class_model implements interf
      */
     protected function initObjectInternal() {
         parent::initObjectInternal();
-        $this->arrMetadata = $this->getMetadata();
+        $this->objMetadata = $this->getMetadata();
     }
 
     /**
@@ -110,7 +117,7 @@ class class_module_packagemanager_template extends class_model implements interf
      * @static
      * @param null|int $intStart
      * @param null|int $intEnd
-     * @return class_module_templatemanager_template[]
+     * @return class_module_packagemanager_template[]
      */
     public static function getAllTemplatepacks($intStart = null, $intEnd = null) {
         $strQuery = "SELECT templatepack_id
@@ -202,30 +209,18 @@ class class_module_packagemanager_template extends class_model implements interf
     }
 
 
-    public function getMetadata() {
-        $arrMetadata = array();
-        $arrMetadata["name"] = "";
-        $arrMetadata["author"] = "";
-        $arrMetadata["description"] = "";
-        $arrMetadata["version"] = "";
-        $arrMetadata["licence"] = "";
-        $arrMetadata["url"] = "";
+    private function getMetadata() {
 
-        //try to load the metadata.xml file
-        if(is_file(_realpath_._templatepath_."/".$this->strName."/metadata.xml")) {
-            $objXML = new class_xml_parser();
-            $objXML->loadFile(_templatepath_."/".$this->strName."/metadata.xml");
-            $arrTree = $objXML->xmlToArray();
+        $objMetadata = new class_module_packagemanager_metadata();
+        try {
+            $objMetadata->autoInit(_templatepath_."/".$this->strName);
+            return $objMetadata;
+        }
+        catch (class_exception $objEx) {
 
-            $arrMetadata["name"]        = $arrTree["templatepack"]["0"]["name"]["0"]["value"];
-            $arrMetadata["author"]      = $arrTree["templatepack"]["0"]["author"]["0"]["value"];
-            $arrMetadata["description"] = $arrTree["templatepack"]["0"]["description"]["0"]["value"];
-            $arrMetadata["version"]     = $arrTree["templatepack"]["0"]["version"]["0"]["value"];
-            $arrMetadata["licence"]     = $arrTree["templatepack"]["0"]["licence"]["0"]["value"];
-            $arrMetadata["url"]         = $arrTree["templatepack"]["0"]["url"]["0"]["value"];
         }
 
-        return $arrMetadata;
+        return null;
     }
 
     public function setStrName($strName) {
