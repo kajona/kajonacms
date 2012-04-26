@@ -46,7 +46,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 	protected function actionChange() {
 
 		$strReturn = "";
-		$strSystemID = "";
+		$strSystemID = $this->getParam("systemid");
         $objTargetRecord = null;
 
 		//Determine the systemid
@@ -56,6 +56,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		//Edit a module?
 		if($this->getParam("changemodule") != "") {
             $objTargetRecord = class_module_system_module::getModuleByName($this->getParam("changemodule"));
+            $strSystemID = $objTargetRecord->getSystemid();
         }
 
 		if($objTargetRecord == null)
@@ -268,27 +269,30 @@ class class_module_right_admin extends class_admin implements interface_admin {
 		return $strReturn;
 	}
 
-	/**
-	 * Saves the rights passed by form
-	 *
-	 * @return string "" in case of success
-	 */
+    /**
+     * Saves the rights passed by form
+     *
+     * @throws class_exception
+     * @return string "" in case of success
+     */
 	protected function actionSaveRights() {
 		$strReturn = "";
 		//Collecting & sorting the passed values
 		$strSystemid = $this->getSystemid();
 
-        $objCommon = new class_module_system_common($strSystemid);
         $objRights = class_carrier::getInstance()->getObjRights();
 
-		//Special case: The root-record.
-        if($strSystemid == null) {
-            if($this->getParam("systemid") == "0") {
-                $strSystemid = "0";
-            }
+        if($this->getParam("systemid") == "0") {
+            $objTarget = new class_module_system_common("0");
+            $objTarget->setStrSystemid("0");
+            $strSystemid = "0";
         }
+        else
+            $objTarget = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-		if($objCommon->rightRight()) {
+
+		//Special case: The root-record.
+		if($objTarget->rightRight()) {
 			//Inheritance?
 			if($this->getParam("inherit") == 1)
 			 	$intInherit = 1;
@@ -300,7 +304,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 				$intInherit = 0;
 
 			//Get Groups
-            $arrGroups = class_modul_user_group::getAllGroups();
+            $arrGroups = class_module_user_group::getAllGroups();
 
             $strView = _admins_group_id_;
             $strEdit = _admins_group_id_;
