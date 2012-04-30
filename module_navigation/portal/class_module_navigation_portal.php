@@ -52,9 +52,10 @@ class class_module_navigation_portal extends class_portal implements interface_p
 		$this->strCurrentSite = $this->getPagename();
 
         //init with the current navigation, required in all cases
-        $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
-        $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
-
+        if(isset($this->arrElementData["navigation_id"])) {
+            $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+            $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
+        }
         //set the default navigation mode
         $this->setAction("navigationSitemap");
 

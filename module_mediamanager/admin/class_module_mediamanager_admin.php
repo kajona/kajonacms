@@ -791,6 +791,7 @@ HTML;
     /**
      * Shows a form or deltes a timeintervall from the logs
      *
+     * @throws class_exception
      * @return string "" in case of success
      * @permissions edit
      * @autoTestable

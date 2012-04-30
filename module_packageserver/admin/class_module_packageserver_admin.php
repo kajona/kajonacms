@@ -38,6 +38,15 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         return $arrReturn;
     }
 
+    /**
+     * Generic list of all packages available on the local filesystem
+     * @return string
+     * @permissions view
+     * @autoTestable
+     */
+    protected function actionList() {
+        return $this->actionOpenFolder();
+    }
 
 
     /**
@@ -46,14 +55,14 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      * @permissions view
      * @autoTestable
      */
-    protected function actionList() {
+    protected function actionOpenFolder() {
 
         if($this->getSystemid() == "")
             $this->setSystemid(_packageserver_repo_id_);
 
-        $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount(_packageserver_repo_id_));
+        $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid()));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB(_packageserver_repo_id_));
+        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
 
         return $this->renderList($objIterator);
     }
@@ -68,14 +77,20 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
     }
 
     protected function renderAdditionalActions(class_model $objListEntry) {
-        if($objListEntry instanceof class_module_mediamanager_file) {
+
+        if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder", "mediamanager"), "icon_folderActionOpen.gif")));
+
+
+        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_folderActionOpen.gif")
+                    getLinkAdmin($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens.gif")
                 )
             );
         }
-        return parent::renderAdditionalActions($objListEntry);
+
+        return array();
     }
 
 
@@ -96,4 +111,54 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         return $this->getLang("commons_error_permissions");
     }
 
+    /**
+     * Creates a small print-view of the current package, rendering all relevant key-value-pairs
+     * @permissions view
+     * @return string
+     */
+    protected function actionShowInfo() {
+        $strReturn = "";
+
+        /** @var $objPackage class_module_mediamanager_file */
+        $objPackage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objPackage instanceof class_module_mediamanager_file && $objPackage->rightView()) {
+
+            $objManager = new class_module_packagemanager_manager();
+            $objHandler = $objManager->getPackageManagerForPath($objPackage->getStrFilename());
+
+
+            $strReturn .= $this->objToolkit->formHeadline($objHandler->getObjMetadata()->getStrTitle());
+            $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_type")." ".$objHandler->getObjMetadata()->getStrType());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version")." ".$objHandler->getObjMetadata()->getStrVersion());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules")." ".$objHandler->getObjMetadata()->getStrRequiredModules());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_minversion")." ".$objHandler->getObjMetadata()->getStrMinVersion());
+
+        }
+
+        return $strReturn;
+
+    }
+
+    /**
+     * Generates a path-navigation
+     *
+     * @return array
+     */
+    protected function getArrOutputNaviEntries() {
+        $arrEntries = class_admin::getArrOutputNaviEntries();
+
+        $arrPath = $this->getPathArray();
+
+        array_shift($arrPath);
+
+        foreach($arrPath as $strOneSystemid) {
+            $objPoint = class_objectfactory::getInstance()->getObject($strOneSystemid);
+            $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
+        }
+
+        return $arrEntries;
+
+    }
 }

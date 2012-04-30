@@ -44,7 +44,6 @@ class class_request_dispatcher {
      * @return string
      */
     public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam) {
-        $strReturn = "";
 
         if($bitAdmin)
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
@@ -66,6 +65,8 @@ class class_request_dispatcher {
      * @param string $strModule
      * @param string $strAction
      * @param string $strLanguageParam
+     *
+     * @throws class_exception
      * @return string
      */
     private function processAdminRequest($strModule, $strAction, $strLanguageParam) {
@@ -178,6 +179,8 @@ class class_request_dispatcher {
      * @param string $strModule
      * @param string $strAction
      * @param string $strLanguageParam
+     *
+     * @throws class_exception
      * @return string
      */
     private function processPortalRequest($strModule, $strAction, $strLanguageParam) {

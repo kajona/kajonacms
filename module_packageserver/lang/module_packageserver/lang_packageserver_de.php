@@ -10,5 +10,13 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["actionList"]                      = "Pakete";
+$lang["actionShowInfo"]                  = "Detail-Informationen";
 $lang["modul_titel"]                     = "Paket-Server";
+$lang["pack_name"]                       = "Name des Packs:";
+$lang["package_author"]                  = "Ersteller:";
 $lang["package_info"]                    = "Details anzeigen";
+$lang["package_minversion"]              = "Minimale System-Version:";
+$lang["package_modules"]                 = "Erforderliche Module:";
+$lang["package_type"]                    = "Typ:";
+$lang["package_version"]                 = "Version:";
