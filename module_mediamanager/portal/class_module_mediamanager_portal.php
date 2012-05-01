@@ -157,7 +157,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                             $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
                         }
 
-                        $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getPortalLanguage(), $objOneFile->getStrName());
+                        $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getStrPortalLanguage(), $objOneFile->getStrName());
 
                         //render the single file
                         $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist_file");
@@ -324,7 +324,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
      */
     private function renderFileStripEntry(class_module_mediamanager_file $objCurFile) {
         $arrTemplate = array(
-            "file_detail_href" => getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objCurFile->getSystemid(), $this->getPortalLanguage(), $objCurFile->getStrName()),
+            "file_detail_href" => getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objCurFile->getSystemid(), $this->getStrPortalLanguage(), $objCurFile->getStrName()),
             "file_name" => $objCurFile->getStrName(),
             "file_systemid" => $objCurFile->getStrSystemid(),
             "file_filename" => $objCurFile->getStrFilename()

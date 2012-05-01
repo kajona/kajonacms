@@ -15,17 +15,17 @@
 class class_module_packageserver_portal extends class_portal implements interface_portal {
 
 
-	/**
-	 * Constructor
-	 *
-	 * @param $arrElementData
-	 */
-	public function __construct($arrElementData) {
-		$this->setArrModuleEntry("moduleId", _packageserver_module_id_);
-		$this->setArrModuleEntry("modul", "packageserver");
+    /**
+     * Constructor
+     *
+     * @param array $arrElementData
+     */
+    public function __construct($arrElementData) {
+        $this->setArrModuleEntry("moduleId", _packageserver_module_id_);
+        $this->setArrModuleEntry("modul", "packageserver");
 
         parent::__construct($arrElementData);
-	}
+    }
 
 	
 
@@ -35,7 +35,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
 	 *
 	 * @return string|json
      * @permissions view
-     * @autoTestable
+     *
      * @xml
 	 */
 	protected function actionList() {

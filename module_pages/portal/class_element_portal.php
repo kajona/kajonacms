@@ -135,7 +135,7 @@ abstract class class_element_portal extends class_portal {
         $strReturn = false;
 
         //load the matching cache-entry
-        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getPortalLanguage());
+        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage());
         if($objCacheEntry != null && $this->onLoadFromCache())
             $strReturn = $objCacheEntry->getStrContent();
 
@@ -170,7 +170,7 @@ abstract class class_element_portal extends class_portal {
             $strElementOutput = $this->getElementOutput();
 
         //load the matching cache-entry
-        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getPortalLanguage(), true);
+        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);
         $objCacheEntry->setStrContent($strElementOutput);
         $objCacheEntry->setIntLeasetime(time()+$this->objElementData->getIntCachetime());
 

@@ -30,6 +30,7 @@ class class_test_generalActionTest extends class_testbase  {
 
     public function testPortalModules() {
 
+
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
@@ -82,3 +83,14 @@ class class_test_generalActionTest extends class_testbase  {
 
 }
 
+
+class class_xml {
+
+    /**
+     * If set to true, the output will be sent without the mandatory xml-head-element
+     * @param bool $bitSuppressXmlHeader
+     */
+    public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
+    }
+
+}

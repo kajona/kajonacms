@@ -93,8 +93,8 @@ class class_modul_pages_search extends class_portal implements interface_search_
 						   AND pageproperties_id = page_id
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						   AND page_element_ph_language = '".dbsafeString($this->getPortalLanguage())."'
-						   AND pageproperties_language = '".dbsafeString($this->getPortalLanguage())."'
+						   AND page_element_ph_language = '".dbsafeString($this->getStrPortalLanguage())."'
+						   AND pageproperties_language = '".dbsafeString($this->getStrPortalLanguage())."'
 						   AND content_id = page_element_id
 						   AND system_status = 1
 						   AND   ".$strWhere."
@@ -143,7 +143,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 						 FROM ".$strTable.",
 						      "._dbprefix_."page_properties,
 						      "._dbprefix_."system
-						 WHERE pageproperties_language = '".$this->objDB->dbsafeString($this->getPortalLanguage())."'
+						 WHERE pageproperties_language = '".$this->objDB->dbsafeString($this->getStrPortalLanguage())."'
 						   AND pageproperties_id = page_id
 						   AND system_id = page_id
 						   AND system_status = 1
@@ -190,14 +190,14 @@ class class_modul_pages_search extends class_portal implements interface_search_
                                "._dbprefix_."page_properties,
                                "._dbprefix_."page
                          WHERE system_module_nr = "._pages_modul_id_."
-                           AND pageproperties_language = '".$this->objDB->dbsafeString($this->getPortalLanguage())."'
+                           AND pageproperties_language = '".$this->objDB->dbsafeString($this->getStrPortalLanguage())."'
 						   AND pageproperties_id = page_id
 						   AND system_id = page_id
                            AND system_id = tags_systemid
                            AND tags_tagid = tags_tag_id
                            AND system_status = 1
                            AND ".$strWhere."
-                           AND tags_attribute = '".  dbsafeString($this->getPortalLanguage())."'  ";
+                           AND tags_attribute = '".  dbsafeString($this->getStrPortalLanguage())."'  ";
 
 
             $arrPages = $this->objDB->getArray($strQuery);

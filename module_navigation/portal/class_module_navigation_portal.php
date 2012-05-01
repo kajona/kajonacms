@@ -387,10 +387,10 @@ class class_module_navigation_portal extends class_portal implements interface_p
 
                             //seems as we have a navigation-element different than the current one.
                             //check, if the element is installed on the current page
-                            $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
+                            $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
                             //maybe on the masters-page?
                             if($objElement == null)
-                                $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
+                                $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
 
                             if($objElement != null) {
                                 //wohooooo, an element was found.

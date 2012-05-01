@@ -83,10 +83,10 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
 
             //check, if the page may be loaded using the default-language
-            $strPreviousLang = $this->getPortalLanguage();
+            $strPreviousLang = $this->getStrPortalLanguage();
             $objDefaultLang = class_module_languages_language::getDefaultLanguage();
-            if($this->getPortalLanguage() != $objDefaultLang->getStrName()) {
-                class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
+            if($this->getStrPortalLanguage() != $objDefaultLang->getStrName()) {
+                class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getStrPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
                 $objPageData = class_module_pages_page::getPageByName($strPagename);
 
@@ -136,18 +136,18 @@ class class_module_pages_portal extends class_portal implements interface_portal
 		$arrElementsOnPage = array();
 
         if($bitPeRequested)
-            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getPortalLanguage());
+            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
         else
-            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
+            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage());
 		//If there's a master-page, load elements on that, too
 		$objMasterData = class_module_pages_page::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
 		if($objMasterData->getStrName() != "") {
             $arrElementsOnMaster = array();
             if($bitPeRequested)
-                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getPortalLanguage());
+                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
             else
-                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getPortalLanguage());
+                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getStrPortalLanguage());
 			//and merge them
 			$arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
             if($objMasterData->rightEdit())
@@ -167,13 +167,13 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
 
         //Initialize the caches internal cache :)
-        class_cache::fillInternalCache("class_element_portal", $this->getPagename(), null, $this->getPortalLanguage());
+        class_cache::fillInternalCache("class_element_portal", $this->getPagename(), null, $this->getStrPortalLanguage());
 
 
         //try to load the additional title from cache
         $strAdditionalTitleFromCache = "";
         $intMaxCacheDuration = 0;
-        $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getPortalLanguage());
+        $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
         if($objCachedTitle != null) {
             $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
             self::$strAdditionalTitle = $strAdditionalTitleFromCache;
@@ -336,7 +336,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
         //check if the additional title has to be saved to the cache
         if(self::$strAdditionalTitle != "" && self::$strAdditionalTitle != $strAdditionalTitleFromCache) {
-            $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getPortalLanguage(), true);
+            $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage(), true);
             $objCacheEntry->setStrContent(self::$strAdditionalTitle );
             $objCacheEntry->setIntLeasetime(time()+$intMaxCacheDuration );
 

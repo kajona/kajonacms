@@ -84,7 +84,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
                 $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
                 $strTemplateActiveRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
 
-                if($objOneLanguage->getStrName() == $this->getPortalLanguage())
+                if($objOneLanguage->getStrName() == $this->getStrPortalLanguage())
                     $strRows .= $this->fillTemplate($arrTemplate, $strTemplateActiveRowID);
                 else
                     $strRows .= $this->fillTemplate($arrTemplate, $strTemplateRowID);

@@ -124,7 +124,6 @@ abstract class class_portal  {
 	}
 
 
-
     /**
      * This method triggers the internal processing.
      * It may be overridden if required, e.g. to implement your own action-handling.
@@ -138,9 +137,12 @@ abstract class class_portal  {
      * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
      * Therefore the list of permissions, named after the "permissions" annotation are validated against
      * the module currently loaded.
+     *
      * @see class_rights::validatePermissionString
      *
      * @param string $strAction
+     *
+     * @throws class_exception
      * @return string
      * @since 3.4
      */
@@ -344,26 +346,6 @@ abstract class class_portal  {
         return $objCommon->getPrevId();
 	}
 
-	/**
-	 * Returns the data for a registered module
-	 *
-	 * @param string $strName
-	 * @param bool $bitCache
-	 * @return mixed
-	 */
-	public function getModuleData($strName, $bitCache = true) {
-	    return $this->objSystemCommon->getModuleData($strName, $bitCache);
-	}
-
-	/**
-	 * Returns the SystemID of a installed module
-	 *
-	 * @param string $strModule
-	 * @return string
-	 */
-	public function getModuleSystemid($strModule) {
-	    return $this->objSystemCommon->getModuleSystemid($strModule);
-	}
 
 	/**
 	 * Generates a sorted array of systemids, reaching from the passed systemid up
@@ -371,9 +353,11 @@ abstract class class_portal  {
 	 *
 	 * @param string $strSystemid
 	 * @return mixed
+     * @deprecated
 	 */
 	public function getPathArray($strSystemid = "") {
-	    return $this->objSystemCommon->getPathArray($strSystemid);
+        $objCommon = new class_module_system_common($strSystemid);
+	    $objCommon->getPathArray($strSystemid);
 	}
 
 	/**
@@ -467,20 +451,11 @@ abstract class class_portal  {
 	/**
 	 * Returns the current Text-Object Instance
 	 *
-	 * @return obj
+	 * @return class_lang
 	 */
 	protected function getObjLang() {
 	    return $this->objLang;
 	}
-
-    /**
-     * Loads the language to load content
-     *
-     * @return string
-     */
-    public function getPortalLanguage() {
-        return $this->objSystemCommon->getStrPortalLanguage();
-    }
 
     /**
      * Returns an instance of class_lang_wrapper, to be used with
@@ -593,6 +568,11 @@ abstract class class_portal  {
             $this->objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
 
         return $this->objModule;
+    }
+
+    protected function getStrPortalLanguage() {
+        $objLanguage = new class_module_languages_language();
+        return $objLanguage->getPortalLanguage();
     }
 
 }
