@@ -17,6 +17,8 @@ class class_installer_element_gallery extends class_installer_base implements in
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
 
+        $this->objMetadata->setStrTitle("element_gallery");
+
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 
 		parent::__construct();

@@ -41,6 +41,7 @@ $lang["package_installocally"]           = "Paket installieren";
 $lang["package_minversion"]              = "Minimale System-Version:";
 $lang["package_modules"]                 = "Erforderliche Module:";
 $lang["package_notinstallable"]          = "Paket kann nicht installiert werden.";
+$lang["package_remote_errorloading"]     = "Fehler bei der Abfrage der verfügbaren Pakete";
 $lang["package_type"]                    = "Typ:";
 $lang["package_version"]                 = "Version:";
 $lang["provider_error_package"]          = "Das geladene Paket stellt kein gültiges Archiv dar.";

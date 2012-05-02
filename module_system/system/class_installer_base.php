@@ -30,7 +30,12 @@ abstract class class_installer_base extends class_root implements interface_inst
 
         $strReturn = "";
 
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+        if(uniStrpos($this->objMetadata->getStrTitle(), "element_") !== false) {
+            $objModule = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
+
+        }
+        else
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
 
         if($objModule === null) {
             class_logger::getInstance("triggering installation of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);

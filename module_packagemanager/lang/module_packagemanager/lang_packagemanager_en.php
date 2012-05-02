@@ -41,6 +41,7 @@ $lang["package_installocally"]           = "Install package";
 $lang["package_minversion"]              = "Minimal system-version:";
 $lang["package_modules"]                 = "Required modules:";
 $lang["package_notinstallable"]          = "Package can't be installed.";
+$lang["package_remote_errorloading"]     = "Error loading the list of packages";
 $lang["package_type"]                    = "Type:";
 $lang["package_version"]                 = "Version:";
 $lang["provider_error_package"]          = "The packages is no valid archive.";

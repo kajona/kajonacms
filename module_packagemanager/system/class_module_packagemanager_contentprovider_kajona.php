@@ -16,6 +16,16 @@
  */
 class class_module_packagemanager_contentprovider_kajona implements interface_packagemanager_contentprovider {
 
+    //TODO: replace with kajona url
+    private $STR_BROWSE_HOST = "";
+    private $STR_BROWSE_URL = "";
+    private $STR_DOWNLOAD_URL = "";
+
+    function __construct() {
+        $this->STR_BROWSE_HOST  = $_SERVER["HTTP_HOST"];
+        $this->STR_BROWSE_URL   = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/xml.php?module=packageserver&action=list";
+        $this->STR_DOWNLOAD_URL = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/download.php";
+    }
 
 
     /**
@@ -48,11 +58,29 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
 
         $strReturn .= $objToolkit->listHeader();
 
-        $strAction = $objToolkit->listButton(
-            getLinkAdmin("packagemanager", "uploadPackage", "provider=".__CLASS__."&file=test", $objLang->getLang("package_install", "packagemanager"), $objLang->getLang("package_install", "packagemanager"), "icon_downloads.gif")
-        );
+        $objRemoteloader = new class_remoteloader();
+        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
+        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL);
 
-        $strReturn .= $objToolkit->genericAdminList(generateSystemid(), "test entry", getImageAdmin("icon_module.gif"), $strAction, 0);
+        $strPackages = "";
+        try {
+            $strPackages = $objRemoteloader->getRemoteContent();
+        }
+        catch (class_exception $objEx) {
+            return $objLang->getLang("package_remote_errorloading", "packagemanager");
+        }
+
+        $arrPackages = json_decode($strPackages, true);
+
+        $intI = 0;
+        foreach($arrPackages as $arrOnePackage) {
+            $strAction = $objToolkit->listButton(
+                getLinkAdmin("packagemanager", "uploadPackage", "provider=".__CLASS__."&systemid=".$arrOnePackage["systemid"], $objLang->getLang("package_install", "packagemanager"), $objLang->getLang("package_install", "packagemanager"), "icon_downloads.gif")
+            );
+
+            $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin("icon_module.gif"), $strAction, $intI++, $arrOnePackage["version"], $arrOnePackage["description"]);
+        }
+
 
         $strReturn .= $objToolkit->listFooter();
 
@@ -73,8 +101,8 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setBitCacheEnabled(false);
 
-        $objRemoteloader->setStrHost("localhost");
-        $objRemoteloader->setStrQueryParams("/pchart2.zip");
+        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
+        $objRemoteloader->setStrQueryParams($this->STR_DOWNLOAD_URL."?systemid=".class_carrier::getInstance()->getParam("systemid"));
 
         $strResponse = $objRemoteloader->getRemoteContent();
         file_put_contents(_realpath_._projectpath_."/temp/".$strFilename, $strResponse);

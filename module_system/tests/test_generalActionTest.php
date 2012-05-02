@@ -82,15 +82,3 @@ class class_test_generalActionTest extends class_testbase  {
 
 
 }
-
-
-class class_xml {
-
-    /**
-     * If set to true, the output will be sent without the mandatory xml-head-element
-     * @param bool $bitSuppressXmlHeader
-     */
-    public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
-    }
-
-}

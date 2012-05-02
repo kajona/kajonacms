@@ -18,6 +18,9 @@ class class_installer_element_downloads extends class_installer_base implements 
 
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+
+        $this->objMetadata->setStrTitle("element_downloads");
+
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 		parent::__construct();
 	}
