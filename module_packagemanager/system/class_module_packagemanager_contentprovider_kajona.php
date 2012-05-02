@@ -22,9 +22,13 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
     private $STR_DOWNLOAD_URL = "";
 
     function __construct() {
-        $this->STR_BROWSE_HOST  = $_SERVER["HTTP_HOST"];
-        $this->STR_BROWSE_URL   = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/xml.php?module=packageserver&action=list";
-        $this->STR_DOWNLOAD_URL = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/download.php";
+
+
+        if(isset($_SERVER["HTTP_HOST"])) {
+            $this->STR_BROWSE_HOST  = $_SERVER["HTTP_HOST"];
+            $this->STR_BROWSE_URL   = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/xml.php?module=packageserver&action=list";
+            $this->STR_DOWNLOAD_URL = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/download.php";
+        }
     }
 
 
@@ -41,7 +45,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
      * Renders the list of available packages or any other kind of gui-representation
      * of the packageprovider.
      *
-     * Whenever the provider is capable of uploading new packages, the copy & n upload process
+     * Whenever the provider is capable of uploading new packages, the copy & and upload process
      * should be triggered by the admin-class again.
      * So make sure links or forms point to
      * module = packagemanager
