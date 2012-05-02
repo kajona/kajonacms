@@ -32,7 +32,7 @@ interface interface_packagemanager_contentprovider {
      * Renders the list of available packages or any other kind of gui-representation
      * of the packageprovider.
      *
-     * Whenever the provider is capable of uploading new packages, the copy & n upload process
+     * Whenever the provider is capable of uploading new packages, the copy & and upload process
      * should be triggered by the admin-class again.
      * So make sure links or forms point to
      * module = packagemanager
@@ -53,4 +53,27 @@ interface interface_packagemanager_contentprovider {
      * @return string|null the filename of the package downloaded or null in case of errors
      */
     public function processPackageUpload();
+
+    /**
+     * Searches for a single, given package.
+     * If found, the packages' metadata is returned.
+     * The basic array-syntax should be used, so
+     * array("title", "version", "description", "systemid")
+     *
+     * @abstract
+     * @param $strTitle
+     * @return string|null
+     */
+    public function searchPackage($strTitle);
+
+    /**
+     * Inits the update of the passed package, of given.
+     * Therefore, the built-in method processPackgeUpload
+     * should be used.
+     *
+     * @abstract
+     * @param $strTitle
+     * @return mixed
+     */
+    public function initPackageUpdate($strTitle);
 }

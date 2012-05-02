@@ -283,16 +283,18 @@ class class_filesystem {
      *
      * @param $strSourceDir
      * @param $strTargetDir
+     * @param bool $bitOverwrite
+     *
      * @since 4.0
      */
-    public function folderCopyRecursive($strSourceDir, $strTargetDir) {
+    public function folderCopyRecursive($strSourceDir, $strTargetDir, $bitOverwrite = false) {
 
         $arrEntries = scandir(_realpath_.$strSourceDir);
         foreach($arrEntries as $strOneEntry) {
             if($strOneEntry == "." || $strOneEntry == "..")
                 continue;
 
-            if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && !is_file(_realpath_.$strTargetDir."/".$strOneEntry)) {
+            if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file(_realpath_.$strTargetDir."/".$strOneEntry) )) {
 
                 if(!is_dir(_realpath_.$strTargetDir))
                     mkdir(_realpath_.$strTargetDir);
@@ -303,7 +305,7 @@ class class_filesystem {
                 if(!is_dir(_realpath_.$strTargetDir."/".$strOneEntry))
                     mkdir(_realpath_.$strTargetDir."/".$strOneEntry);
 
-                $this->folderCopyRecursive($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry);
+                $this->folderCopyRecursive($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry, $bitOverwrite);
             }
         }
     }

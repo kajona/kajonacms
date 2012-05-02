@@ -70,7 +70,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
 
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->folderCopyRecursive($strSource, "/templates/".$strTarget);
+        $objFilesystem->folderCopyRecursive($strSource, "/templates/".$strTarget, true);
         $this->objMetadata->setStrPath("/templates/".$strTarget);
 
         $objFilesystem->folderDeleteRecursive($strSource);

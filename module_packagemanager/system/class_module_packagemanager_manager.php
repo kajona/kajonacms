@@ -121,4 +121,40 @@ class class_module_packagemanager_manager {
         return false;
 
     }
+
+    /**
+     * Searches the latest version of a given package.
+     * If found, the version itself is returned.
+     * Therefore, all providers are called in order of appearance, the
+     * first match is returned.
+     *
+     * @param interface_packagemanager_packagemanager $objPackage
+     * @return string|null
+     */
+    public function searchLatestVersion(interface_packagemanager_packagemanager $objPackage) {
+        $arrProvider = $this->getContentproviders();
+
+        foreach($arrProvider as $objOneProvider) {
+            $arrModule = $objOneProvider->searchPackage($objPackage->getObjMetadata()->getStrTitle());
+
+            if($arrModule != null && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
+                return $arrModule["version"];
+            }
+
+        }
+    }
+
+    public function updatePackage(interface_packagemanager_packagemanager $objPackage) {
+        $arrProvider = $this->getContentproviders();
+
+        foreach($arrProvider as $objOneProvider) {
+            $arrModule = $objOneProvider->searchPackage($objPackage->getObjMetadata()->getStrTitle());
+
+            if($arrModule != null && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
+
+                $objOneProvider->initPackageUpdate($arrModule["title"]);
+            }
+
+        }
+    }
 }

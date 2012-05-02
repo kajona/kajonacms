@@ -84,4 +84,32 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
 
         return null;
     }
+
+    /**
+     * Searches for a single, given package.
+     * If found, the packages' metadata is returned.
+     * The basic array-syntax should be used, so
+     * array("title", "version", "description", "systemid")
+     *
+     * @param $strTitle
+     *
+     * @return string|null
+     */
+    public function searchPackage($strTitle) {
+        return null;
+    }
+
+    /**
+     * Inits the update of the passed package, of given.
+     * Therefore, the built-in method processPackgeUpload
+     * should be used.
+     *
+     * @param $strTitle
+     *
+     * @throws class_exception
+     * @return mixed
+     */
+    public function initPackageUpdate($strTitle) {
+        throw new class_exception("method not supported", class_exception::$level_ERROR);
+    }
 }

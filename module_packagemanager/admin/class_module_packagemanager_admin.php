@@ -70,6 +70,29 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 );
             }
 
+            //search for new versions
+            $strLatestVersion = $objManager->searchLatestVersion($objHandler);
+
+            if($strLatestVersion == null) {
+                $strActions .= $this->objToolkit->listButton(
+                    getImageAdmin("icon_updateError.gif", $this->getLang("package_noversion"))
+                );
+            }
+            else {
+                //compare the version to trigger additional actions
+                if(version_compare($strLatestVersion, $objHandler->getObjMetadata()->getStrVersion(), ">")) {
+                    $strActions .= $this->objToolkit->listButton(
+                        getLinkAdmin($this->getArrModule("modul"), "initPackageUpdate", "&package=".$objHandler->getObjMetadata()->getStrPath(), $this->getLang("package_updatefound")." ".$strLatestVersion, $this->getLang("package_updatefound")." ".$strLatestVersion, "icon_update.gif" )
+                    );
+                }
+                else {
+                    $strActions .= $this->objToolkit->listButton(
+                        getImageAdmin("icon_updateDisabled.gif", $this->getLang("package_noupdate")." ".$strLatestVersion)
+                    );
+                }
+            }
+
+
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
 
@@ -156,6 +179,19 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         }
 
         return $strReturn;
+    }
+
+    /**
+     * Triggers the initial steps to start the update of a single package.
+     * @permissions edit
+     * @return string
+     */
+    protected function actionInitPackageUpdate() {
+        $strPackage = $this->getParam("package");
+        $objManager = new class_module_packagemanager_manager();
+        $objHandler = $objManager->getPackageManagerForPath($strPackage);
+        return $objManager->updatePackage($objHandler);
+
     }
 
 

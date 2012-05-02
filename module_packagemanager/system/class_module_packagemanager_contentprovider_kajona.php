@@ -19,6 +19,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
     //TODO: replace with kajona url
     private $STR_BROWSE_HOST = "";
     private $STR_BROWSE_URL = "";
+    private $STR_SEARCH_URL = "";
     private $STR_DOWNLOAD_URL = "";
 
     function __construct() {
@@ -27,6 +28,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
         if(isset($_SERVER["HTTP_HOST"])) {
             $this->STR_BROWSE_HOST  = $_SERVER["HTTP_HOST"];
             $this->STR_BROWSE_URL   = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/xml.php?module=packageserver&action=list";
+            $this->STR_SEARCH_URL   = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/xml.php?module=packageserver&action=searchPackages&title=";
             $this->STR_DOWNLOAD_URL = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/download.php";
         }
     }
@@ -113,5 +115,61 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
 
 
         return _projectpath_."/temp/".$strFilename;
+    }
+
+    /**
+     * Searches for a single, given package.
+     * If found, the packages' metadata is returned.
+     * The basic array-syntax should be used, so
+     * array("title", "version", "description", "systemid")
+     *
+     * @param $strTitle
+     *
+     * @return string|null
+     */
+    public function searchPackage($strTitle) {
+
+        $objRemoteloader = new class_remoteloader();
+        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
+        $objRemoteloader->setStrQueryParams($this->STR_SEARCH_URL.$strTitle);
+
+        $strPackages = "";
+        try {
+            $strPackages = $objRemoteloader->getRemoteContent();
+        }
+        catch(class_exception $objEx) {
+            return null;
+        }
+
+        $arrPackages = json_decode($strPackages, true);
+
+        if(count($arrPackages) > 0)
+            return $arrPackages[0];
+
+        return null;
+
+    }
+
+
+    /**
+     * Inits the update of the passed package, of given.
+     * Therefore, the built-in method processPackgeUpload
+     * should be used.
+     *
+     * @param $strTitle
+     *
+     * @return mixed
+     */
+    public function initPackageUpdate($strTitle) {
+        $arrMetadata = $this->searchPackage($strTitle);
+
+        if(isset($arrMetadata["systemid"])) {
+            $strUrl = getLinkAdminHref("packagemanager", "uploadPackage", "&provider=".__CLASS__."&systemid=".$arrMetadata["systemid"]);
+
+            $strUrl = str_replace("_webpath_", _webpath_, $strUrl);
+            $strUrl = str_replace("_indexpath_", _indexpath_, $strUrl);
+            header("Location: ".str_replace("&amp;", "&", $strUrl));
+        }
+
     }
 }

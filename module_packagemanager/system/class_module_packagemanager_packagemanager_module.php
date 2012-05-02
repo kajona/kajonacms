@@ -68,7 +68,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->folderCopyRecursive($strSource, "/core/".$strTarget);
+        $objFilesystem->folderCopyRecursive($strSource, "/core/".$strTarget, true);
         $this->objMetadata->setStrPath("/core/".$strTarget);
 
         $objFilesystem->folderDeleteRecursive($strSource);
