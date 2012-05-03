@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
     <title>pchart</title>
-    <description></description>
+    <description>pChart is another charting-engine, rendering charts on the serverside. Please respect the licence of the pChart project before making use of it.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_pchart</target>

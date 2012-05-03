@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package>
-    <title>languageswitch</title>
-    <description></description>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>element_languageswitch</title>
+    <description>A simple element to switch the portal-language. Provides a basic logic to avoid language-switches when no content is available in other languages.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_languageswitch</target>

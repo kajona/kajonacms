@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+    >
     <title>ezcchart</title>
-    <description>ezComponents charting engine.</description>
+    <description>ezComponents charting engine. Used to render charts on the server-side.</description>
     <version>3.9.1</version>
     <author>Kajona Team</author>
     <target>module_ezcchart</target>

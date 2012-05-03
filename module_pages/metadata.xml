@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
     <title>pages</title>
-    <description></description>
+    <description>Pages are the central part of information. A page is rendered in the portal and contains several elements.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_pages</target>

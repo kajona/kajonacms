@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
     <title>mediamanager</title>
-    <description></description>
+    <description>The mediamangaer is a central place to handle all kind of files. This includes images for galleries or even a download-manager. The mediamanager replaces the old download- and gallery-modules.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_mediamanager</target>

@@ -1,0 +1,44 @@
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+    <!--
+        (c) 2004-2006 by MulchProductions, www.mulchprod.de
+        (c) 2007-2012 by Kajona, www.kajona.de
+        Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+    -->
+
+    <xs:element name="package" type="packageMetadata" />
+
+
+    <xs:complexType name="packageMetadata">
+        <xs:sequence>
+            <xs:element type="xs:string" name="title" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="description" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="version" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="author" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="target" maxOccurs="1" minOccurs="1"/>
+
+            <xs:element type="typeType" name="type" maxOccurs="1" minOccurs="1" />
+            <xs:element type="boolType" name="providesInstaller" maxOccurs="1" minOccurs="1" />
+
+            <xs:element type="xs:string" name="requiredModules" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="minSystemVersion" maxOccurs="1" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+
+    <xs:simpleType name="typeType" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MODULE"/>
+            <xs:enumeration value="TEMPLATE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="boolType" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TRUE"/>
+            <xs:enumeration value="FALSE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

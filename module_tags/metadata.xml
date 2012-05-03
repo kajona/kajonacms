@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
     <title>tags</title>
-    <description></description>
+    <description>Tags are used to connect objects with keywords.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_tags</target>
