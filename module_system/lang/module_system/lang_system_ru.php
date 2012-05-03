@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 371
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -45,7 +45,6 @@ $lang["actionSystemSessions"]            = "Сессии";
 $lang["actionSystemSettings"]            = "Настройки системы";
 $lang["actionSystemTasks"]               = "Системные задачи";
 $lang["actionSystemlog"]                 = "Логфайл системы";
-$lang["actionUpdatecheck"]               = "Проверка обновлений";
 $lang["anzahltabellen"]                  = "Количество таблиц";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";

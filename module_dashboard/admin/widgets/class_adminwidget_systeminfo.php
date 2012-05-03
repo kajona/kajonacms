@@ -85,51 +85,15 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      * @return string
      */
     private function getLatestKernelVersion() {
-    	$strReturn = "";
 
-        //Fetch the xml-file of available updates
-        //To do this, use sockets, since php 5.2 url_fopen is disabled in most cases
-        $strChecksum = md5(urldecode(_webpath_)."getVersions");
-        $strQueryString = "/updates.php?action=getVersions&domain=".urlencode(_webpath_)."&checksum=".urlencode($strChecksum);
-        $strXmlVersionList = false;
+        $objManager = new class_module_packagemanager_manager();
+        $objHandler = $objManager->getPackageManagerForPath("/core/module_system/");
+        $strVersion = $objManager->searchLatestVersion($objHandler);
 
-        try {
-            $objRemoteloader = new class_remoteloader();
-            $objRemoteloader->setStrHost("updatecheck.kajona.de");
-            $objRemoteloader->setStrQueryParams($strQueryString);
-            $strXmlVersionList = $objRemoteloader->getRemoteContent();
-        }
-        catch (class_exception $objExeption) {
-            $strXmlVersionList = false;
-        }
+        if($strVersion == "")
+            $strVersion = "n.a.";
 
-        if(!$strXmlVersionList) {
-            return "n.a.";
-        }
-
-        try {
-            $objXmlParser = new class_xml_parser();
-            if($objXmlParser->loadString($strXmlVersionList)) {
-                $arrRemoteModules = $objXmlParser->getNodesAttributesAsArray("module");
-                //Do a little clean up
-                $arrCleanModules = array();
-                foreach ($arrRemoteModules as $arrOneRemoteModule) {
-                    $arrCleanModules[$arrOneRemoteModule[0]["value"]] = $arrOneRemoteModule[1]["value"];
-                }
-
-                if(key_exists("system", $arrCleanModules)) {
-                	$strReturn = $arrCleanModules["system"];
-                }
-            }
-            else
-                $strReturn .= "n.a.";
-
-        }
-        catch (class_exception $objException) {
-            $strReturn .= "n.a.";
-        }
-
-    	return $strReturn;
+        return $strVersion;
     }
 
 }

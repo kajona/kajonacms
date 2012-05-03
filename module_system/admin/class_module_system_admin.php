@@ -16,9 +16,6 @@
  */
 class class_module_system_admin extends class_admin_simple implements interface_admin {
 
-    private $strUpdateServer = "updatecheck.kajona.de";
-    private $strUpdateUrl = "/updates.php";
-
 	/**
 	 * Constructor
 	 *
@@ -45,7 +42,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "", $this->getLang("actionChangelog"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getLang("actionAspects"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("actionSystemSessions"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getLang("actionUpdatecheck"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getLang("actionAbout"), "", "", true, "adminnavi"));
 		return $arrReturn;
@@ -681,81 +677,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         return $strReturn;
     }
-
-
-    /**
-     * Looks for possible updates of the installed modules
-     *
-     * @return string
-     * @autoTestable
-     * @permissions right4
-     */
-    protected function actionUpdateCheck() {
-        $strReturn = "";
-        $strChecksum = md5(urldecode(_webpath_)."getVersions");
-        $strQueryString = $this->strUpdateUrl."?action=getVersions&domain=".urlencode(_webpath_)."&checksum=".urlencode($strChecksum);
-        $strXmlVersionList = false;
-
-        //try to load the xml-file with a list of available updates
-        try {
-            $objRemoteloader = new class_remoteloader();
-            $objRemoteloader->setStrHost($this->strUpdateServer);
-            $objRemoteloader->setStrQueryParams($strQueryString);
-            $strXmlVersionList = $objRemoteloader->getRemoteContent();
-        }
-        catch (class_exception $objExeption) {
-            $strXmlVersionList = false;
-        }
-
-        if($strXmlVersionList === false) {
-            return $this->objToolkit->warningBox($this->getLang("update_nofilefound"));
-        }
-
-        try {
-            $objXmlParser = new class_xml_parser();
-            if($objXmlParser->loadString($strXmlVersionList)) {
-                $arrRemoteModules = $objXmlParser->getNodesAttributesAsArray("module");
-                //Do a little clean up
-                $arrCleanModules = array();
-                foreach ($arrRemoteModules as $arrOneRemoteModule) {
-                    $arrCleanModules[$arrOneRemoteModule[0]["value"]] = $arrOneRemoteModule[1]["value"];
-                }
-                //Get all installed modules
-                $arrModules = class_module_system_module::getAllModules();
-                $arrHeader = array();
-                $arrHeader[] = $this->getLang("update_module_name");
-                $arrHeader[] = $this->getLang("update_module_localversion");
-                $arrHeader[] = $this->getLang("update_module_remoteversion");
-                $arrHeader[] = "";
-
-                $arrRows = array();
-                $intRowCounter = 0;
-                foreach ($arrModules as $objOneModule) {
-                    $arrRows[$intRowCounter] = array();
-                    $arrRows[$intRowCounter][] = $objOneModule->getStrName();
-                    $arrRows[$intRowCounter][] = $objOneModule->getStrVersion();
-                    $arrRows[$intRowCounter][] = (key_exists($objOneModule->getStrName(), $arrCleanModules) ? $arrCleanModules[$objOneModule->getStrName()] : "n.a." );
-                    if(key_exists($objOneModule->getStrName(), $arrCleanModules) && version_compare($objOneModule->getStrVersion(), $arrCleanModules[$objOneModule->getStrName()]) < 0)
-                        $arrRows[$intRowCounter][] = $this->getLang("update_available");
-                    else
-                        $arrRows[$intRowCounter][] = "";
-                    $intRowCounter++;
-                }
-
-                $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
-            }
-            else
-                $strReturn .= $this->objToolkit->warningBox($this->getLang("update_invalidXML"));
-
-        }
-        catch (class_exception $objException) {
-            $strReturn .= $this->objToolkit->warningBox($this->getLang("update_nodom"));
-        }
-
-        return $strReturn;
-    }
-
-
 
     /**
      * Renders the list of aspects available

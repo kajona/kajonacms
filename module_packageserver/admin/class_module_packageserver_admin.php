@@ -33,7 +33,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("actionList"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "logs", "", $this->getLang("actionListLogs"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "logs", "", $this->getLang("actionLogs"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -140,6 +140,49 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         return $strReturn;
 
     }
+
+
+    /**
+     * Show a log of all queries
+     *
+     * @return string
+     * @permissions edit
+     * @autoTestable
+     */
+    protected function actionLogs() {
+        $strReturn = "";
+
+        $intNrOfRecordsPerPage = 25;
+
+        $objLog = new class_module_packageserver_log();
+        $objArraySectionIterator = new class_array_section_iterator($objLog->getLogDataCount());
+        $objArraySectionIterator->setIntElementsPerPage($intNrOfRecordsPerPage);
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection($objLog->getLogData($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
+
+        $arrLogsRaw = $arrPageViews["elements"];
+        $arrLogs = array();
+        foreach($arrLogsRaw as $intKey => $arrOneLog) {
+            $arrLogs[$intKey][0] = dateToString(new class_date($arrOneLog["log_date"]));
+            $arrLogs[$intKey][1] = $arrOneLog["log_ip"];
+            $arrLogs[$intKey][2] = $arrOneLog["log_hostname"];
+            $arrLogs[$intKey][3] = $arrOneLog["log_query"];
+        }
+        //Create a data-table
+        $arrHeader = array();
+        $arrHeader[0] = $this->getLang("commons_date");
+        $arrHeader[1] = $this->getLang("header_ip");
+        $arrHeader[2] = $this->getLang("header_hostname");
+        $arrHeader[3] = $this->getLang("header_query");
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
+        $strReturn .= $arrPageViews["pageview"];
+
+        return $strReturn;
+    }
+
+
 
     /**
      * Generates a path-navigation

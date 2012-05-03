@@ -66,7 +66,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
 
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL);
+        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&domain=".urlencode(_webpath_));
 
         $strPackages = "";
         try {
@@ -131,7 +131,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
 
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrQueryParams($this->STR_SEARCH_URL.$strTitle);
+        $objRemoteloader->setStrQueryParams($this->STR_SEARCH_URL.$strTitle."&domain=".urlencode(_webpath_));
 
         $strPackages = "";
         try {

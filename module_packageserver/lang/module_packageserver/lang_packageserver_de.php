@@ -11,7 +11,11 @@
 
 //editable entries
 $lang["actionList"]                      = "Pakete";
+$lang["actionLogs"]                      = "Protokoll";
 $lang["actionShowInfo"]                  = "Detail-Informationen";
+$lang["header_hostname"]                 = "Remote-Host";
+$lang["header_ip"]                       = "IP";
+$lang["header_query"]                    = "Anfrage";
 $lang["modul_titel"]                     = "Paket-Server";
 $lang["pack_name"]                       = "Name des Packs:";
 $lang["package_author"]                  = "Ersteller:";

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 371
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Antal dataposter per sida";
@@ -52,7 +52,6 @@ $lang["actionSystemSessions"]            = "Sessioner";
 $lang["actionSystemSettings"]            = "Systeminställningar";
 $lang["actionSystemTasks"]               = "Systemuppgifter";
 $lang["actionSystemlog"]                 = "Systemlogg";
-$lang["actionUpdatecheck"]               = "Uppdatera-kontroll";
 $lang["anzahltabellen"]                  = "Antal tabeller";
 $lang["aspect_create"]                   = "Ny aspekt";
 $lang["aspect_default"]                  = "Standardaspekt";

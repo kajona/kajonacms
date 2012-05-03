@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 371
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Number of records per page:";
@@ -50,7 +50,6 @@ $lang["actionSystemSessions"]            = "Sessions";
 $lang["actionSystemSettings"]            = "System settings";
 $lang["actionSystemTasks"]               = "System tasks";
 $lang["actionSystemlog"]                 = "System logfile";
-$lang["actionUpdatecheck"]               = "Update-Check";
 $lang["anzahltabellen"]                  = "Number of tables";
 $lang["aspect_create"]                   = "New aspect";
 $lang["aspect_delete_question"]          = "Do you really want to delete the aspect &quot;<b>%%element_name%%</b>&quot;?";
@@ -292,5 +291,5 @@ $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong val
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Settings", 5 => "Systemtasks", 6 => "Systemlog", 7 => "Updates", 8 => "Aspects");
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Settings", 5 => "Systemtasks", 6 => "Systemlog", 7 => "", 8 => "Aspects");
 $lang["permissions_root_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Universal 1", 5 => "Universal 2", 6 => "Universal 3", 7 => "Universal 4", 8 => "Universal 5");
