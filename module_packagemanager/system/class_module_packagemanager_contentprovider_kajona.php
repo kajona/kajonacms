@@ -84,7 +84,16 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
                 getLinkAdmin("packagemanager", "uploadPackage", "provider=".__CLASS__."&systemid=".$arrOnePackage["systemid"], $objLang->getLang("package_install", "packagemanager"), $objLang->getLang("package_install", "packagemanager"), "icon_downloads.gif")
             );
 
-            $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin("icon_module.gif"), $strAction, $intI++, $arrOnePackage["version"], $arrOnePackage["description"]);
+
+            $strIcon = "icon_module.gif";
+            if($arrOnePackage["type"] == "TEMPLATE")
+                $strIcon = "icon_dot.gif";
+
+
+            $arrOnePackage["version"] = $objLang->getLang("type_".$arrOnePackage["type"], "packagemanager").", V ".$arrOnePackage["version"];
+
+
+            $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin($strIcon), $strAction, $intI++, $arrOnePackage["version"], $arrOnePackage["description"]);
         }
 
 

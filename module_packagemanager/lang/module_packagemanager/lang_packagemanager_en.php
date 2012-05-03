@@ -55,3 +55,5 @@ $lang["provider_local_file"]             = "File:";
 $lang["provider_local_uploadhint"]       = "Upload ZIP-Packages to the system. Packages may be templates, modules or elements. Packages have to contain a file metadata.xml.";
 $lang["provider_select"]                 = "Select provider";
 $lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
+$lang["type_MODULE"]                     = "Module-package";
+$lang["type_TEMPLATE"]                   = "Template-pack";

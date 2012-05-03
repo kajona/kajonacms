@@ -14,7 +14,7 @@
  * @since 4.0
  * @package module_packagemanager
  */
-class class_module_packagemanager_metadata implements interface_admin_listable{
+class class_module_packagemanager_metadata implements interface_admin_listable {
 
     private $strTitle;
     private $strTarget;
@@ -40,7 +40,11 @@ class class_module_packagemanager_metadata implements interface_admin_listable{
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_module.gif";
+        if($this->getStrType() == "TEMPLATE")
+            return "icon_dot.gif";
+        else
+            return "icon_module.gif";
+
     }
 
     public function getStrDisplayName() {
@@ -53,7 +57,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable{
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return $this->getStrVersion();
+        return class_carrier::getInstance()->getObjLang()->getLang("type_".$this->getStrType(), "packagemanager").", V ".$this->getStrVersion();
     }
 
     /**
