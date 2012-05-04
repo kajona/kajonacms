@@ -142,8 +142,19 @@ class class_module_packagemanager_manager {
             }
 
         }
+
+        return null;
     }
 
+    /**
+     * Triggers the update of the passed package.
+     * It is evaluated, if a new version is available.
+     * The provider itself is called via initPackageUpdate, so it's to providers choice
+     * to decide what action to take.
+     *
+     * @param interface_packagemanager_packagemanager $objPackage
+     * @return mixed
+     */
     public function updatePackage(interface_packagemanager_packagemanager $objPackage) {
         $arrProvider = $this->getContentproviders();
 

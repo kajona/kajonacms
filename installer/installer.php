@@ -43,7 +43,7 @@ class class_installer {
 	 *
 	 * @var class_lang
 	 */
-	private $objTexte;
+	private $objLang;
 
 	/**
 	 * session
@@ -57,21 +57,21 @@ class class_installer {
 	    //start up system
 		class_carrier::getInstance();
 		$this->objTemplates = class_carrier::getInstance()->getObjTemplate();
-		$this->objTexte = class_carrier::getInstance()->getObjLang();
+		$this->objLang = class_carrier::getInstance()->getObjLang();
 		//init session-support
 		$this->objSession = class_carrier::getInstance()->getObjSession();
 
 		//set a different language?
 		if(issetGet("language")) {
 		    if(in_array(getGet("language"), explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"))))
-		        $this->objTexte->setStrTextLanguage(getGet("language"));
+		        $this->objLang->setStrTextLanguage(getGet("language"));
 		        //and save to a cookie
         	    $objCookie = new class_cookie();
         	    $objCookie->setCookie("adminlanguage", getGet("language"));
 		}
         else {
 		  //init correct text-file handling as in admins
-		  $this->objTexte->setStrTextLanguage($this->objSession->getAdminLanguage(true));
+		  $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
 
         $this->STR_ORIG_CONFIG_FILE = _corepath_."/module_system/system/config/config.php";
@@ -657,7 +657,7 @@ class class_installer {
      * @deprecated use getLang instead
 	 */
 	public function getText($strKey) {
-	    return $this->objTexte->getLang($strKey, "system");
+	    return $this->objLang->getLang($strKey, "system");
 	}
 
     /**
@@ -667,7 +667,7 @@ class class_installer {
      * @return string
      */
     public function getLang($strKey) {
-        return $this->objTexte->getLang($strKey, "system");
+        return $this->objLang->getLang($strKey, "system");
     }
 }
 

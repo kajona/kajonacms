@@ -67,7 +67,7 @@ interface interface_packagemanager_contentprovider {
     public function searchPackage($strTitle);
 
     /**
-     * Inits the update of the passed package, of given.
+     * Inits the update of the passed package, if given.
      * Therefore, the built-in method processPackgeUpload
      * should be used.
      *
