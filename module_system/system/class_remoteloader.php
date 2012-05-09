@@ -187,7 +187,7 @@ class class_remoteloader {
 		$strReturn = "";
 
 		//request in list of supported protocols?
-		if($this->strProtocolHeader == "http://") {
+		if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
 
 	        try {
 	            $objSocket = new class_socket($this->strHost, ($this->intPort > 0 ? $this->intPort : 80));
@@ -238,51 +238,54 @@ class class_remoteloader {
 		//request in list of supported protocols?
 		if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
 
-	        try {
-	           $intErrorNumber = "";
-	           $strErrorString = "";
+            try {
+                $intErrorNumber = "";
+                $strErrorString = "";
 
-	           $strProtocolAdd = "";
-	           if($this->strProtocolHeader == "http://")
-	               $strProtocolAdd = "tcp://";
-	           if($this->strProtocolHeader == "https://")
-	               $strProtocolAdd = "tls://";
+                $strProtocolAdd = "";
+                if($this->strProtocolHeader == "http://")
+                    $strProtocolAdd = "tcp://";
+                if($this->strProtocolHeader == "https://")
+                    $strProtocolAdd = "tls://";
 
 
-               $arrUrl=parse_url($this->strProtocolHeader.$this->strHost);
-               $objRemoteResource = @fsockopen($strProtocolAdd.$arrUrl['host'],($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
+                $arrUrl=parse_url($this->strProtocolHeader.$this->strHost);
+                $objRemoteResource = @fsockopen($strProtocolAdd.$arrUrl['host'],($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
 
-    		   if(is_resource($objRemoteResource)){
-    		      fwrite($objRemoteResource,"GET ".$arrUrl['path'].$this->strQueryParams." HTTP/1.0\r\n");
-    		      fwrite($objRemoteResource,"Host: ".$arrUrl['host']."\r\n");
-    		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");
+                if(!isset($arrUrl['path']))
+                    $arrUrl['path'] = "";
 
-    		      while(!feof($objRemoteResource)){
-    		         $strReturn .= fgets($objRemoteResource,1024);
-    		      }
-    		      fclose($objRemoteResource);
-    		   }
+                if(is_resource($objRemoteResource)) {
+                    fwrite($objRemoteResource,"GET ".$arrUrl['path'].$this->strQueryParams." HTTP/1.0\r\n");
+                    fwrite($objRemoteResource,"Host: ".$arrUrl['host']."\r\n");
+                    fwrite($objRemoteResource,"Connection: close\r\n\r\n");
 
-          	   if ($intErrorNumber!=0)
-          	       return false;
+                    while(!feof($objRemoteResource)){
+                        $strReturn .= fgets($objRemoteResource,1024);
+                    }
+                    fclose($objRemoteResource);
+                }
 
-          	   if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
-	               $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
-	           }
+                if ($intErrorNumber!=0)
+                    return false;
 
-	           $strReturn = trim($strReturn);
-	           if(uniStrpos($strReturn, "<") !== false) {
-	           	   $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
-	           }
+                if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
+                    $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
+                }
 
-	           //and, if given, remove the last 0
-	           if(uniSubstr($strReturn, -1) == "0")
-	               $strReturn = uniSubstr($strReturn, 0, -1);
+                $strReturn = trim($strReturn);
+                if(uniStrpos($strReturn, "<") !== false) {
+                    $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
+                }
 
-	        }
-	        catch (class_exception $objException) {
-	            $strReturn = false;
-	        }
+                //and, if given, remove the last 0
+                if(uniSubstr($strReturn, -1) == "0")
+                    $strReturn = uniSubstr($strReturn, 0, -1);
+
+            }
+            catch (class_exception $objException) {
+                $strReturn = false;
+            }
 
 		}
 		else {

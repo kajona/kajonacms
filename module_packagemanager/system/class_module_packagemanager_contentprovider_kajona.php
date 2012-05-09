@@ -55,6 +55,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
      * provider = class_name
      * The provider will be called using the processPackageUpload method.
      *
+     * @throws class_exception
      * @return string
      */
     public function renderPackageList() {
@@ -77,6 +78,9 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
         }
 
         $arrPackages = json_decode($strPackages, true);
+
+        if($arrPackages == null)
+            throw new class_exception("Failed to load remote-packages:  ".strip_tags($strPackages), class_exception::$level_ERROR);
 
         $intI = 0;
         foreach($arrPackages as $arrOnePackage) {

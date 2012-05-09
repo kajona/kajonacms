@@ -231,7 +231,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         if($objProvider == null)
             return $this->getLang("commons_error_permissions");
 
-        return $objProvider->renderPackageList();
+        try {
+            $strReturn = $objProvider->renderPackageList();
+        }
+        catch (class_exception $objEx) {
+            $strReturn = $this->objToolkit->warningBox($this->getLang("package_remote_errorloading")."<br />".$objEx->getMessage());
+        }
+        return $strReturn;
     }
 
     /**

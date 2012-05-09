@@ -132,8 +132,6 @@ class class_exception extends Exception {
 
             }
             print $strErrormessage;
-	        //close remaining txs
-	        class_carrier::getInstance()->getObjDB()->__destruct();
 	        //Execution has to be stopped here!
 	        die();
         }
@@ -159,10 +157,8 @@ class class_exception extends Exception {
         	        $strErrormessage .= "</div></body></html>";
                 }
     	        print $strErrormessage;
-    	        //close remaining txs
-                class_carrier::getInstance()->getObjDB()->__destruct();
     	        //if error was displayed, stop execution
-    	        die();
+//    	        die();
             }
         }
 

@@ -19,14 +19,15 @@ class class_zip {
 
     /**
      *
-     * @var class ZipArchive
+     * @var ZipArchive ZipArchive
      */
     private $objArchive = null;
 
-	/**
-	 * Constructor
-	 *
-	 */
+    /**
+     * Constructor
+     *
+     * @throws class_exception
+     */
 	public function __construct() {
         if(!class_exists("ZipArchive"))
             throw new class_exception("current installation has no support for ZipArchive", class_exception::$level_ERROR);

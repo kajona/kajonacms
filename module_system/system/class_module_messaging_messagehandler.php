@@ -39,7 +39,7 @@ class class_module_messaging_messagehandler {
      * If the list of recipients containes a group, the message is duplicated for each member.
      *
      * @param string $strContent
-     * @param class_module_user_group[]|class_module_user_user[] $arrRecipients
+     * @param class_module_user_group[]|class_module_user_user[]|class_module_user_group|class_module_user_user $arrRecipients
      * @param interface_messageprovider $objProvider
      * @return bool
      */
