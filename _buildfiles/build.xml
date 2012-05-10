@@ -173,6 +173,7 @@
 				<include name="module_navigation/*/**"/>
 				<include name="module_pages/*/**"/>
 				<include name="module_samplecontent/*/**"/>
+				<include name="module_packagemanager/*/**"/>
 				<include name="module_system/**"/>
 				<include name="*.php"/>
 			</fileset>
