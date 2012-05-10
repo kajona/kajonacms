@@ -13,6 +13,7 @@
  * @author sidler@mulchprod.de
  */
 class class_template {
+
 	private $arrCacheTemplates = array();
 	private $arrCacheTemplateSections = array();
 
@@ -20,9 +21,10 @@ class class_template {
 
 	private static $objTemplate = null;
 
-    //enable this cache on high-performance environments.
-    //since template-caching can be very memory-consumptive, it is disabled by default.
-    private $bitSessionCacheEnabled = false;
+    /**
+     * @var class_apc_cache
+     */
+    private $objApcCache;
 
 	/**
 	 * Constructor
@@ -31,26 +33,19 @@ class class_template {
 	private function __construct() 	{
 
 
-        //any caches to load from session?
-        $objSession = class_session::getInstance();
-        if($this->bitSessionCacheEnabled) {
-            $this->arrCacheTemplates = $objSession->getSession("templateSessionCacheTemplate");
-            if($this->arrCacheTemplates === false)
-                $this->arrCacheTemplates = array();
+        $this->objApcCache = class_apc_cache::getInstance();
 
-            $this->arrCacheTemplateSections = $objSession->getSession("templateSessionCacheTemplateSections");
-            if($this->arrCacheTemplateSections === false)
-                $this->arrCacheTemplateSections = array();
-        }
+        //any caches to load from session?
+
+        $this->arrCacheTemplates = $this->objApcCache->getValue("templateSessionCacheTemplate", $this->arrCacheTemplates);
+        $this->arrCacheTemplateSections = $this->objApcCache->getValue("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections);
 
 	}
 
     public function __destruct() {
-    	//save cache to session
-        if($this->bitSessionCacheEnabled) {
-            class_session::getInstance()->setSession("templateSessionCacheTemplate", $this->arrCacheTemplates);
-            class_session::getInstance()->setSession("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections);
-        }
+    	//save cache to apc
+        $this->objApcCache->addValue("templateSessionCacheTemplate", $this->arrCacheTemplates, class_config::getInstance()->getConfig("templatecachetime"));
+        $this->objApcCache->addValue("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections, class_config::getInstance()->getConfig("templatecachetime"));
     }
 
 
@@ -275,8 +270,23 @@ class class_template {
      * @param string $strIdentifier
      * @param string $strPlaceholdername
      * @return bool
+     * @deprecated replaced by containsPlaceholder
+     * @see class_template::containsPlaceholder
      */
     public function containesPlaceholder($strIdentifier, $strPlaceholdername) {
+        return $this->containsPlaceholder($strIdentifier, $strPlaceholdername);
+    }
+
+
+    /**
+     * Checks if the template referenced by the identifier contains the placeholder provided
+     * by the second param.
+     *
+     * @param string $strIdentifier
+     * @param string $strPlaceholdername
+     * @return bool
+     */
+    public function containsPlaceholder($strIdentifier, $strPlaceholdername) {
         $arrElements = $this->getElements($strIdentifier);
         foreach($arrElements as $arrSinglePlaceholder)
             if($arrSinglePlaceholder["placeholder"] == $strPlaceholdername)

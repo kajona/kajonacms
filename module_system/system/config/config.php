@@ -47,6 +47,10 @@
     $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers
                                                                                //are queried in the order of appearance. The list is comma-separated, no blanks allowed.
 
+
+    $config['templatecachetime']    = 30;                                      //Number of seconds templates are cached. Reduce this amount during development (probably
+                                                                               //changing the templates a lot) and set it to a high value as soon as the website is in production. Requires APC.
+
 //--system settings -------------------------------------------------------------------------------------
 
     //Debug options

@@ -61,8 +61,6 @@ class class_resourceloader {
 
     }
 
-    private function __clone() {
-    }
 
 
     /**

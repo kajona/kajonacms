@@ -67,19 +67,28 @@ class class_apc_cache  {
 
     /**
      * Fetches a value from the cache
+     *
      * @param $strKey
+     * @param bool|mixed $objDefaultValue The value to be returned in case the key is not found in the store.
+     *
      * @return bool|mixed false if the entry is not existing
      */
-    public function getValue($strKey) {
+    public function getValue($strKey, &$objDefaultValue = false) {
         $strKey = $this->strSystemKey.$strKey;
         if(!$this->bitAPCInstalled) {
             if(isset(self::$arrFallbackCache[$strKey]))
                 return self::$arrFallbackCache[$strKey];
             else
-                return false;
+                return $objDefaultValue;
         }
 
-        return apc_fetch($strKey);
+        $bitSuccess = null;
+        $mixedValue = apc_fetch($strKey, $bitSuccess);
+
+        if($bitSuccess === false)
+            return $objDefaultValue;
+        else
+            return $mixedValue;
     }
 
     public function flushCache() {

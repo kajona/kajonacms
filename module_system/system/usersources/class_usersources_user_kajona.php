@@ -303,7 +303,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     /**
      * The immutable password from the database.
-     * @return type
+     * @return string
      */
     public function getStrFinalPass() {
         return $this->strFinalPass;

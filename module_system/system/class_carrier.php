@@ -45,9 +45,6 @@ class class_carrier {
 	private function __construct() {
 	}
 
-    private function __clone() {
-    }
-
 	/**
 	 * Method to get an instance of class_carrier though the constructor is private
 	 *

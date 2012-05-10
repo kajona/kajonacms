@@ -16,6 +16,9 @@
  */
 class class_usersources_source_kajona  implements interface_usersources_usersource {
 
+
+    private static $arrUserCache = array();
+
     private $objDB;
 
     public function __construct() {
@@ -26,7 +29,7 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
      * Tries to authenticate a user with the given credentials.
      * The password is unencrypted, each source should take care of its own encryption.
      *
-     * @param interface_usersources_user $objUser
+     * @param interface_usersources_user|class_usersources_user_kajona $objUser
      * @param $strPassword
      * @return bool
      */
@@ -97,11 +100,17 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
      * @return interface_usersources_user or null
 	 */
     public function getUserById($strId) {
+
+        if(isset(self::$arrUserCache[$strId]))
+            return self::$arrUserCache[$strId];
+
         $strQuery = "SELECT user_id FROM "._dbprefix_."user_kajona  WHERE user_id = ? ";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
-        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"]))
-            return new class_usersources_user_kajona($arrIds["user_id"]);
+        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
+            self::$arrUserCache[$strId] = new class_usersources_user_kajona($arrIds["user_id"]);
+            return self::$arrUserCache[$strId];
+        }
 
 		return null;
     }
@@ -118,8 +127,13 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
         $strQuery = "SELECT user_id FROM "._dbprefix_."user  WHERE user_username = ? AND user_subsystem = 'kajona'";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
-        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"]))
-            return new class_usersources_user_kajona($arrIds["user_id"]);
+        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
+
+            if(!isset(self::$arrUserCache[$arrIds["user_id"]]))
+                self::$arrUserCache[$arrIds["user_id"]] = new class_usersources_user_kajona($arrIds["user_id"]);
+
+            return self::$arrUserCache[$arrIds["user_id"]];
+        }
 
 		return null;
     }
@@ -133,8 +147,10 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
      * @return string
      */
     public static function encryptPassword($strPassword, $bitMD5Encryption = false) {
-        if($bitMD5Encryption) //TODO: trigger warning message in logfile
+        if($bitMD5Encryption) {
+            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("usage of old md5-encrypted password!", class_logger::$levelWarning);
             return md5($strPassword);
+        }
 
         return sha1($strPassword);
     }
