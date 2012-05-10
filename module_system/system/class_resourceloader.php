@@ -21,16 +21,22 @@
  */
 class class_resourceloader {
 
+    private $strModulesCacheFile = "";
+    private $strTemplatesCacheFile = "";
+    private $strFoldercontentCacheFile = "";
+    private $strFoldercontentLangFile = "";
+
     /**
      * @var class_resourceloader
      */
     private static $objInstance = null;
 
     private $arrModules = array();
-
-    //FIXME: caches may be moved to the session/apc. validate if this makes sense. (invalidation, size, ...)
     private $arrTemplates = array();
     private $arrFoldercontent = array();
+    private $arrLangfiles = array();
+
+    private $bitCacheSaveRequired = false;
 
 
     /**
@@ -50,18 +56,56 @@ class class_resourceloader {
      * Constructor, initializes the internal fields
      */
     private function __construct() {
-        $this->arrModules = scandir(_corepath_);
 
-        $this->arrModules = array_filter(
-            $this->arrModules,
-            function($strValue) {
-                return preg_match("/(module|element|_)+.*/i", $strValue);
-            }
-        );
+        $this->strModulesCacheFile          = _realpath_."/project/temp/modules.cache";
+        $this->strTemplatesCacheFile        = _realpath_."/project/temp/templates.cache";
+        $this->strFoldercontentCacheFile    = _realpath_."/project/temp/foldercontent.cache";
+        $this->strFoldercontentLangFile     = _realpath_."/project/temp/lang.cache";
+
+        if(is_file($this->strModulesCacheFile)) {
+            $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
+            $this->arrTemplates = unserialize(file_get_contents($this->strTemplatesCacheFile));
+            $this->arrFoldercontent = unserialize(file_get_contents($this->strFoldercontentCacheFile));
+            $this->arrLangfiles = unserialize(file_get_contents($this->strFoldercontentLangFile));
+        }
+        else {
+
+            $this->arrModules = scandir(_corepath_);
+
+            $this->arrModules = array_filter(
+                $this->arrModules,
+                function($strValue) {
+                    return preg_match("/(module|element|_)+.*/i", $strValue);
+                }
+            );
+        }
 
     }
 
+    /**
+     * Stores the currently cached entries back to the filesystem - if required.
+     */
+    public function __destruct() {
 
+        if($this->bitCacheSaveRequired) {
+            file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
+            file_put_contents($this->strTemplatesCacheFile, serialize($this->arrTemplates));
+            file_put_contents($this->strFoldercontentCacheFile, serialize($this->arrFoldercontent));
+            file_put_contents($this->strFoldercontentLangFile, serialize($this->arrLangfiles));
+        }
+    }
+
+    /**
+     * Deletes all cached resource-information,
+     * so the .cache-files.
+     */
+    public function flushCache() {
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->fileDelete($this->strModulesCacheFile);
+        $objFilesystem->fileDelete($this->strTemplatesCacheFile);
+        $objFilesystem->fileDelete($this->strFoldercontentCacheFile);
+        $objFilesystem->fileDelete($this->strFoldercontentLangFile);
+    }
 
     /**
      * Looks up the real filename of a template passed.
@@ -75,6 +119,8 @@ class class_resourceloader {
         $strTemplateName = removeDirectoryTraversals($strTemplateName);
         if(isset($this->arrTemplates[$strTemplateName]))
             return $this->arrTemplates[$strTemplateName];
+
+        $this->bitCacheSaveRequired = true;
 
         $strFilename = null;
         //first try: load the file in the current template-pack
@@ -97,6 +143,8 @@ class class_resourceloader {
 
         if($strFilename === null)
             throw new class_exception("Required file ".$strTemplateName." could not be mapped on the filesystem.", class_exception::$level_ERROR);
+
+        $this->arrTemplates[$strTemplateName] = $strFilename;
 
         return $strFilename;
     }
@@ -139,6 +187,8 @@ class class_resourceloader {
             }
         }
 
+
+
         return $arrReturn;
     }
 
@@ -153,6 +203,11 @@ class class_resourceloader {
      */
     public function getLanguageFiles($strFolder) {
         $arrReturn = array();
+
+        if(isset($this->arrLangfiles[$strFolder]))
+            return $this->arrLangfiles[$strFolder];
+
+        $this->bitCacheSaveRequired = true;
 
         //loop all given modules
         foreach($this->arrModules as $strSingleModule) {
@@ -185,6 +240,8 @@ class class_resourceloader {
             }
         }
 
+        $this->arrLangfiles[$strFolder] = $arrReturn;
+
         return $arrReturn;
     }
 
@@ -199,10 +256,12 @@ class class_resourceloader {
      */
     public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false) {
         $arrReturn = array();
-        $strCachename = md5($strFolder.implode(",", $arrExtensionFilter));
+        $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
         if(isset($this->arrFoldercontent[$strCachename]))
             return $this->arrFoldercontent[$strCachename];
+
+        $this->bitCacheSaveRequired = true;
 
         //loop all given modules
         foreach($this->arrModules as $strSingleModule) {
@@ -284,7 +343,6 @@ class class_resourceloader {
         foreach($this->arrModules as $strSingleModule) {
             if(is_file(_corepath_."/".$strSingleModule."/".$strFile)) {
                 return "/core/".$strSingleModule."/".$strFile;
-
             }
         }
 

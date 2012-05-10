@@ -312,9 +312,12 @@ class class_module_navigation_point extends class_model implements interface_mod
         $objLanguage = new class_module_languages_language();
         $arrElements =  class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
 
+        $strOldPageName = $objPage->getParam("page");
+
         foreach($arrElements as $objOneElementOnPage) {
             //Build the class-name for the object
             $strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
+
             /** @var  class_element_portal $objElement  */
             $objElement = new $strClassname($objOneElementOnPage);
             $objElement->setParam("page", $objPage->getStrName());
@@ -325,6 +328,8 @@ class class_module_navigation_point extends class_model implements interface_mod
             }
 
         }
+
+        $objPage->setParam("page", $strOldPageName);
 
         return $arrReturn;
     }

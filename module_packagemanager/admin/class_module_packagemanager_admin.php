@@ -167,6 +167,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $objFilesystem->fileDelete($strFile);
 
                 $strReturn .= $objHandler->move2Filesystem();
+
+                class_resourceloader::getInstance()->flushCache();
             }
             else
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
