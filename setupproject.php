@@ -120,6 +120,10 @@ class class_project_setup {
         </class>
     </classloader>
 
+
+   If you enabled resource-caching in the config.php make sure to delete all .cache files under /project/temp
+   when chaning this file.
+
 -->
 <classloader
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

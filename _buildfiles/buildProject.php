@@ -26,9 +26,11 @@ class Testmanager {
         echo "creating modified config.php...\n";
         echo "using db-driver ".DB_DRIVER."...\n";
         $strConfigfile = file_get_contents(_realpath_."/core/module_system/system/config/config.php");
-        $strConfigfile = str_replace(array("%%defaulthost%%", "%%defaultusername%%", "%%defaultpassword%%", "%%defaultdbname%%", "%%defaultprefix%%", "%%defaultdriver%%", "%%defaultport%%"),
+        $strConfigfile = str_replace(
+            array("%%defaulthost%%", "%%defaultusername%%", "%%defaultpassword%%", "%%defaultdbname%%", "%%defaultprefix%%", "%%defaultdriver%%", "%%defaultport%%"),
             array("localhost",        DB_USER,                DB_PASS,              DB_DB,                  "autotest_",        DB_DRIVER,             ""),
-            $strConfigfile) ;
+            $strConfigfile
+        );
 
         $strSearch = "/\[\'debuglevel\'\]\s* = 0/";
         $strReplace = "['debuglevel'] = 1";

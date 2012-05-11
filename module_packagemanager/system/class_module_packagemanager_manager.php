@@ -169,5 +169,6 @@ class class_module_packagemanager_manager {
         }
 
         class_resourceloader::getInstance()->flushCache();
+        class_classloader::getInstance()->flushCache();
     }
 }

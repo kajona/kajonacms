@@ -17,6 +17,12 @@
  */
 class class_classloader {
 
+
+    private $strModulesCacheFile = "";
+    private $strClassesCacheFile = "";
+
+    private $bitCacheSaveRequired = false;
+
     /**
      * @var class_classloader
      */
@@ -28,7 +34,6 @@ class class_classloader {
      * Cached index of class-files available
      *
      * @var String[]
-     * @todo: could be moved to the session or an apc var
      */
     private $arrFiles = array();
 
@@ -52,21 +57,51 @@ class class_classloader {
      */
     private function __construct() {
 
-        $this->arrModules = scandir(_corepath_);
 
-        $this->arrModules = array_filter(
-            $this->arrModules,
-            function($strValue) {
-                return preg_match("/(module|element|_)+.*/i", $strValue);
-            }
-        );
+        $this->strModulesCacheFile          = _realpath_."/project/temp/modules.cache";
+        $this->strClassesCacheFile          = _realpath_."/project/temp/classes.cache";
 
-        $this->indexAvailableCodefiles();
-        $this->loadClassloaderConfig();
+        if(is_file($this->strModulesCacheFile)) {
+            $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
+            $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
+        }
+        else {
+
+            $this->arrModules = scandir(_corepath_);
+
+            $this->arrModules = array_filter(
+                $this->arrModules,
+                function($strValue) {
+                    return preg_match("/(module|element|_)+.*/i", $strValue);
+                }
+            );
+
+            $this->indexAvailableCodefiles();
+            $this->loadClassloaderConfig();
+
+            $this->bitCacheSaveRequired = true;
+        }
 
     }
 
-    private function __clone() {
+    /**
+     * Stores the cached structures to file - if enabled and required
+     */
+    public function __destruct() {
+        if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+            file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
+            file_put_contents($this->strClassesCacheFile, serialize($this->arrFiles));
+        }
+    }
+
+    /**
+     * Flushes the chache-files.
+     * Use this method if you added new modules / classes.
+     */
+    public function flushCache() {
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->fileDelete($this->strModulesCacheFile);
+        $objFilesystem->fileDelete($this->strClassesCacheFile);
     }
 
     /**
@@ -171,6 +206,11 @@ class class_classloader {
 
         return false;
 
+    }
+
+
+    public function getArrModules() {
+        return $this->arrModules;
     }
 
 }

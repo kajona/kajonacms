@@ -13,7 +13,7 @@
     There's no need to change anything in this file.
     All values and settings may be overridden by placing them in the projects' config-file at
 
-    /project/system/conig.php
+    /project/system/config.php
 
     A minimal config-file will be created during the installation of the system.
 
@@ -48,8 +48,13 @@
                                                                                //are queried in the order of appearance. The list is comma-separated, no blanks allowed.
 
 
-    $config['templatecachetime']    = 30;                                      //Number of seconds templates are cached. Reduce this amount during development (probably
-                                                                               //changing the templates a lot) and set it to a high value as soon as the website is in production. Requires APC.
+    $config['templatecachetime']    = 10;                                      //Number of seconds templates are cached. Cached entries are shared between sessions. Reduce this amount during
+                                                                               //development (probably changing the templates a lot) and set it to a high value as soon as the website is in
+                                                                               //production. Requires APC. Attention: 0 = infinite!
+
+    $config['resourcecaching']      = false;                                   //If enabled, the resource- and class-loader save their meta-information to the filesystem. The cache-files will
+                                                                               //be stored under /project/temp and may be deleted without consequences. The folder needs to be writable.
+                                                                               //Disable caching during development (and remove the cache-files), enable on production sites.
 
 //--system settings -------------------------------------------------------------------------------------
 
@@ -75,35 +80,12 @@
 
 //--database access -------------------------------------------------------------------------------------
 
-switch($_SERVER['SERVER_NAME']) {
 
-    case "aquarium":
-    case "terrarium":
-    case "mango":
+    $config['dbhost']               = "%%defaulthost%%";                       //Server name
+    $config['dbusername']           = "%%defaultusername%%";                   //Username
+    $config['dbpassword']           = "%%defaultpassword%%";                   //Password
+    $config['dbname']               = "%%defaultdbname%%";                     //Database name
+    $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysqli, postgres, sqlite3, oci8
+    $config['dbprefix']             = "%%defaultprefix%%";                     //table-prefix
+    $config['dbport']               = "%%defaultport%%";                       //Database port, default: ""
 
-        //Database-Access
-        $config['dbhost']               = "localhost";                             //Server name
-        $config['dbusername']           = "kajona_v4";                             //Username
-        $config['dbpassword']           = "kajona_v4";                             //Password
-        $config['dbname']               = "kajona_v4";                             //Database name
-        $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3, oci8
-        $config['dbprefix']             = "kajona_";                               //table-prefix
-        $config['dbport']               = "";                                      //Database port, default: ""
-
-        break;
-
-
-    default:
-
-        //Database-Access
-        $config['dbhost']               = "%%defaulthost%%";                       //Server name
-        $config['dbusername']           = "%%defaultusername%%";                   //Username
-        $config['dbpassword']           = "%%defaultpassword%%";                   //Password
-        $config['dbname']               = "%%defaultdbname%%";                     //Database name
-        $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysqli, postgres, sqlite3, oci8
-        $config['dbprefix']             = "%%defaultprefix%%";                     //table-prefix
-        $config['dbport']               = "%%defaultport%%";                       //Database port, default: ""
-
-        break;
-
-}

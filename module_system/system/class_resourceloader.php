@@ -21,7 +21,6 @@
  */
 class class_resourceloader {
 
-    private $strModulesCacheFile = "";
     private $strTemplatesCacheFile = "";
     private $strFoldercontentCacheFile = "";
     private $strFoldercontentLangFile = "";
@@ -57,27 +56,17 @@ class class_resourceloader {
      */
     private function __construct() {
 
-        $this->strModulesCacheFile          = _realpath_."/project/temp/modules.cache";
+
         $this->strTemplatesCacheFile        = _realpath_."/project/temp/templates.cache";
         $this->strFoldercontentCacheFile    = _realpath_."/project/temp/foldercontent.cache";
         $this->strFoldercontentLangFile     = _realpath_."/project/temp/lang.cache";
 
-        if(is_file($this->strModulesCacheFile)) {
-            $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
+        $this->arrModules = class_classloader::getInstance()->getArrModules();
+
+        if(is_file($this->strTemplatesCacheFile)) {
             $this->arrTemplates = unserialize(file_get_contents($this->strTemplatesCacheFile));
             $this->arrFoldercontent = unserialize(file_get_contents($this->strFoldercontentCacheFile));
             $this->arrLangfiles = unserialize(file_get_contents($this->strFoldercontentLangFile));
-        }
-        else {
-
-            $this->arrModules = scandir(_corepath_);
-
-            $this->arrModules = array_filter(
-                $this->arrModules,
-                function($strValue) {
-                    return preg_match("/(module|element|_)+.*/i", $strValue);
-                }
-            );
         }
 
     }
@@ -87,8 +76,7 @@ class class_resourceloader {
      */
     public function __destruct() {
 
-        if($this->bitCacheSaveRequired) {
-            file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
+        if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
             file_put_contents($this->strTemplatesCacheFile, serialize($this->arrTemplates));
             file_put_contents($this->strFoldercontentCacheFile, serialize($this->arrFoldercontent));
             file_put_contents($this->strFoldercontentLangFile, serialize($this->arrLangfiles));
@@ -101,7 +89,6 @@ class class_resourceloader {
      */
     public function flushCache() {
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete($this->strModulesCacheFile);
         $objFilesystem->fileDelete($this->strTemplatesCacheFile);
         $objFilesystem->fileDelete($this->strFoldercontentCacheFile);
         $objFilesystem->fileDelete($this->strFoldercontentLangFile);
