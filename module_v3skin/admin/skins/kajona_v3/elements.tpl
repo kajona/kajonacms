@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: elements.tpl 4413 2012-01-03 19:38:11Z sidler $											*
+*	$Id$											*
 ********************************************************************************************************/
 
 This skin-file is used for the Kajona v3 admin skin and can be used as a sample file to create
