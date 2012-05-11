@@ -283,6 +283,7 @@
 		     	        --jdepend-chart='${basedir}${buildPath}/graph/10-dependencies.svg'
 		     			--summary-xml='${basedir}${buildPath}/logs/pdepend.xml'
 		     	        --overview-pyramid='${basedir}${buildPath}/graph/11-software-metrics-pyramid.svg'
+		     	        --ignore=${basedir}${projectPath}/core/module_ezcchart/system/ezcomponents,${basedir}${projectPath}/core/module_pchart/system/pchart,${basedir}${projectPath}/core/module_system/system/tcpdf,${basedir}${projectPath}/core/module_system/system/phpexcel
 		     			 . "/>
 		 </exec>
 	</target>
