@@ -221,6 +221,41 @@ abstract class class_element_admin extends class_admin {
 		return $this->getArrModule("table");
 	}
 
+    /**
+     * The label of the first config-value.
+     * Overwrite this method if the element makes use of a config-value.
+     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * out of the admin-/portal-element-instance directly.
+     *
+     * @return string
+     */
+    public function getConfigVal1Name() {
+        return "";
+    }
+
+    /**
+     * The label of the second config-value.
+     * Overwrite this method if the element makes use of a config-value.
+     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * out of the admin-/portal-element-instance directly.
+     *
+     * @return string
+     */
+    public function getConfigVal2Name() {
+        return "";
+    }
+
+    /**
+     * The label of the third config-value.
+     * Overwrite this method if the element makes use of a config-value.
+     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * out of the admin-/portal-element-instance directly.
+     *
+     * @return string
+     */
+    public function getConfigVal3Name() {
+        return "";
+    }
 
 	/**
 	 * Returns a short description of the saved content

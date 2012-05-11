@@ -9,10 +9,11 @@
 
 /**
  * Model for a element. This is the "raw"-element, not the element on a page
- * Elements DON'T have systemids!
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element.element_id
  *
  * @todo make real records out of the element-records, so with a matching systemid
  */
@@ -55,20 +56,35 @@ class class_module_pages_element extends class_model implements interface_model,
     private $strVersion = "";
 
     /**
+     * @var string
+     * @tableColumn element_config1
+     */
+    private $strConfigVal1 = "";
+
+    /**
+     * @var string
+     * @tableColumn element_config2
+     */
+    private $strConfigVal2 = "";
+
+    /**
+     * @var string
+     * @tableColumn element_config3
+     */
+    private $strConfigVal3 = "";
+
+    /**
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "pages");
-        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
+        $this->setArrModuleEntry("modul", "pages_content");
+        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
 
 		//base class
-		parent::__construct("");
+		parent::__construct($strSystemid);
 
-        $this->setSystemid($strSystemid);
-        if($strSystemid != "")
-            $this->initObjectInternal();
 
     }
 
@@ -120,70 +136,6 @@ class class_module_pages_element extends class_model implements interface_model,
         $objAdminInstance = $this->getAdminElementInstance();
         return $objAdminInstance->getElementDescription();
     }
-
-
-    /**
-     * Initalises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."element WHERE element_id=?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
-        $this->setStrName($arrRow["element_name"]);
-        $this->setStrClassAdmin($arrRow["element_class_admin"]);
-        $this->setStrClassPortal($arrRow["element_class_portal"]);
-        $this->setIntCachetime($arrRow["element_cachetime"]);
-        $this->setIntRepeat($arrRow["element_repeat"]);
-        $this->setStrVersion($arrRow["element_version"]);
-
-        $this->setSystemid($arrRow["element_id"]);
-    }
-
-
-    /**
-     * Updates the current object to the database
-     * @overwrites class_model::updateObjectToDb()
-     * @param bool $strPrevId
-     * @return bool
-     */
-    public function updateObjectToDb($strPrevId = false) {
-        if($this->getSystemid() == "") {
-
-            $strElementid = generateSystemid();
-            $this->setSystemid($strElementid);
-
-            $strQuery = "INSERT INTO "._dbprefix_."element
-					(element_id, element_name, element_class_portal, element_class_admin, element_repeat, element_cachetime, element_version) VALUES
-					(?, ?, ?, ?, ?, ?, ?)";
-
-            return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $this->getStrName(), $this->getStrClassPortal(), $this->getStrClassAdmin(), (int)$this->getIntRepeat(), (int)$this->getIntCachetime(), $this->getStrVersion() ));
-        }
-        else {
-            $strQuery = "UPDATE "._dbprefix_."element SET
-                            element_name = ?,
-                            element_class_portal = ?,
-                            element_class_admin = ?,
-                            element_cachetime = ?,
-                            element_repeat = ?,
-                            element_version = ?
-                            WHERE element_id= ?";
-            return $this->objDB->_pQuery($strQuery, array( $this->getStrName(), $this->getStrClassPortal(), $this->getStrClassAdmin(), $this->getIntCachetime(), $this->getIntRepeat(), $this->getStrVersion(), $this->getSystemid()));
-        }
-
-    }
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
 
     /**
      * Loads all installed Elements
@@ -248,6 +200,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * The admin-element won't get initialized by a systemid, so you shouldn't retrieve
      * it for further usings.
      *
+     * @throws class_exception
      * @return object An instance of the admin-class linked by the current element
      */
     public function getAdminElementInstance() {
@@ -266,6 +219,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @fieldMandatory
+     * @fieldType text
      * @return string
      */
     public function getStrName() {
@@ -299,6 +253,7 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @fieldMandatory
      * @fieldValidator numeric
+     * @fieldType text
      * @return string
      */
     public function getIntCachetime() {
@@ -346,5 +301,46 @@ class class_module_pages_element extends class_model implements interface_model,
         $this->strVersion = $strVersion;
     }
 
+    /**
+     * @param string $strConfigVal1
+     */
+    public function setStrConfigVal1($strConfigVal1) {
+        $this->strConfigVal1 = $strConfigVal1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrConfigVal1() {
+        return $this->strConfigVal1;
+    }
+
+    /**
+     * @param string $strConfigVal2
+     */
+    public function setStrConfigVal2($strConfigVal2) {
+        $this->strConfigVal2 = $strConfigVal2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrConfigVal2() {
+        return $this->strConfigVal2;
+    }
+
+    /**
+     * @param string $strConfigVal3
+     */
+    public function setStrConfigVal3($strConfigVal3) {
+        $this->strConfigVal3 = $strConfigVal3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrConfigVal3() {
+        return $this->strConfigVal3;
+    }
 
 }

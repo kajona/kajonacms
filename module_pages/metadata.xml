@@ -5,7 +5,7 @@
         >
     <title>pages</title>
     <description>Pages are the central part of information. A page is rendered in the portal and contains several elements.</description>
-    <version>3.4.9</version>
+    <version>3.4.9.1</version>
     <author>Kajona Team</author>
     <target>module_pages</target>
     <type>MODULE</type>

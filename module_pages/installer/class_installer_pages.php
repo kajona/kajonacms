@@ -76,6 +76,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["element_repeat"] 		= array("int", true);
 		$arrFields["element_cachetime"] 	= array("int", false, "-1");
 		$arrFields["element_version"] 	    = array("char20", true);
+		$arrFields["element_config1"] 	    = array("char254", true);
+		$arrFields["element_config2"] 	    = array("char254", true);
+		$arrFields["element_config3"] 	    = array("text", true);
 
 		if(!$this->objDB->createTable("element", $arrFields, array("element_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -281,6 +284,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_341_349();
         }
 
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_3491();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -376,6 +384,48 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.4.9");
         $this->updateElementVersion("paragraph", "3.4.9");
         $this->updateElementVersion("image", "3.4.9");
+        return $strReturn;
+    }
+
+    private function update_349_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
+
+        $strReturn .= "Altering element-table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                    ADD ".$this->objDB->encloseColumnName("element_config1")." ".$this->objDB->getDatatype("char254")." NULL,
+                    ADD ".$this->objDB->encloseColumnName("element_config2")." ".$this->objDB->getDatatype("char254")." NULL,
+                    ADD ".$this->objDB->encloseColumnName("element_config3")." ".$this->objDB->getDatatype("text")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Migrating elements to real records...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."element ";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+
+        foreach($arrRows as $arrOneRow) {
+            $objElement = new class_module_pages_element();
+            $objElement->setStrName($arrOneRow["element_name"]);
+            $objElement->setIntRepeat($arrOneRow["element_repeat"]);
+            $objElement->setStrVersion($arrOneRow["element_version"]);
+            $objElement->setIntCachetime($arrOneRow["element_cachetime"]);
+            $objElement->setStrClassAdmin($arrOneRow["element_class_admin"]);
+            $objElement->setStrClassPortal($arrOneRow["element_class_portal"]);
+
+            $objElement->updateObjectToDb();
+
+            $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id = ?";
+            $this->objDB->_pQuery($strQuery, array($arrOneRow["element_id"]));
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.1");
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.9.1");
+        $this->updateElementVersion("paragraph", "3.4.9.1");
+        $this->updateElementVersion("image", "3.4.9.1");
         return $strReturn;
     }
 }

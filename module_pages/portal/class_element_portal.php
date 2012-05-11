@@ -513,6 +513,8 @@ abstract class class_element_portal extends class_portal {
         $this->strCacheAddon .= $strCacheAddon;
     }
 
+
+
     /**
      * This method may be used, if the current module is able to
      * register own levels in the navigation.
@@ -537,6 +539,13 @@ abstract class class_element_portal extends class_portal {
      */
     public function getNavigationEntries() {
         return false;
+    }
+
+    /**
+     * @return \class_module_pages_pageelement
+     */
+    public function getObjElementData() {
+        return $this->objElementData;
     }
 
 }

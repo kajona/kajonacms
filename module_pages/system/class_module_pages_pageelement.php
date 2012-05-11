@@ -56,6 +56,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     private $intStartDate = 0;
     private $intEndDate = 0;
 
+    private $strConfigVal1 = "";
+    private $strConfigVal2 = "";
+    private $strConfigVal3 = "";
+
     /**
      * Constructor to create a valid object
      *
@@ -134,6 +138,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $this->setStrClassPortal($arrRow["element_class_portal"]);
             $this->setIntCachetime($arrRow["element_cachetime"]);
             $this->setIntRepeat($arrRow["element_repeat"]);
+            $this->setStrConfigVal1($arrRow["element_config1"]);
+            $this->setStrConfigVal2($arrRow["element_config2"]);
+            $this->setStrConfigVal3($arrRow["element_config3"]);
+
 
             if($arrRow["system_date_start"] > 0)
                 $this->intStartDate = $arrRow["system_date_start"];
@@ -768,6 +776,30 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
+    }
+
+    public function setStrConfigVal1($intConfigVal1) {
+        $this->strConfigVal1 = $intConfigVal1;
+    }
+
+    public function getStrConfigVal1() {
+        return $this->strConfigVal1;
+    }
+
+    public function setStrConfigVal2($intConfigVal2) {
+        $this->strConfigVal2 = $intConfigVal2;
+    }
+
+    public function getStrConfigVal2() {
+        return $this->strConfigVal2;
+    }
+
+    public function setStrConfigVal3($intConfigVal3) {
+        $this->strConfigVal3 = $intConfigVal3;
+    }
+
+    public function getStrConfigVal3() {
+        return $this->strConfigVal3;
     }
 
 }

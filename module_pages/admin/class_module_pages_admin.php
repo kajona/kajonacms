@@ -706,79 +706,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator->setArraySection(class_module_pages_element::getAllElements($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator, false, "elementList");
 
-
-        /* TODO: will be moved to the package-manager
-        // ------------------------------------------------------------------------------------------
-        // any element-installers of elements not yet installed?
-        $arrElementsToInstall = array();
-        //load installers available
-        $arrInstallers = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
-
-        if($arrInstallers !== false) {
-
-            foreach($arrInstallers as $strPath => $strFile)
-                if(strpos($strFile, ".php") === false || strpos($strFile, "installer_element") === false)
-                    unset($arrInstallers[$strPath]);
-
-            if(count($arrInstallers) > 0) {
-                asort($arrInstallers);
-                //Loading each installer
-                foreach($arrInstallers as $strPath => $strInstaller) {
-                    //Creating an object....
-                    include_once(_realpath_.$strPath);
-                    $strClass = "class_".str_replace(".php", "", $strInstaller);
-
-
-                    $objInstaller = new $strClass();
-
-                    $objSystem = class_module_system_module::getModuleByName("system");
-                    if($objInstaller instanceof interface_installer ) {
-                        $bitNeededSysversionInstalled = true;
-                        //check, if a min version of the system is needed
-                        if($objInstaller->getMinSystemVersion() != "") {
-                            //the systems version to compare to
-
-                            if(version_compare($objInstaller->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-                                $bitNeededSysversionInstalled = false;
-                            }
-                        }
-
-                        //all needed modules installed?
-                        $bitRequired = true;
-                        $arrModulesNeeded = $objInstaller->getNeededModules();
-                        foreach($arrModulesNeeded as $strOneModule) {
-                            $objTestModule = null;
-                            try {
-                                $objTestModule = class_module_system_module::getModuleByName($strOneModule, true);
-                            }
-                            catch (class_exception $objException) { }
-                            if($objTestModule == null) {
-                                $bitRequired = false;
-                            }
-                        }
-
-                        if($bitRequired && $bitNeededSysversionInstalled && $objInstaller->hasPostInstalls()) {
-                            $arrElementsToInstall[str_replace(".php", "", $strInstaller)] = $objInstaller->getArrModule("name_lang");
-                        }
-                    }
-                }
-            }
-
-            //any installers remaining?
-            $intI = 0;
-            if(count($arrElementsToInstall) > 0 ) {
-                $strReturn .= $this->objToolkit->divider();
-                $strReturn .= $this->objToolkit->getTextRow($this->getLang("element_installer_hint"));
-                $strReturn .= $this->objToolkit->listHeader();
-                foreach ($arrElementsToInstall as $strKey => $strInstaller) {
-                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strInstaller, getImageAdmin("icon_dot.gif"), $this->objToolkit->listButton(getLinkAdmin("pages", "installElement", "&elementName=".$strKey, $this->getLang("element_install"), $this->getLang("element_install"), "icon_install.gif")), $intI++);
-                }
-
-                $strReturn .= $this->objToolkit->listFooter();
-            }
-
-        }*/
-
 		return $strReturn;
 	}
 
@@ -811,6 +738,12 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveElement"));
 	}
 
+    /**
+     * Generates a simple form to edit and create elements' basic data.
+     *
+     * @param class_module_pages_element $objElement
+     * @return class_admin_formgenerator
+     */
     private function getElementForm(class_module_pages_element $objElement) {
 
         //Fetch Admin classes
@@ -825,15 +758,31 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         foreach($arrClasses as $strClass)
             $arrClassesPortal[$strClass] = $strClass;
 
-
         $objForm = new class_admin_formgenerator("element", $objElement);
-        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
-        $objForm->addDynamicField("cachetime")->setStrHint($this->getLang("element_cachetime_hint"));
-        $objForm->addField(new class_formentry_divider());
-        $objForm->addDynamicField("classadmin")->setArrKeyValues($arrClassesAdmin);
-        $objForm->addDynamicField("classportal")->setArrKeyValues($arrClassesPortal);
-        $objForm->addField(new class_formentry_divider());
-        $objForm->addDynamicField("repeat");
+        //redefine for proper lang-rendering
+        $objElement->setArrModuleEntry("modul", "pages");
+        $objForm->generateFieldsFromObject();
+
+        $objForm->getField("name")->setStrLabel($this->getLang("commons_name"));
+        $objForm->getField("cachetime")->setStrHint($this->getLang("element_cachetime_hint"));
+        $objForm->getField("classadmin")->setArrKeyValues($arrClassesAdmin);
+        $objForm->getField("classportal")->setArrKeyValues($arrClassesPortal);
+
+        //check if the config-vals may be overriden
+
+        /** @var $objAdminInstance class_element_admin */
+        $objAdminInstance = $objElement->getAdminElementInstance();
+        if($objAdminInstance->getConfigVal1Name() != "") {
+            $objForm->addDynamicField("configval1")->setStrLabel($objAdminInstance->getConfigVal1Name());
+        }
+
+        if($objAdminInstance->getConfigVal2Name() != "") {
+            $objForm->addDynamicField("configval2")->setStrLabel($objAdminInstance->getConfigVal2Name());
+        }
+
+        if($objAdminInstance->getConfigVal3Name() != "") {
+            $objForm->addDynamicField("configval3")->setStrLabel($objAdminInstance->getConfigVal3Name());
+        }
 
         return $objForm;
     }
@@ -873,12 +822,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		return $strReturn;
 	}
 
-	/**
-	 * Saves a passed element
-	 *
-	 * @return string, "" in case of success
+    /**
+     * Saves a passed element
+     *
+     * @throws class_exception
+     * @return string, "" in case of success
      * @permissions right1
-	 */
+     */
 	protected function actionSaveElement() {
 
         if($this->getParam("mode") == "new")
@@ -901,12 +851,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         return "";
 	}
 
-	/**
-	 * Deletes an element from db / displays the warning-box
-	 *
-	 * @return string, "" in case of success
+    /**
+     * Deletes an element from db / displays the warning-box
+     *
+     * @throws class_exception
+     * @return string, "" in case of success
      * @permissions right1
-	 */
+     */
 	protected function actionDeleteElement() {
 		$strReturn = "";
         $objElement = new class_module_pages_element($this->getParam("elementid"));
