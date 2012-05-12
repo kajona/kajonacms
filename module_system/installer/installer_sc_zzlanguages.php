@@ -15,6 +15,9 @@
  */
 class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
+    /**
+     * @var class_db
+     */
     private $objDB;
     private $strContentLanguage;
 

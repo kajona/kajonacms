@@ -15,6 +15,9 @@
  */
 class class_installer_sc_tags implements interface_sc_installer  {
 
+    /**
+     * @var class_db
+     */
     private $objDB;
     private $strContentLanguage;
 
@@ -23,6 +26,7 @@ class class_installer_sc_tags implements interface_sc_installer  {
     /**
      * Does the hard work: installs the module and registers needed constants
      *
+     * @return string
      */
     public function install() {
         $strReturn = "";

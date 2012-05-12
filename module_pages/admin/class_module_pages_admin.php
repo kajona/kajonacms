@@ -771,17 +771,19 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         //check if the config-vals may be overriden
 
         /** @var $objAdminInstance class_element_admin */
-        $objAdminInstance = $objElement->getAdminElementInstance();
-        if($objAdminInstance->getConfigVal1Name() != "") {
-            $objForm->addDynamicField("configval1")->setStrLabel($objAdminInstance->getConfigVal1Name());
-        }
+        if($objElement->getSystemid() != "") {
+            $objAdminInstance = $objElement->getAdminElementInstance();
+            if($objAdminInstance->getConfigVal1Name() != "") {
+                $objForm->addDynamicField("configval1")->setStrLabel($objAdminInstance->getConfigVal1Name());
+            }
 
-        if($objAdminInstance->getConfigVal2Name() != "") {
-            $objForm->addDynamicField("configval2")->setStrLabel($objAdminInstance->getConfigVal2Name());
-        }
+            if($objAdminInstance->getConfigVal2Name() != "") {
+                $objForm->addDynamicField("configval2")->setStrLabel($objAdminInstance->getConfigVal2Name());
+            }
 
-        if($objAdminInstance->getConfigVal3Name() != "") {
-            $objForm->addDynamicField("configval3")->setStrLabel($objAdminInstance->getConfigVal3Name());
+            if($objAdminInstance->getConfigVal3Name() != "") {
+                $objForm->addDynamicField("configval3")->setStrLabel($objAdminInstance->getConfigVal3Name());
+            }
         }
 
         return $objForm;

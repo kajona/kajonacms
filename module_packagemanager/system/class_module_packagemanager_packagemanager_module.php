@@ -173,7 +173,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
         //version compare - depending on module or element
         if(uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {
-            $objElement = class_module_pages_element::getElement($this->objMetadata->getStrTitle());
+            $objElement = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
             if($objElement !== null) {
                 if(version_compare($this->objMetadata->getStrVersion(), $objElement->getStrVersion(), ">"))
                     return true;
@@ -206,7 +206,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     public function getVersionInstalled() {
         //version compare - depending on module or element
         if(uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {
-            $objElement = class_module_pages_element::getElement($this->objMetadata->getStrTitle());
+            $objElement = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
             if($objElement !== null)
                 return $objElement->getStrVersion();
             else
