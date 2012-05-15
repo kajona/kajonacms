@@ -951,7 +951,7 @@ abstract class class_root {
 		$strPrevID = $this->getPrevId();
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
-						 WHERE system_prev_id=?
+						 WHERE system_prev_id=? AND system_id != '0'
 						 ORDER BY system_sort ASC, system_comment ASC";
 
 		//No caching here to allow multiple shiftings per request
