@@ -211,6 +211,8 @@ abstract class class_installer_base extends class_root implements interface_inst
 	 */
 	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi, $strXmlPortal = "", $strXmlAdmin = "") {
 
+        $this->objDB->flushQueryCache();
+
 		//The previous id is the the id of the Root-Record -> 0
 		$strPrevId = "0";
 

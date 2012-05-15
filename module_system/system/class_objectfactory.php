@@ -169,6 +169,9 @@ class class_objectfactory {
         return null;
     }
 
+    /**
+     * Flushes the internal instance cache
+     */
     public function flushCache() {
         $this->arrObjectCache = array();
     }

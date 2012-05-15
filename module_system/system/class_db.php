@@ -356,8 +356,8 @@ class class_db {
     		    $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
     		    return array();
     		}
-    		if($bitCache)
-    			$this->arrQueryCache[$strQueryMd5] = $arrReturn;
+            if($bitCache)
+                $this->arrQueryCache[$strQueryMd5] = $arrReturn;
 		}
 		return $arrReturn;
 	}
@@ -446,11 +446,13 @@ class class_db {
         return $this->getPArray($strQuery, $arrParams, $intStart, $intEnd, $bitCache);
     }
 
-	/**
-	 * Writes the last DB-Error to the screen
-	 *
-	 * @param string $strQuery
-	 */
+    /**
+     * Writes the last DB-Error to the screen
+     *
+     * @param string $strQuery
+     *
+     * @throws class_exception
+     */
 	private function getError($strQuery) {
         if(!$this->bitConnected)
             $this->dbconnect();

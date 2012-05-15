@@ -1018,6 +1018,7 @@ abstract class class_root {
         //flush the cache
         $this->flushCompletePagesCache();
         $this->objDB->flushQueryCache();
+        $this->setIntSort($intNewPosition);
         $this->internalInit();
 	}
 

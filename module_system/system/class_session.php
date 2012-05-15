@@ -101,14 +101,16 @@ final class class_session {
     }
 
 
-	/**
-	 * Writes a value to the session
-	 *
-	 * @param string $strKey
-	 * @param string $strValue
-	 * @param int $intSessionScope one of class_session::$intScopeRequest or class_session::$intScopeSession
-	 * @return bool
-	 */
+    /**
+     * Writes a value to the session
+     *
+     * @param string $strKey
+     * @param string $strValue
+     * @param int $intSessionScope one of class_session::$intScopeRequest or class_session::$intScopeSession
+     *
+     * @throws class_exception
+     * @return bool
+     */
 	public function setSession($strKey, $strValue, $intSessionScope = 1) 	{
 
 		if($intSessionScope == class_session::$intScopeRequest) {
@@ -315,7 +317,7 @@ final class class_session {
 	/**
 	 * Checks if a user is set active or not
 	 *
-	 * @return unknown
+	 * @return bool
 	 */
 	public function isActive() {
 		if($this->isLoggedin()) {
@@ -383,8 +385,6 @@ final class class_session {
      */
     private function internalLoginHelper(class_module_user_user $objUser) {
 
-        $bitReturn = false;
-
         if($objUser->getIntActive() == 1) {
 
             $objUser->setIntLogins($objUser->getIntLogins()+1);
@@ -448,7 +448,6 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUsername() {
-        $strUsername = "";
 		if($this->isLoggedin() && $this->getObjInternalSession() != null) {
 			$strUsername = $this->getUser()->getStrUsername();
 		}
@@ -464,7 +463,6 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUserID() {
-        $strUserid = "";
 		if($this->getObjInternalSession() != null && $this->isLoggedin()) {
 			$strUserid = $this->getObjInternalSession()->getStrUserid();
 		}
@@ -506,7 +504,6 @@ final class class_session {
 	 * @return string
 	 */
 	public function getGroupIdsAsString() {
-        $strGroupids = "";
 	    if($this->getObjInternalSession() != null ) {
 			$strGroupids = $this->getObjInternalSession()->getStrGroupids();
 		}
@@ -522,7 +519,6 @@ final class class_session {
 	 * @return array
 	 */
 	public function getGroupIdsAsArray() {
-        $strGroupids = "";
 	    if($this->getObjInternalSession() != null ) {
 			$strGroupids = $this->getObjInternalSession()->getStrGroupids();
 		}
@@ -559,11 +555,12 @@ final class class_session {
 	 */
 	public function initInternalSession() {
 
-        $this->bitLazyLoaded = true;
 
 	    $arrTables = $this->objDB->getTables();
-        if(!in_array(_dbprefix_."session", $arrTables))
+        if(!in_array(_dbprefix_."session", $arrTables) || !defined("_guests_group_id_") || !defined("_system_release_time_"))
             return;
+
+        $this->bitLazyLoaded = true;
 
 	    if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
 	        $this->objInternalSession = class_module_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));

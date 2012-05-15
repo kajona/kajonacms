@@ -193,13 +193,14 @@ class class_config {
             return phpSizeToBytes($this->getPhpIni("post_max_size"));
     }
 
-	/**
-	 * Loads all config-files from the filesystem
-	 *
-	 * @deprecated This Method may be removed from future releases. If you need filesystem-based configs,
-	 *             invoke this method on your own. This method is no longer called at system startup!
-	 */
-	public function loadConfigsFilesystem() 	{
+    /**
+     * Loads all config-files from the filesystem
+     *
+     * @deprecated This Method may be removed from future releases. If you need filesystem-based configs,
+     *             invoke this method on your own. This method is no longer called at system startup!
+     * @throws class_exception
+     */
+	public function loadConfigsFilesystem() {
         throw new class_exception("no longer supported", class_exception::$level_FATALERROR);
 	}
 
