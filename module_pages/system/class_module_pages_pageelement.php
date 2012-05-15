@@ -180,10 +180,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         }
 
-        //shift it to the first position by default
+        //shift it to the last position by default
         //As a special feature, we set the element as the last
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
-        $this->objDB->_pQuery($strQuery, array(count($this->getSortedElementsAtPlaceholder()) , $this->getSystemid() ));
+        $this->setIntSort(count($this->getSortedElementsAtPlaceholder())+1);
+        $this->objDB->_pQuery($strQuery, array(count($this->getSortedElementsAtPlaceholder())+1 , $this->getSystemid() ));
         //And shift this element one pos up to get correct order on systemtables
 
         $this->objDB->flushQueryCache();
@@ -476,83 +477,75 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param $intNewPosition
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
-    public function setAbsolutePosition( $intNewPosition) {
-        class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
+    public function setAbsolutePosition($intNewPosition) {
+        class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
+        $this->objDB->flushQueryCache();
 
-		//to have a better array-like handling, decrease pos by one.
-		//remind to add at the end when saving to db
-		$intNewPosition--;
+        //No caching here to allow multiple shiftings per request
+        $arrElements = $this->getSortedElementsAtPlaceholder();
 
-		//No caching here to allow mutliple shiftings per request
-		$arrElements = $this->getSortedElementsAtPlaceholder();
+        //more than one record to set?
+        if(count($arrElements) <= 1)
+            return;
 
-		//more than one record to set?
-		if(count($arrElements) <= 1)
-			return;
+        //senseless new pos?
+        if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
+            return;
 
-		//senseless new pos?
-		if($intNewPosition < 0 || $intNewPosition >= count($arrElements))
-		    return;
+        $intCurPos = $this->getIntSort();
 
-
-		//searching the current element to get to know if element should be
-		//sorted up- or downwards
-		$bitSortDown = false;
-		$bitSortUp = false;
-		$intHitKey = 0;
-		for($intI = 0; $intI < count($arrElements); $intI++) {
-			if($arrElements[$intI]["system_id"] == $this->getSystemid()) {
-				if($intI < $intNewPosition)
-					$bitSortDown = true;
-				if($intI >= $intNewPosition+1)
-					$bitSortUp = true;
-
-				$intHitKey = $intI;
-			}
-		}
-
-		//sort up?
-		if($bitSortUp) {
-			//move the record to be shifted to the wanted pos
-			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort= ?
-								WHERE system_id= ? ";
-			$this->objDB->_pQuery($strQuery, array((int)$intNewPosition, $this->getSystemid() ) );
-
-			//start at the pos to be reached and move all one down
-			for($intI = 0; $intI < count($arrElements); $intI++) {
-				//move all other one pos down, except the last in the interval:
-				//already moved...
-				if($intI >= $intNewPosition && $intI < $intHitKey) {
-					$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=system_sort+1
-								WHERE system_id= ?";
-					$this->objDB->_pQuery($strQuery, array($arrElements[$intI]["system_id"]));
-				}
-			}
-		}
-
-		if($bitSortDown) {
-			//move the record to be shifted to the wanted pos
-			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort= ?
-								WHERE system_id= ?";
-			$this->objDB->_pQuery($strQuery, array((int)$intNewPosition, $this->getSystemid()));
-
-			//start at the pos to be reached and move all one down
-			for($intI = 0; $intI < count($arrElements); $intI++) {
-				//move all other one pos down, except the last in the interval:
-				//already moved...
-				if($intI > $intHitKey && $intI <= $intNewPosition) {
-					$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=system_sort-1
-								WHERE system_id= ?";
-					$this->objDB->_pQuery($strQuery, array($arrElements[$intI]["system_id"]));
-				}
-			}
-		}
+        if($intNewPosition == $intCurPos)
+            return;
 
 
+        //searching the current element to get to know if element should be sorted up- or downwards
+        $bitSortDown = false;
+        $bitSortUp = false;
+        if($intNewPosition < $intCurPos)
+            $bitSortUp = true;
+        else
+            $bitSortDown = true;
+
+
+        //sort up?
+        if($bitSortUp) {
+            //move the record to be shifted to the wanted pos
+            $strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=?
+								WHERE system_id=?";
+            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
+
+            //start at the pos to be reached and move all one down
+            for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
+
+                $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_sort=?
+                            WHERE system_id=?";
+                $this->objDB->_pQuery($strQuery, array($intI+1, $arrElements[$intI-1]["system_id"]));
+            }
+        }
+
+        if($bitSortDown) {
+            //move the record to be shifted to the wanted pos
+            $strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=?
+								WHERE system_id=?";
+            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
+
+            //start at the pos to be reached and move all one up
+            for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
+
+                $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_sort= ?
+                            WHERE system_id=?";
+                $this->objDB->_pQuery($strQuery, array($intI-1, $arrElements[$intI-1]["system_id"]));
+            }
+        }
+
+        //flush the cache
+        $this->flushCompletePagesCache();
+        $this->objDB->flushQueryCache();
+        $this->setIntSort($intNewPosition);
     }
 
     /**

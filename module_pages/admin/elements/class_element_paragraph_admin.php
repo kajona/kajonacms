@@ -113,10 +113,14 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 	public function getContentTitle() {
 
 	    $arrData = $this->loadElementData();
-	    if($arrData["paragraph_title"] != "")
-	       return uniStrTrim(htmlStripTags($arrData["paragraph_title"]), 60);
-	    else
-	       return uniStrTrim(htmlStripTags($arrData["paragraph_content"]), 60);
+        if(isset($arrData["paragraph_title"])) {
+            if($arrData["paragraph_title"] != "")
+               return uniStrTrim(htmlStripTags($arrData["paragraph_title"]), 60);
+            else
+               return uniStrTrim(htmlStripTags($arrData["paragraph_content"]), 60);
+        }
+        else
+            return parent::getContentTitle();
 	}
 
 

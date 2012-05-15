@@ -264,6 +264,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
     		//Build the class-name
     		$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     		//and finally create the object
+            /** @var $objElement class_element_admin */
     		$objElement = new $strElementClass();
     		if($bitShowErrors)
     		  $objElement->setDoValidation(true);
@@ -296,6 +297,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
     			//Load the class to create an object
     			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     			//and finally create the object
+                /** @var $objPageElement class_element_admin */
     			$objPageElement = new $strElementClass();
     			if($bitShowErrors)
     		        $objPageElement->setDoValidation(true);
@@ -375,6 +377,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 			//Build the class-name
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
+            /** @var $objElement class_element_admin */
 			$objElement = new $strElementClass();
             $objElement->setSystemid($this->getSystemid());
 
@@ -393,8 +396,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $objElement->updateForeignElement();
 
 			//Edit Date of page & unlock
-            $objCommons = new class_module_system_common($strPageSystemid);
-            $objCommons->updateObjectToDb();
+            $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
+            $objPage->updateObjectToDb();
 			$objLockmanager->unlockRecord();
 
 			//And update the internal comment and language
@@ -482,8 +485,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
             $objElement->updateForeignElement();
 
 			//Edit Date of page & unlock
-            $objCommons = new class_module_system_common($strPageSystemid);
-            $objCommons->updateObjectToDb();
+            $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
+            $objPage->updateObjectToDb();
 			$objLockmanager->unlockRecord();
 
             //allow the element to run actions after saving
@@ -716,6 +719,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), $this->getLang("modul_titel", "pages"));
 
 		foreach($arrPath as $strOneSystemid) {
+            /** @var $objObject class_module_pages_folder|class_module_pages_page */
             $objObject = class_objectfactory::getInstance()->getObject($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigation
 			if($objObject->getIntModuleNr() == _pages_content_modul_id_)
@@ -740,7 +744,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
         //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setPosition("up");
-        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
     }
 
@@ -751,7 +755,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
         //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setPosition("down");
-        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
 
     /**
@@ -761,7 +765,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
         //Create the object
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setStatus();
-        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
 
 }
