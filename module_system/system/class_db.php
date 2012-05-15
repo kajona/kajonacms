@@ -949,6 +949,7 @@ class class_db {
         //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
 	    $this->arrQueryCache = array();
         $this->arrTablesCache = array();
+        class_objectfactory::getInstance()->flushCache();
 	}
 
 	/**

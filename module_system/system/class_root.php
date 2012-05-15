@@ -666,7 +666,7 @@ abstract class class_root {
 			$strPrevId = 0;
 
         //determine the correct new sort-id - append by default
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
 
@@ -941,18 +941,14 @@ abstract class class_root {
 	/**
 	 * Sets the position of systemid using a given value.
 	 *
-	 * @param int $intPosition
+	 * @param int $intNewPosition
 	 */
-	public function setAbsolutePosition($intPosition) {
-	    class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intPosition, class_logger::$levelInfo);
-
-		//to have a better array-like handling, decrease pos by one.
-		//remind to add at the end when saving to db
-		$intPosition--;
+	public function setAbsolutePosition($intNewPosition) {
+	    class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
+        $this->objDB->flushQueryCache();
 
 		//Load all elements on the same level, so at first get the prev id
-        $objCommon = new class_module_system_common($this->getSystemid());
-		$strPrevID = $objCommon->getPrevId();
+		$strPrevID = $this->getPrevId();
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
 						 WHERE system_prev_id=?
@@ -966,43 +962,40 @@ abstract class class_root {
 			return;
 
 		//senseless new pos?
-		if($intPosition < 0 || $intPosition >= count($arrElements))
+		if($intNewPosition < 0 || $intNewPosition >= count($arrElements))
 		    return;
 
+        $intCurPos = $this->getIntSort();
+
+        if($intNewPosition == $intCurPos)
+            return;
+
+
 		//searching the current element to get to know if element should be sorted up- or downwards
-		$bitSortDown = false;
-		$bitSortUp = false;
-		$intHitKey = 0;
-		for($intI = 0; $intI < count($arrElements); $intI++) {
-			if($arrElements[$intI]["system_id"] == $this->getSystemid()) {
-				if($intI < $intPosition)
-					$bitSortDown = true;
-				if($intI >= $intPosition+1)
-					$bitSortUp = true;
+        $bitSortDown = false;
+        $bitSortUp = false;
+        if($intNewPosition < $intCurPos)
+            $bitSortUp = true;
+        else
+            $bitSortDown = true;
 
-				$intHitKey = $intI;
-			}
-		}
 
-		//sort up?
+        //sort up?
 		if($bitSortUp) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=?
 								WHERE system_id=?";
-			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $this->getSystemid()));
+			$this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
 
 			//start at the pos to be reached and move all one down
-			for($intI = 0; $intI < count($arrElements); $intI++) {
-				//move all other one pos down, except the last in the interval:
-				//already moved...
-				if($intI >= $intPosition && $intI < $intHitKey) {
-					$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=system_sort+1
-								WHERE system_id=?";
-					$this->objDB->_pQuery($strQuery, array($arrElements[$intI]["system_id"]));
-				}
-			}
+			for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
+
+                $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_sort=?
+                            WHERE system_id=?";
+                $this->objDB->_pQuery($strQuery, array($intI+1, $arrElements[$intI-1]["system_id"]));
+            }
 		}
 
 		if($bitSortDown) {
@@ -1010,18 +1003,15 @@ abstract class class_root {
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=?
 								WHERE system_id=?";
-			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $this->getSystemid()));
+			$this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
 
-			//start at the pos to be reached and move all one down
-			for($intI = 0; $intI < count($arrElements); $intI++) {
-				//move all other one pos down, except the last in the interval:
-				//already moved...
-				if($intI > $intHitKey && $intI <= $intPosition) {
-					$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=system_sort-1
-								WHERE system_id=?";
-					$this->objDB->_pQuery($strQuery, array($arrElements[$intI]["system_id"]));
-				}
+			//start at the pos to be reached and move all one up
+			for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
+
+                $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_sort= ?
+                            WHERE system_id=?";
+                $this->objDB->_pQuery($strQuery, array($intI-1, $arrElements[$intI-1]["system_id"]));
 			}
 		}
 

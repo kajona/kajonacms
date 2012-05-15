@@ -206,6 +206,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     public function getVersionInstalled() {
         //version compare - depending on module or element
         if(uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {
+
+            if(class_module_system_module::getModuleByName("pages") === null)
+                return null;
+
             $objElement = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
             if($objElement !== null)
                 return $objElement->getStrVersion();

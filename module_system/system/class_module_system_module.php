@@ -132,39 +132,6 @@ class class_module_system_module extends class_model implements interface_model,
         return $strDescription;
     }
 
-
-//    /**
-//     * Initialises the current object, if a systemid was given
-//     *
-//     */
-//    protected function initObjectInternal() {
-//        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system, "._dbprefix_."system_right WHERE system_id=module_id AND system_id = right_id ORDER BY module_nr";
-//        $arrRow = array();
-//		$arrModules = $this->objDB->getPArray($strQuery, array());
-//
-//		foreach($arrModules as $arrOneModule) {
-//		    if($arrOneModule["module_id"] == $this->getSystemid())
-//		       $arrRow = $arrOneModule;
-//		}
-//
-//        $this->setArrInitRow($arrRow);
-//
-//        $this->setStrName($arrRow["module_name"]);
-//        $this->setStrNamePortal($arrRow["module_filenameportal"]);
-//        $this->setStrXmlNamePortal($arrRow["module_xmlfilenameportal"]);
-//        $this->setStrNameAdmin($arrRow["module_filenameadmin"]);
-//        $this->setStrXmlNameAdmin($arrRow["module_xmlfilenameadmin"]);
-//        $this->setStrVersion($arrRow["module_version"]);
-//        $this->setIntDate($arrRow["module_date"]);
-//        $this->setIntNavigation($arrRow["module_navigation"]);
-//        $this->setIntNr($arrRow["module_nr"]);
-//        if(isset($arrRow["module_aspect"]))
-//            $this->setStrAspect($arrRow["module_aspect"]);
-//    }
-
-
-
-
     /**
      * Loads an array containing all installed modules from database
      *

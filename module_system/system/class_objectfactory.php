@@ -27,7 +27,7 @@ class class_objectfactory {
     private $arrObjectCache = array();
 
     /**
-     * @var #M#M#C\class_carrier.getInstance.getObjDB|?
+     * @var class_db
      */
     private $objDB;
 
@@ -38,9 +38,6 @@ class class_objectfactory {
 
     private function __construct() {
         $this->objDB = class_carrier::getInstance()->getObjDB();
-    }
-
-    private function __clone() {
     }
 
     /**
@@ -67,7 +64,6 @@ class class_objectfactory {
      * @return null|class_model|interface_model
      */
     public function getObject($strSystemid, $bitIgnoreCache = false) {
-
 
         if(!$bitIgnoreCache && isset($this->arrObjectCache[$strSystemid]))
             return $this->arrObjectCache[$strSystemid];
@@ -171,6 +167,10 @@ class class_objectfactory {
             return $strSetter;
 
         return null;
+    }
+
+    public function flushCache() {
+        $this->arrObjectCache = array();
     }
 }
 

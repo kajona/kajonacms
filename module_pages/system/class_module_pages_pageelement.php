@@ -473,15 +473,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * Sets the position of an element using a given value.
      *
-     * @param $intPosition
+     * @param $intNewPosition
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
-    public function setAbsolutePosition( $intPosition) {
-        class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new pos ".$intPosition, class_logger::$levelInfo);
+    public function setAbsolutePosition( $intNewPosition) {
+        class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
 
 		//to have a better array-like handling, decrease pos by one.
 		//remind to add at the end when saving to db
-		$intPosition--;
+		$intNewPosition--;
 
 		//No caching here to allow mutliple shiftings per request
 		$arrElements = $this->getSortedElementsAtPlaceholder();
@@ -491,7 +491,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 			return;
 
 		//senseless new pos?
-		if($intPosition < 0 || $intPosition >= count($arrElements))
+		if($intNewPosition < 0 || $intNewPosition >= count($arrElements))
 		    return;
 
 
@@ -502,9 +502,9 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 		$intHitKey = 0;
 		for($intI = 0; $intI < count($arrElements); $intI++) {
 			if($arrElements[$intI]["system_id"] == $this->getSystemid()) {
-				if($intI < $intPosition)
+				if($intI < $intNewPosition)
 					$bitSortDown = true;
-				if($intI >= $intPosition+1)
+				if($intI >= $intNewPosition+1)
 					$bitSortUp = true;
 
 				$intHitKey = $intI;
@@ -517,13 +517,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort= ?
 								WHERE system_id= ? ";
-			$this->objDB->_pQuery($strQuery, array((int)$intPosition, $this->getSystemid() ) );
+			$this->objDB->_pQuery($strQuery, array((int)$intNewPosition, $this->getSystemid() ) );
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
 				//move all other one pos down, except the last in the interval:
 				//already moved...
-				if($intI >= $intPosition && $intI < $intHitKey) {
+				if($intI >= $intNewPosition && $intI < $intHitKey) {
 					$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=system_sort+1
 								WHERE system_id= ?";
@@ -537,13 +537,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort= ?
 								WHERE system_id= ?";
-			$this->objDB->_pQuery($strQuery, array((int)$intPosition, $this->getSystemid()));
+			$this->objDB->_pQuery($strQuery, array((int)$intNewPosition, $this->getSystemid()));
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
 				//move all other one pos down, except the last in the interval:
 				//already moved...
-				if($intI > $intHitKey && $intI <= $intPosition) {
+				if($intI > $intHitKey && $intI <= $intNewPosition) {
 					$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=system_sort-1
 								WHERE system_id= ?";
