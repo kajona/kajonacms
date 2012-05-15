@@ -44,6 +44,25 @@ class class_module_pages_folder extends class_model implements interface_model, 
 		parent::__construct($strSystemid);
     }
 
+    public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
+        return parent::setAbsolutePosition($intNewPosition, true);
+    }
+
+    protected function onInsertToDb() {
+
+        //set the matching sort-id
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_module_nr = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getStrPrevId(), _pages_folder_id_));
+        $intSiblings = $arrRow["COUNT(*)"];
+
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
+        $this->objDB->_pQuery($strQuery, array($intSiblings, $this->getSystemid()));
+        $this->setIntSort($intSiblings);
+
+        return parent::onInsertToDb();
+    }
+
+
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string

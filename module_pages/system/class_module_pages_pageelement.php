@@ -474,10 +474,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * Sets the position of an element using a given value.
      *
-     * @param $intNewPosition
+     * @param int $intNewPosition
+     * @param bool $bitOnlySameModule
+     *
+     * @return
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
-    public function setAbsolutePosition($intNewPosition) {
+    public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
         class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 

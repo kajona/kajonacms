@@ -938,12 +938,15 @@ abstract class class_root {
         $this->setAbsolutePosition($intPos);
 	}
 
-	/**
-	 * Sets the position of systemid using a given value.
-	 *
-	 * @param int $intNewPosition
-	 */
-	public function setAbsolutePosition($intNewPosition) {
+    /**
+     * Sets the position of systemid using a given value.
+     *
+     * @param int $intNewPosition
+     * @param bool $bitOnlySameModule If set to true, the siblings are loaded based on the same module-id
+     *
+     * @return
+     */
+	public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
 	    class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
@@ -952,10 +955,16 @@ abstract class class_root {
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
 						 WHERE system_prev_id=? AND system_id != '0'
+						 ".($bitOnlySameModule ? " AND system_module_nr = ? " : " ")."
 						 ORDER BY system_sort ASC, system_comment ASC";
 
+        $arrParams = array();
+        $arrParams[] = $strPrevID;
+        if($bitOnlySameModule)
+            $arrParams[] = $this->getIntModuleNr();
+
 		//No caching here to allow multiple shiftings per request
-		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), null, null, false);
+		$arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);
 
 		//more than one record to set?
 		if(count($arrElements) <= 1)
