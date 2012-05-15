@@ -49,7 +49,7 @@ class class_test_sort extends class_testbase {
         $objPage = $arrPages[9]; $this->assertEquals($objPage->getStrName(), "sortsubpage_10"); $this->assertEquals(10, $objPage->getIntSort());
 
 
-        //shirt record 3 to pos 8
+        //shift record 3 to pos 8
         $objPage = $arrPages[2];
         $objPage->setAbsolutePosition(8);
         //old order: 7, 1, 2, 3, 4, 5, 6, 8, 9, 10
@@ -67,6 +67,80 @@ class class_test_sort extends class_testbase {
         $objPage = $arrPages[7]; $this->assertEquals($objPage->getStrName(), "sortsubpage_2");  $this->assertEquals(8, $objPage->getIntSort());
         $objPage = $arrPages[8]; $this->assertEquals($objPage->getStrName(), "sortsubpage_9");  $this->assertEquals(9, $objPage->getIntSort());
         $objPage = $arrPages[9]; $this->assertEquals($objPage->getStrName(), "sortsubpage_10"); $this->assertEquals(10, $objPage->getIntSort());
+
+
+        //out of range shifts
+        $objPage = $arrPages[2];
+        $objPage->setAbsolutePosition(13);
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($objRootPage->getSystemid());
+        $objPage = $arrPages[0]; $this->assertEquals($objPage->getStrName(), "sortsubpage_7");  $this->assertEquals(1, $objPage->getIntSort());
+        $objPage = $arrPages[1]; $this->assertEquals($objPage->getStrName(), "sortsubpage_1");  $this->assertEquals(2, $objPage->getIntSort());
+        $objPage = $arrPages[2]; $this->assertEquals($objPage->getStrName(), "sortsubpage_3");  $this->assertEquals(3, $objPage->getIntSort());
+        $objPage = $arrPages[3]; $this->assertEquals($objPage->getStrName(), "sortsubpage_4");  $this->assertEquals(4, $objPage->getIntSort());
+        $objPage = $arrPages[4]; $this->assertEquals($objPage->getStrName(), "sortsubpage_5");  $this->assertEquals(5, $objPage->getIntSort());
+        $objPage = $arrPages[5]; $this->assertEquals($objPage->getStrName(), "sortsubpage_6");  $this->assertEquals(6, $objPage->getIntSort());
+        $objPage = $arrPages[6]; $this->assertEquals($objPage->getStrName(), "sortsubpage_8");  $this->assertEquals(7, $objPage->getIntSort());
+        $objPage = $arrPages[7]; $this->assertEquals($objPage->getStrName(), "sortsubpage_2");  $this->assertEquals(8, $objPage->getIntSort());
+        $objPage = $arrPages[8]; $this->assertEquals($objPage->getStrName(), "sortsubpage_9");  $this->assertEquals(9, $objPage->getIntSort());
+        $objPage = $arrPages[9]; $this->assertEquals($objPage->getStrName(), "sortsubpage_10"); $this->assertEquals(10, $objPage->getIntSort());
+
+
+        $objPage = $arrPages[2];
+        $objPage->setAbsolutePosition(0);
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($objRootPage->getSystemid());
+        $objPage = $arrPages[0]; $this->assertEquals($objPage->getStrName(), "sortsubpage_7");  $this->assertEquals(1, $objPage->getIntSort());
+        $objPage = $arrPages[1]; $this->assertEquals($objPage->getStrName(), "sortsubpage_1");  $this->assertEquals(2, $objPage->getIntSort());
+        $objPage = $arrPages[2]; $this->assertEquals($objPage->getStrName(), "sortsubpage_3");  $this->assertEquals(3, $objPage->getIntSort());
+        $objPage = $arrPages[3]; $this->assertEquals($objPage->getStrName(), "sortsubpage_4");  $this->assertEquals(4, $objPage->getIntSort());
+        $objPage = $arrPages[4]; $this->assertEquals($objPage->getStrName(), "sortsubpage_5");  $this->assertEquals(5, $objPage->getIntSort());
+        $objPage = $arrPages[5]; $this->assertEquals($objPage->getStrName(), "sortsubpage_6");  $this->assertEquals(6, $objPage->getIntSort());
+        $objPage = $arrPages[6]; $this->assertEquals($objPage->getStrName(), "sortsubpage_8");  $this->assertEquals(7, $objPage->getIntSort());
+        $objPage = $arrPages[7]; $this->assertEquals($objPage->getStrName(), "sortsubpage_2");  $this->assertEquals(8, $objPage->getIntSort());
+        $objPage = $arrPages[8]; $this->assertEquals($objPage->getStrName(), "sortsubpage_9");  $this->assertEquals(9, $objPage->getIntSort());
+        $objPage = $arrPages[9]; $this->assertEquals($objPage->getStrName(), "sortsubpage_10"); $this->assertEquals(10, $objPage->getIntSort());
+
+
+        //border-shifts
+        $objPage = $arrPages[1];
+        $objPage->setAbsolutePosition(1);
+
+        //logical    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        //new key:   0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        //new order: 1, 7, 3, 4, 5, 6, 8, 2, 9, 10
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($objRootPage->getSystemid());
+        $objPage = $arrPages[0]; $this->assertEquals($objPage->getStrName(), "sortsubpage_1");  $this->assertEquals(1, $objPage->getIntSort());
+        $objPage = $arrPages[1]; $this->assertEquals($objPage->getStrName(), "sortsubpage_7");  $this->assertEquals(2, $objPage->getIntSort());
+        $objPage = $arrPages[2]; $this->assertEquals($objPage->getStrName(), "sortsubpage_3");  $this->assertEquals(3, $objPage->getIntSort());
+        $objPage = $arrPages[3]; $this->assertEquals($objPage->getStrName(), "sortsubpage_4");  $this->assertEquals(4, $objPage->getIntSort());
+        $objPage = $arrPages[4]; $this->assertEquals($objPage->getStrName(), "sortsubpage_5");  $this->assertEquals(5, $objPage->getIntSort());
+        $objPage = $arrPages[5]; $this->assertEquals($objPage->getStrName(), "sortsubpage_6");  $this->assertEquals(6, $objPage->getIntSort());
+        $objPage = $arrPages[6]; $this->assertEquals($objPage->getStrName(), "sortsubpage_8");  $this->assertEquals(7, $objPage->getIntSort());
+        $objPage = $arrPages[7]; $this->assertEquals($objPage->getStrName(), "sortsubpage_2");  $this->assertEquals(8, $objPage->getIntSort());
+        $objPage = $arrPages[8]; $this->assertEquals($objPage->getStrName(), "sortsubpage_9");  $this->assertEquals(9, $objPage->getIntSort());
+        $objPage = $arrPages[9]; $this->assertEquals($objPage->getStrName(), "sortsubpage_10"); $this->assertEquals(10, $objPage->getIntSort());
+
+
+
+
+        $objPage = $arrPages[8];
+        $objPage->setAbsolutePosition(10);
+
+        //logical    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        //new key:   0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        //new order: 1, 7, 3, 4, 5, 6, 8, 2, 10, 9
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($objRootPage->getSystemid());
+        $objPage = $arrPages[0]; $this->assertEquals($objPage->getStrName(), "sortsubpage_1");  $this->assertEquals(1, $objPage->getIntSort());
+        $objPage = $arrPages[1]; $this->assertEquals($objPage->getStrName(), "sortsubpage_7");  $this->assertEquals(2, $objPage->getIntSort());
+        $objPage = $arrPages[2]; $this->assertEquals($objPage->getStrName(), "sortsubpage_3");  $this->assertEquals(3, $objPage->getIntSort());
+        $objPage = $arrPages[3]; $this->assertEquals($objPage->getStrName(), "sortsubpage_4");  $this->assertEquals(4, $objPage->getIntSort());
+        $objPage = $arrPages[4]; $this->assertEquals($objPage->getStrName(), "sortsubpage_5");  $this->assertEquals(5, $objPage->getIntSort());
+        $objPage = $arrPages[5]; $this->assertEquals($objPage->getStrName(), "sortsubpage_6");  $this->assertEquals(6, $objPage->getIntSort());
+        $objPage = $arrPages[6]; $this->assertEquals($objPage->getStrName(), "sortsubpage_8");  $this->assertEquals(7, $objPage->getIntSort());
+        $objPage = $arrPages[7]; $this->assertEquals($objPage->getStrName(), "sortsubpage_2");  $this->assertEquals(8, $objPage->getIntSort());
+        $objPage = $arrPages[8]; $this->assertEquals($objPage->getStrName(), "sortsubpage_10");  $this->assertEquals(9, $objPage->getIntSort());
+        $objPage = $arrPages[9]; $this->assertEquals($objPage->getStrName(), "sortsubpage_9"); $this->assertEquals(10, $objPage->getIntSort());
+
+
 
         $objRootPage->deleteObject();
 

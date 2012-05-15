@@ -14,18 +14,18 @@ class class_test_system extends class_testbase  {
         $arrSysRecords = array();
         echo "\tcreating 100 system-records without right-records...\n";
         //nr of records currently
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
         $intNrRightsRecords = $arrRow["COUNT(*)"];
         $objSystemCommon = new class_module_system_common();
         $arrSysRecords = array();
         for ($intI = 0; $intI < 100; $intI++) {
             $intSysId = $objSystemCommon->createSystemRecord(0, "autotest", false);
             $arrSysRecords[] = $intSysId;
-            $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
+            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
             $this->assertEquals($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithoutRights");
-            $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
+            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
             $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkCreateSysRecordsWithoutRights");
         }
 
@@ -34,26 +34,26 @@ class class_test_system extends class_testbase  {
         foreach($arrSysRecords as $strOneId) {
             $objSystemCommon->deleteSystemRecord($strOneId);
         }
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
 
 
         echo "\tcreating 100 system-records with right-records...\n";
         //nr of records currently
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
         $intNrRightsRecords = $arrRow["COUNT(*)"];
         $objSystemCommon = new class_module_system_common();
         $arrSysRecords = array();
         for ($intI = 0; $intI <= 100; $intI++) {
             $intSysId = $objSystemCommon->createSystemRecord(0, "autotest");
             $arrSysRecords[] = $intSysId;
-            $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
+            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
             $this->assertEquals($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithRights");
-            $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
+            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
             $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords+$intI+1, __FILE__." checkCreateSysRecordsWithRights");
         }
 
@@ -62,9 +62,9 @@ class class_test_system extends class_testbase  {
         foreach($arrSysRecords as $strOneId) {
             $objSystemCommon->deleteSystemRecord($strOneId);
         }
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithRights");
-        $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithRights");
 
     }
@@ -72,7 +72,6 @@ class class_test_system extends class_testbase  {
 
     function testSectionHandling() {
 
-        $objSystemCommon = new class_module_system_common();
         $objDB = class_carrier::getInstance()->getObjDB();
 
         //test sections

@@ -962,7 +962,7 @@ abstract class class_root {
 			return;
 
 		//senseless new pos?
-		if($intNewPosition < 0 || $intNewPosition >= count($arrElements))
+		if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
 		    return;
 
         $intCurPos = $this->getIntSort();
