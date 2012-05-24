@@ -50,7 +50,13 @@ class class_request_dispatcher {
         else
             $strReturn = $this->processPortalRequest($strModule, $strAction, $strLanguageParam);
 
+
+        $strReturn = $this->callScriptlets($strReturn);
+
+
         $strReturn = $this->cleanupOutput($strReturn);
+
+
 
         $strReturn = $this->getDebugInfo().$strReturn;
 
@@ -250,10 +256,30 @@ class class_request_dispatcher {
     private function cleanupOutput($strContent) {
         $objTemplate = class_carrier::getInstance()->getObjTemplate();
         $objTemplate->setTemplate($strContent);
-        $objTemplate->fillConstants();
         $objTemplate->deletePlaceholder();
         $strContent = $objTemplate->getTemplate();
         $strContent = str_replace("\%\%", "%%", $strContent);
+
+        return $strContent;
+    }
+
+    /**
+     * Calls the scriptlets in order to process additional tags and in order to enrich the content.
+     *
+     * @param $strContent
+     * @return string
+     */
+    private function callScriptlets($strContent) {
+        $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
+
+        foreach($arrScriptletFiles as $strOneScriptlet) {
+            $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
+            /** @var $objScriptlet interface_scriptlet */
+            $objScriptlet = new $strOneScriptlet();
+
+            if($objScriptlet instanceof interface_scriptlet)
+                $strContent = $objScriptlet->processContent($strContent);
+        }
 
         return $strContent;
     }

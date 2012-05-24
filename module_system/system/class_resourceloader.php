@@ -239,7 +239,7 @@ class class_resourceloader {
      * @param $strFolder
      * @param array $arrExtensionFilter
      * @param bool $bitWithSubfolders
-     * @return array
+     * @return array (path => filename)
      */
     public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false) {
         $arrReturn = array();

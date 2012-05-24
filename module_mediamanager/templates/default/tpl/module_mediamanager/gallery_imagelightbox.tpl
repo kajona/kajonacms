@@ -68,7 +68,7 @@
             <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
         </tr>
         <tr class="portalListRow2">
-            <td><img src="_webpath_/image.php?image=%%folder_preview_image_src%%&amp;maxWidth=50&amp;maxHeight=50" /></td>
+            <td><img src="[img,%%folder_preview_image_src%%,50,50]" /></td>
             <td class="description">%%folder_description%%</td>
         </tr>
     </table>
@@ -99,7 +99,7 @@
 -->
 <filelist_file>
     <div style="text-align: center;">
-        <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="_webpath_/image.php?image=%%file_filename%%&amp;maxWidth=100&amp;maxHeight=100" alt="%%file_subtitle%%" /></a></div>
+        <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100]" alt="%%file_subtitle%%" /></a></div>
         <div>%%file_name%%</div>
     </div>
 </filelist_file>

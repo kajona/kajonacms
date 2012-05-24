@@ -608,12 +608,35 @@ class class_installer {
 	    $strTemplateID = $this->objTemplates->readTemplate("/core/installer/installer.tpl", "installer_main", true);
 
 		$strReturn = $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn = $this->callScriptlets($strReturn);
 		$this->objTemplates->setTemplate($strReturn);
-		$this->objTemplates->fillConstants();
 		$this->objTemplates->deletePlaceholder();
 		$strReturn = $this->objTemplates->getTemplate();
 		return $strReturn;
 	}
+
+
+    /**
+     * Calls the scriptlets in order to process additional tags and in order to enrich the content.
+     *
+     * @param $strContent
+     * @return string
+     */
+    private function callScriptlets($strContent) {
+        $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
+
+        foreach($arrScriptletFiles as $strOneScriptlet) {
+            $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
+            /** @var $objScriptlet interface_scriptlet */
+            $objScriptlet = new $strOneScriptlet();
+
+            if($objScriptlet instanceof interface_scriptlet)
+                $strContent = $objScriptlet->processContent($strContent);
+        }
+
+        return $strContent;
+    }
+
 
 	/**
 	 * Checks, if the config-file was filled with correct values

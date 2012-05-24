@@ -191,7 +191,8 @@ class class_template {
 
 
 	/**
-	 * Fills the current temp-template with the passed values.<br /><b>Make sure to have the wanted template loaded before by using setTemplate()</b>
+	 * Fills the current temp-template with the passed values.
+     * <b>Make sure to have the wanted template loaded before by using setTemplate()</b>
 	 *
 	 * @param mixed $arrContent
      * @param bool $bitRemovePlaceholder
@@ -212,27 +213,11 @@ class class_template {
 
 	/**
 	 * Replaces constants in the template set by setTemplate()
-	 *
+	 * @deprecated use scriptlets instead
 	 */
 	public function fillConstants() {
-
-        if(!defined("_system_browser_cachebuster_"))
-            define("_system_browser_cachebuster_", 0);
-
-		$arrConstants 	= array(  	0 => "_indexpath_",
-							 		1 => "_webpath_",
-							 		2 => "_system_browser_cachebuster_",
-							 		3 => "_gentime_");
-		$arrValues		= array(  	0 => _indexpath_,
-		                      		1 => _webpath_,
-		                      		2 => _system_browser_cachebuster_,
-		                      		3 => date("d.m.y H:i" , time()));
-		if(defined("_skinwebpath_")) {
-			$arrConstants[] = "_skinwebpath_";
-			$arrValues[] = _skinwebpath_;
-		}
-
-		$this->strTempTemplate = str_replace($arrConstants, $arrValues, $this->strTempTemplate);
+        $objConstantScriptlet = new class_scriptlet_constants();
+        $this->strTempTemplate = $objConstantScriptlet->processContent($this->strTempTemplate);
 	}
 
     /**

@@ -70,6 +70,11 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         return $strReturn;
     }
 
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
+        return "";
+    }
+
+
     /**
      * Stores the submitted config-data back to the database
      *
