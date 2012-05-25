@@ -9,7 +9,7 @@
 
 
 /**
- * Installer for the system-module
+ * Installer for the languageswitch element
  *
  * @package element_languageswitch
  * @author sidler@mulchprod.de
