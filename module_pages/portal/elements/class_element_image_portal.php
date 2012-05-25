@@ -47,7 +47,7 @@ class class_element_image_portal extends class_element_portal implements interfa
         else
             $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image");
 
-        $this->arrElementData["image_src"] = urlencode($this->arrElementData["image_image"]);
+        $this->arrElementData["image_src"] = $this->arrElementData["image_image"];
 
         //TODO: rename db columns as well and remove this two lines
         $this->arrElementData["image_width"] = $this->arrElementData["image_x"];

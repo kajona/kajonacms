@@ -15,7 +15,7 @@
 <!-- available placeholders: paragraph_title_tag, paragraph_content, paragraph_image -->
 <paragraph_image>
     %%paragraph_title_tag%%
-    <img src="_webpath_/image.php?image=%%paragraph_image%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%paragraph_title%%" class="element_paragraph_image" />
+    <img src="[img,%%paragraph_image%%,200,200]" alt="%%paragraph_title%%" class="element_paragraph_image" />
     %%paragraph_content%%
     <div class="clearer"></div>
 </paragraph_image>
@@ -30,7 +30,7 @@
 <!-- available placeholders: paragraph_title_tag, paragraph_content, paragraph_image, paragraph_link -->
 <paragraph_image_link>
     %%paragraph_title_tag%%
-    <a href="%%paragraph_link%%" title="%%paragraph_title%%"><img src="_webpath_/image.php?image=%%paragraph_image%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%paragraph_title%%" class="element_paragraph_image" /></a>
+    <a href="%%paragraph_link%%" title="%%paragraph_title%%"><img src="[img,%%paragraph_image%%,200,200]" alt="%%paragraph_title%%" class="element_paragraph_image" /></a>
     %%paragraph_content%%<br /><br />
     %%lang_link_more_title%% <a href="%%paragraph_link%%">%%paragraph_link%%</a>
     <div class="clearer"></div>

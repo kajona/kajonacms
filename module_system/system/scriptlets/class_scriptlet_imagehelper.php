@@ -32,11 +32,19 @@ class class_scriptlet_imagehelper implements interface_scriptlet {
             return $strContent;
 
 
-        //$arrTemp = array();
-        //preg_match("#\[img,([A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)\]#i", $strContent, $arrTemp);
-        //var_dump($arrTemp);
+        $arrTemp = array();
+        preg_match_all("#\[img,([+%A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)\]#i", $strContent, $arrTemp);
 
-        $strContent = preg_replace("#\[img,([A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)\]#i", _webpath_."/image.php?image=\${1}&amp;maxWidth=\${2}&amp;maxHeight=\${3}", $strContent);
+        foreach($arrTemp[0] as $intKey => $strSearchString) {
+            $strContent = uniStrReplace(
+                $strSearchString,
+                _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;maxWidth=".$arrTemp[2][$intKey]."&amp;maxHeight=".$arrTemp[3][$intKey],
+                $strContent
+            );
+        }
+
+        //fast way, no urlencode required
+        //$strContent = preg_replace("#\[img,([A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)\]#i", _webpath_."/image.php?image=\${1}&amp;maxWidth=\${2}&amp;maxHeight=\${3}", $strContent);
 
 
         return $strContent;

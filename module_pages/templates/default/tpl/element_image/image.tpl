@@ -7,7 +7,7 @@
 <!-- available placeholders: image_src, image_title, image_width, image_height -->
 <image>
     <div class="element_image">
-        <img src="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%image_title%%" /><br />
+        <img src="[img,%%image_src%%,200,200]" alt="%%image_title%%" /><br />
         %%image_title%%
     </div>
 </image>
@@ -15,7 +15,7 @@
 <!-- available placeholders: link_href, image_src, image_title, image_width, image_height -->
 <image_link>
     <div class="element_image">
-        <a href="%%link_href%%"><img src="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%image_title%%" /></a><br />
+        <a href="%%link_href%%"><img src="[img,%%image_src%%,200,200]" alt="%%image_title%%" /></a><br />
         %%image_title%%
     </div>
 </image_link>

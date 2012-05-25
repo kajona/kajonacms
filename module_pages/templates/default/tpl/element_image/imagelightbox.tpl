@@ -55,8 +55,8 @@
 	</script>
 	
 	<div class="imagelightbox">
-	    <a href="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=800&amp;maxHeight=800" class="photoViewer" title="%%image_title%%">
-			<img src="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%image_title%%" />
+	    <a href="[img,%%image_src%%,800,800]" class="photoViewer" title="%%image_title%%">
+			<img src="[img,%%image_src%%,200,200]" alt="%%image_title%%" />
 	    </a>
 	</div>
 </image>
@@ -115,8 +115,8 @@
 	</script>
 
 	<div class="imagelightbox">
-	    <a href="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=800&amp;maxHeight=800" class="photoViewer" title="%%image_title%%">
-			<img src="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%image_title%%" />
+	    <a href="[img,%%image_src%%,800,800]" class="photoViewer" title="%%image_title%%">
+			<img src="[img,%%image_src%%,200,200]" alt="%%image_title%%" />
 	    </a>
 	</div>
 </image_link>
