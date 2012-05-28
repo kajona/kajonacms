@@ -33,14 +33,26 @@ class class_scriptlet_imagehelper implements interface_scriptlet {
 
 
         $arrTemp = array();
-        preg_match_all("#\[img,([+%A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)\]#i", $strContent, $arrTemp);
+        preg_match_all("#\[img,([+%A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)(,fixed|,max|)\]#i", $strContent, $arrTemp);
+
+        var_dump($arrTemp);
 
         foreach($arrTemp[0] as $intKey => $strSearchString) {
-            $strContent = uniStrReplace(
-                $strSearchString,
-                _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;maxWidth=".$arrTemp[2][$intKey]."&amp;maxHeight=".$arrTemp[3][$intKey],
-                $strContent
-            );
+
+            if(isset($arrTemp[4][$intKey]) && $arrTemp[4][$intKey] == ",fixed") {
+                $strContent = uniStrReplace(
+                    $strSearchString,
+                    _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;fixedWidth=".$arrTemp[2][$intKey]."&amp;fixedHeight=".$arrTemp[3][$intKey],
+                    $strContent
+                );
+            }
+            else {
+                $strContent = uniStrReplace(
+                    $strSearchString,
+                    _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;maxWidth=".$arrTemp[2][$intKey]."&amp;maxHeight=".$arrTemp[3][$intKey],
+                    $strContent
+                );
+            }
         }
 
         //fast way, no urlencode required

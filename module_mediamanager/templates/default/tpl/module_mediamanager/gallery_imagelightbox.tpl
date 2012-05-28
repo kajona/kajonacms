@@ -99,7 +99,7 @@
 -->
 <filelist_file>
     <div style="text-align: center;">
-        <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100]" alt="%%file_subtitle%%" /></a></div>
+        <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
         <div>%%file_name%%</div>
     </div>
 </filelist_file>
