@@ -35,8 +35,6 @@ class class_scriptlet_imagehelper implements interface_scriptlet {
         $arrTemp = array();
         preg_match_all("#\[img,([+%A-Za-z0-9_\./\\\]+),([0-9]+),([0-9]+)(,fixed|,max|)\]#i", $strContent, $arrTemp);
 
-        var_dump($arrTemp);
-
         foreach($arrTemp[0] as $intKey => $strSearchString) {
 
             if(isset($arrTemp[4][$intKey]) && $arrTemp[4][$intKey] == ",fixed") {
