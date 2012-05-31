@@ -140,6 +140,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                             $arrFileTemplate["image_detail_src"]  = $this->generateImage($objOneFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
                         }
 
+                        $arrFileTemplate["file_id"] = $objOneFile->getStrSystemid();
                         $arrFileTemplate["file_name"] = $objOneFile->getStrName();
                         $arrFileTemplate["file_filename"] = $objOneFile->getStrFilename();
                         $arrFileTemplate["file_subtitle"] = $objOneFile->getStrSubtitle();

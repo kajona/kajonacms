@@ -140,7 +140,7 @@ class class_lockmanager  {
     /**
 	 * Unlocks records locked passed the defined max-locktime
 	 *
-	 * @return true
+	 * @return bool
 	 */
 	private function unlockOldRecords() {
 	    $intMinTime = time() - _system_lock_maxtime_;

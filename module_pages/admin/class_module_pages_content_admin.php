@@ -315,11 +315,12 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
-	/**
-	 * Saves the passed Element to the database (edit or new modes)
-	 *
-	 * @return string "" in case of success
-	 */
+    /**
+     * Saves the passed Element to the database (edit or new modes)
+     *
+     * @throws class_exception
+     * @return string "" in case of success
+     */
 	protected function actionSaveElement() {
 		$strReturn = "";
 		//There are two modes - edit and new
@@ -374,7 +375,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		if($objLockmanager->isLockedByCurrentUser()) {
 			//Load the data of the current element
 			$objElementData = new class_module_pages_pageelement($this->getSystemid());
-			//Build the class-name
+            /** @var $objElement class_element_admin */
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
             /** @var $objElement class_element_admin */
@@ -446,66 +447,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
-    /**
-	 * Updates a single field of an element already existing.
-	 *
-	 * @return string "" in case of success
-     * @xml
-     */
-	protected function actionUpdateElementField() {
-		$strReturn = "";
-		//check, if the element isn't locked
-        $objCommons = new class_module_system_common($this->getSystemid());
-		$strPageSystemid = $objCommons->getPrevId();
-
-        $objLockmanager = new class_lockmanager($this->getSystemid());
-
-		if($objLockmanager->isLockedByCurrentUser() && $objCommons->rightEdit()) {
-			//Load the data of the current element
-			$objElementData = new class_module_pages_pageelement($this->getSystemid());
-			//Build the class-name
-			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
-			//and finally create the object
-            /** @var class_element_admin $objElement  */
-			$objElement = new $strElementClass();
-            $objElement->setSystemid($this->getSystemid());
-            $arrElementData = $objElement->loadElementData();
-
-            //see if we could set the param to the element
-            if($this->getParam("field") != "") {
-                $arrElementData[$this->getParam("field")] = $this->getParam("value");
-            }
-
-            //pass the data to the element, maybe the element wants to update some data
-            $objElement->setArrParamData($arrElementData);
-            $objElement->doBeforeSaveToDb();
-
-			//check, if we could save the data, so the element needn't to
-			//woah, we are soooo great
-            $objElement->updateForeignElement();
-
-			//Edit Date of page & unlock
-            $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
-            $objPage->updateObjectToDb();
-			$objLockmanager->unlockRecord();
-
-            //allow the element to run actions after saving
-            $objElement->doAfterSaveToDb();
-
-			//Loading the data of the corresp site
-			$objPage = new class_module_pages_page($strPageSystemid);
-			$this->flushPageFromPagesCache($objPage->getStrName());
-
-            $strReturn = "<message><success>update succeeded</success></message>";
-		}
-		else  {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-			$strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
-		}
-		return $strReturn;
-	}
-
-
 	/**
 	 * Shows the warning box before deleteing a element
 	 *
@@ -527,11 +468,12 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
-	/**
-	 * Deletes an Element
-	 *
-	 * @return string, "" in case of success
-	 */
+    /**
+     * Deletes an Element
+     *
+     * @throws class_exception
+     * @return string , "" in case of success
+     */
 	protected function actionDeleteElementFinal() {
 		$strReturn = "";
 
@@ -563,7 +505,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
      * Provides a form to set up the params needed to copy a single element from one placeholder to another.
      * Collects the target language, the target page and the target placeholder, invokes the copy-procedure.
      *
-     * @return string, "" in case of success
+     * @throws class_exception
+     * @return string , "" in case of success
      */
     protected function actionCopyElement() {
         $strReturn = "";
@@ -691,13 +634,12 @@ class class_module_pages_content_admin extends class_admin implements interface_
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
 
-                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                 }
                 else
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);
 
             }
-
 
         }
         else
@@ -766,6 +708,93 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$objElement = new class_module_pages_pageelement($this->getSystemid());
 		$objElement->setStatus();
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+    }
+
+
+    /**
+     * @xml
+     * @permissions edit
+     */
+    protected function actionUpdateObjectProperty() {
+        $strReturn = "";
+        //get the object to update
+        /** @var $objObject class_module_pages_element */
+        $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objObject->rightEdit()) {
+            //differ between two modes - page-elements or regular objects
+            if($objObject instanceof class_module_pages_pageelement) {
+
+                $strPageSystemid = $objObject->getPrevId();
+                $objLockmanager = new class_lockmanager($strPageSystemid);
+
+                if(!$objLockmanager->isLocked())
+                    $objLockmanager->lockRecord();
+
+                if($objLockmanager->isLockedByCurrentUser()) {
+                    //and finally create the object
+                    /** @var class_module_pages_pageelement $objElement  */
+                    $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
+                    //and finally create the object
+                    /** @var $objElement class_element_admin */
+                    $objElement = new $strElementClass();
+                    $objElement->setSystemid($this->getSystemid());
+                    $arrElementData = $objElement->loadElementData();
+
+                    //see if we could set the param to the element
+                    if($this->getParam("property") != "") {
+                        $arrElementData[$this->getParam("property")] = $this->getParam("value");
+                        $objElement->setArrParamData($arrElementData);
+                    }
+
+                    //pass the data to the element, maybe the element wants to update some data
+                    $objElement->doBeforeSaveToDb();
+
+                    //check, if we could save the data, so the element needn't to
+                    //woah, we are soooo great
+                    $objElement->updateForeignElement();
+
+                    //Edit Date of page & unlock
+                    $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
+                    $objPage->updateObjectToDb();
+                    $objLockmanager->unlockRecord();
+
+                    //allow the element to run actions after saving
+                    $objElement->doAfterSaveToDb();
+
+                    //Loading the data of the corresp site
+                    $objPage = new class_module_pages_page($strPageSystemid);
+                    $this->flushPageFromPagesCache($objPage->getStrName());
+
+                    $strReturn = "<message><success>element update succeeded</success></message>";
+                }
+            }
+            else {
+                //any other object - try to find the matching property and write the value
+                if($this->getParam("property") == "") {
+                    header(class_http_statuscodes::$strSC_BADREQUEST);
+                    return "<message><error>missing property param</error></message>";
+                }
+
+                $strSetter = class_objectfactory::getSetter($objObject, $this->getParam("property"));
+                if($strSetter == null) {
+                    header(class_http_statuscodes::$strSC_BADREQUEST);
+                    return "<message><error>setter not found</error></message>";
+                }
+
+                call_user_func(array($objObject, $strSetter), $this->getParam("value"));
+                $objObject->updateObjectToDb();
+                $this->flushCompletePagesCache();
+
+                $strReturn = "<message><success>object update succeeded</success></message>";
+
+            }
+        }
+        else  {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
+        }
+        return $strReturn;
+
     }
 
 }

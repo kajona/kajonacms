@@ -552,16 +552,17 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
     /**
-	 * Shifts an element up or down
-	 * This is a special implementation, because we don't have the usual system_prev_id relations.
+     * Shifts an element up or down
+     * This is a special implementation, because we don't have the usual system_prev_id relations.
      * Creates an initial sorting.
-	 * Note: Could be optimized!
-	 *
-	 * @param string $strMode up || down
-	 * @return string "" in case of success
+     * Note: Could be optimized!
+     *
+     * @param string $strMode up || down
+     *
+     * @return string|void "" in case of success
      * @see class_root::setPosition($strDirection = "upwards")
      * @deprecated
-	 */
+     */
 	public function setPosition($strMode = "up") {
 
         $arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();

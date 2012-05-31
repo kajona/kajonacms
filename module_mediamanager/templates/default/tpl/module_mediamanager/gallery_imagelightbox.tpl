@@ -95,12 +95,12 @@
 
 <!-- represents a single file within a filelist
      available placeholders: image_detail_src, file_name, file_filename, file_subtitle, file_description, file_size, file_hits, file_details_href,
-     file_owner, file_lmtime, file_link, file_link_href
+     file_owner, file_lmtime, file_link, file_link_href, file_id
 -->
 <filelist_file>
     <div style="text-align: center;">
         <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
-        <div>%%file_name%%</div>
+        <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
     </div>
 </filelist_file>
 

@@ -73,8 +73,8 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 	public function actionSave($strSystemid) {
 
 	    //do some cleanups
-        $strContent = processWysiwygHtmlContent($this->getParam("paragraph_content"));
-		$strImage = str_replace(_webpath_, "", $this->getParam("paragraph_image"));
+        $strContent = processWysiwygHtmlContent($this->arrParamData["paragraph_content"]);
+		$strImage = str_replace(_webpath_, "", $this->arrParamData["paragraph_image"]);
 
 		//and save to database
 		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
