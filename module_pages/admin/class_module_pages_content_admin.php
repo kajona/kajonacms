@@ -725,7 +725,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             if($objObject instanceof class_module_pages_pageelement) {
 
                 $strPageSystemid = $objObject->getPrevId();
-                $objLockmanager = new class_lockmanager($strPageSystemid);
+                $objLockmanager = new class_lockmanager($objObject->getSystemid());
 
                 if(!$objLockmanager->isLocked())
                     $objLockmanager->lockRecord();
