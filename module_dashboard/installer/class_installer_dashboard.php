@@ -20,7 +20,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	public function __construct() {
 
         $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
 
         $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
 		parent::__construct();

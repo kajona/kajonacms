@@ -17,7 +17,7 @@ class class_installer_element_downloads extends class_installer_base implements 
 	public function __construct() {
 
         $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
 
         $this->objMetadata->setStrTitle("element_downloads");
 

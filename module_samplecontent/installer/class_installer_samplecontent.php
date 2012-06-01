@@ -22,7 +22,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
 
         $this->setArrModuleEntry("moduleId", _samplecontent_modul_id_);
 

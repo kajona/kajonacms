@@ -20,7 +20,7 @@ class class_installer_element_directorybrowser extends class_installer_base impl
      */
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), __DIR__));
+        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
         $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
         parent::__construct();
 	}
