@@ -35,12 +35,13 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
 	}
 
-	/**
-	 * Handles the loading of a page, more in a functional than in an oop style
-	 *
+    /**
+     * Handles the loading of a page, more in a functional than in an oop style
+     *
+     * @throws class_exception
      * @return string the generated page
      * @permissions view
-	 */
+     */
 	protected function actionGeneratePage() {
 
 		//Determin the pagename
@@ -502,6 +503,7 @@ CSS;
 
                 //find the current cursor-position before creating the paste-container, used lateron
                 var sel = rangy.getSelection();
+                //var range = rangy.createRange();
 
                 var offset = editable.offset();
                 $('body').append('<div id="pasteContainer" contentEditable="true" style="position:absolute; clip:rect(0px, 0px, 0px, 0px); width: 1px; height: 1px; top: ' + offset.top + 'px; left: ' + offset.left + 'px;"></div>');
@@ -539,8 +541,8 @@ CSS;
                     var strOldHtml = sel.anchorNode.data;
                     var strNewHtml = strOldHtml.substr(0, sel.anchorOffset)+cleanContent+strOldHtml.substring(sel.focusOffset);
                     sel.anchorNode.data = strNewHtml;
-
-                    //editable.html(strNewHtml); //TODO: find matching cursor position, e.g. with http://code.google.com/p/rangy/ -> implemented, see above
+                    //set the cursor to the end of the selection
+                    sel.collapse(sel.anchorNode, sel.anchorOffset+cleanContent.length);
                 }, 10);
             };
 
