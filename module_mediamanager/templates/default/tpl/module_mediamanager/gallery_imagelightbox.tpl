@@ -2,61 +2,20 @@
 
 <!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
+    <script type="text/javascript" src="_webpath_/templates/default/js/lightbox/jquery.lightbox-0.5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/lightbox/css/jquery.lightbox-0.5.css" />
+
     <script type="text/javascript">
-        if (YAHOO.lang.isUndefined(arrViewers)) {
-            var arrViewers = new Array();
+        $(function() {
+            // Use this example, or...
+            $('a.photoViewer').lightBox();
 
-            YAHOO.util.Event.onDOMReady(function () {
-                YAHOO.namespace("YAHOO.photoViewer");
-                YAHOO.photoViewer.config = { viewers: {} };
-
-                //init all viewers
-                for (var i=0; i<arrViewers.length; i++) {
-                    YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
-                        properties: {
-                            id: arrViewers[i],
-                            grow: 0.2,
-                            fade: 0.2,
-                            modal: true,
-                            dragable: false,
-                            fixedcenter: true,
-                            loadFrom: "html",
-                            position: "absolute",
-                            buttonText: {
-                                next: " ",
-                                prev: " ",
-                                close: "X"
-                            },
-                            /* remove/rename the slideShow property to disable slideshow feature */
-                            slideShow: {
-                            	autoStart: false,
-                            	duration: 3500,
-                            	controlsText: {
-                            	    play: " ",
-                            	    pause: " ",
-                            	    stop: " ",
-                            	    display: "{0}/{1}"
-	                            }
-                            }
-                        }
-                    };
-                }
-            });
-
-            KAJONA.portal.loader.load(
-                ["dragdrop", "animation", "container"],
-            	[KAJONA_WEBPATH+"/templates/default/js/photoviewer/build/photoviewer_base.js",
-            	 KAJONA_WEBPATH+"/templates/default/js/photoviewer/assets/skins/kajona/kajona.css"]
-            );
-        }
-
-        //add viewer
-        arrViewers.push("pv_%%systemid%%");
+        });
     </script>
 
     <p>%%pathnavigation%%</p>
     %%folderlist%%
-    <div id="pv_%%systemid%%">%%filelist%%</div>
+    <ul id="pv_%%systemid%%">%%filelist%%</ul>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
@@ -99,7 +58,7 @@
 -->
 <filelist_file>
     <div style="text-align: center;">
-        <div><a href="%%image_detail_src%%" title="%%name%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
+        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
         <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
     </div>
 </filelist_file>

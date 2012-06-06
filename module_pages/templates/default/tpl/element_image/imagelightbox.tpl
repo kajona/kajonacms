@@ -2,57 +2,16 @@
 
 <!-- available placeholders: image_src, image_title, image_width, image_height -->
 <image>
-	<script type="text/javascript">
-	    if (YAHOO.lang.isUndefined(arrViewers)) {
-	        var arrViewers = new Array();
-	
-	        //add viewer: all images with class "photoViewer" in the div with the id "contentContainer"
-	        arrViewers.push("contentContainer");
-	
-	        YAHOO.util.Event.onDOMReady(function () {
-	            YAHOO.namespace("YAHOO.photoViewer");
-	            YAHOO.photoViewer.config = { viewers: {} };
-	
-	            //init all viewers
-	            for (var i=0; i<arrViewers.length; i++) {
-	                YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
-	                    properties: {
-	                        id: arrViewers[i],
-	                        grow: 0.2,
-	                        fade: 0.2,
-	                        modal: true,
-	                        dragable: false,
-	                        fixedcenter: true,
-	                        loadFrom: "html",
-	                        position: "absolute",
-	                        buttonText: {
-	                            next: " ",
-	                            prev: " ",
-	                            close: "X"
-	                        },
-	                        /* remove/rename the slideShow property to disable slideshow feature */
-	                        slideShow: {
-	                            autoStart: false,
-	                            duration: 3500,
-	                            controlsText: {
-	                                play: " ",
-	                                pause: " ",
-	                                stop: " ",
-	                                display: "{0}/{1}"
-	                            }
-	                        }
-	                    }
-	                };
-	            }
-	        });
-	
-	        KAJONA.portal.loader.load(
-	            ["dragdrop", "animation", "container"],
-	            [KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.js",
-	             KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/kajona/kajona.css"]
-	        );
-	    }
-	</script>
+    <script type="text/javascript" src="_webpath_/templates/default/js/lightbox/jquery.lightbox-0.5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/lightbox/css/jquery.lightbox-0.5.css" />
+
+    <script type="text/javascript">
+        $(function() {
+            // Use this example, or...
+            $('a.photoViewer').lightBox();
+
+        });
+    </script>
 	
 	<div class="imagelightbox">
 	    <a href="[img,%%image_src%%,800,800]" class="photoViewer" title="%%image_title%%">
@@ -62,57 +21,16 @@
 </image>
 
 <image_link>
-	<script type="text/javascript">
-	    if (YAHOO.lang.isUndefined(arrViewers)) {
-	        var arrViewers = new Array();
+    <script type="text/javascript" src="_webpath_/templates/default/js/lightbox/jquery.lightbox-0.5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/lightbox/css/jquery.lightbox-0.5.css" />
 
-	        //add viewer: all images with class "photoViewer" in the div with the id "contentContainer"
-	        arrViewers.push("contentContainer");
+    <script type="text/javascript">
+        $(function() {
+            // Use this example, or...
+            $('a.photoViewer').lightBox();
 
-	        YAHOO.util.Event.onDOMReady(function () {
-	            YAHOO.namespace("YAHOO.photoViewer");
-	            YAHOO.photoViewer.config = { viewers: {} };
-
-	            //init all viewers
-	            for (var i=0; i<arrViewers.length; i++) {
-	                YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
-	                    properties: {
-	                        id: arrViewers[i],
-	                        grow: 0.2,
-	                        fade: 0.2,
-	                        modal: true,
-	                        dragable: false,
-	                        fixedcenter: true,
-	                        loadFrom: "html",
-	                        position: "absolute",
-	                        buttonText: {
-	                            next: " ",
-	                            prev: " ",
-	                            close: "X"
-	                        },
-	                        /* remove/rename the slideShow property to disable slideshow feature */
-	                        slideShow: {
-	                            autoStart: false,
-	                            duration: 3500,
-	                            controlsText: {
-	                                play: " ",
-	                                pause: " ",
-	                                stop: " ",
-	                                display: "{0}/{1}"
-	                            }
-	                        }
-	                    }
-	                };
-	            }
-	        });
-
-	        KAJONA.portal.loader.load(
-	            ["dragdrop", "animation", "container"],
-	            [KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.js",
-	             KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/kajona/kajona.css"]
-	        );
-	    }
-	</script>
+        });
+    </script>
 
 	<div class="imagelightbox">
 	    <a href="[img,%%image_src%%,800,800]" class="photoViewer" title="%%image_title%%">
