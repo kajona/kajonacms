@@ -61,7 +61,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
                                 SET char1 = ?
                                 WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, array("postacomment_classic.tpl", $strElementId))) {
+            if($this->objDB->_pQuery($strQuery, array("postacomment_ajax.tpl", $strElementId))) {
                 $strReturn .= "Postacomment element created.\n";
             }
             else {

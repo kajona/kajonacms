@@ -217,10 +217,9 @@ class class_module_postacomment_post extends class_model implements interface_mo
         }
         //check that systemid isn't the id of a comment to avoid recursions
         $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
-        if($objRecord->getIntModuleNr() == _postacomment_modul_id_)
-                {
-                    return true;
-                }
+        if($objRecord == null || $objRecord->getIntModuleNr() == _postacomment_modul_id_) {
+            return true;
+        }
 
         //ok, so search for a records matching
         $arrPosts1 = class_module_postacomment_post::loadPostList(false, $strSystemid);
