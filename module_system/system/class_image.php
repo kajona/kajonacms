@@ -304,7 +304,7 @@ class class_image {
         else {
             switch ($strType) {
 			case ".jpg":
-				imagejpeg($this->objImage, "", $intJpegQuality);
+				imagejpeg($this->objImage, null, $intJpegQuality);
 				break;
 			case ".png":
 				imagepng($this->objImage);

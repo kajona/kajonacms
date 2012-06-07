@@ -211,7 +211,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * Loads all tags having at least one assigned systemrecord
      * and being active
-     * @return class_module_tags_tag
+     * @return class_module_tags_tag[]
      */
     public static function getTagsWithAssignments() {
         $strQuery = "SELECT DISTINCT(tags_tagid)

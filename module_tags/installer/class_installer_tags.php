@@ -20,7 +20,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
 
-		parent::__construct();
+        parent::__construct();
 	}
 
     public function install() {
@@ -78,12 +78,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $strReturn .= "Registering tags-element...\n";
 
         //check, if not already existing
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("tags");
-        }
-        catch (class_exception $objEx)  {
-        }
+        $objElement = class_module_pages_element::getElement("tags");
         if($objElement == null) {
             $objElement = new class_module_pages_element();
             $objElement->setStrName("tags");

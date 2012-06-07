@@ -4,9 +4,12 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                                 *
+*	$Id: lang_postacomment_en.php 3949 2011-06-25 10:46:38Z sidler $					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 337
 
-
-require_once './core/bootstrap.php';
-require_once './core/module_mediamanager/download.php';
+//editable entries
+$lang["postacomment_actionfilter"]       = "Action-filter:";
+$lang["postacomment_actionfilter_hint"]  = "If set, the comment-field and comment-list is only shown having a matching action-command. Should be left empty in most cases.";
+$lang["postacomment_numberofposts"]      = "Number of posts (0=unlimited)";

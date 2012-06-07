@@ -54,7 +54,7 @@ class class_flyimage {
      */
     public function __construct() {
         //Loading all configs...
-        $objCarrier = class_carrier::getInstance();
+        class_carrier::getInstance();
         //find the params to use
         $this->strFilename = urldecode(getGet("image"));
         //avoid directory traversing
@@ -91,8 +91,6 @@ class class_flyimage {
      */
     public function generateImage() {
         //Load the image-dimensions
-        $intWidthNew = 0;
-		$intHeightNew = 0;
 		if(is_file(_realpath_.$this->strFilename) && uniStrpos($this->strFilename, "/files") !== false ) {
 
 			//check headers, maybe execution could be terminated right here

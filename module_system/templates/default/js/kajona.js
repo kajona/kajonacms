@@ -4,15 +4,15 @@
 //       $Id$
 
 if (typeof KAJONA == "undefined") {
-	var KAJONA = {
-		util: {},
-		portal: {
-			lang: {}
-		},
-		admin: {
-			lang: {}
-		}
-	};
+    var KAJONA = {
+        util: {},
+        portal: {
+            lang: {}
+        },
+        admin: {
+            lang: {}
+        }
+    };
 }
 
 
@@ -46,18 +46,18 @@ KAJONA.util.inArray = function (strNeedle, arrHaystack) {
  * @param {Function} objCallbackInvisible
  */
 KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisible) {
-	var element = document.getElementById(strElementId);
-	if (element.style.display == 'none') 	{
-		element.style.display = 'block';
-		if (YAHOO.lang.isFunction(objCallbackVisible)) {
-			objCallbackVisible();
-		}
+    var element = document.getElementById(strElementId);
+    if (element.style.display == 'none') 	{
+        element.style.display = 'block';
+        if ($.isFunction(objCallbackVisible)) {
+            objCallbackVisible();
+        }
     }
     else {
-    	element.style.display = 'none';
-		if (YAHOO.lang.isFunction(objCallbackInvisible)) {
-			objCallbackInvisible();
-		}
+        element.style.display = 'none';
+        if ($.isFunction(objCallbackInvisible)) {
+            objCallbackInvisible();
+        }
     }
 };
 
@@ -69,152 +69,152 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
  * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
  */
 KAJONA.util.Loader = function (strScriptBase) {
-	var scriptBase = KAJONA_WEBPATH + strScriptBase;
-	var yuiBase = scriptBase + "yui/";
-	var arrRequestedModules = {};
-	var arrLoadedModules = {};
-	var arrCallbacks = [];
+    var scriptBase = KAJONA_WEBPATH + strScriptBase;
+    var yuiBase = scriptBase + "yui/";
+    var arrRequestedModules = {};
+    var arrLoadedModules = {};
+    var arrCallbacks = [];
 
-	function createYuiLoader() {
-		//create instance of YUILoader
-		var yuiLoader = new YAHOO.util.YUILoader({
-			base : yuiBase,
+    function createYuiLoader() {
+        //create instance of YUILoader
+        var yuiLoader = new YAHOO.util.YUILoader({
+            base : yuiBase,
 
-			//filter: "DEBUG", //use debug versions
-			//add the cachebuster
-			filter: {
-				'searchExp': "\\.js$",
-				'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
-			},
+            //filter: "DEBUG", //use debug versions
+            //add the cachebuster
+            filter: {
+                'searchExp': "\\.js$",
+                'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
+            },
 
-			onFailure : function(o) {
-				alert("File loading failed: " + YAHOO.lang.dump(o));
-			},
+            onFailure : function(o) {
+                alert("File loading failed: " + YAHOO.lang.dump(o));
+            },
 
-			onProgress : function(o) {
-				arrLoadedModules[o.name] = true;
-				checkCallbacks();
-			}
-		});
+            onProgress : function(o) {
+                arrLoadedModules[o.name] = true;
+                checkCallbacks();
+            }
+        });
 
-		return yuiLoader;
-	}
+        return yuiLoader;
+    }
 
-	function checkCallbacks() {
-		//check if we're ready to call some registered callbacks
-		for (var i = 0; i < arrCallbacks.length; i++) {
-			if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
-				var bitCallback = true;
-				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
-					if (!(arrCallbacks[i].requiredModules[j] in arrLoadedModules)) {
-						bitCallback = false;
-					}
-				}
+    function checkCallbacks() {
+        //check if we're ready to call some registered callbacks
+        for (var i = 0; i < arrCallbacks.length; i++) {
+            if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
+                var bitCallback = true;
+                for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
+                    if (!(arrCallbacks[i].requiredModules[j] in arrLoadedModules)) {
+                        bitCallback = false;
+                    }
+                }
 
-				//execute callback and delete it so it won't get called again
-				if (bitCallback) {
-					arrCallbacks[i].callback();
-					delete arrCallbacks[i];
-				}
-			}
-		}
-	}
+                //execute callback and delete it so it won't get called again
+                if (bitCallback) {
+                    arrCallbacks[i].callback();
+                    delete arrCallbacks[i];
+                }
+            }
+        }
+    }
 
-	this.load = function(arrYuiComponents, arrFiles, callback) {
-		var arrYuiComponentsToWaitFor = [];
-		var arrFilesToWaitFor = [];
-		var arrYuiComponentsToLoad = [];
-		var arrFilesToLoad = [];
+    this.load = function(arrYuiComponents, arrFiles, callback) {
+        var arrYuiComponentsToWaitFor = [];
+        var arrFilesToWaitFor = [];
+        var arrYuiComponentsToLoad = [];
+        var arrFilesToLoad = [];
 
-		//check YUI components, if they are already loaded or requested
-		if (YAHOO.lang.isArray(arrYuiComponents)) {
-			for (var i = 0; i < arrYuiComponents.length; i++) {
-				if (!(arrYuiComponents[i] in arrLoadedModules)) {
-					arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
-					if (!(arrYuiComponents[i] in arrRequestedModules)) {
-						arrYuiComponentsToLoad.push(arrYuiComponents[i]);
-					}
-				}
-			}
-		}
+        //check YUI components, if they are already loaded or requested
+        if (YAHOO.lang.isArray(arrYuiComponents)) {
+            for (var i = 0; i < arrYuiComponents.length; i++) {
+                if (!(arrYuiComponents[i] in arrLoadedModules)) {
+                    arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
+                    if (!(arrYuiComponents[i] in arrRequestedModules)) {
+                        arrYuiComponentsToLoad.push(arrYuiComponents[i]);
+                    }
+                }
+            }
+        }
 
-		//check own JS/CSS files, if they are already loaded or requested
-		if (YAHOO.lang.isArray(arrFiles)) {
-			for (var i = 0; i < arrFiles.length; i++) {
-				if (!(arrFiles[i] in arrLoadedModules)) {
-					arrFilesToWaitFor.push(arrFiles[i]);
-					if (!(arrFiles[i] in arrRequestedModules)) {
-						arrFilesToLoad.push(arrFiles[i]);
-					}
-				}
-			}
-		}
+        //check own JS/CSS files, if they are already loaded or requested
+        if (YAHOO.lang.isArray(arrFiles)) {
+            for (var i = 0; i < arrFiles.length; i++) {
+                if (!(arrFiles[i] in arrLoadedModules)) {
+                    arrFilesToWaitFor.push(arrFiles[i]);
+                    if (!(arrFiles[i] in arrRequestedModules)) {
+                        arrFilesToLoad.push(arrFiles[i]);
+                    }
+                }
+            }
+        }
 
-		//if all modules are already loaded, execute the callback
-		if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
-			if (YAHOO.lang.isFunction(callback)) {
-				callback();
-			}
-		} else {
-			//register the callback to be called later on
-			if (YAHOO.lang.isFunction(callback)) {
-				arrCallbacks.push({
-					'callback' : callback,
-					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
-				});
-			}
+        //if all modules are already loaded, execute the callback
+        if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
+            if (YAHOO.lang.isFunction(callback)) {
+                callback();
+            }
+        } else {
+            //register the callback to be called later on
+            if (YAHOO.lang.isFunction(callback)) {
+                arrCallbacks.push({
+                    'callback' : callback,
+                    'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
+                });
+            }
 
-			//are there components/files to load which are not already requested?
-			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
-				var yuiLoader = createYuiLoader();
+            //are there components/files to load which are not already requested?
+            if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
+                var yuiLoader = createYuiLoader();
 
-				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
-					yuiLoader.require(arrYuiComponentsToLoad[i]);
-					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
-				}
-				for (var i = 0; i < arrFilesToLoad.length; i++) {
+                for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
+                    yuiLoader.require(arrYuiComponentsToLoad[i]);
+                    arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
+                }
+                for (var i = 0; i < arrFilesToLoad.length; i++) {
                     var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
 
                     var filter = {
-        				'searchExp': "\\."+fileType,
-        				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
-        			};
+                        'searchExp': "\\."+fileType,
+                        'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
+                    };
                     var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
 
-					yuiLoader.addModule( {
-						name : arrFilesToLoad[i],
-						type : fileType,
-						skinnable : false,
-						fullpath : url
-					});
+                    yuiLoader.addModule( {
+                        name : arrFilesToLoad[i],
+                        type : fileType,
+                        skinnable : false,
+                        fullpath : url
+                    });
 
-					yuiLoader.require(arrFilesToLoad[i]);
-					arrRequestedModules[arrFilesToLoad[i]] = true;
-				}
+                    yuiLoader.require(arrFilesToLoad[i]);
+                    arrRequestedModules[arrFilesToLoad[i]] = true;
+                }
 
-				//fire YUILoader after the onDOMReady event
-				YAHOO.util.Event.onDOMReady(function () {
-					yuiLoader.insert();
-				});
-			}
-		}
-	}
+                //fire YUILoader after the onDOMReady event
+                YAHOO.util.Event.onDOMReady(function () {
+                    yuiLoader.insert();
+                });
+            }
+        }
+    }
 
-	//for compatibility with Kajona templates pre 3.3.0
-	this.convertAdditionalFiles = function(additionalFiles) {
-		if (YAHOO.lang.isString(additionalFiles)) {
-			//convert to array and add webpath
-			return new Array(scriptBase + additionalFiles);
-		} else if (YAHOO.lang.isArray(additionalFiles)) {
-			//add webpath
-			for (var i = 0; i < additionalFiles.length; i++) {
-				additionalFiles[i] = scriptBase + additionalFiles[i];
-			}
-			return additionalFiles;
-		} else {
-			return null;
-		}
-	}
+    //for compatibility with Kajona templates pre 3.3.0
+    this.convertAdditionalFiles = function(additionalFiles) {
+        if (YAHOO.lang.isString(additionalFiles)) {
+            //convert to array and add webpath
+            return new Array(scriptBase + additionalFiles);
+        } else if (YAHOO.lang.isArray(additionalFiles)) {
+            //add webpath
+            for (var i = 0; i < additionalFiles.length; i++) {
+                additionalFiles[i] = scriptBase + additionalFiles[i];
+            }
+            return additionalFiles;
+        } else {
+            return null;
+        }
+    }
 };
 
 
@@ -239,23 +239,23 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
         containerName += "_"+strCaptchaId;
         imgID += "_"+strCaptchaId;
     } else {
-    	//fallback for old templates (old function call)
-    	imgID = "kajonaCaptcha";
+        //fallback for old templates (old function call)
+        imgID = "kajonaCaptcha";
     }
-	if (!intWidth) {
-		var intWidth = 180;
-	}
+    if (!intWidth) {
+        var intWidth = 180;
+    }
 
-	var timeCode = new Date().getTime();
-	if (document.getElementById(imgID) == undefined) {
-		var objImg=document.createElement("img");
-		objImg.setAttribute("id", imgID);
-		objImg.setAttribute("src", "image.php?image=kajonaCaptcha&maxWidth="+intWidth+"&reload="+timeCode);
-		document.getElementById(containerName).appendChild(objImg);
-	} else {
-		var objImg = document.getElementById(imgID);
-		objImg.src = objImg.src + "&reload="+timeCode;
-	}
+    var timeCode = new Date().getTime();
+    if (document.getElementById(imgID) == undefined) {
+        var objImg=document.createElement("img");
+        objImg.setAttribute("id", imgID);
+        objImg.setAttribute("src", "image.php?image=kajonaCaptcha&maxWidth="+intWidth+"&reload="+timeCode);
+        document.getElementById(containerName).appendChild(objImg);
+    } else {
+        var objImg = document.getElementById(imgID);
+        objImg.src = objImg.src + "&reload="+timeCode;
+    }
 };
 
 /**
@@ -264,114 +264,114 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
  * originally based on Bubble Tooltips by Alessandro Fulciniti (http://pro.html.it - http://web-graphics.com)
  */
 KAJONA.portal.tooltip = (function() {
-	var container;
-	var lastMouseX = 0;
-	var lastMouseY = 0;
+    var container;
+    var lastMouseX = 0;
+    var lastMouseY = 0;
 
-	function locate(e) {
-		var posx = 0, posy = 0, c;
-		if (e == null) {
-			e = window.event;
-		}
-		if (e.pageX || e.pageY) {
-			posx = e.pageX;
-			posy = e.pageY;
-		} else if (e.clientX || e.clientY) {
-			if (document.documentElement.scrollTop) {
-				posx = e.clientX + document.documentElement.scrollLeft;
-				posy = e.clientY + document.documentElement.scrollTop;
-			} else {
-				posx = e.clientX + document.body.scrollLeft;
-				posy = e.clientY + document.body.scrollTop;
-			}
-		}
+    function locate(e) {
+        var posx = 0, posy = 0, c;
+        if (e == null) {
+            e = window.event;
+        }
+        if (e.pageX || e.pageY) {
+            posx = e.pageX;
+            posy = e.pageY;
+        } else if (e.clientX || e.clientY) {
+            if (document.documentElement.scrollTop) {
+                posx = e.clientX + document.documentElement.scrollLeft;
+                posy = e.clientY + document.documentElement.scrollTop;
+            } else {
+                posx = e.clientX + document.body.scrollLeft;
+                posy = e.clientY + document.body.scrollTop;
+            }
+        }
 
-		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
-		if (posx == 0 && posy == 0) {
-			posx = lastMouseX;
-			posy = lastMouseY;
-		} else {
-			lastMouseX = posx;
-			lastMouseY = posy;
-		}
+        //save current x and y pos (needed to show tooltip at right position if it's added by onclick)
+        if (posx == 0 && posy == 0) {
+            posx = lastMouseX;
+            posy = lastMouseY;
+        } else {
+            lastMouseX = posx;
+            lastMouseY = posy;
+        }
 
-		c = container;
-		var left = (posx - c.offsetWidth);
-		if (left - c.offsetWidth < 0) {
-			left += c.offsetWidth;
-		}
-		c.style.top = (posy + 10) + "px";
-		c.style.left = left + "px";
-	}
+        c = container;
+        var left = (posx - c.offsetWidth);
+        if (left - c.offsetWidth < 0) {
+            left += c.offsetWidth;
+        }
+        c.style.top = (posy + 10) + "px";
+        c.style.left = left + "px";
+    }
 
-	function add(objElement, strHtmlContent, bitOpacity) {
-		var tooltip;
+    function add(objElement, strHtmlContent, bitOpacity) {
+        var tooltip;
 
-		if (strHtmlContent == null || strHtmlContent.length == 0) {
-			try {
-				strHtmlContent = objElement.getAttribute("title");
-			} catch (e) {}
-		}
-		if (strHtmlContent == null || strHtmlContent.length == 0) {
-			return;
-		}
+        if (strHtmlContent == null || strHtmlContent.length == 0) {
+            try {
+                strHtmlContent = objElement.getAttribute("title");
+            } catch (e) {}
+        }
+        if (strHtmlContent == null || strHtmlContent.length == 0) {
+            return;
+        }
 
-		//try to remove title
-		try {
-			objElement.removeAttribute("title");
-		} catch (e) {}
+        //try to remove title
+        try {
+            objElement.removeAttribute("title");
+        } catch (e) {}
 
-		tooltip = document.createElement("span");
-		tooltip.className = "kajonaTooltip";
-		tooltip.style.display = "block";
-		tooltip.innerHTML = strHtmlContent;
+        tooltip = document.createElement("span");
+        tooltip.className = "kajonaTooltip";
+        tooltip.style.display = "block";
+        tooltip.innerHTML = strHtmlContent;
 
-		if (bitOpacity != false) {
-			tooltip.style.filter = "alpha(opacity:85)";
-			tooltip.style.KHTMLOpacity = "0.85";
-			tooltip.style.MozOpacity = "0.85";
-			tooltip.style.opacity = "0.85";
-		}
+        if (bitOpacity != false) {
+            tooltip.style.filter = "alpha(opacity:85)";
+            tooltip.style.KHTMLOpacity = "0.85";
+            tooltip.style.MozOpacity = "0.85";
+            tooltip.style.opacity = "0.85";
+        }
 
-		//create tooltip container and save reference
-		if (container == null) {
-			var h = document.createElement("span");
-			h.id = "kajonaTooltipContainer";
-			h.setAttribute("id", "kajonaTooltipContainer");
-			h.style.position = "absolute";
-			h.style.zIndex = "2000";
-			document.getElementsByTagName("body")[0].appendChild(h);
-			container = h;
-		}
+        //create tooltip container and save reference
+        if (container == null) {
+            var h = document.createElement("span");
+            h.id = "kajonaTooltipContainer";
+            h.setAttribute("id", "kajonaTooltipContainer");
+            h.style.position = "absolute";
+            h.style.zIndex = "2000";
+            document.getElementsByTagName("body")[0].appendChild(h);
+            container = h;
+        }
 
-		objElement.tooltip = tooltip;
-		objElement.onmouseover = show;
-		objElement.onmouseout = hide;
-		objElement.onmousemove = locate;
-		objElement.onmouseover(objElement);
-	}
+        objElement.tooltip = tooltip;
+        objElement.onmouseover = show;
+        objElement.onmouseout = hide;
+        objElement.onmousemove = locate;
+        objElement.onmouseover(objElement);
+    }
 
-	function show(objEvent) {
-		hide();
-		container.appendChild(this.tooltip);
-		locate(objEvent);
-	}
+    function show(objEvent) {
+        hide();
+        container.appendChild(this.tooltip);
+        locate(objEvent);
+    }
 
-	function hide() {
-		try {
-			var c = container;
-			if (c.childNodes.length > 0) {
-				c.removeChild(c.firstChild);
-			}
-		} catch (e) {}
-	}
+    function hide() {
+        try {
+            var c = container;
+            if (c.childNodes.length > 0) {
+                c.removeChild(c.firstChild);
+            }
+        } catch (e) {}
+    }
 
-	//public variables and methods
-	return {
-		add : add,
-		show : show,
-		hide : hide
-	}
+    //public variables and methods
+    return {
+        add : add,
+        show : show,
+        hide : hide
+    }
 }());
 
 
@@ -397,19 +397,19 @@ KAJONA.portal.loader = new KAJONA.util.Loader("/templates/default/js/");
  * extend the loader with predefined helper functions
  */
 KAJONA.portal.loader.loadAjaxBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "connection" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+    this.load([ "connection" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
 KAJONA.portal.loader.loadAnimationBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "animation" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+    this.load([ "animation" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
 KAJONA.portal.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+    this.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
 KAJONA.portal.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "calendar" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+    this.load([ "calendar" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
 

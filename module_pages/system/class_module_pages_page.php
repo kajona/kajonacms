@@ -277,7 +277,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @param int $intEnd
      * @param string $strFilter
      * @param bool $bitIncludeAlias
-     * @return mixed class_module_pages_page
+     * @return class_module_pages_page[]
      * @static
      */
 	public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "", $bitIncludeAlias = true) {

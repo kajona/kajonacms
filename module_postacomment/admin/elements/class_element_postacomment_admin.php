@@ -4,27 +4,27 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                  *
+*	$Id: class_element_postacomment.php 3577 2011-01-17 20:07:32Z sidler $                              *
 ********************************************************************************************************/
 
 
 /**
- * Class to handle the admin-stuff of the tags-element
+ * Class representing the admin-part of the postacomment element
  *
- * @package module_tags
- * @author sidler@mulchpro.de
+ * @package modul_postacomment
+ * @author sidler@mulchprod.de
+ *
  */
-class class_element_tags_admin extends class_element_admin implements interface_admin_element {
+class class_element_postacomment_admin extends class_element_admin implements interface_admin_element {
 
 	/**
 	 * Constructor
 	 *
 	 */
 	public function __construct() {
-
-        $this->setArrModuleEntry("name", "element_tags");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1");
+		$this->setArrModuleEntry("name", "element_postacomment");
+		$this->setArrModuleEntry("table", _dbprefix_."element_universal");
+		$this->setArrModuleEntry("tableColumns", "char1,char2,int1");
 		parent::__construct();
 	}
 
@@ -34,11 +34,10 @@ class class_element_tags_admin extends class_element_admin implements interface_
 	 * @param mixed $arrElementData
 	 * @return string
 	 */
-	public function getEditForm($arrElementData) {
+	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 
-		//Load the available templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_tags");
+        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_postacomment");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {
@@ -46,12 +45,14 @@ class class_element_tags_admin extends class_element_admin implements interface_
 			}
 		}
 
-        $strReturn .= $this->objToolkit->warningBox($this->getLang("tags_hint"));
-
 		if(count($arrTemplates) == 1)
             $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("postacomment_actionfilter_hint"));
+        $strReturn .= $this->objToolkit->formInputText("char2", $this->getLang("postacomment_actionfilter"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
+        $strReturn .= $this->objToolkit->formInputText("int1", $this->getLang("postacomment_numberofposts"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 

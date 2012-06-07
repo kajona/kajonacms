@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id: lang_directorybrowser_de.php 4041 2011-07-25 17:34:43Z sidler $					    *
