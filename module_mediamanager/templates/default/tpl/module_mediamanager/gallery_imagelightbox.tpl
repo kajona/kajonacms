@@ -2,14 +2,32 @@
 
 <!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
-    <script type="text/javascript" src="_webpath_/templates/default/js/lightbox/jquery.lightbox-0.5.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/lightbox/css/jquery.lightbox-0.5.css" />
+    <script type="text/javascript" src="_webpath_/templates/default/js/fancybox/jquery.fancybox.pack.js"></script>
+    <script type="text/javascript" src="_webpath_/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.js"></script>
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/fancybox/jquery.fancybox.css" />
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.css" />
 
     <script type="text/javascript">
-        $(function() {
-            // Use this example, or...
-            $('a.photoViewer').lightBox();
-
+        $(document).ready(function() {
+            $(".fancybox-thumb").fancybox({
+                prevEffect	: 'none',
+                nextEffect	: 'none',
+                helpers	: {
+                    title	: {
+                        type: 'outside'
+                    },
+                    overlay	: {
+                        opacity : 0.8,
+                        css : {
+                            'background-color' : '#000'
+                        }
+                    },
+                    thumbs	: {
+                        width	: 50,
+                        height	: 50
+                    }
+                }
+            });
         });
     </script>
 
@@ -17,6 +35,7 @@
     %%folderlist%%
     <ul id="pv_%%systemid%%">%%filelist%%</ul>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
+    <div>Please note: This template makes use of the jQuery plugin "lightbox". Make sure to respect the projects <a href="http://fancyapps.com/fancybox/#license" target="_blank">licence</a>.</div>
 </list>
 
 <!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_href, folder_preview_image_src -->
@@ -58,7 +77,7 @@
 -->
 <filelist_file>
     <div style="text-align: center;">
-        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="photoViewer"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
+        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb" title="%%file_subtitle%%"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
         <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
     </div>
 </filelist_file>
