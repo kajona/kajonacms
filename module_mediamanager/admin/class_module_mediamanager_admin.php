@@ -353,7 +353,7 @@ HTML;
             $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
             if($objCurFile->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                 if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                    $strReturn .= $this->getLang("upload_success");
+                    $strReturn .= $this->getLang("upload_erfolg");
 
                     $objCurFile->syncRepo();
 
