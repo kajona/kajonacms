@@ -49,13 +49,13 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
     var element = document.getElementById(strElementId);
     if (element.style.display == 'none') 	{
         element.style.display = 'block';
-        if (YAHOO.lang.isFunction(objCallbackVisible)) {
+        if ($.isFunction(objCallbackVisible)) {
             objCallbackVisible();
         }
     }
     else {
         element.style.display = 'none';
-        if (YAHOO.lang.isFunction(objCallbackInvisible)) {
+        if ($.isFunction(objCallbackInvisible)) {
             objCallbackInvisible();
         }
     }
