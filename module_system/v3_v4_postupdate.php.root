@@ -13,7 +13,6 @@ require_once './core/bootstrap.php';
 
 /*
  * TODO: Migrate Ratings (Downloads, Gallery)
- * TODO: Migrate Postacommment (Downloads, Gallery)
  */
 
 
@@ -145,6 +144,8 @@ class class_v3_v4_postupdate {
                     $objOneFile->setIntHits($arrOneOldFile["downloads_hits"]);
                     $objOneFile->updateObjectToDb();
 
+                    $this->moveComments($arrOneOldFile["downloads_id"], $objOneFile->getSystemid());
+
                     echo "...update succeeded\n";
 
                     if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
@@ -257,6 +258,8 @@ class class_v3_v4_postupdate {
                     $objOneFile->setIntHits($arrOneOldFile["pic_hits"]);
                     $objOneFile->updateObjectToDb();
 
+                    $this->moveComments($arrOneOldFile["pic_id"], $objOneFile->getSystemid());
+
                     echo "...update succeeded\n";
 
                     if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
@@ -355,17 +358,20 @@ class class_v3_v4_postupdate {
         $this->removeSetting("_filemanager_foldersize_");
         $this->removeSetting("_filemanager_show_foreign_");
 
+        return true;
     }
 
 
 
 
 
+    private function moveComments($strOldSystemid, $strNewSystemid) {
+        $strQuery = "UPDATE "._dbprefix_."postacomment
+                        SET postacomment_systemid = ?
+                      WHERE postacomment_systemid = ?";
 
-
-
-
-
+        return $this->objDB->_pQuery($strQuery, array($strNewSystemid, $strOldSystemid));
+    }
 
 
 
