@@ -8,5 +8,5 @@
 ********************************************************************************************************/
 
 //ID of the postacomment-module
-	define( "_postacomment_modul_id_",							80);
+define( "_postacomment_modul_id_",							80);
 

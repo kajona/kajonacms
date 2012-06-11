@@ -11,7 +11,7 @@
  * Portal-class of the postacomment-module
  * Serves xml-requests, e.g. saves a sent comment
  *
- * @package modul_postacomment
+ * @package module_postacomment
  * @author sidler@mulchprod.de
  */
 class class_module_postacomment_portal_xml extends class_portal implements interface_xml_portal {

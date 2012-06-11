@@ -11,7 +11,7 @@
 /**
  * Admin class of the postacomment-module. Responsible for listing posts and organizing them
  *
- * @package modul_postacomment
+ * @package module_postacomment
  * @author sidler@mulchprod.de
  */
 class class_module_postacomment_admin extends class_admin_simple implements interface_admin {

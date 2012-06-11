@@ -10,7 +10,7 @@
 /**
  * Class providing an install for the postacomment module
  *
- * @package modul_postacomment
+ * @package module_postacomment
  */
 class class_installer_postacomment extends class_installer_base implements interface_installer {
 

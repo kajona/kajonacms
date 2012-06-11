@@ -11,7 +11,7 @@
 /**
  * Class representing the admin-part of the postacomment element
  *
- * @package modul_postacomment
+ * @package module_postacomment
  * @author sidler@mulchprod.de
  *
  */

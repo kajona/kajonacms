@@ -10,7 +10,7 @@
 /**
  * Portal-part of the postacomment-element
  *
- * @package modul_postacomment
+ * @package module_postacomment
  * @author sidler@mulchprod.de
  */
 class class_element_postacomment_portal extends class_element_portal implements interface_portal_element {

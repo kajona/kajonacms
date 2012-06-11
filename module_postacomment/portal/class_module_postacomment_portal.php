@@ -10,7 +10,7 @@
 /**
  * Portal-class of the postacomment. Handles the printing of postacomment lists / detail
  *
- * @package modul_postacomment
+ * @package module_postacomment
  * @author sidler@mulchprod.de
  */
 class class_module_postacomment_portal extends class_portal implements interface_portal {
@@ -243,10 +243,10 @@ class class_module_postacomment_portal extends class_portal implements interface
         $intNumberOfIcons = class_module_rating_rate::$intMaxRatingValue;
 
         //read the templates
-        $strTemplateBarId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "rating_bar");
+        $strTemplateBarId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "rating_bar");
 
         if($bitRatingAllowed && $bitPermissions) {
-            $strTemplateIconId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "rating_icon");
+            $strTemplateIconId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "rating_icon");
 
             for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
                 $arrTemplate = array();

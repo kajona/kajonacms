@@ -10,7 +10,7 @@
 /**
  * Model for comment itself
  *
- * @package modul_postacomment
+ * @package module_postacomment
  * @author sidler@mulchprod.de
  *
  * @targetTable postacomment.postacomment_id
