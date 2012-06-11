@@ -112,11 +112,12 @@ class class_module_guestbook_portal extends class_portal implements interface_po
 	}
 
 
-	/**
-	 * Saves the passed values to db
-	 *
-	 * @return string "" in case of success
-	 */
+    /**
+     * Saves the passed values to db
+     *
+     * @throws class_exception
+     * @return string "" in case of success
+     */
 	protected function actionSaveGuestbook() {
 		$strReturn = "";
         
@@ -142,7 +143,6 @@ class class_module_guestbook_portal extends class_portal implements interface_po
                 throw new class_exception("Error saving entry", class_exception::$level_ERROR);
 
 
-
             $strMailtext = $this->getLang("new_post_mail");
             $strMailtext .= getLinkAdminHref("guestbook", "edit", "&systemid=".$objPost->getSystemid(), false);
             $objMessageHandler = new class_module_messaging_messagehandler();
@@ -155,7 +155,6 @@ class class_module_guestbook_portal extends class_portal implements interface_po
             }
 
             $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_guestbook());
-
 
 			//Flush the page from cache
             $this->flushPageFromPagesCache($this->getPagename());

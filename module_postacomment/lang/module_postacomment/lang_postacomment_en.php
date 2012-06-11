@@ -21,16 +21,15 @@ $lang["postacomment_title"]              = "Subject:";
 $lang["quickhelp_editPost"]              = "In this view, you can change the values of a comment.";
 $lang["quickhelp_list"]                  = "All comments provided by users using the portal are listed in this view.<br />A row has the following structure:<br/><br/>Pagename  (Language) | Date <br/>Username | Subject <br />Message <br/><br />By using the page-filter at top of the list, the posts can be filtered by a single page.Long comments are cut, so use the action edit to read the complete message.";
 $lang["required_postacomment_comment"]   = "Comment";
-$lang["_postacomment_notify_mail_"]      = "Info-mailadress:";
-$lang["_postacomment_notify_mail_hint"]      = "If populated with a valid email-adresse, an info-mail is sent in case of new comments.";
 
 $lang["pac_newmail_subject"]             = "New comment on the webseite";
 $lang["pac_newmail_body"]                = "A new comment was posted:";
 
 $lang["form_message_label"]              = "Message";
 $lang["form_name_label"]                 = "Name";
-$lang["form_subject_label"]              = "Subject";
+$lang["form_comment_title"]              = "Subject";
 $lang["form_submit_label"]               = "Submit";
+$lang["form_comment_username"]              = "Name:";
 $lang["postacomment_empty"]              = "No comments made till now";
 $lang["postacomment_rating_rate1"]       = "Rate comment with ";
 $lang["postacomment_rating_rate2"]       = " point(s)!";
@@ -39,6 +38,9 @@ $lang["postacomment_write_new"]          = "Write a comment";
 $lang["validation_code"]                 = "Please enter the valid code";
 $lang["validation_message"]              = "Please provide a message";
 $lang["validation_name"]                 = "Please provide your name";
+
+$lang["messageprovider_postacomment_name"] = "Comments";
+$lang["new_comment_mail"]                = "A new comment was created.";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Post", 5 => "Rating", 6 => "", 7 => "", 8 => "");

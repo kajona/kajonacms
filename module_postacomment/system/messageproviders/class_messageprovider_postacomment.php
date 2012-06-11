@@ -3,18 +3,18 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                         *
+*	$Id: class_messageprovider_guestbook.php 4647 2012-05-11 14:37:22Z sidler $                         *
 ********************************************************************************************************/
 
 /**
- * The guestbook message-provider is able to send mails as soon as a new post is available.
- * By default, all users with edit-permissions of the guestbook-module are notified.
+ * The postacomment message-provider is able to send mails as soon as a new comment is available.
+ * By default, all users with edit-permissions of the postacomment-module are notified.
  *
  * @author sidler@mulchprod.de
- * @package module_guestbook
+ * @package module_postacomment
  * @since 4.0
  */
-class class_messageprovider_guestbook implements interface_messageprovider {
+class class_messageprovider_postacomment implements interface_messageprovider {
 
     /**
      * Called whenever a message is being deleted
@@ -40,7 +40,7 @@ class class_messageprovider_guestbook implements interface_messageprovider {
      * @return string
      */
     public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_guestbook_name", "guestbook");
+        return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_postacomment_name", "postacomment");
     }
 
     /**
@@ -49,6 +49,6 @@ class class_messageprovider_guestbook implements interface_messageprovider {
      * @return string
      */
     public function getStrIdentifier() {
-        return "guestbook";
+        return "postacomment";
     }
 }

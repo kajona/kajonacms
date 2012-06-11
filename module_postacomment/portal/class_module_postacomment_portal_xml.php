@@ -82,6 +82,19 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
 
             $objPost->updateObjectToDb();
             $this->flushPageFromPagesCache($this->getPagename());
+
+            $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
+            $strMailtext .= getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
+            $objMessageHandler = new class_module_messaging_messagehandler();
+            $arrGroups = array();
+            $allGroups = class_module_user_group::getAllGroups();
+            foreach($allGroups as $objOneGroup) {
+                if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
+                    $arrGroups[] = $objOneGroup;
+            }
+            $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_postacomment());
+
+
             //reinit post -> encoded entities
             $objPost->initObject();
 

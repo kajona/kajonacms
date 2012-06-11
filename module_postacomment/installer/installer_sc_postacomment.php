@@ -100,14 +100,12 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
             $arrParams = array();
             if($this->strContentLanguage == "de") {
                 $arrParams[] = "";
-                $arrParams[] = "Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden. Um die Ajax-Funktionen dieses Moduls 
-                                zu nutzen, kann über die Administration das Template des Postacomment-Seitenelements verändert werden.";
+                $arrParams[] = "Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden.";
                 $arrParams[] = $strElementId;
             }
             else {
                 $arrParams[] = "";
-                $arrParams[] = "By using the form below, comments may be added to the current page. To make use of the ajax-features of this module,
-                                switch the template to be used by the postacomment-pageelement by using the admin-backend.";
+                $arrParams[] = "By using the form below, comments may be added to the current page. ";
                 $arrParams[] = $strElementId;
             }
 

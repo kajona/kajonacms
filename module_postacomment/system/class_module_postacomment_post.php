@@ -226,15 +226,13 @@ class class_module_postacomment_post extends class_model implements interface_mo
         $arrPosts2 = class_module_postacomment_post::loadPostList(false, "", $strSystemid);
 
         //and delete
-        foreach($arrPosts1 as $objOnePost)
-                {
-                    $bitReturn &= $objOnePost->deleteObject();
-                }
+        foreach($arrPosts1 as $objOnePost) {
+            $bitReturn &= $objOnePost->deleteObject();
+        }
 
-        foreach($arrPosts2 as $objOnePost)
-                {
-                    $bitReturn &= $objOnePost->deleteObject();
-                }
+        foreach($arrPosts2 as $objOnePost) {
+            $bitReturn &= $objOnePost->deleteObject();
+        }
 
         return $bitReturn;
     }
@@ -266,10 +264,6 @@ class class_module_postacomment_post extends class_model implements interface_mo
         return $this->strUsername;
     }
 
-    /**
-     * @return int
-     * @fieldType text
-     */
     public function getIntDate() {
         if($this->intDate == null || $this->intDate == "") {
             $this->intDate = time();
@@ -278,10 +272,6 @@ class class_module_postacomment_post extends class_model implements interface_mo
         return $this->intDate;
     }
 
-    /**
-     * @return string
-     * @fieldType page
-     */
     public function getStrAssignedPage() {
         return $this->strAssignedPage;
     }

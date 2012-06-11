@@ -184,6 +184,18 @@ class class_module_postacomment_portal extends class_portal implements interface
 
         $this->flushPageFromPagesCache($this->getPagename());
 
+
+        $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
+        $strMailtext .= getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
+        $objMessageHandler = new class_module_messaging_messagehandler();
+        $arrGroups = array();
+        $allGroups = class_module_user_group::getAllGroups();
+        foreach($allGroups as $objOneGroup) {
+            if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
+                $arrGroups[] = $objOneGroup;
+        }
+        $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_postacomment());
+
         $this->portalReload(_indexpath_."?".$this->getHistory(0));
         return "";
 	}

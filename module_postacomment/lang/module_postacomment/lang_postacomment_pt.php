@@ -4,10 +4,10 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: lang_postacomment_pt.php 3953 2011-06-26 13:04:19Z sidler $					    *
+*	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 370
 
 //editable entries
 $lang["form_message_label"]              = "Mensagem";
@@ -22,4 +22,3 @@ $lang["postacomment_write_new"]          = "Escrever um comentário";
 $lang["validation_code"]                 = "Por favor introduza um código válido";
 $lang["validation_message"]              = "Por favor introduza uma mensagem";
 $lang["validation_name"]                 = "Por favor introduza o seu nome";
-?>
