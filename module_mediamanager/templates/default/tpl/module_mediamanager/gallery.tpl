@@ -110,7 +110,7 @@ like < filelist >%%file_0%%</ filelist > -->
 <rating_bar>
     <script type="text/javascript">
         if (typeof bitKajonaRatingsLoaded == "undefined") {
-            KAJONA.portal.loader.loadAjaxBase(null, "rating.js");
+            $.getScript(KAJONA_WEBPATH+"/templates/default/js/rating.js");
             var bitKajonaRatingsLoaded = true;
         }
     </script>
