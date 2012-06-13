@@ -155,6 +155,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function actionInstallPackage() {
         $strReturn = "";
+        $strLog = "";
         $strFile = $this->getParam("package");
 
         $objManager = new class_module_packagemanager_manager();
@@ -175,10 +176,20 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
 
             if($objHandler->getObjMetadata()->getBitProvidesInstaller())
-                $strReturn .= $objHandler->installOrUpdate();
+                $strLog .= $objHandler->installOrUpdate();
 
-            if($objHandler instanceof class_module_packagemanager_packagemanager_module)
-                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+            if($strLog !== "") {
+                $strReturn .= $this->objToolkit->formHeadline($this->getLang("package_install_success"));
+                $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
+
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "list"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
+                $strReturn .= $this->objToolkit->formClose();
+            }
+            else {
+                if($objHandler instanceof class_module_packagemanager_packagemanager_module)
+                    $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+            }
         }
 
         return $strReturn;

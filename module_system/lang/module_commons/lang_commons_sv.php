@@ -31,6 +31,7 @@ $lang["commons_list"]                    = "Lista";
 $lang["commons_module_permissions"]      = "Modulrättigheter";
 $lang["commons_name"]                    = "Namn:";
 $lang["commons_no"]                      = "Nej";
+$lang["commons_ok"]                      = "Ok";
 $lang["commons_open_browser"]            = "Öppna filhanterare";
 $lang["commons_page_success"]            = "Sida i fall det har lyckats (valfri)";
 $lang["commons_path"]                    = "Sökväg:";

@@ -30,6 +30,7 @@ $lang["commons_list"]                    = "Список";
 $lang["commons_module_permissions"]      = "Разрешения модуля";
 $lang["commons_name"]                    = "Имя:";
 $lang["commons_no"]                      = "Нет";
+$lang["commons_ok"]                      = "Ok";
 $lang["commons_one_level_up"]            = "Один уровень наверх";
 $lang["commons_open_browser"]            = "Открыть браузер";
 $lang["commons_page_success"]            = "Страница в случае успеха (факультативно):";
