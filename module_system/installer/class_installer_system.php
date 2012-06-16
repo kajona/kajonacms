@@ -143,6 +143,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields = array();
 		$arrFields["user_id"] 			= array("char20", false);
 		$arrFields["user_pass"] 		= array("char254", true);
+		$arrFields["user_salt"] 		= array("char20", true);
 		$arrFields["user_email"] 		= array("char254", true);
 		$arrFields["user_forename"] 	= array("char254", true);
 		$arrFields["user_name"] 		= array("char254", true);
@@ -520,6 +521,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_3492();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -764,6 +771,23 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.1");
+        return $strReturn;
+    }
+
+    private function update_3491_3492() {
+        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
+
+
+        //messages
+        $strReturn .= "Updating table user_kajona...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona")."
+                            ADD ".$this->objDB->encloseColumnName("user_salt")." ".$this->objDB->getDatatype("char20")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.2");
         return $strReturn;
     }
 

@@ -38,7 +38,7 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
             $bitMD5Encryption = false;
             if(uniStrlen($objUser->getStrFinalPass()) == 32)
                 $bitMD5Encryption = true;
-            if($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $bitMD5Encryption) )
+            if($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $objUser->getStrSalt(), $bitMD5Encryption) )
                  return true;
         }
 
@@ -143,16 +143,23 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
      * Encrypts the password, e.g. in order to be validated during logins
      *
      * @param string $strPassword
+     * @param string $strSalt
      * @param bool $bitMD5Encryption
+     *
      * @return string
      */
-    public static function encryptPassword($strPassword, $bitMD5Encryption = false) {
+    public static function encryptPassword($strPassword, $strSalt = "", $bitMD5Encryption = false) {
         if($bitMD5Encryption) {
             class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("usage of old md5-encrypted password!", class_logger::$levelWarning);
             return md5($strPassword);
         }
 
-        return sha1($strPassword);
+        if($strSalt == "") {
+            return sha1($strPassword);
+        }
+        else {
+            return sha1(md5($strSalt).$strPassword);
+        }
     }
 
 

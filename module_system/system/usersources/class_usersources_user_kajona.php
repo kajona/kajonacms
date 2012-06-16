@@ -29,6 +29,8 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     private $strMobile = "";
     private $longDate = 0;
 
+    private $strSalt = "";
+
     /**
      * The immutable password from the database.
      * $strPass is not published with the information from the database, otherwise it would be
@@ -79,6 +81,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
             $this->setStrMobile($arrRow["user_mobile"]);
             $this->setLongDate($arrRow["user_date"]);
             $this->setSystemid($arrRow["user_id"]);
+            $this->setStrSalt($arrRow["user_salt"]);
 
             $this->strFinalPass = $arrRow["user_pass"];
         }
@@ -117,9 +120,9 @@ class class_usersources_user_kajona extends class_model implements interface_mod
                         user_name, 	user_street,
                         user_postal, user_city,
                         user_tel, user_mobile,
-                        user_date
+                        user_date, user_salt
 
-                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
             class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), class_logger::$levelInfo);
 
@@ -134,7 +137,8 @@ class class_usersources_user_kajona extends class_model implements interface_mod
                 $this->getStrCity(),
                 $this->getStrTel(),
                 $this->getStrMobile(),
-                $this->getLongDate()
+                $this->getLongDate(),
+                $this->getStrSalt()
             ));
         }
         else {
@@ -144,22 +148,22 @@ class class_usersources_user_kajona extends class_model implements interface_mod
             if($this->getStrPass() != "") {
                 $strQuery = "UPDATE "._dbprefix_."user_kajona SET
                         user_pass=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
-                        user_date=? WHERE user_id = ?";
+                        user_date=?, user_salt=? WHERE user_id = ?";
                    $arrParams = array(
                         $this->getStrPass(),
                         $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
-                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getSystemid()
+                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
                    );
 
             }
             else {
                 $strQuery = "UPDATE "._dbprefix_."user_kajona SET
                         user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
-                        user_date=? WHERE user_id = ?";
+                        user_date=?, user_salt=? WHERE user_id = ?";
 
                 $arrParams = array(
                         $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
-                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getSystemid()
+                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
                    );
 
             }
@@ -312,8 +316,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
 
     public function setStrPass($strPass) {
-        if(trim($strPass) != "")
-            $this->strPass = class_usersources_source_kajona::encryptPassword($strPass);
+        if(trim($strPass) != "") {
+            $this->setStrSalt(generateSystemid());
+            $this->strPass = class_usersources_source_kajona::encryptPassword($strPass, $this->getStrSalt());
+        }
     }
 
     public function setStrEmail($strEmail) {
@@ -400,6 +406,12 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->longDate = $longDate;
     }
 
+    public function setStrSalt($strSalt) {
+        $this->strSalt = $strSalt;
+    }
 
+    public function getStrSalt() {
+        return $this->strSalt;
+    }
 
 }
