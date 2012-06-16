@@ -2,10 +2,10 @@
 
 <!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
-    <script type="text/javascript" src="_webpath_/templates/default/js/fancybox/jquery.fancybox.pack.js"></script>
-    <script type="text/javascript" src="_webpath_/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.js"></script>
-    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/fancybox/jquery.fancybox.css" />
-    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.css" />
+    <script type="text/javascript" src="_webpath_/templates/default/js/fancybox/jquery.fancybox.pack.js?_system_browser_cachebuster_"></script>
+    <script type="text/javascript" src="_webpath_/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.js?_system_browser_cachebuster_"></script>
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/fancybox/jquery.fancybox.css?_system_browser_cachebuster_" />
+    <link rel="stylesheet" type="text/css" href="_webpath_/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.css?_system_browser_cachebuster_" />
 
     <script type="text/javascript">
         $(document).ready(function() {
