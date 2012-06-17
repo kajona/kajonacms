@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
-    <title>element_facebooklikebox</title>
+    <title>facebooklikebox</title>
     <description>Want a "like my page" button on your site? Then this element is yours.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>

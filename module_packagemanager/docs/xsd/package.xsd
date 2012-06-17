@@ -30,6 +30,7 @@
     <xs:simpleType name="typeType" >
         <xs:restriction base="xs:string">
             <xs:enumeration value="MODULE"/>
+            <xs:enumeration value="ELEMENT"/>
             <xs:enumeration value="TEMPLATE"/>
         </xs:restriction>
     </xs:simpleType>

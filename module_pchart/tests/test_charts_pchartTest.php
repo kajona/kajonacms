@@ -118,5 +118,3 @@ class class_test_charts_pchart extends class_testbase  {
 
 
 }
-
-?>

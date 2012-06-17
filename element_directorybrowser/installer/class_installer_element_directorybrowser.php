@@ -32,10 +32,10 @@ class class_installer_element_directorybrowser extends class_installer_base impl
         //Register the element
         $strReturn .= "Registering directorybrowser-element...\n";
         //check, if not already existing
-        $objElement = class_module_pages_element::getElement("directorybrowser");
+        $objElement = class_module_pages_element::getElement($this->objMetadata->getStrTitle());
         if($objElement == null) {
             $objElement = new class_module_pages_element();
-            $objElement->setStrName("directorybrowser");
+            $objElement->setStrName($this->objMetadata->getStrTitle());
             $objElement->setStrClassAdmin("class_element_directorybrowser_admin.php");
             $objElement->setStrClassPortal("class_element_directorybrowser_portal.php");
             $objElement->setIntCachetime(3600);
@@ -55,7 +55,7 @@ class class_installer_element_directorybrowser extends class_installer_base impl
 	public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("directorybrowser")->getStrVersion() == "1.0") {
+        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "1.0") {
             $strReturn .= $this->update_10_11();
             $this->objDB->flushQueryCache();
         }
@@ -66,7 +66,7 @@ class class_installer_element_directorybrowser extends class_installer_base impl
 
     private function update_10_11() {
         $strReturn = "Updating 1.0 to 1.1...\n";
-        $this->updateElementVersion("directorybrowser", "1.1");
+        $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.1");
         return $strReturn;
     }
 
