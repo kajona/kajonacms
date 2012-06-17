@@ -37,6 +37,26 @@ class class_module_packagemanager_manager {
     }
 
     /**
+     * Searches the current local packages for a single, given package.
+     * If not found, null is returned.
+     *
+     * @param $strName
+     *
+     * @return class_module_packagemanager_metadata|null
+     */
+    public function getPackage($strName) {
+        $arrAvailable = $this->getAvailablePackages();
+        foreach($arrAvailable as $objOnePackage) {
+            if($objOnePackage->getStrTitle() == $strName)
+                    {
+                        return $objOnePackage;
+                    }
+        }
+
+        return null;
+    }
+
+    /**
      * Loads the matching packagemanager for a given path.
      *
      * @param $strPath

@@ -4,7 +4,11 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>mediamanager</title>
-    <description>The mediamangaer is a central place to handle all kind of files. This includes images for galleries or even a download-manager. The mediamanager replaces the old download- and gallery-modules.</description>
+    <description>
+        The mediamangaer is a central place to handle all kind of files. This includes images for galleries or even a download-manager.
+        If you have the package "qr-code" installed, the download links may be shown by a qrcode-image, too.
+        The mediamanager replaces the old download- and gallery-modules.
+    </description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_mediamanager</target>

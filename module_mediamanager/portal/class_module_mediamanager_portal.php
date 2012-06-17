@@ -156,6 +156,13 @@ class class_module_mediamanager_portal extends class_portal implements interface
                         if($objOneFile->rightRight2()) {
                             $arrFileTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
                             $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+
+                            $objPackagemanager = new class_module_packagemanager_manager();
+                            if($objPackagemanager->getPackage("qrcode") !== null) {
+                                $objQrCode = new class_qrcode();
+                                $objQrCode->setIntSize(1);
+                                $arrFileTemplate["file_link_qrcode"] = "<img src=\"_webpath_".$objQrCode->getImageForString($arrFileTemplate["file_link_href"])."\" alt=\"".$this->getLang("download_link")."\"/>";
+                            }
                         }
 
                         $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getStrPortalLanguage(), $objOneFile->getStrName());
@@ -259,6 +266,13 @@ class class_module_mediamanager_portal extends class_portal implements interface
         if($objFile->rightRight2()) {
             $arrDetailsTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objFile->getSystemid();
             $arrDetailsTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+
+            $objPackagemanager = new class_module_packagemanager_manager();
+            if($objPackagemanager->getPackage("qrcode") !== null) {
+                $objQrCode = new class_qrcode();
+                $arrDetailsTemplate["file_link_qrcode"] = "<img src=\"_webpath_".$objQrCode->getImageForString($arrDetailsTemplate["file_link_href"])."\" alt=\"".$this->getLang("download_link")."\"/>";
+            }
+
         }
 
         //if its am image, provide additional information
