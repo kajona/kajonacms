@@ -20,6 +20,7 @@
  <exclude-pattern>*ezcomponents*</exclude-pattern>
  <exclude-pattern>*.js</exclude-pattern>
  <exclude-pattern>*phpexcel*</exclude-pattern>
+ <exclude-pattern>*phpqrcode*</exclude-pattern>
  <exclude-pattern>*/lang/*</exclude-pattern>
 
  <!--
