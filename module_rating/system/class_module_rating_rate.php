@@ -195,7 +195,7 @@ class class_module_rating_rate extends class_model implements interface_model, i
 
         //check that systemid isn't the id of a rating to avoid recursions
         $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
-        if($objRecord->getIntModuleNr() == _rating_modul_id_)
+        if($objRecord != null && $objRecord->getIntModuleNr() == _rating_modul_id_)
             return true;
 
         //ok, so delete matching records
