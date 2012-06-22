@@ -89,7 +89,9 @@ class class_module_postacomment_portal extends class_portal implements interface
     				$arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
     			    //ratings available?
                     if($objOnePost->getFloatRating() !== null) {
-                        $arrOnePost["postacomment_post_rating"] = $this->buildRatingBar($objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2());
+                        /** @var $objRating class_module_rating_portal */
+                        $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                        $arrOnePost["postacomment_post_rating"] = $objRating->buildRatingBar($objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2());
                     }
 
 
@@ -224,50 +226,7 @@ class class_module_postacomment_portal extends class_portal implements interface
 	    return $bitReturn;
 	}
 
-    /**
-     * Builds the rating bar available for every comment.
-     * Creates the needed js-links and image-tags as defined by the template.
-     *
-     * @param float $floatRating
-     * @param int $intRatings
-     * @param string $strSystemid
-     * @param bool $bitRatingAllowed
-     * @param bool $bitPermissions
-     *
-     * @return string
-     */
-    private function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
-        $strIcons = "";
-        $strRatingBarTitle = "";
 
-        $intNumberOfIcons = class_module_rating_rate::$intMaxRatingValue;
-
-        //read the templates
-        $strTemplateBarId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "rating_bar");
-
-        if($bitRatingAllowed && $bitPermissions) {
-            $strTemplateIconId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "rating_icon");
-
-            for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
-                $arrTemplate = array();
-                $arrTemplate["rating_icon_number"] = $intI;
-
-                $arrTemplate["rating_icon_onclick"] = "KAJONA.portal.rating.rate('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); return false;";
-
-                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId, false);
-            }
-        } else {
-            if(!$bitRatingAllowed)
-                $strRatingBarTitle = $this->getLang("postacomment_rating_voted");
-            else
-                $strRatingBarTitle = $this->getLang("commons_error_permissions");
-        }
-
-        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,
-                                         "rating_rating" => $floatRating, "rating_hits" => $intRatings,
-                                         "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100),
-                                         "system_id" => $strSystemid, 2), $strTemplateBarId);
-    }
 
     /**
      * If you want to set a sepcial page to be used for loading and rendering the portal list, use this

@@ -4,18 +4,12 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$					    *
+*	$Id: lang_mediamanager_de.php 4647 2012-05-11 14:37:22Z sidler $					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 370
 
-//editable entries
-$lang["form_message_label"]              = "Mensagem";
-$lang["form_name_label"]                 = "Nome";
-$lang["form_subject_label"]              = "Assunto";
-$lang["form_submit_label"]               = "Aceitar";
-$lang["postacomment_empty"]              = "Não existem comentários";
-$lang["postacomment_write_new"]          = "Escrever um comentário";
-$lang["validation_code"]                 = "Por favor introduza um código válido";
-$lang["validation_message"]              = "Por favor introduza uma mensagem";
-$lang["validation_name"]                 = "Por favor introduza o seu nome";
+$lang["rating_rate1"]            = "Eintrag mit ";
+$lang["rating_rate2"]            = " Punkt(en) bewerten!";
+$lang["rating_voted"]            = "Dieser Eintrag wurde bereits bewertet.";
+

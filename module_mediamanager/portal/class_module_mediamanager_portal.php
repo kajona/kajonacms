@@ -306,7 +306,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
 		//ratings available?
 		if($objFile->getFloatRating() !== null) {
-            $arrDetailsTemplate["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objFile->getIntRatingHits(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
+            /** @var $objRating class_module_rating_portal */
+            $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+            $arrDetailsTemplate["file_rating"] = $objRating->buildRatingBar($objFile->getFloatRating(), $objFile->getIntRatingHits(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
 		}
 
         $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail");
@@ -613,53 +615,6 @@ class class_module_mediamanager_portal extends class_portal implements interface
 	}
 
     /**
-     * Builds the rating bar available for every image-detailview.
-     * Creates the needed js-links and image-tags as defined by the template.
-     *
-     * @param float $floatRating
-     * @param int $intRatings
-     * @param string $strSystemid
-     * @param bool $bitRatingAllowed
-     * @param bool $bitPermissions
-     *
-     * @return string
-     * @todo adopt implementation as soon as ratings are back on
-     */
-	private function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
-		$strIcons = "";
-		$strRatingBarTitle = "";
-
-		$intNumberOfIcons = class_module_rating_rate::$intMaxRatingValue;
-
-		//read the templates
-		$strTemplateBarId = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "rating_bar");
-
-		if($bitRatingAllowed && $bitPermissions) {
-			$strTemplateIconId = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "rating_icon");
-
-			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
-				$arrTemplate = array();
-				$arrTemplate["rating_icon_number"] = $intI;
-
-			    $arrTemplate["rating_icon_onclick"] = "KAJONA.portal.rating.rate('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); return false;";
-       		    $arrTemplate["rating_icon_title"] = $this->getLang("gallery_rating_rate1").$intI.$this->getLang("gallery_rating_rate2");
-
-				$strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
-			}
-		} else {
-		    if(!$bitRatingAllowed)
-			    $strRatingBarTitle = $this->getLang("gallery_rating_voted");
-			else
-			    $strRatingBarTitle = $this->getLang("commons_error_permissions");
-		}
-
-		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,
-                                         "rating_rating" => $floatRating, "rating_hits" => $intRatings,
-                                         "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100),
-                                         "system_id" => $strSystemid, 2), $strTemplateBarId);
-	}
-
-    /**
      * Calculates the number of images per row as defined in the template.
      *
      * @param string $strTemplate
@@ -676,11 +631,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
 
     public function getNavigationNodes() {
-
         $arrReturn = array();
 
         $objRepo = new class_module_mediamanager_repo($this->arrElementData["repo_id"]);
-
         $objPoint = new class_module_navigation_point();
         $objPoint->setIntRecordStatus(1, false);
         $objPoint->setStrName($objRepo->getStrTitle());
