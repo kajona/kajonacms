@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>portalupload</title>
+    <description>An element to handle uploads by the portal.</description>
+    <version>3.4.9</version>
+    <author>Kajona Team</author>
+    <target>element_portalupload</target>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>system,pages,mediamanager</requiredModules>
+    <minSystemVersion>3.4.9</minSystemVersion>
+</package>
