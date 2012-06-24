@@ -44,8 +44,10 @@ class class_filesystem {
 		}
 
 		//Deleting the root-folder, if given
-		if(uniStrpos($strFolder, _realpath_) !== false)
-			$strFolder = str_replace(_realpath_, "", $strFolder);
+        if(uniStrpos($strFolder, _realpath_) !== false)
+                {
+                    $strFolder = str_replace(_realpath_, "", $strFolder);
+                }
 
 		//Read files
 		if(is_dir(_realpath_ . $strFolder)) {
@@ -69,8 +71,10 @@ class class_filesystem {
 				closedir($handle);
 			}
 		}
-		else
-			return false;
+        else
+                {
+                    return false;
+                }
 
 		//sorting
 		asort($arrReturn);
@@ -97,8 +101,10 @@ class class_filesystem {
 						    );
 
 
-		if(uniStrpos($strFolder, _realpath_) !== false)
-			$strFolder = str_replace(_realpath_, "", $strFolder);
+        if(uniStrpos($strFolder, _realpath_) !== false)
+                {
+                    $strFolder = str_replace(_realpath_, "", $strFolder);
+                }
 
 
 		//Valid dir?
@@ -153,7 +159,9 @@ class class_filesystem {
 		$arrReturn = array();
 
         if(strpos($strFile, _realpath_) === false)
-            $strFile = _realpath_.$strFile;
+                {
+                    $strFile = _realpath_ . $strFile;
+                }
 
 		if(is_file($strFile)) {
 			//Filename
@@ -161,10 +169,13 @@ class class_filesystem {
 
 			//Type
 			$intTemp = uniStrrpos($strFile, ".");
-			if($intTemp !== false)
-				$arrReturn["filetype"] = uniSubstr($strFile, $intTemp);
-			else
-				$arrReturn["filetype"] = $strFile;
+            if($intTemp !== false)
+                    {
+                        $arrReturn["filetype"] = uniSubstr($strFile, $intTemp);
+                    }
+            else {
+                $arrReturn["filetype"] = $strFile;
+            }
 			$arrReturn["filetype"] = uniStrtolower($arrReturn["filetype"]);
 			//Size
 			$arrReturn["filesize"] = filesize($strFile);
@@ -292,18 +303,24 @@ class class_filesystem {
         $arrEntries = scandir(_realpath_.$strSourceDir);
         foreach($arrEntries as $strOneEntry) {
             if($strOneEntry == "." || $strOneEntry == "..")
-                continue;
+                    {
+                        continue;
+                    }
 
             if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file(_realpath_.$strTargetDir."/".$strOneEntry) )) {
 
-                if(!is_dir(_realpath_.$strTargetDir))
-                    mkdir(_realpath_.$strTargetDir);
+                if(!is_dir(_realpath_ . $strTargetDir))
+                        {
+                            mkdir(_realpath_ . $strTargetDir);
+                        }
 
                 copy(_realpath_.$strSourceDir."/".$strOneEntry, _realpath_.$strTargetDir."/".$strOneEntry);
             }
             else if(is_dir(_realpath_.$strSourceDir."/".$strOneEntry)) {
-                if(!is_dir(_realpath_.$strTargetDir."/".$strOneEntry))
-                    mkdir(_realpath_.$strTargetDir."/".$strOneEntry);
+                if(!is_dir(_realpath_ . $strTargetDir . "/" . $strOneEntry))
+                        {
+                            mkdir(_realpath_ . $strTargetDir . "/" . $strOneEntry);
+                        }
 
                 $this->folderCopyRecursive($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry, $bitOverwrite);
             }
@@ -333,8 +350,10 @@ class class_filesystem {
                 }
             }
         } else {
-            if(!is_dir(_realpath_.$strFolder))
-                $bitReturn = mkdir(_realpath_.$strFolder, 0777);
+            if(!is_dir(_realpath_ . $strFolder))
+                    {
+                        $bitReturn = mkdir(_realpath_ . $strFolder, 0777);
+                    }
         }
 
         return $bitReturn;
@@ -355,12 +374,16 @@ class class_filesystem {
         $arrFiles = $this->getCompleteList($strFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
 
         foreach($arrFiles["files"] as $arrFile)
-            $intReturn += $arrFile["filesize"];
+                {
+                    $intReturn += $arrFile["filesize"];
+                }
 
         //Call it recursive
         if(count($arrFiles["folders"]) > 0) {
             foreach($arrFiles["folders"] as $strOneFolder)
-                $intReturn += $this->folderSize($strFolder."/".$strOneFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
+                    {
+                        $intReturn += $this->folderSize($strFolder . "/" . $strOneFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
+                    }
         }
         return $intReturn;
     }
@@ -382,8 +405,10 @@ class class_filesystem {
 				@chmod($strTarget, 0777);
 				$bitReturn = true;
 			}
-			else
-				@unlink($strTempfile);
+            else
+                    {
+                        @unlink($strTempfile);
+                    }
 		}
 		return $bitReturn;
 	}
@@ -397,10 +422,13 @@ class class_filesystem {
 	 */
 	public function openFilePointer($strFilename, $strMode = "w") {
 	    $this->objFilePointer = @fopen(_realpath_.$strFilename, $strMode);
-	    if($this->objFilePointer)
-	        return true;
-	    else
-	        return false;
+        if($this->objFilePointer)
+                {
+                    return true;
+                }
+        else {
+            return false;
+        }
 	}
 
 	/**
@@ -408,8 +436,10 @@ class class_filesystem {
 	 *
 	 */
 	public function closeFilePointer() {
-	    if($this->objFilePointer != null)
-	       @fclose($this->objFilePointer);
+        if($this->objFilePointer != null)
+                {
+                    @fclose($this->objFilePointer);
+                }
 
 	    $this->objFilePointer = null;
 	}
@@ -421,19 +451,23 @@ class class_filesystem {
      */
     public function setFilePointerOffset($intOffset) {
         if($this->objFilePointer != null)
-	       @fseek($this->objFilePointer, $intOffset);
+                {
+                    @fseek($this->objFilePointer, $intOffset);
+                }
     }
 
 	/**
 	 * Tries to write the content passed to the file opened before
 	 *
-	 * @param stirng $strContent
+	 * @param string $strContent
 	 * @return bool
 	 */
 	public function writeToFile($strContent) {
 	    if($this->objFilePointer != null) {
-	        if(@fwrite($this->objFilePointer, $strContent) !== false)
-	           return true;
+            if(@fwrite($this->objFilePointer, $strContent) !== false)
+                    {
+                        return true;
+                    }
 	    }
 	    return false;
 	}
@@ -479,7 +513,9 @@ class class_filesystem {
                 $strChar = fgetc($this->objFilePointer);
 
                 if($strChar == "\n")
-                    $intLinesRead++;
+                        {
+                            $intLinesRead++;
+                        }
             }
         }
 
@@ -495,5 +531,31 @@ class class_filesystem {
 	public function isWritable($strFile) {
 		return is_writable(_realpath_."/".$strFile);
 	}
+
+    /**
+     * Wrapper to phps' chmod function. Provides an optional recursion.
+     *
+     * @param $strFile
+     * @param $strMode
+     * @param bool $bitRecursive
+     *
+     * @since 4.0
+     * @return bool
+     */
+    public function chmod($strFile, $strMode, $bitRecursive = false) {
+        $bitReturn = chmod(_realpath_ . $strFile, $strMode);
+
+        if($bitRecursive && is_dir(_realpath_.$strFile)) {
+            $arrFiles = $this->getCompleteList($strFile);
+
+            foreach($arrFiles["files"] as $strOneFile) {
+                $bitReturn = $bitReturn && chmod(_realpath_."/".$strFile."/".$strOneFile, $strMode);
+            }
+            foreach($arrFiles["folders"] as $strOneFolder) {
+                $bitReturn = $bitReturn && $this->chmod($strFile."/".$strOneFolder, $strMode, $bitRecursive);
+            }
+        }
+        return $bitReturn;
+    }
 }
 

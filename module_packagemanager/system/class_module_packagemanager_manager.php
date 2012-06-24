@@ -48,9 +48,7 @@ class class_module_packagemanager_manager {
         $arrAvailable = $this->getAvailablePackages();
         foreach($arrAvailable as $objOnePackage) {
             if($objOnePackage->getStrTitle() == $strName)
-                    {
-                        return $objOnePackage;
-                    }
+               return $objOnePackage;
         }
 
         return null;

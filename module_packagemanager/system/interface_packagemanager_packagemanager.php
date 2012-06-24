@@ -68,4 +68,14 @@ interface interface_packagemanager_packagemanager {
      * @return string|null
      */
     public function getVersionInstalled();
+
+    /**
+     * Queries the packagemanager for the resolved target path, so the folder to package will be located at
+     * after installation (or is already located at since it's already installed.
+     *
+     * @abstract
+     * @return mixed
+     */
+    public function getStrTargetPath();
+
 }

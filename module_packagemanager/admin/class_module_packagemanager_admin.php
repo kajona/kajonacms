@@ -132,10 +132,14 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
 
             if(!$objHandler->getObjMetadata()->getBitProvidesInstaller() || $objHandler->isInstallable()) {
+
+                $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".$objHandler->getStrTargetPath());
+
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
                 $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("package_doinstall"));
                 $strReturn .= $this->objToolkit->formClose();
+
             }
             else {
                 $strReturn .= $this->objToolkit->warningBox($this->getLang("package_notinstallable"));

@@ -58,3 +58,4 @@ $lang["provider_select"]                 = "Provider auswählen";
 $lang["systemtask_templatepackimport_name"] = "Template-Pack importieren";
 $lang["type_MODULE"]                     = "Modul-Paket";
 $lang["type_TEMPLATE"]                   = "Template-Pack";
+$lang["package_target_writable"]         = "Für die Installation werden Schreibrechte auf folgendem Ordner benötigt:";

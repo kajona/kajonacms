@@ -428,7 +428,7 @@ abstract class class_admin {
 	/**
 	 * Returns the current Text-Object Instance
 	 *
-	 * @return obj
+	 * @return class_lang
 	 */
 	protected function getObjLang() {
 	    return $this->objLang;

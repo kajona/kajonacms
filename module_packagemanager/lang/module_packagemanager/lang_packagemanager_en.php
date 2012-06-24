@@ -58,3 +58,4 @@ $lang["provider_select"]                 = "Select provider";
 $lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
 $lang["type_MODULE"]                     = "Module-package";
 $lang["type_TEMPLATE"]                   = "Template-pack";
+$lang["package_target_writable"]         = "To install the package, write permissions are required in the following directory:";

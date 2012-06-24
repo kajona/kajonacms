@@ -66,12 +66,16 @@ class class_module_packagemanager_packagemanager_template implements interface_p
         if(!is_dir(_realpath_.$strSource))
             throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
 
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->chmod("/templates/".$strTarget, "0777", true);
+
         class_logger::getInstance("moving ".$strSource." to /templates/".$strTarget, class_logger::$levelInfo);
 
 
-        $objFilesystem = new class_filesystem();
         $objFilesystem->folderCopyRecursive($strSource, "/templates/".$strTarget, true);
         $this->objMetadata->setStrPath("/templates/".$strTarget);
+
+        $objFilesystem->chmod("/templates/".$strTarget, "0644", true);
 
         $objFilesystem->folderDeleteRecursive($strSource);
     }
@@ -114,4 +118,15 @@ class class_module_packagemanager_packagemanager_template implements interface_p
     public function getVersionInstalled() {
         return null;
     }
+
+    /**
+     * Queries the packagemanager for the resolved target path, so the folder to package will be located at
+     * after installation (or is already located at since it's already installed.
+     *
+     * @return mixed
+     */
+    public function getStrTargetPath() {
+        return "/templates/".$this->objMetadata->getStrTarget();
+    }
+
 }
