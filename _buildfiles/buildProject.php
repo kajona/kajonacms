@@ -61,8 +61,10 @@ class Testmanager {
         $objTemplateData->autoInit("/core/module_packagemanager");
         $objPagesData = new class_module_packagemanager_metadata();
         $objPagesData->autoInit("/core/module_pages");
+        $objMediamanagerData = new class_module_packagemanager_metadata();
+        $objMediamanagerData->autoInit("/core/module_mediamanager");
         $arrPackagesToInstall = array(
-            $objSystemData, $objTemplateData, $objPagesData
+            $objSystemData, $objTemplateData, $objPagesData, $objMediamanagerData
         );
 
         echo "\n\n\n";
@@ -71,7 +73,7 @@ class Testmanager {
         $arrPackageMetadata = $objManager->getAvailablePackages();
 
         foreach($arrPackageMetadata as $objOneMetadata) {
-            if(!in_array($objOneMetadata->getStrTitle(), array("system", "pages", "packagemanager", "samplecontent")))
+            if(!in_array($objOneMetadata->getStrTitle(), array("system", "pages", "packagemanager", "samplecontent", "mediamanager")))
                 $arrPackagesToInstall[] = $objOneMetadata;
         }
 
