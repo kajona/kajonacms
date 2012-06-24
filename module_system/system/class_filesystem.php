@@ -543,6 +543,10 @@ class class_filesystem {
      * @return bool
      */
     public function chmod($strFile, $strMode, $bitRecursive = false) {
+
+        if(!file_exists(_realpath_.$strFile))
+            return false;
+
         $bitReturn = chmod(_realpath_ . $strFile, $strMode);
 
         if($bitRecursive && is_dir(_realpath_.$strFile)) {
