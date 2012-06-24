@@ -67,10 +67,14 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         class_logger::getInstance("moving ".$strSource." to /core/".$strTarget, class_logger::$levelInfo);
 
         $objFilesystem = new class_filesystem();
+        //set a chmod before copying the files - at least try to
+        $objFilesystem->chmod("/core/".$strTarget, 0777);
 
         $objFilesystem->folderCopyRecursive($strSource, "/core/".$strTarget, true);
         $this->objMetadata->setStrPath("/core/".$strTarget);
 
+        //reset chmod after copying the files
+        $objFilesystem->chmod("/core/".$strTarget);
 
         $objFilesystem->folderDeleteRecursive($strSource);
     }

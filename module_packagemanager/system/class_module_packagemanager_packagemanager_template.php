@@ -67,11 +67,14 @@ class class_module_packagemanager_packagemanager_template implements interface_p
             throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
 
         $objFilesystem = new class_filesystem();
+        $objFilesystem->chmod("/templates/".$strTarget, 0777);
 
         class_logger::getInstance("moving ".$strSource." to /templates/".$strTarget, class_logger::$levelInfo);
 
         $objFilesystem->folderCopyRecursive($strSource, "/templates/".$strTarget, true);
         $this->objMetadata->setStrPath("/templates/".$strTarget);
+
+        $objFilesystem->chmod("/templates/".$strTarget);
 
         $objFilesystem->folderDeleteRecursive($strSource);
     }

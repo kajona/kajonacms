@@ -534,29 +534,39 @@ class class_filesystem {
 
     /**
      * Wrapper to phps' chmod function. Provides an optional recursion.
+     * When called with no other param then the path, a default set of
+     *  0644 for files and
+     *  0755 for directories
+     * is set.
      *
-     * @param $strFile
-     * @param $strMode
+     * @param $strPath
+     * @param int $intModeFile
+     * @param int $intModeDirectory
      * @param bool $bitRecursive
      *
+     * @internal param $strMode
      * @since 4.0
      * @return bool
      */
-    public function chmod($strFile, $strMode, $bitRecursive = false) {
+    public function chmod($strPath, $intModeFile = 0644, $intModeDirectory = 0755, $bitRecursive = false) {
 
-        if(!file_exists(_realpath_.$strFile))
+        if(!file_exists(_realpath_.$strPath))
             return false;
 
-        $bitReturn = chmod(_realpath_ . $strFile, $strMode);
 
-        if($bitRecursive && is_dir(_realpath_.$strFile)) {
-            $arrFiles = $this->getCompleteList($strFile);
+        $bitReturn = chmod(
+            _realpath_ . $strPath,
+            (is_dir(_realpath_.$strPath) ? $intModeDirectory : $intModeFile)
+        );
+
+        if($bitRecursive && is_dir(_realpath_.$strPath)) {
+            $arrFiles = $this->getCompleteList($strPath);
 
             foreach($arrFiles["files"] as $strOneFile) {
-                $bitReturn = $bitReturn && chmod(_realpath_."/".$strFile."/".$strOneFile, $strMode);
+                $bitReturn = $bitReturn && chmod(_realpath_."/".$strPath."/".$strOneFile, $intModeFile);
             }
             foreach($arrFiles["folders"] as $strOneFolder) {
-                $bitReturn = $bitReturn && $this->chmod($strFile."/".$strOneFolder, $strMode, $bitRecursive);
+                $bitReturn = $bitReturn && $this->chmod($strPath."/".$strOneFolder, $intModeFile, $intModeDirectory, $bitRecursive);
             }
         }
         return $bitReturn;
