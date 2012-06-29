@@ -206,7 +206,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_hidden");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = $strValue;
+        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -225,7 +225,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_text");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = $strValue;
+        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = $strOpener;
@@ -248,7 +248,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = $strValue;
+        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = getLinkAdminDialog("pages",
@@ -306,7 +306,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = $strValue;
+        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = getLinkAdminDialog("user",
@@ -442,7 +442,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_textarea");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = $strValue;
+        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["readonly"] = ($bitReadonly ? "readonly=\"readonly\"" : "");
@@ -461,7 +461,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_password");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = $strValue;
+        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);

@@ -33,7 +33,6 @@
  */
 class class_mail {
 
-	private $arrModul;
 
 	private $arrayTo = array();
 	private $arrayCc = array();
@@ -298,7 +297,7 @@ class class_mail {
                 $this->arrHeader[] = "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
 
                 if(function_exists("quoted_printable_encode")) {
-                    $this->arrHeader[] = "Content-Transfer-Encoding: quoted-printable".$this->strEndOfLine.$this->strEndOfLine;
+                    $this->arrHeader[] = "Content-Transfer-Encoding: quoted-printable".$this->strEndOfLine;
                     $strBody .= quoted_printable_encode($this->strText);
                 }
                 else {

@@ -98,13 +98,19 @@ class class_module_guestbook_portal extends class_portal implements interface_po
             $strErrors .= $this->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
         }
 
-		//update elements
-		$arrTemplate = array();
-		$arrTemplate["eintragen_fehler"] = $this->getParam("eintragen_fehler").$strErrors;
-        $arrTemplate["gb_post_name"]  = htmlToString($this->getParam("gb_post_name"), true);
-        $arrTemplate["gb_post_email"] = htmlToString($this->getParam("gb_post_email"), true);
-        $arrTemplate["gb_post_text"] = htmlToString($this->getParam("gb_post_text"), true);
-        $arrTemplate["gb_post_page"] = htmlToString($this->getParam("gb_post_page"), true);
+        //update elements
+        $arrTemplate = array();
+        $arrTemplate["eintragen_fehler"] = $this->getParam("eintragen_fehler").$strErrors;
+        $arrTemplate["gb_post_name"]  = $this->getParam("gb_post_name");
+        $arrTemplate["gb_post_email"] = $this->getParam("gb_post_email");
+        $arrTemplate["gb_post_text"] = $this->getParam("gb_post_text");
+        $arrTemplate["gb_post_page"] = $this->getParam("gb_post_page");
+
+        foreach($arrTemplate as $strKey => $strValue) {
+            if(uniStrpos($strKey, "gb_post_") !== false) {
+                $arrTemplate[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
+            }
+        }
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename(), "", "saveGuestbook");
         $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);

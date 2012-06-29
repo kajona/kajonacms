@@ -54,6 +54,12 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
             $arrForm["comment_page"] = $this->getParam("comment_page");
             $arrForm["validation_errors"] = $this->strErrors;
 
+            foreach($arrForm as $strKey => $strValue) {
+                if(uniStrpos($strKey, "comment_") !== false) {
+                    $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
+                }
+            }
+
             //texts
             $arrForm["postacomment_write_new"] = $this->getLang("postacomment_write_new");
             $arrForm["form_name_label"] = $this->getLang("form_name_label");

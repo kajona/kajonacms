@@ -139,7 +139,7 @@ class class_request_dispatcher {
                         //React, if admin was opened by the portaleditor
                         if(getPost("peClose") == "1" || getGet("peClose") == "1") {
                             if(getGet("peRefreshPage") != "")
-                                $strReturn = "<html><head></head><body onload=\"parent.location = '".getLinkPortalHref(getGet("peRefreshPage"))."';\"></body></html>";
+                                $strReturn = "<html><head></head><body onload=\"parent.location = '".urldecode(getGet("peRefreshPage"))."';\"></body></html>";
                             else
                                 $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
                         }

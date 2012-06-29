@@ -132,6 +132,12 @@ class class_module_postacomment_portal extends class_portal implements interface
 			$arrForm["comment_page"] = $this->getPagename();
 			$arrForm["validation_errors"] = $this->strErrors;
 
+            foreach($arrForm as $strKey => $strValue) {
+                if(uniStrpos($strKey, "comment_") !== false) {
+                    $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
+                }
+            }
+
 			$strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID, false);
 
 			//button to show the form

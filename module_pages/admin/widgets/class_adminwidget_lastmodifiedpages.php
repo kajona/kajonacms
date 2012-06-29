@@ -22,6 +22,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         parent::__construct();
         //register the fields to be persisted and loaded
         $this->setPersistenceKeys(array("nrofrows"));
+        $this->setBitBlockSessionClose(true);
     }
 
     /**

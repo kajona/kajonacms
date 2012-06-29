@@ -480,7 +480,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
 
         if($this->getParam("pe") != "")
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&peRefreshPage=".$objPage->getStrName()));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&peRefreshPage=".urlencode(getLinkPortalHref($objPage->getStrName()))));
         else
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "systemid=".$objPage->getPrevId()));
 

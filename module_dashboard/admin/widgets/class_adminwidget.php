@@ -41,6 +41,9 @@ abstract class class_adminwidget {
      */
     private $objLang;
 
+
+    private $bitBlockSessionClose = false;
+
     public function __construct() {
 
     	$this->objDb = class_carrier::getInstance()->getObjDB();
@@ -209,6 +212,15 @@ abstract class class_adminwidget {
     protected final function widgetSeparator() {
         return $this->objToolkit->adminwidgetSeparator();
     }
+
+    public function setBitBlockSessionClose($bitBlockSessionClose) {
+        $this->bitBlockSessionClose = $bitBlockSessionClose;
+    }
+
+    public function getBitBlockSessionClose() {
+        return $this->bitBlockSessionClose;
+    }
+
 }
 
 
