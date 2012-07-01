@@ -19,7 +19,9 @@ class class_test_charts_flotTest extends class_testbase  {
         <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.js\"></script>    
         <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/flot_examples.js\"></script>
         <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js\"></script>
+        <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.orderBars.js\"></script>
         ";
+        
         
         
         //CSS-Stylesheets
@@ -36,8 +38,6 @@ class class_test_charts_flotTest extends class_testbase  {
 
             div.graph
             {
-                width: 800;
-                height: 400;
                 #float: left;
                 border: 1px dashed gainsboro;
             }
@@ -53,7 +53,7 @@ class class_test_charts_flotTest extends class_testbase  {
         </style>
         ";
         
-        /*$objGraph = new class_graph_flot();
+        $objGraph = new class_graph_flot();
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
         $objGraph->addLinePlot(array(4,7,1,2), "serie 3");
@@ -62,20 +62,19 @@ class class_test_charts_flotTest extends class_testbase  {
         
         $objGraph = new class_graph_flot();
         $objGraph->addBarChartSet(array(1,2,3,4), "serie 1");
-        echo $objGraph->showGraph();*/
+        echo $objGraph->showGraph();
         
         $objGraph = new class_graph_flot();
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
-        $objGraph->setStrXAxisTitle("X-Axis");
-        $objGraph->setStrYAxisTitle("Y-Axis");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
         $objGraph->addBarChartSet(array(1,2,3,4), "serie 3");
-        //$objGraph->addBarChartSet(array(1,2,3,4), "serie 4");
-        //$objGraph->createPieChart(array(1,2,3,4), array("val 1", "val 2", "val 3", "val 4"));
         echo $objGraph->showGraph();
         
-        //$objGraph = new class_graph_flot();
-        //echo $objGraph->showGraph();
+        $objGraph = new class_graph_flot();
+        $objGraph->createPieChart(array(1,2,3,4), array("val 1", "val 2", "val 3", "val 4"));
+        echo $objGraph->showGraph();
         
         
         echo"<br/>";

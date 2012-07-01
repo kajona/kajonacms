@@ -18,9 +18,9 @@
  */
 class class_graph_flot_seriesdata {
     
-    private $strLabel = "";
-    private $arrayData = array();
-    private $strSeriesChartType = "";
+    protected $strLabel = "";
+    protected $arrayData = array();
+    protected $strSeriesChartType = "";
     
     /**
     * Constructor

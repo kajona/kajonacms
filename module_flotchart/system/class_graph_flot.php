@@ -8,8 +8,6 @@
 *	$Id: class_graph_flot.php 4527 2012-03-07 10:38:46Z sidler $                                             *
 ********************************************************************************************************/
 
-//require_once(_corepath_."/module_flotchart/system/flot/class_graph_flot_chartdata.php");
-//require_once(_corepath_."/module_flotchart/system/flot/class_graph_flot_seriesdata.php");
 
 /**
  * This class could be used to create graphs based on the flot API.
@@ -24,112 +22,118 @@ class class_graph_flot implements interface_graph {
    
     private $objChartData = null;
     
+    
     /**
     * Constructor
     *
     */
     public function __construct() {
-        $this->objChartData = new class_graph_flot_chartdata();
-
     }
     
     public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
-        $seriesData = new class_graph_flot_seriesdata();
-        $seriesData->setArrayData($arrValues);
-        $seriesData->setStrLabel($strLegend);
-        $tempArr = $this->objChartData->getArrChartTypes();
-        $seriesData->setStrSeriesChartType($tempArr["bars"]);
+        if($this->objChartData == null) 
+            $this->objChartData = new class_graph_flot_chartdata_base_impl();
         
-        $this->objChartData->addSeriesData($seriesData);
+        if($this->objChartData instanceof class_graph_flot_chartdata_base_impl) {
+            $seriesData = new class_graph_flot_seriesdata();
+            $seriesData->setArrayData($arrValues);
+            $seriesData->setStrLabel($strLegend);
+            $tempArr = $this->objChartData->getArrChartTypes();
+            $seriesData->setStrSeriesChartType($tempArr["bars"]);
+
+            $this->objChartData->addSeriesData($seriesData);
+        }
     }
 
     public function addLinePlot($arrValues, $strLegend) {
-        $seriesData = new class_graph_flot_seriesdata();
-        $seriesData->setArrayData($arrValues);
-        $seriesData->setStrLabel($strLegend);
-        $tempArr = $this->objChartData->getArrChartTypes();
-        $seriesData->setStrSeriesChartType($tempArr["lines"]);
+        if($this->objChartData == null) 
+            $this->objChartData = new class_graph_flot_chartdata_base_impl();
         
-        $this->objChartData->addSeriesData($seriesData);
+        if($this->objChartData instanceof class_graph_flot_chartdata_base_impl) {
+            $seriesData = new class_graph_flot_seriesdata();
+            $seriesData->setArrayData($arrValues);
+            $seriesData->setStrLabel($strLegend);
+            $tempArr = $this->objChartData->getArrChartTypes();
+            $seriesData->setStrSeriesChartType($tempArr["lines"]);
+
+            $this->objChartData->addSeriesData($seriesData);
+        }
         
     }
 
     public function addStackedBarChartSet($arrValues, $strLegend) {
+        if($this->objChartData == null) 
+            $this->objChartData = new class_graph_flot_chartdata_base_impl();
         
+        if($this->objChartData instanceof class_graph_flot_chartdata_base_impl) {
+        }
     }
 
     public function createPieChart($arrValues, $arrLegends) {
+        if($this->objChartData == null) 
+            $this->objChartData = new class_graph_flot_chartdata_base_pie();
         
+        if($this->objChartData instanceof class_graph_flot_chartdata_base_pie) {
+            $seriesData = new class_graph_flot_seriesdata_pie();
+            $seriesData->setArrayData($arrValues);
+            $seriesData->setStrLabelArray($arrLegends);
+            $tempArr = $this->objChartData->getArrChartTypes();
+            $seriesData->setStrSeriesChartType($tempArr["pie"]);
+
+            $this->objChartData->addSeriesData($seriesData);
+        }
     }
 
     public function saveGraph($strFilename) {
-        //does nothing;
+        $this->objChartData->saveGraph($strFilename);
         
     }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        
+        $this->objChartData->setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels);
     }
 
     public function setBitRenderLegend($bitRenderLegend) {
-        
+        $this->objChartData->setBitRenderLegend($bitRenderLegend);
     }
 
     public function setIntHeight($intHeight) {
-        
+        $this->objChartData->setIntHeight($intHeight);
     }
 
     public function setIntWidth($intWidth) {
-        
+        $this->objChartData->setIntWidth($intWidth);
     }
 
     public function setIntXAxisAngle($intXAxisAngle) {
-        
+        $this->objChartData->setIntXAxisAngle($intXAxisAngle);
     }
 
     public function setStrBackgroundColor($strColor) {
-        
+        $this->objChartData->setStrBackgroundColor($strColor);
     }
 
     public function setStrFont($strFont) {
-        
+        $this->objChartData->setStrFont($strFont);
     }
 
     public function setStrFontColor($strFontColor) {
-        
+        $this->objChartData->setStrFontColor($strFontColor);
     }
 
     public function setStrGraphTitle($strTitle) {
-        
+        $this->objChartData->setStrGraphTitle($strTitle);
     }
 
     public function setStrXAxisTitle($strTitle) {
         $this->objChartData->setStrXAxisTitle($strTitle);
-        
     }
 
     public function setStrYAxisTitle($strTitle) {
         $this->objChartData->setStrYAxisTitle($strTitle);
-        
     }
 
     public function showGraph() {
-        $strData = $this->objChartData->dataToJSON();
-        $strOptions = $this->objChartData->optionsToJSON();
-        $strChartId = generateSystemid();
-        
-        //create div - in this div the chart will be generated
-        $strDiv = "\t <div id=\"".$strChartId."\" class=\"graph\"></div>";
-     
-        //function which will be called afetr the pages loading
-        $strCall = "
-        <script type=\"text/javascript\">
-            $(document).ready(function(){
-                $.plot($(\"#".$strChartId."\"),[".$strData."],{".$strOptions."})
-            })
-        </script>
-        ";
-        
-        return $strDiv."\n".$strCall;
+        return $this->objChartData->showGraph();
     }
 }
