@@ -7,7 +7,8 @@
  -->
 <filedetail>
     <div class="galleryRandom">
-        %%file_name%% %%file_subtitle%%<br />
+        <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
+        %%file_subtitle%%<br />
         <img src="%%image_src%%" alt="%%file_name%%" /><br />
         %%file_rating%%<br />
         %%file_description%%

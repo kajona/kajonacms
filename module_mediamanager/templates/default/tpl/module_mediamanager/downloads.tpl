@@ -44,7 +44,7 @@
 <filelist_file>
     <tr class="portalListRow1">
         <td class="image"><img src="_webpath_/portal/pics/kajona/icon_downloads.gif" /></td>
-        <td class="title"><a href="%%file_details_href%%">%%file_name%%</a></td>
+        <td class="title"><a href="%%file_details_href%%" data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</a></td>
         <td class="center">%%file_size%%</td>
         <td class="actions">%%file_link%%</td>
         <td class="rating">%%file_rating%%</td>
@@ -52,7 +52,7 @@
     <tr class="portalListRow2">
         <td></td>
         <td colspan="4" class="description">
-            <div style="float: left;">%%file_description%%</div><div style="float: right;">%%file_link_qrcode%%</div>
+            <div style="float: left;" data-kajona-editable="%%file_id%%#strDescription">%%file_description%%</div><div style="float: right;">%%file_link_qrcode%%</div>
             <div style="clear: both;"></div>
         </td>
     </tr>
@@ -73,7 +73,7 @@
     %%pathnavigation%%
     <div>
         <div>
-            <div style="float: left;">%%file_name%%</div><div style="float: right;">%%file_rating%%</div>
+            <div style="float: left;" data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div><div style="float: right;">%%file_rating%%</div>
             <div style="clear: both;"></div>
         </div>
         <div>
@@ -81,13 +81,13 @@
             <div style="clear: both;"></div>
         </div>
         <div>
-            <div style="float: left;">%%file_filename%%</div><div style="float: right;">%%file_link_qrcode%%</div>
+            <div style="float: right;">%%file_link_qrcode%%</div>
+            <div style="float: left;">
+                <div>%%file_filename%%</div>
+                <div data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</div>
+                <div>%%file_preview%%</div>
+            </div>
             <div style="clear: both;"></div>
-        </div>
-        <div>
-            %%file_description%%
-            %%file_preview%%
-
         </div>
     </div>
 </filedetail>

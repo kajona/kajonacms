@@ -454,6 +454,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
         $arrTemp = array();
 		$arrTemp["page_intern"] = $objPointData->getStrPageI();
 		$arrTemp["page_extern"] = $objPointData->getStrPageE();
+		$arrTemp["systemid"] = $objPointData->getSystemid();
 		$arrTemp["text"] = $objPointData->getStrName();
 		$arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"], $objPointData->getStrLinkAction(), "", $objPointData->getStrSystemid());
 		$arrTemp["href"] = getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());

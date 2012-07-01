@@ -74,7 +74,7 @@ like < filelist >%%file_0%%</ filelist > -->
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td>%%file_description%%</td>
+            <td data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</td>
             <td>&nbsp;</td>
         </tr>
         <tr>

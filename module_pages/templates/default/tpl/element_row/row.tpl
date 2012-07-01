@@ -2,5 +2,5 @@
 
 <!-- available placeholders: paragraph_title -->
 <row>
-    <h1>%%paragraph_title%%</h1>
+    <h1 data-kajona-editable="%%content_id%%#paragraph_title#plain">%%paragraph_title%%</h1>
 </row>
