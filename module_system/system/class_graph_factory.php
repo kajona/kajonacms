@@ -27,7 +27,7 @@ class class_graph_factory {
      * based on the passed param
      *
      * @param string $strType
-     * @return interface_chart
+     * @return interface_graph
      */
     public static function getGraphInstance($strType = "") {
         if($strType == self::$STR_TYPE_EZC) {

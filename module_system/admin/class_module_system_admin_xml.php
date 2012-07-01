@@ -20,7 +20,6 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
     /**
      * Constructor
-     *
      */
 	public function __construct() {
         $this->setArrModuleEntry("modul", "system");
@@ -41,7 +40,6 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $intNewPos = $this->getParam("listPos");
 		//check permissions
 		if($objCommon->rightEdit() && $intNewPos != "") {
-
 
             //there is a different mode for page-elements, catch now
             //store edit date

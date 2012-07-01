@@ -1,0 +1,261 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: class_modul_stats_admin.php 3962 2011-07-03 12:10:54Z sidler $                                  *
+********************************************************************************************************/
+
+/**
+ * Admin-Part of the stats, generating all reports an handles requests to workers
+ *
+ * @package module_stats
+ * @author sidler@mulchprod.de
+ */
+class class_module_stats_admin extends class_admin implements interface_admin {
+    
+    
+    public static $STR_SESSION_KEY_DATE_START = "STR_SESSION_KEY_DATE_START";
+    public static $STR_SESSION_KEY_DATE_END = "STR_SESSION_KEY_DATE_END";
+    public static $STR_SESSION_KEY_INTERVAL = "STR_SESSION_KEY_INTERVAL";
+    
+
+    /**
+     * @var class_date
+     */
+	private $objDateStart;
+    /**
+     * @var class_date
+     */
+	private $objDateEnd;
+	private $intInterval = 2;
+
+
+	/**
+	 * Constructor
+	 *
+	 */
+	public function __construct() {
+        $this->setArrModuleEntry("modul", "stats");
+        $this->setArrModuleEntry("moduleId", _stats_modul_id_);
+        parent::__construct();
+
+
+        $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_START);
+        if($intDateStart == "")
+                {
+                    $intDateStart = strtotime(strftime("%Y-%m", time()) . "-01");
+                }
+
+		//Start: first day of current month
+        $this->objDateStart = new class_date();
+        $this->objDateStart->setTimeInOldStyle($intDateStart);
+        
+		//End: Current Day of month
+        $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_END);
+        if($intDateEnd == "")
+                {
+                    $intDateEnd = time() + 3600 * 24;
+                }
+        $this->objDateEnd = new class_date();
+        $this->objDateEnd->setTimeInOldStyle($intDateEnd);
+
+
+        $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_INTERVAL);
+        if($this->intInterval == "")
+                {
+                    $this->intInterval = 2;
+                }
+        
+        class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $intDateStart);
+        class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $intDateEnd);
+        class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
+		
+
+		//stats may take time -> increase the time available
+        @ini_set("max_execution_time", "500");
+
+        //stats may consume a lot of memory, increase max mem limit
+        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
+                {
+                    @ini_set("memory_limit", "60M");
+                }
+        
+        $this->setAction("list");
+	}
+
+
+	public function getOutputModuleNavi() {
+	    $arrReturn = array();
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        //Load all plugins available and create the navigation
+        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
+
+        foreach($arrPlugins as $strFile => $strOnePlugin) {
+            $strClassName = str_replace(".php", "", $strOnePlugin);
+
+            /** @var $objPlugin interface_admin_statsreports */
+            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
+            if($objPlugin instanceof interface_admin_statsreports && $this->getObjModule()->rightView())
+                    {
+                        $arrReturn[] = array("", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi"));
+                    }
+        }
+
+        return $arrReturn;
+	}
+
+
+    /**
+     * @return string|void
+     * @permissions view
+     * @autoTestable
+     */
+    protected function actionList() {
+        //In every case, we should generate the date-selector
+        $strReturn = $this->processDates();
+
+        $strAction = $this->getParam("action");
+        if($strAction == "")
+            $strAction = "statsCommon";
+
+        //And now we have to load the requested plugin
+        $strReturn .= $this->loadRequestedPlugin($strAction);
+        
+        return $strReturn;
+    }
+
+    /**
+     * Loads the given plugin, i.e. the given report.
+     * Creates an instance, passes control an returns parsed data
+     *
+     * @param string $strPlugin
+     * @return string
+     */
+    private function loadRequestedPlugin($strPlugin) {
+        $strReturn = "";
+
+        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
+
+        foreach($arrPlugins as $strOnePlugin) {
+            $strClassName = str_replace(".php", "", $strOnePlugin);
+            /** @var $objPlugin interface_admin_statsreports */
+            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
+
+            if($objPlugin->getReportCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
+
+                $strReturn .= $this->getInlineLoadingCode($strPlugin);
+                //place date-selctor before
+                $strReturn = $this->createDateSelector($objPlugin).$strReturn;
+            }
+        }
+
+        return $strReturn;
+    }
+
+
+    /**
+     * Creates a small form to set the date-intervall of the current report
+     *
+     * @param \interface_admin_statsreports|null $objReport
+     *
+     * @return string
+     */
+	private function createDateSelector(interface_admin_statsreports $objReport = null) {
+		$strReturn = "";
+
+		//And create the selector
+        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getParam("action")));
+        $strReturn .= $this->objToolkit->formInputHidden("sort", $this->getParam("sort"));
+        $strReturn .= $this->objToolkit->formInputHidden("action", $this->getParam("action"));
+        $strReturn .= $this->objToolkit->formInputHidden("filter", "true");
+        $strReturn .= $this->objToolkit->formDateSingle("start", $this->getLang("start"), $this->objDateStart);
+        $strReturn .= $this->objToolkit->formDateSingle("end", $this->getLang("ende"),  $this->objDateEnd);
+
+        //create intervall dropdown?
+        if($objReport != null) {
+            if($objReport instanceof interface_admin_statsreports ) {
+                if($objReport->isIntervalable()) {
+                    $arrOption = array();
+                    $arrOption["1"] = $this->getLang("interval_1day");
+                    $arrOption["2"] = $this->getLang("interval_2days");
+                    $arrOption["7"] = $this->getLang("interval_7days");
+                    $arrOption["15"] = $this->getLang("interval_15days");
+                    $arrOption["30"] = $this->getLang("interval_30days");
+                    $arrOption["60"] = $this->getLang("interval_60days");
+                    $strReturn .= $this->objToolkit->formInputDropdown("interval", $arrOption, $this->getLang("interval"), $this->intInterval);
+                }
+            }
+        }
+        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("filtern"));
+        $strReturn .= $this->objToolkit->formClose();
+        $strReturn = "<div class=\"dateSelector\">".$strReturn."</div>";
+
+		return $strReturn;
+	}
+
+	/**
+	 * Creates int-values of the passed date-values
+	 *
+	 */
+	private function processDates() {
+
+        if($this->getParam("filter") == "true") {
+
+            $this->objDateStart = new class_date();
+            $this->objDateStart->generateDateFromParams("start", $this->getAllParams());
+
+            $this->objDateEnd = new class_date();
+            $this->objDateEnd->generateDateFromParams("end", $this->getAllParams());
+
+            
+            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $this->objDateStart->getTimeInOldStyle());
+            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $this->objDateEnd->getTimeInOldStyle());
+
+            if($this->getParam("interval") != "")
+                $this->intInterval = (int)$this->getParam("interval");
+            else
+                $this->intInterval = 2;
+
+            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
+        }
+	}
+
+
+    /**
+     * Creates the code required to load the report via an ajax request
+     * 
+     * @param string $strPlugin
+     * @param string $strPv
+     * @return string 
+     */
+    private function getInlineLoadingCode($strPlugin, $strPv = "") {
+        $strReturn = "<script type=\"text/javascript\">
+                            KAJONA.admin.loader.loadAjaxBase(function() {
+                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$strPlugin."&pv=".$strPv."\", {
+                                    success : function(o) {
+                                        var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
+                                        document.getElementById(\"report_container\").innerHTML=o.responseText.substr(
+                                          intStart, o.responseText.indexOf(\"]]\")-intStart
+                                        );
+                                        if(o.responseText.indexOf(\"[CDATA[\") < 0) {
+                                            var intStart = o.responseText.indexOf(\"<error>\")+7;
+                                            document.getElementById(\"report_container\").innerHTML=o.responseText.substr(
+                                              intStart, o.responseText.indexOf(\"</error>\")-intStart
+                                            );
+                                        }
+                                    },
+                                    failure : function(o) {
+                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                    }
+                                  })
+                            });
+                          </script>";
+
+        $strReturn .= "<div id=\"report_container\" ><div class=\"loadingContainer\"></div></div>";
+        return $strReturn;
+    }
+
+}
