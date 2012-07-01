@@ -234,21 +234,22 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private function getInlineLoadingCode($strPlugin, $strPv = "") {
         $strReturn = "<script type=\"text/javascript\">
                             KAJONA.admin.loader.loadAjaxBase(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$strPlugin."&pv=".$strPv."\", {
-                                    success : function(o) {
-                                        var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
-                                        document.getElementById(\"report_container\").innerHTML=o.responseText.substr(
-                                          intStart, o.responseText.indexOf(\"]]\")-intStart
+                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$strPlugin."&pv=".$strPv."\", function(data, status, jqXHR) {
+
+                                    if(status == 'success')  {
+                                        var intStart = data.indexOf(\"[CDATA[\")+7;
+                                        document.getElementById(\"report_container\").innerHTML=data.substr(
+                                          intStart, data.indexOf(\"]]\")-intStart
                                         );
-                                        if(o.responseText.indexOf(\"[CDATA[\") < 0) {
-                                            var intStart = o.responseText.indexOf(\"<error>\")+7;
-                                            document.getElementById(\"report_container\").innerHTML=o.responseText.substr(
-                                              intStart, o.responseText.indexOf(\"</error>\")-intStart
+                                        if(data.indexOf(\"[CDATA[\") < 0) {
+                                            var intStart = data.indexOf(\"<error>\")+7;
+                                            document.getElementById(\"report_container\").innerHTML=data.substr(
+                                              intStart, data.indexOf(\"</error>\")-intStart
                                             );
                                         }
-                                    },
-                                    failure : function(o) {
-                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                    }
+                                    else  {
+                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
                                     }
                                   })
                             });

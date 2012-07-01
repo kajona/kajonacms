@@ -919,9 +919,9 @@ KAJONA.admin.systemtask = {
             jsDialog_0.init();
         }
 
-        KAJONA.admin.ajax.executeSystemtask(strTaskname, strAdditionalParam, {
-            success : function(o) {
-                var strResponseText = o.responseText;
+        KAJONA.admin.ajax.genericAjaxCall("system", "executeSystemTask", "&task="+strTaskname+strAdditionalParam, function(data, status, jqXHR) {
+            if(status == 'success') {
+                var strResponseText = data;
 
                 //parse the response and check if it's valid
                 if(strResponseText.indexOf("<error>") != -1) {
@@ -955,11 +955,11 @@ KAJONA.admin.systemtask = {
                     	KAJONA.admin.systemtask.executeTask(strTaskname, strReload, true);
                     }
                 }
-            },
+            }
 
-            failure : function(o) {
+            else {
                 jsDialog_0.hide();
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />"+o.responseText);
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />"+data);
             }
         });
     },
@@ -980,88 +980,75 @@ KAJONA.admin.systemtask = {
  * AJAX functions for connecting to the server
  */
 KAJONA.admin.ajax = {
-	posConn: null,
-	pagesConn: null,
-	dashboardConn: null,
-	statusConn: null,
-	cropConn: null,
-	rotateConn: null,
-	genericCall: null,
-    systemTaskCall: null,
 
-    regularCallback: {
-		success : function(o) {
-			KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText)
-		},
-		failure : function(o) {
+    getDataObjectFromString: function(strData, bitFirstIsSystemid) {
+        //strip other params, backwards compatibility
+        var arrElements = strData.split("&");
+        var data = { };
+
+        if(bitFirstIsSystemid)
+            data["systemid"] = arrElements[0];
+
+        //first one is the systemid
+        if(arrElements.length > 1) {
+            $.each(arrElements, function(index, strValue) {
+                if(!bitFirstIsSystemid || index > 0) {
+                    var arrSingleParams = strValue.split("=");
+                    data[arrSingleParams[0]] = arrSingleParams[1];
+                }
+            });
+        }
+        return data;
+    },
+
+    regularCallback: function(data, status, jqXHR) {
+		if(status == 'success') {
+			KAJONA.admin.statusDisplay.displayXMLMessage(data)
+		}
+		else {
 			KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
 		}
 	},
 
-    executeSystemtask : function(strTaskname, strAdditionalParam, objCallback) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=executeSystemTask&task='+strTaskname;
-		var postBody = strAdditionalParam;
-
-		if (KAJONA.admin.ajax.systemTaskCall == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(KAJONA.admin.ajax.systemTaskCall)) {
-			KAJONA.admin.ajax.systemTaskCall = YAHOO.util.Connect.asyncRequest('POST',
-					postTarget, objCallback, postBody);
-		}
-	},
 
 	genericAjaxCall : function(module, action, systemid, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
-		var postBody = 'systemid=' + systemid;
+        var data = this.getDataObjectFromString(systemid, true);
 
-        KAJONA.admin.ajax.genericCall = YAHOO.util.Connect.asyncRequest(
-                'POST', postTarget, objCallback, postBody);
+        $.ajax({
+            type: 'POST',
+            url: postTarget,
+            data: data,
+            success: objCallback,
+            dataType: 'text'
+        });
+
 	},
 
     setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList, objCallback, strTargetModule) {
         if(strTargetModule == null || strTargetModule == "")
             strTargetModule = "system";
 
-        var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+strTargetModule+'&action=setAbsolutePosition';
-        var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos;
-
-
         if(typeof objCallback == 'undefined' || objCallback == null)
             objCallback = KAJONA.admin.ajax.regularCallback;
 
-		if (KAJONA.admin.ajax.posConn == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(KAJONA.admin.ajax.posConn)) {
-			KAJONA.admin.ajax.posConn = YAHOO.util.Connect.asyncRequest('POST',
-					postTarget, objCallback, postBody);
-		}
+
+        KAJONA.admin.ajax.genericAjaxCall(strTargetModule, "setAbsolutePosition", systemIdToMove + "&listPos=" + intNewPos, objCallback);
 	},
 
 	setDashboardPos : function(systemIdToMove, intNewPos, strIdOfList) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=dashboard&action=setDashboardPosition';
-		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos
-				+ '&listId=' + strIdOfList;
-
-		if (KAJONA.admin.ajax.dashboardConn == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(KAJONA.admin.ajax.dashboardConn)) {
-			KAJONA.admin.ajax.dashboardConn = YAHOO.util.Connect.asyncRequest(
-					'POST', postTarget, KAJONA.admin.ajax.regularCallback, postBody);
-		}
+        KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", systemIdToMove + "&listPos=" + intNewPos, KAJONA.admin.ajax.regularCallback);
 	},
 
 	setSystemStatus : function(strSystemIdToSet, bitReload) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setStatus';
-		var postBody = 'systemid=' + strSystemIdToSet;
-
-        var objCallback = {
-            success: function(o) {
-				KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
+        var objCallback = function(data, status, jqXHR) {
+            if(status == 'success') {
+				KAJONA.admin.statusDisplay.displayXMLMessage(data);
 
                 if(bitReload !== null && bitReload === true)
                     location.reload();
 
-				if (o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
+				if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
 					var image = document.getElementById('statusImage_' + strSystemIdToSet);
 					var link = document.getElementById('statusLink_' + strSystemIdToSet);
 
@@ -1077,88 +1064,73 @@ KAJONA.admin.ajax = {
 
 					KAJONA.admin.tooltip.add(link);
 				}
-        	},
-
-            failure: function(o) {
-        		KAJONA.admin.statusDisplay.messageError(o.responseText);
+        	}
+            else{
+        		KAJONA.admin.statusDisplay.messageError(data);
         	}
         };
 
-		if (KAJONA.admin.ajax.statusConn == null || !YAHOO.util.Connect.isCallInProgress(KAJONA.admin.ajax.statusConn)) {
-			KAJONA.admin.ajax.statusConn = YAHOO.util.Connect.asyncRequest(
-					'POST', postTarget, objCallback, postBody);
-		}
+        KAJONA.admin.ajax.genericAjaxCall("system", "setStatus", strSystemIdToSet, objCallback);
 	},
 
 	saveImageCropping : function(intX, intY, intWidth, intHeight, strFile, objCallback) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=mediamanager&action=saveCropping';
 		var postBody = 'file=' + strFile + '&intX=' + intX + '&intY=' + intY
 				+ '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';
 
-		if (KAJONA.admin.ajax.cropConn == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(KAJONA.admin.ajax.cropConn)) {
-			KAJONA.admin.ajax.cropConn = YAHOO.util.Connect.asyncRequest('POST',
-					postTarget, objCallback, postBody);
-		}
+
+
+        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "saveCropping", "&"+postBody , objCallback);
 	},
 
 	saveImageRotating : function(intAngle, strFile, objCallback) {
-		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=mediamanager&action=rotate';
 		var postBody = 'file=' + strFile + '&angle=' + intAngle + '';
 
-		if (KAJONA.admin.ajax.rotateConn == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(KAJONA.admin.ajax.rotateConn)) {
-			KAJONA.admin.ajax.rotateConn = YAHOO.util.Connect.asyncRequest(
-					'POST', postTarget, objCallback, postBody);
-		}
+
+        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "rotate", "&"+postBody , objCallback);
 	},
 
 
     createFolder : function (strFmRepoId, strFolder) {
-        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
-                success : function(o) {
-                    //check if answer contains an error
-                    if(o.responseText.indexOf("<error>") != -1) {
-                        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
-                    }
-                    else {
-                        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "partialSyncRepo", strFmRepoId, {
-                                success : function(o) {
-                                    location.reload();
-                                },
-                                failure : function(o) {
-                                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-                                }
-                            }
-                        );
-
-                    }
-                },
-                failure : function(o) {
-                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        KAJONA.admin.ajax.genericAjaxCall("mediamanager", "createFolder", strFmRepoId+"&folder="+strFolder, function(data, status, jqXHR) {
+            if(status == 'success') {
+                //check if answer contains an error
+                if(data.indexOf("<error>") != -1) {
+                    KAJONA.admin.statusDisplay.displayXMLMessage(data);
                 }
-            });
+                else {
+                    KAJONA.admin.ajax.genericAjaxCall("mediamanager", "partialSyncRepo", strFmRepoId, function(data, status, jqXHR) {
+                        if(status == 'success') {
+                            location.reload();
+                        }
+                        else {
+                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+                        }
+                    });
+                }
+            }
+            else  {
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+            }
+        });
     },
 
 
 
     loadPagesTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
-        KAJONA.admin.ajax.genericAjaxCall("pages", "getChildNodes", nodeSystemid, {
-            success : function(o) {
+        KAJONA.admin.ajax.genericAjaxCall("pages", "getChildNodes", nodeSystemid, function(data, status, jqXHR) {
+            if(status == 'success') {
                 //check if answer contains an error
-                if(o.responseText.indexOf("<error>") != -1) {
-                    KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
-                    o.argument.fnLoadComplete();
+                if(data.indexOf("<error>") != -1) {
+                    KAJONA.admin.statusDisplay.displayXMLMessage(data);
+                    fnLoadComplete();
                 }
                 else {
                     //success, start transforming the childs to tree-view nodes
                     //TODO: use xml parser instead of string-parsing
                     //process nodes
-                    var intStart = o.responseText.indexOf("<entries>")+9;
-                    var strEntries = o.responseText.substr(intStart, o.responseText.indexOf("</entries>")-intStart);
+                    var intStart = data.indexOf("<entries>")+9;
+                    var strEntries = data.substr(intStart, data.indexOf("</entries>")-intStart);
 
                     while(strEntries.indexOf("<folder>") != -1 || strEntries.indexOf("<page>") != -1 ) {
 
@@ -1221,36 +1193,30 @@ KAJONA.admin.ajax = {
 
                     }
 
-                    o.argument.fnLoadComplete();
+                    fnLoadComplete();
                     KAJONA.admin.treeview.checkInitialTreeViewToggling();
                 }
-            },
-            failure : function(o) {
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-            },
-            argument: {
-                "node": node,
-                "fnLoadComplete": fnLoadComplete
-            },
-
-            timeout: 7000
+            }
+            else {
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+            }
         });
     },
 
     loadNavigationTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
-        KAJONA.admin.ajax.genericAjaxCall("navigation", "getChildNodes", nodeSystemid, {
-            success : function(o) {
+        KAJONA.admin.ajax.genericAjaxCall("navigation", "getChildNodes", nodeSystemid, function(data, status, jqXHR) {
+            if(status == 'success') {
                 //check if answer contains an error
-                if(o.responseText.indexOf("<error>") != -1) {
-                    KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
-                    o.argument.fnLoadComplete();
+                if(data.indexOf("<error>") != -1) {
+                    KAJONA.admin.statusDisplay.displayXMLMessage(data);
+                    fnLoadComplete();
                 }
                 else {
                     //success, start transforming the childs to tree-view nodes
                     //TODO: use xml parser instead of string-parsing
                     //process nodes
-                    var strPoints = o.responseText;
+                    var strPoints = data;
 
                     while(strPoints.indexOf("<point>") != -1 ) {
                         var intFolderStart = strPoints.indexOf("<point>")+7;
@@ -1279,19 +1245,13 @@ KAJONA.admin.ajax = {
                         strPoints = strPoints.substr(strPoints.indexOf("</point>")+8);
                     }
 
-                    o.argument.fnLoadComplete();
+                    fnLoadComplete();
                     KAJONA.admin.treeview.checkInitialTreeViewToggling();
                 }
-            },
-            failure : function(o) {
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
-            },
-            argument: {
-                "node": node,
-                "fnLoadComplete": fnLoadComplete
-            },
-
-            timeout: 7000
+            }
+            else {
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+            }
         });
     }
 
@@ -1617,10 +1577,10 @@ KAJONA.admin.mediamanager.imageEditor = {
             this.cropArea.height = Math.floor(this.cropArea.height * (intOriginalHeigth / intScaledHeight));
         }
 
-        var callback = {
-            success : function(o) {
+        var callback = function(data, status, jqXHR) {
+            if(status == 'success') {
         		var iE = KAJONA.admin.mediamanager.imageEditor;
-                KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
+                KAJONA.admin.statusDisplay.displayXMLMessage(data);
                 iE.fm_cropObj.destroy();
                 iE.fm_cropObj = null;
                 document.getElementById("accept_icon").src = document
@@ -1641,10 +1601,9 @@ KAJONA.admin.mediamanager.imageEditor = {
                 iE.cropArea = null;
 
                 hide_fm_screenlock_dialog();
-            },
-            failure : function(o) {
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>"
-                        + o.responseText);
+            }
+            else {
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>"+data);
                 hide_fm_screenlock_dialog();
             }
         };
@@ -1656,10 +1615,10 @@ KAJONA.admin.mediamanager.imageEditor = {
     rotate : function (intAngle) {
         init_fm_screenlock_dialog();
 
-        var callback = {
-            success : function(o) {
+        var callback = function(data, status, jqXHR) {
+            if(status == 'success') {
         		var iE = KAJONA.admin.mediamanager.imageEditor;
-                KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
+                KAJONA.admin.statusDisplay.displayXMLMessage(data);
 
                 if (iE.fm_cropObj != null) {
                 	iE.fm_cropObj.destroy();
@@ -1689,10 +1648,9 @@ KAJONA.admin.mediamanager.imageEditor = {
                         + ' x ' + intWidthOld;
 
                 hide_fm_screenlock_dialog();
-            },
-            failure : function(o) {
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>"
-                        + o.responseText);
+            }
+            else {
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>"+ data);
                 hide_fm_screenlock_dialog();
             }
         };
@@ -1779,13 +1737,13 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
  */
 KAJONA.admin.tags = {};
 KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
-    KAJONA.admin.ajax.genericAjaxCall("tags", "saveTag", strSystemid+"&tagname="+strTagname+"&attribute="+strAttribute, {
-        success : function(o) {
+    KAJONA.admin.ajax.genericAjaxCall("tags", "saveTag", strSystemid+"&tagname="+strTagname+"&attribute="+strAttribute, function(data, status, jqXHR) {
+        if(status == 'success') {
             KAJONA.admin.tags.reloadTagList(strSystemid, strAttribute);
             document.getElementById('tagname').value='';
-        },
-        failure : function(o) {
-            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        }
+        else {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
         }
     });
 };
@@ -1794,28 +1752,28 @@ KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
 
     YAHOO.util.Dom.addClass("tagsWrapper_"+strSystemid, "loadingContainer");
 
-    KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, {
-        success : function(o) {
-            var intStart = o.responseText.indexOf("<tags>")+6;
-            var strContent = o.responseText.substr(intStart, o.responseText.indexOf("</tags>")-intStart);
+    KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, function(data, status, jqXHR) {
+        if(status == 'success') {
+            var intStart = data.indexOf("<tags>")+6;
+            var strContent = data.substr(intStart, data.indexOf("</tags>")-intStart);
             YAHOO.util.Dom.removeClass("tagsWrapper_"+strSystemid, "loadingContainer");
             document.getElementById("tagsWrapper_"+strSystemid).innerHTML = strContent;
-        },
-        failure : function(o) {
-            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        }
+        else {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
             YAHOO.util.Dom.removeClass("tagsWrapper_"+strSystemid, "loadingContainer");
         }
     });
 };
 
 KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute) {
-    KAJONA.admin.ajax.genericAjaxCall("tags", "removeTag", strTagId+"&targetid="+strTargetSystemid+"&attribute="+strAttribute, {
-        success : function(o) {
+    KAJONA.admin.ajax.genericAjaxCall("tags", "removeTag", strTagId+"&targetid="+strTargetSystemid+"&attribute="+strAttribute, function(data, status, jqXHR) {
+        if(status == 'success') {
             KAJONA.admin.tags.reloadTagList(strTargetSystemid, strAttribute);
             document.getElementById('tagname').value='';
-        },
-        failure : function(o) {
-            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        }
+        else {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
         }
     });
 };

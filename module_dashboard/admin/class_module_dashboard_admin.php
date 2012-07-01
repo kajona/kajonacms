@@ -97,21 +97,21 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         $strGeneratedContent = "<script type=\"text/javascript\">
                         window.setTimeout( function() {
                             KAJONA.admin.loader.loadAjaxBase(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", {
-                                    success : function(o) {
-                                        var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
-                                        document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=o.responseText.substr(
-                                          intStart, o.responseText.indexOf(\"]]\")-intStart
+                                  KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", function(data, status, jqXHR) {
+                                    if(status == 'success') {
+                                        var intStart = data.indexOf(\"[CDATA[\")+7;
+                                        document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
+                                          intStart, data.indexOf(\"]]\")-intStart
                                         );
-                                        if(o.responseText.indexOf(\"[CDATA[\") < 0) {
-                                            var intStart = o.responseText.indexOf(\"<error>\")+7;
-                                            document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=o.responseText.substr(
-                                              intStart, o.responseText.indexOf(\"</error>\")-intStart
+                                        if(data.indexOf(\"[CDATA[\") < 0) {
+                                            var intStart = data.indexOf(\"<error>\")+7;
+                                            document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
+                                              intStart, data.indexOf(\"</error>\")-intStart
                                             );
                                         }
-                                    },
-                                    failure : function(o) {
-                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                    }
+                                    else {
+                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
                                     }
                                   })
                             });
@@ -185,24 +185,24 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
         $strContent = "<script type=\"text/javascript\">
                         KAJONA.admin.loader.loadAjaxBase(function() {
-                              KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", {
-                                success : function(o) {
-                                    var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
+                              KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", function(data, status, jqXHR) {
+                                if(status == 'success') {
+                                    var intStart = data.indexOf(\"[CDATA[\")+7;
                                     var objNode = document.getElementById(\"".$strContainerId."\");
-                                    document.getElementById(\"".$strContainerId."\").innerHTML=o.responseText.substr(
-                                      intStart, o.responseText.indexOf(\"]]\")-intStart
+                                    document.getElementById(\"".$strContainerId."\").innerHTML=data.substr(
+                                      intStart, data.indexOf(\"]]\")-intStart
                                     );
-                                    if(o.responseText.indexOf(\"[CDATA[\") < 0) {
-                                        var intStart = o.responseText.indexOf(\"<error>\")+7;
+                                    if(data.indexOf(\"[CDATA[\") < 0) {
+                                        var intStart = data.indexOf(\"<error>\")+7;
                                         var objNode = document.getElementById(\"".$strContainerId."\");
                                         objNode.innerHTML=o.responseText.substr(
-                                          intStart, o.responseText.indexOf(\"</error>\")-intStart
+                                          intStart, data.indexOf(\"</error>\")-intStart
                                         );
                                     }
-                                    KAJONA.util.evalScript(o.responseText);
-                                },
-                                failure : function(o) {
-                                    KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                    KAJONA.util.evalScript(data);
+                                }
+                                else {
+                                    KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
                                 }
                               })
                         });
