@@ -47,7 +47,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 	}
 
 	public function getReportTitle() {
-	    return  $this->objTexts->getLang("topcountries", "stats", "admin");
+	    return  $this->objTexts->getLang("topcountries", "stats");
 	}
 
 	public function getReportCommand() {
@@ -91,13 +91,13 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 		}
 		//HeaderRow
 		$arrHeader[] = "#";
-		$arrHeader[] = $this->objTexts->getLang("top_country_titel", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getLang("commons_hits_header", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getLang("top_country_titel", "stats");
+		$arrHeader[] = $this->objTexts->getLang("commons_hits_header", "stats");
 		$arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
-        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats", "admin"));
+        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats"));
         
 		return $strReturn;
 	}

@@ -49,7 +49,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 	}
 
 	public function getReportTitle() {
-	    return  $this->objTexts->getLang("topqueries", "stats", "admin");
+	    return  $this->objTexts->getLang("topqueries", "stats");
 	}
 
 	public function getReportCommand() {
@@ -91,9 +91,9 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 		}
 		//HeaderRow
 		$arrHeader[] = "#";
-		$arrHeader[] = $this->objTexts->getLang("top_query_titel", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getLang("top_query_gewicht", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getLang("top_query_titel", "stats");
+		$arrHeader[] = $this->objTexts->getLang("top_query_gewicht", "stats");
+		$arrHeader[] = $this->objTexts->getLang("anteil", "stats");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
@@ -172,10 +172,10 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
     	    $objGraph = class_graph_factory::getGraphInstance();
     	    
             $objGraph->setArrXAxisTickLabels($arrLabels);
-            $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getLang("top_query_titel", "stats", "admin"));
+            $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getLang("top_query_titel", "stats"));
     	    
-    	    $objGraph->setStrXAxisTitle($this->objTexts->getLang("top_query_titel", "stats", "admin"));
-    	    $objGraph->setStrYAxisTitle($this->objTexts->getLang("top_query_gewicht", "stats", "admin"));
+    	    $objGraph->setStrXAxisTitle($this->objTexts->getLang("top_query_titel", "stats"));
+    	    $objGraph->setStrYAxisTitle($this->objTexts->getLang("top_query_gewicht", "stats"));
     	    $strFilename = _images_cachepath_."stats_topqueries.png";
     	    $objGraph->saveGraph($strFilename);
     		return _webpath_.$strFilename;

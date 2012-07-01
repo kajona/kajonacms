@@ -46,7 +46,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 	}
 
 	public function getReportTitle() {
-	    return  $this->objTexts->getLang("topreferer", "stats", "admin");
+	    return  $this->objTexts->getLang("topreferer", "stats");
 	}
 
 	public function getReportCommand() {
@@ -82,7 +82,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 				break;
 
 			if($arrOneStat["referer"] == "")
-				$arrOneStat["referer"] =  $this->objTexts->getLang("referer_direkt", "stats", "admin");
+				$arrOneStat["referer"] =  $this->objTexts->getLang("referer_direkt", "stats");
 			else
 				$arrOneStat["referer"] = getLinkPortal("", $arrOneStat["referer"], "_blank", uniStrTrim($arrOneStat["referer"], 45));
 
@@ -95,8 +95,8 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 		}
 		//HeaderRow
 		$arrHeader[] = "#";
-		$arrHeader[] = $this->objTexts->getLang("top_referer_titel", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getLang("top_referer_gewicht", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getLang("top_referer_titel", "stats");
+		$arrHeader[] = $this->objTexts->getLang("top_referer_gewicht", "stats");
 		$arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);

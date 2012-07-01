@@ -44,9 +44,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
         $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_START);
         if($intDateStart == "")
-                {
-                    $intDateStart = strtotime(strftime("%Y-%m", time()) . "-01");
-                }
+            $intDateStart = strtotime(strftime("%Y-%m", time()) . "-01");
 
 		//Start: first day of current month
         $this->objDateStart = new class_date();
@@ -55,19 +53,16 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 		//End: Current Day of month
         $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_END);
         if($intDateEnd == "")
-                {
-                    $intDateEnd = time() + 3600 * 24;
-                }
+            $intDateEnd = time() + 3600 * 24;
+
         $this->objDateEnd = new class_date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
 
         $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_INTERVAL);
         if($this->intInterval == "")
-                {
-                    $this->intInterval = 2;
-                }
-        
+            $this->intInterval = 2;
+
         class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $intDateStart);
         class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $intDateEnd);
         class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
@@ -78,10 +73,8 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
         //stats may consume a lot of memory, increase max mem limit
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
-                {
-                    @ini_set("memory_limit", "60M");
-                }
-        
+            @ini_set("memory_limit", "60M");
+
         $this->setAction("list");
 	}
 
@@ -91,18 +84,10 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         //Load all plugins available and create the navigation
-        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
+        $arrPlugins = $this->getReports();
 
-        foreach($arrPlugins as $strFile => $strOnePlugin) {
-            $strClassName = str_replace(".php", "", $strOnePlugin);
-
-            /** @var $objPlugin interface_admin_statsreports */
-            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
-            if($objPlugin instanceof interface_admin_statsreports && $this->getObjModule()->rightView())
-                    {
-                        $arrReturn[] = array("", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi"));
-                    }
-        }
+        foreach($arrPlugins as $objPlugin)
+            $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi"));
 
         return $arrReturn;
 	}
@@ -137,19 +122,12 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private function loadRequestedPlugin($strPlugin) {
         $strReturn = "";
 
-        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
+        $arrPlugins = $this->getReports();
+        if(isset($arrPlugins[$strPlugin])) {
 
-        foreach($arrPlugins as $strOnePlugin) {
-            $strClassName = str_replace(".php", "", $strOnePlugin);
-            /** @var $objPlugin interface_admin_statsreports */
-            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
-
-            if($objPlugin->getReportCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
-
-                $strReturn .= $this->getInlineLoadingCode($strPlugin);
-                //place date-selctor before
-                $strReturn = $this->createDateSelector($objPlugin).$strReturn;
-            }
+            $strReturn .= $this->getInlineLoadingCode($strPlugin);
+            //place date-selctor before
+            $strReturn = $this->createDateSelector($arrPlugins[$strPlugin]).$strReturn;
         }
 
         return $strReturn;
@@ -210,7 +188,6 @@ class class_module_stats_admin extends class_admin implements interface_admin {
             $this->objDateEnd = new class_date();
             $this->objDateEnd->generateDateFromParams("end", $this->getAllParams());
 
-            
             class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $this->objDateStart->getTimeInOldStyle());
             class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $this->objDateEnd->getTimeInOldStyle());
 
@@ -218,6 +195,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
                 $this->intInterval = (int)$this->getParam("interval");
             else
                 $this->intInterval = 2;
+
 
             class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
         }
@@ -257,6 +235,30 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
         $strReturn .= "<div id=\"report_container\" ><div class=\"loadingContainer\"></div></div>";
         return $strReturn;
+    }
+
+    /**
+     * Creates a list of reports available, sorted by the human-readable title.
+     * The key report-command is used as a key.
+     * @return interface_admin_statsreports[]
+     */
+    private function getReports() {
+        $arrReturn = array();
+        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
+
+        foreach($arrPlugins as $strOnePlugin) {
+            $strClassName = str_replace(".php", "", $strOnePlugin);
+            /** @var $objPlugin interface_admin_statsreports */
+            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
+
+            if($objPlugin instanceof interface_admin_statsreports)
+                $arrReturn[$objPlugin->getReportCommand()] = $objPlugin;
+        }
+
+        uasort($arrReturn, function(interface_admin_statsreports $objA, interface_admin_statsreports $objB) {
+            return strcmp($objA->getReportTitle(), $objB->getReportTitle());
+        });
+        return $arrReturn;
     }
 
 }

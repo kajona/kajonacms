@@ -48,7 +48,7 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
 	}
 
 	public function getReportTitle() {
-	    return  $this->objLang->getLang("topvisitor", "stats", "admin");
+	    return  $this->objLang->getLang("topvisitor", "stats");
 	}
 
 	public function getReportCommand() {
@@ -95,13 +95,13 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
 		}
 		//HeaderRow
 		$arrHeader[] = "#";
-		$arrHeader[] = $this->objLang->getLang("top_visitor_titel", "stats", "admin");
-		$arrHeader[] = $this->objLang->getLang("commons_hits_header", "stats", "admin");
+		$arrHeader[] = $this->objLang->getLang("top_visitor_titel", "stats");
+		$arrHeader[] = $this->objLang->getLang("commons_hits_header", "stats");
 		$arrHeader[] = $this->objLang->getLang("anteil", "stats", "admin");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
-        $strReturn .= $this->objToolkit->getTextRow($this->objLang->getLang("stats_hint_task", "stats", "admin"));
+        $strReturn .= $this->objToolkit->getTextRow($this->objLang->getLang("stats_hint_task", "stats"));
 
 		return $strReturn;
 	}

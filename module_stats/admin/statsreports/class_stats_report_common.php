@@ -49,7 +49,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	}
 
 	public function getReportTitle() {
-	    return  $this->objTexts->getLang("allgemein", "stats", "admin");
+	    return  $this->objTexts->getLang("allgemein", "stats");
 	}
 
 	public function getReportCommand() {
@@ -72,19 +72,19 @@ class class_stats_report_common implements interface_admin_statsreports {
 
         $arrValues = array();
         $arrValues[0] = array();
-        $arrValues[0][] = $this->objTexts->getLang("anzahl_hits", "stats", "admin");
+        $arrValues[0][] = $this->objTexts->getLang("anzahl_hits", "stats");
         $arrValues[0][] = $this->getHits();
 
         $arrValues[1] = array();
-        $arrValues[1][] = $this->objTexts->getLang("anzahl_visitor", "stats", "admin");
+        $arrValues[1][] = $this->objTexts->getLang("anzahl_visitor", "stats");
         $arrValues[1][] = $this->getVisitors();
 
         $arrValues[2] = array();
-        $arrValues[2][] = $this->objTexts->getLang("anzahl_pagespvisit", "stats", "admin");
+        $arrValues[2][] = $this->objTexts->getLang("anzahl_pagespvisit", "stats");
         $arrValues[2][] = $this->getPagesPerVisit();
 
         $arrValues[3] = array();
-        $arrValues[3][] = $this->objTexts->getLang("anzahl_timepvisit", "stats", "admin");
+        $arrValues[3][] = $this->objTexts->getLang("anzahl_timepvisit", "stats");
         $arrValues[3][] = $this->getTimePerVisit();
 
         $arrValues[4] = array();
@@ -92,7 +92,7 @@ class class_stats_report_common implements interface_admin_statsreports {
         $arrValues[4][] = " ";
 
         $arrValues[5] = array();
-        $arrValues[5][] = $this->objTexts->getLang("anzahl_online", "stats", "admin");
+        $arrValues[5][] = $this->objTexts->getLang("anzahl_online", "stats");
         $arrValues[5][] = $this->getNumberOfCurrentUsers();
 
 
@@ -296,9 +296,9 @@ class class_stats_report_common implements interface_admin_statsreports {
 		if($intCount > 1) {
 
             $objChart1 = class_graph_factory::getGraphInstance();
-            $objChart1->setStrGraphTitle($this->objTexts->getLang("graph_hitsPerDay", "stats", "admin"));
-            $objChart1->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats", "admin"));
-            $objChart1->setStrYAxisTitle($this->objTexts->getLang("graph_hits", "stats", "admin"));
+            $objChart1->setStrGraphTitle($this->objTexts->getLang("graph_hitsPerDay", "stats"));
+            $objChart1->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats"));
+            $objChart1->setStrYAxisTitle($this->objTexts->getLang("graph_hits", "stats"));
             $objChart1->setIntWidth(715);
             $objChart1->setIntHeight(200);
             $objChart1->setArrXAxisTickLabels($arrTickLabels);
@@ -308,9 +308,9 @@ class class_stats_report_common implements interface_admin_statsreports {
     		$objChart1->saveGraph($strImagePath1);
 
             $objChart2 = class_graph_factory::getGraphInstance();
-            $objChart2->setStrGraphTitle($this->objTexts->getLang("graph_visitorsPerDay", "stats", "admin"));
-            $objChart2->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats", "admin"));
-            $objChart2->setStrYAxisTitle($this->objTexts->getLang("graph_visitors", "stats", "admin"));
+            $objChart2->setStrGraphTitle($this->objTexts->getLang("graph_visitorsPerDay", "stats"));
+            $objChart2->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats"));
+            $objChart2->setStrYAxisTitle($this->objTexts->getLang("graph_visitors", "stats"));
             $objChart2->setIntWidth(715);
             $objChart2->setIntHeight(200);
             $objChart2->setArrXAxisTickLabels($arrTickLabels);

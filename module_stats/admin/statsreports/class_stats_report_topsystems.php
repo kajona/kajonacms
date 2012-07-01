@@ -69,7 +69,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 	}
 
 	public function getReportTitle() {
-	    return  $this->objTexts->getLang("topsystem", "stats", "admin");
+	    return  $this->objTexts->getLang("topsystem", "stats");
 	}
 
 	public function getReportCommand() {
@@ -113,13 +113,13 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 		}
 		//HeaderRow
 		$arrHeader[] = "#";
-		$arrHeader[] = $this->objTexts->getLang("top_system_titel", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getLang("top_system_gewicht", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getLang("top_system_titel", "stats");
+		$arrHeader[] = $this->objTexts->getLang("top_system_gewicht", "stats");
+		$arrHeader[] = $this->objTexts->getLang("anteil", "stats");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
-        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats", "admin"));
+        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats"));
 
 		return $strReturn;
 	}
