@@ -18,6 +18,7 @@ class class_test_charts_flotTest extends class_testbase  {
         <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.js\"></script>
         <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.js\"></script>    
         <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/flot_examples.js\"></script>
+        <script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js\"></script>
         ";
         
         
@@ -35,8 +36,8 @@ class class_test_charts_flotTest extends class_testbase  {
 
             div.graph
             {
-                width: 400;
-                height: 150;
+                width: 800;
+                height: 400;
                 #float: left;
                 border: 1px dashed gainsboro;
             }
@@ -52,35 +53,30 @@ class class_test_charts_flotTest extends class_testbase  {
         </style>
         ";
         
+        /*$objGraph = new class_graph_flot();
+        $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
+        $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
+        $objGraph->addLinePlot(array(4,7,1,2), "serie 3");
+        $objGraph->addLinePlot(array(4,3,2,1), "serie 4");
+        echo $objGraph->showGraph();
         
-        //<DIV>-Containers for the charts
-        echo "<h2>Pie Chart</h2>";
-        echo "\t <div id=\"piechart\" class=\"graph\" \"></div>";
+        $objGraph = new class_graph_flot();
+        $objGraph->addBarChartSet(array(1,2,3,4), "serie 1");
+        echo $objGraph->showGraph();*/
         
-        echo "<h2>Pie Chart with legend</h2>";
-        echo "\t <div id=\"piechart_legend\" class=\"graph\" \"></div>";
+        $objGraph = new class_graph_flot();
+        $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
+        $objGraph->setStrXAxisTitle("X-Axis");
+        $objGraph->setStrYAxisTitle("Y-Axis");
+        $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
+        $objGraph->addBarChartSet(array(1,2,3,4), "serie 3");
+        //$objGraph->addBarChartSet(array(1,2,3,4), "serie 4");
+        //$objGraph->createPieChart(array(1,2,3,4), array("val 1", "val 2", "val 3", "val 4"));
+        echo $objGraph->showGraph();
         
-        echo "<h2>Bar Chart</h2>";
-        echo "\t <div id=\"barchart\" class=\"graph\" style=\"width:600px\" \"></div>";
+        //$objGraph = new class_graph_flot();
+        //echo $objGraph->showGraph();
         
-        echo "<h2>Stacked Bar Chart</h2>";
-        echo "\t <div id=\"stackedbarchart\" class=\"graph\" style=\"width:600px\" \"></div>";
-        
-        echo "<h2>Line Chart</h2>";
-        echo "\t <div id=\"linechart\" class=\"graph\" style=\"width:600px\" \"></div>";
-        
-        echo "<h2>Combined Line/Bar Chart</h2>";
-        echo "\t <div id=\"linebarchart\" class=\"graph\" style=\"width:600px\" \"></div>";
-        
-        
-        //Plot the charts when document is ready
-        echo"
-        <script type=\"text/javascript\">
-            $(document).ready(function(){
-                $(plotCharts);
-            })
-        </script>
-        ";
         
         echo"<br/>";
     }
