@@ -99,58 +99,16 @@ class class_installer_navigation extends class_installer_base implements interfa
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_3401();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.1") {
-            $strReturn .= $this->update_3401_341();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_341_349();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_349();
         }
 
         return $strReturn."\n\n";
 	}
 
 
-    private function update_340_3401() {
-        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
-
-        $strReturn .= "Deleting process-xml class...\n";
-        $objFilesystem = new class_filesystem();
-        if(!$objFilesystem->fileDelete("/admin/class_modul_navigation_admin_xml.php"))
-            $strReturn .= "Deletion of /admin/class_modul_navigation_admin_xml.php failed!\n";
-
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-        $objModule->setStrXmlNameAdmin("");
-        $objModule->updateObjectToDb();
-
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "3.4.0.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "3.4.0.1");
-        return $strReturn;
-    }
-
-
-    private function update_3401_341() {
-        $strReturn = "Updating 3.4.0.1 to 3.4.1...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "3.4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "3.4.1");
-        return $strReturn;
-    }
-
-    private function update_341_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+    private function update_342_349() {
+        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
         $strReturn .= "Adding classes for existing records...\n";
         $strReturn .= "Trees\n";

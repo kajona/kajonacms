@@ -485,33 +485,10 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Version found:\n\t Module: ".$this->objMetadata->getStrTitle().", Version: ".$this->objMetadata->getStrVersion()."\n\n";
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_3401();
-            $this->objDB->flushQueryCache();
-        }
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.1") {
-            $strReturn .= $this->update_3401_3402();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.2") {
-            $strReturn .= $this->update_3402_341();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_341_349();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1.1") {
-            $strReturn .= $this->update_341_349();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
         }
 
@@ -531,133 +508,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 
-     private function update_340_3401() {
-        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
-
-        $strReturn .= "Deleting system_output_gzip constant... \n";
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
-        if(!$this->objDB->_pQuery($strQuery, array("_system_output_gzip_")))
-            $strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.0.1");
-        return $strReturn;
-    }
 
 
-    private function update_3401_3402() {
-        $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
 
-        $strReturn .= "Installing kajona-user-subsystem user-table...\n";
-		$arrFields = array();
-		$arrFields["user_id"] 			= array("char20", false);
-		$arrFields["user_pass"] 		= array("char254", true);
-		$arrFields["user_email"] 		= array("char254", true);
-		$arrFields["user_forename"] 	= array("char254", true);
-		$arrFields["user_name"] 		= array("char254", true);
-		$arrFields["user_street"] 		= array("char254", true);
-		$arrFields["user_postal"] 		= array("char254", true);
-		$arrFields["user_city"] 		= array("char254", true);
-		$arrFields["user_tel"] 			= array("char254", true);
-		$arrFields["user_mobile"] 		= array("char254", true);
-		$arrFields["user_date"] 		= array("long", true);
-
-		if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Installing kajona-user-subsystem group-table...\n";
-        $arrFields = array();
-		$arrFields["group_id"] 			= array("char20", false);
-		$arrFields["group_desc"]		= array("char254", true);
-
-		if(!$this->objDB->createTable("user_group_kajona", $arrFields, array("group_id")))
-			$strReturn .= "An error occured! ...\n";
-
-
-        $strReturn .= "Updating kajona-user-subsystem members-table...\n";
-        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_members")." TO ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."
-                    CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char20")." NOT NULL,
-                    CHANGE ".$this->objDB->encloseColumnName("group_member_user_id")." ".$this->objDB->encloseColumnName("group_member_user_kajona_id")." ".$this->objDB->getDatatype("char20")." NOT NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
-
-
-        $strReturn .= "Migrating current groups to new kajona-user-subsystems...\n";
-        $strQuery = "SELECT * FROM "._dbprefix_."user_group ORDER BY group_id DESC";
-        $arrRows = $this->objDB->getPArray($strQuery, array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona
-                                        (group_id) VALUES (?) ";
-            $this->objDB->_pQuery($strQuery, array($arrOneRow["group_id"]));
-        }
-
-        $strReturn .= "Migrating current users to new kajona-user-subsystems...\n";
-        $strQuery = "SELECT * FROM "._dbprefix_."user ORDER BY user_id DESC";
-        $arrRows = $this->objDB->getPArray($strQuery, array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."user_kajona
-                                        (user_id, user_pass, user_email, user_forename, user_name,
-                                        user_street, user_postal, user_city, user_tel, user_mobile, user_date) VALUES
-                                        (?,?,?,?,?,?,?,?,?,?,?) ";
-            $this->objDB->_pQuery($strQuery, array(
-                $arrOneRow["user_id"], $arrOneRow["user_pass"], $arrOneRow["user_email"],
-                $arrOneRow["user_forename"], $arrOneRow["user_name"], $arrOneRow["user_street"], $arrOneRow["user_postal"],
-                $arrOneRow["user_city"], $arrOneRow["user_tel"], $arrOneRow["user_mobile"], $arrOneRow["user_date"]));
-
-        }
-
-        $strReturn .= "Updating old user-tables...\n";
-		$strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
-                    ADD ".$this->objDB->encloseColumnName("user_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL,
-                    DROP ".$this->objDB->encloseColumnName("user_pass").",
-                    DROP ".$this->objDB->encloseColumnName("user_email").",
-                    DROP ".$this->objDB->encloseColumnName("user_forename").",
-                    DROP ".$this->objDB->encloseColumnName("user_name").",
-                    DROP ".$this->objDB->encloseColumnName("user_street").",
-                    DROP ".$this->objDB->encloseColumnName("user_postal").",
-                    DROP ".$this->objDB->encloseColumnName("user_city").",
-                    DROP ".$this->objDB->encloseColumnName("user_tel").",
-                    DROP ".$this->objDB->encloseColumnName("user_mobile").",
-                    DROP ".$this->objDB->encloseColumnName("user_date")." ";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
-
-
-        $strReturn .= "Updating old group-tables...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")."
-                    ADD ".$this->objDB->encloseColumnName("group_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Reassigning current users to kajona usersubsystem...\n";
-        $strQuery = "UPDATE "._dbprefix_."user SET user_subsystem = ?";
-        if(!$this->objDB->_pQuery($strQuery, array('kajona')))
-            $strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Reassigning current groups to kajona usersubsystem...\n";
-        $strQuery = "UPDATE "._dbprefix_."user_group SET group_subsystem = ?";
-        if(!$this->objDB->_pQuery($strQuery, array('kajona')))
-            $strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.0.2");
-        return $strReturn;
-    }
-
-    private function update_3402_341() {
-        $strReturn = "Updating 3.4.0.2 to 3.4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.1");
-        return $strReturn;
-    }
-
-
-    private function update_341_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+    private function update_342_349() {
+        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
         $strReturn .= "Updating model-classes...\n";
         $strQuery = "SELECT * FROM "._dbprefix_."system_module";

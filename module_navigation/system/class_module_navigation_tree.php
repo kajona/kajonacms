@@ -84,7 +84,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
      *
      * @param bool|int $intStart
      * @param bool|int $intEnd
-     * @return mixed
+     * @return class_module_navigation_tree[]
      * @static
      */
     public static function getAllNavis($intStart = false, $intEnd = false) {

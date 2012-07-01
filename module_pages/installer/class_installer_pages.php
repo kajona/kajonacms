@@ -264,24 +264,10 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_3401();
-        }
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.1") {
-            $strReturn .= $this->update_3401_3402();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.2") {
-            $strReturn .= $this->update_3402_341();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_341_349();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_349();
         }
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
@@ -294,62 +280,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
 
-    private function update_340_3401() {
-        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
-
-        $strReturn .= "Updating page_element-table...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
-                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_placeholder")." ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->getDatatype("char254")." NOT NULL,
-                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_name")." ".$this->objDB->encloseColumnName("page_element_ph_name")." ".$this->objDB->getDatatype("char254")." NULL,
-                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_element")." ".$this->objDB->encloseColumnName("page_element_ph_element")." ".$this->objDB->getDatatype("char254")." NULL,
-                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_title")." ".$this->objDB->encloseColumnName("page_element_ph_title")." ".$this->objDB->getDatatype("char254")." NULL,
-                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_language")." ".$this->objDB->encloseColumnName("page_element_ph_language")." ".$this->objDB->getDatatype("char20")." NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.0.1");
-        $strReturn .= "Updating element-version...\n";
-        $this->updateElementVersion("row", "3.4.0.1");
-        $this->updateElementVersion("paragraph", "3.4.0.1");
-        $this->updateElementVersion("image", "3.4.0.1");
-        return $strReturn;
-    }
-
-    private function update_3401_3402() {
-        $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
-
-        $strReturn .= "Deleting process-xml class...\n";
-        $objFilesystem = new class_filesystem();
-        if(!$objFilesystem->fileDelete("/admin/class_modul_pages_admin_xml.php"))
-            $strReturn .= "Deletion of /admin/class_modul_pages_admin_xml.php failed!\n";
-
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-        $objModule->setStrXmlNameAdmin("");
-        $objModule->updateObjectToDb();
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.0.2");
-        $strReturn .= "Updating element-version...\n";
-        $this->updateElementVersion("row", "3.4.0.2");
-        $this->updateElementVersion("paragraph", "3.4.0.2");
-        $this->updateElementVersion("image", "3.4.0.2");
-        return $strReturn;
-    }
-
-    private function update_3402_341() {
-        $strReturn = "Updating 3.4.0.2 to 3.4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.1");
-        $strReturn .= "Updating element-version...\n";
-        $this->updateElementVersion("row", "3.4.1");
-        $this->updateElementVersion("paragraph", "3.4.1");
-        $this->updateElementVersion("image", "3.4.1");
-        return $strReturn;
-    }
-
-    private function update_341_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+    private function update_342_349() {
+        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
         $strReturn .= "Setting new element-classes...\n";
         $arrElements = class_module_pages_element::getAllElements();

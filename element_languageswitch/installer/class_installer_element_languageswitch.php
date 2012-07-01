@@ -59,28 +59,8 @@ class class_installer_element_languageswitch extends class_installer_base implem
     public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.0") {
-            $strReturn .= $this->update_340_3401();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.0.1") {
-            $strReturn .= $this->update_3401_3402();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.0.2") {
-            $strReturn .= $this->update_3402_341();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.1") {
-            $strReturn .= $this->update_341_349();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.1.1") {
-            $strReturn .= $this->update_341_349();
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.2") {
+            $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
         }
 
@@ -88,28 +68,9 @@ class class_installer_element_languageswitch extends class_installer_base implem
     }
 
 
-    private function update_340_3401() {
-        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
-        $this->updateElementVersion("languageswitch", "3.4.0.1");
-        return $strReturn;
-    }
 
-
-    private function update_3401_3402() {
-        $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
-        $this->updateElementVersion("languageswitch", "3.4.0.2");
-        return $strReturn;
-    }
-
-    private function update_3402_341() {
-        $strReturn = "Updating 3.4.0.2 to 3.4.1...\n";
-        $this->updateElementVersion("languageswitch", "3.4.1");
-        return $strReturn;
-    }
-
-
-    private function update_341_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+    private function update_342_349() {
+        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
         $this->updateElementVersion("languageswitch", "3.4.9");
         return $strReturn;
     }

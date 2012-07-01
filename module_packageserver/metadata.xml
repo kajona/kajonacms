@@ -5,7 +5,7 @@
         >
     <title>packageserver</title>
     <description>The packageserver is used to provide the server-part of the kajona packages-system. It is based on the mediamanager.</description>
-    <version>3.9.1</version>
+    <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_packageserver</target>
     <type>MODULE</type>

@@ -95,9 +95,7 @@ class class_installer_guestbook extends class_installer_base  {
         }
 
 
-
 		return $strReturn;
-
 	}
 
 
@@ -110,13 +108,8 @@ class class_installer_guestbook extends class_installer_base  {
 
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_341();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_341_349();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_349();
         }
 
         return $strReturn."\n\n";
@@ -124,16 +117,7 @@ class class_installer_guestbook extends class_installer_base  {
 
 
 
-    private function update_340_341() {
-        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "3.4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("guestbook", "3.4.1");
-        return $strReturn;
-    }
-
-    private function update_341_349() {
+    private function update_342_349() {
         $strReturn = "Updating 3.4.1 to 3.4.9...\n";
 
 

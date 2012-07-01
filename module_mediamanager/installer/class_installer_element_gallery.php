@@ -97,15 +97,15 @@ class class_installer_element_gallery extends class_installer_base implements in
 
     public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.1") {
-            $strReturn .= $this->update_341_349();
+        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.2") {
+            $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
     }
 
-    public function update_341_349() {
+    public function update_342_349() {
         $strReturn = "Updating element gallery to 3.4.9...\n";
 
         $strReturn .= "Migrating old gallery-element table...\n";

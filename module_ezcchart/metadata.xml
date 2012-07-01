@@ -5,7 +5,7 @@
     >
     <title>ezcchart</title>
     <description>ezComponents charting engine. Used to render charts on the server-side.</description>
-    <version>3.9.1</version>
+    <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_ezcchart</target>
     <type>MODULE</type>

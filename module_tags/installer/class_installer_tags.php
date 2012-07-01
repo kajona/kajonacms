@@ -107,33 +107,18 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_341();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_341_349();
+            $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
         }
 
         return $strReturn."\n\n";
 	}
 
-    private function update_340_341() {
-        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("tags", "3.4.1");
-        return $strReturn;
-    }
 
 
-    private function update_341_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+    private function update_342_349() {
+        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
         $strReturn .= "Adding classes for existing records...\n";
 

@@ -5,7 +5,7 @@
         >
     <title>packagemanager</title>
     <description>The packagemanager wraps all logic to handle packages.</description>
-    <version>3.9.1</version>
+    <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_packagemanager</target>
     <type>MODULE</type>

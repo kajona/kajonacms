@@ -54,6 +54,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
             include_once(_realpath_.array_search($strOneInstaller, $arrInstaller));
             //Creating an object....
             $strClass = "class_".str_replace(".php", "", $strOneInstaller);
+            /** @var $objInstaller interface_sc_installer|class_installer_base */
             $objInstaller = new $strClass();
 
             if($objInstaller instanceof interface_sc_installer ) {
@@ -85,18 +86,18 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_341();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_349();
         }
 
         return $strReturn;
 	}
 
 
-    private function update_340_341() {
-        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
+    private function update_342_349() {
+        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("samplecontent", "3.4.1");
+        $this->updateModuleVersion("samplecontent", "3.4.9");
         return $strReturn;
     }
 

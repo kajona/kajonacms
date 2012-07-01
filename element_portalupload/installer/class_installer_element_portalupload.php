@@ -53,40 +53,6 @@ class class_installer_element_portalupload extends class_installer_base implemen
 
     public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.2.0.9") {
-            $strReturn .= $this->postUpdate_3209_321();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.2.1") {
-            $strReturn .= $this->postUpdate_321_330();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.3.0") {
-            $strReturn .= $this->postUpdate_330_3301();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.3.0.1") {
-            $strReturn .= $this->postUpdate_3301_331();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.3.1") {
-            $strReturn .= $this->postUpdate_331_340();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.4.0") {
-            $strReturn .= $this->postUpdate_340_341();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.4.1") {
-            $strReturn .= $this->postUpdate_341_342();
-            $this->objDB->flushQueryCache();
-        }
 
         if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.4.2") {
             $strReturn .= $this->postUpdate_342_349();
@@ -96,47 +62,6 @@ class class_installer_element_portalupload extends class_installer_base implemen
         return $strReturn;
     }
 
-    public function postUpdate_3209_321() {
-        $strReturn = "Updating element portalupload to 3.2.1...\n";
-        $this->updateElementVersion("portalupload", "3.2.1");
-        return $strReturn;
-    }
-
-    public function postUpdate_321_330() {
-        $strReturn = "Updating element portalupload to 3.3.0...\n";
-        $this->updateElementVersion("portalupload", "3.3.0");
-        return $strReturn;
-    }
-
-    public function postUpdate_330_3301() {
-        $strReturn = "Updating element portalupload to 3.3.0.1...\n";
-        $this->updateElementVersion("portalupload", "3.3.0.1");
-        return $strReturn;
-    }
-
-    public function postUpdate_3301_331() {
-        $strReturn = "Updating element portalupload to 3.3.1...\n";
-        $this->updateElementVersion("portalupload", "3.3.1");
-        return $strReturn;
-    }
-
-    public function postUpdate_331_340() {
-        $strReturn = "Updating element portalupload to 3.4.0...\n";
-        $this->updateElementVersion("portalupload", "3.4.0");
-        return $strReturn;
-    }
-
-    public function postUpdate_340_341() {
-        $strReturn = "Updating element portalupload to 3.4.1...\n";
-        $this->updateElementVersion("portalupload", "3.4.1");
-        return $strReturn;
-    }
-
-    public function postUpdate_341_342() {
-        $strReturn = "Updating element portalupload to 3.4.2...\n";
-        $this->updateElementVersion("portalupload", "3.4.2");
-        return $strReturn;
-    }
 
     public function postUpdate_342_349() {
         $strReturn = "Updating element portalupload to 3.4.9...\n";

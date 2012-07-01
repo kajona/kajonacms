@@ -95,19 +95,10 @@ class class_installer_postacomment extends class_installer_base implements inter
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_341();
-        }
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_340_3411();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1.1") {
-            $strReturn .= $this->update_3411_349();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_349();
         }
 
         return $strReturn."\n\n";
@@ -115,30 +106,8 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 
 
-    private function update_340_341() {
-        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("postacomment", "3.4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("postacomment", "3.4.1");
-        return $strReturn;
-    }
 
-    private function update_340_3411() {
-        $strReturn = "Updating 3.4.1 to 3.4.1.1...\n";
-
-        $strReturn .= "Registering notify-mailadress constant...\n";
-        $this->registerConstant("_postacomment_notify_mail_", "", class_module_system_setting::$int_TYPE_STRING, _postacomment_modul_id_);
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("postacomment", "3.4.1.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("postacomment", "3.4.1.1");
-        return $strReturn;
-    }
-
-
-    private function update_3411_349() {
+    private function update_342_349() {
         $strReturn = "Updating 3.4.1.1 to 3.4.9...\n";
 
         $strReturn .= "Adding classes for existing records...\n";

@@ -69,38 +69,8 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0") {
-            $strReturn .= $this->update_340_3401();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.1") {
-            $strReturn .= $this->update_3401_3402();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.0.2") {
-            $strReturn .= $this->update_3402_341();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1") {
-            $strReturn .= $this->update_341_349();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.1.1") {
-            $strReturn .= $this->update_341_349();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_3491();
+        if($arrModul["module_version"] == "3.4.2") {
+            $strReturn .= $this->update_342_3491();
             $this->objDB->flushQueryCache();
         }
 
@@ -108,32 +78,8 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	}
 
 
-     private function update_340_3401() {
-        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("dashboard", "3.4.0.1");
-        return $strReturn;
-    }
-
-
-    private function update_3401_3402() {
-        $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
-
-        $this->updateModuleVersion("dashboard", "3.4.0.2");
-        return $strReturn;
-    }
-
-    private function update_3402_341() {
-        $strReturn = "Updating 3.4.0.2 to 3.4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("dashboard", "3.4.1");
-        return $strReturn;
-    }
-
-
-    private function update_341_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
+    private function update_342_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
 
         $strReturn .= "Updating model-classes...\n";
 
@@ -143,14 +89,6 @@ class class_installer_dashboard extends class_installer_base implements interfac
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( 'class_module_dashboard_widget', $arrOneRow["system_id"] ) );
         }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("dashboard", "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_349_3491() {
-        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
 
         //drop widget id
         //add class, content

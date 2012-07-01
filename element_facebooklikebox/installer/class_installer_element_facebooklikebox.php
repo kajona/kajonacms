@@ -56,18 +56,8 @@ class class_installer_element_facebooklikebox extends class_installer_base imple
     public function postUpdate() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.3.1") {
-            $strReturn .= $this->postUpdate_331_340();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.0") {
-            $strReturn .= $this->postUpdate_340_341();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.1") {
-            $strReturn .= $this->postUpdate_341_349();
+        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.2") {
+            $strReturn .= $this->postUpdate_342_349();
             $this->objDB->flushQueryCache();
         }
 
@@ -75,19 +65,8 @@ class class_installer_element_facebooklikebox extends class_installer_base imple
     }
 
 
-    public function postUpdate_331_340() {
-        $strReturn = "Updating element facebooklikebox to 3.4.0...\n";
-        $this->updateElementVersion("facebooklikebox", "3.4.0");
-        return $strReturn;
-    }
 
-    public function postUpdate_340_341() {
-        $strReturn = "Updating element facebooklikebox to 3.4.1...\n";
-        $this->updateElementVersion("facebooklikebox", "3.4.1");
-        return $strReturn;
-    }
-
-    public function postUpdate_341_349() {
+    public function postUpdate_342_349() {
         $strReturn = "Updating element facebooklikebox to 3.4.9...\n";
         $this->updateElementVersion("facebooklikebox", "3.4.9");
         return $strReturn;
