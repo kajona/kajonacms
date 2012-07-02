@@ -342,3 +342,31 @@
 .yui-skin-sam .yuimenuitem-selected .yuimenuitemlabel{
     color: #000000 !important;
 }
+
+
+
+
+/* Hallo Inline Editor */
+body *[data-kajona-editable] {
+    outline: 1px dotted rgba(0, 255, 0, 0.5);
+}
+
+body *[data-kajona-editable] {
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    /*outline: 2px dotted rgba(0, 255, 0, 0);*/
+}
+
+body *[data-kajona-editable]:hover {
+    outline: 1px dotted rgba(0, 255, 0, 0.5);
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.hallotoolbar {
+    /*width: 400px !important;*/
+}
+
+.hallotoolbar .ui-button .ui-button-text {
+    /*line-height: auto !important;*/
+    font-size: 0.7em !important;
+}

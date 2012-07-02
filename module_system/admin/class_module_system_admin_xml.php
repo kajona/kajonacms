@@ -53,7 +53,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 $objCommon->setAbsolutePosition($intNewPos);
             }
 
-		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setAbsolutePosOk")."</message>";
+		    $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setAbsolutePosOk")."</message>";
 		    $this->flushCompletePagesCache();
 		}
 		else {

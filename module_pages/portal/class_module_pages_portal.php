@@ -384,7 +384,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 //Add an iconbar
     		    $arrPeContents["pe_iconbar"] = "";
                 //TODO: i18n
-                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.savePage(); return false;\" id=\"savePageLink\">".getImageAdmin("icon_acceptDisabled.gif", $this->getLang("Änderungen speichern", "pages"))."</a>";
+                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.RTE.savePage(); return false;\" id=\"savePageLink\">".getImageAdmin("icon_acceptDisabled.gif", $this->getLang("Änderungen speichern", "pages"))."</a>";
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
     		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"), $this->getLang("pe_icon_edit", "pages"), "icon_pencil.gif");
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
@@ -401,6 +401,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
     		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getImageAdmin("icon_enabled.gif", $this->getLang("pe_disable", "pages"))."</a>";
 
     		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
+                $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
@@ -409,13 +410,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $strPeToolbar .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor_ie.css\"]);</script><![endif]-->";
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
 
+//TODO: temporary poc hallo integration, cleanup required, move to external loader
 
-
-
-//TODO: temporary poc hallo integration, cleanup required
-
-
-                $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
                 $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js\"></script>";
                 $strPeToolbar .= "\n       <link rel=\"stylesheet\" href=\""._webpath_."/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css\" type=\"text/css\">";
 
@@ -432,178 +428,10 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
                 $strPeToolbar .= "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_pages/admin/scripts/halloeditor/hallo.css\" type=\"text/css\">";
                 $strPeToolbar .= "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_pages/admin/scripts/halloeditor/fontawesome/css/font-awesome.css\" type=\"text/css\">";
-                $strPeToolbar .= <<<CSS
-<style id="hintstyles">
-    body *[data-kajona-editable] {
-        outline: 1px dotted rgba(0, 255, 0, 0.5);
-    }
-</style>
 
-<style>
-    body *[data-kajona-editable] {
-        -webkit-transition: all .5s ease-in-out;
-        -moz-transition: all .5s ease-in-out;
-        /*outline: 2px dotted rgba(0, 255, 0, 0);*/
-    }
-
-    body *[data-kajona-editable]:hover {
-        outline: 1px dotted rgba(0, 255, 0, 0.5);
-        background-color: rgba(0, 255, 0, 0.2);
-    }
-
-    .hallotoolbar {
-        /*width: 400px !important;*/
-    }
-
-    .hallotoolbar .ui-button .ui-button-text {
-        /*line-height: auto !important;*/
-        font-size: 0.7em !important;
-    }
-
-</style>
-CSS;
-
-                $strPeToolbar .= "<script type='text/javascript'>";
-                $strPeToolbar .= <<<JS
-
-
-       $(function () {
-            KAJONA.admin.portaleditor.RTE = {};
-            KAJONA.admin.portaleditor.RTE.modifiedFields = {};
-
-            KAJONA.admin.portaleditor.savePage = function () {
-
-                console.group('savePage');
-
-                $.each(KAJONA.admin.portaleditor.RTE.modifiedFields, function (key, value) {
-                    var keySplitted = key.split('#');
-
-                    var data = {
-                        systemid: keySplitted[0],
-                        property: keySplitted[1],
-                        value: value
-                    };
-
-                    $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data, function () {
-                        console.warn('server response');
-                        console.log(this.responseText);
-                    });
-                });
-                console.groupEnd('savePage');
-                $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace(".gif", "Disabled.gif"));
-                KAJONA.admin.portaleditor.RTE.modifiedFields = {};
-            };
-
-
-            var pasteHandler = function (event) {
-                //disable resizing handles in FF
-                document.execCommand("enableObjectResizing", false, false);
-
-                var editable = $(event.currentTarget);
-
-                //find the current cursor-position before creating the paste-container, used lateron
-                var sel = rangy.getSelection();
-                //var range = rangy.createRange();
-
-                var offset = editable.offset();
-                $('body').append('<div id="pasteContainer" contentEditable="true" style="position:absolute; clip:rect(0px, 0px, 0px, 0px); width: 1px; height: 1px; top: ' + offset.top + 'px; left: ' + offset.left + 'px;"></div>');
-                var pasteContainer = $('#pasteContainer');
-
-                var keySplitted = editable.attr('data-kajona-editable').split('#');
-                var isPlaintext = (keySplitted[2] && keySplitted[2] == 'plain') ? true : false;
-                if (isPlaintext) {
-                    var htmlCleanConfig = {
-                        allowedTags: ['']
-                    };
-                } else {
-                    var htmlCleanConfig = {
-                        allowedTags: ['br', 'p', 'ul', 'ol', 'li']
-                    };
-                }
-
-                editable.blur();
-                pasteContainer.focus();
-
-                window.setTimeout(function() {
-                    event.stopPropagation();
-
-                    var content = pasteContainer.html();
-                    var cleanContent = $.htmlClean.trim($.htmlClean(content, htmlCleanConfig));
-                    console.warn('paste val: ', content, cleanContent);
-                    pasteContainer.html('');
-                    pasteContainer.remove();
-
-                    //enable resizing handles in FF again
-                    document.execCommand("enableObjectResizing", false, true);
-                    editable.focus();
-
-                    //update the old selection
-                    var strOldHtml = sel.anchorNode.data;
-                    var strNewHtml = strOldHtml.substr(0, sel.anchorOffset)+cleanContent+strOldHtml.substring(sel.focusOffset);
-                    sel.anchorNode.data = strNewHtml;
-                    //set the cursor to the end of the selection
-                    sel.collapse(sel.anchorNode, sel.anchorOffset+cleanContent.length);
-                }, 10);
-            };
-
-
-
-            //loop over all editables
-            $('*[data-kajona-editable]').each(function () {
-                var editable = $(this);
-                var keySplitted = editable.attr('data-kajona-editable').split('#');
-                var isPlaintext = (keySplitted[2] && keySplitted[2] == 'plain') ? true : false;
-
-                //attach paste handler
-                editable.bind('paste', pasteHandler);
-
-                //prevent enter key when editable is a plaintext field
-                if (isPlaintext) {
-                    editable.keypress(function(event) {
-                        if (event.which == 13) {
-                            return false;
-                        }
-                    });
-                }
-
-                //always disable drag&drop
-                editable.bind('drop drag', function () {
-                    return false;
-                });
-
-
-                //generate hallo editor config
-                var halloConfig = {
-                    plugins: {
-                        halloreundo: {}
-                    },
-                    modified: function (event, obj) {
-                        var attr = $(this).attr('data-kajona-editable');
-
-                        $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace("Disabled", ""));
-                        KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = obj.content;
-                        //console.log('modified field', attr, obj.content);
-                    }
-                };
-
-                if (!isPlaintext) {
-                    halloConfig.plugins = {
-                        halloformat: {},
-                        hallolists: {},
-                        halloreundo: {},
-                        hallolink: {}
-
-                    };
-                }
-
-                //finally init hallo editor
-                editable.hallo(halloConfig);
-            });
-
-       });
-
-JS;
-$strPeToolbar .= "</script>";
+                $strPeToolbar .= "<script type='text/javascript'>
+                    $(KAJONA.admin.portaleditor.RTE.init);
+                </script>";
 
 //TODO: cleanup end
 
