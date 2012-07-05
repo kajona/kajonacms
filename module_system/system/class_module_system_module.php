@@ -137,7 +137,7 @@ class class_module_system_module extends class_model implements interface_model,
      *
      * @param bool $intStart
      * @param bool $intEnd
-     * @return mixed
+     * @return class_module_system_module[]
      * @static
      */
 	public static function getAllModules($intStart = null, $intEnd = null) {

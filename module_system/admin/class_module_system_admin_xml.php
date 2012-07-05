@@ -74,11 +74,11 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
 	    if($objCommon->rightEdit()) {
     	    if($objCommon->setStatus()) {
-    	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setStatusOk")."</message>";
+    	        $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
     	    }
     	    else
-                $strReturn .= "<error>".$this->getSystemid()." - ".$this->getLang("setStatusError")."</error>";
+                $strReturn .= "<error>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusError")."</error>";
 	    }
 	    else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);

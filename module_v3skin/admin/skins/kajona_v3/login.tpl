@@ -14,7 +14,6 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript">
 		KAJONA.util.setBrowserFocus("name");
-		KAJONA.admin.loader.loadAjaxBase();
   		KAJONA.admin.loader.loadDragNDropBase();
   		KAJONA.admin.loader.loadAnimationBase();
 		KAJONA.admin.loader.loadAutocompleteBase();

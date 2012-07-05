@@ -976,7 +976,6 @@ class class_toolkit_admin extends class_toolkit {
                 var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.gif';
                 var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.gif';
 
-                KAJONA.admin.loader.loadAjaxBase();
             </script>";
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
         }

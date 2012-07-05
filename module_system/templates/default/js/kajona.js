@@ -219,3 +219,131 @@ KAJONA.portal.tooltip = (function() {
 }());
 
 
+KAJONA.util.Loader = function () {
+    var arrFilesLoaded = [];
+    var arrCallbacks = [];
+
+
+    function checkCallbacks() {
+        //check if we're ready to call some registered callbacks
+        for (var i = 0; i < arrCallbacks.length; i++) {
+            if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
+                var bitCallback = true;
+                for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
+                    if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
+                        //console.log("missing file "+arrCallbacks[i].requiredModules[j]);
+                        bitCallback = false;
+                    }
+                }
+
+                //execute callback and delete it so it won't get called again
+                if (bitCallback) {
+                    arrCallbacks[i].callback();
+                    delete arrCallbacks[i];
+                }
+            }
+        }
+    }
+
+    this.loadFile = function(arrInputFiles, objCallback, bitPreventPathAdding) {
+        var arrFilesToLoad = [];
+
+        if(!$.isArray(arrInputFiles))
+            arrInputFiles = [ arrInputFiles ];
+
+        //add suffixes
+        $.each(arrInputFiles, function(index, strOneFile) {
+            if($.inArray(strOneFile, arrFilesLoaded) == -1)
+                arrFilesToLoad.push(strOneFile);
+        });
+
+        if(arrFilesToLoad.length == 0) {
+            //console.log("skipped loading files, all already loaded");
+            //all files already loaded, call callback
+            if($.isFunction(objCallback))
+                objCallback();
+        }
+        else {
+            //start loader-processing
+            $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
+
+                //check what loader to take - js or css
+                var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
+
+                if($.isFunction(objCallback)) {
+                    arrCallbacks.push({
+                        'callback' : objCallback,
+                        'requiredModules' : arrFilesToLoad
+                    });
+                }
+
+                //start loading process
+                if(fileType == 'css') {
+                    loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                }
+
+                if(fileType == 'js') {
+                    loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                }
+            });
+        }
+    };
+
+
+    function createFinalLoadPath(strPath, bitPreventPathAdding) {
+
+        if(!bitPreventPathAdding)
+            strPath = KAJONA_WEBPATH + strPath;
+
+        var fileType = strPath.substr(strPath.length-2, 2) == 'js' ? 'js' : 'css';
+
+        var filter = {
+            'searchExp': "\\."+fileType,
+            'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
+        };
+        strPath = strPath.replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+
+        return strPath;
+    }
+
+    function loadCss(strPath, strOriginalPath) {
+        //console.log("loading css: "+strPath);
+
+        if (document.createStyleSheet) {
+            document.createStyleSheet(strPath);
+        }
+        else {
+            $('<link rel="stylesheet" type="text/css" href="' + strPath + '" />').appendTo('head');
+        }
+
+        arrFilesLoaded.push(strOriginalPath);
+        checkCallbacks();
+    }
+
+    function loadJs(strPath, strOriginalPath) {
+        //console.log("loading js: "+strPath);
+
+        //enable caching, cache flushing is done by the cachebuster
+        var options =  {
+            dataType: "script",
+            cache: true,
+            url: strPath
+        };
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        $.ajax(options)
+            .done(function(script, textStatus) {
+                arrFilesLoaded.push(strOriginalPath);
+                checkCallbacks();
+
+            })
+            .fail(function(jqxhr, settings, exception) {
+                alert('loading file '+strPath+' failed');
+            });
+    }
+
+};
+
+KAJONA.portal.loader = new KAJONA.util.Loader();
+

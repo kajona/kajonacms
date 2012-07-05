@@ -42,9 +42,10 @@ KAJONA.util.evalScript = function (scripts) {
 		}
 		return false;
 	}
-	catch(e) {	alert(e)
+	catch(e) {
+        alert(e);
 	}
-}
+};
 
 
 /**
@@ -170,14 +171,26 @@ KAJONA.util.mover = (function() {
  *
  * @param {String} strScriptBase
  * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
+ *
+ * @todo: remove param strScriptBase
  */
 KAJONA.util.Loader = function (strScriptBase) {
-	var scriptBase = KAJONA_WEBPATH + strScriptBase;
-	var yuiBase = scriptBase + "yui/";
-	var arrRequestedModules = {};
-	var arrLoadedModules = {};
-	var arrCallbacks = [];
 
+    //todo: delete
+	var scriptBase = KAJONA_WEBPATH + strScriptBase;
+
+    //todo: delete
+	var yuiBase = scriptBase + "yui/";
+    //todo: delete
+	var arrRequestedModules = {};
+    //todo: delete
+	var arrLoadedModules = {};
+
+
+	var arrCallbacks = [];
+    var arrFilesLoaded = [];
+
+    //todo: delete
 	function createYuiLoader() {
 		//create instance of YUILoader
 		var yuiLoader = new YAHOO.util.YUILoader({
@@ -196,6 +209,8 @@ KAJONA.util.Loader = function (strScriptBase) {
 
 			onProgress : function(o) {
 				arrLoadedModules[o.name] = true;
+
+                arrFilesLoaded.push(o.name);
 				checkCallbacks();
 			}
 		});
@@ -209,7 +224,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 			if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
 				var bitCallback = true;
 				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
-					if (!(arrCallbacks[i].requiredModules[j] in arrLoadedModules)) {
+                    if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
 						bitCallback = false;
 					}
 				}
@@ -223,7 +238,118 @@ KAJONA.util.Loader = function (strScriptBase) {
 		}
 	}
 
+
+    this.loadFile = function(arrInputFiles, objCallback, bitPreventPathAdding) {
+        var arrFilesToLoad = [];
+
+        if(!$.isArray(arrInputFiles))
+            arrInputFiles = [ arrInputFiles ];
+
+        //add suffixes
+        $.each(arrInputFiles, function(index, strOneFile) {
+            if($.inArray(strOneFile, arrFilesLoaded) == -1)
+                arrFilesToLoad.push(strOneFile);
+        });
+
+        if(arrFilesToLoad.length == 0) {
+            //console.log("skipped loading files, all already loaded");
+            //all files already loaded, call callback
+            if($.isFunction(objCallback))
+                objCallback();
+        }
+        else {
+            //start loader-processing
+            $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
+
+                //check what loader to take - js or css
+                var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
+
+                if($.isFunction(objCallback)) {
+                    arrCallbacks.push({
+                        'callback' : objCallback,
+                        'requiredModules' : arrFilesToLoad
+                    });
+                }
+
+                //start loading process
+                if(fileType == 'css') {
+                    loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                }
+
+                if(fileType == 'js') {
+                    loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                }
+            });
+        }
+    };
+
+    function createFinalLoadPath(strPath, bitPreventPathAdding) {
+
+        if(!bitPreventPathAdding)
+            strPath = KAJONA_WEBPATH + strPath;
+
+        var fileType = strPath.substr(strPath.length-2, 2) == 'js' ? 'js' : 'css';
+
+        var filter = {
+            'searchExp': "\\."+fileType,
+            'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
+        };
+        strPath = strPath.replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+
+        return strPath;
+    }
+
+
+    function loadCss(strPath, strOriginalPath) {
+        //console.log("loading css: "+strPath);
+
+        if (document.createStyleSheet) {
+            document.createStyleSheet(strPath);
+        }
+        else {
+            $('<link rel="stylesheet" type="text/css" href="' + strPath + '" />').appendTo('head');
+        }
+
+        arrFilesLoaded.push(strOriginalPath);
+        checkCallbacks();
+    }
+
+    function loadJs(strPath, strOriginalPath) {
+        //console.log("loading js: "+strPath);
+
+        //enable caching, cache flushing is done by the cachebuster
+        var options =  {
+            dataType: "script",
+            cache: true,
+            url: strPath
+        };
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        $.ajax(options)
+            .done(function(script, textStatus) {
+                arrFilesLoaded.push(strOriginalPath);
+                checkCallbacks();
+
+            })
+            .fail(function(jqxhr, settings, exception) {
+                console.warn('loading file '+strPath+' failed: '+exception);
+            });
+    }
+
+    /**
+     * @deprecated
+     * @param arrYuiComponents
+     * @param arrFiles
+     * @param callback
+     */
 	this.load = function(arrYuiComponents, arrFiles, callback) {
+
+
+        //TODO: convert loads to hardcoded lists of dependencies
+
+
+        //todo: delete
 		var arrYuiComponentsToWaitFor = [];
 		var arrFilesToWaitFor = [];
 		var arrYuiComponentsToLoad = [];
@@ -274,26 +400,39 @@ KAJONA.util.Loader = function (strScriptBase) {
 				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
 					yuiLoader.require(arrYuiComponentsToLoad[i]);
 					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
+
 				}
-				for (var i = 0; i < arrFilesToLoad.length; i++) {
-                    var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
 
-                    var filter = {
-        				'searchExp': "\\."+fileType,
-        				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
-        			};
-                    var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+                if(arrFilesToLoad.length > 0) {
+                    this.loadFile(arrFilesToLoad, null, true);
+                }
 
-					yuiLoader.addModule( {
-						name : arrFilesToLoad[i],
-						type : fileType,
-						skinnable : false,
-						fullpath : url
-					});
-
-					yuiLoader.require(arrFilesToLoad[i]);
-					arrRequestedModules[arrFilesToLoad[i]] = true;
-				}
+//				for (var i = 0; i < arrFilesToLoad.length; i++) {
+//
+//                    this.loadFile()
+//
+//
+//                    //TODO: ugly hack
+//                    arrFilesLoaded.push(arrFilesToLoad[i]);
+//
+//                    var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
+//
+//                    var filter = {
+//        				'searchExp': "\\."+fileType,
+//        				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
+//        			};
+//                    var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+//
+//					yuiLoader.addModule( {
+//						name : arrFilesToLoad[i],
+//						type : fileType,
+//						skinnable : false,
+//						fullpath : url
+//					});
+//
+//					yuiLoader.require(arrFilesToLoad[i]);
+//					arrRequestedModules[arrFilesToLoad[i]] = true;
+//				}
 
 				//fire YUILoader after the onDOMReady event
 				YAHOO.util.Event.onDOMReady(function () {
@@ -301,9 +440,10 @@ KAJONA.util.Loader = function (strScriptBase) {
 				});
 			}
 		}
-	}
+	};
 
 	//for compatibility with Kajona templates pre 3.3.0
+    //todo: delete
 	this.convertAdditionalFiles = function(additionalFiles) {
 		if (YAHOO.lang.isString(additionalFiles)) {
 			//convert to array and add webpath
@@ -349,7 +489,7 @@ KAJONA.admin.loader = new KAJONA.util.Loader("/core/module_system/admin/scripts/
  * extend the loader with predefined helper functions
  */
 KAJONA.admin.loader.loadAjaxBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "connection" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+    alert("KAJONA.admin.loader.loadAjaxBase no longer supported!");
 };
 
 KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles) {
@@ -386,14 +526,7 @@ KAJONA.admin.loader.loadImagecropperBase = function(objCallback, arrAdditionalFi
 };
 
 KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
-	var arrCustomFiles = [
-	    KAJONA_WEBPATH + "/core/module_system/admin/scripts/yui/container/container-min.js",
-	    KAJONA_WEBPATH+"/core/module_system/admin/scripts/yui/resize/resize-min.js"
-	];
-	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
-		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
-	}
-	this.load([ "container", "element", "dragdrop" ], arrCustomFiles, objCallback);
+	this.load([ "resize", "container", "element", "dragdrop" ], arrAdditionalFiles, objCallback);
 };
 
 KAJONA.admin.loader.loadTreeviewBase = function(objCallback, arrAdditionalFiles) {
@@ -1037,7 +1170,7 @@ KAJONA.admin.ajax = {
 	},
 
 	setDashboardPos : function(systemIdToMove, intNewPos, strIdOfList) {
-        KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", systemIdToMove + "&listPos=" + intNewPos, KAJONA.admin.ajax.regularCallback);
+        KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", systemIdToMove + "&listPos=" + intNewPos+"&listId="+strIdOfList, KAJONA.admin.ajax.regularCallback);
 	},
 
 	setSystemStatus : function(strSystemIdToSet, bitReload) {

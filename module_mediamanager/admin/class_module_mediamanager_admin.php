@@ -245,7 +245,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             $strSystemid = $this->getSystemid();
             $strJsCode = <<<HTML
             <script type="text/javascript">
-            KAJONA.admin.loader.loadAjaxBase(function syncRepo() {
+            $(document).ready(function syncRepo() {
                 KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", KAJONA.admin.ajax.regularCallback);
             });
             </script>

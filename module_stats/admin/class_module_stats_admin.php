@@ -211,7 +211,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
      */
     private function getInlineLoadingCode($strPlugin, $strPv = "") {
         $strReturn = "<script type=\"text/javascript\">
-                            KAJONA.admin.loader.loadAjaxBase(function() {
+                            $(document).ready(function() {
                                   KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$strPlugin."&pv=".$strPv."\", function(data, status, jqXHR) {
 
                                     if(status == 'success')  {

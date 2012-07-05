@@ -1004,7 +1004,7 @@ otherwise the JavaScript will fail!
     <div id="tagsWrapper_%%targetSystemid%%" class="loadingContainer">
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadAjaxBase(function() {
+        $(document).ready(function() {
             KAJONA.admin.tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
         });
     </script>

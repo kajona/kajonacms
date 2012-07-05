@@ -28,7 +28,7 @@
 
 <!-- available placeholders: comment_systemid -->
 <postacomment_new_button>
-    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" onclick="$.getScript(KAJONA_WEBPATH+'/templates/default/js/postacomment.js?'+_system_browser_cachebuster_); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">%%lang_postacomment_write_new%%</a></div>
+    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" onclick="KAJONA.portal.loader.loadFile('/templates/default/js/postacomment.js'); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">%%lang_postacomment_write_new%%</a></div>
 </postacomment_new_button>
 
 <!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page -->

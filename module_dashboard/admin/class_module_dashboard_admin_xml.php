@@ -51,7 +51,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 		    $objWidget->setStrColumn($strNewColumn);
 		    $objWidget->updateObjectToDb();
 
-		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getLang("setDashboardPosition")."</message>";
+		    $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
 		}
 		else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);

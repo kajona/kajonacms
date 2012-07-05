@@ -95,27 +95,25 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	    $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
 
         $strGeneratedContent = "<script type=\"text/javascript\">
-                        window.setTimeout( function() {
-                            KAJONA.admin.loader.loadAjaxBase(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", function(data, status, jqXHR) {
-                                    if(status == 'success') {
-                                        var intStart = data.indexOf(\"[CDATA[\")+7;
+                        $(document).ready(function() {
+                              KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", function(data, status, jqXHR) {
+                                if(status == 'success') {
+                                    var intStart = data.indexOf(\"[CDATA[\")+7;
+                                    document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
+                                      intStart, data.indexOf(\"]]\")-intStart
+                                    );
+                                    if(data.indexOf(\"[CDATA[\") < 0) {
+                                        var intStart = data.indexOf(\"<error>\")+7;
                                         document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
-                                          intStart, data.indexOf(\"]]\")-intStart
+                                          intStart, data.indexOf(\"</error>\")-intStart
                                         );
-                                        if(data.indexOf(\"[CDATA[\") < 0) {
-                                            var intStart = data.indexOf(\"<error>\")+7;
-                                            document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
-                                              intStart, data.indexOf(\"</error>\")-intStart
-                                            );
-                                        }
                                     }
-                                    else {
-                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
-                                    }
-                                  })
-                            });
-                        }, 500);
+                                }
+                                else {
+                                    KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
+                                }
+                              })
+                        });
                     </script>";
 
         $strWidgetId = $objConcreteWidget->getSystemid();
@@ -184,7 +182,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         $strContainerId = generateSystemid();
 
         $strContent = "<script type=\"text/javascript\">
-                        KAJONA.admin.loader.loadAjaxBase(function() {
+                        $(document).ready(function() {
                               KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", function(data, status, jqXHR) {
                                 if(status == 'success') {
                                     var intStart = data.indexOf(\"[CDATA[\")+7;
@@ -213,6 +211,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         $arrFilterEntries = array();
         $arrModules = class_module_system_module::getAllModules();
         foreach($arrModules as $objSingleModule) {
+            /** @var $objAdminInstance interface_calendarsource_admin|class_module_system_module */
             $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
             if($objSingleModule->getStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) {
                 $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
