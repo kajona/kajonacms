@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Kajona administration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--<link href="css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet">-->
+
+    <link href="less/bootstrap.less" rel="stylesheet/less">
+    <link href="less/responsive.less" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="less/less.js"></script>
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span4">
+                    <div class="dropdown userNotificationsDropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user icon-white"><div class="badge">13</div></i> admin@kajona.de
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <ul>
+                                    <li><a href="#">5 new comments</a></li>
+                                    <li><a href="#">2 review tasks</a></li>
+                                    <li><a href="#">2 Kajona updates available</a></li>
+                                </ul>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Edit user</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="span4">
+                    <form class="navbar-search pull-left">
+                        <input type="text" class="search-query span4" placeholder="Search" id="globalSearchInput">
+                    </form>
+                </div>
+                <div class="span4" style="text-align: right;">
+                    <select id="languageChooser" class="input-small">
+                        <option>English</option>
+                        <option>Deutsch</option>
+                    </select>
+                    <select id="aspectChooser" class="input-medium">
+                        <option>Content manager</option>
+                        <option>Site administrator</option>
+                    </select>
+                    <button class="btn btn-large pull-right">
+                        <i class="icon-share"></i>
+                        Portaleditor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">&nbsp;</div>
+            <div class="span10">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#"><i class="icon-home"></i></a> <span class="divider">/</span>
+                    </li>
+                    <li>
+                        <a href="#">Pages</a> <span class="divider">/</span>
+                    </li>
+                    <li>
+                        <a href="#">My first page</a> <span class="divider">/</span>
+                    </li>
+                    <li class="active">
+                        <a href="#">Second level page</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+            <div class="well sidebar-nav">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <div class="pull-left">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </div>
+                    <div class="pull-left">
+                        Modules
+                    </div>
+                </a>
+                <div class="nav-collapse">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">Content</li>
+                        <li class="active"><a href="#">Pages</a></li>
+                        <li><a href="#">News</a></li>
+                        <li><a href="#">Mediamanager</a></li>
+                        <li><a href="#">Eventmanager</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li class="nav-header">User content</li>
+                        <li><a href="#">Comments</a></li>
+                        <li><a href="#">Voting</a></li>
+                        <li><a href="#">Guestbook</a></li>
+                        <li class="nav-header">System</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">General</a></li>
+                                <li><a href="#">Downloads</a></li>
+                                <li><a href="#">Searchqueries</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Top browser</a></li>
+                                <li><a href="#">Top countries</a></li>
+                                <li><a href="#">Top downloads</a></li>
+                                <li><a href="#">Top pages</a></li>
+                                <li><a href="#">Top keywords</a></li>
+                                <li><a href="#">Top references</a></li>
+                                <li><a href="#">Top sessions</a></li>
+                                <li><a href="#">Top systems</a></li>
+                                <li><a href="#">Top visitors</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">User</a></li>
+                        <li><a href="#">Templates</a></li>
+                        <li><a href="#">Languages</a></li>
+                        <li><a href="#">Filemanager</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">System</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Root rights</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Tasks</a></li>
+                                <li><a href="#">Aspects</a></li>
+                                <li><a href="#">System info</a></li>
+                                <li><a href="#">Modules</a></li>
+                                <li><a href="#">Sessions</a></li>
+                                <li><a href="#">Logs</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">About Kajona</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="span10" id="content">
+            <div class="hero-unit">
+                <h1>Hello, Kajona!</h1>
+                <p>You just made the best choice of your life! <a href="http://www.kajona.de/" rel="tooltip" title="Kajona Content Management Framework">Kajona</a> is ready to help you manage your website with ease.</p>
+                <p>
+                    <a class="btn btn-primary btn-large" data-toggle="modal" data-keyboard="false" data-backdrop="static" href="#myModal1">Learn more &raquo;</a>
+                    <a class="btn btn-primary btn-large" data-toggle="modal" href="#myModal2">Watch video tutorials &raquo;</a>
+
+                    <div class="modal fade" id="myModal1">
+                        <div class="modal-header">
+                            <h3>Modal header 1</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>Haha, you can't close me…!</p>
+                            <p>Just wait 10 secs</p>
+                            <div class="progress progress-striped active" style="width: 30%;">
+                                <div class="bar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="myModal2">
+                        <div class="modal-header">
+                            <a class="close" data-dismiss="modal">×</a>
+
+                            <h3>Modal header 2</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>One fine body…</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-primary">Save changes</a>
+                            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+
+                    <div class="alert">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <strong>Holy moly, this is not yet implemented!</strong> Still deep shit diggin...
+                        <br><br>
+                        <div class="progress progress-danger progress-striped active" style="width: 30%;">
+                            <div class="bar" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                </p>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span4">
+                    <h2>Modified pages</h2>
+
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                        magna mollis euismod. Donec sed odio dui. </p>
+
+                    <p><a class="btn btn-danger" href="#" rel="popover" title="Ohh ohh" data-content="If you click this button, the internet will be destroyed!">Popover! &raquo;</a></p>
+                </div>
+
+                <div class="span4">
+                    <h2>Notes</h2>
+
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                        magna mollis euismod. Donec sed odio dui. </p>
+
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+
+                <div class="span4">
+                    <h2>Stats</h2>
+
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                        magna mollis euismod. Donec sed odio dui. </p>
+
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span4">
+                    <h2>System info</h2>
+
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                        magna mollis euismod. Donec sed odio dui. </p>
+
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+
+                <div class="span4">
+                    <h2>System log</h2>
+
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                        magna mollis euismod. Donec sed odio dui. </p>
+
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="row-fluid">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Edit page details</legend>
+                        <div class="control-group">
+                            <label for="input01" class="control-label">Page title</label>
+
+                            <div class="controls">
+                                <input type="text" id="input01" class="input-xlarge">
+                                <p class="help-block">
+                                    In addition to freeform text, any HTML5 text-based input appears like so.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="textarea" class="control-label">Description</label>
+
+                            <div class="controls">
+                                <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="optionsCheckbox" class="control-label"></label>
+
+                            <div class="controls">
+                                <label class="checkbox">
+                                    <input type="checkbox" value="option1" id="optionsCheckbox">
+                                    Option one is this and that&mdash;be sure to include why it's great
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="select01" class="control-label">Select list</label>
+
+                            <div class="controls">
+                                <select id="select01">
+                                    <option>something</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="fileInput" class="control-label">File input</label>
+
+                            <div class="controls">
+                                <input type="file" id="fileInput" class="input-file">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn">Cancel</button>
+                            <button class="btn btn-primary btn-large" type="submit">Save changes</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="row-fluid">
+                <ul class="thumbnails gallery sortable">
+                    <li class="span3">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/260x180" alt="">
+                            <div style="padding-top: 3px; height: 15px;">
+                            <h5 class="pull-left">My picture <span class="number">1</span></h5>
+                            <div class="actions pull-right">
+                                <a href="#" rel="tooltip" title="Edit picture details"><i class="icon-pencil"></i></a>
+                                <a href="#" rel="tooltip" title="Delete picture"><i class="icon-trash"></i></a>
+                                <a href="#" rel="tooltip" title="Tag this picture"><i class="icon-tag"></i></a>
+                                <a href="#" rel="tooltip" title="Disable this picture"><i class="icon-eye-open"></i></a>
+                            </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="pagination">
+                    <ul>
+                        <li><a href="#">Prev</a></li>
+                        <li class="active">
+                            <a href="#">1</a>
+                        </li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>powered by Kajona</p>
+    </footer>
+
+</div>
+
+<script src="js/jquery.js"></script>
+<script src="js/jquery-ui-1.8.18.custom.min.js"></script>
+<script src="js/jquery.ui.touch-punch.min.js"></script>
+<script src="js/bootstrap-transition.js"></script>
+<script src="js/bootstrap-alert.js"></script>
+<script src="js/bootstrap-modal.js"></script>
+<script src="js/bootstrap-dropdown.js"></script>
+<script src="js/bootstrap-scrollspy.js"></script>
+<script src="js/bootstrap-tab.js"></script>
+<script src="js/bootstrap-tooltip.js"></script>
+<script src="js/bootstrap-popover.js"></script>
+<script src="js/bootstrap-button.js"></script>
+<script src="js/bootstrap-collapse.js"></script>
+<script src="js/bootstrap-carousel.js"></script>
+<script src="js/bootstrap-typeahead.js"></script>
+
+<script>
+    $(function () {
+        function isTouchDevice() {
+          return !!('ontouchstart' in window) ? 1 : 0;
+        }
+
+        $.widget('custom.catcomplete', $.ui.autocomplete, {
+            _renderMenu: function(ul, items) {
+                var self = this;
+                var currentCategory = '';
+
+                $.each(items, function(index, item) {
+                    if (item.category != currentCategory) {
+                        ul.append('<li class="ui-autocomplete-category"><h3>' + item.category + '</h3></li>');
+                        currentCategory = item.category;
+                    }
+                    self._renderItem(ul, item);
+                });
+
+                ul.append('<li class="detailedResults"><a href="#">View detailed search results</a></li>');
+
+                ul.addClass('dropdown-menu');
+            },
+            _renderItem: function (ul, item) {
+                return $('<li></li>')
+                    .data('item.autocomplete', item)
+                    .append('<a>' + '<img src="http://placehold.it/40x40" alt="" class="pull-left"><h4 class="pull-left">' + item.label + '</h4><br>' + item.desc + '</a>')
+                    .appendTo(ul);
+            }
+        });
+        $('#globalSearchInput').catcomplete({
+            source: 'search.json',
+            select: function (event, ui) {
+                alert( ui.item ?
+                    "Selected: " + ui.item.value + " aka " + ui.item.label :
+                    "Nothing selected, input was " + this.value );
+            }
+        });
+
+        //sidebar responsive
+        $('.nav-collapse').on('show', function () {
+            var collapsible = $(this);
+            window.setTimeout(function () {
+                collapsible.css({
+                    overflow: 'visible',
+                    height: 'auto'
+                });
+            }, 500);
+        });
+
+        $('.nav-collapse').on('hide', function () {
+            $(this).css('overflow', '');
+        });
+
+
+
+
+        $('#myModal1').on('show', function () {
+            var $modal = $(this);
+            var $progressbar = $modal.find('.progress > .bar');
+            var progress = 0;
+
+            var interval = window.setInterval(function () {
+                progress += 10;
+                $progressbar.css('width', progress + '%');
+
+                if (progress >= 100) {
+                    $modal.modal('hide');
+
+                    window.clearInterval(interval);
+                    $progressbar.css('width', '0%');
+                }
+            }, 1000);
+
+        });
+
+
+        var $thumb = $('.gallery li').first();
+        for (var i = 2; i < 12; i++) {
+            var $newThumb = $thumb.clone();
+            $newThumb.find('.number').html(i);
+            $('.gallery').append($newThumb);
+        }
+
+        $('.sortable').sortable({
+            stop: function (event, data) {
+                console.log('[sortable] stopped', arguments);
+            },
+            delay: isTouchDevice() ? 2000 : 0
+        });
+        $('.sortable').disableSelection();
+
+        $('#content a[rel=popover]').popover();
+        $('#content a[rel=tooltip]').tooltip();
+
+    });
+
+</script>
+</body>
+</html>

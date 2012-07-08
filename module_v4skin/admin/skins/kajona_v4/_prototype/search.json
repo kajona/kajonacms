@@ -1,0 +1,36 @@
+[{
+    "category": "Tags",
+    "label": "Kajona",
+    "value": "id123",
+    "desc": "A page about Kajona"
+}, {
+    "category": "Tags",
+    "label": "Content Management",
+    "value": "id456",
+    "desc": "A page about content management"
+}, {
+    "category": "Pages",
+    "label": "My Page 1",
+    "value": "id789",
+    "desc": "Really cool page"
+}, {
+    "category": "Pages",
+    "label": "Page 2",
+    "value": "id92334",
+    "desc": "Awesome sub page!"
+}, {
+    "category": "User",
+    "label": "Stefan Idler",
+    "value": "id92334",
+    "desc": "Director"
+}, {
+    "category": "User",
+    "label": "Jakob Schröter",
+    "value": "id92334",
+    "desc": "Chill master"
+}, {
+    "category": "User",
+    "label": "Johannes Elze",
+    "value": "id92334",
+    "desc": "Dharma master"
+}]
