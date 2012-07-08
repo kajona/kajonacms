@@ -35,7 +35,7 @@
                 <div class="span4">
                     <div class="dropdown userNotificationsDropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-user icon-white"><div class="badge">13</div></i> admin@kajona.de
+                            <i class="icon-user icon-white"><span class="badge badge-info">13</span></i> admin@kajona.de
                         </a>
                         <ul class="dropdown-menu">
                             <li>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="span4">
                     <form class="navbar-search pull-left">
-                        <input type="text" class="search-query span4" placeholder="Search" id="globalSearchInput">
+                        <input type="text" class="search-query" placeholder="Search" id="globalSearchInput">
                     </form>
                 </div>
                 <div class="span4" style="text-align: right;">
@@ -99,6 +99,8 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
+
+        <!-- MODULE NAVIGATION -->
         <div class="span2">
             <div class="well sidebar-nav">
                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -161,13 +163,18 @@
                                 <li><a href="#">About Kajona</a></li>
                             </ul>
                         </li>
-
                     </ul>
                 </div>
             </div>
         </div>
 
+
+
+        <!-- CONTENT CONTAINER -->
         <div class="span10" id="content">
+
+
+            <!-- WELCOME MESSAGE (maybe we don't need this) -->
             <div class="hero-unit">
                 <h1>Hello, Kajona!</h1>
                 <p>You just made the best choice of your life! <a href="http://www.kajona.de/" rel="tooltip" title="Kajona Content Management Framework">Kajona</a> is ready to help you manage your website with ease.</p>
@@ -216,6 +223,8 @@
                 </p>
             </div>
 
+
+            <!-- DASHBOARD -->
             <div class="row-fluid">
                 <div class="span4">
                     <h2>Modified pages</h2>
@@ -268,12 +277,11 @@
 
                     <p><a class="btn" href="#">View details &raquo;</a></p>
                 </div>
-
             </div>
 
 
 
-
+            <!-- EDIT FORM -->
             <div class="row-fluid">
                 <form class="form-horizontal">
                     <fieldset>
@@ -332,23 +340,97 @@
                     </fieldset>
                 </form>
             </div>
+
+
+            <!-- TREE & EDIT FORM -->
             <div class="row-fluid">
+                <div class="span4">
+                    <div id="treeDemo">
+
+                    </div>
+                </div>
+                <div class="span8">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend>Edit page details</legend>
+                            <div class="control-group">
+                                <label for="input01" class="control-label">Page title</label>
+
+                                <div class="controls">
+                                    <input type="text" id="input01" class="input-xlarge">
+                                    <p class="help-block">
+                                        In addition to freeform text, any HTML5 text-based input appears like so.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="textarea" class="control-label">Description</label>
+
+                                <div class="controls">
+                                    <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="optionsCheckbox" class="control-label"></label>
+
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input type="checkbox" value="option1" id="optionsCheckbox">
+                                        Option one is this and that&mdash;be sure to include why it's great
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="select01" class="control-label">Select list</label>
+
+                                <div class="controls">
+                                    <select id="select01">
+                                        <option>something</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="fileInput" class="control-label">File input</label>
+
+                                <div class="controls">
+                                    <input type="file" id="fileInput" class="input-file">
+                                </div>
+                            </div>
+                            <!--
+                            <div class="form-actions">
+                                <button class="btn">Cancel</button>
+                                <button class="btn btn-primary btn-large" type="submit">Save changes</button>
+                            </div>
+                            -->
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- GALLERY -->
+            <div>
                 <ul class="thumbnails gallery sortable">
                     <li class="span3">
                         <div class="thumbnail">
                             <img src="http://placehold.it/260x180" alt="">
                             <div style="padding-top: 3px; height: 15px;">
-                            <h5 class="pull-left">My picture <span class="number">1</span></h5>
-                            <div class="actions pull-right">
-                                <a href="#" rel="tooltip" title="Edit picture details"><i class="icon-pencil"></i></a>
-                                <a href="#" rel="tooltip" title="Delete picture"><i class="icon-trash"></i></a>
-                                <a href="#" rel="tooltip" title="Tag this picture"><i class="icon-tag"></i></a>
-                                <a href="#" rel="tooltip" title="Disable this picture"><i class="icon-eye-open"></i></a>
-                            </div>
+                                <h5 class="pull-left">My picture <span class="number">1</span></h5>
+                                <div class="actions pull-right">
+                                    <a href="#" rel="tooltip" title="Edit picture details"><i class="icon-pencil"></i></a>
+                                    <a href="#" rel="tooltip" title="Delete picture"><i class="icon-trash"></i></a>
+                                    <a href="#" rel="tooltip" title="Tag this picture"><i class="icon-tag"></i></a>
+                                    <a href="#" rel="tooltip" title="Disable this picture"><i class="icon-eye-open"></i></a>
+                                </div>
                             </div>
                         </div>
                     </li>
                 </ul>
+
                 <div class="pagination">
                     <ul>
                         <li><a href="#">Prev</a></li>
@@ -362,6 +444,8 @@
                     </ul>
                 </div>
             </div>
+
+
         </div>
     </div>
 
@@ -388,6 +472,11 @@
 <script src="js/bootstrap-collapse.js"></script>
 <script src="js/bootstrap-carousel.js"></script>
 <script src="js/bootstrap-typeahead.js"></script>
+
+<script src="js/jstree/jquery.cookie.js"></script>
+<script src="js/jstree/jquery.hotkeys.js"></script>
+<script src="js/jstree/jquery.jstree.js"></script>
+<script src="treedemo.js"></script>
 
 <script>
     $(function () {
@@ -466,6 +555,7 @@
         });
 
 
+        // insert demo thumbnails
         var $thumb = $('.gallery li').first();
         for (var i = 2; i < 12; i++) {
             var $newThumb = $thumb.clone();
@@ -473,6 +563,7 @@
             $('.gallery').append($newThumb);
         }
 
+        // init drag&drop ordering for gallery
         $('.sortable').sortable({
             stop: function (event, data) {
                 console.log('[sortable] stopped', arguments);
@@ -481,6 +572,8 @@
         });
         $('.sortable').disableSelection();
 
+
+        // init popovers & tooltips
         $('#content a[rel=popover]').popover();
         $('#content a[rel=tooltip]').tooltip();
 

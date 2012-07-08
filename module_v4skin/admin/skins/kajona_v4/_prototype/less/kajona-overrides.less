@@ -5,6 +5,10 @@ body {
 
 .sidebar-nav {
     padding: 9px 0;
+
+    .btn-navbar {
+        display: none;
+    }
 }
 
 .breadcrumb {
@@ -19,25 +23,12 @@ body {
     display: block;
 }
 
+
 .userNotificationsDropdown .badge {
     position: absolute;
     top: -6px;
-    left: -11px;
-    padding: 0;
-    background-color: red;
-    color: @white;
-    font-family: Tahoma, Verdana, Arial, sans-serif;
-    font-weight: bold;
+    left: -24px;
     font-style: normal;
-    text-align: center;
-    font-size: 9px;
-    letter-spacing: -2px;
-    line-height: 13px;
-    text-indent: -2px;
-    .border-radius(100%);
-    @shadow: 1px 1px 1px rgba(0, 0, 0, .4);
-    .box-shadow(@shadow);
-    .square(16px);
 }
 
 
@@ -64,6 +55,10 @@ body {
 
 .gallery .thumbnail:hover .actions {
     opacity: 1;
+}
+
+.thumbnails > li {
+    margin-left: 30px !important;
 }
 
 .sortable li {
