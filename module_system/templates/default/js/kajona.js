@@ -222,6 +222,7 @@ KAJONA.portal.tooltip = (function() {
 KAJONA.util.Loader = function () {
     var arrFilesLoaded = [];
     var arrCallbacks = [];
+    var arrFilesInProgress = [];
 
 
     function checkCallbacks() {
@@ -253,7 +254,7 @@ KAJONA.util.Loader = function () {
 
         //add suffixes
         $.each(arrInputFiles, function(index, strOneFile) {
-            if($.inArray(strOneFile, arrFilesLoaded) == -1)
+            if($.inArray(strOneFile, arrFilesLoaded) == -1 && $.inArray(strOneFile, arrFilesInProgress) == -1)
                 arrFilesToLoad.push(strOneFile);
         });
 
@@ -266,7 +267,7 @@ KAJONA.util.Loader = function () {
         else {
             //start loader-processing
             $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
-
+                arrFilesInProgress.push(strOneFileToLoad);
                 //check what loader to take - js or css
                 var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
 

@@ -570,7 +570,9 @@ class class_toolkit_admin extends class_toolkit {
                     });
                     uploader.init();
                 }
-                KAJONA.admin.loader.loadUploaderBase(initUploader);
+                KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
+                    KAJONA.admin.loader.loadUploaderBase(initUploader);
+                });
 
                 jsDialog_0.setTitle('".$objText->getLang("upload_multiple_dialogHeader", "mediamanager")."');
             </script>";

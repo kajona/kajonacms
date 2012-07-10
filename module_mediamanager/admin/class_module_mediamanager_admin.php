@@ -246,6 +246,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             $strJsCode = <<<HTML
             <script type="text/javascript">
             $(document).ready(function syncRepo() {
+                KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js');
                 KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", KAJONA.admin.ajax.regularCallback);
             });
             </script>
@@ -521,6 +522,7 @@ HTML;
 
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
+            KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
                 KAJONA.admin.loader.loadImagecropperBase();
 
                 var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&quality=80';
@@ -534,7 +536,7 @@ HTML;
                 function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:KAJONA.admin.mediamanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
-
+            });
 				</script>";
 
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(1);
@@ -588,6 +590,8 @@ HTML;
      */
     protected function actionFolderContentFolderviewMode() {
         $strReturn = "";
+
+        $strReturn = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js');</script>";
 
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests
