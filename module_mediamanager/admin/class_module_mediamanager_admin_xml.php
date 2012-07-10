@@ -28,7 +28,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
 
 
     /**
-     * Create a new folder using the combi of folder & systemid passed
+     * Create a new folder using the combination of passed folder & systemid
      * @return string
      * @permissions edit
      */

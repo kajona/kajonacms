@@ -25,6 +25,7 @@ class class_template {
      * @var class_apc_cache
      */
     private $objApcCache;
+    private $bitSaveToCacheRequired = false;
 
 	/**
 	 * Constructor
@@ -44,8 +45,10 @@ class class_template {
 
     public function __destruct() {
     	//save cache to apc
-        $this->objApcCache->addValue("templateSessionCacheTemplate", $this->arrCacheTemplates, class_config::getInstance()->getConfig("templatecachetime"));
-        $this->objApcCache->addValue("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections, class_config::getInstance()->getConfig("templatecachetime"));
+        if($this->bitSaveToCacheRequired) {
+            $this->objApcCache->addValue("templateSessionCacheTemplate", $this->arrCacheTemplates, class_config::getInstance()->getConfig("templatecachetime"));
+            $this->objApcCache->addValue("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections, class_config::getInstance()->getConfig("templatecachetime"));
+        }
     }
 
 
@@ -102,6 +105,8 @@ class class_template {
 
 		if(isset($this->arrCacheTemplateSections[$strCacheSection]))
 			return $strCacheSection;
+
+        $this->bitSaveToCacheRequired = true;
 
 		if(isset($this->arrCacheTemplates[$strCacheTemplate]))
 			$bitKnownTemplate = true;

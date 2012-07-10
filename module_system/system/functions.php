@@ -924,8 +924,6 @@ function processWysiwygHtmlContent($strHtmlContent) {
 }
 
 /**
- * @deprecated Doesn't make that much sense?!
- * @todo please check if needed, maybe remove method
  * Encodes an url to be more safe but being less strict than urlencode()
  *
  * @param string $strText
@@ -1004,30 +1002,13 @@ function createFilename($strName, $bitFolder = false) {
 	if(!$bitFolder)
 	   $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
 
-	$strTemp = "";
-	//search for other, unknown chars and replace them
-	for($intI = 0; $intI < uniStrlen($strReturn); $intI++) {
-	    //no match right up till here -> doin the hard way
-	    if(!preg_match("/[a-z0-9-_]/", $strReturn[$intI]))
-	        $strTemp .= "-";
-	    else
-	        $strTemp .= $strReturn[$intI];
-
-	}
+    //remove all other special characters
+    $strTemp = preg_replace("/[^A-Za-z0-9_-]/", "", $strReturn);
 
 	//do a replacing in the ending, too
 	if($strEnding != "") {
-    	$strTempEnding = "";
-        //search for other, unknown chars and replace them
-        for($intI = 0; $intI < uniStrlen($strEnding); $intI++) {
-            //no match right up till here -> doin the hard way
-            if(!preg_match("/[a-z0-9-_]/", $strEnding[$intI]))
-                $strTempEnding .= "-";
-            else
-                $strTempEnding .= $strEnding[$intI];
-        }
-
-        $strEnding = ".".$strTempEnding;
+        //remove all other special characters
+        $strEnding = ".".preg_replace("/[^A-Za-z0-9_-]/", "", $strEnding);
 
 	}
 

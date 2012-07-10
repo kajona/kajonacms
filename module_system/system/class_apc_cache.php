@@ -106,4 +106,8 @@ class class_apc_cache  {
 
     }
 
+    public function getBitAPCInstalled() {
+        return $this->bitAPCInstalled;
+    }
+
 }

@@ -314,8 +314,6 @@ class class_request_dispatcher {
         $strDebug = "";
         if(_timedebug_ || _dbnumber_ || _templatenr_ || _memory_) {
 
-			$strDebug .= "<pre>Kajona Debug: ";
-
     		//Maybe we need the time used to generate this page
     		if(_timedebug_ === true) {
     			$arrTimestampEnde = gettimeofday();
@@ -349,10 +347,13 @@ class class_request_dispatcher {
                     class_cache::getIntRequests()."/".class_cache::getIntHits()."/".class_cache::getIntSaves()."/".class_cache::getIntCachesize()." ";
     		}
 
-			$strDebug .= "</pre>\n";
-
             if(_xmlLoader_ === true)
-                $strDebug = "<!-- ".$strDebug ." -->";
+                $strDebug = "<!-- Kajona Debug: ".$strDebug ." -->";
+            else
+                $strDebug = "<pre style='z-index: 2000000; position: absolute; background-color: white; width: 100%; top: 0px;'>Kajona Debug: ".$strDebug."</pre>";
+
+            $strDebug .= "\n";
+
 		}
 
         return $strDebug;

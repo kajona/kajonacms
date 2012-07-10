@@ -221,7 +221,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 	function checkCallbacks() {
 		//check if we're ready to call some registered callbacks
 		for (var i = 0; i < arrCallbacks.length; i++) {
-			if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
+			if (arrCallbacks[i]) {
 				var bitCallback = true;
 				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
                     if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {

@@ -75,7 +75,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
     public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
-        return parent::setAbsolutePosition($intNewPosition, true);
+        parent::setAbsolutePosition($intNewPosition, true);
     }
 
 
@@ -118,7 +118,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return string
      */
     public function getStrLongDescription() {
-        // TODO: Implement getStrLongDescription() method.
+        return "";
     }
 
 
