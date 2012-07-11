@@ -1004,7 +1004,7 @@ otherwise the JavaScript will fail!
     <div id="tagsWrapper_%%targetSystemid%%" class="loadingContainer">
     </div>
     <script type="text/javascript">
-        $(document).ready(function() {
+        KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
             KAJONA.admin.tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
         });
     </script>
@@ -1030,7 +1030,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 Part of the admin-skin, quick-access to the users favorite tags
 <adminskin_tagselector>
 %%favorites_menu%%
-    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this);"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
 </adminskin_tagselector>
 
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.

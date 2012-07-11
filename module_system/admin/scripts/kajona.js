@@ -672,7 +672,7 @@ KAJONA.admin.folderview = {
 			parent.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
 		}
 
-        if (YAHOO.lang.isFunction(objCallback)) {
+        if ($.isFunction(objCallback)) {
 			objCallback();
 		}
 
@@ -688,7 +688,7 @@ KAJONA.admin.folderview = {
 	    	if (arrTargetsValues[i][0] == "ckeditor") {
 	    		CKEDITOR.tools.callFunction(this.selectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
 	    	} else {
-	    		var formField = YAHOO.util.Dom.get(arrTargetsValues[i][0]);
+	    		var formField = $("#"+arrTargetsValues[i][0]).get(0);
 
                 if (formField != null) {
                 	formField.value = arrTargetsValues[i][1];
@@ -896,7 +896,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
 	this.setTitle = function(strTitle) {
 		document.getElementById(this.containerId + "_title").innerHTML = strTitle;
-	}
+	};
 
 	this.setContent = function(strQuestion, strConfirmButton, strLinkHref) {
 		if (intDialogType == 1) {
@@ -909,20 +909,20 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 				return false;
 			};
 		}
-	}
+	};
 
 	this.setContentRaw = function(strContent) {
 		document.getElementById(this.containerId + "_content").innerHTML = strContent;
 		//center the dialog (later() as workaround to add a minimal delay)
 		YAHOO.lang.later(10, this, function() {this.dialog.center();});
-	}
+	};
 
 	this.setContentIFrame = function(strUrl) {
 		this.iframeId = this.containerId+"_iframe";
         this.iframeURL = strUrl;
         //commented, now called below
 		//document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+strUrl+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
-	}
+	};
 
 	this.init = function(intWidth, intHeight) {
 		this.dialog = new YAHOO.widget.Panel(this.containerId, {
@@ -959,14 +959,14 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 		if (bitResizing) {
 			this.enableResizing();
 		}
-	}
+	};
 
 	this.hide = function() {
 		try {
 			this.dialog.hide();
 		}
 		catch (e) {};
-	}
+	};
 
 	this.enableDragging = function() {
 		this.dialog.cfg.setProperty("draggable", true);
@@ -981,7 +981,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 				}
 			}
         }, this, true);
-	}
+	};
 
 	this.enableResizing = function() {
 		var resize = new YAHOO.util.Resize(this.containerId, {
@@ -1023,8 +1023,8 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 				YAHOO.util.Dom.setStyle(this.containerId+"_iframe", "visibility", "visible");
 			}
         }, this, true);
-	}
-}
+	};
+};
 
 
 /**
@@ -1411,51 +1411,6 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 	calendar.render();
 };
 
-/**
- * Tags-handling
- */
-KAJONA.admin.tags = {};
-KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
-    KAJONA.admin.ajax.genericAjaxCall("tags", "saveTag", strSystemid+"&tagname="+strTagname+"&attribute="+strAttribute, function(data, status, jqXHR) {
-        if(status == 'success') {
-            KAJONA.admin.tags.reloadTagList(strSystemid, strAttribute);
-            document.getElementById('tagname').value='';
-        }
-        else {
-            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-        }
-    });
-};
-
-KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
-
-    YAHOO.util.Dom.addClass("tagsWrapper_"+strSystemid, "loadingContainer");
-
-    KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, function(data, status, jqXHR) {
-        if(status == 'success') {
-            var intStart = data.indexOf("<tags>")+6;
-            var strContent = data.substr(intStart, data.indexOf("</tags>")-intStart);
-            YAHOO.util.Dom.removeClass("tagsWrapper_"+strSystemid, "loadingContainer");
-            document.getElementById("tagsWrapper_"+strSystemid).innerHTML = strContent;
-        }
-        else {
-            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-            YAHOO.util.Dom.removeClass("tagsWrapper_"+strSystemid, "loadingContainer");
-        }
-    });
-};
-
-KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute) {
-    KAJONA.admin.ajax.genericAjaxCall("tags", "removeTag", strTagId+"&targetid="+strTargetSystemid+"&attribute="+strAttribute, function(data, status, jqXHR) {
-        if(status == 'success') {
-            KAJONA.admin.tags.reloadTagList(strTargetSystemid, strAttribute);
-            document.getElementById('tagname').value='';
-        }
-        else {
-            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-        }
-    });
-};
 
 /**
  * Form manangement

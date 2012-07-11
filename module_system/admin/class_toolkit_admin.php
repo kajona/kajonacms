@@ -1327,7 +1327,7 @@ class class_toolkit_admin extends class_toolkit {
 
             if(count($arrFields) > 0 ) {
 
-                $strRendercode .= "<script type=\"text/javascript\">YAHOO.util.Event.onDOMReady(function () {
+                $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
                         KAJONA.admin.forms.renderMandatoryFields([";
                 foreach($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
