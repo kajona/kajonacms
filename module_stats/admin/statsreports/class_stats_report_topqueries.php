@@ -176,9 +176,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
     	    
     	    $objGraph->setStrXAxisTitle($this->objTexts->getLang("top_query_titel", "stats"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getLang("top_query_gewicht", "stats"));
-    	    $strFilename = _images_cachepath_."stats_topqueries.png";
-    	    $objGraph->saveGraph($strFilename);
-    		return _webpath_.$strFilename;
+    		return $objGraph->renderGraph();
 	    }
 	    else
 	       return "";

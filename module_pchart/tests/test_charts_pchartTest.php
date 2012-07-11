@@ -20,7 +20,7 @@ class class_test_charts_pchart extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph4.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph4.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph4.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\tstacked bar chart...\n";
         $objGraph = new class_graph_pchart();
@@ -35,7 +35,7 @@ class class_test_charts_pchart extends class_testbase  {
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6"));
         $objGraph->saveGraph(_images_cachepath_."/graph3.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph3.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph3.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\tbar chart...\n";
         $objGraph = new class_graph_pchart();
@@ -52,7 +52,7 @@ class class_test_charts_pchart extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph2.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph2.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph2.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\tbar chart variation...\n";
         $objGraph = new class_graph_pchart();
@@ -71,7 +71,7 @@ class class_test_charts_pchart extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph2b.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph2b.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph2b.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\tline chart...\n";
         $objGraph = new class_graph_pchart();
@@ -86,7 +86,7 @@ class class_test_charts_pchart extends class_testbase  {
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"));
         $objGraph->saveGraph(_images_cachepath_."/graph1.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph1.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph1.png\" />\n";
+        echo $objGraph->renderGraph();
 
 
          echo "\tcombined line / bar chart...\n";
@@ -103,7 +103,7 @@ class class_test_charts_pchart extends class_testbase  {
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"));
         $objGraph->saveGraph(_images_cachepath_."/graph6.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph6.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph6.png\" />\n";
+        echo $objGraph->renderGraph();
 
         $this->assertTrue(true);
 

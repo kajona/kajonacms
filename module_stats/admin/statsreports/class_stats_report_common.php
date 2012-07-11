@@ -107,7 +107,6 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 * @return int
 	 */
 	public function getHits() {
-		$intReturn = 0;
 		$strQuery = "SELECT count(*)
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date >= ?
@@ -124,7 +123,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 *
 	 * @param int $intStart
 	 * @param int $intEnd
-	 * @return int
+	 * @return array
 	 */
 	public function getHitsForOnePeriod($intStart, $intEnd) {
 		$strQuery = "SELECT stats_date, COUNT(*) as hits
@@ -144,7 +143,6 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 * @return int
 	 */
 	public function getVisitors() {
-		$intReturn = 0;
 
         $strQuery = "SELECT stats_ip , stats_browser, stats_date
 						FROM "._dbprefix_."stats_data
@@ -165,7 +163,7 @@ class class_stats_report_common implements interface_admin_statsreports {
      * @param $intStart
      * @param $intEnd
      *
-     * @return int
+     * @return array
      */
 	private function getVisitorsForOnePeriod($intStart, $intEnd) {
 		$strQuery = "SELECT stats_ip , stats_browser, stats_date
@@ -174,7 +172,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 								AND stats_date <= ?
 						GROUP BY stats_ip, stats_browser
 						ORDER BY stats_date ASC";
-		$arrTemp = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), $intStart, $intEnd);
+		$arrTemp = $this->objDB->getPArray($strQuery, array($intStart, $intEnd));
 		return $arrTemp;
 	}
 
@@ -256,6 +254,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 
         $arrHitsTotal = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
         $arrUserTotal = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
+
 		while($intStart <= $this->intDateEnd) {
 
 			$arrTickLabels[$intCount] = date("d.m.", $intStart);
@@ -295,6 +294,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 		//create a graph ->line-graph
 		if($intCount > 1) {
 
+
             $objChart1 = class_graph_factory::getGraphInstance();
             $objChart1->setStrGraphTitle($this->objTexts->getLang("graph_hitsPerDay", "stats"));
             $objChart1->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats"));
@@ -304,8 +304,6 @@ class class_stats_report_common implements interface_admin_statsreports {
             $objChart1->setArrXAxisTickLabels($arrTickLabels);
             $objChart1->addLinePlot($arrHits, "Hits");
             $objChart1->setBitRenderLegend(false);
-            $strImagePath1 = _images_cachepath_."stats_common_1.png";
-    		$objChart1->saveGraph($strImagePath1);
 
             $objChart2 = class_graph_factory::getGraphInstance();
             $objChart2->setStrGraphTitle($this->objTexts->getLang("graph_visitorsPerDay", "stats"));
@@ -316,12 +314,10 @@ class class_stats_report_common implements interface_admin_statsreports {
             $objChart2->setArrXAxisTickLabels($arrTickLabels);
             $objChart2->addLinePlot($arrUser, "Visitors/Day");
             $objChart2->setBitRenderLegend(false);
-            $strImagePath2 = _images_cachepath_."stats_common_2.png";
-    		$objChart2->saveGraph($strImagePath2);
 
             $this->objDB->flushQueryCache();
 
-            return array((_webpath_.$strImagePath1), (_webpath_.$strImagePath2));
+            return array($objChart1->renderGraph(), $objChart2->renderGraph());
 
 		}
 		else

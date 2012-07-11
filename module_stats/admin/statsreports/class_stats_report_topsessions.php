@@ -152,7 +152,7 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
             $strDetails .= $this->objTexts->getLang("top_session_detail_hostname", "stats", "admin"). $arrOneSession["stats_hostname"] ."<br />";
             //and fetch all pages
             $strQuery = "SELECT stats_page
-                           FROM ".$this->arrModule["table"]."
+                           FROM "._dbprefix_."stats_data
                           WHERE stats_session= ?
                           ORDER BY stats_date ASC";
 

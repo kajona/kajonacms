@@ -249,9 +249,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
         if(count($arrKeyValues) > 0) {
             $objGraph = class_graph_factory::getGraphInstance();
             $objGraph->createPieChart($arrValues, $arrLabels);
-            $strFilename = _images_cachepath_."stats_topbrowser.png";
-            $objGraph->saveGraph($strFilename);
-    		$arrReturn[] = _webpath_.$strFilename;
+    		$arrReturn[] = $objGraph->renderGraph();
         }
 
 		//--- XY-Plot -----------------------------------------------------------------------------------
@@ -292,9 +290,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
     		foreach($arrPlots as $arrPlotName => $arrPlotData) {
     		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
     		}
-    		$strFilename = _images_cachepath_."stats_topbrowser_plot.png";
-            $objGraph->saveGraph($strFilename);
-    		$arrReturn[] = _webpath_.$strFilename;
+    		$arrReturn[] = $objGraph->renderGraph();
 		}
 		//reset global dates
 		$this->intDateEnd = $intGlobalEnd;

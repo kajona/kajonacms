@@ -150,9 +150,8 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
         		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
         		}
-        		$strFilename = _images_cachepath_."stats_topdownloads_plot.png";
-                $objGraph->saveGraph($strFilename);
-        		$arrReturn[] = _webpath_.$strFilename;
+                $objGraph->renderGraph();
+        		$arrReturn[] = $objGraph->renderGraph();
     		}
     		//reset global dates
     		$this->intDateEnd = $intGlobalEnd;

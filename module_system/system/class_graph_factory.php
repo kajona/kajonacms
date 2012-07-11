@@ -20,6 +20,7 @@ class class_graph_factory {
 
     public static $STR_TYPE_EZC = "CHART_TYPE_EZC";
     public static $STR_TYPE_PCHART = "CHART_TYPE_PCHART";
+    public static $STR_TYPE_FLOT = "CHART_TYPE_FLOT";
 
 
     /**
@@ -36,10 +37,16 @@ class class_graph_factory {
         else if($strType == self::$STR_TYPE_PCHART) {
             return new class_graph_pchart();
         }
+        else if($strType == self::$STR_TYPE_FLOT) {
+            return new class_graph_flot();
+        }
         else {
             if(defined("_system_graph_type_")) {
                 if(_system_graph_type_ == "pchart") {
                     return new class_graph_pchart();
+                }
+                else if(_system_graph_type_ == "flot") {
+                    return new class_graph_flot();
                 }
             }
         }

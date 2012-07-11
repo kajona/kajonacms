@@ -91,9 +91,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
             $objChart->setIntWidth(200);
             $objChart->setStrXAxisTitle("");
             $objChart->setStrYAxisTitle("");
-            $objChart->saveGraph(_images_cachepath_."statswidget.png");
-
-            $strReturn .= "<img src=\""._webpath_._images_cachepath_."statswidget.png\" />";
+            $strReturn .= $objChart->renderGraph();
         }
         if($this->getFieldValue("day") == "checked") {
             //current day:
@@ -121,7 +119,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
             if(!is_numeric($intMaxRecords) || $intMaxRecords > 15)
                 $intMaxRecords = 15;
                 
-            $arrRecordsets = class_carrier::getInstance()->getObjDB()->getArray("SELECT * FROM "._dbprefix_."stats_data ORDER BY stats_date DESC ", 0, $intMaxRecords-1);
+            $arrRecordsets = class_carrier::getInstance()->getObjDB()->getPArray("SELECT * FROM "._dbprefix_."stats_data ORDER BY stats_date DESC ", array(), 0, $intMaxRecords-1);
             
             foreach($arrRecordsets as $arrOneRecord) {
                 $strReturn .= $this->widgetText($arrOneRecord["stats_ip"]." ".$arrOneRecord["stats_page"]);

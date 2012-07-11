@@ -217,7 +217,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
                                     if(status == 'success')  {
                                         var intStart = data.indexOf(\"[CDATA[\")+7;
                                         document.getElementById(\"report_container\").innerHTML=data.substr(
-                                          intStart, data.indexOf(\"]]\")-intStart
+                                          intStart, data.indexOf(\"]]>\")-intStart
                                         );
                                         if(data.indexOf(\"[CDATA[\") < 0) {
                                             var intStart = data.indexOf(\"<error>\")+7;
@@ -225,6 +225,8 @@ class class_module_stats_admin extends class_admin implements interface_admin {
                                               intStart, data.indexOf(\"</error>\")-intStart
                                             );
                                         }
+                                        //trigger embedded js-code
+                                        try { KAJONA.util.evalScript(data); } catch (objEx) { console.warn(objEx)};
                                     }
                                     else  {
                                         KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);

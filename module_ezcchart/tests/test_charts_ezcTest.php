@@ -17,7 +17,7 @@ class class_test_charts_ezcTest extends class_testbase  {
         $objGraph->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->saveGraph(_images_cachepath_."/graph4.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph4.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph4.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\t pie chart without legend...\n";
         $objGraph = new class_graph_ezc();
@@ -26,8 +26,7 @@ class class_test_charts_ezcTest extends class_testbase  {
         $objGraph->setBitRenderLegend(false);
         $objGraph->saveGraph(_images_cachepath_."/graph4_wl.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph4_wl.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph4_wl.png\" />\n";
-
+        echo $objGraph->renderGraph();
 
         echo "\tbar chart...\n";
         $objGraph = new class_graph_ezc();
@@ -41,7 +40,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph2.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph2.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph2.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\tstacked bar chart...\n";
         $objGraph = new class_graph_ezc();
@@ -55,7 +54,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph3.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph3.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph3.png\" />\n";
+        echo $objGraph->renderGraph();
 
 
 
@@ -75,7 +74,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph2b.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph2b.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph2b.png\" />\n";
+        echo $objGraph->renderGraph();
 
         echo "\tline chart...\n";
         $objGraph = new class_graph_ezc();
@@ -89,7 +88,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph1.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph1.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph1.png\" />\n";
+        echo $objGraph->renderGraph();
 
 
         echo "\tcombined line / bar chart...\n";
@@ -107,7 +106,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph6.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph6.png");
-        echo "\t <img src=\""._webpath_._images_cachepath_."/graph6.png\" />\n";
+        echo $objGraph->renderGraph();
 
 
 

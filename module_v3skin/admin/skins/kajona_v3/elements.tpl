@@ -344,7 +344,7 @@ A fieldset to structure logical sections
 </misc_fieldset>
 
 <graph_container>
-<div class="graphBox"><img src="%%imgsrc%%" /></div>
+<div class="graphBox">%%imgsrc%%</div>
 </graph_container>
 
 

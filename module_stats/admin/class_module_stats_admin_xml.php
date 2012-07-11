@@ -84,7 +84,7 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
 
                 foreach($arrImage as $strImage) {
                     if($strImage != "") {
-                       $strReturn .= $this->objToolkit->getGraphContainer($strImage."?reload=".time());
+                       $strReturn .= $this->objToolkit->getGraphContainer($strImage);
                     }
                 }
 

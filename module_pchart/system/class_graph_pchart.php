@@ -460,6 +460,22 @@ class class_graph_pchart implements interface_graph {
         $this->objChart->Render($strFilename);
 	}
 
+    /**
+     * Common way to get a chart. The engine should save the chart
+     * to the filesystem (if required) and returns the chart with a complete
+     * code to embed the chart into a html-page.
+     * Please be aware that the method may return a large amount of code depending on
+     * the type of engine - from a simple img-tag up to a full js-logic.
+     *
+     * @since 4.0
+     * @return mixed
+     */
+    public function renderGraph() {
+        $strFilename = _images_cachepath_."/".generateSystemid().".png";
+        $this->saveGraph($strFilename);
+        return "<img src=\""._webpath_."/".$strFilename."\" alt=\"".$this->strGraphTitle."\" />";
+    }
+
 	/**
 	 * Inserts a line-break to long legend-values
 	 *

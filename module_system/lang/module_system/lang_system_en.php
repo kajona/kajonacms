@@ -24,7 +24,7 @@ $lang["_system_changehistory_enabled_"]  = "Änderungshistory enabled:";
 $lang["_system_dbdump_amount_"]          = "Number of DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Defines how many DB-dumps should be kept.";
 $lang["_system_graph_type_"]             = "Chart-library used:";
-$lang["_system_graph_type_hint"]         = "Valid values: pchart, ezc. pChat has to be downloaded manually, for optimal images ezc makes use of the php-module 'cairo'.<br />See also <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
+$lang["_system_graph_type_hint"]         = "Valid values: pchart, ezc, flot. pChat has to be downloaded manually, for optimal images ezc makes use of the php-module 'cairo'.<br />See also <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
 $lang["_system_lock_maxtime_"]           = "Maximum locktime:";
 $lang["_system_lock_maxtime_hint"]       = "After the given duration in seconds, locked records will be unlocked automatically.";
 $lang["_system_mod_rewrite_"]            = "URL-rewriting:";

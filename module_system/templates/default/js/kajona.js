@@ -232,13 +232,15 @@ KAJONA.util.Loader = function () {
                 var bitCallback = true;
                 for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
                     if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
-                        //console.log("missing file "+arrCallbacks[i].requiredModules[j]);
+                        console.log('requirement '+arrCallbacks[i].requiredModules[j]+' not given, no callback');
                         bitCallback = false;
+                        break;
                     }
                 }
 
                 //execute callback and delete it so it won't get called again
                 if (bitCallback) {
+                    console.log('requirements all given, triggering callback. loaded: '+arrCallbacks[i].requiredModules);
                     arrCallbacks[i].callback();
                     delete arrCallbacks[i];
                 }
@@ -266,16 +268,18 @@ KAJONA.util.Loader = function () {
         }
         else {
             //start loader-processing
+            var bitCallbackAdded = false;
             $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
                 arrFilesInProgress.push(strOneFileToLoad);
                 //check what loader to take - js or css
                 var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
 
-                if($.isFunction(objCallback)) {
+                if(!bitCallbackAdded && $.isFunction(objCallback)) {
                     arrCallbacks.push({
                         'callback' : objCallback,
                         'requiredModules' : arrFilesToLoad
                     });
+                    bitCallbackAdded = true;
                 }
 
                 //start loading process

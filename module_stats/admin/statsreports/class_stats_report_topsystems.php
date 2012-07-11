@@ -215,9 +215,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         }
         $objGraph = class_graph_factory::getGraphInstance();
         $objGraph->createPieChart($arrValues, $arrLabels);
-        $strFilename = _images_cachepath_."stats_topsystem.png";
-        $objGraph->saveGraph($strFilename);
-		$arrReturn[] = _webpath_.$strFilename;
+		$arrReturn[] = $objGraph->renderGraph();
 
 		//--- XY-Plot -----------------------------------------------------------------------------------
 		//calc number of plots
@@ -261,9 +259,8 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
     		foreach($arrPlots as $arrPlotName => $arrPlotData) {
     		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
     		}
-    		$strFilename = _images_cachepath_."stats_topsystem_plot.png";
-            $objGraph->saveGraph($strFilename);
-    		$arrReturn[] = _webpath_.$strFilename;
+            $objGraph->renderGraph();
+    		$arrReturn[] = $objGraph->renderGraph();
 		}
 
 		//reset global dates

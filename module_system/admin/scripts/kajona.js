@@ -226,13 +226,16 @@ KAJONA.util.Loader = function (strScriptBase) {
 				var bitCallback = true;
 				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
                     if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
+                        console.log('requirement '+arrCallbacks[i].requiredModules[j]+' not given, no callback');
 						bitCallback = false;
+                        break;
 					}
 				}
 
 				//execute callback and delete it so it won't get called again
 				if (bitCallback) {
-					arrCallbacks[i].callback();
+                    console.log('requirements all given, triggering callback. loaded: '+arrCallbacks[i].requiredModules);
+                    arrCallbacks[i].callback();
 					delete arrCallbacks[i];
 				}
 			}
@@ -260,16 +263,18 @@ KAJONA.util.Loader = function (strScriptBase) {
         }
         else {
             //start loader-processing
+            var bitCallbackAdded = false;
             $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
                 arrFilesInProgress.push(strOneFileToLoad);
                 //check what loader to take - js or css
                 var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
 
-                if($.isFunction(objCallback)) {
+                if(!bitCallbackAdded && $.isFunction(objCallback)) {
                     arrCallbacks.push({
                         'callback' : objCallback,
                         'requiredModules' : arrFilesToLoad
                     });
+                    bitCallbackAdded = true;
                 }
 
                 //start loading process
@@ -407,33 +412,6 @@ KAJONA.util.Loader = function (strScriptBase) {
                 if(arrFilesToLoad.length > 0) {
                     this.loadFile(arrFilesToLoad, null, true);
                 }
-
-//				for (var i = 0; i < arrFilesToLoad.length; i++) {
-//
-//                    this.loadFile()
-//
-//
-//                    //TODO: ugly hack
-//                    arrFilesLoaded.push(arrFilesToLoad[i]);
-//
-//                    var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
-//
-//                    var filter = {
-//        				'searchExp': "\\."+fileType,
-//        				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
-//        			};
-//                    var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
-//
-//					yuiLoader.addModule( {
-//						name : arrFilesToLoad[i],
-//						type : fileType,
-//						skinnable : false,
-//						fullpath : url
-//					});
-//
-//					yuiLoader.require(arrFilesToLoad[i]);
-//					arrRequestedModules[arrFilesToLoad[i]] = true;
-//				}
 
 				//fire YUILoader after the onDOMReady event
 				YAHOO.util.Event.onDOMReady(function () {

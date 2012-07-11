@@ -30,152 +30,268 @@ if (typeof KAJONA == "undefined") {
  * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
  */
 KAJONA.util.Loader = function (strScriptBase) {
-	var scriptBase = KAJONA_WEBPATH + strScriptBase;
-	var yuiBase = scriptBase + "yui/";
-	var arrRequestedModules = {};
-	var arrLoadedModules = {};
-	var arrCallbacks = [];
 
-	function createYuiLoader() {
-		//create instance of YUILoader
-		var yuiLoader = new YAHOO.util.YUILoader({
-			base : yuiBase,
+    //todo: delete
+    var scriptBase = KAJONA_WEBPATH + strScriptBase;
 
-			//filter: "DEBUG", //use debug versions
-			//add the cachebuster
-			filter: {
-				'searchExp': "\\.js$",
-				'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
-			},
+    //todo: delete
+    var yuiBase = scriptBase + "yui/";
+    //todo: delete
+    var arrRequestedModules = {};
+    //todo: delete
+    var arrLoadedModules = {};
 
-			onFailure : function(o) {
-				alert("File loading failed: " + YAHOO.lang.dump(o));
-			},
 
-			onProgress : function(o) {
-				arrLoadedModules[o.name] = true;
-				checkCallbacks();
-			}
-		});
+    var arrCallbacks = [];
+    var arrFilesLoaded = [];
+    var arrFilesInProgress = [];
 
-		return yuiLoader;
-	}
+    //todo: delete
+    function createYuiLoader() {
+        //create instance of YUILoader
+        var yuiLoader = new YAHOO.util.YUILoader({
+            base : yuiBase,
 
-	function checkCallbacks() {
-		//check if we're ready to call some registered callbacks
-		for (var i = 0; i < arrCallbacks.length; i++) {
-			if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
-				var bitCallback = true;
-				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
-					if (!(arrCallbacks[i].requiredModules[j] in arrLoadedModules)) {
-						bitCallback = false;
-					}
-				}
+            //filter: "DEBUG", //use debug versions
+            //add the cachebuster
+            filter: {
+                'searchExp': "\\.js$",
+                'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
+            },
 
-				//execute callback and delete it so it won't get called again
-				if (bitCallback) {
-					arrCallbacks[i].callback();
-					delete arrCallbacks[i];
-				}
-			}
-		}
-	}
+            onFailure : function(o) {
+                alert("File loading failed: " + YAHOO.lang.dump(o));
+            },
 
-	this.load = function(arrYuiComponents, arrFiles, callback) {
-		var arrYuiComponentsToWaitFor = [];
-		var arrFilesToWaitFor = [];
-		var arrYuiComponentsToLoad = [];
-		var arrFilesToLoad = [];
+            onProgress : function(o) {
+                arrLoadedModules[o.name] = true;
 
-		//check YUI components, if they are already loaded or requested
-		if (YAHOO.lang.isArray(arrYuiComponents)) {
-			for (var i = 0; i < arrYuiComponents.length; i++) {
-				if (!(arrYuiComponents[i] in arrLoadedModules)) {
-					arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
-					if (!(arrYuiComponents[i] in arrRequestedModules)) {
-						arrYuiComponentsToLoad.push(arrYuiComponents[i]);
-					}
-				}
-			}
-		}
+                arrFilesLoaded.push(o.name);
+                checkCallbacks();
+            }
+        });
 
-		//check own JS/CSS files, if they are already loaded or requested
-		if (YAHOO.lang.isArray(arrFiles)) {
-			for (var i = 0; i < arrFiles.length; i++) {
-				if (!(arrFiles[i] in arrLoadedModules)) {
-					arrFilesToWaitFor.push(arrFiles[i]);
-					if (!(arrFiles[i] in arrRequestedModules)) {
-						arrFilesToLoad.push(arrFiles[i]);
-					}
-				}
-			}
-		}
+        return yuiLoader;
+    }
 
-		//if all modules are already loaded, execute the callback
-		if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
-			if (YAHOO.lang.isFunction(callback)) {
-				callback();
-			}
-		} else {
-			//register the callback to be called later on
-			if (YAHOO.lang.isFunction(callback)) {
-				arrCallbacks.push({
-					'callback' : callback,
-					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
-				});
-			}
+    function checkCallbacks() {
+        //check if we're ready to call some registered callbacks
+        for (var i = 0; i < arrCallbacks.length; i++) {
+            if (arrCallbacks[i]) {
+                var bitCallback = true;
+                for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
+                    if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
+                        console.log('requirement '+arrCallbacks[i].requiredModules[j]+' not given, no callback');
+                        bitCallback = false;
+                        break;
+                    }
+                }
 
-			//are there components/files to load which are not already requested?
-			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
-				var yuiLoader = createYuiLoader();
+                //execute callback and delete it so it won't get called again
+                if (bitCallback) {
+                    console.log('requirements all given, triggering callback. loaded: '+arrCallbacks[i].requiredModules);
+                    arrCallbacks[i].callback();
+                    delete arrCallbacks[i];
+                }
+            }
+        }
+    }
 
-				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
-					yuiLoader.require(arrYuiComponentsToLoad[i]);
-					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
-				}
-				for (var i = 0; i < arrFilesToLoad.length; i++) {
-                    var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
 
-                    var filter = {
-        				'searchExp': "\\."+fileType,
-        				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
-        			};
-                    var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+    this.loadFile = function(arrInputFiles, objCallback, bitPreventPathAdding) {
+        var arrFilesToLoad = [];
 
-					yuiLoader.addModule( {
-						name : arrFilesToLoad[i],
-						type : fileType,
-						skinnable : false,
-						fullpath : url
-					});
+        if(!$.isArray(arrInputFiles))
+            arrInputFiles = [ arrInputFiles ];
 
-					yuiLoader.require(arrFilesToLoad[i]);
-					arrRequestedModules[arrFilesToLoad[i]] = true;
-				}
+        //add suffixes
+        $.each(arrInputFiles, function(index, strOneFile) {
+            if($.inArray(strOneFile, arrFilesLoaded) == -1 && $.inArray(strOneFile, arrFilesInProgress) == -1)
+                arrFilesToLoad.push(strOneFile);
+        });
 
-				//fire YUILoader after the onDOMReady event
-				YAHOO.util.Event.onDOMReady(function () {
-					yuiLoader.insert();
-				});
-			}
-		}
-	}
+        if(arrFilesToLoad.length == 0) {
+            //console.log("skipped loading files, all already loaded");
+            //all files already loaded, call callback
+            if($.isFunction(objCallback))
+                objCallback();
+        }
+        else {
+            //start loader-processing
+            var bitCallbackAdded = false;
+            $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
+                arrFilesInProgress.push(strOneFileToLoad);
+                //check what loader to take - js or css
+                var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
 
-	//for compatibility with Kajona templates pre 3.3.0
-	this.convertAdditionalFiles = function(additionalFiles) {
-		if (YAHOO.lang.isString(additionalFiles)) {
-			//convert to array and add webpath
-			return new Array(scriptBase + additionalFiles);
-		} else if (YAHOO.lang.isArray(additionalFiles)) {
-			//add webpath
-			for (var i = 0; i < additionalFiles.length; i++) {
-				additionalFiles[i] = scriptBase + additionalFiles[i];
-			}
-			return additionalFiles;
-		} else {
-			return null;
-		}
-	}
+                if(!bitCallbackAdded && $.isFunction(objCallback)) {
+                    arrCallbacks.push({
+                        'callback' : objCallback,
+                        'requiredModules' : arrFilesToLoad
+                    });
+                    bitCallbackAdded = true;
+                }
+
+                //start loading process
+                if(fileType == 'css') {
+                    loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                }
+
+                if(fileType == 'js') {
+                    loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                }
+            });
+        }
+    };
+
+    function createFinalLoadPath(strPath, bitPreventPathAdding) {
+
+        if(!bitPreventPathAdding)
+            strPath = KAJONA_WEBPATH + strPath;
+
+        var fileType = strPath.substr(strPath.length-2, 2) == 'js' ? 'js' : 'css';
+
+        var filter = {
+            'searchExp': "\\."+fileType,
+            'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
+        };
+        strPath = strPath.replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+
+        return strPath;
+    }
+
+
+    function loadCss(strPath, strOriginalPath) {
+        //console.log("loading css: "+strPath);
+
+        if (document.createStyleSheet) {
+            document.createStyleSheet(strPath);
+        }
+        else {
+            $('<link rel="stylesheet" type="text/css" href="' + strPath + '" />').appendTo('head');
+        }
+
+        arrFilesLoaded.push(strOriginalPath);
+        checkCallbacks();
+    }
+
+    function loadJs(strPath, strOriginalPath) {
+        //console.log("loading js: "+strPath);
+
+        //enable caching, cache flushing is done by the cachebuster
+        var options =  {
+            dataType: "script",
+            cache: true,
+            url: strPath
+        };
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        $.ajax(options)
+            .done(function(script, textStatus) {
+                arrFilesLoaded.push(strOriginalPath);
+                checkCallbacks();
+
+            })
+            .fail(function(jqxhr, settings, exception) {
+                console.warn('loading file '+strPath+' failed: '+exception);
+            });
+    }
+
+    /**
+     * @deprecated
+     * @param arrYuiComponents
+     * @param arrFiles
+     * @param callback
+     */
+    this.load = function(arrYuiComponents, arrFiles, callback) {
+
+
+        //TODO: convert loads to hardcoded lists of dependencies
+
+
+        //todo: delete
+        var arrYuiComponentsToWaitFor = [];
+        var arrFilesToWaitFor = [];
+        var arrYuiComponentsToLoad = [];
+        var arrFilesToLoad = [];
+
+        //check YUI components, if they are already loaded or requested
+        if (YAHOO.lang.isArray(arrYuiComponents)) {
+            for (var i = 0; i < arrYuiComponents.length; i++) {
+                if (!(arrYuiComponents[i] in arrLoadedModules)) {
+                    arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
+                    if (!(arrYuiComponents[i] in arrRequestedModules)) {
+                        arrYuiComponentsToLoad.push(arrYuiComponents[i]);
+                    }
+                }
+            }
+        }
+
+        //check own JS/CSS files, if they are already loaded or requested
+        if (YAHOO.lang.isArray(arrFiles)) {
+            for (var i = 0; i < arrFiles.length; i++) {
+                if (!(arrFiles[i] in arrLoadedModules)) {
+                    arrFilesToWaitFor.push(arrFiles[i]);
+                    if (!(arrFiles[i] in arrRequestedModules)) {
+                        arrFilesToLoad.push(arrFiles[i]);
+                    }
+                }
+            }
+        }
+
+        //if all modules are already loaded, execute the callback
+        if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
+            if (YAHOO.lang.isFunction(callback)) {
+                callback();
+            }
+        } else {
+            //register the callback to be called later on
+            if (YAHOO.lang.isFunction(callback)) {
+                arrCallbacks.push({
+                    'callback' : callback,
+                    'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
+                });
+            }
+
+            //are there components/files to load which are not already requested?
+            if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
+                var yuiLoader = createYuiLoader();
+
+                for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
+                    yuiLoader.require(arrYuiComponentsToLoad[i]);
+                    arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
+
+                }
+
+                if(arrFilesToLoad.length > 0) {
+                    this.loadFile(arrFilesToLoad, null, true);
+                }
+
+                //fire YUILoader after the onDOMReady event
+                YAHOO.util.Event.onDOMReady(function () {
+                    yuiLoader.insert();
+                });
+            }
+        }
+    };
+
+    //for compatibility with Kajona templates pre 3.3.0
+    //todo: delete
+    this.convertAdditionalFiles = function(additionalFiles) {
+        if (YAHOO.lang.isString(additionalFiles)) {
+            //convert to array and add webpath
+            return new Array(scriptBase + additionalFiles);
+        } else if (YAHOO.lang.isArray(additionalFiles)) {
+            //add webpath
+            for (var i = 0; i < additionalFiles.length; i++) {
+                additionalFiles[i] = scriptBase + additionalFiles[i];
+            }
+            return additionalFiles;
+        } else {
+            return null;
+        }
+    }
 };
 
 

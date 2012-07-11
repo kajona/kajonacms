@@ -142,10 +142,8 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     	    $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getLang("top_seiten_titel", "stats"));
     	    $objGraph->setStrXAxisTitle($this->objTexts->getLang("top_seiten_titel", "stats"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getLang("commons_hits_header", "stats"));
-    	    $strFilename = "/portal/pics/cache/stats_toppages.png";
             $objGraph->setBitRenderLegend(false);
-    	    $objGraph->saveGraph($strFilename);
-    		$arrReturn[] =  _webpath_.$strFilename;
+    		$arrReturn[] = $objGraph->renderGraph();
 
     		//--- XY-Plot -----------------------------------------------------------------------------------
     		//calc number of plots
@@ -183,9 +181,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
         		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
         		}
-        		$strFilename = _images_cachepath_."stats_toppages_plot.png";
-                $objGraph->saveGraph($strFilename);
-        		$arrReturn[] = _webpath_.$strFilename;
+        		$arrReturn[] = $objGraph->renderGraph();
     		}
     		//reset global dates
     		$this->intDateEnd = $intGlobalEnd;

@@ -18,8 +18,6 @@
  */
 abstract class class_graph_flot_chartdata_base {
 
-    protected $intWidth = 600;
-    protected $intHeight = 350;
     protected $arrFlotSeriesData = array();
     protected $arrChartTypes = array();
 
@@ -59,14 +57,6 @@ abstract class class_graph_flot_chartdata_base {
         
     }
 
-    public function setIntHeight($intHeight) {
-        $this->intHeight = $intHeight;
-    }
-
-    public function setIntWidth($intWidth) {
-        $this->intWidth = $intWidth;
-    }
-
     public function setStrBackgroundColor($strColor) {
         
     }
@@ -83,24 +73,17 @@ abstract class class_graph_flot_chartdata_base {
         
     }
 
-    public function showGraph() {
+    public function showGraph($strChartId) {
         $strData = $this->dataToJSON();
         $strOptions = $this->optionsToJSON();
-        $strChartId = generateSystemid();
 
-        //create div - in this div the chart will be generated
-        $strDiv = "\t <div id=\"" . $strChartId . "\" class=\"graph\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
+        //the plot-call itself is wrapped in a short timeout-delay. otherwise the js could get confused.
 
-        //function which will be called afetr the pages loading
-        $strCall = "
-        <script type=\"text/javascript\">
-            $(document).ready(function(){
-                $.plot($(\"#" . $strChartId . "\"),[" . $strData . "],{" . $strOptions . "})
-            })
-        </script>
-        ";
-
-        return $strDiv . "\n" . $strCall;
+        return " $(document).ready(function() {
+            setTimeout(function() {
+                $.plot($(\"#" . $strChartId . "\"), [" . $strData . "], {" . $strOptions . "});
+            }, 200);
+         });";
     }
 
     public function dataToJSON() {

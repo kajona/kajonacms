@@ -18,9 +18,14 @@
  * @author stefan.meyer1@yahoo.de
  */
 class class_graph_flot implements interface_graph {
-    
-   
+
+    /**
+     * @var class_graph_flot_chartdata_base
+     */
     private $objChartData = null;
+
+    private $intWidth = 600;
+    private $intHeight = 350;
     
     
     /**
@@ -90,7 +95,8 @@ class class_graph_flot implements interface_graph {
     }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        $this->objChartData->setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels);
+        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
+        //$this->objChartData->setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels);
     }
 
     public function setBitRenderLegend($bitRenderLegend) {
@@ -98,11 +104,11 @@ class class_graph_flot implements interface_graph {
     }
 
     public function setIntHeight($intHeight) {
-        $this->objChartData->setIntHeight($intHeight);
+        $this->intHeight = $intHeight;
     }
 
     public function setIntWidth($intWidth) {
-        $this->objChartData->setIntWidth($intWidth);
+        $this->intWidth = $intWidth;
     }
 
     public function setIntXAxisAngle($intXAxisAngle) {
@@ -122,18 +128,64 @@ class class_graph_flot implements interface_graph {
     }
 
     public function setStrGraphTitle($strTitle) {
-        $this->objChartData->setStrGraphTitle($strTitle);
+        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
+        //$this->objChartData->setStrGraphTitle($strTitle);
     }
 
     public function setStrXAxisTitle($strTitle) {
-        $this->objChartData->setStrXAxisTitle($strTitle);
+        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
+        //$this->objChartData->setStrXAxisTitle($strTitle);
     }
 
     public function setStrYAxisTitle($strTitle) {
-        $this->objChartData->setStrYAxisTitle($strTitle);
+        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
+        //$this->objChartData->setStrYAxisTitle($strTitle);
     }
 
     public function showGraph() {
-        return $this->objChartData->showGraph();
+        return $this->objChartData->showGraph(generateSystemid());
     }
+
+    /**
+     * Common way to get a chart. The engine should save the chart
+     * to the filesystem (if required) and returns the chart with a complete
+     * code to embed the chart into a html-page.
+     * Please be aware that the method may return a large amount of code depending on
+     * the type of engine - from a simple img-tag up to a full js-logic.
+     *
+     * @since 4.0
+     * @return mixed
+     */
+    public function renderGraph() {
+
+
+        $strChartId = generateSystemid();
+        $strChartCode = $this->objChartData->showGraph($strChartId);
+
+        //generate the wrapping js-code and all requirements
+        $strReturn = "\t <div id=\"" . $strChartId . "\" class=\"flotGraph\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
+
+        //TODO: eventually create all required css-code based on the current properties. this would make the request to flot.css obsolete
+
+        $strReturn .= "<script type='text/javascript'>
+
+            KAJONA.admin.loader.loadFile([
+                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.js',
+                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
+                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
+                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
+                '/core/module_flotchart/admin/scripts/flot.css'
+            ], function() {
+                    console.log('trggering flot for chart ".$strChartId."');
+                ".$strChartCode."
+
+
+            });
+        </script>";
+
+
+
+        return $strReturn;
+    }
+
 }

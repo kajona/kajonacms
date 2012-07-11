@@ -97,6 +97,8 @@ interface interface_graph {
 	 * sends the graph directly (!!!) to the browser.
      * Execution should be terminated afterwards.
 	 *
+     * <b>Please note that not all chart-engines support this method.</b>
+     * @deprecated use interface_graph::renderGraph() instead
 	 */
 	public function showGraph();
 
@@ -104,8 +106,22 @@ interface interface_graph {
 	 * Does the magic. Creates all necessary stuff and finally
 	 * saves the graph to the specified filename
 	 *
+     * <b>Please note that not all chart-engines support this method.</b>
+     * @deprecated use interface_graph::renderGraph() instead
 	 */
 	public function saveGraph($strFilename);
+
+    /**
+     * Common way to get a chart. The engine should save the chart
+     * to the filesystem (if required) and returns the chart with a complete
+     * code to embed the chart into a html-page.
+     * Please be aware that the method may return a large amount of code depending on
+     * the type of engine - from a simple img-tag up to a full js-logic.
+     *
+     * @since 4.0
+     * @return mixed
+     */
+    public function renderGraph();
 
 	/**
 	 * Set the title of the x-axis

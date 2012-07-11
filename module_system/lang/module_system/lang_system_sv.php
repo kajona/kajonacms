@@ -24,7 +24,7 @@ $lang["_system_changehistory_enabled_"]  = "Ändringshistorik aktiverad:";
 $lang["_system_dbdump_amount_"]          = "Antal DB dumpningar";
 $lang["_system_dbdump_amount_hint"]      = "Definieras hur många DB-dumpningar som skall behållas.";
 $lang["_system_graph_type_"]             = "Använda diagrambibliotek:";
-$lang["_system_graph_type_hint"]         = "Giltiga värden: pchart, ezc. pChart måste laddas ner och installeras, ezc behöver PHP-modul 'cairo'.<br />Se även <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
+$lang["_system_graph_type_hint"]         = "Giltiga värden: pchart, ezc, flot. pChart måste laddas ner och installeras, ezc behöver PHP-modul 'cairo'.<br />Se även <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
 $lang["_system_lock_maxtime_"]           = "Maximal spärrtid:";
 $lang["_system_lock_maxtime_hint"]       = "Efter den angivna tiden i sekunder kommer den spärrade dataposten automatisk att frigöras.";
 $lang["_system_mod_rewrite_"]            = "URL-omskrivning";

@@ -186,9 +186,8 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
         }
         $objGraph = class_graph_factory::getGraphInstance();
         $objGraph->createPieChart($arrValues, $arrLabels);
-        $strFilename = _images_cachepath_."stats_topcountries.png";
-        $objGraph->saveGraph($strFilename);
-		$arrReturn[] = _webpath_.$strFilename;
+
+		$arrReturn[] = $objGraph->renderGraph();
 
 
 		return $arrReturn;
