@@ -168,6 +168,12 @@ abstract class class_root {
         $this->initObjectInternal();
         $this->internalInit();
 
+        //if given, read versioning information
+        if(defined("_system_changehistory_enabled_") && _system_changehistory_enabled_ == "true" && $this instanceof interface_versionable) {
+            $objChangelog = new class_module_system_changelog();
+            $objChangelog->readOldValues($this);
+        }
+
     }
 
     /**
@@ -472,10 +478,10 @@ abstract class class_root {
      * Called whenever a update-request was fired.
      * Use this method to synchronize the current object with the database.
      * Use only updates, inserts are not required to be implemented.
-     *
      * Provides a default implementation based on the current objects column mappings.
      * Override this method whenever you want to perform additional actions or escaping.
      *
+     * @throws class_exception
      * @return bool
      */
     protected function updateStateToDb() {

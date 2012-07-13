@@ -17,8 +17,6 @@
 class class_module_system_setting extends class_model implements interface_model, interface_versionable  {
 
 
-    private $strActionChange = "changeSetting";
-
     //0 = bool, 1 = int, 2 = string, 3 = page
     //use ONLY the following static vars to assign a type to your constant.
     //integer values may change without warnings!
@@ -51,6 +49,11 @@ class class_module_system_setting extends class_model implements interface_model
     public static $int_TYPE_PAGE = 3;
 
     private $strName = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
     private $strValue = "";
     private $intType = 0;
     private $intModule = 0;
@@ -139,7 +142,7 @@ class class_module_system_setting extends class_model implements interface_model
             class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
 
             $objChangelog = new class_module_system_changelog();
-            $objChangelog->createLogEntry($this, $this->strActionChange);
+            $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
             $strQuery = "UPDATE "._dbprefix_."system_config
                         SET system_config_value = ?
@@ -210,41 +213,22 @@ class class_module_system_setting extends class_model implements interface_model
 		return $arrRow["COUNT(*)"] == 1;
 	}
 
-    public function getActionName($strAction) {
+    public function getVersionActionName($strAction) {
         return $strAction;
     }
 
-    public function getChangedFields($strAction) {
-        if($strAction == $this->strActionChange) {
-            return array(
-                array("property" => $this->getStrName(), "oldvalue" => $this->strOldValue, "newvalue" => $this->getStrValue())
-            );
-        }
-    }
-
-    public function renderValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue) {
         return $strValue;
     }
 
-    public function getClassname() {
-        return __CLASS__;
-    }
-
-    public function getPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty) {
         return $strProperty;
     }
 
-    public function getRecordName() {
+    public function getVersionRecordName() {
         return class_carrier::getInstance()->getObjLang()->getLang("change_type_setting", "system");
     }
 
-    public function getModuleName() {
-        return $this->arrModule["modul"];
-    }
-
-
-
-    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
         return $this->strName;
     }

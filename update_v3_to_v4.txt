@@ -77,3 +77,10 @@ Toolkit-Changes:
 
 functions.php:
 - removed getNoticeAdminWithoutAhref(), use getImageAdmin() instead
+
+
+Versioning
+Versioning as provided by interface_versionable and class_module_system_changelog have been refactored. The properties monitored for versioning
+have to be marked with the annotation @versionable. By default, the property is added by its' name. If necessary, an alias may be used
+by adding the name inline with the annotation, e.g. @versionable name1. The old- and new-values are determined automatically.
+The interface-methods have been renamed to be more specific, please update your implementations.

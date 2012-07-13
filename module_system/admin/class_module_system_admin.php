@@ -618,7 +618,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog") {
         $strReturn = "";
-        //check needed rights - done twice since public
+        //check needed rights - done twice since public and callable by not only the controller
         if(!class_carrier::getInstance()->getObjRights()->validatePermissionString("right3", $this->getObjModule()))
             return $this->getLang("commons_error_permissions");
 
@@ -644,27 +644,29 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrHeader[] = $this->getLang("change_oldvalue");
         $arrHeader[] = $this->getLang("change_newvalue");
 
-        foreach ($arrLogs as /** @var $objOneEntry class_changelog_container */ $objOneEntry) {
+        /** @var $objOneEntry class_changelog_container */
+        foreach ($arrLogs as $objOneEntry) {
             $arrRowData = array();
 
-            /** @var interface_versionable $objTarget */$objTarget = $objOneEntry->getObjTarget();
+            /** @var interface_versionable|class_model $objTarget */
+            $objTarget = $objOneEntry->getObjTarget();
 
             $strOldValue = $objOneEntry->getStrOldValue();
             $strNewValue = $objOneEntry->getStrNewValue();
 
             if($objTarget != null) {
-                $strOldValue = $objTarget->renderValue($objOneEntry->getStrProperty(), $strOldValue);
-                $strNewValue = $objTarget->renderValue($objOneEntry->getStrProperty(), $strNewValue);
+                $strOldValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strOldValue);
+                $strNewValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strNewValue);
             }
 
             $arrRowData[] = dateToString($objOneEntry->getObjDate());
             $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
             if($strSystemid == "")
-                $arrRowData[] = $objTarget != null ? $objTarget->getModuleName() : "";
+                $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
             if($strSystemid == "")
-                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getRecordName(), 20), $objTarget->getRecordName()." ".$objOneEntry->getStrSystemid()) : "";
-            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getActionName($objOneEntry->getStrAction()), 15), $objTarget->getActionName($objOneEntry->getStrAction())) : "";
-            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getPropertyName($objOneEntry->getStrProperty()) ) : "";
+                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid()) : "";
+            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionActionName($objOneEntry->getStrAction()), 15), $objTarget->getVersionActionName($objOneEntry->getStrAction())) : "";
+            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getVersionPropertyName($objOneEntry->getStrProperty()) ) : "";
             $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
             $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strNewValue, 20), $strNewValue);
 

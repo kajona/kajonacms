@@ -16,9 +16,10 @@
  */
 class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
 
-    private $strActionEdit = "editFolder";
-    private $strActionDelete = "deleteFolder";
-
+    /**
+     * @var string
+     * @versionable
+     */
     private $strName = "";
     private $strLanguage = "";
 
@@ -130,7 +131,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
     protected function updateStateToDb() {
         //create change-logs
         $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, $this->strActionEdit);
+        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
         class_logger::getInstance()->addLogRow("updated folder ".$this->getStrName(), class_logger::$levelInfo);
 
@@ -306,7 +307,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
         }
 
         $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, $this->strActionDelete);
+        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
 
         //delete the folder-properties
         $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";
@@ -316,45 +317,24 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
 
 
-    public function getActionName($strAction) {
-        if($strAction == $this->strActionEdit)
+    public function getVersionActionName($strAction) {
+        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT)
             return $this->getLang("pages_ordner_edit", "pages");
-        else if($strAction == $this->strActionDelete)
+        else if($strAction == class_module_system_changelog::$STR_ACTION_DELETE)
             return $this->getLang("pages_ordner_delete", "pages");
 
         return $strAction;
     }
 
-    public function getChangedFields($strAction) {
-        if($strAction == $this->strActionEdit) {
-            return array(
-                array("property" => "foldername",  "oldvalue" => $this->strOldName, "newvalue" => $this->getStrName())
-            );
-        }
-        else if($strAction == $this->strActionDelete) {
-            return array(
-                array("property" => "foldername",  "oldvalue" => $this->strOldName)
-            );
-        }
-    }
-
-    public function renderValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue) {
         return $strValue;
     }
 
-    public function getClassname() {
-        return __CLASS__;
-    }
-
-    public function getModuleName() {
-        return $this->arrModule["modul"];
-    }
-
-    public function getPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty) {
         return $strProperty;
     }
 
-    public function getRecordName() {
+    public function getVersionRecordName() {
         return class_carrier::getInstance()->getObjLang()->getLang("change_object_folder", "pages");
     }
 

@@ -17,30 +17,51 @@ class test_systemchangelogTest extends class_testbase {
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
 
-        $objSystemCommon = new class_module_system_common();
-
-        $strSystemid = $objSystemCommon->createSystemRecord($objSystemCommon->getModuleSystemid("system"), "autotest dummy record");
 
         $objChanges = new class_module_system_changelog();
 
+        $strSystemid = generateSystemid();
+        $arrOldValues = $objChanges->readOldValues(new dummyObject($strSystemid));
+
+        $this->assertEquals($arrOldValues["strTest"], "old");
+        $this->assertEquals($arrOldValues["second"], "second old");
+
+        $arrOldValues = $objChanges->getOldValuesForSystemid($strSystemid);
+        $this->assertEquals($arrOldValues["strTest"], "old");
+        $this->assertEquals($arrOldValues["second"], "second old");
+
+
         $objChanges->createLogEntry(new dummyObject($strSystemid), "1");
-        $this->assertEquals(1, class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(0, class_module_system_changelog::getLogEntriesCount($strSystemid));
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
-        $objChanges->createLogEntry(new dummyObject($strSystemid), "2");
-        $this->assertEquals(1, class_module_system_changelog::getLogEntriesCount($strSystemid));
-        $this->assertEquals(1, count(class_module_system_changelog::getLogEntries($strSystemid)));
+        $objDummy = new dummyObject($strSystemid);
+        $objDummy->setStrTest("new test 1");
+        $objDummy->setStrSecondTest("new val 2");
+
+        $objChanges->createLogEntry($objDummy, "2");
+        $this->assertEquals(2, class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(2, count(class_module_system_changelog::getLogEntries($strSystemid)));
+
+        $arrLogs = class_module_system_changelog::getLogEntries($strSystemid);
+        foreach($arrLogs as $objOneChangelog) {
+            if($objOneChangelog->getStrProperty() == "strTest") {
+                $this->assertEquals($objOneChangelog->getStrOldValue(), "old");
+                $this->assertEquals($objOneChangelog->getStrNewValue(), "new test 1");
+            }
+
+            if($objOneChangelog->getStrProperty() == "second") {
+                $this->assertEquals($objOneChangelog->getStrOldValue(), "second old");
+                $this->assertEquals($objOneChangelog->getStrNewValue(), "new val 2");
+            }
+        }
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2", true);
-        $this->assertEquals(2, class_module_system_changelog::getLogEntriesCount($strSystemid));
-        $this->assertEquals(2, count(class_module_system_changelog::getLogEntries($strSystemid)));
-
-        $objSystemCommon->deleteSystemRecord($strSystemid);
-
-
+        $this->assertEquals(4, class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(4, count(class_module_system_changelog::getLogEntries($strSystemid)));
 
 
     }
@@ -48,6 +69,19 @@ class test_systemchangelogTest extends class_testbase {
 
 
 class dummyObject implements interface_versionable {
+
+    /**
+     * @var
+     * @versionable
+     */
+    private $strTest = "old";
+
+    /**
+     * @var
+     * @versionable second
+     */
+    private $strSecondTest = "second old";
+
     private $strSystemid;
     function __construct($strSystemid) {
         $this->strSystemid = $strSystemid;
@@ -65,37 +99,40 @@ class dummyObject implements interface_versionable {
         $this->strSystemid = $strSystemid;
     }
 
-    public function renderValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue) {
         return $strValue;
     }
 
-
-    public function getActionName($strAction) {
+    public function getVersionActionName($strAction) {
         return "dummy";
     }
 
-    public function getChangedFields($strAction) {
-        if($strAction == "1")
-            return array(array("property" => "test", "oldvalue" => "0", "newvalue" => "1"));
-
-        if($strAction == "2")
-            return array(array("property" => "test", "oldvalue" => "3", "newvalue" => "3"));
-    }
-
-    public function getClassname() {
-        return __CLASS__;
-    }
-
-    public function getModuleName() {
+    public function getArrModule($strKey) {
         return "dummy";
     }
 
-    public function getPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty) {
         return $strProperty;
     }
 
-    public function getRecordName() {
+    public function getVersionRecordName() {
         return "dummy";
+    }
+
+    public function setStrSecondTest($strSecondTest) {
+        $this->strSecondTest = $strSecondTest;
+    }
+
+    public function getStrSecondTest() {
+        return $this->strSecondTest;
+    }
+
+    public function setStrTest($strTest) {
+        $this->strTest = $strTest;
+    }
+
+    public function getStrTest() {
+        return $this->strTest;
     }
 
 }

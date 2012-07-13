@@ -20,29 +20,61 @@ class class_module_pages_page extends class_model implements interface_model, in
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
 
-    private $strActionEdit = "editPageProperties";
-    private $strActionDelete = "deletePageProperties";
-
-
     /**
      * @var string
      * @tableColumn page_name
+     * @versionable
      */
 	private $strName = "";
 
     /**
      * @var int
      * @tableColumn page_type
+     * @versionable
      */
 	private $intType = 0;
 
-	private $strKeywords = "";
-	private $strDescription = "";
-	private $strTemplate = "";
-	private $strBrowsername = "";
-	private $strSeostring = "";
-	private $strLanguage = "";
-	private $strAlias = "";
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strKeywords = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strDescription = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strTemplate = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strBrowsername = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strSeostring = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strLanguage = "";
+
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strAlias = "";
 
     private $strOldName;
     private $intOldType;
@@ -211,7 +243,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         //create change-logs
         $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, $this->strActionEdit);
+        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
 		//Update the baserecord
         $bitBaseUpdate = parent::updateStateToDb();
@@ -381,7 +413,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $bitReturn = false;
 
         $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, $this->strActionDelete);
+        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
 
         //Delete the page and the properties out of the tables
         $strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";
@@ -557,61 +589,24 @@ class class_module_pages_page extends class_model implements interface_model, in
 	}
 
 
-    public function getActionName($strAction) {
-        if($strAction == $this->strActionEdit)
+    public function getVersionActionName($strAction) {
+        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT)
             return $this->getLang("seite_bearbeiten", "pages");
-        else if($strAction == $this->strActionDelete)
+        else if($strAction == class_module_system_changelog::$STR_ACTION_DELETE)
             return $this->getLang("seite_loeschen", "pages");
 
         return $strAction;
     }
 
-    public function getChangedFields($strAction) {
-        if($strAction == $this->strActionEdit) {
-            return array(
-                array("property" => "browsername", "oldvalue" => $this->strOldBrowsername, "newvalue" => $this->getStrBrowsername()),
-                array("property" => "description", "oldvalue" => $this->strOldDescription, "newvalue" => $this->getStrDesc()),
-                array("property" => "keywords",    "oldvalue" => $this->strOldKeywords,    "newvalue" => $this->getStrKeywords()),
-                array("property" => "name",        "oldvalue" => $this->strOldName,        "newvalue" => $this->getStrName()),
-                array("property" => "template",    "oldvalue" => $this->strOldTemplate,    "newvalue" => $this->getStrTemplate()),
-                array("property" => "seostring",   "oldvalue" => $this->strOldSeostring,   "newvalue" => $this->getStrSeostring()),
-                array("property" => "alias",       "oldvalue" => $this->strOldAlias,       "newvalue" => $this->getStrAlias()),
-                array("property" => "type",        "oldvalue" => $this->intOldType,        "newvalue" => $this->getIntType()),
-                array("property" => "language",    "oldvalue" => $this->strOldLanguage,    "newvalue" => $this->getStrLanguage())
-            );
-        }
-        else if($strAction == $this->strActionDelete) {
-            return array(
-                array("property" => "browsername", "oldvalue" => $this->strOldBrowsername),
-                array("property" => "description", "oldvalue" => $this->strOldDescription),
-                array("property" => "keywords",    "oldvalue" => $this->strOldKeywords),
-                array("property" => "name",        "oldvalue" => $this->strOldName),
-                array("property" => "template",    "oldvalue" => $this->strOldTemplate),
-                array("property" => "seostring",   "oldvalue" => $this->strOldSeostring),
-                array("property" => "alias",       "oldvalue" => $this->strOldAlias),
-                array("property" => "type",        "oldvalue" => $this->intOldType),
-                array("property" => "language",    "oldvalue" => $this->strOldLanguage)
-            );
-        }
-    }
-
-    public function renderValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue) {
         return $strValue;
     }
 
-    public function getClassname() {
-        return __CLASS__;
-    }
-
-    public function getModuleName() {
-        return $this->arrModule["modul"];
-    }
-
-    public function getPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty) {
         return $strProperty;
     }
 
-    public function getRecordName() {
+    public function getVersionRecordName() {
         return class_carrier::getInstance()->getObjLang()->getLang("change_object_page", "pages");
     }
 

@@ -14,32 +14,15 @@
  * For future releases it is planned to extend the capabilities to a full
  * versioning system.
  *
+ * Since v4.0, the properties' old values are read automatically. Therefore, the properties to be
+ * versioned have to be marked with the annotation "@versionable".
+ *
  * @author sidler@mulchprod.de
  * @package module_system
  * @since 3.4.0
  */
 interface interface_versionable {
 
-    /**
-     * Returns the classname of the logged record.
-     * Used afterwards to instantiate the related object
-     *
-     * @return string
-     * @fixme: move to interface_model / automatic determination
-     */
-    public function getClassname();
-
-    /**
-     * Returns the list of changed fields in order to be processed by the
-     * changlog-class. The passed class indicates what fields to return
-     *
-     * Expects a multi-dim array using the structure:
-     * array( array("property", "oldvalue", "newvalue" ));
-     *
-     * @param string $strAction
-     * @return array
-     */
-    public function getChangedFields($strAction);
 
     /**
      * Returns a human readable name of the action stored with the changeset.
@@ -47,15 +30,14 @@ interface interface_versionable {
      * @param string $strAction the technical actionname
      * @return string the human readable name
      */
-    public function getActionName($strAction);
+    public function getVersionActionName($strAction);
 
     /**
      * Returns a human readable name of the record / object stored with the changeset.
      *
      * @return string the human readable name
-     * @fixme merge with interface_model::getStrDisplayName
      */
-    public function getRecordName();
+    public function getVersionRecordName();
 
     /**
      * Returns a human readable name of the property-name stored with the changeset.
@@ -63,14 +45,7 @@ interface interface_versionable {
      * @param string $strProperty the technical property-name
      * @return string the human readable name
      */
-    public function getPropertyName($strProperty);
-
-    /**
-     * Returns the modules' name of the logged entry.
-     *
-     * @return string
-     */
-    public function getModuleName();
+    public function getVersionPropertyName($strProperty);
 
     /**
      * Renders a stored value. Allows the class to modify the value to display, e.g. to
@@ -80,5 +55,5 @@ interface interface_versionable {
      * @param string $strValue
      * @return string
      */
-    public function renderValue($strProperty, $strValue);
+    public function renderVersionValue($strProperty, $strValue);
 }

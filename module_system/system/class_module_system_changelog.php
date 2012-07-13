@@ -21,6 +21,13 @@
  */
 class class_module_system_changelog extends class_model implements interface_model  {
 
+    private static $arrOldValueCache = array();
+
+
+    public static $STR_ACTION_EDIT      = "actionEdit";
+    public static $STR_ACTION_DELETE    = "actionDelete";
+
+
     /**
      * Constructor to create a valid object
      *
@@ -49,35 +56,127 @@ class class_module_system_changelog extends class_model implements interface_mod
     protected function initObjectInternal() {
     }
 
+
+    /**
+     * Reads all properties marked with the annotation @versionable.
+     * The state is cached in a static array mapped to the objects systemid.
+     * In consequence, this means that only objects with a valid systemid are scanned for properties under versioning.
+     *
+     * @param interface_versionable $objCurrentObject
+     * @return array|null
+     */
+    public function readOldValues(interface_versionable $objCurrentObject) {
+        if(validateSystemid($objCurrentObject->getSystemid())) {
+            $arrOldValues = $this->readVersionableProperties($objCurrentObject);
+            self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
+            return $arrOldValues;
+        }
+        return null;
+    }
+
+    private function readVersionableProperties(interface_versionable $objCurrentObject) {
+        if(validateSystemid($objCurrentObject->getSystemid())) {
+            $arrOldValues = array();
+
+            $objAnnotations = new class_annotations($objCurrentObject);
+
+            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@versionable");
+
+
+            foreach($arrProperties as $strProperty => $strAnnotation) {
+
+                $strValue = "";
+
+                //all prerequisites match, start creating query
+                $strGetter = class_objectfactory::getGetter($objCurrentObject, $strProperty);
+                if($strGetter !== null) {
+                    $strValue = call_user_func(array($objCurrentObject, $strGetter));
+                }
+
+                $strNamedEntry = trim(uniSubstr($strAnnotation, uniStrpos($strAnnotation, "@versionable")));
+                //try to read the old value and see, if it should be mapped to a new name
+                if($strNamedEntry != "")
+                    $strProperty = $strNamedEntry;
+
+                $arrOldValues[$strProperty] = $strValue;
+            }
+
+            self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
+
+            return $arrOldValues;
+        }
+        return null;
+    }
+
+    public function getOldValuesForSystemid($strSystemid) {
+        if(isset(self::$arrOldValueCache[$strSystemid]))
+            return self::$arrOldValueCache[$strSystemid];
+        else
+            return null;
+    }
+
+
+
+    private function createChangeArray($objSourceModel) {
+        $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
+
+        //this are now the new ones
+        $arrNewValues = $this->readVersionableProperties($objSourceModel);
+
+        if($arrOldValues == null || $arrNewValues == null)
+            $arrOldValues = array();
+
+        $arrReturn = array();
+        foreach($arrNewValues as $strPropertyName => $objValue) {
+            $arrReturn[] = array(
+                "property" => $strPropertyName,
+                "oldvalue" => isset($arrOldValues[$strPropertyName]) ? $arrOldValues[$strPropertyName] : "",
+                "newvalue" => isset($arrNewValues[$strPropertyName]) ? $arrNewValues[$strPropertyName] : ""
+            );
+        }
+
+        return $arrReturn;
+    }
+
+
     /**
      * Generates a new entry in the modification log storing all relevant information.
      * Creates an entry in the systemlog leveled as information, too.
      * By default entries with same old- and new-values are dropped.
      * The passed object has to implement interface_versionable.
      *
+     * If $bitDeleteAction isset to true, the change will behave in a way like deleting a record. This means the new-value will be empty on save.
+     * If not set manually, the system will try to detect if it's a delete operation based on the current action.
      *
      * @param interface_versionable $objSourceModel
      * @param string $strAction
      * @param bool $bitForceEntry if set to true, an entry will be created even if the values didn't change
+     * @param bool $bitDeleteAction if set to true, the change will behave in a way like deleting a record. This means the new-value will be empty on save.
+     *             If not set manually, the system will try to detect if it's a delete operation based on the current action.
+     *
+     * @throws class_exception
      * @return bool
      */
-    public function createLogEntry(interface_versionable $objSourceModel, $strAction, $bitForceEntry = false) {
+    public function createLogEntry(interface_versionable $objSourceModel, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
         $bitReturn = true;
+
+        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
+            return true;
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
             return true;
         }
 
-        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
-            return true;
+
 
         //changes require at least kajona 3.3.1.10
         $arrModul = $this->getModuleData("system", false);
-        if(version_compare($arrModul["module_version"], "3.3.1.10") < 0)
+        if(version_compare($arrModul["module_version"], "3.4.9") < 0)
             return;
 
-        $arrChanges = $objSourceModel->getChangedFields($strAction);
+        $arrChanges = $this->createChangeArray($objSourceModel);
+
         if(is_array($arrChanges) && in_array(_dbprefix_."changelog", $this->objDB->getTables())) {
             foreach($arrChanges as $arrChangeSet) {
 
@@ -97,10 +196,13 @@ class class_module_system_changelog extends class_model implements interface_mod
                 if($strNewvalue instanceof class_date)
                     $strNewvalue= $strNewvalue->getLongTimestamp();
 
+                if($bitDeleteAction || ($bitDeleteAction === null && $strAction == self::$STR_ACTION_DELETE))
+                    $strNewvalue = "";
+
                 if(!$bitForceEntry && ($strOldvalue == $strNewvalue) )
                     continue;
 
-                class_logger::getInstance()->addLogRow("change in class ".$objSourceModel->getClassname()."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60), class_logger::$levelInfo);
+                class_logger::getInstance()->addLogRow("change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60), class_logger::$levelInfo);
 
                 $strQuery = "INSERT INTO "._dbprefix_."changelog
                      (change_id,
@@ -121,7 +223,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $objSourceModel->getSystemid(),
                     $objSourceModel->getPrevid(),
                     $this->objSession->getUserID(),
-                    $objSourceModel->getClassname(),
+                    get_class($objSourceModel),
                     $strAction,
                     $strProperty,
                     $strOldvalue,
@@ -140,7 +242,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      * @param string $strSystemidFilter
      * @param null|int $intStart
      * @param null|int $intEnd
-     * @return class_changelog_container
+     * @return class_changelog_container[]
      */
     public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
         $strQuery = "SELECT *
@@ -185,11 +287,11 @@ class class_module_system_changelog extends class_model implements interface_mod
      /**
      * Creates the list of logentries, based on a flexible but specific filter-list
      *
-     * @param type $strSystemidFilter
-     * @param type $strActionFilter
-     * @param type $strPropertyFilter
-     * @param type $strOldvalueFilter
-     * @param type $strNewvalueFilter
+     * @param string $strSystemidFilter
+     * @param string $strActionFilter
+     * @param string $strPropertyFilter
+     * @param string $strOldvalueFilter
+     * @param string $strNewvalueFilter
      * @return class_changelog_container
      */
     public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
