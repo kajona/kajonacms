@@ -10,7 +10,7 @@
 /**
  * Class providing an installer for the rating module
  *
- * @package modul_rating
+ * @package module_rating
  */
 class class_installer_rating extends class_installer_base implements interface_installer {
 

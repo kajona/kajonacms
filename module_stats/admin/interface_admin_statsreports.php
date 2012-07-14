@@ -10,7 +10,7 @@
 /**
  * Interface for the admin-plugins of the stats-reports
  *
- * @package modul_stats
+ * @package module_stats
  */
 interface interface_admin_statsreports {
 

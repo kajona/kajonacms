@@ -9,7 +9,7 @@
 
 /**
  * Does an absolute, linear rating based on the current rating-value
- * @package modul_rating
+ * @package module_rating
  */
 class class_module_rating_algo_absolute implements interface_module_rating_algo {
 	
