@@ -9,22 +9,22 @@
 
 
 //Tables & rows of page-elements
-$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_title";
-$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_content";
-$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_link";
-$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_image";
-$arrSearch["pages_elements"][_dbprefix_."element_image"][] = "image_title";
-$arrSearch["pages_elements"][_dbprefix_."element_image"][] = "image_image";
-$arrSearch["pages_elements"][_dbprefix_."element_image"][] = "image_link";
-$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char1";
-$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char2";
-$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char3";
-$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "text";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_title LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_content LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_link LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_image LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_image"][] = "image_title LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_image"][] = "image_image LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_image"][] = "image_link LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char1 LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char2 LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char3 LIKE ?";
+$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "text LIKE ?";
 
 //Pagedata
-$arrSearch["page"][_dbprefix_."page"][] = "page_name";
-$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_description";
-$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_keywords";
-$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_browsername";
+$arrSearch["page"][_dbprefix_."page"][] = "page_name LIKE ?";
+$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_description LIKE ?";
+$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_keywords LIKE ?";
+$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_browsername LIKE ?";
 
 

@@ -10,9 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_downloads_search_resultpage_"]   = "Treffer-Seite:";
-$lang["_gallery_search_resultpage_"]     = "Treffer-Seite:";
-$lang["_gallery_search_resultpage_hint"] = "Auf dieser Seite erfolgt die Detailansicht der Bilder, die in der Suche gefunden wurden.";
 $lang["_mediamanager_default_filesrepoid_"] = "Standard Dateien-Repository:";
 $lang["_mediamanager_default_imagesrepoid_"] = "Standard Bilder-Repository:";
 $lang["actionEditImage"]                 = "Bild bearbeiten";

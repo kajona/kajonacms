@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_guestbook_search_resultpage_"]   = "Result page:";
-$lang["_guestbook_search_resultpage_hint"] = "On this page, the posts found by the search, are linked to.";
 $lang["actionNew"]                       = "New guestbook";
 $lang["actionViewGuestbook"]             = "View guestbook";
 $lang["delete_question"]                 = "Do you really want to delete the guestbook &quot;<b>%%element_name%%</b>&quot; with all entries?";

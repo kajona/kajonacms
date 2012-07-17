@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_guestbook_search_resultpage_"]   = "Träffsida:";
-$lang["_guestbook_search_resultpage_hint"] = "Träffar som resulterat från en sökning i gästboken är länkade till denna sida.";
 $lang["actionNew"]                       = "Ny gästbok";
 $lang["actionViewGuestbook"]             = "Visa gästboken";
 $lang["delete_question"]                 = "Vill du verkligen radera gästboken  &quot;<b>%%element_name%%</b>&quot;med alla inlägg.";

@@ -84,3 +84,7 @@ Versioning as provided by interface_versionable and class_module_system_changelo
 have to be marked with the annotation @versionable. By default, the property is added by its' name. If necessary, an alias may be used
 by adding the name inline with the annotation, e.g. @versionable name1. The old- and new-values are determined automatically.
 The interface-methods have been renamed to be more specific, please update your implementations.
+
+Module Search:
+There are now two separated plugin-structures: The portal searchplugins and the admin searchplugins. In consequence, the interface and plugins
+need the postfix _admin / _portal.

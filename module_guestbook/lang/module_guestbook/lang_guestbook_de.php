@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_guestbook_search_resultpage_"]   = "Treffer-Seite:";
-$lang["_guestbook_search_resultpage_hint"] = "Auf diese Seite verlinken die Treffer der Suche, die in Gästebuch-Posts gefunden wurden.";
 $lang["actionNew"]                       = "Gästebuch anlegen";
 $lang["actionViewGuestbook"]             = "Gästebuch anzeigen";
 $lang["delete_question"]                 = "Möchten Sie das Gästebuch &quot;<b>%%element_name%%</b>&quot; mit allen Einträgen wirklich löschen?";

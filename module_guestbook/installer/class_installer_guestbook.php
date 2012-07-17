@@ -59,10 +59,6 @@ class class_installer_guestbook extends class_installer_base  {
 		//register the module
 		$this->registerModule("guestbook", _guestbook_module_id_, "class_module_guestbook_portal.php", "class_module_guestbook_admin.php", $this->objMetadata->getStrVersion() , true);
 
-		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_module_system_setting::$int_TYPE_PAGE, _guestbook_module_id_);
-
-
         //Table for page-element
         $strReturn .= "Installing guestbook-element table...\n";
 
@@ -135,6 +131,9 @@ class class_installer_guestbook extends class_installer_base  {
             $this->objDB->_pQuery($strQuery, array( 'class_module_guestbook_post', $arrOneRow["system_id"] ) );
         }
 
+        $strReturn .= "Removing old constants\n";
+        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+        $this->objDB->_pQuery($strQuery, array("_guestbook_search_resultpage_"));
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.4.9");

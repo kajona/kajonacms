@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
+*	$Id$                          *
 ********************************************************************************************************/
 
 /**
@@ -202,6 +202,26 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         $arrRow  = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
+
+    /**
+     * Searches the repository-id for the current file.
+     *
+     * @return string
+     */
+    public function getRepositoryId() {
+
+        $strPrevid = $this->getPrevId();
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
+        while($arrRow["COUNT(*)"] == 0 && $strPrevid != "" && $strPrevid != "0") {
+
+            $objFile = new class_module_mediamanager_file($strPrevid);
+            $strPrevid = $objFile->getPrevId();
+            $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
+        }
+
+        return $strPrevid;
+    }
+
 
 
     /**

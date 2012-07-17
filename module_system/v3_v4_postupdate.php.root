@@ -231,13 +231,6 @@ class class_v3_v4_postupdate {
         $this->objDB->_pQuery("DROP TABLE "._dbprefix_."gallery_pic", array());
         $this->removeSetting("_gallery_search_resultpage_");
 
-        echo "updating setting _gallery_search_resultpage_\n";
-        $objSetting = class_module_system_setting::getConfigByName("_gallery_search_resultpage_");
-        if($objSetting != null) {
-            $objSetting->setIntModule(_mediamanager_module_id_);
-            $objSetting->updateObjectToDb();
-        }
-
         return true;
     }
 

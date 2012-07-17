@@ -10,9 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_downloads_search_resultpage_"]   = "Страница с результатом:";
-$lang["_gallery_search_resultpage_"]     = "Страница с результатом:";
-$lang["_gallery_search_resultpage_hint"] = "Эта страница отображает список изображений, найденных при поиске";
 $lang["actionLogbook"]                   = "Системный журнал";
 $lang["actionLogbookFlush"]              = "Очистить системный журнал";
 $lang["actionMasssync"]                  = "Все синхронезировать";

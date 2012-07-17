@@ -77,14 +77,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
             true, "",
             "class_module_mediamanager_admin_xml.php");
 
-		$strReturn .= "Registering system-constants...\n";
-
-        if(class_module_system_setting::getConfigByName("_gallery_search_resultpage_") === null)
-		    $this->registerConstant("_gallery_search_resultpage_", "gallery", class_module_system_setting::$int_TYPE_PAGE, _mediamanager_module_id_);
-
-        $this->registerConstant("_downloads_search_resultpage_", "downloads", class_module_system_setting::$int_TYPE_PAGE, _mediamanager_module_id_);
-
-
         $this->registerConstant("_mediamanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
         $this->registerConstant("_mediamanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
 

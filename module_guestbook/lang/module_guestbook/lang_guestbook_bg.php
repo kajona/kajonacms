@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["_guestbook_search_resultpage_"]   = "Страница с резултати:";
-$lang["_guestbook_search_resultpage_hint"] = "В тази страница са постовете намерени чрез 'търсене', съдържат връзки.";
 $lang["actionNew"]                       = "Нова книга за гости";
 $lang["actionViewGuestbook"]             = "Прегледай книга за гости";
 $lang["delete_question"]                 = "Наистина ли искате да премахнете книгата за гости &quot;<b>%%element_name%%</b>&quot; с всичките и записи?";
