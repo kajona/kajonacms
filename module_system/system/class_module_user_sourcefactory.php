@@ -56,7 +56,7 @@ class class_module_user_sourcefactory {
      * Returns a list of groups matching the passed query-term.
      *
      * @param string $strName
-     * @return class_module_user_group or null
+     * @return class_module_user_group[]
      */
     public function getGrouplistByQuery($strName) {
 
@@ -171,14 +171,16 @@ class class_module_user_sourcefactory {
         return $objPlainUser;
 	}
 
-	/**
+    /**
      * Tries to resolve the subsystem identified by the passed name.
-	 * Returns an instance of the usersource identified by its classname.
+     * Returns an instance of the usersource identified by its classname.
      * The classname is build by the schema class_usersources_source_$strName
      *
-	 * @param string $strName
+     * @param string $strName
+     *
+     * @throws class_exception
      * @return interface_usersources_usersource or null if not existing, an exception is raised, too.
-	 */
+     */
 	public function getUsersource($strName) {
         $strName = trim($strName);
         if($strName == "")
@@ -196,7 +198,7 @@ class class_module_user_sourcefactory {
 
     /**
      * Returns an array of all user-subsystem-identifiers available.
-     * @return string
+     * @return string[]
      */
     public function getArrUsersources() {
         return $this->arrSubsystemsAvailable;

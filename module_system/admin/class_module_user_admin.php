@@ -298,6 +298,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     /**
      * Negates the status of an existing user
      *
+     * @throws class_exception
      * @return string "" in case of success
      * @permissions edit
      */
@@ -537,7 +538,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             return $this->actionNewUser($this->getParam("mode"), $objForm);
         }
 
-
+        $objUser = null;
         if($this->getParam("mode") == "new") {
 
             //create a new user and pass all relevant data
@@ -810,11 +811,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
 
     /**
-	 * Deletes a membership
-	 *
-	 * @return string "" in case of success
+     * Deletes a membership
+     *
+     * @throws class_exception
+     * @return string "" in case of success
      * @permissions delete
-	 */
+     */
     protected function actionGroupMemberDelete() {
         $strReturn = "";
         $objGroup = new class_module_user_group($this->getParam("groupid"));
@@ -829,11 +831,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
 
     /**
-	 * Deletes a group and all memberships
-	 *
-	 * @return void
+     * Deletes a group and all memberships
+     *
+     * @throws class_exception
+     * @return void
      * @permissions delete
-	 */
+     */
     protected function actionGroupDelete() {
         //Delete memberships
         $objGroup = new class_module_user_group($this->getSystemid());
@@ -1132,7 +1135,19 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrElements = array_merge($arrElements, $objSource->getGrouplistByQuery($strFilter));
         }
 
-        usort($arrElements, array("class_module_user_admin", "sortUserAndGroups"));
+        usort($arrElements, function ($objA, $objB) {
+            if($objA instanceof class_module_user_user)
+                $strA = $objA->getStrUsername();
+            else
+                $strA = $objA->getStrName();
+
+            if($objB instanceof class_module_user_user)
+                $strB = $objB->getStrUsername();
+            else
+                $strB = $objB->getStrName();
+
+            return strcmp(strtolower($strA), strtolower($strB));
+        });
 
         $strReturn .= "<result>\n";
         foreach ($arrElements as $objOneElement) {
@@ -1159,18 +1174,4 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 		return $strReturn;
     }
 
-
-    public static function sortUserAndGroups($objA, $objB) {
-        if($objA instanceof class_module_user_user)
-            $strA = $objA->getStrUsername();
-        else
-            $strA = $objA->getStrName();
-
-        if($objB instanceof class_module_user_user)
-            $strB = $objB->getStrUsername();
-        else
-            $strB = $objB->getStrName();
-
-        return strcmp(strtolower($strA), strtolower($strB));
-    }
 }
