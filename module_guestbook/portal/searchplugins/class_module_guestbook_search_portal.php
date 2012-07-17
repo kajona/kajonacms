@@ -102,7 +102,7 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
                             //calculate pv
                             $intPvPos = ceil($intCounter/$intAmount);
                             $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["hits"] = 1;
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")."&pv=".$intPvPos);
+                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos);
                             $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["pagename"] = $arrOnePage["page_name"];
                             $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["description"] = uniStrTrim($objPost->getStrGuestbookPostText(), 100);
                         }

@@ -83,7 +83,7 @@ class class_module_mediamanager_search_portal implements interface_search_plugin
                             $this->arrHits[$objFile->getSystemid().$arrOnePage["page_id"]]["hits"]++;
                         else {
                             $this->arrHits[$objFile->getSystemid().$arrOnePage["page_id"]]["hits"] = 1;
-                            $this->arrHits[$objFile->getSystemid().$arrOnePage["page_id"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $objFile->getStrDisplayName(), "mediaFolder", "&highlight=".html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"), $objFile->getPrevId(), "", "", $objFile->getStrDisplayName());
+                            $this->arrHits[$objFile->getSystemid().$arrOnePage["page_id"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $objFile->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")), $objFile->getPrevId(), "", "", $objFile->getStrDisplayName());
                             $this->arrHits[$objFile->getSystemid().$arrOnePage["page_id"]]["pagename"] = $arrOnePage["page_name"];
                             $this->arrHits[$objFile->getSystemid().$arrOnePage["page_id"]]["description"] = uniStrTrim($objFile->getStrDescription(), 150);
 					    }

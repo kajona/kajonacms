@@ -118,7 +118,7 @@ class class_module_postacomment_search_portal implements interface_search_plugin
 
                         }
                         $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["hits"] = 1;
-                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["pagelink"] = getLinkPortal($arrOnePost["page_name"], "", "_self", $arrOnePost["page_name"], "", "&highlight=".html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")."&pvPAC=".$intPvPos);
+                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["pagelink"] = getLinkPortal($arrOnePost["page_name"], "", "_self", $arrOnePost["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pvPAC=".$intPvPos);
                         $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["pagename"] = $arrOnePost["page_name"];
                         $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["description"] = uniStrTrim($objComment->getStrComment(), 100);
                     }

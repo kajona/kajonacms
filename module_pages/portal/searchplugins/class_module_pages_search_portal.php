@@ -114,7 +114,7 @@ class class_module_pages_search_portal extends class_portal implements interface
 					else {
 						$this->arrHits[$arrOnePage["page_name"]]["hits"] = 1;
 						$strText = $arrOnePage["pageproperties_browsername"] != "" ? $arrOnePage["pageproperties_browsername"] : $arrOnePage["page_name"];
-						$this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"));
+						$this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")));
 						$this->arrHits[$arrOnePage["page_name"]]["pagename"] = $arrOnePage["page_name"];
 						$this->arrHits[$arrOnePage["page_name"]]["description"] = uniStrTrim($arrOnePage["pageproperties_description"], 200);
 					}
@@ -170,7 +170,7 @@ class class_module_pages_search_portal extends class_portal implements interface
     					else {
     						$this->arrHits[$arrOnePage["page_name"]]["hits"] = 1;
     						$strText = $arrOnePage["pageproperties_browsername"] != "" ? $arrOnePage["pageproperties_browsername"] : $arrOnePage["page_name"];
-                            $this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"));
+                            $this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")));
     						$this->arrHits[$arrOnePage["page_name"]]["pagename"] = $arrOnePage["page_name"];
     						$this->arrHits[$arrOnePage["page_name"]]["description"] = uniStrTrim($arrOnePage["pageproperties_description"], 200);
     					}
@@ -219,7 +219,7 @@ class class_module_pages_search_portal extends class_portal implements interface
     					else {
     						$this->arrHits[$arrOnePage["page_name"]]["hits"] = 1;
     						$strText = $arrOnePage["pageproperties_browsername"] != "" ? $arrOnePage["pageproperties_browsername"] : $arrOnePage["page_name"];
-                            $this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"));
+                            $this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")));
     						$this->arrHits[$arrOnePage["page_name"]]["pagename"] = $arrOnePage["page_name"];
     						$this->arrHits[$arrOnePage["page_name"]]["description"] = $arrOnePage["pageproperties_description"];
     					}
