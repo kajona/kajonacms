@@ -15,6 +15,9 @@
  * @author sidler@mulchprod.de
  */
 class class_module_search_portal_xml extends class_portal implements interface_xml_portal {
+
+    private static $INT_MAX_NR_OF_RESULTS = 30;
+
 	/**
 	 * Constructor
 	 */
@@ -42,7 +45,7 @@ class class_module_search_portal_xml extends class_portal implements interface_x
 		$arrResult = array();
 	    $objSearchCommons = new class_module_search_commons();
 	    if($strSearchterm != "") {
-	        $arrResult = $objSearchCommons->doSearch($strSearchterm);
+	        $arrResult = $objSearchCommons->doPortalSearch($strSearchterm);
 	    }
 
 	    $strReturn .= $this->createSearchXML($strSearchterm, $arrResult);
@@ -62,8 +65,13 @@ class class_module_search_portal_xml extends class_portal implements interface_x
 
 
         //And now all results
+        $intI = 0;
         $strReturn .="    <resultset>\n";
         foreach($arrResults as $arrOneResult) {
+
+            if(++$intI > self::$INT_MAX_NR_OF_RESULTS)
+                break;
+
             //create a correct link
             if(!isset($arrOneResult["pagelink"]))
 				$arrOneResult["pagelink"] = getLinkPortal($arrOneResult["pagename"], "", "_self", $arrOneResult["pagename"], "", "&highlight=".$strSearchterm."#".$strSearchterm);

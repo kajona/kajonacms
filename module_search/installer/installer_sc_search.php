@@ -70,7 +70,7 @@ class class_installer_sc_search implements interface_sc_installer  {
                                         search_amount = ?,
                                         search_page = ?
                                     WHERE content_id = ?";
-                    if($this->objDB->_pQuery($strQuery, array("search_results.tpl", 6, "", $strElementId)))
+                    if($this->objDB->_pQuery($strQuery, array("search_ajax.tpl", 0, "", $strElementId)))
                         $strReturn .= "Search element created.\n";
                     else
                         $strReturn .= "Error creating search element.\n";
