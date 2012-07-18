@@ -16,6 +16,10 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
 
     private $arrTableConfig = array();
     private $strSearchterm;
+
+    /**
+     * @var class_search_result[]
+     */
     private $arrHits = array();
 
     private $objDB;
@@ -40,7 +44,7 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
         if(class_module_system_module::getModuleByName("guestbook") != null)
             $this->searchGuestbook();
 
-        return $this->arrHits;
+        return array_values($this->arrHits);
     }
 
 
@@ -85,8 +89,9 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
                         if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "" || !$objPost->rightView())
                             continue;
 
-                        if(isset($this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["hits"])) {
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["hits"]++;
+                        if(isset($this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]])) {
+                            $objResult = $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]];
+                            $objResult->setIntHits($objResult->getIntHits()+1);
                         }
                         else {
 
@@ -101,10 +106,15 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
                             }
                             //calculate pv
                             $intPvPos = ceil($intCounter/$intAmount);
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["hits"] = 1;
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos);
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["pagename"] = $arrOnePage["page_name"];
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]]["description"] = uniStrTrim($objPost->getStrGuestbookPostText(), 100);
+
+                            $objResult = new class_search_result();
+                            $objResult->setStrResultId($objPost->getSystemid().$arrOnePage["page_id"]);
+                            $objResult->setStrSystemid($objPost->getSystemid());
+                            $objResult->setStrPagelink(getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
+                            $objResult->setStrPagename($arrOnePage["page_name"]);
+                            $objResult->setStrDescription($objPost->getStrGuestbookPostText());
+
+                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]] = $objResult;
                         }
                     }
                 }

@@ -15,7 +15,7 @@
         strLastQuery : "",
 
         queryBackend : function() {
-            var strCurrentQuery = $("#resultSearchterm").val();
+            var strCurrentQuery = $("#resultSearchterm").val().trim();
             var searchRunning = false;
             var post_target = KAJONA_WEBPATH+"/xml.php?module=search&action=doSearch";
             var post_data = {

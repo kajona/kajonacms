@@ -27,7 +27,7 @@ interface interface_search_plugin_portal {
      * This method is invoked from outside, starts to search for the passed term
      * and returns the results
      *
-     * @return array
+     * @return class_search_result[]
      */
     public function doSearch();
 

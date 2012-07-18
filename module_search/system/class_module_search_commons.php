@@ -37,38 +37,21 @@ class class_module_search_commons extends class_model implements interface_model
     }
 
     /**
-     * Checks, if a page is valid to be listed in the seach-resultset
-     *
-     * @param string $strPagename
-     * @return bool
-     */
-    private function isPageValid($strPagename) {
-        $objPage = class_module_pages_page::getPageByName($strPagename);
-
-        return (validateSystemid($objPage->getSystemid()) && $objPage->getIntRecordStatus() == 1 && $objPage->rightView());
-    }
-
-
-    /**
      * Calls the single search-functions, sorts the results and creates the output.
      * Method for portal-searches.
      *
      * @param $strSearchterm
      *
-     * @return array
+     * @return class_search_result[]
      */
 	public function doPortalSearch($strSearchterm) {
-
         $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
-
 	    if(uniStrlen($strSearchterm) == 0)
 	       return array();
 	       
 	    //log the query
 	    class_module_search_log::generateLogEntry($strSearchterm);
 
-	    $arrSearchtermPlugin = array();
-	    $arrSearchtermPlugin[] = $strSearchterm;
         $arrHits = array();
 
 		//Search for search-plugins
@@ -80,43 +63,48 @@ class class_module_search_commons extends class_model implements interface_model
                 /** @var $objPlugin interface_search_plugin_portal */
 		        $objPlugin = new $strClassname($strSearchterm);
 		        if($objPlugin instanceof interface_search_plugin_portal) {
-                    $arrTempResults = $objPlugin->doSearch();
-
-                    //merge found hits with current hits
-                    foreach($arrTempResults as $strKey => $arrOneResult) {
-                        if(isset($arrHits[$strKey])) {
-                            //ok, merge in
-                            $arrHits[$strKey]["hits"]++;
-                        }
-                        else {
-                            $arrHits[$strKey] = $arrOneResult;
-                        }
-                    }
+                    $arrHits = array_merge($arrHits, $objPlugin->doSearch());
 		        }
 		    }
 		}
 
-		//Sort the hits
-		$arrHitsSorted = array();
-		foreach($arrHits as $arrOneModule) {
-		    //Before returning the page, check if its disabled & the rights are correct
-            if(!$this->isPageValid($arrOneModule["pagename"]))
-		        continue;
 
-			if(!isset($arrHitsSorted[(string)$arrOneModule["hits"]]))
-				$arrHitsSorted[(string)$arrOneModule["hits"]] = $arrOneModule;
-			else {
-				$intTemp = $arrOneModule["hits"]+0.001;
-				while(isset($arrHitsSorted[(string)$intTemp]))
-					$intTemp += 0.001;
-				$arrHitsSorted[(string)$intTemp] = $arrOneModule;
-			}
-		}
-		//Sort by relevance
-		krsort($arrHitsSorted);
+        $arrHits = $this->mergeDuplicates($arrHits);
 
-		return $arrHitsSorted;
+        //sort by hits
+        uasort($arrHits, function(class_search_result $objA, class_search_result $objB) {
+            return $objA->getIntHits() < $objB->getIntHits();
+        });
+
+
+
+		return $arrHits;
 
 	}
+
+    /**
+     * Merges duplicates in the passed array.
+     *
+     * @param class_search_result[] $arrResults
+     * @return class_search_result[]
+     */
+    private function mergeDuplicates($arrResults) {
+        /** @var $arrReturn class_search_result[] */
+        $arrReturn = array();
+
+        foreach($arrResults as $objOneResult) {
+
+            if(isset($arrReturn[$objOneResult->getStrSortHash()])) {
+                $objResult = $arrReturn[$objOneResult->getStrSortHash()];
+                $objResult->setIntHits($objResult->getIntHits()+1);
+            }
+            else {
+                $arrReturn[$objOneResult->getStrSortHash()] = $objOneResult;
+            }
+        }
+
+        return $arrReturn;
+
+    }
 
 }

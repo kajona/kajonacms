@@ -16,6 +16,10 @@ class class_module_postacomment_search_portal implements interface_search_plugin
 
     private $arrTableConfig = array();
     private $strSearchterm;
+
+    /**
+     * @var class_search_result
+     */
     private $arrHits = array();
 
     private $objDB;
@@ -40,7 +44,7 @@ class class_module_postacomment_search_portal implements interface_search_plugin
         if(class_module_system_module::getModuleByName("postacomment") != null)
             $this->searchPostacomment();
 
-        return $this->arrHits;
+        return array_values($this->arrHits);
     }
 
 
@@ -97,8 +101,9 @@ class class_module_postacomment_search_portal implements interface_search_plugin
                     if(!isset($arrOnePost["page_name"]) || $arrOnePost["page_name"] == "" || !$objComment->rightView())
                         continue;
 
-                    if(isset($this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["hits"])) {
-                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["hits"]++;
+                    if(isset($this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]])) {
+                        $objResult = $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]];
+                        $objResult->setIntHits($objResult->getIntHits()+1);
                     }
                     else {
 
@@ -113,14 +118,18 @@ class class_module_postacomment_search_portal implements interface_search_plugin
                                 if($objOnePostForPage->getSystemid() == $objComment->getSystemid())
                                    break;
                             }
-                        //calculate pv
-                        $intPvPos = ceil($intCounter/$intAmount);
-
+                            //calculate pv
+                            $intPvPos = ceil($intCounter/$intAmount);
                         }
-                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["hits"] = 1;
-                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["pagelink"] = getLinkPortal($arrOnePost["page_name"], "", "_self", $arrOnePost["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pvPAC=".$intPvPos);
-                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["pagename"] = $arrOnePost["page_name"];
-                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]]["description"] = uniStrTrim($objComment->getStrComment(), 100);
+
+                        $objResult = new class_search_result();
+                        $objResult->setStrResultId($objComment->getSystemid().$arrOnePost["page_id"]);
+                        $objResult->setStrSystemid($objComment->getSystemid());
+                        $objResult->setStrPagelink(getLinkPortal($arrOnePost["page_name"], "", "_self", $arrOnePost["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pvPAC=".$intPvPos));
+                        $objResult->setStrPagename($arrOnePost["page_name"]);
+                        $objResult->setStrDescription($objComment->getStrComment());
+
+                        $this->arrHits[$objComment->getSystemid().$arrOnePost["page_id"]] = $objResult;
                     }
                 }
             }

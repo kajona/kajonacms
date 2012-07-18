@@ -54,7 +54,13 @@ class class_module_search_portal_xml extends class_portal implements interface_x
 	}
 
 
-	private function createSearchXML($strSearchterm, $arrResults) {
+    /**
+     * @param $strSearchterm
+     * @param class_search_result[] $arrResults
+     *
+     * @return string
+     */
+    private function createSearchXML($strSearchterm, $arrResults) {
         $strReturn = "";
 
         $strReturn .=
@@ -67,20 +73,21 @@ class class_module_search_portal_xml extends class_portal implements interface_x
         //And now all results
         $intI = 0;
         $strReturn .="    <resultset>\n";
-        foreach($arrResults as $arrOneResult) {
+        foreach($arrResults as $objOneResult) {
 
             if(++$intI > self::$INT_MAX_NR_OF_RESULTS)
                 break;
 
             //create a correct link
-            if(!isset($arrOneResult["pagelink"]))
-				$arrOneResult["pagelink"] = getLinkPortal($arrOneResult["pagename"], "", "_self", $arrOneResult["pagename"], "", "&highlight=".$strSearchterm."#".$strSearchterm);
+            if($objOneResult->getStrPagelink() != "")
+				$objOneResult->setStrPagelink(getLinkPortal($objOneResult->getStrPagename(), "", "_self", $objOneResult->getStrPagename(), "", "&highlight=".$strSearchterm."#".$strSearchterm));
 
             $strReturn .=
              "        <item>\n"
-		    ."            <pagename>".$arrOneResult["pagename"]."</pagename>\n"
-		    ."            <pagelink>".$arrOneResult["pagelink"]."</pagelink>\n"
-		    ."            <description>".xmlSafeString($arrOneResult["description"])."</description>\n"
+		    ."            <pagename>".$objOneResult->getStrPagename()."</pagename>\n"
+		    ."            <pagelink>".$objOneResult->getStrPagelink()."</pagelink>\n"
+		    ."            <score>".$objOneResult->getIntHits()."</score>\n"
+		    ."            <description>".xmlSafeString(uniStrTrim($objOneResult->getStrDescription(), 200))."</description>\n"
 		    ."        </item>\n";
         }
 
