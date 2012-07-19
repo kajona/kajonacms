@@ -61,7 +61,7 @@ class class_classloader {
         $this->strModulesCacheFile          = _realpath_."/project/temp/modules.cache";
         $this->strClassesCacheFile          = _realpath_."/project/temp/classes.cache";
 
-        if(is_file($this->strModulesCacheFile)) {
+        if(is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
             $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
             $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
         }
@@ -151,6 +151,7 @@ class class_classloader {
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/statsreports/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/systemtasks/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/widgets/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/searchplugins/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/elements/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/searchplugins/"));
@@ -170,7 +171,7 @@ class class_classloader {
      * Loads all classes in a single folder, but traversing each module available.
      * Internal helper.
      * @param $strFolder
-     * @return String[]
+     * @return string[]
      */
     private function getClassesInFolder($strFolder) {
 
@@ -209,7 +210,10 @@ class class_classloader {
 
     }
 
-
+    /**
+     * Returns the list of modules index by the classloader, so residing under /core
+     * @return string[]
+     */
     public function getArrModules() {
         return $this->arrModules;
     }

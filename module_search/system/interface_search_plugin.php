@@ -4,7 +4,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: interface_search_plugin_portal.php 3530 2011-01-06 12:30:26Z sidler $                                  *
+*	$Id: interface_search_plugin.php 3530 2011-01-06 12:30:26Z sidler $                                  *
 ********************************************************************************************************/
 
 /**
@@ -13,7 +13,7 @@
  * @package module_search
  * @author sidler@mulchprod.de
  */
-interface interface_search_plugin_portal {
+interface interface_search_plugin {
 
     /**
      * Constructor, receiving the term to search for

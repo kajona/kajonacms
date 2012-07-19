@@ -52,21 +52,55 @@ class class_module_search_commons extends class_model implements interface_model
 	    //log the query
 	    class_module_search_log::generateLogEntry($strSearchterm);
 
-        $arrHits = array();
-
 		//Search for search-plugins
         $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins", array(".php"));
-		foreach($arrSearchPlugins as $strOnePlugin) {
-		    //Check, if not the interface
-		    if($strOnePlugin != "interface_search_plugin_portal.php" && uniStrpos($strOnePlugin, "searchdef_pages_" ) === false) {
-		        $strClassname = str_replace(".php", "", $strOnePlugin);
-                /** @var $objPlugin interface_search_plugin_portal */
-		        $objPlugin = new $strClassname($strSearchterm);
-		        if($objPlugin instanceof interface_search_plugin_portal) {
+        return $this->doSearch($strSearchterm, $arrSearchPlugins);
+
+	}
+
+
+
+    /**
+     * Calls the single search-functions, sorts the results and creates the output.
+     * Method for portal-searches.
+     *
+     * @param $strSearchterm
+     *
+     * @return class_search_result[]
+     */
+    public function doAdminSearch($strSearchterm) {
+        $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
+        if(uniStrlen($strSearchterm) == 0)
+            return array();
+
+        //Search for search-plugins
+        $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/searchplugins", array(".php"));
+        return $this->doSearch($strSearchterm, $arrSearchPlugins);
+
+    }
+
+    /**
+     * Internal wrapper, triggers the final search.
+     *
+     * @param $strSearchterm
+     * @param $arrSearchPlugins
+     *
+     * @return array|class_search_result[]
+     */
+    private function doSearch($strSearchterm, $arrSearchPlugins) {
+        $arrHits = array();
+
+        foreach($arrSearchPlugins as $strOnePlugin) {
+            //Check, if not the interface
+            if(uniStrpos($strOnePlugin, "searchdef_pages_" ) === false) {
+                $strClassname = str_replace(".php", "", $strOnePlugin);
+                /** @var $objPlugin interface_search_plugin */
+                $objPlugin = new $strClassname($strSearchterm);
+                if($objPlugin instanceof interface_search_plugin) {
                     $arrHits = array_merge($arrHits, $objPlugin->doSearch());
-		        }
-		    }
-		}
+                }
+            }
+        }
 
 
         $arrHits = $this->mergeDuplicates($arrHits);
@@ -78,9 +112,8 @@ class class_module_search_commons extends class_model implements interface_model
 
 
 
-		return $arrHits;
-
-	}
+        return $arrHits;
+    }
 
     /**
      * Merges duplicates in the passed array.

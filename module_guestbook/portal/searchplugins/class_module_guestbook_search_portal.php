@@ -11,10 +11,10 @@
  * Search plugin of the guestbook-module.
  *
  * @package module_guestbook
+ * @author sidler@mulchprod.de
  */
-class class_module_guestbook_search_portal implements interface_search_plugin_portal  {
+class class_module_guestbook_search_portal implements interface_search_plugin  {
 
-    private $arrTableConfig = array();
     private $strSearchterm;
 
     /**
@@ -27,15 +27,6 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
     public function  __construct($strSearchterm) {
 
         $this->strSearchterm = $strSearchterm;
-        $arrSearch = array();
-
-        //Downloads
-        $arrSearch["guestbook"] = array();
-		$arrSearch["guestbook"][_dbprefix_."guestbook_post"][] = "guestbook_post_name LIKE ?";
-		$arrSearch["guestbook"][_dbprefix_."guestbook_post"][] = "guestbook_post_text LIKE ?";
-
-		$this->arrTableConfig = $arrSearch;
-
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
@@ -54,72 +45,71 @@ class class_module_guestbook_search_portal implements interface_search_plugin_po
      */
 	private function searchGuestbook() {
 
-		foreach($this->arrTableConfig["guestbook"] as $strTable => $arrColumnConfig) {
-			$arrWhere = array();
-            $arrParams = array();
+        $arrWhere = array(
+            "guestbook_post_name LIKE ?",
+            "guestbook_post_text LIKE ?"
+        );
+        $arrParams = array(
+            "%".$this->strSearchterm."%",
+            "%".$this->strSearchterm."%"
+        );
 
-			//Build an or-statemement out of the columns
-			foreach($arrColumnConfig as $strColumn) {
-                $arrWhere[] = $strColumn;
-                $arrParams[] = "%".$this->strSearchterm."%";
-			}
-			$strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
+        $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
-			//Query bauen
-			$strQuery ="SELECT system_id
-			              FROM ".$strTable.",
-			 		           "._dbprefix_."system
-			             WHERE ".$strWhere."
-			 	           AND system_id  = guestbook_post_id
-			 		       AND system_status = 1";
+        //Query bauen
+        $strQuery ="SELECT system_id
+                      FROM "._dbprefix_."guestbook_post,
+                           "._dbprefix_."system
+                     WHERE ".$strWhere."
+                       AND system_id  = guestbook_post_id
+                       AND system_status = 1";
 
-			$arrPosts = $this->objDB->getPArray($strQuery, $arrParams);
+        $arrPosts = $this->objDB->getPArray($strQuery, $arrParams);
 
-			//Register found posts
-			if(count($arrPosts) > 0) {
+        //Register found posts
+        if(count($arrPosts) > 0) {
 
-				foreach($arrPosts as $arrOnePost) {
+            foreach($arrPosts as $arrOnePost) {
 
-                    $objPost = new class_module_guestbook_post($arrOnePost["system_id"]);
-                    $arrDetails = $this->getElementData($objPost);
+                $objPost = new class_module_guestbook_post($arrOnePost["system_id"]);
+                $arrDetails = $this->getElementData($objPost);
 
-                    foreach($arrDetails as $arrOnePage) {
+                foreach($arrDetails as $arrOnePage) {
 
-                        //check, if the post is available on a page using the current language
-                        if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "" || !$objPost->rightView())
-                            continue;
+                    //check, if the post is available on a page using the current language
+                    if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "" || !$objPost->rightView())
+                        continue;
 
-                        if(isset($this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]])) {
-                            $objResult = $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]];
-                            $objResult->setIntHits($objResult->getIntHits()+1);
+                    if(isset($this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]])) {
+                        $objResult = $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]];
+                        $objResult->setIntHits($objResult->getIntHits()+1);
+                    }
+                    else {
+
+                        //search pv position
+                        $intAmount = $arrOnePage["guestbook_amount"];
+                        $arrPostsInGB = class_module_guestbook_post::getPosts($objPost->getPrevId(), true);
+                        $intCounter = 0;
+                        foreach($arrPostsInGB as $objOnePostInGb) {
+                            $intCounter++;
+                            if($objOnePostInGb->getSystemid() == $objPost->getSystemid())
+                               break;
                         }
-                        else {
+                        //calculate pv
+                        $intPvPos = ceil($intCounter/$intAmount);
 
-                            //search pv position
-                            $intAmount = $arrOnePage["guestbook_amount"];
-                            $arrPostsInGB = class_module_guestbook_post::getPosts($objPost->getPrevId(), true);
-                            $intCounter = 0;
-                            foreach($arrPostsInGB as $objOnePostInGb) {
-                                $intCounter++;
-                                if($objOnePostInGb->getSystemid() == $objPost->getSystemid())
-                                   break;
-                            }
-                            //calculate pv
-                            $intPvPos = ceil($intCounter/$intAmount);
+                        $objResult = new class_search_result();
+                        $objResult->setStrResultId($objPost->getSystemid().$arrOnePage["page_id"]);
+                        $objResult->setStrSystemid($objPost->getSystemid());
+                        $objResult->setStrPagelink(getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
+                        $objResult->setStrPagename($arrOnePage["page_name"]);
+                        $objResult->setStrDescription($objPost->getStrGuestbookPostText());
 
-                            $objResult = new class_search_result();
-                            $objResult->setStrResultId($objPost->getSystemid().$arrOnePage["page_id"]);
-                            $objResult->setStrSystemid($objPost->getSystemid());
-                            $objResult->setStrPagelink(getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
-                            $objResult->setStrPagename($arrOnePage["page_name"]);
-                            $objResult->setStrDescription($objPost->getStrGuestbookPostText());
-
-                            $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]] = $objResult;
-                        }
+                        $this->arrHits[$objPost->getSystemid().$arrOnePage["page_id"]] = $objResult;
                     }
                 }
             }
-		}
+        }
 	}
 
     private function getElementData(class_module_guestbook_post $objPost) {

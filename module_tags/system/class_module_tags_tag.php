@@ -191,7 +191,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * Creates a list of tags matching the passed filter.
      *
      * @param string $strFilter
-     * @return class_module_tags_tag
+     * @return class_module_tags_tag[]
      */
     public static function getTagsByFilter($strFilter) {
         $strQuery = "SELECT tags_tag_id
@@ -272,7 +272,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @param $intEnd
      * @return class_model[]
      */
-    public function getArrAssignedRecords($intStart, $intEnd) {
+    public function getArrAssignedRecords($intStart = null, $intEnd = null) {
         $strQuery = "SELECT system.system_id
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."system as system

@@ -23,6 +23,7 @@ class class_search_result {
     private $strPagelink;
     private $strPagename;
     private $strDescription;
+    private $objObject = null;
 
 
     public function getStrSortHash() {
@@ -77,4 +78,25 @@ class class_search_result {
     public function getStrSystemid() {
         return $this->strSystemid;
     }
+
+    public function setObjObject($objObject) {
+        $this->objObject = $objObject;
+
+        if($objObject instanceof class_model) {
+            if($this->strSystemid == "")
+                $this->strSystemid = $objObject->getSystemid();
+
+            if($this->strResultId == "")
+                $this->strResultId = $objObject->getSystemid();
+        }
+
+    }
+
+    /**
+     * @return class_model|interface_model
+     */
+    public function getObjObject() {
+        return $this->objObject;
+    }
+
 }

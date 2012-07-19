@@ -16,11 +16,17 @@
  * e.g: $arrSearch["pages_elements"]["table_to_search"][] = "row_to_search"
  *
  * @package module_pages
+ * @author sidler@mulchprod.de
  */
-class class_module_pages_search_portal extends class_portal implements interface_search_plugin_portal  {
+class class_module_pages_search_portal implements interface_search_plugin  {
 
     private $arrTableConfig = array();
     private $strSearchterm = "";
+
+    /**
+     * @var class_db
+     */
+    private $objDB;
 
     /**
      * @var class_search_result
@@ -28,7 +34,6 @@ class class_module_pages_search_portal extends class_portal implements interface
     private $arrHits = array();
 
     public function  __construct($strSearchterm) {
-        parent::__construct();
 
         $this->strSearchterm = $strSearchterm;
 
@@ -47,6 +52,8 @@ class class_module_pages_search_portal extends class_portal implements interface
         }
 
 		$this->arrTableConfig = $arrSearch;
+
+        $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
 

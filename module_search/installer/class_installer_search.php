@@ -54,7 +54,7 @@ class class_installer_search extends class_installer_base implements interface_i
 
 		$strReturn .= "Registering module...\n";
 		//register the module
-		$this->registerModule("search", _search_module_id_, "class_module_search_portal.php", "", $this->objMetadata->getStrVersion() , false, "class_module_search_portal_xml.php");
+		$this->registerModule("search", _search_module_id_, "class_module_search_portal.php", "class_module_search_admin.php", $this->objMetadata->getStrVersion() , false, "class_module_search_portal_xml.php");
 
 
         if(class_module_pages_element::getElement("search") == null) {
@@ -96,6 +96,12 @@ class class_installer_search extends class_installer_base implements interface_i
 
     private function update_342_349() {
         $strReturn = "Updating 3.4.2 to 3.4.9...\n";
+
+        $strReturn .= "Registering search admin class...\n";
+        $objModule = class_module_system_module::getModuleByName("search");
+        $objModule->setStrNameAdmin("class_module_search_admin.php");
+        $objModule->updateObjectToDb();
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.4.9");
         $strReturn .= "Updating element-versions...\n";
