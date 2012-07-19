@@ -671,7 +671,7 @@ abstract class class_admin {
         if(method_exists($this, $strMethodName)) {
 
             //validate the permissions required to call this method, the xml-part is validated afterwards
-            $objAnnotations = new class_annotations(get_class($this));
+            $objAnnotations = new class_reflection(get_class($this));
 
             $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
             if($strPermissions !== false) {

@@ -106,7 +106,8 @@ class class_formentry_base {
             return;
 
         //try to get the matching getter
-        $strGetter = class_objectfactory::getGetter($this->objSourceObject, $this->strSourceProperty);
+        $objReflection = new class_reflection($this->objSourceObject);
+        $strGetter = $objReflection->getGetter($this->strSourceProperty);
         if($strGetter === null)
             throw new class_exception("unable to find getter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
 
@@ -126,7 +127,8 @@ class class_formentry_base {
         if($this->objSourceObject == null)
             return;
 
-        $strSetter = class_objectfactory::getSetter($this->objSourceObject, $this->strSourceProperty);
+        $objReflection = new class_reflection($this->objSourceObject);
+        $strSetter = $objReflection->getSetter($this->strSourceProperty);
         if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
 

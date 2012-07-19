@@ -2,10 +2,10 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
-class class_test_annotations extends class_testbase  {
+class class_test_reflection extends class_testbase  {
 
     public function testAnnotationsValueFromClass() {
-        $objAnnotations = new class_annotations(new B());
+        $objAnnotations = new class_reflection(new B());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@noval");
         $this->assertEquals(0, count($arrClassAnnotations));
@@ -15,7 +15,7 @@ class class_test_annotations extends class_testbase  {
         $this->assertEquals("val2", $arrClassAnnotations[0]);
         $this->assertEquals("val1", $arrClassAnnotations[1]);
 
-        $objAnnotations = new class_annotations(new A());
+        $objAnnotations = new class_reflection(new A());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@noval");
         $this->assertEquals(0, count($arrClassAnnotations));
@@ -27,7 +27,7 @@ class class_test_annotations extends class_testbase  {
 
     public function testHasMethodAnnotation() {
 
-        $objAnnotations = new class_annotations(new B());
+        $objAnnotations = new class_reflection(new B());
 
         $this->assertTrue($objAnnotations->hasMethodAnnotation("testMethod", "@methodTest"));
         $this->assertTrue(!$objAnnotations->hasMethodAnnotation("testMethod", "@method2Test"));
@@ -37,18 +37,18 @@ class class_test_annotations extends class_testbase  {
 
     public function testHasPropertyAnnotation() {
 
-        $objAnnotations = new class_annotations(new B());
+        $objAnnotations = new class_reflection(new B());
 
         $this->assertTrue($objAnnotations->hasPropertyAnnotation("propertyB1", "@propertyTest"));
         $this->assertTrue(!$objAnnotations->hasPropertyAnnotation("propertyB1", "@property2Test"));
 
-        $objAnnotations = new class_annotations(new A());
+        $objAnnotations = new class_reflection(new A());
         $this->assertTrue($objAnnotations->hasPropertyAnnotation("propertyA1", "@propertyTest"));
     }
 
     public function testGetMethodAnnotationValue() {
 
-        $objAnnotations = new class_annotations(new B());
+        $objAnnotations = new class_reflection(new B());
 
         $this->assertEquals("val1", $objAnnotations->getMethodAnnotationValue("testMethod", "@methodTest"));
         $this->assertTrue(!$objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test"));
@@ -56,7 +56,7 @@ class class_test_annotations extends class_testbase  {
 
     public function testGetPropertiesWithAnnotation() {
 
-        $objAnnotations = new class_annotations(new B());
+        $objAnnotations = new class_reflection(new B());
 
         $this->assertEquals(3, count($objAnnotations->getPropertiesWithAnnotation("@propertyTest")));
 
@@ -75,6 +75,25 @@ class class_test_annotations extends class_testbase  {
 
     }
 
+    public function testGetGetters() {
+        $objReflection = new class_reflection(new A());
+        $this->assertEquals(strtolower("getLongPropertyA1"), strtolower($objReflection->getGetter("propertyA1")));
+
+        $objReflection = new class_reflection(new B());
+        $this->assertEquals(strtolower("getLongPropertyA1"), strtolower($objReflection->getGetter("propertyA1")));
+        $this->assertEquals(strtolower("getBitPropertyB1"), strtolower($objReflection->getGetter("propertyB1")));
+    }
+
+
+    public function testGetSetters() {
+        $objReflection = new class_reflection(new A());
+        $this->assertEquals(strtolower("setStrPropertyA1"), strtolower($objReflection->getSetter("propertyA1")));
+
+        $objReflection = new class_reflection(new B());
+        $this->assertEquals(strtolower("setStrPropertyA1"), strtolower($objReflection->getSetter("propertyA1")));
+        $this->assertEquals(strtolower("setIntPropertyB1"), strtolower($objReflection->getSetter("propertyB1")));
+    }
+
 }
 
 //set up test-structures
@@ -91,6 +110,14 @@ class A {
     private $propertyA1;
 
     private $propertyA2;
+
+    public function setStrPropertyA1($propertyA1) {
+        $this->propertyA1 = $propertyA1;
+    }
+
+    public function getLongPropertyA1() {
+        return $this->propertyA1;
+    }
 }
 
 /**
@@ -115,6 +142,14 @@ class B extends A {
      */
     public function testMethod() {
 
+    }
+
+    public function setIntPropertyB1($propertyB1) {
+        $this->propertyB1 = $propertyB1;
+    }
+
+    public function getBitPropertyB1() {
+        return $this->propertyB1;
     }
 
 }

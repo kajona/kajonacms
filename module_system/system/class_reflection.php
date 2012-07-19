@@ -17,7 +17,7 @@
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
-class class_annotations {
+class class_reflection {
 
     private static $arrAnnotationsCache = array();
 
@@ -30,6 +30,7 @@ class class_annotations {
     private static $STR_HASPROPERTY_CACHE = "hasproperty";
 
     private $arrCurrentCache;
+    private $strSourceClass;
 
     /**
      *
@@ -37,21 +38,25 @@ class class_annotations {
      */
     private $objReflectionClass;
 
-	/**
-	 * Creates an instance of the annotations-class, parametrized with the class to inspect
+    /**
+     * Creates an instance of the annotations-class, parametrized with the class to inspect
      *
      * @param string|object $strSourceClass
-	 */
+     *
+     * @throws class_exception
+     */
 	public function __construct($strSourceClass) {
 
         if(is_object($strSourceClass))
-            $strSourceClass = get_class($strSourceClass);
+            $this->strSourceClass = get_class($strSourceClass);
+        else
+            $this->strSourceClass = $strSourceClass;
 
-        if(!class_exists($strSourceClass))
-            throw new class_exception("class ".$strSourceClass." not found", class_exception::$level_ERROR);
+        if(!class_exists($this->strSourceClass))
+            throw new class_exception("class ".$this->strSourceClass." not found", class_exception::$level_ERROR);
 
-        if(!isset(self::$arrAnnotationsCache[$strSourceClass]))
-            self::$arrAnnotationsCache[$strSourceClass] = array(
+        if(!isset(self::$arrAnnotationsCache[$this->strSourceClass]))
+            self::$arrAnnotationsCache[$this->strSourceClass] = array(
                 self::$STR_CLASS_PROPERTIES_CACHE,
                 self::$STR_METHOD_CACHE,
                 self::$STR_HASMETHOD_CACHE,
@@ -59,8 +64,8 @@ class class_annotations {
                 self::$STR_HASPROPERTY_CACHE
             );
 
-        $this->arrCurrentCache = &self::$arrAnnotationsCache[$strSourceClass];
-        $this->objReflectionClass = new ReflectionClass($strSourceClass);
+        $this->arrCurrentCache = &self::$arrAnnotationsCache[$this->strSourceClass];
+        $this->objReflectionClass = new ReflectionClass($this->strSourceClass);
 	}
 
 
@@ -87,7 +92,7 @@ class class_annotations {
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
-            $objBaseAnnotations = new class_annotations($objBaseClass->getName());
+            $objBaseAnnotations = new class_reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationValuesFromClass($strAnnotation));
         }
 
@@ -200,12 +205,86 @@ class class_annotations {
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
-            $objBaseAnnotations = new class_annotations($objBaseClass->getName());
+            $objBaseAnnotations = new class_reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation));
         }
 
         $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
         return $arrReturn;
+    }
+
+
+    /**
+     * Searches an object for a given properties' setter method.
+     * If not found, null is returned instead.
+     * @static
+     * @param string $strPropertyName
+     * @return null|string
+     */
+    public function getSetter($strPropertyName) {
+
+        $strSetter = "set".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setStr".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setInt".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setFloat".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setBit".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "setLong".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        return null;
+    }
+
+
+    /**
+     * Searches an object for a given properties' getter method.
+     * If not found, null is returned instead.
+     * @static
+     * @param string $strPropertyName
+     * @return null|string
+     */
+    public function getGetter($strPropertyName) {
+
+        $strSetter = "get".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getStr".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getInt".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getFloat".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getBit".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getLong".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        return null;
     }
 
     /**

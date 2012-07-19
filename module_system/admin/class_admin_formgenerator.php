@@ -159,7 +159,7 @@ class class_admin_formgenerator {
 
         //load all methods
         $objReflection = new ReflectionClass($this->objSourceobject);
-        $objAnnotations = new class_annotations($this->objSourceobject);
+        $objAnnotations = new class_reflection($this->objSourceobject);
 
         $arrMethods = $objReflection->getMethods();
         foreach($arrMethods as $objOneMethod) {
@@ -184,16 +184,14 @@ class class_admin_formgenerator {
     public function addDynamicField($strPropertyName) {
 
         //try to get the matching getter
-        $strGetter = class_objectfactory::getGetter($this->objSourceobject, $strPropertyName);
+        $objReflection = new class_reflection($this->objSourceobject);
+        $strGetter = $objReflection->getGetter($strPropertyName);
         if($strGetter === null)
             throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
 
-
-        $objAnnotation = new class_annotations($this->objSourceobject);
-
-        $strType      = $objAnnotation->getMethodAnnotationValue($strGetter, self::$STR_TYPE_ANNOTATION);
-        $strValidator = $objAnnotation->getMethodAnnotationValue($strGetter, self::$STR_VALIDATOR_ANNOTATION);
-        $strMandatory = $objAnnotation->getMethodAnnotationValue($strGetter, self::$STR_MANDATORY_ANNOTATION);
+        $strType      = $objReflection->getMethodAnnotationValue($strGetter, self::$STR_TYPE_ANNOTATION);
+        $strValidator = $objReflection->getMethodAnnotationValue($strGetter, self::$STR_VALIDATOR_ANNOTATION);
+        $strMandatory = $objReflection->getMethodAnnotationValue($strGetter, self::$STR_MANDATORY_ANNOTATION);
 
         if($strType === false)
             $strType = "text";

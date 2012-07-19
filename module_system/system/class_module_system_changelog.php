@@ -78,9 +78,9 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(validateSystemid($objCurrentObject->getSystemid())) {
             $arrOldValues = array();
 
-            $objAnnotations = new class_annotations($objCurrentObject);
+            $objReflection = new class_reflection($objCurrentObject);
 
-            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@versionable");
+            $arrProperties = $objReflection->getPropertiesWithAnnotation("@versionable");
 
 
             foreach($arrProperties as $strProperty => $strAnnotation) {
@@ -88,7 +88,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                 $strValue = "";
 
                 //all prerequisites match, start creating query
-                $strGetter = class_objectfactory::getGetter($objCurrentObject, $strProperty);
+                $strGetter = $objReflection->getGetter($strProperty);
                 if($strGetter !== null) {
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }

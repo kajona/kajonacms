@@ -470,7 +470,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //adding elements is more generic right here - load all methods
         if($objUser->isEditable()) {
             $objReflection = new ReflectionClass($objUser);
-            $objAnnotations = new class_annotations($objUser);
+            $objAnnotations = new class_reflection($objUser);
 
             $arrMethods = $objReflection->getMethods();
             foreach($arrMethods as $objOneMethod) {
@@ -706,7 +706,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($objGroup->isEditable()) {
             //adding elements is more generic right here - load all methods
             $objReflection = new ReflectionClass($objGroup);
-            $objAnnotations = new class_annotations($objGroup);
+            $objAnnotations = new class_reflection($objGroup);
 
             $arrMethods = $objReflection->getMethods();
             foreach($arrMethods as $objOneMethod) {

@@ -775,7 +775,8 @@ class class_module_pages_content_admin extends class_admin implements interface_
                     return "<message><error>missing property param</error></message>";
                 }
 
-                $strSetter = class_objectfactory::getSetter($objObject, $this->getParam("property"));
+                $objReflection = new class_reflection($objObject);
+                $strSetter = $objReflection->getSetter($this->getParam("property"));
                 if($strSetter == null) {
                     header(class_http_statuscodes::$strSC_BADREQUEST);
                     return "<message><error>setter not found</error></message>";

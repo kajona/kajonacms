@@ -187,8 +187,8 @@ abstract class class_root {
      */
     protected function initObjectInternal() {
         //try to do a default init
-        $objAnnotations = new class_annotations($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+        $objReflection = new class_reflection($this);
+        $arrTargetTables = $objReflection->getAnnotationValuesFromClass("@targetTable");
 
         if(validateSystemid($this->getSystemid()) && count($arrTargetTables) > 0 ) {
             $strWhere = "";
@@ -215,8 +215,8 @@ abstract class class_root {
             $this->setArrInitRow($arrRow);
 
             //get the mapped properties
-            $objAnnotations = new class_annotations($this);
-            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+            $objReflection = new class_reflection($this);
+            $arrProperties = $objReflection->getPropertiesWithAnnotation("@tableColumn");
 
             foreach($arrProperties as $strPropertyName => $strColumn) {
 
@@ -230,7 +230,7 @@ abstract class class_root {
                     continue;
                 }
 
-                $strSetter = class_objectfactory::getSetter($this, $strPropertyName);
+                $strSetter = $objReflection->getSetter($strPropertyName);
                 if($strSetter !== null)
                     call_user_func(array($this, $strSetter), $arrRow[$strColumn]);
             }
@@ -291,7 +291,7 @@ abstract class class_root {
     protected function deleteObjectInternal() {
         $bitReturn = true;
 
-        $objAnnotations = new class_annotations($this);
+        $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
 
         if(count($arrTargetTables) > 0) {
@@ -387,7 +387,7 @@ abstract class class_root {
             if(validateSystemid($this->getStrSystemid())) {
 
                 //Create the foreign records
-                $objAnnotations = new class_annotations($this);
+                $objAnnotations = new class_reflection($this);
                 $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
                 if(count($arrTargetTables) > 0) {
                     foreach($arrTargetTables as $strOneConfig) {
@@ -488,8 +488,8 @@ abstract class class_root {
 
         if(validateSystemid($this->getSystemid())) {
             //fetch properties with annotations
-            $objAnnotations = new class_annotations($this);
-            $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+            $objReflection = new class_reflection($this);
+            $arrTargetTables = $objReflection->getAnnotationValuesFromClass("@targetTable");
             if(count($arrTargetTables) > 0) {
                 $bitReturn = true;
 
@@ -501,7 +501,7 @@ abstract class class_root {
                     $arrEscapes = array();
 
                     //get the mapped properties
-                    $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+                    $arrProperties = $objReflection->getPropertiesWithAnnotation("@tableColumn");
 
                     foreach($arrProperties as $strPropertyName => $strColumn) {
 
@@ -521,10 +521,10 @@ abstract class class_root {
                             $strColumn = $arrColumnDef[1];
 
                         //all prerequisites match, start creating query
-                        $strGetter = class_objectfactory::getGetter($this, $strPropertyName);
+                        $strGetter = $objReflection->getGetter($strPropertyName);
                         if($strGetter !== null) {
                             $arrColValues[$strColumn] = call_user_func(array($this, $strGetter));
-                            $arrEscapes[] = !$objAnnotations->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
+                            $arrEscapes[] = !$objReflection->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
                         }
                     }
 
