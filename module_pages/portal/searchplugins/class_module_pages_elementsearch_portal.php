@@ -14,7 +14,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_elementssearch_PORTAL implements interface_search_plugin  {
+class class_module_pages_elementsearch_portal implements interface_search_plugin  {
 
     private $strSearchterm = "";
 
