@@ -309,9 +309,14 @@ abstract class class_root {
     /**
      * Removes the current object from the system.
      *
+     * @throws class_exception
      * @return bool
      */
     public function deleteObject() {
+
+        if(!$this instanceof interface_model)
+            throw new class_exception("delete operation required interface_model to be implemented", class_exception::$level_ERROR);
+
         $this->objDB->transactionBegin();
 
         //validate, if there are subrecords, so child nodes to be deleted
@@ -326,8 +331,6 @@ abstract class class_root {
 
         $bitReturn = $this->deleteObjectInternal();
         $bitReturn .= $this->deleteSystemRecord($this->getSystemid());
-
-        $this->objDB->flushQueryCache();
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
@@ -1728,14 +1731,5 @@ abstract class class_root {
         return $this->arrInitRow;
     }
 
-    /**
-     * Provides a human readable name of the current object. May be used for rendering in lists or
-     * other purposes.
-     *
-     * @see interface_model::getStrDisplayName()
-     * @abstract
-     * @return mixed
-     */
-    abstract function getStrDisplayName();
 
 }
