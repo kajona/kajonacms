@@ -56,6 +56,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $strReturn = "";
         $objCommon = new class_module_system_common($this->getSystemid());
         if($objCommon->rightEdit()) {
+            /** @var $objSystemAdmin class_module_system_admin */
             $objSystemAdmin = class_module_system_module::getModuleByName("system")->getAdminInstanceOfConcreteModule();
             $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
         }
@@ -71,7 +72,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * @permissions edit
      */
     protected function actionNew() {
-        // TODO: Implement actionNew() method.
+        //in nearly every case, a new page should be created
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "newPage"));
+        return "";
     }
 
     /**
@@ -90,6 +93,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else if($objEntry instanceof class_module_pages_folder) {
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFolder", "&systemid=".$objEntry->getSystemid()));
+        }
+        else if($objEntry instanceof class_module_pages_element) {
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editElement", "&systemid=".$objEntry->getSystemid()));
         }
     }
 
@@ -165,6 +171,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else
             return parent::renderEditAction($objListEntry);
+
+        return "";
     }
 
 
@@ -260,9 +268,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         else if($strListIdentifier == "elementList" && $this->getObjModule()->rightRight1()) {
             return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newElement", "", $this->getLang("modul_element_neu"), $this->getLang("modul_element_neu"), "icon_new.gif"));
         }
-        else
-            return "";
 
+        return "";
     }
 
 
@@ -454,6 +461,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * Saves a submitted page in the database (new Page!)
      *
      * @param bool $bitAlias
+     *
+     * @throws class_exception
      * @return String, "" if successful
      * @permissions edit
      */

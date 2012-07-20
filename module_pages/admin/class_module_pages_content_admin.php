@@ -155,7 +155,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             if($objLockmanager->isLockedByCurrentUser())
                                 $objLockmanager->unlockRecord();
 
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
                             $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                         }
 
@@ -181,7 +181,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             $objElement = $objOneElementInSystem;
                             if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
+                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrDisplayName() . ")", "", $strActions, $intI++);
                             }
                             else {
@@ -194,7 +194,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                                 }
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
+                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
                                     $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", "", $strActions, $intI++);
                                 }
                             }
@@ -252,7 +252,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
      * @param bool $bitShowErrors
      * @return string
      */
-	protected function actionNewElement($bitShowErrors = false) {
+	protected function actionNew($bitShowErrors = false) {
 		$strReturn = "";
         //check rights
         $objCommon = new class_module_system_common($this->getSystemid());
@@ -277,17 +277,24 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		return $strReturn;
 	}
 
-
     /**
      * Loads the form to edit the element
      *
      * @param bool $bitShowErrors
      * @return string
+     * @permissions edit
      */
-	protected function actionEditElement($bitShowErrors = false) {
+	protected function actionEdit($bitShowErrors = false) {
 		$strReturn = "";
 		//check rights
-        $objElement = new class_module_pages_pageelement($this->getSystemid());
+        $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        if($objElement instanceof class_module_pages_element) {
+            $this->adminReload(getLinkAdminHref("pages", "edit", "&systemid=".$objElement->getSystemid()));
+            return "";
+        }
+
+
 		if($objElement->rightEdit()) {
     		//Load the element data
     		//check, if the element isn't locked
@@ -342,7 +349,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//really continue? try to validate the passed data.
 			if(!$objElement->validateForm()) {
-			    $strReturn .= $this->actionNewElement(true);
+			    $strReturn .= $this->actionNew(true);
 			    return $strReturn;
 			}
 
@@ -384,7 +391,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//really continue? try to validate the passed data.
 			if(!$objElement->validateForm()) {
-			    $strReturn .= $this->actionEditElement(true);
+			    $strReturn .= $this->actionEdit(true);
 			    return $strReturn;
 			}
 

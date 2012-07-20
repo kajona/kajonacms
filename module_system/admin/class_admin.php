@@ -553,12 +553,12 @@ abstract class class_admin {
 
         //Text for the current action available?
         //different loading when editing page-elements
-        if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "editElement" || $this->getParam("action") == "newElement")) {
+        if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "edit" || $this->getParam("action") == "new")) {
             $objElement = null;
-            if($this->getParam("action") == "editElement") {
+            if($this->getParam("action") == "edit") {
                 $objElement = new class_module_pages_pageelement($this->getSystemid());
             }
-            else if ($this->getParam("action") == "newElement") {
+            else if ($this->getParam("action") == "new") {
                 $strPlaceholderElement = $this->getParam("element");
                 $objElement = class_module_pages_element::getElement($strPlaceholderElement);
             }

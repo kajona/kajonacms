@@ -239,7 +239,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 	 * Returns all Pages listed in a given folder
 	 *
 	 * @param string $strFolderid
-	 * @return string
+	 * @return class_module_pages_page[]
 	 * @static
 	 */
 	public static function getPagesInFolder($strFolderid = "") {

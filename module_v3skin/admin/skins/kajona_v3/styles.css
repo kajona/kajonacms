@@ -1501,7 +1501,7 @@ div.percentBeam {
     left:0;
     top:0;
     border:none;
-    z-index:1;
+    z-index:1 !important;
     overflow:hidden;
 }
 

@@ -232,7 +232,7 @@ abstract class class_element_portal extends class_portal {
 
 
                 $strModule = "pages_content";
-                $strAction = "editElement";
+                $strAction = "edit";
                 //param-inits ---------------------------------------
                 //Generate url to the admin-area
                 if($arrConfig["pe_module"] != "") {
@@ -450,7 +450,7 @@ abstract class class_element_portal extends class_portal {
             $objLanguages = new class_module_languages_language();
             $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
-            $strElementHref = getLinkAdminHref("pages_content", "newElement", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");
+            $strElementHref = getLinkAdminHref("pages_content", "new", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");
 
             $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref);
 

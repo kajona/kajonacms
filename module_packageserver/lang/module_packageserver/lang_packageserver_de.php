@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["_packageserver_repo_id_"]         = "Paket-Repository:";
 $lang["actionList"]                      = "Pakete";
 $lang["actionLogs"]                      = "Protokoll";
 $lang["actionShowInfo"]                  = "Detail-Informationen";

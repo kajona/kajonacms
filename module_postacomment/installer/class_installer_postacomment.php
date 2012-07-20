@@ -58,10 +58,6 @@ class class_installer_postacomment extends class_installer_base implements inter
 		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
 		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right2");
 
-		$strReturn .= "Registering system-constants...\n";
-        $this->registerConstant("_postacomment_notify_mail_", "", class_module_system_setting::$int_TYPE_STRING, _postacomment_modul_id_);
-
-
 
         $strReturn .= "Registering postacomment-element...\n";
         //check, if not already existing

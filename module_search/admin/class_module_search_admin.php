@@ -95,7 +95,7 @@ class class_module_search_admin extends class_admin implements interface_admin {
 
             $strLink = $objOneResult->getStrPagelink();
             if($strLink == "")
-                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid());
+                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid()."&source=search");
 
             $strReturn .=
              "        <item>\n"

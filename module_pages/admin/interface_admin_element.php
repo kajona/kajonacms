@@ -17,7 +17,7 @@ interface interface_admin_element {
 	/**
 	 * Called to get a form to edit oder create the given element
 	 *
-	 * @param mixed The content of the current element to fill the form
+	 * @param mixed $arrElementData The content of the current element to fill the form
 	 */
 	public function getEditForm($arrElementData);
 

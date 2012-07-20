@@ -69,7 +69,7 @@ class class_module_pages_elementssearch_admin implements interface_search_plugin
                 $objPost = class_objectfactory::getInstance()->getObject($arrOneEntry["content_id"]);
                 $objResult = new class_search_result();
                 $objResult->setObjObject($objPost);
-                $objResult->setStrPagelink(getLinkAdminHref("pages_content", "editElement", "&systemid=".$arrOneEntry["content_id"]));
+                $objResult->setStrPagelink(getLinkAdminHref("pages_content", "edit", "&systemid=".$arrOneEntry["content_id"]."&source=search"));
                 $this->arrHits[] = $objResult;
             }
 
