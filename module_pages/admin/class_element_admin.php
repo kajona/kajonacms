@@ -125,13 +125,6 @@ abstract class class_element_admin extends class_admin {
 		return $strReturn;
 	}
 
-    /**
-     * Called to get a form to edit oder create the given element
-     *
-     * @param mixed $arrElementData The content of the current element to fill the form
-     */
-    public abstract function getEditForm($arrElementData);
-
 	/**
 	 * Loads the data of the current element
 	 *
