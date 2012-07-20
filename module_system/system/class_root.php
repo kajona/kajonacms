@@ -330,16 +330,18 @@ abstract class class_root {
         }
 
         $bitReturn = $this->deleteObjectInternal();
-        $bitReturn .= $this->deleteSystemRecord($this->getSystemid());
+        $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
             $this->objDB->transactionCommit();
+            $this->objDB->flushQueryCache();
             return true;
         }
         else {
             class_logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
             $this->objDB->transactionRollback();
+            $this->objDB->flushQueryCache();
             return false;
         }
     }
