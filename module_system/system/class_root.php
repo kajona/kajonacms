@@ -127,7 +127,7 @@ abstract class class_root {
     private $strRecordClass;
     /**
      * Long-based representation of the timestamp the record was created initially
-     * @var long
+     * @var int
      */
     private $longCreateDate;
 
@@ -423,7 +423,7 @@ abstract class class_root {
         $this->setStrRecordComment($this->getStrDisplayName());
 
         //save back to the database
-        $bitCommit = $this->updateSystemrecord();
+        $bitCommit = $bitCommit & $this->updateSystemrecord();
 
         //update ourselves to the database
         if(!$this->updateStateToDb())
@@ -448,6 +448,8 @@ abstract class class_root {
      * Overwrite this callback if your object should be notified if the current objects systemid was changed.
      * @param $strOldPrevid
      * @param $strNewPrevId
+     *
+     * @todo may be moved to callback object
      */
     protected function onPrevIdChange($strOldPrevid, $strNewPrevId) {
 
@@ -548,7 +550,16 @@ abstract class class_root {
 
     }
 
-
+    /**
+     * Called internally to update a single target-table
+     *
+     * @param $arrColValues
+     * @param $arrEscapes
+     * @param $strTargetTable
+     * @param $strPrimaryCol
+     *
+     * @return bool
+     */
     private function updateSingleTable($arrColValues, $arrEscapes, $strTargetTable, $strPrimaryCol) {
 
         $arrValues = array();
@@ -783,7 +794,6 @@ abstract class class_root {
 	    return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $strSystemid));
 	}
 
-    // --- RIGHTS-METHODS -----------------------------------------------------------------------------------
 
     /**
      * Returns the bool-value for the right to view this record,
@@ -950,7 +960,7 @@ abstract class class_root {
      * @param int $intNewPosition
      * @param bool $bitOnlySameModule If set to true, the siblings are loaded based on the same module-id
      *
-     * @return
+     * @return void
      */
 	public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
 	    class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
@@ -1317,11 +1327,13 @@ abstract class class_root {
     }
 
     /**
-	 * Gets the Prev-ID of a record
-	 *
-	 * @param string $strSystemid
-	 * @return string
-	 */
+     * Gets the Prev-ID of a record
+     *
+     * @param string $strSystemid
+     *
+     * @throws class_exception
+     * @return string
+     */
 	public function getPrevId($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
@@ -1343,11 +1355,13 @@ abstract class class_root {
     }
 
     /**
-	 * Gets the module id / module nr of a systemRecord
-	 *
-	 * @param string $strSystemid
-	 * @return int
-	 */
+     * Gets the module id / module nr of a systemRecord
+     *
+     * @param string $strSystemid
+     *
+     * @throws class_exception
+     * @return int
+     */
 	public function getRecordModuleNr($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
@@ -1372,11 +1386,13 @@ abstract class class_root {
     }
 
     /**
-	 * Returns the name of the user who last edited the record
-	 *
-	 * @param string $strSystemid
-	 * @return string
-	 */
+     * Returns the name of the user who last edited the record
+     *
+     * @param string $strSystemid
+     *
+     * @throws class_exception
+     * @return string
+     */
 	public function getLastEditUser($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
@@ -1438,6 +1454,8 @@ abstract class class_root {
      * Returns the creation-date of the current record
      *
      * @param string $strSystemid
+     *
+     * @throws class_exception
      * @return class_date
      */
     public function getObjCreateDate($strSystemid = "") {
@@ -1463,6 +1481,8 @@ abstract class class_root {
      * Gets the id of the user currently being the owner of the record
      *
      * @param string $strSystemid
+     *
+     * @throws class_exception
      * @return string
      */
     public final function getOwnerId($strSystemid = "") {
@@ -1477,6 +1497,8 @@ abstract class class_root {
      *
      * @param string $strOwner
      * @param string $strSystemid
+     *
+     * @throws class_exception
      * @return bool
      */
     public final function setOwnerId($strOwner, $strSystemid = "") {
@@ -1492,11 +1514,13 @@ abstract class class_root {
     }
 
     /**
-	 * Gets the status of a systemRecord
-	 *
-	 * @param string $strSystemid
-	 * @return int
-	 */
+     * Gets the status of a systemRecord
+     *
+     * @param string $strSystemid
+     *
+     * @throws class_exception
+     * @return int
+     */
 	public function getStatus($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
@@ -1510,6 +1534,8 @@ abstract class class_root {
      *
      * @param string $strSystemid
      * @param bool $intStatus
+     *
+     * @throws class_exception
      * @return bool
      * @todo: systemid param handling
      */
@@ -1558,11 +1584,13 @@ abstract class class_root {
     }
 
     /**
-	 * Gets comment saved with the record
-	 *
-	 * @param string $strSystemid
-	 * @return string
-	 */
+     * Gets comment saved with the record
+     *
+     * @param string $strSystemid
+     *
+     * @throws class_exception
+     * @return string
+     */
 	public function getRecordComment($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
@@ -1700,5 +1728,14 @@ abstract class class_root {
         return $this->arrInitRow;
     }
 
+    /**
+     * Provides a human readable name of the current object. May be used for rendering in lists or
+     * other purposes.
+     *
+     * @see interface_model::getStrDisplayName()
+     * @abstract
+     * @return mixed
+     */
+    abstract function getStrDisplayName();
 
 }

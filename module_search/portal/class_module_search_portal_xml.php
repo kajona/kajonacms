@@ -75,6 +75,11 @@ class class_module_search_portal_xml extends class_portal implements interface_x
         $strReturn .="    <resultset>\n";
         foreach($arrResults as $objOneResult) {
 
+            $objPage = class_module_pages_page::getPageByName($objOneResult->getStrPagename());
+            if(!$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
+                continue;
+
+
             if(++$intI > self::$INT_MAX_NR_OF_RESULTS)
                 break;
 

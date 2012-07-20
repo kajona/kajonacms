@@ -76,6 +76,8 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier != self::$INT_LISTTYPE_FOLDER)
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
+
+        return "";
     }
 
     protected function renderLevelUpAction($strListIdentifier) {
@@ -98,6 +100,8 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
                 else
                     return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
             }
+
+            return "";
         }
         else
             return parent::renderEditAction($objListEntry, $bitDialog);
@@ -154,6 +158,14 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
      * @permissions edit
      */
     protected function actionEdit() {
+
+        //check what method to trigger
+        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objInstance instanceof class_module_mediamanager_repo)
+            return $this->actionNew("edit");
+        else if($objInstance instanceof class_module_mediamanager_file)
+            return $this->actionEditFile();
+
         return $this->actionNew("edit");
     }
 
