@@ -36,9 +36,8 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
         //get all model-classes to scan
         $arrClasses = $this->getModelReflectionClasses();
 
-        foreach($arrClasses as $strOneClass) {
+        foreach($arrClasses as $strOneClass)
             $this->processSingleClass($strOneClass);
-        }
 
         return $this->arrHits;
     }
@@ -58,7 +57,6 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                 $arrTables[] = _dbprefix_.$arrOneTable[0];
             }
 
-
             //build the like-statements
             $arrWhere = array();
             $arrParams = array();
@@ -67,22 +65,18 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
             foreach($arrProperties as $strPropertyName => $strColumn) {
 
                 $arrColumn = explode(".", $strColumn);
-
                 if(count($arrColumn) == 2)
                     $strColumn = _dbprefix_.$strColumn;
-
 
                 $arrWhere[] = $strColumn ." LIKE ? ";
                 $arrParams[] = "%".$this->strSearchterm."%";
             }
 
-
             $strQuery = "SELECT system_id
                           FROM ".implode(", ", $arrTables)." ,
                                ".$this->objDB->encloseTableName(_dbprefix_."system")."
                          WHERE ( ".implode(" OR ", $arrWhere)." )
-                            ".$strWhere."
-                            ";
+                            ".$strWhere."";
 
             $arrRows = $this->objDB->getPArray($strQuery, $arrParams);
 
@@ -96,10 +90,8 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                 }
             }
 
-
         }
     }
-
 
 
     /**

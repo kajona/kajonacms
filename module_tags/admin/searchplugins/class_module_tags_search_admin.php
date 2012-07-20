@@ -9,7 +9,7 @@
 
 
 /**
- * Search plugin of the tags-module.
+ * Search plugin of the tags-module. Lists the referenced records, too.
  *
  * @package module_tags
  * @autor sidler@mulchprod.de
@@ -17,11 +17,6 @@
 class class_module_tags_search_admin implements interface_search_plugin  {
 
     private $strSearchterm = "";
-
-    /**
-     * @var class_search_result
-     */
-    private $arrHits = array();
 
     /**
      * @var class_db
@@ -35,15 +30,12 @@ class class_module_tags_search_admin implements interface_search_plugin  {
 
 
     public function doSearch() {
-
         $arrHits = array();
 
         if(class_module_system_module::getModuleByName("tags") != null) {
-
             $arrTags = class_module_tags_tag::getTagsByFilter($this->strSearchterm);
 
             foreach($arrTags as $objOneTag) {
-
                 //add the tag itself
                 $objResult = new class_search_result();
                 $objResult->setObjObject($objOneTag);
@@ -58,7 +50,6 @@ class class_module_tags_search_admin implements interface_search_plugin  {
                 }
 
             }
-
 
        }
 

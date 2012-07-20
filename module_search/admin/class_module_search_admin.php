@@ -83,12 +83,8 @@ class class_module_search_admin extends class_admin implements interface_admin {
             if($objOneResult->getObjObject() == null || !$objOneResult->getObjObject()->rightView())
                 continue;
 
-
-
             if(++$intI > self::$INT_MAX_NR_OF_RESULTS)
                 break;
-
-
 
             $strIcon = "";
             if($objOneResult->getObjObject() instanceof interface_admin_listable) {

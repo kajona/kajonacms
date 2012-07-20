@@ -24,7 +24,7 @@ class class_element_row_admin extends class_element_admin implements interface_a
 
         $this->setArrModuleEntry("name", "element_row");
         $this->setArrModuleEntry("table", _dbprefix_."element_paragraph");
-        $this->setArrModuleEntry("tableColumns", "paragraph_title,paragraph_template");
+        $this->setArrModuleEntry("tableColumns", "paragraph_title,paragraph_template,paragraph_content");
 
 		parent::__construct();
 	}
