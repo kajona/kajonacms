@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <link href='http://fonts.googleapis.com/css?family=Dosis:500,700' rel='stylesheet' type='text/css'>
+
     <meta charset="utf-8">
     <title>Kajona administration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +23,7 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="img/favicon.png">
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
@@ -32,10 +35,10 @@
     <div class="navbar-inner">
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span4">
+                <div class="span4" style="padding:5px 0 0 10px;">
                     <div class="dropdown userNotificationsDropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-user icon-white"><span class="badge badge-info">13</span></i> admin@kajona.de
+                            <i class="icon-user icon-white" id="icon-user"><span class="badge badge-info" id="badge-info">13</span></i> admin@kajona.de
                         </a>
                         <ul class="dropdown-menu">
                             <li>
@@ -52,12 +55,11 @@
                         </ul>
                     </div>
                 </div>
-                <div class="span4">
+                <div class="span8" style="text-align: right;">
                     <form class="navbar-search pull-left">
-                        <input type="text" class="search-query" placeholder="Search" id="globalSearchInput">
+                        <i id="icon-lupe"></i>
+                        <input type="text" class="search-query" placeholder="Suchbegriff" id="globalSearchInput">
                     </form>
-                </div>
-                <div class="span4" style="text-align: right;">
                     <select id="languageChooser" class="input-small">
                         <option>English</option>
                         <option>Deutsch</option>
@@ -66,9 +68,9 @@
                         <option>Content manager</option>
                         <option>Site administrator</option>
                     </select>
-                    <button class="btn btn-large pull-right">
-                        <i class="icon-share"></i>
+                    <button id="portaleditor">
                         Portaleditor
+                        <i class="icon-share"></i>
                     </button>
                 </div>
             </div>
@@ -80,13 +82,13 @@
             <div class="span10">
                 <ul class="breadcrumb">
                     <li>
-                        <a href="#"><i class="icon-home"></i></a> <span class="divider">/</span>
+                        <a href="#"><i id="icon-home"></i></a> <span class="divider"></span>
                     </li>
                     <li>
-                        <a href="#">Pages</a> <span class="divider">/</span>
+                        <a href="#">Pages</a> <span class="divider"></span>
                     </li>
                     <li>
-                        <a href="#">My first page</a> <span class="divider">/</span>
+                        <a href="#">My first page</a> <span class="divider"></span>
                     </li>
                     <li class="active">
                         <a href="#">Second level page</a>
@@ -334,8 +336,8 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button class="btn">Cancel</button>
-                            <button class="btn btn-primary btn-large" type="submit">Save changes</button>
+                            <button class="btn" id="savechanges" type="submit"><span class="btn-text">Save changes</span><span class="statusicon"></span></button>
+                            <button class="btn" id="cancelglobal"><span class="btn-text">Cancel</span><span class="statusicon"></span></button>
                         </div>
                     </fieldset>
                 </form>
@@ -402,8 +404,8 @@
                             </div>
                             <!--
                             <div class="form-actions">
-                                <button class="btn">Cancel</button>
                                 <button class="btn btn-primary btn-large" type="submit">Save changes</button>
+                                <button class="btn">Cancel</button>
                             </div>
                             -->
                         </fieldset>
