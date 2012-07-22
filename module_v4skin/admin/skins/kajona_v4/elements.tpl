@@ -321,6 +321,38 @@ in addition, a container for the calendar is needed. use %%calendarContainerId%%
 If the calendar is used, you HAVE TO create a js-function named "calClose_%%calendarContainerId%%". This
 function is called after selecting a date, e.g. to hide the calendar
 <input_date_simple>
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%title%%</label>
+
+        <div class="controls">
+            <!--
+            <div class="input-append date" id="%%calendarId%%" data-date="12.02.2012" data-date-format="dd.mm.yyyy" data-date-weekStart="1">
+                <input class="input-xlarge" size="16" type="text" value="12.02.2012">
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+            -->
+            <input id="%%calendarId%%" class="input-xlarge" size="16" type="text" value="">
+            <script>
+            $(function () {
+                $('#%%calendarId%%').datepicker({
+                    format: 'dd.mm.yyyy',
+                    weekStart: 1,
+                    autoclose: true,
+                    language: 'de'
+                });
+            });
+            </script>
+
+            <!--
+            <p class="help-block">
+                In addition to freeform text, any HTML5 text-based input appears like so.
+            </p>
+            -->
+        </div>
+    </div>
+
+
+<!--
 	<div><label for="%%titleDay%%">%%title%% </label>
 		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
 		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
@@ -328,6 +360,7 @@ function is called after selecting a date, e.g. to hide the calendar
 		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
+-->
 	%%calendarCommands%%
 </input_date_simple>
 

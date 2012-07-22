@@ -155,6 +155,8 @@
 <script src="_skinwebpath_/js/bootstrap-collapse.js"></script>
 <script src="_skinwebpath_/js/bootstrap-carousel.js"></script>
 <script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>
+<script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>
+<script src="_skinwebpath_/js/locales/bootstrap-datepicker.de.js"></script>
 
 <script src="_skinwebpath_/js/jstree/jquery.cookie.js"></script>
 <script src="_skinwebpath_/js/jstree/jquery.hotkeys.js"></script>
