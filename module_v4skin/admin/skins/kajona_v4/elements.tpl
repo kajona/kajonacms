@@ -17,7 +17,7 @@ templates!
 
 Optional Element to start a list
 <list_header>
-<table cellpadding="0" cellspacing="0" class="adminList">
+<table class="table table-striped">
 </list_header>
 
 Header to use when creating drag n dropable lists. places an id an loads the needed js-scripts in the
@@ -39,7 +39,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
 
     var bitOnlySameTable = %%sameTable%%;
 </script>
-<table cellspacing="0" cellpadding="0" id="%%listid%%" class="adminList">
+<table id="%%listid%%" class="table table-striped">
 </dragable_list_header>
 
 Optional Element to close a list
@@ -108,7 +108,7 @@ Currently, there are two modes: with and without a description.
 
 Divider to split up a page in logical sections
 <divider><br />
-<table cellpadding="0" cellspacing="0" style="width: 100%;">
+<table style="width: 100%;">
 	<tr>
   		<td class="%%class%%">&nbsp;</td>
 	</tr>
@@ -117,7 +117,7 @@ Divider to split up a page in logical sections
 
 data list header. Used to open a table to print data
 <datalist_header>
-<table cellpadding="0" cellspacing="0" class="adminList">
+<table class="table table-striped">
 </datalist_header>
 
 data list footer. at the bottom of the datatable
@@ -185,7 +185,13 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 Dropdown
 <input_dropdown>
-	<div><label for="%%name%%">%%title%% </label><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%% %%addons%%>%%options%%</select></div><br />
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%title%%</label>
+
+        <div class="controls">
+            <select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%% %%addons%%>%%options%%</select>
+        </div>
+    </div>
 </input_dropdown>
 
 <input_dropdown_row>
@@ -269,7 +275,16 @@ Regular Password-Field
 
 Upload-Field
 <input_upload>
-	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /> (%%maxSize%%)</div><br />
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%title%%</label>
+
+        <div class="controls">
+            <input type="file" name="%%name%%" id="%%name%%" class="input-file %%class%%">
+            <p class="help-block">
+                %%maxSize%%
+            </p>
+        </div>
+    </div>
 </input_upload>
 
 Upload-Field for multiple files with progress bar
@@ -312,7 +327,16 @@ Upload-Field for multiple files with progress bar
 
 Regular Submit-Button
 <input_submit>
-	<div><label for="%%name%%">&nbsp;</label><input type="submit" name="%%name%%" value="%%value%%" class="%%class%%" %%disabled%% %%eventhandler%% /></div><br />
+    <div class="form-actions">
+        <button id="savechanges" type="submit" class="btn %%class%%" %%disabled%% %%eventhandler%%>
+            <span class="btn-text">%%value%%</span>
+            <span class="statusicon"></span>
+        </button>
+        <button id="cancelglobal" class="btn" onclick="location.reload();">
+            <span class="btn-text">Cancel</span>
+            <span class="statusicon"></span>
+        </button>
+    </div>
 </input_submit>
 
 An easy date-selector
@@ -414,7 +438,9 @@ Same as above, but using an image to fold / unfold the content
 
 A precent-beam to illustrate proportions
 <percent_beam>
-<div class="percentBeamText">%%percent%% %</div><div class="percentBeam" style="width: %%width%%px;" title="%%percent%% %"><img src="_skinwebpath_/pics/icon_progressbar.gif" width="%%beamwidth%%" height="10" /></div><div style="clear: both;"></div>
+    <div class="progress progress-striped active" style="width: 30%;" title="%%percent%%%">
+        <div class="bar" style="width: %%percent%%%;"></div>
+    </div>
 </percent_beam>
 
 A fieldset to structure logical sections
@@ -471,9 +497,10 @@ Part to display the login status, user is logged in
 
 Shown, wherever the attention of the user is needed
 <warning_box>
-<div class="%%class%%">
-%%content%%
-</div>
+    <div class="alert alert-block %%class%%">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        %%content%%
+    </div>
 </warning_box>
 
 Used to print plain text
@@ -493,7 +520,7 @@ Used to print headline in a form
 
 This Section is used to display a few special details about the current page being edited
 <page_infobox>
- <table cellpadding="0" cellspacing="0" style="width: 100%;" class="statusPages">
+ <table style="width: 100%;" class="statusPages">
   <tr>
     <td style="width: 18%;">%%pagetemplateTitle%%</td>
     <td style="width: 72%;">%%pagetemplate%%</td>
@@ -507,7 +534,7 @@ This Section is used to display a few special details about the current page bei
 
 Infobox used by the filemanager
 <filemanager_infobox>
-<table cellpadding="0" cellspacing="0" class="statusFilemanager">
+<table class="statusFilemanager">
   <tr>
     <td style="padding-bottom: 5px;"></td>
     <td style="text-align: right; white-space: nowrap;" rowspan="2">%%nrfilestitle%% %%files%%<br />%%nrfoldertitle%% %%folders%%</td>
@@ -531,7 +558,7 @@ The following sections specify the layout of the rights-mgmt
 </rights_form_header>
 
 <rights_form_form>
-<table cellpadding="0" cellspacing="0" style="width: 98%;">
+<table style="width: 98%;">
 	<tr class="adminListRow1">
 		<td width=\"19%\">&nbsp;</td>
 		<td width=\"9%\">%%title0%%</td>
@@ -579,7 +606,7 @@ The following sections specify the layout of the rights-mgmt
 </rights_form_row_2>
 
 <rights_form_inherit>
-<table cellpadding="0" cellspacing="0" style="width: 90%;">
+<table style="width: 90%;">
 	<tr>
       <td style="width: 10%;" class="listecontent">%%title%%</td>
       <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% /></div></td>
@@ -736,7 +763,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 -- CONTENT TOOLBAR --------------------------------------------------------------------------------------
 
 <contentToolbar_wrapper>
-    <table cellpadding="0" cellspacing="0" class="contentToolbar">
+    <table class="contentToolbar">
         <tr>%%entries%%</tr>
     </table>
 </contentToolbar_wrapper>
@@ -753,12 +780,13 @@ The following sections are used to display the path-navigations, e.g. used by th
 -- ERROR HANDLING ---------------------------------------------------------------------------------------
 
 <error_container>
-<div class="warnbox">
-	<h3>%%errorintro%%</h3>
-	<ul>
-		%%errorrows%%
-	</ul>
-</div>
+    <div class="alert alert-block alert-error">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <h4 class="alert-heading">%%errorintro%%</h4>
+        <ul>
+            %%errorrows%%
+        </ul>
+    </div>
 </error_container>
 
 <error_row>
@@ -770,9 +798,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 Used to print pre-formatted text, e.g. log-file contents
 <preformatted>
-    <div class="preText">
-    	<pre>%%pretext%%</pre>
-    </div>
+    <pre class="pre-scrollable">%%pretext%%</pre>
 </preformatted>
 
 ---------------------------------------------------------------------------------------------------------
@@ -784,7 +810,7 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
-    <style type="text/css">
+    <style>
         .peButtonNew {
             display: none;
         }
@@ -808,7 +834,7 @@ pe_iconbar, pe_disable
     <div id="peToolbar" style="display: none;">
     	<div class="logo"></div>
 		<div class="info">
-			<table cellpadding="0" cellspacing="0">
+			<table>
 				<tbody>
 		            <tr>
 			            <td rowspan="2" style="width: 100%; text-align: center; vertical-align: middle;">%%pe_iconbar%%</td>
@@ -894,65 +920,46 @@ The language switch surrounds the buttons
 -- QUICK HELP -------------------------------------------------------------------------------------------
 
 <quickhelp>
-    <script type="text/javascript">
-        function showQuickHelp() {
-        	if (document.getElementById('quickHelp').style.display == 'block') {
-        		hideQuickHelp();
-        	} else {
-	            document.getElementById('quickHelp').style.display='block';
-	            document.getElementById('quickHelp').style.position='absolute';
-	            document.getElementById('quickHelp').style.left=(screen.availWidth/2 - 200)+'px';
-	            document.getElementById('quickHelp').style.top='150px';
-	            document.getElementById('quickHelp').style.zIndex='21';
-			}
-        }
-
-        function hideQuickHelp() {
-            document.getElementById('quickHelp').style.display='none';
-        }
-
-        //Register mover for the help-layer
-		document.onmousemove = KAJONA.util.mover.checkMousePosition;
-		document.onmouseup = KAJONA.util.mover.unsetMousePressed;
+    <script>
+        $(function () {
+            $('#quickHelpButton').popover({
+                title: '%%title%%',
+                content: '%%text%%',
+                placement: 'bottom'
+            });
+        });
     </script>
-    <div id="quickHelp" onmousedown="KAJONA.util.mover.setMousePressed(this)" onmouseup="KAJONA.util.mover.unsetMousePressed()" onselectstart="return false;">
-		<div class="hd">
-			<div class="title">%%title%%</div>
-			<div class="c"><a href="javascript:hideQuickHelp();">[X]</a></div>
-			<div class="clear"></div>
-		</div>
-		<div class="bd">
-			<div class="c">
-				<div class="spacer"></div>
-				<p>
-					%%text%%
-				</p>
-				<div class="spacer"></div>
-			</div>
-		</div>
-		<div class="ft">
-			<div class="c"></div>
-		</div>
-	</div>
 </quickhelp>
 
 <quickhelp_button>
-    <div class="quickHelpButton"><a href="javascript:showQuickHelp();">%%text%%</a></div>
+    <button id="quickHelpButton">%%text%%</button>
 </quickhelp_button>
 
 ---------------------------------------------------------------------------------------------------------
 -- PAGEVIEW ---------------------------------------------------------------------------------------------
 
 <pageview_body>
-<div align="center" style="margin-top: 10px;">%%nrOfElementsText%% %%nrOfElements%% | %%linkBackward%% %%pageList%% %%linkForward%%</div>
+    <div class="pagination">
+        <ul>
+            %%linkBackward%%
+            %%pageList%%
+            %%linkForward%%
+        </ul>
+    </div>
+    <br>
+    %%nrOfElementsText%% %%nrOfElements%%
 </pageview_body>
 
 <pageview_link_forward>
-<a href="%%href%%">%%linkText%%&gt;&gt;</a>
+    <li>
+        <a href="%%href%%">%%linkText%%&gt;&gt;</a>
+    </li>
 </pageview_link_forward>
 
 <pageview_link_backward>
-<a href="%%href%%">&lt;&lt;%%linkText%%</a>
+    <li>
+        <a href="%%href%%">&lt;&lt;%%linkText%%</a>
+    </li>
 </pageview_link_backward>
 
 <pageview_page_list>
@@ -960,11 +967,15 @@ The language switch surrounds the buttons
 </pageview_page_list>
 
 <pageview_list_item>
-<a href="%%href%%" >[ %%pageNr%% ]</a>&nbsp;
+    <li>
+        <a href="%%href%%">%%pageNr%%</a>
+    </li>
 </pageview_list_item>
 
 <pageview_list_item_active>
-<b><a href="%%href%%" >[ %%pageNr%% ]</a></b>&nbsp;
+    <li class="active">
+        <a href="%%href%%">%%pageNr%%</a>
+    </li>
 </pageview_list_item_active>
 
 ---------------------------------------------------------------------------------------------------------
@@ -1182,7 +1193,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </calendar_filter_entry>
 
 <calendar_pager>
-    <table class="calendarPager" cellpadding="0" cellspacing="0" >
+    <table class="calendarPager">
         <tr>
             <td width="20%" style="text-align: left;">%%backwards%%</td>
             <td width="60%" style="text-align: center; font-weight: bold;">%%center%%</td>
@@ -1192,7 +1203,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </calendar_pager>
 
 <calendar_wrapper>
-    <table class="calendar" cellpadding="0" cellspacing="0" >%%content%%</table>
+    <table class="calendar">%%content%%</table>
 </calendar_wrapper>
 
 <calendar_container>

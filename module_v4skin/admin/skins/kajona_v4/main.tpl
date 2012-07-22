@@ -194,7 +194,7 @@
             }
         });
         $('#globalSearchInput').catcomplete({
-            source: 'search.json',
+            source: '_skinwebpath_/search.json',
             select: function (event, ui) {
                 alert( ui.item ?
                     "Selected: " + ui.item.value + " aka " + ui.item.label :
