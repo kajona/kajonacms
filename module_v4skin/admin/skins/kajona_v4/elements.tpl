@@ -744,11 +744,8 @@ Spacer, used to seperate logical groups
 The following sections are used to display the path-navigations, e.g. used by the navigation module
 
 <path_container>
-    <!-- TODO: url for home button, active state, no divider for last item -->
+    <!-- TODO: active state, no divider for last item -->
     <ul class="breadcrumb">
-        <li>
-            <a href="#"><i id="icon-home"></i></a> <span class="divider"></span>
-        </li>
         %%pathnavi%%
     </ul>
 </path_container>

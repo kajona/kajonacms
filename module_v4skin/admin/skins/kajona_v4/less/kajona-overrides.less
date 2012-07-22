@@ -13,7 +13,16 @@ body {
 
 .breadcrumb {
     padding: 0px 14px;
+
+    li:first-child a {
+        background: url(../img/icon-home.png) 0px 0px no-repeat;
+        padding-left: 18px;
+        padding-top: 16px;
+        .hide-text();
+    }
 }
+
+
 
 .userNotificationsDropdown {
     margin-top: 10px;
@@ -216,13 +225,6 @@ body {
 		height:13px;
 		display:inline-block;
   padding: 0 5px;
-}
-
-#icon-home {
-  width:18px;
-		height:16px;
-		background:url(../img/icon-home.png) left top no-repeat @grayDarker;
-		display:inline-block;
 }
 
 #content .form-actions {
