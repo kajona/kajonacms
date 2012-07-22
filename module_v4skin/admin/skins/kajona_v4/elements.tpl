@@ -744,7 +744,6 @@ Spacer, used to seperate logical groups
 The following sections are used to display the path-navigations, e.g. used by the navigation module
 
 <path_container>
-    <!-- TODO: active state, no divider for last item -->
     <ul class="breadcrumb">
         %%pathnavi%%
     </ul>
@@ -752,7 +751,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 <path_entry>
     <li>
-        %%pathlink%% <span class="divider"></span>
+        %%pathlink%%
     </li>
 </path_entry>
 
