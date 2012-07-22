@@ -1019,7 +1019,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter"), $this->getLang("user_browser_show"), $this->getLang("user_browser_show"), "icon_folderActionOpen.gif"));
 
                 if($this->getParam("allowGroup") == "1")
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("group_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
+                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
 
                 $strReturn .= $this->objToolkit->simpleAdminList($objSingleGroup, $strAction, $intI++);
 
@@ -1040,7 +1040,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled.gif"));
                 else
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("user_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
+                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("user_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
                 $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction, $intI++);
 
             }

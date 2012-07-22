@@ -426,7 +426,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot.gif"), $strAction, $intCounter++);
         }
         else {
-            $strAction  = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+            $strAction  = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf.gif"), $strAction, $intCounter++);
         }
         if(count($arrPoints) > 0) {
@@ -434,7 +434,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             foreach($arrPoints as $objSinglePoint) {
                 if($objSinglePoint->rightView()) {
                     $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"), $this->getLang("navigationp_anzeigen"), $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
                     $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter);
                 }
             }
@@ -462,7 +462,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 		$strReturn .= $this->objToolkit->listHeader();
         /** @var class_module_navigation_tree $objOnenavigation */
 		foreach($arrNavis as $objOnenavigation) {
-		    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['navigation_name', '".$objOnenavigation->getStrName()."'], ['navigation_id', '".$objOnenavigation->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
+		    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['navigation_name', '".$objOnenavigation->getStrName()."'], ['navigation_id', '".$objOnenavigation->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
             $strReturn .= $this->objToolkit->simpleAdminList($objOnenavigation, $strAction, $intCounter++);
 		}
         $strReturn .= $this->objToolkit->listFooter();

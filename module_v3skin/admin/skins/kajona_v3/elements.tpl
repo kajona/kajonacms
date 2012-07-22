@@ -229,7 +229,7 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
 	<div style="display:inline;">
-			<div id="kajonaUploadButtonsContainer" onmouseover="KAJONA.admin.tooltip.add(this, '%%upload_multiple_pleaseWait%%');">
+            <div id="kajonaUploadButtonsContainer" rel="tooltip" title="%%upload_multiple_pleaseWait%%">
 				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
@@ -366,10 +366,10 @@ Needed Elements: %%error%%, %%form%%
 
 Part to display the login status, user is logged in
 <logout_form>
-    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
-    <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.gif" title="%%sitemapTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
-    <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);" /></a></li>
-    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
+    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.gif" title="%%sitemapTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" rel="tooltip" /></a></li>
 </logout_form>
 
 Shown, wherever the attention of the user is needed
@@ -751,7 +751,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" rel="tooltip"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
 	<script type="text/javascript">
 		KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [
@@ -1030,7 +1030,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 Part of the admin-skin, quick-access to the users favorite tags
 <adminskin_tagselector>
 %%favorites_menu%%
-    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);"/></a></li>
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" rel="tooltip" /></a></li>
 </adminskin_tagselector>
 
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.
@@ -1044,7 +1044,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </aspect_chooser_entry>
 
 <tooltip_text>
-    <span title="%%tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);">%%text%%</span>
+    <span title="%%tooltip%%" rel="tooltip">%%text%%</span>
 </tooltip_text>
 
 

@@ -260,7 +260,8 @@
 
         // init popovers & tooltips
         $('#content a[rel=popover]').popover();
-        $('#content a[rel=tooltip]').tooltip();
+
+        $('*[rel=tooltip]').tooltip();
 
     });
 

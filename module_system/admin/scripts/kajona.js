@@ -617,7 +617,8 @@ KAJONA.admin.tooltip = (function() {
 	return {
 		add : add,
 		show : show,
-		hide : hide
+		hide : hide,
+        init : init
 	}
 }());
 

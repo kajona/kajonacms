@@ -678,7 +678,7 @@ HTML;
 
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
-                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
+                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
 
                         $strReturn .= $this->objToolkit->simpleAdminList($objOneFile, $strActions, $intI++);
                     }
@@ -749,7 +749,7 @@ HTML;
         if($arrContent["nrFolders"] != 0) {
             foreach($arrContent["folders"] as $strFolderCur) {
                 $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".$strFolder."/".$strFolderCur."&form_element=".$strFormElement, $this->getLang("actionOpenFolder"), $this->getLang("actionOpenFolder"), "icon_folderActionOpen.gif"));
-                $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
+                $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
             }
         }
