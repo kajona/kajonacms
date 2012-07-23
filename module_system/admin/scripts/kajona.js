@@ -613,6 +613,9 @@ KAJONA.admin.tooltip = (function() {
 		} catch (e) {}
 	}
 
+    function init() {
+    }
+
 	//public variables and methods
 	return {
 		add : add,
@@ -1048,8 +1051,11 @@ KAJONA.admin.systemtask = {
 
                     //show status info
                     document.getElementById('systemtaskStatusDiv').innerHTML = strStatusInfo;
+
+                    /*
                     //center the dialog again (later() as workaround to add a minimal delay)
                     YAHOO.lang.later(10, this, function() {jsDialog_0.dialog.center();});
+                    */
 
                     if(strReload == "") {
                     	jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE_DONE);

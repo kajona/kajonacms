@@ -23,6 +23,73 @@
     %%head%%
     <script src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
 
+    <script>
+
+    /**
+      * Object to show a modal dialog
+      */
+     KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bitResizing) {
+     	this.dialog;
+     	this.containerId = strDialogId;
+     	this.iframeId;
+        this.iframeURL;
+
+     	this.setTitle = function (strTitle) {
+            $('#' + this.containerId + '_title').html(strTitle);
+     	};
+
+     	this.setContent = function (strContent, strConfirmButton, strLinkHref) {
+     		if (intDialogType == 1) {
+                $('#' + this.containerId + '_content').html(strContent);
+
+     			var $confirmButton = $('#' + this.containerId + '_confirmButton');
+                $confirmButton.val(strConfirmButton);
+                $confirmButton.click(function() {
+     				window.location = strLinkHref;
+     				return false;
+     			});
+     		}
+     	};
+
+     	this.setContentRaw = function(strContent) {
+            $('#' + this.containerId + '_content').html(strContent);
+     	};
+
+     	this.setContentIFrame = function(strUrl) {
+     		this.iframeId = this.containerId + '_iframe';
+            this.iframeURL = strUrl;
+      	};
+
+     	this.init = function(intWidth, intHeight) {
+            $('#' + this.containerId).modal({
+                keyboard: false,
+                show: true
+            });
+
+            if(this.iframeURL != null) {
+                $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="100%" name="' + this.iframeId + '" id="' + this.iframeId + '"></iframe>');
+                this.iframeURL = null;
+            }
+
+     		//TODO: dynamically loading of dragdrop/resize files
+     		if (bitDragging) {
+     			this.enableDragging();
+     		}
+     		if (bitResizing) {
+     			this.enableResizing();
+     		}
+     	};
+
+     	this.hide = function() {
+            $('#' + this.containerId).modal('hide');
+     	};
+
+     	this.enableDragging = function() {};
+
+     	this.enableResizing = function() {};
+     };
+    </script>
+
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="_skinwebpath_/js/html5.js?_system_browser_cachebuster_"></script>
@@ -164,6 +231,7 @@
 <script src="_skinwebpath_/treedemo.js"></script>
 
 <script>
+
     $(function () {
         function isTouchDevice() {
           return !!('ontouchstart' in window) ? 1 : 0;

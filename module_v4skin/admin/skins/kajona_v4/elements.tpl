@@ -1033,40 +1033,53 @@ The language switch surrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
-<dialogContainer><div class="dialog" id="%%dialog_id%%">
-	<div class="hd"><div class="c"><h3 id="%%dialog_id%%_title"><!-- filled by js --></h3></div></div>
-	<div class="bd">
-		<div class="c" id="%%dialog_id%%_content">
-			<!-- filled by js -->
-		</div>
-	</div>
-	<div class="ft"><div class="c"></div></div>
-</div></dialogContainer>
+<dialogContainer>
+    <div class="modal hide" id="%%dialog_id%%">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="%%dialog_id%%">×</button>
+            <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
+        </div>
+        <div class="modal-body" id="%%dialog_id%%_content">
+            <!-- filled by js -->
+        </div>
+    </div>
+</dialogContainer>
 
-<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
-	<div class="hd"><div class="c"><h3 id="%%dialog_id%%_title"><!-- filled by js --></h3></div></div>
-	<div class="bd">
-		<div class="c">
-			<span id="%%dialog_id%%_content"><!-- filled by js --></span><br /><br />
-			<input type="submit" name="%%dialog_id%%_confirmButton" id="%%dialog_id%%_confirmButton" value="confirm" class="inputSubmit" /> <input type="submit" name="%%dialog_id%%_cancelButton" id="%%dialog_id%%_cancelButton" value="%%dialog_cancelButton%%" class="inputSubmitShort" onclick="jsDialog_1.hide(); return false;" />
-			<br />
-		</div>
-	</div>
-	<div class="ft"><div class="c"></div></div>
-</div></dialogConfirmationContainer>
+<dialogConfirmationContainer>
+    <div class="modal hide" id="%%dialog_id%%">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
+        </div>
+        <div class="modal-body" id="%%dialog_id%%_content">
+            <!-- filled by js -->
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal" id="%%dialog_id%%_cancelButton">%%dialog_cancelButton%%</a>
+            <a href="#" class="btn btn-primary" id="%%dialog_id%%_confirmButton">confirm</a>
+        </div>
+    </div>
+</dialogConfirmationContainer>
 
-<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%" style="width: 100px;">
-    <div class="hd"><div class="c"><h3 id="%%dialog_id%%_title">%%dialog_title%%</h3></div></div>
-    <div class="bd">
-        <div class="c" style="margin-left: 45px;">
+<dialogLoadingContainer>
+    <div class="modal hide" id="%%dialog_id%%" style="width: 100px;">
+        <div class="modal-header">
+            <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
+        </div>
+        <div class="modal-body">
             <div id="dialogLoadingDiv" class="loadingContainer"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
     </div>
-    <div class="ft"><div class="c"></div></div>
-</div></dialogLoadingContainer>
+</dialogLoadingContainer>
 
-<dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>
+<dialogRawContainer>
+    <div class="modal hide" id="%%dialog_id%%">
+        <div class="modal-body">
+            <div id="%%dialog_id%%_content"><!-- filled by js --></div>
+        </div>
+    </div>
+</dialogRawContainer>
 
 
 
