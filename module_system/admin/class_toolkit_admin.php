@@ -1158,6 +1158,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param mixed $arrModules
      * @param string $strCurrent
      * @return string
+     *
+     * @deprecated will be moved to the sitemap
      */
     public function getAdminModuleNavi($arrModules, $strCurrent) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main");
@@ -1210,6 +1212,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param $arrActions
      * @return string
+     *
+     * @deprecated will be moved to the sitemap
      */
     public function getAdminModuleActionNavi($arrActions) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "moduleactionnavi_main");
@@ -1230,12 +1234,25 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array("rows" => $strRows), $strTemplateID);
     }
 
-    public function getAdminSitemap() {
+
+    /**
+     * The v4 way of generating a backend-navigation.
+     *
+     * @param string $strCurrentModule
+     *
+     * @return string
+     */
+    public function getAdminSitemap($strCurrentModule = "") {
         $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_wrapper");
         $strModuleID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper");
+        $strModuleActiveID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper_active");
         $strActionID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_action_entry");
+        $strDividerID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_divider_entry");
 
         $strModules = "";
+
+        if($strCurrentModule == "elemente")
+            $strCurrentModule = "pages";
 
         $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
         foreach ($arrModules as $arrModule) {
@@ -1244,12 +1261,31 @@ class class_toolkit_admin extends class_toolkit {
                 $arrActions = class_admin_helper::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
 
                 $strActions = "";
-                foreach($arrActions as $strOneAction)
-                    if(trim($strOneAction) != "")
-                        $strActions .= $this->objTemplate->fillTemplate(array("action" => $strOneAction), $strActionID);
+                foreach($arrActions as $strOneAction) {
+                    if(trim($strOneAction) != "") {
+                        $arrActionEntries = array(
+                            "action" => $strOneAction
+                        );
+                        $strActions .= $this->objTemplate->fillTemplate($arrActionEntries, $strActionID);
+                    }
+                    else {
+                        $strActions .= $this->objTemplate->fillTemplate(array(), $strDividerID);
+                    }
+                }
 
 
-                $strModules .= $this->objTemplate->fillTemplate(array("module" => getLinkAdmin($objModule->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objModule->getStrName())), "actions" => $strActions), $strModuleID);
+                $arrModuleLevel = array(
+                    "module" => getLinkAdmin($objModule->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objModule->getStrName())),
+                    "actions" => $strActions,
+                    "moduleTitle" => $objModule->getStrName(),
+                    "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objModule->getStrName()),
+                    "moduleHref" => getLinkAdminHref($objModule->getStrName(),"")
+                );
+
+                if($strCurrentModule == $objModule->getStrName())
+                    $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleActiveID);
+                else
+                    $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleID);
             }
         }
 

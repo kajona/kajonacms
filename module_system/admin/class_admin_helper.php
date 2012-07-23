@@ -55,6 +55,7 @@ class class_admin_helper {
      * @param $strCurrentModule
      *
      * @return string
+     * @deprecated will be replaced by the sitemap
      */
     public static function getOutputMainNavi($strCurrentModule) {
         if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
@@ -67,6 +68,7 @@ class class_admin_helper {
 
             return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleNavi($arrModuleRows, $strCurrentModule);
         }
+        return "";
     }
 
     /**
@@ -114,6 +116,7 @@ class class_admin_helper {
             //Pass to the skin-object
             return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleActionNavi($arrFinalItems);
         }
+        return "";
     }
 
     /**

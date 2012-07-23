@@ -33,7 +33,6 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("", "");
 		return $arrReturn;
 	}
 

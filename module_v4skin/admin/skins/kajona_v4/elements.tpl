@@ -679,64 +679,69 @@ Please refer to the CKEditor documentation to see what's possible here
 
 ---------------------------------------------------------------------------------------------------------
 -- MODULE NAVIGATION ------------------------------------------------------------------------------------
+                    /* TODO: REMOVE SECTION */
+                    The surrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
+                    <modulenavi_main>
+                        <ul id="adminModuleNaviUl">
+                            %%rows%%
+                        </ul>
+                    </modulenavi_main>
 
-The surrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
-<modulenavi_main>
-    <ul id="adminModuleNaviUl">
-    	%%rows%%
-	</ul>
-</modulenavi_main>
+                    One row representing one module
+                    Possible: %%name%%, %%link%%, %%href%%
+                    <modulenavi_main_row>
+                    <li><span><a href="%%href%%">%%name%%</a></span></li>
+                    </modulenavi_main_row>
 
-One row representing one module
-Possible: %%name%%, %%link%%, %%href%%
-<modulenavi_main_row>
-<li><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row>
+                    <modulenavi_main_row_hidden>
+                    <li class="adminModuleNaviHidden"><span><a href="%%href%%">%%name%%</a></span></li>
+                    </modulenavi_main_row_hidden>
 
-<modulenavi_main_row_hidden>
-<li class="adminModuleNaviHidden"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_hidden>
+                    <modulenavi_main_row_selected>
+                    <li class="active"><span><a href="%%href%%">%%name%%</a></span></li>
+                    </modulenavi_main_row_selected>
 
-<modulenavi_main_row_selected>
-<li id="selected"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_selected>
+                    <modulenavi_main_row_first>
+                    <li class="first"><span><a href="%%href%%">%%name%%</a></span></li>
+                    </modulenavi_main_row_first>
 
-<modulenavi_main_row_first>
-<li class="first"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_first>
+                    <modulenavi_main_row_selected_first>
+                    <li class="first"><span><a href="%%href%%">%%name%%</a></span></li>
+                    </modulenavi_main_row_selected_first>
 
-<modulenavi_main_row_selected_first>
-<li id="selected" class="first"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_selected_first>
+                    <modulenavi_main_row_last>
+                    <li><span><a href="%%href%%">%%name%%</a></span></li>
+                    </modulenavi_main_row_last>
 
-<modulenavi_main_row_last>
-<li><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_last>
+                    <modulenavi_main_row_selected_last>
+                    <li><span><a href="%%href%%" >%%name%%</a></span></li>
+                    </modulenavi_main_row_selected_last>
 
-<modulenavi_main_row_selected_last>
-<li id="selected"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_selected_last>
+                    /* TODO: REMOVE SECTION */
 
 ---------------------------------------------------------------------------------------------------------
 -- INTERNAL MODULE-ACTION NAVIGATION --------------------------------------------------------------------
+                    /* TODO: REMOVE SECTION */
 
-The sourrounding of the moduleaction-navigation (NOT THE MODULE LIST!)
-<moduleactionnavi_main>
-    <ul>
-    	%%rows%%
-	</ul>
-</moduleactionnavi_main>
+                    The sourrounding of the moduleaction-navigation (NOT THE MODULE LIST!)
+                    <moduleactionnavi_main>
+                        <ul>
+                            %%rows%%
+                        </ul>
+                    </moduleactionnavi_main>
 
-One row representing one action
-Possible: %%name%%, %%link%%, %%href%%
-<moduleactionnavi_row>
-<li><a href="%%href%%">%%name%%</a></li>
-</moduleactionnavi_row>
+                    One row representing one action
+                    Possible: %%name%%, %%link%%, %%href%%
+                    <moduleactionnavi_row>
+                    <li><a href="%%href%%">%%name%%</a></li>
+                    </moduleactionnavi_row>
 
-Spacer, used to seperate logical groups
-<moduleactionnavi_spacer>
-<li class="spacer"></li>
-</moduleactionnavi_spacer>
+                    Spacer, used to seperate logical groups
+                    <moduleactionnavi_spacer>
+                    <li class="spacer"></li>
+                    </moduleactionnavi_spacer>
+
+                    /* TODO: REMOVE SECTION */
 
 ---------------------------------------------------------------------------------------------------------
 -- PATH NAVIGATION --------------------------------------------------------------------------------------
@@ -1257,6 +1262,10 @@ It containes a list of aspects and provides the possibility to switch the differ
     <div id="menuContainer_%%id%%" class="yui-skin-sam"></div>
 </contextmenu_wrapper>
 
+
+---------------------------------------------------------------------------------------------------------
+-- BACKEND NAVIGATION -----------------------------------------------------------------------------------
+
 <sitemap_wrapper>
     <ul class="nav nav-list">
         %%level%%
@@ -1265,14 +1274,28 @@ It containes a list of aspects and provides the possibility to switch the differ
 
 <sitemap_module_wrapper>
     <li class="dropdown">
-        %%module%%
-        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats</a>-->
+        <!--%%module%%-->
+        <a href="%%moduleHref%%" class="dropdown-toggle" data-toggle="dropdown">%%moduleName%%</a>
         <ul class="dropdown-menu">
             %%actions%%
         </ul>
     </li>
 </sitemap_module_wrapper>
 
+<sitemap_module_wrapper_active>
+<li class="dropdown active">
+    <!--%%module%%-->
+    <a href="%%moduleHref%%" class="dropdown-toggle" data-toggle="dropdown">%%moduleName%%</a>
+    <ul class="dropdown-menu">
+        %%actions%%
+    </ul>
+</li>
+</sitemap_module_wrapper_active>
+
 <sitemap_action_entry>
     <li>%%action%%</li>
 </sitemap_action_entry>
+
+<sitemap_divider_entry>
+<li class="divider"></li>
+</sitemap_divider_entry>

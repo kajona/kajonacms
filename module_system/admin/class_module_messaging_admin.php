@@ -35,7 +35,6 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "config", "", $this->getLang("actionConfig"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("", "");
 		return $arrReturn;
 	}
 
