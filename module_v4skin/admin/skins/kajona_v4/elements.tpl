@@ -1275,7 +1275,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 <sitemap_module_wrapper>
     <li class="dropdown">
         <!--%%module%%-->
-        <a href="%%moduleHref%%" class="dropdown-toggle" data-toggle="dropdown">%%moduleName%%</a>
+        <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
         <ul class="dropdown-menu">
             %%actions%%
         </ul>
@@ -1285,7 +1285,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 <sitemap_module_wrapper_active>
 <li class="dropdown active">
     <!--%%module%%-->
-    <a href="%%moduleHref%%" class="dropdown-toggle" data-toggle="dropdown">%%moduleName%%</a>
+    <a  class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
     <ul class="dropdown-menu">
         %%actions%%
     </ul>
