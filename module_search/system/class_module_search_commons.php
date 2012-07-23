@@ -75,7 +75,22 @@ class class_module_search_commons extends class_model implements interface_model
 
         //Search for search-plugins
         $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/searchplugins", array(".php"));
-        return $this->doSearch($strSearchterm, $arrSearchPlugins);
+
+        $objSearchFunc = function(class_search_result $objA, class_search_result $objB) {
+            //first by module
+            if($objA->getObjObject() instanceof class_model && $objB->getObjObject() instanceof class_model) {
+                $intCmp = strcmp($objA->getObjObject()->getArrModule("modul"), $objB->getObjObject()->getArrModule("modul"));
+
+                if($intCmp != 0)
+                    return $intCmp;
+                else
+                    return $objA->getIntHits() < $objB->getIntHits();
+            }
+            return $objA->getIntHits() < $objB->getIntHits();
+        };
+
+
+        return $this->doSearch($strSearchterm, $arrSearchPlugins, $objSearchFunc);
 
     }
 
@@ -84,10 +99,11 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @param $strSearchterm
      * @param $arrSearchPlugins
+     * @param null|object $objSortFunc
      *
      * @return array|class_search_result[]
      */
-    private function doSearch($strSearchterm, $arrSearchPlugins) {
+    private function doSearch($strSearchterm, $arrSearchPlugins, $objSortFunc = null) {
         $arrHits = array();
 
         foreach($arrSearchPlugins as $strOnePlugin) {
@@ -105,10 +121,13 @@ class class_module_search_commons extends class_model implements interface_model
 
         $arrHits = $this->mergeDuplicates($arrHits);
 
+        if($objSortFunc == null)
+            $objSortFunc = function(class_search_result $objA, class_search_result $objB) {
+                return $objA->getIntHits() < $objB->getIntHits();
+            };
+
         //sort by hits
-        uasort($arrHits, function(class_search_result $objA, class_search_result $objB) {
-            return $objA->getIntHits() < $objB->getIntHits();
-        });
+        uasort($arrHits, $objSortFunc);
 
 
 

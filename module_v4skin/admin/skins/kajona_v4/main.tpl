@@ -237,38 +237,60 @@
           return !!('ontouchstart' in window) ? 1 : 0;
         }
 
+
         $.widget('custom.catcomplete', $.ui.autocomplete, {
             _renderMenu: function(ul, items) {
                 var self = this;
                 var currentCategory = '';
 
                 $.each(items, function(index, item) {
-                    if (item.category != currentCategory) {
-                        ul.append('<li class="ui-autocomplete-category"><h3>' + item.category + '</h3></li>');
-                        currentCategory = item.category;
+                    if (item.module != currentCategory) {
+                        ul.append('<li class="ui-autocomplete-category"><h3>' + item.module + '</h3></li>');
+                        currentCategory = item.module;
                     }
                     self._renderItem(ul, item);
                 });
 
                 ul.append('<li class="detailedResults"><a href="#">View detailed search results</a></li>');
-
                 ul.addClass('dropdown-menu');
             },
             _renderItem: function (ul, item) {
                 return $('<li></li>')
                     .data('item.autocomplete', item)
-                    .append('<a>' + '<img src="http://placehold.it/40x40" alt="" class="pull-left"><h4 class="pull-left">' + item.label + '</h4><br>' + item.desc + '</a>')
+                    .append('<a>' + '<img src="'+item.icon+'" alt="" class="pull-left"><h4 class="pull-left">' + item.systemid + '</h4><br>' + item.description + '</a>')
                     .appendTo(ul);
             }
         });
         $('#globalSearchInput').catcomplete({
-            source: '_skinwebpath_/search.json',
+            //source: '_skinwebpath_/search.json',
+            source: function(request, response) {
+                $.ajax({
+                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        query: request.term,
+                        module: 'search',
+                        action: 'searchXml',
+                        asJson: '1'
+                    },
+                    success: response
+                });
+            },
             select: function (event, ui) {
-                alert( ui.item ?
-                    "Selected: " + ui.item.value + " aka " + ui.item.label :
+                if(ui.item) {
+                    document.location = ui.item.link;
+                }
+                console.log( ui.item ?
+                    "Selected: " + ui.item.link + " aka " + ui.item.description :
                     "Nothing selected, input was " + this.value );
             }
         });
+
+
+
+
+
 
         //sidebar responsive
         $('.nav-collapse').on('show', function () {

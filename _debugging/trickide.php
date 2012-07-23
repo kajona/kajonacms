@@ -12,3 +12,4 @@ define("_system_changehistory_enabled_", "");
 define("_pages_portaleditor_", "");
 define("_pages_templatechange_", "");
 define("_pages_defaulttemplate_", "");
+define("_skinwebpath_", "");

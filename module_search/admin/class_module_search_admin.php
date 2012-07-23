@@ -52,10 +52,60 @@ class class_module_search_admin extends class_admin implements interface_admin {
 	        $arrResult = $objSearchCommons->doAdminSearch($strSearchterm);
 	    }
 
-	    $strReturn .= $this->createSearchXML($strSearchterm, $arrResult);
+        if($this->getParam("asJson") != "")
+	        $strReturn .= $this->createSearchJson($strSearchterm, $arrResult);
+        else
+	        $strReturn .= $this->createSearchXML($strSearchterm, $arrResult);
 
         return $strReturn;
 	}
+
+    /**
+     * @param $strSearchterm
+     * @param class_search_result[] $arrResults
+     *
+     * @return string
+     */
+    private function createSearchJson($strSearchterm, $arrResults) {
+        class_xml::setBitSuppressXmlHeader(true);
+
+        $arrItems = array();
+        $intI = 0;
+        foreach($arrResults as $objOneResult) {
+            $arrItem = array();
+            //create a correct link
+            if($objOneResult->getObjObject() == null || !$objOneResult->getObjObject()->rightView())
+                continue;
+
+            if(++$intI > self::$INT_MAX_NR_OF_RESULTS)
+                break;
+
+            $strIcon = "";
+            if($objOneResult->getObjObject() instanceof interface_admin_listable) {
+                $strIcon = $objOneResult->getObjObject()->getStrIcon();
+                if(is_array($strIcon))
+                    $strIcon = $strIcon[0];
+            }
+
+            $strLink = $objOneResult->getStrPagelink();
+            if($strLink == "")
+                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid()."&source=search");
+
+            $arrItem["module"] = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneResult->getObjObject()->getArrModule("modul"));
+            $arrItem["systemid"] = $objOneResult->getStrSystemid();
+            $arrItem["icon"] = _skinwebpath_."/pics/".$strIcon;
+            $arrItem["score"] = $objOneResult->getStrSystemid();
+            $arrItem["description"] = uniStrTrim($objOneResult->getObjObject()->getStrDisplayName(), 200);
+            $arrItem["link"] = html_entity_decode($strLink);
+
+            $arrItems[] = $arrItem;
+        }
+
+
+        $objResult = $arrItems;
+
+        return json_encode($objResult);
+    }
 
 
     /**
