@@ -11,20 +11,50 @@ body {
     }
 }
 
+
 .userNotificationsDropdown {
-    margin-top: 10px;
-}
+    margin: 10px 0 0 25px;
 
-.userNotificationsDropdown:hover ul.dropdown-menu {
-    display: block;
-}
+    a {
+        color:#626262 !important;
+    }
 
+    a:hover {
+        color:@green !important;
+    }
 
-.userNotificationsDropdown .badge {
-    position: absolute;
-    top: -6px;
-    left: -24px;
-    font-style: normal;
+    a.dropdown-toggle {
+        background:none;
+    }
+
+    &:hover .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu {
+        background:none @white;
+        border:1px solid #d2d2d2;
+        left:0px;
+        top:23px;
+
+        li ul li {
+            list-style:inside none;
+            padding:0px;
+            margin-left:-10px;
+
+            a {
+                padding-left:0px;
+                margin-left:0px;
+            }
+        }
+    }
+
+    .badge {
+        position: absolute;
+        top: -6px;
+        left: -24px;
+        font-style: normal;
+    }
 }
 
 
@@ -434,47 +464,53 @@ label {
   border-width: 0px 0px 0px 10px;
 }
 
-.nav-list > .active > a, .nav-list > .active > a:hover, .nav > li > a:hover, a.dropdown-toggle, li.open a.dropdown-toggle {
-  color:@white;
-  text-shadow:none;
-		background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
+.nav-list > .active > a,
+.nav-list > .active > a:hover,
+.nav > li > a:hover,
+a.dropdown-toggle,
+li.open a.dropdown-toggle {
+    color:@white;
+    text-shadow:none;
+    background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
 }
 
 .dropdown-menu {
-  background-clip: none;
-  background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
-  border:0px;
-  .border-radius(0px);
-  .box-shadow(none);
-  display: none;
-  float: left;
-  left: 100%;
-  list-style: none outside none;
-  margin: 1px 0 0;
-  min-width: 160px;
-  padding: 4px 0;
-  position: absolute;
-  top: -1px;
-  z-index: 1000;
-		text-align:left;
-		color:@white;
-}
+    background-clip: none;
+    background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
+    border:0px;
+    .border-radius(0px);
+    .box-shadow(none);
+    display: none;
+    float: left;
+    left: 100%;
+    list-style: none outside none;
+    margin: 1px 0 0;
+    min-width: 160px;
+    padding: 4px 0;
+    position: absolute;
+    top: -1px;
+    z-index: 1000;
+    text-align:left;
+    color:@white;
 
-.dropdown-menu a {
-  clear: both;
-  color: @white;
-  display: block;
-  font-weight: normal;
-		font-size:18px;
-  line-height: 20px;
-  padding: 4px 15px;
-  white-space: nowrap;
-}
+    a {
+        clear: both;
+        color: @white;
+        display: block;
+        font-weight: normal;
+        font-size:18px;
+        line-height: 20px;
+        padding: 4px 15px;
+        white-space: nowrap;
+    }
 
-.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-    background-color:transparent;
-    color: #434343;
-    text-decoration: none;
+    li > a:hover,
+    .active > a,
+    .active > a:hover {
+        background-color:transparent;
+        color: #434343;
+        text-decoration: none;
+    }
 }
 
 .nav > li.dropdown:hover > .dropdown-menu {
@@ -482,50 +518,20 @@ label {
 }
 
 .nav-list .divider {
-  background-color: @white;
-  border-bottom: 0px;
-  height: 1px;
-  margin: 9px 1px;
-  overflow: hidden;
+    background-color: @white;
+    border-bottom: 0px;
+    height: 1px;
+    margin: 9px 1px;
+    overflow: hidden;
 }
 
-.userNotificationsDropdown a.dropdown-toggle {
-  background:none;
-}
 
-.userNotificationsDropdown {
-		margin:10px 0 0 25px;
-}
-
-.userNotificationsDropdown a {
-		color:#626262;
-}
-
-.progress-danger.progress-striped .bar, .progress-striped .bar {
+.progress-danger.progress-striped .bar,
+.progress-striped .bar {
   background-color: @green;
 }
 
-.userNotificationsDropdown .dropdown-menu {
-  background:none @white;
-		border:1px solid #d2d2d2;
-		left:0px;
-		top:23px;
-}
 
-.userNotificationsDropdown .dropdown-menu li ul li {
-  list-style:inside none;
-		padding:0px;
-		margin-left:-10px;
-}
-
-.userNotificationsDropdown .dropdown-menu li ul li a {
-		padding-left:0px;
-		margin-left:0px;
-}
-
-.userNotificationsDropdown .dropdown-menu a:hover {
-  color:@green;
-}
 
 :focus { 
   -moz-outline-style:none;
