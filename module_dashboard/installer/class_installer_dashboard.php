@@ -64,13 +64,19 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_3491();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_3492();
             $this->objDB->flushQueryCache();
         }
 
@@ -141,5 +147,54 @@ class class_installer_dashboard extends class_installer_base implements interfac
         return $strReturn;
     }
 
+
+    private function update_3491_3492() {
+        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
+
+        $strReturn .= "Updating widget db-structure...\n";
+        $arrUsers = class_module_user_user::getAllUsers();
+        $arrAspects = class_module_system_aspect::getAllAspects();
+
+
+        foreach($arrUsers as $objOneUser) {
+            $strReturn .= "  user: ".$objOneUser->getStrUsername()."\n";
+            foreach($arrAspects as $objOneAspect) {
+                $strReturn .= "    aspect: ".$objOneAspect->getStrName()."\n";
+
+                $arrParams = array($objOneUser->getSystemid(), $objOneAspect->getSystemid());
+
+                $strAspectWhere = " AND dashboard_aspect = ? ";
+                if($objOneAspect->getBitDefault()) {
+                    $strAspectWhere = " AND ( dashboard_aspect = ? OR dashboard_aspect IS NULL OR dashboard_aspect LIKE ? OR dashboard_aspect = '' ) ";
+                    $arrParams[] = $objOneAspect->getSystemid();
+                }
+
+                $strQuery = "SELECT system_id
+                              FROM "._dbprefix_."dashboard,
+                                   "._dbprefix_."system
+                             WHERE dashboard_id = system_id
+                               AND dashboard_user = ?
+                               ".$strAspectWhere;
+
+                $arrRows = $this->objDB->getPArray($strQuery, $arrParams);
+                foreach($arrRows as $arrOneRow) {
+                    $objWidget = new class_module_dashboard_widget($arrOneRow["system_id"]);
+
+                    if($objWidget->getStrClass() != "") {
+                        $strReturn .= "     updating widget ".$objWidget->getSystemid()."\n";
+                        $objWidget->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($objOneUser->getSystemid(), $objOneAspect->getSystemid()));
+                    }
+                }
+
+
+            }
+
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("dashboard", "3.4.9.2");
+        return $strReturn;
+    }
 
 }

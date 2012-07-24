@@ -49,7 +49,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
      */
     public function getWidgetOutput() {
         $strReturn = "";
-        $objStatsCommon = new class_stats_report_common(class_carrier::getInstance()->getObjDB(), null, null);
+        $objStatsCommon = new class_stats_report_common(class_carrier::getInstance()->getObjDB(), class_carrier::getInstance()->getObjToolkit("admin"), class_carrier::getInstance()->getObjLang());
         //check wich infos to produce
         if($this->getFieldValue("current") == "checked") {
             $strReturn .= $this->getLang("stats_online").$objStatsCommon->getNumberOfCurrentUsers();

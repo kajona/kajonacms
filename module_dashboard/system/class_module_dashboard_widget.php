@@ -76,7 +76,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * Looks up all widgets available in the filesystem.
      * ATTENTION: returns the class-name representation of a file, NOT the filename itself.
      *
-     * @return array
+     * @return string[]
      */
     public function getListOfWidgetsAvailable() {
         $arrReturn = array();
@@ -99,6 +99,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @return interface_adminwidget|class_adminwidget
      */
     public function getConcreteAdminwidget() {
+        /** @var $objWidget interface_adminwidget|class_adminwidget */
         $objWidget = new $this->strClass();
         //Pass the field-values
         $objWidget->setFieldsAsString($this->getStrContent());
@@ -136,21 +137,28 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
     /**
      * Looks up the widgets placed in a given column and
-     * returns a list of instances
+     * returns a list of instances, reduced for the current user
      *
      * @param string $strColumn
      * @param string $strAspectFilter
+     * @param string $strUserId
+     *
      * @return array of class_module_dashboard_widget
      */
-    public function getWidgetsForColumn($strColumn, $strAspectFilter = "") {
+    public function getWidgetsForColumn($strColumn, $strAspectFilter = "", $strUserId = "") {
+
+        if($strUserId == "")
+            $strUserId = $this->objSession->getUserID();
 
         $arrParams = array();
-        $arrParams[] = $this->objSession->getUserID();
+        $arrParams[] = $strUserId;
         $arrParams[] = $strColumn;
-        if($strAspectFilter != "") {
-            $arrParams[] = "%".$strAspectFilter."%";
-            $strAspectFilter = " AND (dashboard_aspect = '' OR dashboard_aspect IS NULL OR dashboard_aspect LIKE ? )";
-        }
+//        if($strAspectFilter != "") {
+//            $arrParams[] = "%".$strAspectFilter."%";
+//            $strAspectFilter = " AND (dashboard_aspect = '' OR dashboard_aspect IS NULL OR dashboard_aspect LIKE ? )";
+//        }
+
+        $arrParams[] = self::getWidgetsRootNodeForUser($strUserId, $strAspectFilter);
 
         $strQuery = "SELECT system_id
         			  FROM "._dbprefix_."dashboard,
@@ -158,7 +166,8 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         			 WHERE dashboard_user = ?
         			   AND dashboard_column = ?
         			   AND dashboard_id = system_id
-                       ".$strAspectFilter."
+        			   AND system_prev_id = ?
+                       /*".$strAspectFilter."*/
         	     ORDER BY system_sort ASC ";
 
         $arrRows = $this->objDB->getPArray($strQuery, $arrParams);
@@ -172,10 +181,60 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         return $arrReturn;
     }
 
+    /**
+     * Searches the root-node for a users' widgets.
+     * If not given, the node is created on the fly.
+     * Those nodes are required to ensure a proper sort-handling on the system-table
+     *
+     * @static
+     *
+     * @param $strUserid
+     * @param string $strAspectId
+     * @return string
+     */
+    public static function getWidgetsRootNodeForUser($strUserid, $strAspectId = "") {
+
+        if($strAspectId == "")
+            $strAspectId = class_module_system_aspect::getCurrentAspectId();
+
+        $strQuery = "SELECT system_id
+        			  FROM "._dbprefix_."dashboard,
+        			  	   "._dbprefix_."system
+        			 WHERE dashboard_id = system_id
+        			   AND system_prev_id = ?
+        			   AND dashboard_user = ?
+        			   AND dashboard_aspect = ?
+        			   AND dashboard_class = ?
+        	     ORDER BY system_sort ASC ";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(
+            class_module_system_module::getModuleByName("dashboard")->getSystemid(),
+            $strUserid,
+            $strAspectId,
+            "root_node"
+        ));
+
+        if(!isset($arrRow["system_id"]) || !validateSystemid($arrRow["system_id"])) {
+            //Create a new root-node on the fly
+            $objWidget = new class_module_dashboard_widget();
+            $objWidget->setStrAspect($strAspectId);
+            $objWidget->setStrUser($strUserid);
+            $objWidget->setStrClass("root_node");
+            $objWidget->updateObjectToDb(class_module_system_module::getModuleByName("dashboard")->getSystemid());
+
+            $strReturnId = $objWidget->getSystemid();
+        }
+        else
+            $strReturnId = $arrRow["system_id"];
+
+        return $strReturnId;
+    }
+
 
     /**
      * Looks up the widgets placed in a given column and
      * returns a list of instances
+     * Use with care!
      *
      * @return class_module_dashboard_widget[]
      */
@@ -199,19 +258,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         }
         return $arrReturn;
     }
-
-
-    /**
-     * Returns the corresponding instance of class_module_system_adminwidget.
-     * User class_module_system_adminwidget::getConcreteAdminwidget() to obtain
-     * an instance of the real widget
-     *
-     * @return class_module_system_adminwidget
-     */
-    public function getWidgetmodelForCurrentEntry() {
-        return new class_module_system_adminwidget($this->getStrWidgetId());
-    }
-
 
     /**
      * Creates an initial set of widgets to be displayed to new users.
@@ -241,8 +287,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrClass($arrOneWidget[0]);
             $objDashboard->setStrContent($arrOneWidget[1]);
-            $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
-            if(!$objDashboard->updateObjectToDb())
+            if(!$objDashboard->updateObjectToDb(self::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getCurrentAspectId())))
                 $bitReturn = false;
         }
 
@@ -251,7 +296,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
-    //--- GETTERS / SETTERS ---------------------------------------------------------------------------------
 
     public function setStrColumn($strColumn) {
         $this->strColumn = $strColumn;
@@ -259,18 +303,12 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     public function setStrUser($strUser) {
         $this->strUser = $strUser;
     }
-    public function setStrWidgetId($strWidgetId) {
-        $this->strWidgetId = $strWidgetId;
-    }
 
     public function getStrColumn() {
         return $this->strColumn;
     }
     public function getStrUser() {
         return $this->strUser;
-    }
-    public function getStrWidgetId() {
-        return $this->strWidgetId;
     }
 
     public function getStrAspect() {

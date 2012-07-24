@@ -108,6 +108,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                                           intStart, data.indexOf(\"</error>\")-intStart
                                         );
                                     }
+                                    KAJONA.util.evalScript(data);
                                 }
                                 else {
                                     KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
@@ -282,6 +283,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
             $arrDD = array();
             foreach ($arrWidgetsAvailable as $strOneWidget) {
+                /** @var $objWidget interface_adminwidget|class_adminwidget */
                 $objWidget = new $strOneWidget();
                 $arrDD[$strOneWidget] = $objWidget->getWidgetName();
 
@@ -332,7 +334,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             $objDashboard->setStrColumn($this->getParam("column"));
             $objDashboard->setStrUser($this->objSession->getUserID());
             $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
-            if($objDashboard->updateObjectToDb())
+            if($objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($this->objSession->getUserID(), class_module_system_aspect::getCurrentAspectId())))
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             else
                 return $this->getLang("errorSavingWidget");
@@ -342,12 +344,13 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	    return $strReturn;
 	}
 
-	/**
-	 * Deletes a widget from the dashboard
-	 *
-	 * @return string "" in case of success
+    /**
+     * Deletes a widget from the dashboard
+     *
+     * @throws class_exception
+     * @return string "" in case of success
      * @permissions delete
-	 */
+     */
 	protected function actionDeleteWidget() {
 	    $strReturn = "";
         $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
@@ -359,12 +362,13 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 		return $strReturn;
 	}
 
-	/**
-	 * Creates the form to edit a widget (NOT the dashboard entry!)
-	 *
-	 * @return string "" in case of success
+    /**
+     * Creates the form to edit a widget (NOT the dashboard entry!)
+     *
+     * @throws class_exception
+     * @return string "" in case of success
      * @permissions edit
-	 */
+     */
 	protected function actionEditWidget() {
 	    $strReturn = "";
         if($this->getParam("saveWidget") == "") {
