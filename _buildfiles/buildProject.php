@@ -55,47 +55,49 @@ class Testmanager {
         $objDB->flushQueryCache();
         
         
-        $objSystemData = new class_module_packagemanager_metadata();
-        $objSystemData->autoInit("/core/module_system");
-        $objTemplateData = new class_module_packagemanager_metadata();
-        $objTemplateData->autoInit("/core/module_packagemanager");
-        $objPagesData = new class_module_packagemanager_metadata();
-        $objPagesData->autoInit("/core/module_pages");
-        $objMediamanagerData = new class_module_packagemanager_metadata();
-        $objMediamanagerData->autoInit("/core/module_mediamanager");
-        $arrPackagesToInstall = array(
-            $objSystemData, $objTemplateData, $objPagesData, $objMediamanagerData
-        );
 
         echo "\n\n\n";
         echo "Searching for packages to be installed...";
         $objManager = new class_module_packagemanager_manager();
         $arrPackageMetadata = $objManager->getAvailablePackages();
 
+        $arrPackagesToInstall = array();
         foreach($arrPackageMetadata as $objOneMetadata) {
-            if(!in_array($objOneMetadata->getStrTitle(), array("system", "pages", "packagemanager", "samplecontent", "mediamanager")))
+            if(!in_array($objOneMetadata->getStrTitle(), array("samplecontent")))
                 $arrPackagesToInstall[] = $objOneMetadata;
         }
 
         echo "nr of packages found to install: ".count($arrPackagesToInstall)."\n";
         echo "\n\n";
 
+        $intMaxLoops = 0;
         echo "starting installations...\n";
-        foreach($arrPackagesToInstall as $objOneMetadata) {
+        while(count($arrPackagesToInstall) > 0 && ++$intMaxLoops < 100) {
+            foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
 
-            echo "---------------------------------------------------------------\n";
+                echo "---------------------------------------------------------------\n";
 
-            if(!$objOneMetadata->getBitProvidesInstaller()) {
-                echo "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n\n";
-                continue;
+                if(!$objOneMetadata->getBitProvidesInstaller()) {
+                    echo "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n\n";
+                    unset($arrPackagesToInstall[$intKey]);
+                    continue;
+                }
+
+
+                echo "Installing ".$objOneMetadata->getStrTitle()."...\n\n";
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+                if(!$objHandler->isInstallable()) {
+                    echo "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements";
+                    continue;
+                }
+
+                echo $objHandler->installOrUpdate();
+
+                unset($arrPackagesToInstall[$intKey]);
+
+                echo "\n\n";
             }
-
-
-            echo "Installing ".$objOneMetadata->getStrTitle()."...\n\n";
-            $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
-            echo $objHandler->installOrUpdate();
-            
-            echo "\n\n";
         }
 
 

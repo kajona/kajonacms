@@ -153,11 +153,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         $arrParams = array();
         $arrParams[] = $strUserId;
         $arrParams[] = $strColumn;
-//        if($strAspectFilter != "") {
-//            $arrParams[] = "%".$strAspectFilter."%";
-//            $strAspectFilter = " AND (dashboard_aspect = '' OR dashboard_aspect IS NULL OR dashboard_aspect LIKE ? )";
-//        }
-
         $arrParams[] = self::getWidgetsRootNodeForUser($strUserId, $strAspectFilter);
 
         $strQuery = "SELECT system_id
