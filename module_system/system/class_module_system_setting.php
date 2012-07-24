@@ -172,7 +172,7 @@ class class_module_system_setting extends class_model implements interface_model
     /**
 	 * Fetches all Configs from the database
 	 *
-	 * @return array
+	 * @return class_module_system_setting[]
 	 * @static
 	 */
 	public static function getAllConfigValues() {

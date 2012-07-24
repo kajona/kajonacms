@@ -693,8 +693,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray($this->getSystemid());
-        array_unshift($arrNodes, $this->getModuleSystemid($this->arrModule["modul"]));
-        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadPagesTreeViewNodes", $this->getModuleSystemid($this->arrModule["modul"]), $arrNodes, $strSideContent, $this->getOutputModuleTitle(), getLinkAdminHref($this->arrModule["modul"]));
+        array_unshift($arrNodes, $this->getObjModule()->getSystemid());
+        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadPagesTreeViewNodes", $this->getObjModule()->getSystemid(), $arrNodes, $strSideContent, $this->getOutputModuleTitle(), getLinkAdminHref($this->arrModule["modul"]));
         return $strReturn;
     }
 
@@ -962,7 +962,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $bitPageAliases = ($this->getParam("pagealiases") != "" ? true : false);
         $bitPageelements = ($this->getParam("elements") == "false" ? false : true);
         $bitFolder = ($this->getParam("folder") != "" ? true : false);
-        $strSystemid = ($this->getSystemid() != "" ? $this->getSystemid() : $this->getModuleSystemid("pages") );
+        $strSystemid = ($this->getSystemid() != "" ? $this->getSystemid() : class_module_system_module::getModuleByName("pages")->getSystemid());
         $strElement = ($this->getParam("form_element") != "" ? $this->getParam("form_element") : "ordner_name");
         $strPageid = ($this->getParam("pageid") != "" ? $this->getParam("pageid") : "0" );
 
@@ -971,7 +971,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objFolder = new class_module_pages_folder($strSystemid);
 		$strLevelUp = "";
 
-		if(validateSystemid($strSystemid) && $strSystemid != $this->getModuleSystemid($this->arrModule["modul"]))
+		if(validateSystemid($strSystemid) && $strSystemid != $this->getObjModule()->getSystemid())
 			$strLevelUp = $objFolder->getPrevId();
 		//but: when browsing pages the current level should be kept
 		iF($strPageid != "0")
@@ -981,8 +981,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		//Folder to jump one level up
 		if(!$bitPages || $strLevelUp != "" || $bitFolder) {
 			$strAction = $this->objToolkit->listButton(($strSystemid != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$strLevelUp.($bitFolder ? "&folder=1" : "").($bitPages ? "&pages=1" : "").(!$bitPageelements ? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.gif") :  " " );
-			if($strSystemid == $this->getModuleSystemid($this->arrModule["modul"]) && (!$bitPages || $bitFolder))
-				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("ordner_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getModuleSystemid($this->arrModule["modul"])."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.gif"));
+			if($strSystemid == $this->getObjModule()->getSystemid() && (!$bitPages || $bitFolder))
+				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("ordner_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getObjModule()->getSystemid()."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.gif"));
 
 			$strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $strAction, $intCounter++);
 		}

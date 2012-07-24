@@ -47,6 +47,7 @@ General:
 - Signature of class_admin::getOutputModuleNavi() changed from protected to public
 - Signatures of class_root::setPosition() and class_root::setAbsolutePosition() changed, no longer including an id-param
 - class_root::getObjectTables() was removed, table declarations are now stored within the class' doc-comment
+- class_root::getModuleSystemid() was removed, to be fetched by the regular module-classes
 
 Installers:
 - remove postInstall sections, elements should be handled by the regular install() methods.

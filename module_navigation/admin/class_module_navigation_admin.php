@@ -66,7 +66,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 		$strReturn = "";
 
         //Decide, whether to return the list of navigation or the layer of a navigation
-        if($this->getSystemid() == "" || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])) {
+        if($this->getSystemid() == "" || $this->getSystemid() == $this->getObjModule()->getSystemid()) {
 
             $objIterator = new class_array_section_iterator(class_module_navigation_tree::getAllNavisCount());
             $objIterator->setPageNumber($this->getParam("pv"));
@@ -421,7 +421,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //Link one level up
         $strPrevID = $objPoint->getPrevId();
-        if($strPrevID != $this->getModuleSystemid($this->arrModule["modul"])){
+        if($strPrevID != $this->getObjModule()->getSystemid()){
             $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.gif"));
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot.gif"), $strAction, $intCounter++);
         }

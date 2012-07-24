@@ -378,7 +378,7 @@ abstract class class_root {
             if($strPrevId === false || $strPrevId === "") {
                 //try to find the current modules-one
                 if(isset($this->arrModule["modul"])) {
-                    $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
+                    $strPrevId = class_module_system_module::getModuleByName($this->arrModule["modul"], true)->getSystemid();
                     if(!validateSystemid($strPrevId))
                         throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
                 }
@@ -1111,32 +1111,10 @@ abstract class class_root {
 	 * @param bool $bitCache
 	 * @return mixed
      * @deprecated
-     * @todo remove, located at class_module_system_module
+     * @see class_module_system_module::getPlainModuleData($strName, $bitCache)
 	 */
 	public function getModuleData($strName, $bitCache = true) {
-		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-		$arrModules = $this->objDB->getPArray($strQuery, array(),null, null, $bitCache);
-
-		foreach($arrModules as $arrOneModule) {
-		    if($arrOneModule["module_name"] == $strName)
-		       return $arrOneModule;
-		}
-
-        return array();
-	}
-
-	/**
-	 * Returns the SystemID of a installed module
-	 *
-	 * @param string $strModule
-	 * @return string
-	 */
-	public function getModuleSystemid($strModule) {
-		$arrModule = $this->getModuleData($strModule);
-		if(isset($arrModule["module_id"]))
-			return $arrModule["module_id"];
-		else
-			return "";
+        return class_module_system_module::getPlainModuleData($strName, $bitCache);
 	}
 
 	/**

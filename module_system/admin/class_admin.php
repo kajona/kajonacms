@@ -285,6 +285,8 @@ abstract class class_admin {
 	 *
 	 * @param string $strModule
 	 * @return string "" in case of an error
+     *
+     * @deprecated
 	 */
 	public function getModuleSystemid($strModule) {
         $objModule = class_module_system_module::getModuleByName($strModule);
@@ -307,7 +309,7 @@ abstract class class_admin {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
         if($strStopSystemid == "")
-            $strStopSystemid = $this->getModuleSystemid($this->arrModule["modul"]);
+            $strStopSystemid = $this->getObjModule()->getSystemid();
 
         $objSystemCommon = new class_module_system_common();
 		return $objSystemCommon->getPathArray($strSystemid, $strStopSystemid);
@@ -459,14 +461,15 @@ abstract class class_admin {
 
     // --- OutputMethods ------------------------------------------------------------------------------------
 
-	/**
-	 * Basic controller method invoking all further methods in order to generate an admin view.
+    /**
+     * Basic controller method invoking all further methods in order to generate an admin view.
      * Takes care of generating the navigation, title, common JS variables, loading quickhelp texts,...
-	 *
-	 * @return string
-	 * @final
+     *
+     * @throws class_exception
+     * @return string
+     * @final
      * @todo could be moved to a general admin-skin helper
-	 */
+     */
 	public final function getModuleOutput() {
 
         $this->validateAndUpdateCurrentAspect();

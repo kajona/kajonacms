@@ -20,6 +20,8 @@
 class class_reflection {
 
     private static $arrAnnotationsCache = array();
+    private static $strAnnotationsCacheFile = array();
+    private static $bitCacheSaveRequired = false;
 
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
 
@@ -37,6 +39,14 @@ class class_reflection {
      * @var ReflectionClass
      */
     private $objReflectionClass;
+
+    public static function static_construct() {
+        self::$strAnnotationsCacheFile          = _realpath_."/project/temp/reflection.cache";
+
+        if(is_file(self::$strAnnotationsCacheFile)) {
+            self::$arrAnnotationsCache = unserialize(file_get_contents(self::$strAnnotationsCacheFile));
+        }
+    }
 
     /**
      * Creates an instance of the annotations-class, parametrized with the class to inspect
@@ -68,6 +78,21 @@ class class_reflection {
         $this->objReflectionClass = new ReflectionClass($this->strSourceClass);
 	}
 
+    function __destruct() {
+        if(self::$bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+            file_put_contents(self::$strAnnotationsCacheFile, serialize(self::$arrAnnotationsCache));
+            self::$bitCacheSaveRequired = false;
+        }
+    }
+
+    /**
+     * Flushes the chache-files.
+     * Use this method if you added new modules / classes.
+     */
+    public static function flushCache() {
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->fileDelete(self::$strAnnotationsCacheFile);
+    }
 
     /**
      * Fetches a list of annotations from the class-doc-comment.
@@ -97,6 +122,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
+        self::$bitCacheSaveRequired = true;
         return $arrReturn;
     }
 
@@ -121,6 +147,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
+        self::$bitCacheSaveRequired = true;
         return $bitReturn;
     }
 
@@ -141,6 +168,7 @@ class class_reflection {
         $bitReturn = false !== $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
 
         $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
+        self::$bitCacheSaveRequired = true;
         return $bitReturn;
     }
 
@@ -174,6 +202,7 @@ class class_reflection {
         //strip the annotation parts
         $strReturn = trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
         $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation] = $strReturn;
+        self::$bitCacheSaveRequired = true;
         return $strReturn;
     }
 
@@ -210,6 +239,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
+        self::$bitCacheSaveRequired = true;
         return $arrReturn;
     }
 
@@ -327,4 +357,4 @@ class class_reflection {
         return $arrReturn;
     }
 }
-
+class_reflection::static_construct();

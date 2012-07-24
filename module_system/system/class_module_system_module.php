@@ -299,6 +299,24 @@ class class_module_system_module extends class_model implements interface_model,
             return null;
     }
 
+    /**
+     * Returns the data for a registered module as given in the database
+     *
+     * @param string $strName
+     * @param bool $bitCache
+     * @return mixed
+     */
+    public static function getPlainModuleData($strName, $bitCache = true) {
+        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
+        $arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
+
+        foreach($arrModules as $arrOneModule) {
+            if($arrOneModule["module_name"] == $strName)
+                return $arrOneModule;
+        }
+
+        return array();
+    }
 
 
     public function getStrName() {

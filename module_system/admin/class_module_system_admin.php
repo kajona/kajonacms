@@ -57,13 +57,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 "mail_body" => "string"
             );
         }
-
-        if($strAction == "saveAspect") {
-            return array(
-                "form_strname" => "string",
-                "form_bitdefault" => "number"
-            );
-        }
+        return parent::getRequiredFields();
     }
 
 
@@ -381,6 +375,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
                     //instantiate the current task
                     $strClassname = uniStrReplace(".php", "", $strOneFile);
+                    /** @var $objTask interface_admin_systemtask */
                     $objTask = new $strClassname();
                     if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
@@ -432,6 +427,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
             $strReturn .= $this->objToolkit->formHeadline($this->getLang("systemtask_group_".$strGroupName));
             $strReturn .= $this->objToolkit->listHeader();
+            /** @var $objOneTask interface_admin_systemtask */
             foreach($arrTasks as $objOneTask) {
 
                 //generate the link to execute the task
@@ -513,6 +509,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrHeader[3] = $this->getLang("session_status");
         $arrHeader[4] = $this->getLang("session_activity");
         $arrHeader[5] = "";
+        /** @var $objOneSession class_module_system_session */
         foreach ($arrSessions as $objOneSession) {
             $arrRowData = array();
             $strUsername = "";
@@ -751,11 +748,12 @@ class class_module_system_admin extends class_admin_simple implements interface_
     }
 
     /**
-	 * saves the submitted form-data as a new aspect or updates an existing one
-	 *
-	 * @return string, "" in case of success
+     * saves the submitted form-data as a new aspect or updates an existing one
+     *
+     * @throws class_exception
+     * @return string, "" in case of success
      * @permissions right5
-	 */
+     */
 	protected function actionSaveAspect() {
         $objAspect = null;
 
@@ -777,13 +775,15 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 throw new class_exception("Error creating new aspect", class_exception::$level_ERROR);
         }
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
+        return "";
 	}
 
-	/**
-	 * Deletes an aspect
-	 *
-	 * @return string
-	 */
+    /**
+     * Deletes an aspect
+     *
+     * @throws class_exception
+     * @return string
+     */
 	protected function actionDeleteAspect() {
         $objAspect = new class_module_system_aspect($this->getSystemid());
         if($objAspect->rightDelete() && $objAspect->rightRight5()) {
@@ -794,6 +794,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         }
         else
 		    return $this->getLang("commons_error_permissions");
+        return "";
 	}
 
 
@@ -888,7 +889,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      *
      * @param int $intModuleID
      * @param bool $bitZeroIsSystem
-     * @return mixed
+     * @return class_module_system_module
      */
 	private function getModuleDataID($intModuleID, $bitZeroIsSystem = false) {
 		$arrModules = class_module_system_module::getAllModules();

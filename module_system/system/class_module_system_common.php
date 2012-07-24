@@ -295,7 +295,7 @@ class class_module_system_common extends class_model implements interface_model 
     /**
 	 * Creates Infos about the GDLib
 	 *
-	 * @return string
+	 * @return string[]
 	 */
 	public function getGDInfos() {
 		$arrReturn = array();
