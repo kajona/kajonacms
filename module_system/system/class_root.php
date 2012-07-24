@@ -649,7 +649,7 @@ abstract class class_root {
             $this->objDB->flushQueryCache();
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
-
+            $this->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             $this->onPrevIdChange($this->strOldPrevId, $this->strOldPrevId);
         }
 
@@ -940,6 +940,40 @@ abstract class class_root {
 	    return $arrReturn;
 	}
 
+
+    /**
+     * Fixes the sort-ids when a record is assigned to a new prev-id.
+     * The old siblings have to be shifted, the records new sort-id
+     * is set up by the new number of siblings.
+     *
+     * @param $strOldPrevid
+     * @param $strNewPrevid
+     */
+    private function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid) {
+        $this->objDB->flushQueryCache();
+
+        $strQuery = "SELECT system_id, system_sort
+					 FROM "._dbprefix_."system
+					 WHERE system_prev_id=?
+                     ORDER BY system_sort ASC";
+        $arrSiblings = $this->objDB->getPArray($strQuery, array($strOldPrevid));
+
+        $intI = 1;
+        foreach($arrSiblings as $arrOneSibling) {
+            if($arrOneSibling["system_sort"] != $intI) {
+                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
+                $this->objDB->_pQuery($strQuery, array($intI, $arrOneSibling["system_id"]));
+            }
+            $intI++;
+        }
+
+        //the new sort-id of the new-record may be set up easily
+        $intNewCount = $this->getNumberOfSiblings($this->getSystemid(), false);
+        $this->setIntSort($intNewCount);
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
+        $this->objDB->_pQuery($strQuery, array($intNewCount, $this->getSystemid()));
+    }
+
 	/**
 	 * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
 	 *
@@ -1076,6 +1110,8 @@ abstract class class_root {
 	 * @param string $strName
 	 * @param bool $bitCache
 	 * @return mixed
+     * @deprecated
+     * @todo remove, located at class_module_system_module
 	 */
 	public function getModuleData($strName, $bitCache = true) {
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
@@ -1110,8 +1146,7 @@ abstract class class_root {
 	 * @param bool $bitRight
 	 * @param bool $bitDate
 	 * @return bool
-     * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only
-     *        called by the test-classes
+     * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only called by the test-classes
      *
 	 */
 	public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
@@ -1386,7 +1421,7 @@ abstract class class_root {
         return $this->intSort;
     }
 
-    public function setIntSort($intSort) {
+    protected function setIntSort($intSort) {
         $this->intSort = $intSort;
     }
 

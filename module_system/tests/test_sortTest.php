@@ -147,6 +147,67 @@ class class_test_sort extends class_testbase {
     }
 
 
+    public function testHierarchicalSort() {
+        $objRootPage = new class_module_pages_page();
+
+        $objRootPage->setStrName("test1");
+        $objRootPage->updateObjectToDb();
+
+
+        $objPageL1 = new class_module_pages_page();
+        $objPageL1->setStrName("layer_1"); $objPageL1->updateObjectToDb($objRootPage->getSystemid());
+
+        $objPageL2 = new class_module_pages_page();
+        $objPageL2->setStrName("layer_2"); $objPageL2->updateObjectToDb($objRootPage->getSystemid());
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("layer_1_1"); $objPage->updateObjectToDb($objPageL1->getSystemid());
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("layer_1_2"); $objPage->updateObjectToDb($objPageL1->getSystemid());
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("layer_1_3"); $objPage->updateObjectToDb($objPageL1->getSystemid());
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("layer_2_1"); $objPage->updateObjectToDb($objPageL2->getSystemid());
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("layer_2_2"); $objPage->updateObjectToDb($objPageL2->getSystemid());
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("layer_2_3"); $objPage->updateObjectToDb($objPageL2->getSystemid());
+
+
+        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_1")->getIntSort());
+        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2")->getIntSort());
+
+        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_1_1")->getIntSort());
+        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_1_2")->getIntSort());
+        $this->assertEquals(3, class_module_pages_page::getPageByName("layer_1_3")->getIntSort());
+
+        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_2_1")->getIntSort());
+        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2_2")->getIntSort());
+        $this->assertEquals(3, class_module_pages_page::getPageByName("layer_2_3")->getIntSort());
+
+
+
+        //shifting hierarchies
+        class_module_pages_page::getPageByName("layer_2_2")->updateObjectToDb($objPageL1->getSystemid());
+
+        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_1_1")->getIntSort());
+        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_1_2")->getIntSort());
+        $this->assertEquals(3, class_module_pages_page::getPageByName("layer_1_3")->getIntSort());
+        $this->assertEquals(4, class_module_pages_page::getPageByName("layer_2_2")->getIntSort());
+
+        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_2_1")->getIntSort());
+        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2_3")->getIntSort());
+
+
+        $objRootPage->deleteObject();
+    }
+
+
 
 
 }
