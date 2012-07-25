@@ -125,7 +125,7 @@ class class_exception extends Exception {
             else {
                 $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px;  \">\n";
     		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
-                $strErrormessage .= htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8")."<br />";
+                $strErrormessage .= htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false)."<br />";
 
                 $strErrormessage .= "Please inform the administration about the error above.";
     	        $strErrormessage .= "</div></body></html>";
@@ -150,7 +150,7 @@ class class_exception extends Exception {
                 else {
                     $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
         		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
-                    $strErrormessage .= htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8")."<br />";
+                    $strErrormessage .= htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false)."<br />";
         		    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
 
     	            $strErrormessage .= "Please inform the administration about the error above.";
@@ -169,7 +169,7 @@ class class_exception extends Exception {
      * This method is called, if an exception was thrown in the code but not caught
      * by an try-catch block.
      *
-     * @param class_excpetion $objException
+     * @param class_exception $objException
      */
     public static function globalExceptionHandler($objException) {
         if (!($objException instanceof class_exception))

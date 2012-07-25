@@ -56,7 +56,7 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
 
             foreach($arrForm as $strKey => $strValue) {
                 if(uniStrpos($strKey, "comment_") !== false) {
-                    $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
+                    $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
                 }
             }
 

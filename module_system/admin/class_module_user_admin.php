@@ -71,6 +71,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $arrReturn["user_username"] = "string";
 
             //merge with fields from source
+            /** @var $objBlankUser class_module_user_user */
             $objBlankUser = null;
             if($this->getSystemid() != "") {
                 $objUser = new class_module_user_user($this->getSystemid());
@@ -184,6 +185,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             else
                 return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_inactive"), "icon_disabled.gif"));
         }
+        return "";
     }
 
     protected function renderDeleteAction(interface_model $objListEntry) {
@@ -228,6 +230,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         if($objListEntry instanceof class_module_user_user && $objListEntry->getObjSourceUser()->isEditable() && $objListEntry->getObjSourceUser()->isPasswortResetable() && $objListEntry->rightEdit() && checkEmailaddress($objListEntry->getStrEmail()))
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mail.gif"));
+
+        if($objListEntry instanceof class_module_user_user && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray()))
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "switchToUser", "&systemid=".$objListEntry->getSystemid(), "", $this->getText("user_switch_to"), "icon_userswitch.gif"));
 
         if($objListEntry instanceof class_module_user_group && $objListEntry->rightEdit())
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("gruppe_mitglieder"), "icon_group.gif"));
@@ -1048,6 +1053,36 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         return $strReturn;
 
+    }
+
+    /**
+     * @return string
+     * @throws class_exception
+     * @permissions edit
+     */
+    protected function actionSwitchToUser() {
+        $strReturn = "";
+        if(class_module_system_module::getModuleByName("system")->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+
+            //reset the aspect
+            $strAddon = "";
+            $objDefaultAspect = class_module_system_aspect::getDefaultAspect();
+
+            if($objDefaultAspect !== null)
+                $strAddon = "&aspect=".$objDefaultAspect->getSystemid();
+
+            $objNewUser = new class_module_user_user($this->getSystemid());
+            if($this->objSession->switchSessionToUser($objNewUser)) {
+                $this->adminReload(getLinkAdminHref("dashboard", "", $strAddon));
+                return "";
+            }
+            else
+                throw new class_exception("session switch failed", class_exception::$level_ERROR);
+        }
+        else
+            $strReturn .= $this->getLang("commons_error_permissions");
+
+        return $strReturn;
     }
 
 

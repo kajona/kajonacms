@@ -4,25 +4,25 @@ Mergeinfo with v3 head codeline (v3 -> v4)
 Please note that merging is done manually, there's no automatic way.
 Revision is inclusive.
 
-element_directorybrowser            4744
-element_facebooklikebox             4744
+element_directorybrowser            4812
+element_facebooklikebox             4812
 element_languageswitch (see module_system)
-element_portalupload                4755
+element_portalupload                4812
 
-module_ezchart                      4744
-module_guestbook                    4744
-module_navigation                   4744
-module_pages                        4744
-module_pchart                       4744
-module_postacomment                 4744
-module_rating                       4744
-module_samplecontent                4744
-module_stats                        4750
-module_system                       4744
-  module_dashboard                  4744
-  module_filemanager                4744
-module_tags                         4744
-module_v3skin (v3: module_system)   4744
+module_ezchart                      4812
+module_guestbook                    4812
+module_navigation                   4812
+module_pages                        4812
+module_pchart                       4812
+module_postacomment                 4812
+module_rating                       4812
+module_samplecontent                4812
+module_stats                        4812
+module_system                       4812
+  module_dashboard                  4812
+  module_filemanager                4812
+module_tags                         4812
+module_v3skin (v3: module_system)   4812
 
 
 
@@ -31,6 +31,6 @@ module_v3skin (v3: module_system)   4744
 no longer maintained:
 
 module_mediamanager replaces
-  module_downloads                  4744
-  module_gallery                    4744
-  module_filemanager                4744
+  module_downloads                  4812
+  module_gallery                    4812
+  module_filemanager                4812

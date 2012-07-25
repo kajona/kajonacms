@@ -34,12 +34,7 @@ class class_apc_cache  {
 
     private function __construct() {
         $this->bitAPCInstalled = function_exists("apc_store") && function_exists("apc_fetch");
-
-        $objSystem = class_module_system_module::getModuleByName("system");
-        if($objSystem != null)
-            $this->strSystemKey = class_module_system_module::getModuleByName("system")->getSystemid();
-        else
-            $this->strSystemKey = generateSystemid();
+        $this->strSystemKey = md5(__FILE__);
     }
 
 

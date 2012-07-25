@@ -87,10 +87,10 @@ class class_module_user_log extends class_model implements interface_model  {
      */
     public static function getLoginLogs($intStart = null, $intEnd = null) {
         $strQuery = "SELECT *
-				       FROM "._dbprefix_."user_log as log
-			      LEFT JOIN "._dbprefix_."user as user
-						ON log.user_log_userid = user.user_id
-				   ORDER BY log.user_log_date DESC";
+				       FROM "._dbprefix_."user_log
+			      LEFT JOIN "._dbprefix_."user
+						ON user_log_userid = user_id
+				   ORDER BY user_log_date DESC";
 		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
     }
 

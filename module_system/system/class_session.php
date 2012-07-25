@@ -377,6 +377,33 @@ final class class_session {
 		return $bitReturn;
 	}
 
+
+    /**
+     * Helper to switch the session to a different user. This is may be used to test access-profiles.
+     * Due to security concerns, only members of the admin-group are allowed to switch to another user.
+     *
+     * @param class_module_user_user $objTargetUser
+     *
+     * @return bool
+     */
+    public function switchSessionToUser(class_module_user_user $objTargetUser) {
+        if($this->isLoggedin()) {
+            if(in_array(_admins_group_id_, $this->getGroupIdsAsArray())) {
+                $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
+                $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
+
+                $strGroups = implode(",", $objTargetUser->getArrGroupIds());
+                $this->getObjInternalSession()->setStrGroupids($strGroups);
+                $this->getObjInternalSession()->updateObjectToDb();
+                $this->objUser = $objTargetUser;
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Does all the internal login-handling
      *

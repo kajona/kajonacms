@@ -134,7 +134,7 @@ class class_module_postacomment_portal extends class_portal implements interface
 
             foreach($arrForm as $strKey => $strValue) {
                 if(uniStrpos($strKey, "comment_") !== false) {
-                    $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
+                    $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
                 }
             }
 

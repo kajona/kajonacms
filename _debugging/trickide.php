@@ -17,3 +17,4 @@ define("_admins_group_id_", "");
 define("_guests_group_id_", "");
 define("_admin_nr_of_rows_", "");
 define("_pages_indexpage_", "");
+define("_user_selfedit_", "");

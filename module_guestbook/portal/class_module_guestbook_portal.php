@@ -108,7 +108,7 @@ class class_module_guestbook_portal extends class_portal implements interface_po
 
         foreach($arrTemplate as $strKey => $strValue) {
             if(uniStrpos($strKey, "gb_post_") !== false) {
-                $arrTemplate[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8");
+                $arrTemplate[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
             }
         }
 
