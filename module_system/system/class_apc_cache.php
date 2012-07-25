@@ -51,13 +51,13 @@ class class_apc_cache  {
     }
 
     /**
-     * Adds a value to the cache. The third param is the time to live in seconds.
+     * Adds a value to the cache. The third param is the time to live in seconds, defaulted to 180
      * @param $strKey
      * @param $objValue
      * @param int $intTtl
      * @return array|bool
      */
-    public function addValue($strKey, $objValue, $intTtl = 0) {
+    public function addValue($strKey, $objValue, $intTtl = 180) {
         $strKey = $this->strSystemKey.$strKey;
         if(!$this->bitAPCInstalled)
             return self::$arrFallbackCache[$strKey] = $objValue;

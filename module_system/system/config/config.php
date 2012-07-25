@@ -52,7 +52,7 @@
                                                                                //development (probably changing the templates a lot) and set it to a high value as soon as the website is in
                                                                                //production. Requires APC. Attention: 0 = infinite!
 
-    $config['resourcecaching']      = false;                                   //If enabled, the resource- and class-loader save their meta-information to the filesystem. The cache-files will
+    $config['resourcecaching']      = false;                                   //If enabled, the resource- and class-loader save their meta-information to the filesystem and the APC cache. The cache-files will
                                                                                //be stored under /project/temp and may be deleted without consequences. The folder needs to be writable.
                                                                                //Disable caching during development (and remove the cache-files), enable on production sites.
 

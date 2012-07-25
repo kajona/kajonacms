@@ -61,25 +61,34 @@ class class_classloader {
         $this->strModulesCacheFile          = _realpath_."/project/temp/modules.cache";
         $this->strClassesCacheFile          = _realpath_."/project/temp/classes.cache";
 
-        if(is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
-            $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
-            $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
-        }
-        else {
+        include_once(__DIR__."/class_apc_cache.php");
+        $this->arrModules = class_apc_cache::getInstance()->getValue(__CLASS__."modules");
+        $this->arrFiles = class_apc_cache::getInstance()->getValue(__CLASS__."files");
 
-            $this->arrModules = scandir(_corepath_);
+        if($this->arrModules === false || $this->arrFiles == false) {
+            $this->arrModules = array();
+            $this->arrFiles = array();
 
-            $this->arrModules = array_filter(
-                $this->arrModules,
-                function($strValue) {
-                    return preg_match("/(module|element|_)+.*/i", $strValue);
-                }
-            );
+            if(is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
+                $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
+                $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
+            }
+            else {
 
-            $this->indexAvailableCodefiles();
-            $this->loadClassloaderConfig();
+                $this->arrModules = scandir(_corepath_);
 
-            $this->bitCacheSaveRequired = true;
+                $this->arrModules = array_filter(
+                    $this->arrModules,
+                    function($strValue) {
+                        return preg_match("/(module|element|_)+.*/i", $strValue);
+                    }
+                );
+
+                $this->indexAvailableCodefiles();
+                $this->loadClassloaderConfig();
+
+                $this->bitCacheSaveRequired = true;
+            }
         }
 
     }
@@ -89,6 +98,10 @@ class class_classloader {
      */
     public function __destruct() {
         if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+
+            class_apc_cache::getInstance()->addValue(__CLASS__."modules", $this->arrModules);
+            class_apc_cache::getInstance()->addValue(__CLASS__."files", $this->arrFiles);
+
             file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
             file_put_contents($this->strClassesCacheFile, serialize($this->arrFiles));
         }

@@ -20,7 +20,7 @@
 class class_reflection {
 
     private static $arrAnnotationsCache = array();
-    private static $strAnnotationsCacheFile = array();
+    private static $strAnnotationsCacheFile;
     private static $bitCacheSaveRequired = false;
 
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
@@ -41,10 +41,15 @@ class class_reflection {
     private $objReflectionClass;
 
     public static function static_construct() {
-        self::$strAnnotationsCacheFile          = _realpath_."/project/temp/reflection.cache";
+        self::$strAnnotationsCacheFile = _realpath_."/project/temp/reflection.cache";
 
-        if(is_file(self::$strAnnotationsCacheFile)) {
-            self::$arrAnnotationsCache = unserialize(file_get_contents(self::$strAnnotationsCacheFile));
+        self::$arrAnnotationsCache = class_apc_cache::getInstance()->getValue("reflection");
+
+        if(self::$arrAnnotationsCache == false) {
+            self::$arrAnnotationsCache = array();
+
+            if(is_file(self::$strAnnotationsCacheFile))
+                self::$arrAnnotationsCache = unserialize(file_get_contents(self::$strAnnotationsCacheFile));
         }
     }
 
@@ -80,13 +85,14 @@ class class_reflection {
 
     function __destruct() {
         if(self::$bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+            class_apc_cache::getInstance()->addValue("reflection", self::$arrAnnotationsCache);
             file_put_contents(self::$strAnnotationsCacheFile, serialize(self::$arrAnnotationsCache));
             self::$bitCacheSaveRequired = false;
         }
     }
 
     /**
-     * Flushes the chache-files.
+     * Flushes the cache-files.
      * Use this method if you added new modules / classes.
      */
     public static function flushCache() {

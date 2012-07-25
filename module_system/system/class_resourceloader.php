@@ -63,10 +63,23 @@ class class_resourceloader {
 
         $this->arrModules = class_classloader::getInstance()->getArrModules();
 
-        if(is_file($this->strTemplatesCacheFile)) {
-            $this->arrTemplates = unserialize(file_get_contents($this->strTemplatesCacheFile));
-            $this->arrFoldercontent = unserialize(file_get_contents($this->strFoldercontentCacheFile));
-            $this->arrLangfiles = unserialize(file_get_contents($this->strFoldercontentLangFile));
+        //try to load the caches from apc
+        $this->arrTemplates = class_apc_cache::getInstance()->getValue(__CLASS__."templates");
+        $this->arrFoldercontent = class_apc_cache::getInstance()->getValue(__CLASS__."foldercontent");
+        $this->arrLangfiles = class_apc_cache::getInstance()->getValue(__CLASS__."langfiles");
+
+
+        if($this->arrTemplates === false || $this->arrFoldercontent === false || $this->arrLangfiles === false) {
+            $this->arrTemplates = array();
+            $this->arrFoldercontent = array();
+            $this->arrLangfiles = array();
+
+            if(is_file($this->strTemplatesCacheFile) && is_file($this->strFoldercontentCacheFile) && is_file($this->strFoldercontentLangFile)) {
+                $this->arrTemplates = unserialize(file_get_contents($this->strTemplatesCacheFile));
+                $this->arrFoldercontent = unserialize(file_get_contents($this->strFoldercontentCacheFile));
+                $this->arrLangfiles = unserialize(file_get_contents($this->strFoldercontentLangFile));
+            }
+
         }
 
     }
@@ -77,6 +90,11 @@ class class_resourceloader {
     public function __destruct() {
 
         if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+
+            class_apc_cache::getInstance()->addValue(__CLASS__."templates", $this->arrTemplates);
+            class_apc_cache::getInstance()->addValue(__CLASS__."foldercontent", $this->arrFoldercontent);
+            class_apc_cache::getInstance()->addValue(__CLASS__."langfiles", $this->arrLangfiles);
+
             file_put_contents($this->strTemplatesCacheFile, serialize($this->arrTemplates));
             file_put_contents($this->strFoldercontentCacheFile, serialize($this->arrFoldercontent));
             file_put_contents($this->strFoldercontentLangFile, serialize($this->arrLangfiles));
