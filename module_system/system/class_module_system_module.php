@@ -77,7 +77,7 @@ class class_module_system_module extends class_model implements interface_model,
     private $strAspect = "";
 
 
-    private static $arrModuleData = null;
+    //private static $arrModuleData = null;
 
     /**
      * Constructor to create a valid object
@@ -105,20 +105,16 @@ class class_module_system_module extends class_model implements interface_model,
      * @return array
      */
     private static function loadModuleData($bitCache = true) {
-        if(self::$arrModuleData == null) {
-            $strQuery = "SELECT *
-                           FROM "._dbprefix_."system_right,
-                                "._dbprefix_."system_module,
-                                "._dbprefix_."system
-                      LEFT JOIN "._dbprefix_."system_date
-                             ON system_id = system_date_id
-                          WHERE system_id = right_id
-                            AND system_id=module_id";
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."system_right,
+                            "._dbprefix_."system_module,
+                            "._dbprefix_."system
+                  LEFT JOIN "._dbprefix_."system_date
+                         ON system_id = system_date_id
+                      WHERE system_id = right_id
+                        AND system_id=module_id";
 
-            self::$arrModuleData = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
-        }
-
-        return self::$arrModuleData;
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
     }
 
 
