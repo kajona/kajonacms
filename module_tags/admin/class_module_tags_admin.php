@@ -75,8 +75,15 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
             return parent::renderEditAction($objListEntry);
         else if($objListEntry->rightEdit())
             return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+
+        return "";
     }
 
+    /**
+     * @param interface_model|class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             if($objListEntry->rightDelete()) {
@@ -85,6 +92,8 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         }
         else if($objListEntry instanceof class_module_tags_favorite)
             return parent::renderDeleteAction($objListEntry);
+
+        return "";
     }
 
 
@@ -152,7 +161,18 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objTag->getArrAssignedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        return $this->renderList($objArraySectionIterator);
+        return $this->renderList($objArraySectionIterator, false, "assignedTagList");
+    }
+
+    public function getActionIcons($objOneIterable, $strListIdentifier = "") {
+        if($strListIdentifier == "assignedTagList") {
+            //call the original module to render the action-icons
+            $objAdminInstance = class_module_system_module::getModuleByName($objOneIterable->getArrModule("modul"))->getAdminInstanceOfConcreteModule();
+            if($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple)
+                return $objAdminInstance->getActionIcons($objOneIterable);
+        }
+
+        return parent::getActionIcons($objOneIterable, $strListIdentifier);
     }
 
     /**

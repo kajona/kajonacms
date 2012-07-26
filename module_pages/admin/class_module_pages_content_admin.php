@@ -63,7 +63,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
 		$strReturn = "";
         $objPage = new class_module_pages_page($this->getSystemid());
         //get infos about the page
-
         $arrToolbarEntries = array();
         $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
         $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getLang("contentToolbar_content")."</a>";
@@ -83,9 +82,6 @@ class class_module_pages_content_admin extends class_admin implements interface_
         $arrTemplate["lastuserTitle"] = $this->getLang("lastuserTitle");
         $arrTemplate["lasteditTitle"] = $this->getLang("lasteditTitle");
         $arrTemplate["lastuser"] = $objPage->getLastEditUser();
-
-        if(_system_changehistory_enabled_ != "false")
-            $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getLang("show_history")).")";
 
         $arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
         $strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
@@ -287,6 +283,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	protected function actionEdit($bitShowErrors = false) {
 		$strReturn = "";
 		//check rights
+        /** @var $objElement class_module_pages_element */
         $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objElement instanceof class_module_pages_element) {
@@ -302,6 +299,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                 $objElement->getLockManager()->lockRecord();
 
     			//Load the class to create an object
+
     			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     			//and finally create the object
                 /** @var $objPageElement class_element_admin */

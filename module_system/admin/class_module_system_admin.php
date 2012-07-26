@@ -603,17 +603,26 @@ class class_module_system_admin extends class_admin_simple implements interface_
     /**
      * Renders the list of changes for the passed systemrecord.
      * May be called from other modules in order to get the rendered list for a single record.
+     * In most cases rendered as a overlay, so in folderview mode
      *
      * @param string $strSystemid sytemid to filter
      * @param string $strSourceModule source-module, required for a working pageview
      * @param string $strSourceAction source-action, required for a working pageview
-     * @return string
+     * @param bool $bitBlockFolderview
      *
+     * @return string
      * @since 3.4.0
      * @autoTestable
      * @permissions right3
      */
-    public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog") {
+    public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog", $bitBlockFolderview = false) {
+
+        if(!$bitBlockFolderview)
+            $this->setArrModuleEntry("template", "/folderview.tpl");
+
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
+
         $strReturn = "";
         //check needed rights - done twice since public and callable by not only the controller
         if(!class_carrier::getInstance()->getObjRights()->validatePermissionString("right3", $this->getObjModule()))

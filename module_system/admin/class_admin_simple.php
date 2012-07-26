@@ -114,16 +114,7 @@ abstract class class_admin_simple extends class_admin {
                 if(!$objOneIterable->rightView())
                     continue;
 
-                $strActions = "";
-                $strActions .= $this->renderEditAction($objOneIterable);
-                $arrAddons = $this->renderAdditionalActions($objOneIterable);
-                if(is_array($arrAddons))
-                    $strActions .= implode("", $this->renderAdditionalActions($objOneIterable));
-                $strActions .= $this->renderDeleteAction($objOneIterable);
-                $strActions .= $this->renderStatusAction($objOneIterable);
-                $strActions .= $this->renderTagAction($objOneIterable);
-                $strActions .= $this->renderPermissionsAction($objOneIterable);
-
+                $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
                 $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++);
             }
         }
@@ -145,6 +136,30 @@ abstract class class_admin_simple extends class_admin {
 
         return $strReturn;
     }
+
+    /**
+     * Wrapper rendering all action-icons for a given record. In most cases used to render a list-entry.
+     *
+     * @param class_model|interface_model|interface_admin_listable $objOneIterable
+     * @param string $strListIdentifier
+     *
+     * @return string
+     */
+    public function getActionIcons($objOneIterable, $strListIdentifier = "") {
+        $strActions = "";
+        $strActions .= $this->renderEditAction($objOneIterable);
+        $arrAddons = $this->renderAdditionalActions($objOneIterable);
+        if(is_array($arrAddons))
+            $strActions .= implode("", $this->renderAdditionalActions($objOneIterable));
+        $strActions .= $this->renderDeleteAction($objOneIterable);
+        $strActions .= $this->renderStatusAction($objOneIterable);
+        $strActions .= $this->renderTagAction($objOneIterable);
+        $strActions .= $this->renderChangeHistoryAction($objOneIterable);
+        $strActions .= $this->renderPermissionsAction($objOneIterable);
+
+        return $strActions;
+    }
+
 
     /**
      * Renders the action to jump a level upwards.
@@ -173,6 +188,7 @@ abstract class class_admin_simple extends class_admin {
             else
                 return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
         }
+        return "";
     }
 
     /**
@@ -184,6 +200,7 @@ abstract class class_admin_simple extends class_admin {
         if($objListEntry->rightDelete()) {
             return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon));
         }
+        return "";
     }
 
     /**
@@ -195,6 +212,7 @@ abstract class class_admin_simple extends class_admin {
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
             return $this->objToolkit->listStatusButton($objListEntry);
         }
+        return "";
     }
 
     /**
@@ -206,6 +224,7 @@ abstract class class_admin_simple extends class_admin {
         if($objListEntry->rightRight() && $this->strPeAddon == "") {
             return $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid())));
         }
+        return "";
     }
 
     /**
@@ -217,6 +236,7 @@ abstract class class_admin_simple extends class_admin {
         if($objListEntry->rightEdit()) {
             return $this->objToolkit->listButton(getLinkAdminDialog("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_edit_tags"), $this->getLang("commons_edit_tags"), "icon_tag.gif"));
         }
+        return "";
     }
 
     /**
@@ -247,6 +267,21 @@ abstract class class_admin_simple extends class_admin {
             else
                 return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.gif"));
         }
+        return "";
+    }
+
+    /**
+     * Renders the button to open the records' change history. In most cases, this is done in a overlay.
+     * To open the change-history, the permission "right3" on the system-module is required.
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
+    protected function renderChangeHistoryAction(class_model $objListEntry) {
+        if(_system_changehistory_enabled_ == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightEdit() && class_module_system_module::getModuleByName("system")->rightRight3()) {
+            return $this->objToolkit->listButton(getLinkAdminDialog("system", "genericChangelog", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_edit_history"), $this->getLang("commons_edit_history"), "icon_history.gif"));
+        }
+        return "";
     }
 
 

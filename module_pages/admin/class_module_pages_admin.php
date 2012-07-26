@@ -238,10 +238,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else if($objListEntry instanceof class_module_pages_folder) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
-
-            if(_system_changehistory_enabled_ != "false")
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("show_history"), "icon_history.gif"));
-
             return $arrReturn;
         }
         else
@@ -797,41 +793,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         return $objForm;
     }
-
-	/**
-	 * Tries to install the passed element by using the elements' installer placed in the
-	 * /installer-folder
-	 *
-	 * @return string, "" in case of success
-     * @permissions right1
-     * @todo will be moved to package-manager
-     */
-	protected function actionInstallElement() {
-        $strReturn = "";
-        $strElementToInstall = $this->getParam("elementName");
-
-        $arrInstallers = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
-
-        foreach($arrInstallers as $strPath => $strFile) {
-            if(uniStrReplace(".php", "", $strFile) == $strElementToInstall) {
-                include_once(_realpath_.$strPath);
-                //Creating an object....
-                $strClass = "class_".str_replace(".php", "", $strFile);
-
-                /** @var $objInstaller interface_installer */
-                $objInstaller = new $strClass();
-
-                $strInstallLog = $objInstaller->doPostInstall();
-                $strInstallLog .= "Done.\n";
-                $strReturn .= $this->objToolkit->getPreformatted(array($strInstallLog));
-                break;
-            }
-        }
-
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
-
-		return $strReturn;
-	}
 
     /**
      * Saves a passed element
