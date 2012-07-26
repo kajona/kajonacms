@@ -37,7 +37,14 @@ class class_test_charts_flotTest extends class_testbase  {
         echo $objGraph->renderGraph();
         
         $objGraph = new class_graph_flot();
-        $objGraph->createPieChart(array(1,2,3,4), array("val 1", "val 2", "val 3", "val 4"));
+        $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
+        $objGraph->getObjChartData()->formatLabels("font-size:11px ;text-align:center; padding:2px; color:white");
+        $objGraph->getObjChartData()->show3d();
+        $objGraph->getObjChartData()->showLabelBackground();
+        $objGraph->getObjChartData()->setPieChartRaduis("0.8");
+        $objGraph->getObjChartData()->setLablesInsidePieChart("0.6");
+        //$objGraph->getObjChartData()->disableLegend();
+        //$objGraph->getObjChartData()->disableLabels();
         echo $objGraph->renderGraph();
         
         

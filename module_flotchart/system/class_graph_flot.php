@@ -35,6 +35,10 @@ class class_graph_flot implements interface_graph {
     public function __construct() {
     }
     
+    public function getObjChartData() {
+        return $this->objChartData;
+    }
+    
     public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
         if($this->objChartData == null) 
             $this->objChartData = new class_graph_flot_chartdata_base_impl();
