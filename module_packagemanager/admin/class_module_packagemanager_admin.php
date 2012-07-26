@@ -25,7 +25,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $this->setArrModuleEntry("moduleId", _packagemanager_module_id_);
         parent::__construct();
 
-        class_module_packagemanager_template::syncTemplatepacks();
+
     }
 
     public function getOutputModuleNavi() {
@@ -53,6 +53,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @autoTestable
      */
     protected function actionList() {
+
+        class_module_packagemanager_template::syncTemplatepacks();
+
         $strReturn = "";
         $objManager = new class_module_packagemanager_manager();
         $arrPackages = $objManager->getAvailablePackages();

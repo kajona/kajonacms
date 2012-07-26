@@ -68,6 +68,9 @@ class class_module_system_session extends class_model implements interface_model
         $strQuery = "SELECT * FROM "._dbprefix_."session WHERE session_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
+        //avoid useless query, set internal row
+        $this->setArrInitRow(array("system_id" => ""));
+
         if(count($arrRow) > 1) {
             $this->setStrPHPSessionId($arrRow["session_phpid"]) ;
             $this->setStrUserid($arrRow["session_userid"]) ;
@@ -176,7 +179,7 @@ class class_module_system_session extends class_model implements interface_model
     /**
      * Returns, if available, the internal session-object for the passed internal session-id
      *
-     * @param sring $strSessionid
+     * @param string $strSessionid
      * @return class_module_system_session
      */
     public static function getSessionById($strSessionid) {

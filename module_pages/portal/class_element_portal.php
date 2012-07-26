@@ -529,7 +529,7 @@ abstract class class_element_portal extends class_portal {
      *    )
      * )
      *
-     * If you don' want to create additional navigation entries, don't overwrite this method.
+     * If you don't want to create additional navigation entries, don't overwrite this method.
      *
      * @see class_module_navigation_tree::getCompleteNaviStructure()
      * @see class_module_navigation_point::getDynamicNaviLayer()

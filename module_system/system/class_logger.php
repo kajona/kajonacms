@@ -96,7 +96,8 @@ final class class_logger {
      * @param string $strMessage
      * @param int $intLevel
      * @param bool $bitSkipSessionData
-     * @return
+     *
+     * @return void
      */
     public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false) {
 

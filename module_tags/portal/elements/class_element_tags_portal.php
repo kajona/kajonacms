@@ -54,15 +54,18 @@ class class_element_tags_portal extends class_element_portal implements interfac
                 $strLinks = "";
                 //render the links - if possible
                 foreach($arrAssignments as $arrOneAssignment) {
-                    $objRecord = new class_module_system_common($arrOneAssignment["tags_systemid"]);
-                    if($objRecord->getIntModuleNr() == _pages_modul_id_) {
-                        $objPage = new class_module_pages_page($objRecord->getSystemid());
-                        $strLink = getLinkPortal($objPage->getStrName(), "", "_self", $objPage->getStrBrowsername(), "", "&highlight=".urlencode($objTag->getStrName()), "", "", $arrOneAssignment["tags_attribute"]);
+                    $objRecord = class_objectfactory::getInstance()->getObject($arrOneAssignment["tags_systemid"]);
 
+                    if($objRecord == null)
+                        continue;
+
+                    if($objRecord instanceof class_module_pages_page) {
+                        $strLink = getLinkPortal($objRecord->getStrName(), "", "_self", $objRecord->getStrBrowsername(), "", "&highlight=".urlencode($objTag->getStrName()), "", "", $arrOneAssignment["tags_attribute"]);
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);
                     }
 
                     if(class_module_system_module::getModuleByName("news") != null && $objRecord->getIntModuleNr() == _news_modul_id_) {
+                        //TODO: fix after news integration
                         $objNews = new class_module_news_news($objRecord->getSystemid());
                         $strLink = getLinkPortal(_news_search_resultpage_, "", "_self", $objNews->getStrTitle(), "newsDetail", "&highlight=".urlencode($objTag->getStrName()), $objRecord->getSystemid(), "", "", $objNews->getStrTitle());
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);

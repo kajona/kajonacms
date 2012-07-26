@@ -168,7 +168,7 @@ class class_carrier {
 	 * get an instance!
 	 *
 	 * @param string $strArea
-	 * @return class_toolkit_admin or class_toolkit_portal
+	 * @return class_toolkit_admin|class_toolkit_portal
 	 */
 	public function getObjToolkit($strArea) {
 		//Do we have to generate the object?
@@ -192,6 +192,7 @@ class class_carrier {
 			}
 			return $this->objToolkitPortal;
 		}
+        return null;
 	}
 
     /**

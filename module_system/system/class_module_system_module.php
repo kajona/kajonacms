@@ -77,6 +77,8 @@ class class_module_system_module extends class_model implements interface_model,
     private $strAspect = "";
 
 
+    private static $arrModuleData = null;
+
     /**
      * Constructor to create a valid object
      *
@@ -89,6 +91,61 @@ class class_module_system_module extends class_model implements interface_model,
 		//base class
 		parent::__construct($strSystemid);
 
+    }
+
+    /**
+     * Initialises the internal modules-cache.
+     * Loads all module-data into a single array.
+     * Avoids multiple queries against the module-table.
+     *
+     * @static
+     *
+     * @param bool $bitCache
+     *
+     * @return array
+     */
+    private static function loadModuleData($bitCache = true) {
+        if(self::$arrModuleData == null) {
+            $strQuery = "SELECT *
+                           FROM "._dbprefix_."system_right,
+                                "._dbprefix_."system_module,
+                                "._dbprefix_."system
+                      LEFT JOIN "._dbprefix_."system_date
+                             ON system_id = system_date_id
+                          WHERE system_id = right_id
+                            AND system_id=module_id";
+
+            self::$arrModuleData = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
+        }
+
+        return self::$arrModuleData;
+    }
+
+
+    /**
+     * Overwrites the base-method in order to provide a better caching-mechanism.
+     */
+    protected function initObjectInternal() {
+
+        $arrRows = self::loadModuleData();
+
+        foreach($arrRows as $arrOneRow) {
+            if($arrOneRow["system_id"] == $this->getSystemid()) {
+                $this->setStrName($arrOneRow["module_name"]);
+                $this->setStrNamePortal($arrOneRow["module_filenameportal"]);
+                $this->setStrXmlNamePortal($arrOneRow["module_xmlfilenameportal"]);
+                $this->setStrNameAdmin($arrOneRow["module_filenameadmin"]);
+                $this->setStrXmlNameAdmin($arrOneRow["module_xmlfilenameadmin"]);
+                $this->setStrVersion($arrOneRow["module_version"]);
+                $this->setIntDate($arrOneRow["module_date"]);
+                $this->setIntNavigation($arrOneRow["module_navigation"]);
+                $this->setIntNr($arrOneRow["module_nr"]);
+                $this->setStrAspect($arrOneRow["module_aspect"]);
+
+                $this->setArrInitRow($arrOneRow);
+                break;
+            }
+        }
     }
 
     /**
@@ -120,14 +177,15 @@ class class_module_system_module extends class_model implements interface_model,
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
         $objAdminInstance = $this->getAdminInstanceOfConcreteModule();
-       if($objAdminInstance != null)
-           $strDescription = $objAdminInstance->getModuleDescription();
-       else
-           $strDescription = "";
+        if($objAdminInstance != null)
+            $strDescription = $objAdminInstance->getModuleDescription();
+        else
+            $strDescription = "";
 
         return $strDescription;
     }
@@ -141,16 +199,20 @@ class class_module_system_module extends class_model implements interface_model,
      * @static
      */
 	public static function getAllModules($intStart = null, $intEnd = null) {
-		$strQuery = "SELECT module_id
-		               FROM "._dbprefix_."system_module,
-		                    "._dbprefix_."system
-		              WHERE module_id = system_id
-		           ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        $arrRows = self::loadModuleData();
 
 		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_system_module($arrOneId["module_id"]);
+        $intI = 0;
+		foreach($arrRows as $arrOneRow) {
+            if($intStart != null && $intEnd != null) {
+                if($intI >= $intStart && $intI <= $intEnd)
+		            $arrReturn[] = new class_module_system_module($arrOneRow["module_id"]);
+            }
+            else
+                $arrReturn[] = new class_module_system_module($arrOneRow["module_id"]);
+
+            $intI++;
+        }
 
 		return $arrReturn;
 	}
@@ -161,12 +223,7 @@ class class_module_system_module extends class_model implements interface_model,
      * @return int
      */
     public static function getAllModulesCount() {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."system_module,
-                            "._dbprefix_."system
-                      WHERE module_id = system_id";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
+        return count(self::loadModuleData());
     }
 
 	/**
@@ -181,8 +238,7 @@ class class_module_system_module extends class_model implements interface_model,
         if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0)
             return null;
 
-		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-		$arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrModules = self::loadModuleData();
         $arrRow = array();
 		foreach($arrModules as $arrOneModule) {
 		    if($arrOneModule["module_name"] == $strName)
@@ -213,8 +269,7 @@ class class_module_system_module extends class_model implements interface_model,
      * @static
      */
 	public static function getModuleIdByNr($strNr) {
-		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-		$arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+		$arrModules = self::loadModuleData();
         $arrRow = array();
 		foreach($arrModules as $arrOneModule) {
 		    if($arrOneModule["module_nr"] == $strNr)
@@ -307,8 +362,7 @@ class class_module_system_module extends class_model implements interface_model,
      * @return mixed
      */
     public static function getPlainModuleData($strName, $bitCache = true) {
-        $strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-        $arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
+        $arrModules = self::loadModuleData($bitCache);
 
         foreach($arrModules as $arrOneModule) {
             if($arrOneModule["module_name"] == $strName)
