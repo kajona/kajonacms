@@ -4,7 +4,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: lang_mediamanager_de.php 4647 2012-05-11 14:37:22Z sidler $					    *
+*	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 370
