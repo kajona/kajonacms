@@ -35,17 +35,13 @@ class class_element_navigation_admin extends class_element_admin implements inte
 	 */
     public function getEditForm($arrElementData)	{
 		$strReturn = "";
-		//Load all navigations available
-		if(isset($arrElementData["navigation_id"]) && $arrElementData["navigation_id"] != '') {
-		    $objNavi = new class_module_navigation_tree($arrElementData["navigation_id"]);
-		    $strNaviName = $objNavi->getStrName();
-		}
-		else
-		    $strNaviName = "";
+
+        $arrNavigationsDropdown = array();
+        foreach(class_module_navigation_tree::getAllNavis() as $objOneNavigation)
+            $arrNavigationsDropdown[$objOneNavigation->getSystemid()] = $objOneNavigation->getStrDisplayName();
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getLang("commons_name"), $strNaviName, "inputText", getLinkAdminDialog("navigation", "navigationBrowser", "", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")), true);
-		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
+		$strReturn .= $this->objToolkit->formInputDropdown("navigation_id", $arrNavigationsDropdown, $this->getLang("commons_name"), (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : "" ));
 		//Load the available templates
 		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_navigation");
 		$arrTemplatesDD = array();

@@ -435,36 +435,11 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                 if($objSinglePoint->rightView()) {
                     $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"), $this->getLang("navigationp_anzeigen"), $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
                     $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
-                    $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter);
+                    $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter++);
                 }
             }
 		}
 
-        $strReturn .= $this->objToolkit->listFooter();
-		return $strReturn;
-	}
-
-    /**
-	 * Returns a list of available navigation
-	 *
-     * @return string
-     * @autoTestable
-     * @permissions view
-     */
-	protected function actionNavigationBrowser() {
-		$strReturn = "";
-		$intCounter = 1;
-        $this->setArrModuleEntry("template", "/folderview.tpl");
-		//Load all navis
-		$arrNavis = class_module_navigation_tree::getAllNavis();
-
-
-		$strReturn .= $this->objToolkit->listHeader();
-        /** @var class_module_navigation_tree $objOnenavigation */
-		foreach($arrNavis as $objOnenavigation) {
-		    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['navigation_name', '".$objOnenavigation->getStrName()."'], ['navigation_id', '".$objOnenavigation->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
-            $strReturn .= $this->objToolkit->simpleAdminList($objOnenavigation, $strAction, $intCounter++);
-		}
         $strReturn .= $this->objToolkit->listFooter();
 		return $strReturn;
 	}
