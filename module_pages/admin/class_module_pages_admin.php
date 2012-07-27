@@ -52,20 +52,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 		return $arrReturn;
 	}
 
-    protected function actionShowHistory() {
-        $strReturn = "";
-        $objCommon = new class_module_system_common($this->getSystemid());
-        if($objCommon->rightEdit()) {
-            /** @var $objSystemAdmin class_module_system_admin */
-            $objSystemAdmin = class_module_system_module::getModuleByName("system")->getAdminInstanceOfConcreteModule();
-            $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
-        }
-        else
-            $strReturn = $this->getLang("commons_error_permissions");
-
-        return $strReturn;
-    }
-
     /**
      * Renders the form to create a new entry
      * @return string

@@ -17,18 +17,18 @@ class class_test_charts_flotTest extends class_testbase  {
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona.js\"></script>";
 
 
-        $objGraph = new class_graph_flot();
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
         $objGraph->addLinePlot(array(4,7,1,2), "serie 3");
         $objGraph->addLinePlot(array(4,3,2,1), "serie 4");
         echo $objGraph->renderGraph();
         
-        $objGraph = new class_graph_flot();
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->addBarChartSet(array(1,2,3,4), "serie 1");
         echo $objGraph->renderGraph();
         
-        $objGraph = new class_graph_flot();
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
@@ -36,7 +36,7 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->addBarChartSet(array(1,2,3,4), "serie 3");
         echo $objGraph->renderGraph();
         
-        $objGraph = new class_graph_flot();
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->getObjChartData()->formatLabels("font-size:11px ;text-align:center; padding:2px; color:white");
         $objGraph->getObjChartData()->show3d();
