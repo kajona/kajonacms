@@ -1196,12 +1196,10 @@ div.percentBeam {
 }
 
 /* A U T O C O M P L E T E */
-.ac_container {
-	position: relative;
-}
+
 
 /* styles for results container */
-.ac_container .ac_results {
+.ui-autocomplete {
 	position: absolute;
 	top: 1.6em;
 	width: 178px;
@@ -1210,12 +1208,12 @@ div.percentBeam {
 }
 
 /* ie6-styles for results container */
-* html .ac_container .ac_results {
+* html .autocomplete {
 	left: -186px;
 }
 
 /* styles for header/body/footer wrapper within container */
-.ac_container .yui-ac-content {
+.ui-autocomplete {
 	position: absolute;
 	width: 100%;
 	border: 1px solid #00e800;
@@ -1228,25 +1226,27 @@ div.percentBeam {
 }
 
 /* styles for results list */
-.ac_container .yui-ac-content ul {
+ul.ui-autocomplete {
 	margin: 0;
 	padding: 0;
 	width: 100%;
+    list-style: none;
 }
 
 /* styles for result item */
-.ac_container .yui-ac-content li {
+.ui-autocomplete  li.ui-menu-item {
 	margin: 0;
 	padding: 2px 5px;
 	cursor: default;
 	white-space: nowrap;
+    list-style: none;
 }
 
-.ac_container_user .yui-ac-content li {
+.ac_container_user li {
     line-height: 22px;
 }
 
-.ac_container .yui-ac-content li:hover {
+.ui-autocomplete li.ui-menu-item:hover, .ui-autocomplete li.ui-menu-item:selection, .ui-autocomplete li.ui-menu-item:focus {
 	background-color: #f0f0f0;
 
 }
@@ -1265,6 +1265,10 @@ div.percentBeam {
     padding-bottom: 3px;
     background-position: left center;
 }
+
+
+
+
 
 /* F L A S H U P L O A D */
 .kajonaUploadFilesContainer {

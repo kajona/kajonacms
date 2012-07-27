@@ -350,7 +350,7 @@ class class_request_dispatcher {
             if(_xmlLoader_ === true)
                 $strDebug = "<!-- Kajona Debug: ".$strDebug ." -->";
             else
-                $strDebug = "<pre style='z-index: 2000000; position: absolute; background-color: white; width: 100%; top: 0px;'>Kajona Debug: ".$strDebug."</pre>";
+                $strDebug = "<pre style='z-index: 2000000; position: absolute; background-color: white; width: 100%; top: 0px; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: ".$strDebug."</pre>";
 
             $strDebug .= "\n";
 

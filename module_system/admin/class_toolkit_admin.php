@@ -265,26 +265,24 @@ class class_toolkit_admin extends class_toolkit {
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
-	            KAJONA.admin.loader.loadAutocompleteBase(function () {
-	                var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
-	                pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
-	                pageDataSource.responseSchema = {
-	                    resultNode : \"page\",
-	                    fields : [\"title\"]
-	                };
-
-	                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
-	                    queryMatchCase: false,
-	                    allowBrowserAutocomplete: false,
-	                    useShadow: false
-	                });
-	                pageautocomplete.generateRequest = function(sQuery) {
-	                    return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ;
-	                };
-
-	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
-	                KAJONA.admin.".$strJsVarName." = pageautocomplete;
-	            });
+                    $(function() {
+                        $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
+                            source: function(request, response) {
+                                $.ajax({
+                                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: {
+                                        filter: request.term,
+                                        module: 'pages',
+                                        action: 'getPagesByFilter'
+                                    },
+                                    success: response
+                                });
+                            },
+                            minLength: 1
+                        });
+                    });
 	        </script>
         ";
 

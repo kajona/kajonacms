@@ -1022,20 +1022,17 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * @permissions view
 	 */
 	protected function actionGetPagesByFilter() {
-		$strReturn = "";
         $strFilter = $this->getParam("filter");
-        $arrPages = class_module_pages_page::getAllPages(0, 0, $strFilter);
+        $arrPages = class_module_pages_page::getAllPages(null, null, $strFilter);
 
-        $strReturn .= "<pages>\n";
+        $arrReturn = array();
         foreach ($arrPages as $objOnePage) {
             if($objOnePage->rightView()) {
-                $strReturn .= "  <page>\n";
-                $strReturn .= "    <title>".xmlSafeString($objOnePage->getStrName())."</title>\n";
-                $strReturn .= "  </page>\n";
+                $arrReturn[] = $objOnePage->getStrName();
             }
         }
-        $strReturn .= "</pages>\n";
-		return $strReturn;
+        class_xml::setBitSuppressXmlHeader(true);
+		return json_encode($arrReturn);
 	}
 
     /**
