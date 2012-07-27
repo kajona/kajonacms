@@ -36,7 +36,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @throws class_exception
      * @return string
-   ⁰  * @since 3.2.0.9
+     * @since 3.2.0.9
      */
     public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "inputDate", $bitWithTime = false) {
         //check passed param
@@ -505,7 +505,6 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formInputUpload($strName, $strTitle = "", $strClass = "inputText") {
-        $strReturn = "";
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
@@ -516,9 +515,7 @@ class class_toolkit_admin extends class_toolkit {
         $objText = class_carrier::getInstance()->getObjLang();
         $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
 
-        $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-
-        return $strReturn;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
     /**
@@ -680,6 +677,8 @@ class class_toolkit_admin extends class_toolkit {
      * Returns a single TextRow in a form
      *
      * @param string $strText
+     * @param string $strClass
+     *
      * @return string
      */
     public function formTextRow($strText, $strClass = "text") {
@@ -897,8 +896,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-/*"*****************************************************************************************************/
-// --- Action-Elements ----------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- Action-Elements ----------------------------------------------------------------------------------
 
     /**
      * Creates a action-Entry in a list
@@ -912,8 +911,6 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["content"] = $strContent;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
-
-
 
 
     /**
@@ -949,6 +946,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param class_model|string $objInstance or a systemid
      * @param bool $bitReload triggers a page-reload afterwards
+     *
+     * @throws class_exception
      * @return string
      */
     public function listStatusButton($objInstance, $bitReload = false) {
@@ -962,8 +961,6 @@ class class_toolkit_admin extends class_toolkit {
         else
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
-        $strImage = "";
-        $strText = "";
         if($objRecord->getIntRecordStatus() == 1) {
             $strImage = "icon_enabled.gif";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
@@ -1014,6 +1011,8 @@ class class_toolkit_admin extends class_toolkit {
      * Returns a single TextRow
      *
      * @param string $strText
+     * @param string $strClass
+     *
      * @return string
      */
     public function getTextRow($strText, $strClass = "text") {
@@ -1156,89 +1155,6 @@ class class_toolkit_admin extends class_toolkit {
 
     /*"*****************************************************************************************************/
     // --- Navigation-Elements ------------------------------------------------------------------------------
-
-    /**
-     * Generates the module-navigation in the admin-area
-     *
-     * @param mixed $arrModules
-     * @param string $strCurrent
-     * @return string
-     *
-     * @deprecated will be moved to the sitemap
-     */
-    public function getAdminModuleNavi($arrModules, $strCurrent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main");
-        $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row");
-        $strTemplateRowHiddenID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_hidden");
-        $strTemplateRowIDFirst = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_first");
-        $strTemplateRowIDLast = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_last");
-        $strTemplateRowSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_selected");
-        $strTemplateRowSelectedIDFirst = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_selected_first");
-        $strTemplateRowSelectedIDLast = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_selected_last");
-        $strRows = "";
-        $intCount = 1;
-        $intMax = count($arrModules);
-        foreach ($arrModules as $arrOneModule) {
-            if($strCurrent == $arrOneModule["rawName"]) {
-                if($intCount == 1)
-                    $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowSelectedIDFirst);
-                elseif ($intCount == $intMax)
-                    $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowSelectedIDLast);
-                else
-                    $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowSelectedID);
-            }
-            else {
-                if($intCount == 1)
-                    $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowIDFirst);
-                elseif ($intCount == $intMax)
-                    $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowIDLast);
-                else {
-                    //allow to hide modules if too much given
-                    if($intCount >= 8) {
-                        $strTemp = $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowHiddenID);
-                        if($strTemp == "")
-                            $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);
-                        else
-                            $strRows .= $strTemp;
-                    }
-                    else
-                        $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);
-                }
-
-            }
-
-            $intCount++;
-        }
-        return $this->objTemplate->fillTemplate(array("rows" => $strRows), $strTemplateID);
-    }
-
-    /**
-     * Generates the moduleaction-navigation in the admin-area
-     *
-     * @param $arrActions
-     * @return string
-     *
-     * @deprecated will be moved to the sitemap
-     */
-    public function getAdminModuleActionNavi($arrActions) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "moduleactionnavi_main");
-        $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "moduleactionnavi_row");
-        $strTemplateSpacerID = $this->objTemplate->readTemplate("/elements.tpl", "moduleactionnavi_spacer");
-        $strRows = "";
-        foreach ($arrActions as $strOneAction) {
-            //spacer or a regular navigationpoint given?
-            if($strOneAction == "") {
-                $strRows .= $this->objTemplate->fillTemplate(array(), $strTemplateSpacerID);
-            }
-            else {
-                $arrRow = array();
-                $arrRow = splitUpLink($strOneAction);
-                $strRows .= $this->objTemplate->fillTemplate($arrRow, $strTemplateRowID);
-            }
-        }
-        return $this->objTemplate->fillTemplate(array("rows" => $strRows), $strTemplateID);
-    }
-
 
     /**
      * The v4 way of generating a backend-navigation.
@@ -2136,7 +2052,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @since 3.4.1
      * @param string $strIdentifier
-     * @param string $arrEntries
+     * @param string[] $arrEntries
      * @return string
      */
     public function registerMenu($strIdentifier, $arrEntries) {

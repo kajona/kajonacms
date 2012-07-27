@@ -553,66 +553,6 @@ Please refer to the CKEditor documentation to see what's possible here
     filebrowserImageWindowWindowHeight : 500,
 </wysiwyg_ckeditor_inits>
 
----------------------------------------------------------------------------------------------------------
--- MODULE NAVIGATION ------------------------------------------------------------------------------------
-
-The surrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
-<modulenavi_main>
-    <ul id="adminModuleNaviUl">
-    	%%rows%%
-	</ul>
-</modulenavi_main>
-
-One row representing one module
-Possible: %%name%%, %%link%%, %%href%%
-<modulenavi_main_row>
-<li><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row>
-
-<modulenavi_main_row_hidden>
-<li class="adminModuleNaviHidden"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_hidden>
-
-<modulenavi_main_row_selected>
-<li id="selected"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_selected>
-
-<modulenavi_main_row_first>
-<li class="first"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_first>
-
-<modulenavi_main_row_selected_first>
-<li id="selected" class="first"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_selected_first>
-
-<modulenavi_main_row_last>
-<li><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_last>
-
-<modulenavi_main_row_selected_last>
-<li id="selected"><span><a href="%%href%%">%%name%%</a></span></li>
-</modulenavi_main_row_selected_last>
-
----------------------------------------------------------------------------------------------------------
--- INTERNAL MODULE-ACTION NAVIGATION --------------------------------------------------------------------
-
-The sourrounding of the moduleaction-navigation (NOT THE MODULE LIST!)
-<moduleactionnavi_main>
-    <ul>
-    	%%rows%%
-	</ul>
-</moduleactionnavi_main>
-
-One row representing one action
-Possible: %%name%%, %%link%%, %%href%%
-<moduleactionnavi_row>
-<li><a href="%%href%%">%%name%%</a></li>
-</moduleactionnavi_row>
-
-Spacer, used to seperate logical groups
-<moduleactionnavi_spacer>
-<li class="spacer"></li>
-</moduleactionnavi_spacer>
 
 ---------------------------------------------------------------------------------------------------------
 -- PATH NAVIGATION --------------------------------------------------------------------------------------
@@ -1128,14 +1068,26 @@ It containes a list of aspects and provides the possibility to switch the differ
     <div id="menuContainer_%%id%%" class="yui-skin-sam"></div>
 </contextmenu_wrapper>
 
+
+
+
 <sitemap_wrapper>
-    <ul>%%level%%</ul>
+    %%level%%
 </sitemap_wrapper>
 
 <sitemap_module_wrapper>
-    <li>%%module%%<ul>%%actions%%</ul></li>
+    <li><span>%%module%%</span></li>
 </sitemap_module_wrapper>
+
+<sitemap_module_wrapper_active>
+<li id="selected"><span>%%module%%</span><ul>%%actions%%</ul></li>
+
+</sitemap_module_wrapper_active>
 
 <sitemap_action_entry>
     <li>%%action%%</li>
 </sitemap_action_entry>
+
+<sitemap_divider_entry>
+<li class="spacer"></li>
+</sitemap_divider_entry>

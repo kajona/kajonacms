@@ -475,10 +475,8 @@ abstract class class_admin {
         $this->validateAndUpdateCurrentAspect();
 
 		//Calling the contentsetter
-		$this->arrOutput["content"] = $this->getOutputContent();
-		$this->arrOutput["mainnavi"] = class_admin_helper::getOutputMainNavi($this->getArrModule("modul"));
+		$this->arrOutput["content"] = $this->strOutput;
 		$this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries());
-		$this->arrOutput["modulenavi"] = class_admin_helper::getModuleActionNavi($this);
         $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
         if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
@@ -528,21 +526,6 @@ abstract class class_admin {
 
         }
     }
-
-
-	/**
-	 * Loads the content the module itself created.
-	 * Since version 3.4, there's no need to implemented this method on your own.
-     * Nevertheless, you can override this method if you want to perform special
-     * action / transformations to the content generated right before placing it
-     * into the response.
-	 *
-	 * @return string
-     * @deprecated handled by the internal action()
-	 */
-	protected function getOutputContent() {
-	    return $this->strOutput;
-	}
 
 	/**
 	 * Tries to generate a quick-help button.

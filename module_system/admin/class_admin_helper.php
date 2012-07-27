@@ -45,32 +45,6 @@ class class_admin_helper {
 
     }
 
-
-    /**
-     * Writes the main backend navigation, so collects
-     * all modules of the current aspect
-     * Creates a list of all installed modules.
-     * Prepares the rendering via the toolkit.
-     *
-     * @param $strCurrentModule
-     *
-     * @return string
-     * @deprecated will be replaced by the sitemap
-     */
-    public static function getOutputMainNavi($strCurrentModule) {
-        if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
-
-            //NOTE: Some special Modules need other highlights
-            if($strCurrentModule == "elemente")
-                $strCurrentModule = "pages";
-
-            $arrModuleRows = self::getOutputMainNaviHelper();
-
-            return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleNavi($arrModuleRows, $strCurrentModule);
-        }
-        return "";
-    }
-
     /**
      * Writes the main backend navigation, so collects
      * all modules of the current aspect
@@ -100,23 +74,6 @@ class class_admin_helper {
         }
 
         return array();
-    }
-
-
-    /**
-     * Creates the list of actions available for a single module,
-     * rendered by the toolkit
-     * @static
-     * @param class_admin $objAdminModule
-     * @return string
-     */
-    public static function getModuleActionNavi(class_admin $objAdminModule) {
-        if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
-            $arrFinalItems = self::getModuleActionNaviHelper($objAdminModule);
-            //Pass to the skin-object
-            return class_carrier::getInstance()->getObjToolkit("admin")->getAdminModuleActionNavi($arrFinalItems);
-        }
-        return "";
     }
 
     /**

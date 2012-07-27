@@ -330,7 +330,15 @@ td {
     white-space: nowrap;
 }
 
-#moduleNavi ul li.first {
+#moduleNavi ul li ul {
+    display: none;
+}
+
+#moduleNavi div.activeActions {
+    display: none;
+}
+
+#moduleNavi ul li:first-child {
     margin-left: -2px;
 }
 
@@ -447,7 +455,12 @@ html>body #moduleNavi ul span {
 	list-style-type: none;
 }
 
-#moduleActionNavi ul li {
+#moduleActionNavi ul li span {
+    display: none;
+}
+
+#moduleActionNavi ul li ul {
+    display: block;
 }
 
 #moduleActionNavi ul li.spacer {
