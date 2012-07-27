@@ -25,6 +25,9 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 	public function __construct() {
         $this->setArrModuleEntry("modul", "navigation");
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
+
+        $this->setArrModuleEntry("adminGroup", class_admin_helper::$STR_PAGES_GROUP);
+
 		parent::__construct();
 
         if($this->getParam("pe") == "1")

@@ -148,7 +148,6 @@ class class_lang {
         }
         else {
             //try to load the fallback-files
-            $objFilesystem = new class_filesystem();
             //load files
             $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("module_".$strModule);
             if(is_array($arrFiles)) {
@@ -164,8 +163,28 @@ class class_lang {
             if(isset($this->arrFallbackTextEntrys[$this->strFallbackLanguage][$strModule][$strText])) {
                 $strReturn = $this->arrFallbackTextEntrys[$this->strFallbackLanguage][$strModule][$strText];
             }
-            else
-                $strReturn = "!".$strText."!";
+            else {
+
+                if(!isset($this->arrFallbackTextEntrys[$this->strFallbackLanguage][$this->strCommonsName])) {
+                    $arrFiles = class_resourceloader::getInstance()->getLanguageFiles("module_".$this->strCommonsName);
+                    if(is_array($arrFiles)) {
+                        foreach($arrFiles as $strPath => $strFilename) {
+                            $strTemp = str_replace(".php", "", $strFilename);
+                            $arrName = explode("_", $strTemp);
+
+                            if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
+                                $this->loadAndMergeTextfile($this->strCommonsName, $strPath, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
+                            }
+                        }
+                    }
+                }
+
+                if(isset($this->arrFallbackTextEntrys[$this->strFallbackLanguage][$this->strCommonsName][$strText])) {
+                    $strReturn = $this->arrFallbackTextEntrys[$this->strFallbackLanguage][$this->strCommonsName][$strText];
+                }
+                else
+                    $strReturn = "!".$strText."!";
+            }
         }
 
         return $strReturn;

@@ -23,6 +23,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
 	public function __construct() {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
+        $this->setArrModuleEntry("adminGroup", class_admin_helper::$STR_SYSTEM_GROUP);
 		parent::__construct();
 
 	}

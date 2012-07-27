@@ -1169,6 +1169,7 @@ class class_toolkit_admin extends class_toolkit {
         $strModuleActiveID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper_active");
         $strActionID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_action_entry");
         $strDividerID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_divider_entry");
+        $strGroupID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_group_entry");
 
         $strModules = "";
 
@@ -1176,38 +1177,70 @@ class class_toolkit_admin extends class_toolkit {
             $strCurrentModule = "pages";
 
         $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
+
+        /** @var $arrAdminInstances class_admin[] */
+        $arrAdminInstances = array();
         foreach ($arrModules as $arrModule) {
             $objModule = new class_module_system_module($arrModule["module_id"]);
             if($objModule->rightView()) {
-                $arrActions = class_admin_helper::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
-
-                $strActions = "";
-                foreach($arrActions as $strOneAction) {
-                    if(trim($strOneAction) != "") {
-                        $arrActionEntries = array(
-                            "action" => $strOneAction
-                        );
-                        $strActions .= $this->objTemplate->fillTemplate($arrActionEntries, $strActionID);
-                    }
-                    else {
-                        $strActions .= $this->objTemplate->fillTemplate(array(), $strDividerID);
-                    }
-                }
-
-
-                $arrModuleLevel = array(
-                    "module" => getLinkAdmin($objModule->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objModule->getStrName())),
-                    "actions" => $strActions,
-                    "moduleTitle" => $objModule->getStrName(),
-                    "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objModule->getStrName()),
-                    "moduleHref" => getLinkAdminHref($objModule->getStrName(),"")
-                );
-
-                if($strCurrentModule == $objModule->getStrName())
-                    $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleActiveID);
-                else
-                    $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleID);
+                $arrAdminInstances[] = $objModule->getAdminInstanceOfConcreteModule();
             }
+        }
+
+        //sort by group and sort
+        uasort($arrAdminInstances, function(class_admin $objA, class_admin $objB) {
+
+            if($objA->getArrModule("adminGroup") == "")
+                $objA->setArrModuleEntry("adminGroup", "4_commons");
+
+            if($objB->getArrModule("adminGroup") == "")
+                $objB->setArrModuleEntry("adminGroup", "4_commons");
+
+            if($objA->getArrModule("adminGroup") == $objB->getArrModule("adminGroup"))
+                return $objA->getObjModule()->getIntSort() > $objB->getObjModule()->getIntSort();
+            else
+                return strcmp($objA->getArrModule("adminGroup"), $objB->getArrModule("adminGroup"));
+
+        });
+
+        $strPrevGroup = "";
+
+        foreach ($arrAdminInstances as $objOneInstance) {
+
+            if($strPrevGroup != $objOneInstance->getArrModule("adminGroup")) {
+                $strPrevGroup = $objOneInstance->getArrModule("adminGroup");
+                $strModules .=  $this->objTemplate->fillTemplate(array("moduleName" => class_carrier::getInstance()->getObjLang()->getLang("group_title_".$strPrevGroup, $objOneInstance->getObjModule()->getStrName())), $strGroupID);
+            }
+
+            $arrActions = class_admin_helper::getModuleActionNaviHelper($objOneInstance);
+
+            $strActions = "";
+            foreach($arrActions as $strOneAction) {
+                if(trim($strOneAction) != "") {
+                    $arrActionEntries = array(
+                        "action" => $strOneAction
+                    );
+                    $strActions .= $this->objTemplate->fillTemplate($arrActionEntries, $strActionID);
+                }
+                else {
+                    $strActions .= $this->objTemplate->fillTemplate(array(), $strDividerID);
+                }
+            }
+
+
+            $arrModuleLevel = array(
+                "module" => getLinkAdmin($objOneInstance->getObjModule()->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName())),
+                "actions" => $strActions,
+                "moduleTitle" => $objOneInstance->getObjModule()->getStrName(),
+                "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName()),
+                "moduleHref" => getLinkAdminHref($objOneInstance->getObjModule()->getStrName(),"")
+            );
+
+            if($strCurrentModule == $objOneInstance->getObjModule()->getStrName())
+                $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleActiveID);
+            else
+                $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleID);
+
         }
 
         return $this->objTemplate->fillTemplate(array("level" => $strModules), $strWrapperID);

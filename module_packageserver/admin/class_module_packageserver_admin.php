@@ -26,6 +26,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
 
         $this->setArrModuleEntry("modul", "packageserver");
         $this->setArrModuleEntry("moduleId", _packageserver_module_id_);
+        $this->setArrModuleEntry("adminGroup", class_admin_helper::$STR_SYSTEM_GROUP);
     }
 
     public function getOutputModuleNavi() {

@@ -49,3 +49,7 @@ $lang["commons_result_page"]             = "Treffer-Seite:";
 $lang["commons_save"]                    = "Speichern";
 $lang["commons_title"]                   = "Titel:";
 $lang["commons_yes"]                     = "Ja";
+$lang["group_title_4_commons"]           = "Verschiedenes";
+$lang["group_title_2_usercontent"]       = "Benutzer-Inhalte";
+$lang["group_title_3_system"]            = "System";
+$lang["group_title_1_pages"]             = "Seiten";

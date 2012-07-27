@@ -16,6 +16,11 @@
  */
 class class_admin_helper {
 
+
+    public static $STR_PAGES_GROUP          = "1_pages";
+    public static $STR_SYSTEM_GROUP         = "3_system";
+    public static $STR_USERCONTENT_GROUP    = "2_usercontent";
+
     /**
      * Adds a menu-button to the second entry of the path-array. The menu renders the list of all modules installed,
      * including a quick-jump link.

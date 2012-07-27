@@ -49,3 +49,7 @@ $lang["commons_result_page"]             = "Result page:";
 $lang["commons_save"]                    = "Save";
 $lang["commons_title"]                   = "Title:";
 $lang["commons_yes"]                     = "Yes";
+$lang["group_title_4_commons"]           = "Misc";
+$lang["group_title_2_usercontent"]       = "User Content";
+$lang["group_title_3_system"]            = "User Content";
+$lang["group_title_1_pages"]             = "Pages";
