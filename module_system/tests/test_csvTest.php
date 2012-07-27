@@ -33,7 +33,11 @@ class class_test_csv extends class_testbase  {
         $objCsv->setStrFilename($strFile);
         $this->assertTrue($objCsv->createArrayFromFile(), __FILE__." checkCsvCreateArrayFromFileReader");
         $arrValuesFromCsv = $objCsv->getArrData();
-        $this->assertEquals(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[0], $arrValuesFromCsv[0])), 0, __FILE__." checkCsvCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[1], $arrValuesFromCsv[1])), 0, __FILE__." checkCsvCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[2], $arrValuesFromCsv[2])), 0, __FILE__." checkCsvCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[3], $arrValuesFromCsv[3])), 0, __FILE__." checkCsvCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[4], $arrValuesFromCsv[4])), 0, __FILE__." checkCsvCreateArrayFromFile");
 
         //test with set encloser
         $objCsv = new class_csv();
@@ -50,7 +54,11 @@ class class_test_csv extends class_testbase  {
         $objCsv->setStrFilename($strFile);
         $this->assertTrue($objCsv->createArrayFromFile(), __FILE__." checkCsvEncloserCreateArrayFromFileReader");
         $arrValuesFromCsv = $objCsv->getArrData();
-        $this->assertEquals(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[0], $arrValuesFromCsv[0])), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[1], $arrValuesFromCsv[1])), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[2], $arrValuesFromCsv[2])), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[3], $arrValuesFromCsv[3])), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues[4], $arrValuesFromCsv[4])), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
 
         echo "\tsaved generated CSV file to <a href=\""._webpath_.$strFile."\">"._webpath_.$strFile."</a>\n";
 
