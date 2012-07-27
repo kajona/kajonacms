@@ -241,7 +241,6 @@
 		    	       --coverage-clover '${basedir}${buildPath}/logs/clover.xml'
 		    	       --coverage-html '${basedir}${buildPath}/coverage'
 			           core" />
-            <env key="PATH" path="${java.library.path}:/opt/local/lib/php/PEAR/bin"/>
 		  </exec>
 
 	</target>
