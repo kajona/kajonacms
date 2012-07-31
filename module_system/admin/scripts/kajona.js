@@ -838,7 +838,7 @@ KAJONA.admin.statusDisplay = {
 		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
 
 		//start fade-in handler
-    	KAJONA.admin.loader.loadAnimationBase(function() {
+    	KAJONA.admin.loader.loadDragNDropBase(function() {
     		KAJONA.admin.statusDisplay.fadeIn();
 		});
 	},

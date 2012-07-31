@@ -112,7 +112,8 @@ class class_module_system_module extends class_model implements interface_model,
                   LEFT JOIN "._dbprefix_."system_date
                          ON system_id = system_date_id
                       WHERE system_id = right_id
-                        AND system_id=module_id";
+                        AND system_id=module_id
+                   ORDER BY system_sort ASC, system_comment ASC   ";
 
         return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
     }

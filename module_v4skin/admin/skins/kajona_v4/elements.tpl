@@ -25,20 +25,35 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-	KAJONA.admin.loader.loadDragNDropBase(function () {
-		KAJONA.admin.loader.loadDragNDropBase(function() {
-            KAJONA.admin.dragndroplist.DDApp.init();
-            KAJONA.admin.dragndroplist.DDApp.targetModule = '%%targetModule%%';
-        }, "dragdrophelper_tr.js");
-	});
-	if(arrayTableIds == null) {
-        var arrayTableIds = new Array("%%listid%%");
-    } else {
-        arrayTableIds[(arrayTableIds.length +0)] = "%%listid%%";
-	}
-
-    var bitOnlySameTable = %%sameTable%%;
+    $(function() {
+        var oldPos = null;
+        $('#%%listid%%').sortable( {
+            items: 'tbody:has(tr[id!=""])',
+            cursor: 'move',
+            forcePlaceholderSize: true,
+            placeholder: 'group_move_placeholder',
+            start: function(event, ui) {
+                oldPos = ui.item.index()
+            },
+            stop: function(event, ui) {
+                if(oldPos != ui.item.index()) {
+                    var intOffset = 1;
+                    //see, of there are nodes not being sortable - would lead to another offset
+                    $('#%%listid%% > tbody').each(function(index) {
+                        if($(this).find('tr').attr('id') == "")
+                            intOffset--;
+                        if($(this).find('tr').attr('id') == ui.item.find('tr').attr('id'))
+                            return false;
+                    });
+                    //console.log('move from '+(oldPos+intOffset)+'to'+(ui.item.index()+intOffset ))
+                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').attr('id'), ui.item.index()+intOffset, null, null, '%%targetModule%%');
+                }
+                oldPos = 0;
+            }
+        });
+    });
 </script>
+<style>.group_move_placeholder { display: table-row; } </style>
 <table id="%%listid%%" class="table table-striped">
 </dragable_list_header>
 
@@ -56,6 +71,7 @@ The general list will replace all other list types in the future.
 It is responsible for rendering the different admin-lists.
 Currently, there are two modes: with and without a description.
 <generallist_1>
+    <tbody>
         <tr id="%%listitemid%%" class="generalListSet1">
             <td >%%checkbox%%</td>
             <td class="image">%%image%%</td>
@@ -63,9 +79,11 @@ Currently, there are two modes: with and without a description.
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
         </tr>
+    </tbody>
 </generallist_1>
 
 <generallist_2>
+    <tbody>
         <tr id="%%listitemid%%" class="generalListSet2">
             <td >%%checkbox%%</td>
             <td class="image">%%image%%</td>
@@ -73,6 +91,7 @@ Currently, there are two modes: with and without a description.
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
         </tr>
+    </tbody>
 </generallist_2>
 
 <generallist_desc_1>
