@@ -409,19 +409,25 @@ place ajaxScript before the closing input_pageselector-tag and make sure, that y
 have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
 "ac_results" inside the "ac_container", to generate a resultlist
 <input_pageselector>
-  <div class="ac_container">
-     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div>
-     <div id="%%name%%_container" class="ac_results"></div>
-  </div><br />
-%%ajaxScript%%
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%title%%</label>
+
+        <div class="controls">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+            %%opener%%
+            %%ajaxScript%%
+    </div>
 </input_pageselector>
 
 <input_userselector>
-  <div class="ac_container ac_container_user">
-     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div>
-     <div id="%%name%%_container" class="ac_results"></div>
-  </div><br />
-%%ajaxScript%%
+<div class="control-group">
+<label for="%%name%%" class="control-label">%%title%%</label>
+
+<div class="controls">
+    <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+    %%opener%%
+    %%ajaxScript%%
+</div>
 </input_userselector>
 
 ---------------------------------------------------------------------------------------------------------

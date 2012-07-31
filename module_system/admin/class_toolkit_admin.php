@@ -320,44 +320,45 @@ class class_toolkit_admin extends class_toolkit {
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
+        $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
-	            KAJONA.admin.loader.loadAutocompleteBase(function () {
-	                var userDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
-	                userDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
-	                userDataSource.responseSchema = {
-	                    resultNode : \"user\",
-	                    fields : [\"title\", \"icon\", \"systemid\"]
-	                };
+                    $(function() {
 
-	                var userautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", userDataSource, {
-	                    queryMatchCase: false,
-	                    allowBrowserAutocomplete: false,
-	                    useShadow: false
-	                });
-	                userautocomplete.generateRequest = function(sQuery) {
-	                    return \"?admin=1&module=user&action=getUserByFilter&user=".
-                                    ($bitUser ? "true" : "false")."&group=".
-                                    ($bitGroups ? "true" : "false").
-                                    ($bitBlockCurrentUser ? "&block=current" : "")."&filter=\" + sQuery ;
-	                };
-
-                    userautocomplete.formatResult = function(oResultData, sQuery, sResultMatch) {
-                        var sOutput = \"<span class='userSelectorAC' style='background-image: url(\"+oResultData[1]+\"); '>\"+sResultMatch+\"</span>\";
-                        var sMarkup = (sResultMatch) ? sOutput : \"\";
-                        return sMarkup;
-                    };
-
-                    var itemSelectHandler = function(sType, aArgs) {
-                        var oData = aArgs[2]; // object literal of data for the result
-                        if(document.getElementById('".$strName."_id') != null)
-                            document.getElementById('".$strName."_id').value=oData[2];
-                    };
-                    userautocomplete.itemSelectEvent.subscribe(itemSelectHandler);
-
-	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
-	                KAJONA.admin.".$strJsVarName." = userautocomplete;
-	            });
+                        $('#".$strName."').autocomplete({
+                            source: function(request, response) {
+                                $.ajax({
+                                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: {
+                                        filter: request.term,
+                                        module: 'user',
+                                        action: 'getUserByFilter',
+                                        user: ".($bitUser ? "'true'" : "'false'").",
+                                        group: ".($bitGroups ? "'true'" : "'false'").",
+                                        block: ".($bitBlockCurrentUser ? "'current'" : "''")."
+                                    },
+                                    success: response
+                                });
+                            },
+                            select: function( event, ui ) {
+                                if(ui.item) {
+                                    $( '#".$strName."' ).val( ui.item.title );
+                                    if($( '#".$strName."_id' ))
+                                        $( '#".$strName."_id' ).val( ui.item.systemid );
+                                }
+                                return false;
+                            },
+                            minLength: 1
+                        })
+                        .data( 'autocomplete' )._renderItem = function( ul, item ) {
+                            return $( '<li></li>' )
+                                .data( 'item.autocomplete', item )
+                                .append( '<span style=\'background-image: url('+item.icon+'); \'><a class=\'ui-menu-item\'>'+item.title+'</a></span>' )
+                                .appendTo( ul );
+                        } ;
+                    });
 	        </script>
         ";
 
@@ -1766,7 +1767,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
         $arrTemplate = array();
         $arrTemplate["title"] = class_carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
-        $arrTemplate["text"] = $strText;
+        $arrTemplate["text"] = addslashes($strText);
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         //and the button

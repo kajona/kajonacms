@@ -211,6 +211,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         if($strListIdentifier == "groupList" && $this->getObjModule()->rightEdit())
             return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getLang("gruppen_anlegen"), $this->getLang("gruppen_anlegen"), "icon_new.gif"));
+
+        return "";
     }
 
     protected function renderTagAction(class_model $objListEntry) {
@@ -1157,7 +1159,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * @permissions view
      */
     protected function actionGetUserByFilter() {
-        $strReturn = "";
         $strFilter = $this->getParam("filter");
 
         $arrElements = array();
@@ -1185,29 +1186,36 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             return strcmp(strtolower($strA), strtolower($strB));
         });
 
-        $strReturn .= "<result>\n";
+
+        $arrReturn = array();
         foreach ($arrElements as $objOneElement) {
 
             if($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID())
                 continue;
 
+            $arrEntry = array();
+
             if($objOneElement instanceof class_module_user_user) {
-                $strReturn .= "  <user>\n";
-                $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrUsername(). " (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )")."</title>\n";
-                $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";
-                $strReturn .= "    <icon>".xmlSafeString(_skinwebpath_."/pics/icon_user.gif")."</icon>\n";
-                $strReturn .= "  </user>\n";
+                $arrEntry["title"]      = $objOneElement->getStrUsername(). " (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                $arrEntry["label"]      = $objOneElement->getStrUsername(). " (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                $arrEntry["value"]      = $objOneElement->getStrUsername(). " (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                $arrEntry["systemid"]   = $objOneElement->getSystemid();
+                $arrEntry["icon"]       = _skinwebpath_."/pics/icon_user.gif";
             }
             else if($objOneElement instanceof class_module_user_group) {
-                $strReturn .= "  <user>\n";
-                $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrName())."</title>\n";
-                $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";
-                $strReturn .= "    <icon>".xmlSafeString(_skinwebpath_."/pics/icon_group.gif")."</icon>\n";
-                $strReturn .= "  </user>\n";
+                $arrEntry["title"]      = $objOneElement->getStrName();
+                $arrEntry["value"]      = $objOneElement->getStrName();
+                $arrEntry["label"]      = $objOneElement->getStrName();
+                $arrEntry["systemid"]   = $objOneElement->getSystemid();
+                $arrEntry["icon"]       = _skinwebpath_."/pics/icon_group.gif";
             }
+
+            $arrReturn[] = $arrEntry;
         }
-        $strReturn .= "</result>\n";
-		return $strReturn;
+
+        class_xml::setBitSuppressXmlHeader(true);
+
+		return json_encode($arrReturn);
     }
 
 }

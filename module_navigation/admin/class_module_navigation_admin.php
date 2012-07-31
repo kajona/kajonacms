@@ -132,6 +132,8 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             return "";
         else
             return parent::getNewEntryAction($strListIdentifier);
+
+        return "";
     }
 
 
@@ -223,12 +225,13 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         return $objForm;
     }
 
-	/**
-	 * Saves or updates a navigation
-	 *
-	 * @return string, "" in case of success
+    /**
+     * Saves or updates a navigation
+     *
+     * @throws class_exception
+     * @return string, "" in case of success
      * @permissions edit
-	 */
+     */
 	protected function actionSaveNavi() {
 		$strReturn = "";
 
@@ -269,25 +272,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * @permissions edit
      */
 	protected function actionNewNaviPoint($strMode = "new", class_admin_formgenerator $objForm = null) {
-		$strReturn = "";
-
-        $strNodeBrowser = getLinkAdminDialog(
-            $this->arrModule["modul"],
-            "navigationPointBrowser",
-            "&form_element=navigation_parent&systemid=".$this->getPrevId(),
-            $this->getLang("commons_open_browser"),
-            $this->getLang("commons_open_browser"),
-            "icon_externalBrowser.gif",
-            $this->getLang("commons_open_browser")
-        );
-
-        $strParentname = "";
-        $objParentPoint = null;
-        if(validateSystemid($this->getParam("navigation_parent_id"))) {
-            $objParentPoint = new class_module_navigation_point($this->getParam("navigation_parent_id"));
-            $strParentname = $objParentPoint->getStrName();
-        }
-
 
         $objPoint = new class_module_navigation_point();
         if ($strMode == "edit") {

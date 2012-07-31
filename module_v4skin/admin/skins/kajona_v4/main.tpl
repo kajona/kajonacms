@@ -209,7 +209,7 @@
 
 
 
-<script src="_skinwebpath_/js/jquery-ui-1.8.18.custom.min.js"></script>
+<!--<script src="_skinwebpath_/js/jquery-ui-1.8.18.custom.min.js"></script>-->
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js"></script>
 <script src="_skinwebpath_/js/bootstrap-transition.js"></script>
 <script src="_skinwebpath_/js/bootstrap-alert.js"></script>
@@ -222,7 +222,7 @@
 <script src="_skinwebpath_/js/bootstrap-button.js"></script>
 <script src="_skinwebpath_/js/bootstrap-collapse.js"></script>
 <script src="_skinwebpath_/js/bootstrap-carousel.js"></script>
-<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>
+<!--<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>-->
 <script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>
 <script src="_skinwebpath_/js/locales/bootstrap-datepicker.de.js"></script>
 
