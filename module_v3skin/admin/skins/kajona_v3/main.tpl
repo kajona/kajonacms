@@ -98,6 +98,12 @@
 	function hideMenu() {
         $('#moduleNaviHidden').fadeOut();
 	}
+
+    $(function() {
+        $('[rel="tooltip"]').each(function(index) {
+            KAJONA.admin.tooltip.add(this);
+        });
+    });
 </script>
 
 <div class="folderviewDialog" id="folderviewDialog">

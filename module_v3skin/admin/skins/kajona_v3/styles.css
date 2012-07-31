@@ -415,9 +415,13 @@ html>body #moduleNavi ul span {
 	padding: 0px;
 }
 
+#moduleNaviHidden ul li:first-child {
+    margin-left: 0;
+}
+
 #moduleNaviHidden ul li a {
 	display: block;
-	width: 90px;
+	width: 120px;
 	padding: 0 0 0 7px;
 }
 
