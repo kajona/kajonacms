@@ -34,6 +34,7 @@
 			<td id="moduleNavi">
 				<div>
                     <ul id="adminModuleNavi">%%moduleSitemap%%</ul>%%aspectChooser%%
+                    <a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img id="modulNaviMoreIcon" src="_skinwebpath_/modulenavi_more.png" /></a>
 				</div>
 				<div id="moduleNaviHidden">
 					<ul id="naviCollectorUl"></ul>
@@ -72,7 +73,32 @@
 </table>
 
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+<script type="text/javascript">
+	var moduleNaviHiddenTimeout = undefined;
+	$(function() {
+        var count = 0;
+        var intEntriesVisible = 0;
+        $('#adminModuleNavi > li').each(function(index) {
+            if(index > 7 && this.id != 'selected') {
+                $('#naviCollectorUl').append(this);
+                this.onmouseout = function() {moduleNaviHiddenTimeout = window.setTimeout('hideMenu()', 1000);};
+                this.onmouseover = function() {window.clearTimeout(moduleNaviHiddenTimeout);};
+                intEntriesVisible++;
+            }
+        });
 
+        if(intEntriesVisible == 0)
+           document.getElementById('modulNaviMoreIcon').style.display='none';
+    });
+
+	function showMenu() {
+        $('#moduleNaviHidden').offset($('#showMenuLink').offset()).fadeIn();
+	}
+
+	function hideMenu() {
+        $('#moduleNaviHidden').fadeOut();
+	}
+</script>
 
 <div class="folderviewDialog" id="folderviewDialog">
     <div class="hd"><span id="folderviewDialog_title">BROWSER</span><div class="close"><a href="#" onclick="KAJONA.admin.folderview.dialog.hide(); KAJONA.admin.folderview.dialog.setContentRaw(''); return false;">X</a></div></div>

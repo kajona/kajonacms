@@ -16,7 +16,6 @@
 	<script type="text/javascript">
 		KAJONA.util.setBrowserFocus("name");
   		KAJONA.admin.loader.loadDragNDropBase();
-  		KAJONA.admin.loader.loadAnimationBase();
 	</script>
 </head>
 <body class="login">

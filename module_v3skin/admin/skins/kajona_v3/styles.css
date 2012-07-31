@@ -1215,7 +1215,7 @@ div.percentBeam {
 /* styles for header/body/footer wrapper within container */
 .ui-autocomplete {
 	position: absolute;
-	width: 100%;
+	/*width: 100%;*/
 	border: 1px solid #00e800;
 	background: #ffffff;
 	overflow: hidden;
@@ -1229,36 +1229,34 @@ div.percentBeam {
 ul.ui-autocomplete {
 	margin: 0;
 	padding: 0;
-	width: 100%;
+	/*width: 100%;*/
     list-style: none;
 }
 
 /* styles for result item */
 .ui-autocomplete  li.ui-menu-item {
 	margin: 0;
-	padding: 2px 5px;
+    padding: 0;
 	cursor: default;
 	white-space: nowrap;
-    list-style: none;
+    list-style: none outside none;
 }
 
-.ac_container_user li {
+.ui-autocomplete li {
+}
+
+.ui-autocomplete li a {
     line-height: 22px;
+    display: block;
 }
 
-.ui-autocomplete li.ui-menu-item:hover, .ui-autocomplete li.ui-menu-item:selection, .ui-autocomplete li.ui-menu-item:focus {
+.ui-autocomplete li.ui-menu-item a.ui-state-hover  {
 	background-color: #f0f0f0;
-
+    color: #000000;
+    cursor: pointer;
 }
 
-/* styles for highlighted result item */
-.ac_container .yui-ac-content li.yui-ac-highlight {
-	background-color: #f0f0f0;
-	color: #000000;
-	cursor: pointer;
-}
-
-.ac_container span.userSelectorAC {
+.ui-autocomplete a.userSelectorAC {
     background-repeat: no-repeat;
     padding-left: 25px;
     padding-top: 4px;

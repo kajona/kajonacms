@@ -342,6 +342,9 @@ class class_toolkit_admin extends class_toolkit {
                                     success: response
                                 });
                             },
+                            focus: function(event, ui) {
+                                return false;
+                            },
                             select: function( event, ui ) {
                                 if(ui.item) {
                                     $( '#".$strName."' ).val( ui.item.title );
@@ -355,7 +358,7 @@ class class_toolkit_admin extends class_toolkit {
                         .data( 'autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data( 'item.autocomplete', item )
-                                .append( '<span style=\'background-image: url('+item.icon+'); \'><a class=\'ui-menu-item\'>'+item.title+'</a></span>' )
+                                .append( '<a class=\'ui-menu-item userSelectorAC\' style=\'background-image: url('+item.icon+');\' >'+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });

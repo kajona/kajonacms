@@ -475,10 +475,6 @@ KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles
 	this.load([ "connection", "animation", "dragdrop" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
-KAJONA.admin.loader.loadAnimationBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "animation" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
-};
-
 KAJONA.admin.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFiles) {
 	this.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
