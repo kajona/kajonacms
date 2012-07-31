@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?_system_browser_cachebuster_"></script>
     %%head%%
 	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+	<script type="text/javascript" src="_skinwebpath_/js/v3skin.js?_system_browser_cachebuster_"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />

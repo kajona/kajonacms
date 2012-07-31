@@ -366,31 +366,21 @@ function is called after selecting a date, e.g. to hide the calendar
 <input_date_simple>
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
-
         <div class="controls">
-            <!--
-            <div class="input-append date" id="%%calendarId%%" data-date="12.02.2012" data-date-format="dd.mm.yyyy" data-date-weekStart="1">
-                <input class="input-xlarge" size="16" type="text" value="12.02.2012">
-                <span class="add-on"><i class="icon-th"></i></span>
-            </div>
-            -->
-            <input id="%%calendarId%%" class="input-xlarge" size="16" type="text" value="">
+            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
             <script>
-            $(function () {
-                $('#%%calendarId%%').datepicker({
-                    format: 'dd.mm.yyyy',
-                    weekStart: 1,
-                    autoclose: true,
-                    language: 'de'
-                });
-            });
+                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js", "_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                    console.log("rendering calendar %%calendarId%%");
+                    var format = '%%dateFormat%%';
+                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+                    $('#%%calendarId%%').datepicker({
+                        format: format,
+                        weekStart: 1,
+                        autoclose: true,
+                        language: '%%calendarLang%%'
+                    });
+                }, true);
             </script>
-
-            <!--
-            <p class="help-block">
-                In addition to freeform text, any HTML5 text-based input appears like so.
-            </p>
-            -->
         </div>
     </div>
 
@@ -404,22 +394,43 @@ function is called after selecting a date, e.g. to hide the calendar
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
 -->
-	%%calendarCommands%%
 </input_date_simple>
 
 <input_datetime_simple>
-	<div><label for="%%titleDay%%">%%title%% </label>
-		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
-		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
-		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
-        <a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
 
-        <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />
-		<input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%title%%</label>
+        <div class="controls">
+            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
+            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+            <script>
+                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js", "_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                    console.log("rendering calendar %%calendarId%%");
+                    var format = '%%dateFormat%%';
+                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+                    $('#%%calendarId%%').datepicker({
+                        format: format,
+                        weekStart: 1,
+                        autoclose: true,
+                        language: '%%calendarLang%%'
+                    });
+                }, true);
+            </script>
+        </div>
+    </div>
 
-		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
-	</div><br />
-	%%calendarCommands%%
+	<!--<div><label for="%%titleDay%%">%%title%% </label>-->
+		<!--<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />-->
+		<!--<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />-->
+		<!--<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />-->
+        <!--<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>-->
+
+        <!--<input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />-->
+		<!--<input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />-->
+
+		<!--<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>-->
+	<!--</div><br />-->
 </input_datetime_simple>
 
 A page-selector.

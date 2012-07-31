@@ -102,6 +102,15 @@ class class_date {
         if(isset($arrParams[$strFieldname."_second"]) && $arrParams[$strFieldname."_second"] != "")
             $intMinute = (int)$arrParams[$strFieldname."_second"];
 
+        //see if the other parts may be read directly
+        if(isset($arrParams[$strFieldname])) {
+            $objDateTime = DateTime::createFromFormat(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $arrParams[$strFieldname]);
+            $intTimestamp = $objDateTime->getTimestamp();
+            $intYear = strftime("%Y", $intTimestamp);
+            $intMonth = strftime("%m", $intTimestamp);
+            $intDay = strftime("%d", $intTimestamp);
+        }
+
         $this->setIntYear($intYear);
         $this->setIntMonth($intMonth);
         $this->setIntDay($intDay);

@@ -77,12 +77,8 @@ abstract class class_graph_flot_chartdata_base {
         $strData = $this->dataToJSON();
         $strOptions = $this->optionsToJSON();
 
-        //the plot-call itself is wrapped in a short timeout-delay. otherwise the js could get confused.
-
         return " $(document).ready(function() {
-            setTimeout(function() {
-                $.plot($(\"#" . $strChartId . "\"), [" . $strData . "], {" . $strOptions . "});
-            }, 200);
+            $.plot($(\"#" . $strChartId . "\"), [" . $strData . "], {" . $strOptions . "});
          });";
     }
 

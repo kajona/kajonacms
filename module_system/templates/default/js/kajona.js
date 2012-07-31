@@ -256,7 +256,7 @@ KAJONA.util.Loader = function () {
 
         //add suffixes
         $.each(arrInputFiles, function(index, strOneFile) {
-            if($.inArray(strOneFile, arrFilesLoaded) == -1 && $.inArray(strOneFile, arrFilesInProgress) == -1)
+            if($.inArray(strOneFile, arrFilesLoaded) == -1)
                 arrFilesToLoad.push(strOneFile);
         });
 
@@ -270,25 +270,28 @@ KAJONA.util.Loader = function () {
             //start loader-processing
             var bitCallbackAdded = false;
             $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
-                arrFilesInProgress.push(strOneFileToLoad);
                 //check what loader to take - js or css
                 var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
 
                 if(!bitCallbackAdded && $.isFunction(objCallback)) {
                     arrCallbacks.push({
-                        'callback' : objCallback,
+                        'callback' : function() { setTimeout( objCallback, 100); },
                         'requiredModules' : arrFilesToLoad
                     });
                     bitCallbackAdded = true;
                 }
 
-                //start loading process
-                if(fileType == 'css') {
-                    loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
-                }
+                if( $.inArray(strOneFileToLoad, arrFilesInProgress) == -1 ) {
+                    arrFilesInProgress.push(strOneFileToLoad);
 
-                if(fileType == 'js') {
-                    loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                    //start loading process
+                    if(fileType == 'css') {
+                        loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                    }
+
+                    if(fileType == 'js') {
+                        loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                    }
                 }
             });
         }

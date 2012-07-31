@@ -60,6 +60,12 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["valueYear"] = $objDateToShow != null ? $objDateToShow->getIntYear() : "";
         $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
+        $arrTemplate["valuePlain"] = dateToString($objDateToShow, false);
+        if($bitWithTime)
+            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
+        else
+            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
+        $arrTemplate["calendarLang"] = class_carrier::getInstance()->getObjSession()->getAdminLanguage();
 
         $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjLang()->getLang("titleTime", "system");
 
@@ -67,12 +73,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarId"] = $strName;
         $strContainerId = $strName."_calendarContainer";
         $arrTemplate["calendarContainerId"] = $strContainerId;
-
-        //commands and values for the calendar
-        $arrTemplate["calendarCommands"]  ="<script type=\"text/javascript\">\n";
-	    $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarWeekday = [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."];\n";
-	    $arrTemplate["calendarCommands"] .="    KAJONA.admin.lang.toolsetCalendarMonth = [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."];\n";
-        $arrTemplate["calendarCommands"] .="</script>\n";
+	    $arrTemplate["calendarLang_weekday"] =" [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
+	    $arrTemplate["calendarLang_month"]   =" [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }

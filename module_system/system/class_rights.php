@@ -481,29 +481,6 @@ class class_rights {
     }
 
 	/**
-	 * Checks whether a user is in the admin-group or not
-	 *
-	 * @param string $strUserid
-	 * @return bool
-	 */
-	public function userIsAdmin($strUserid) {
-		$bitReturn = false;
-
-		$strQuery = "SELECT COUNT(*)
-						FROM "._dbprefix_."user_group_members AS member,
-						     "._dbprefix_."user as users
-						WHERE member.group_member_user_id = users.user_id
-							AND member.group_member_group_id = ?
-							AND users.user_id= ? ";
-		$arrRow = $this->objDb->getPRow($strQuery, array(_admins_group_id_, $strUserid));
-
-		if($arrRow["COUNT(*)"] == 1)
-			$bitReturn = true;
-
-		return $bitReturn;
-	}
-
-	/**
 	 * Adds a group for a right at a given systemid
 	 * <b>NOTE: By setting rights using this method, inheritance is set to false!!!</b>
 	 *

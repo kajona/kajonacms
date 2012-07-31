@@ -251,7 +251,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 
         //add suffixes
         $.each(arrInputFiles, function(index, strOneFile) {
-            if($.inArray(strOneFile, arrFilesLoaded) == -1 && $.inArray(strOneFile, arrFilesInProgress) == -1)
+            if($.inArray(strOneFile, arrFilesLoaded) == -1 )
                 arrFilesToLoad.push(strOneFile);
         });
 
@@ -265,25 +265,28 @@ KAJONA.util.Loader = function (strScriptBase) {
             //start loader-processing
             var bitCallbackAdded = false;
             $.each(arrFilesToLoad, function(index, strOneFileToLoad) {
-                arrFilesInProgress.push(strOneFileToLoad);
                 //check what loader to take - js or css
                 var fileType = strOneFileToLoad.substr(strOneFileToLoad.length-2, 2) == 'js' ? 'js' : 'css';
 
                 if(!bitCallbackAdded && $.isFunction(objCallback)) {
                     arrCallbacks.push({
-                        'callback' : objCallback,
+                        'callback' : function() { setTimeout( objCallback, 100); },
                         'requiredModules' : arrFilesToLoad
                     });
                     bitCallbackAdded = true;
                 }
 
-                //start loading process
-                if(fileType == 'css') {
-                    loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
-                }
+                if( $.inArray(strOneFileToLoad, arrFilesInProgress) == -1 ) {
+                    arrFilesInProgress.push(strOneFileToLoad);
 
-                if(fileType == 'js') {
-                    loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                    //start loading process
+                    if(fileType == 'css') {
+                        loadCss(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                    }
+
+                    if(fileType == 'js') {
+                        loadJs(createFinalLoadPath(strOneFileToLoad, bitPreventPathAdding), strOneFileToLoad);
+                    }
                 }
             });
         }
@@ -477,19 +480,6 @@ KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles
 
 KAJONA.admin.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFiles) {
 	this.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
-};
-
-KAJONA.admin.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles) {
-	var arrCustomFiles = [
-	    KAJONA_WEBPATH + "/core/module_system/admin/scripts/yui/calendar/calendar-min.js",
-        KAJONA_WEBPATH + "/core/module_system/admin/scripts/yui/calendar/assets/calendar.css"
-	];
-
-	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
-		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
-	}
-
-	this.load(null, arrCustomFiles, objCallback);
 };
 
 KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
@@ -1336,61 +1326,7 @@ KAJONA.admin.treeview.checkInitialTreeViewToggling = function() {
 };
 
 
-/**
- * Calendar functions
- */
-KAJONA.admin.calendar = {};
-KAJONA.admin.calendar.showCalendar = function(strCalendarId, strCalendarContainerId, objButton) {
-	KAJONA.util.fold(strCalendarContainerId, function() {
-		//positioning the calendar container
-		var btnRegion = YAHOO.util.Region.getRegion(objButton);
-		YAHOO.util.Dom.setStyle(strCalendarContainerId, "left", btnRegion.left+"px");
 
-		//show nice loading animation while loading the calendar files
-		YAHOO.util.Dom.addClass(strCalendarContainerId, "loadingContainer");
-
-		KAJONA.admin.loader.loadCalendarBase(function() {
-	    	KAJONA.admin.calendar.initCalendar(strCalendarId, strCalendarContainerId);
-	    	YAHOO.util.Dom.removeClass(strCalendarContainerId, "loadingContainer");
-	    });
-	});
-};
-
-KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContainerId) {
-	var calendar = new YAHOO.widget.Calendar(strCalendarContainerId);
-	calendar.cfg.setProperty("WEEKDAYS_SHORT", KAJONA.admin.lang.toolsetCalendarWeekday);
-	calendar.cfg.setProperty("MONTHS_LONG", KAJONA.admin.lang.toolsetCalendarMonth);
-	calendar.cfg.setProperty("START_WEEKDAY", 1);
-
-	var handleSelect = function(type, args, obj) {
-		var dates = args[0];
-		var date = dates[0];
-		var year = date[0], month = (date[1] < 10 ? '0'+date[1]:date[1]), day = (date[2] < 10 ? '0'+date[2]:date[2]);
-		//write to fields
-		document.getElementById(strCalendarId+"_day").value = day;
-		document.getElementById(strCalendarId+"_month").value = month;
-		document.getElementById(strCalendarId+"_year").value = year;
-
-		//disabled because of JS error: this.config is null
-		//calendar.destroy();
-		KAJONA.util.fold(strCalendarContainerId);
-	};
-
-	//check for values in date form
-	var formDate = [document.getElementById(strCalendarId+"_day").value, document.getElementById(strCalendarId+"_month").value, document.getElementById(strCalendarId+"_year").value];
-	if (formDate[0] > 0 && formDate[1] > 0 && formDate[2] > 0) {
-		calendar.select(formDate[1]+'/'+formDate[0]+'/'+formDate[2]);
-
-		var selectedDates = calendar.getSelectedDates();
-		if (selectedDates.length > 0) {
-			var firstDate = selectedDates[0];
-			calendar.cfg.setProperty("pagedate", (firstDate.getMonth()+1) + "/" + firstDate.getFullYear());
-		}
-	}
-
-	calendar.selectEvent.subscribe(handleSelect, calendar, true);
-	calendar.render();
-};
 
 
 /**

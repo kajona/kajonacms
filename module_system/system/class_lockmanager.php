@@ -73,7 +73,7 @@ class class_lockmanager  {
 	 */
 	public function unlockRecord($bitForceUnlock = false)	{
         if($this->isLockedByCurrentUser() ||
-            ($bitForceUnlock && class_carrier::getInstance()->getObjRights()->userIsAdmin(class_carrier::getInstance()->getObjSession()->getUserID()) )
+            ($bitForceUnlock && in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()) )
         ) {
 
 
@@ -130,7 +130,7 @@ class class_lockmanager  {
      */
     public function isUnlockableForCurrentUser() {
 
-        if(class_carrier::getInstance()->getObjRights()->userIsAdmin(class_carrier::getInstance()->getObjSession()->getUserID()))
+        if(in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()))
             return true;
 
         return false;

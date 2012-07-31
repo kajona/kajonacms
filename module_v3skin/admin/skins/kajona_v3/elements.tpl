@@ -301,7 +301,10 @@ function is called after selecting a date, e.g. to hide the calendar
 		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
-	%%calendarCommands%%
+	<script type="text/javascript">
+        KAJONA.admin.lang.toolsetCalendarWeekday = %%calendarLang_weekday%%;
+        KAJONA.admin.lang.toolsetCalendarMonth = %%calendarLang_month%%;
+	</script>
 </input_date_simple>
 
 <input_datetime_simple>
@@ -316,7 +319,10 @@ function is called after selecting a date, e.g. to hide the calendar
 
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
-	%%calendarCommands%%
+    <script type="text/javascript">
+        KAJONA.admin.lang.toolsetCalendarWeekday = %%calendarLang_weekday%%;
+        KAJONA.admin.lang.toolsetCalendarMonth = %%calendarLang_month%%;
+    </script>
 </input_datetime_simple>
 
 A page-selector.
