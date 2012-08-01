@@ -10,6 +10,17 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["cropImage"]                       = "Кроп изображения";
+$lang["cropImageAccept"]                 = "Сохранить кроп";
+$lang["cropWarningCrop"]                 = "Кроп";
+$lang["cropWarningDialogHeader"]         = "Подтвердить кроп";
+$lang["cropWarningSaving"]               = "Пожалуйста, обратите внимание: Кроп влияет на все варианты использования картинки. Все равно выполнить?<br />";
+$lang["cropWarningUnsavedHint"]          = "Ваши действия с картинкой еще не сохранены!\\nВы действительно хотите совершить действие?\\n\\nЧтобы сохранить действия нажмите на \"Отменить\" и сделайте двойной щелчок на картинку.";
+$lang["rotateImageLeft"]                 = "Повернуть на 90° направо";
+$lang["rotateImageRight"]                = "Повернуть на 90° налево";
+$lang["showPreview"]                     = "Показать размер предпросмотра";
+$lang["showRealsize"]                    = "Показать размер оригинала";
+
 $lang["actionLogbook"]                   = "Системный журнал";
 $lang["actionLogbookFlush"]              = "Очистить системный журнал";
 $lang["actionMasssync"]                  = "Все синхронезировать";

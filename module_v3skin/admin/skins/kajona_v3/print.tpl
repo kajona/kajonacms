@@ -49,6 +49,12 @@
     KAJONA.admin.loader.loadDialogBase(function() {
     	KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
     });
+
+    $(function() {
+        $('[rel="tooltip"]').each(function(index) {
+            KAJONA.admin.tooltip.add(this);
+        });
+    });
 </script>
 </body>
 </html>

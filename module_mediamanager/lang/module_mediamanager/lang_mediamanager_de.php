@@ -10,6 +10,17 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["cropImage"]                       = "Bild zuschneiden";
+$lang["cropImageAccept"]                 = "Zuschneiden speichern";
+$lang["cropWarningCrop"]                 = "Ja, zuschneiden";
+$lang["cropWarningDialogHeader"]         = "Zuschneiden bestätigen";
+$lang["cropWarningSaving"]               = "Bitte beachten: Das Zuschneiden betrifft alle Verwendungen des Bildes! Trotzdem forfahren?<br />";
+$lang["cropWarningUnsavedHint"]          = "Ihre Änderungen am Bild wurden noch nicht gespeichert!\\nMöchten Sie die Änderungen wirklich verwerfen?\\n\\nZum Speichern der Änderungen wählen Sie \"Abbrechen\" und machen Sie einen Doppelklick auf das Bild.";
+$lang["rotateImageRight"]                = "Um 90° nach rechts drehen";
+$lang["rotateImageLeft"]                = "Um 90° nach links drehen";
+$lang["showPreview"]                     = "Vorschaugröße anzeigen";
+$lang["showRealsize"]                    = "Originalgröße anzeigen";
+
 $lang["_mediamanager_default_filesrepoid_"] = "Standard Dateien-Repository:";
 $lang["_mediamanager_default_imagesrepoid_"] = "Standard Bilder-Repository:";
 $lang["actionEditImage"]                 = "Bild bearbeiten";

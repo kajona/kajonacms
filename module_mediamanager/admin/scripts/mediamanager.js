@@ -13,25 +13,16 @@ KAJONA.admin.loader.loadUploaderBase = function(objCallback, arrAdditionalFiles)
 	this.load([ "uploader", "swf" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
-KAJONA.admin.loader.loadImagecropperBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "imagecropper" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
-};
-
 
 KAJONA.admin.ajax.saveImageCropping = function(intX, intY, intWidth, intHeight, strFile, objCallback) {
     var postBody = 'file=' + strFile + '&intX=' + intX + '&intY=' + intY
         + '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';
-
-
-
     KAJONA.admin.ajax.genericAjaxCall("mediamanager", "saveCropping", "&"+postBody , objCallback);
 };
 
 
 KAJONA.admin.ajax.saveImageRotating = function(intAngle, strFile, objCallback) {
     var postBody = 'file=' + strFile + '&angle=' + intAngle + '';
-
-
     KAJONA.admin.ajax.genericAjaxCall("mediamanager", "rotate", "&"+postBody , objCallback);
 };
 
@@ -45,12 +36,10 @@ KAJONA.admin.ajax.createFolder = function (strFmRepoId, strFolder) {
             }
             else {
                 KAJONA.admin.ajax.genericAjaxCall("mediamanager", "partialSyncRepo", strFmRepoId, function(data, status, jqXHR) {
-                    if(status == 'success') {
+                    if(status == 'success')
                         location.reload();
-                    }
-                    else {
+                    else
                         KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-                    }
                 });
             }
         }
@@ -59,8 +48,6 @@ KAJONA.admin.ajax.createFolder = function (strFmRepoId, strFolder) {
         }
     });
 };
-
-
 
 
 
@@ -308,61 +295,46 @@ KAJONA.admin.mediamanager.imageEditor = {
     fm_image_isScaled : true,
 
     showRealSize : function () {
-        document.getElementById('fm_mediamanagerPic').src = fm_image_rawurl + "&x="
-            + (new Date()).getMilliseconds();
-
+        $('#fm_mediamanagerPic').attr('src', fm_image_rawurl + "&x="+ (new Date()).getMilliseconds());
         this.fm_image_isScaled = false;
-
         this.hideCropping();
     },
 
     showPreview : function () {
-        document.getElementById('fm_mediamanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
-            + "&x=" + (new Date()).getMilliseconds();
+        $('#fm_mediamanagerPic').attr('src', fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)+ "&x=" + (new Date()).getMilliseconds());
         this.fm_image_isScaled = true;
-
         this.hideCropping();
     },
 
     showCropping : function () {
         // init the cropping
         if (this.fm_cropObj == null) {
-        	this.fm_cropObj = new YAHOO.widget.ImageCropper('fm_mediamanagerPic', {
-                status :true
+            $('#fm_mediamanagerPic').Jcrop({}, function() {
+                KAJONA.admin.mediamanager.imageEditor.fm_cropObj = this;
             });
-            document.getElementById("accept_icon").src = document
-                    .getElementById("accept_icon").src.replace(
-                    "icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
 
-            YAHOO.util.Event.addListener("fm_mediamanagerPic_wrap", 'dblclick', function (event) {
+            this.fm_cropObj.animateTo([ 120,120,80,80 ]);
+
+            $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_acceptDisabled.gif", "icon_crop_accept.gif"));
+            $("#fm_mediamanagerPic_wrap").bind('dblclick', function (event) {
             	KAJONA.admin.mediamanager.imageEditor.saveCropping();
             });
-
-            //show confirm box when existing the page without saving the cropping
-            YAHOO.util.Event.addListener(window, 'beforeunload', function (event) {
-            	event.returnValue = fm_warning_unsavedHint;
-            });
         } else {
-        	this.hideCropping();
+            this.hideCropping();
         }
     },
 
     hideCropping : function () {
         if (this.fm_cropObj != null) {
-        	YAHOO.util.Event.removeListener(window, 'beforeunload');
-
         	this.fm_cropObj.destroy();
         	this.fm_cropObj = null;
-            document.getElementById("accept_icon").src = document
-                    .getElementById("accept_icon").src.replace(
-                    "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+            $('#fm_mediamanagerPic').css("visibility", "visible");
+            $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif"));
         }
     },
 
     saveCropping : function () {
         if (this.fm_cropObj != null) {
-        	YAHOO.util.Event.removeListener(window, 'beforeunload');
-
             init_fm_crop_save_warning_dialog();
         }
     },
@@ -370,7 +342,8 @@ KAJONA.admin.mediamanager.imageEditor = {
     saveCroppingToBackend : function () {
         jsDialog_1.hide();
         init_fm_screenlock_dialog();
-        this.cropArea = this.fm_cropObj.getCropCoords();
+        this.cropArea = this.fm_cropObj.tellSelect();
+
         if (fm_image_isScaled) {
             // recalculate the "real" crop-coordinates
             var intScaledWidth = document.getElementById('fm_mediamanagerPic').width;
@@ -378,10 +351,10 @@ KAJONA.admin.mediamanager.imageEditor = {
             var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
             var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
 
-            this.cropArea.left = Math.floor(this.cropArea.left * (intOriginalWidth / intScaledWidth));
-            this.cropArea.top = Math.floor(this.cropArea.top * (intOriginalHeigth / intScaledHeight));
-            this.cropArea.width = Math.floor(this.cropArea.width * (intOriginalWidth / intScaledWidth));
-            this.cropArea.height = Math.floor(this.cropArea.height * (intOriginalHeigth / intScaledHeight));
+            this.cropArea.x = Math.floor(this.cropArea.x * (intOriginalWidth / intScaledWidth));
+            this.cropArea.y = Math.floor(this.cropArea.y * (intOriginalHeigth / intScaledHeight));
+            this.cropArea.w = Math.floor(this.cropArea.w * (intOriginalWidth / intScaledWidth));
+            this.cropArea.h = Math.floor(this.cropArea.h * (intOriginalHeigth / intScaledHeight));
         }
 
         var callback = function(data, status, jqXHR) {
@@ -390,15 +363,13 @@ KAJONA.admin.mediamanager.imageEditor = {
                 KAJONA.admin.statusDisplay.displayXMLMessage(data);
                 iE.fm_cropObj.destroy();
                 iE.fm_cropObj = null;
-                document.getElementById("accept_icon").src = document
-                        .getElementById("accept_icon").src.replace(
-                        "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
-                document.getElementById('fm_image_dimensions').innerHTML = iE.cropArea.width
-                        + ' x ' + iE.cropArea.height;
-                document.getElementById('fm_image_size').innerHTML = 'n.a.';
-                document.getElementById('fm_int_realwidth').value = iE.cropArea.width;
-                document.getElementById('fm_int_realheight').value = iE.cropArea.height;
+                $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif"));
+                $('#fm_image_dimensions').html(iE.cropArea.w+' x '+iE.cropArea.h);
+                $('#fm_image_size').html('n.a.');
+                $('#fm_int_realwidth').val(iE.cropArea.w);
+                $('#fm_int_realheight').val(iE.cropArea.h);
 
+                $('#fm_mediamanagerPic').css("visibility", "visible");
                 if (this.fm_image_isScaled) {
                 	iE.showPreview();
                 } else {
@@ -406,7 +377,6 @@ KAJONA.admin.mediamanager.imageEditor = {
                 }
 
                 iE.cropArea = null;
-
                 hide_fm_screenlock_dialog();
             }
             else {
@@ -415,8 +385,8 @@ KAJONA.admin.mediamanager.imageEditor = {
             }
         };
 
-        KAJONA.admin.ajax.saveImageCropping(this.cropArea.left, this.cropArea.top,
-        		this.cropArea.width, this.cropArea.height, fm_file, callback);
+        KAJONA.admin.ajax.saveImageCropping(this.cropArea.x, this.cropArea.y,
+        		this.cropArea.w, this.cropArea.h, fm_file, callback);
     },
 
     rotate : function (intAngle) {
@@ -430,9 +400,7 @@ KAJONA.admin.mediamanager.imageEditor = {
                 if (iE.fm_cropObj != null) {
                 	iE.fm_cropObj.destroy();
                 	iE.fm_cropObj = null;
-                    document.getElementById("accept_icon").src = document
-                            .getElementById("accept_icon").src.replace(
-                            "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+                    $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif"));
                 }
 
                 //switch width and height
@@ -447,12 +415,11 @@ KAJONA.admin.mediamanager.imageEditor = {
                 }
 
                 // update size-info & hidden elements
-                var intWidthOld = document.getElementById('fm_int_realwidth').value;
-                var intHeightOld = document.getElementById('fm_int_realheight').value;
-                document.getElementById('fm_int_realwidth').value = intHeightOld;
-                document.getElementById('fm_int_realheight').value = intWidthOld;
-                document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
-                        + ' x ' + intWidthOld;
+                var intWidthOld = $('#fm_int_realwidth').val();
+                var intHeightOld = $('#fm_int_realheight').val();
+                $('#fm_int_realwidth').val(intHeightOld);
+                $('#fm_int_realheight').val(intWidthOld);
+                $('#fm_image_dimensions').html(intHeightOld+ ' x ' + intWidthOld);
 
                 hide_fm_screenlock_dialog();
             }
@@ -464,7 +431,6 @@ KAJONA.admin.mediamanager.imageEditor = {
 
         KAJONA.admin.ajax.saveImageRotating(intAngle, fm_file, callback);
     }
-
 };
 
 

@@ -17,6 +17,12 @@
         $(document).ready(function() {
             new YAHOO.util.KeyListener(document, { keys:27 }, KAJONA.admin.folderview.close).enable();
         });
+
+        $(function() {
+            $('[rel="tooltip"]').each(function(index) {
+                KAJONA.admin.tooltip.add(this);
+            });
+        });
     </script>
 </head>
 <body class="folderView">

@@ -10,6 +10,17 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["cropImage"]                       = "Beskär bild";
+$lang["cropImageAccept"]                 = "Spara beskärning";
+$lang["cropWarningCrop"]                 = "Redan beskuren";
+$lang["cropWarningDialogHeader"]         = "Bekräfta beskärning";
+$lang["cropWarningSaving"]               = "Vänligen beakta: Beskärning av bilder påverkar all användning av bilderna! Fortsätt i alla fall?<br />";
+$lang["cropWarningUnsavedHint"]          = "Ändringarna av bilden har ännu inte sparats!\\nVill du verkligen förkasta ändringarna?\\n\\nFör att spara ändringarna välj \"avbryt\" och dubbelklicka på bilden.";
+$lang["rotateImageLeft"]                 = "Roltera 90° åt vänster";
+$lang["rotateImageRight"]                = "Roltera 90° åt höger";
+$lang["showPreview"]                     = "Visa förhandsgranskningsstorlek";
+$lang["showRealsize"]                    = "Visa originalstorlek";
+
 $lang["actionLogbook"]                   = "Loggbok";
 $lang["actionLogbookFlush"]              = "Töm loggbok";
 $lang["actionMasssync"]                  = "Synkronisera alla";

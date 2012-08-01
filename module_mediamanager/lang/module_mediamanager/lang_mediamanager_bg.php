@@ -10,6 +10,17 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["cropImage"]                       = "Отрежи изображение";
+$lang["cropImageAccept"]                 = "Запази изрязването";
+$lang["cropWarningCrop"]                 = "Изрежи";
+$lang["cropWarningDialogHeader"]         = "Потвърди изрязване";
+$lang["cropWarningSaving"]               = "Внимание: Изрязването на снимката рефлектира навсякъде където се ползва изображението. Продължи?<br />";
+$lang["cropWarningUnsavedHint"]          = "Манипулациите по изображението не са запазени!\\nНаистина ли отхвърляте промените?\\n\\nНатисни \'откажи\' с двойно щракане върху изображението запазвате промените.";
+$lang["rotateImageLeft"]                 = "Завърти 90° на дясно";
+$lang["rotateImageRight"]                = "Завърти 90° на ляво";
+$lang["showPreview"]                     = "В умален размер";
+$lang["showRealsize"]                    = "В оригиналнен размер";
+
 $lang["actionLogbook"]                   = "Дневник";
 $lang["actionLogbookFlush"]              = "Изчисти дневника";
 $lang["actionMasssync"]                  = "Синхронизирай всички";

@@ -525,7 +525,6 @@ HTML;
             $arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($strFile)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_mediamanagerPic\" />";
 
             $arrTemplate["file_actions"] = "";
-
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"", "", $this->getLang("showPreview"), "icon_zoom_out.gif"))." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left.gif"));
@@ -533,10 +532,12 @@ HTML;
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
 
-
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
-            KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
-                KAJONA.admin.loader.loadImagecropperBase();
+                KAJONA.admin.loader.loadFile([
+                    '/core/module_mediamanager/admin/scripts/mediamanager.js',
+                    '/core/module_mediamanager/admin/scripts/jcrop/jquery.Jcrop.min.js',
+                    '/core/module_mediamanager/admin/scripts/jcrop/css/jquery.Jcrop.min.css'
+                ]);
 
                 var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&quality=80';
                 var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&maxWidth=__width__&maxHeight=__height__';
@@ -544,12 +545,11 @@ HTML;
                 var fm_image_scaledMaxHeight = $intHeight;
                 var fm_image_isScaled = true;
                 var fm_file = '".$strFile."' ;
-                var fm_warning_unsavedHint = '".$this->getLang("cropWarningUnsavedHint")."';
 
                 function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:KAJONA.admin.mediamanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
-            });
+
 				</script>";
 
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(1);
