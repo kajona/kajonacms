@@ -258,6 +258,21 @@ td {
     vertical-align: middle;
 }
 
+#messageBadge {
+    position: absolute;
+    /*display: inline;*/
+    top: 4px;
+    right: 66px;
+    background-color: #2CF72C;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    text-align: center;
+    -moz-box-shadow: 0 0 2px 2px #2CF72C;
+    -webkit-box-shadow: 0 0 2px 2px #2CF72C;
+    box-shadow: 0 0 2px 2px #2CF72C;
+}
+
 /* S T A T U S B O X */
 
 #statusBoxHeader {

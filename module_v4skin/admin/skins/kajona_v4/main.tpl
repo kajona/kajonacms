@@ -233,9 +233,14 @@
 <script>
 
     $(function () {
+
         function isTouchDevice() {
           return !!('ontouchstart' in window) ? 1 : 0;
         }
+
+
+
+
 
 
         $.widget('custom.catcomplete', $.ui.autocomplete, {
@@ -352,6 +357,10 @@
         $('#content a[rel=popover]').popover();
 
         $('*[rel=tooltip]').tooltip();
+
+
+
+
 
     });
 

@@ -178,17 +178,24 @@ class class_module_messaging_message extends class_model implements interface_mo
      * Returns the number of mesages for a single user - ignoring the messages states.
      *
      * @param string $strUserid
+     * @param bool $bitOnlyUnread
      *
      * @return int
      */
-    public static function getNumberOfMessagesForUser($strUserid) {
+    public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
+
+        $arrParams = array($strUserid);
+        if($bitOnlyUnread)
+            $arrParams[] = 1;
+
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
 		            WHERE system_id = message_id
 		              AND message_user = ?
+		              ".($bitOnlyUnread ? " AND message_read = ? " : "")."
 		              AND system_date_id = system_id";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
 

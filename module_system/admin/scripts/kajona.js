@@ -1327,10 +1327,8 @@ KAJONA.admin.treeview.checkInitialTreeViewToggling = function() {
 
 
 
-
-
 /**
- * Form manangement
+ * Form management
  */
 KAJONA.admin.forms = {};
 KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
@@ -1441,4 +1439,27 @@ KAJONA.admin.openPrintView = function(strUrlToLoad) {
     KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"px"); return false;
 };
 
+/**
+ * Subsystem for all messaging related tasks. Queries the backend for the number of unread messages, ...
+ * @type {Object}
+ */
+KAJONA.admin.messaging = {
 
+    /**
+     * Gets the number of unread messages for the current user.
+     * Expects a callback-function whereas the number is passed as a param.
+     *
+     * @param objCallback
+     */
+    getUnreadCount : function(objCallback) {
+
+        KAJONA.admin.ajax.genericAjaxCall("messaging", "getUnreadMessagesCount", "", function(data, status, jqXHR) {
+            if(status == 'success') {
+                var objResponse = $($.parseXML(data));
+                KAJONA.admin.messaging.intCount = objResponse.find("messageCount").text();
+                objCallback(objResponse.find("messageCount").text());
+
+            }
+        });
+    }
+};

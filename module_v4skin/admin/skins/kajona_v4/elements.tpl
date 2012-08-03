@@ -509,7 +509,7 @@ Part to display the login status, user is logged in
 <logout_form>
     <div class="dropdown userNotificationsDropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-user icon-white" id="icon-user"><span class="badge badge-info" id="badge-info">13</span></i> %%name%%
+            <i class="icon-user icon-white" id="icon-user"><span class="badge badge-info" id="badge-info">-</span></i> %%name%%
         </a>
         <ul class="dropdown-menu">
 
@@ -529,6 +529,11 @@ Part to display the login status, user is logged in
             <li><a href="%%logout%%">%%logoutTitle%%</a></li>
         </ul>
     </div>
+<script type="text/javascript">
+    KAJONA.admin.messaging.getUnreadCount(function(intCount) {
+        $('#badge-info').text(intCount);
+    });
+</script>
 </logout_form>
 
 Shown, wherever the attention of the user is needed

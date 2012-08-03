@@ -166,5 +166,18 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 	}
 
 
+    /**
+     * Gets the number of unread messages for the current user
+     *
+     * @permissions view
+     * @autoTestable
+     * @xml
+     *
+     * @return int
+     */
+    protected function actionGetUnreadMessagesCount() {
+        return "<messageCount>".class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), false)."</messageCount>";
+    }
+
 
 }

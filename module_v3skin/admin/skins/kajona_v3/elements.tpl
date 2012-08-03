@@ -388,8 +388,14 @@ Part to display the login status, user is logged in
 <logout_form>
     <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
     <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.gif" title="%%sitemapTitle%%" rel="tooltip" /></a></li>
+    <li><a href="#"><img src="_skinwebpath_/pics/icon_mail.gif" title="" rel="tooltip" /></a><div id="messageBadge"></div></li>
     <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" rel="tooltip" /></a></li>
     <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" rel="tooltip" /></a></li>
+<script type="text/javascript">
+    KAJONA.admin.messaging.getUnreadCount(function(intCount) {
+        $('#messageBadge').text(intCount);
+    });
+</script>
 </logout_form>
 
 Shown, wherever the attention of the user is needed
