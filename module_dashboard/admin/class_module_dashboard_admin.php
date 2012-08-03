@@ -80,6 +80,30 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         }
         $strReturn .= $this->objToolkit->getMainDashboard($arrColumns);
 
+        $strReturn .= <<<JS
+<script>
+    $(function() {
+        $('.adminwidgetColumn > li').each(function () {
+            var widget = $(this);
+            var systemId = widget.data('systemid');
+            var content = widget.find('.content').first();
+            KAJONA.admin.ajax.genericAjaxCall('dashboard', 'getWidgetContent', systemId, function(data, status, jqXHR) {
+                if (status == 'success') {
+                    content.removeClass('loadingContainer');
+
+                    //TODO remove XML or switch to JSON on the server side
+                    content.html(data);
+
+                    //TODO use jquerys eval?
+                    KAJONA.util.evalScript(data);
+                } else {
+                    KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
+                }
+            });
+        });
+    });
+</script>
+JS;
 
 	    return $strReturn;
 	}
@@ -94,28 +118,8 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 	    $strWidgetContent = "";
 	    $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
 
-        $strGeneratedContent = "<script type=\"text/javascript\">
-                        $(document).ready(function() {
-                              KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", function(data, status, jqXHR) {
-                                if(status == 'success') {
-                                    var intStart = data.indexOf(\"[CDATA[\")+7;
-                                    document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
-                                      intStart, data.indexOf(\"]]\")-intStart
-                                    );
-                                    if(data.indexOf(\"[CDATA[\") < 0) {
-                                        var intStart = data.indexOf(\"<error>\")+7;
-                                        document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=data.substr(
-                                          intStart, data.indexOf(\"</error>\")-intStart
-                                        );
-                                    }
-                                    KAJONA.util.evalScript(data);
-                                }
-                                else {
-                                    KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
-                                }
-                              })
-                        });
-                    </script>";
+        //TODO remove this?
+        $strGeneratedContent = "";
 
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();

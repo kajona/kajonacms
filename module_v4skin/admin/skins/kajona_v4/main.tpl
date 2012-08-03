@@ -343,14 +343,31 @@
             $('.gallery').append($newThumb);
         }
 
-        // init drag&drop ordering for gallery
-        $('.sortable').sortable({
-            stop: function (event, data) {
-                console.log('[sortable] stopped', arguments);
-            },
-            delay: isTouchDevice() ? 2000 : 0
+        // init general drag&drop ordering
+        $('.sortable').each(function () {
+            var $oneSortable = $(this);
+        
+            var handle = $oneSortable.data('sortable-handle');
+            var $handle = $oneSortable.find(handle ? '* > ' + handle : 'li');
+            $handle.css('cursor', 'move');
+            $handle.disableSelection();
+
+            $oneSortable.sortable({
+                handle: handle,
+                stop: function (event, ui) {
+                    var $item = ui.item;
+                    var systemId = $item.data('systemid');
+
+                    var position = $item.index();
+                    console.log('[sortable] new position', systemId, position);
+
+                    //TODO why do we need strIdOfList and strTargetModule? Both should be already stored on the server-side, or?
+                    //KAJONA.admin.ajax.setAbsolutePosition(systemId, position, strIdOfList, objCallback, strTargetModule);
+                },
+                delay: isTouchDevice() ? 2000 : 0
+            });
         });
-        $('.sortable').disableSelection();
+
 
 
         // init popovers & tooltips

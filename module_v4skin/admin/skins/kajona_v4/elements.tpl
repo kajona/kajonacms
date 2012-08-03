@@ -956,43 +956,17 @@ The language switch surrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
-
+//TODO %%widget_id%% is not needed anymore
 <adminwidget_widget>
-    <div class="adminwidget">
-            <div class="hd ddHandle">
-                <div class="title">%%widget_name%%</div>
-                <div class="c">%%widget_edit%% %%widget_delete%%</div>
-                <div class="clear"></div>
-            </div>
-            <div class="bd">
-                <div class="c">
-                    <div id="p_widget_%%widget_id%%" >
-                        <div class="loadingContainer">%%widget_content%%</div>
-                    </div>
-                </div>
-            </div>
-            <div class="ft">
-                <div class="c"></div>
-            </div>
+    <h2>%%widget_name%%</h2>
+    <div class="actions">%%widget_edit%% %%widget_delete%%</div>
+    <div class="content loadingContainer">
+        %%widget_content%%
     </div>
 </adminwidget_widget>
 
 <dashboard_column_header>
-	<br />
-	<script type="text/javascript">
-	    KAJONA.admin.loader.loadDragNDropBase(function () {
-	        KAJONA.admin.loader.loadDragNDropBase(function() {
-                KAJONA.admin.dragndroplistDashboard.DDApp.init();
-            }, "dragdrophelper_li.js");
-	    });
-    	if(arrayListIds == null) {
-            var arrayListIds = new Array("%%column_id%%");
-        } else {
-            arrayListIds[(arrayListIds.length +0)] = "%%column_id%%";
-		}
-	</script>
-
-	<ul id="%%column_id%%" class="adminwidgetColumn">
+	<ul id="%%column_id%%" class="adminwidgetColumn sortable" data-sortable-handle="h2">
 </dashboard_column_header>
 
 <dashboard_column_footer>
@@ -1000,7 +974,7 @@ The language switch surrounds the buttons
 </dashboard_column_footer>
 
 <dashboard_encloser>
-	<li id="%%entryid%%" style="padding: 0; margin: 0;">%%content%%</li>
+	<li data-systemid="%%entryid%%">%%content%%</li>
 </dashboard_encloser>
 
 <adminwidget_text>
