@@ -458,16 +458,6 @@ abstract class class_portal  {
 	}
 
     /**
-     * Returns an instance of class_lang_wrapper, to be used with
-     * class_template::fill_array()
-     *
-     * @return class_lang_wrapper
-     */
-    public final function getLangWrapper() {
-        return new class_lang_wrapper($this->objLang, $this->arrModule["modul"]);
-    }
-
-    /**
      * Wrapper to class_template::fillTemplate().
      * Includes the passing of an class_lang_wrapper by default.
      * NOTE: Removes placeholders. If unwanted, call directly.
@@ -479,7 +469,7 @@ abstract class class_portal  {
      * @return string
      */
     public final function fillTemplate($arrContent, $strIdentifier) {
-        return $this->objTemplate->fillTemplate($arrContent, $strIdentifier, true, $this->getLangWrapper());
+        return $this->objTemplate->fillTemplate($arrContent, $strIdentifier, true);
     }
 
 

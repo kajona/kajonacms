@@ -28,7 +28,7 @@
 
 <!-- available placeholders: comment_systemid -->
 <postacomment_new_button>
-    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" onclick="KAJONA.portal.loader.loadFile('/templates/default/js/postacomment.js'); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">%%lang_postacomment_write_new%%</a></div>
+    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" onclick="KAJONA.portal.loader.loadFile('/templates/default/js/postacomment.js'); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">[lang,postacomment_write_new,postacomment]</a></div>
 </postacomment_new_button>
 
 <!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page -->
@@ -38,12 +38,12 @@
     		<ul>
     		    %%validation_errors%%
     		</ul>
-    		<div><label for="comment_name_%%comment_systemid%%">%%lang_form_name_label%%*:</label><input type="text" name="comment_name" id="comment_name_%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div><br />
-    		<div><label for="comment_subject_%%comment_systemid%%">%%lang_form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject_%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
-    		<div><label for="comment_message_%%comment_systemid%%">%%lang_form_message_label%%*:</label><textarea name="comment_message" id="comment_message_%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
-    		<div><label for="kajonaCaptcha_%%comment_systemid%%"></label><span id="kajonaCaptcha_%%comment_systemid%%"></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%'); return false;">%%lang_commons_captcha_reload%%</a>)</div><br />
-    		<div><label for="form_captcha_%%comment_systemid%%">%%lang_commons_captcha%%*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" autocomplete="off" /></div><br /><br />
-    		<div><label for="comment_submit_%%comment_systemid%%"></label><input type="submit" name="submit" value="%%lang_form_submit_label%%" id="comment_submit_%%comment_systemid%%" class="button" /></div><br />
+    		<div><label for="comment_name_%%comment_systemid%%">[lang,form_name_label,postacomment]*:</label><input type="text" name="comment_name" id="comment_name_%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div><br />
+    		<div><label for="comment_subject_%%comment_systemid%%">[lang,form_subject_label,postacomment]:</label><input type="text" name="comment_subject" id="comment_subject_%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
+    		<div><label for="comment_message_%%comment_systemid%%">[lang,form_message_label,postacomment]*:</label><textarea name="comment_message" id="comment_message_%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
+    		<div><label for="kajonaCaptcha_%%comment_systemid%%"></label><span id="kajonaCaptcha_%%comment_systemid%%"></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%'); return false;">[lang,commons_captcha_reload,postacomment]</a>)</div><br />
+    		<div><label for="form_captcha_%%comment_systemid%%">[lang,commons_captcha,postacomment]*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" autocomplete="off" /></div><br /><br />
+    		<div><label for="comment_submit_%%comment_systemid%%"></label><input type="submit" name="submit" value="[lang,form_submit_label,postacomment]" id="comment_submit_%%comment_systemid%%" class="button" /></div><br />
     		<input type="hidden" name="comment_template" value="%%comment_template%%" />
             <input type="hidden" name="comment_systemid" value="%%comment_systemid%%" />
             <input type="hidden" name="comment_page" value="%%comment_page%%" />

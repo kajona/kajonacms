@@ -57,7 +57,7 @@
                 %%faqs_faqs%%
                 %%comments_postacomment%%
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
-                %%mixed2_portalupload%%
+                %%mixed2_portalupload|directorybrowser%%
                 %%mixed3_flash|mediaplayer|tags|eventmanager%%
 
                 <div align="right">

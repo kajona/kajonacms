@@ -659,9 +659,14 @@ pe_iconbar, pe_disable
 	<script type="text/javascript">
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "%%pe_dialog_close_warning%%";
-		YAHOO.util.Event.onDOMReady(function () {
+        $(function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
-		});
+
+            $('[rel="tooltip"]').each(function(index) {
+                KAJONA.admin.tooltip.add(this);
+            });
+        });
+
 	</script>
 
     <div id="peToolbar" style="display: none;">

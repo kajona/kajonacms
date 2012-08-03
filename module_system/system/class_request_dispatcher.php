@@ -52,14 +52,8 @@ class class_request_dispatcher {
 
 
         $strReturn = $this->callScriptlets($strReturn);
-
-
         $strReturn = $this->cleanupOutput($strReturn);
-
-
-
         $strReturn = $this->getDebugInfo().$strReturn;
-
         $this->sendConditionalGetHeaders($strReturn);
 
         return $strReturn;

@@ -3,11 +3,11 @@
 <!-- available placeholders: action, suche_term -->
 <search_form>
     <form name="searchResultForm" method="post" action="%%action%%" accept-charset="UTF-8">
-        <div><label for="resultSearchterm">%%lang_searchterm_label%%:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" onkeyup="KAJONA.portal.search.queryBackend();" /></div><br />
-        <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="%%lang_submit_label%%" class="button" /></div><br />
+        <div><label for="resultSearchterm">[lang,searchterm_label,search]:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" onkeyup="KAJONA.portal.search.queryBackend();" /></div><br />
+        <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="[lang,submit_label,search]" class="button" /></div><br />
     </form>
 
-    <div id="resultSetHeader" style="display: none;">%%lang_hitlist_text1%% <span id="spanSearchterm"></span> %%lang_hitlist_text2%% <span id="spanSearchamount"></span> %%lang_hitlist_text3%%:</div>
+    <div id="resultSetHeader" style="display: none;">[lang,hitlist_text1,search] <span id="spanSearchterm"></span> [lang,hitlist_text2,search] <span id="spanSearchamount"></span> [lang,hitlist_text3,search]:</div>
     <div id="searchResult"></div>
 
     <script type="text/javascript">

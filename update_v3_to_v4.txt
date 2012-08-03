@@ -1,7 +1,7 @@
 
 General
 - Remove ?> closing tags
-
+- The %%lang_ schemed placeholders are no longer available. They are completely replaced by the scriptlet [lang,placeholder,sourceModule]. available in both, admin and portal.
 
 Module Update
 - rename module-folder from modul_xx to module_xx

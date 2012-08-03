@@ -3,8 +3,8 @@
 <!-- available placeholders: action, suche_term -->
 <search_form>
     <form name="searchResultForm" method="post" action="%%action%%" accept-charset="UTF-8">
-        <div><label for="resultSearchterm">%%lang_searchterm_label%%:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" /></div><br />
-        <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="%%lang_submit_label%%" class="button" /></div><br />
+        <div><label for="resultSearchterm">[lang,searchterm_label,search]:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" /></div><br />
+        <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="[lang,submit_label,search]" class="button" /></div><br />
     </form>
 </search_form>
 
@@ -12,7 +12,7 @@
 <search_hitlist>
     <br /><br />
     <div>
-        <div>%%lang_hitlist_text1%% "%%search_term%%" %%lang_hitlist_text2%% %%search_nrresults%% %%lang_hitlist_text3%%:</div><br />
+        <div>[lang,hitlist_text1,search] "%%search_term%%" [lang,hitlist_text2,search] %%search_nrresults [lang,hitlist_text3,search]:</div><br />
         <ul>%%hitlist%%</ul>
         <div align="center">%%link_back%%&nbsp;&nbsp;%%link_overview%%&nbsp;&nbsp;%%link_forward%%</div>
     </div>

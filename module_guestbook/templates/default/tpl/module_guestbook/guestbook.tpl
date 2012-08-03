@@ -13,14 +13,14 @@
 <post>
     <table>
         <tr>
-            <td>%%lang_post_name_from%%: %%post_name_plain%%</td>
+            <td>[lang,post_name_from,guestbook]: %%post_name_plain%%</td>
             <td style="text-align: right;">%%post_date%%</td>
         </tr>
         <tr>
-            <td colspan="2">%%lang_post_page_text%%: %%post_page%%</td>
+            <td colspan="2">[lang,post_page_text,guestbook]: %%post_page%%</td>
         </tr>
         <tr>
-            <td>%%lang_post_message_text%%:</td>
+            <td>[lang,post_message_text%%:</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
@@ -33,13 +33,13 @@
 <entry_form>
     <ul>%%eintragen_fehler%%</ul>
     <form name="form1" method="post" action="%%action%%" accept-charset="UTF-8">
-        <div><label for="gb_post_name">%%lang_post_name_text%%*:</label><input type="text" name="gb_post_name" id="gb_post_name" value="%%gb_post_name%%" class="inputText" /></div><br />
-        <div><label for="gb_post_email">%%lang_post_mail_text%%*:</label><input type="text" name="gb_post_email" id="gb_post_email" value="%%gb_post_email%%" class="inputText" /></div><br />
-        <div><label for="gb_post_page">%%lang_post_page_text%%:</label><input type="text" name="gb_post_page" id="gb_post_page" value="%%gb_post_page%%" class="inputText" /></div><br />
-        <div><label for="gb_post_text">%%lang_post_message_text%%*:</label><textarea name="gb_post_text" id="gb_post_text" class="inputTextarea">%%gb_post_text%%</textarea></div><br /><br />
-        <div><label for="kajonaCaptcha_gb"></label><span id="kajonaCaptcha_gb"><script type="text/javascript">KAJONA.portal.loadCaptcha('gb', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('gb', 180); return false;">%%lang_commons_captcha_reload%%</a>)</div><br />
-    	<div><label for="gb_post_captcha">%%lang_commons_captcha%%*:</label><input type="text" name="gb_post_captcha" id="gb_post_captcha" class="inputText" /></div><br /><br />
-    	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_post_submit_text%%" class="button" /></div><br />
+        <div><label for="gb_post_name">[lang,post_name_text,guestbook]*:</label><input type="text" name="gb_post_name" id="gb_post_name" value="%%gb_post_name%%" class="inputText" /></div><br />
+        <div><label for="gb_post_email">[lang,post_mail_text,guestbook]*:</label><input type="text" name="gb_post_email" id="gb_post_email" value="%%gb_post_email%%" class="inputText" /></div><br />
+        <div><label for="gb_post_page">[lang,post_page_text,guestbook]:</label><input type="text" name="gb_post_page" id="gb_post_page" value="%%gb_post_page%%" class="inputText" /></div><br />
+        <div><label for="gb_post_text">[lang,post_message_text,guestbook]*:</label><textarea name="gb_post_text" id="gb_post_text" class="inputTextarea">%%gb_post_text%%</textarea></div><br /><br />
+        <div><label for="kajonaCaptcha_gb"></label><span id="kajonaCaptcha_gb"><script type="text/javascript">KAJONA.portal.loadCaptcha('gb', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('gb', 180); return false;">[lang,commons_captcha_reload,guestbook]</a>)</div><br />
+    	<div><label for="gb_post_captcha">[lang,commons_captcha,guestbook]*:</label><input type="text" name="gb_post_captcha" id="gb_post_captcha" class="inputText" /></div><br /><br />
+    	<div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,post_submit_text,guestbook]" class="button" /></div><br />
     </form>
 </entry_form>
 

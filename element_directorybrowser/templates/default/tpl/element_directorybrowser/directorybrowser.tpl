@@ -4,9 +4,9 @@
 <directorybrowser_wrapper>
     <table style="width: 100%">
         <tr>
-            <th>%%lang_directorybrowser_name%%</th>
-            <th>%%lang_directorybrowser_size%%</th>
-            <th>%%lang_directorybrowser_date%%</th>
+            <th>[lang,directorybrowser_name,elements]</th>
+            <th>[lang,directorybrowser_size,elements]</th>
+            <th>[lang,directorybrowser_date,elements]</th>
         </tr>
         %%files%%
     </table>

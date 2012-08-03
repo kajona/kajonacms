@@ -161,10 +161,9 @@ class class_template {
 	 * @param mixed $arrContent
 	 * @param string $strIdentifier
 	 * @param bool $bitRemovePlaceholder
-     * @param class_lang_wrapper $objLangWrapper
 	 * @return string The filled template
 	 */
-	public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true, $objLangWrapper = null) {
+	public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true) {
 		if(isset($this->arrCacheTemplateSections[$strIdentifier]))
 			$strTemplate = $this->arrCacheTemplateSections[$strIdentifier];
 		else
@@ -175,19 +174,6 @@ class class_template {
 				$strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
 			}
 		}
-
-        //any language-keys to fill?
-        if($objLangWrapper != null && $objLangWrapper instanceof class_lang_wrapper) {
-            //load placeholders
-            $arrTemp = array();
-            preg_match_all("'%%lang_([A-Za-z0-9_]*)%%'i", $strTemplate, $arrTemp);
-
-            if(isset($arrTemp[1]) && count($arrTemp[1]) > 0) {
-                foreach ($arrTemp[1] as $strStrippedPlaceholders) {
-                    $strTemplate = str_replace("%%lang_".$strStrippedPlaceholders."%%", $objLangWrapper->getLang($strStrippedPlaceholders), $strTemplate);
-                }
-            }
-        }
 
 		if($bitRemovePlaceholder)
 		   $strTemplate = $this->deletePlaceholderRaw($strTemplate);
