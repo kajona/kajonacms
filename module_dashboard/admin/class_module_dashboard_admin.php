@@ -90,10 +90,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             KAJONA.admin.ajax.genericAjaxCall('dashboard', 'getWidgetContent', systemId, function(data, status, jqXHR) {
                 if (status == 'success') {
                     content.removeClass('loadingContainer');
-
-                    //TODO remove XML or switch to JSON on the server side
-                    content.html(data);
-
+                    content.html( $.parseJSON(data) );
                     //TODO use jquerys eval?
                     KAJONA.util.evalScript(data);
                 } else {

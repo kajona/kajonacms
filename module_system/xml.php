@@ -25,6 +25,7 @@ define("_autotesting_", false);
 class class_xml {
 
     private static $bitSuppressXmlHeader = false;
+    private static $strReturnContentType = "Content-Type: text/xml; charset=utf-8";
 
     public function __construct() {
 		class_carrier::getInstance();
@@ -66,12 +67,24 @@ class class_xml {
         self::$bitSuppressXmlHeader = $bitSuppressXmlHeader;
     }
 
+    /**
+     * Use this method to set a new response type, e.g. json
+     * @static
+     * @param $strReturnContentType
+     */
+    public static function setStrReturnContentType($strReturnContentType) {
+        self::$strReturnContentType = $strReturnContentType;
+    }
 
+    public static function getStrReturnContentType() {
+        return self::$strReturnContentType;
+    }
 
 }
 
 //pass control
 $objXML = new class_xml();
-header("Content-Type: text/xml; charset=utf-8");
-echo $objXML->processRequest();
+$strContent = $objXML->processRequest();
+header(class_xml::getStrReturnContentType());
+echo $strContent;
 

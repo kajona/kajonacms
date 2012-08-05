@@ -844,7 +844,7 @@ The language switch surrounds the buttons
             <div class="bd">
                 <div class="c">
                     <div id="p_widget_%%widget_id%%" >
-                        <div class="loadingContainer">%%widget_content%%</div>
+                        <div class="loadingContainer content">%%widget_content%%</div>
                     </div>
                 </div>
             </div>
@@ -877,7 +877,7 @@ The language switch surrounds the buttons
 </dashboard_column_footer>
 
 <dashboard_encloser>
-	<li id="%%entryid%%" style="padding: 0; margin: 0;">%%content%%</li>
+	<li id="%%entryid%%" data-systemid="%%entryid%%" style="padding: 0; margin: 0;">%%content%%</li>
 </dashboard_encloser>
 
 <adminwidget_text>

@@ -71,22 +71,21 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         //load the aspect and close the session afterwards
         class_module_system_aspect::getCurrentAspect();
 
-
-        $strReturn = "";
         $objWidgetModel = new class_module_dashboard_widget($this->getSystemid());
         if($objWidgetModel->rightView()) {
-            $strReturn = "<content>";
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
 
             if(!$objConcreteWidget->getBitBlockSessionClose())
                 class_carrier::getInstance()->getObjSession()->sessionClose();
 
-            $strReturn .= "<![CDATA[". $objConcreteWidget->generateWidgetOutput() ."]]>";
-            $strReturn .= "</content>";
+            class_xml::setBitSuppressXmlHeader(true);
+            class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+            $strReturn = json_encode($objConcreteWidget->generateWidgetOutput());
+
         }
         else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-		    $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+		    $strReturn = "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
