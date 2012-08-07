@@ -1382,41 +1382,36 @@ KAJONA.admin.contextMenu = {
     menus: {},
 
     addElements: function (strIdentifier, arrElements) {
-		this.menus[strIdentifier] = {
-			elements: arrElements
-		};
+		this.menus[strIdentifier] = arrElements;
 	},
 
 	showElementMenu: function (strIdentifier, objAttach) {
         KAJONA.admin.tooltip.hide();
+        if(typeof $(objAttach).attr('id') != 'string')
+            $(objAttach).attr('id', new Date().getTime()+strIdentifier);
 
-		var arrEntry = this.menus[strIdentifier];
-		var arrElements = arrEntry["elements"];
-		var menu;
-
-		if (YAHOO.lang.isUndefined(arrEntry["menu"])) {
-			arrEntry["menu"] = menu = new YAHOO.widget.Menu("menu_"+strIdentifier, {
-				shadow: false,
-				lazyLoad: true
-			});
-
-			var handleClick = function (strType, arrArgs, objElement) {
-				eval(objElement.elementAction);
-			};
-
-			for (var i=0; i<arrElements.length; i++) {
-				var e = arrElements[i];
-                if(typeof e != 'undefined')
-                    menu.addItem({ text: e.elementName, onclick: {fn: handleClick, obj: e} });
-			}
-			menu.render("menuContainer_"+strIdentifier);
-		} else {
-			menu = arrEntry["menu"];
-		}
-		var buttonRegion = YAHOO.util.Region.getRegion(objAttach);
-		menu.cfg.setProperty("x", buttonRegion.left);
-		menu.cfg.setProperty("y", buttonRegion.top);
-		menu.show();
+        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquery/jquery.contextMenu.js", "/core/module_system/admin/scripts/jquery/jquery.contextMenu.css"], function() {
+            var items = {};
+            $.each(KAJONA.admin.contextMenu.menus[strIdentifier], function(index, element) {
+                //element.name = element.elementName;
+                items[index] = {
+                    name : element.elementName
+                };
+            });
+            $.contextMenu({
+                selector: '#'+$(objAttach).attr('id'),
+                build: function($trigger, e) {
+                    return {
+                        callback: function(key, options) {
+                            var objElement = KAJONA.admin.contextMenu.menus[strIdentifier][key];
+                            eval(objElement.elementAction);
+                        },
+                        items: items
+                    }
+                }
+            });
+            $('#'+$(objAttach).attr('id')).contextMenu();
+        });
 	}
 };
 

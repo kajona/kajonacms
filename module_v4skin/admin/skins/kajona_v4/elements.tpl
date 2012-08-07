@@ -1218,7 +1218,6 @@ It containes a list of aspects and provides the possibility to switch the differ
 <contextmenu_wrapper>
     <script type="text/javascript"> (function() {
           KAJONA.admin.contextMenu.addElements('%%id%%', [%%entries%%]);
-          KAJONA.admin.loader.load([ 'menu', 'container' ]);
          })();
     </script>
     <div id="menuContainer_%%id%%" class="yui-skin-sam"></div>
