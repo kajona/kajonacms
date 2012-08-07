@@ -55,3 +55,14 @@ class class_testbase extends PHPUnit_Framework_TestCase {
 
 }
 
+//define classes to avoid execution errors
+//TODO: remove as soon as request / response objects have been added
+class class_xml {
+    public static function setBitSuppressXmlHeader($intVal) {
+
+    }
+    public static function setStrReturnContentType($intVal) {
+
+    }
+}
+
