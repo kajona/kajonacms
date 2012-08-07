@@ -173,10 +173,40 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
      * @autoTestable
      * @xml
      *
-     * @return int
+     * @return string
      */
     protected function actionGetUnreadMessagesCount() {
-        return "<messageCount>".class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), false)."</messageCount>";
+        return "<messageCount>".class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), true)."</messageCount>";
+    }
+
+    /**
+     * Creates a list of the recent messages for the current user.
+     * The structure is returned in an json-format.
+     *
+     * @permissions view
+     * @xml
+     * @autoTestable
+     *
+     * @return string
+     */
+    protected function actionGetRecentMessages() {
+        class_xml::setBitSuppressXmlHeader(true);
+        class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+
+        $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5 ;
+
+        $arrMessages = class_module_messaging_message::getMessagesForUser($this->objSession->getUserID(), 0, $intMaxAmount-1);
+        $arrReturn = array();
+        foreach($arrMessages as $objOneMessage) {
+            $arrReturn[] = array(
+                "systemid" => $objOneMessage->getSystemid(),
+                "title" => $objOneMessage->getStrDisplayName(),
+                "unread" => $objOneMessage->getBitRead(),
+                "details" => getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false)
+            );
+        }
+
+        return json_encode($arrReturn);
     }
 
 

@@ -20,7 +20,7 @@
             <td colspan="2">[lang,post_page_text,guestbook]: %%post_page%%</td>
         </tr>
         <tr>
-            <td>[lang,post_message_text%%:</td>
+            <td>[lang,post_message_text,guestbook]:</td>
             <td>&nbsp;</td>
         </tr>
         <tr>

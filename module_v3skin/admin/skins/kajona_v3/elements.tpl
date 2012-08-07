@@ -391,12 +391,37 @@ Part to display the login status, user is logged in
 <logout_form>
     <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
     <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.gif" title="%%sitemapTitle%%" rel="tooltip" /></a></li>
-    <li><a href="#"><img src="_skinwebpath_/pics/icon_mail.gif" title="" rel="tooltip" /></a><div id="messageBadge"></div></li>
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('KJ_messageList', this); return false;"><img src="_skinwebpath_/pics/icon_mail.gif" title="" rel="tooltip" /></a><div id="messageBadge"></div></li>
     <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" rel="tooltip" /></a></li>
     <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" rel="tooltip" /></a></li>
+    <div id="menuContainer_KJ_messageList" class="yui-skin-sam"></div>
 <script type="text/javascript">
     KAJONA.admin.messaging.getUnreadCount(function(intCount) {
         $('#messageBadge').text(intCount);
+
+        //load the list of messages
+        KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
+            var arrElements = new Array();
+            $.each(objResponse, function(index, item) {
+                console.log(item);
+                var objElement = {
+                    elementName : item.title,
+                    elementAction : 'location.href=\''+item.details+'\''
+                };
+                if(item.unread == 0)
+                    objElement.elementName = "<span class='messagesListMenuUnread'>"+objElement.elementName+"</span>";
+                else
+                    objElement.elementName = "<span class='messagesListMenuRead'>"+objElement.elementName+"</span>";
+                arrElements.push(objElement);
+            });
+            arrElements.push({
+                elementName : '<span class="messagesListMenuUnread">[lang,actionShowAll,messaging]<span>',
+                elementAction : 'location.href="_indexpath_?admin=1&module=messaging"'
+            });
+            console.log(arrElements);
+            KAJONA.admin.contextMenu.addElements('KJ_messageList', arrElements);
+        });
+
     });
 </script>
 </logout_form>

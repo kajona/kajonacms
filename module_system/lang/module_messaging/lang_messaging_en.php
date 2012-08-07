@@ -18,3 +18,4 @@ $lang["message_subject"]                 = "New message received";
 $lang["modul_titel"]                     = "Messages";
 $lang["provider_bymail"]                 = "Email notifications";
 $lang["provider_enabled"]                = "Enabled";
+$lang["actionShowAll"]                   = "Show all messages";

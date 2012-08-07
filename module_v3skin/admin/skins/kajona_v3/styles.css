@@ -242,7 +242,7 @@ td {
 
 #topBar td a {
     text-decoration: none;
-    font-weight: bold;
+    font-weight: normal;
 }
 #topBar img {
     margin: 0 1px 0 0px;
@@ -258,6 +258,10 @@ td {
     vertical-align: middle;
 }
 
+#topBar #globalPath a {
+    font-weight: bold;
+}
+
 #messageBadge {
     position: absolute;
     /*display: inline;*/
@@ -271,6 +275,18 @@ td {
     -moz-box-shadow: 0 0 2px 2px #2CF72C;
     -webkit-box-shadow: 0 0 2px 2px #2CF72C;
     box-shadow: 0 0 2px 2px #2CF72C;
+}
+
+.messagesListMenuUnread, .messagesListMenuRead {
+    background: url("pics/icon_mailDisabled.gif") no-repeat;
+    padding: 4px 4px 4px 24px;
+    line-height: 22px;
+
+}
+
+.messagesListMenuUnread {
+    background-image: url("pics/icon_mail.gif");
+    font-weight: bold;
 }
 
 /* S T A T U S B O X */

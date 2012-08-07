@@ -1461,5 +1461,19 @@ KAJONA.admin.messaging = {
 
             }
         });
+    },
+
+    /**
+     * Loads the list of recent messages for the current user.
+     * The callback is passed the json-object as a param.
+     * @param objCallback
+     */
+    getRecentMessages : function(objCallback) {
+        KAJONA.admin.ajax.genericAjaxCall("messaging", "getRecentMessages", "", function(data, status, jqXHR) {
+            if(status == 'success') {
+                var objResponse = $.parseJSON(data);
+                objCallback(objResponse);
+            }
+        });
     }
 };

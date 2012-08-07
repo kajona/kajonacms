@@ -517,10 +517,10 @@ Part to display the login status, user is logged in
         <ul class="dropdown-menu">
 
             <li>
-                <ul>
-                    <li><a href="#">5 new comments</a></li>
-                    <li><a href="#">2 review tasks</a></li>
-                    <li><a href="#">2 Kajona updates available</a></li>
+                <ul id="messagingShortlist">
+                    <!--<li><a href="#">5 new comments</a></li>-->
+                    <!--<li><a href="#">2 review tasks</a></li>-->
+                    <!--<li><a href="#">2 Kajona updates available</a></li>-->
                 </ul>
             </li>
             <li class="divider"></li>
@@ -535,6 +535,16 @@ Part to display the login status, user is logged in
 <script type="text/javascript">
     KAJONA.admin.messaging.getUnreadCount(function(intCount) {
         $('#badge-info').text(intCount);
+
+        KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
+            $.each(objResponse, function(index, item) {
+                if(item.unread == 0)
+                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><b>"+item.title+"</b></a></li>");
+                else
+                    $('#messagingShortlist').append("<li><a href='"+item.details+"'>"+item.title+"</a></li>");
+            });
+            $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><b>[lang,actionShowAll,messaging]</b></a></li>");
+        });
     });
 </script>
 </logout_form>

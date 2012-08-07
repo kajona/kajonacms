@@ -154,7 +154,7 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @param bool|int $intStart
      * @param bool|int $intEnd
      *
-     * @return class_module_system_aspect[]
+     * @return class_module_messaging_message[]
      * @static
      */
     public static function getMessagesForUser($strUserid, $intStart = null, $intEnd = null) {
@@ -186,7 +186,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
         $arrParams = array($strUserid);
         if($bitOnlyUnread)
-            $arrParams[] = 1;
+            $arrParams[] = 0;
 
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
