@@ -268,7 +268,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
                     $(function() {
-                        $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
+                        KAJONA.admin.".$strJsVarName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
                             source: function(request, response) {
                                 $.ajax({
                                     url: KAJONA_WEBPATH+'/xml.php?admin=1',

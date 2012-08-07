@@ -610,24 +610,26 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
             $strReturn .= "
                 <script type=\"text/javascript\">
-                    KAJONA.admin.loader.loadAutocompleteBase(function () {
-	                    function reloadForm() {
-	                        //ugly part: add a delay to be sure the field is filled by the autocomplete
-							YAHOO.lang.later(100, this, function() {
-								document.getElementById('copyElement_doCopy').value = 0;
-								var formElement = document.getElementById('formCopyElement');
-								formElement.submit();
-                            });
-	                    }
 
-	                    KAJONA.admin.copyElement_page.itemSelectEvent.subscribe(reloadForm);
+                $(function() {
+                        var reloadForm = function() {
+                            setTimeout( function() {
+                                document.getElementById('copyElement_doCopy').value = 0;
+                                var formElement = document.getElementById('formCopyElement');
+                                formElement.submit();
+                            }, 100);
+
+                        };
+
+	                    KAJONA.admin.copyElement_page.bind('autocompleteselect', reloadForm);
 
 	                    var languageField = document.getElementById('copyElement_language');
 	                    languageField.onchange = reloadForm;
 
                         var pageField = document.getElementById('copyElement_page');
 	                    pageField.onchange = reloadForm;
-                    });
+	             });
+
                 </script>";
 
             //any actions to take?

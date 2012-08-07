@@ -478,10 +478,6 @@ KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles
 	this.load([ "connection", "animation", "dragdrop" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
-KAJONA.admin.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
-};
-
 KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
 	this.load([ "resize", "container", "element", "dragdrop" ], arrAdditionalFiles, objCallback);
 };
@@ -1392,25 +1388,29 @@ KAJONA.admin.contextMenu = {
 
         KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquery/jquery.contextMenu.js", "/core/module_system/admin/scripts/jquery/jquery.contextMenu.css"], function() {
             var items = {};
+            var bitElementsFound = false;
             $.each(KAJONA.admin.contextMenu.menus[strIdentifier], function(index, element) {
                 //element.name = element.elementName;
                 items[index] = {
                     name : element.elementName
                 };
+                bitElementsFound = true;
             });
-            $.contextMenu({
-                selector: '#'+$(objAttach).attr('id'),
-                build: function($trigger, e) {
-                    return {
-                        callback: function(key, options) {
-                            var objElement = KAJONA.admin.contextMenu.menus[strIdentifier][key];
-                            eval(objElement.elementAction);
-                        },
-                        items: items
+            if(bitElementsFound) {
+                $.contextMenu({
+                    selector: '#'+$(objAttach).attr('id'),
+                    build: function($trigger, e) {
+                        return {
+                            callback: function(key, options) {
+                                var objElement = KAJONA.admin.contextMenu.menus[strIdentifier][key];
+                                eval(objElement.elementAction);
+                            },
+                            items: items
+                        }
                     }
-                }
-            });
-            $('#'+$(objAttach).attr('id')).contextMenu();
+                });
+                $('#'+$(objAttach).attr('id')).contextMenu();
+            }
         });
 	}
 };
