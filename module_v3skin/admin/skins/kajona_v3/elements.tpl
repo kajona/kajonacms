@@ -51,6 +51,9 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
                 oldPos = 0;
             }
         });
+        $('#%%listid%% > tbody:has(tr[id!=""]) > tr').each(function(index) {
+            $(this).css('cursor', 'move');
+        });
     });
 </script>
 <style>.group_move_placeholder { display: table-row; } </style>
