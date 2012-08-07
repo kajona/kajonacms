@@ -48,7 +48,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
 			$strReturn .= "An error occured! ...\n";
         //the dashboard
-        $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), false, "", "class_module_dashboard_admin_xml.php");
+        $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_dashboard_admin_xml.php");
 
         //up till now, the default widgets are still missing - create them.
         $arrUsers = class_module_user_user::getAllUsers();
@@ -154,6 +154,12 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $strReturn .= "Updating widget db-structure...\n";
         $arrUsers = class_module_user_user::getAllUsers();
         $arrAspects = class_module_system_aspect::getAllAspects();
+
+
+        $strReturn .= "Enabling dashboard in navigation...\n";
+        $objModule = class_module_system_module::getModuleByName("dashboard");
+        $objModule->setIntNavigation(1);
+        $objModule->updateObjectToDb();
 
 
         foreach($arrUsers as $objOneUser) {
