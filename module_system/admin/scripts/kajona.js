@@ -461,12 +461,6 @@ KAJONA.util.Loader = function (strScriptBase) {
  */
 KAJONA.admin.loader = new KAJONA.util.Loader("/core/module_system/admin/scripts/");
 
-/*
- * extend the loader with predefined helper functions
- */
-KAJONA.admin.loader.loadAjaxBase = function(objCallback, arrAdditionalFiles) {
-    alert("KAJONA.admin.loader.loadAjaxBase no longer supported!");
-};
 
 KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles) {
 	this.load([ "connection", "animation", "dragdrop" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
@@ -474,10 +468,6 @@ KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles
 
 KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
 	this.load([ "resize", "container", "element", "dragdrop" ], arrAdditionalFiles, objCallback);
-};
-
-KAJONA.admin.loader.loadTreeviewBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "treeview", "connection" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
 
