@@ -673,11 +673,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      */
     private function generateTreeView($strSideContent) {
         $strReturn = "";
-
         //generate the array of ids to expand initially
-        $arrNodes = $this->getPathArray($this->getSystemid());
-        array_unshift($arrNodes, $this->getObjModule()->getSystemid());
-        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadPagesTreeViewNodes", $this->getObjModule()->getSystemid(), $arrNodes, $strSideContent, $this->getOutputModuleTitle(), getLinkAdminHref($this->arrModule["modul"]));
+        $arrNodes = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
+        $strReturn .= $this->objToolkit->getTreeview(_webpath_."/xml.php?admin=1&module=pages&action=getChildNodes", "", $arrNodes, $strSideContent);
         return $strReturn;
     }
 
@@ -1045,25 +1043,51 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * @permissions view
      */
     protected function actionGetChildNodes() {
-        $strReturn = "";
+        $arrReturn = array();
 
-        $strReturn .= "<entries>";
+
+        if($this->getSystemid() == "") {
+            class_xml::setBitSuppressXmlHeader(true);
+            class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+            return json_encode(array(
+                array(
+                    "data" => array(
+                        "title" => $this->getOutputModuleTitle(),
+                        "icon" => _skinwebpath_."/pics/icon_folderClosed.gif"
+                    ),
+                    "state" => "closed",
+                    "attr" => array(
+                        "id" => $this->getObjModule()->getSystemid(),
+                        "systemid" => $this->getObjModule()->getSystemid(),
+                        "link" => getLinkAdminHref("pages", "list", "systemid=".$this->getObjModule()->getSystemid(), false),
+                        "isleaf" =>  false
+                    )
+                )
+            ));
+        }
+
 
         $arrFolder = class_module_pages_folder::getFolderList($this->getSystemid());
         foreach ($arrFolder as $objSingleEntry) {
-                if($objSingleEntry->rightView()) {
-                    /** @var class_module_pages_folder $objSingleEntry */
-                    if($objSingleEntry instanceof class_module_pages_folder) {
-                        $strReturn .= "<folder>";
-                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrDisplayName())."</name>";
-                        $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
-                        $strReturn .= "<link>".getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false)."</link>";
-                        $strReturn .= "<isleaf>".(count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
-                        $strReturn .= "</folder>";
-                    }
+            if($objSingleEntry->rightView()) {
+                /** @var class_module_pages_folder $objSingleEntry */
+                if($objSingleEntry instanceof class_module_pages_folder) {
+                    $arrReturn[] = array(
+                        "data" => array(
+                            "title" => $objSingleEntry->getStrDisplayName(),
+                            "icon" => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon()
+                        ),
+                        "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
+                        "attr" => array(
+                            "id" => $objSingleEntry->getSystemid(),
+                            "systemid" => $objSingleEntry->getSystemid(),
+                            "link" => getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false),
+                            "isleaf" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
+                        )
+                    );
                 }
             }
-
+        }
 
         $arrPages = class_module_pages_folder::getPagesInFolder($this->getSystemid());
         if(count($arrPages) > 0) {
@@ -1071,25 +1095,34 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 if($objSingleEntry->rightView()) {
                     /** @var class_module_pages_page $objSingleEntry */
                     if($objSingleEntry instanceof class_module_pages_page) {
-                        $strReturn .= "<page>";
-                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrDisplayName())."</name>";
-                        $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
-                        if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
-                            $strReturn .= "<link></link>";
-                        else
-                            $strReturn .= "<link>".getLinkAdminHref("pages", "list", "&systemid=".$objSingleEntry->getSystemid(), false)."</link>";
 
-                        $strReturn .= "<type>".$objSingleEntry->getIntType()."</type>";
-                        $strReturn .= "<isleaf>".(count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
-                        $strReturn .= "</page>";
+                        $strTargetId = $objSingleEntry->getSystemid();
+                        if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
+                            $strTargetId = class_module_pages_page::getPageByName($objSingleEntry->getStrAlias())->getSystemid();
+
+                        $arrReturn[] = array(
+                            "data" => array(
+                                "title" => $objSingleEntry->getStrDisplayName(),
+                                "icon" => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon()
+                            ),
+                            "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
+                            "attr" => array(
+                                "id" => $objSingleEntry->getSystemid(),
+                                "systemid" => $objSingleEntry->getSystemid(),
+                                "link" => ($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS ? getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false) : getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false)),
+                                "type" => $objSingleEntry->getIntType(),
+                                "isleaf" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
+                            )
+                        );
                     }
 
                 }
             }
         }
-        $strReturn .= "</entries>";
 
-        return $strReturn;
+        class_xml::setBitSuppressXmlHeader(true);
+        class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+        return json_encode($arrReturn);
     }
 
 }

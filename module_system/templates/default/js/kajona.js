@@ -303,13 +303,7 @@ KAJONA.util.Loader = function () {
         if(!bitPreventPathAdding)
             strPath = KAJONA_WEBPATH + strPath;
 
-        var fileType = strPath.substr(strPath.length-2, 2) == 'js' ? 'js' : 'css';
-
-        var filter = {
-            'searchExp': "\\."+fileType,
-            'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
-        };
-        strPath = strPath.replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+        strPath = strPath+"?"+KAJONA_BROWSER_CACHEBUSTER;
 
         return strPath;
     }

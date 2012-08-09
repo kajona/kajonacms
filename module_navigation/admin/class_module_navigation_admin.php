@@ -463,7 +463,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray();
-        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadNavigationTreeViewNodes", $arrNodes[0], $arrNodes, $strSideContent, $this->getOutputModuleTitle(), getLinkAdminHref($this->arrModule["modul"], "list", "&systemid=".$arrNodes[0], false));
+        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent);
         return $strReturn;
     }
 
@@ -479,27 +479,36 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * @permissions view
      */
     protected function actionGetChildNodes() {
-        $strReturn = " ";
 
-        $strReturn .= "<subnodes>";
         $arrNavigations = class_module_navigation_point::getNaviLayer($this->getSystemid());
+
+        $arrReturn = array();
 
         if(count($arrNavigations) > 0) {
             /** @var class_module_navigation_point $objSinglePoint */
             foreach ($arrNavigations as $objSinglePoint) {
                 if($objSinglePoint->rightView()) {
-                    $strReturn .= "<point>";
-                    $strReturn .= "<name>".xmlSafeString($objSinglePoint->getStrName())."</name>";
-                    $strReturn .= "<systemid>".$objSinglePoint->getSystemid()."</systemid>";
-                    $strReturn .= "<link>".getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false)."</link>";
-                    $strReturn .= "<isleaf>".(count(class_module_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
-                    $strReturn .= "</point>";
+
+                    $arrReturn[] = array(
+                        "data" => array(
+                            "title" => $objSinglePoint->getStrDisplayName(),
+                            "icon" => _skinwebpath_."/pics/".$objSinglePoint->getStrIcon()
+                        ),
+                        "state" => (count(class_module_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "" : "closed"),
+                        "attr" => array(
+                            "id" => $objSinglePoint->getSystemid(),
+                            "systemid" => $objSinglePoint->getSystemid(),
+                            "link" => getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
+                        )
+                    );
+
                 }
             }
         }
 
-        $strReturn .= "</subnodes>";
-        return $strReturn;
+        class_xml::setBitSuppressXmlHeader(true);
+        class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+        return json_encode($arrReturn);
     }
 
 

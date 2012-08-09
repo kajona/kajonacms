@@ -297,13 +297,7 @@ KAJONA.util.Loader = function (strScriptBase) {
         if(!bitPreventPathAdding)
             strPath = KAJONA_WEBPATH + strPath;
 
-        var fileType = strPath.substr(strPath.length-2, 2) == 'js' ? 'js' : 'css';
-
-        var filter = {
-            'searchExp': "\\."+fileType,
-            'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
-        };
-        strPath = strPath.replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+        strPath = strPath+"?"+KAJONA_BROWSER_CACHEBUSTER;
 
         return strPath;
     }
@@ -1164,163 +1158,9 @@ KAJONA.admin.ajax = {
         };
 
         KAJONA.admin.ajax.genericAjaxCall("system", "setStatus", strSystemIdToSet, objCallback);
-	},
-
-    loadPagesTreeViewNodes : function (node, fnLoadComplete)  {
-        var nodeSystemid = node.systemid;
-        KAJONA.admin.ajax.genericAjaxCall("pages", "getChildNodes", nodeSystemid, function(data, status, jqXHR) {
-            if(status == 'success') {
-                //check if answer contains an error
-                if(data.indexOf("<error>") != -1) {
-                    KAJONA.admin.statusDisplay.displayXMLMessage(data);
-                    fnLoadComplete();
-                }
-                else {
-                    //success, start transforming the childs to tree-view nodes
-                    //TODO: use xml parser instead of string-parsing
-                    //process nodes
-                    var intStart = data.indexOf("<entries>")+9;
-                    var strEntries = data.substr(intStart, data.indexOf("</entries>")-intStart);
-
-                    while(strEntries.indexOf("<folder>") != -1 || strEntries.indexOf("<page>") != -1 ) {
-
-                        if(strEntries.substr(0, 8) == "<folder>") {
-                            var intFolderStart = strEntries.indexOf("<folder>")+8;
-                            var intFolderEnd = strEntries.indexOf("</folder>")-intFolderStart;
-                            var strSingleFolder = strEntries.substr(intFolderStart, intFolderEnd);
-
-                            var intTemp = strSingleFolder.indexOf("<name>")+6;
-                            var strName = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</name>")-intTemp);
-
-                            intTemp = strSingleFolder.indexOf("<systemid>")+10;
-                            var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
-
-                            intTemp = strSingleFolder.indexOf("<link>")+6;
-                            var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
-
-                            intTemp = strSingleFolder.indexOf("<isleaf>")+8;
-                            var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
-
-                            strName = strName.replace(/&amp;/g, '&', strName);
-
-                            var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
-                            tempNode.systemid = strSystemid;
-                            tempNode.labelStyle = "treeView-foldernode";
-                            tempNode.isLeaf = strLeaf == "true";
-
-                            strEntries = strEntries.substr(strEntries.indexOf("</folder>")+9);
-                        }
-                        else if(strEntries.substr(0, 6) == "<page>") {
-                            var intPageStart = strEntries.indexOf("<page>")+6;
-                            var intPageEnd = strEntries.indexOf("</page>")-intPageStart;
-                            var strSinglePage = strEntries.substr(intPageStart, intPageEnd);
-
-                            intTemp = strSinglePage.indexOf("<name>")+6;
-                            strName = strSinglePage.substr(intTemp, strSinglePage.indexOf("</name>")-intTemp);
-
-                            intTemp = strSinglePage.indexOf("<systemid>")+10;
-                            strSystemid = strSinglePage.substr(intTemp, strSinglePage.indexOf("</systemid>")-intTemp);
-
-                            intTemp = strSinglePage.indexOf("<link>")+6;
-                            strLink = strSinglePage.substr(intTemp, strSinglePage.indexOf("</link>")-intTemp);
-
-                            intTemp = strSinglePage.indexOf("<isleaf>")+8;
-                            var strLeaf = strSinglePage.substr(intTemp, strSinglePage.indexOf("</isleaf>")-intTemp);
-
-                            intTemp = strSinglePage.indexOf("<type>")+6;
-                            var intType = strSinglePage.substr(intTemp, strSinglePage.indexOf("</type>")-intTemp);
-
-                            strName = strName.replace(/&amp;/g, '&', strName);
-
-                            tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
-                            tempNode.systemid = strSystemid;
-                            tempNode.isLeaf = strLeaf == "true";
-                            tempNode.labelStyle = intType == 0 ? "treeView-pagenode" : "treeView-pagealiasnode";
-
-                            strEntries = strEntries.substr(strEntries.indexOf("</page>")+7);
-
-                        }
-
-                    }
-
-                    fnLoadComplete();
-                    KAJONA.admin.treeview.checkInitialTreeViewToggling();
-                }
-            }
-            else {
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-            }
-        });
-    },
-
-    loadNavigationTreeViewNodes : function (node, fnLoadComplete)  {
-        var nodeSystemid = node.systemid;
-        KAJONA.admin.ajax.genericAjaxCall("navigation", "getChildNodes", nodeSystemid, function(data, status, jqXHR) {
-            if(status == 'success') {
-                //check if answer contains an error
-                if(data.indexOf("<error>") != -1) {
-                    KAJONA.admin.statusDisplay.displayXMLMessage(data);
-                    fnLoadComplete();
-                }
-                else {
-                    //success, start transforming the childs to tree-view nodes
-                    //TODO: use xml parser instead of string-parsing
-                    //process nodes
-                    var strPoints = data;
-
-                    while(strPoints.indexOf("<point>") != -1 ) {
-                        var intFolderStart = strPoints.indexOf("<point>")+7;
-                        var intFolderEnd = strPoints.indexOf("</point>")-intFolderStart;
-                        var strSingleFolder = strPoints.substr(intFolderStart, intFolderEnd);
-
-                        var intTemp = strSingleFolder.indexOf("<name>")+6;
-                        var strName = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</name>")-intTemp);
-
-                        intTemp = strSingleFolder.indexOf("<systemid>")+10;
-                        var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
-
-                        intTemp = strSingleFolder.indexOf("<link>")+6;
-                        var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
-
-                        intTemp = strSingleFolder.indexOf("<isleaf>")+8;
-                        var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
-
-                        strName = strName.replace(/&amp;/g, '&', strName);
-
-                        var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
-                        tempNode.systemid = strSystemid;
-                        tempNode.labelStyle = "treeView-navigationnode";
-                        tempNode.isLeaf = strLeaf == "true";
-
-                        strPoints = strPoints.substr(strPoints.indexOf("</point>")+8);
-                    }
-
-                    fnLoadComplete();
-                    KAJONA.admin.treeview.checkInitialTreeViewToggling();
-                }
-            }
-            else {
-                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-            }
-        });
-    }
+	}
 
 };
-
-/**
- * Treeview functions
- */
-KAJONA.admin.treeview = {};
-KAJONA.admin.treeview.checkInitialTreeViewToggling = function() {
-    if(arrTreeViewExpanders.length > 0) {
-        var strValue = arrTreeViewExpanders.shift();
-        var objNode = tree.getNodeByProperty("systemid", strValue);
-        if(objNode != null) {
-            objNode.expand();
-        }
-    }
-};
-
 
 
 /**

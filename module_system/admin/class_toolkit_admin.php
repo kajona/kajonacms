@@ -1730,36 +1730,53 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Create a tree-view UI-element. Please not, that currently it's only possible to use
-     * one tree-view per page.
-     * The nodes are loaded via AJAX by calling the method passed as the first arg.
+     * Create a tree-view UI-element.
+     * The nodes are loaded via AJAX by calling the url passed as the first arg.
      * The optional third param is an ordered list of systemid identifying the nodes to expand initially.
+     * The tree may be wrapped into a two-column view.
      *
-     * @param string $strLoadNodeDataFunction
+     * @param string $strLoadNodeDataUrl, systemid is appended automatically
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
      * @param string $strSideContent
-     * @param string $strRootNodeTitle
-     * @param string $strRootNodeLink
+     *
      * @return string
      */
-    public function getTreeview($strLoadNodeDataFunction, $strRootNodeSystemid, $arrNodesToExpand = array(), $strSideContent = "", $strRootNodeTitle = " ", $strRootNodeLink = "") {
+    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "") {
+        $arrTemplate = array();
+        $arrTemplate["sideContent"] = $strSideContent;
+        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+
+    /**
+     * Create a tree-view UI-element.
+     * The nodes are loaded via AJAX by calling the url passed as the first arg.
+     * The optional third param is an ordered list of systemid identifying the nodes to expand initially.
+     * Renders only the tree, so no other content
+     *
+     * @param string $strLoadNodeDataUrl, systemid is appended automatically
+     * @param string $strRootNodeSystemid
+     * @param array $arrNodesToExpand
+     *
+     * @return string
+     */
+    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
-        $arrTemplate["loadNodeDataFunction"] = $strLoadNodeDataFunction;
-        $arrTemplate["sideContent"] = $strSideContent;
-        $arrTemplate["rootNodeTitle"] = $strRootNodeTitle;
-        $arrTemplate["rootNodeLink"] = uniStrReplace("&amp;", "&", $strRootNodeLink);
+        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
+        $arrTemplate["treeId"] = generateSystemid();
         $arrTemplate["treeviewExpanders"] = "";
         for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
             if($intI < count($arrNodesToExpand)-1)
                 $arrTemplate["treeviewExpanders"] .= ",";
         }
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
-
 
     /**
      * Renderes the quickhelp-button and the quickhelp-text passed

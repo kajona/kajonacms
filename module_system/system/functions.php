@@ -317,7 +317,61 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
 	return $strLink;
 }
 
+function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false, $bitBlockPrintview = false) {
+    $strLink = "";
 
+    //add print-view param?
+    if(!$bitBlockPrintview && (getGet("printView") != "" || getPost("printView") != ""))
+        $strParams .= "&printView=1";
+
+
+    //systemid in params?
+    $strSystemid = "";
+    $arrParams = explode("&", $strParams);
+
+    foreach($arrParams as $strKey => $strValue) {
+        $arrEntry = explode("=", $strValue);
+        if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
+            $strSystemid = $arrEntry[1];
+            unset($arrParams[$strKey]);
+        }
+        else if($strValue == "")
+            unset($arrParams[$strKey]);
+    }
+
+    //urlencoding
+    $strModule = urlencode($strModule);
+    $strAction = urlencode($strAction);
+
+    //rewriting enabled?
+    if(_system_mod_rewrite_ == "true") {
+
+        //scheme: /admin/module.action.systemid
+        if($strModule != "" && $strAction == "" && $strSystemid == "")
+            $strLink = _webpath_."/xml/admin/".$strModule.".html";
+        else if($strModule != "" && $strAction != "" && $strSystemid == "")
+            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction.".html";
+        else
+            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
+
+        if(count($arrParams) > 0)
+            $strLink .= "?".implode("&amp;", $arrParams);
+
+    }
+    else {
+        $strLink = ""._webpath_."/xml.php?admin=1&amp;module=".$strModule.
+            ($strAction != "" ? "&amp;action=".$strAction : "" ).
+            ($strSystemid != "" ?  "&amp;systemid=".$strSystemid : "");
+
+        if(count($arrParams) > 0)
+            $strLink .= "&amp;".(implode("&amp;", $arrParams));
+    }
+
+    if(!$bitEncodedAmpersand)
+        $strLink = uniStrReplace("&amp;", "&", $strLink);
+
+    return $strLink;
+}
 
 
 

@@ -955,12 +955,50 @@ The language switch surrounds the buttons
 ---------------------------------------------------------------------------------------------------------
 -- TREE VIEW --------------------------------------------------------------------------------------------
 
+<tree>
+    <div id="%%treeId%%" class="treeDiv"></div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile([
+            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
+            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
+        ], function() {
+            $('#%%treeId%%').jstree({
+                "plugins" : [
+                    "themes","json_data","ui","dnd","types","hotkeys"
+                ],
+                "json_data" : {
+                    "ajax" : {
+                        "url" : "%%loadNodeDataUrl%%",
+                        "data" : function (n) {
+                            return {
+                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
+                                "rootnode" : '%%rootNodeSystemid%%'
+                            };
+                        }
+                    }
+                },
+                "themes" : {
+                    "url" : "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
+                    "icons" : true
+                },
+                "core" : {
+                    "initially_open" : [ %%treeviewExpanders%% ]
+                }
+            })
+            .bind("select_node.jstree", function (event, data) {
+                document.location.href=data.rslt.obj.attr("link");
+            });
+        });
+    </script>
+</tree>
+
+
 <treeview>
     <table width="100%" cellpadding="3">
         <tr>
-            <td valign="top" width="200" >
+            <td valign="top" width="250" >
                 <div class="treeViewWrapper">
-                    <div id="treeDiv"></div>
+                    %%treeContent%%
                 </div>
             </td>
             <td valign="top" style="border-left: 1px solid #cccccc;">
@@ -968,29 +1006,6 @@ The language switch surrounds the buttons
             </td>
         </tr>
     </table>
-    <script type="text/javascript">
-    var tree;
-    var arrTreeViewExpanders = new Array(%%treeviewExpanders%%);
-    //anonymous function wraps the remainder of the logic:
-    (function() {
-        //function to initialize the tree:
-        function treeInit() {
-            //instantiate the tree:
-            tree = new YAHOO.widget.TreeView("treeDiv");
-            tree.setDynamicLoad(%%loadNodeDataFunction%%);
-
-            var root = tree.getRoot();
-            var tempNode = new YAHOO.widget.TextNode({label:'%%rootNodeTitle%%', href:'%%rootNodeLink%%'}, root, false);
-            tempNode.systemid = '%%rootNodeSystemid%%';
-            //The tree is not created in the DOM until this method is called:
-            tree.draw();
-            KAJONA.admin.treeview.checkInitialTreeViewToggling();
-        }
-        //build the tree when files are loaded
-        KAJONA.admin.loader.loadTreeviewBase(treeInit);
-
-    })();
-    </script>
 </treeview>
 
 The tag-wrapper is the section used to surround the list of tag.

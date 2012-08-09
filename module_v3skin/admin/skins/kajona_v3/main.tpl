@@ -104,6 +104,7 @@
         $('[rel="tooltip"]').each(function(index) {
             KAJONA.admin.tooltip.add(this);
         });
+        KAJONA.admin.tooltip.hide();
     });
 </script>
 
