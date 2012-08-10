@@ -83,7 +83,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $objIterator->setPageNumber($this->getParam("pv"));
             $objIterator->setIntElementsPerPage($objIterator->getNumberOfElements());
             $objIterator->setArraySection(class_module_navigation_point::getNaviLayer($this->getSystemid()));
-            $strReturn .= $this->renderList($objIterator, true, "naviPoints");
+            $strReturn .= $this->renderList($objIterator, false, "naviPoints");
 
             if($this->strPeAddon == "")
                 $strReturn = $this->generateTreeView($strReturn);
@@ -463,7 +463,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray();
-        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent);
+        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent, true, true);
         return $strReturn;
     }
 

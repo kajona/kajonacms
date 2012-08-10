@@ -200,6 +200,7 @@ $lang["session_status"]                  = "State";
 $lang["session_username"]                = "Username";
 $lang["session_valid"]                   = "Valid until";
 $lang["setAbsolutePosOk"]                = "Saving position succeeded";
+$lang["setPrevIdOk"]                     = "Saving new parent succeeded";
 $lang["setStatusError"]                  = "Error changing the status";
 $lang["setStatusOk"]                     = "Changing the status succeeded";
 $lang["settings_updated"]                = "Settings changed successfully";

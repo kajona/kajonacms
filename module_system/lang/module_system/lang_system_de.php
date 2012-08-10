@@ -202,6 +202,7 @@ $lang["session_valid"]                   = "Gültig bis";
 $lang["setAbsolutePosOk"]                = "Speichern der Position erfolgreich";
 $lang["setStatusError"]                  = "Fehler beim Ändern des Status";
 $lang["setStatusOk"]                     = "Ändern des Status erfolgreich";
+$lang["setPrevIdOk"]                     = "Speichern des neuen Eltern-Knotens erfolgreich";
 $lang["settings_updated"]                = "Einstellungen wurden geändert.";
 $lang["setzen_erfolg"]                   = "Rechte erfolgreich gespeichert";
 $lang["speicherplatz"]                   = "Speicherplatz";

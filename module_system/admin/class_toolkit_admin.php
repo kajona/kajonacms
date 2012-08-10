@@ -1739,13 +1739,16 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
      * @param string $strSideContent
+     * @param bool $bitOrderingEnabled
+     * @param bool $bitHierachicalSortEnabled
+     *
      *
      * @return string
      */
-    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "") {
+    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "",$bitOrderingEnabled = false, $bitHierachicalSortEnabled = false) {
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
-        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
+        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand, $bitOrderingEnabled, $bitHierachicalSortEnabled);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -1760,14 +1763,19 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strLoadNodeDataUrl, systemid is appended automatically
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
+     * @param bool $bitOrderingEnabled
+     * @param bool $bitHierachicalSortEnabled
+     *
      *
      * @return string
      */
-    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
+    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false) {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
         $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
         $arrTemplate["treeId"] = generateSystemid();
+        $arrTemplate["orderingEnabled"] = $bitOrderingEnabled ? "true" : "false";
+        $arrTemplate["hierarchialSortEnabled"] = $bitHierachicalSortEnabled ? "true" : "false";
         $arrTemplate["treeviewExpanders"] = "";
         for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";

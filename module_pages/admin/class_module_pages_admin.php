@@ -98,26 +98,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         $bitPeMode = $this->getParam("pe") != "";
 
-        $strFolder = "";
-        $arrFolder = class_module_pages_folder::getFolderList($this->getSystemid());
-        if(count($arrFolder) > 0) {
-            $objArraySectionIterator = new class_array_section_iterator(count($arrFolder));
-            $objArraySectionIterator->setPageNumber(1);
-            $objArraySectionIterator->setIntElementsPerPage($objArraySectionIterator->getNumberOfElements());
-            $objArraySectionIterator->setArraySection($arrFolder);
-            $strFolder = $this->renderList($objArraySectionIterator, false, "folderList");
-
-            $strFolder .= $this->objToolkit->divider();
-            $strFolder = $this->objToolkit->getLayoutFolderPic($strFolder, $this->getLang("klapper"));
-        }
-
         //Collect the pages belonging to the current parent
-        $arrPages = class_module_pages_folder::getPagesInFolder($this->getSystemid());
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         $objArraySectionIterator = new class_array_section_iterator(count($arrPages));
         $objArraySectionIterator->setPageNumber(1);
         $objArraySectionIterator->setIntElementsPerPage($objArraySectionIterator->getNumberOfElements());
         $objArraySectionIterator->setArraySection($arrPages);
-        $strPages = $this->renderList($objArraySectionIterator, true, "pagesList");
+        $strPages = $this->renderList($objArraySectionIterator, false, "pagesList");
 
         $strPathNavi = "";
 
@@ -131,9 +118,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $strPathNavi .= $this->objToolkit->divider();
 
         if($bitPeMode)
-            $strReturn = $strPathNavi.$strFolder.$strPages;
+            $strReturn = $strPathNavi.$strPages;
         else
-            $strReturn = $strPathNavi.$this->generateTreeView($strFolder.$strPages);
+            $strReturn = $strPathNavi.$this->generateTreeView($strPages);
 
         return $strReturn;
 	}
@@ -675,7 +662,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $strReturn = "";
         //generate the array of ids to expand initially
         $arrNodes = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
-        $strReturn .= $this->objToolkit->getTreeview(_webpath_."/xml.php?admin=1&module=pages&action=getChildNodes", "", $arrNodes, $strSideContent);
+        $strReturn .= $this->objToolkit->getTreeview(_webpath_."/xml.php?admin=1&module=pages&action=getChildNodes", "", $arrNodes, $strSideContent, true, true);
         return $strReturn;
     }
 
@@ -1045,54 +1032,29 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     protected function actionGetChildNodes() {
         $arrReturn = array();
 
-
-        if($this->getSystemid() == "") {
-            class_xml::setBitSuppressXmlHeader(true);
-            class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
-            return json_encode(array(
-                array(
-                    "data" => array(
-                        "title" => $this->getOutputModuleTitle(),
-                        "icon" => _skinwebpath_."/pics/icon_folderClosed.gif"
-                    ),
-                    "state" => "closed",
-                    "attr" => array(
-                        "id" => $this->getObjModule()->getSystemid(),
-                        "systemid" => $this->getObjModule()->getSystemid(),
-                        "link" => getLinkAdminHref("pages", "list", "systemid=".$this->getObjModule()->getSystemid(), false),
-                        "isleaf" =>  false
-                    )
-                )
-            ));
-        }
-
-
-        $arrFolder = class_module_pages_folder::getFolderList($this->getSystemid());
-        foreach ($arrFolder as $objSingleEntry) {
-            if($objSingleEntry->rightView()) {
-                /** @var class_module_pages_folder $objSingleEntry */
-                if($objSingleEntry instanceof class_module_pages_folder) {
-                    $arrReturn[] = array(
-                        "data" => array(
-                            "title" => $objSingleEntry->getStrDisplayName(),
-                            "icon" => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon()
-                        ),
-                        "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
-                        "attr" => array(
-                            "id" => $objSingleEntry->getSystemid(),
-                            "systemid" => $objSingleEntry->getSystemid(),
-                            "link" => getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false),
-                            "isleaf" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
-                        )
-                    );
-                }
-            }
-        }
-
-        $arrPages = class_module_pages_folder::getPagesInFolder($this->getSystemid());
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
         if(count($arrPages) > 0) {
             foreach ($arrPages as $objSingleEntry) {
                 if($objSingleEntry->rightView()) {
+
+                    /** @var class_module_pages_folder $objSingleEntry */
+                    if($objSingleEntry instanceof class_module_pages_folder) {
+                        $arrReturn[] = array(
+                            "data" => array(
+                                "title" => $objSingleEntry->getStrDisplayName(),
+                                "icon" => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon()
+                            ),
+                            "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
+                            "attr" => array(
+                                "id" => $objSingleEntry->getSystemid(),
+                                "systemid" => $objSingleEntry->getSystemid(),
+                                "link" => getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false),
+                                "isleaf" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
+                            )
+                        );
+                    }
+
+
                     /** @var class_module_pages_page $objSingleEntry */
                     if($objSingleEntry instanceof class_module_pages_page) {
 

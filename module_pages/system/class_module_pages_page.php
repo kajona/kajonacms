@@ -106,11 +106,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 		parent::__construct($strSystemid);
     }
 
-    public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
-        parent::setAbsolutePosition($intNewPosition, true);
-    }
-
-
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

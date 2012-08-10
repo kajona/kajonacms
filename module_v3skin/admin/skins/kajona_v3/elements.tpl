@@ -962,10 +962,34 @@ The language switch surrounds the buttons
             "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
             "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
         ], function() {
+
+            //create a valid tree config - drag n drop enabled, sorting enabled
+            var check_move = function(m) { return false; };
+            if('%%orderingEnabled%%' == 'true') {
+                check_move = function(m) {
+
+                    if(m.o.attr("draggable") === "false")
+                        return false;
+
+                    var p = this._get_parent(m.o);
+                    if(!p) return false;
+                    p = p == -1 ? this.get_container() : p;
+                    if(p === m.np) return true;
+                    if(p[0] && m.np[0] && p[0] === m.np[0]) return true;
+                    return false;
+                };
+            }
+
+            if('%%hierarchialSortEnabled%%' == 'true') {
+                check_move = function(m) {
+                    if(m.o.attr("draggable") === "false")
+                        return false;
+                    return true;
+                };
+            };
+
             $('#%%treeId%%').jstree({
-                "plugins" : [
-                    "themes","json_data","ui","dnd","types","hotkeys"
-                ],
+
                 "json_data" : {
                     "ajax" : {
                         "url" : "%%loadNodeDataUrl%%",
@@ -977,16 +1001,54 @@ The language switch surrounds the buttons
                         }
                     }
                 },
+                "crrm" : {
+                    "move" : {
+                        "check_move" : check_move
+                    }
+                },
+                "types" : {
+                    "default" : {
+                        "renamable" : "none"
+                    }
+                },
+                "dnd" : {
+                    "drag_check" : function (data) { return false; },
+                    "drop_target" : false,
+                    "drag_target" : false
+                },
                 "themes" : {
                     "url" : "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
                     "icons" : true
                 },
                 "core" : {
                     "initially_open" : [ %%treeviewExpanders%% ]
-                }
+                },
+                "plugins" : [ "themes","json_data","ui","dnd","crrm","types" ]
             })
+            //TODO: Hotkeys removed. currently theres no way of preventing a node-renaming, e.g. by pressing f2
             .bind("select_node.jstree", function (event, data) {
                 document.location.href=data.rslt.obj.attr("link");
+            })
+            .bind("rename_node.jstree", function (NODE, REF_NODE) {
+                 // Do your operation
+            }).bind("move_node.jstree", function (e, data) {
+                data.rslt.o.each(function (i) {
+
+                    console.log("id: "+$(this).attr("id"));
+                    console.log("position: "+(data.rslt.cp + i +1));
+                    console.log("title: "+(data.rslt.name));
+                    console.log("ref: "+ (data.rslt.cr === -1 ? 1 : data.rslt.np.attr("id")));
+
+                    var prevId = (data.rslt.cr === -1 ? '%%rootNodeSystemid%%' : data.rslt.np.attr("id"));
+                    var systemid = $(this).attr("id");
+                    var pos = (data.rslt.cp + i +1)
+                    KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", systemid+"&prevId="+prevId, function() {
+                        KAJONA.admin.ajax.setAbsolutePosition(systemid, pos, null, function() {
+                            //location.reload();
+                        });
+                    });
+
+                });
             });
         });
     </script>

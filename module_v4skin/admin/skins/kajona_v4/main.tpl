@@ -225,11 +225,6 @@
 <!--<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>-->
 <!--<script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>-->
 
-<script src="_skinwebpath_/js/jstree/jquery.cookie.js"></script>
-<script src="_skinwebpath_/js/jstree/jquery.hotkeys.js"></script>
-<script src="_skinwebpath_/js/jstree/jquery.jstree.js"></script>
-<script src="_skinwebpath_/treedemo.js"></script>
-
 <script>
 
     $(function () {

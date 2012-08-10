@@ -39,7 +39,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $intNewPos = $this->getParam("listPos");
 		//check permissions
-		if($objCommon->rightEdit() && $intNewPos != "") {
+		if($objCommon != null && $objCommon->rightEdit() && $intNewPos != "") {
 
             //there is a different mode for page-elements, catch now
             //store edit date
@@ -87,6 +87,34 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
 	    return $strReturn;
 	}
+
+    /**
+     * Sets the prev-id of a record.
+     * expects the param prevId
+     * @return string
+     */
+    protected function actionSetPrevid() {
+        $strReturn = "";
+
+        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $strNewPrevId = $this->getParam("prevId");
+        //check permissions
+        if($objCommon != null && $objCommon->rightEdit() && validateSystemid($strNewPrevId)) {
+
+            if($objCommon->getStrPrevId() != $strNewPrevId) {
+                $objCommon->updateObjectToDb($strNewPrevId);
+            }
+
+            $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setPrevIdOk")."</message>";
+            $this->flushCompletePagesCache();
+        }
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+        }
+
+        return $strReturn;
+    }
 
     /**
      * Executes a systemtask.
