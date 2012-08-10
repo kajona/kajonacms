@@ -47,15 +47,15 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
         $options = "series: {
                 pie: {
                     show: true,
-                    tilt:" . $this->tilt.",
-                    radius:".$this->pieChartRaduis.",
+                    tilt:" . $this->tilt . ",
+                    radius:" . $this->pieChartRaduis . ",
                     label: {
-                        show:".$this->showLabels.",
+                        show:" . $this->showLabels . ",
                         formatter: function(label, series) {
                             return '<div style=\"" . $this->labelStyleSheets . "\">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
                         },
                         radius:" . $this->labelRadius . ",
-                        background: {opacity: ".$this->labelBackroundOpacity." }
+                        background: {opacity: " . $this->labelBackroundOpacity . " }
                     }
                 }
             }";
@@ -63,25 +63,13 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
         //show legend?
         $options.=",legend: {
             show: " . $this->showLegend . "
-        }";
+        },";
 
+        $hoverable = "grid: { hoverable: true, clickable: true }";
+        $options.=$hoverable;
         return $options;
     }
 
-    /**
-     * Displays legend with the labels
-     */
-    public function showLegend() {
-        $this->showLegend = "true";
-    }
-
-    /**
-     * Removes the legend
-     */
-    public function disableLegend() {
-        $this->showLegend = "false";
-    }
-    
     /**
      * Labels are being placed around the pie chart
      */
@@ -126,22 +114,38 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
     public function disabel3d() {
         $this->tilt = "1";
     }
-    
+
     public function showLabelBackground() {
         $this->labelBackroundOpacity = "0.8";
     }
-    
+
     public function disableLabelBackground() {
         $this->labelBackroundOpacity = "0";
     }
-    
+
     /**
-     *The raduis must be between 0 and 1
+     * The raduis must be between 0 and 1
      * @param type $raduis 
      */
     public function setPieChartRaduis($raduis) {
         $this->pieChartRaduis = $raduis;
-        
     }
+
+    public function showChartToolTips($strChartId) {
+        $tooltip =
+                "<script type='text/javascript'>
+                $(\"#" . $strChartId . "\").bind(\"plothover\", pieHover);
+                function pieHover(event, pos, obj) {
+                    if (!obj)
+                        return;
+
+                    percent = parseFloat(obj.series.percent).toFixed(2);
+                    $(\"#pieHover\").html('<span style=\"font-weight: bold; color: '+obj.series.color+'\">'+obj.series.label+' ('+percent+'%)</span>');
+                }
+                </script>";
+
+        return $tooltip;
+    }
+
 }
 

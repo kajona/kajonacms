@@ -161,11 +161,11 @@ class class_graph_flot implements interface_graph {
      * @return mixed
      */
     public function renderGraph() {
-
+        
 
         $strChartId = generateSystemid();
         $strChartCode = $this->objChartData->showGraph($strChartId);
-
+        
         //generate the wrapping js-code and all requirements
         $strReturn = "\t <div id=\"" . $strChartId . "\" class=\"flotGraph\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
 
@@ -182,14 +182,13 @@ class class_graph_flot implements interface_graph {
             ], function() {
                     console.log('trggering flot for chart ".$strChartId."');
                 ".$strChartCode."
-
-
             });
         </script>";
 
+        
+        $toolTip = $this->objChartData->showChartToolTips($strChartId);
 
-
-        return $strReturn;
+        return $strReturn.$toolTip;
     }
 
 }
