@@ -507,7 +507,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         }
 
         class_xml::setBitSuppressXmlHeader(true);
-        class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+        class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 

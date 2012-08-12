@@ -18,13 +18,13 @@ class class_http_responsetypes {
      * Default xml response type
      * @var string
      */
-    public static $STR_TYPE_XML = "Content-Type: text/xml; charset=utf-8";
+    const STR_TYPE_XML = "Content-Type: text/xml; charset=utf-8";
 
     /**
      * Default json response type
      * @var string
      */
-    public static $STR_TYPE_JSON = "Content-Type: application/json; charset=utf-8";
+    const  STR_TYPE_JSON = "Content-Type: application/json; charset=utf-8";
 
 
 

@@ -191,7 +191,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
      */
     protected function actionGetRecentMessages() {
         class_xml::setBitSuppressXmlHeader(true);
-        class_xml::setStrReturnContentType(class_http_responsetypes::$STR_TYPE_JSON);
+        class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5 ;
 
