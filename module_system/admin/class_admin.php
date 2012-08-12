@@ -677,7 +677,7 @@ abstract class class_admin {
                     throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
 
                 if($this->arrModule["modul"] != $this->getParam("module")) {
-                    header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                    header(class_http_statuscodes::SC_UNAUTHORIZED);
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
                 }
             }
@@ -691,7 +691,7 @@ abstract class class_admin {
                 throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
 
             if(get_class($this) == "class_module_login_admin_xml") {
-                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                header(class_http_statuscodes::SC_UNAUTHORIZED);
                 throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
             }
 

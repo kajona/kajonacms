@@ -81,19 +81,19 @@ class class_download_manager extends class_root {
 					@fclose($ptrFile);
 				}
 				else {
-                    header(class_http_statuscodes::$strSC_FORBIDDEN);
+                    header(class_http_statuscodes::SC_FORBIDDEN);
                     $bitRedirectToErrorPage = true;
 				}
 
 			}
 			else {
-				header(class_http_statuscodes::$strSC_NOT_FOUND);
+				header(class_http_statuscodes::SC_NOT_FOUND);
 				$bitRedirectToErrorPage = true;
 			}
 
 		}
 		else {
-            header(class_http_statuscodes::$strSC_NOT_FOUND);
+            header(class_http_statuscodes::SC_NOT_FOUND);
             $bitRedirectToErrorPage = true;
 		}
 

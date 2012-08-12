@@ -50,7 +50,7 @@ class class_xml {
         $strContent = $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
 
         if($strContent == "") {
-            header(class_http_statuscodes::$strSC_BADREQUEST);
+            header(class_http_statuscodes::SC_BADREQUEST);
             $strContent = "<error>An error occurred, malformed request</error>";
         }
 

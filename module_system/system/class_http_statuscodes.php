@@ -20,14 +20,14 @@ class class_http_statuscodes {
      *
      * @var int
      */
-    public static  $strSC_BADREQUEST = "HTTP/1.0 400 Bad Request";
+    const SC_BADREQUEST = "HTTP/1.0 400 Bad Request";
 
     /**
      * Status code (401) indicating authentication is possible but has failed or not yet been provided.
      *
      * @var int
      */
-    public static  $strSC_UNAUTHORIZED = "HTTP/1.0 401 Unauthorized";
+    const SC_UNAUTHORIZED = "HTTP/1.0 401 Unauthorized";
 
 
     /**
@@ -35,7 +35,7 @@ class class_http_statuscodes {
      *
      * @var int
      */
-    public static  $strSC_FORBIDDEN = "HTTP/1.0 403 Forbidden";
+    const SC_FORBIDDEN = "HTTP/1.0 403 Forbidden";
 
 
 
@@ -45,7 +45,7 @@ class class_http_statuscodes {
      *
      * @var int
      */
-    public static  $strSC_NOT_FOUND = "HTTP/1.0 404 Not Found";
+    const SC_NOT_FOUND = "HTTP/1.0 404 Not Found";
 
 
 
@@ -54,7 +54,7 @@ class class_http_statuscodes {
      *
      * @var int
      */
-    public static  $strSC_NOT_MODIFIED = "HTTP/1.0 304 Not Modified";
+    const SC_NOT_MODIFIED = "HTTP/1.0 304 Not Modified";
 
 
 
@@ -64,7 +64,7 @@ class class_http_statuscodes {
      *
      * @var int
      */
-    public static  $strSC_INTERNAL_SERVER_ERROR = "HTTP/1.0 500 Internal Server Error";
+    const SC_INTERNAL_SERVER_ERROR = "HTTP/1.0 500 Internal Server Error";
 
 
 }

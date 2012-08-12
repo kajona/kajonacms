@@ -1382,7 +1382,7 @@ function checkConditionalGetHeaders($strChecksum) {
     if(issetServer("HTTP_IF_NONE_MATCH")) {
         if(getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
             //strike. no further actions needed.
-            header(class_http_statuscodes::$strSC_NOT_MODIFIED);
+            header(class_http_statuscodes::SC_NOT_MODIFIED);
             header("ETag: ".$strChecksum);
             header("Cache-Control: max-age=86400, must-revalidate");
 

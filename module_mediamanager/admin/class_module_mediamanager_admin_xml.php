@@ -64,17 +64,17 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
                     $strReturn = "<message>".xmlSafeString($this->getLang("folder_create_success"))."</message>";
                 }
                 else {
-                    header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                    header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
                     $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
                 }
             }
             else {
-                header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
                 $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
             }
         }
         else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            header(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -109,7 +109,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         if($objFile instanceof class_module_mediamanager_file) {
             $strFolder = $objFile->getStrFilename();
             if(!$objFile->rightEdit() || $objFile->getIntType() != class_module_mediamanager_file::$INT_TYPE_FOLDER) {
-                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                header(class_http_statuscodes::SC_UNAUTHORIZED);
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
                 return $strReturn;
             }
@@ -122,14 +122,14 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             $objRepo = $objFile;
             $strFolder = $objFile->getStrPath();
             if(!$objFile->rightEdit()) {
-                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                header(class_http_statuscodes::SC_UNAUTHORIZED);
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
                 return $strReturn;
             }
 
         }
         else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            header(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
             return $strReturn;
         }
@@ -160,12 +160,12 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
                     $strReturn .= "<message><error>".$this->getLang("xmlupload_error_copyUpload")."</error></message>";
             }
             else {
-                header(class_http_statuscodes::$strSC_BADREQUEST);
+                header(class_http_statuscodes::SC_BADREQUEST);
                 $strReturn .= "<message><error>".$this->getLang("xmlupload_error_filter")."</error></message>";
             }
         }
         else {
-            header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+            header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("xmlupload_error_notWritable"))."</error></message>";
         }
 
@@ -268,7 +268,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             }
         }
         else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            header(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -307,7 +307,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             }
         }
         else {
-            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            header(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
