@@ -74,13 +74,13 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
 	var element = document.getElementById(strElementId);
 	if (element.style.display == 'none') 	{
 		element.style.display = 'block';
-		if (YAHOO.lang.isFunction(objCallbackVisible)) {
+		if ($.isFunction(objCallbackVisible)) {
 			objCallbackVisible();
 		}
     }
     else {
     	element.style.display = 'none';
-		if (YAHOO.lang.isFunction(objCallbackInvisible)) {
+		if ($.isFunction(objCallbackInvisible)) {
 			objCallbackInvisible();
 		}
     }
@@ -108,10 +108,10 @@ KAJONA.util.foldImage = function (strElementId, strImageId, strImageVisible, str
 };
 
 KAJONA.util.setBrowserFocus = function (strElementId) {
-	YAHOO.util.Event.onDOMReady(function() {
+	$(function() {
 		try {
-		    focusElement = YAHOO.util.Dom.get(strElementId);
-		    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
+		    focusElement = $("#"+strElementId);
+		    if (focusElement.hasClass("inputWysiwyg")) {
 		    	CKEDITOR.config.startupFocus = true;
 		    } else {
 		        focusElement.focus();
@@ -347,10 +347,6 @@ KAJONA.util.Loader = function (strScriptBase) {
      * @param callback
      */
 	this.load = function(arrYuiComponents, arrFiles, callback) {
-
-
-        //TODO: convert loads to hardcoded lists of dependencies
-
 
         //todo: delete
 		var arrYuiComponentsToWaitFor = [];
@@ -683,7 +679,7 @@ KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
 	} else {
 		window.location.replace(url + '&language=' + strLanguageToLoad);
 	}
-}
+};
 
 /**
  * little helper function for the system right matrix
@@ -718,7 +714,7 @@ KAJONA.admin.checkRightMatrix = function() {
 			}
 		}
 	}
-}
+};
 
 /**
  * General way to display a status message.
@@ -763,14 +759,12 @@ KAJONA.admin.statusDisplay = {
 	},
 
 	/**
-	 * Creates a informal message box containg the passed content
+	 * Creates a informal message box contaning the passed content
 	 *
 	 * @param {String} strMessage
 	 */
     messageOK : function(strMessage) {
-		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfMessageBox)
-		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfErrorBox)
-		YAHOO.util.Dom.addClass(this.idOfMessageBox, this.classOfMessageBox);
+		$("#"+this.idOfMessageBox).removeClass(this.classOfMessageBox).removeClass(this.classOfErrorBox).addClass(this.classOfMessageBox);
 		this.timeToFadeOut = this.timeToFadeOutMessage;
 		this.startFadeIn(strMessage);
     },
@@ -781,9 +775,7 @@ KAJONA.admin.statusDisplay = {
 	 * @param {String} strMessage
 	 */
     messageError : function(strMessage) {
-		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfMessageBox)
-		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfErrorBox)
-		YAHOO.util.Dom.addClass(this.idOfMessageBox, this.classOfErrorBox);
+        $("#"+this.idOfMessageBox).removeClass(this.classOfMessageBox).removeClass(this.classOfErrorBox).addClass(this.classOfErrorBox);
 		this.timeToFadeOut = this.timeToFadeOutError;
 		this.startFadeIn(strMessage);
     },
@@ -794,18 +786,18 @@ KAJONA.admin.statusDisplay = {
 			this.animObject.stop(true);
 			this.animObject.onComplete.unsubscribeAll();
 		}
-		var statusBox = YAHOO.util.Dom.get(this.idOfMessageBox);
-		var contentBox = YAHOO.util.Dom.get(this.idOfContentBox);
-		contentBox.innerHTML = strMessage;
-		YAHOO.util.Dom.setStyle(statusBox, "display", "");
-		YAHOO.util.Dom.setStyle(statusBox, "opacity", 0.0);
+		var statusBox = $("#"+this.idOfMessageBox);
+		var contentBox = $("#"+this.idOfContentBox);
+		contentBox.html(strMessage);
+		statusBox.css("display", "").css("opacity", 0.0);
 
 		//place the element at the top of the page
-		var screenWidth = YAHOO.util.Dom.getViewportWidth();
-		var divWidth = statusBox.offsetWidth;
+		var screenWidth = $(window).width()
+		var divWidth = statusBox.width();
 		var newX = screenWidth/2 - divWidth/2;
-		var newY = YAHOO.util.Dom.getDocumentScrollTop() -2;
-		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
+		var newY = $(window).scrollTop() -2;
+        statusBox.css('top', newY);
+        statusBox.css('left', newX);
 
 		//start fade-in handler
     	KAJONA.admin.loader.loadDragNDropBase(function() {
@@ -814,21 +806,19 @@ KAJONA.admin.statusDisplay = {
 	},
 
 	fadeIn : function () {
-		this.animObject = new YAHOO.util.Anim(this.idOfMessageBox, {opacity: {to: 0.8}}, 1, YAHOO.util.Easing.easeOut);
-		this.animObject.onComplete.subscribe(function() {window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", this.timeToFadeOut);});
-		this.animObject.animate();
+        $("#"+this.idOfMessageBox).animate({opacity: 0.8}, 1000, function() {  window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", this.timeToFadeOut); });
 	},
 
 	startFadeOut : function() {
-		var statusBox = YAHOO.util.Dom.get(this.idOfMessageBox);
 
-		//get the current pos
-		var attributes = {
-	        points: {by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5]}
-	    };
-	    this.animObject = new YAHOO.util.Motion(statusBox, attributes, 0.5);
-	    this.animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle(this.idOfMessageBox, "display", "none");});
-		this.animObject.animate();
+        $("#"+this.idOfMessageBox).animate(
+            { top: -200 },
+            1000,
+            function() {
+                $("#"+this.idOfMessageBox).css("display", "none");
+            }
+        );
+
 	}
 };
 
@@ -1018,11 +1008,6 @@ KAJONA.admin.systemtask = {
                     //show status info
                     document.getElementById('systemtaskStatusDiv').innerHTML = strStatusInfo;
 
-                    /*
-                    //center the dialog again (later() as workaround to add a minimal delay)
-                    YAHOO.lang.later(10, this, function() {jsDialog_0.dialog.center();});
-                    */
-
                     if(strReload == "") {
                     	jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE_DONE);
                     	document.getElementById('systemtaskLoadingDiv').style.display = "none";
@@ -1042,9 +1027,6 @@ KAJONA.admin.systemtask = {
     },
 
     cancelExecution : function() {
-        if(YAHOO.util.Connect.isCallInProgress(KAJONA.admin.ajax.systemTaskCall)) {
-           YAHOO.util.Connect.abort(KAJONA.admin.ajax.systemTaskCall, null, false);
-        }
         jsDialog_0.hide();
     },
 
@@ -1163,12 +1145,12 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
         var arrElement = arrFields[i];
         if(arrElement.length == 2) {
             if(arrElement[1] == 'date') {
-                YAHOO.util.Dom.addClass(arrElement[0]+"_day", "mandatoryFormElement");
-                YAHOO.util.Dom.addClass(arrElement[0]+"_month", "mandatoryFormElement");
-                YAHOO.util.Dom.addClass(arrElement[0]+"_year", "mandatoryFormElement");
+               $("#"+arrElement[0]+"_day").addClass("mandatoryFormElement");
+               $("#"+arrElement[0]+"_month").addClass("mandatoryFormElement");
+               $("#"+arrElement[0]+"_year").addClass("mandatoryFormElement");
             }
             else
-                YAHOO.util.Dom.addClass(arrElement[0], "mandatoryFormElement");
+                $("#"+arrElement[0]).addClass("mandatoryFormElement");
         }
     }
 };
@@ -1184,7 +1166,7 @@ KAJONA.admin.dashboardCalendar.eventMouseOver = function(strSourceId) {
     var sourceArray = eval("kj_cal_"+strSourceId);
     if(typeof sourceArray != undefined) {
         for(var i=0; i< sourceArray.length; i++) {
-            YAHOO.util.Dom.addClass("event_"+sourceArray[i], "mouseOver");
+            $("#event_"+sourceArray[i]).addClass("mouseOver");
         }
     }
 };
@@ -1196,7 +1178,7 @@ KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
     var sourceArray = eval("kj_cal_"+strSourceId);
     if(typeof sourceArray != undefined) {
         for(var i=0; i< sourceArray.length; i++) {
-            YAHOO.util.Dom.removeClass("event_"+sourceArray[i], "mouseOver");
+            $("#event_"+sourceArray[i]).removeClass("mouseOver");
         }
     }
 };
@@ -1247,8 +1229,8 @@ KAJONA.admin.contextMenu = {
 
 
 KAJONA.admin.openPrintView = function(strUrlToLoad) {
-    var intWidth = YAHOO.util.Dom.getViewportWidth() * 0.8;
-    var intHeight = YAHOO.util.Dom.getViewportHeight() * 0.9;
+    var intWidth = $(window).width() * 0.8;
+    var intHeight = $(window).height() * 0.9;
 
     if(strUrlToLoad == null)
         strUrlToLoad = location.href;
