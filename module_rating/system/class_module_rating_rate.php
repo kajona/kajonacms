@@ -17,6 +17,8 @@
  */
 class class_module_rating_rate extends class_model implements interface_model, interface_recorddeleted_listener  {
 
+    const RATING_COOKIE = "kj_ratingHistory";
+
     /**
      * @var string
      * @tableColumn rating_systemid
@@ -104,12 +106,12 @@ class class_module_rating_rate extends class_model implements interface_model, i
 
         //and save it in a cookie
         $objCookie = new class_cookie();
-        $objCookie->setCookie("kj_ratingHistory", getCookie("kj_ratingHistory").$this->getSystemid().",");
+        $objCookie->setCookie(class_module_rating_rate::RATING_COOKIE, getCookie(class_module_rating_rate::RATING_COOKIE).$this->getSystemid().",");
 
         //flush the page-cache to have all pages rendered using the correct values
         $this->flushCompletePagesCache();
-        
 
+        return true;
     }
 
     /**
@@ -135,8 +137,8 @@ class class_module_rating_rate extends class_model implements interface_model, i
     	if($arrRow["COUNT(*)"] == 0) {
     		//cookie available?
             $objCookie = new class_cookie();
-            if($objCookie->getCookie("kj_ratingHistory") != "") {
-    			$strRatingCookie = $objCookie->getCookie("kj_ratingHistory");
+            if($objCookie->getCookie(class_module_rating_rate::RATING_COOKIE) != "") {
+    			$strRatingCookie = $objCookie->getCookie(class_module_rating_rate::RATING_COOKIE);
     			if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
     			   $bitReturn = false;
     			}
@@ -200,7 +202,7 @@ class class_module_rating_rate extends class_model implements interface_model, i
 
         //ok, so delete matching records
         //fetch the matching ids..
-        //TODO: could be change to a direct deletion instead of a select & delete combination. a single delete could be faster.
+        //TODO: could be changed to a direct deletion instead of a select & delete combination. a single delete could be faster.
         $strQuery = "SELECT rating_id
                      FROM "._dbprefix_."rating"."
                      WHERE rating_systemid = ? ";
@@ -209,12 +211,12 @@ class class_module_rating_rate extends class_model implements interface_model, i
         if(count($arrRows) > 0) {
         	foreach ($arrRows as $arrOneRow) {
         		$strQuery = "DELETE FROM "._dbprefix_."rating"." WHERE rating_id= ?";
-        		$bitReturn &= $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
-        		$bitReturn &= $this->deleteSystemRecord($arrOneRow["rating_id"]);
+        		$bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
+        		$bitReturn = $bitReturn && $this->deleteSystemRecord($arrOneRow["rating_id"]);
 
         		//delete the entries from the history-table
         		$strQuery = "DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ";
-        		$bitReturn &= $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
+        		$bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
         	}
         }
 

@@ -1,0 +1,276 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: class_modul_faqs_faq.php 4023 2011-07-22 12:13:06Z sidler $                                    *
+********************************************************************************************************/
+
+/**
+ * Model for a faq itself
+ *
+ * @package module_faqs
+ * @author sidler@mulchprod.de
+ *
+ * @targetTable faqs.faqs_id
+ */
+class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable  {
+
+    /**
+     * @var string
+     * @tableColumn faqs.faqs_question
+     */
+    private $strQuestion = "";
+
+    /**
+     * @var string
+     * @tableColumn faqs.faqs_answer
+     * @blockEscaping
+     */
+    private $strAnswer = "";
+
+    private $arrCats = array();
+
+    private $updateBitMemberships = false;
+
+    /**
+     * Constructor to create a valid object
+     *
+     * @param string $strSystemid (use "" on new objects)
+     */
+    public function __construct($strSystemid = "") {
+        $this->setArrModuleEntry("moduleId", _faqs_module_id_);
+        $this->setArrModuleEntry("modul", "faqs");
+
+        //base class
+        parent::__construct($strSystemid);
+    }
+
+    /**
+     * Returns the icon the be used in lists.
+     * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
+     * done afterwards.
+     *
+     * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
+     *         [the image name, the alt-title]
+     */
+    public function getStrIcon() {
+        return "icon_question.gif";
+    }
+
+    /**
+     * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
+     * @return string
+     */
+    public function getStrAdditionalInfo() {
+        return "";
+    }
+
+    /**
+     * If not empty, the returned string is rendered below the common title.
+     *
+     * @return string
+     */
+    public function getStrLongDescription() {
+        return "";
+    }
+
+    /**
+     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
+     * @return string
+     */
+    public function getStrDisplayName() {
+        return uniSubstr($this->getStrQuestion(), 0, 200);
+    }
+
+
+    /**
+     * saves the current object with all its params back to the database
+     *
+     * @return bool
+     */
+    protected function updateStateToDb() {
+        //delete all relations
+        if($this->updateBitMemberships) {
+            class_module_faqs_category::deleteFaqsMemberships($this->getSystemid());
+            //insert all memberships
+            foreach($this->arrCats as $strCatID => $strValue) {
+                $strQuery = "INSERT INTO "._dbprefix_."faqs_member
+                            (faqsmem_id, faqsmem_faq, faqsmem_category) VALUES
+                            (?, ?, ?)";
+
+                $this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID));
+            }
+        }
+        return parent::updateStateToDb();
+
+    }
+
+    /**
+     * Loads all faqs from the database
+     * if passed, the filter is used to load the faqs of the given category
+     *
+     * @param string $strFilter
+     * @param null $intStart
+     * @param null $intEnd
+     *
+     * @return mixed
+     * @static
+     */
+	public static function getFaqsList($strFilter = "", $intStart = null, $intEnd = null) {
+        $strQuery = "";
+        $arrParams = array();
+		if($strFilter != "") {
+			$strQuery = "SELECT system_id
+							FROM "._dbprefix_."faqs,
+							     "._dbprefix_."system,
+							     "._dbprefix_."faqs_member
+							WHERE system_id = faqs_id
+							  AND faqs_id = faqsmem_faq
+							  AND faqsmem_category = ?
+							ORDER BY faqs_question ASC";
+            $arrParams[] = $strFilter;
+		}
+		else {
+			$strQuery = "SELECT system_id
+							FROM "._dbprefix_."faqs,
+							     "._dbprefix_."system
+							WHERE system_id = faqs_id
+							ORDER BY faqs_question ASC";
+		}
+
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+		$arrReturn = array();
+		foreach($arrIds as $arrOneId)
+		    $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+
+		return $arrReturn;
+	}
+
+    /**
+     * Loads all faqs from the database
+     * if passed, the filter is used to load the faqs of the given category
+     *
+     * @param string $strFilter
+     * @return mixed
+     * @static
+     */
+    public static function getFaqsCount($strFilter = "") {
+        $arrParams = array();
+        if($strFilter != "") {
+            $strQuery = "SELECT COUNT(*)
+							FROM "._dbprefix_."faqs,
+							     "._dbprefix_."system,
+							     "._dbprefix_."faqs_member
+							WHERE system_id = faqs_id
+							  AND faqs_id = faqsmem_faq
+							  AND faqsmem_category = ?
+							ORDER BY faqs_question ASC";
+            $arrParams[] = $strFilter;
+        }
+        else {
+            $strQuery = "SELECT COUNT(*)
+							FROM "._dbprefix_."faqs,
+							     "._dbprefix_."system
+							WHERE system_id = faqs_id
+							ORDER BY faqs_question ASC";
+        }
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        return $arrRow["COUNT(*)"];
+    }
+
+
+	public function deleteObject() {
+	    //Delete memberships
+	    if(class_module_faqs_category::deleteFaqsMemberships($this->getSystemid())) {
+            return parent::deleteObject();
+	    }
+	    return false;
+	}
+
+
+	/**
+	 * Loads all faqs from the db assigned to the passed cat
+	 *
+	 * @param string $strCat
+	 * @return class_module_faqs_faq[]
+	 * @static
+	 */
+	public static function loadListFaqsPortal($strCat) {
+		$arrReturn = array();
+        $strQuery = "";
+        $arrParams = array();
+		if($strCat == 1) {
+		    $strQuery = "SELECT system_id
+    						FROM "._dbprefix_."faqs,
+    		                     "._dbprefix_."system
+    		                WHERE system_id = faqs_id
+    		                  AND system_status = 1
+    						ORDER BY faqs_question ASC";
+		}
+		else {
+    		$strQuery = "SELECT system_id
+    						FROM "._dbprefix_."faqs,
+    						     "._dbprefix_."faqs_member,
+    		                     "._dbprefix_."system
+    		                WHERE system_id = faqs_id
+    		                  AND faqs_id = faqsmem_faq
+    		                  AND faqsmem_category = ?
+    		                  AND system_status = 1
+    						ORDER BY faqs_question ASC";
+            $arrParams[] = $strCat;
+		}
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+		$arrReturn = array();
+		foreach($arrIds as $arrOneId)
+		    $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+
+		return $arrReturn;
+	}
+
+    /**
+     * @return string
+     * @fieldType text
+     * @fieldMandatory
+     */
+    public function getStrQuestion() {
+        return $this->strQuestion;
+    }
+
+    /**
+     * @return string
+     * @fieldType wysiwygsmall
+     * @fieldMandatory
+     */
+    public function getStrAnswer() {
+        return $this->strAnswer;
+    }
+
+
+
+
+    public function getArrCats() {
+        return $this->arrCats;
+    }
+
+    public function setStrAnswer($strAnswer) {
+        $this->strAnswer = $strAnswer;
+    }
+    public function setStrQuestion($strQuestion) {
+        $this->strQuestion = $strQuestion;
+    }
+
+    public function setArrCats($arrCats) {
+        $this->arrCats = $arrCats;
+    }
+
+    public function setUpdateBitMemberships($updateBitMemberships) {
+        $this->updateBitMemberships = $updateBitMemberships;
+    }
+
+
+}

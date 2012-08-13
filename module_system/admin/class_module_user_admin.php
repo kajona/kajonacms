@@ -29,7 +29,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::$STR_SYSTEM_GROUP);
+        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_SYSTEM_GROUP);
 
         parent::__construct();
         $this->arrLanguages = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));

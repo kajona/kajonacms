@@ -25,7 +25,7 @@ class class_element_gallery_portal extends class_element_portal implements inter
 		$this->setArrModuleEntry("table", _dbprefix_."element_gallery");
 
         //we support ratings, so add cache-busters
-        $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
+        $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
 	}
 
 

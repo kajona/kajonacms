@@ -4,9 +4,9 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                         *
+*	$Id: modul_faqs_id.php 3530 2011-01-06 12:30:26Z sidler $                                           *
 ********************************************************************************************************/
 
-//ID of the rating-module
-define( "_rating_modul_id_",							85);
+//ID des faqs-Moduls
+	define( "_faqs_module_id_",							75);
 

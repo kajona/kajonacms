@@ -25,7 +25,7 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
 	public function __construct() {
 		$this->setArrModuleEntry("moduleId", _guestbook_module_id_);
 		$this->setArrModuleEntry("modul", "guestbook");
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::$STR_USERCONTENT_GROUP);
+        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_USERCONTENT_GROUP);
 		parent::__construct();
 	}
 

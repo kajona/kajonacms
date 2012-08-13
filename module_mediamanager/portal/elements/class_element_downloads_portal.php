@@ -26,7 +26,7 @@ class class_element_downloads_portal extends class_element_portal implements int
 		parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
+        $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
 	}
 
 

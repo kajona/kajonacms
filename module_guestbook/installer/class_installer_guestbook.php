@@ -98,12 +98,12 @@ class class_installer_guestbook extends class_installer_base  {
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
@@ -118,13 +118,13 @@ class class_installer_guestbook extends class_installer_base  {
 
 
         $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "Trees\n";
+        $strReturn .= "Guestbooks\n";
         foreach(class_module_guestbook_guestbook::getGuestbooks() as $objOneBook) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( get_class($objOneBook), $objOneBook->getSystemid() ) );
         }
 
-        $strReturn .= "Navigation Points\n";
+        $strReturn .= "Posts\n";
         $arrRows = $this->objDB->getPArray("SELECT guestbook_post_id FROM "._dbprefix_."guestbook_post, "._dbprefix_."system WHERE system_id = guestbook_post_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";

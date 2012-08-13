@@ -15,8 +15,6 @@
  */
 class class_installer_dashboard extends class_installer_base implements interface_installer {
 
-    private $strContentLanguage;
-
 	public function __construct() {
 
         $this->objMetadata = new class_module_packagemanager_metadata();
@@ -25,8 +23,6 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
 		parent::__construct();
 
-		//set the correct language
-		$this->strContentLanguage = $this->objSession->getAdminLanguage();
 	}
 
 

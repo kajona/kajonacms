@@ -39,7 +39,14 @@ class class_formentry_wysiwygsmall extends class_formentry_base implements inter
         return $strReturn;
     }
 
-    /**
+    public function setValueToObject() {
+        $this->setStrValue(processWysiwygHtmlContent($this->getStrValue()));
+        return parent::setValueToObject();
+    }
+
+
+
+        /**
      * @param $strOpener
      * @return class_formentry_text
      */
