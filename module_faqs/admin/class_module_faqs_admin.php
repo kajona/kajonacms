@@ -194,7 +194,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
             $objForm->updateSourceObject();
             $objCat->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", "&peClose=1"));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
             return "";
         }
 
@@ -286,7 +286,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
             $objFaq->setUpdateBitMemberships(true);
             $objFaq->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", "&peClose=1"));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
             return "";
         }
 

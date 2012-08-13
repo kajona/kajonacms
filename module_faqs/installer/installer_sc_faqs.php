@@ -40,8 +40,8 @@ class class_installer_sc_faqs implements interface_sc_installer  {
             $this->strIndexID = $objIndex->getSystemid();
 
         $strReturn .= "Creating faqs\n";
-        $objFaq1 = new class_modul_faqs_faq();
-        $objFaq2 = new class_modul_faqs_faq();
+        $objFaq1 = new class_module_faqs_faq();
+        $objFaq2 = new class_module_faqs_faq();
 
         if($this->strContentLanguage == "de") {
         	$objFaq1->setStrQuestion("Was ist Kajona?");
