@@ -17,7 +17,7 @@
 class class_module_mediamanager_admin extends class_admin_simple implements interface_admin  {
 
 
-    private static $INT_LISTTYPE_FOLDER = "INT_LISTTYPE_FOLDER";
+    const INT_LISTTYPE_FOLDER = "INT_LISTTYPE_FOLDER";
 
     private $strPeAddon = "";
 
@@ -75,14 +75,14 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     }
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        if($strListIdentifier != self::$INT_LISTTYPE_FOLDER)
+        if($strListIdentifier != class_module_mediamanager_admin::INT_LISTTYPE_FOLDER)
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
 
         return "";
     }
 
     protected function renderLevelUpAction($strListIdentifier) {
-        if($strListIdentifier == self::$INT_LISTTYPE_FOLDER) {
+        if($strListIdentifier == class_module_mediamanager_admin::INT_LISTTYPE_FOLDER) {
             $objCur = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
             if($objCur instanceof class_module_mediamanager_file)
@@ -258,10 +258,9 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             $strSystemid = $this->getSystemid();
             $strJsCode = <<<HTML
             <script type="text/javascript">
-            $(document).ready(function syncRepo() {
-                KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js');
-                KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", KAJONA.admin.ajax.regularCallback);
-            });
+                KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
+                    KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", KAJONA.admin.ajax.regularCallback);
+                });
             </script>
 HTML;
 
@@ -275,10 +274,11 @@ HTML;
 
 
         $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid()));
+        $objIterator->setIntElementsPerPage(class_module_mediamanager_file::getFileCount($this->getSystemid()));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
 
-        return $strJsCode.$strActions.$this->objToolkit->divider().$this->renderList($objIterator, true, self::$INT_LISTTYPE_FOLDER);
+        return $strJsCode.$strActions.$this->objToolkit->divider().$this->renderList($objIterator, true, class_module_mediamanager_admin::INT_LISTTYPE_FOLDER);
 
 
     }
@@ -308,6 +308,7 @@ HTML;
         $strDialog = $this->objToolkit->formInputText("folderName", $this->getLang("commons_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
+                        KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js');
                         function init_fm_newfolder_dialog() {
                             jsDialog_1.setTitle('".$this->getLang("folder_new_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
@@ -350,9 +351,9 @@ HTML;
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getAction(), "datei_upload_final=1"), "formUpload", "multipart/form-data");
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-        $strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
+        $strReturn .= $this->objToolkit->formInputHidden("mutliuploadSystemid", $this->getSystemid());
 
-        $strReturn .= $this->objToolkit->formInputUploadFlash("mediamanager_upload", $this->getLang("mediamanager_upload"), $objCurFile->getStrUploadFilter(), true, true);
+        $strReturn .= $this->objToolkit->formInputUploadMultiple("mediamanager_upload", $this->getLang("mediamanager_upload"), $objCurFile->getStrUploadFilter(), true, true);
         $strReturn .= $this->objToolkit->formClose();
 
         if($this->getParam("datei_upload_final") != "") {

@@ -226,7 +226,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 				var bitCallback = true;
 				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
                     if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
-                        console.log('requirement '+arrCallbacks[i].requiredModules[j]+' not given, no callback');
+                        //console.log('requirement '+arrCallbacks[i].requiredModules[j]+' not given, no callback');
 						bitCallback = false;
                         break;
 					}

@@ -532,67 +532,24 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitFallback
      * @return string
      */
-    public function formInputUploadFlash($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false, $bitFallback = false) {
-
-        //upload works with session.use_only_cookies=disabled only. if set to enabled, use the fallback upload
-        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("session.use_only_cookies") == "1") {
-            $strReturn = $this->formInputUpload($strName, $strTitle);
-            $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjLang()->getLang("upload_multiple_uploadFiles", "mediamanager"));
-            return $strReturn;
-        }
+    public function formInputUploadMultiple($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false, $bitFallback = false) {
 
 
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
+        $arrTemplate["name"] = $strName;
 
-        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $strAllowedFileTypes);
-        if($strAllowedFileTypes == "")
-            $strAllowedFileTypes = "*.*";
+        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "','"), $strAllowedFileTypes);
+
+        $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? "'".$strAllowedFileTypes."'" : $strAllowedFileTypes;
+
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
         $objText = class_carrier::getInstance()->getObjLang();
 
-        $arrTemplate["javascript"] = "
-            <script type=\"text/javascript\">
-                var uploader;
-
-                function initUploader() {
-                    YAHOO.widget.Uploader.SWFURL = \""._webpath_."/core/module_system/admin/scripts/yui/uploader/assets/uploader.swf\";
-                    uploader = new KAJONA.admin.mediamanager.Uploader({
-                        \"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
-                        \"selectLinkId\": \"kajonaUploadSelectLink\",
-                        \"uploadLinkId\": \"kajonaUploadUploadLink\",
-                        \"cancelLinkId\": \"kajonaUploadCancelLink\",
-                        \"multipleFiles\": ".($bitMultiple ? "true" : "false").",
-                        \"allowedFileTypes\": \"".$strAllowedFileTypes."\",
-                        \"allowedFileTypesDescription\": \"".$strAllowedFileTypes."\",
-                        \"maxFileSize\": ".$objConfig->getPhpMaxUploadSize().",
-                        \"warningNotComplete\": \"".$objText->getLang("upload_multiple_warningNotComplete", "mediamanager")."\",
-                        \"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=mediamanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
-                        \"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
-                                              \"inputElement\" : \"".$strName."\"}, //create valid input-name element. no array needed!
-                        \"uploadInputName\": \"".$strName."\"
-                    });
-                    uploader.init();
-                }
-                KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
-                    KAJONA.admin.loader.loadUploaderBase(initUploader);
-                });
-
-                jsDialog_0.setTitle('".$objText->getLang("upload_multiple_dialogHeader", "mediamanager")."');
-            </script>";
-
-        $arrTemplate["upload_fehler_filter"] = $objText->getLang("upload_fehler_filter", "mediamanager");
-        $arrTemplate["upload_multiple_uploadFiles"] = $objText->getLang("upload_multiple_uploadFiles", "mediamanager");
-        $arrTemplate["upload_multiple_cancel"] = $objText->getLang("upload_multiple_cancel", "mediamanager");
-        $arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getLang("upload_multiple_totalFilesAndSize", "mediamanager");
         $arrTemplate["upload_multiple_errorFilesize"] = $objText->getLang("upload_multiple_errorFilesize", "mediamanager")." ".bytesToString($objConfig->getPhpMaxUploadSize());
-        $arrTemplate["upload_multiple_pleaseWait"] = $objText->getLang("upload_multiple_pleaseWait", "mediamanager");
 
-        $arrTemplate["modalDialog"] = $this->jsDialog(0);
-
-        //Fallback code if no or old Flash Player available
         if ($bitFallback) {
             $strFallbackForm = $this->formInputUpload($strName, $strTitle);
             $strFallbackForm .= $this->formInputSubmit($objText->getLang("upload_multiple_uploadFiles", "mediamanager"));

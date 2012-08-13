@@ -1301,9 +1301,58 @@ ul.ui-autocomplete {
 
 
 
+/* M U L T I U P L O A D */
+.qq-upload-button {
+    background-color: #FFFFFF !important;
+    background-image: url("forms_button_back.png") !important;
+    background-position: left center !important;
+    background-repeat: repeat-x !important;
+    border: 1px solid #C2C2C2 !important;
+    color: #575757 !important;
+    cursor: pointer !important;
+    display: block !important;
+    float: left !important;
+    font-family: Verdana,Arial,Helvetica,sans-serif !important;
+    font-size: 11px !important;
+    margin: 8px 0 0 !important;
+    padding: 2px 0 3px 15px !important;
+    text-align: left !important;
+    width: 156px !important;
+}
 
 
-/* F L A S H U P L O A D */
+.qq-upload-list {
+    padding-top: 50px !important;
+}
+
+#uploadContainer li {
+    width: 315px;
+    background-color: #f0f0f0;
+    padding: 5px;
+    margin: 0 0 5px 0;
+    list-style-type: none;
+}
+
+.qq-upload-drop-area {
+    border: 1px solid #c4f3c4 !important;
+    background-color: #c4f3c4 !important;
+}
+
+.qq-upload-drop-area-active {
+    border: 1px solid #000000 !important;
+}
+
+
+#uploadContainer .error {
+    background-color: #ffcccc;
+    color: #000000;
+}
+
+#uploadContainer .active {
+    background-color: #c4f3c4;
+    color: #000000;
+}
+
 .kajonaUploadFilesContainer {
 	max-height: 245px;
 	overflow-y: auto;
@@ -1314,60 +1363,7 @@ ul.ui-autocomplete {
 	padding: 0;
 }
 
-.kajonaUploadFilesList li {
-	width: 315px;
-	background-color: #f0f0f0;
-	padding: 5px;
-	margin: 0 0 5px 0;
-	list-style-type: none;
-}
 
-#kajonaUploadFileSample {
-	display: none;
-}
-
-.kajonaUploadFilesList .filename {
-	width: 260px;
-	float: left;
-	white-space: nowrap;
-}
-
-.kajonaUploadFilesList .progress {
-	margin-left: 260px;
-	text-align: right;
-}
-
-.kajonaUploadFilesList .progressBar {
-	height: 4px;
-	width: 315px;
-	margin-top: 2px;
-	background-color: #c2c2c2;
-	padding: 0;
-}
-
-.kajonaUploadFilesList .progressBar div {
-	height: 4px;
-	background-color: #00e800;
-}
-
-.kajonaUploadFilesList li.active {
-	background-color: #c4f3c4;
-	color: #000000;
-}
-
-.kajonaUploadFilesList li.error {
-	background-color: #ffcccc;
-	color: #000000;
-}
-
-.kajonaUploadFilesList li.error .progress, .kajonaUploadFilesList li.error .progressBar div {
-	visibility: hidden;
-}
-
-.kajonaUploadError {
-	font-weight: bold;
-	color: #ff0000;
-}
 
 
 /* Dialog classes */

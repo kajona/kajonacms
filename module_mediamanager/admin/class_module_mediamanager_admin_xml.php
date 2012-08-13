@@ -137,7 +137,19 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         //Handle the fileupload
         $arrSource = $this->getParam($this->getParam("inputElement"));
 
-        $strTarget = $strFolder."/".createFilename($arrSource["name"]);
+
+        $bitJsonResponse = $this->getParam("jsonResponse") != "";
+
+        $bitPostData = false;
+        if(is_array($arrSource)) {
+            $strFilename = $arrSource["name"];
+        }
+        else {
+            $bitPostData = getPostRawData() != "";
+            $strFilename = $arrSource;
+        }
+
+        $strTarget = $strFolder."/".createFilename($strFilename);
         $objFilesystem = new class_filesystem();
 
         if(!file_exists(_realpath_."/".$strFolder))
@@ -148,25 +160,57 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             //Check file for correct filters
             $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
 
-            $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+            $strSuffix = uniStrtolower(uniSubstr($strFilename, uniStrrpos($strFilename, ".")));
             if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
-                if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                    $strReturn .= "<message>".$this->getLang("xmlupload_success")."</message>";
+
+                if($bitPostData) {
+                    $objFilesystem = new class_filesystem();
+                    $objFilesystem->openFilePointer($strTarget);
+                    $bitCopySuccess = $objFilesystem->writeToFile(getPostRawData());
+                    $objFilesystem->closeFilePointer();
+                }
+                else {
+                    $bitCopySuccess = $objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"]);
+                }
+                if($bitCopySuccess) {
+                    if($bitJsonResponse)
+                        $strReturn = json_encode(array('success' => true));
+                    else
+                        $strReturn .= "<message>".$this->getLang("xmlupload_success")."</message>";
+
                     class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
 
                     $objRepo->syncRepo();
                 }
-                else
-                    $strReturn .= "<message><error>".$this->getLang("xmlupload_error_copyUpload")."</error></message>";
+                else {
+                    if($bitJsonResponse)
+                        $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_copyUpload")));
+                    else
+                        $strReturn .= "<message><error>".$this->getLang("xmlupload_error_copyUpload")."</error></message>";
+                }
             }
             else {
                 header(class_http_statuscodes::SC_BADREQUEST);
-                $strReturn .= "<message><error>".$this->getLang("xmlupload_error_filter")."</error></message>";
+
+                if($bitJsonResponse)
+                    $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_filter")));
+                else
+                    $strReturn .= "<message><error>".$this->getLang("xmlupload_error_filter")."</error></message>";
             }
         }
         else {
             header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
-            $strReturn .= "<message><error>".xmlSafeString($this->getLang("xmlupload_error_notWritable"))."</error></message>";
+
+            if($bitJsonResponse)
+                $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_notWritable")));
+            else
+                $strReturn .= "<message><error>".xmlSafeString($this->getLang("xmlupload_error_notWritable"))."</error></message>";
+        }
+
+
+        if($bitJsonResponse) {
+            class_xml::setBitSuppressXmlHeader(true);
+            class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
         }
 
         @unlink($arrSource["tmp_name"]);

@@ -249,42 +249,70 @@ Upload-Field
 </input_upload>
 
 Upload-Field for multiple files with progress bar
-<input_uploadFlash>
-	<div style="display:inline;">
-            <div id="kajonaUploadButtonsContainer" rel="tooltip" title="%%upload_multiple_pleaseWait%%">
-				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
-				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
-			</div>
-	</div>
+<input_upload_multiple>
 
-    %%modalDialog%%
-    %%javascript%%
 
-	<div id="kajonaUploadDialog" style="display: none;">
-		<div class="kajonaUploadFilesContainer">
-			<ul id="kajonaUploadFiles" class="kajonaUploadFilesList">
-				<li id="kajonaUploadFileSample">
-					<div>
-						<div class="filename"></div>
-						<div class="progress">&nbsp;</div>
-						<div class="clearer"></div>
-					</div>
-					<div class="progressBar"></div>
-				</li>
-			</ul>
-		</div>
-		<br />
-		<span id="kajonaUploadFilesTotal"></span>&nbsp;%%upload_multiple_totalFilesAndSize%%&nbsp;<span id="kajonaUploadFilesTotalSize"></span>
-		<br /><br />
-		<div id="kajonaUploadError" class="kajonaUploadError" style="display: none;">%%upload_multiple_errorFilesize%%<br /><br /></div>
-		<input type="submit" name="kajonaUploadUploadLink" id="kajonaUploadUploadLink" value="%%upload_multiple_uploadFiles%%" class="inputSubmit" /> <input type="submit" name="kajonaUploadCancelLink" id="kajonaUploadCancelLink" value="%%upload_multiple_cancel%%" class="inputSubmitShort" />
-		<br />
-	</div>
+    <div id="uploadContainer">
+        <noscript>%%fallbackContent%%</noscript>
+    </div>
 
-	<div id="kajonaUploadFallbackContainer" style="display: none;">
-		%%fallbackContent%%
-	</div>
-</input_uploadFlash>
+    <script type="text/javascript">
+
+        KAJONA.admin.loader.loadFile([
+            "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.js",
+            "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.css"
+        ], function() {
+
+            var uploader = new qq.FileUploader({
+                element: document.getElementById('uploadContainer'),
+                action: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
+                debug: false,
+                inputName : '%%name%%',
+                allowedExtensions: [%%allowedExtensions%%],
+                params : {
+                    systemid: document.getElementById("mutliuploadSystemid").value,
+                    inputElement : '%%name%%',
+                    jsonResponse : 'true'
+                },
+                messages : {
+                    typeError: "[lang,upload_fehler_filter,mediamanager]",
+                    sizeError: "%%upload_multiple_errorFilesize%%"
+                },
+                onComplete: function(id, fileName, responseJSON){
+                    console.log(uploader.getInProgress());
+
+                    if(uploader.getInProgress() == 0)
+                        document.location.reload();
+                },
+                uploadButtonText : '[lang,upload_multiple_uploadFiles,mediamanager]',
+                classes: {
+                    // used to get elements from templates
+                    button: 'qq-upload-button',
+                    drop: 'qq-upload-drop-area ',
+                    dropActive: 'qq-upload-drop-area-active ',
+                    dropDisabled: 'qq-upload-drop-area-disabled',
+                    list: 'qq-upload-list',
+                    progressBar: 'qq-progress-bar',
+                    file: 'qq-upload-file',
+                    spinner: 'qq-upload-spinner',
+                    size: 'qq-upload-size',
+                    cancel: 'qq-upload-cancel',
+
+                    // added to list item <li> when upload completes
+                    // used in css to hide progress spinner
+                    success: 'active',
+                    fail: 'error'
+                },
+                dragText : "[lang,upload_dropArea,mediamanager]"
+
+            });
+
+        });
+
+    </script>
+
+</input_upload_multiple>
+
 
 Regular Submit-Button
 <input_submit>
