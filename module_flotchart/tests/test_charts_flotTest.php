@@ -22,7 +22,8 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
         $objGraph->addLinePlot(array(4,7,1,2), "serie 3");
         $objGraph->addLinePlot(array(4,3,2,1), "serie 4");
-        $objGraph->setBitRenderLegend("false");
+        $objGraph->setBitRenderLegend(false);
+        $objGraph->setIntXAxisAngle(-20);
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
@@ -42,13 +43,11 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->getObjChartData()->formatLabels("font-size:11px ;text-align:center; padding:2px; color:white");
         $objGraph->getObjChartData()->show3d();
         $objGraph->getObjChartData()->showLabelBackground();
-        $objGraph->getObjChartData()->setPieChartRaduis("0.8");
-        $objGraph->getObjChartData()->setLablesInsidePieChart("0.6");
-        $objGraph->setBitRenderLegend("false");
+        $objGraph->getObjChartData()->setPieChartRaduis(0.8);
+        $objGraph->getObjChartData()->setLablesInsidePieChart(0.6);
+        $objGraph->setBitRenderLegend(false);
         //$objGraph->getObjChartData()->disableLabels();
         echo $objGraph->renderGraph();
-        
-        "<div stlye=\"-webkit-transform: rotate(120deg);\">\"+val+\"</div>";
         
         echo"<br/>";
     }

@@ -20,11 +20,13 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
 
     protected $strXAxisTitle = "X-Axis";
     protected $strYAxisTitle = "Y-Axis";
+    protected $intXAxisAngle = 0;
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
     }
 
     public function setIntXAxisAngle($intXAxisAngle) {
+        $this->intXAxisAngle = $intXAxisAngle;
     }
 
     public function setStrXAxisTitle($strTitle) {
@@ -36,10 +38,21 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
     }
 
     public function optionsToJSON() {
-        $xaxis = "xaxis: { tickFormatter:function(val, axis) {return  \"<div style=\'-moz-transform: rotate(-20deg)\'>\"+val+\"</div>\"}, axisLabel: '" . $this->strXAxisTitle . "',axisLabelUseCanvas: true, axisLabelPadding:30}";
-        $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',axisLabelUseCanvas: true, axisLabelPadding:8}";
-        $hoverable = "grid: { hoverable: true, clickable: true }";
-        $legend = "legend: {show:".$this->showLegend."}";
+        $xaxis = "xaxis: { tickFormatter:function(val, axis) {return  flotHelper.getTickFormatter(".$this->intXAxisAngle.", val)}, 
+                           axisLabel: '" . $this->strXAxisTitle . "',
+                           axisLabelUseCanvas: true, 
+                           axisLabelPadding:30
+                        }";
+        $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
+                            axisLabelUseCanvas: true, 
+                            axisLabelPadding:8
+                        }";
+
+        $legend = "legend: {show:".$this->bShowLegend."}";
+        
+        $hoverable = "grid: { hoverable: true, 
+                                clickable: true 
+                            }";
 
 
         $options = "";

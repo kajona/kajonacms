@@ -20,7 +20,7 @@ abstract class class_graph_flot_chartdata_base {
 
     protected $arrFlotSeriesData = array();
     protected $arrChartTypes = array();
-    protected $showLegend = "true";
+    protected $bShowLegend = true;
 
     /**
      * Constructor
@@ -57,7 +57,11 @@ abstract class class_graph_flot_chartdata_base {
     }
 
     public function setBitRenderLegend($bitRenderLegend) {
-        $this->showLegend = $bitRenderLegend;
+        if($bitRenderLegend)
+            $this->bShowLegend = "true";
+        else
+           $this->bShowLegend = "false";
+            
         
     }
 

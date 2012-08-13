@@ -18,13 +18,12 @@
  */
 class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_base {
 
-    protected $showLegend = "true";
-    protected $showLabels = "true";
+    protected $bShowLabels = true;
     protected $labelStyleSheets = "";
-    protected $labelRadius = "1";
-    protected $tilt = "1";
-    protected $labelBackroundOpacity = "0";
-    protected $pieChartRaduis = "1";
+    protected $dLabelRadius = 1;
+    protected $dTilt = 1;
+    protected $dLabelBackroundOpacity = 0;
+    protected $dPieChartRaduis = 1;
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
         //pie chart has no x-Axis
@@ -44,29 +43,40 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
 
     public function optionsToJSON() {
         //disaply pie chart
-        $options = "series: {
-                pie: {
-                    show: true,
-                    tilt:" . $this->tilt . ",
-                    radius:" . $this->pieChartRaduis . ",
-                    label: {
-                        show:" . $this->showLabels . ",
-                        formatter: function(label, series) {
-                            return '<div style=\"" . $this->labelStyleSheets . "\">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                        },
-                        radius:" . $this->labelRadius . ",
-                        background: {opacity: " . $this->labelBackroundOpacity . " }
-                    }
+        $series = "
+        series: {
+            pie: {
+                show: true,
+                tilt:" . $this->dTilt . ",
+                radius:" . $this->dPieChartRaduis . ",
+                label: {
+                    show:" . $this->bShowLabels . ",
+                    formatter: function(label, series) {
+                        return '<div style=\"" . $this->labelStyleSheets . "\">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                    },
+                    radius:" . $this->dLabelRadius . ",
+                    background: {opacity: " . $this->dLabelBackroundOpacity . " }
                 }
+            }
+        }";
+
+        $legend ="
+            legend: {
+                show: " . $this->bShowLegend . "
             }";
 
-        //show legend?
-        $options.=",legend: {
-            show: " . $this->showLegend . "
-        },";
-
-        $hoverable = "grid: { hoverable: true, clickable: true }";
+        $hoverable = "
+            grid: { 
+                hoverable: true, 
+                clickable: true 
+            }";
+        
+        
+        $options = "";
+        $options.=$series . ",";
+        $options.=$legend . ",";
         $options.=$hoverable;
+        
         return $options;
     }
 
@@ -74,14 +84,14 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
      * Labels are being placed around the pie chart
      */
     public function showLabels() {
-        $this->showLabels = "true";
+        $this->bShowLabels = "true";
     }
 
     /**
      * Removes the labels from the chart
      */
     public function disableLabels() {
-        $this->showLabels = "false";
+        $this->bShowLabels = "false";
     }
 
     /**
@@ -97,38 +107,38 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
      * @param type $labelRaduis - The raduis wehre labels be set. Must be between 0 and 1.
      */
     public function setLablesInsidePieChart($labelRaduis) {
-        $this->showLabels = "true";
-        $this->labelRadius = $labelRaduis;
+        $this->bShowLabels = "true";
+        $this->dLabelRadius = $labelRaduis;
     }
 
     /**
      * Makes the pie chart look like 3d by setting the tilt to 0.5
      */
     public function show3d() {
-        $this->tilt = "0.5";
+        $this->dTilt = 0.5;
     }
 
     /**
      * Disables 3d looking pie chart
      */
     public function disabel3d() {
-        $this->tilt = "1";
+        $this->dTilt = 1;
     }
 
     public function showLabelBackground() {
-        $this->labelBackroundOpacity = "0.8";
+        $this->dLabelBackroundOpacity = 0.8;
     }
 
     public function disableLabelBackground() {
-        $this->labelBackroundOpacity = "0";
+        $this->dLabelBackroundOpacity = 0;
     }
 
     /**
      * The raduis must be between 0 and 1
      * @param type $raduis 
      */
-    public function setPieChartRaduis($raduis) {
-        $this->pieChartRaduis = $raduis;
+    public function setPieChartRaduis($dRaduis) {
+        $this->dPieChartRaduis = $dRaduis;
     }
 
     public function showChartToolTips($strChartId) {

@@ -167,7 +167,7 @@ class class_graph_flot implements interface_graph {
         $strChartCode = $this->objChartData->showGraph($strChartId);
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "\t <div id=\"" . $strChartId . "\" class=\"flotGraph\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
+        $strReturn = "\t <div id=\"" . $strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
 
         //TODO: eventually create all required css-code based on the current properties. this would make the request to flot.css obsolete
 
@@ -178,7 +178,7 @@ class class_graph_flot implements interface_graph {
                 '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
                 '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
                 '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
-                '/core/module_flotchart/admin/scripts/flot.css'
+                '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
             ], function() {
                     console.log('trggering flot for chart ".$strChartId."');
                 ".$strChartCode."
