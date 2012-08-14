@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["commons_accept"]                  = "Übernehmen";
@@ -24,6 +24,7 @@ $lang["commons_date"]                    = "Datum";
 $lang["commons_delete"]                  = "Löschen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["commons_description"]             = "Beschreibung:";
+$lang["commons_edit_copy"]               = "Kopie erstellen";
 $lang["commons_edit_history"]            = "Änderungshistorie anzeigen";
 $lang["commons_edit_permissions"]        = "Rechte bearbeiten";
 $lang["commons_edit_tags"]               = "Tags bearbeiten";
@@ -49,7 +50,7 @@ $lang["commons_result_page"]             = "Treffer-Seite:";
 $lang["commons_save"]                    = "Speichern";
 $lang["commons_title"]                   = "Titel:";
 $lang["commons_yes"]                     = "Ja";
-$lang["group_title_4_commons"]           = "Verschiedenes";
+$lang["group_title_1_pages"]             = "Seiten";
 $lang["group_title_2_usercontent"]       = "Benutzer-Inhalte";
 $lang["group_title_3_system"]            = "System";
-$lang["group_title_1_pages"]             = "Seiten";
+$lang["group_title_4_commons"]           = "Verschiedenes";

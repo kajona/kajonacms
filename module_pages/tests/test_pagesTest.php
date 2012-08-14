@@ -78,26 +78,100 @@ class class_test_pages extends class_testbase  {
         $this->assertEquals(count($arrFoldersAtLevel), 0, __FILE__." checkNrOfFoldersAtLevel");
 
 
-        echo "\ttesting to copy a page...\n";
-        $objOriginalPage = class_module_pages_page::getPageByName("index");
-        $this->assertTrue($objOriginalPage->copyPage(), __FILE__." checkCopyPageCopy");
-
-        $objDB->flushQueryCache();
-        $objCopy = class_module_pages_page::getPageByName("index_1");
-        $this->assertTrue($objCopy->getSystemid() != "", __FILE__." checkCopyPageHasSysid");
-        $this->assertEquals($objOriginalPage->getNumberOfElementsOnPage(), $objCopy->getNumberOfElementsOnPage(), __FILE__." checkCopyPageNrOfElements");
-
-        $arrOrigElements = class_module_pages_pageelement::getAllElementsOnPage($objOriginalPage->getSystemid());
-        $arrCopyElements = class_module_pages_pageelement::getAllElementsOnPage($objCopy->getSystemid());
-
-        foreach ($arrOrigElements as $intKey => $objElement) {
-            $this->assertEquals($arrOrigElements[$intKey]->getStrName(),$arrCopyElements[$intKey]->getStrName(),__FILE__." checkCopyPageElementName");
-        }
 
 
         echo"\tdeleting folder...\n";
         $objFolder = new class_module_pages_folder($strTestFolderID);
         $objFolder->deleteObject();
+
+    }
+
+
+    public function testCopyPage() {
+
+        $strTitle = generateSystemid();
+
+
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName($strTitle);
+        $objPage->setStrBrowsername(generateSystemid());
+        $objPage->setStrSeostring(generateSystemid());
+        $objPage->setStrDesc(generateSystemid());
+        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->updateObjectToDb();
+
+        $strOldSystemid = $objPage->getSystemid();
+
+        $objPagelement = new class_module_pages_pageelement();
+        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrName("text");
+        $objPagelement->setStrElement("paragraph");
+        $objPagelement->updateObjectToDb($objPage->getSystemid());
+        $objPagelement = new class_module_pages_pageelement($objPagelement->getSystemid());
+
+        $strElementClass = str_replace(".php", "", $objPagelement->getStrClassAdmin());
+        //and finally create the object
+        /** @var $objElement class_element_admin */
+        $objElement = new $strElementClass();
+        $objElement->setSystemid($objPagelement->getSystemid());
+        $arrElementData = $objElement->loadElementData();
+        $arrElementData["paragraph_title"] = "autotest";
+        $objElement->setArrParamData($arrElementData);
+
+        $objElement->doBeforeSaveToDb();
+        $objElement->updateForeignElement();
+        $objElement->doAfterSaveToDb();
+
+
+
+
+        //copy the page itself
+        $objPage->copyObject();
+
+        $strNewSystemid = $objPage->getSystemid();
+
+
+        $objOldPage = new class_module_pages_page($strOldSystemid);
+        $objNewPage = new class_module_pages_page($strNewSystemid);
+
+        $this->assertNotEquals($objOldPage->getStrName(), $objNewPage->getStrName());
+        $this->assertEquals($objOldPage->getStrBrowsername(), $objNewPage->getStrBrowsername());
+        $this->assertEquals($objOldPage->getStrSeostring(), $objNewPage->getStrSeostring());
+        $this->assertEquals($objOldPage->getStrDesc(), $objNewPage->getStrDesc());
+        $this->assertEquals($objOldPage->getStrTemplate(), $objNewPage->getStrTemplate());
+
+        $arrOldElements = class_module_pages_pageelement::getAllElementsOnPage($strOldSystemid);
+        $arrNewElements = class_module_pages_pageelement::getAllElementsOnPage($strNewSystemid);
+
+        $this->assertEquals(count($arrOldElements), count($arrNewElements));
+        $this->assertEquals(1, count($arrOldElements));
+        $this->assertEquals(1, count($arrNewElements));
+
+        $objOldElement = $arrOldElements[0];
+        $objNewElement = $arrNewElements[0];
+
+        $this->assertEquals($objOldElement->getStrPlaceholder(), $objNewElement->getStrPlaceholder());
+        $this->assertEquals($objOldElement->getStrLanguage(), $objNewElement->getStrLanguage());
+        $this->assertEquals($objOldElement->getStrElement(), $objNewElement->getStrElement());
+
+        $strElementClass = str_replace(".php", "", $objOldElement->getStrClassAdmin());
+        $objElement = new $strElementClass();
+        $objElement->setSystemid($objOldElement->getSystemid());
+        $arrOldElementData = $objElement->loadElementData();
+
+        $strElementClass = str_replace(".php", "", $objNewElement->getStrClassAdmin());
+        $objElement = new $strElementClass();
+        $objElement->setSystemid($objNewElement->getSystemid());
+        $arrNewElementData = $objElement->loadElementData();
+
+        $this->assertNotEquals($arrOldElementData["content_id"], $arrNewElementData["content_id"]);
+        $this->assertEquals($arrOldElementData["paragraph_title"], $arrNewElementData["paragraph_title"]);
+
+
+
+        $objNewPage->deleteObject();
+        $objOldPage->deleteObject();
 
     }
 

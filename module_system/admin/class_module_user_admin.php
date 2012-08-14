@@ -219,6 +219,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         return "";
     }
 
+    protected function renderCopyAction(class_model $objListEntry) {
+        return "";
+    }
+
 
     /**
      * @param class_model|class_module_user_user $objListEntry

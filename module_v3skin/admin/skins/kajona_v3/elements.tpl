@@ -718,6 +718,7 @@ pe_iconbar, pe_disable
             $('[rel="tooltip"]').each(function(index) {
                 KAJONA.admin.tooltip.add(this);
             });
+            KAJONA.admin.tooltip.hide();
         });
 
 	</script>

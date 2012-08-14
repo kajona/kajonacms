@@ -108,6 +108,13 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             return parent::renderEditAction($objListEntry, $bitDialog);
     }
 
+    protected function renderCopyAction(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_mediamanager_file) {
+            return "";
+        }
+        return parent::renderCopyAction($objListEntry);
+    }
+
 
     /**
 	 * Creates a list of all available galleries

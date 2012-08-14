@@ -15,11 +15,12 @@
  *
  * @targetTable faqs.faqs_id
  */
-class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable  {
+class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable  {
 
     /**
      * @var string
      * @tableColumn faqs.faqs_question
+     * @versionable
      */
     private $strQuestion = "";
 
@@ -27,12 +28,58 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @var string
      * @tableColumn faqs.faqs_answer
      * @blockEscaping
+     * @versionable
      */
     private $strAnswer = "";
 
     private $arrCats = array();
 
     private $updateBitMemberships = false;
+
+    /**
+     * Returns a human readable name of the action stored with the changeset.
+     *
+     * @param string $strAction the technical actionname
+     *
+     * @return string the human readable name
+     */
+    public function getVersionActionName($strAction) {
+        return $strAction;
+    }
+
+    /**
+     * Returns a human readable name of the record / object stored with the changeset.
+     *
+     * @return string the human readable name
+     */
+    public function getVersionRecordName() {
+        return "faq";
+    }
+
+    /**
+     * Returns a human readable name of the property-name stored with the changeset.
+     *
+     * @param string $strProperty the technical property-name
+     *
+     * @return string the human readable name
+     */
+    public function getVersionPropertyName($strProperty) {
+        return $strProperty;
+    }
+
+    /**
+     * Renders a stored value. Allows the class to modify the value to display, e.g. to
+     * replace a timestamp by a readable string.
+     *
+     * @param string $strProperty
+     * @param string $strValue
+     *
+     * @return string
+     */
+    public function renderVersionValue($strProperty, $strValue) {
+        return $strValue;
+    }
+
 
     /**
      * Constructor to create a valid object
@@ -108,6 +155,17 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
         return parent::updateStateToDb();
 
     }
+
+    public function copyObject($strNewPrevid = "") {
+        $arrMemberCats = class_module_faqs_category::getFaqsMember($this->getSystemid());
+        $this->arrCats = array();
+        foreach($arrMemberCats as $objOneCat) {
+            $this->arrCats[$objOneCat->getSystemid()] = "1";
+        }
+        $this->updateBitMemberships = true;
+        return parent::copyObject($strNewPrevid);
+    }
+
 
     /**
      * Loads all faqs from the database

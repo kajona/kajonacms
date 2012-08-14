@@ -634,7 +634,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
             //any actions to take?
             if($this->getParam("copyElement_doCopy") == 1) {
-                $objNewElement = $objSourceElement->copyElementToPage($objPage->getSystemid());
+                $objNewElement = $objSourceElement->copyObject($objPage->getSystemid());
                 $objNewElement->setStrLanguage( $objLang->getStrName() );
                 $objNewElement->setStrPlaceholder($this->getParam("copyElement_placeholder"));
                 if($objNewElement->updateObjectToDb()) {

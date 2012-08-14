@@ -70,6 +70,28 @@ abstract class class_admin_simple extends class_admin {
     }
 
     /**
+     * A general action to delete a record.
+     * This method may be overwritten by subclasses.
+     *
+     * @permissions delete
+     * @throws class_exception
+     */
+    protected function actionCopyObject() {
+        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objRecord != null && $objRecord->rightEdit()) {
+            if(!$objRecord->copyObject())
+                throw new class_exception("error creating a copy of object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        }
+        else
+            throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
+    }
+
+
+    /**
+
+    /**
      * Renders a list of items, target is the common admin-list.
      * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
      * As soon as the list is sortable, the page-size should be at least the same as the number of elements
@@ -152,6 +174,7 @@ abstract class class_admin_simple extends class_admin {
         if(is_array($arrAddons))
             $strActions .= implode("", $this->renderAdditionalActions($objOneIterable));
         $strActions .= $this->renderDeleteAction($objOneIterable);
+        $strActions .= $this->renderCopyAction($objOneIterable);
         $strActions .= $this->renderStatusAction($objOneIterable);
         $strActions .= $this->renderTagAction($objOneIterable);
         $strActions .= $this->renderChangeHistoryAction($objOneIterable);
@@ -235,6 +258,19 @@ abstract class class_admin_simple extends class_admin {
     protected function renderTagAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
             return $this->objToolkit->listButton(getLinkAdminDialog("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_edit_tags"), $this->getLang("commons_edit_tags"), "icon_tag.gif"));
+        }
+        return "";
+    }
+
+
+    /**
+     * Renders the permissions action button for the current record.
+     * @param class_model $objListEntry
+     * @return string
+     */
+    protected function renderCopyAction(class_model $objListEntry) {
+        if($objListEntry->rightEdit() && $this->strPeAddon == "") {
+            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "copyObject", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_copy"), "icon_copy.gif"));
         }
         return "";
     }

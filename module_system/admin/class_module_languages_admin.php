@@ -54,6 +54,11 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
 	}
 
+    protected function renderCopyAction(class_model $objListEntry) {
+        return "";
+    }
+
+
     /**
      * @return string
      * @permissions edit
@@ -112,12 +117,13 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         return $objForm;
     }
 
-	/**
-	 * saves the submitted form-data as a new language, oder updates the corresponding language
-	 *
-	 * @return string, "" in case of success
+    /**
+     * saves the submitted form-data as a new language, oder updates the corresponding language
+     *
+     * @throws class_exception
+     * @return string, "" in case of success
      * @permissions edit
-	 */
+     */
 	protected function actionSaveLanguage() {
         $strOldLang = "";
 	    if($this->getParam("mode") == "new") {
@@ -159,12 +165,13 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	}
 
-	/**
-	 * Deletes the language
-	 *
-	 * @return string
+    /**
+     * Deletes the language
+     *
+     * @throws class_exception
+     * @return string
      * @permissions delete
-	 */
+     */
 	protected function actionDelete() {
 	    $strReturn = "";
         $objLang = new class_module_languages_language($this->getSystemid());

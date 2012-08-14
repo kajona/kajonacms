@@ -27,11 +27,15 @@ class class_core_eventdispatcher {
      */
     private static $arrRecordDeletedListener = null;
 
-
     /**
      * @var interface_previdchanged_listener
      */
     private static $arrPrevidChangedListener = null;
+
+    /**
+     * @var interface_recordcopied_listener
+     */
+    private static $arrRecordCopiedListener = null;
 
     /**
      * Triggers all model-classes implementing the interface interface_statuschanged_listener and notifies
@@ -106,6 +110,31 @@ class class_core_eventdispatcher {
 
 
     /**
+     * Triggers all model-classes implementing the interface interface_recordcopied_listener and notifies them about a
+     * copied record.
+     *
+     * @static
+     *
+     * @param $strOldSystemid
+     * @param $strNewSystemid
+     *
+     * @return bool
+     * @see interface_recordcopied_listener
+     */
+    public static function notifyRecordCopiedListeners($strOldSystemid, $strNewSystemid) {
+        $bitReturn = true;
+        $arrListener = self::getRecordCopiedListeners();
+        /** @var interface_recordcopied_listener $objOneListener */
+        foreach($arrListener as $objOneListener) {
+            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating recordCopiedEvent to ".get_class($objOneListener)." oldsysid: ".$strOldSystemid." newsysid: ".$strNewSystemid, class_logger::$levelInfo);
+            $bitReturn = $bitReturn && $objOneListener->handleRecordCopiedEvent($strOldSystemid, $strNewSystemid);
+        }
+
+        return $bitReturn;
+    }
+
+
+    /**
      * Loads all objects registered to ne notified in case of status-changes
      * @static
      * @return interface_recorddeleted_listener
@@ -145,6 +174,19 @@ class class_core_eventdispatcher {
         return self::$arrPrevidChangedListener;
     }
 
+
+    /**
+     * Loads all objects registered to ne notified in case of previd-changes
+     * @static
+     * @return interface_recordcopied_listener
+     */
+    private static function getRecordCopiedListeners() {
+        if(self::$arrRecordCopiedListener == null) {
+            self::$arrRecordCopiedListener = self::loadInterfaceImplementers("interface_recordcopied_listener");
+        }
+
+        return self::$arrRecordCopiedListener;
+    }
 
     /**
      * Loads all business-objects implementing the passed interface

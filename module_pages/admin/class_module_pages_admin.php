@@ -202,7 +202,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                 if(!$bitPeMode) {
                     $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte"), "icon_page.gif"));
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "copyPage", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_copy"), "icon_copy.gif"));
                 }
 
                 $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_treeBranchOpen.gif"));
@@ -218,28 +217,47 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             return parent::renderAdditionalActions($objListEntry);
     }
 
+    protected function renderCopyAction(class_model $objListEntry) {
+
+        $bitPeMode = $this->getParam("pe") != "";
+        if($bitPeMode)
+            return "";
+
+        if($objListEntry instanceof class_module_pages_element)
+            return "";
+
+        if($objListEntry instanceof class_module_pages_folder)
+            return "";
+
+        if($objListEntry instanceof class_module_pages_page && $objListEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
+            return "";
+
+        return parent::renderCopyAction($objListEntry);
+    }
+
+
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
 
         if($this->getParam("pe") != "")
             return "";
 
-        if($strListIdentifier != "folderList" && $strListIdentifier != "elementList" && $this->getObjModule()->rightEdit()) {
-            $arrReturn = array();
+        $arrReturn = array();
+
+        if($strListIdentifier != "elementList" && $this->getObjModule()->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newPage", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu"), $this->getLang("modul_neu"), "icon_new.gif"));
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAlias", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu_alias"), $this->getLang("modul_neu_alias"), "icon_new_alias.gif"));
 
-            return $arrReturn;
         }
-        else if($strListIdentifier == "folderList" && $this->getObjModule()->rightRight2()) {
+        if($strListIdentifier != "elementList" && $this->getObjModule()->rightRight2()) {
             if((!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getObjModule()->getSystemid()))
-                return $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new.gif"));
+                $arrReturn[] =  $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new.gif"));
 
         }
-        else if($strListIdentifier == "elementList" && $this->getObjModule()->rightRight1()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newElement", "", $this->getLang("modul_element_neu"), $this->getLang("modul_element_neu"), "icon_new.gif"));
+        if($strListIdentifier == "elementList" && $this->getObjModule()->rightRight1()) {
+            $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newElement", "", $this->getLang("modul_element_neu"), $this->getLang("modul_element_neu"), "icon_new.gif"));
         }
 
-        return "";
+        return $arrReturn;
     }
 
 
@@ -500,26 +518,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
 		return $strReturn;
 	} //actionDeletePageFinal
-
-	/**
-	 * Invokes a deep copy of the current page
-	 *
-	 * @return string "" in case of success
-	 */
-	protected function actionCopyPage() {
-	    $strReturn = "";
-        $objPage = new class_module_pages_page($this->getSystemid());
-		if($objPage->rightEdit($this->getSystemid())) {
-			if(!$objPage->copyPage())
-                throw new class_exception("Error while copying the page!", class_exception::$level_ERROR);
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objPage->getPrevId()));
-		}
-		else
-			$strReturn = $this->getLang("commons_error_permissions");
-
-		return $strReturn;
-	}
 
 
     /**

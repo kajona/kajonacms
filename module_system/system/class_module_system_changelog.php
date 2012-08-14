@@ -170,10 +170,10 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
 
-        //changes require at least kajona 3.3.1.10
-        $arrModul = $this->getModuleData("system", false);
+        //changes require at least kajona 3.4.9
+        $arrModul = class_module_system_module::getPlainModuleData("system", false);
         if(version_compare($arrModul["module_version"], "3.4.9") < 0)
-            return;
+            return false;
 
         $arrChanges = $this->createChangeArray($objSourceModel);
 

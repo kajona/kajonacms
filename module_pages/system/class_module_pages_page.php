@@ -405,19 +405,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      */
 	protected function deleteObjectInternal() {
 
-        $bitReturn = false;
-
-        $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
-
         //Delete the page and the properties out of the tables
-        $strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";
         $strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()) ) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid()) )) {
-            $bitReturn =  true;
-        }
+        $this->objDB->_pQuery($strQuery2, array($this->getSystemid()) );
 
-		return $bitReturn;
+        return parent::deleteObjectInternal();
 	}
 
 	/**
@@ -454,96 +446,69 @@ class class_module_pages_page extends class_model implements interface_model, in
 	}
 
 
-	/**
-	 * Does a deep copy of the current page.
-	 * Inlcudes all page-elements created on the page
-	 * and all languages.
-	 *
-	 * @return bool
-	 */
-	public function copyPage() {
-	    class_logger::getInstance()->addLogRow("copy page ".$this->getSystemid(), class_logger::$levelInfo);
-	    //working directly on the db is much more easier than handling this stuff by objects
-	    $strSourcePage = $this->getSystemid();
-
-	    //load basic page properties
-	    $arrBasicSourcePage = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."page WHERE page_id = ?", array( $strSourcePage ));
-
-	    //and load an array of corresponding pageproperties
-	    $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?", array( $strSourcePage ));
-
-	    //create the new systemid
-	    $strIdOfNewPage = generateSystemid();
-
-	    //start the copy-process
-	    $this->objDB->transactionBegin();
-
-	    //copy the rights and systemrecord
-	    $objCommon = new class_module_system_common($this->getSystemid());
-	    if(!$objCommon->copyCurrentSystemrecord($strIdOfNewPage)) {
-	        $this->objDB->transactionRollback();
-            class_logger::getInstance()->addLogRow("error while duplicating systemrecord ".$this->getSystemid()." to ".$strIdOfNewPage, class_logger::$levelError);
-	        return false;
-	    }
+    /**
+     * Does a deep copy of the current page.
+     * Inlcudes all page-elements created on the page
+     * and all languages.
+     *
+     * @param string $strNewPrevid
+     *
+     * @return bool
+     */
+	public function copyObject($strNewPrevid = "") {
 
 
-        $strNewPagename = $this->generateNonexistingPagename($arrBasicSourcePage["page_name"], false);
-	    //create the foregin record in our table
-	    $strQuery = "INSERT INTO "._dbprefix_."page
-	    			(page_id, page_name, page_type) VALUES
-	    			(?, ?, ?)";
-	    if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPage, $strNewPagename, $arrBasicSourcePage["page_type"] ) )) {
-	        $this->objDB->transactionRollback();
-            class_logger::getInstance()->addLogRow("error while creating record in table "._dbprefix_."page", class_logger::$levelError);
-	        return false;
-	    }
+        $this->objDB->transactionBegin();
 
-        //update the comment in system-table
-        $strQuery = "UPDATE "._dbprefix_."system
-                        SET system_comment= ?
-                      WHERE system_id= ?";
+        //fetch data to be updated after the general copy process
+        //page-properties, language dependant
+        $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?", array( $this->getSystemid() ));
 
-        $this->objDB->_pQuery($strQuery, array($strNewPagename, $strIdOfNewPage ));
+        //create a new page-name
+        $this->setStrName($this->generateNonexistingPagename($this->getStrName(), false));
 
-	    //insert all pageprops in all languages
-	    foreach ($arrBasicSourceProperties as $arrOneProperty) {
-	        $strQuery = "INSERT INTO "._dbprefix_."page_properties
-	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language, pageproperties_alias) VALUES
-	        (?, ?, ?, ?, ?, ?, ?, ?)";
+        //copy the page-instance and all elements on the page
+        parent::copyObject($strNewPrevid);
+
+        //update the pages' properties in the table - manually
+        foreach ($arrBasicSourceProperties as $arrOneProperty) {
+
+            //insert or update - the properties for the current language should aready be in place
+            $this->objDB->flushQueryCache();
+            $arrCount = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."page_properties WHERE pageproperties_id = ? AND pageproperties_language = ? ", array($this->getSystemid(), $arrOneProperty["pageproperties_language"]));
+
+            if($arrCount["COUNT(*)"] == 0) {
+                $strQuery = "INSERT INTO "._dbprefix_."page_properties
+                (pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_alias, pageproperties_language, pageproperties_id) VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?)";
+            }
+            else {
+                $strQuery = "UPDATE "._dbprefix_."page_properties SET
+                 pageproperties_id = ?, pageproperties_browsername = ?, pageproperties_keywords = ?, pageproperties_description = ?, pageproperties_template = ?, pageproperties_seostring = ? WHERE pageproperties_language = ? AND pageproperties_alias = ?";
+            }
 
             $arrValues = array(
-                $strIdOfNewPage,
                 $arrOneProperty["pageproperties_browsername"],
                 $arrOneProperty["pageproperties_keywords"],
                 $arrOneProperty["pageproperties_description"],
                 $arrOneProperty["pageproperties_template"],
                 $arrOneProperty["pageproperties_seostring"],
+                $arrOneProperty["pageproperties_alias"],
                 $arrOneProperty["pageproperties_language"],
-                $arrOneProperty["pageproperties_alias"]
+                $this->getSystemid()
             );
 
-	        if(!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false, false))) {
-	            $this->objDB->transactionRollback();
+            if(!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false, false))) {
+                $this->objDB->transactionRollback();
                 class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
-	            return false;
-	        }
-	    }
+                return false;
+            }
+        }
 
-	    //ok. so now load all elements on the source page and copy them, too
-	    $arrElementsOnSource = class_module_pages_pageelement::getAllElementsOnPage($this->getSystemid());
-	    if(count($arrElementsOnSource) > 0) {
-    	    foreach ($arrElementsOnSource as $objOneSourceElement) {
-    	        if($objOneSourceElement->copyElementToPage($strIdOfNewPage) == null) {
-    	            $this->objDB->transactionRollback();
-                    class_logger::getInstance()->addLogRow("error while copying page element ".$objOneSourceElement->getStrName(), class_logger::$levelError);
-    	            return false;
-    	        }
-    	    }
-	    }
 
-	    //if we reach up here, we've done it. commit and quit ;)
-	    $this->objDB->transactionCommit();
-	    return true;
+        $this->objDB->transactionCommit();
+
+        return $this;
 	}
 
     /**

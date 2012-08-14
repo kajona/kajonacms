@@ -40,7 +40,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getLang("actionSystemTasks"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getLang("actionSystemlog"), "", "", true, "adminnavi"));
         if(_system_changehistory_enabled_ != "false")
-            $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "", $this->getLang("actionChangelog"), "", "", true, "adminnavi"));
+            $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "&bitBlockFolderview=true", $this->getLang("actionChangelog"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getLang("actionAspects"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("actionSystemSessions"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
@@ -169,6 +169,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
             return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new.gif"));
 
         return parent::getNewEntryAction($strListIdentifier);
+    }
+
+    protected function renderCopyAction(class_model $objListEntry) {
+        return "";
     }
 
 
@@ -618,7 +622,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog", $bitBlockFolderview = false) {
 
-        if(!$bitBlockFolderview)
+        if(!$bitBlockFolderview && $this->getParam("bitBlockFolderview") == "")
             $this->setArrModuleEntry("template", "/folderview.tpl");
 
         if($strSystemid == "")
@@ -635,7 +639,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid);
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
         $arrLogs = $arrPageViews["elements"];
 
         $arrData = array();
@@ -817,7 +821,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionAbout() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part1"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part3"));

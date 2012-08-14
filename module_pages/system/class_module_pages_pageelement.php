@@ -202,105 +202,40 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strNewPage
      * @return class_module_pages_pageelement the new element or null in case of an error
      */
-    public function copyElementToPage($strNewPage) {
+    public function copyObject($strNewPage = "") {
+
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
+
         $this->objDB->transactionBegin();
 
-        $strIdOfNewPageelement = generateSystemid();
+        //fetch all values to insert after the general copy process - mainly the foreign table
+        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
+        //and finally create the object
+        /** @var $objElement class_element_admin */
+        $objElement = new $strElementClass();
+        $objElement->setSystemid($this->getSystemid());
+        $arrElementData = $objElement->loadElementData();
 
-        //working directly on the db is much easier right here!
-        //start by making a copy of the sysrecords, attaching them to the new page
-        $objCommon = new class_module_system_common($this->getSystemid());
-        $objCommon->copyCurrentSystemrecord($strIdOfNewPageelement, $strNewPage);
 
+        //duplicate the current elements - afterwards $this is the new element
+        parent::copyObject($strNewPage);
 
-        //fetch data of the current element
-        $arrCurrentElement = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."page_element WHERE page_element_id = ?", array( $this->getSystemid() ));
+        $objElement = new $strElementClass();
+        $objElement->setSystemid($this->getSystemid());
+        $arrNewElementData = $objElement->loadElementData();
+        $arrElementData["content_id"] = $arrNewElementData["content_id"];
+        $arrElementData["page_element_id"] = $arrNewElementData["page_element_id"];
+        $arrElementData["system_id"] = $arrNewElementData["system_id"];
+        $objElement->setArrParamData($arrElementData);
 
-        //save data as foreign data of the new record
-        $strQuery = "INSERT INTO "._dbprefix_."page_element
-        			(page_element_id, page_element_ph_placeholder, page_element_ph_name, page_element_ph_element, page_element_ph_title, page_element_ph_language) VALUES
-        			( ?, ?, ?, ?, ?, ?)";
+        $objElement->doBeforeSaveToDb();
+        $objElement->updateForeignElement();
+        $objElement->doAfterSaveToDb();
 
-        if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPageelement,
-                                                    $arrCurrentElement["page_element_ph_placeholder"],
-                                                    $arrCurrentElement["page_element_ph_name"],
-                                                    $arrCurrentElement["page_element_ph_element"],
-                                                    $arrCurrentElement["page_element_ph_title"],
-                                                    $arrCurrentElement["page_element_ph_language"]))) {
-            $this->objDB->transactionRollback();
-            return null;
-        }
-
-        //now the tricky part - the elements content-table...
-        //get elements table-name
-		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
-		$objElement = new $strElementClass();
-		//Fetch the table
-		$strElementTable = $objElement->getTable();
-
-		//just copy, if a table was given
-		if($strElementTable != "") {
-			//load the old row
-			$arrContentRow = $this->objDB->getPRow("SELECT * FROM ".$strElementTable." WHERE content_id = ? ", array($this->getSystemid()) );
-
-			//load the Columns of the table
-			$arrColumns = $this->objDB->getColumnsOfTable($strElementTable);
-
-			//build the new insert
-			$strQuery = "INSERT INTO ".$strElementTable." ( ";
-            $arrValues = array();
-            $arrEscapes = array();
-			foreach ($arrColumns as $arrOneColumn)
-	            $strQuery .= " ".$this->objDB->encloseColumnName($arrOneColumn["columnName"]).",";
-
-	        //remove last comma
-	        $strQuery = uniSubstr($strQuery, 0, -1);
-	        $strQuery .= ") VALUES ( ";
-	        foreach ($arrColumns as $arrOneColumn) {
-	            if($arrOneColumn["columnName"] == "content_id") {
-	                $strQuery .= " ?,";
-                    $arrValues[] = $strIdOfNewPageelement;
-                    $arrEscapes[] = true;
-	            }
-	            else if(strpos($arrOneColumn["columnType"], "int") !== false) {
-	                $intValue = $arrContentRow[$arrOneColumn["columnName"]];
-	                if($intValue == "")
-	                    $intValue = "NULL";
-	                $strQuery .= " ?,";
-                    $arrValues[] = $intValue;
-                    $arrEscapes[] = true;
-	            }
-	            else {
-	            	//no dbsafestring here, otherwise contents may be double-encoded...
-	                $strQuery .= " ?,";
-                    $arrValues[] = $arrContentRow[$arrOneColumn["columnName"]];
-                    $arrEscapes[] = false;
-	            }
-	        }
-	        $strQuery = uniSubstr($strQuery, 0, -1);
-	        $strQuery .= ")";
-
-	        if(!$this->objDB->_pQuery($strQuery, $arrValues, $arrEscapes)) {
-	            $this->objDB->transactionRollback();
-	            return null;
-	        }
-		}
-
-        //ok, all done. return.
         $this->objDB->transactionCommit();
 
-        //create an instance of the new element and return it
-        $objNewElement = new class_module_pages_pageelement($strIdOfNewPageelement);
+        return $this;
 
-        //adopt the new sort id, since page-elements have a special order at each placeholder
-        //As a special feature, we set the element as the last
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
-        $this->objDB->flushQueryCache();
-        $this->objDB->_pQuery($strQuery, array(count($objNewElement->getSortedElementsAtPlaceholder())-1 , $strIdOfNewPageelement ));
-
-
-        return $objNewElement;
     }
 
 

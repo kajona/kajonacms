@@ -328,6 +328,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         return "";
     }
 
+    protected function renderCopyAction(class_model $objListEntry) {
+        return "";
+    }
+
+
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {

@@ -291,6 +291,11 @@ abstract class class_root {
     protected function deleteObjectInternal() {
         $bitReturn = true;
 
+        if(defined("_system_changehistory_enabled_") && _system_changehistory_enabled_ == "true" && $this instanceof interface_versionable) {
+            $objChanges = new class_module_system_changelog();
+            $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
+        }
+
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
 
@@ -311,6 +316,8 @@ abstract class class_root {
      *
      * @throws class_exception
      * @return bool
+     *
+     * @todo add change table integration
      */
     public function deleteObject() {
 
@@ -450,6 +457,52 @@ abstract class class_root {
     }
 
 
+    /**
+     * A default implementation for copy-operations.
+     * Overwrite this method if you want to execute additional statements.
+     * Please be aware that you are working on the new object afterwards!
+     *
+     * @param string $strNewPrevid
+     *
+     * @return bool
+     */
+    public function copyObject($strNewPrevid = "") {
+
+        $this->objDB->transactionBegin();
+
+        $strOldSysid = $this->getSystemid();
+
+        if($strNewPrevid == "")
+            $strNewPrevid = $this->strOldPrevId;
+
+        //prepare the current object
+        $this->unsetSystemid();
+        $bitReturn = $this->updateObjectToDb($strNewPrevid);
+        //call event listeners
+        $bitReturn = $bitReturn && class_core_eventdispatcher::notifyRecordCopiedListeners($strOldSysid, $this->getSystemid());
+
+
+        //process subrecords
+        //validate, if there are subrecords, so child nodes to be copied to the current record
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($strOldSysid));
+        foreach($arrChilds as $arrOneChild) {
+            if(validateSystemid($arrOneChild["system_id"])) {
+                $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
+                if($objInstance !== null)
+                    $objInstance->copyObject($this->getSystemid());
+            }
+        }
+
+
+        if($bitReturn)
+            $this->objDB->transactionCommit();
+        else
+            $this->objDB->transactionRollback();
+
+        return $bitReturn;
+    }
+
+
    /**
     * Internal helper, checks if a child-node is the descendant of a given base-node
     * @param $strBaseId
@@ -483,6 +536,12 @@ abstract class class_root {
     protected function updateStateToDb() {
 
         if(validateSystemid($this->getSystemid())) {
+
+            if(defined("_system_changehistory_enabled_") && _system_changehistory_enabled_ == "true" && $this instanceof interface_versionable) {
+                $objChanges = new class_module_system_changelog();
+                $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
+            }
+
             //fetch properties with annotations
             $objReflection = new class_reflection($this);
             $arrTargetTables = $objReflection->getAnnotationValuesFromClass("@targetTable");

@@ -20,7 +20,7 @@
  *
  * @targetTable tags_tag.tags_tag_id
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable  {
+class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener  {
 
     /**
      * @var string
@@ -366,6 +366,29 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return $bitReturn;
     }
 
+    /**
+     * Called whenever a record was copied.
+     * copies the tag-assignments from the source object to the target object
+     *
+     * @param $strOldSystemid
+     * @param $strNewSystemid
+     *
+     * @internal param $strSystemid
+     * @internal param $intNewStatus
+     * @return bool
+     */
+    public function handleRecordCopiedEvent($strOldSystemid, $strNewSystemid) {
+        $strQuery = "SELECT tags_tagid, tags_attribute
+                       FROM "._dbprefix_."tags_member
+                      WHERE tags_systemid = ?";
+        $arrRows = $this->objDB->getPArray($strQuery, array($strOldSystemid));
+        foreach($arrRows as $arrSingleRow) {
+            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_tagid, tags_systemid, tags_attribute) VALUES (?, ?, ?)";
+            $this->objDB->_pQuery($strQuery, array($arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"]));
+        }
+
+        return true;
+    }
 
 
     /**

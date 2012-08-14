@@ -74,6 +74,10 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         return "";
     }
 
+    protected function renderCopyAction(class_model $objListEntry) {
+        return "";
+    }
+
 
     /**
      * Stores the submitted config-data back to the database
