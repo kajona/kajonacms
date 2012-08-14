@@ -1821,24 +1821,44 @@ class class_toolkit_admin extends class_toolkit {
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
-	            KAJONA.admin.loader.loadAutocompleteBase(function () {
-	                var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
-	                pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
-	                pageDataSource.responseSchema = {
-	                    resultNode : \"tag\",
-	                    fields : [\"name\"]
-	                };
+                    $(function() {
+                        function split( val ) {
+                            return val.split( /,\s*/ );
+                        }
 
-	                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
-	                    queryMatchCase: false,
-	                    allowBrowserAutocomplete: false,
-	                    useShadow: false,
-                        delimChar: [\",\"]
-	                });
-	                pageautocomplete.generateRequest = function(sQuery) {
-	                    return \"?admin=1&module=tags&action=getTagsByFilter&filter=\" + sQuery ;
-	                };
-	            });
+                        function extractLast( term ) {
+                            return split( term ).pop();
+                        }
+
+                        KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
+                            source: function(request, response) {
+                                $.ajax({
+                                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: {
+                                        filter:  extractLast( request.term ),
+                                        module: 'tags',
+                                        action: 'getTagsByFilter'
+                                    },
+                                    success: response
+                                });
+                            },
+                            focus: function() {
+                                return false;
+                            },
+                            select: function( event, ui ) {
+                                var terms = split( this.value );
+                                terms.pop();
+                                terms.push( ui.item.value );
+                                terms.push( '' );
+                                this.value = terms.join( ', ' );
+                                return false;
+                            },
+                            minLength: 1
+
+                        });
+                    });
 	        </script>
         ";
 

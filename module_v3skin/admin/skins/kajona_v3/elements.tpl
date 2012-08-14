@@ -1121,10 +1121,8 @@ place ajaxScript before the closing input_tagselector-tag and make sure, that yo
 have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
 "ac_results" inside the "ac_container", to generate a resultlist
 <input_tagselector>
-  <div class="ac_container">
      <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" /> %%opener%%</div>
-     <div id="%%name%%_container" class="ac_results"></div>
-  </div><br />
+  <br />
 %%ajaxScript%%
 </input_tagselector>
 

@@ -121,30 +121,23 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
 
     /**
      * Generates the list of tags matching the passed filter-criteria.
-     * Returned structure:
-     * <tags>
-     *   <tag>
-     *      <name></name>
-     *   </tag>
-     * </tags>
+     * Returned structure is json based.
      *
      * @return string
      * @permissions view
      */
     protected function actionGetTagsByFilter() {
-        $strReturn = "<tags>";
-         $strFilter = $this->getParam("filter");
+        $arrReturn = array();
+        $strFilter = $this->getParam("filter");
 
-         $arrTags = class_module_tags_tag::getTagsByFilter($strFilter);
-         foreach($arrTags as $objOneTag) {
-             $strReturn .="<tag>";
-             $strReturn .= "<name>".  xmlSafeString($objOneTag->getStrName())."</name>";
-             $strReturn .="</tag>";
-         }
+        $arrTags = class_module_tags_tag::getTagsByFilter($strFilter);
+        foreach($arrTags as $objOneTag) {
+            $arrReturn[] = $objOneTag->getStrName();
+        }
 
-        $strReturn .= "</tags>";
-
-        return $strReturn;
+        class_xml::setBitSuppressXmlHeader(true);
+        class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
+        return json_encode($arrReturn);
     }
 
 }
