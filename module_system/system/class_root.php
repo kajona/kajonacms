@@ -449,17 +449,6 @@ abstract class class_root {
         return $bitReturn;
     }
 
-    /**
-     * Overwrite this callback if your object should be notified if the current objects systemid was changed.
-     * @param $strOldPrevid
-     * @param $strNewPrevId
-     *
-     * @todo may be moved to callback object
-     */
-    protected function onPrevIdChange($strOldPrevid, $strNewPrevId) {
-
-    }
-
 
    /**
     * Internal helper, checks if a child-node is the descendant of a given base-node
@@ -650,7 +639,7 @@ abstract class class_root {
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
             $this->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
-            $this->onPrevIdChange($this->strOldPrevId, $this->strOldPrevId);
+            class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
         }
 
         return $bitReturn;

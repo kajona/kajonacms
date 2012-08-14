@@ -27,6 +27,12 @@ class class_core_eventdispatcher {
      */
     private static $arrRecordDeletedListener = null;
 
+
+    /**
+     * @var interface_previdchanged_listener
+     */
+    private static $arrPrevidChangedListener = null;
+
     /**
      * Triggers all model-classes implementing the interface interface_statuschanged_listener and notifies
      * about a new status set.
@@ -43,8 +49,7 @@ class class_core_eventdispatcher {
         $arrListener = self::getStatusChangedListeners();
         /** @var interface_statuschanged_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
-            //FIXME: move to event-log
-            class_logger::getInstance()->addLogRow("propagating statusChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid." status: ".$intNewStatus, class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating statusChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid." status: ".$intNewStatus, class_logger::$levelInfo);
             $bitReturn = $bitReturn && $objOneListener->handleStatusChangedEvent($strSystemid, $intNewStatus);
         }
 
@@ -66,9 +71,34 @@ class class_core_eventdispatcher {
         $arrListener = self::getRecordDeletedListeners();
         /** @var interface_recorddeleted_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
-            //FIXME: move to event-log
-            class_logger::getInstance()->addLogRow("propagating recordDeletedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating recordDeletedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
             $bitReturn = $bitReturn && $objOneListener->handleRecordDeletedEvent($strSystemid);
+        }
+
+        return $bitReturn;
+    }
+
+
+    /**
+     * Triggers all model-classes implementing the interface interface_previdchanged_listener and notifies them about a
+     * deleted record.
+     *
+     * @static
+     *
+     * @param $strSystemid
+     * @param $strOldPrevid
+     * @param $strNewPrevid
+     *
+     * @return bool
+     * @see interface_previdchanged_listener
+     */
+    public static function notifyPrevidChangedListeners($strSystemid, $strOldPrevid, $strNewPrevid) {
+        $bitReturn = true;
+        $arrListener = self::getPrevidChangedListeners();
+        /** @var interface_previdchanged_listener $objOneListener */
+        foreach($arrListener as $objOneListener) {
+            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating previdChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
+            $bitReturn = $bitReturn && $objOneListener->handlePrevidChangedEvent($strSystemid, $strOldPrevid, $strNewPrevid);
         }
 
         return $bitReturn;
@@ -99,6 +129,20 @@ class class_core_eventdispatcher {
         }
 
         return self::$arrStatusChangedListener;
+    }
+
+
+    /**
+     * Loads all objects registered to ne notified in case of previd-changes
+     * @static
+     * @return interface_previdchanged_listener
+     */
+    private static function getPrevidChangedListeners() {
+        if(self::$arrPrevidChangedListener == null) {
+            self::$arrPrevidChangedListener = self::loadInterfaceImplementers("interface_previdchanged_listener");
+        }
+
+        return self::$arrPrevidChangedListener;
     }
 
 

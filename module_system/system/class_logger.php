@@ -20,6 +20,7 @@ final class class_logger {
     public static $DBLOG = "dblayer.log";
     public static $USERSOURCES = "usersources.log";
     public static $QUERIES = "dbqueries.log";
+    public static $EVENTS = "events.log";
 
     /**
      * Level to be used for real errors
