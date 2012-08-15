@@ -11,7 +11,7 @@ class class_test_portalTest extends class_testbase  {
         echo "generating all pages existing to find notices...\n";
 
         $arrPages = class_module_pages_page::getAllPages();
-        $objDispatcher = new class_request_dispatcher();
+        $objDispatcher = new class_request_dispatcher(class_response_object::getInstance());
 
         $objModule = class_module_system_module::getModuleByName("pages");
 
