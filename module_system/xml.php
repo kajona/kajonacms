@@ -24,8 +24,11 @@ define("_autotesting_", false);
  */
 class class_xml {
 
-    private static $bitSuppressXmlHeader = false;
-    private static $strReturnContentType = "Content-Type: text/xml; charset=utf-8";
+    /**
+     * @var class_response_object
+     */
+    public $objResponse;
+
 
     public function __construct() {
 		class_carrier::getInstance();
@@ -46,15 +49,20 @@ class class_xml {
             $strLanguageParam = getPost("language");
 
 
-        $objDispatcher = new class_request_dispatcher();
+        $this->objResponse = class_response_object::getInstance();
+        $this->objResponse->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
+        $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
+
+
+        $objDispatcher = new class_request_dispatcher($this->objResponse);
         $strContent = $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
 
         if($strContent == "") {
-            header(class_http_statuscodes::SC_BADREQUEST);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
             $strContent = "<error>An error occurred, malformed request</error>";
         }
 
-        if(!self::$bitSuppressXmlHeader)
+        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML)
             $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n".$strContent;
         return $strContent;
     }
@@ -64,7 +72,6 @@ class class_xml {
      * @param bool $bitSuppressXmlHeader
      */
     public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
-        self::$bitSuppressXmlHeader = $bitSuppressXmlHeader;
     }
 
     /**
@@ -73,11 +80,9 @@ class class_xml {
      * @param $strReturnContentType
      */
     public static function setStrReturnContentType($strReturnContentType) {
-        self::$strReturnContentType = $strReturnContentType;
     }
 
     public static function getStrReturnContentType() {
-        return self::$strReturnContentType;
     }
 
 }
@@ -85,6 +90,6 @@ class class_xml {
 //pass control
 $objXML = new class_xml();
 $strContent = $objXML->processRequest();
-header(class_xml::getStrReturnContentType());
-echo $strContent;
+$objXML->objResponse->sendHeaders();
+echo $objXML->objResponse->getStrContent();
 

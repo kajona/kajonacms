@@ -1364,9 +1364,9 @@ function uniStrTrim($strString, $intLength, $strAdd = "…") {
  *
  * @param string $strChecksum Checksum of the content. Must be unique for one state.
  */
-function sendConditionalGetHeaders($strChecksum) {
-    header("ETag: ".$strChecksum);
-    header("Cache-Control: max-age=86400, must-revalidate");
+function setConditionalGetHeaders($strChecksum) {
+    class_response_object::getInstance()->addHeader("ETag: ".$strChecksum);
+    class_response_object::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
 
 }
 
@@ -1382,9 +1382,9 @@ function checkConditionalGetHeaders($strChecksum) {
     if(issetServer("HTTP_IF_NONE_MATCH")) {
         if(getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
             //strike. no further actions needed.
-            header(class_http_statuscodes::SC_NOT_MODIFIED);
-            header("ETag: ".$strChecksum);
-            header("Cache-Control: max-age=86400, must-revalidate");
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_MODIFIED);
+            class_response_object::getInstance()->addHeader("ETag: ".$strChecksum);
+            class_response_object::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
 
             return true;
         }

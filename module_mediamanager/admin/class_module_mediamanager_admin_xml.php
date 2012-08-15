@@ -64,17 +64,17 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
                     $strReturn = "<message>".xmlSafeString($this->getLang("folder_create_success"))."</message>";
                 }
                 else {
-                    header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
                     $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
                 }
             }
             else {
-                header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
                 $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
             }
         }
         else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -109,7 +109,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         if($objFile instanceof class_module_mediamanager_file) {
             $strFolder = $objFile->getStrFilename();
             if(!$objFile->rightEdit() || $objFile->getIntType() != class_module_mediamanager_file::$INT_TYPE_FOLDER) {
-                header(class_http_statuscodes::SC_UNAUTHORIZED);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
                 return $strReturn;
             }
@@ -122,14 +122,14 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             $objRepo = $objFile;
             $strFolder = $objFile->getStrPath();
             if(!$objFile->rightEdit()) {
-                header(class_http_statuscodes::SC_UNAUTHORIZED);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
                 return $strReturn;
             }
 
         }
         else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
             return $strReturn;
         }
@@ -190,7 +190,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
                 }
             }
             else {
-                header(class_http_statuscodes::SC_BADREQUEST);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
 
                 if($bitJsonResponse)
                     $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_filter")));
@@ -199,7 +199,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             }
         }
         else {
-            header(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
 
             if($bitJsonResponse)
                 $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_notWritable")));
@@ -209,8 +209,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
 
 
         if($bitJsonResponse) {
-            class_xml::setBitSuppressXmlHeader(true);
-            class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
+            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         }
 
         @unlink($arrSource["tmp_name"]);
@@ -312,7 +311,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             }
         }
         else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -351,7 +350,7 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             }
         }
         else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 

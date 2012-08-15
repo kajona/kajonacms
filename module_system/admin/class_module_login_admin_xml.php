@@ -44,7 +44,7 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
 			return "<message><success>".xmlSafeString($this->getLang("login_xml_succeess", "system"))."</success></message>";
 		}
 		else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
 			return "<message><error>".xmlSafeString($this->getLang("login_xml_error", "system"))."</error></message>";
 		}
 	}

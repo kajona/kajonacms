@@ -135,9 +135,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
                         //check, if it's an image
                         $strSuffix = uniStrtolower(uniSubstr($objOneFile->getStrFilename(), uniStrrpos($objOneFile->getStrFilename(), ".")));
-                        if(in_array($strSuffix, $this->arrImageTypes)) {
+                        if(in_array($strSuffix, $this->arrImageTypes) && isset($this->arrElementData["gallery_maxh_d"]) && isset($this->arrElementData["gallery_maxw_d"])) {
                             //provide image placeholders
-                            $arrFileTemplate["image_detail_src"]  = $this->generateImage($objOneFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
+                            $arrFileTemplate["image_detail_src"] = $this->generateImage($objOneFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
                         }
 
                         $arrFileTemplate["file_id"] = $objOneFile->getStrSystemid();
@@ -275,9 +275,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
         }
 
-        //if its am image, provide additional information
+        //if its an image, provide additional information
         $strSuffix = uniStrtolower(uniSubstr($objFile->getStrFilename(), uniStrrpos($objFile->getStrFilename(), ".")));
-        if(in_array($strSuffix, $this->arrImageTypes)) {
+        if(in_array($strSuffix, $this->arrImageTypes) && isset($this->arrElementData["gallery_maxh_d"]) && isset($this->arrElementData["gallery_maxw_d"])) {
             $arrDetailsTemplate["image_src"] = $this->generateImage($objFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
         }
 

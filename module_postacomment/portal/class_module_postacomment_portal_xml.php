@@ -117,24 +117,10 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
             $strXMLContent .= $this->fillTemplate($arrOnePost, $strTemplateID);
         }
 
-        class_xml::setBitSuppressXmlHeader(true);
-	    $strReturn .= $this->createPostCommentXML($strXMLContent);
-
-        return $strReturn;
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        return $strXMLContent;
 	}
 
-
-	private function createPostCommentXML($strContent) {
-        $strReturn = "";
-
-        //$strReturn .= "<postacomment>\n";
-        //placing a html-part, so no xmlSafeString needed
-        //$strReturn .= xmlSafeString($strContent);
-        $strReturn .= $strContent;
-
-	    //$strReturn .= "</postacomment>";
-        return $strReturn;
-	}
 
 
     /**

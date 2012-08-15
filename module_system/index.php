@@ -27,6 +27,11 @@ define("_autotesting_", false);
  */
 class class_index  {
 
+    /**
+     * @var class_response_object
+     */
+    public $objResponse;
+
 	public function __construct() {
 		class_carrier::getInstance();
 	}
@@ -52,8 +57,12 @@ class class_index  {
             $strLanguageParam = getPost("language");
 
 
-        $objDispatcher = new class_request_dispatcher();
-        return $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
+        $this->objResponse = class_response_object::getInstance();
+        $this->objResponse->setStResponseType(class_http_responsetypes::STR_TYPE_HTML);
+        $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
+
+        $objDispatcher = new class_request_dispatcher($this->objResponse);
+        $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
     }
 
 }
@@ -61,7 +70,7 @@ class class_index  {
 
 //creating the wrapper instance and passing control
 $objIndex = new class_index();
-header('Content-Type: text/html; charset=utf-8');
-echo $objIndex->processRequest();
-
+$objIndex->processRequest();
+$objIndex->objResponse->sendHeaders();
+echo $objIndex->objResponse->getStrContent();
 

@@ -136,7 +136,7 @@ class class_gzip {
 
         if(defined("_system_output_gzip_") && _system_output_gzip_ == "true" && strpos(getServer("HTTP_ACCEPT_ENCODING"), "gzip") !== false) {
             //header to browser
-            header("Content-Encoding: gzip");
+            class_response_object::getInstance()->addHeader("Content-Encoding: gzip");
             $strContent = gzencode($strContent);
             return $strContent;
 	    }

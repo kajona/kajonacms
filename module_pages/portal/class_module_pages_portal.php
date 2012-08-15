@@ -76,11 +76,11 @@ class class_module_pages_portal extends class_portal implements interface_portal
 			//try to send the correct header
 			//page not found
             if($objPageData->getStrName() == "" || $objPageData->getStatus() != 1)
-			    header(class_http_statuscodes::SC_NOT_FOUND);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
 
 			//user is not allowed to view the page
 			if($objPageData->getStrName() != "" && !$objPageData->rightView())
-			    header(class_http_statuscodes::SC_FORBIDDEN);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
 
 
             //check, if the page may be loaded using the default-language

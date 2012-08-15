@@ -57,7 +57,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 		    $this->flushCompletePagesCache();
 		}
 		else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -81,7 +81,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 $strReturn .= "<error>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusError")."</error>";
 	    }
 	    else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -109,7 +109,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             $this->flushCompletePagesCache();
         }
         else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 

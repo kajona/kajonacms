@@ -21,6 +21,11 @@ class class_request_dispatcher {
     private $arrTimestampStart;
 
     /**
+     * @var class_response_object
+     */
+    private $objResponse = null;
+
+    /**
      *
      * @var class_session
      */
@@ -29,9 +34,10 @@ class class_request_dispatcher {
     /**
      * Standard constructor
      */
-    public function __construct() {
+    public function __construct(class_response_object $objResponse) {
         $this->arrTimestampStart = gettimeofday();
         $this->objSession = class_carrier::getInstance()->getObjSession();
+        $this->objResponse = $objResponse;
     }
 
     /**
@@ -56,7 +62,7 @@ class class_request_dispatcher {
         $strReturn = $this->getDebugInfo().$strReturn;
         $this->sendConditionalGetHeaders($strReturn);
 
-        return $strReturn;
+        $this->objResponse->setStrContent($strReturn);
     }
 
     /**
@@ -83,20 +89,22 @@ class class_request_dispatcher {
 		    if(!issetServer($strHeaderName) ) {
                 //reload to https
                 if(_xmlLoader_ === true)
-                    header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
+                    class_response_object::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
                 else
-                    header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                    class_response_object::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
 
+                class_response_object::getInstance()->sendHeaders();
                 die("Reloading using https...");
 		    }
             //value of header correct?
             else if($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
                 if(_xmlLoader_ === true)
-                    header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
+                    class_response_object::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
                 else
-                    header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                    class_response_object::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
 
+                class_response_object::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
 		}
@@ -228,8 +236,8 @@ class class_request_dispatcher {
         else {
 
             if(_xmlLoader_ === false) {
-                if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer/installer.php")) {
-                    header("Location: "._webpath_."/installer/installer.php");
+                if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
+                    class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
                 }
             }
@@ -289,13 +297,14 @@ class class_request_dispatcher {
         //check headers, maybe execution could be terminated right here
 	    //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
         if(checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent))) {
+            class_response_object::getInstance()->sendHeaders();
             flush();
             die();
         }
 
         //send headers if not an ie
         if(strpos(getServer("HTTP_USER_AGENT"), "IE") === false)
-            sendConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent));
+            setConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent));
     }
 
 

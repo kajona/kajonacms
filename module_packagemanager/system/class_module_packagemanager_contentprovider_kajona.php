@@ -181,7 +181,7 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
 
             $strUrl = str_replace("_webpath_", _webpath_, $strUrl);
             $strUrl = str_replace("_indexpath_", _indexpath_, $strUrl);
-            header("Location: ".str_replace("&amp;", "&", $strUrl));
+            class_response_object::getInstance()->setStrRedirectUrl($strUrl);
         }
 
     }

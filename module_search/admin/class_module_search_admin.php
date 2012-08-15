@@ -67,7 +67,6 @@ class class_module_search_admin extends class_admin implements interface_admin {
      * @return string
      */
     private function createSearchJson($strSearchterm, $arrResults) {
-        class_xml::setBitSuppressXmlHeader(true);
 
         $arrItems = array();
         $intI = 0;
@@ -103,7 +102,7 @@ class class_module_search_admin extends class_admin implements interface_admin {
 
 
         $objResult = $arrItems;
-
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($objResult);
     }
 

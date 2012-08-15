@@ -133,6 +133,7 @@ class class_exception extends Exception {
             }
             print $strErrormessage;
 	        //Execution has to be stopped here!
+            class_response_object::getInstance()->sendHeaders();
 	        die();
         }
         elseif ($this->intErrorlevel == class_exception::$level_ERROR) {
@@ -175,6 +176,7 @@ class class_exception extends Exception {
         if (!($objException instanceof class_exception))
             $objException = new class_exception((string)$objException, class_exception::$level_FATALERROR);
         $objException->processException();
+        class_response_object::getInstance()->sendHeaders();
     }
 
     public function getErrorlevel() {

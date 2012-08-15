@@ -285,15 +285,19 @@ class class_image {
 
 		switch ($strType) {
 			case ".jpg":
-			    header("Content-type: image/jpeg");
+                class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JPEG);
 				break;
 			case ".png":
-			    header("Content-type: image/png");
+                class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_PNG);
 				break;
 			case ".gif":
-			    header("Content-type: image/gif");
+                class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_GIF);
 				break;
 			}
+
+
+        //send all mandatory headers
+        class_response_object::getInstance()->sendHeaders();
 
         //stream image directly from the filesystem if available
         if(is_file(_realpath_.$this->strCachepath.$this->strCachename)) {

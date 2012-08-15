@@ -135,8 +135,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
             $arrReturn[] = $objOneTag->getStrName();
         }
 
-        class_xml::setBitSuppressXmlHeader(true);
-        class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 

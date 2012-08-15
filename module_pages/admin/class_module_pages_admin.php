@@ -1014,7 +1014,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $arrReturn[] = $objOnePage->getStrName();
             }
         }
-        class_xml::setBitSuppressXmlHeader(true);
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
 		return json_encode($arrReturn);
 	}
 
@@ -1078,10 +1078,10 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                 }
             }
+
         }
 
-        class_xml::setBitSuppressXmlHeader(true);
-        class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
         return json_encode($arrReturn);
     }
 

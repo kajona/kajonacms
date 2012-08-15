@@ -43,7 +43,7 @@
 -->
 <filelist_file>
     <tr class="portalListRow1">
-        <td class="image"><img src="_webpath_/portal/pics/kajona/icon_downloads.gif" /></td>
+        <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_downloads.gif" /></td>
         <td class="title"><a href="%%file_details_href%%" data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</a></td>
         <td class="center">%%file_size%%</td>
         <td class="actions">%%file_link%%</td>

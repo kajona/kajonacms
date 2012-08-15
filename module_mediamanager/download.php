@@ -52,53 +52,56 @@ class class_download_manager extends class_root {
 					//Check the current browsertype
 					if(uniStrpos($strBrowser, "IE") !== false) {
 						//Internet Explorer
-						header("Content-type: application/x-ms-download");
-		        		header("Content-type: x-type/subtype\n");
-						header("Content-type: application/force-download");
-						header("Content-Disposition: attachment; filename=".preg_replace(
+                        class_response_object::getInstance()->addHeader("Content-type: application/x-ms-download");
+                        class_response_object::getInstance()->addHeader("Content-type: x-type/subtype\n");
+                        class_response_object::getInstance()->addHeader("Content-type: application/force-download");
+                        class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=".preg_replace(
                             '/\./', '%2e',
                             saveUrlEncode(trim(basename($objFile->getStrFilename()))), substr_count(basename($objFile->getStrFilename()), '.') - 1
                         ));
 					}
 					else {
 						//Good: another browser vendor
-						header("Content-Type: application/octet-stream");
-						header("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($objFile->getStrFilename()))));
+                        class_response_object::getInstance()->addHeader("Content-Type: application/octet-stream");
+                        class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($objFile->getStrFilename()))));
 					}
 					//Common headers
-					header("Expires: Mon, 01 Jan 1995 00:00:00 GMT");
-					header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-					header("Pragma: no-cache");
-					header("Content-description: JustThum-Generated Data\n");
-					header("Content-Length: ".filesize(_realpath_.$objFile->getStrFilename()));
+                    class_response_object::getInstance()->addHeader("Expires: Mon, 01 Jan 1995 00:00:00 GMT");
+                    class_response_object::getInstance()->addHeader("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+                    class_response_object::getInstance()->addHeader("Pragma: no-cache");
+                    class_response_object::getInstance()->addHeader("Content-description: JustThum-Generated Data\n");
+                    class_response_object::getInstance()->addHeader("Content-Length: ".filesize(_realpath_.$objFile->getStrFilename()));
 
 					//End Session
 					$this->objSession->sessionClose();
+                    class_response_object::getInstance()->sendHeaders();
 
 					//Loop the file
 					$ptrFile = @fopen(_realpath_.$objFile->getStrFilename(), 'rb');
                     fpassthru($ptrFile);
 					@fclose($ptrFile);
+
+                    die();
 				}
 				else {
-                    header(class_http_statuscodes::SC_FORBIDDEN);
+                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
                     $bitRedirectToErrorPage = true;
 				}
 
 			}
 			else {
-				header(class_http_statuscodes::SC_NOT_FOUND);
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
 				$bitRedirectToErrorPage = true;
 			}
 
 		}
 		else {
-            header(class_http_statuscodes::SC_NOT_FOUND);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
             $bitRedirectToErrorPage = true;
 		}
 
 		if($bitRedirectToErrorPage) {
-			header("Location: ".str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalHref(_pages_errorpage_)));
+            class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalHref(_pages_errorpage_)));
 		}
 	}
 }
@@ -107,3 +110,5 @@ class class_download_manager extends class_root {
 //Create a object
 $objDownload = new class_download_manager(getGet("systemid"));
 $objDownload->actionDownload();
+class_response_object::getInstance()->sendHeaders();
+

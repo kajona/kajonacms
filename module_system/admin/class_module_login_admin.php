@@ -169,15 +169,15 @@ class class_module_login_admin extends class_admin implements interface_admin  {
     		$objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
     		//any url to redirect?
     		if($this->objSession->getSession("loginReferer") != "")
-			    header("Location: "._indexpath_."?".$this->objSession->getSession("loginReferer"));
+			    class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession("loginReferer"));
 			else
-			    header("Location: "._indexpath_."?admin=1");
+                class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
 
 
 			return true;
 		}
 		else {
-			header("Location: "._indexpath_."?admin=1&loginerror=1");
+            class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1&loginerror=1");
 			return false;
 		}
 	}
@@ -189,7 +189,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
 	 */
 	protected function actionAdminlogout() {
 		$this->objSession->logout();
-		header("Location: "._indexpath_."?admin=1");
+        class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
 	}
 
 

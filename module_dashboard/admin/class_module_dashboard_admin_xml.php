@@ -54,7 +54,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 		    $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
 		}
 		else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
 		    $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -78,13 +78,12 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
             if(!$objConcreteWidget->getBitBlockSessionClose())
                 class_carrier::getInstance()->getObjSession()->sessionClose();
 
-            class_xml::setBitSuppressXmlHeader(true);
-            class_xml::setStrReturnContentType(class_http_responsetypes::STR_TYPE_JSON);
+            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
             $strReturn = json_encode($objConcreteWidget->generateWidgetOutput());
 
         }
         else {
-            header(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
 		    $strReturn = "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 

@@ -95,6 +95,7 @@ class class_flyimage {
 
 			//check headers, maybe execution could be terminated right here
 			if(checkConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight))) {
+                class_response_object::getInstance()->sendHeaders();
 			    return;
 			}
 
@@ -102,7 +103,7 @@ class class_flyimage {
             $this->objImage->resizeAndCropImage($this->intMaxWidth, $this->intMaxHeight, $this->intFixedWidth, $this->intFixedHeight);
 
 			//send the headers for conditional gets
-			sendConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight));
+			setConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight));
 
 			//TODO: add expires header for browser caching (optional)
             /*
@@ -223,9 +224,9 @@ class class_flyimage {
         $this->objImage->setBitNeedToSave(false);
 
         //force no-cache headers
-        header("Expires: Thu, 19 Nov 1981 08:52:00 GMT", true);
-        header("Cache-Control: no-store, no-cache, must-revalidate, private", true);
-        header("Pragma: no-cache", true);
+        class_response_object::getInstance()->addHeader("Expires: Thu, 19 Nov 1981 08:52:00 GMT", true);
+        class_response_object::getInstance()->addHeader("Cache-Control: no-store, no-cache, must-revalidate, private", true);
+        class_response_object::getInstance()->addHeader("Pragma: no-cache", true);
 
         $this->objImage->sendImageToBrowser(70);
         $this->objImage->releaseResources();

@@ -68,11 +68,8 @@ class class_module_packageserver_portal extends class_portal implements interfac
 
         class_module_packageserver_log::generateDlLog("", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
 
-
-
-        class_xml::setBitSuppressXmlHeader(true);
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
         $strReturn = json_encode($arrPackages);
-        header("Content-type: application/json");
         return $strReturn;
     }
 
@@ -142,11 +139,8 @@ class class_module_packageserver_portal extends class_portal implements interfac
         class_module_packageserver_log::generateDlLog($this->getParam("title"), $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
 
 
-        class_xml::setBitSuppressXmlHeader(true);
-        $strReturn = json_encode($arrReturn);
-        header("Content-type: application/json");
-        return $strReturn;
-
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        return json_encode($arrReturn);
     }
 
 }
