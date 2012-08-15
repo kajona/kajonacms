@@ -70,17 +70,11 @@
 
 
 
-    <!--<target name="buildSqlite" depends="-->
-		    								<!--cleanFilesystem, init,-->
-					    					<!--buildProject, installProjectSqlite,-->
-					    					<!--lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb,-->
-					    					<!--buildFullZip, buildLightZip" />-->
-
-
     <target name="buildSqlite" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					phpcpd" />
+					    					lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb,
+					    					buildFullZip, buildLightZip" />
 
     <target name="buildMysql" depends="
 		    								cleanFilesystem, init,
@@ -316,11 +310,14 @@
     </target>
 
     <target name="phpdox" description="Generate API documentation using phpDox">
-        <exec executable="phpdox"/>
+        <exec executable="phpdox">
+            <arg line="--file ${basedir}/phpdox.xml" />
+        </exec>
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="phpunit" failonerror="true">
+            <arg line="--configuration ${basedir}/phpunit.xml" />
             <arg path="${basedir}${projectPath}" />
         </exec>
     </target>

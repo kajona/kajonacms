@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<phpdox xmlns="http://phpdox.de/config">
+    <project name="Kajona v4 Head" source="project/core" workdir="build/phpdox">
+        <collector publiconly="false">
+            <include mask="*.php" />
+            <exclude mask="*ezcomponents*" />
+            <exclude mask="*pchart*" />
+            <exclude mask="*phpexcel*" />
+        </collector>
+
+        <generator output="build">
+            <build engine="html" enabled="true" output="api"/>
+        </generator>
+    </project>
+</phpdox>
