@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset
+        name="Kajona Rule Set"
+        xmlns="http://pmd.sf.net/ruleset/1.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation=" http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>
+
+    </description>
+
+    <!-- Import the entire unused code rule set -->
+    <rule ref="rulesets/unusedcode.xml"/>
+
+    <rule ref="rulesets/codesize.xml" />
+
+    <rule ref="rulesets/naming.xml" />
+</ruleset>
