@@ -55,16 +55,15 @@ class class_xml {
 
 
         $objDispatcher = new class_request_dispatcher($this->objResponse);
-        $strContent = $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
+        $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
 
-        if($strContent == "") {
+        if($this->objResponse->getStrContent() == "") {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
-            $strContent = "<error>An error occurred, malformed request</error>";
+            $this->objResponse->setStrContent("<error>An error occurred, malformed request</error>");
         }
 
         if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML)
-            $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n".$strContent;
-        return $strContent;
+            $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n".$this->objResponse->getStrContent());
     }
 
     /**
@@ -89,7 +88,7 @@ class class_xml {
 
 //pass control
 $objXML = new class_xml();
-$strContent = $objXML->processRequest();
+$objXML->processRequest();
 $objXML->objResponse->sendHeaders();
 echo $objXML->objResponse->getStrContent();
 

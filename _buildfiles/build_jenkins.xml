@@ -12,7 +12,7 @@
      Author: sidler
      $Id: build.xml 4822 2012-07-27 07:55:40Z sidler $
      ====================================================================== -->
-<project name="Kajona Head Build" default="buildSqlite" basedir=".">
+<project name="Kajona Head Build" default="buildSqliteFull" basedir=".">
 
     <description>
         Buildfile to run common tasks.
@@ -69,11 +69,17 @@
     </target>
 
 
-
-    <target name="buildSqlite" depends="
+    <target name="buildSqliteFast" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb,
+					    					lint,phpunit,
+					    					buildFullZip, buildLightZip" />
+
+
+    <target name="buildSqliteFull" depends="
+		    								cleanFilesystem, init,
+					    					buildProject, installProjectSqlite,
+					    					lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpunit,phpcb,
 					    					buildFullZip, buildLightZip" />
 
     <target name="buildMysql" depends="
@@ -89,6 +95,8 @@
     <target name="buildFullZipOnly" depends="
                                             cleanFilesystem, init,
                                             buildProject, buildFullZip" />
+
+
 
 
     <!-- removes existing folders and creates them again -->
@@ -233,9 +241,6 @@
 
             <fileset dir="${basedir}${projectPath}">
                 <include name="**/*.php" />
-                <exclude name="**/ezcomponents/**" />
-                <exclude name="**/pchart/**" />
-                <exclude name="**/phpqrcode/**" />
                 <modified />
             </fileset>
 
@@ -244,6 +249,7 @@
 
     <target name="phploc" description="Measure project size using PHPLOC">
         <exec executable="phploc">
+            <arg line=" --exclude ${basedir}${projectPath}/core/module_ezcchart/system/ezcomponents --exclude ${basedir}${projectPath}/core/module_pchart/system/pchart --exclude ${basedir}${projectPath}/core/module_system/system/tcpdf --exclude ${basedir}${projectPath}/core/module_system/system/phpexcel --exclude ${basedir}${projectPath}/core/module_qrcode/system/phpqrcode   "/>
             <arg value="--log-csv" />
             <arg value="${basedir}${buildPath}/logs/phploc.csv" />
             <arg path="${basedir}${projectPath}" />
@@ -286,6 +292,7 @@
     <target name="phpcs"
             description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
         <exec executable="phpcs">
+            <arg value="--tab-width=4" />
             <arg value="--standard=${basedir}/phpcs-ruleset.xml" />
             <arg path="${basedir}${projectPath}" />
         </exec>
@@ -293,6 +300,7 @@
 
     <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec executable="phpcs" output="/dev/null">
+            <arg value="--tab-width=4" />
             <arg value="--report=checkstyle" />
             <arg value="--report-file=${basedir}${buildPath}/logs/checkstyle.xml" />
             <arg value="--standard=${basedir}/phpcs-ruleset.xml" />
@@ -309,11 +317,28 @@
         </exec>
     </target>
 
+
+    <!-- currently disabled in favor of phpdocumentor -->
     <target name="phpdox" description="Generate API documentation using phpDox">
         <exec executable="phpdox">
             <arg line="--file ${basedir}/phpdox.xml" />
         </exec>
     </target>
+
+
+    <!-- requires phpDocumentor, binary phpdoc -->
+    <target name="generatePhpDocs">
+        <echo>Generating PHP API Docs</echo>
+        <exec executable="${path.phpdoc}" dir="${basedir}${projectPath}/core">
+            <arg line=" -ue on -t '${basedir}${buildPath}/api'
+			           -i *tcpdf*,*pchart*,*yui*,*ezcomponents*,*phpexcel*
+			          -ti 'Kajona API Docs'
+			           -dn module_system
+			           -d ."/>
+        </exec>
+    </target>
+
+
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="phpunit" failonerror="true">
