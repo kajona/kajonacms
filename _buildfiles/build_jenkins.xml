@@ -50,6 +50,12 @@
     <!-- path to pdepend -->
     <property name="path.pdepend"   value="pdepend" />
 
+    <property name="path.php"       value="php" />
+
+    <property name="path.phploc"    value="phploc" />
+
+    <property name="path.phpcb"     value="phpcb" />
+
 
     <!--
              No need to change anything below!
@@ -236,7 +242,7 @@
 
 
     <target name="lint" description="Perform syntax check of sourcecode files">
-        <apply executable="php" failonerror="true">
+        <apply executable="${path.php}" failonerror="true">
             <arg value="-l" />
 
             <fileset dir="${basedir}${projectPath}">
@@ -248,7 +254,7 @@
     </target>
 
     <target name="phploc" description="Measure project size using PHPLOC">
-        <exec executable="phploc">
+        <exec executable="${path.phploc}">
             <arg line=" --exclude ${basedir}${projectPath}/core/module_ezcchart/system/ezcomponents --exclude ${basedir}${projectPath}/core/module_pchart/system/pchart --exclude ${basedir}${projectPath}/core/module_system/system/tcpdf --exclude ${basedir}${projectPath}/core/module_system/system/phpexcel --exclude ${basedir}${projectPath}/core/module_qrcode/system/phpqrcode   "/>
             <arg value="--log-csv" />
             <arg value="${basedir}${buildPath}/logs/phploc.csv" />
@@ -257,7 +263,7 @@
     </target>
 
     <target name="pdepend" description="Calculate software metrics using PHP_Depend">
-        <exec executable="pdepend">
+        <exec executable="${path.pdepend}">
             <arg value="--jdepend-xml=${basedir}${buildPath}/logs/jdepend.xml" />
             <arg value="--jdepend-chart=${basedir}${buildPath}/pdepend/dependencies.svg" />
             <arg value="--overview-pyramid=${basedir}${buildPath}/pdepend/overview-pyramid.svg" />
@@ -268,7 +274,7 @@
 
     <target name="phpmd"
             description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-        <exec executable="phpmd">
+        <exec executable="${path.phpmd}">
             <arg path="${basedir}${projectPath}" />
             <arg value="text" />
             <arg value="--exclude " />
@@ -278,7 +284,7 @@
     </target>
 
     <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-        <exec executable="phpmd">
+        <exec executable="${path.phpmd}">
             <arg path="${basedir}${projectPath}" />
             <arg value="xml" />
             <arg value="${basedir}/phpmd-ruleset.xml" />
@@ -291,7 +297,7 @@
 
     <target name="phpcs"
             description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
-        <exec executable="phpcs">
+        <exec executable="${path.phpcs}">
             <arg value="--tab-width=4" />
             <arg value="--standard=${basedir}/phpcs-ruleset.xml" />
             <arg path="${basedir}${projectPath}" />
@@ -299,7 +305,7 @@
     </target>
 
     <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-        <exec executable="phpcs" output="/dev/null">
+        <exec executable="${path.phpcs}" output="/dev/null">
             <arg value="--tab-width=4" />
             <arg value="--report=checkstyle" />
             <arg value="--report-file=${basedir}${buildPath}/logs/checkstyle.xml" />
@@ -309,7 +315,7 @@
     </target>
 
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
-        <exec executable="phpcpd">
+        <exec executable="${path.phpcpd}">
             <arg line=" --exclude ${basedir}${projectPath}/core/module_ezcchart/system/ezcomponents --exclude ${basedir}${projectPath}/core/module_pchart/system/pchart --exclude ${basedir}${projectPath}/core/module_system/system/tcpdf --exclude ${basedir}${projectPath}/core/module_system/system/phpexcel --exclude ${basedir}${projectPath}/core/module_qrcode/system/phpqrcode   "/>
             <arg value="--log-pmd" />
             <arg value="${basedir}${buildPath}/logs/pmd-cpd.xml" />
@@ -341,14 +347,14 @@
 
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="phpunit" failonerror="true">
+        <exec executable="${path.phpunit}" failonerror="true">
             <arg line="--configuration ${basedir}/phpunit.xml " />
             <arg path="${basedir}${projectPath}" />
         </exec>
     </target>
 
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
-        <exec executable="phpcb">
+        <exec executable="${path.phpcb}">
             <arg value="--log" />
             <arg path="${basedir}${buildPath}/logs" />
             <arg value="--source" />
