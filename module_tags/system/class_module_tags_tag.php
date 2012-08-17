@@ -220,14 +220,18 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                             "._dbprefix_."system
                       WHERE tags_tag_id = tags_tagid
                         AND tags_tag_id = system_id
-                        AND system_status = 1
-                   ORDER BY tags_tag_name ASC";
+                        AND system_status = 1";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tagid"]);
         }
+
+        //search them by name
+        usort($arrReturn, function(class_module_tags_tag $objA, class_module_tags_tag $objB) {
+            return strcmp($objA->getStrName(), $objB->getStrName());
+        });
 
         return $arrReturn;
     }
