@@ -12,7 +12,7 @@
      Author: sidler
      $Id: build.xml 4822 2012-07-27 07:55:40Z sidler $
      ====================================================================== -->
-<project name="Kajona Head Build" default="buildSqliteFull" basedir=".">
+<project name="Kajona Head Build" default="buildSqliteFast" basedir=".">
 
     <description>
         Buildfile to run common tasks.
@@ -78,14 +78,14 @@
     <target name="buildSqliteFast" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,
+					    					lint,phploc,phpunit,
 					    					buildFullZip, buildLightZip" />
 
 
     <target name="buildSqliteFull" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpunit,phpcb,
+					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpcb,
 					    					buildFullZip, buildLightZip" />
 
     <target name="buildMysql" depends="
