@@ -14,4 +14,3 @@ define("DB_DRIVER",                             "mysqli");
 
 ini_set("session.save_path", "/tmp");
 ini_set("session.use_cookies", "Off");
-?>

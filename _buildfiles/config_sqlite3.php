@@ -12,4 +12,3 @@ define("DB_DRIVER",                             "sqlite3");
 
 ini_set("session.save_path", "/tmp");
 ini_set("session.use_cookies", "Off");
-?>
