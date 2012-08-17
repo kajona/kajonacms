@@ -24,9 +24,9 @@ class class_test_user extends class_testbase  {
         echo "\t ...found ".$intStartUsers." users.\n";
 
 
-        echo "\tcreate 100 users using the model...\n";
+        echo "\tcreate 10 users using the model...\n";
         $arrUsersCreated = array();
-        for($intI =0; $intI < 100; $intI++) {
+        for($intI =0; $intI < 10; $intI++) {
             $objUser = new class_module_user_user();
            // $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
             $strUsername = "user_".generateSystemid();
@@ -39,13 +39,13 @@ class class_test_user extends class_testbase  {
             $this->assertEquals($objUser->getStrUsername(), $strUsername, __FILE__." checkNameOfUserCreated");
         }
         $arrUserInstalled = class_module_user_user::getAllUsers();
-        $this->assertEquals(count($arrUserInstalled), (100+$intStartUsers), __FILE__." checkNrOfUsersCreatedByModel");
+        $this->assertEquals(count($arrUserInstalled), (10+$intStartUsers), __FILE__." checkNrOfUsersCreatedByModel");
 
 
 
-        echo "\tcreate 100 groups using the model...\n";
+        echo "\tcreate 10 groups using the model...\n";
         $arrGroupsCreated = array();
-        for($intI =0; $intI < 100; $intI++) {
+        for($intI =0; $intI < 10; $intI++) {
             $objGroup = new class_module_user_group();
             $strName = "name_".generateSystemid();
             $objGroup->setStrName($strName);
@@ -57,7 +57,7 @@ class class_test_user extends class_testbase  {
             $this->assertEquals($objGroup->getStrName(), $strName, __FILE__." checkNameOfGroupCreated");
         }
         $arrGroupsInstalled = class_module_user_group::getAllGroups();
-        $this->assertEquals(count($arrGroupsInstalled), (100+$intStartGroups), __FILE__." checkNrOfGroupsByModel");
+        $this->assertEquals(count($arrGroupsInstalled), (10+$intStartGroups), __FILE__." checkNrOfGroupsByModel");
 
 
 
@@ -92,8 +92,8 @@ class class_test_user extends class_testbase  {
         $objGroup->setStrName("AUTOTESTGROUP");
         $objGroup->updateObjectToDb();
 
-        echo "\tadding 100 members to group...\n";
-        for ($intI = 0; $intI <= 100; $intI++) {
+        echo "\tadding 10 members to group...\n";
+        for ($intI = 0; $intI <= 10; $intI++) {
             $objUser = new class_module_user_user();
             $objUser->setStrUsername("AUTOTESTUSER_".$intI);
             //$objUser->setStrEmail("autotest_".$intI."@kajona.de");
