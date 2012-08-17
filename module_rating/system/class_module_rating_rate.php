@@ -184,20 +184,16 @@ class class_module_rating_rate extends class_model implements interface_model, i
      * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid)
      *
      * @param string $strSystemid
+     * @param string $strSourceClass
+     *
      * @return bool
      * @overwrites
-     *
      */
-    public function handleRecordDeletedEvent($strSystemid) {
+    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
         $bitReturn = true;
 
         //ratings installed as a module?
-        if(class_module_system_module::getModuleByName("rating") == null)
-            return true;
-
-        //check that systemid isn't the id of a rating to avoid recursions
-        $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
-        if($objRecord != null && $objRecord->getIntModuleNr() == _rating_modul_id_)
+        if($strSourceClass == "class_module_rating_rate" || class_module_system_module::getModuleByName("rating") == null)
             return true;
 
         //ok, so delete matching records

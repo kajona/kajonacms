@@ -347,16 +347,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
      * @param $strSystemid
+     * @param string $strSourceClass
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid) {
-        if(class_module_system_module::getModuleByName("tags") == null)
-            return true;
-
-        //check that systemid isn't the id of a tag to avoid recursions
-        $objCommon = new class_module_system_common($strSystemid);
-        if($objCommon->getIntModuleNr() == _tags_modul_id_)
+    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+        if($strSourceClass == "class_module_tags_tag" || class_module_system_module::getModuleByName("tags") == null)
             return true;
 
         //delete memberships. Fire a plain query, faster then searching.

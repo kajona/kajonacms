@@ -65,18 +65,21 @@ class class_core_eventdispatcher {
      * deleted record.
      *
      * @static
+     *
      * @param $strSystemid
+     * @param $strClass
+     *
      * @return bool
      *
      * @see interface_recorddeleted_listener
      */
-    public static function notifyRecordDeletedListeners($strSystemid) {
+    public static function notifyRecordDeletedListeners($strSystemid, $strClass) {
         $bitReturn = true;
         $arrListener = self::getRecordDeletedListeners();
         /** @var interface_recorddeleted_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
             class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating recordDeletedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handleRecordDeletedEvent($strSystemid);
+            $bitReturn = $bitReturn && $objOneListener->handleRecordDeletedEvent($strSystemid, $strClass);
         }
 
         return $bitReturn;

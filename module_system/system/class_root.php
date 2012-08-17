@@ -1179,7 +1179,7 @@ abstract class class_root {
 
 		//try to call other modules, maybe wanting to delete anything in addition, if the current record
 		//is going to be deleted
-        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid);
+        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
 
 		//Start a tx before deleting anything
 		$this->objDB->transactionBegin();

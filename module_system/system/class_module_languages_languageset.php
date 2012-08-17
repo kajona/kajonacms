@@ -232,10 +232,11 @@ class class_module_languages_languageset extends class_model implements interfac
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
      * @param $strSystemid
+     * @param string $strSourceClass
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid) {
+    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
         //fire a plain query on the database, much faster then searching for matching records
         $strQuery = "DELETE FROM "._dbprefix_."languages_languageset
                       WHERE languageset_language = ?

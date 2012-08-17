@@ -24,10 +24,12 @@ interface interface_recorddeleted_listener {
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
      * @abstract
+     *
      * @param $strSystemid
+     * @param string $strSourceClass The class-name of the object deleted
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid);
+    public function handleRecordDeletedEvent($strSystemid, $strSourceClass);
 
 }

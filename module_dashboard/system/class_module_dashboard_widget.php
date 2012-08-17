@@ -108,7 +108,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
-
     /**
      * Implementing callback to react on user-delete events
      *
@@ -119,13 +118,14 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
      * @param $strSystemid
+     * @param string $strSourceClass
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid) {
-        if(validateSystemid($strSystemid)) {
+    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+        if($strSourceClass == "class_module_user_user" && validateSystemid($strSystemid)) {
             $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
-            $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
+            $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid), null, null, false);
             foreach($arrRows as $arrOneRow) {
                 $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
                 $objWidget->deleteObject();

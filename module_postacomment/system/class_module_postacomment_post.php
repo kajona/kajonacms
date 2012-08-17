@@ -206,20 +206,15 @@ class class_module_postacomment_post extends class_model implements interface_mo
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
      * @param $strSystemid
+     * @param string $strSourceClass
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid) {
+    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
         $bitReturn = true;
         //module installed?
-        if(class_module_system_module::getModuleByName("postacomment") == null) {
+        if($strSourceClass == "class_module_postacomment_post" || class_module_system_module::getModuleByName("postacomment") == null)
             return true;
-        }
-        //check that systemid isn't the id of a comment to avoid recursions
-        $objRecord = class_objectfactory::getInstance()->getObject($strSystemid);
-        if($objRecord == null || $objRecord->getIntModuleNr() == _postacomment_modul_id_) {
-            return true;
-        }
 
         //ok, so search for a records matching
         $arrPosts1 = class_module_postacomment_post::loadPostList(false, $strSystemid);
