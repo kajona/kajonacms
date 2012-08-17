@@ -1142,7 +1142,7 @@ class class_toolkit_admin extends class_toolkit {
         /** @var $arrAdminInstances class_admin[] */
         $arrAdminInstances = array();
         foreach ($arrModules as $arrModule) {
-            $objModule = new class_module_system_module($arrModule["module_id"]);
+            $objModule = class_module_system_module::getModuleBySystemid($arrModule["module_id"]);
             if($objModule->rightView()) {
                 $arrAdminInstances[] = $objModule->getAdminInstanceOfConcreteModule();
             }

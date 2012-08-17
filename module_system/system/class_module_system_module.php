@@ -76,6 +76,11 @@ class class_module_system_module extends class_model implements interface_model,
      */
     private $strAspect = "";
 
+    /**
+     * @var class_module_system_module[]
+     */
+    private static $arrModules = array();
+
 
     //private static $arrModuleData = null;
 
@@ -91,6 +96,8 @@ class class_module_system_module extends class_model implements interface_model,
 		//base class
 		parent::__construct($strSystemid);
 
+        if(validateSystemid($strSystemid))
+            self::$arrModules[$strSystemid] = $this;
     }
 
     /**
@@ -203,10 +210,10 @@ class class_module_system_module extends class_model implements interface_model,
 		foreach($arrRows as $arrOneRow) {
             if($intStart != null && $intEnd != null) {
                 if($intI >= $intStart && $intI <= $intEnd)
-		            $arrReturn[] = new class_module_system_module($arrOneRow["module_id"]);
+		            $arrReturn[] = class_module_system_module::getModuleBySystemid($arrOneRow["module_id"]);
             }
             else
-                $arrReturn[] = new class_module_system_module($arrOneRow["module_id"]);
+                $arrReturn[] = class_module_system_module::getModuleBySystemid($arrOneRow["module_id"]);
 
             $intI++;
         }
@@ -235,6 +242,13 @@ class class_module_system_module extends class_model implements interface_model,
         if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0)
             return null;
 
+
+        //check if the module is already cached
+        foreach(self::$arrModules as $objOneModule)
+            if(!$bitIgnoreStatus && $objOneModule->getStrName() == $strName)
+                return $objOneModule;
+
+
         $arrModules = self::loadModuleData();
         $arrRow = array();
 		foreach($arrModules as $arrOneModule) {
@@ -246,17 +260,34 @@ class class_module_system_module extends class_model implements interface_model,
             //check the status right here - better performance due to cached queries
             if(!$bitIgnoreStatus) {
                 if($arrRow["system_status"] == "1")
-                    return new class_module_system_module($arrRow["module_id"]);
+                    return self::getModuleBySystemid($arrRow["module_id"]);
                 else
                     return null;
 
             }
             else
-                return new class_module_system_module($arrRow["module_id"]);
+                return self::getModuleBySystemid($arrRow["module_id"]);
         }
 		else
 		    return null;
 	}
+
+
+    /**
+     * Creates a new instance of a module or returns an already instantiated one.
+     * For modules, this is the preferred way of generating instances.
+     *
+     * @param $strSystemid
+     * @return class_module_system_module
+     * @static
+     */
+    public static function getModuleBySystemid($strSystemid) {
+        if(isset(self::$arrModules[$strSystemid]))
+            return self::$arrModules[$strSystemid];
+
+        return new class_module_system_module($strSystemid);
+
+    }
 
     /**
      * Looks up the id of a module using the passed module-number

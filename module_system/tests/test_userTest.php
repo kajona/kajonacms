@@ -66,8 +66,8 @@ class class_test_user extends class_testbase  {
             echo "\t\tdeleting user ".$strOneUser."...\n";
             $objUser = new class_module_user_user($strOneUser);
             $objUser->deleteObject();
-            $objDB->flushQueryCache();
         }
+        $objDB->flushQueryCache();
 
 
         echo "\tcheck number of users installed...\n";
@@ -80,8 +80,8 @@ class class_test_user extends class_testbase  {
         foreach($arrGroupsCreated as $strOneGroup) {
             $objOneGroup = new class_module_user_group($strOneGroup);
             $objOneGroup->deleteObject();
-            $objDB->flushQueryCache();
         }
+        $objDB->flushQueryCache();
 
         echo "\tcheck number of groups installed...\n";
         $arrGroupsInstalled = class_module_user_group::getAllGroups();

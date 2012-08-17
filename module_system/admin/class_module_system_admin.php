@@ -183,7 +183,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionModuleAspect() {
         $strReturn = "";
-        $objModule = new class_module_system_module($this->getSystemid());
+        $objModule = class_module_system_module::getModuleBySystemid($this->getSystemid());
         $strReturn .= $this->objToolkit->formHeadline($objModule->getStrName());
         $arrAspectsSet = explode(",", $objModule->getStrAspect());
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveModuleAspect"));
@@ -208,7 +208,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             if(uniStrpos($strName, "aspect_") !== false)
                 $arrParams[] = uniSubstr($strName, 7);
 
-        $objModule = new class_module_system_module($this->getSystemid());
+        $objModule = class_module_system_module::getModuleBySystemid($this->getSystemid());
         $objModule->setStrAspect(implode(",", $arrParams));
 
         $objModule->updateObjectToDb();
