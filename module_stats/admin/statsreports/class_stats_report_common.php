@@ -144,7 +144,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 */
 	public function getVisitors() {
 
-        $strQuery = "SELECT stats_ip , stats_browser, stats_date
+        $strQuery = "SELECT stats_ip , stats_browser
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date >= ?
 								AND stats_date <= ?
