@@ -19,7 +19,8 @@
  * @author sidler@mulchprod.de
  * @see class_logger
  */
-class class_module_system_changelog extends class_model implements interface_model  {
+class
+class_module_system_changelog extends class_model implements interface_model  {
 
     private static $arrOldValueCache = array();
 
@@ -202,7 +203,10 @@ class class_module_system_changelog extends class_model implements interface_mod
                 if(!$bitForceEntry && ($strOldvalue == $strNewvalue) )
                     continue;
 
-                class_logger::getInstance()->addLogRow("change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60), class_logger::$levelInfo);
+                class_logger::getInstance()->addLogRow(
+                    "change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60),
+                    class_logger::$levelInfo
+                );
 
                 $strQuery = "INSERT INTO "._dbprefix_."changelog
                      (change_id,
@@ -258,8 +262,16 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         $arrReturn = array();
         foreach($arrRows as $arrRow)
-            $arrReturn[] = new class_changelog_container($arrRow["change_date"], $arrRow["change_systemid"], $arrRow["change_user"],
-                           $arrRow["change_class"], $arrRow["change_action"], $arrRow["change_property"], $arrRow["change_oldvalue"], $arrRow["change_newvalue"]);
+            $arrReturn[] = new class_changelog_container(
+                $arrRow["change_date"],
+                $arrRow["change_systemid"],
+                $arrRow["change_user"],
+                $arrRow["change_class"],
+                $arrRow["change_action"],
+                $arrRow["change_property"],
+                $arrRow["change_oldvalue"],
+                $arrRow["change_newvalue"]
+            );
 
         return $arrReturn;
     }
@@ -333,8 +345,16 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         $arrReturn = array();
         foreach($arrRows as $arrRow)
-            $arrReturn[] = new class_changelog_container($arrRow["change_date"], $arrRow["change_systemid"], $arrRow["change_user"],
-                           $arrRow["change_class"], $arrRow["change_action"], $arrRow["change_property"], $arrRow["change_oldvalue"], $arrRow["change_newvalue"]);
+            $arrReturn[] = new class_changelog_container(
+                $arrRow["change_date"],
+                $arrRow["change_systemid"],
+                $arrRow["change_user"],
+                $arrRow["change_class"],
+                $arrRow["change_action"],
+                $arrRow["change_property"],
+                $arrRow["change_oldvalue"],
+                $arrRow["change_newvalue"]
+            );
 
         return $arrReturn;
     }
@@ -401,8 +421,6 @@ class class_module_system_changelog extends class_model implements interface_mod
     protected function updateStateToDb() {
         return true;
     }
-
-
 }
 
 
