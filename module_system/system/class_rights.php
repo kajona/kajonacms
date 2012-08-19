@@ -304,15 +304,15 @@ class class_rights {
 		$arrRow = $this->getPlainRightRow($strSystemid);
 
 		//Exploding the array
-		$arrReturn[self::$STR_RIGHT_VIEW]  = explode(",",$arrRow[self::$STR_RIGHT_VIEW]);
-		$arrReturn[self::$STR_RIGHT_EDIT]  = explode(",",$arrRow[self::$STR_RIGHT_EDIT]) ;
-		$arrReturn[self::$STR_RIGHT_DELETE] = explode(",",$arrRow[self::$STR_RIGHT_DELETE]);
-		$arrReturn[self::$STR_RIGHT_RIGHT] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT]);
-		$arrReturn[self::$STR_RIGHT_RIGHT1] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT1]);
-		$arrReturn[self::$STR_RIGHT_RIGHT2] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT2]);
-		$arrReturn[self::$STR_RIGHT_RIGHT3] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT3]);
-		$arrReturn[self::$STR_RIGHT_RIGHT4] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT4]);
-		$arrReturn[self::$STR_RIGHT_RIGHT5] = explode(",",$arrRow[self::$STR_RIGHT_RIGHT5]);
+		$arrReturn[self::$STR_RIGHT_VIEW]  = explode(",", $arrRow[self::$STR_RIGHT_VIEW]);
+		$arrReturn[self::$STR_RIGHT_EDIT]  = explode(",", $arrRow[self::$STR_RIGHT_EDIT]) ;
+		$arrReturn[self::$STR_RIGHT_DELETE] = explode(",", $arrRow[self::$STR_RIGHT_DELETE]);
+		$arrReturn[self::$STR_RIGHT_RIGHT] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT]);
+		$arrReturn[self::$STR_RIGHT_RIGHT1] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT1]);
+		$arrReturn[self::$STR_RIGHT_RIGHT2] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT2]);
+		$arrReturn[self::$STR_RIGHT_RIGHT3] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT3]);
+		$arrReturn[self::$STR_RIGHT_RIGHT4] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT4]);
+		$arrReturn[self::$STR_RIGHT_RIGHT5] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT5]);
 
 		$arrReturn[self::$STR_RIGHT_INHERIT] = (int)$arrRow[self::$STR_RIGHT_INHERIT];
 
@@ -506,7 +506,7 @@ class class_rights {
 
 	    //build a one-dim array
         $arrRights[self::$STR_RIGHT_VIEW]  = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
-        $arrRights[self::$STR_RIGHT_EDIT]  = implode(",", $arrRights[self::$STR_RIGHT_EDIT]) ;
+        $arrRights[self::$STR_RIGHT_EDIT]  = implode(",", $arrRights[self::$STR_RIGHT_EDIT]);
         $arrRights[self::$STR_RIGHT_DELETE] = implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
         $arrRights[self::$STR_RIGHT_RIGHT] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
         $arrRights[self::$STR_RIGHT_RIGHT1] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
@@ -552,7 +552,7 @@ class class_rights {
 
 	    //build a one-dim array
         $arrRights[self::$STR_RIGHT_VIEW]  = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
-        $arrRights[self::$STR_RIGHT_EDIT]  = implode(",", $arrRights[self::$STR_RIGHT_EDIT]) ;
+        $arrRights[self::$STR_RIGHT_EDIT]  = implode(",", $arrRights[self::$STR_RIGHT_EDIT]);
         $arrRights[self::$STR_RIGHT_DELETE] = implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
         $arrRights[self::$STR_RIGHT_RIGHT] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
         $arrRights[self::$STR_RIGHT_RIGHT1] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
