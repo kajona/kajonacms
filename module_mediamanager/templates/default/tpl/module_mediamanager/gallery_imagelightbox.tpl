@@ -51,11 +51,24 @@
             <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
         </tr>
         <tr class="portalListRow2">
-            <td><img src="[img,%%folder_preview_image_src%%,50,50]" /></td>
+            <td></td>
             <td class="description">%%folder_description%%</td>
         </tr>
     </table>
 </folderlist>
+
+<folderlist_preview>
+    <table cellspacing="0" class="portalList">
+        <tr class="portalListRow1">
+            <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.gif" /></td>
+            <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
+        </tr>
+        <tr class="portalListRow2">
+            <td><img src="[img,%%folder_preview_image_src%%,50,50]" /></td>
+            <td class="description">%%folder_description%%</td>
+        </tr>
+    </table>
+</folderlist_preview>
 
 <!-- the following section is used to wrap a list of files, e.g. in order to build a table.
      If you'd like to have a behaviour like rendering an unlimited list of files per row, use s.th.

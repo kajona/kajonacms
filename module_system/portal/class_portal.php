@@ -20,45 +20,49 @@ abstract class class_portal  {
      *
      * @var class_config
      */
-	protected $objConfig = null;			//Object containing config-data
-	/**
-	 * Instance of class_db
-	 *
-	 * @var class_db
-	 */
-	protected $objDB = null;				//Object to the database
-	/**
-	 * Instance of class_toolkit_portal
-	 *
-	 * @var class_toolkit_portal
-	 */
-	protected $objToolkit = null;			//Toolkit-Object
-	/**
-	 * Instance of class_session
-	 *
-	 * @var class_session
-	 */
-	protected $objSession = null;			//Object containing the session-management
-	/**
-	 * Instance of class_template
-	 *
-	 * @var class_template
-	 */
-	protected $objTemplate = null;			//Object to handle templates
+    protected $objConfig = null; //Object containing config-data
 
-	/**
-	 * Instance of class_lang
-	 *
-	 * @var class_lang
-	 */
-	private $objLang = null;				//Object managing the lang-files
+    /**
+     * Instance of class_db
+     *
+     * @var class_db
+     */
+    protected $objDB = null; //Object to the database
 
-	/**
-	 * Instance of class_module_system_common
-	 *
-	 * @var class_module_system_common
-	 */
-	private $objSystemCommon = null;
+    /**
+     * Instance of class_toolkit_portal
+     *
+     * @var class_toolkit_portal
+     */
+    protected $objToolkit = null; //Toolkit-Object
+
+    /**
+     * Instance of class_session
+     *
+     * @var class_session
+     */
+    protected $objSession = null; //Object containing the session-management
+
+    /**
+     * Instance of class_template
+     *
+     * @var class_template
+     */
+    protected $objTemplate = null; //Object to handle templates
+
+    /**
+     * Instance of class_lang
+     *
+     * @var class_lang
+     */
+    private $objLang = null; //Object managing the lang-files
+
+    /**
+     * Instance of class_module_system_common
+     *
+     * @var class_module_system_common
+     */
+    private $objSystemCommon = null;
 
     /**
      * Instance of the current modules' definition
@@ -67,13 +71,13 @@ abstract class class_portal  {
      */
     private $objModule = null;
 
-	private   $strAction;			        //current action to perform (GET/POST)
-	private   $strSystemid;			        //current systemid
-	private   $arrHistory;			        //Stack containing the 5 urls last visited
-	protected $arrModule = array();	        //Array containing info about the current module
-	protected $strTemplateArea;		        //String containing the current Area for the templateobject
-	protected $strOutput;
-	protected $arrElementData;
+    private   $strAction;			        //current action to perform (GET/POST)
+    private   $strSystemid;			        //current systemid
+    private   $arrHistory;			        //Stack containing the 5 urls last visited
+    protected $arrModule = array();	        //Array containing info about the current module
+    protected $strTemplateArea;		        //String containing the current Area for the templateobject
+    protected $strOutput;
+    protected $arrElementData;
 
     /**
      * Constructor
@@ -81,47 +85,47 @@ abstract class class_portal  {
      * @param array $arrElementData
      * @param string $strSystemid
      */
-	public function __construct($arrElementData = array(), $strSystemid = "") {
+    public function __construct($arrElementData = array(), $strSystemid = "") {
 
-		//Setting SystemID
-		if($strSystemid == "")
+        //Setting SystemID
+        if($strSystemid == "")
             $this->setSystemid(class_carrier::getInstance()->getParam("systemid"));
-		else
-			$this->setSystemid($strSystemid);
+        else
+            $this->setSystemid($strSystemid);
 
-		//Generating all the required objects. For this we use our cool cool carrier-object
-		//take care of loading just the necessary objects
-		$objCarrier = class_carrier::getInstance();
-		$this->objConfig = $objCarrier->getObjConfig();
-		$this->objDB = $objCarrier->getObjDB();
-	    $this->objToolkit = $objCarrier->getObjToolkit("portal");
-		$this->objSession = $objCarrier->getObjSession();
-	    $this->objLang = $objCarrier->getObjLang();
-	    $this->objTemplate = $objCarrier->getObjTemplate();
-		$this->objSystemCommon = new class_module_system_common($strSystemid);
+        //Generating all the required objects. For this we use our cool cool carrier-object
+        //take care of loading just the necessary objects
+        $objCarrier = class_carrier::getInstance();
+        $this->objConfig = $objCarrier->getObjConfig();
+        $this->objDB = $objCarrier->getObjDB();
+        $this->objToolkit = $objCarrier->getObjToolkit("portal");
+        $this->objSession = $objCarrier->getObjSession();
+        $this->objLang = $objCarrier->getObjLang();
+        $this->objTemplate = $objCarrier->getObjTemplate();
+        $this->objSystemCommon = new class_module_system_common($strSystemid);
 
-		//Writing to the history
+        //Writing to the history
         if(!_xmlLoader_)
             $this->setHistory();
 
-		//And keep the action
-		$this->strAction = $this->getParam("action");
+        //And keep the action
+        $this->strAction = $this->getParam("action");
         //in most cases, the list is the default action if no other action was passed
-		if($this->strAction == "")
-		    $this->strAction = "list";
+        if($this->strAction == "")
+            $this->strAction = "list";
 
-		//set the pagename
-		if($this->getParam("page") == "")
-		    $this->setParam("page", $this->getPagename());
+        //set the pagename
+        if($this->getParam("page") == "")
+            $this->setParam("page", $this->getPagename());
 
-		//set the correct language
+        //set the correct language
         $objLanguage = new class_module_languages_language();
         //set current language to the texts-object
         $this->objLang->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
         $this->arrElementData = $arrElementData;
 
-	}
+    }
 
 
     /**
@@ -214,72 +218,67 @@ abstract class class_portal  {
      * @param string $strKey Key
      * @param mixed $mixedValue Value
      */
-	public function setParam($strKey, $mixedValue) {
+    public function setParam($strKey, $mixedValue) {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
-//		$this->arrParams[$strKey] = $mixedValue;
-	}
-
-	/**
-	 * Returns a value from the params-Array
-	 *
-	 * @param string $strKey
-	 * @return string else ""
-	 */
-	public function getParam($strKey) {
-        return class_carrier::getInstance()->getParam($strKey);
-//		if(isset($this->arrParams[$strKey]))
-//			return $this->arrParams[$strKey];
-//		else
-//			return "";
-	}
-
-	/**
-	 * Returns the complete Params-Array
-	 *
-	 * @return mixed
-	 */
-	public final function getAllParams() {
-        return class_carrier::getAllParams();
-//	    return $this->arrParams;
-	}
-
-	/**
-	 * returns the action used for the current request
-	 *
-	 * @return string
-	 */
-	public final function getAction() {
-	    return (string)$this->strAction;
-	}
+    }
 
     /**
-	 * sets the action used for the current request
-	 *
+     * Returns a value from the params-Array
+     *
+     * @param string $strKey
+     *
+     * @return string else ""
+     */
+    public function getParam($strKey) {
+        return class_carrier::getInstance()->getParam($strKey);
+    }
+
+    /**
+     * Returns the complete Params-Array
+     *
+     * @return mixed
+     */
+    public final function getAllParams() {
+        return class_carrier::getAllParams();
+    }
+
+    /**
+     * returns the action used for the current request
+     *
+     * @return string
+     */
+    public final function getAction() {
+        return (string)$this->strAction;
+    }
+
+    /**
+     * sets the action used for the current request
+     *
      * @param string $strAction
-	 * @return string
-	 */
-	public final function setAction($strAction) {
-	    $this->strAction = $strAction;
-	}
+     *
+     * @return string
+     */
+    public final function setAction($strAction) {
+        $this->strAction = $strAction;
+    }
 
-// --- SystemID & System-Table Methods ------------------------------------------------------------------
 
-
-	/**
-	 * Sets the current SystemID
-	 *
-	 * @param string $strID
-	 * @return bool
-	 * @final
-	 */
-	public final function setSystemid($strID) {
-		if(validateSystemid($strID)) {
-			$this->strSystemid = $strID;
-			return true;
-		}
-		else
-			return false;
-	}
+    /**
+     * Sets the current SystemID
+     *
+     * @param string $strID
+     *
+     * @return bool
+     * @final
+     */
+    public final function setSystemid($strID) {
+        if(validateSystemid($strID)) {
+            $this->strSystemid = $strID;
+            return true;
+        }
+        else
+            return false;
+    }
 
 	/**
 	 * Returns the current SystemID
