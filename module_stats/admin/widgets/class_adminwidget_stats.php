@@ -128,12 +128,12 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
         }
         return $strReturn;
     }
-    
-    
+
+
     /**
      * Return a short (!) name of the widget.
      *
-     * @return 
+     * @return string
      */
     public function getWidgetName() {
         return $this->getLang("stats_name");

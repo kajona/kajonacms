@@ -15,57 +15,56 @@
  */
 class class_stats_report_common implements interface_admin_statsreports {
 
-	//class vars
-	private $intDateStart;
-	private $intDateEnd;
-	private $intInterval = 1;
+    //class vars
+    private $intDateStart;
+    private $intDateEnd;
+    private $intInterval = 1;
 
-	private $objTexts;
-	private $objToolkit;
-	private $objDB;
+    private $objTexts;
+    private $objToolkit;
+    private $objDB;
 
-	private $arrModule;
 
-	/**
-	 * Constructor
-	 *
-	 */
+    /**
+     * Constructor
+
+     */
     public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts) {
 
-		$this->objTexts = $objTexts;
-		$this->objToolkit = $objToolkit;
-		$this->objDB = $objDB;
+        $this->objTexts = $objTexts;
+        $this->objToolkit = $objToolkit;
+        $this->objDB = $objDB;
 
-		if (class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
-			@ini_set("memory_limit", "30M");
-	}
+        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
+            @ini_set("memory_limit", "30M");
+    }
 
-	public function setEndDate($intEndDate) {
-	    $this->intDateEnd = $intEndDate;
-	}
+    public function setEndDate($intEndDate) {
+        $this->intDateEnd = $intEndDate;
+    }
 
-	public function setStartDate($intStartDate) {
-	    $this->intDateStart = $intStartDate;
-	}
+    public function setStartDate($intStartDate) {
+        $this->intDateStart = $intStartDate;
+    }
 
-	public function getReportTitle() {
-	    return  $this->objTexts->getLang("allgemein", "stats");
-	}
+    public function getReportTitle() {
+        return $this->objTexts->getLang("allgemein", "stats");
+    }
 
-	public function getReportCommand() {
-	    return "statsCommon";
-	}
+    public function getReportCommand() {
+        return "statsCommon";
+    }
 
-	public function isIntervalable() {
-	    return true;
-	}
+    public function isIntervalable() {
+        return true;
+    }
 
-	public function setInterval($intInterval) {
-	    $this->intInterval = $intInterval;
-	}
+    public function setInterval($intInterval) {
+        $this->intInterval = $intInterval;
+    }
 
-	public function getReport() {
-	    $strReturn = "";
+    public function getReport() {
+        $strReturn = "";
 
         //Create Data-table
         $arrHeader = array();
@@ -98,63 +97,60 @@ class class_stats_report_common implements interface_admin_statsreports {
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
-	/**
-	 * Returns the number of hits
-	 *
-	 * @return int
-	 */
-	public function getHits() {
-		$strQuery = "SELECT count(*)
+    /**
+     * Returns the number of hits
+     *
+     * @return int
+     */
+    public function getHits() {
+        $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date >= ?
 						  AND stats_date <= ?";
 
-		$arrRow = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
-		$intReturn = $arrRow["count(*)"];
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
+        $intReturn = $arrRow["count(*)"];
 
-		return $intReturn;
-	}
+        return $intReturn;
+    }
 
-	/**
-	 * Returns the number of hits
-	 *
-	 * @param int $intStart
-	 * @param int $intEnd
-	 * @return array
-	 */
-	public function getHitsForOnePeriod($intStart, $intEnd) {
-		$strQuery = "SELECT stats_date, COUNT(*) as hits
+    /**
+     * Returns the number of hits
+     *
+     * @param int $intStart
+     * @param int $intEnd
+     *
+     * @return array
+     */
+    private function getHitsForOnePeriod($intStart, $intEnd) {
+        $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date >= ?
-								AND stats_date <= ?
-						GROUP BY stats_date
-						ORDER BY stats_date ASC";
+								AND stats_date <= ?";
 
-		$arrTemp = $this->objDB->getPArray($strQuery, array($intStart, $intEnd));
-		return $arrTemp;
-	}
+        $arrTemp = $this->objDB->getPRow($strQuery, array($intStart, $intEnd));
+        return $arrTemp["COUNT(*)"];
+    }
 
-	/**
-	 * Returns the number of visitors
-	 *
-	 * @return int
-	 */
-	public function getVisitors() {
+    /**
+     * Returns the number of visitors
+     *
+     * @return int
+     */
+    public function getVisitors() {
 
         $strQuery = "SELECT stats_ip , stats_browser
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date >= ?
 								AND stats_date <= ?
-						GROUP BY stats_ip, stats_browser
-						ORDER BY stats_date ASC";
-        
-		$arrRows = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
-		$intReturn = count($arrRows);
-		return $intReturn;
-	}
+						GROUP BY stats_ip, stats_browser";
+
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
+        return count($arrRows);
+    }
 
 
     /**
@@ -165,55 +161,54 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return array
      */
-	private function getVisitorsForOnePeriod($intStart, $intEnd) {
-		$strQuery = "SELECT stats_ip , stats_browser, stats_date
+    private function getVisitorsForOnePeriod($intStart, $intEnd) {
+        $strQuery = "SELECT stats_ip, stats_browser
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date >= ?
 								AND stats_date <= ?
-						GROUP BY stats_ip, stats_browser
-						ORDER BY stats_date ASC";
-		$arrTemp = $this->objDB->getPArray($strQuery, array($intStart, $intEnd));
-		return $arrTemp;
-	}
+						GROUP BY stats_ip, stats_browser";
+        $arrTemp = $this->objDB->getPArray($strQuery, array($intStart, $intEnd));
+        return count($arrTemp);
+    }
 
-	/**
-	 * Returns the average number of pages per visit
-	 *
-	 * @return int
-	 */
-	private function getPagesPerVisit() {
-		$intReturn = 0;
-		$intUser = $this->getVisitors();
-		$intHits = $this->getHits();
+    /**
+     * Returns the average number of pages per visit
+     *
+     * @return int
+     */
+    private function getPagesPerVisit() {
+        $intReturn = 0;
+        $intUser = $this->getVisitors();
+        $intHits = $this->getHits();
 
-		if($intHits != 0)
-			$intReturn = (int)($intHits/$intUser);
+        if($intHits != 0)
+            $intReturn = (int)($intHits / $intUser);
 
-		return $intReturn;
-	}
+        return $intReturn;
+    }
 
-	/**
-	 * Returns the number of useres currently online browsing the portal
-	 *
-	 * @return int
-	 */
-	public function getNumberOfCurrentUsers() {
-		$strQuery = "SELECT stats_ip, stats_browser, count(*)
+    /**
+     * Returns the number of useres currently online browsing the portal
+     *
+     * @return int
+     */
+    public function getNumberOfCurrentUsers() {
+        $strQuery = "SELECT stats_ip, stats_browser, count(*)
 					  FROM "._dbprefix_."stats_data
 					  WHERE stats_date >= ?
 					  GROUP BY stats_ip, stats_browser";
 
-		$arrRow = $this->objDB->getPArray($strQuery, array(time() - _stats_duration_online_));
+        $arrRow = $this->objDB->getPArray($strQuery, array(time() - _stats_duration_online_));
 
-		return count($arrRow);
-	}
+        return count($arrRow);
+    }
 
-	/**
-	 * Returns the average time a user spent on the site
-	 *
-	 * @return int
-	 */
-	private function getTimePerVisit() {
+    /**
+     * Returns the average time a user spent on the site
+     *
+     * @return int
+     */
+    private function getTimePerVisit() {
         $strQuery = "SELECT MAX(stats_date) as max,
                             MIN(stats_date) as min,
                             MAX(stats_date)-MIN(stats_date) as dauer,
@@ -236,63 +231,35 @@ class class_stats_report_common implements interface_admin_statsreports {
         }
         else
             return "0";
-	}
+    }
 
-	public function getReportGraph() {
-		//load datasets, reloading after 30 days to limit memory consumption
-		$arrHits = array();
-		$arrUser = array();
-		$arrTickLabels = array();
-
-		$intDaysPerLoad = 10;
+    public function getReportGraph() {
+        //load datasets, reloading after 30 days to limit memory consumption
+        $arrHits = array();
+        $arrUser = array();
+        $arrTickLabels = array();
 
         //create tick labels
         $intCount = 0;
-        $intStart = $this->intDateStart;
         $intDBStart = $this->intDateStart;
-        $intDBEnd = ($intDBStart+$intDaysPerLoad*24*60*60);
-
-        $arrHitsTotal = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
-        $arrUserTotal = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
-
-		while($intStart <= $this->intDateEnd) {
-
-			$arrTickLabels[$intCount] = date("d.m.", $intStart);
-			$arrHits[$intCount] = 0;
-			$arrUser[$intCount] = 0;
-
-			//reload hits?
-			if(($intStart+24*60*60*$this->intInterval) > $intDBEnd ) {
-			    //reload arrays
-			    $intDBStart = $intStart;
-			    $intDBEnd = ($intStart+$intDaysPerLoad*24*60*60);
-			    $arrHitsTotal = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
-                $arrUserTotal = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
-
-			    //IMPORTANT: Flush query cache to avoid max mem errors
-			    $this->objDB->flushQueryCache();
-			}
-
-			foreach($arrHitsTotal as $arrOneKey => $arrOneHit) {
-			    if($arrOneHit["stats_date"] >= $intStart && $arrOneHit["stats_date"] < ($intStart+24*60*60*$this->intInterval)) {
-			        $arrHits[$intCount] += $arrOneHit["hits"];
-			    }
-			}
-
-			foreach($arrUserTotal as $arrOneKey => $arrOneUser) {
-			    if($arrOneUser["stats_date"] >= $intStart && $arrOneUser["stats_date"] < ($intStart+24*60*60*$this->intInterval)) {
-			        $arrUser[$intCount] += 1;
-			    }
-			}
-
-			//load the next interval
-			$intStart += 24*60*60*$this->intInterval;
-			$intCount++;
-		}
+        $intDBEnd = ($intDBStart + $this->intInterval * 24 * 60 * 60);
 
 
-		//create a graph ->line-graph
-		if($intCount > 1) {
+        while($intDBStart <= $this->intDateEnd) {
+
+            $arrTickLabels[$intCount] = date("d.m.", $intDBStart);
+            $arrHits[$intCount] = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
+            $arrUser[$intCount] = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
+
+            $intDBStart = $intDBEnd;
+            $intDBEnd = ($intDBStart + $this->intInterval * 24 * 60 * 60);
+
+            $this->objDB->flushQueryCache();
+            $intCount++;
+        }
+
+        //create a graph ->line-graph
+        if($intCount > 1) {
 
 
             $objChart1 = class_graph_factory::getGraphInstance();
@@ -319,9 +286,9 @@ class class_stats_report_common implements interface_admin_statsreports {
 
             return array($objChart1->renderGraph(), $objChart2->renderGraph());
 
-		}
-		else
-		  return "";
-	}
+        }
+        else
+            return "";
+    }
 
 }
