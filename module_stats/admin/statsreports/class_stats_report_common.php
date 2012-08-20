@@ -112,7 +112,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 						  AND stats_date <= ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
-        $intReturn = $arrRow["count(*)"];
+        $intReturn = $arrRow["COUNT(*)"];
 
         return $intReturn;
     }
