@@ -77,11 +77,11 @@ class class_exception extends Exception {
             $strMailtext .= "User: ".  class_carrier::getInstance()->getObjSession()->getUserID()." (".class_carrier::getInstance()->getObjSession()->getUsername().")\n";
             $strMailtext .= "Source host: ".getServer("REMOTE_ADDR")." (".@gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
             $strMailtext .= "Query string: ".getServer("REQUEST_URI")."\n";
-			$strMailtext .= "POST data (selective):\n";
-            foreach ($arrPostParams as $strParam) {
-            	if (getPost($strParam) != "") {
-            		$strMailtext .= "\t".$strParam.": ".getPost($strParam)."\n";
-            	}
+            $strMailtext .= "POST data (selective):\n";
+            foreach($arrPostParams as $strParam) {
+                if(getPost($strParam) != "") {
+                    $strMailtext .= "\t".$strParam.": ".getPost($strParam)."\n";
+                }
             }
             $strMailtext .= "\n\n";
             $strMailtext .= "Last actions called:\n";
@@ -124,17 +124,17 @@ class class_exception extends Exception {
             }
             else {
                 $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px;  \">\n";
-    		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
+                $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
                 $strErrormessage .= htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false)."<br />";
 
                 $strErrormessage .= "Please inform the administration about the error above.";
-    	        $strErrormessage .= "</div></body></html>";
+                $strErrormessage .= "</div></body></html>";
 
             }
             print $strErrormessage;
-	        //Execution has to be stopped here!
+            //Execution has to be stopped here!
             class_response_object::getInstance()->sendHeaders();
-	        die();
+            die();
         }
         elseif ($this->intErrorlevel == class_exception::$level_ERROR) {
             //handle regular errors
@@ -150,16 +150,16 @@ class class_exception extends Exception {
                 }
                 else {
                     $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
-        		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
+                    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
                     $strErrormessage .= htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false)."<br />";
-        		    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
+                    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
 
-    	            $strErrormessage .= "Please inform the administration about the error above.";
-        	        $strErrormessage .= "</div></body></html>";
+                    $strErrormessage .= "Please inform the administration about the error above.";
+                    $strErrormessage .= "</div></body></html>";
                 }
-    	        print $strErrormessage;
-    	        //if error was displayed, stop execution
-//    	        die();
+                print $strErrormessage;
+                //if error was displayed, stop execution
+                //die();
             }
         }
 

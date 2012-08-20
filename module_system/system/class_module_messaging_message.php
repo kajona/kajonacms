@@ -185,15 +185,12 @@ class class_module_messaging_message extends class_model implements interface_mo
     public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
 
         $arrParams = array($strUserid);
-        if($bitOnlyUnread)
-            $arrParams[] = 0;
 
         $strQuery = "SELECT COUNT(*)
-                     FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
+                     FROM "._dbprefix_."messages, "._dbprefix_."system
 		            WHERE system_id = message_id
 		              AND message_user = ?
-		              ".($bitOnlyUnread ? " AND message_read = ? " : "")."
-		              AND system_date_id = system_id";
+		              ".($bitOnlyUnread ? " AND message_read IS NULL " : "")."";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];

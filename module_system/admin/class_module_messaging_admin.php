@@ -104,25 +104,27 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
 
     /**
-	 * Returns a list of the languages
-	 *
-	 * @return string
+     * Returns a list of the languages
+     *
+     * @return string
      * @permissions view
      * @autoTestable
-	 */
-	protected function actionList() {
+     */
+    protected function actionList() {
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_messaging_message::getMessagesForUser(
-            $this->objSession->getUserID(),
-            $objArraySectionIterator->calculateStartPos(),
-            $objArraySectionIterator->calculateEndPos()
-        ));
+        $objArraySectionIterator->setArraySection(
+            class_module_messaging_message::getMessagesForUser(
+                $this->objSession->getUserID(),
+                $objArraySectionIterator->calculateStartPos(),
+                $objArraySectionIterator->calculateEndPos()
+            )
+        );
 
         return $this->renderList($objArraySectionIterator);
 
-	}
+    }
 
     /**
      * @return string
@@ -147,7 +149,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
      * @return string
      * @permissions view
      */
-	protected function actionView() {
+    protected function actionView() {
         $objMessage = new class_module_messaging_message($this->getSystemid());
 
         if($objMessage->getStrUser() == $this->objSession->getUserID()) {
@@ -167,7 +169,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         else
             return $this->getLang("commons_error_permissions");
 
-	}
+    }
 
 
     /**
