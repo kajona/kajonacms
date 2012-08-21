@@ -186,11 +186,12 @@ class class_module_messaging_message extends class_model implements interface_mo
 
         $arrParams = array($strUserid);
 
+
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."messages, "._dbprefix_."system
 		            WHERE system_id = message_id
 		              AND message_user = ?
-		              ".($bitOnlyUnread ? " AND message_read IS NULL " : "")."";
+		              ".($bitOnlyUnread ? " AND (message_read IS NULL OR message_read = 0 )" : "")."";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
