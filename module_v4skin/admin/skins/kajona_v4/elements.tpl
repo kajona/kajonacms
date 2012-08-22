@@ -1028,7 +1028,7 @@ The language switch surrounds the buttons
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
 <dialogContainer>
-    <div class="modal hide" id="%%dialog_id%%">
+    <div class="modal hide fade" id="%%dialog_id%%">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="%%dialog_id%%">×</button>
             <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
@@ -1040,7 +1040,7 @@ The language switch surrounds the buttons
 </dialogContainer>
 
 <dialogConfirmationContainer>
-    <div class="modal hide" id="%%dialog_id%%">
+    <div class="modal hide fade" id="%%dialog_id%%">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">×</button>
             <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
@@ -1056,7 +1056,7 @@ The language switch surrounds the buttons
 </dialogConfirmationContainer>
 
 <dialogLoadingContainer>
-    <div class="modal hide" id="%%dialog_id%%" style="width: 100px;">
+    <div class="modal hide fade" id="%%dialog_id%%" style="width: 100px;">
         <div class="modal-header">
             <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
         </div>

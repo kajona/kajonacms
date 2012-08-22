@@ -479,7 +479,7 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
 
     if($strOnClick == "") {
         if($intWidth !== null && $intHeight !== null)
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init('".$intWidth."px', '".$intHeight."px'); return false;";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
         else
             $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
     }

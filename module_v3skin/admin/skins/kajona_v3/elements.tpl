@@ -702,9 +702,8 @@ pe_iconbar, pe_disable
         }
     </style>
 
-	<div class="peDialog" id="peDialog">
-	    <div class="hd" id="peDialog_title">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
-	    <div class="bd" id="peDialog_content">
+	<div class="peDialog" id="peDialog" title="PORTALEDITOR">
+	    <div class="bd dialogContent" id="peDialog_content" >
 	        <!-- filled by js -->
 	    </div>
 	</div>
@@ -944,40 +943,31 @@ The language switch surrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
-<dialogContainer><div class="dialog" id="%%dialog_id%%">
-	<div class="hd"><div class="c"><h3 id="%%dialog_id%%_title"><!-- filled by js --></h3></div></div>
-	<div class="bd">
+<dialogContainer><div class="dialog" id="%%dialog_id%%" title="" width="465">
+
 		<div class="c" id="%%dialog_id%%_content">
 			<!-- filled by js -->
 		</div>
-	</div>
-	<div class="ft"><div class="c"></div></div>
+
 </div></dialogContainer>
 
-<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
-	<div class="hd"><div class="c"><h3 id="%%dialog_id%%_title"><!-- filled by js --></h3></div></div>
-	<div class="bd">
-		<div class="c">
-			<span id="%%dialog_id%%_content"><!-- filled by js --></span><br /><br />
+<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%" title="" width="465">
+
+			<span id="%%dialog_id%%_content" class="dialogContent"><!-- filled by js --></span><br /><br />
 			<input type="submit" name="%%dialog_id%%_confirmButton" id="%%dialog_id%%_confirmButton" value="confirm" class="inputSubmit" /> <input type="submit" name="%%dialog_id%%_cancelButton" id="%%dialog_id%%_cancelButton" value="%%dialog_cancelButton%%" class="inputSubmitShort" onclick="jsDialog_1.hide(); return false;" />
 			<br />
-		</div>
-	</div>
-	<div class="ft"><div class="c"></div></div>
+
 </div></dialogConfirmationContainer>
 
-<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%" style="width: 100px;">
-    <div class="hd"><div class="c"><h3 id="%%dialog_id%%_title">%%dialog_title%%</h3></div></div>
-    <div class="bd">
-        <div class="c" style="margin-left: 45px;">
+<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%" style="width: 100px;" title="">
+        <div class="c dialogContent" style="margin-left: 45px;">
             <div id="dialogLoadingDiv" class="loadingContainer"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
-    </div>
     <div class="ft"><div class="c"></div></div>
 </div></dialogLoadingContainer>
 
-<dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>
+<dialogRawContainer><div class="dialog" id="%%dialog_id%%" title="" width="465"><span id="%%dialog_id%%_content" class="dialogContent"><!-- filled by js --></span></div></dialogRawContainer>
 
 
 

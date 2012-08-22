@@ -255,13 +255,15 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminDialog("pages",
-                                                   "pagesFolderBrowser",
-                                                   "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
-                                                   class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-                                                   class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-                                                   "icon_externalBrowser.gif",
-                                                   class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"));
+        $arrTemplate["opener"] = getLinkAdminDialog(
+            "pages",
+            "pagesFolderBrowser",
+            "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
+            class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
+            class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
+            "icon_externalBrowser.gif",
+            class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
+        );
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
@@ -312,13 +314,15 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminDialog("user",
-                                              "userBrowser",
-                                               "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
-                                               class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
-                                               class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
-                                               "icon_externalBrowser.gif",
-                                               class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"));
+        $arrTemplate["opener"] = getLinkAdminDialog(
+            "user",
+            "userBrowser",
+            "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
+            class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
+            class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
+            "icon_externalBrowser.gif",
+            class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
+        );
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
@@ -383,13 +387,15 @@ class class_toolkit_admin extends class_toolkit {
      * @since 3.3.4
      */
     public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "inputText") {
-        $strOpener = getLinkAdminDialog("mediamanager",
-										"folderContentFolderviewMode",
-										"&form_element=".$strName."&systemid=".$strRepositoryId,
-										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-										"icon_externalBrowser.gif",
-										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"));
+        $strOpener = getLinkAdminDialog(
+            "mediamanager",
+            "folderContentFolderviewMode",
+            "&form_element=".$strName."&systemid=".$strRepositoryId,
+            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            "icon_externalBrowser.gif",
+            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
+        );
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
@@ -408,29 +414,34 @@ class class_toolkit_admin extends class_toolkit {
      * @since 3.4.0
      */
     public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
-        $strOpener = getLinkAdminDialog("mediamanager",
-										"folderContentFolderviewMode",
-										"&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
-										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-										"icon_externalBrowser.gif",
-										class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"));
+        $strOpener = getLinkAdminDialog(
+            "mediamanager",
+            "folderContentFolderviewMode",
+            "&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
+            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            "icon_externalBrowser.gif",
+            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
+        );
 
-        $strOpener .= " ".getLinkAdminDialog("mediamanager",
-                                         "imageDetails",
-                                         "file='+document.getElementById('".$strName."').value+'",
-                                         class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
-                                         class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
-                                         "icon_crop.gif",
-                                         class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
-                                         true, false,
-                                         " (function() {
-                                             if(document.getElementById('".$strName."').value != '') {
-                                                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'")."');
-                                                 KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
-                                                 KAJONA.admin.folderview.dialog.init();
-                                             }
-                                             return false; })(); return false;");
+        $strOpener .= " ".getLinkAdminDialog(
+            "mediamanager",
+            "imageDetails",
+            "file='+document.getElementById('".$strName."').value+'",
+            class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
+            class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
+            "icon_crop.gif",
+            class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
+            true,
+            false,
+            " (function() {
+             if(document.getElementById('".$strName."').value != '') {
+                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'")."');
+                 KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
+                 KAJONA.admin.folderview.dialog.init();
+             }
+             return false; })(); return false;"
+        );
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
@@ -1661,8 +1672,10 @@ class class_toolkit_admin extends class_toolkit {
 
             //and create the java-script
             $strContent .="<script type=\"text/javascript\">
-                KAJONA.admin.loader.loadDialogBase();
-                var jsDialog_".$intDialogType." = new KAJONA.admin.ModalDialog('".$strContainerId."', ".$intDialogType.");
+                var jsDialog_".$intDialogType." = null;
+                KAJONA.admin.loader.loadFile('_skinwebpath_/js/kajona_dialog.js', function() {
+                    jsDialog_".$intDialogType." = new KAJONA.admin.ModalDialog('".$strContainerId."', ".$intDialogType.");
+                }, true);
             </script>";
         }
 

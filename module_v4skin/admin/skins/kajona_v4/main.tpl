@@ -23,69 +23,7 @@
 
     <script>
 
-    /**
-      * Object to show a modal dialog
-      */
-     KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bitResizing) {
-     	this.dialog;
-     	this.containerId = strDialogId;
-     	this.iframeId;
-        this.iframeURL;
 
-     	this.setTitle = function (strTitle) {
-            $('#' + this.containerId + '_title').html(strTitle);
-     	};
-
-     	this.setContent = function (strContent, strConfirmButton, strLinkHref) {
-     		if (intDialogType == 1) {
-                $('#' + this.containerId + '_content').html(strContent);
-
-     			var $confirmButton = $('#' + this.containerId + '_confirmButton');
-                $confirmButton.val(strConfirmButton);
-                $confirmButton.click(function() {
-     				window.location = strLinkHref;
-     				return false;
-     			});
-     		}
-     	};
-
-     	this.setContentRaw = function(strContent) {
-            $('#' + this.containerId + '_content').html(strContent);
-     	};
-
-     	this.setContentIFrame = function(strUrl) {
-     		this.iframeId = this.containerId + '_iframe';
-            this.iframeURL = strUrl;
-      	};
-
-     	this.init = function(intWidth, intHeight) {
-            $('#' + this.containerId).modal({
-                keyboard: false,
-                show: true
-            });
-
-            if(this.iframeURL != null) {
-                $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="100%" name="' + this.iframeId + '" id="' + this.iframeId + '"></iframe>');
-                this.iframeURL = null;
-            }
-
-     		//TODO: dynamically loading of dragdrop/resize files
-     		if (bitDragging) {
-     			this.enableDragging();
-     		}
-     		if (bitResizing) {
-     			this.enableResizing();
-     		}
-     	};
-
-     	this.hide = function() {
-            $('#' + this.containerId).modal('hide');
-     	};
-
-     	this.enableDragging = function() {};
-
-     	this.enableResizing = function() {};
-     };
     </script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -373,6 +311,26 @@
 
     });
 
+</script>
+
+
+
+
+<div class="modal hide fade" id="folderviewDialog" role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>BROWSER</h3>
+    </div>
+    <div class="modal-body">
+        <div id="folderviewDialog_content"><!-- filled by js --></div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
+        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
+    }, true);
 </script>
 </body>
 </html>

@@ -1367,6 +1367,27 @@ ul.ui-autocomplete {
 
 
 /* Dialog classes */
+
+.ui-dialog-titlebar {
+    background-image: none;
+    background-color: #C4F3C4;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.ui-dialog iframe {
+    border: none;
+}
+
+.ui-widget {
+    font-size: 1em;
+}
+
+.dialogContent {
+    height: 470px;
+}
+
 /* based on http://www.schillmania.com/content/projects/even-more-rounded-corners/ */
 .dialog {
     display: block;
@@ -1432,124 +1453,7 @@ ul.ui-autocomplete {
     overflow: auto;
 }
 
-/* IE6 fixes for dialog */
-* html .dialog {
-	background-color: #ffffff;
-	border: 2px solid #00e800;
-}
 
-* html .dialog .hd .c,
-* html .dialog .ft .c {
-	height:auto;
-}
-
-* html .dialog .hd {
-	background-image: none;
-	margin-right:0px; /* space for right corner */
-}
-
-* html .dialog .hd .c {
-	background-image: none;
-	margin-right:0px; /* pull right corner back over "empty" space (from above margin) */
-}
-
-* html .dialog .hd .c h3 {
-	padding-top: 5px;
-	padding-bottom: 10px;
-}
-
-* html .dialog .bd {
-	background-image: none;
- 	margin-right:0px;
-}
-
-* html .dialog .bd .c {
-	background-image: none;
-	margin:0px 10px 10px 10px;
-	padding-right: 0px;
-	padding-bottom: 20px;
-}
-
-* html .dialog .ft {
-	background-image: none;
-	margin-right:0px;
-}
-
-* html .dialog .ft .c {
-	background-image: none;
-	background-color: #ffffff;
-	margin-right:0px;
-}
-
-
-.yui-overlay,
-.yui-panel-container {
-    visibility:hidden;
-    position:absolute;
-    z-index: 2;
-}
-
-.mask {
-    z-index: 1;
-    display:none;
-    position:absolute;
-    top:0;
-    left:0;
-    -moz-opacity: 0.2;
-    opacity:.20;
-    filter: alpha(opacity=20);
-    background-color:#000000;
-}
-
-.yui-panel-container.show-scrollbars {
-    overflow: visible;
-}
-
-.yui-panel-container.show-scrollbars .underlay {
-    overflow: auto;
-}
-
-/* Panel underlay styles */
-
-.yui-panel-container .underlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-}
-
-.yui-panel-container.matte {
-    padding: 3px;
-    background-color: #fff;
-}
-
-
-/*
-   Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
-   the Panel's content changes, to force Safari 2.x to redraw the underlay.
-   We attempt to choose a CSS property which has no visual impact when added,
-   removed, but still causes Safari to redraw
-*/
-.yui-panel-container.shadow .underlay.yui-force-redraw {
-    padding-bottom: 1px;
-}
-
-.yui-effect-fade .underlay {
-    display:none;
-}
-
-.yui-panel {
-    visibility:hidden;
-    border-collapse:separate;
-    position:relative;
-    left:0;
-    top:0;
-    border:none;
-    z-index:1 !important;
-    overflow:hidden;
-}
 
 /* Image Cropper */
 .folderview_image_details td.first {
@@ -1581,19 +1485,6 @@ ul.ui-autocomplete {
     padding-right: 2px;
 }
 
-.yui-resize-handle {
-    background-color: #FFFFFF;
-}
-
-.yui-crop-resize-mask {
-    border: 1px dashed #FFFFFF;
-}
-
-.yui-crop .yui-crop-mask {
-    background-color: #000;
-    opacity: .5;
-    filter: alpha(opacity=50);
-}
 
 .yui-resize-status {
     background-color: #CCCCCC;

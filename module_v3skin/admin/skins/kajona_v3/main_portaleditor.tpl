@@ -36,9 +36,9 @@
 </div>
 
 <script type="text/javascript">
-    KAJONA.admin.loader.loadDialogBase(function() {
+    KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
         KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
-    });
+    }, true);
 </script>
 
 </body>

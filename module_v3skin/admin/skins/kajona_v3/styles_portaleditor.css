@@ -177,6 +177,28 @@
 
 
 /* DIALOG */
+
+.ui-dialog-titlebar {
+    background-image: none;
+    background-color: #C4F3C4;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.ui-dialog iframe {
+    border: none;
+}
+
+.ui-widget {
+    font-size: 1em;
+}
+
+.dialogContent {
+    height:100%;
+}
+
+
 .peDialog {
     display: none;
     position: absolute;

@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<link rel="stylesheet" href="_webpath_/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
 	<link rel="stylesheet" href="_skinwebpath_/styles.css?_system_browser_cachebuster_" type="text/css" />
     <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
@@ -108,17 +109,16 @@
     });
 </script>
 
-<div class="folderviewDialog" id="folderviewDialog">
-    <div class="hd"><span id="folderviewDialog_title">BROWSER</span><div class="close"><a href="#" onclick="KAJONA.admin.folderview.dialog.hide(); KAJONA.admin.folderview.dialog.setContentRaw(''); return false;">X</a></div></div>
-    <div class="bd" id="folderviewDialog_content">
+<div class="folderviewDialog" id="folderviewDialog" title="BROWSER">
+    <div id="folderviewDialog_content" class="dialogContent">
         <!-- filled by js -->
     </div>
 </div>
 
 <script type="text/javascript">
-    KAJONA.admin.loader.loadDialogBase(function() {
-    	KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
-    });
+    KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
+        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
+    }, true );
 </script>
 </body>
 </html>
