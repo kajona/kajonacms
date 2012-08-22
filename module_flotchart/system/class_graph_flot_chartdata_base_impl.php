@@ -25,19 +25,20 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         $xaxis = "xaxis: { tickFormatter:function(val, axis) {return  flotHelper.getTickFormatter(".$this->intXAxisAngle.", val)}, 
                            axisLabel: '" . $this->strXAxisTitle . "',
                            axisLabelUseCanvas: true, 
-                           axisLabelPadding:30
+                           axisLabelPadding:15,
+                           axisLabelFontFamily:'".$this->strFont."'
                         }";
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
                             axisLabelUseCanvas: true, 
-                            axisLabelPadding:8
+                            axisLabelPadding:15,
+                            axisLabelFontFamily:'".$this->strFont."'
                         }";
 
         $legend = "legend: {show:".$this->bShowLegend."}";
         
         $hoverable = "grid: { hoverable: true, 
-                                clickable: true,
-                                backgroundColor:'".$this->strBackgroundColor."',
-                                color:'".$this->strFontColor."'    
+                              clickable: true,
+                              backgroundColor:'".$this->strBackgroundColor."'   
                             }";
 
 
@@ -53,13 +54,13 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
     public function showChartToolTips($strChartId) {
         $tooltip =
                 "<script type='text/javascript'>
-                    function showTooltip(x, y, contents) {
+                    function showTooltip(x, y, contents, z) {
                         $('<div id=\"tooltip\">' + contents + '</div>').css( {
                             position: 'absolute',
                             display: 'none',
                             top: y + 5,
                             left: x + 5,
-                            border: '1px solid #fdd',
+                            border: '2px solid '+z,
                             padding: '2px',
                             'background-color': '#fee',
                             opacity: 0.80
@@ -78,10 +79,11 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
 
                                 $(\"#tooltip\").remove();
                                 var x = item.datapoint[0].toFixed(2),
-                                    y = item.datapoint[1].toFixed(2);
+                                    y = item.datapoint[1].toFixed(2),
+                                    z = item.series.color;
 
                                 showTooltip(item.pageX, item.pageY,
-                                            item.series.label + \" of \" + x + \" = \" + y);
+                                            '<b>'+item.series.label+'</b><br/>' + x + ' = ' + y, z);
                             }
                         }
                         else {

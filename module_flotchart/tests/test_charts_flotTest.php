@@ -42,11 +42,6 @@ class class_test_charts_flotTest extends class_testbase  {
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
-        $objGraph->getObjChartData()->formatLabels("font-size:11px ;text-align:center; padding:2px; color:white");
-        $objGraph->getObjChartData()->show3d();
-        $objGraph->getObjChartData()->showLabelBackground();
-        $objGraph->getObjChartData()->setPieChartRaduis(0.8);
-        $objGraph->getObjChartData()->setLablesInsidePieChart(0.6);
         $objGraph->setBitRenderLegend(false);
         echo $objGraph->renderGraph();
         

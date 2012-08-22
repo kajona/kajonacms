@@ -19,13 +19,14 @@
 class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_base {
 
     protected $bShowLabels = true;
-    protected $labelStyleSheets = "";
-    protected $dLabelRadius = 1;
-    protected $dTilt = 1;
-    protected $dLabelBackroundOpacity = 0;
+    protected $labelStyleSheets = "font-size:11px ;text-align:center; padding:2px; color:white";
+    protected $dLabelRadius = 0.6;
+    protected $dTilt = 0.7;
+    protected $dLabelBackroundOpacity = 0.8;
     protected $dPieChartRaduis = 1;
 
-   
+    
+    
     public function optionsToJSON() {
         //disaply pie chart
         $series = "
@@ -53,9 +54,9 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
         $hoverable = "
             grid: { 
                 hoverable: true, 
-                clickable: true 
+                clickable: true,
+                backgroundColor:'".$this->strBackgroundColor."'
             }";
-        
         
         $options = "";
         $options.=$series . ",";

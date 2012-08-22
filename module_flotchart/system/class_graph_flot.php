@@ -36,7 +36,7 @@ class class_graph_flot implements interface_graph {
     private $bShowLegend = true;
     private $strGraphTitle = "";
     private $strBackgroundColor="#FFFFFF";
-    private $strFont = "";
+    private $strFont = "Verdana, Arial, Helvetica, sans-serifs";
     private $strFontColor ="#000000";
     
     
@@ -185,7 +185,7 @@ class class_graph_flot implements interface_graph {
         $strChartCode = $this->objChartData->showGraph($strChartId);
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "\t <div id=\"" . $strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
+        $strReturn = "\t <div id=\"" . $strChartId . "\" style=\"font-size:11px; font-family:".$this->strFont."; width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
 
         //TODO: eventually create all required css-code based on the current properties. this would make the request to flot.css obsolete
 
