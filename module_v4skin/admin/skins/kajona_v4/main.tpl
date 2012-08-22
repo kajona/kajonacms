@@ -17,7 +17,6 @@
 
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?_system_browser_cachebuster_"></script>
     %%head%%
     <script src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
 
@@ -272,33 +271,6 @@
             $newThumb.find('.number').html(i);
             $('.gallery').append($newThumb);
         }
-
-        // init general drag&drop ordering
-        $('.sortable').each(function () {
-            var $oneSortable = $(this);
-        
-            var handle = $oneSortable.data('sortable-handle');
-            var $handle = $oneSortable.find(handle ? '* > ' + handle : 'li');
-            $handle.css('cursor', 'move');
-            $handle.disableSelection();
-
-            $oneSortable.sortable({
-                handle: handle,
-                stop: function (event, ui) {
-                    var $item = ui.item;
-                    var systemId = $item.data('systemid');
-
-                    var position = $item.index();
-                    console.log('[sortable] new position', systemId, position);
-
-                    //TODO why do we need strIdOfList and strTargetModule? Both should be already stored on the server-side, or?
-                    //KAJONA.admin.ajax.setAbsolutePosition(systemId, position, strIdOfList, objCallback, strTargetModule);
-                },
-                delay: isTouchDevice() ? 2000 : 0
-            });
-        });
-
-
 
         // init popovers & tooltips
         $('#content a[rel=popover]').popover();

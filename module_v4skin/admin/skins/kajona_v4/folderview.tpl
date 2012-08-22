@@ -4,7 +4,6 @@
 <head>
 	<link rel="stylesheet" href="_skinwebpath_/styles.css?_system_browser_cachebuster_" type="text/css" />
     <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?_system_browser_cachebuster_"></script>
     %%head%%
 	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
 	<title>Kajona³ admin [%%moduletitle%%]</title>

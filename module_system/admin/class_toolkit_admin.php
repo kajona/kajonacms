@@ -639,8 +639,8 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false) {
         $strId = generateSystemid();
-        $strCallbackVisible = "function() {YAHOO.util.Dom.addClass('".$strId."', 'optionalElementsWrapperVisible'); }";
-        $strCallbackInvisible = "function() {YAHOO.util.Dom.removeClass('".$strId."', 'optionalElementsWrapperVisible'); }";
+        $strCallbackVisible = "function() { $('#".$strId."').addClass('optionalElementsWrapperVisible'); }";
+        $strCallbackInvisible = "function() { $('#".$strId."').removeClass('optionalElementsWrapperVisible'); }";
         $arrFolder = $this->getLayoutFolder($strContent, "<img src=\""._skinwebpath_."/pics/icon_folderClosed.gif\" alt=\"\" /> ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
         return "<br /><div id=\"".$strId."\" class=\"optionalElementsWrapper".($bitVisible ? " optionalElementsWrapperVisible" : "")."\">".$this->getFieldset($arrFolder[1], $arrFolder[0])."</div>";
     }
@@ -1524,11 +1524,21 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if($intCurrentpage < $intNrOfPages)
-            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                                                                                 "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID);
+            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
+                array(
+                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
+                    "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))
+                ),
+                $strTemplateForwardID
+            );
         if($intCurrentpage > 1)
-            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                                                                                  "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID);
+            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
+                array(
+                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
+                    "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))
+                ),
+                $strTemplateBackwardID
+            );
 
 
         $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
@@ -1540,12 +1550,11 @@ class class_toolkit_admin extends class_toolkit {
     // --- Adminwidget / Dashboard --------------------------------------------------------------------------
 
 
-    public function getMainDashboard($arrColumn) {
-        $strReturn = "<table class=\"dashBoard\"><tr>";
-        foreach ($arrColumn as $strOneColumn)
-            $strReturn .= "<td>".$strOneColumn."</td>";
-        $strReturn .= "</tr></table>";
-        return $strReturn;
+    public function getMainDashboard($arrColumns) {
+        return $this->objTemplate->fillTemplate(
+            array("entries" => implode("", $arrColumns)),
+            $this->objTemplate->readTemplate("/elements.tpl", "dashboard_wrapper")
+        );
     }
 
     /**

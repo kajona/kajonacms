@@ -388,12 +388,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
                         if($this->getParam("execute") == "true") {
                             $strTaskOutput = "
                                 <script type=\"text/javascript\">
-                                $(document).ready(function() {
-                                   KAJONA.admin.loader.loadDialogBase( function() {
-                                       KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-                                       KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
-                                    })
-                                 })   ;
+                                $(function() {
+                                   KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+                                   KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
+                                 });
                                 </script>";
                         }
                         else {

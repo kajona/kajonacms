@@ -10,23 +10,26 @@
  */
 KAJONA.admin.calendar = {};
 KAJONA.admin.calendar.showCalendar = function(strCalendarId, strCalendarContainerId, objButton) {
-    KAJONA.util.fold(strCalendarContainerId, function() {
-        //positioning the calendar container
-        var btnRegion = YAHOO.util.Region.getRegion(objButton);
-        YAHOO.util.Dom.setStyle(strCalendarContainerId, "left", btnRegion.left+"px");
+    KAJONA.admin.loader.loadFile(["/core/module_v3skin/admin/skins/kajona_v3/js/yui/yuiloader-dom-event/yuiloader-dom-event.js"], function() {
+        KAJONA.util.fold(strCalendarContainerId, function() {
+            //positioning the calendar container
+            var btnRegion = YAHOO.util.Region.getRegion(objButton);
+            YAHOO.util.Dom.setStyle(strCalendarContainerId, "left", btnRegion.left+"px");
 
-        //show nice loading animation while loading the calendar files
-        YAHOO.util.Dom.addClass(strCalendarContainerId, "loadingContainer");
+            //show nice loading animation while loading the calendar files
+            YAHOO.util.Dom.addClass(strCalendarContainerId, "loadingContainer");
 
 
-        KAJONA.admin.loader.loadFile([
-            "/core/module_v3skin/admin/skins/kajona_v3/js/yui/calendar/calendar-min.js",
-            "/core/module_v3skin/admin/skins/kajona_v3/js/yui/calendar/assets/calendar.css"
-        ], function() {
-            KAJONA.admin.calendar.initCalendar(strCalendarId, strCalendarContainerId);
-            YAHOO.util.Dom.removeClass(strCalendarContainerId, "loadingContainer");
+            KAJONA.admin.loader.loadFile([
+                "/core/module_v3skin/admin/skins/kajona_v3/js/yui/calendar/calendar-min.js",
+                "/core/module_v3skin/admin/skins/kajona_v3/js/yui/calendar/assets/calendar.css"
+            ], function() {
+                KAJONA.admin.calendar.initCalendar(strCalendarId, strCalendarContainerId);
+                YAHOO.util.Dom.removeClass(strCalendarContainerId, "loadingContainer");
+            });
         });
     });
+
 };
 
 KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContainerId) {

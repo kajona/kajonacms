@@ -28,7 +28,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     $(function() {
         var oldPos = null;
         $('#%%listid%%').sortable( {
-            items: 'tbody:has(tr[id!=""])',
+            items: 'tbody:has(tr[data-systemid!=""])',
             cursor: 'move',
             forcePlaceholderSize: true,
             placeholder: 'group_move_placeholder',
@@ -40,23 +40,24 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
                     var intOffset = 1;
                     //see, of there are nodes not being sortable - would lead to another offset
                     $('#%%listid%% > tbody').each(function(index) {
-                        if($(this).find('tr').attr('id') == "")
+                        if($(this).find('tr').data('systemid') == "")
                             intOffset--;
-                        if($(this).find('tr').attr('id') == ui.item.find('tr').attr('id'))
+                        if($(this).find('tr').data('systemid') == ui.item.find('tr').data('systemid'))
                             return false;
                     });
                     //console.log('move from '+(oldPos+intOffset)+'to'+(ui.item.index()+intOffset ))
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').attr('id'), ui.item.index()+intOffset, null, null, '%%targetModule%%');
+                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset, null, null, '%%targetModule%%');
                 }
                 oldPos = 0;
-            }
+            },
+            delay: isTouchDevice() ? 2000 : 0
         });
         $('#%%listid%% > tbody:has(tr[id!=""]) > tr').each(function(index) {
             $(this).css('cursor', 'move');
         });
     });
 </script>
-<style>.group_move_placeholder { display: table-row; } </style>
+<style>.group_move_placeholder { display: table-row } </style>
 <table id="%%listid%%" class="table table-striped">
 </dragable_list_header>
 
@@ -75,7 +76,7 @@ It is responsible for rendering the different admin-lists.
 Currently, there are two modes: with and without a description.
 <generallist_1>
     <tbody>
-        <tr id="%%listitemid%%" class="generalListSet1">
+        <tr data-systemid="%%listitemid%%" class="generalListSet1">
             <td >%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -87,7 +88,7 @@ Currently, there are two modes: with and without a description.
 
 <generallist_2>
     <tbody>
-        <tr id="%%listitemid%%" class="generalListSet2">
+        <tr data-systemid="%%listitemid%%" class="generalListSet2">
             <td >%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -99,7 +100,7 @@ Currently, there are two modes: with and without a description.
 
 <generallist_desc_1>
     <tbody class="generalListSet1">
-        <tr id="%%listitemid%%">
+        <tr data-systemid="%%listitemid%%">
             <td rowspan="2">%%checkbox%%</td>
             <td rowspan="2" class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -114,7 +115,7 @@ Currently, there are two modes: with and without a description.
 
 <generallist_desc_2>
     <tbody class="generalListSet2">
-        <tr id="%%listitemid%%">
+        <tr data-systemid="%%listitemid%%">
             <td rowspan="2">%%checkbox%%</td>
             <td rowspan="2" class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -842,9 +843,9 @@ pe_iconbar, pe_disable
 	<script type="text/javascript">
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "%%pe_dialog_close_warning%%";
-		YAHOO.util.Event.onDOMReady(function () {
+        KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
-		});
+		}, true);
 	</script>
 
     <div id="peToolbar" style="display: none;">
@@ -999,22 +1000,22 @@ The language switch surrounds the buttons
 //TODO %%widget_id%% is not needed anymore
 <adminwidget_widget>
     <h2>%%widget_name%%</h2>
-    <div class="actions">%%widget_edit%% %%widget_delete%%</div>
+    <div class="adminwidget actions">%%widget_edit%% %%widget_delete%%</div>
     <div class="content loadingContainer">
         %%widget_content%%
     </div>
 </adminwidget_widget>
 
 <dashboard_column_header>
-	<ul id="%%column_id%%" class="adminwidgetColumn sortable" data-sortable-handle="h2">
+	<td><ul id="%%column_id%%" class="adminwidgetColumn" data-sortable-handle="h2">
 </dashboard_column_header>
 
 <dashboard_column_footer>
-	</ul>
+	</ul></td>
 </dashboard_column_footer>
 
 <dashboard_encloser>
-	<li data-systemid="%%entryid%%">%%content%%</li>
+	<li class="dbEntry" data-systemid="%%entryid%%">%%content%%</li>
 </dashboard_encloser>
 
 <adminwidget_text>
@@ -1024,6 +1025,38 @@ The language switch surrounds the buttons
 <adminwidget_separator>
 &nbsp;<br />
 </adminwidget_separator>
+
+<dashboard_wrapper>
+    <table class="dashBoard"><tr>%%entries%%</tr></table>
+
+    <script type="text/javascript">
+        $("ul.adminwidgetColumn").each(function(index) {
+
+            $(this).sortable({
+                items: 'li.dbEntry',
+                handle: 'h2',
+                forcePlaceholderSize: true,
+                cursor: 'move',
+                connectWith: '.adminwidgetColumn',
+                stop: function(event, ui) {
+                    //search list for new pos
+                    var intPos = 0;
+                    $(".dbEntry").each(function(index) {
+                        intPos++;
+                        if($(this).data("systemid") == ui.item.data("systemid")) {
+                            console.log("new pos: "+intPos);
+                            console.log("colum: "+ui.item.closest('ul').attr('id'));
+                            KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", ui.item.data("systemid") + "&listPos=" + intPos+"&listId="+ui.item.closest('ul').attr('id'), KAJONA.admin.ajax.regularCallback)
+                            return false;
+                        }
+                    });
+                },
+                delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+            }).find("h2").css("cursor", "move");
+        });
+    </script>
+
+</dashboard_wrapper>
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
@@ -1323,7 +1356,7 @@ It containes a list of aspects and provides the possibility to switch the differ
           KAJONA.admin.contextMenu.addElements('%%id%%', [%%entries%%]);
          })();
     </script>
-    <div id="menuContainer_%%id%%" class="yui-skin-sam"></div>
+    <div id="menuContainer_%%id%%"></div>
 </contextmenu_wrapper>
 
 

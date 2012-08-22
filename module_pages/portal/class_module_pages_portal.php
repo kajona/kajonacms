@@ -402,12 +402,10 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
     		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
                 $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
-    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
-                $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.loadPortaleditorBase();</script>";
-                $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";
-                $strPeToolbar .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor_ie.css\"]);</script><![endif]-->";
+                $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.loadFile([\""._skinwebpath_."/styles_portaleditor.css\"], null, true);</script>";
+                $strPeToolbar .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">KAJONA.admin.loader.loadFile([\""._skinwebpath_."/styles_portaleditor_ie.css\"], null, true);</script><![endif]-->";
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
 
 //TODO: temporary poc hallo integration, cleanup required, move to external loader
@@ -446,7 +444,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 //Button to enable the toolbar & pe
                 $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">".getImageAdmin("icon_disabled.gif", $this->getLang("pe_enable", "pages"))."</a></div>";
     		    //Load YUI and portaleditor javascript
-    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
     		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";

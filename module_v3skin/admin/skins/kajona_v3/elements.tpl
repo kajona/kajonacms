@@ -711,14 +711,14 @@ pe_iconbar, pe_disable
 	<script type="text/javascript">
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "%%pe_dialog_close_warning%%";
-        $(function() {
+        KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
 
             $('[rel="tooltip"]').each(function(index) {
                 KAJONA.admin.tooltip.add(this);
             });
             KAJONA.admin.tooltip.hide();
-        });
+        }, true);
 
 	</script>
 
@@ -889,48 +889,35 @@ The language switch surrounds the buttons
 
 <adminwidget_widget>
     <div class="adminwidget">
-            <div class="hd ddHandle">
-                <div class="title">%%widget_name%%</div>
-                <div class="c">%%widget_edit%% %%widget_delete%%</div>
-                <div class="clear"></div>
-            </div>
-            <div class="bd">
-                <div class="c">
-                    <div id="p_widget_%%widget_id%%" >
-                        <div class="loadingContainer content">%%widget_content%%</div>
-                    </div>
+        <div class="hd ddHandle">
+            <div class="title">%%widget_name%%</div>
+            <div class="c">%%widget_edit%% %%widget_delete%%</div>
+            <div class="clear"></div>
+        </div>
+        <div class="bd">
+            <div class="c">
+                <div id="p_widget_%%widget_id%%" >
+                    <div class="loadingContainer content">%%widget_content%%</div>
                 </div>
             </div>
-            <div class="ft">
-                <div class="c"></div>
-            </div>
+        </div>
+        <div class="ft">
+            <div class="c"></div>
+        </div>
     </div>
 </adminwidget_widget>
 
 <dashboard_column_header>
 	<br />
-	<script type="text/javascript">
-	    KAJONA.admin.loader.loadDragNDropBase(function () {
-	        KAJONA.admin.loader.loadDragNDropBase(function() {
-                KAJONA.admin.dragndroplistDashboard.DDApp.init();
-            }, "dragdrophelper_li.js");
-	    });
-    	if(arrayListIds == null) {
-            var arrayListIds = new Array("%%column_id%%");
-        } else {
-            arrayListIds[(arrayListIds.length +0)] = "%%column_id%%";
-		}
-	</script>
-
-	<ul id="%%column_id%%" class="adminwidgetColumn">
+	<td><ul id="%%column_id%%" class="adminwidgetColumn">
 </dashboard_column_header>
 
 <dashboard_column_footer>
-	</ul>
+	</ul></td>
 </dashboard_column_footer>
 
 <dashboard_encloser>
-	<li id="%%entryid%%" data-systemid="%%entryid%%" style="padding: 0; margin: 0;">%%content%%</li>
+	<li id="%%entryid%%" class="dbEntry" data-systemid="%%entryid%%" style="padding: 0; margin: 0;">%%content%%</li>
 </dashboard_encloser>
 
 <adminwidget_text>
@@ -940,6 +927,33 @@ The language switch surrounds the buttons
 <adminwidget_separator>
 &nbsp;<br />
 </adminwidget_separator>
+
+<dashboard_wrapper>
+    <table class="dashBoard"><tr>%%entries%%</tr></table>
+
+    <script type="text/javascript">
+        $("ul.adminwidgetColumn").each(function(index) {
+
+            $(this).sortable({
+                items: 'li.dbEntry',
+                handle: '.ddHandle',
+                connectWith: '.adminwidgetColumn',
+                stop: function(event, ui) {
+                    //search list for new pos
+                    var intPos = 0;
+                    $(".dbEntry").each(function(index) {
+                        intPos++;
+                        if($(this).data("systemid") == ui.item.data("systemid")) {
+                            KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", ui.item.data("systemid") + "&listPos=" + intPos+"&listId="+ui.item.closest('ul').attr('id'), KAJONA.admin.ajax.regularCallback)
+                            return false;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+</dashboard_wrapper>
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------

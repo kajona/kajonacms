@@ -20,46 +20,48 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
     private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
 
         $this->setArrModuleEntry("modul", "dashboard");
         $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
 
-	/**
-	 * saves the new position of a widget on the dashboard.
-	 * updates the sorting AND the assigned colum
-	 *
-	 * @return string
-	 */
-	protected function actionSetDashboardPosition() {
-	    $strReturn = "";
+    /**
+     * saves the new position of a widget on the dashboard.
+     * updates the sorting AND the assigned colum
+     *
+     * @return string
+     */
+    protected function actionSetDashboardPosition() {
+        $strReturn = "";
 
         $objWidget = new class_module_dashboard_widget($this->getSystemid());
-		//check permissions
-		if($objWidget->rightEdit()) {
-		    $intNewPos = $this->getParam("listPos");
-		    $strNewColumn = $this->getParam("listId");
-		    if($intNewPos != "")
+        //check permissions
+        if($objWidget->rightEdit()) {
+            $intNewPos = $this->getParam("listPos");
+            $objWidget->setStrColumn($this->getParam("listId"));
+            $objWidget->updateObjectToDb();
+            $this->objDB->flushQueryCache();
+
+            $objWidget = new class_module_dashboard_widget($this->getSystemid());
+            if($intNewPos != "")
                 $objWidget->setAbsolutePosition($intNewPos);
 
-		    $objWidget->setStrColumn($strNewColumn);
-		    $objWidget->updateObjectToDb();
 
-		    $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
-		}
-		else {
+            $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
+        }
+        else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
-		    $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
-	}
+    }
 
     /**
      * Renderes the content of a single widget.
@@ -84,15 +86,13 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
-		    $strReturn = "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+            $strReturn = "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
     }
 
     /**
-     *
-     *
      * @return string
      * @permissions view
      */
@@ -154,9 +154,13 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
             if($objDate->getIntMonth() == $intCurMonth) {
                 //Query modules for dates
                 $objStartDate = clone $objDate;
-                $objStartDate->setIntHour(0);$objStartDate->setIntMin(0);$objStartDate->setIntSec(0);
+                $objStartDate->setIntHour(0);
+                $objStartDate->setIntMin(0);
+                $objStartDate->setIntSec(0);
                 $objEndDate = clone $objDate;
-                $objEndDate->setIntHour(23);$objEndDate->setIntMin(59);$objEndDate->setIntSec(59);
+                $objEndDate->setIntHour(23);
+                $objEndDate->setIntMin(59);
+                $objEndDate->setIntSec(59);
                 foreach($arrRelevantModules as $objOneModule) {
                     $arrEvents = array_merge($objOneModule->getArrCalendarEntries($objStartDate, $objEndDate), $arrEvents);
                 }
@@ -191,7 +195,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
             }
 
             $bitBlocked = false;
-            if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6 )
+            if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6)
                 $bitBlocked = true;
 
             $strToday = "";
