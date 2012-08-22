@@ -24,6 +24,8 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->addLinePlot(array(4,3,2,1), "serie 4");
         $objGraph->setBitRenderLegend(false);
         $objGraph->setIntXAxisAngle(-20);
+        $objGraph->setStrXAxisTitle("XXX");
+        $objGraph->setStrYAxisTitle("YYY");
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
@@ -46,7 +48,6 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->getObjChartData()->setPieChartRaduis(0.8);
         $objGraph->getObjChartData()->setLablesInsidePieChart(0.6);
         $objGraph->setBitRenderLegend(false);
-        //$objGraph->getObjChartData()->disableLabels();
         echo $objGraph->renderGraph();
         
         echo"<br/>";
