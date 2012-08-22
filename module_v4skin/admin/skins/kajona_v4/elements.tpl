@@ -771,7 +771,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 </path_container>
 
 <path_entry>
-    <li>
+    <li class="pathentry">
         %%pathlink%%
     </li>
 </path_entry>
@@ -1352,12 +1352,18 @@ It containes a list of aspects and provides the possibility to switch the differ
 ---------------------------------------------------------------------------------------------------------
 -- MENU -------------------------------------------------------------------------------------------------
 <contextmenu_wrapper>
-    <script type="text/javascript"> (function() {
-          KAJONA.admin.contextMenu.addElements('%%id%%', [%%entries%%]);
-         })();
-    </script>
-    <div id="menuContainer_%%id%%"></div>
+
+    <div class="dropdown-menu generalContextMenu" role="menu">
+        <ul >
+            %%entries%%
+        </ul>
+    </div>
+
 </contextmenu_wrapper>
+
+<contextmenu_entry>
+    <li ><a href="#" onclick="%%elementAction%%">%%elementName%%</a></li>
+</contextmenu_entry>
 
 
 ---------------------------------------------------------------------------------------------------------

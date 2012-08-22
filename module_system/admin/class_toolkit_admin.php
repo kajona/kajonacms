@@ -2117,9 +2117,17 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function registerMenu($strIdentifier, $arrEntries) {
+        $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry");
         $strEntries = "";
         foreach($arrEntries as $arrOneEntry)
-            $strEntries .= "{elementName:'".$arrOneEntry["name"]."', elementAction:'".uniStrReplace("'", "\'", $arrOneEntry["onclick"])."'},";
+            $strEntries .= $this->objTemplate->fillTemplate(
+                array(
+                    "elementName" => $arrOneEntry["name"],
+                    "elementAction" => $arrOneEntry["onclick"],
+                    "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"])
+                ),
+                $strTemplateEntryID
+            );
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_wrapper");
         $arrTemplate = array();

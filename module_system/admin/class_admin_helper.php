@@ -43,10 +43,12 @@ class class_admin_helper {
 
 
         if(isset($arrPathEntries[1]))
-            $arrPathEntries[1] = "<a href=\"#\" onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a> ".$arrPathEntries[1];
+            $arrPathEntries[1] = "
+                    <span class='dropdown'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
+                    ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>
+                    ".$arrPathEntries[1];
 
-        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries).
-           class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries);
+        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries);
 
     }
 

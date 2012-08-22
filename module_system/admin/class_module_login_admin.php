@@ -13,62 +13,62 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_module_login_admin extends class_admin implements interface_admin  {
+class class_module_login_admin extends class_admin implements interface_admin {
 
-	public function __construct() {
+    public function __construct() {
 
         $this->setArrModuleEntry("modul", "login");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
         $this->setArrModuleEntry("template", "/login.tpl");
 
-		parent::__construct();
+        parent::__construct();
 
         if($this->getAction() != "pwdReset" || $this->getAction() != "adminLogin" || $this->getAction() != "adminLogout")
             $this->setAction("login");
-	}
+    }
 
-
-	/**
-	 * Creates a small login-field
-	 *
-	 * @return string
-	 */
-	protected function actionLogin() {
-
-		//Save the requested URL
-		if($this->getParam("loginerror") == "")
-		    $this->objSession->setSession("loginReferer", getServer("QUERY_STRING"));
-
-		//Loading a small login-form
-		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
-		$arrTemplate = array();
-		$strForm = "";
-		$strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "adminLogin"));
-		$strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
-		$strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
-		$strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"), "", "", "inputSubmitShort");
-		$strForm .= $this->objToolkit->formClose();
-		$arrTemplate["form"] = $strForm;
-		$arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
-		$arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
-		$arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
-		//An error occurred?
-		if($this->getParam("loginerror") == 1)
-			$arrTemplate["error"] = $this->getLang("login_loginError", "user");
-
-		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-
-
-		return $strReturn;
-	}
 
     /**
-	 * Creates a form in order to change the password - if the authcode is valid
-	 *
-	 * @return string
-	 */
-	protected function actionPwdReset() {
-		$strReturn = "";
+     * Creates a small login-field
+     *
+     * @return string
+     */
+    protected function actionLogin() {
+
+        //Save the requested URL
+        if($this->getParam("loginerror") == "")
+            $this->objSession->setSession("loginReferer", getServer("QUERY_STRING"));
+
+        //Loading a small login-form
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
+        $arrTemplate = array();
+        $strForm = "";
+        $strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "adminLogin"));
+        $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
+        $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
+        $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"), "", "", "inputSubmitShort");
+        $strForm .= $this->objToolkit->formClose();
+        $arrTemplate["form"] = $strForm;
+        $arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
+        $arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
+        $arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
+        //An error occurred?
+        if($this->getParam("loginerror") == 1)
+            $arrTemplate["error"] = $this->getLang("login_loginError", "user");
+
+        $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+
+
+        return $strReturn;
+    }
+
+    /**
+     * Creates a form in order to change the password - if the authcode is valid
+     *
+     * @return string
+     */
+    protected function actionPwdReset() {
+        $strReturn = "";
 
         if(!validateSystemid($this->getParam("systemid")))
             return $this->getLang("login_change_error", "user");
@@ -106,7 +106,7 @@ class class_module_login_admin extends class_admin implements interface_admin  {
                 $strPass1 = trim($this->getParam("password1"));
                 $strPass2 = trim($this->getParam("password2"));
 
-                if($strPass1 == $strPass2 && checkText($strPass1, 3, 200) && $objUser->getStrUsername() == $this->getParam("username") ) {
+                if($strPass1 == $strPass2 && checkText($strPass1, 3, 200) && $objUser->getStrUsername() == $this->getParam("username")) {
                     if($objUser->getObjSourceUser()->isPasswortResetable() && method_exists($objUser->getObjSourceUser(), "setStrPass")) {
                         $objUser->getObjSourceUser()->setStrPass($strPass1);
                         $objUser->getObjSourceUser()->updateObjectToDb();
@@ -125,72 +125,71 @@ class class_module_login_admin extends class_admin implements interface_admin  {
             $strReturn .= $this->getLang("login_change_error", "user");
 
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
      * Returns a skin based info-box about the current users' login-status.
      *
      * @return string
      */
-	public function getLoginStatus() {
-		$arrTemplate = array();
-		$arrTemplate["name"] = $this->objSession->getUsername();
-		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
-		$arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
-		$arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
-		$arrTemplate["sitemap"] = getLinkAdminHref("dashboard", "sitemap");
-		$arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
-		$arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
-		$arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
-		$arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
-		$arrTemplate["sitemapTitle"] = $this->getLang("login_sitemap", "user");
-		$arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getLang("login_printview", "user"));
+    public function getLoginStatus() {
+        $arrTemplate = array();
+        $arrTemplate["name"] = $this->objSession->getUsername();
+        $arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
+        $arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
+        $arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
+        $arrTemplate["sitemap"] = getLinkAdminHref("dashboard", "sitemap");
+        $arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
+        $arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
+        $arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
+        $arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
+        $arrTemplate["sitemapTitle"] = $this->getLang("login_sitemap", "user");
+        $arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getLang("login_printview", "user"));
 
-		return $this->objToolkit->getLoginStatus($arrTemplate);
-	}
+        return $this->objToolkit->getLoginStatus($arrTemplate);
+    }
 
     /**
      * Generates the form to fetch the credentials required to authenticate a user
      *
      * @return string
      */
-	protected function actionAdminLogin() {
+    protected function actionAdminLogin() {
 
-		if($this->objSession->login($this->getParam("name"), $this->getParam("passwort"))) {
-		    //user allowed to access admin?
-		    if(!$this->objSession->isAdmin()) {
-		        //no, reset session
-		        $this->objSession->logout();
-		    }
-			//save the current skin as a cookie
-    	    $objCookie = new class_cookie();
-    		$objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
-    		$objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
-    		//any url to redirect?
-    		if($this->objSession->getSession("loginReferer") != "")
-			    class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession("loginReferer"));
-			else
+        if($this->objSession->login($this->getParam("name"), $this->getParam("passwort"))) {
+            //user allowed to access admin?
+            if(!$this->objSession->isAdmin()) {
+                //no, reset session
+                $this->objSession->logout();
+            }
+            //save the current skin as a cookie
+            $objCookie = new class_cookie();
+            $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
+            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
+            //any url to redirect?
+            if($this->objSession->getSession("loginReferer") != "")
+                class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession("loginReferer"));
+            else
                 class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
 
 
-			return true;
-		}
-		else {
+            return true;
+        }
+        else {
             class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1&loginerror=1");
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
     /**
-	 * Ends the session of the current user and
+     * Ends the session of the current user and
      * redirects back to the login-screen
-	 *
-	 */
-	protected function actionAdminlogout() {
-		$this->objSession->logout();
-        class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
-	}
 
+     */
+    protected function actionAdminlogout() {
+        $this->objSession->logout();
+        class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
+    }
 
 }

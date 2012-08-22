@@ -74,6 +74,38 @@ body {
     }
 }
 
+.generalContextMenu {
+    background:none @white !important;
+    border: 1px solid #d2d2d2 !important;
+    left: auto !important;
+    top: auto !important;
+
+    li::before {
+        background: none !important;
+    }
+
+    li {
+        display: block;
+    }
+
+    a {
+        color:#626262 !important;
+        padding: 2px !important;
+        text-transform: none;
+    }
+
+    a:hover {
+        color:@green !important;
+    }
+
+    a.dropdown-toggle {
+        background:none;
+    }
+
+    &:hover .dropdown-menu {
+        display: block;
+    }
+}
 
 #content .form-actions {
     position: fixed;
@@ -239,7 +271,7 @@ body {
     padding: 7px 14px 7px 14px;
     height:19px;
 
-    li {
+    li.pathentry {
         text-shadow:none;
         color:@white;
         font-weight:700;
@@ -252,14 +284,14 @@ body {
         color:@white;
     }
 
-    li:first-child a {
+    li.pathentry:first-child a {
         background: url(../img/icon-home.png) 0px 0px no-repeat;
         padding-left: 18px;
         padding-top: 16px;
         .hide-text();
     }
 
-    li:before {
+    li.pathentry:before {
         content: '.';
         color: transparent;
         background: url(../img/icon-arrow-right.png) center center no-repeat @grayDarker;
@@ -269,7 +301,7 @@ body {
         padding: 0 5px;
     }
 
-    li:first-child:before {
+    li.pathentry:first-child:before {
         display: none;
     }
 }

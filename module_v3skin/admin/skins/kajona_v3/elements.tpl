@@ -1230,6 +1230,9 @@ It containes a list of aspects and provides the possibility to switch the differ
     </script>
 </contextmenu_wrapper>
 
+<contextmenu_entry>
+    {elementName:'%%elementName%%', elementAction:'%%elementActionEscaped%%'},
+</contextmenu_entry>
 
 
 
