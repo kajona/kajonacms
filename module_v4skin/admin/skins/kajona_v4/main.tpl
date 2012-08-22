@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- TODO: integrate locally -->
-    <link href="http://fonts.googleapis.com/css?family=Dosis:500,700" rel="stylesheet">
-
     <meta charset="utf-8">
     <title>Kajona admin [%%webpathTitle%%]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
