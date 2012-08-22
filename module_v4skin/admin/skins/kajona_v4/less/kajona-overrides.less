@@ -170,7 +170,7 @@ body {
 		background:none;
 		text-transform:uppercase;
 	 font-weight:700;
-		font-size:20px;
+		font-size:@baseFontSize + 4;
 		color:#888;
 		height:24px;
 }
@@ -212,7 +212,7 @@ body {
 		color:#626262;
 		text-shadow:none;
 		padding: 3px 7px 2px 7px;
-		font-size:15px;
+		font-size:@baseFontSize - 1;
 }
 
 #icon-lupe {
@@ -243,7 +243,7 @@ body {
         text-shadow:none;
         color:@white;
         font-weight:700;
-        font-size:16px;
+        font-size:@baseFontSize;
         text-transform:uppercase;
     }
 
@@ -305,7 +305,7 @@ btn {
   color: #333333;
   cursor: pointer;
   display: inline-block;
-  font-size: 16px;
+  font-size: @baseFontSize;
   line-height: 20px;
   margin-bottom: 0;
   padding: 4px 10px;
@@ -331,7 +331,7 @@ btn {
   color: #888888;
   cursor: pointer;
   display: block;
-  font-size: 18px;
+  font-size: @baseFontSize + 2;
   line-height: 20px;
   margin-bottom: 0;
   padding:0px;
@@ -345,7 +345,7 @@ btn {
 
 #cancelglobal {
   margin-top:1px;
-		font-size:16px;
+		font-size:@baseFontSize;
 }
 
 #savechanges:hover, #cancelglobal:hover {
@@ -395,7 +395,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
   color: @gray;
   display: inline-block;
-  font-size: 16px;
+  font-size: @baseFontSize;
   height: 20px;
   line-height: 20px;
   margin-bottom: 9px;
@@ -464,7 +464,7 @@ label {
   color: @white;
 		background-color:@grayDarker;
   display: block;
-  font-size: 18px;
+  font-size: @baseFontSize + 2;
   font-weight: 700;
   line-height: 20px;
   padding: 6px 15px;
@@ -476,7 +476,7 @@ label {
   padding: 6px 15px;
 		background-color:#e5e5e5;
 		margin-bottom:1px;
-		font-size:18px;
+		font-size:@baseFontSize + 2;
 		color:#626262;
   border-color:@green;
   border-style: solid;
@@ -517,7 +517,7 @@ li.open a.dropdown-toggle {
         color: @white;
         display: block;
         font-weight: normal;
-        font-size:18px;
+        font-size:@baseFontSize + 2;
         line-height: 20px;
         padding: 4px 15px;
         white-space: nowrap;
@@ -579,7 +579,7 @@ li.open a.dropdown-toggle {
 
 .jstree ul li a {
 		font-family:Dosis, Helvetica, Arial, sans-serif !important;
-		font-size:20px;
+		font-size:@baseFontSize + 4;
   color: @gray;
   display: inline-block;
   height: 30px;
