@@ -25,22 +25,7 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
     protected $dLabelBackroundOpacity = 0;
     protected $dPieChartRaduis = 1;
 
-    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        //pie chart has no x-Axis
-    }
-
-    public function setIntXAxisAngle($intXAxisAngle) {
-        //pie chart has no y-Axis
-    }
-
-    public function setStrXAxisTitle($strTitle) {
-        //pie chart has no x-Axis
-    }
-
-    public function setStrYAxisTitle($strTitle) {
-        //pie chart has no y-Axis
-    }
-
+   
     public function optionsToJSON() {
         //disaply pie chart
         $series = "

@@ -27,6 +27,18 @@ class class_graph_flot implements interface_graph {
     private $intWidth = 600;
     private $intHeight = 350;
     
+    //line and barchart
+    private $strXAxisTitle = "";
+    private $strYAxisTitle = "";
+    private $intXAxisAngle = 0;
+    
+    //line char, bar chart, pie chart
+    private $bShowLegend = true;
+    private $strGraphTitle = "";
+    private $strBackgroundColor="#FFFFFF";
+    private $strFont = "";
+    private $strFontColor ="#000000";
+    
     
     /**
     * Constructor
@@ -95,16 +107,13 @@ class class_graph_flot implements interface_graph {
 
     public function saveGraph($strFilename) {
         $this->objChartData->saveGraph($strFilename);
-        
     }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
-        //$this->objChartData->setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels);
     }
 
     public function setBitRenderLegend($bitRenderLegend) {
-        $this->objChartData->setBitRenderLegend($bitRenderLegend);
+        $this->bShowLegend = $bitRenderLegend;
     }
 
     public function setIntHeight($intHeight) {
@@ -116,38 +125,35 @@ class class_graph_flot implements interface_graph {
     }
 
     public function setIntXAxisAngle($intXAxisAngle) {
-        $this->objChartData->setIntXAxisAngle($intXAxisAngle);
+        $this->intXAxisAngle = $intXAxisAngle;
     }
-
+    
     public function setStrBackgroundColor($strColor) {
-        $this->objChartData->setStrBackgroundColor($strColor);
+        $this->strBackgroundColor = $strColor;
     }
 
     public function setStrFont($strFont) {
-        $this->objChartData->setStrFont($strFont);
+        $this->strFont = $strFont;
     }
 
     public function setStrFontColor($strFontColor) {
-        $this->objChartData->setStrFontColor($strFontColor);
+        $this->strFontColor = $strFontColor;
     }
 
     public function setStrGraphTitle($strTitle) {
-        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
-        //$this->objChartData->setStrGraphTitle($strTitle);
+        $this->strGraphTitle = $strTitle;
     }
 
     public function setStrXAxisTitle($strTitle) {
-        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
-        //$this->objChartData->setStrXAxisTitle($strTitle);
+        $this->strXAxisTitle = $strTitle;
     }
 
     public function setStrYAxisTitle($strTitle) {
-        //TODO: why to data holder? could lead to NpE in case no type is set up yet!
-        //$this->objChartData->setStrYAxisTitle($strTitle);
-    }
+        $this->strYAxisTitle = $strTitle;
+     }
 
     public function showGraph() {
-        return $this->objChartData->showGraph(generateSystemid());
+        $this->renderGraph();
     }
 
     /**
@@ -161,8 +167,20 @@ class class_graph_flot implements interface_graph {
      * @return mixed
      */
     public function renderGraph() {
+        if($this->objChartData == null)
+             throw new class_exception("Chart not initialized yet", class_exception::$level_ERROR);
         
-
+        //set attributes
+        $this->objChartData->setBitRenderLegend($this->bShowLegend);
+        $this->objChartData->setIntXAxisAngle($this->intXAxisAngle);
+        $this->objChartData->setStrBackgroundColor($this->strBackgroundColor);
+        $this->objChartData->setStrFont($this->strFont);
+        $this->objChartData->setStrFontColor($this->strFontColor);
+        $this->objChartData->setStrGraphTitle($this->strGraphTitle);
+        $this->objChartData->setStrXAxisTitle($this->strXAxisTitle);
+        $this->objChartData->setStrYAxisTitle($this->strYAxisTitle);
+        
+        //create chart
         $strChartId = generateSystemid();
         $strChartCode = $this->objChartData->showGraph($strChartId);
         

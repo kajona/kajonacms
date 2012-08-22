@@ -18,23 +18,7 @@
  */
 class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_base{
 
-    protected $strXAxisTitle = "X-Axis";
-    protected $strYAxisTitle = "Y-Axis";
-    protected $intXAxisAngle = 0;
-
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-    }
-
-    public function setIntXAxisAngle($intXAxisAngle) {
-        $this->intXAxisAngle = $intXAxisAngle;
-    }
-
-    public function setStrXAxisTitle($strTitle) {
-        $this->strXAxisTitle = $strTitle;
-    }
-
-    public function setStrYAxisTitle($strTitle) {
-        $this->strYAxisTitle = $strTitle;
     }
 
     public function optionsToJSON() {
@@ -51,7 +35,9 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         $legend = "legend: {show:".$this->bShowLegend."}";
         
         $hoverable = "grid: { hoverable: true, 
-                                clickable: true 
+                                clickable: true,
+                                backgroundColor:'".$this->strBackgroundColor."',
+                                color:'".$this->strFontColor."'    
                             }";
 
 

@@ -20,8 +20,20 @@ abstract class class_graph_flot_chartdata_base {
 
     protected $arrFlotSeriesData = array();
     protected $arrChartTypes = array();
-    protected $bShowLegend = true;
 
+    //line and barchart
+    protected $strXAxisTitle = "";
+    protected $strYAxisTitle = "";
+    protected $intXAxisAngle = 0;
+    
+    //line char, bar chart, pie chart
+    protected $bShowLegend = "true";
+    protected $strGraphTitle = "";
+    protected $strBackgroundColor="";
+    protected $strFont = "";
+    protected $strFontColor ="";
+    
+    
     /**
      * Constructor
      *
@@ -31,14 +43,47 @@ abstract class class_graph_flot_chartdata_base {
         $this->arrChartTypes["lines"] = "lines: {show:true}, points:{show:true} ";
         $this->arrChartTypes["pie"] = "pie: {show:true}";
     }
+    
+    public function setBitRenderLegend($bitRenderLegend) {
+        if($bitRenderLegend) {
+            $this->bShowLegend = "true";
+        }
+        else {
+            $this->bShowLegend = "false";
+        }
+    }
 
-    public abstract function setIntXAxisAngle($intXAxisAngle);
+    public function setIntXAxisAngle($intXAxisAngle) {
+        $this->intXAxisAngle = $intXAxisAngle;
+    }
+    
+    public function setStrBackgroundColor($strColor) {
+        $this->strBackgroundColor = $strColor;
+    }
 
-    public abstract function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12);
+    public function setStrFont($strFont) {
+        $this->strFont = $strFont;
+    }
 
-    public abstract function setStrXAxisTitle($strTitle);
+    public function setStrFontColor($strFontColor) {
+        $this->strFontColor = $strFontColor;
+    }
 
-    public abstract function setStrYAxisTitle($strTitle);
+    public function setStrGraphTitle($strTitle) {
+        $this->strGraphTitle = $strTitle;
+    }
+
+    public function setStrXAxisTitle($strTitle) {
+        $this->strXAxisTitle = $strTitle;
+    }
+
+    public function setStrYAxisTitle($strTitle) {
+        $this->strYAxisTitle = $strTitle;
+     }
+
+    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
+        
+    }
 
     public abstract function optionsToJSON();
 
@@ -56,30 +101,6 @@ abstract class class_graph_flot_chartdata_base {
         $this->arrFlotSeriesData[] = $seriesData;
     }
 
-    public function setBitRenderLegend($bitRenderLegend) {
-        if($bitRenderLegend)
-            $this->bShowLegend = "true";
-        else
-           $this->bShowLegend = "false";
-            
-        
-    }
-
-    public function setStrBackgroundColor($strColor) {
-        
-    }
-
-    public function setStrFont($strFont) {
-        
-    }
-
-    public function setStrFontColor($strFontColor) {
-        
-    }
-
-    public function setStrGraphTitle($strTitle) {
-        
-    }
 
     public function showGraph($strChartId) {
         $strData = $this->dataToJSON();
