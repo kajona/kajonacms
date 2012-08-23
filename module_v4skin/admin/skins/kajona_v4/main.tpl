@@ -72,22 +72,6 @@
             <div class="span2">&nbsp;</div>
             <div class="span10">
                 %%path%%
-                <!--
-                <ul class="breadcrumb">
-                    <li>
-                        <a href="#"><i id="icon-home"></i></a> <span class="divider"></span>
-                    </li>
-                    <li>
-                        <a href="#">Pages</a> <span class="divider"></span>
-                    </li>
-                    <li>
-                        <a href="#">My first page</a> <span class="divider"></span>
-                    </li>
-                    <li class="active">
-                        <a href="#">Second level page</a>
-                    </li>
-                </ul>
-                -->
             </div>
         </div>
     </div>
@@ -159,15 +143,6 @@
 
     $(function () {
 
-        function isTouchDevice() {
-          return !!('ontouchstart' in window) ? 1 : 0;
-        }
-
-
-
-
-
-
         $.widget('custom.catcomplete', $.ui.autocomplete, {
             _renderMenu: function(ul, items) {
                 var self = this;
@@ -183,6 +158,7 @@
 
                 ul.append('<li class="detailedResults"><a href="#">View detailed search results</a></li>');
                 ul.addClass('dropdown-menu');
+                ul.addClass('search-dropdown-menu');
             },
             _renderItem: function (ul, item) {
                 return $('<li></li>')
@@ -191,6 +167,7 @@
                     .appendTo(ul);
             }
         });
+
         $('#globalSearchInput').catcomplete({
             //source: '_skinwebpath_/search.json',
             source: function(request, response) {
@@ -211,9 +188,6 @@
                 if(ui.item) {
                     document.location = ui.item.link;
                 }
-                console.log( ui.item ?
-                    "Selected: " + ui.item.link + " aka " + ui.item.description :
-                    "Nothing selected, input was " + this.value );
             }
         });
 
@@ -275,10 +249,6 @@
 
 
         KAJONA.admin.contextMenu.showElementMenu = function() {};
-
-
-
-
     });
 
 </script>

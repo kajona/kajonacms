@@ -50,7 +50,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
                 }
                 oldPos = 0;
             },
-            delay: isTouchDevice() ? 2000 : 0
+            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
         });
         $('#%%listid%% > tbody:has(tr[id!=""]) > tr').each(function(index) {
             $(this).css('cursor', 'move');

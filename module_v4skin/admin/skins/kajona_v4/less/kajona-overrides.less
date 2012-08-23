@@ -32,6 +32,7 @@ body {
 .userNotificationsDropdown {
     margin: 10px 0 0 25px;
 
+
     a {
         color:#626262 !important;
     }
@@ -45,7 +46,8 @@ body {
         display: block;
     }
 
-//    .dropdown-menu {
+    .dropdown-menu {
+        .border-radius(0px);
 //        background:none @white;
 //        border:1px solid #d2d2d2;
 //        left:0px;
@@ -61,7 +63,7 @@ body {
 //                margin-left:0px;
 //            }
 //        }
-//    }
+    }
 
     .badge {
         position: absolute;
@@ -528,7 +530,8 @@ label {
     background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
 }
 
-.nav .dropdown-menu {
+.nav .dropdown-menu,
+.search-dropdown-menu {
     background-clip: none;
     background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
     border:0px;
