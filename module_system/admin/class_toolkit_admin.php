@@ -261,7 +261,7 @@ class class_toolkit_admin extends class_toolkit {
             "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
             class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
             class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-            "icon_externalBrowser.gif",
+            "icon_externalBrowser.png",
             class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
         );
 
@@ -320,7 +320,7 @@ class class_toolkit_admin extends class_toolkit {
             "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
-            "icon_externalBrowser.gif",
+            "icon_externalBrowser.png",
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
         );
 
@@ -393,7 +393,7 @@ class class_toolkit_admin extends class_toolkit {
             "&form_element=".$strName."&systemid=".$strRepositoryId,
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-            "icon_externalBrowser.gif",
+            "icon_externalBrowser.png",
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
         );
 
@@ -420,7 +420,7 @@ class class_toolkit_admin extends class_toolkit {
             "&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-            "icon_externalBrowser.gif",
+            "icon_externalBrowser.png",
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
         );
 
@@ -430,7 +430,7 @@ class class_toolkit_admin extends class_toolkit {
             "file='+document.getElementById('".$strName."').value+'",
             class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
             class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
-            "icon_crop.gif",
+            "icon_crop.png",
             class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
             true,
             false,
@@ -641,7 +641,7 @@ class class_toolkit_admin extends class_toolkit {
         $strId = generateSystemid();
         $strCallbackVisible = "function() { $('#".$strId."').addClass('optionalElementsWrapperVisible'); }";
         $strCallbackInvisible = "function() { $('#".$strId."').removeClass('optionalElementsWrapperVisible'); }";
-        $arrFolder = $this->getLayoutFolder($strContent, "<img src=\""._skinwebpath_."/pics/icon_folderClosed.gif\" alt=\"\" /> ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
+        $arrFolder = $this->getLayoutFolder($strContent, "<img src=\""._skinwebpath_."/pics/icon_folderClosed.png\" alt=\"\" /> ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
         return "<br /><div id=\"".$strId."\" class=\"optionalElementsWrapper".($bitVisible ? " optionalElementsWrapperVisible" : "")."\">".$this->getFieldset($arrFolder[1], $arrFolder[0])."</div>";
     }
 
@@ -907,7 +907,7 @@ class class_toolkit_admin extends class_toolkit {
         $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
                                          "",
                                          class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
-                                         "icon_ton.gif" );
+                                         "icon_ton.png" );
 
         return $this->listButton($strButton).$strDialog;
     }
@@ -934,11 +934,11 @@ class class_toolkit_admin extends class_toolkit {
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
         if($objRecord->getIntRecordStatus() == 1) {
-            $strImage = "icon_enabled.gif";
+            $strImage = "icon_enabled.png";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
         }
         else {
-            $strImage = "icon_disabled.gif";
+            $strImage = "icon_disabled.png";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
         }
 
@@ -949,8 +949,8 @@ class class_toolkit_admin extends class_toolkit {
             $strJavascript .= "<script type=\"text/javascript\">
                 var strActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")."';
                 var strInActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")."';
-                var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.gif';
-                var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.gif';
+                var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.png';
+                var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.png';
 
             </script>";
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
@@ -1030,7 +1030,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitVisible
      * @return string
      */
-    public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen.gif", $strImageInvisible = "icon_folderClosed.gif", $bitVisible = true) {
+    public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen.gif", $strImageInvisible = "icon_folderClosed.png", $bitVisible = true) {
         $strID = str_replace(array(" ", "."), array("", ""), microtime());
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder_pic");
         $arrTemplate = array();
@@ -1821,7 +1821,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["strTagId"] = $strTagId;
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
-        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.gif", class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "tags"));
+        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.png", class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "tags"));
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

@@ -46,7 +46,7 @@ class class_module_faqs_category extends class_model implements interface_model,
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_folderClosed.gif";
+        return "icon_folderClosed.png";
     }
 
     /**

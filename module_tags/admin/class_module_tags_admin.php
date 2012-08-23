@@ -62,8 +62,8 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.gif")),
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionAddToFavorites"), $this->getLang("actionAddToFavorites"), "icon_favorite.gif"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.png")),
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionAddToFavorites"), $this->getLang("actionAddToFavorites"), "icon_favorite.png"))
             );
         }
         else
@@ -74,7 +74,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         if($objListEntry instanceof class_module_tags_tag)
             return parent::renderEditAction($objListEntry);
         else if($objListEntry->rightEdit())
-            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
 
         return "";
     }

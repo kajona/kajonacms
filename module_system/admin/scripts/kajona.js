@@ -817,7 +817,7 @@ KAJONA.admin.ajax = {
 					var image = document.getElementById('statusImage_' + strSystemIdToSet);
 					var link = document.getElementById('statusLink_' + strSystemIdToSet);
 
-					if (image.src.indexOf('icon_enabled.gif') != -1) {
+					if (image.src.indexOf('icon_enabled.png') != -1) {
 						image.src = strInActiveImageSrc;
 						image.setAttribute('alt', strInActiveText);
 						link.setAttribute('title', strInActiveText);

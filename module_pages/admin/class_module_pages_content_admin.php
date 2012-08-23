@@ -64,9 +64,9 @@ class class_module_pages_content_admin extends class_admin implements interface_
         $objPage = new class_module_pages_page($this->getSystemid());
         //get infos about the page
         $arrToolbarEntries = array();
-        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
-        $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getLang("contentToolbar_content")."</a>";
-        $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getLang("contentToolbar_preview")."</a>";
+        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
+        $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.png);\">".$this->getLang("contentToolbar_content")."</a>";
+        $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.png);\">".$this->getLang("contentToolbar_preview")."</a>";
 
         //if languages are installed, present a language switch right here
         $objLanguages = new class_module_languages_admin();
@@ -140,23 +140,23 @@ class class_module_pages_content_admin extends class_admin implements interface_
                         if(!$objLockmanager->isAccessibleForCurrentUser()) {
                             //So, return a button, if we have an admin in front of us
                             if($objLockmanager->isUnlockableForCurrentUser() ) {
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.gif"));
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.png"));
                             }
                             //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.gif", $this->getLang("ds_gesperrt")));
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.gif", $this->getLang("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.png", $this->getLang("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.png", $this->getLang("ds_gesperrt")));
                         }
                         else {
                             //if it's the user who locked the record, unlock it now
                             if($objLockmanager->isLockedByCurrentUser())
                                 $objLockmanager->unlockRecord();
 
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_pencil.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_pencil.png"));
                             $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                         }
 
                         //The Icons to sort the list and to copy the element
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.gif"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.png"));
 
                         //The status-icons
                         $strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
@@ -177,7 +177,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             $objElement = $objOneElementInSystem;
                             if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
+                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.png"));
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrDisplayName() . ")", "", $strActions, $intI++);
                             }
                             else {
@@ -190,7 +190,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                                 }
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.gif"));
+                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.png"));
                                     $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", "", $strActions, $intI++);
                                 }
                             }

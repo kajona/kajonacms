@@ -57,7 +57,7 @@ class class_module_packagemanager_template extends class_model implements interf
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_dot.gif";
+        return "icon_dot.png";
     }
 
     /**

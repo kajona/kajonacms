@@ -103,7 +103,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                     "&systemid=".$objEditObject->getPrevId().$this->strPeAddon,
                     $this->getLang("commons_one_level_up"),
                     $this->getLang("commons_one_level_up"),
-                    "icon_treeLevelUp.gif"
+                    "icon_treeLevelUp.png"
                 );
             }
         }
@@ -116,17 +116,17 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         if($objListEntry instanceof class_module_navigation_tree) {
             if(validateSystemid($objListEntry->getStrFolderId()))
-                $arrReturn[] = $this->objToolkit->listButton(getImageAdmin("icon_treeBranchOpenDisabled.gif", $this->getLang("navigation_show_disabled")));
+                $arrReturn[] = $this->objToolkit->listButton(getImageAdmin("icon_treeBranchOpenDisabled.png", $this->getLang("navigation_show_disabled")));
             else
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigation_anzeigen"), "icon_treeBranchOpen.gif")
+                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigation_anzeigen"), "icon_treeBranchOpen.png")
                 );
 
         }
 
         if($objListEntry instanceof class_module_navigation_point) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin("navigation", "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.gif")
+                getLinkAdmin("navigation", "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.png")
             );
         }
 
@@ -143,7 +143,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                         "&systemid=".$this->getSystemid().$this->strPeAddon,
                         $this->getLang("modul_anlegenpunkt"),
                         $this->getLang("modul_anlegenpunkt"),
-                        "icon_new.gif"
+                        "icon_new.png"
                     )
                 );
             }
@@ -229,7 +229,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             "&form_element=navi_folder_i&folder=1",
             $this->getLang("commons_open_browser"),
             $this->getLang("commons_open_browser"),
-            "icon_externalBrowser.gif",
+            "icon_externalBrowser.png",
             $this->getLang("commons_open_browser")
         );
 
@@ -334,7 +334,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             "&form_element=point_parent&systemid=".$objParent->getPrevId(),
             $this->getLang("commons_open_browser"),
             $this->getLang("commons_open_browser"),
-            "icon_externalBrowser.gif",
+            "icon_externalBrowser.png",
             $this->getLang("commons_open_browser")
         );
 
@@ -430,19 +430,19 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         //Link one level up
         $strPrevID = $objPoint->getPrevId();
         if($strPrevID != $this->getObjModule()->getSystemid()) {
-            $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.gif"));
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot.gif"), $strAction, $intCounter++);
+            $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.png"));
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot.png"), $strAction, $intCounter++);
         }
         else {
-            $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf.gif"), $strAction, $intCounter++);
+            $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")."</a>");
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf.png"), $strAction, $intCounter++);
         }
         if(count($arrPoints) > 0) {
             /** @var class_module_navigation_point $objSinglePoint */
             foreach($arrPoints as $objSinglePoint) {
                 if($objSinglePoint->rightView()) {
-                    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"), $this->getLang("navigationp_anzeigen"), $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+                    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"), $this->getLang("navigationp_anzeigen"), $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.png"));
+                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")."</a>");
                     $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter++);
                 }
             }

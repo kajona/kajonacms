@@ -122,9 +122,9 @@ class class_module_messaging_message extends class_model implements interface_mo
      */
     public function getStrIcon() {
         if($this->getBitRead())
-            return "icon_mailDisabled.gif";
+            return "icon_mailDisabled.png";
         else
-            return "icon_mail.gif";
+            return "icon_mail.png";
     }
 
     /**

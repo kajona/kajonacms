@@ -70,7 +70,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if($objHandler->isInstallable()) {
                 $strActions .= $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "processPackage", "&package=".$objOneMetadata->getStrPath(), $this->getLang("package_install"), $this->getLang("package_installocally"), "icon_downloads.gif")
+                    getLinkAdmin($this->getArrModule("modul"), "processPackage", "&package=".$objOneMetadata->getStrPath(), $this->getLang("package_install"), $this->getLang("package_installocally"), "icon_downloads.png")
                 );
             }
 
@@ -79,19 +79,19 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if($strLatestVersion == null) {
                 $strActions .= $this->objToolkit->listButton(
-                    getImageAdmin("icon_updateError.gif", $this->getLang("package_noversion"))
+                    getImageAdmin("icon_updateError.png", $this->getLang("package_noversion"))
                 );
             }
             else {
                 //compare the version to trigger additional actions
                 if(version_compare($strLatestVersion, $objHandler->getObjMetadata()->getStrVersion(), ">")) {
                     $strActions .= $this->objToolkit->listButton(
-                        getLinkAdmin($this->getArrModule("modul"), "initPackageUpdate", "&package=".$objHandler->getObjMetadata()->getStrPath(), $this->getLang("package_updatefound")." ".$strLatestVersion, $this->getLang("package_updatefound")." ".$strLatestVersion, "icon_update.gif" )
+                        getLinkAdmin($this->getArrModule("modul"), "initPackageUpdate", "&package=".$objHandler->getObjMetadata()->getStrPath(), $this->getLang("package_updatefound")." ".$strLatestVersion, $this->getLang("package_updatefound")." ".$strLatestVersion, "icon_update.png" )
                     );
                 }
                 else {
                     $strActions .= $this->objToolkit->listButton(
-                        getImageAdmin("icon_updateDisabled.gif", $this->getLang("package_noupdate")." ".$strLatestVersion)
+                        getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion)
                     );
                 }
             }
@@ -100,7 +100,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
 
-        $strAddActions = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.gif"));
+        $strAddActions = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png"));
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
 
 
@@ -235,8 +235,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneProvider->getDisplayTitle(),
-                    getImageAdmin("icon_dot.gif"),
-                    $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept.gif")),
+                    getImageAdmin("icon_dot.png"),
+                    $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept.png")),
                     $intI++
                 );
             }
@@ -316,9 +316,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
-            //$strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "download", "", $this->getLang("action_download"), $this->getLang("action_download"), "icon_install.gif"));
-            $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_upload.gif"));
-            $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new.gif"));
+            //$strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "download", "", $this->getLang("action_download"), $this->getLang("action_download"), "icon_install.png"));
+            $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_upload.png"));
+            $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new.png"));
         }
 
         return $strReturn;
@@ -336,7 +336,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_enabled.gif", $this->getLang("pack_active_no_status")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_enabled.png", $this->getLang("pack_active_no_status")));
             }
             else
                 return $this->objToolkit->listStatusButton($objListEntry, true);
@@ -347,7 +347,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getLang("pack_active_no_delete")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.png", $this->getLang("pack_active_no_delete")));
             }
             else
                 return $this->objToolkit->listDeleteButton(

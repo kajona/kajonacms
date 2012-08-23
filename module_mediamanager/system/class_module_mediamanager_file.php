@@ -84,7 +84,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     public function getStrIcon() {
 
         if($this->getIntType() == self::$INT_TYPE_FOLDER)
-            return "icon_folderClosed.gif";
+            return "icon_folderClosed.png";
 
 
         //get the filetype

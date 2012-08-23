@@ -55,7 +55,7 @@ class class_module_user_group extends class_model implements interface_model, in
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_group.gif";
+        return "icon_group.png";
     }
 
     /**

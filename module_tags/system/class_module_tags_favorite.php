@@ -59,7 +59,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_favorite.gif";
+        return "icon_favorite.png";
     }
 
     /**

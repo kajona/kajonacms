@@ -72,7 +72,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == class_module_faqs_admin::STR_CAT_LIST)
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCat", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCat", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new.png"));
 
 
         return parent::getNewEntryAction($strListIdentifier, $bitDialog);
@@ -90,7 +90,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_faqs_category)
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=".$objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens.gif"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=".$objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens.png"))
             );
 
 

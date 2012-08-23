@@ -80,13 +80,13 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
     protected function renderAdditionalActions(class_model $objListEntry) {
 
         if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
-            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder", "mediamanager"), "icon_folderActionOpen.gif")));
+            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder", "mediamanager"), "icon_folderActionOpen.png")));
 
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens.gif")
+                    getLinkAdmin($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens.png")
                 )
             );
         }

@@ -89,7 +89,7 @@ KAJONA.admin.mediamanager.imageEditor = {
 
             this.fm_cropObj.animateTo([ 120,120,80,80 ]);
 
-            $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_acceptDisabled.gif", "icon_crop_accept.gif"));
+            $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_acceptDisabled.gif", "icon_crop_accept.png"));
             $("#fm_mediamanagerPic_wrap").bind('dblclick', function (event) {
             	KAJONA.admin.mediamanager.imageEditor.saveCropping();
             });
@@ -103,7 +103,7 @@ KAJONA.admin.mediamanager.imageEditor = {
         	this.fm_cropObj.destroy();
         	this.fm_cropObj = null;
             $('#fm_mediamanagerPic').css("visibility", "visible");
-            $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif"));
+            $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.png"));
         }
     },
 
@@ -137,7 +137,7 @@ KAJONA.admin.mediamanager.imageEditor = {
                 KAJONA.admin.statusDisplay.displayXMLMessage(data);
                 iE.fm_cropObj.destroy();
                 iE.fm_cropObj = null;
-                $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif"));
+                $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.png"));
                 $('#fm_image_dimensions').html(iE.cropArea.w+' x '+iE.cropArea.h);
                 $('#fm_image_size').html('n.a.');
                 $('#fm_int_realwidth').val(iE.cropArea.w);
@@ -174,7 +174,7 @@ KAJONA.admin.mediamanager.imageEditor = {
                 if (iE.fm_cropObj != null) {
                 	iE.fm_cropObj.destroy();
                 	iE.fm_cropObj = null;
-                    $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif"));
+                    $("#accept_icon").attr('src', $("#accept_icon").attr('src').replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.png"));
                 }
 
                 //switch width and height

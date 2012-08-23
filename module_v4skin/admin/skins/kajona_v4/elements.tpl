@@ -421,7 +421,7 @@ function is called after selecting a date, e.g. to hide the calendar
 		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
 		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
 		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
-		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
+		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.png" alt="" /></a>
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
 -->
@@ -455,7 +455,7 @@ function is called after selecting a date, e.g. to hide the calendar
 		<!--<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />-->
 		<!--<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />-->
 		<!--<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />-->
-        <!--<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>-->
+        <!--<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.png" alt="" /></a>-->
 
         <!--<input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />-->
 		<!--<input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />-->
@@ -904,7 +904,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" rel="tooltip"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" rel="tooltip"><img src="_skinwebpath_/pics/icon_new.png" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
 	<script type="text/javascript">
 		KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [
@@ -1263,7 +1263,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 Part of the admin-skin, quick-access to the users favorite tags
 <adminskin_tagselector>
 %%favorites_menu%%
-    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" rel="tooltip"/></a></li>
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.png" title="%%icon_tooltip%%" rel="tooltip"/></a></li>
 </adminskin_tagselector>
 
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.

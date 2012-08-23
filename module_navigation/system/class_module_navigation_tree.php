@@ -60,7 +60,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_treeRoot.gif";
+        return "icon_treeRoot.png";
     }
 
     /**

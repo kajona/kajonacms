@@ -119,15 +119,15 @@ class class_module_system_admin extends class_admin_simple implements interface_
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_system_module) {
             $arrReturn = array();
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect.gif"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect.png"));
 
             if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
                 if($objListEntry->getStrName() == "system")
-                    $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled.gif"));
+                    $arrReturn[] =  $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled.png"));
                 else if($objListEntry->getStatus() == 0)
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled.gif"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled.png"));
                 else
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled.gif"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled.png"));
             }
 
             return $arrReturn;
@@ -166,7 +166,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             return "";
 
         if($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit())
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new.png"));
 
         return parent::getNewEntryAction($strListIdentifier);
     }
@@ -439,19 +439,19 @@ class class_module_system_admin extends class_admin_simple implements interface_
                     $strLink = getLinkAdmin("system", "systemTasks", "&task=".$objOneTask->getStrInternalTaskName(),
                                                                                       $objOneTask->getStrTaskname(),
                                                                                       $this->getLang("systemtask_run"),
-                                                                                      "icon_accept.gif");
+                                                                                      "icon_accept.png");
                 }
                 else {
                     $strLink = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
                                                                                       "",
                                                                                       $this->getLang("systemtask_run"),
-                                                                                      "icon_accept.gif");
+                                                                                      "icon_accept.png");
                 }
 
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneTask->getStrTaskname(),
-                    getImageAdmin("icon_dot.gif"),
+                    getImageAdmin("icon_dot.png"),
                     $this->objToolkit->listButton($strLink),
                     $intI++
                 );
@@ -520,7 +520,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $objUser = new class_module_user_user($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
-            $arrRowData[0] = getImageAdmin("icon_user.gif");
+            $arrRowData[0] = getImageAdmin("icon_user.png");
             $arrRowData[1] = $strUsername;
             $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
@@ -561,9 +561,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
             $arrRowData[4] = $strActivity;
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_ton.gif");
+                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_ton.png");
             else
-                $arrRowData[5] = getImageAdmin("icon_tonDisabled.gif");
+                $arrRowData[5] = getImageAdmin("icon_tonDisabled.png");
             $arrData[] = $arrRowData;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);

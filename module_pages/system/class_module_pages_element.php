@@ -117,7 +117,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_dot.gif";
+        return "icon_dot.png";
     }
 
     /**

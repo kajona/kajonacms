@@ -54,7 +54,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_tag.gif";
+        return "icon_tag.png";
     }
 
     /**

@@ -54,7 +54,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return  "icon_language.gif";
+        return  "icon_language.png";
     }
 
     /**

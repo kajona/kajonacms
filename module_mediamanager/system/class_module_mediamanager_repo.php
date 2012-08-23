@@ -61,7 +61,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_folderOpen.gif";
+        return "icon_folderOpen.png";
     }
 
     /**

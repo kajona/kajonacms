@@ -95,7 +95,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_treeLeaf.gif";
+        return "icon_treeLeaf.png";
     }
 
     /**

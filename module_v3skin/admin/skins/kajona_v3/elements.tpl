@@ -329,7 +329,7 @@ function is called after selecting a date, e.g. to hide the calendar
 		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
 		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
 		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
-		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
+		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.png" alt="" /></a>
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
 	<script type="text/javascript">
@@ -343,7 +343,7 @@ function is called after selecting a date, e.g. to hide the calendar
 		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
 		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
 		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
-        <a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
+        <a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.png" alt="" /></a>
 
         <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />
 		<input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
@@ -386,7 +386,7 @@ Same as above, but using an image to fold / unfold the content
 
 A precent-beam to illustrate proportions
 <percent_beam>
-<div class="percentBeamText">%%percent%% %</div><div class="percentBeam" style="width: %%width%%px;" title="%%percent%% %"><img src="_skinwebpath_/pics/icon_progressbar.gif" width="%%beamwidth%%" height="10" /></div><div style="clear: both;"></div>
+<div class="percentBeamText">%%percent%% %</div><div class="percentBeam" style="width: %%width%%px;" title="%%percent%% %"><img src="_skinwebpath_/pics/icon_progressbar.png" width="%%beamwidth%%" height="10" /></div><div style="clear: both;"></div>
 </percent_beam>
 
 A fieldset to structure logical sections
@@ -417,11 +417,11 @@ Needed Elements: %%error%%, %%form%%
 
 Part to display the login status, user is logged in
 <logout_form>
-    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
-    <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.gif" title="%%sitemapTitle%%" rel="tooltip" /></a></li>
-    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('KJ_messageList', this); return false;"><img src="_skinwebpath_/pics/icon_mail.gif" title="" rel="tooltip" /></a><div id="messageBadge"></div></li>
-    <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.gif" title="%%name%% - %%profileTitle%%" rel="tooltip" /></a></li>
-    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.png" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.png" title="%%sitemapTitle%%" rel="tooltip" /></a></li>
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('KJ_messageList', this); return false;"><img src="_skinwebpath_/pics/icon_mail.png" title="" rel="tooltip" /></a><div id="messageBadge"></div></li>
+    <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.png" title="%%name%% - %%profileTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.png" title="%%logoutTitle%%" rel="tooltip" /></a></li>
 <script type="text/javascript">
     KAJONA.admin.messaging.getUnreadCount(function(intCount) {
         $('#messageBadge').text(intCount);
@@ -775,7 +775,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" rel="tooltip"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" rel="tooltip"><img src="_skinwebpath_/pics/icon_new.png" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
 	<script type="text/javascript">
 		KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [
@@ -1134,7 +1134,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 Part of the admin-skin, quick-access to the users favorite tags
 <adminskin_tagselector>
 %%favorites_menu%%
-    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.gif" title="%%icon_tooltip%%" rel="tooltip" /></a></li>
+    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.png" title="%%icon_tooltip%%" rel="tooltip" /></a></li>
 </adminskin_tagselector>
 
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.

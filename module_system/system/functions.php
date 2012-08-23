@@ -531,9 +531,9 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $str
  */
 function getRightsImageAdminName($strSystemid) {
 	if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
-	   return "icon_key_inherited.gif";
+	   return "icon_key_inherited.png";
 	else
-	   return "icon_key.gif";
+	   return "icon_key.png";
 }
 
 

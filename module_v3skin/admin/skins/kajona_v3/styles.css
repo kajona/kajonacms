@@ -278,14 +278,14 @@ td {
 }
 
 .messagesListMenuUnread, .messagesListMenuRead {
-    background: url("pics/icon_mailDisabled.gif") no-repeat;
+    background: url("pics/icon_mailDisabled.png") no-repeat;
     padding: 4px 4px 4px 24px;
     line-height: 22px;
 
 }
 
 .messagesListMenuUnread {
-    background-image: url("pics/icon_mail.gif");
+    background-image: url("pics/icon_mail.png");
     font-weight: bold;
 }
 

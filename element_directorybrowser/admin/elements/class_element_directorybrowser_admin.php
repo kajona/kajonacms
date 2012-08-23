@@ -49,7 +49,7 @@ class class_element_directorybrowser_admin extends class_element_admin implement
         else
             $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
         
-        $strReturn .= $this->objToolkit->formInputText("char2", $this->getLang("directory"), isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" , "inputText", getLinkAdminDialog("mediamanager", "folderListFolderview", "&form_element=char2", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.gif", $this->getLang("commons_open_browser")));
+        $strReturn .= $this->objToolkit->formInputText("char2", $this->getLang("directory"), isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" , "inputText", getLinkAdminDialog("mediamanager", "folderListFolderview", "&form_element=char2", $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.png", $this->getLang("commons_open_browser")));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char2");
 

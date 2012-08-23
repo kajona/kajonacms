@@ -117,7 +117,7 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($this->getObjModule()->rightEdit() && $strListIdentifier != $this->STR_POST_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("actionNew"), $this->getLang("actionNew"), "icon_new.gif"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("actionNew"), $this->getLang("actionNew"), "icon_new.png"));
         }
     }
 
@@ -125,7 +125,7 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
         if($objListEntry instanceof class_module_guestbook_guestbook) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->arrModule["modul"], "viewGuestbook", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionViewGuestbook"), "icon_bookLens.gif")
+                    getLinkAdmin($this->arrModule["modul"], "viewGuestbook", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionViewGuestbook"), "icon_bookLens.png")
                 )
             );
         }

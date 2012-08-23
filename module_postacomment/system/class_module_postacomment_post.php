@@ -85,7 +85,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_comment.gif";
+        return "icon_comment.png";
     }
 
     /**

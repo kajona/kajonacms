@@ -132,7 +132,7 @@ JS;
                 $strWidgetName,
                 $strGeneratedContent,
                 ($objDashboardWidget->rightEdit() ?
-                    getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.gif") : ""),
+                    getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.png") : ""),
                 ($objDashboardWidget->rightDelete() ?
                     $this->objToolkit->listDeleteButton(
                         $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),

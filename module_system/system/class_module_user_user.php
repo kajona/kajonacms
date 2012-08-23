@@ -70,7 +70,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_user.gif";
+        return "icon_user.png";
     }
 
     /**
