@@ -252,6 +252,21 @@
 
         KAJONA.admin.statusDisplay.classOfMessageBox = "alert alert-info";
         KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-error";
+
+        KAJONA.admin.scroll = null;
+        $(window).scroll(function() {
+            var scroll = $(this).scrollTop();
+            if(scroll > 10 && KAJONA.admin.scroll != 'top') {
+                $("ul.breadcrumb").addClass("breadcrumbTop");
+                KAJONA.admin.scroll = "top";
+            }
+            else if(scroll <= 10 && KAJONA.admin.scroll != 'margin') {
+                $("ul.breadcrumb").removeClass("breadcrumbTop");
+                KAJONA.admin.scroll = "fixed";
+            }
+
+
+        });
     });
 
 </script>

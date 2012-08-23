@@ -320,6 +320,11 @@ body {
     }
 }
 
+.breadcrumbTop {
+    margin: 0px;
+    padding: 2px 14px 2px 14px;
+}
+
 #content .form-actions {
   background-color:#eeeeee;
   border-color:none;
@@ -714,4 +719,42 @@ label {
 /* STATUSBOX */
 #jsStatusBox {
     z-index: 1050;
+}
+
+
+
+
+/* TABLE STRIPING */
+.table-striped-tbody {
+
+    td.description {
+
+    }
+
+
+    tbody:nth-child(odd) {
+        border-top: 1px solid @tableBorder;
+        tr td, tr th {
+            background-color: @tableBackgroundAccent;
+
+        }
+    }
+
+    tbody:nth-child(even) {
+        border-top: 1px solid @tableBorder;
+        tr td, tr th {
+            background-color: @tableBackground;
+        }
+    }
+
+    tbody:hover {
+        tr td,
+        tr th {
+            background-color: @tableBackgroundHover;
+        }
+    }
+
+    td.description {
+        border-top: none;
+    }
 }

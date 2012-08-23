@@ -46,7 +46,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
     this.init = function(intWidth, intHeight) {
 
         if(!intWidth)
-            intWidth = 500;
+            intWidth = $(window).width() * 0.6;
 
         $('#' + this.containerId).modal({
             backdrop: true,

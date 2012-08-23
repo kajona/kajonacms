@@ -17,7 +17,7 @@ templates!
 
 Optional Element to start a list
 <list_header>
-<table class="table table-striped">
+<table class="table table-striped-tbody">
 </list_header>
 
 Header to use when creating drag n dropable lists. places an id an loads the needed js-scripts in the
@@ -58,7 +58,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     });
 </script>
 <style>.group_move_placeholder { display: table-row } </style>
-<table id="%%listid%%" class="table table-striped">
+<table id="%%listid%%" class="table table-striped-tbody">
 </dragable_list_header>
 
 Optional Element to close a list
