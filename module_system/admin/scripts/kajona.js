@@ -587,7 +587,6 @@ KAJONA.admin.statusDisplay = {
 	timeToFadeOutMessage : 4000,
 	timeToFadeOutError : 10000,
 	timeToFadeOut : null,
-	animObject : null,
 
 	/**
 	 * General entrance point. Use this method to pass an xml-response from the kajona server.
@@ -633,11 +632,6 @@ KAJONA.admin.statusDisplay = {
     },
 
 	startFadeIn : function(strMessage) {
-		//currently animated?
-		if(this.animObject != null && this.animObject.isAnimated()) {
-			this.animObject.stop(true);
-			this.animObject.onComplete.unsubscribeAll();
-		}
 		var statusBox = $("#"+this.idOfMessageBox);
 		var contentBox = $("#"+this.idOfContentBox);
 		contentBox.html(strMessage);
@@ -662,7 +656,6 @@ KAJONA.admin.statusDisplay = {
 	},
 
 	startFadeOut : function() {
-
         $("#"+this.idOfMessageBox).animate(
             { top: -200 },
             1000,

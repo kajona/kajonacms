@@ -12,12 +12,10 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
- *
  * @targetTable element.element_id
- *
  * @todo make real records out of the element-records, so with a matching systemid
  */
-class class_module_pages_element extends class_model implements interface_model, interface_admin_listable  {
+class class_module_pages_element extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
@@ -82,9 +80,8 @@ class class_module_pages_element extends class_model implements interface_model,
         $this->setArrModuleEntry("modul", "pages_content");
         $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
-
+        //base class
+        parent::__construct($strSystemid);
 
     }
 
@@ -98,6 +95,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -122,6 +120,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -130,6 +129,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -142,23 +142,25 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @param bool|int $intStart
      * @param bool|int $intEnd
+     *
      * @return class_module_pages_element[]
      * @static
      */
-	public static function getAllElements($intStart = null, $intEnd = null) {
-		$strQuery = "SELECT element_id FROM "._dbprefix_."element ORDER BY element_name";
+    public static function getAllElements($intStart = null, $intEnd = null) {
+        $strQuery = "SELECT element_id FROM "._dbprefix_."element ORDER BY element_name";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_pages_element($arrOneId["element_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId)
+            $arrReturn[] = new class_module_pages_element($arrOneId["element_id"]);
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     /**
      * Counts the number of elements available
+     *
      * @static
      * @return int
      */
@@ -168,31 +170,32 @@ class class_module_pages_element extends class_model implements interface_model,
         return $arrReturn["COUNT(*)"];
     }
 
-	/**
-	 * Returns the element using the given element-name
-	 *
-	 * @param string $strName
-	 * @return class_module_pages_element
-	 */
-	public static function getElement($strName) {
-		$strQuery = "SELECT element_id FROM "._dbprefix_."element WHERE element_name=?";
-		$arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-		if(isset($arrId["element_id"]))
+    /**
+     * Returns the element using the given element-name
+     *
+     * @param string $strName
+     *
+     * @return class_module_pages_element
+     */
+    public static function getElement($strName) {
+        $strQuery = "SELECT element_id FROM "._dbprefix_."element WHERE element_name=?";
+        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
+        if(isset($arrId["element_id"]))
             return new class_module_pages_element($arrId["element_id"]);
         else
             return null;
-	}
+    }
 
-	/**
-	 * Deletes one element
+    /**
+     * Deletes one element
      * Overwrites the base-method, since there's no entry in the system-table
-	 *
-	 * @return bool
-	 */
-	public function deleteObject() {
-	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id=?";
-	    return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-	}
+     *
+     * @return bool
+     */
+    public function deleteObject() {
+        $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id=?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+    }
 
 
     /**
@@ -266,7 +269,6 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @return string
      * @deprecated use getStrDisplayName()
-     *
      * @fixme remove me
      */
     public function getStrReadableName() {
@@ -280,15 +282,19 @@ class class_module_pages_element extends class_model implements interface_model,
     public function setStrName($strName) {
         $this->strName = $strName;
     }
+
     public function setStrClassPortal($strClassPortal) {
         $this->strClassPortal = $strClassPortal;
     }
+
     public function setStrClassAdmin($strClassAdmin) {
         $this->strClassAdmin = $strClassAdmin;
     }
+
     public function setIntRepeat($intRepeat) {
         $this->intRepeat = $intRepeat;
     }
+
     public function setIntCachetime($intCachetime) {
         $this->intCachetime = $intCachetime;
     }

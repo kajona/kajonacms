@@ -82,7 +82,7 @@
 
         <!-- MODULE NAVIGATION -->
         <div class="span2">
-            <div class="well sidebar-nav">
+            <div class="sidebar-nav">
                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                     <div class="pull-left">
                         <span class="icon-bar"></span>
@@ -249,10 +249,12 @@
 
 
         KAJONA.admin.contextMenu.showElementMenu = function() {};
+
+        KAJONA.admin.statusDisplay.classOfMessageBox = "alert alert-info";
+        KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-error";
     });
 
 </script>
-
 
 
 
@@ -272,5 +274,8 @@
         KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
     }, true);
 </script>
+
+<div id="jsStatusBox" class="" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+
 </body>
 </html>

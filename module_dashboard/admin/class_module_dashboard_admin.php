@@ -19,30 +19,29 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
     private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
 
         $this->setArrModuleEntry("modul", "dashboard");
         $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
-		parent::__construct();
+        parent::__construct();
 
-	}
+    }
 
 
     public function getOutputModuleNavi() {
-	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("moduleRights"), "", "", true, "adminnavi"));
+        $arrReturn = array();
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("moduleRights"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("actionCalendar"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "sitemap", "", $this->getLang("actionSitemap"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("actionCalendar"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "sitemap", "", $this->getLang("actionSitemap"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("addWidget"), "", "", true, "adminnavi"));
-		return $arrReturn;
-	}
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("addWidget"), "", "", true, "adminnavi"));
+        return $arrReturn;
+    }
 
     protected function getArrOutputNaviEntries() {
         $arrReturn = parent::getArrOutputNaviEntries();
@@ -53,15 +52,15 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
 
     /**
-	 * Generates the dashboard itself.
-	 * Loads all widgets placed on the dashboard
-	 *
-	 * @return string
+     * Generates the dashboard itself.
+     * Loads all widgets placed on the dashboard
+     *
+     * @return string
      * @autoTestable
      * @permissions view
-	 */
-	protected function actionList() {
-	    $strReturn = "";
+     */
+    protected function actionList() {
+        $strReturn = "";
         $strReturn .= $this->objToolkit->jsDialog(1);
         //load the widgets for each column. currently supporting 3 columns on the dashboard.
         $objDashboardmodel = new class_module_dashboard_widget();
@@ -102,18 +101,19 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 </script>
 JS;
 
-	    return $strReturn;
-	}
+        return $strReturn;
+    }
 
-	/**
-	 * Creates the layout of a dashboard-entry. loads the widget to fetch the contents of the concrete widget.
-	 *
-	 * @param class_module_dashboard_widget $objDashboardWidget
-	 * @return string
-	 */
-	protected function layoutAdminWidget($objDashboardWidget) {
-	    $strWidgetContent = "";
-	    $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
+    /**
+     * Creates the layout of a dashboard-entry. loads the widget to fetch the contents of the concrete widget.
+     *
+     * @param class_module_dashboard_widget $objDashboardWidget
+     *
+     * @return string
+     */
+    protected function layoutAdminWidget($objDashboardWidget) {
+        $strWidgetContent = "";
+        $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
 
         //TODO remove this?
         $strGeneratedContent = "";
@@ -144,7 +144,7 @@ JS;
         );
 
         return $strWidgetContent;
-	}
+    }
 
     /**
      * Creates a calendar-based view of the current month.
@@ -221,7 +221,6 @@ JS;
             }
         }
 
-        $arrTemp = $this->getAllParams();
         if($this->getParam("doCalendarFilter") != "") {
             //update filter-criteria
             foreach($arrFilterEntries as $strOneId => $strName) {
@@ -268,15 +267,15 @@ JS;
         return $strReturn;
     }
 
-	/**
-	 * Generates the forms to add a widget to the dashboard
-	 *
-	 * @return string, "" in case of success
+    /**
+     * Generates the forms to add a widget to the dashboard
+     *
+     * @return string, "" in case of success
      * @autoTestable
      * @permissions edit
-	 */
-	protected function actionAddWidgetToDashboard() {
-	    $strReturn = "";
+     */
+    protected function actionAddWidgetToDashboard() {
+        $strReturn = "";
         //step 1: select a widget, plz
         if($this->getParam("step") == "") {
             $objSystemWidget = new class_module_dashboard_widget();
@@ -342,8 +341,8 @@ JS;
         }
 
 
-	    return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
      * Deletes a widget from the dashboard
@@ -352,16 +351,16 @@ JS;
      * @return string "" in case of success
      * @permissions delete
      */
-	protected function actionDeleteWidget() {
-	    $strReturn = "";
+    protected function actionDeleteWidget() {
+        $strReturn = "";
         $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
         if(!$objDashboardwidget->deleteObject())
             throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
      * Creates the form to edit a widget (NOT the dashboard entry!)
@@ -370,8 +369,8 @@ JS;
      * @return string "" in case of success
      * @permissions edit
      */
-	protected function actionEditWidget() {
-	    $strReturn = "";
+    protected function actionEditWidget() {
+        $strReturn = "";
         if($this->getParam("saveWidget") == "") {
             $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
             $objWidget = $objDashboardwidget->getConcreteAdminwidget();
@@ -398,8 +397,8 @@ JS;
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
      * @return string

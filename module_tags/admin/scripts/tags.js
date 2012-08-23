@@ -28,7 +28,7 @@ KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
 
 KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
 
-    YAHOO.util.Dom.addClass("tagsWrapper_"+strSystemid, "loadingContainer");
+    $("#tagsWrapper_"+strSystemid).addClass("loadingContainer");
 
     KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, function(data, status, jqXHR) {
         if(status == 'success') {

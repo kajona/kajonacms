@@ -14,10 +14,6 @@
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript">
-        $(document).ready(function() {
-            new YAHOO.util.KeyListener(document, { keys:27 }, KAJONA.admin.folderview.close).enable();
-        });
-
         $(function() {
             $('[rel="tooltip"]').each(function(index) {
                 KAJONA.admin.tooltip.add(this);

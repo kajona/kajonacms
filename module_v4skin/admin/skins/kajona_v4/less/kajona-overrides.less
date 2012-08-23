@@ -14,14 +14,24 @@
 
 
 
-
 body {
     padding-top: 70px;
     padding-bottom: 40px;
 }
 
 .sidebar-nav {
-    padding: 9px 0;
+
+    background-color: @white;
+    border:0px;
+    .border-radius(0px);
+    .box-shadow(none);
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding:0px;
+
+    text-align:right;
+    position:relative;
+    top:-10px;
 
     .btn-navbar {
         display: none;
@@ -32,11 +42,8 @@ body {
 .userNotificationsDropdown {
     margin: 10px 0 0 25px;
 
-
     a {
         color:#626262 !important;
-
-
     }
 
     a:hover {
@@ -79,8 +86,6 @@ body {
         left: -24px;
         font-style: normal;
     }
-
-
 
 }
 
@@ -151,13 +156,6 @@ body {
 .thumbnails > li {
     margin-left: 30px !important;
 }
-
-/*
-.sortable li {
-    cursor: move;
-}
-*/
-
 
 .ui-autocomplete {
     max-height: 300px;
@@ -495,18 +493,6 @@ label {
   padding-left:0px;
 }
 
-.well {
-  background-color: @white;
-  border:0px;
-  .border-radius(0px);
-  .box-shadow(none);
-  margin-bottom: 20px;
-  min-height: 20px;
-  padding:0px;
-		text-align:right;
-		position:relative;
-		top:-10px;
-}
 
 .nav .nav-header {
   color: @white;
@@ -714,4 +700,18 @@ label {
             padding: 10px;
         }
     }
+
+    li {
+        list-style: none;
+    }
+
+    .adminwidgetactions {
+        display: inline;
+        margin-top: -40px;
+    }
+}
+
+/* STATUSBOX */
+#jsStatusBox {
+    z-index: 1050;
 }

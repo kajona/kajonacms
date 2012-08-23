@@ -417,11 +417,11 @@ Needed Elements: %%error%%, %%form%%
 
 Part to display the login status, user is logged in
 <logout_form>
-    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.png" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%dashboard%%"><img src="_skinwebpath_/icon_home.gif" title="%%dashboardTitle%%" rel="tooltip" /></a></li>
     <li><a href="%%sitemap%%"><img src="_skinwebpath_/pics/icon_sitemap.png" title="%%sitemapTitle%%" rel="tooltip" /></a></li>
     <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('KJ_messageList', this); return false;"><img src="_skinwebpath_/pics/icon_mail.png" title="" rel="tooltip" /></a><div id="messageBadge"></div></li>
     <li><a href="%%profile%%"><img src="_skinwebpath_/pics/icon_user.png" title="%%name%% - %%profileTitle%%" rel="tooltip" /></a></li>
-    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.png" title="%%logoutTitle%%" rel="tooltip" /></a></li>
+    <li><a href="%%logout%%"><img src="_skinwebpath_/icon_logout.gif" title="%%logoutTitle%%" rel="tooltip" /></a></li>
 <script type="text/javascript">
     KAJONA.admin.messaging.getUnreadCount(function(intCount) {
         $('#messageBadge').text(intCount);

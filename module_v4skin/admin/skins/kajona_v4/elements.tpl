@@ -1002,10 +1002,12 @@ The language switch surrounds the buttons
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
 //TODO %%widget_id%% is not needed anymore
 <adminwidget_widget>
-    <h2>%%widget_name%%</h2>
-    <div class="adminwidget actions">%%widget_edit%% %%widget_delete%%</div>
+    <div class="well well-small">
+    <h2 class="">%%widget_name%%</h2>
+    <div class="adminwidgetactions pull-right">%%widget_edit%% %%widget_delete%%</div>
     <div class="content loadingContainer">
         %%widget_content%%
+    </div>
     </div>
 </adminwidget_widget>
 
