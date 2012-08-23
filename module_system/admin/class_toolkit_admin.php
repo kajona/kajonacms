@@ -284,7 +284,8 @@ class class_toolkit_admin extends class_toolkit {
                                     success: response
                                 });
                             },
-                            minLength: 1
+                            minLength: 1,
+                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
                         });
                     });
 	        </script>
@@ -359,7 +360,8 @@ class class_toolkit_admin extends class_toolkit {
                                 }
                                 return false;
                             },
-                            minLength: 1
+                            minLength: 1,
+                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
                         })
                         .data( 'autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
@@ -1877,7 +1879,8 @@ class class_toolkit_admin extends class_toolkit {
                                 this.value = terms.join( ', ' );
                                 return false;
                             },
-                            minLength: 1
+                            minLength: 1,
+                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
 
                         });
                     });

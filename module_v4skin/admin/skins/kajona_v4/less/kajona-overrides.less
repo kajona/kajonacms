@@ -44,11 +44,11 @@ body {
 
     a {
         color:#626262 !important;
-    }
 
-    a:hover {
-        color:@green !important;
-        background: none !important;
+        &:hover {
+            color:@green !important;
+            background: none !important;
+        }
     }
 
     &:hover .dropdown-menu {
@@ -57,21 +57,6 @@ body {
 
     .dropdown-menu {
         .border-radius(0px);
-//        background:none @white;
-//        border:1px solid #d2d2d2;
-//        left:0px;
-//        top:23px;
-//
-//        li ul li {
-//            list-style:inside none;
-//            padding:0px;
-//            margin-left:-10px;
-//
-//            a {
-//                padding-left:0px;
-//                margin-left:0px;
-//            }
-//        }
 
         a {
             i {
@@ -91,7 +76,7 @@ body {
 
 .generalContextMenu {
     background:none @white !important;
-    border: 1px solid #d2d2d2 !important;
+    border: 1px solid @menuBorder !important;
     left: auto !important;
     top: auto !important;
 
@@ -118,10 +103,6 @@ body {
     a.dropdown-toggle {
         background:none;
     }
-
-//    &:hover .dropdown-menu {
-//        display: block;
-//    }
 
     ul {
         margin: 0px;
@@ -162,10 +143,13 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     position: fixed;
+    background-color: @white;
+    border: 1px solid @menuBorder !important;
 
     li a {
         cursor: pointer;
-        padding-bottom: 8px;
+        padding: 3px 15px;
+        display: block;
     }
 
     li img {
@@ -323,6 +307,11 @@ body {
 .breadcrumbTop {
     margin: 0px;
     padding: 2px 14px 2px 14px;
+}
+
+
+#content h1 {
+    padding-top: 20px;
 }
 
 #content .form-actions {
@@ -722,15 +711,8 @@ label {
 }
 
 
-
-
 /* TABLE STRIPING */
 .table-striped-tbody {
-
-    td.description {
-
-    }
-
 
     tbody:nth-child(odd) {
         border-top: 1px solid @tableBorder;
