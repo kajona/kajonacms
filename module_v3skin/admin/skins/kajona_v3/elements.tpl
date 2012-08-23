@@ -1077,7 +1077,7 @@ The language switch surrounds the buttons
                     var pos = (data.rslt.cp + i +1)
                     KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", systemid+"&prevId="+prevId, function() {
                         KAJONA.admin.ajax.setAbsolutePosition(systemid, pos, null, function() {
-                            //location.reload();
+                            location.reload();
                         });
                     });
 

@@ -58,15 +58,15 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     }
 
 
-	/**
-	 * Returns a list of the current level
-	 *
-	 * @return string
+    /**
+     * Returns a list of the current level
+     *
+     * @return string
      * @autoTestable
      * @permissions view
-	 */
-	protected function actionList() {
-		$strReturn = "";
+     */
+    protected function actionList() {
+        $strReturn = "";
 
         //Decide, whether to return the list of navigation or the layer of a navigation
         if($this->getSystemid() == "" || $this->getSystemid() == $this->getObjModule()->getSystemid()) {
@@ -91,13 +91,20 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             return $strReturn;
         }
 
-	}
+    }
 
     protected function renderLevelUpAction($strListIdentifier) {
         if($strListIdentifier == "naviPoints") {
             if($this->getSystemid() != "") {
                 $objEditObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-                return getLinkAdmin("navigation", "list", "&systemid=".$objEditObject->getPrevId().$this->strPeAddon, $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.gif");
+                return getLinkAdmin(
+                    "navigation",
+                    "list",
+                    "&systemid=".$objEditObject->getPrevId().$this->strPeAddon,
+                    $this->getLang("commons_one_level_up"),
+                    $this->getLang("commons_one_level_up"),
+                    "icon_treeLevelUp.gif"
+                );
             }
         }
         return parent::renderLevelUpAction($strListIdentifier);
@@ -111,12 +118,16 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             if(validateSystemid($objListEntry->getStrFolderId()))
                 $arrReturn[] = $this->objToolkit->listButton(getImageAdmin("icon_treeBranchOpenDisabled.gif", $this->getLang("navigation_show_disabled")));
             else
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
+                $arrReturn[] = $this->objToolkit->listButton(
+                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigation_anzeigen"), "icon_treeBranchOpen.gif")
+                );
 
         }
 
         if($objListEntry instanceof class_module_navigation_point) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
+            $arrReturn[] = $this->objToolkit->listButton(
+                getLinkAdmin("navigation", "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.gif")
+            );
         }
 
         return $arrReturn;
@@ -125,7 +136,16 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == "naviPoints") {
             if($this->getObjModule()->rightEdit()) {
-                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNaviPoint", "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("modul_anlegenpunkt"), $this->getLang("modul_anlegenpunkt"), "icon_new.gif"));
+                return $this->objToolkit->listButton(
+                    getLinkAdmin(
+                        $this->getArrModule("modul"),
+                        "newNaviPoint",
+                        "&systemid=".$this->getSystemid().$this->strPeAddon,
+                        $this->getLang("modul_anlegenpunkt"),
+                        $this->getLang("modul_anlegenpunkt"),
+                        "icon_new.gif"
+                    )
+                );
             }
         }
         else if($strListIdentifier == "browserList")
@@ -168,7 +188,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * @return string
      * @permissions edit
      */
-	protected function actionEditNavi() {
+    protected function actionEditNavi() {
         return $this->actionNewNavi("edit");
     }
 
@@ -181,7 +201,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * @autoTestable
      * @permissions edit
      */
-	protected function actionNewNavi($strMode = "new", class_admin_formgenerator $objForm = null) {
+    protected function actionNewNavi($strMode = "new", class_admin_formgenerator $objForm = null) {
 
         $objNavi = new class_module_navigation_tree();
 
@@ -198,7 +218,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
 
-	}
+    }
 
 
     private function getNaviAdminForm(class_module_navigation_tree $objTree) {
@@ -232,8 +252,8 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * @return string, "" in case of success
      * @permissions edit
      */
-	protected function actionSaveNavi() {
-		$strReturn = "";
+    protected function actionSaveNavi() {
+        $strReturn = "";
 
         $objNavi = new class_module_navigation_tree();
         if($this->getParam("mode") == "edit") {
@@ -255,8 +275,8 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
     protected function actionEditNaviPoint() {
@@ -271,10 +291,10 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * @return string
      * @permissions edit
      */
-	protected function actionNewNaviPoint($strMode = "new", class_admin_formgenerator $objForm = null) {
+    protected function actionNewNaviPoint($strMode = "new", class_admin_formgenerator $objForm = null) {
 
         $objPoint = new class_module_navigation_point();
-        if ($strMode == "edit") {
+        if($strMode == "edit") {
             //Load Point data
             $objPoint = new class_module_navigation_point($this->getSystemid());
         }
@@ -284,7 +304,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
         return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
-	}
+    }
 
 
     private function getPointAdminForm(class_module_navigation_point $objPoint, $strMode) {
@@ -309,14 +329,14 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         }
 
         $strNodeBrowser = getLinkAdminDialog(
-                    $this->arrModule["modul"],
-                    "navigationPointBrowser",
-                    "&form_element=point_parent&systemid=".$objParent->getPrevId(),
-                    $this->getLang("commons_open_browser"),
-                    $this->getLang("commons_open_browser"),
-                    "icon_externalBrowser.gif",
-                    $this->getLang("commons_open_browser")
-                );
+            $this->arrModule["modul"],
+            "navigationPointBrowser",
+            "&form_element=point_parent&systemid=".$objParent->getPrevId(),
+            $this->getLang("commons_open_browser"),
+            $this->getLang("commons_open_browser"),
+            "icon_externalBrowser.gif",
+            $this->getLang("commons_open_browser")
+        );
 
         $objForm = new class_admin_formgenerator("point", $objPoint);
 
@@ -335,14 +355,14 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         return $objForm;
     }
 
-	/**
-	 * Saves or updates a navi-point
-	 *
-	 * @return string "" in case of success
+    /**
+     * Saves or updates a navi-point
+     *
+     * @return string "" in case of success
      * @permissions edit
-	 */
-	protected function actionSaveNaviPoint() {
-		$strReturn = "";
+     */
+    protected function actionSaveNaviPoint() {
+        $strReturn = "";
         $objPoint = new class_module_navigation_point();
         if($this->getParam("mode") == "edit") {
             $objPoint = new class_module_navigation_point($this->getSystemid());
@@ -365,18 +385,19 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         $this->flushCompletePagesCache();
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objPoint->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
         return $strReturn;
-	}
+    }
 
 
-	/**
-	 * Invokes the deletion of navi-points
-	 *
-	 * @return string "" in case of success
+    /**
+     * Invokes the deletion of navi-points
+     *
+     * @throws class_exception
+     * @return string "" in case of success
      * @permissions delete
-	 */
-	protected function actionDelete() {
-		$strReturn = "";
-		//Check rights
+     */
+    protected function actionDelete() {
+        $strReturn = "";
+        //Check rights
         $objPoint = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $this->flushCompletePagesCache();
 
@@ -386,20 +407,20 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
-	 * Returns a list of available navigation-points
-	 *
+     * Returns a list of available navigation-points
+     *
      * @return string
      * @permissions view
-	 */
-	protected function actionNavigationPointBrowser() {
-		$strReturn = "";
+     */
+    protected function actionNavigationPointBrowser() {
+        $strReturn = "";
         $this->setArrModuleEntry("template", "/folderview.tpl");
-		$intCounter = 1;
-		//Load all navis
+        $intCounter = 1;
+        //Load all navis
 
         $arrPoints = class_module_navigation_point::getNaviLayer($this->getSystemid());
         $strReturn .= $this->objToolkit->listHeader();
@@ -408,12 +429,12 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //Link one level up
         $strPrevID = $objPoint->getPrevId();
-        if($strPrevID != $this->getObjModule()->getSystemid()){
-            $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.gif"));
+        if($strPrevID != $this->getObjModule()->getSystemid()) {
+            $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.gif"));
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot.gif"), $strAction, $intCounter++);
         }
         else {
-            $strAction  = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+            $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf.gif"), $strAction, $intCounter++);
         }
         if(count($arrPoints) > 0) {
@@ -425,18 +446,18 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                     $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter++);
                 }
             }
-		}
+        }
 
         $strReturn .= $this->objToolkit->listFooter();
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
-   /**
-	* Helper to generate a small path-navigation
-	*
-	* @return array
-	*/
-	protected function getArrOutputNaviEntries() {
+    /**
+     * Helper to generate a small path-navigation
+     *
+     * @return array
+     */
+    protected function getArrOutputNaviEntries() {
         $arrEntries = parent::getArrOutputNaviEntries();
 
         $arrPath = $this->getPathArray();
