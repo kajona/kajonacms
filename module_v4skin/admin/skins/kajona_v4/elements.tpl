@@ -546,24 +546,24 @@ Part to display the login status, user is logged in
             <!-- messages will be inserted here -->
             <li class="divider" id="userNotificationsDropdownTagsList"></li>
             <li class="divider"></li>
-            <li><a href="%%dashboard%%">%%dashboardTitle%%</a></li>
-            <li><a href="%%sitemap%%">%%sitemapTitle%%</a></li>
+            <li><a href="%%dashboard%%"><i class='icon-home'></i> %%dashboardTitle%%</a></li>
+            <!--<li><a href="%%sitemap%%">%%sitemapTitle%%</a></li>-->
             <li class="divider"></li>
-            <li><a href="%%profile%%">%%profileTitle%%</a></li>
+            <li><a href="%%profile%%"><i class='icon-user'></i> %%profileTitle%%</a></li>
             <li class="divider"></li>
-            <li><a href="%%logout%%">%%logoutTitle%%</a></li>
+            <li><a href="%%logout%%"><i class="icon-off"></i> %%logoutTitle%%</a></li>
         </ul>
     </div>
 <script type="text/javascript">
     KAJONA.admin.messaging.getUnreadCount(function(intCount) {
         $('#badge-info').text(intCount);
         KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
-            $('#messagingShortlist').prepend("<li><a href='_indexpath_?admin=1&module=messaging'>[lang,actionShowAll,messaging]</a></li>");
+            $('#messagingShortlist').prepend("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,actionShowAll,messaging]</a></li>");
             $.each(objResponse, function(index, item) {
                 if(item.unread == 0)
-                    $('#messagingShortlist').prepend("<li><a href='"+item.details+"'><b>"+item.title+"</b></a></li>");
+                    $('#messagingShortlist').prepend("<li><a href='"+item.details+"'><i class='icon-envelope'></i> <b>"+item.title+"</b></a></li>");
                 else
-                    $('#messagingShortlist').prepend("<li><a href='"+item.details+"'>"+item.title+"</a></li>");
+                    $('#messagingShortlist').prepend("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
             });
         });
     });
@@ -573,7 +573,7 @@ Part to display the login status, user is logged in
 
             $.each($.parseJSON(data), function(index, item) {
                 console.log(item);
-                $('#userNotificationsDropdownTagsList').after("<li><a href='"+item.url+"'>"+item.name+"</a></li>");
+                $('#userNotificationsDropdownTagsList').after("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
             });
         }
     });
