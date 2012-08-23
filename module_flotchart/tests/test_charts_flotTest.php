@@ -26,10 +26,13 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setIntXAxisAngle(-20);
         $objGraph->setStrXAxisTitle("XXX");
         $objGraph->setStrYAxisTitle("YYY");
+        $objGraph->setStrBackgroundColor("#F0F0F0");
+        $objGraph->setStrGraphTitle("My First Line Chart");
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->addBarChartSet(array(1,2,3,4), "serie 1");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;

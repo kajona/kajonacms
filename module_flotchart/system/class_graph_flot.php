@@ -31,6 +31,7 @@ class class_graph_flot implements interface_graph {
     private $strXAxisTitle = "";
     private $strYAxisTitle = "";
     private $intXAxisAngle = 0;
+    private $arrXAxisTickLabels = array();
     
     //line char, bar chart, pie chart
     private $bShowLegend = true;
@@ -110,6 +111,7 @@ class class_graph_flot implements interface_graph {
     }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
+        $this->arrXAxisTickLabels = $arrXAxisTickLabels;
     }
 
     public function setBitRenderLegend($bitRenderLegend) {
@@ -179,14 +181,16 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->setStrGraphTitle($this->strGraphTitle);
         $this->objChartData->setStrXAxisTitle($this->strXAxisTitle);
         $this->objChartData->setStrYAxisTitle($this->strYAxisTitle);
+        $this->objChartData->setArrXAxisTickLabels($this->arrXAxisTickLabels);
         
         //create chart
         $strChartId = generateSystemid();
         $strChartCode = $this->objChartData->showGraph($strChartId);
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "\t <div id=\"" . $strChartId . "\" style=\"font-size:11px; font-family:".$this->strFont."; width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
-
+        $strReturn = "<div style=\"text-align:center; width:".$this->intWidth."px; \">".$this->strGraphTitle;
+        $strReturn = $strReturn."\t <div id=\"" . $strChartId . "\" style=\"font-size:11px; font-family:".$this->strFont."; width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
+        $strReturn = $strReturn."</div>";
         //TODO: eventually create all required css-code based on the current properties. this would make the request to flot.css obsolete
 
         $strReturn .= "<script type='text/javascript'>

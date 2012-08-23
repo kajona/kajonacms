@@ -25,6 +25,7 @@ abstract class class_graph_flot_chartdata_base {
     protected $strXAxisTitle = "";
     protected $strYAxisTitle = "";
     protected $intXAxisAngle = 0;
+    protected $arrXAxisTickLabels = array();
     
     //line char, bar chart, pie chart
     protected $bShowLegend = "true";
@@ -82,7 +83,7 @@ abstract class class_graph_flot_chartdata_base {
      }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        
+        $this->arrXAxisTickLabels = $arrXAxisTickLabels;
     }
 
     public abstract function optionsToJSON();

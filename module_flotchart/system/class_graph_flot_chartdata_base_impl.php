@@ -18,15 +18,13 @@
  */
 class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_base{
 
-    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-    }
-
     public function optionsToJSON() {
         $xaxis = "xaxis: { tickFormatter:function(val, axis) {return  flotHelper.getTickFormatter(".$this->intXAxisAngle.", val)}, 
                            axisLabel: '" . $this->strXAxisTitle . "',
                            axisLabelUseCanvas: true, 
                            axisLabelPadding:15,
-                           axisLabelFontFamily:'".$this->strFont."'
+                           axisLabelFontFamily:'".$this->strFont."',
+                           ticks:".$this->ticksToJSON()."
                         }";
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
                             axisLabelUseCanvas: true, 
@@ -51,6 +49,19 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         return $options;
     }
 
+    public function ticksToJSON() {
+        if(count($this->arrXAxisTickLabels)==0)
+            return "null";
+        
+        $data = "[";
+        foreach ($this->arrXAxisTickLabels as $intKey => $objValue) {
+            $data.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
+        }
+        $data = substr($data, 0, -1);
+        $data.="]";
+        return $data;
+    }
+    
     public function showChartToolTips($strChartId) {
         $tooltip =
                 "<script type='text/javascript'>
