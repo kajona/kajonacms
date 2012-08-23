@@ -20,15 +20,15 @@
  */
 class class_module_tags_admin_xml extends class_admin implements interface_xml_admin {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
 
         $this->setArrModuleEntry("modul", "tags");
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
     /**
      * Creates a new tag (if not already existing) and assigns the tag to the passed system-record
@@ -133,6 +133,30 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
         $arrTags = class_module_tags_tag::getTagsByFilter($strFilter);
         foreach($arrTags as $objOneTag) {
             $arrReturn[] = $objOneTag->getStrName();
+        }
+
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        return json_encode($arrReturn);
+    }
+
+    /**
+     * Generates the list of favorite tags for the current user.
+     * Returned structure is json based.
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionGetFavoriteTags() {
+        $arrReturn = array();
+
+        $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
+
+        foreach($arrFavorites as $objOneFavorite) {
+            $arrReturn[] = array(
+                "name" => $objOneFavorite->getStrDisplayName(),
+                "onclick" => "location.href='".getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)."'",
+                "url" => getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)
+            );
         }
 
         class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);

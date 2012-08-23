@@ -21,23 +21,23 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
      * Constructor
      *
      */
-	public function __construct() {
+    public function __construct() {
         $this->setArrModuleEntry("modul", "messaging");
         $this->setArrModuleEntry("moduleId", _messaging_module_id_);
         $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_SYSTEM_GROUP);
-		parent::__construct();
+        parent::__construct();
 
-	}
+    }
 
 
     public function getOutputModuleNavi() {
-	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn = array();
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "config", "", $this->getLang("actionConfig"), "", "", true, "adminnavi"));
-		return $arrReturn;
-	}
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "config", "", $this->getLang("actionConfig"), "", "", true, "adminnavi"));
+        return $arrReturn;
+    }
 
     /**
      * Renders the form to configure each messageprovider

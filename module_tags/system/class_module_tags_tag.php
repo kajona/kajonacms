@@ -20,7 +20,7 @@
  *
  * @targetTable tags_tag.tags_tag_id
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener  {
+class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener {
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         $this->setArrModuleEntry("modul", "tags");
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
@@ -89,7 +89,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         //delete memberships
         $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?";
         //delete the record itself
-	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid()))  )
+        if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())))
             return parent::deleteObjectInternal();
 
         return false;
@@ -141,7 +141,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @param string $strSystemid
      * @param string $strAttribute
-     * @return array
+     * @return class_module_tags_tag[]
      */
     public static function getTagsForSystemid($strSystemid, $strAttribute = null) {
 

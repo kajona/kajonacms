@@ -38,33 +38,30 @@ body {
 
     a:hover {
         color:@green !important;
-    }
-
-    a.dropdown-toggle {
-        background:none;
+        background: none !important;
     }
 
     &:hover .dropdown-menu {
         display: block;
     }
 
-    .dropdown-menu {
-        background:none @white;
-        border:1px solid #d2d2d2;
-        left:0px;
-        top:23px;
-
-        li ul li {
-            list-style:inside none;
-            padding:0px;
-            margin-left:-10px;
-
-            a {
-                padding-left:0px;
-                margin-left:0px;
-            }
-        }
-    }
+//    .dropdown-menu {
+//        background:none @white;
+//        border:1px solid #d2d2d2;
+//        left:0px;
+//        top:23px;
+//
+//        li ul li {
+//            list-style:inside none;
+//            padding:0px;
+//            margin-left:-10px;
+//
+//            a {
+//                padding-left:0px;
+//                margin-left:0px;
+//            }
+//        }
+//    }
 
     .badge {
         position: absolute;
@@ -86,24 +83,30 @@ body {
 
     li {
         display: block;
+        padding: 0px;
+        text-shadow: none;
     }
 
     a {
         color:#626262 !important;
-        padding: 2px !important;
         text-transform: none;
+        padding: 3px 15px;
     }
 
     a:hover {
-        color:@green !important;
+        color:@white !important;
     }
 
     a.dropdown-toggle {
         background:none;
     }
 
-    &:hover .dropdown-menu {
-        display: block;
+//    &:hover .dropdown-menu {
+//        display: block;
+//    }
+
+    ul {
+        margin: 0px;
     }
 }
 
@@ -518,14 +521,14 @@ label {
 .nav-list > .active > a,
 .nav-list > .active > a:hover,
 .nav > li > a:hover,
-a.dropdown-toggle,
-li.open a.dropdown-toggle {
+.nav > a.dropdown-toggle,
+.nav li.open a.dropdown-toggle {
     color:@white;
     text-shadow:none;
     background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
 }
 
-.dropdown-menu {
+.nav .dropdown-menu {
     background-clip: none;
     background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
     border:0px;

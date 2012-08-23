@@ -45,11 +45,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span4" style="padding:5px 0 0 10px;">
-
-                    <!--%%tagSelector%%-->
-
                     %%login%%
-
                 </div>
                 <div class="span8" style="text-align: right;">
                     <form class="navbar-search pull-left">
@@ -113,7 +109,7 @@
                         Modules
                     </div>
                 </a>
-                <div class="nav-collapse">
+                <div class="nav-collapse" id="moduleNavigation">
                     %%moduleSitemap%%
                 </div>
             </div>
@@ -277,6 +273,8 @@
 
         $('*[rel=tooltip]').tooltip();
 
+
+        KAJONA.admin.contextMenu.showElementMenu = function() {};
 
 
 

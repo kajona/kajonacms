@@ -98,47 +98,47 @@ class class_admin_helper {
             foreach($arrItems as $arrOneItem) {
                 $bitAdd = false;
                 switch ($arrOneItem[0]) {
-                    case "view":
-                        if($objModule->rightView())
-                            $bitAdd = true;
-                        break;
-                    case "edit":
-                        if($objModule->rightEdit())
-                            $bitAdd = true;
-                        break;
-                    case "delete":
-                        if($objModule->rightDelete())
-                            $bitAdd = true;
-                        break;
-                    case "right":
-                        if($objModule->rightRight())
-                            $bitAdd = true;
-                        break;
-                    case "right1":
-                        if($objModule->rightRight1())
-                            $bitAdd = true;
-                        break;
-                    case "right2":
-                        if($objModule->rightRight2())
-                            $bitAdd = true;
-                        break;
-                    case "right3":
-                        if($objModule->rightRight3())
-                            $bitAdd = true;
-                        break;
-                    case "right4":
-                        if($objModule->rightRight4())
-                            $bitAdd = true;
-                        break;
-                    case "right5":
-                        if($objModule->rightRight5())
-                            $bitAdd = true;
-                        break;
-                    case "":
+                case "view":
+                    if($objModule->rightView())
                         $bitAdd = true;
-                        break;
-                    default:
-                        break;
+                    break;
+                case "edit":
+                    if($objModule->rightEdit())
+                        $bitAdd = true;
+                    break;
+                case "delete":
+                    if($objModule->rightDelete())
+                        $bitAdd = true;
+                    break;
+                case "right":
+                    if($objModule->rightRight())
+                        $bitAdd = true;
+                    break;
+                case "right1":
+                    if($objModule->rightRight1())
+                        $bitAdd = true;
+                    break;
+                case "right2":
+                    if($objModule->rightRight2())
+                        $bitAdd = true;
+                    break;
+                case "right3":
+                    if($objModule->rightRight3())
+                        $bitAdd = true;
+                    break;
+                case "right4":
+                    if($objModule->rightRight4())
+                        $bitAdd = true;
+                    break;
+                case "right5":
+                    if($objModule->rightRight5())
+                        $bitAdd = true;
+                    break;
+                case "":
+                    $bitAdd = true;
+                    break;
+                default:
+                    break;
                 }
 
                 if($bitAdd || $arrOneItem[1] == "")
