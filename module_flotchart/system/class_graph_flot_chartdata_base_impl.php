@@ -24,12 +24,14 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                            axisLabelUseCanvas: true, 
                            axisLabelPadding:15,
                            axisLabelFontFamily:'".$this->strFont."',
+                           color:'".$this->strFontColor."',
                            ticks:".$this->ticksToJSON()."
                         }";
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
                             axisLabelUseCanvas: true, 
                             axisLabelPadding:15,
-                            axisLabelFontFamily:'".$this->strFont."'
+                            axisLabelFontFamily:'".$this->strFont."',
+                            color:'".$this->strFontColor."'
                         }";
 
         $legend = "legend: {show:".$this->bShowLegend."}";

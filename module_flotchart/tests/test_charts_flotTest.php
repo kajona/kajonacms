@@ -26,16 +26,28 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setIntXAxisAngle(-20);
         $objGraph->setStrXAxisTitle("XXX");
         $objGraph->setStrYAxisTitle("YYY");
+        $objGraph->setStrFontColor("red");
         $objGraph->setStrBackgroundColor("#F0F0F0");
         $objGraph->setStrGraphTitle("My First Line Chart");
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
-        $objGraph->addBarChartSet(array(1,2,3,4), "serie 1");
+        $objGraph->setStrGraphTitle("A Bar Chart");
+        $objGraph->addBarChartSet(array(1,4,3,6), "serie 1");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph->setStrXAxisTitle("x-axis");
+        $objGraph->setStrYAxisTitle("y-axis");
+        $objGraph->setStrGraphTitle("Test Stacked Bar Chart");
+        $objGraph->addStackedBarChartSet(array(8,-5,7,8,4,12), "serie 1");
+        $objGraph->addStackedBarChartSet(array(3,-4,6,2,5,2 ), "serie 2");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6"));
+        echo $objGraph->renderGraph();
+        
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph->setStrGraphTitle("A Mixed Chart");
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
@@ -44,6 +56,7 @@ class class_test_charts_flotTest extends class_testbase  {
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
+        $objGraph->setStrGraphTitle("A Pie Chart");
         $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->setBitRenderLegend(false);
         echo $objGraph->renderGraph();

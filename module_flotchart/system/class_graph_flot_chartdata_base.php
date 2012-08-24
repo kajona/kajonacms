@@ -41,6 +41,7 @@ abstract class class_graph_flot_chartdata_base {
      */
     public function __construct() {
         $this->arrChartTypes["bars"] = "bars: {show:true, barWidth:0.5, align: 'center'}";
+        $this->arrChartTypes["barsStacked"] = "stack:true, bars: {show:true, barWidth:0.5, align: 'center'}";
         $this->arrChartTypes["lines"] = "lines: {show:true}, points:{show:true} ";
         $this->arrChartTypes["pie"] = "pie: {show:true}";
     }

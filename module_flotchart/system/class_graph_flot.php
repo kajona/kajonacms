@@ -88,6 +88,13 @@ class class_graph_flot implements interface_graph {
             $this->objChartData = new class_graph_flot_chartdata_base_impl();
         
         if($this->objChartData instanceof class_graph_flot_chartdata_base_impl) {
+            $seriesData = new class_graph_flot_seriesdata();
+            $seriesData->setArrayData($arrValues);
+            $seriesData->setStrLabel($strLegend);
+            $tempArr = $this->objChartData->getArrChartTypes();
+            $seriesData->setStrSeriesChartType($tempArr["barsStacked"]);
+
+            $this->objChartData->addSeriesData($seriesData);
         }
     }
 
