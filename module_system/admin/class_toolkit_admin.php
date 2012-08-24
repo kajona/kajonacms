@@ -117,6 +117,8 @@ class class_toolkit_admin extends class_toolkit {
         $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
+
+        //KAJONA.admin.loader.loadFile('/core/module_system/admin/scripts/ckeditor/ckeditor.js', function() {
             var ckeditorConfig = {
                 customConfig : 'config_kajona_standard.js',
                 toolbar : '".$strToolbarset."',
@@ -126,6 +128,7 @@ class class_toolkit_admin extends class_toolkit {
                 filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace('".$strName."', ckeditorConfig);
+        //});
         ";
         $strReturn .= "</script>\n";
 

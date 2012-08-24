@@ -173,7 +173,6 @@ KAJONA.util.mover = (function() {
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * Please only use the specific instances KAJONA.portal.loader or KAJONA.admin.loader
  *
- * @param {String} strScriptBase
  * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
  *
  */

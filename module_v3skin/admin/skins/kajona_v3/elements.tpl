@@ -932,6 +932,23 @@ The language switch surrounds the buttons
     <table class="dashBoard"><tr>%%entries%%</tr></table>
 
     <script type="text/javascript">
+
+        $('.adminwidgetColumn > li').each(function () {
+            var widget = $(this);
+            var systemId = widget.data('systemid');
+            var content = widget.find('.content').first();
+            KAJONA.admin.ajax.genericAjaxCall('dashboard', 'getWidgetContent', systemId, function(data, status, jqXHR) {
+                if (status == 'success') {
+                    content.removeClass('loadingContainer');
+                    content.html( $.parseJSON(data) );
+                    //TODO use jquerys eval?
+                    KAJONA.util.evalScript(data);
+                } else {
+                    KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
+                }
+            });
+        });
+
         $("ul.adminwidgetColumn").each(function(index) {
 
             $(this).sortable({

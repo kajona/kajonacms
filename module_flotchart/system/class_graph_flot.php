@@ -195,15 +195,16 @@ class class_graph_flot implements interface_graph {
 
         $strReturn .= "<script type='text/javascript'>
 
-            KAJONA.admin.loader.loadFile([
-                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.js',
-                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
-                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
-                '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
-                '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
-            ], function() {
-                    console.log('trggering flot for chart ".$strChartId."');
-                ".$strChartCode."
+            KAJONA.admin.loader.loadFile(['/core/module_flotchart/admin/scripts/js/flot/jquery.flot.js'], function() {
+                KAJONA.admin.loader.loadFile([
+                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
+                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
+                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
+                    '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
+                ], function() {
+                        console.log('triggering flot for chart ".$strChartId."');
+                    ".$strChartCode."
+                });
             });
         </script>";
 

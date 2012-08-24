@@ -79,28 +79,6 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         }
         $strReturn .= $this->objToolkit->getMainDashboard($arrColumns);
 
-        $strReturn .= <<<JS
-<script>
-    $(function() {
-        $('.adminwidgetColumn > li').each(function () {
-            var widget = $(this);
-            var systemId = widget.data('systemid');
-            var content = widget.find('.content').first();
-            KAJONA.admin.ajax.genericAjaxCall('dashboard', 'getWidgetContent', systemId, function(data, status, jqXHR) {
-                if (status == 'success') {
-                    content.removeClass('loadingContainer');
-                    content.html( $.parseJSON(data) );
-                    //TODO use jquerys eval?
-                    KAJONA.util.evalScript(data);
-                } else {
-                    KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
-                }
-            });
-        });
-    });
-</script>
-JS;
-
         return $strReturn;
     }
 
@@ -133,7 +111,7 @@ JS;
                 $strGeneratedContent,
                 ($objDashboardWidget->rightEdit() ?
                     getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.png") : ""),
-                ($objDashboardWidget->rightDelete() ?
+                    ($objDashboardWidget->rightDelete() ?
                     $this->objToolkit->listDeleteButton(
                         $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
                         $this->getLang("widgetDeleteQuestion"),

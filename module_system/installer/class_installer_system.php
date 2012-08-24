@@ -334,7 +334,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
 
         //And the default skin
-        $this->registerConstant("_admin_skin_default_", "kajona_v3", class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        $this->registerConstant("_admin_skin_default_", "kajona_v4", class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
         //and a few system-settings
         $this->registerConstant("_system_portal_disable_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
@@ -365,7 +365,7 @@ class class_installer_system extends class_installer_base implements interface_i
         //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
         $this->registerConstant("_system_browser_cachebuster_", 0, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.4: Adding constant _system_graph_type_ indicating the chart-engine to use
-        $this->registerConstant("_system_graph_type_", "ezc", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_graph_type_", "flot", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
         //3.4: Enabling or disabling the internal changehistory
         $this->registerConstant("_system_changehistory_enabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 

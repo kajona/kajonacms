@@ -104,9 +104,10 @@
         <!-- CONTENT CONTAINER -->
         <div class="span10" id="content">
 
-            <h1>%%moduletitle%%</h1>
-            %%quickhelp%%
-
+            <div class="contentTopbar clearfix">
+                <h1 class="pull-left">%%moduletitle%%</h1>
+                <div class="pull-right">%%quickhelp%%</div>
+            </div>
             %%content%%
 
 
@@ -273,7 +274,7 @@
 
 
 
-<div class="modal hide fade" id="folderviewDialog" role="dialog">
+<div class="modal hide fade fullsize" id="folderviewDialog" role="dialog">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h3>BROWSER</h3>

@@ -26,7 +26,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             $('#' + this.containerId + '_content').html(strContent);
 
             var $confirmButton = $('#' + this.containerId + '_confirmButton');
-            $confirmButton.val(strConfirmButton);
+            $confirmButton.html(strConfirmButton);
             $confirmButton.click(function() {
                 window.location = strLinkHref;
                 return false;
@@ -45,8 +45,22 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
     this.init = function(intWidth, intHeight) {
 
-        if(!intWidth)
-            intWidth = $(window).width() * 0.6;
+
+        if(!intWidth) {
+            if($('#' + this.containerId).hasClass("fullsize")) {
+                intWidth = $(window).width() * 0.6;
+            }
+            else
+                intWidth = 400;
+        }
+
+        if(!intHeight) {
+            if($('#' + this.containerId).hasClass("fullsize")) {
+                intHeight = $(window).height() * 0.6;
+            }
+            else
+                intHeight = 'auto';
+        }
 
         $('#' + this.containerId).modal({
             backdrop: true,
@@ -54,6 +68,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             show: true
         }).css({
             width: intWidth,
+
             'margin-left': function () {
                 return -($(this).width() / 2);
             }
@@ -61,7 +76,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
 
         if(this.iframeURL != null) {
-            $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="100%" name="' + this.iframeId + '" id="' + this.iframeId + '"></iframe>');
+            $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight-50)+' name="' + this.iframeId + '" id="' + this.iframeId + '" seamless></iframe>');
             this.iframeURL = null;
         }
 

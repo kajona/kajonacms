@@ -44,7 +44,6 @@ class class_adminwidget_note extends class_adminwidget implements interface_admi
      * @return string
      */
     public function getWidgetOutput() {
-        $strReturn = "";
         return $this->widgetText(nl2br($this->getFieldValue("content")));
     }
 
@@ -52,7 +51,7 @@ class class_adminwidget_note extends class_adminwidget implements interface_admi
     /**
      * Return a short (!) name of the widget.
      *
-     * @return
+     * @return string
      */
     public function getWidgetName() {
         return $this->getLang("note_name");

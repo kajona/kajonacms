@@ -17,7 +17,7 @@ templates!
 
 Optional Element to start a list
 <list_header>
-<table class="table table-striped-tbody">
+<table class="table admintable table-striped-tbody">
 </list_header>
 
 Header to use when creating drag n dropable lists. places an id an loads the needed js-scripts in the
@@ -58,7 +58,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     });
 </script>
 <style>.group_move_placeholder { display: table-row } </style>
-<table id="%%listid%%" class="table table-striped-tbody">
+<table id="%%listid%%" class="table admintable table-striped-tbody">
 </dragable_list_header>
 
 Optional Element to close a list
@@ -77,7 +77,7 @@ Currently, there are two modes: with and without a description.
 <generallist_1>
     <tbody>
         <tr data-systemid="%%listitemid%%" class="generalListSet1">
-            <td >%%checkbox%%</td>
+            <td class="checkbox">%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
@@ -89,7 +89,7 @@ Currently, there are two modes: with and without a description.
 <generallist_2>
     <tbody>
         <tr data-systemid="%%listitemid%%" class="generalListSet2">
-            <td >%%checkbox%%</td>
+            <td class="checkbox">%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
@@ -754,8 +754,8 @@ Please refer to the CKEditor documentation to see what's possible here
     height : 250,
     resize_minWidth : 640,
     resize_maxWidth : 640,
-    skin : 'office2003,_skinwebpath_/ckeditor/',
-    uiColor : '#9AB8F3',
+    skin : 'BootstrapCK-Skin,_skinwebpath_/plugins/BootstrapCK-Skin/',
+    uiColor : '#F5F5F5',
     filebrowserWindowWidth : 400,
     filebrowserWindowHeight : 500,
     filebrowserImageWindowWidth : 400,
@@ -945,7 +945,7 @@ The language switch surrounds the buttons
             $('#quickHelpButton').popover({
                 title: '%%title%%',
                 content: '%%text%%',
-                placement: 'bottom'
+                placement: 'left'
             });
         });
     </script>
@@ -1035,6 +1035,23 @@ The language switch surrounds the buttons
     <table class="dashBoard"><tr>%%entries%%</tr></table>
 
     <script type="text/javascript">
+
+        $('.adminwidgetColumn > li').each(function () {
+            var widget = $(this);
+            var systemId = widget.data('systemid');
+            var content = widget.find('.content').first();
+            KAJONA.admin.ajax.genericAjaxCall('dashboard', 'getWidgetContent', systemId, function(data, status, jqXHR) {
+                if (status == 'success') {
+                    content.removeClass('loadingContainer');
+                    content.html( $.parseJSON(data) );
+                    //TODO use jquerys eval?
+                    KAJONA.util.evalScript(data);
+                } else {
+                    KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
+                }
+            });
+        });
+
         $("ul.adminwidgetColumn").each(function(index) {
 
             $(this).sortable({
@@ -1066,7 +1083,7 @@ The language switch surrounds the buttons
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
 <dialogContainer>
-    <div class="modal hide fade" id="%%dialog_id%%">
+    <div class="modal hide fade fullsize" id="%%dialog_id%%">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="%%dialog_id%%">×</button>
             <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
