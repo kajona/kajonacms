@@ -847,10 +847,20 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
                $("#"+arrElement[0]+"_month").addClass("mandatoryFormElement");
                $("#"+arrElement[0]+"_year").addClass("mandatoryFormElement");
             }
-            else
+
+            if($("#"+arrElement[0]))
                 $("#"+arrElement[0]).addClass("mandatoryFormElement");
         }
+
+        //closest(".control-group").addClass("error")
     }
+};
+
+KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
+    $(arrFields).each(function() {
+        if($("#"+this))
+            $("#"+this).closest(".control-group").addClass("error");
+    });
 };
 
 /**

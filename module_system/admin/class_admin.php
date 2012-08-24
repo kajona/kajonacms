@@ -116,8 +116,11 @@ abstract class class_admin {
         if($this->getParam("printView") != "")
              $this->arrModule["template"] = "/print.tpl";
 
+        if($this->getParam("folderview") != "")
+            $this->arrModule["template"] = "/folderview.tpl";
 
-        //FIXME: find proper position
+
+        //TODO: find proper position
         class_adminskin_helper::defineSkinWebpath();
 	}
 

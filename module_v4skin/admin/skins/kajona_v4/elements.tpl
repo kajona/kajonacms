@@ -382,10 +382,10 @@ Regular Submit-Button
             <span class="btn-text">%%value%%</span>
             <span class="statusicon"></span>
         </button>
-        <button id="cancelglobal" class="btn" onclick="location.reload();">
+        <!--<button id="cancelglobal" class="btn" onclick="location.reload();">
             <span class="btn-text">Cancel</span>
             <span class="statusicon"></span>
-        </button>
+        </button>-->
     </div>
 </input_submit>
 
@@ -639,7 +639,7 @@ Infobox used by the filemanager
 The following sections specify the layout of the rights-mgmt
 
 <rights_form_header>
-	<div align="left">%%backlink%% | %%desc%% %%record%% <br /><br /></div>
+	<div align="left">%%desc%% %%record%% <br /><br /></div>
 </rights_form_header>
 
 <rights_form_form>
@@ -753,7 +753,6 @@ Please refer to the CKEditor documentation to see what's possible here
     width : 640,
     height : 250,
     resize_minWidth : 640,
-    resize_maxWidth : 640,
     skin : 'BootstrapCK-Skin,_skinwebpath_/plugins/BootstrapCK-Skin/',
     uiColor : '#F5F5F5',
     filebrowserWindowWidth : 400,

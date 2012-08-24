@@ -360,7 +360,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
                 $strUrlHistory = $this->getHistory(0);
                 $arrHistory = explode("&", $strUrlHistory);
                 if($arrHistory[1] != "module=rights") {
-                    $this->adminReload(_indexpath_."?".$this->getHistory(0));
+                    $this->adminReload(_indexpath_."?".$this->getHistory(0).($this->getParam("pe") != "" ? "&peClose=1" : ""));
                 }
 
 				return "";

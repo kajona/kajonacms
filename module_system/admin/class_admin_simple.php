@@ -245,7 +245,7 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderPermissionsAction(class_model $objListEntry) {
         if($objListEntry->rightRight() && $this->strPeAddon == "") {
-            return $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid())));
+            return $this->objToolkit->listButton(getLinkAdminDialog("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid()), $objListEntry->getStrDisplayName(), true, true));
         }
         return "";
     }

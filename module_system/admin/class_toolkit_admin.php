@@ -1296,6 +1296,7 @@ class class_toolkit_admin extends class_toolkit {
 
                 $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
                         KAJONA.admin.forms.renderMandatoryFields([";
+
                 foreach($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
                 }
@@ -1310,9 +1311,14 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
-        foreach ($arrErrors as $strOneError) {
+        $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
+            KAJONA.admin.forms.renderMissingMandatoryFields([";
+
+        foreach ($arrErrors as $strKey => $strOneError) {
             $strRows .= $this->objTemplate->fillTemplate(array("field_errortext" => $strOneError), $strTemplateRowID);
+            $strRendercode .= "[ '".$strKey."' ], ";
         }
+        $strRendercode .= " [] ]); });</script>";
         $arrTemplate = array();
         $arrTemplate["errorrows"] = $strRows;
         $arrTemplate["errorintro"] = class_lang::getInstance()->getLang("errorintro", "system");

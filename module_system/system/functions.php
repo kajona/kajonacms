@@ -473,6 +473,10 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null) {
     $strLink = "";
 
+
+    if($bitPortalEditor)
+        $strParams .= "&pe=1";
+
     //urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
@@ -484,8 +488,7 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
             $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
     }
 
-    if($bitPortalEditor)
-        $strParams .= "&pe=1";
+
 
     if($strImage != "") {
         if($strAlt == "")

@@ -277,7 +277,7 @@
 <div class="modal hide fade fullsize" id="folderviewDialog" role="dialog">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>BROWSER</h3>
+        <h3 id="folderviewDialog_title">BROWSER</h3>
     </div>
     <div class="modal-body">
         <div id="folderviewDialog_content"><!-- filled by js --></div>

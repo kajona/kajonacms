@@ -623,7 +623,6 @@ Please refer to the CKEditor documentation to see what's possible here
     width : 640,
     height : 250,
     resize_minWidth : 640,
-    resize_maxWidth : 640,
     skin : 'office2003,_skinwebpath_/ckeditor/',
     uiColor : '#9AB8F3',
     filebrowserWindowWidth : 400,

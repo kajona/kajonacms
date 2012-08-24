@@ -38,7 +38,7 @@
     -->
 </head>
 
-<body>
+<body class="dialogBody">
 
 
 <div class="container-fluid">

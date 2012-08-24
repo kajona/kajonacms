@@ -18,6 +18,8 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
     this.iframeURL;
 
     this.setTitle = function (strTitle) {
+        if(strTitle == "")
+            strTitle = "&nbsp;";
         $('#' + this.containerId + '_title').html(strTitle);
     };
 
@@ -59,7 +61,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
                 intHeight = $(window).height() * 0.6;
             }
             else
-                intHeight = 'auto';
+                intHeight = '100%';
         }
 
         $('#' + this.containerId).modal({
@@ -68,7 +70,6 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             show: true
         }).css({
             width: intWidth,
-
             'margin-left': function () {
                 return -($(this).width() / 2);
             }
@@ -76,7 +77,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
 
         if(this.iframeURL != null) {
-            $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight-50)+' name="' + this.iframeId + '" id="' + this.iframeId + '" seamless></iframe>');
+            $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight-50)+' name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
             this.iframeURL = null;
         }
 
