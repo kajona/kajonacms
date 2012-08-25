@@ -63,6 +63,10 @@ body {
 
         }
 
+        &.dropdown-toggle:hover {
+            text-decoration: underline;
+            color: #626262 !important;
+        }
 
     }
 
@@ -403,7 +407,7 @@ btn {
 }
 
 #savechanges:hover, #cancelglobal:hover {
-  color:@white;
+  color:@black;
 }
 
 #savechanges span.btn-text, #cancelglobal span.btn-text {
@@ -464,9 +468,12 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   border-color:@green;
   .box-shadow(0 0 6px @green+20);
   outline: 0 none;
+}
 
-
-
+select {
+    height: 30px;
+    padding: 2px 0 2px 8px;
+    background: url(../img/form_select.png) no-repeat;
 }
 
 
