@@ -13,14 +13,6 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript">
-        $(function() {
-            $('[rel="tooltip"]').each(function(index) {
-                KAJONA.admin.tooltip.add(this);
-            });
-            KAJONA.admin.tooltip.hide();
-        });
-    </script>
 </head>
 <body class="folderView">
 

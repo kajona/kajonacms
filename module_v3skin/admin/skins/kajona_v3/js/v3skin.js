@@ -67,3 +67,19 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
     calendar.selectEvent.subscribe(handleSelect, calendar, true);
     calendar.render();
 };
+
+
+
+
+
+KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
+
+    $('*[rel=tooltip]').qtip({
+        position: {
+            viewport: $(window)
+        },
+        style: {
+            classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+        }
+    });
+});

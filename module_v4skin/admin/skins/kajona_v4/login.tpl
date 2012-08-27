@@ -7,6 +7,7 @@
     <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
     %%head%%
 	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+    <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />

@@ -19,6 +19,7 @@
     <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
     %%head%%
     <script src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+    <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 
     <script>
 

@@ -6,6 +6,7 @@
     <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     %%head%%
 	<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+    <script type="text/javascript" src="_skinwebpath_/js/v3skin.js?_system_browser_cachebuster_"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />
@@ -49,11 +50,7 @@
         KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
     }, true);
 
-    $(function() {
-        $('[rel="tooltip"]').each(function(index) {
-            KAJONA.admin.tooltip.add(this);
-        });
-    });
+
 </script>
 </body>
 </html>

@@ -66,28 +66,11 @@
 <script src="_skinwebpath_/js/bootstrap-button.js"></script>
 <script src="_skinwebpath_/js/bootstrap-collapse.js"></script>
 <script src="_skinwebpath_/js/bootstrap-carousel.js"></script>
+
+<script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 <!--<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>-->
 <!--<script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>-->
 
-<script>
-
-    $(function () {
-
-        // init popovers & tooltips
-        $('#content a[rel=popover]').popover();
-
-        $('*[rel=tooltip]').tooltip();
-
-
-        KAJONA.admin.contextMenu.showElementMenu = function() {};
-
-        KAJONA.admin.statusDisplay.classOfMessageBox = "alert alert-info";
-        KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-error";
-
-
-    });
-
-</script>
 
 
 
