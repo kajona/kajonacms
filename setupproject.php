@@ -30,7 +30,7 @@ class class_project_setup {
         $arrModules = array_filter(
             $arrModules,
             function($strValue) {
-                return preg_match("/(installer|module|element|_)+.*/i", $strValue);
+                return preg_match("/(module|element|_)+.*/i", $strValue);
             }
         );
 

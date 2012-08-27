@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>installer</title>
+    <description>The basic installer gui, required to install a system from scratch.</description>
+    <version>3.4.9</version>
+    <author>Kajona Team</author>
+    <target>module_installer</target>
+    <type>MODULE</type>
+    <providesInstaller>FALSE</providesInstaller>
+    <requiredModules />
+    <minSystemVersion />
+</package>
