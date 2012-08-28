@@ -555,6 +555,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["name"] = $strName;
+        $arrTemplate["modalDialog"] = $this->jsDialog(0);
 
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "','"), $strAllowedFileTypes);
 

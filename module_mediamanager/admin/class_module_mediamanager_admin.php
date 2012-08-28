@@ -287,7 +287,7 @@ HTML;
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
 
-        return $strJsCode.$strActions.$this->objToolkit->divider().$this->renderList($objIterator, true, class_module_mediamanager_admin::INT_LISTTYPE_FOLDER);
+        return $strJsCode.$strActions.$this->renderList($objIterator, true, class_module_mediamanager_admin::INT_LISTTYPE_FOLDER);
 
 
     }
@@ -396,18 +396,17 @@ HTML;
     }
 
 
-
-	/**
-	 * Synchronizes all repos available
-	 *
-	 * @return string
+    /**
+     * Synchronizes all repos available
+     *
+     * @return string
      * @permission edit
      * @autoTestable
-	 */
-	protected function actionMassSync() {
+     */
+    protected function actionMassSync() {
 
         $arrRepos = class_module_mediamanager_repo::getAllRepos();
-        $arrSyncs = array( "insert" => 0, "delete" => 0);
+        $arrSyncs = array("insert" => 0, "delete" => 0);
         foreach($arrRepos as $objOneRepo) {
             if($objOneRepo->rightEdit()) {
                 $arrTemp = $objOneRepo->syncRepo();
@@ -421,8 +420,8 @@ HTML;
         //Flush cache
         $this->flushCompletePagesCache();
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
     /**
