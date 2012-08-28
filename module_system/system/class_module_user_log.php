@@ -13,7 +13,7 @@
  * @package module_user
  * @author sidler@mulchprod.de
  */
-class class_module_user_log extends class_model implements interface_model  {
+class class_module_user_log extends class_model implements interface_model {
 
     /**
      * Constructor to create a valid object
@@ -24,12 +24,13 @@ class class_module_user_log extends class_model implements interface_model  {
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -38,17 +39,19 @@ class class_module_user_log extends class_model implements interface_model  {
 
     /**
      * Deletes the current object from the system
+     *
      * @return bool
      */
     public function deleteObject() {
         return true;
     }
 
-        /**
+    /**
      * Generates a login-log-entry
      *
      * @param int $intStatus
      * @param string $strOtherUsername
+     *
      * @return bool
      * @static
      */
@@ -56,24 +59,34 @@ class class_module_user_log extends class_model implements interface_model  {
 
         $arrParams = array();
 
-		$strQuery = "INSERT INTO "._dbprefix_."user_log
-						(user_log_id, user_log_userid, user_log_date, user_log_status, user_log_ip) VALUES
-						(?, ?, ?, ?, ?)";
+        $strQuery = "INSERT INTO "._dbprefix_."user_log
+						(user_log_id, user_log_userid, user_log_date, user_log_status, user_log_ip, user_log_sessid) VALUES
+						(?, ?, ?, ?, ?, ?)";
 
         $arrParams[] = generateSystemid();
 
         if($strOtherUsername == "") {
-			$arrParams[] = (class_carrier::getInstance()->getObjSession()->getUserID() == "" ? "0" : class_carrier::getInstance()->getObjSession()->getUserID());
+            $arrParams[] = (class_carrier::getInstance()->getObjSession()->getUserID() == "" ? "0" : class_carrier::getInstance()->getObjSession()->getUserID());
         }
-		else {
-		    $arrParams[] = $strOtherUsername;
-		}
+        else {
+            $arrParams[] = $strOtherUsername;
+        }
 
-        $arrParams[] = time();
+        $arrParams[] = class_date::getCurrentTimestamp();
         $arrParams[] = (int)$intStatus;
         $arrParams[] = getServer("REMOTE_ADDR");
+        $arrParams[] = class_carrier::getInstance()->getObjSession()->getInternalSessionId();
 
-		return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
+    }
+
+
+    public static function registerLogout() {
+        $strQuery = "UPDATE "._dbprefix_."user_log
+                        SET user_log_enddate = ?
+                      WHERE user_log_sessid = ?";
+
+        return class_carrier::getInstance()->getObjDB()->getInstance()->_pQuery($strQuery, array(class_date::getCurrentTimestamp(), class_carrier::getInstance()->getObjSession()->getInternalSessionId()));
     }
 
     /**
@@ -91,7 +104,7 @@ class class_module_user_log extends class_model implements interface_model  {
 			      LEFT JOIN "._dbprefix_."user
 						ON user_log_userid = user_id
 				   ORDER BY user_log_date DESC";
-		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
     }
 
     /**
@@ -102,9 +115,9 @@ class class_module_user_log extends class_model implements interface_model  {
     public function getLoginLogsCount() {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_log as log";
-		$arrRow = $this->objDB->getPRow($strQuery, array());
+        $arrRow = $this->objDB->getPRow($strQuery, array());
 
-		return $arrRow["COUNT(*)"];
+        return $arrRow["COUNT(*)"];
     }
 
 }

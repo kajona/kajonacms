@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Standard-Admin-Skin:";
@@ -69,11 +69,14 @@ $lang["login_loginPass"]                 = "Passwort";
 $lang["login_loginPass2"]                = "Passwort";
 $lang["login_loginTitle"]                = "Anmelden";
 $lang["login_loginUser"]                 = "Benutzer";
+$lang["login_logindate"]                 = "Start";
 $lang["login_logoutTitle"]               = "Abmelden";
+$lang["login_logoutdate"]                = "Ende";
 $lang["login_nr"]                        = "#";
 $lang["login_password_form_intro"]       = "Bitte vergeben Sie ein neues Passwort unter Angabe des zugehörigen Benutzernamens.<br />";
 $lang["login_printview"]                 = "Druckansicht öffnen";
 $lang["login_profileTitle"]              = "Benutzer bearbeiten";
+$lang["login_sessid"]                    = "Session-ID";
 $lang["login_sitemap"]                   = "Sitemap";
 $lang["login_status"]                    = "Status";
 $lang["login_statusTitle"]               = "Angemeldet als:";
@@ -137,13 +140,12 @@ $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_portal"]                     = "Portal-Login:";
 $lang["user_resend_password_hint"]       = "Mit dem Zusenden eines neuen Passwortes erhält der Benutzer an die hinterlegte E-Mailadresse eine E-Mail mit einem neuen Passwort sowie einem Link zum Ändern des Passwortes. <br />Hierfür muss der Benutzer seinen Benutzernamen kennen.<br />";
 $lang["user_skin"]                       = "Admin-Skin:";
+$lang["user_switch_to"]                  = "Session mit dem gewählten User starten. Zum Beenden ist ein erneuter Logout/Login notwendig.";
 $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_username"]                   = "Benutzername:";
 $lang["user_usersource"]                 = "Benutzerquelle:";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["userlist_filter"]                 = "Filter anwenden";
-$lang["user_switch_to"]                  = "Session mit dem gewählten User starten. Zum Beenden ist ein erneuter Logout/Login notwendig.";
-
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");

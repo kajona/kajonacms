@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Default admin skin:";
@@ -68,11 +68,14 @@ $lang["login_loginJsInfo"]               = "Please allow JavaScript for this sit
 $lang["login_loginPass"]                 = "Password";
 $lang["login_loginTitle"]                = "Login";
 $lang["login_loginUser"]                 = "Username";
+$lang["login_logindate"]                 = "Start";
 $lang["login_logoutTitle"]               = "Log out";
+$lang["login_logoutdate"]                = "End";
 $lang["login_nr"]                        = "#";
 $lang["login_password_form_intro"]       = "Please choose a new password along with providing your username.<br />";
 $lang["login_printview"]                 = "Open print-view";
 $lang["login_profileTitle"]              = "Edit profile";
+$lang["login_sessid"]                    = "Session-ID";
 $lang["login_sitmap"]                    = "Sitemap";
 $lang["login_status"]                    = "Status";
 $lang["login_statusTitle"]               = "Logged in as:";
@@ -136,13 +139,12 @@ $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_portal"]                     = "Portal login:";
 $lang["user_resend_password_hint"]       = "By sending the user a new password, an email is sent to the adress saved with the users profile containing a new password and a link to change the password.<br />The user must be aware of his username in order to finish the process.<br />";
 $lang["user_skin"]                       = "Admin skin:";
+$lang["user_switch_to"]                  = "Switch current session to user. You have to logout/login again to proceed with your current user.";
 $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_username"]                   = "Username:";
 $lang["user_usersource"]                 = "User-Source:";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["userlist_filter"]                 = "Apply filter";
-$lang["user_switch_to"]                  = "Switch current session to user. You have to logout/login again to proceed with your current user.";
-
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");

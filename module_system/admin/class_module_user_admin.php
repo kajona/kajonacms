@@ -990,18 +990,22 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrRows = array();
         foreach(array_keys($arrLogs) as $intI) {
             $arrRows[$intI] = array();
-            $arrRows[$intI][]	= $arrLogs[$intI]["user_log_id"];
+            //$arrRows[$intI][]	= $arrLogs[$intI]["user_log_id"];
+            $arrRows[$intI][]	= $arrLogs[$intI]["user_log_sessid"];
             $arrRows[$intI][]	= ($arrLogs[$intI]["user_username"] != "" ? $arrLogs[$intI]["user_username"] : $arrLogs[$intI]["user_log_userid"]);
-            $arrRows[$intI][]	= timeToString($arrLogs[$intI]["user_log_date"]);
+            $arrRows[$intI][]	= dateToString(new class_date($arrLogs[$intI]["user_log_date"]));
+            $arrRows[$intI][]	= $arrLogs[$intI]["user_log_enddate"] != "" ? dateToString(new class_date($arrLogs[$intI]["user_log_enddate"])) : "";
             $arrRows[$intI][]	= ($arrLogs[$intI]["user_log_status"] == 0 ? $this->getLang("login_status_0") : $this->getLang("login_status_1"));
             $arrRows[$intI][]	= $arrLogs[$intI]["user_log_ip"];
         }
 
         //Building the surrounding table
         $arrHeader = array();
-        $arrHeader[]	= $this->getLang("login_nr");
+        //$arrHeader[]	= $this->getLang("login_nr");
+        $arrHeader[]	= $this->getLang("login_sessid");
         $arrHeader[]	= $this->getLang("login_user");
-        $arrHeader[]	= $this->getLang("commons_date");
+        $arrHeader[]	= $this->getLang("login_logindate");
+        $arrHeader[]	= $this->getLang("login_logoutdate");
         $arrHeader[]	= $this->getLang("login_status");
         $arrHeader[]	= $this->getLang("login_ip");
         //and fetch the table
