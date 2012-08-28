@@ -102,18 +102,7 @@ $(function () {
     // init popovers & tooltips
     $('#content a[rel=popover]').popover();
 
-    KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
-
-        $('*[rel=tooltip]').qtip({
-            position: {
-                viewport: $(window)
-            },
-            style: {
-                classes: 'ui-tooltip-youtube ui-tooltip-shadow'
-            }
-        });
-    });
-
+    KAJONA.admin.tooltip.initTooltip();
 
     KAJONA.admin.contextMenu.showElementMenu = function() {};
 

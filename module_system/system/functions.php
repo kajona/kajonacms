@@ -521,7 +521,7 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @todo switch to popover instead of tooltip
  */
 function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $strStyle="") {
-	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"KAJONA.admin.tooltip.add(this, '".addslashes($strAlt)."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
+	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" rel=\"tooltip\"  ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
 }
 
 /**
@@ -533,10 +533,10 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $str
  * @todo move to toolkit
  */
 function getRightsImageAdminName($strSystemid) {
-	if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
-	   return "icon_key_inherited.png";
-	else
-	   return "icon_key.png";
+    if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
+        return "icon_key_inherited.png";
+    else
+        return "icon_key.png";
 }
 
 
@@ -547,20 +547,22 @@ function getRightsImageAdminName($strSystemid) {
  * @return int
  */
 function phpSizeToBytes($strBytes) {
-	$intReturn = 0;
+    $intReturn = 0;
 
-	$strBytes = uniStrtolower($strBytes);
+    $strBytes = uniStrtolower($strBytes);
 
-	if(strpos($strBytes, "m") !== false) {
-		$intReturn = str_replace("m", "", $strBytes);
-		$intReturn = $intReturn * 1024 * 1024;
-	} else if(strpos($strBytes, "k") !== false) {
-		$intReturn = str_replace("m", "", $strBytes);
-		$intReturn = $intReturn * 1024;
-	} else if(strpos($strBytes, "g") !== false) {
-		$intReturn = str_replace("m", "", $strBytes);
-		$intReturn = $intReturn * 1024 * 1024 * 1024;
-	}
+    if(strpos($strBytes, "m") !== false) {
+        $intReturn = str_replace("m", "", $strBytes);
+        $intReturn = $intReturn * 1024 * 1024;
+    }
+    else if(strpos($strBytes, "k") !== false) {
+        $intReturn = str_replace("m", "", $strBytes);
+        $intReturn = $intReturn * 1024;
+    }
+    else if(strpos($strBytes, "g") !== false) {
+        $intReturn = str_replace("m", "", $strBytes);
+        $intReturn = $intReturn * 1024 * 1024 * 1024;
+    }
 
 	return $intReturn;
 }

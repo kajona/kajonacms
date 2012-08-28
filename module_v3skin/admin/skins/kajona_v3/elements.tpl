@@ -713,10 +713,6 @@ pe_iconbar, pe_disable
         KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
 
-            $('[rel="tooltip"]').each(function(index) {
-                KAJONA.admin.tooltip.add(this);
-            });
-            KAJONA.admin.tooltip.hide();
         }, true);
 
 	</script>

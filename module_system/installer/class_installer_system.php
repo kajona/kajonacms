@@ -203,7 +203,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_log_sessid"]  = array("char20", true);
         $arrFields["user_log_enddate"] = array("long", true);
 
-        if(!$this->objDB->createTable("user_log", $arrFields, array("user_log_id")))
+        if(!$this->objDB->createTable("user_log", $arrFields, array("user_log_id"), array("user_log_sessid")))
             $strReturn .= "An error occured! ...\n";
 
         // Sessionmgtm ----------------------------------------------------------------------------------
@@ -659,6 +659,8 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_pQuery($strQuery, array()))
             $strReturn .= "An error occured! ...\n";
 
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_log")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_log_sessid")." ) ", array());
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.3");

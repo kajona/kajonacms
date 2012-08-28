@@ -398,6 +398,53 @@ KAJONA.admin.folderview = {
 };
 
 
+KAJONA.admin.tooltip = {
+    initTooltip : function() {
+        KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
+
+            $('*[rel=tooltip]').qtip({
+                position: {
+                    viewport: $(window)
+                },
+                style: {
+                    classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                }
+            });
+        });
+    },
+
+    addTooltip : function(objElement, strText) {
+        KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
+
+            if(strText) {
+                $(objElement).qtip({
+                    position: {
+                        viewport: $(window)
+                    },
+                    style: {
+                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    },
+                    content : {
+                        text: strText
+                    }
+                });
+            }
+            else {
+                $(objElement).qtip({
+                    position: {
+                        viewport: $(window)
+                    },
+                    style: {
+                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    }
+                });
+            }
+        });
+    }
+
+};
+
+
 
 /**
  * switches the edited language in admin
@@ -686,20 +733,20 @@ KAJONA.admin.ajax = {
                     location.reload();
 
 				if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
-					var image = document.getElementById('statusImage_' + strSystemIdToSet);
-					var link = document.getElementById('statusLink_' + strSystemIdToSet);
+					var image = $('#statusImage_' + strSystemIdToSet);
+					var link = $('#statusLink_' + strSystemIdToSet);
 
-					if (image.src.indexOf('icon_enabled.png') != -1) {
-						image.src = strInActiveImageSrc;
-						image.setAttribute('alt', strInActiveText);
-						link.setAttribute('title', strInActiveText);
+					if (image.attr('src').indexOf('icon_enabled.png') != -1) {
+						image.attr('src', strInActiveImageSrc);
+						image.attr('alt', strInActiveText);
+						link.attr('title', strInActiveText);
 					} else {
-						image.src = strActiveImageSrc;
-						image.setAttribute('alt', strActiveText);
-						link.setAttribute('title', strActiveText);
+						image.attr('src', strActiveImageSrc);
+						image.attr('alt', strActiveText);
+						link.attr('title', strActiveText);
 					}
 
-					KAJONA.admin.tooltip.add(link);
+                    KAJONA.admin.util.tooltip.addTooltip(link);
 				}
         	}
             else{
@@ -782,7 +829,7 @@ KAJONA.admin.contextMenu = {
 	},
 
 	showElementMenu: function (strIdentifier, objAttach) {
-        KAJONA.admin.tooltip.hide();
+
         if(typeof $(objAttach).attr('id') != 'string')
             $(objAttach).attr('id', new Date().getTime()+strIdentifier);
 

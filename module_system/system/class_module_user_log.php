@@ -80,13 +80,20 @@ class class_module_user_log extends class_model implements interface_model {
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
     }
 
-
+    /**
+     * Updates the users' log-entry with the current logout-timestamp
+     * @static
+     * @return bool
+     */
     public static function registerLogout() {
         $strQuery = "UPDATE "._dbprefix_."user_log
                         SET user_log_enddate = ?
                       WHERE user_log_sessid = ?";
 
-        return class_carrier::getInstance()->getObjDB()->getInstance()->_pQuery($strQuery, array(class_date::getCurrentTimestamp(), class_carrier::getInstance()->getObjSession()->getInternalSessionId()));
+        return class_carrier::getInstance()->getObjDB()->getInstance()->_pQuery(
+            $strQuery,
+            array(class_date::getCurrentTimestamp(), class_carrier::getInstance()->getObjSession()->getInternalSessionId())
+        );
     }
 
     /**

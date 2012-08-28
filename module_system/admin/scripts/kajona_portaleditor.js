@@ -226,7 +226,6 @@ KAJONA.admin.portaleditor = {
 	},
 
 	showNewElementMenu: function (strPlaceholder, objAttach) {
-		KAJONA.admin.tooltip.hide();
 
 		var arrPlaceholder = this.objPlaceholderWithElements[strPlaceholder];
 		var arrElements = arrPlaceholder["elements"];
@@ -408,9 +407,51 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 KAJONA.admin.loader = new KAJONA.util.Loader();
 
 
-$(function() {
-    $('[rel="tooltip"]').each(function(index) {
-        KAJONA.admin.tooltip.add(this);
-    });
-    KAJONA.admin.tooltip.hide();
-});
+KAJONA.admin.tooltip = {
+    initTooltip : function() {
+        KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
+
+            $('*[rel=tooltip]').qtip({
+                position: {
+                    viewport: $(window)
+                },
+                style: {
+                    classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                }
+            });
+        });
+    },
+
+    addTooltip : function(objElement, strText) {
+        KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
+
+            if(strText) {
+                $(objElement).qtip({
+                    position: {
+                        viewport: $(window)
+                    },
+                    style: {
+                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    },
+                    content : {
+                        text: strText
+                    }
+                });
+            }
+            else {
+                $(objElement).qtip({
+                    position: {
+                        viewport: $(window)
+                    },
+                    style: {
+                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    }
+                });
+            }
+        });
+    }
+
+};
+
+
+KAJONA.admin.tooltip.initTooltip();
