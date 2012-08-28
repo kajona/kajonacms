@@ -90,8 +90,6 @@ abstract class class_admin_simple extends class_admin {
 
 
     /**
-
-    /**
      * Renders a list of items, target is the common admin-list.
      * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
      * As soon as the list is sortable, the page-size should be at least the same as the number of elements
@@ -207,9 +205,27 @@ abstract class class_admin_simple extends class_admin {
         if($objListEntry->rightEdit()) {
 
             if($bitDialog)
-                return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+                return $this->objToolkit->listButton(
+                    getLinkAdminDialog(
+                        $objListEntry->getArrModule("modul"),
+                        "edit",
+                        "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
+                        $this->getLang("commons_list_edit"),
+                        $this->getLang("commons_list_edit"),
+                        "icon_pencil.png"
+                    )
+                );
             else
-                return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+                return $this->objToolkit->listButton(
+                    getLinkAdmin(
+                        $objListEntry->getArrModule("modul"),
+                        "edit",
+                        "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
+                        $this->getLang("commons_list_edit"),
+                        $this->getLang("commons_list_edit"),
+                        "icon_pencil.png"
+                    )
+                );
         }
         return "";
     }
@@ -221,7 +237,11 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon));
+            return $this->objToolkit->listDeleteButton(
+                $objListEntry->getStrDisplayName(),
+                $this->getLang("delete_question", $objListEntry->getArrModule("modul")),
+                getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
+            );
         }
         return "";
     }
@@ -245,7 +265,19 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderPermissionsAction(class_model $objListEntry) {
         if($objListEntry->rightRight() && $this->strPeAddon == "") {
-            return $this->objToolkit->listButton(getLinkAdminDialog("right", "change", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_permissions"), getRightsImageAdminName($objListEntry->getSystemid()), $objListEntry->getStrDisplayName(), true, true));
+            return $this->objToolkit->listButton(
+                getLinkAdminDialog(
+                    "right",
+                    "change",
+                    "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
+                    "",
+                    $this->getLang("commons_edit_permissions"),
+                    getRightsImageAdminName($objListEntry->getSystemid()),
+                    $objListEntry->getStrDisplayName(),
+                    true,
+                    true
+                )
+            );
         }
         return "";
     }
@@ -257,7 +289,16 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderTagAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdminDialog("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_edit_tags"), $this->getLang("commons_edit_tags"), "icon_tag.png"));
+            return $this->objToolkit->listButton(
+                getLinkAdminDialog(
+                    "tags",
+                    "genericTagForm",
+                    "&systemid=".$objListEntry->getSystemid(),
+                    $this->getLang("commons_edit_tags"),
+                    $this->getLang("commons_edit_tags"),
+                    "icon_tag.png"
+                )
+            );
         }
         return "";
     }
@@ -270,7 +311,16 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderCopyAction(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "copyObject", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("commons_edit_copy"), "icon_copy.png"));
+            return $this->objToolkit->listButton(
+                getLinkAdmin(
+                    $objListEntry->getArrModule("modul"),
+                    "copyObject",
+                    "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
+                    "",
+                    $this->getLang("commons_edit_copy"),
+                    "icon_copy.png"
+                )
+            );
         }
         return "";
     }
@@ -299,9 +349,13 @@ abstract class class_admin_simple extends class_admin {
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($this->getObjModule()->rightEdit()) {
             if($bitDialog)
-                return $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.png"));
+                return $this->objToolkit->listButton(
+                    getLinkAdminDialog($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.png")
+                );
             else
-                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.png"));
+                return $this->objToolkit->listButton(
+                    getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.png")
+                );
         }
         return "";
     }
@@ -315,7 +369,16 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderChangeHistoryAction(class_model $objListEntry) {
         if(_system_changehistory_enabled_ == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightEdit() && class_module_system_module::getModuleByName("system")->rightRight3()) {
-            return $this->objToolkit->listButton(getLinkAdminDialog("system", "genericChangelog", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_edit_history"), $this->getLang("commons_edit_history"), "icon_history.png"));
+            return $this->objToolkit->listButton(
+                getLinkAdminDialog(
+                    "system",
+                    "genericChangelog",
+                    "&systemid=".$objListEntry->getSystemid(),
+                    $this->getLang("commons_edit_history"),
+                    $this->getLang("commons_edit_history"),
+                    "icon_history.png"
+                )
+            );
         }
         return "";
     }

@@ -829,6 +829,37 @@ label {
     font-family: @baseFontFamily !important;
     padding: 4px !important;
     font-size: @baseFontSize - 5 !important;
+}
 
+/* UPLOADER */
+#uploadContainer {
+
+    .qq-upload-button {
+        .btn;
+        width: 200px;
+
+        &:hover {
+
+        }
+    }
+
+    .qq-upload-drop-area, .qq-upload-extra-drop-area {
+        .alert;
+        .alert-info;
+
+        width: 90% !important;
+    }
+
+    .qq-upload-drop-area-active {
+        .alert-success;
+    }
+
+    .qq-upload-list {
+        .alert-success;
+
+        li {
+            background: none;
+        }
+    }
 
 }

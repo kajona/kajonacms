@@ -7,25 +7,20 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["actionLogbook"]                   = "Loggbok";
+$lang["actionLogbookFlush"]              = "Töm loggbok";
+$lang["actionMasssync"]                  = "Synkronisera alla";
+$lang["actionOpenFolder"]                = "Visa mapp";
+$lang["backlink"]                        = "Föregående";
 $lang["cropImage"]                       = "Beskär bild";
 $lang["cropImageAccept"]                 = "Spara beskärning";
 $lang["cropWarningCrop"]                 = "Redan beskuren";
 $lang["cropWarningDialogHeader"]         = "Bekräfta beskärning";
 $lang["cropWarningSaving"]               = "Vänligen beakta: Beskärning av bilder påverkar all användning av bilderna! Fortsätt i alla fall?<br />";
 $lang["cropWarningUnsavedHint"]          = "Ändringarna av bilden har ännu inte sparats!\\nVill du verkligen förkasta ändringarna?\\n\\nFör att spara ändringarna välj \"avbryt\" och dubbelklicka på bilden.";
-$lang["rotateImageLeft"]                 = "Roltera 90° åt vänster";
-$lang["rotateImageRight"]                = "Roltera 90° åt höger";
-$lang["showPreview"]                     = "Visa förhandsgranskningsstorlek";
-$lang["showRealsize"]                    = "Visa originalstorlek";
-
-$lang["actionLogbook"]                   = "Loggbok";
-$lang["actionLogbookFlush"]              = "Töm loggbok";
-$lang["actionMasssync"]                  = "Synkronisera alla";
-$lang["actionOpenFolder"]                = "Visa mapp";
-$lang["backlink"]                        = "Föregående";
 $lang["delete_question"]                 = "Vill du verkligen ta bort &quot;<b>%%element_name%%</b>&quot;?";
 $lang["download_link"]                   = "Download";
 $lang["form_file_description"]           = "Beskrivningej:";
@@ -46,6 +41,10 @@ $lang["header_user"]                     = "Användare";
 $lang["image_dimensions"]                = "Bildstorlek:";
 $lang["logbook_hint_date"]               = "Radera alla poster i loggboken äldre än i angivna datum.";
 $lang["overview"]                        = "Översikt";
+$lang["rotateImageLeft"]                 = "Roltera 90° åt vänster";
+$lang["rotateImageRight"]                = "Roltera 90° åt höger";
+$lang["showPreview"]                     = "Visa förhandsgranskningsstorlek";
+$lang["showRealsize"]                    = "Visa originalstorlek";
 $lang["sync_add"]                        = "Tillagt:";
 $lang["sync_del"]                        = "Raderat: ";
 $lang["sync_end"]                        = "Synkroniseringen har framgångsrikt avslutats<br />";

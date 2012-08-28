@@ -313,10 +313,16 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
 
-
-    <div id="uploadContainer">
-        <noscript>%%fallbackContent%%</noscript>
+    <div id="uploadContainerWrapper" class="well well-small">
+        <div id="uploadContainer" >
+            <noscript>%%fallbackContent%%</noscript>
+        </div>
+        <div class="alert alert-info">
+            [lang,upload_dropArea,mediamanager]
+        </div>
+        <div id="startUploadBtn" class="btn">[lang,upload_multiple_uploadFiles,mediamanager]</div>
     </div>
+
 
     <script type="text/javascript">
 
@@ -330,26 +336,26 @@ Upload-Field for multiple files with progress bar
                 action: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
                 debug: false,
                 inputName : '%%name%%',
+                autoUpload: false,
                 allowedExtensions: [%%allowedExtensions%%],
-            params : {
-                systemid: document.getElementById("mutliuploadSystemid").value,
+
+                params : {
+                    systemid: document.getElementById("mutliuploadSystemid").value,
                     inputElement : '%%name%%',
                     jsonResponse : 'true'
-            },
-            messages : {
-                typeError: "[lang,upload_fehler_filter,mediamanager]",
+                },
+                messages : {
+                    typeError: "[lang,upload_fehler_filter,mediamanager]",
                     sizeError: "%%upload_multiple_errorFilesize%%"
-            },
-            onComplete: function(id, fileName, responseJSON){
-                console.log(uploader.getInProgress());
-
-                if(uploader.getInProgress() == 0)
-                    document.location.reload();
-            },
-            uploadButtonText : '[lang,upload_multiple_uploadFiles,mediamanager]',
+                },
+                onComplete: function(id, fileName, responseJSON){
+                    if(uploader.getInProgress() == 0)
+                        document.location.reload();
+                },
+                uploadButtonText : '[lang,file_select,mediamanager]',
                 classes: {
-                // used to get elements from templates
-                button: 'qq-upload-button',
+                    // used to get elements from templates
+                    button: 'qq-upload-button',
                     drop: 'qq-upload-drop-area ',
                     dropActive: 'qq-upload-drop-area-active ',
                     dropDisabled: 'qq-upload-drop-area-disabled',
@@ -364,10 +370,14 @@ Upload-Field for multiple files with progress bar
                     // used in css to hide progress spinner
                     success: 'active',
                     fail: 'error'
-            },
-            dragText : "[lang,upload_dropArea,mediamanager]"
+                },
+                dragText : "[lang,upload_dropArea,mediamanager]"
 
-        });
+            });
+
+            $('#startUploadBtn').click(function() {
+                uploader.uploadStoredFiles();
+            });
 
         });
 
@@ -572,7 +582,6 @@ Part to display the login status, user is logged in
         if(status == 'success') {
 
             $.each($.parseJSON(data), function(index, item) {
-                console.log(item);
                 $('#userNotificationsDropdownTagsList').after("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
             });
         }
@@ -1223,7 +1232,7 @@ The language switch surrounds the buttons
                     var pos = (data.rslt.cp + i +1)
                     KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", systemid+"&prevId="+prevId, function() {
                         KAJONA.admin.ajax.setAbsolutePosition(systemid, pos, null, function() {
-                            //location.reload();
+                            location.reload();
                         });
                     });
 

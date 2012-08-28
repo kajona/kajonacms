@@ -7,20 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["cropImage"]                       = "Crop image";
-$lang["cropImageAccept"]                 = "Save cropping";
-$lang["cropWarningCrop"]                 = "Yes, crop";
-$lang["cropWarningDialogHeader"]         = "Confirm cropping";
-$lang["cropWarningSaving"]               = "Please note: The cropping affects all usages of the image. Proceed anyway?<br />";
-$lang["cropWarningUnsavedHint"]          = "Your image operations are not saved yet!\\nDo you really want to discard them?\\n\\nPress \'abort\' and double click on the image to save the operations.";
-$lang["rotateImageLeft"]                 = "Rotate 90° to the right";
-$lang["rotateImageRight"]                = "Rotate 90° to the left";
-$lang["showPreview"]                     = "Show preview size";
-$lang["showRealsize"]                    = "Show original size";
-
 $lang["_mediamanager_default_filesrepoid_"] = "Default file-repository:";
 $lang["_mediamanager_default_imagesrepoid_"] = "Default images-respository:";
 $lang["actionEditImage"]                 = "Edit image";
@@ -29,12 +18,19 @@ $lang["actionLogbookFlush"]              = "Flush logfile";
 $lang["actionMasssync"]                  = "Synchronize all";
 $lang["actionNew"]                       = "New repository";
 $lang["actionOpenFolder"]                = "Show folder";
+$lang["cropImage"]                       = "Crop image";
+$lang["cropImageAccept"]                 = "Save cropping";
+$lang["cropWarningCrop"]                 = "Yes, crop";
+$lang["cropWarningDialogHeader"]         = "Confirm cropping";
+$lang["cropWarningSaving"]               = "Please note: The cropping affects all usages of the image. Proceed anyway?<br />";
+$lang["cropWarningUnsavedHint"]          = "Your image operations are not saved yet!\\nDo you really want to discard them?\\n\\nPress \'abort\' and double click on the image to save the operations.";
 $lang["delete_question"]                 = "Do you really want to delete the file &quot;<b>%%element_name%%</b>&quot;?<br />All stored details, even in other repositories, will be deleted, too!";
 $lang["download_link"]                   = "Download";
 $lang["file_delete_error"]               = "Error deleting the file";
 $lang["file_delete_success"]             = "File deleted succesfully";
 $lang["file_editdate"]                   = "Last modified:";
 $lang["file_hits"]                       = "hits";
+$lang["file_select"]                     = "Select file...";
 $lang["file_size"]                       = "Filesize:";
 $lang["filemanager_upload_filter_h"]     = "A comma-separated list of file types allowed to be uploaded (e.g. &quot;.jpg,.gif,.png&quot;) ";
 $lang["filemanager_view_filter_h"]       = "A comma-separated list of file types allowed to be shown (e.g. &quot;.jpg,.gif,.png&quot;)";
@@ -57,11 +53,16 @@ $lang["mediamanager_upload"]             = "Select file:";
 $lang["modul_titel"]                     = "Mediamananger";
 $lang["module_action_new"]               = "New repository";
 $lang["overview"]                        = "Overview";
+$lang["rotateImageLeft"]                 = "Rotate 90° to the right";
+$lang["rotateImageRight"]                = "Rotate 90° to the left";
+$lang["showPreview"]                     = "Show preview size";
+$lang["showRealsize"]                    = "Show original size";
 $lang["stats_title"]                     = "Downloads";
 $lang["stats_toptitle"]                  = "Top downloads";
 $lang["sync_add"]                        = "Added: ";
 $lang["sync_del"]                        = " Deleted: ";
 $lang["sync_end"]                        = "Synchronization finished successfully<br />";
+$lang["upload_dropArea"]                 = "Drop files here";
 $lang["upload_erfolg"]                   = "File was uploaded successfully<br />";
 $lang["upload_fehler"]                   = "An error occured while uploading file<br />";
 $lang["upload_fehler_filter"]            = "The uploaded file type is not allowed<br />";
@@ -71,7 +72,7 @@ $lang["upload_multiple_errorFilesize"]   = "The marked files can't be uploaded d
 $lang["upload_multiple_errorFlash"]      = "Please install <a href=\"http://get.adobe.com/en/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> >= Version 9 to use the comfortable file upload.";
 $lang["upload_multiple_pleaseWait"]      = "Please wait...";
 $lang["upload_multiple_totalFilesAndSize"] = "file(s) with a total of";
-$lang["upload_multiple_uploadFiles"]     = "Upload file(s)";
+$lang["upload_multiple_uploadFiles"]     = "Upload selected file(s)";
 $lang["upload_multiple_warningNotComplete"] = "The file upload is still running!\\nDo you really want to abort it?";
 $lang["upload_submit"]                   = "Upload";
 $lang["xml_cropping_success"]            = "Cropping successful";
@@ -80,7 +81,6 @@ $lang["xmlupload_error_copyUpload"]      = "Error while copying the file on the 
 $lang["xmlupload_error_filter"]          = "Filetyp not allowed in current filter";
 $lang["xmlupload_error_notWritable"]     = "Folder not writable";
 $lang["xmlupload_success"]               = "Upload successfull";
-$lang["upload_dropArea"]                 = "Drop files here";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Download", 6 => "", 7 => "", 8 => "");

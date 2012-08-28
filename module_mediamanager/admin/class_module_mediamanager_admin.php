@@ -77,6 +77,11 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier != class_module_mediamanager_admin::INT_LISTTYPE_FOLDER)
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
+        else if($strListIdentifier == class_module_mediamanager_admin::INT_LISTTYPE_FOLDER) {
+            return $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", "", $this->getLang("commons_create_folder"), "icon_new.png"));
+
+            //href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "btn"
+        }
 
         return "";
     }
@@ -273,12 +278,9 @@ HTML;
 
         }
 
-
         $strActions = "";
-        $strActions .= $this->generateNewFolderDialogCode();
-        $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "inputSubmit");
         $strActions .= $this->actionUploadFileInternal();
-
+        $strActions .= $this->generateNewFolderDialogCode();
 
         $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid()));
         $objIterator->setIntElementsPerPage(class_module_mediamanager_file::getFileCount($this->getSystemid()));
@@ -533,12 +535,24 @@ HTML;
             $arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($strFile)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_mediamanagerPic\" />";
 
             $arrTemplate["file_actions"] = "";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in.png"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"", "", $this->getLang("showPreview"), "icon_zoom_out.png"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left.png"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right.png"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop.png"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled.png", "accept_icon"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in.png")
+            );
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"", "", $this->getLang("showPreview"), "icon_zoom_out.png")
+            )." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left.png")
+            );
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right.png")
+            )." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop.png")
+            );
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled.png", "accept_icon")
+            )." ";
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
                 KAJONA.admin.loader.loadFile([
@@ -586,7 +600,8 @@ HTML;
 
         foreach($arrPath as $strOneSystemid) {
             $objPoint = class_objectfactory::getInstance()->getObject($strOneSystemid);
-            $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
+            if($objPoint != null)
+                $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
         }
 
         return $arrEntries;
