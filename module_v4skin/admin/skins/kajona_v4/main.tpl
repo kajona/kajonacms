@@ -105,9 +105,9 @@
         <div class="span10" id="content">
 
             <div class="contentTopbar clearfix">
-                <h1 class="pull-left">%%moduletitle%%</h1>
-                <div class="pull-right">%%quickhelp%%</div>
+                <h1 id="moduleTitle" class="pull-left">%%moduletitle%%</h1>%%quickhelp%%
             </div>
+
             %%content%%
 
 

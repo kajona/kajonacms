@@ -743,8 +743,10 @@ label {
 
 /* ADMIN TABLE SETUP */
 
-table {
-    padding: 6px;
+.table {
+    td, th {
+        padding: 6px;
+    }
 
     &.admintable {
 
@@ -757,6 +759,10 @@ table {
 
         td.actions {
             text-align: right;
+        }
+
+        td.description {
+            padding-top: 0px;
         }
     }
 
@@ -821,4 +827,8 @@ table {
 /* TOOLTIPS */
 .ui-tooltip-content {
     font-family: @baseFontFamily !important;
+    padding: 4px !important;
+    font-size: @baseFontSize - 5 !important;
+
+
 }

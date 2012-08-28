@@ -101,7 +101,7 @@ Currently, there are two modes: with and without a description.
 <generallist_desc_1>
     <tbody class="generalListSet1">
         <tr data-systemid="%%listitemid%%">
-            <td rowspan="2">%%checkbox%%</td>
+            <td rowspan="2" class="checkbox">%%checkbox%%</td>
             <td rowspan="2" class="image">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
@@ -116,7 +116,7 @@ Currently, there are two modes: with and without a description.
 <generallist_desc_2>
     <tbody class="generalListSet2">
         <tr data-systemid="%%listitemid%%">
-            <td rowspan="2">%%checkbox%%</td>
+            <td rowspan="2" class="checkbox">%%checkbox%%</td>
             <td rowspan="2" class="image">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
@@ -941,17 +941,16 @@ The language switch surrounds the buttons
 <quickhelp>
     <script>
         $(function () {
-            $('#quickHelpButton').popover({
+            $('#moduleTitle').popover({
                 title: '%%title%%',
                 content: '%%text%%',
-                placement: 'left'
-            });
+                placement: 'bottom'
+            }).css("cursor", "help");
         });
     </script>
 </quickhelp>
 
 <quickhelp_button>
-    <button id="quickHelpButton">%%text%%</button>
 </quickhelp_button>
 
 ---------------------------------------------------------------------------------------------------------
