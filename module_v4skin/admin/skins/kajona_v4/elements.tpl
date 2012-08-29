@@ -590,7 +590,7 @@ Part to display the login status, user is logged in
         </a>
         <ul class="dropdown-menu" role="menu">
             <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class='icon-tag'></i>[lang,modul_titel,messaging]</a>
+                <a tabindex="-1" href="#"><i class='icon-tag'></i> [lang,modul_titel,messaging]</a>
                 <ul class="dropdown-menu sub-menu" id="messagingShortlist">
                 </ul>
             </li>
@@ -598,7 +598,7 @@ Part to display the login status, user is logged in
             <!-- messages will be inserted here -->
             <li class="divider"></li>
             <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class='icon-tag'></i>[lang,modul_titel,tags]</a>
+                <a tabindex="-1" href="#"><i class='icon-tag'></i> [lang,modul_titel,tags]</a>
                 <ul class="dropdown-menu sub-menu" id="tagsSubemenu">
                 </ul>
             </li>
