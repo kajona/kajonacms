@@ -58,28 +58,30 @@ class class_admin_helper {
 
         if($strSourceModule != "") {
             $objModule = class_module_system_module::getModuleByName($strSourceModule);
-            $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
-            $arrActionMenuEntries = array();
-            foreach($arrModuleActions as $strOneAction) {
-                if($strOneAction != "") {
-                    $arrLink = splitUpLink($strOneAction);
+            if($objModule != null) {
+                $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
+                $arrActionMenuEntries = array();
+                foreach($arrModuleActions as $strOneAction) {
+                    if($strOneAction != "") {
+                        $arrLink = splitUpLink($strOneAction);
 
-                    $arrActionMenuEntries[] = array(
-                        "name" => $arrLink["name"],
-                        "onclick" => "location.href='".$arrLink["href"]."'"
-                    );
+                        $arrActionMenuEntries[] = array(
+                            "name" => $arrLink["name"],
+                            "onclick" => "location.href='".$arrLink["href"]."'"
+                        );
+                    }
                 }
+
+                $strModuleMenuId = generateSystemid();
+                $strActionSwitcher = "
+                        <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
+                        ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrActionMenuEntries)."</span>";
+
+
+                if(isset($arrPathEntries[0]) && $arrPathEntries[0] != "")
+                    $arrFinalEntries[] = array_shift($arrPathEntries);
+                $arrFinalEntries[] = $strActionSwitcher;
             }
-
-            $strModuleMenuId = generateSystemid();
-            $strActionSwitcher = "
-                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
-                    ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrActionMenuEntries)."</span>";
-
-
-            if(isset($arrPathEntries[0]) && $arrPathEntries[0] != "")
-                $arrFinalEntries[] = array_shift($arrPathEntries);
-            $arrFinalEntries[] = $strActionSwitcher;
         }
 
 

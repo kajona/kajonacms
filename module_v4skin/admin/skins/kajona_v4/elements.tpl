@@ -588,9 +588,20 @@ Part to display the login status, user is logged in
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-user icon-white" id="icon-user"><span class="badge badge-info" id="badge-info">-</span></i> %%name%%
         </a>
-        <ul class="dropdown-menu" role="menu" id="messagingShortlist">
+        <ul class="dropdown-menu" role="menu">
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#"><i class='icon-tag'></i>[lang,modul_titel,messaging]</a>
+                <ul class="dropdown-menu sub-menu" id="messagingShortlist">
+                </ul>
+            </li>
+
             <!-- messages will be inserted here -->
-            <li class="divider" id="userNotificationsDropdownTagsList"></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#"><i class='icon-tag'></i>[lang,modul_titel,tags]</a>
+                <ul class="dropdown-menu sub-menu" id="tagsSubemenu">
+                </ul>
+            </li>
             <li class="divider"></li>
             <li><a href="%%dashboard%%"><i class='icon-home'></i> %%dashboardTitle%%</a></li>
             <!--<li><a href="%%sitemap%%">%%sitemapTitle%%</a></li>-->
@@ -598,27 +609,29 @@ Part to display the login status, user is logged in
             <li><a href="%%profile%%"><i class='icon-user'></i> %%profileTitle%%</a></li>
             <li class="divider"></li>
             <li><a href="%%logout%%"><i class="icon-off"></i> %%logoutTitle%%</a></li>
+
+
+
         </ul>
     </div>
 <script type="text/javascript">
     KAJONA.admin.messaging.getUnreadCount(function(intCount) {
         $('#badge-info').text(intCount);
         KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
-            $('#messagingShortlist').prepend("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,actionShowAll,messaging]</a></li>");
             $.each(objResponse, function(index, item) {
                 if(item.unread == 0)
-                    $('#messagingShortlist').prepend("<li><a href='"+item.details+"'><i class='icon-envelope'></i> <b>"+item.title+"</b></a></li>");
+                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> <b>"+item.title+"</b></a></li>");
                 else
-                    $('#messagingShortlist').prepend("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
+                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
             });
+            $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,actionShowAll,messaging]</a></li>");
         });
     });
 
     KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
         if(status == 'success') {
-
             $.each($.parseJSON(data), function(index, item) {
-                $('#userNotificationsDropdownTagsList').after("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
+                $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
             });
         }
     });
