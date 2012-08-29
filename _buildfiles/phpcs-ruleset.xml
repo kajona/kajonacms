@@ -33,8 +33,8 @@
  -->
  <rule ref="Generic.Files.LineLength">
    <properties>
-      <property name="lineLimit" value="200"/>
-      <property name="absoluteLineLimit" value="300"/>
+      <property name="lineLimit" value="240"/>
+      <property name="absoluteLineLimit" value="340"/>
    </properties>
    <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase" />
    <exclude name="Generic.ControlStructures.InlineControlStructure.Discouraged" />

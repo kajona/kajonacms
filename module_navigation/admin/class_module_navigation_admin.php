@@ -22,26 +22,26 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      * Constructor
      *
      */
-	public function __construct() {
+    public function __construct() {
         $this->setArrModuleEntry("modul", "navigation");
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
 
         $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_PAGES_GROUP);
 
-		parent::__construct();
+        parent::__construct();
 
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
-	}
+    }
 
     public function getOutputModuleNavi() {
-	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn = array();
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
-		return $arrReturn;
-	}
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
+        return $arrReturn;
+    }
 
     protected final function validateForm() {
         $arrReturn = array();
@@ -83,7 +83,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $objIterator->setPageNumber($this->getParam("pv"));
             $objIterator->setIntElementsPerPage($objIterator->getNumberOfElements());
             $objIterator->setArraySection(class_module_navigation_point::getNaviLayer($this->getSystemid()));
-            $strReturn .= $this->renderList($objIterator, false, "naviPoints");
+            $strReturn .= $this->renderList($objIterator, true, "naviPoints", true);
 
             if($this->strPeAddon == "")
                 $strReturn = $this->generateTreeView($strReturn);
@@ -347,7 +347,9 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         $objForm->getField("pagee")->setStrLabel($this->getLang("navigation_page_e"));;
         $objForm->getField("image")->setStrLabel($this->getLang("commons_image"));
 
-        $objForm->addField(new class_formentry_text("point", "parent"))->setStrOpener($strNodeBrowser)->setBitReadonly(true)->setStrValue($objParentPoint->getStrName())->setStrLabel($this->getLang("navigation_parent"));
+        $objForm->addField(
+            new class_formentry_text("point", "parent"))->setStrOpener($strNodeBrowser)->setBitReadonly(true)->setStrValue($objParentPoint->getStrName())->setStrLabel($this->getLang("navigation_parent")
+        );
         $objForm->addField(new class_formentry_hidden("point", "parent_id"))->setStrValue($objParentPoint->getSystemid());
 
         $objForm->getField("target")->setArrKeyValues($arrTargets)->setStrLabel($this->getLang("navigation_target"));;
@@ -430,19 +432,41 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         //Link one level up
         $strPrevID = $objPoint->getPrevId();
         if($strPrevID != $this->getObjModule()->getSystemid()) {
-            $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_treeLevelUp.png"));
+            $strAction = $this->objToolkit->listButton(
+                getLinkAdmin(
+                    $this->arrModule["modul"],
+                    "navigationPointBrowser",
+                    "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"),
+                    $this->getLang("commons_one_level_up"),
+                    $this->getLang("commons_one_level_up"),
+                    "icon_treeLevelUp.png"
+                )
+            );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot.png"), $strAction, $intCounter++);
         }
         else {
-            $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")."</a>");
+            $strAction = $this->objToolkit->listButton(
+                "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+            );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf.png"), $strAction, $intCounter++);
         }
         if(count($arrPoints) > 0) {
             /** @var class_module_navigation_point $objSinglePoint */
             foreach($arrPoints as $objSinglePoint) {
                 if($objSinglePoint->rightView()) {
-                    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"), $this->getLang("navigationp_anzeigen"), $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen.png"));
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")."</a>");
+                    $strAction = $this->objToolkit->listButton(
+                        getLinkAdmin(
+                            $this->arrModule["modul"],
+                            "navigationPointBrowser",
+                            "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"),
+                            $this->getLang("navigationp_anzeigen"),
+                            $this->getLang("navigationp_anzeigen"),
+                            "icon_treeBranchOpen.png"
+                        )
+                    );
+                    $strAction .= $this->objToolkit->listButton(
+                        "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+                    );
                     $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter++);
                 }
             }
@@ -484,7 +508,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray();
-        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent, true, true);
+        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent);
         return $strReturn;
     }
 

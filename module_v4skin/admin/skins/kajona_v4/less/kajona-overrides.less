@@ -631,70 +631,82 @@ label {
   text-shadow:none;
 }
 
-#treeDemo {
-  background-color: @white;
+
+
+.jstree {
+
+    a {
+        padding:0px !important;
+    }
+
+    ul li a {
+        font-family:Dosis, Helvetica, Arial, sans-serif !important;
+        font-size:@baseFontSize + 4;
+        color: @gray;
+        display: inline-block;
+        height: 30px;
+        line-height: 25px;
+        margin: 0;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .admintable {
+        display: inline-table;
+    }
 }
 
-.jstree ul li a {
-		font-family:Dosis, Helvetica, Arial, sans-serif !important;
-		font-size:@baseFontSize + 4;
-  color: @gray;
-  display: inline-block;
-  height: 30px;
-  line-height: 25px;
-  margin: 0;
-  text-decoration: none;
-  white-space: nowrap;
+.jstree-default {
+
+    background-color: #ffffff !important;
+
+    li {
+        background-image: none !important;
+    }
+
+    ins {
+        background-color: transparent;
+        background-image: url(../img/icon-tree-sprite.png) !important;
+        background-repeat: no-repeat;
+        width:20px !important;
+        height:20px !important;
+        margin:10px 0px;
+    }
+
+    .jstree-open > ins {
+        background-position: -160px 0 !important;
+    }
+
+    .jstree-leaf > ins {
+           background-position: -180px 0 !important;
+    }
+
+    .jstree-closed > ins {
+      background-position: -140px 0 !important;
+    }
+
+    a .jstree-icon {
+      background-image: none !important;
+    }
+
+    .jstree-clicked {
+      background:transparent !important;
+      border:0px !important;
+    }
+
+    .jstree-open > ins {
+      background-position: 0px 0px;
+    }
+
+    .jstree-hovered {
+        background:transparent !important;
+        border:0px !important;
+        padding:0px !important;
+        color:@green
+    }
+
 }
 
-.jstree-default li {
-  background-image: none !important;
-}
-
-.jstree-default ins {
-  background-color: transparent;
-  background-image: url(../img/icon-tree-sprite.png) !important;
-  background-repeat: no-repeat;
-		width:20px !important;
-		height:20px !important;
-		margin:10px 0px;
-}
-
-.jstree-default .jstree-open > ins {
-  background-position: -160px 0 !important;
-}
-
-.jstree-default .jstree-leaf > ins {
-  background-position: -180px 0 !important;
-}
-
-.jstree-default .jstree-closed > ins {
-  background-position: -140px 0 !important;
-}
-
-.jstree-default a .jstree-icon {
-  background-image: none !important;
-}
-
-.jstree-default .jstree-clicked {
-  background:transparent !important;
-  border:0px !important;
-}
-
-.jstree-default .jstree-open > ins {
-  background-position: 0px 0px;
-}
-
-.jstree-default .jstree-hovered {
-  background:transparent !important;
-  border:0px !important;
-		padding:0px !important;
-		color:@green
-}
-
-.jstree a {
-  padding:0px !important;
-}
 
 .hero-unit {
   background-color: #F6F6F6;
@@ -711,6 +723,8 @@ label {
   line-height: 1;
   padding: 4px;
 }
+
+
 
 /* DASHBOARD */
 .dashBoard {
@@ -755,6 +769,15 @@ label {
         }
 
         td.image {
+        }
+
+        td.listsorthandle, td.treedrag {
+            padding: 0;
+            vertical-align: middle;
+
+            li {
+                margin: 6px;
+            }
         }
 
         td.actions {

@@ -722,13 +722,20 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strListId
      * @param bool $bitOnlySameTable dropping only allowed within the same table or also in other tables
-     * @param string $strTargetModule
+     * @param bool $bitAllowDropOnTree
      *
      * @return string
      */
-    public function dragableListHeader($strListId, $bitOnlySameTable = false, $strTargetModule = "") {
+    public function dragableListHeader($strListId, $bitOnlySameTable = false, $bitAllowDropOnTree = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_header");
-        return $this->objTemplate->fillTemplate(array("listid" => $strListId, "sameTable" => $bitOnlySameTable? "true" : "false", "targetModule" => $strTargetModule), $strTemplateID);
+        return $this->objTemplate->fillTemplate(
+            array(
+                "listid" => $strListId,
+                "sameTable" => $bitOnlySameTable? "true" : "false",
+                "jsInject" => "bitMoveToTree = ".($bitAllowDropOnTree ? "true" : "false").";"
+            ),
+            $strTemplateID
+        );
     }
 
 
@@ -1730,16 +1737,13 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
      * @param string $strSideContent
-     * @param bool $bitOrderingEnabled
-     * @param bool $bitHierachicalSortEnabled
-     *
      *
      * @return string
      */
-    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "",$bitOrderingEnabled = false, $bitHierachicalSortEnabled = false) {
+    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "") {
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
-        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand, $bitOrderingEnabled, $bitHierachicalSortEnabled);
+        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }

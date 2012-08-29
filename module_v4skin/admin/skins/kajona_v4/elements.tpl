@@ -25,12 +25,21 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
+
+
+
     $(function() {
+
+        var bitMoveToTree = false;
+        %%jsInject%%
+
         var oldPos = null;
         $('#%%listid%%').sortable( {
             items: 'tbody:has(tr[data-systemid!=""])',
+            handle: 'td.listsorthandle',
             cursor: 'move',
             forcePlaceholderSize: true,
+            forceHelperSize: true,
             placeholder: 'group_move_placeholder',
             start: function(event, ui) {
                 oldPos = ui.item.index()
@@ -45,20 +54,26 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
                         if($(this).find('tr').data('systemid') == ui.item.find('tr').data('systemid'))
                             return false;
                     });
-                    //console.log('move from '+(oldPos+intOffset)+'to'+(ui.item.index()+intOffset ))
                     KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset, null, null, '%%targetModule%%');
                 }
                 oldPos = 0;
             },
             delay: KAJONA.util.isTouchDevice() ? 2000 : 0
         });
-        $('#%%listid%% > tbody:has(tr[id!=""]) > tr').each(function(index) {
-            $(this).css('cursor', 'move');
+        $('#%%listid%% > tbody:has(tr[data-systemid!=""]) > tr').each(function(index) {
+            $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='icon-resize-vertical'></i>");
+            KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
+
+            if(bitMoveToTree) {
+                $(this).find("td.treedrag").css('cursor', 'move').addClass("jstree-draggable").append("<i class='icon-resize-horizontal' data-systemid='"+$(this).closest("tr").data("systemid")+"'></i>");
+                KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
+            }
         });
     });
 </script>
-<style>.group_move_placeholder { display: table-row } </style>
+<style>.group_move_placeholder { display: table-row; } </style>
 <table id="%%listid%%" class="table admintable table-striped-tbody">
+
 </dragable_list_header>
 
 Optional Element to close a list
@@ -77,6 +92,8 @@ Currently, there are two modes: with and without a description.
 <generallist_1>
     <tbody>
         <tr data-systemid="%%listitemid%%" class="generalListSet1">
+            <td class="treedrag"></td>
+            <td class="listsorthandle"></td>
             <td class="checkbox">%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -89,6 +106,8 @@ Currently, there are two modes: with and without a description.
 <generallist_2>
     <tbody>
         <tr data-systemid="%%listitemid%%" class="generalListSet2">
+            <td class="treedrag"></td>
+            <td class="listsorthandle"></td>
             <td class="checkbox">%%checkbox%%</td>
             <td class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -101,6 +120,8 @@ Currently, there are two modes: with and without a description.
 <generallist_desc_1>
     <tbody class="generalListSet1">
         <tr data-systemid="%%listitemid%%">
+            <td rowspan="2" class="treedrag"></td>
+            <td rowspan="2" class="listsorthandle"></td>
             <td rowspan="2" class="checkbox">%%checkbox%%</td>
             <td rowspan="2" class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -116,6 +137,8 @@ Currently, there are two modes: with and without a description.
 <generallist_desc_2>
     <tbody class="generalListSet2">
         <tr data-systemid="%%listitemid%%">
+            <td rowspan="2" class="treedrag"></td>
+            <td rowspan="2" class="listsorthandle"></td>
             <td rowspan="2" class="checkbox">%%checkbox%%</td>
             <td rowspan="2" class="image">%%image%%</td>
             <td class="title">%%title%%</td>
@@ -339,7 +362,6 @@ Upload-Field for multiple files with progress bar
 
 
                 $('#showUploaderBtn').click(function() {
-                    console.log($('#kajonaUploadDialog').html());
                     jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
                     jsDialog_0.init();
                 });
@@ -427,7 +449,6 @@ function is called after selecting a date, e.g. to hide the calendar
             <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
             <script>
                 KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js", "_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                    console.log("rendering calendar %%calendarId%%");
                     var format = '%%dateFormat%%';
                     format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                     $('#%%calendarId%%').datepicker({
@@ -463,7 +484,6 @@ function is called after selecting a date, e.g. to hide the calendar
             <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
             <script>
                 KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js", "_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                    console.log("rendering calendar %%calendarId%%");
                     var format = '%%dateFormat%%';
                     format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                     $('#%%calendarId%%').datepicker({
@@ -1089,8 +1109,6 @@ The language switch surrounds the buttons
                     $(".dbEntry").each(function(index) {
                         intPos++;
                         if($(this).data("systemid") == ui.item.data("systemid")) {
-                            console.log("new pos: "+intPos);
-                            console.log("colum: "+ui.item.closest('ul').attr('id'));
                             KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", ui.item.data("systemid") + "&listPos=" + intPos+"&listId="+ui.item.closest('ul').attr('id'), KAJONA.admin.ajax.regularCallback)
                             return false;
                         }
@@ -1215,17 +1233,60 @@ The language switch surrounds the buttons
                     }
                 },
                 "dnd" : {
+                    "drop_finish" : function () {
+                        alert("DROP");
+                    },
+                    "drag_check" : function (data) {
+
+                        var draggedId = $(data.o).data("systemid");
+                        var targetId = $(data.r).attr("systemid");
+
+                        //validate, if the drag-node is the same as the target
+                        if(draggedId == targetId)
+                            return false;
+
+                        //node already an existing parent node?
+                        var arrParent = $("#"+targetId).closest("li[systemid='"+draggedId+"']");
+                        if(arrParent.length != 0) {
+                            return false;
+                        }
+
+                        return {
+                            after : false,
+                            before : false,
+                            inside : true
+                        };
+                    },
+                    "drag_finish" : function (data) {
+
+                        var draggedId = $(data.o).data("systemid");
+                        var targetId = $(data.r).attr("systemid");
+
+                        var arrParent = $("#"+targetId).closest("li[systemid='"+draggedId+"']");
+                        if(arrParent.length != 0) {
+                            location.reload();
+                            return false;
+                        }
+
+                        //save new parent to backend
+                        KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", draggedId+"&prevId="+targetId, function() {
+                            location.reload();
+                        });
+
+                    }
+                },
+                /*"dnd" : {
                     "drag_check" : function (data) { return false; },
                     "drop_target" : false,
                     "drag_target" : false
-                },
+                },*/
                 "themes" : {
                     "url" : "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
                     "icons" : true
                 },
                 "core" : {
-                    "initially_open" : [ %%treeviewExpanders%% ]
-
+                    "initially_open" : [ %%treeviewExpanders%% ],
+                    "html_titles" : true
                 },
                 "plugins" : [ "themes","json_data","ui","dnd","crrm","types" ]
             })
@@ -1237,11 +1298,6 @@ The language switch surrounds the buttons
                 // Do your operation
             }).bind("move_node.jstree", function (e, data) {
                 data.rslt.o.each(function (i) {
-
-                    console.log("id: "+$(this).attr("id"));
-                    console.log("position: "+(data.rslt.cp + i +1));
-                    console.log("title: "+(data.rslt.name));
-                    console.log("ref: "+ (data.rslt.cr === -1 ? 1 : data.rslt.np.attr("id")));
 
                     var prevId = (data.rslt.cr === -1 ? '%%rootNodeSystemid%%' : data.rslt.np.attr("id"));
                     var systemid = $(this).attr("id");

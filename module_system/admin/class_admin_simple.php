@@ -97,11 +97,12 @@ abstract class class_admin_simple extends class_admin {
      * @param class_array_section_iterator $objArraySectionIterator
      * @param bool $bitSortable
      * @param string $strListIdentifier an internal identifier to check the current parent-list
+     * @param bool $bitAllowTreeDrop
      *
      * @throws class_exception
      * @return string
      */
-    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "") {
+    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false) {
         $strReturn = "";
         $intI = 0;
 
@@ -118,7 +119,7 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
 
         if($bitSortable)
-            $strReturn .= $this->objToolkit->dragableListHeader($strListId);
+            $strReturn .= $this->objToolkit->dragableListHeader($strListId, false, $bitAllowTreeDrop);
         else
             $strReturn .= $this->objToolkit->listHeader();
 
