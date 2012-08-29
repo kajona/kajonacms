@@ -235,7 +235,7 @@ Dropdown
         <label for="%%name%%" class="control-label">%%title%%</label>
 
         <div class="controls">
-            <select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%% %%addons%%>%%options%%</select>
+            <select name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 </input_dropdown>
