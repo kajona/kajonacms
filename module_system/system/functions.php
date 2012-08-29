@@ -14,10 +14,10 @@
 //For the sake of different loaders - check again :(
 //Mbstring loaded? If yes, we could use unicode-safe string-functions
 if(!defined("_mbstringloaded_")) {
-	if(extension_loaded("mbstring")) {
+    if(extension_loaded("mbstring")) {
         define("_mbstringloaded_", true);
         mb_internal_encoding("UTF-8");
-	}
+    }
     else {
         define("_mbstringloaded_", false);
     }
@@ -30,10 +30,10 @@ if(!defined("_mbstringloaded_")) {
  * @return string
  */
 function getGet($strKey) {
-	if(issetGet($strKey))
-		return $_GET[$strKey];
-	else
-		return "";
+    if(issetGet($strKey))
+        return $_GET[$strKey];
+    else
+        return "";
 }
 
 /**
@@ -42,7 +42,7 @@ function getGet($strKey) {
  * @return mixed
  */
 function getArrayGet() {
-	return $_GET;
+    return $_GET;
 }
 
 /**
@@ -51,7 +51,7 @@ function getArrayGet() {
  * @return mixed
  */
 function getArrayFiles() {
-	return $_FILES;
+    return $_FILES;
 }
 
 
@@ -62,10 +62,10 @@ function getArrayFiles() {
  * @return bool
  */
 function issetGet($strKey) {
-	if(isset($_GET[$strKey]))
-		return true;
-	else
-		return false;
+    if(isset($_GET[$strKey]))
+        return true;
+    else
+        return false;
 }
 
 /**
@@ -75,10 +75,10 @@ function issetGet($strKey) {
  * @return string
  */
 function getPost($strKey) {
-	if(issetPost($strKey))
-		return $_POST[$strKey];
-	else
-		return "";
+    if(issetPost($strKey))
+        return $_POST[$strKey];
+    else
+        return "";
 }
 
 /**
@@ -87,7 +87,7 @@ function getPost($strKey) {
  * @return mixed
  */
 function getArrayPost() {
-	return $_POST;
+    return $_POST;
 }
 
 /**
@@ -97,10 +97,10 @@ function getArrayPost() {
  * @return bool
  */
 function issetPost($strKey) {
-	if(isset($_POST[$strKey]))
-		return true;
-	else
-		return false;
+    if(isset($_POST[$strKey]))
+        return true;
+    else
+        return false;
 }
 
 /**
@@ -123,13 +123,13 @@ function getPostRawData($bitMultipart = false) {
  * Returns a value from the SERVER-Array
  *
  * @param mixed $strKey
- * @return unknown
+ * @return string
  */
 function getServer($strKey) {
-	if(issetServer($strKey))
-		return $_SERVER[$strKey];
-	else
-		return "";
+    if(issetServer($strKey))
+        return $_SERVER[$strKey];
+    else
+        return "";
 }
 
 /**
@@ -150,10 +150,10 @@ function getAllPassedParams() {
  * @return bool
  */
 function issetServer($strKey) {
-	if(isset($_SERVER[$strKey]))
-		return true;
-	else
-		return false;
+    if(isset($_SERVER[$strKey]))
+        return true;
+    else
+        return false;
 }
 
 /**
@@ -228,27 +228,27 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
  */
 function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
     $strLink = "";
-	if($strImage != "") {
-		if($strAlt == "")
-			$strAlt = $strAction;
-		if(!$bitTooltip)
-			$strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
-		else
-			$strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" /></a>";
-	}
+    if($strImage != "") {
+        if($strAlt == "")
+            $strAlt = $strAction;
+        if(!$bitTooltip)
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+        else
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" /></a>";
+    }
 
-	if($strImage == "" && $strText != "") 	{
-		if($strAlt == "")
-			$strAlt = $strText;
+    if($strImage == "" && $strText != "") {
+        if($strAlt == "")
+            $strAlt = $strText;
 
 
         if($strAlt != $strText)
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." rel=\"tooltip\">".$strText."</a>";
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "")." rel=\"tooltip\">".$strText."</a>";
         else
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
-	}
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
+    }
 
-	return $strLink;
+    return $strLink;
 }
 
 /**
@@ -274,49 +274,60 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
     $arrParams = explode("&", $strParams);
 
     foreach($arrParams as $strKey => $strValue) {
-    	$arrEntry = explode("=", $strValue);
-    	if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
-    	   $strSystemid = $arrEntry[1];
-    	   unset($arrParams[$strKey]);
-    	}
-    	else if($strValue == "")
-           unset($arrParams[$strKey]);
+        $arrEntry = explode("=", $strValue);
+        if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
+            $strSystemid = $arrEntry[1];
+            unset($arrParams[$strKey]);
+        }
+        else if($strValue == "")
+            unset($arrParams[$strKey]);
     }
 
-	//urlencoding
+    //urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
 
     //rewriting enabled?
     if(_system_mod_rewrite_ == "true") {
 
-    	//scheme: /admin/module.action.systemid
-    	if($strModule != "" && $strAction == "" && $strSystemid == "")
-    	   $strLink = _webpath_."/admin/".$strModule.".html";
-    	else if($strModule != "" && $strAction != "" && $strSystemid == "")
-    	   $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";
-    	else
-           $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
+        //scheme: /admin/module.action.systemid
+        if($strModule != "" && $strAction == "" && $strSystemid == "")
+            $strLink = _webpath_."/admin/".$strModule.".html";
+        else if($strModule != "" && $strAction != "" && $strSystemid == "")
+            $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";
+        else
+            $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
 
         if(count($arrParams) > 0)
-        $strLink .= "?".implode("&amp;", $arrParams);
+            $strLink .= "?".implode("&amp;", $arrParams);
 
     }
     else {
-	   $strLink = ""._indexpath_."?admin=1&amp;module=".$strModule.
-                                        ($strAction != "" ? "&amp;action=".$strAction : "" ).
-                                        ($strSystemid != "" ?  "&amp;systemid=".$strSystemid : "");
+        $strLink = ""._indexpath_."?admin=1&amp;module=".$strModule.
+            ($strAction != "" ? "&amp;action=".$strAction : "").
+            ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "");
 
-       if(count($arrParams) > 0)
-           $strLink .= "&amp;".(implode("&amp;", $arrParams));
+        if(count($arrParams) > 0)
+            $strLink .= "&amp;".(implode("&amp;", $arrParams));
     }
 
     if(!$bitEncodedAmpersand)
         $strLink = uniStrReplace("&amp;", "&", $strLink);
 
-	return $strLink;
+    return $strLink;
 }
 
+/**
+ * Generates an admin-url to trigger xml-requests. Takes care of url-rewriting
+ *
+ * @param $strModule
+ * @param string $strAction
+ * @param string $strParams
+ * @param bool $bitEncodedAmpersand
+ * @param bool $bitBlockPrintview
+ *
+ * @return mixed|string
+ */
 function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false, $bitBlockPrintview = false) {
     $strLink = "";
 
@@ -374,34 +385,35 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
 }
 
 
-
 /**
  * Generats a raw link in admin-area.
  * Can be used to create links to external resources. no admin=1 and so on is added.
  *
- * @param string $strParames
+ * @param $strParams
  * @param string $strText
  * @param string $strAlt
  * @param string $strImage
  * @param string $strTarget
+ *
+ * @internal param string $strParames
  * @return string
  */
-function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $strTarget = "_self") {
-	$strLink = "";
-	//Wenn Parameter gegeben sind, diese aufbereiten)
-	$strParams = str_replace("&", "&amp;", $strParams);
+function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = "", $strTarget = "_self") {
+    $strLink = "";
+    //Wenn Parameter gegeben sind, diese aufbereiten)
+    $strParams = str_replace("&", "&amp;", $strParams);
 
-	//Admin?
-	if(_admin_) {
-		if($strImage != "") {
-			$strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
-		}
+    //Admin?
+    if(_admin_) {
+        if($strImage != "") {
+            $strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+        }
 
-		if($strImage == "" && $strText != "") {
-			$strLink = "<a href=\""._indexpath_."?".$strParams."\" title=\"".$strAlt."\">".$strText."</a>";
-		}
-	}
-	return $strLink;
+        if($strImage == "" && $strText != "") {
+            $strLink = "<a href=\""._indexpath_."?".$strParams."\" title=\"".$strAlt."\">".$strText."</a>";
+        }
+    }
+    return $strLink;
 }
 
 /**
@@ -413,44 +425,45 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
  * @param string $strText
  * @param string $strAlt
  * @param string $strImage
- * @param int $intWidth
- * @param int $intHeight
+ * @param int|string $intWidth
+ * @param int|string $intHeight
  * @param string $strTitle
  * @param bool $bitTooltip
  * @param bool $bitPortalEditor
+ *
  * @return string
  */
-function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
     $strLink = "";
-	//if($strParams != "")
-	//	$strParams = str_replace("&", "&amp;", $strParams);
+    //if($strParams != "")
+    //    $strParams = str_replace("&", "&amp;", $strParams);
 
     if($bitPortalEditor && $intHeight == "500")
         $intHeight = 690;
 
-	//urlencoding
+    //urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
 
-	if($bitPortalEditor)
+    if($bitPortalEditor)
         $strParams .= "&pe=1";
 
-	if($strImage != "") {
-		if($strAlt == "")
-			$strAlt = $strAction;
+    if($strImage != "") {
+        if($strAlt == "")
+            $strAlt = $strAction;
 
-		if(!$bitTooltip)
-			$strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
-		else
-			$strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
-	}
+        if(!$bitTooltip)
+            $strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
+        else
+            $strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
+    }
 
-	if($strImage == "" && $strText != "") {
-		if($strAlt == "")
-			$strAlt = $strText;
-		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "" )." onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
-	}
-	return $strLink;
+    if($strImage == "" && $strText != "") {
+        if($strAlt == "")
+            $strAlt = $strText;
+        $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "")." onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
+    }
+    return $strLink;
 }
 
 /**
@@ -521,7 +534,7 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @todo switch to popover instead of tooltip
  */
 function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $strStyle="") {
-	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" rel=\"tooltip\"  ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
+    return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" ".($strAlt != "" ? " rel=\"tooltip\" " : "" )."  ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
 }
 
 /**
@@ -564,7 +577,7 @@ function phpSizeToBytes($strBytes) {
         $intReturn = $intReturn * 1024 * 1024 * 1024;
     }
 
-	return $intReturn;
+    return $intReturn;
 }
 
 /**
@@ -572,29 +585,30 @@ function phpSizeToBytes($strBytes) {
  *
  * @param int $intBytes
  * @param bool $bitPhpIni (Value ends with M/K/B)
+ *
  * @return string
  */
 function bytesToString($intBytes, $bitPhpIni = false) {
-	$strReturn = "";
-	if($intBytes >= 0) {
-		$arrFormats = array("B", "KB", "MB", "GB", "TB");
+    $strReturn = "";
+    if($intBytes >= 0) {
+        $arrFormats = array("B", "KB", "MB", "GB", "TB");
 
-		if($bitPhpIni) {
-			$intBytes = phpSizeToBytes($intBytes);
-		}
+        if($bitPhpIni) {
+            $intBytes = phpSizeToBytes($intBytes);
+        }
 
-		$intTemp = $intBytes;
-		$intCounter = 0;
+        $intTemp = $intBytes;
+        $intCounter = 0;
 
-		while($intTemp > 1024) 	{
-			$intTemp = $intTemp / 1024;
-			$intCounter++;
-		}
+        while($intTemp > 1024) {
+            $intTemp = $intTemp / 1024;
+            $intCounter++;
+        }
 
-		$strReturn = number_format($intTemp, 2) . " " . $arrFormats[$intCounter];
-		return $strReturn;
-	}
-	return $strReturn;
+        $strReturn = number_format($intTemp, 2)." ".$arrFormats[$intCounter];
+        return $strReturn;
+    }
+    return $strReturn;
 }
 
 /**
@@ -602,17 +616,18 @@ function bytesToString($intBytes, $bitPhpIni = false) {
  *
  * @param int $intTime
  * @param bool $bitLong
+ *
  * @return string
  */
 function timeToString($intTime, $bitLong = true) {
-	$strReturn = "";
-	if($intTime > 0) {
-		if($bitLong)
-			$strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"), $intTime);
-		else
-			$strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $intTime);
-	}
-	return $strReturn;
+    $strReturn = "";
+    if($intTime > 0) {
+        if($bitLong)
+            $strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"), $intTime);
+        else
+            $strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $intTime);
+    }
+    return $strReturn;
 }
 
 /**
@@ -673,7 +688,9 @@ function numberFormat($floatNumber, $intNrOfDecimals = 2) {
  */
 function hex2rgb($color){
     $color = str_replace('#', '', $color);
-    if (strlen($color) != 6){ return array(0,0,0); }
+    if(strlen($color) != 6) {
+        return array(0,0,0);
+    }
     $rgb = array();
     for ($x=0;$x<3;$x++){
         $rgb[$x] = hexdec(substr($color,(2*$x),2));
@@ -718,16 +735,16 @@ function rgb2hex($arrRGB) {
  * @return string
  */
 function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "") {
-	$strReturn = "";
+    $strReturn = "";
 
-	$strHref = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
+    $strHref = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 
-	if($strTarget == "")
-		$strTarget = "_self";
+    if($strTarget == "")
+        $strTarget = "_self";
 
-	$strReturn .="<a href=\"".$strHref."\" target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" ": "").">".$strText."</a>";
+    $strReturn .="<a href=\"".$strHref."\" target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" ": "").">".$strText."</a>";
 
-	return $strReturn;
+    return $strReturn;
 }
 
 /**
@@ -743,22 +760,22 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  * @return string
  */
 function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
-	$strReturn = "";
-	$bitInternal = true;
+    $strReturn = "";
+    $bitInternal = true;
 
-	//return "#" if neither an internal nor an external page is set
+    //return "#" if neither an internal nor an external page is set
     if($strPageI == "" && $strPageE == "")
         return "#";
 
-	//Internal links are more important than external links!
-	if($strPageI == "" && $strPageE != "")
-		$bitInternal = false;
+    //Internal links are more important than external links!
+    if($strPageI == "" && $strPageE != "")
+        $bitInternal = false;
 
     //if given, remove first & from params
     if(substr($strParams, 0, 1) == "&")
         $strParams = substr($strParams, 1);
 
-	$strParams = str_replace("&", "&amp;", $strParams);
+    $strParams = str_replace("&", "&amp;", $strParams);
     //create an array out of the params
 
     // any anchors set to the page?
@@ -769,26 +786,26 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
         $strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));
     }
 
-	//urlencoding
+    //urlencoding
     $strPageI = urlencode($strPageI);
     $strAction = urlencode($strAction);
     //$strParams = urlencode($strParams);
 
-	//more than one language installed?
-	$intNumberOfLanguages = class_module_languages_language::getNumberOfLanguagesAvailable(true);
+    //more than one language installed?
+    $intNumberOfLanguages = class_module_languages_language::getNumberOfLanguagesAvailable(true);
 
-	if($strLanguage == "" && $intNumberOfLanguages > 1) {
-		$objCommon = new class_module_system_common();
-		$strLanguage = $objCommon->getStrPortalLanguage();
-	}
-	else if($strLanguage != "" && $intNumberOfLanguages <=1)
-	    $strLanguage = "";
+    if($strLanguage == "" && $intNumberOfLanguages > 1) {
+        $objCommon = new class_module_system_common();
+        $strLanguage = $objCommon->getStrPortalLanguage();
+    }
+    else if($strLanguage != "" && $intNumberOfLanguages <=1)
+        $strLanguage = "";
 
     $strHref = "";
-	if($bitInternal) {
-	    //check, if we could use mod_rewrite
-	    $bitRegularLink = true;
-	    if(_system_mod_rewrite_ == "true") {
+    if($bitInternal) {
+        //check, if we could use mod_rewrite
+        $bitRegularLink = true;
+        if(_system_mod_rewrite_ == "true") {
 
             //used later to add seo-relevant keywords
             $objPage = class_module_pages_page::getPageByName($strPageI);
@@ -831,23 +848,23 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 
             $bitRegularLink = false;
 
-	    }
+        }
 
         if($bitRegularLink)
-		    $strHref = "_indexpath_"."?".($strPageI != "" ? "page=".$strPageI : "" )."".
-		                              ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
-		                              ($strAction != "" ? "&amp;action=".$strAction : "").
-		                              ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-		                              ($strParams != "" ? "&amp;".$strParams : "" ).
-		                              ($strAnchor != "" ? "#".$strAnchor : "")."";
-	}
-	else {
-		$strHref = $strPageE;
-	}
+            $strHref = "_indexpath_"."?".($strPageI != "" ? "page=".$strPageI : "" )."".
+                                      ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
+                                      ($strAction != "" ? "&amp;action=".$strAction : "").
+                                      ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
+                                      ($strParams != "" ? "&amp;".$strParams : "" ).
+                                      ($strAnchor != "" ? "#".$strAnchor : "")."";
+    }
+    else {
+        $strHref = $strPageE;
+    }
 
-	$strReturn .= $strHref;
+    $strReturn .= $strHref;
 
-	return $strReturn;
+    return $strReturn;
 }
 
 /**
@@ -859,17 +876,18 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
  * @param string $strParams
  * @param string $strSystemid
  * @param string $strTitle
- * @param int $intWidth
- * @param int $intHeight
+ * @param int|string $intWidth
+ * @param int|string $intHeight
+ *
  * @return string
  */
 function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500") {
 
     $strLink = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
 
-	$strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
+    $strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
 
-	return $strLink;
+    return $strLink;
 }
 
 /**
@@ -900,36 +918,36 @@ function splitUpLink($strLink) {
  * @return string
  */
 function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
-	$strReturn = $strHtml;
+    $strReturn = $strHtml;
 
-	if($bitEntities) {
-		$strReturn = htmlentities($strHtml, ENT_COMPAT, "UTF-8");
-	}
-	else {
-	    if(get_magic_quotes_gpc() == 0)
-		   $strReturn = str_replace("'", "\'", $strHtml);
-	}
-	$arrSearch = array();
-	if($bitEscapeCrlf) {
-    	$arrSearch[] = "\r\n";
-    	$arrSearch[] = "\n\r";
-    	$arrSearch[] = "\n";
-    	$arrSearch[] = "\r";
-	}
+    if($bitEntities) {
+        $strReturn = htmlentities($strHtml, ENT_COMPAT, "UTF-8");
+    }
+    else {
+        if(get_magic_quotes_gpc() == 0)
+           $strReturn = str_replace("'", "\'", $strHtml);
+    }
+    $arrSearch = array();
+    if($bitEscapeCrlf) {
+        $arrSearch[] = "\r\n";
+        $arrSearch[] = "\n\r";
+        $arrSearch[] = "\n";
+        $arrSearch[] = "\r";
+    }
     $arrSearch[] = "%%";
 
-	$arrReplace = array();
-	if($bitEscapeCrlf) {
-    	$arrReplace[] = "<br />";
-    	$arrReplace[] = "<br />";
-    	$arrReplace[] = "<br />";
-    	$arrReplace[] = "<br />";
-	}
-	$arrReplace[] = "\%\%";
+    $arrReplace = array();
+    if($bitEscapeCrlf) {
+        $arrReplace[] = "<br />";
+        $arrReplace[] = "<br />";
+        $arrReplace[] = "<br />";
+        $arrReplace[] = "<br />";
+    }
+    $arrReplace[] = "\%\%";
 
 
-	$strReturn = str_replace($arrSearch, $arrReplace, $strReturn);
-	return $strReturn;
+    $strReturn = str_replace($arrSearch, $arrReplace, $strReturn);
+    return $strReturn;
 }
 
 /**
@@ -941,8 +959,8 @@ function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
  * @return string
  */
 function htmlStripTags ($strHtml, $strAllowTags = "") {
-	$strReturn = strip_tags($strHtml, $strAllowTags);
-	return $strReturn;
+    $strReturn = strip_tags($strHtml, $strAllowTags);
+    return $strReturn;
 }
 
 /**
@@ -990,9 +1008,9 @@ function processWysiwygHtmlContent($strHtmlContent) {
  * @return string
  */
 function saveUrlEncode($strText) {
-	$arraySearch = array(" ");
-	$arrayReplace = array("%20");
-	return str_replace($arraySearch, $arrayReplace, $strText);
+    $arraySearch = array(" ");
+    $arrayReplace = array("%20");
+    return str_replace($arraySearch, $arrayReplace, $strText);
 }
 
 /**
@@ -1003,21 +1021,20 @@ function saveUrlEncode($strText) {
  * @return string
  */
 function urlSafeString($strText) {
-    $strReturn = "";
     if($strText == "")
         return "";
 
-	$strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
+    $strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
 
-	$arrSearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
-	$arrReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
+    $arrSearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
+    $arrReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
 
-	$strReturn = str_replace($arrSearch, $arrReplace, $strText);
+    $strReturn = str_replace($arrSearch, $arrReplace, $strText);
 
-	//remove all other special characters
-	$strReturn = preg_replace("/[^A-Za-z0-9_-]/", "", $strReturn);
+    //remove all other special characters
+    $strReturn = preg_replace("/[^A-Za-z0-9_-]/", "", $strReturn);
 
-	return $strReturn;
+    return $strReturn;
 }
 
 /**
@@ -1038,43 +1055,41 @@ function removeDirectoryTraversals($strFilename) {
  * @return string
  */
 function createFilename($strName, $bitFolder = false) {
-	$strReturn = "";
+    $strName = uniStrtolower($strName);
 
-	$strName = uniStrtolower($strName);
+    if(!$bitFolder)
+        $strEnding = uniSubstr($strName, (uniStrrpos($strName, ".")+1));
+    else
+        $strEnding = "";
 
-	if(!$bitFolder)
-		$strEnding = uniSubstr($strName, (uniStrrpos($strName, ".")+1));
-	else
-		$strEnding = "";
+    if(!$bitFolder)
+        $strReturn = uniSubstr($strName, 0, (uniStrrpos($strName, ".") ));
+    else
+        $strReturn = $strName;
 
-	if(!$bitFolder)
-		$strReturn = uniSubstr($strName, 0, (uniStrrpos($strName, ".") ));
-	else
-		$strReturn = $strName;
+    //Filter non allowed chars
+    $arrSearch =         array( " ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
+    $arrReplace =         array( "_", "_", "_","ae","oe","ue", "_","ss", "_");
 
-	//Filter non allowed chars
-	$arrSearch = 		array( " ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
-	$arrReplace = 		array( "_", "_", "_","ae","oe","ue", "_","ss", "_");
+    $strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
 
-	$strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
-
-	//and the ending
-	if(!$bitFolder)
-	   $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
+    //and the ending
+    if(!$bitFolder)
+       $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
 
     //remove all other special characters
     $strTemp = preg_replace("/[^A-Za-z0-9_-]/", "", $strReturn);
 
-	//do a replacing in the ending, too
-	if($strEnding != "") {
+    //do a replacing in the ending, too
+    if($strEnding != "") {
         //remove all other special characters
         $strEnding = ".".preg_replace("/[^A-Za-z0-9_-]/", "", $strEnding);
 
-	}
+    }
 
-	$strReturn = $strTemp.$strEnding;
+    $strReturn = $strTemp.$strEnding;
 
-	return $strReturn;
+    return $strReturn;
 }
 
 /**
@@ -1108,11 +1123,11 @@ function checkNumber($intNumber) {
  * @return bool
  */
 function checkFolder($strPath) {
-	$bitTest = is_dir(_realpath_.$strPath) && strlen($strPath) > 0;
-	if($bitTest === false)
-		return false;
-	else
-		return true;
+    $bitTest = is_dir(_realpath_.$strPath) && strlen($strPath) > 0;
+    if($bitTest === false)
+        return false;
+    else
+        return true;
 }
 
 /**
@@ -1138,44 +1153,45 @@ function checkText($strText, $intMin = 1, $intMax = 0) {
  * @return string The new SystemID
  */
 function generateSystemid() {
-	//generate md5 key
-	$strKey = md5(_realpath_);
+    //generate md5 key
+    $strKey = md5(_realpath_);
 
-	$strTemp = "";
+    $strTemp = "";
 
-	//Do the magic: take out 6 characters randomly...
-	for($intI = 0; $intI < 7; $intI++) {
-		$intTemp = rand(0, 31);
-		$strTemp .= $strKey[$intTemp];
-	}
+    //Do the magic: take out 6 characters randomly...
+    for($intI = 0; $intI < 7; $intI++) {
+        $intTemp = rand(0, 31);
+        $strTemp .= $strKey[$intTemp];
+    }
 
-	$intId = uniqid($strTemp);
+    $intId = uniqid($strTemp);
 
-	return $intId;
+    return $intId;
 }
 
 
 /**
  * Checks a systemid for the correct syntax
  *
- * @param string $strtID
+ * @param string $strID
  * @return bool
  */
 function validateSystemid($strID) {
 
-	//Check against wrong characters
-	if(preg_match("/([a-z|A-a|0-9]){20}/", $strID)) {
-		return true;
-	}
-	else
-		return false;
+    //Check against wrong characters
+    if(preg_match("/([a-z|A-a|0-9]){20}/", $strID)) {
+        return true;
+    }
+    else
+        return false;
 }
 
 /**
  * Wrapper to dbSafeString of class_db
  *
  * @param string $strString
- * @param string $bitHtmlEntities escape html-entities?
+ * @param bool|string $bitHtmlEntities escape html-entities?
+ *
  * @see class_db::dbSafeString($strString, $bitHtmlEntities = true)
  * @return string
  */
@@ -1289,7 +1305,8 @@ function uniStrtoupper($strString) {
  *
  * @param string $strString
  * @param int $intStart
- * @param int $intEnd
+ * @param int|string $intEnd
+ *
  * @return string
  */
 function uniSubstr($strString, $intStart, $intEnd = "") {
@@ -1333,7 +1350,7 @@ function uniEreg($strPattern, $strString) {
 function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false) {
     if($bitUnicodesafe) {
         if(!is_array($mixedSearch)) {
-            $mixedSearch = '!'.preg_quote($mixedSearch,'!').'!u';
+            $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u';
         }
         else{
             foreach ($mixedSearch as $strKey => $strValue) {
@@ -1357,7 +1374,7 @@ function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe
  */
 function uniStrTrim($strString, $intLength, $strAdd = "…") {
     if($intLength > 0 && uniStrlen($strString) > $intLength) {
-		return trim(uniSubstr($strString, 0, $intLength)).$strAdd;
+        return trim(uniSubstr($strString, 0, $intLength)).$strAdd;
     }
     else {
         return $strString;

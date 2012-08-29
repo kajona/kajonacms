@@ -687,7 +687,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $strReturn = "";
         //generate the array of ids to expand initially
         $arrNodes = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
-        $strReturn .= $this->objToolkit->getTreeview(_webpath_."/xml.php?admin=1&module=pages&action=getChildNodes", "", $arrNodes, $strSideContent);
+        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml("pages", "getChildNodes"), "", $arrNodes, $strSideContent);
         return $strReturn;
     }
 

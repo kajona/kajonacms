@@ -19,6 +19,7 @@ define("_admin_nr_of_rows_", "");
 define("_pages_indexpage_", "");
 define("_user_selfedit_", "");
 define("_admin_skin_default_", "");
+define("_system_mod_rewrite_", "");
 define("_system_release_time_", "");
 define("_pages_errorpage_", "");
 define("_corepath_", __DIR__."/../");

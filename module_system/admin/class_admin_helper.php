@@ -26,12 +26,15 @@ class class_admin_helper {
      * including a quick-jump link.
      *
      * @static
+     *
      * @param $arrPathEntries
+     * @param string $strSourceModule
+     *
+     * @internal param array $arrModuleActions
      * @return string
      */
-    public static function getAdminPathNavi($arrPathEntries) {
+    public static function getAdminPathNavi($arrPathEntries, $strSourceModule = "") {
         //modify some of the entries
-        $strModuleMenuId = generateSystemid();
         $arrMenuEntries = array();
         $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
         foreach($arrModules as $arrOneModule) {
@@ -42,13 +45,47 @@ class class_admin_helper {
         }
 
 
-        if(isset($arrPathEntries[1]))
-            $arrPathEntries[1] = "
-                    <span class='dropdown'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
-                    ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>
-                    ".$arrPathEntries[1];
+        $strModuleMenuId = generateSystemid();
+        $strModuleSwitcher = "
+                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
+                    ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>";
 
-        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries);
+        $arrFinalEntries = array(
+            array_shift($arrPathEntries),
+            $strModuleSwitcher
+        );
+
+
+        if($strSourceModule != "") {
+            $objModule = class_module_system_module::getModuleByName($strSourceModule);
+            $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
+            $arrActionMenuEntries = array();
+            foreach($arrModuleActions as $strOneAction) {
+                if($strOneAction != "") {
+                    $arrLink = splitUpLink($strOneAction);
+
+                    $arrActionMenuEntries[] = array(
+                        "name" => $arrLink["name"],
+                        "onclick" => "location.href='".$arrLink["href"]."'"
+                    );
+                }
+            }
+
+            $strModuleMenuId = generateSystemid();
+            $strActionSwitcher = "
+                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
+                    ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrActionMenuEntries)."</span>";
+
+
+            if(isset($arrPathEntries[0]) && $arrPathEntries[0] != "")
+                $arrFinalEntries[] = array_shift($arrPathEntries);
+            $arrFinalEntries[] = $strActionSwitcher;
+        }
+
+
+        $arrFinalEntries = array_merge($arrFinalEntries, $arrPathEntries);
+
+        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrFinalEntries);
 
     }
 
@@ -96,50 +133,10 @@ class class_admin_helper {
             $arrFinalItems = array();
             //build array of final items
             foreach($arrItems as $arrOneItem) {
-                $bitAdd = false;
-                switch ($arrOneItem[0]) {
-                case "view":
-                    if($objModule->rightView())
-                        $bitAdd = true;
-                    break;
-                case "edit":
-                    if($objModule->rightEdit())
-                        $bitAdd = true;
-                    break;
-                case "delete":
-                    if($objModule->rightDelete())
-                        $bitAdd = true;
-                    break;
-                case "right":
-                    if($objModule->rightRight())
-                        $bitAdd = true;
-                    break;
-                case "right1":
-                    if($objModule->rightRight1())
-                        $bitAdd = true;
-                    break;
-                case "right2":
-                    if($objModule->rightRight2())
-                        $bitAdd = true;
-                    break;
-                case "right3":
-                    if($objModule->rightRight3())
-                        $bitAdd = true;
-                    break;
-                case "right4":
-                    if($objModule->rightRight4())
-                        $bitAdd = true;
-                    break;
-                case "right5":
-                    if($objModule->rightRight5())
-                        $bitAdd = true;
-                    break;
-                case "":
+                if($arrOneItem[0] == "")
                     $bitAdd = true;
-                    break;
-                default:
-                    break;
-                }
+                else
+                    $bitAdd = class_carrier::getInstance()->getObjRights()->validatePermissionString($arrOneItem[0], $objModule);
 
                 if($bitAdd || $arrOneItem[1] == "")
                     $arrFinalItems[] = $arrOneItem[1];

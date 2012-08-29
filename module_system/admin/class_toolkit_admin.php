@@ -276,13 +276,11 @@ class class_toolkit_admin extends class_toolkit {
                         KAJONA.admin.".$strJsVarName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
                             source: function(request, response) {
                                 $.ajax({
-                                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                                    url: '".getLinkAdminXml("pages", "getPagesByFilter")."',
                                     type: 'POST',
                                     dataType: 'json',
                                     data: {
-                                        filter: request.term,
-                                        module: 'pages',
-                                        action: 'getPagesByFilter'
+                                        filter: request.term
                                     },
                                     success: response
                                 });
@@ -338,13 +336,11 @@ class class_toolkit_admin extends class_toolkit {
                         $('#".$strName."').autocomplete({
                             source: function(request, response) {
                                 $.ajax({
-                                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                                    url: '".getLinkAdminXml("user", "getUserByFilter")."',
                                     type: 'POST',
                                     dataType: 'json',
                                     data: {
                                         filter: request.term,
-                                        module: 'user',
-                                        action: 'getUserByFilter',
                                         user: ".($bitUser ? "'true'" : "'false'").",
                                         group: ".($bitGroups ? "'true'" : "'false'").",
                                         block: ".($bitBlockCurrentUser ? "'current'" : "''")."
@@ -1133,9 +1129,9 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function getLoginStatus($arrElements) {
         //Loading a small login-form
-		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
-		$strReturn = $this->objTemplate->fillTemplate($arrElements, $strTemplateID);
-		return $strReturn;
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
+        $strReturn = $this->objTemplate->fillTemplate($arrElements, $strTemplateID);
+        return $strReturn;
     }
 
     /*"*****************************************************************************************************/
@@ -1871,13 +1867,11 @@ class class_toolkit_admin extends class_toolkit {
                         KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
                             source: function(request, response) {
                                 $.ajax({
-                                    url: KAJONA_WEBPATH+'/xml.php?admin=1',
+                                    url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
                                     type: 'POST',
                                     dataType: 'json',
                                     data: {
-                                        filter:  extractLast( request.term ),
-                                        module: 'tags',
-                                        action: 'getTagsByFilter'
+                                        filter:  extractLast( request.term )
                                     },
                                     success: response
                                 });

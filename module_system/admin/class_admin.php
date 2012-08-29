@@ -479,7 +479,7 @@ abstract class class_admin {
 
 		//Calling the contentsetter
 		$this->arrOutput["content"] = $this->strOutput;
-		$this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries());
+		$this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries(), $this->getArrModule("modul"));
         $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
         if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
