@@ -1344,7 +1344,8 @@ otherwise the JavaScript will fail!
 </tags_wrapper>
 
 <tags_tag>
-    <div class="tag">%%tagname%%<a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');">%%deleteIcon%%</a></div>
+    <span class="label label-info">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> <i class="icon-trash icon-white" id="icon_%%strTagId%%" title="[lang,commons_delete,tag]" rel="tooltip" ></i></a></span>
+    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
 </tags_tag>
 
 A tag-selector.

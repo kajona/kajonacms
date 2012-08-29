@@ -199,14 +199,13 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
      * @permissions edit
      */
     public function getTagForm($strTargetSystemid, $strAttribute = null) {
-        $strReturn = "";
         $strTagContent = "";
 
         $strTagsWrapperId = generateSystemid();
 
-        $objTarget = class_objectfactory::getInstance()->getObject($strTargetSystemid);
-
-        $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
+        $strTagContent .= $this->objToolkit->formHeader(
+            getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;"
+        );
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tag_name"));
         $strTagContent .= $this->objToolkit->formInputSubmit($this->getLang("button_add"), $this->getLang("button_add"), "");
@@ -214,10 +213,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
         $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
 
-        $strReturn .= $this->objToolkit->divider();
-        $strReturn .= $this->objToolkit->getFieldset($this->getLang("tagsection_header")." ".$objTarget->getStrDisplayName(), $strTagContent);
-
-        return $strReturn;
+        return $strTagContent;
     }
 
     protected function getArrOutputNaviEntries() {

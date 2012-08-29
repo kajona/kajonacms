@@ -297,7 +297,8 @@ abstract class class_admin_simple extends class_admin {
                     "&systemid=".$objListEntry->getSystemid(),
                     $this->getLang("commons_edit_tags"),
                     $this->getLang("commons_edit_tags"),
-                    "icon_tag.png"
+                    "icon_tag.png",
+                    $objListEntry->getStrDisplayName()
                 )
             );
         }

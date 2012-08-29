@@ -35,7 +35,8 @@ KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
             var intStart = data.indexOf("<tags>")+6;
             var strContent = data.substr(intStart, data.indexOf("</tags>")-intStart);
             $("#tagsWrapper_"+strSystemid).removeClass("loadingContainer");
-            document.getElementById("tagsWrapper_"+strSystemid).innerHTML = strContent;
+            $("#tagsWrapper_"+strSystemid).html(strContent);
+            KAJONA.util.evalScript(strContent);
         }
         else {
             KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
