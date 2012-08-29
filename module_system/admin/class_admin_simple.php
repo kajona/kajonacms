@@ -378,7 +378,8 @@ abstract class class_admin_simple extends class_admin {
                     "&systemid=".$objListEntry->getSystemid(),
                     $this->getLang("commons_edit_history"),
                     $this->getLang("commons_edit_history"),
-                    "icon_history.png"
+                    "icon_history.png",
+                    $objListEntry->getStrDisplayName()
                 )
             );
         }

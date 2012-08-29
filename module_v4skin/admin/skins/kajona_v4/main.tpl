@@ -137,6 +137,7 @@
 <script src="_skinwebpath_/js/bootstrap-button.js"></script>
 <script src="_skinwebpath_/js/bootstrap-collapse.js"></script>
 <script src="_skinwebpath_/js/bootstrap-carousel.js"></script>
+<script src="_skinwebpath_/js/bootstrap-affix.js"></script>
 
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 

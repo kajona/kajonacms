@@ -989,7 +989,8 @@ The language switch surrounds the buttons
             $('#moduleTitle').popover({
                 title: '%%title%%',
                 content: '%%text%%',
-                placement: 'bottom'
+                placement: 'bottom',
+                trigger: 'hover'
             }).css("cursor", "help");
         });
     </script>
@@ -1479,7 +1480,6 @@ It containes a list of aspects and provides the possibility to switch the differ
 
 <sitemap_module_wrapper>
     <li class="dropdown">
-        <!--%%module%%-->
         <a class="dropdown-toggle"  data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
         <ul class="dropdown-menu">
             %%actions%%
@@ -1489,8 +1489,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 
 <sitemap_module_wrapper_active>
 <li class="dropdown active">
-    <!--%%module%%-->
-    <a  class="dropdown-toggle"  data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
+    <a class="dropdown-toggle"  data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
     <ul class="dropdown-menu">
         %%actions%%
     </ul>

@@ -7,7 +7,7 @@ $(function () {
 
             $.each(items, function(index, item) {
                 if (item.module != currentCategory) {
-                    ul.append('<li class="ui-autocomplete-category"><h3>' + item.module + '</h3></li>');
+                    ul.append('<li class="ui-autocomplete-category"><h3 class="small">' + item.module + '</h3></li>');
                     currentCategory = item.module;
                 }
                 self._renderItem(ul, item);
@@ -18,9 +18,9 @@ $(function () {
             ul.addClass('search-dropdown-menu');
         },
         _renderItem: function (ul, item) {
-            return $('<li></li>')
+            return $('<li class="clearfix"></li>')
                 .data('item.autocomplete', item)
-                .append('<a>' + '<img src="'+item.icon+'" alt="" class="pull-left"><h4 class="pull-left">' + item.systemid + '</h4><br>' + item.description + '</a>')
+                .append('<a>' + '<img src="'+item.icon+'" alt="" class="pull-left">' + item.description + '</a>')
                 .appendTo(ul);
         }
     });
