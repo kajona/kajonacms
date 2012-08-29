@@ -209,7 +209,9 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
 
 
         if($bitJsonResponse) {
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+            //disabled for ie. otherwise the upload won't work due to the headers.
+            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_HTML);
+            //class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         }
 
         @unlink($arrSource["tmp_name"]);
