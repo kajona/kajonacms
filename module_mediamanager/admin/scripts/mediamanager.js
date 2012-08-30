@@ -7,13 +7,6 @@ if (typeof KAJONA == "undefined") {
 	alert('load kajona.js before!');
 }
 
-
-
-KAJONA.admin.loader.loadUploaderBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "uploader", "swf" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
-};
-
-
 KAJONA.admin.ajax.saveImageCropping = function(intX, intY, intWidth, intHeight, strFile, objCallback) {
     var postBody = 'file=' + strFile + '&intX=' + intX + '&intY=' + intY
         + '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';

@@ -339,7 +339,7 @@ Upload-Field for multiple files with progress bar
 
     <div id="showUploaderBtn" class="btn">[lang,upload_multiple_dialogHeader,mediamanager]</div>
 
-        <div id="kajonaUploadDialog" style="display: none;">
+    <div id="kajonaUploadDialog" style="display: none;">
 
         <div id="uploadContainerWrapper" class="well well-small">
             <div id="uploadContainer" >
@@ -352,9 +352,7 @@ Upload-Field for multiple files with progress bar
             <div id="startUploadBtn" class="btn">[lang,upload_multiple_uploadFiles,mediamanager]</div>
         </div>
 
-
         <script type="text/javascript">
-
             KAJONA.admin.loader.loadFile([
                 "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.js",
                 "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.css"
@@ -366,7 +364,6 @@ Upload-Field for multiple files with progress bar
                     jsDialog_0.init();
                 });
 
-
                 var uploader = new qq.FileUploader({
                     element: document.getElementById('uploadContainer'),
                     action: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
@@ -374,7 +371,6 @@ Upload-Field for multiple files with progress bar
                     inputName : '%%name%%',
                     autoUpload: false,
                     allowedExtensions: [%%allowedExtensions%%],
-
                     params : {
                         systemid: document.getElementById("mutliuploadSystemid").value,
                         inputElement : '%%name%%',
@@ -401,9 +397,6 @@ Upload-Field for multiple files with progress bar
                         spinner: 'qq-upload-spinner',
                         size: 'qq-upload-size',
                         cancel: 'qq-upload-cancel',
-
-                        // added to list item <li> when upload completes
-                        // used in css to hide progress spinner
                         success: 'active',
                         fail: 'error'
                     },
@@ -411,10 +404,14 @@ Upload-Field for multiple files with progress bar
 
                 });
 
+                $('table.admintable').bind("dragenter", function(e) {
+                    jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
+                    jsDialog_0.init();
+                });
+
                 $('#startUploadBtn').click(function() {
                     uploader.uploadStoredFiles();
                 });
-
 
                 jsDialog_0.setTitle('[lang,upload_multiple_dialogHeader,mediamanager]');
             });
