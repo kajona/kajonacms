@@ -58,8 +58,6 @@ body {
         display: block;
     }
 
-
-
     .nav-list > li > a {
         padding: 6px 15px;
         background-color:#e5e5e5;
@@ -134,30 +132,17 @@ body {
     }
 }
 
-
 .userNotificationsDropdown {
     margin: 10px 0 0 25px;
 
-    a {
-        color:#626262 !important;
+    a.dropdown-toggle {
+        color: @linkColor;
+        padding: 4px;
 
         &:hover {
-            //TODO: for testing only!
-            //color:@green !important;
-            //background: none !important;
-
-            color: @white !important;
-
-            i[class^="icon-"] {
-                background-image: url(../img/glyphicons-halflings-white.png);
-            }
-        }
-
-        &.dropdown-toggle:hover {
             text-decoration: underline;
-            color: #626262 !important;
+            color: @linkColor;
         }
-
     }
 
     &:hover .dropdown-menu {
@@ -170,6 +155,27 @@ body {
         a {
             i {
                 vertical-align: baseline;
+            }
+            &:hover {
+                i[class^="icon-"] {
+                    background-image: url("@{iconWhiteSpritePath}");
+                }
+            }
+        }
+
+        .sub-menu {
+            left: 100%;
+            position: absolute;
+            top: 0;
+            visibility: hidden;
+        }
+
+        li {
+            &:hover {
+                .sub-menu {
+                    visibility: visible;
+                    display: block;
+                }
             }
         }
 
@@ -204,27 +210,18 @@ body {
                 display: block;
             }
         }
+    }
 
-        .sub-menu {
-            left: 100%;
-            position: absolute;
-            top: 0;
-            visibility: hidden;
-            margin-top: -1px;
-        }
-
-        li:hover {
-            .sub-menu {
-                visibility: visible;
-                display: block;
-            }
+    .dropdown-submenu:hover > a {
+        i[class^="icon-"] {
+            background-image: url("@{iconWhiteSpritePath}");
         }
     }
 
     .badge {
         position: absolute;
         top: -6px;
-        left: -24px;
+        left: -15px;
         font-style: normal;
     }
 }
@@ -765,10 +762,12 @@ label {
     width: 100%;
     td {
         width: 33%;
+        max-width: 33%;
         vertical-align: top;
 
         ul {
-            padding: 10px;
+            padding: 10px 0;
+            margin: 10px 10px;
         }
     }
 
@@ -779,8 +778,14 @@ label {
     .dbEntry {
         .adminwidgetactions {
             display: inline;
-            margin-top: -60px;
+            margin-top: -50px;
         }
+
+        h2 {
+            font-size: @baseFontSize + 5;
+            line-height: @baseFontSize + 8
+        }
+
     }
 }
 
