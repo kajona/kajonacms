@@ -422,15 +422,11 @@ Upload-Field for multiple files with progress bar
 
 Regular Submit-Button
 <input_submit>
-    <div class="form-actions">
-        <button id="savechanges" type="submit" class="btn %%class%%" %%disabled%% %%eventhandler%%>
+    <div class="control-group">
+        <button type="submit" class="btn savechanges %%class%%" %%disabled%% %%eventhandler%%>
             <span class="btn-text">%%value%%</span>
             <span class="statusicon"></span>
         </button>
-        <!--<button id="cancelglobal" class="btn" onclick="location.reload();">
-            <span class="btn-text">Cancel</span>
-            <span class="statusicon"></span>
-        </button>-->
     </div>
 </input_submit>
 

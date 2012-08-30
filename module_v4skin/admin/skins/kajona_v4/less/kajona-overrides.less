@@ -22,6 +22,11 @@ body {
     &.portaleditorBody {
         padding: 0;
     }
+
+    h2 {
+        font-size: @baseFontSize + 5;
+        line-height: @baseFontSize + 8
+    }
 }
 
 .sidebar-nav {
@@ -491,18 +496,54 @@ body {
         padding-top: 25px;
     }
 
-    .form-actions {
-        background-color:#eeeeee;
-        border-color:none;
-        .border-radius(0px);
-        .box-shadow(none);
-        border-style:solid;
-        border-width:0px;
-        bottom:0;
-        margin:0 10px 10px 0;
-        padding:10px;
-        position:fixed;
-        right:0;
+    form {
+        .control-label {
+            width: 160px;
+        }
+
+        .controls {
+            margin-left: 180px;
+        }
+
+        .control-group {
+            margin-bottom: @baseLineHeight - 12;
+        }
+
+        .savechanges {
+            margin: 20px 0 0 180px;
+            border: 4px solid @grayLight;
+            background-color: #e5e5e5;
+            .border-radius(0px);
+            .box-shadow(none);
+            color: #888888;
+            cursor: pointer;
+            font-size: @baseFontSize + 2;
+            vertical-align: middle;
+            font-weight: 700;
+            text-transform: uppercase;
+
+            &:hover {
+                color:@black;
+                span.statusicon {
+                    background-color:darken(@green, 10%);
+                }
+            }
+
+            span.btn-text {
+                margin:6px 0 6px 20px;
+                display: inline-block;
+            }
+
+            span.statusicon {
+                width:33px;
+                height:33px;
+                display:inline-block;
+                float:right;
+                background: center center no-repeat;
+                background-color:@green;
+                background-image:url(../img/icon-save.png);
+            }
+        }
     }
 
     .pagination ul {
@@ -538,15 +579,9 @@ body {
 
 }
 
-#savechanges, #cancelglobal {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+.savechanges {
     background-color: #e5e5e5;
     background-image: none;
-    background-repeat: no-repeat;
     border-color: none;
     border-style: solid;
     border-width: 0px;
@@ -554,7 +589,6 @@ body {
     .box-shadow(none);
     color: #888888;
     cursor: pointer;
-    display: block;
     font-size: @baseFontSize + 2;
     line-height: 20px;
     margin-bottom: 0;
@@ -568,11 +602,15 @@ body {
 
     &:hover {
         color:@black;
+
+        span.statusicon {
+            background-color:darken(@green, 10%);
+        }
     }
 
     span.btn-text {
         margin:6px 0 6px 20px;
-        display:inline-block;
+        display: inline-block;
     }
 
     span.statusicon {
@@ -582,33 +620,13 @@ body {
         display:inline-block;
         float:right;
         background: center center no-repeat;
-    }
-}
-
-#cancelglobal {
-    margin-top:1px;
-    font-size:@baseFontSize;
-
-    span.statusicon {
-        background-color:@red;
-        background-image:url(../img/icon-cancel.png);
-    }
-
-    span.statusicon:hover {
-        background-color:darken(@red, 10%);
-    }
-}
-
-#savechanges {
-    span.statusicon {
         background-color:@green;
         background-image:url(../img/icon-save.png);
     }
-
-    span.statusicon:hover {
-        background-color:darken(@green, 10%);
-    }
 }
+
+
+
 
 
 
@@ -779,11 +797,6 @@ label {
         .adminwidgetactions {
             display: inline;
             margin-top: -50px;
-        }
-
-        h2 {
-            font-size: @baseFontSize + 5;
-            line-height: @baseFontSize + 8
         }
 
     }
