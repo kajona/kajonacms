@@ -15,8 +15,8 @@ $arrFilesToCompile = array(
 
 $strSkinReplacement = "";
 $strSkinReplacement = <<<TXT
-    <link href="_skinwebpath_/less/bootstrap.css?_system_browser_cachebuster_" rel="stylesheet/css">
-    <link href="_skinwebpath_/less/responsive.css?_system_browser_cachebuster_" rel="stylesheet/css">
+    <link rel="stylesheet" href="_skinwebpath_/less/styles.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_skinwebpath_/less/responsive.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 $arrFilesToUpdate = array(
