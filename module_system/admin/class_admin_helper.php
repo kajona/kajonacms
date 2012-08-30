@@ -71,47 +71,11 @@ class class_admin_helper {
 
         $strModuleMenuId = generateSystemid();
         $strModuleSwitcher = "
-                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
+                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' class=\"moduleSwitchLink\" role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
                     ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>";
 
-        $arrFinalEntries = array(
-            array_shift($arrPathEntries),
-            $strModuleSwitcher
-        );
-
-
-        if($strSourceModule != "") {
-            $objModule = class_module_system_module::getModuleByName($strSourceModule);
-            if($objModule != null) {
-                $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
-                $arrActionMenuEntries = array();
-                foreach($arrModuleActions as $strOneAction) {
-                    if($strOneAction != "") {
-                        $arrLink = splitUpLink($strOneAction);
-
-                        $arrActionMenuEntries[] = array(
-                            "name" => $arrLink["name"],
-                            "onclick" => "location.href='".$arrLink["href"]."'"
-                        );
-                    }
-                }
-
-                $strModuleMenuId = generateSystemid();
-                $strActionSwitcher = "
-                        <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
-                        ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrActionMenuEntries)."</span>";
-
-
-                if(isset($arrPathEntries[0]) && $arrPathEntries[0] != "")
-                    $arrFinalEntries[] = array_shift($arrPathEntries);
-                $arrFinalEntries[] = $strActionSwitcher;
-            }
-        }
-
-
-        $arrFinalEntries = array_merge($arrFinalEntries, $arrPathEntries);
-
-        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrFinalEntries);
+        array_unshift($arrPathEntries, $strModuleSwitcher);
+        return class_carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries);
 
     }
 
