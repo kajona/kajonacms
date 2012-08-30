@@ -38,10 +38,34 @@ class class_admin_helper {
         $arrMenuEntries = array();
         $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
         foreach($arrModules as $arrOneModule) {
-            $arrMenuEntries[] = array(
+            $arrCurMenuEntry = array(
                 "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
                 "onclick" => "location.href='".getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'"
             );
+
+            //fetch the submenu entries
+            $objModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
+            if($objModule != null) {
+                $arrActionMenuEntries = array();
+                $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
+                foreach($arrModuleActions as $strOneAction) {
+                    if($strOneAction != "") {
+                        $arrLink = splitUpLink($strOneAction);
+
+                        $arrActionMenuEntries[] = array(
+                            "name" => $arrLink["name"],
+                            "onclick" => "location.href='".$arrLink["href"]."'"
+                        );
+                    }
+                    else {
+                        $arrActionMenuEntries[] = array(
+                            "name" => ""
+                        );
+                    }
+                }
+                $arrCurMenuEntry["submenu"] = $arrActionMenuEntries;
+            }
+            $arrMenuEntries[] = $arrCurMenuEntry;
         }
 
 

@@ -2117,7 +2117,8 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Creates the markup to render a js-based contex-menu.
      * Each entry is an array with the keys
-     *   array("name" => "xx", "onclick" => "xx");
+     *   array("name" => "xx", "onclick" => "xx", "submenu" => array());
+     * The support of submenus depends on the current implementation, so may not be present everywhere!
      * A menu may be shown by calling
      * KAJONA.admin.contextMenu.showElementMenu('$strIdentifier', this)
      * whereas this is the js-element the menu should be attached to.
@@ -2129,16 +2130,45 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function registerMenu($strIdentifier, $arrEntries) {
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry");
+        $strDividerTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_divider_entry");
+        $strSubmenuTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_submenucontainer_entry");
         $strEntries = "";
-        foreach($arrEntries as $arrOneEntry)
-            $strEntries .= $this->objTemplate->fillTemplate(
-                array(
-                    "elementName" => $arrOneEntry["name"],
-                    "elementAction" => $arrOneEntry["onclick"],
-                    "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"])
-                ),
-                $strTemplateEntryID
+        foreach($arrEntries as $arrOneEntry) {
+            $strCurTemplate = $strTemplateEntryID;
+
+            $arrTemplate = array(
+                "elementName" => $arrOneEntry["name"],
+                "elementAction" => $arrOneEntry["onclick"],
+                "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"])
             );
+
+            if(isset($arrOneEntry["submenu"]) && count($arrOneEntry["submenu"]) > 0) {
+                $strSubmenu = "";
+                foreach($arrOneEntry["submenu"] as $arrOneSubmenu) {
+                    $strCurSubTemplate = $strTemplateEntryID;
+
+                    if($arrOneSubmenu["name"] == "") {
+                        $arrSubTemplate = array();
+                        $strCurSubTemplate = $strDividerTemplateEntryID;
+                    }
+                    else {
+                        $arrSubTemplate = array(
+                            "elementName" => $arrOneSubmenu["name"],
+                            "elementAction" => $arrOneSubmenu["onclick"],
+                            "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneSubmenu["onclick"])
+                        );
+                    }
+
+                    $strSubmenu .= $this->objTemplate->fillTemplate($arrSubTemplate, $strCurSubTemplate);
+                }
+                $arrTemplate["entries"] = $strSubmenu;
+
+                $strCurTemplate = $strSubmenuTemplateEntryID;
+            }
+
+
+            $strEntries .= $this->objTemplate->fillTemplate($arrTemplate, $strCurTemplate);
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_wrapper");
         $arrTemplate = array();

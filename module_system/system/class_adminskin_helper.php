@@ -39,7 +39,7 @@ class class_adminskin_helper {
      * Loads the file-system path for a single skin
      * @static
      * @param $strSkin
-     * @return false|string
+     * @return string
      */
     public static function getPathForSkin($strSkin) {
         return class_resourceloader::getInstance()->getPathForFolder("/admin/skins/".$strSkin);

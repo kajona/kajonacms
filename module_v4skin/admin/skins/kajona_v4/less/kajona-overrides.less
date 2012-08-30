@@ -248,13 +248,13 @@ body {
     }
 
     a {
-        color:#626262 !important;
+        color: @linkColor !important;
         text-transform: none;
         padding: 3px 15px;
     }
 
-    a:hover {
-        color:@white !important;
+    a:hover, .dropdown-submenu:hover > a  {
+        color: @white !important;
     }
 
     a.dropdown-toggle {
@@ -264,6 +264,8 @@ body {
     ul {
         margin: 0px;
     }
+
+
 }
 
 

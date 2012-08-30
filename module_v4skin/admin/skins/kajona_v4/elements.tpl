@@ -1461,18 +1461,29 @@ It containes a list of aspects and provides the possibility to switch the differ
 ---------------------------------------------------------------------------------------------------------
 -- MENU -------------------------------------------------------------------------------------------------
 <contextmenu_wrapper>
-
     <div class="dropdown-menu generalContextMenu" role="menu">
         <ul >
             %%entries%%
         </ul>
     </div>
-
 </contextmenu_wrapper>
 
 <contextmenu_entry>
     <li ><a href="#" onclick="%%elementAction%%">%%elementName%%</a></li>
 </contextmenu_entry>
+
+<contextmenu_divider_entry>
+    <li class="divider"></li>
+</contextmenu_divider_entry>
+
+<contextmenu_submenucontainer_entry>
+    <li class="dropdown-submenu" >
+        <a href="#" onclick="%%elementAction%%">%%elementName%%</a>
+        <ul class="dropdown-menu">
+            %%entries%%
+        </ul>
+    </li>
+</contextmenu_submenucontainer_entry>
 
 
 ---------------------------------------------------------------------------------------------------------
