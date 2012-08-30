@@ -469,7 +469,7 @@ class class_db {
 		                             $strQuery);
 
 		    $strErrorCode = "";
-			$strErrorCode .= "<pre>Error in query\n\n";
+			$strErrorCode .= "Error in query\n\n";
 			$strErrorCode .= "Error:\n";
 			$strErrorCode .= $strError . "\n\n";
 			$strErrorCode .= "Query:\n";
@@ -483,7 +483,6 @@ class class_db {
 					$strErrorCode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
 				}
 			}
-			$strErrorCode .= "</pre>";
 			throw new class_exception($strErrorCode, class_exception::$level_ERROR);
 		}
 		else {
