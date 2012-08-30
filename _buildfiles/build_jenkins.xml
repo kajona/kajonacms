@@ -139,10 +139,8 @@
                 <exclude name=".svn"/>
                 <include name="element_*/**"/>
                 <include name="module_*/*/**"/>
-                <include name="widget_*/*/**"/>
                 <include name="template_*/*/**"/>
                 <include name="_debugging/*/**"/>
-                <include name="installer/*/**"/>
                 <include name="*.php"/>
             </fileset>
 
@@ -162,10 +160,8 @@
 
                 <include name="element_*/**"/>
                 <include name="module_*/*/**"/>
-                <include name="widget_*/*/**"/>
                 <include name="template_*/*/**"/>
                 <include name="_debugging/*/**"/>
-                <include name="installer/*/**"/>
                 <include name="*.php"/>
 
             </fileset>
@@ -197,7 +193,8 @@
                 <include name="module_samplecontent/*/**"/>
                 <include name="module_packagemanager/*/**"/>
                 <include name="module_system/**"/>
-                <include name="installer/*/**"/>
+                <include name="module_installer/*/**"/>
+                <include name="module_v4skin/*/**"/>
                 <include name="*.php"/>
             </fileset>
 

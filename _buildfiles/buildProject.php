@@ -7,7 +7,7 @@ class Testmanager {
 
     public $bitOnlyProjectsetup = false;
 
-    public $strConfigFile = "config_sqlite3.php";
+    public $strConfigFile = "";
 
     public function main() {
 
@@ -110,6 +110,7 @@ class Testmanager {
 $objTestmanager = new Testmanager();
 $objTestmanager->strProjectPath = $argv[1];
 $objTestmanager->bitOnlyProjectsetup = $argv[2] == "onlySetup";
-$objTestmanager->strConfigFile = $argv[3];
+if(isset($argv[3]))
+    $objTestmanager->strConfigFile = $argv[3];
 $objTestmanager->main();
 
