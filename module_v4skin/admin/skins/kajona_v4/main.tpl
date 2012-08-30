@@ -7,13 +7,12 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="generator" content="Kajona, www.kajona.de" />
 
-    <!--<link href="css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet">-->
-    <!-- <link rel="stylesheet" href="_skinwebpath_/styles.css?_system_browser_cachebuster_" > -->
-
+    <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <link href="_skinwebpath_/less/responsive.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
     <script src="_skinwebpath_/less/less.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
@@ -110,7 +109,6 @@
 
             %%content%%
 
-
         </div>
     </div>
 
@@ -122,9 +120,6 @@
 
 </div>
 
-
-
-<!--<script src="_skinwebpath_/js/jquery-ui-1.8.18.custom.min.js"></script>-->
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js"></script>
 <script src="_skinwebpath_/js/bootstrap-transition.js"></script>
 <script src="_skinwebpath_/js/bootstrap-alert.js"></script>
@@ -140,16 +135,6 @@
 <script src="_skinwebpath_/js/bootstrap-affix.js"></script>
 
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
-
-<!--<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>-->
-<!--<script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>-->
-
-<script>
-
-
-
-</script>
-
 
 
 <div class="modal hide fade fullsize" id="folderviewDialog" role="dialog">
