@@ -77,7 +77,7 @@ abstract class class_portal  {
     protected $arrModule = array();	        //Array containing info about the current module
     protected $strTemplateArea;		        //String containing the current Area for the templateobject
     protected $strOutput;
-    protected $arrElementData;
+    protected $arrElementData = array();
 
     /**
      * Constructor

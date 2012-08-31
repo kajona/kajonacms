@@ -51,9 +51,6 @@ class class_installer_element_facebooklikebox extends class_installer_base imple
 
 
 	public function update() {
-	}
-
-    public function postUpdate() {
         $strReturn = "";
 
         if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.2") {

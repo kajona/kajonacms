@@ -15,7 +15,6 @@
  * @abstract
  */
 abstract class class_element_portal extends class_portal {
-	protected $arrElementData;
 
     private $strCacheAddon = "";
 
@@ -37,9 +36,7 @@ abstract class class_element_portal extends class_portal {
         $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
 
 
-		$arrTemp = array();
 		$this->setSystemid($objElementData->getSystemid());
-		$this->arrElementData = $arrTemp;
 		//merge the attributes of $objElementData to the array
 		$this->arrElementData["page_element_ph_placeholder"] = $objElementData->getStrPlaceholder();
 		$this->arrElementData["page_element_ph_name"] = $objElementData->getStrName();

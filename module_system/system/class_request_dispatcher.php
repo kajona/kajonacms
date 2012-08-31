@@ -272,18 +272,8 @@ class class_request_dispatcher {
      * @return string
      */
     private function callScriptlets($strContent) {
-        $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
-
-        foreach($arrScriptletFiles as $strOneScriptlet) {
-            $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
-            /** @var $objScriptlet interface_scriptlet */
-            $objScriptlet = new $strOneScriptlet();
-
-            if($objScriptlet instanceof interface_scriptlet)
-                $strContent = $objScriptlet->processContent($strContent);
-        }
-
-        return $strContent;
+        $objScriptlet = new class_scriptlet_helper();
+        return $objScriptlet->processString($strContent);
     }
 
 
