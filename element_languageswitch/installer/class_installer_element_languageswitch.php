@@ -16,7 +16,6 @@
  */
 class class_installer_element_languageswitch extends class_installer_base implements interface_installer {
 
-    private $strContentLanguage;
 
     public function __construct() {
 
@@ -25,8 +24,6 @@ class class_installer_element_languageswitch extends class_installer_base implem
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
         parent::__construct();
 
-        //set the correct language
-        $this->strContentLanguage = $this->objSession->getAdminLanguage();
     }
 
 

@@ -671,7 +671,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
             /** @var $objObject class_module_pages_folder|class_module_pages_page */
             $objObject = class_objectfactory::getInstance()->getObject($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigation
-			if($objObject->getIntModuleNr() == _pages_content_modul_id_)
+			if($objObject == null || $objObject->getIntModuleNr() == _pages_content_modul_id_)
 				continue;
 
             if($objObject instanceof class_module_pages_folder) {

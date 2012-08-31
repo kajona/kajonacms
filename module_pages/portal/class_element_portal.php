@@ -55,7 +55,7 @@ abstract class class_element_portal extends class_portal {
 	 */
 	public function getElementContent($strSystemid) {
 	    //table given?
-	    if($this->arrModule["table"] != "") {
+	    if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "") {
     		$strQuery = "SELECT *
     						FROM ".$this->arrModule["table"]."
     						WHERE content_id = ? ";

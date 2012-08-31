@@ -105,10 +105,12 @@ class class_date {
         //see if the other parts may be read directly
         if(isset($arrParams[$strFieldname])) {
             $objDateTime = DateTime::createFromFormat(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $arrParams[$strFieldname]);
-            $intTimestamp = $objDateTime->getTimestamp();
-            $intYear = strftime("%Y", $intTimestamp);
-            $intMonth = strftime("%m", $intTimestamp);
-            $intDay = strftime("%d", $intTimestamp);
+            if($objDateTime) {
+                $intTimestamp = $objDateTime->getTimestamp();
+                $intYear = strftime("%Y", $intTimestamp);
+                $intMonth = strftime("%m", $intTimestamp);
+                $intDay = strftime("%d", $intTimestamp);
+            }
         }
 
         $this->setIntYear($intYear);
