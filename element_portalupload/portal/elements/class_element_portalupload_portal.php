@@ -11,6 +11,7 @@
  * Portal Element to load the login-form, or a small "status" area, providing an logout link
  *
  * @package element_portalupload
+ * @author sidler@mulchprod.de
  */
 class class_element_portalupload_portal extends class_element_portal implements interface_portal_element {
 
