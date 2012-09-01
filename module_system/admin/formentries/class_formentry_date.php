@@ -45,14 +45,14 @@ class class_formentry_date extends class_formentry_base implements interface_for
 
     protected function updateValue() {
         $arrParams = class_carrier::getAllParams();
-        if(isset($arrParams[$this->getStrEntryName()."_day"]) && $arrParams[$this->getStrEntryName()."_day"] != "") {
+        if((isset($arrParams[$this->getStrEntryName()."_day"]) && $arrParams[$this->getStrEntryName()."_day"] != "") || (isset($arrParams[$this->getStrEntryName()]) && $arrParams[$this->getStrEntryName()] != "")) {
 
             $objDate = new class_date();
             $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
             $this->setStrValue($objDate->getLongTimestamp());
         }
         else
-            $this->setStrValue = $this->getValueFromObject();
+            $this->setStrValue($this->getValueFromObject());
 
     }
 

@@ -3,11 +3,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
     >
-    <title>faqs</title>
-    <description>A module to organize frequently asked questions.</description>
+    <title>news</title>
+    <description>Fully fledged news-management. Rss-Feed, categories, time-based publishing.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>module_faqs</target>
+    <target>module_news</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>system,pages</requiredModules>

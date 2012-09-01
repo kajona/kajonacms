@@ -4,22 +4,22 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_modul_faqs_category.php 4046 2011-07-30 11:58:08Z sidler $                                *
+*	$Id: class_modul_news_category.php 4049 2011-08-03 14:59:29Z sidler $                                *
 ********************************************************************************************************/
 
 /**
- * Model for a faqscategory
+ * Model for a newscategory
  *
- * @package module_faqs
+ * @package module_news
  * @author sidler@mulchprod.de
  *
- * @targetTable faqs_category.faqs_cat_id
+ * @targetTable news_category.news_cat_id
  */
-class class_module_faqs_category extends class_model implements interface_model, interface_admin_listable  {
+class class_module_news_category extends class_model implements interface_model, interface_admin_listable  {
 
     /**
      * @var string
-     * @tableColumn faqs_category.faqs_cat_title
+     * @tableColumn news_category.news_cat_title
      */
     private $strTitle = "";
 
@@ -30,8 +30,8 @@ class class_module_faqs_category extends class_model implements interface_model,
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _faqs_module_id_);
-        $this->setArrModuleEntry("modul", "faqs");
+        $this->setArrModuleEntry("moduleId", _news_module_id_);
+        $this->setArrModuleEntry("modul", "news");
 
         //base class
         parent::__construct($strSystemid);
@@ -46,7 +46,7 @@ class class_module_faqs_category extends class_model implements interface_model,
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_folderClosed.png";
+        return "icon_dot.png";
     }
 
     /**
@@ -78,86 +78,74 @@ class class_module_faqs_category extends class_model implements interface_model,
 
 
     /**
-     * Loads all available categories from the db
-     *
-     * @param null $intStart
-     * @param null $intEnd
-     * @param bool $bitOnlyActive
-     *
-     * @return class_module_faqs_category[]
-     * @static
-     */
-	public static function getCategories($intStart = null, $intEnd = null, $bitOnlyActive = false) {
-		$strQuery = "SELECT system_id FROM "._dbprefix_."faqs_category,
+	 * Loads all available categories from the db
+	 *
+	 * @return class_module_news_category[]
+	 * @static
+	 */
+	public static function getCategories() {
+		$strQuery = "SELECT system_id FROM "._dbprefix_."news_category,
 						"._dbprefix_."system
-						WHERE system_id = faqs_cat_id
-						".($bitOnlyActive ? " AND system_status = 1 ": "" )."
-						ORDER BY faqs_cat_title";
+						WHERE system_id = news_cat_id
+						ORDER BY news_cat_title";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_faqs_category($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_news_category($arrOneId["system_id"]);
 
 		return $arrReturn;
 	}
 
     /**
-     * Loads all available categories from the db
+     * Counts all available categories in the db
      *
-     * @param bool $bitOnlyActive
-     * @return mixed
+     * @return int
      * @static
      */
-    public static function getCategoriesCount($bitOnlyActive = false) {
-        $strQuery = "SELECT COUNT(*)
-                      FROM "._dbprefix_."faqs_category,
+    public static function getCategoriesCount() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."news_category,
 						"._dbprefix_."system
-						WHERE system_id = faqs_cat_id
-						".($bitOnlyActive ? " AND system_status = 1 ": "" )."
-						ORDER BY faqs_cat_title";
+						WHERE system_id = news_cat_id
+						ORDER BY news_cat_title";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
     }
 
-
 	/**
-	 * Loads all categories, the given faq is in
+	 * Loads all categories, the given news is in
 	 *
 	 * @param string $strSystemid
-	 * @return class_module_faqs_category[]
+	 * @return class_module_news_category[]
 	 * @static
 	 */
-	public static function getFaqsMember($strSystemid) {
-	    $strQuery = "SELECT faqsmem_category as system_id FROM "._dbprefix_."faqs_member
-	                   WHERE faqsmem_faq = ? ";
+	public static function getNewsMember($strSystemid) {
+	    $strQuery = "SELECT newsmem_category as system_id FROM "._dbprefix_."news_member
+	                   WHERE newsmem_news = ? ";
 	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_faqs_category($arrOneId["system_id"]);
+		    $arrReturn[] = new class_module_news_category($arrOneId["system_id"]);
 
 		return $arrReturn;
 	}
 
-
-    /**
-     * Deletes all memberships of the given FAQ
-     *
-     * @param string $strSystemid FAQ-ID
-     * @return bool
-     */
-    public static function deleteFaqsMemberships($strSystemid) {
-        $strQuery = "DELETE FROM "._dbprefix_."faqs_member
-	                  WHERE faqsmem_faq = ? ";
+	/**
+	 * Deletes all memberships of the given NEWS
+	 *
+	 * @param string $strSystemid NEWS-ID
+	 * @return bool
+	 */
+	public static function deleteNewsMemberships($strSystemid) {
+	    $strQuery = "DELETE FROM "._dbprefix_."news_member
+	                  WHERE newsmem_news = ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid));
-    }
+	}
 
 	public function deleteObject() {
-
-	    //start by deleting from members and cat table
-        $strQuery = "DELETE FROM "._dbprefix_."faqs_member WHERE faqsmem_category = ? ";
-
+	    //start by deleting from members an cat table
+        $strQuery = "DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             return parent::deleteObject();
         }

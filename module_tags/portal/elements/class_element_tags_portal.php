@@ -64,7 +64,7 @@ class class_element_tags_portal extends class_element_portal implements interfac
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);
                     }
 
-                    if(class_module_system_module::getModuleByName("news") != null && $objRecord->getIntModuleNr() == _news_modul_id_) {
+                    if(class_module_system_module::getModuleByName("news") != null && $objRecord->getIntModuleNr() == _news_module_id_) {
                         //TODO: fix after news integration
                         $objNews = new class_module_news_news($objRecord->getSystemid());
                         $strLink = getLinkPortal(_news_search_resultpage_, "", "_self", $objNews->getStrTitle(), "newsDetail", "&highlight=".urlencode($objTag->getStrName()), $objRecord->getSystemid(), "", "", $objNews->getStrTitle());

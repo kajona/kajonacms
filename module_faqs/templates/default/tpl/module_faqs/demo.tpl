@@ -21,7 +21,7 @@
         <div class="faqFaqQuestion">
             <table cellpadding="0" cellspacing="0">
                 <tr>
-                    <td><img src="_webpath_/templates/default/pics/kajona/icon_question.png" /></td>
+                    <td><img src="_webpath_/templates/default/pics/kajona/icon_question.gif" /></td>
                     <td style="padding-left: 2px;" data-kajona-editable="%%faq_systemid%%#strQuestion#plain">%%faq_question%%</td>
                 </tr>
             </table>

@@ -22,6 +22,11 @@ abstract class class_admin_simple extends class_admin {
 
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
+
+        if($this->getParam("adminunlockid") != "") {
+            $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
+            $objLockmanager->unlockRecord(true);
+        }
     }
 
 
@@ -168,6 +173,7 @@ abstract class class_admin_simple extends class_admin {
      */
     public function getActionIcons($objOneIterable, $strListIdentifier = "") {
         $strActions = "";
+        $strActions .= $this->renderUnlockAction($objOneIterable);
         $strActions .= $this->renderEditAction($objOneIterable);
         $arrAddons = $this->renderAdditionalActions($objOneIterable);
         if(is_array($arrAddons))
@@ -205,6 +211,11 @@ abstract class class_admin_simple extends class_admin {
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry->rightEdit()) {
 
+            $objLockmanager = $objListEntry->getLockManager();
+            if(!$objLockmanager->isAccessibleForCurrentUser()) {
+                return $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.png", $this->getLang("commons_locked")));
+            }
+
             if($bitDialog)
                 return $this->objToolkit->listButton(
                     getLinkAdminDialog(
@@ -231,6 +242,26 @@ abstract class class_admin_simple extends class_admin {
         return "";
     }
 
+
+    /**
+     * Renders the unlock action button for the current record.
+     * @param \class_model|\interface_model $objListEntry
+     * @return string
+     */
+    protected function renderUnlockAction(interface_model $objListEntry) {
+
+        $objLockmanager = $objListEntry->getLockManager();
+        if(!$objLockmanager->isAccessibleForCurrentUser()) {
+            if($objLockmanager->isUnlockableForCurrentUser() ) {
+                return $this->objToolkit->listButton(
+                    getLinkAdmin($objListEntry->getArrModule("modul"), "list", "&adminunlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen.png")
+                );
+            }
+        }
+        return "";
+    }
+
+
     /**
      * Renders the delete action button for the current record.
      * @param \class_model|\interface_model $objListEntry
@@ -238,6 +269,12 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
+
+            $objLockmanager = $objListEntry->getLockManager();
+            if(!$objLockmanager->isAccessibleForCurrentUser()) {
+                return $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.png", $this->getLang("commons_locked")));
+            }
+
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(),
                 $this->getLang("delete_question", $objListEntry->getArrModule("modul")),

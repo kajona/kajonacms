@@ -36,7 +36,6 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
      * @permissons right1
 	 */
 	protected function actionSavePost() {
-	    $strReturn = "";
 
 	    $strXMLContent = "";
 

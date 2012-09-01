@@ -55,7 +55,6 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
 		foreach ($arrCategories as $objCategory) {
 
     		//Load faqs
-            $arrFaqs = array();
     		if(!is_object($objCategory) && $objCategory == 1) {
     		    $arrFaqs = class_module_faqs_faq::loadListFaqsPortal(1);
     		    $objCategory = new class_module_faqs_category();

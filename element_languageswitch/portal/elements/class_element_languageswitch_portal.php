@@ -63,7 +63,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
                 $strSeoAddon = "";
                 if($strTargetSystemid != null && defined("_news_modul_id_")) {
                     $objCommon = new class_module_system_common($strTargetSystemid);
-                    if($objCommon->getIntModuleNr() == _news_modul_id_) {
+                    if($objCommon->getIntModuleNr() == _news_module_id_) {
                         $objNews = new class_modul_news_news($strTargetSystemid);
                         $strSeoAddon = $objNews->getStrTitle();
                     }

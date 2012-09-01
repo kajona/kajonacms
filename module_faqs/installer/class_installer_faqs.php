@@ -21,7 +21,6 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->setArrModuleEntry("moduleId", _faqs_module_id_);
         parent::__construct();
 
-        //set the correct language
 	}
 
 

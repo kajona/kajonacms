@@ -441,30 +441,22 @@ function is called after selecting a date, e.g. to hide the calendar
         <div class="controls">
             <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
             <script>
-                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js", "_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                    var format = '%%dateFormat%%';
-                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
-                    $('#%%calendarId%%').datepicker({
-                        format: format,
-                        weekStart: 1,
-                        autoclose: true,
-                        language: '%%calendarLang%%'
-                    });
+                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js"], function() {
+                    KAJONA.admin.loader.loadFile(["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                        var format = '%%dateFormat%%';
+                        format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+                        $('#%%calendarId%%').datepicker({
+                            format: format,
+                            weekStart: 1,
+                            autoclose: true,
+                            language: '%%calendarLang%%'
+                        });
+                    }, true);
                 }, true);
             </script>
         </div>
     </div>
 
-
-<!--
-	<div><label for="%%titleDay%%">%%title%% </label>
-		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
-		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
-		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
-		<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.png" alt="" /></a>
-		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
-	</div><br />
--->
 </input_date_simple>
 
 <input_datetime_simple>
@@ -476,15 +468,17 @@ function is called after selecting a date, e.g. to hide the calendar
             <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />
             <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
             <script>
-                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js", "_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                    var format = '%%dateFormat%%';
-                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
-                    $('#%%calendarId%%').datepicker({
-                        format: format,
-                        weekStart: 1,
-                        autoclose: true,
-                        language: '%%calendarLang%%'
-                    });
+                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js"], function() {
+                    KAJONA.admin.loader.loadFile(["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                        var format = '%%dateFormat%%';
+                        format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+                        $('#%%calendarId%%').datepicker({
+                            format: format,
+                            weekStart: 1,
+                            autoclose: true,
+                            language: '%%calendarLang%%'
+                        });
+                    }, true);
                 }, true);
             </script>
         </div>

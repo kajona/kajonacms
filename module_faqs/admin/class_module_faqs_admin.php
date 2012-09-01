@@ -28,7 +28,6 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
         $this->setArrModuleEntry("modul", "faqs");
         $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_PAGES_GROUP);
         parent::__construct();
-
 	}
 
 
@@ -107,7 +106,6 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
      * @permissions view
 	 */
 	protected function actionList() {
-		$strReturn = "";
 
         $objIterator = new class_array_section_iterator(class_module_faqs_category::getCategoriesCount());
         $objIterator->setIntElementsPerPage(class_module_faqs_category::getCategoriesCount());

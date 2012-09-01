@@ -179,7 +179,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @static
      */
 	public static function getFaqsList($strFilter = "", $intStart = null, $intEnd = null) {
-        $strQuery = "";
         $arrParams = array();
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id
@@ -259,8 +258,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 	 * @static
 	 */
 	public static function loadListFaqsPortal($strCat) {
-		$arrReturn = array();
-        $strQuery = "";
         $arrParams = array();
 		if($strCat == 1) {
 		    $strQuery = "SELECT system_id
@@ -307,8 +304,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     public function getStrAnswer() {
         return $this->strAnswer;
     }
-
-
 
 
     public function getArrCats() {
