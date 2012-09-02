@@ -1008,10 +1008,9 @@ The language switch surrounds the buttons
             %%linkBackward%%
             %%pageList%%
             %%linkForward%%
+            <li><span>%%nrOfElementsText%% %%nrOfElements%%</span></li>
         </ul>
     </div>
-    <br>
-    %%nrOfElementsText%% %%nrOfElements%%
 </pageview_body>
 
 <pageview_link_forward>
@@ -1037,8 +1036,8 @@ The language switch surrounds the buttons
 </pageview_list_item>
 
 <pageview_list_item_active>
-    <li class="active">
-        <a href="%%href%%">%%pageNr%%</a>
+    <li>
+        <a href="%%href%%" class="active">%%pageNr%%</a>
     </li>
 </pageview_list_item_active>
 

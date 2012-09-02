@@ -552,36 +552,47 @@ body {
         }
     }
 
-    .pagination ul {
-        .border-radius(0px);
-        .box-shadow(none);
-        display: inline-block;
-        margin-bottom: 0;
-        margin-left: 0;
-        background-color:@white;
+    .pagination {
+
+        text-align: center;
+
+        ul {
+            .border-radius(0px);
+            .box-shadow(none);
+            display: inline-block;
+            margin-bottom: 0;
+            margin-left: 0;
+            background-color:@white;
+
+            li {
+                a, span {
+                    border-color: #dcdcdc;
+                    border-style: solid;
+                    border-width: 1px;
+                    float: left;
+                    line-height: 30px;
+                    padding: 0 10px;
+                    text-decoration: none;
+                    color:@grayDark;
+                    margin:0 3px;
+                    background-color:@grayLight;
+
+                    &.active {
+                        color:@green;
+                    }
+                }
+
+                &:first-child a, &:last-child a {
+                    border-left-width: 1px;
+                    .border-radius(0px);
+                }
+            }
+        }
+
+
+
     }
 
-    .pagination a {
-        border-color: #dcdcdc;
-        border-style: solid;
-        border-width: 1px;
-        float: left;
-        line-height: 30px;
-        padding: 0 10px;
-        text-decoration: none;
-        color:@grayDark;
-        margin:0 3px;
-        background-color:@grayLight;
-    }
-
-    .pagination .active a {
-        color:@green;
-    }
-
-    .pagination li:first-child a, .pagination li:last-child a {
-        border-left-width: 1px;
-        .border-radius(0px);
-    }
 
 }
 
