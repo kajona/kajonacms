@@ -87,7 +87,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_news.png";
+        return "icon_rss.png";
     }
 
     /**
