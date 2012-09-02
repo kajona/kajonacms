@@ -68,7 +68,7 @@ abstract class class_admin_simple extends class_admin {
             if(!$objRecord->deleteObject())
                 throw new class_exception("error deleting object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+            $this->adminReload(_indexpath_."?".$this->getHistory(1).($this->getParam("pe") != "" ? "&peClose=1" : ""));
         }
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
@@ -272,7 +272,7 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.png", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(getImageAdmin("i=con_tonLocked.png", $this->getLang("commons_locked")));
             }
 
             return $this->objToolkit->listDeleteButton(

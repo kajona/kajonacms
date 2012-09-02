@@ -5,6 +5,7 @@ define("DB_USER",                               "kajona_test");
 define("DB_PASS",                               "kajona_test");
 define("DB_DB",                                 "kajona_test");
 define("DB_DRIVER",                             "sqlite3");
+define("DB_HOST",				                "localhost");
 
 
 

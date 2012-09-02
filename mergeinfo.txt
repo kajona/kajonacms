@@ -15,6 +15,7 @@ element_rssfeed                     4949
 module_ezchart                      4812
 module_guestbook                    4812
 module_navigation                   4812
+module_news                         4955
 module_pages                        4812
 module_pchart                       4812
 module_postacomment                 4812

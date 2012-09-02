@@ -1,7 +1,7 @@
 <?php 
 
 //database-settings
-define("DB_HOST",				"192.168.60.208");
+define("DB_HOST",				                "192.168.60.208");
 define("DB_USER",                               "kajona");
 define("DB_PASS",                               "kajona");
 define("DB_DB",                                 "ora10");

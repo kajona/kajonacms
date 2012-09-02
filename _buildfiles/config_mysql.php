@@ -1,7 +1,7 @@
 <?php 
 
 //database-settings
-define("DB_HOST",				"localhost");
+define("DB_HOST",				                "localhost");
 define("DB_USER",                               "kajona");
 define("DB_PASS",                               "kajona");
 define("DB_DB",                                 "kajona");
