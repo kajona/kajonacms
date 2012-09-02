@@ -225,7 +225,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     );
 
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_treeBranchOpen.png")
+                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen.png")
                 );
             }
             else if($objListEntry->rightEdit()) {
@@ -237,7 +237,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 }
 
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_treeBranchOpen.png")
+                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen.png")
                 );
             }
 

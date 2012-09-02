@@ -216,7 +216,7 @@ One Column in a row (data record) - the header, the content, the footer, providi
 
 Element containing one button / action, multiple put together, e.g. to edit or delete a record.
 To avoid side-effects, no line-break in this case -> not needed by default, but in classics-style!
-<list_button>%%content%%</list_button>
+<list_button><span class="listButton">%%content%%</span></list_button>
 
 ---------------------------------------------------------------------------------------------------------
 -- FORM ELEMENTS ----------------------------------------------------------------------------------------
