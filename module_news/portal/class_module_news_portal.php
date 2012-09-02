@@ -26,9 +26,9 @@ class class_module_news_portal extends class_portal implements interface_portal 
         parent::__construct($arrElementData);
 
         $strAction = $this->getParam("action");
-        if ($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1)
+        if($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1)
             $this->setAction("newsDetail");
-		elseif($this->arrElementData["news_view"] == 0 || $strAction == "newsList")
+		elseif(!isset($this->arrElementData["news_view"]) || $this->arrElementData["news_view"] == 0 || $strAction == "newsList")
 		    $this->setAction("newsList");
 	}
 
