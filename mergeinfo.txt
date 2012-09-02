@@ -9,6 +9,8 @@ element_facebooklikebox             4812
 element_formular                    4949
 element_languageswitch (see module_system)
 element_lastmodified                4949
+element_portallogin                 4964
+element_portalregistration          4964
 element_portalupload                4812
 element_rssfeed                     4949
 
