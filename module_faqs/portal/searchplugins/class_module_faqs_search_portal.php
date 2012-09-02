@@ -105,18 +105,19 @@ class class_module_faqs_search_portal implements interface_search_plugin  {
     private function getElementData(class_module_faqs_faq $objFaq) {
         $strQuery =  "SELECT page_name,  page_id
                        FROM "._dbprefix_."element_faqs,
-                            "._dbprefix_."faqs_member,
-                            "._dbprefix_."faqs,
+                            "._dbprefix_."faqs
+                  LEFT JOIN "._dbprefix_."faqs_member
+                         ON (faqsmem_faq = faqs_id),
                             "._dbprefix_."page_element,
                             "._dbprefix_."page,
                             "._dbprefix_."system
                       WHERE faqs_id = ?
                         AND content_id = page_element_id
                         AND content_id = system_id
-                        AND ( faqs_category = 0 OR (
-                                faqs_category = faqsmem_category
-                                AND faqsmem_faq = faqs_id
-                           )
+                        AND (
+                            faqs_category IS NULL OR (
+                                faqs_category = '0' OR faqs_category = faqsmem_category
+                            )
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
