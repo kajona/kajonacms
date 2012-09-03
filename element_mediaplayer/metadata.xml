@@ -3,8 +3,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
-    <title>flash</title>
-    <description>Embed flash movies into the website.</description>
+    <title>mediaplayer</title>
+    <description>Embed media elements (e.g. movies) into the website.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_flash</target>

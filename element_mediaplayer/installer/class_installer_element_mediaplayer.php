@@ -4,20 +4,19 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                 *
+*	$Id: installer_element_mediaplayer.php 4148 2011-10-27 19:47:06Z sidler $                         *
 ********************************************************************************************************/
 
 /**
- * Installer to install a facebooklikebox-element to use in the portal
+ * Installer to install a mediaplayer-element to use in the portal
  *
- * @package element_facebooklikebox
+ * @package element_mediaplayer
  * @author sidler@mulchprod.de
  */
-class class_installer_element_facebooklikebox extends class_installer_base implements interface_installer {
+class class_installer_element_mediaplayer extends class_installer_base implements interface_installer {
 
     /**
      * Constructor
-     *
      */
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
@@ -26,18 +25,17 @@ class class_installer_element_facebooklikebox extends class_installer_base imple
         parent::__construct();
 	}
 
-
 	public function install() {
 		$strReturn = "";
 
 		//Register the element
-		$strReturn .= "Registering facebooklikebox-element...\n";
+		$strReturn .= "Registering mediaplayer-element...\n";
 		//check, if not already existing
-		if(class_module_pages_element::getElement("facebooklikebox") == null) {
+		if(class_module_pages_element::getElement("mediaplayer") == null) {
 		    $objElement = new class_module_pages_element();
-		    $objElement->setStrName("facebooklikebox");
-		    $objElement->setStrClassAdmin("class_element_facebooklikebox_admin.php");
-		    $objElement->setStrClassPortal("class_element_facebooklikebox_portal.php");
+		    $objElement->setStrName("mediaplayer");
+		    $objElement->setStrClassAdmin("class_element_mediaplayer_admin.php");
+		    $objElement->setStrClassPortal("class_element_mediaplayer_portal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -53,20 +51,17 @@ class class_installer_element_facebooklikebox extends class_installer_base imple
 
 	public function update() {
         $strReturn = "";
-
-        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.2") {
+        if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "3.4.2") {
             $strReturn .= $this->postUpdate_342_349();
             $this->objDB->flushQueryCache();
         }
-
         return $strReturn;
     }
 
 
-
     public function postUpdate_342_349() {
-        $strReturn = "Updating element facebooklikebox to 3.4.9...\n";
-        $this->updateElementVersion("facebooklikebox", "3.4.9");
+        $strReturn = "Updating element mediaplayer to 3.4.9...\n";
+        $this->updateElementVersion("mediaplayer", "3.4.9");
         return $strReturn;
     }
 }
