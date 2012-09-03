@@ -33,7 +33,7 @@ class class_formentry_headline extends class_formentry_base implements interface
         return $objToolkit->formHeadline($this->getStrValue());
     }
 
-    protected function updateLabel() {
+    public function updateLabel($strKey = "") {
         return "";
     }
 

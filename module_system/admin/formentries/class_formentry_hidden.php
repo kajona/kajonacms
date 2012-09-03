@@ -33,7 +33,7 @@ class class_formentry_hidden extends class_formentry_base implements interface_f
         return $objToolkit->formInputHidden($this->getStrEntryName(), $this->getStrValue());
     }
 
-    protected function updateLabel() {
+    public function updateLabel($strKey = "") {
         return "";
     }
 

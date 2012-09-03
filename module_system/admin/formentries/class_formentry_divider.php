@@ -33,7 +33,7 @@ class class_formentry_divider extends class_formentry_base implements interface_
         return $objToolkit->divider();
     }
 
-    protected function updateLabel() {
+    public function updateLabel($strKey = "") {
         return "";
     }
 

@@ -25,13 +25,14 @@
  */
 class class_admin_formgenerator {
 
-    private static $STR_TYPE_ANNOTATION = "@fieldType";
-    private static $STR_VALIDATOR_ANNOTATION = "@fieldValidator";
-    private static $STR_MANDATORY_ANNOTATION = "@fieldMandatory";
+    const  STR_TYPE_ANNOTATION      = "@fieldType";
+    const  STR_VALIDATOR_ANNOTATION = "@fieldValidator";
+    const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
+    const  STR_LABEL_ANNOTATION     = "@fieldLabel";
 
-    public static $BIT_BUTTON_SUBMIT = 2;
-    public static $BIT_BUTTON_CLOSE = 4;
-    public static $BIT_BUTTON_CANCEL = 8;
+    const  BIT_BUTTON_SUBMIT = 2;
+    const  BIT_BUTTON_CLOSE  = 4;
+    const  BIT_BUTTON_CANCEL = 8;
 
 
     private $intButtonConfig = 2;
@@ -123,13 +124,13 @@ class class_admin_formgenerator {
         foreach($this->arrFields as $objOneField)
             $strReturn .= $objOneField->renderField();
 
-        if($intButtonConfig & self::$BIT_BUTTON_SUBMIT)
+        if($intButtonConfig & self::BIT_BUTTON_SUBMIT)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submit");
 
-        if($intButtonConfig & self::$BIT_BUTTON_CANCEL)
+        if($intButtonConfig & self::BIT_BUTTON_CANCEL)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancel");
 
-        if($intButtonConfig & self::$BIT_BUTTON_CLOSE)
+        if($intButtonConfig & self::BIT_BUTTON_CLOSE)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submit");
 
 
@@ -189,14 +190,18 @@ class class_admin_formgenerator {
         if($strGetter === null)
             throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
 
-        $strType      = $objReflection->getMethodAnnotationValue($strGetter, self::$STR_TYPE_ANNOTATION);
-        $strValidator = $objReflection->getMethodAnnotationValue($strGetter, self::$STR_VALIDATOR_ANNOTATION);
-        $strMandatory = $objReflection->getMethodAnnotationValue($strGetter, self::$STR_MANDATORY_ANNOTATION);
+        $strType      = $objReflection->getMethodAnnotationValue($strGetter, self::STR_TYPE_ANNOTATION);
+        $strValidator = $objReflection->getMethodAnnotationValue($strGetter, self::STR_VALIDATOR_ANNOTATION);
+        $strMandatory = $objReflection->getMethodAnnotationValue($strGetter, self::STR_MANDATORY_ANNOTATION);
+        $strLabel     = $objReflection->getMethodAnnotationValue($strGetter, self::STR_LABEL_ANNOTATION);
 
         if($strType === false)
             $strType = "text";
 
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
+        if($strLabel !== false) {
+            $objField->updateLabel($strLabel);
+        }
 
         $bitMandatory = false;
         if($strMandatory !== false && $strMandatory !== "false")

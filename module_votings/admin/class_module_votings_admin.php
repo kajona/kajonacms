@@ -46,11 +46,10 @@ class class_module_votings_admin extends class_admin_simple implements interface
         //Link to root-folder
         foreach($arrPath as $strOneVoting) {
 
-            /** @var $objInstance class_module_pages_folder|class_module_pages_page */
             $objInstance = class_objectfactory::getInstance()->getObject($strOneVoting);
 
             if($objInstance instanceof class_module_votings_answer) {
-                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$strOneVoting, $objInstance->getStrDisplayName());
+                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$objInstance->getPrevId(), $objInstance->getStrDisplayName());
             }
             if($objInstance instanceof class_module_votings_voting) {
                 $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$strOneVoting, $objInstance->getStrDisplayName());
@@ -90,14 +89,33 @@ class class_module_votings_admin extends class_admin_simple implements interface
     }
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        if($strListIdentifier == self::STR_LIST_ANSWER && $this->getObjModule()->rightEdit()) {
-            return array(
-                getLinkAdmin($this->getArrModule("modul"), "newAnswer", "&systemid=".$this->getSystemid(), $this->getLang("actionNewAnswer"), $this->getLang("actionNewAnswer"), "icon_new.png")
-            );
+        if($strListIdentifier == self::STR_LIST_ANSWER) {
+            if($this->getObjModule()->rightEdit()) {
+                return array(
+                    getLinkAdmin($this->getArrModule("modul"), "newAnswer", "&systemid=".$this->getSystemid(), $this->getLang("actionNewAnswer"), $this->getLang("actionNewAnswer"), "icon_new.png")
+                );
+            }
         }
+        else
+            return parent::getNewEntryAction($strListIdentifier, $bitDialog);
 
+        return array();
+    }
 
-        return parent::getNewEntryAction($strListIdentifier, $bitDialog);
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry instanceof class_module_votings_answer) {
+            if($objListEntry->rightDelete()) {
+                return $this->objToolkit->listDeleteButton(
+                    $objListEntry->getStrDisplayName(),
+                    $this->getLang("voting_delete_answer", $this->getArrModule("modul")),
+                    getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid())
+                );
+            }
+        }
+        else
+            return parent::renderDeleteAction($objListEntry);
+
+        return "";
     }
 
 
@@ -251,8 +269,15 @@ class class_module_votings_admin extends class_admin_simple implements interface
         if($objForm == null)
             $objForm = $this->getVotingAnswerForm($objAnswer);
 
+        if(!validateSystemid($this->getParam("votingid"))) {
+            if($strMode == "new")
+                $this->setParam("votingid", $this->getSystemid());
+            else
+                $this->setParam("votingid", $objAnswer->getPrevId());
+        }
+
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        $objForm->addField(new class_formentry_hidden("", "votingid"))->setStrValue(($strMode == "new" ? $this->getSystemid() : $objAnswer->getPrevId()));
+        $objForm->addField(new class_formentry_hidden("", "votingid"))->setStrValue($this->getParam("votingid"));
         return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveAnswer"));
     }
 
@@ -281,7 +306,7 @@ class class_module_votings_admin extends class_admin_simple implements interface
         if($objAnswer != null) {
             $objForm = $this->getVotingAnswerForm($objAnswer);
             if(!$objForm->validateForm())
-                return $this->actionNewVoting($this->getParam("mode"), $objForm);
+                return $this->actionNewAnswer($this->getParam("mode"), $objForm);
 
             $objForm->updateSourceObject();
             $objAnswer->updateObjectToDb($this->getParam("votingid"));

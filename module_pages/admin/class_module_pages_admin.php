@@ -110,8 +110,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
             $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
         }
-        else
-            $strPathNavi .= $this->objToolkit->divider();
 
         if($bitPeMode)
             $strReturn = $strPathNavi.$strPages;

@@ -88,8 +88,20 @@ class class_formentry_base {
      * Loads the fields label-text, based on a combination of form-name and property-name.
      * The generated label may be overwritten if necessary.
      */
-    protected function updateLabel() {
-        $this->strLabel = class_carrier::getInstance()->getObjLang()->getLang("form_".$this->strFormName."_".$this->strSourceProperty, $this->objSourceObject->getArrModule("modul"));
+    public function updateLabel($strKey = "") {
+
+        //check, if label is set as a property
+        if($strKey != "") {
+            $this->strLabel = class_carrier::getInstance()->getObjLang()->getLang($strKey, $this->objSourceObject->getArrModule("modul"));
+        }
+        else {
+            $this->strLabel = class_carrier::getInstance()->getObjLang()->getLang("form_".$this->strFormName."_".$this->strSourceProperty, $this->objSourceObject->getArrModule("modul"));
+            $strKey = "form_".$this->strFormName."_".$this->strSourceProperty;
+        }
+
+        $strHint = $strKey."_hint";
+        if(class_carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")) != "!".$strHint."!")
+            $this->setStrHint(class_carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")));
     }
 
     /**
