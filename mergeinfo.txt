@@ -22,6 +22,7 @@ module_navigation                   4812
 module_news                         4955
 module_pages                        4812
 module_pchart                       4812
+module_pdf                          4964
 module_postacomment                 4812
 module_rating                       4812
 module_samplecontent                4812
