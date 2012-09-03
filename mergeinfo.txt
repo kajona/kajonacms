@@ -6,6 +6,7 @@ Revision is inclusive.
 
 element_directorybrowser            4812
 element_facebooklikebox             4812
+element_flash                       4964
 element_formular                    4949
 element_languageswitch (see module_system)
 element_lastmodified                4949
