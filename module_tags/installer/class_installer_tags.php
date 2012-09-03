@@ -11,6 +11,7 @@
  * Class providing an install for the tags module
  *
  * @package module_tags
+ * @author sidler@mulchprod.de
  */
 class class_installer_tags extends class_installer_base implements interface_installer {
 
@@ -102,11 +103,10 @@ class class_installer_tags extends class_installer_base implements interface_ins
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
-
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.1") {
             $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
@@ -121,7 +121,6 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
         $strReturn .= "Adding classes for existing records...\n";
-
 
         $strReturn .= "Tags\n";
         $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."tags_tag, "._dbprefix_."system WHERE system_id = tags_tag_id AND (system_class IS NULL OR system_class = '')", array());

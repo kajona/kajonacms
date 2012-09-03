@@ -12,7 +12,6 @@
      Author: sidler
      $Id: build.xml 4822 2012-07-27 07:55:40Z sidler $
 
-     TODO: remove installer-references as soon as installer is moved to its own project
      ====================================================================== -->
 <project name="Kajona Head Build" default="buildSqliteFast" basedir=".">
 

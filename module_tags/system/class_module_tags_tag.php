@@ -392,7 +392,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
 
     /**
-     * @return mixed
+     * @return string
      * @fieldType text
      * @fieldMandatory
      */

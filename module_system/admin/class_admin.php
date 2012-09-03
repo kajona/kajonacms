@@ -665,7 +665,13 @@ abstract class class_admin {
 
             $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
             if($strPermissions !== false) {
-                if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $this->getObjModule())) {
+
+                if(validateSystemid($this->getSystemid()) && class_objectfactory::getInstance()->getObject($this->getSystemid()) != null)
+                    $objObjectToCheck = class_objectfactory::getInstance()->getObject($this->getSystemid());
+                else
+                    $objObjectToCheck = $this->getObjModule();
+
+                if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
                     $this->strOutput = $this->getLang("commons_error_permissions");
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
                 }

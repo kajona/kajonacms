@@ -12,7 +12,7 @@
  * Class to handle the admin-stuff of the tags-element
  *
  * @package module_tags
- * @author sidler@mulchpro.de
+ * @author sidler@mulchprod.de
  */
 class class_element_tags_admin extends class_element_admin implements interface_admin_element {
 

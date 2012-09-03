@@ -60,6 +60,7 @@
                 %%mixed2_portalupload|directorybrowser%%
                 %%mixed3_flash|mediaplayer|tags|eventmanager%%
                 %%list_userlist%%
+                %%votings_votings%%
 
                 <div align="right">
                 <div id="fb-root"></div>

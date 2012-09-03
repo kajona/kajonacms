@@ -469,7 +469,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             var KAJONA_SYSTEMTASK_CLOSE = '".$this->getLang("systemtask_close_dialog")."';
             var kajonaSystemtaskDialogContent = '".$strDialogContent."';
             </script>";
-        $strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
+        $strReturn = $strTaskOutput.$strReturn;
 
         return $strReturn;
     }

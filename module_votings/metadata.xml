@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>votings</title>
+    <description>Let your users vote on different polls.</description>
+    <version>1.1</version>
+    <author>Kajona Team</author>
+    <target>module_votings</target>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>system,pages</requiredModules>
+    <minSystemVersion>3.4.9</minSystemVersion>
+</package>

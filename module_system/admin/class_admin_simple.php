@@ -23,8 +23,8 @@ abstract class class_admin_simple extends class_admin {
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
 
-        if($this->getParam("adminunlockid") != "") {
-            $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
+        if($this->getParam("unlockid") != "") {
+            $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord(true);
         }
     }
@@ -254,7 +254,7 @@ abstract class class_admin_simple extends class_admin {
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    getLinkAdmin($objListEntry->getArrModule("modul"), "list", "&adminunlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen.png")
+                    getLinkAdmin($objListEntry->getArrModule("modul"), "list", "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen.png")
                 );
             }
         }

@@ -153,12 +153,8 @@ Currently, there are two modes: with and without a description.
 
 
 Divider to split up a page in logical sections
-<divider><br />
-<table style="width: 100%;">
-	<tr>
-  		<td class="%%class%%">&nbsp;</td>
-	</tr>
-</table>
+<divider>
+<hr />
 </divider>
 
 data list header. Used to open a table to print data

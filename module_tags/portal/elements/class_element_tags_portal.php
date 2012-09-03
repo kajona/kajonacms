@@ -21,9 +21,7 @@ class class_element_tags_portal extends class_element_portal implements interfac
      * @param $objElementData
      */
 	public function __construct($objElementData) {
-
 		parent::__construct($objElementData);
-
         $this->setArrModuleEntry("table", _dbprefix_."element_universal");
 	}
 

@@ -28,11 +28,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_PAGES_GROUP);
 
         parent::__construct();
-        if($this->getParam("unlockid") != "") {
-            $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
-            $objLockmanager->unlockRecord();
-        }
-
     }
 
 
@@ -525,6 +520,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     /**
      * Delete a page and all associated elements
      *
+     * @throws class_exception
      * @return string, "" in case of success
      */
     protected function actionDeletePageFinal() {
@@ -629,6 +625,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     /**
      * Deletes a folder from Database. All subpages & subfolders turn up to top-level
      *
+     * @throws class_exception
      * @return string, "" in case of success
      */
     protected function actionDeleteFolderFinal() {

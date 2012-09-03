@@ -437,6 +437,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
     $strLink = "";
     //if($strParams != "")
     //    $strParams = str_replace("&", "&amp;", $strParams);
+    $strTitle = uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle)));
 
     if($bitPortalEditor && $intHeight == "500")
         $intHeight = 690;
@@ -486,6 +487,8 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null) {
     $strLink = "";
 
+
+    $strTitle = uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle)));
 
     if($bitPortalEditor)
         $strParams .= "&pe=1";
