@@ -61,6 +61,7 @@
                 %%mixed3_flash|mediaplayer|tags|eventmanager%%
                 %%list_userlist%%
                 %%votings_votings%%
+                %%maps_maps%%
 
                 <div align="right">
                 <div id="fb-root"></div>

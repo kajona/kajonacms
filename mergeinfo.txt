@@ -10,6 +10,7 @@ element_flash                       4964
 element_formular                    4949
 element_languageswitch (see module_system)
 element_lastmodified                4949
+element_maps                        4977
 element_mediaplayer                 4977
 element_portallogin                 4964
 element_portalregistration          4964
