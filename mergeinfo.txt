@@ -40,6 +40,7 @@ module_system                       4812
 module_tags                         4812
 module_v3skin (v3: module_system)   4812
 module_votings                      4949
+module_workflows                    4989
 
 
 

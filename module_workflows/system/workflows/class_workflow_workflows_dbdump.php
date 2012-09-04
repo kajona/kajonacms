@@ -4,18 +4,18 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_workflow_ldap_sync.php 4743 2012-06-28 11:31:38Z sidler $                               *
+*	$Id: class_workflow_workflows_dbdump.php 4742 2012-06-28 11:31:15Z sidler $                               *
 ********************************************************************************************************/
 
 /**
- * triggers the internal sync of the ldap-userbase
+ * Workflow to create a dbdump in a regular interval, by default configured for 24h
  *
- * @package module_ldap
+ * @package module_workflows
  */
-class class_workflow_ldap_sync implements interface_workflows_handler  {
+class class_workflow_workflows_dbdump implements interface_workflows_handler  {
 
     private $intIntervalHours = 24;
-    
+
     /**
      * @var class_module_workflows_workflow
      */
@@ -26,7 +26,7 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
      */
     public function getConfigValueNames() {
         return array(
-            class_carrier::getInstance()->getObjLang()->getLang("workflow_ldapsync_val1", "ldap")
+            class_carrier::getInstance()->getObjLang()->getLang("workflow_dbdump_val1", "workflows")
         );
     }
 
@@ -43,22 +43,22 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
      * @see interface_workflows_handler::getDefaultValues()
      */
     public function getDefaultValues() {
-        return array(24); // by default there are 24h between each sync
+        return array(24); // by default there are 24h between each dbdump
     }
-    
+
     public function setObjWorkflow($objWorkflow) {
         $this->objWorkflow = $objWorkflow;
     }
 
     public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("workflow_ldapsync_title", "ldap");
+        return class_carrier::getInstance()->getObjLang()->getLang("workflow_dbdumps_title", "workflows");
     }
-    
+
 
     public function execute() {
 
-        $objUsersources = new class_usersources_source_ldap();
-        $objUsersources->updateUserData();
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $objDB->dumpDb();
 
         //trigger again
         return false;
@@ -71,11 +71,16 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
 
 
     public function schedule() {
-        $this->objWorkflow->setObjTriggerdate(new class_date(time() - 30 + $this->intIntervalHours * 36000));
+
+        $newTriggerdate = $this->objWorkflow->getObjTriggerdate()->getTimeInOldStyle();
+        $newTriggerdate = $newTriggerdate + $this->intIntervalHours * 3600;
+
+        $this->objWorkflow->setObjTriggerdate(new class_date($newTriggerdate));
+
     }
 
     public function getUserInterface() {
-       
+
     }
 
     public function processUserInput($arrParams) {
@@ -88,5 +93,5 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
     }
 
 
-    
+
 }

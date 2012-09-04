@@ -61,12 +61,13 @@ class class_module_user_sourcefactory {
     public function getGrouplistByQuery($strName) {
 
         //validate if a group with the given name is available
-        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group where group_name LIKE ?";
+        $strQuery = "SELECT group_id, group_subsystem FROM "._dbprefix_."user_group where group_name LIKE ?";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strName."%"));
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
-            $arrReturn[] = new class_module_user_group($arrOneRow["group_id"]);
+            if(in_array($arrOneRow["group_subsystem"], $this->arrSubsystemsAvailable))
+                $arrReturn[] = new class_module_user_group($arrOneRow["group_id"]);
         }
         return $arrReturn;
     }
@@ -111,28 +112,30 @@ class class_module_user_sourcefactory {
     public function getUserlistByUserquery($strParam) {
 
         //validate if a group with the given name is available
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username LIKE ? AND user_active = 1";
+        $strQuery = "SELECT user_id, user_subsystem FROM "._dbprefix_."user where user_username LIKE ? AND user_active = 1";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strParam."%"));
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
-            $arrReturn[] =  new class_module_user_user($arrOneRow["user_id"]);
+            if(in_array($arrOneRow["user_subsystem"], $this->arrSubsystemsAvailable))
+                $arrReturn[] =  new class_module_user_user($arrOneRow["user_id"]);
         }
 
         return $arrReturn;
     }
 
 
-	/**
-	 * Tries to authenticate a user identified by its username and password.
+    /**
+     * Tries to authenticate a user identified by its username and password.
      * If given the leightweight user-object is returned.
-     *
      * Otherwise null is returned AND an authentication-exception is being raised.
      *
-	 * @param string $strName
+     * @param string $strName
      * @param string $strPassword
+     *
+     * @throws class_authentication_exception
      * @return interface_usersources_user
-	 */
+     */
 	public function authenticateUser($strName, $strPassword) {
         $objUser = $this->getUserByUsername($strName);
         if($objUser != null) {

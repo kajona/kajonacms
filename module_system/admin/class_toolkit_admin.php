@@ -365,7 +365,7 @@ class class_toolkit_admin extends class_toolkit {
                         .data( 'autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data( 'item.autocomplete', item )
-                                .append( '<a class=\'ui-menu-item userSelectorAC\' style=\'background-image: url('+item.icon+');\' >'+item.title+'</a>' )
+                                .append( '<a class=\'ui-menu-item userSelectorAC\' style=\'background-image: url('+item.icon+'); background-repeat: no-repeat;\' >'+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });
