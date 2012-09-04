@@ -67,7 +67,6 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
     private function getAdminForm(class_module_guestbook_guestbook $objGB) {
         $objForm = new class_admin_formgenerator("gb", $objGB);
         $objForm->generateFieldsFromObject();
-        $objForm->getField("guestbooktitle")->setStrLabel($this->getLang("commons_title"));
         return $objForm;
     }
 

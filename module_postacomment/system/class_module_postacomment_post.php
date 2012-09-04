@@ -236,6 +236,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
     /**
      * @return string
      * @fieldType text
+     * @fieldLabel form_comment_title
      */
     public function getStrTitle() {
         return $this->strTitle;
@@ -245,6 +246,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
      * @return string
      * @fieldMandatory
      * @fieldType textarea
+     * @fieldLabel postacomment_comment
      */
     public function getStrComment() {
         return $this->strComment;

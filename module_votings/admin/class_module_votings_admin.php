@@ -185,7 +185,6 @@ class class_module_votings_admin extends class_admin_simple implements interface
     private function getVotingAdminForm(class_module_votings_voting $objVoting) {
         $objForm = new class_admin_formgenerator("voting", $objVoting);
         $objForm->generateFieldsFromObject();
-        $objForm->getField("title")->setStrLabel($this->getLang("commons_title"));
         return $objForm;
     }
 

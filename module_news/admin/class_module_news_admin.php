@@ -331,7 +331,6 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
     private function getCatAdminForm(class_module_news_category $objCat) {
         $objForm = new class_admin_formgenerator("cat", $objCat);
         $objForm->generateFieldsFromObject();
-        $objForm->getField("title")->setStrLabel($this->getLang("commons_title"));
         return $objForm;
     }
 
@@ -403,8 +402,6 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
     private function getNewsAdminForm(class_module_news_news $objNews) {
         $objForm = new class_admin_formgenerator("news", $objNews);
         $objForm->generateFieldsFromObject();
-
-        $objForm->getField("title")->setStrLabel($this->getLang("commons_title"));
 
         $arrCats = class_module_news_category::getCategories();
         if (count($arrCats) > 0)
@@ -539,7 +536,6 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
     private function getFeedAdminForm(class_module_news_feed $objFeed) {
         $objForm = new class_admin_formgenerator("feed", $objFeed);
         $objForm->generateFieldsFromObject();
-        $objForm->getField("title")->setStrLabel($this->getLang("commons_title"));
 
         $arrNewsCats = class_module_news_category::getCategories();
         $arrCatsDD = array();

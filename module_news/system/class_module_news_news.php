@@ -387,6 +387,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      * @fieldType text
      * @fieldMandatory
+     * @fieldLabel commons_title
      */
     public function getStrTitle() {
         return $this->strTitle;

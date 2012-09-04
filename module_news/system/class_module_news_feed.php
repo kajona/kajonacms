@@ -262,6 +262,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @return string
      * @fieldType text
      * @fieldMandatory
+     * @fieldLabel commons_title
      */
     public function getStrUrlTitle() {
         return $this->strUrlTitle;

@@ -217,6 +217,7 @@ class class_module_votings_voting extends class_model implements interface_model
      * @return string
      * @fieldType textarea
      * @fieldMandatory
+     * @fieldLabel commons_title
      */
     public function getStrTitle() {
         return $this->strTitle;

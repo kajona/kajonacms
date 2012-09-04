@@ -340,6 +340,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @return string
      * @fieldMandatory
      * @fieldType text
+     * @fieldLabel commons_name
      */
     public function getStrName() {
         return $this->strName;
@@ -348,6 +349,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @return string
      * @fieldType page
+     * @fieldLabel navigation_page_i
      */
     public function getStrPageI() {
         return uniStrtolower($this->strPageI);
@@ -356,6 +358,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @return string
      * @fieldType file
+     * @fieldLabel navigation_page_e
      */
     public function getStrPageE() {
         return $this->strPageE;
@@ -364,6 +367,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @return string
      * @fieldType dropdown
+     * @fieldLabel navigation_target
      */
     public function getStrTarget() {
         return $this->strTarget != "" ? $this->strTarget : "_self";
@@ -372,6 +376,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @return string
      * @fieldType image
+     * @fieldLabel commons_image
      */
     public function getStrImage() {
         return $this->strImage;

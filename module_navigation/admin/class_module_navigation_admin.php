@@ -238,7 +238,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $objFolder = new class_module_pages_folder($objTree->getStrFolderId());
 
-        $objForm->addDynamicField("name")->setStrLabel($this->getLang("commons_name"));
+        $objForm->addDynamicField("name");
         $objForm->addField(new class_formentry_text("navi", "folder_i", null))->setStrValue($objFolder->getStrName())->setBitReadonly(true)->setStrOpener($strFolderBrowser)->setStrLabel($this->getLang("navigation_folder_i"));
         $objForm->addField(new class_formentry_hidden("navi", "folder_i_id"))->setStrValue($objFolder->getSystemid());
 
@@ -342,17 +342,12 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $objForm->generateFieldsFromObject();
 
-        $objForm->getField("name")->setStrLabel($this->getLang("commons_name"));
-        $objForm->getField("pagei")->setStrLabel($this->getLang("navigation_page_i"));
-        $objForm->getField("pagee")->setStrLabel($this->getLang("navigation_page_e"));;
-        $objForm->getField("image")->setStrLabel($this->getLang("commons_image"));
-
         $objForm->addField(
             new class_formentry_text("point", "parent"))->setStrOpener($strNodeBrowser)->setBitReadonly(true)->setStrValue($objParentPoint->getStrName())->setStrLabel($this->getLang("navigation_parent")
         );
         $objForm->addField(new class_formentry_hidden("point", "parent_id"))->setStrValue($objParentPoint->getSystemid());
 
-        $objForm->getField("target")->setArrKeyValues($arrTargets)->setStrLabel($this->getLang("navigation_target"));;
+        $objForm->getField("target")->setArrKeyValues($arrTargets);
 
         return $objForm;
     }

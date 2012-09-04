@@ -145,6 +145,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @return string
      * @fieldMandatory
      * @fieldValidator folder
+     * @fieldLabel commons_path
      */
     public function getStrPath() {
         return $this->strPath;
@@ -153,6 +154,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     /**
      * @return string
      * @fieldMandatory
+     * @fieldLabel commons_title
      */
     public function getStrTitle() {
         return $this->strTitle;

@@ -761,7 +761,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objElement->setArrModuleEntry("modul", "pages");
         $objForm->generateFieldsFromObject();
 
-        $objForm->getField("name")->setStrLabel($this->getLang("commons_name"));
         $objForm->getField("cachetime")->setStrHint($this->getLang("element_cachetime_hint"));
         $objForm->getField("classadmin")->setArrKeyValues($arrClassesAdmin);
         $objForm->getField("classportal")->setArrKeyValues($arrClassesPortal);

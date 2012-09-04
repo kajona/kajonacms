@@ -112,9 +112,6 @@ class class_module_postacomment_admin extends class_admin_simple implements inte
     private function getAdminForm(class_module_postacomment_post $objComment) {
         $objForm = new class_admin_formgenerator("comment", $objComment);
         $objForm->generateFieldsFromObject();
-
-        $objForm->getField("title")->setStrLabel($this->getLang("form_comment_title"));
-        $objForm->getField("comment")->setStrLabel($this->getLang("postacomment_comment"));
         return $objForm;
     }
 

@@ -164,7 +164,6 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
     private function getCatAdminForm(class_module_faqs_category $objCat) {
         $objForm = new class_admin_formgenerator("cat", $objCat);
         $objForm->generateFieldsFromObject();
-        $objForm->getField("title")->setStrLabel($this->getLang("commons_title"));
         return $objForm;
     }
 

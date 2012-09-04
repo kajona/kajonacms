@@ -141,6 +141,7 @@ class class_module_guestbook_guestbook extends class_model implements interface_
      * @fieldMandatory
      * @fieldType text
      * @return string
+     * @fieldLabel commons_title
      */
     public function getStrGuestbookTitle() {
         return $this->strGuestbookTitle;

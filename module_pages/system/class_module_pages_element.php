@@ -224,6 +224,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * @fieldMandatory
      * @fieldType text
      * @return string
+     * @fieldLabel commons_name
      */
     public function getStrName() {
         return $this->strName;

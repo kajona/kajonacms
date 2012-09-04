@@ -168,6 +168,7 @@ class class_module_faqs_category extends class_model implements interface_model,
      * @return string
      * @fieldType text
      * @fieldMandatory
+     * @fieldLabel commons_title
      */
     public function getStrTitle() {
         return $this->strTitle;

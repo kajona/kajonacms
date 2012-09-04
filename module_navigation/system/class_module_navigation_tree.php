@@ -203,6 +203,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
     /**
      * @return string
      * @fieldMandatory
+     * @fieldLabel commons_title
      */
     public function getStrName() {
         return $this->strName;
