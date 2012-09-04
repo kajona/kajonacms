@@ -15,10 +15,8 @@
 class class_installer_guestbook extends class_installer_base  {
 
 	public function __construct() {
-
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
 		$this->setArrModuleEntry("moduleId", _guestbook_module_id_);
 		parent::__construct();
 	}

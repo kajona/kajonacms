@@ -23,6 +23,7 @@ element_userlist                    4949
 module_eventmanager                 4973
 module_ezchart                      4812
 module_guestbook                    4812
+module_ldap                         4984
 module_navigation                   4812
 module_news                         4955
 module_pages                        4812
