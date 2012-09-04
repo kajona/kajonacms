@@ -54,7 +54,7 @@ class class_systemtask_workflows extends class_systemtask_base implements interf
      * @return string
      */
     public function executeTask() {
-        $objWorkflowController = new class_module_workflows_controller();
+        $objWorkflowController = new class_workflows_controller();
 
         $objWorkflowController->scheduleWorkflows();
         $objWorkflowController->runWorkflows();

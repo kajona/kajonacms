@@ -175,7 +175,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
      */
     protected function actionTriggerWorkflows() {
         $strReturn = "";
-        $objWorkflowController = new class_module_workflows_controller();
+        $objWorkflowController = new class_workflows_controller();
         $objWorkflowController->scheduleWorkflows();
         $objWorkflowController->runWorkflows();
 

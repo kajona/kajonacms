@@ -14,37 +14,9 @@
  * @package module_workflows
  * @author sidler@mulchprod.de
  */
-class class_module_workflows_controller extends class_model implements interface_model  {
+class class_workflows_controller   {
 
     const STR_LOGFILE = "workflows.log";
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _workflows_module_id_);
-        $this->setArrModuleEntry("modul", "workflows");
-
-        //base class
-        parent::__construct($strSystemid);
-
-    }
-
-    /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     *
-     * @return string
-     */
-    public function getStrDisplayName() {
-        return "";
-    }
-
-
-    public function updateObjectToDb($strPrevId = false) {
-        return true;
-    }
 
 
     /**
