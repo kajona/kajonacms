@@ -389,8 +389,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
                             $strTaskOutput = "
                                 <script type=\"text/javascript\">
                                 $(function() {
+                                   setTimeout(function() {
                                    KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
                                    KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
+                                   }, 500);
                                  });
                                 </script>";
                         }
@@ -462,7 +464,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn .= $this->objToolkit->jsDialog(0);
 
         //include js-code & stuff to handle executions
-        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$this->getLang("systemtask_cancel_execution")."\" class=\"inputSubmit\" /><br />";
+        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$this->getLang("systemtask_cancel_execution")."\" class=\"btn inputSubmit\" /><br />";
         $strReturn .= "<script type=\"text/javascript\">
             var KAJONA_SYSTEMTASK_TITLE = '".$this->getLang("systemtask_dialog_title")."';
             var KAJONA_SYSTEMTASK_TITLE_DONE = '".$this->getLang("systemtask_dialog_title_done")."';

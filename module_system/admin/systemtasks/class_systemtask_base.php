@@ -65,8 +65,6 @@ abstract class class_systemtask_base {
     private $bitMultipartform = false;
 
     public function __construct() {
-        $arrModule = array();
-        $arrModule["moduleId"]      = _system_modul_id_;
 
         //load the external objects
         $this->objDB = class_carrier::getInstance()->getObjDB();
