@@ -25,7 +25,6 @@ class class_element_facebooklikebox_admin extends class_element_admin implements
         $this->setArrModuleEntry("name", "element_facebooklikebox");
         $this->setArrModuleEntry("table", _dbprefix_."element_universal");
 		$this->setArrModuleEntry("tableColumns", "char1");
-
 		parent::__construct();
 	}
 

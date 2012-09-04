@@ -17,6 +17,7 @@ element_portalregistration          4964
 element_portalupload                4812
 element_rssfeed                     4949
 element_tagto                       4949
+element_tellafriend                 4982
 element_userlist                    4949
 
 module_eventmanager                 4973
