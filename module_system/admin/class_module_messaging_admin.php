@@ -102,6 +102,22 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
     }
 
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+        if($objListEntry->rightEdit()) {
+            return $this->objToolkit->listButton(
+                getLinkAdmin(
+                    $objListEntry->getArrModule("modul"),
+                    "edit",
+                    "&systemid=".$objListEntry->getSystemid(),
+                    $this->getLang("commons_list_edit"),
+                    $this->getLang("commons_list_edit"),
+                    "icon_lens.png"
+                )
+            );
+        }
+        return "";
+    }
+
 
     /**
      * Returns a list of the languages

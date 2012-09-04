@@ -139,10 +139,10 @@ class class_module_votings_admin extends class_admin_simple implements interface
     protected function actionEdit() {
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objObject->rightEdit() && $objObject instanceof class_module_votings_answer)
-            return $this->actionEditAnswer();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editAnswer", "&systemid=".$objObject->getSystemid()));
 
         if($objObject->rightEdit() && $objObject instanceof class_module_votings_voting)
-            return $this->actionEditVoting();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editVoting", "&systemid=".$objObject->getSystemid()));
 
         return "";
     }

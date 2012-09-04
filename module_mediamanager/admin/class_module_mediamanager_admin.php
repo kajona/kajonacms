@@ -177,9 +177,9 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         if($objInstance instanceof class_module_mediamanager_repo)
             return $this->actionNew("edit");
         else if($objInstance instanceof class_module_mediamanager_file)
-            return $this->actionEditFile();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFile", "&source=".$this->getParam("source")."&systemid=".$objInstance->getSystemid()));
 
-        return $this->actionNew("edit");
+        return "";
     }
 
     /**

@@ -61,10 +61,10 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
     protected function actionEdit() {
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objObject instanceof class_module_faqs_category && $objObject->rightEdit())
-            return $this->actionEditCat();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editCat", "&systemid=".$objObject->getSystemid()));
 
         if($objObject instanceof class_module_faqs_faq && $objObject->rightEdit())
-            return $this->actionEditFaq();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFaq", "&systemid=".$objObject->getSystemid()));
 
         return "";
     }

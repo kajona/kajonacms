@@ -111,7 +111,7 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
             return $this->actionNew("edit");
 
         if($objInstance instanceof class_module_guestbook_post)
-            return $this->actionEditPost();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editPost", "&systemid=".$objInstance->getSystemid()));
     }
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {

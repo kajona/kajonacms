@@ -66,13 +66,13 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objObject instanceof class_module_news_category && $objObject->rightEdit())
-            return $this->actionEditCat();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editCat", "&systemid=".$objObject->getSystemid()));
 
         if($objObject instanceof class_module_news_news && $objObject->rightEdit())
-            return $this->actionEditNews();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNews", "&systemid=".$objObject->getSystemid()));
 
         if($objObject instanceof class_module_news_feed && $objObject->rightEdit())
-            return $this->actionEditNewsFeed();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNewsFeed", "&systemid=".$objObject->getSystemid()));
 
         return "";
     }

@@ -67,7 +67,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objInstance instanceof class_module_workflows_handler && $objInstance->rightRight1())
-            return $this->actionEditHandler();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editHandler", "&systemid=".$objInstance->getSystemid()));
 
         return "";
     }

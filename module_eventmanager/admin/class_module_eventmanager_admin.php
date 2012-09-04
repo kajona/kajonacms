@@ -81,10 +81,10 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
     protected function actionEdit() {
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objObject->rightEdit() && $objObject instanceof class_module_eventmanager_event)
-            return $this->actionEditEvent();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editEvent", "&systemid=".$objObject->getSystemid()));
 
         if($objObject->rightEdit() && $objObject instanceof class_module_eventmanager_participant)
-            return $this->actionEditParticipant();
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editParticipant", "&systemid=".$objObject->getSystemid()));
 
         return "";
     }
