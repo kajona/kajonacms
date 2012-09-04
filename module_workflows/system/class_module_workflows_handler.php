@@ -95,7 +95,10 @@ class class_module_workflows_handler extends class_model implements interface_mo
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getObjInstanceOfHandler()->getStrName();
+        if($this->getObjInstanceOfHandler() != null)
+            return $this->getObjInstanceOfHandler()->getStrName();
+        else
+            return "";
     }
 
 
@@ -200,9 +203,12 @@ class class_module_workflows_handler extends class_model implements interface_mo
      * @return interface_workflows_handler
      */
     public function getObjInstanceOfHandler() {
-        $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
-
-        return new $strClassname();
+        if($this->getStrHandlerClass() != "") {
+            $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
+            return new $strClassname();
+        }
+        else
+            return null;
     }
 
 
