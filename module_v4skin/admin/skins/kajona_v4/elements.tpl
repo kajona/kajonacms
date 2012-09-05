@@ -229,7 +229,6 @@ Dropdown
 <input_dropdown>
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
-
         <div class="controls">
             <select name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
@@ -248,7 +247,6 @@ Checkbox
 <input_checkbox>
     <div class="control-group">
         <label for="%%name%%" class="control-label"></label>
-
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" %%checked%%>
@@ -267,16 +265,9 @@ Regular Text-Field
 <input_text>
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
-
         <div class="controls">
             <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
             %%opener%%
-
-            <!--
-            <p class="help-block">
-                In addition to freeform text, any HTML5 text-based input appears like so.
-            </p>
-            -->
         </div>
     </div>
 </input_text>
@@ -285,15 +276,8 @@ Textarea
 <input_textarea>
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
-
         <div class="controls">
             <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%readonly%%>%%value%%</textarea>
-
-            <!--
-            <p class="help-block">
-                In addition to freeform text, any HTML5 text-based input appears like so.
-            </p>
-            -->
         </div>
     </div>
 </input_textarea>
@@ -302,15 +286,8 @@ Regular Password-Field
 <input_password>
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
-
         <div class="controls">
             <input type="password" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
-
-            <!--
-            <p class="help-block">
-                In addition to freeform text, any HTML5 text-based input appears like so.
-            </p>
-            -->
         </div>
     </div>
 </input_password>
@@ -319,7 +296,6 @@ Upload-Field
 <input_upload>
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
-
         <div class="controls">
             <input type="file" name="%%name%%" id="%%name%%" class="input-file %%class%%">
             <p class="help-block">
@@ -332,7 +308,6 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
     %%modalDialog%%
-
     <div id="showUploaderBtn" class="btn">[lang,upload_multiple_dialogHeader,mediamanager]</div>
 
     <div id="kajonaUploadDialog" style="display: none;">
@@ -506,6 +481,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
             <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
             %%opener%%
             %%ajaxScript%%
+        </div>
     </div>
 </input_pageselector>
 
@@ -549,6 +525,49 @@ A fieldset to structure logical sections
 </graph_container>
 
 
+<tabbed_content_wrapper>
+    <ul class="nav nav-tabs" id="myTab">
+        %%tabheader%%
+    </ul>
+
+    <div class="tab-content">
+        %%tabcontent%%
+    </div>
+</tabbed_content_wrapper>
+
+<tabbed_content_tabheader>
+    <li class="%%classaddon%%"><a href="" data-target="#%%tabid%%" data-toggle="tab">%%tabtitle%%</a></li>
+</tabbed_content_tabheader>
+
+<tabbed_content_tabcontent>
+    <div class="tab-pane fade %%classaddon%%" id="%%tabid%%">
+        %%tabcontent%%
+    </div>
+</tabbed_content_tabcontent>
+
+
+    ---
+
+<form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
+    in form %%tabid%%
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%tabid%%</label>
+
+        <div class="controls">
+            <select name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
+        </div>
+    </div>
+    <div class="formText"><div class="spacer"></div><div class="%%class%%">%%text%%</div></div><br />
+    <div class="control-group">
+        <button type="submit" class="btn savechanges %%class%%" %%disabled%% %%eventhandler%%>
+        <span class="btn-text">%%tabid%%</span>
+        <span class="statusicon"></span>
+        </button>
+    </div>
+</form>
+</div>
+    ----
+
 ---------------------------------------------------------------------------------------------------------
 -- SPECIAL SECTIONS -------------------------------------------------------------------------------------
 
@@ -557,14 +576,14 @@ Needed Elements: %%error%%, %%form%%
 <login_form>
 <div class="alert alert-error" id="loginError">
     <button type="button" class="close" data-dismiss="alert">×</button>
-    %%error%%
+    <p>%%error%%</p>
 </div>
 %%form%%
 <script type="text/javascript">
 	if (navigator.cookieEnabled == false) {
 	    document.getElementById("loginError").innerHTML = "%%loginCookiesInfo%%";
 	}
-    if($('#loginError').html() == "")
+    if($('#loginError > p').html() == "")
         $('#loginError').remove();
 
 </script>
@@ -639,12 +658,14 @@ Shown, wherever the attention of the user is needed
 
 Used to print plain text
 <text_row>
-<span class="%%class%%">%%text%%</span><br />
+<p class="%%class%%">%%text%%</p>
 </text_row>
 
 Used to print plaintext in a form
 <text_row_form>
-<div class="formText"><div class="spacer"></div><div class="%%class%%">%%text%%</div></div><br />
+<div class="controls">
+    <p class="help-block %%class%%">%%text%%</p>
+</div>
 </text_row_form>
 
 Used to print headline in a form

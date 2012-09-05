@@ -1109,6 +1109,34 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Creates a tab-list out of the passed tabs.
+     * The params is expected as
+     * arraykey => tabname
+     * arrayvalue => tabcontent
+     * @param $arrTabs array(key => content)
+     *
+     * @return string
+     */
+    public function getTabbedContent($arrTabs) {
+
+        $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_wrapper");
+        $strHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabheader");
+        $strContentID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabcontent");
+
+        $strTabs = "";
+        $strTabContent = "";
+        $strClassaddon = "active in ";
+        foreach($arrTabs as $strTitle => $strContent) {
+            $strTabId = generateSystemid();
+            $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "classaddon" => $strClassaddon), $strHeaderID);
+            $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => $strContent, "classaddon" => $strClassaddon), $strContentID);
+            $strClassaddon = "";
+        }
+
+        return $this->objTemplate->fillTemplate(array("tabheader" => $strTabs, "tabcontent" => $strTabContent), $strWrapperID);
+    }
+
+    /**
      * Container for graphs, e.g. used by stats.
      *
      * @param string $strImgSrc
