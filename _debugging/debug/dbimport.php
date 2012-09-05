@@ -21,31 +21,50 @@ echo "|loaded.                                                                  
 echo "+-------------------------------------------------------------------------------+\n\n";
 
 if(issetPost("doimport")) {
-	$strFilename = getPost("dumpname");
-	$objDb = $objCarrier->getObjDB();
-	echo "importing ".$strFilename."\n";
-	if($objDb->importDb($strFilename))
-		echo "import successfull.\n";
-	else
-		echo "import failed.\n";
+    $strFilename = getPost("dumpname");
+    $objDb = $objCarrier->getObjDB();
+    echo "importing ".$strFilename."\n";
+    if($objDb->importDb($strFilename))
+        echo "import successfull.\n";
+    else
+        echo "import failed.\n";
 }
 else {
 
-	echo "searching dbdumps available...\n";
+    $objFilesystem = new class_filesystem();
 
-	$objFilesystem = new class_filesystem();
-	$arrFiles = $objFilesystem->getFilelist("/project/dbdumps/");
-	echo "found ".count($arrFiles)." dump(s)\n\n";
+    if($objFilesystem->isWritable("/project/dbdumps")) {
+        echo "Searching dbdumps available...\n";
 
-	echo "<form method=\"post\">";
-	echo "dump to import:\n";
-	echo "<select name=\"dumpname\" type=\"dropdown\">";
-	foreach ($arrFiles as $strOneFile)
-		echo "<option id=\"".$strOneFile."\">".$strOneFile."</option>";
-	echo "</select>";
-	echo "<input type=\"hidden\" name=\"doimport\" value=\"1\" />";
-	echo "<input type=\"submit\" value=\"import\" />";
-	echo "</form>";
+        $arrFiles = $objFilesystem->getFilelist(_projectpath_."dbdumps/", array(".zip", ".gz", ".sql"));
+        echo "Found ".count($arrFiles)." dump(s)\n\n";
+
+        echo "<form method='post'>";
+        echo "Dump to import:\n";
+        echo "<select name='dumpname' type='dropdown'>";
+        foreach ($arrFiles as $strOneFile) {
+            $arrDetails = $objFilesystem->getFileDetails(_projectpath_."dbdumps/".$strOneFile);
+
+            $strTimestamp = "";
+            if(uniStrpos($strOneFile, "_") !== false)
+                $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_")+1, (uniStrpos($strOneFile, ".")-uniStrrpos($strOneFile, "_")));
+
+            if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
+                echo "<option id='".$strOneFile."' value='".$strOneFile."'>".$strOneFile." (".timeToString($strTimestamp)." - ".bytesToString($arrDetails["filesize"]).")</option>";
+            else
+                echo "<option id='".$strOneFile."' value='".$strOneFile."'>".$strOneFile." (".bytesToString($arrDetails["filesize"]).")</option>";
+        }
+        echo "</select>";
+        echo "<input type='hidden' name='doimport' value='1' />";
+        echo "<input type='submit' value='import' />";
+        echo "</form>";
+    }
+    else
+        echo "<span style='color: red;'>WARNING!!\n\nThe system/dbdumps is NOT writeable. DB dumps can NOT be imported! </span>\n\n";
+
+
+    echo "searching dbdumps available...\n";
+
 }
 
 

@@ -62,13 +62,24 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string
      */
     public function getAdminForm() {
-    	$strReturn = "";
+        $strReturn = "";
         //show dropdown to select db-dump
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
         $arrOptions = array();
-        foreach($arrFiles as $strOneFile)
-            $arrOptions[$strOneFile] = $strOneFile;
+        foreach($arrFiles as $strOneFile) {
+            $arrDetails = $objFilesystem->getFileDetails(_projectpath_."/dbdumps/".$strOneFile);
+
+            $strTimestamp = "";
+            if(uniStrpos($strOneFile, "_") !== false)
+                $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_") + 1, (uniStrpos($strOneFile, ".") - uniStrrpos($strOneFile, "_")));
+
+            if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
+                $arrOptions[$strOneFile] = $strOneFile." (".timeToString($strTimestamp)." - ".bytesToString($arrDetails["filesize"]).")";
+            else
+                $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")";
+
+        }
 
         $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getLang("systemtask_dbimport_file"));
 

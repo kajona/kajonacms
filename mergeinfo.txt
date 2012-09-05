@@ -4,43 +4,43 @@ Mergeinfo with v3 head codeline (v3 -> v4)
 Please note that merging is done manually, there's no automatic way.
 Revision is inclusive.
 
-element_directorybrowser            4812
-element_facebooklikebox             4812
-element_flash                       4964
-element_formular                    4949
+element_directorybrowser            4996
+element_facebooklikebox             4996
+element_flash                       4996
+element_formular                    4996
 element_languageswitch (see module_system)
-element_lastmodified                4949
-element_maps                        4977
-element_mediaplayer                 4977
-element_portallogin                 4964
-element_portalregistration          4964
-element_portalupload                4812
-element_rssfeed                     4949
-element_tagto                       4949
-element_tellafriend                 4982
-element_userlist                    4949
+element_lastmodified                4996
+element_maps                        4996
+element_mediaplayer                 4996
+element_portallogin                 4996
+element_portalregistration          4996
+element_portalupload                4996
+element_rssfeed                     4996
+element_tagto                       4996
+element_tellafriend                 4996
+element_userlist                    4996
 
-module_eventmanager                 4973
-module_ezchart                      4812
-module_guestbook                    4812
-module_ldap                         4984
-module_navigation                   4812
-module_news                         4955
-module_pageimportexport             4986
-module_pages                        4812
-module_pchart                       4812
-module_pdf                          4964
-module_postacomment                 4812
-module_rating                       4812
-module_samplecontent                4812
-module_stats                        4812
-module_system                       4812
-  module_dashboard                  4812
-  module_filemanager                4812
-module_tags                         4812
-module_v3skin (v3: module_system)   4812
-module_votings                      4949
-module_workflows                    4989
+module_eventmanager                 4996
+module_ezchart                      4996
+module_guestbook                    4996
+module_ldap                         4996
+module_navigation                   4996
+module_news                         4996
+module_pageimportexport             4996
+module_pages                        4996
+module_pchart                       4996
+module_pdf                          4996
+module_postacomment                 4996
+module_rating                       4996
+module_samplecontent                4996
+module_stats                        4996
+module_system                       4996
+  module_dashboard                  4996
+  module_filemanager                4996
+module_tags                         4996
+module_v3skin (v3: module_system)   4996
+module_votings                      4996
+module_workflows                    4996
 
 
 
@@ -49,6 +49,6 @@ module_workflows                    4989
 no longer maintained:
 
 module_mediamanager replaces
-  module_downloads                  4812
-  module_gallery                    4812
-  module_filemanager                4812
+  module_downloads                  4996
+  module_gallery                    4996
+  module_filemanager                4996

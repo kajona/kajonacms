@@ -15,7 +15,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_module_system_session extends class_model implements interface_model  {
+class class_module_system_session extends class_model implements interface_model {
 
     public static $LOGINSTATUS_LOGGEDIN = "loggedin";
     public static $LOGINSTATUS_LOGGEDOUT = "loggedout";
@@ -31,26 +31,25 @@ class class_module_system_session extends class_model implements interface_model
     private $bitValid = false;
 
 
-
-
     /**
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-		$this->strLoginstatus = self::$LOGINSTATUS_LOGGEDOUT;
+        $this->strLoginstatus = self::$LOGINSTATUS_LOGGEDOUT;
 
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -60,7 +59,7 @@ class class_module_system_session extends class_model implements interface_model
 
     /**
      * Initalises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
 
@@ -72,13 +71,13 @@ class class_module_system_session extends class_model implements interface_model
         $this->setArrInitRow(array("system_id" => ""));
 
         if(count($arrRow) > 1) {
-            $this->setStrPHPSessionId($arrRow["session_phpid"]) ;
-            $this->setStrUserid($arrRow["session_userid"]) ;
-            $this->setStrGroupids($arrRow["session_groupids"]) ;
-            $this->setIntReleasetime($arrRow["session_releasetime"]) ;
-            $this->setStrLoginstatus($arrRow["session_loginstatus"]) ;
-            $this->setStrLoginprovider($arrRow["session_loginprovider"]) ;
-            $this->setStrLasturl($arrRow["session_lasturl"]) ;
+            $this->setStrPHPSessionId($arrRow["session_phpid"]);
+            $this->setStrUserid($arrRow["session_userid"]);
+            $this->setStrGroupids($arrRow["session_groupids"]);
+            $this->setIntReleasetime($arrRow["session_releasetime"]);
+            $this->setStrLoginstatus($arrRow["session_loginstatus"]);
+            $this->setStrLoginprovider($arrRow["session_loginprovider"]);
+            $this->setStrLasturl($arrRow["session_lasturl"]);
 
             $this->bitValid = true;
         }
@@ -88,11 +87,13 @@ class class_module_system_session extends class_model implements interface_model
      * saves the current object with all its params back to the database
      *
      * @param bool $strPrevId
+     *
      * @return bool
      * @overwrite class_model::updateObjectToDb() due to performance issues
      */
     public function updateObjectToDb($strPrevId = false) {
 
+        $this->bitValid = true;
 
         if($this->getSystemid() == "") {
             $strInternalSessionId = generateSystemid();
@@ -112,16 +113,19 @@ class class_module_system_session extends class_model implements interface_model
                           session_lasturl
                           ) VALUES ( ?,?,?,?,?,?,?,? )";
 
-            return $this->objDB->_pQuery($strQuery, array(
-                $strInternalSessionId,
-                $this->getStrPHPSessionId(),
-                $this->getStrUserid(),
-                $this->getStrGroupids(),
-                (int)$this->getIntReleasetime(),
-                $this->getStrLoginstatus(),
-                $this->getStrLoginprovider(),
-                $this->getStrLasturl()
-            ) );
+            return $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strInternalSessionId,
+                    $this->getStrPHPSessionId(),
+                    $this->getStrUserid(),
+                    $this->getStrGroupids(),
+                    (int)$this->getIntReleasetime(),
+                    $this->getStrLoginstatus(),
+                    $this->getStrLoginprovider(),
+                    $this->getStrLasturl()
+                )
+            );
 
         }
         else {
@@ -137,16 +141,19 @@ class class_module_system_session extends class_model implements interface_model
                           session_lasturl = ?
                         WHERE session_id = ? ";
 
-            return $this->objDB->_pQuery($strQuery, array(
-                $this->getStrPHPSessionId(),
-                $this->getStrUserid(),
-                $this->getStrGroupids(),
-                (int)$this->getIntReleasetime(),
-                $this->getStrLoginstatus(),
-                $this->getStrLoginprovider(),
-                $this->getStrLasturl(),
-                $this->getSystemid()
-            ));
+            return $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $this->getStrPHPSessionId(),
+                    $this->getStrUserid(),
+                    $this->getStrGroupids(),
+                    (int)$this->getIntReleasetime(),
+                    $this->getStrLoginstatus(),
+                    $this->getStrLoginprovider(),
+                    $this->getStrLasturl(),
+                    $this->getSystemid()
+                )
+            );
         }
     }
 
@@ -171,15 +178,15 @@ class class_module_system_session extends class_model implements interface_model
         class_logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), class_logger::$levelInfo);
         //start with the modul-table
         $strQuery = "DELETE FROM "._dbprefix_."session WHERE session_id = ?";
-		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
-
 
 
     /**
      * Returns, if available, the internal session-object for the passed internal session-id
      *
      * @param string $strSessionid
+     *
      * @return class_module_system_session
      */
     public static function getSessionById($strSessionid) {
@@ -196,6 +203,7 @@ class class_module_system_session extends class_model implements interface_model
      *
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      */
     public static function getAllActiveSessions($intStart = null, $intEnd = null) {
@@ -218,7 +226,7 @@ class class_module_system_session extends class_model implements interface_model
     public static function getNumberOfActiveSessions() {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ?";
 
-        $arrRow =  class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time()));
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time()));
         return $arrRow["COUNT(*)"];
     }
 
@@ -242,7 +250,7 @@ class class_module_system_session extends class_model implements interface_model
      */
     public static function deleteInvalidSessions() {
         $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ?";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time() ));
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time()));
     }
 
     public function isSessionValid() {
@@ -250,26 +258,31 @@ class class_module_system_session extends class_model implements interface_model
     }
 
 
-    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function setStrPHPSessionId($strPHPSessId) {
         $this->strPHPSessionId = $strPHPSessId;
     }
+
     public function setStrUserid($strUserid) {
         $this->strUserid = $strUserid;
     }
+
     public function setStrGroupids($strGroupids) {
         $this->strGroupids = $strGroupids;
     }
+
     public function setIntReleasetime($intReleasetime) {
         $this->intReleasetime = $intReleasetime;
     }
+
     public function setStrLoginprovider($strLoginprovider) {
         $this->strLoginprovider = $strLoginprovider;
     }
+
     public function setStrLasturl($strLasturl) {
         //limit to 255 chars
         $this->strLasturl = uniStrTrim($strLasturl, 450, "");
     }
+
     public function setStrLoginstatus($strLoginstatus) {
         $this->strLoginstatus = $strLoginstatus;
     }
@@ -277,24 +290,29 @@ class class_module_system_session extends class_model implements interface_model
     public function getStrPHPSessionId() {
         return $this->strPHPSessionId;
     }
+
     public function getStrUserid() {
         return $this->strUserid;
     }
+
     public function getStrGroupids() {
         return $this->strGroupids;
     }
+
     public function getIntReleasetime() {
         return $this->intReleasetime;
     }
+
     public function getStrLoginprovider() {
         return $this->strLoginprovider;
     }
+
     public function getStrLasturl() {
         return $this->strLasturl;
     }
+
     public function getStrLoginstatus() {
         return $this->strLoginstatus;
     }
-
 
 }
