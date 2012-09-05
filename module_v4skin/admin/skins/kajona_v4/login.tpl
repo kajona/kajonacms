@@ -1,82 +1,70 @@
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <style>
-        body {
-           background-color: #EBEBEB; 
+    <meta charset="utf-8">
+    <title>Kajona admin [%%webpathTitle%%]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="generator" content="Kajona, www.kajona.de" />
 
-        }
-        .loginBox { 
-            text-align: center; 
-        }
-        .loginform {
-            border: 1px solid #D6D6D6;
-            background-color: #FDFDFD;
-            margin:auto; 
-            margin-top: 200px;
-            width: 200px;
-            text-align: left;
-            font-size: 12px;
-            font-family: Helvetica;
-            padding:15px;
-        }
-        .loginform label {
-            color: #575757;
-        }
-        .inputTextShort {
-            background-color: #EEEEEE;
-            border: 1px solid #DFDFDF;
-            color: #575757;
-            margin-bottom: 10px; 
-            font-family: Verdana,Arial,Helvetica,sans-serif;
-            font-size: 11px;
-            padding: 2px 0 3px 4px;
-            width: 180px;
-        }
-        .copyright , .copyright a {
-            color: #C2C2C2;
-            font-size: 10px;
-        }
-        
-        .inputSubmit, .inputSubmitShort {
-           height: 20px;
-           width: 126px;
-           background-color: #EEEEEE;
-           border: 1px solid #DFDFDF;
-           cursor: pointer;
-           color: #575757;
-           margin: 8px 0 0 0;
+    <!-- KAJONA_BUILD_LESS_START -->
+    <link href="_skinwebpath_/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <link href="_skinwebpath_/less/responsive.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="_skinwebpath_/less/less.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
 
-       }
-
-        
-    </style>
-    
-    <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
     %%head%%
-	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
-    <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
-	<title>Kajona³ admin [%%webpathTitle%%]</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="robots" content="noindex, nofollow" />
-	<meta name="generator" content="Kajona³, www.kajona.de" />
-	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript">
-		KAJONA.util.setBrowserFocus("name");
-	</script>
+    <script src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="_skinwebpath_/js/html5.js?_system_browser_cachebuster_"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="_skinwebpath_/img/favicon.png">
+    <!--
+    <link rel="apple-touch-icon" href="_skinwebpath_/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="_skinwebpath_/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="_skinwebpath_/img/apple-touch-icon-114x114.png">
+    -->
 </head>
-<body>
-<div class="loginBox">
-    <div class="loginform">%%content%%</div>
-    <div class="copyright">&copy; 2012 <a href="http://www.kajona.de" target="_blank" title="Kajona4 CMS - empowering your content">Kajona 4</a></div>
-</div>
-    
-    
-<div class="imgPreload">
-	<img src="_skinwebpath_/loading.gif" alt="" title="" />
+
+<body class="login">
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12" id="content">
+            <div class="modal" id="loginContainer">
+                <div class="modal-header">
+                    <h3 id="loginContainer_title">Kajona v4</h3>
+                </div>
+                <div class="modal-body">
+                    <div id="loginContainer_content">%%content%%</div>
+                </div>
+                <div class="modal-footer">
+                    <a href="http://www.kajona.de" target="_blank">Kajona - empowering your content</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-transition.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-alert.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-modal.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-dropdown.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-scrollspy.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-tab.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-tooltip.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-popover.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-button.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-collapse.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-carousel.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap-affix.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 </body>
 </html>

@@ -555,14 +555,20 @@ A fieldset to structure logical sections
 The login-Form is being displayed, when the user has to log in.
 Needed Elements: %%error%%, %%form%%
 <login_form>
+<div class="alert alert-error" id="loginError">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    %%error%%
+</div>
 %%form%%
-<p class="error" id="loginError">%%error%%</p>
 <script type="text/javascript">
 	if (navigator.cookieEnabled == false) {
-	  document.getElementById("loginError").innerHTML = "%%loginCookiesInfo%%";
+	    document.getElementById("loginError").innerHTML = "%%loginCookiesInfo%%";
 	}
+    if($('#loginError').html() == "")
+        $('#loginError').remove();
+
 </script>
-<noscript><p class="error">%%loginJsInfo%%</p></noscript>
+<noscript><div class="alert alert-error">%%loginJsInfo%%</div></noscript>
 </login_form>
 
 Part to display the login status, user is logged in
@@ -588,6 +594,8 @@ Part to display the login status, user is logged in
             <li class="divider"></li>
             <li><a href="%%dashboard%%"><i class='icon-home'></i> %%dashboardTitle%%</a></li>
             <!--<li><a href="%%sitemap%%">%%sitemapTitle%%</a></li>-->
+            <li class="divider"></li>
+            <li><a href="#" onclick="document.print();"><i class='icon-print'></i> %%printTitle%%</a></li>
             <li class="divider"></li>
             <li><a href="%%profile%%"><i class='icon-user'></i> %%profileTitle%%</a></li>
             <li class="divider"></li>

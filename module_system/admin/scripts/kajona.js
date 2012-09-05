@@ -865,7 +865,7 @@ KAJONA.admin.contextMenu = {
 
 KAJONA.admin.openPrintView = function(strUrlToLoad) {
     var intWidth = $(window).width() * 0.8;
-    var intHeight = $(window).height() * 0.9;
+    var intHeight = $(window).height() * 0.8;
 
     if(strUrlToLoad == null)
         strUrlToLoad = location.href;
@@ -878,7 +878,7 @@ KAJONA.admin.openPrintView = function(strUrlToLoad) {
 
     KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad);
 
-    KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"px"); return false;
+    KAJONA.admin.folderview.dialog.init(intWidth+"px"); return false;
 };
 
 /**

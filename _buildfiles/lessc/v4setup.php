@@ -20,7 +20,9 @@ $strSkinReplacement = <<<TXT
 TXT;
 
 $arrFilesToUpdate = array(
-    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/main.tpl"
+    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/main.tpl",
+    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/folderview.tpl",
+    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/login.tpl"
 );
 
 
@@ -35,14 +37,9 @@ $strEndPlaceholder = "<!-- KAJONA_BUILD_LESS_END -->";
 
 foreach($arrFilesToUpdate as $strOneFile) {
     $strContent = file_get_contents($strOneFile);
-
     $strPrologue = substr($strContent, 0, strpos($strContent, $strStartPlaceholder));
-
     $strEnd = substr($strContent, strpos($strContent, $strEndPlaceholder)+strlen($strEndPlaceholder));
-
     $strContent = $strPrologue.$strSkinReplacement.$strEnd;
-
     file_put_contents($strOneFile, $strContent);
-
 }
 

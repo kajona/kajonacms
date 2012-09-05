@@ -145,7 +145,8 @@ class class_module_login_admin extends class_admin implements interface_admin {
         $arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
         $arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
         $arrTemplate["sitemapTitle"] = $this->getLang("login_sitemap", "user");
-        $arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getLang("login_printview", "user"));
+        $arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView();\"", $this->getLang("login_printview", "user"));
+        $arrTemplate["printTitle"] = $this->getLang("login_print", "user");
 
         return $this->objToolkit->getLoginStatus($arrTemplate);
     }

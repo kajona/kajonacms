@@ -74,6 +74,7 @@ $lang["login_logoutdate"]                = "End";
 $lang["login_nr"]                        = "#";
 $lang["login_password_form_intro"]       = "Please choose a new password along with providing your username.<br />";
 $lang["login_printview"]                 = "Open print-view";
+$lang["login_print"]                 = "Print page";
 $lang["login_profileTitle"]              = "Edit profile";
 $lang["login_sessid"]                    = "Session-ID";
 $lang["login_sitmap"]                    = "Sitemap";
