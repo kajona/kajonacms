@@ -85,7 +85,14 @@ class class_module_packagemanager_contentprovider_kajona implements interface_pa
         $intI = 0;
         foreach($arrPackages as $arrOnePackage) {
             $strAction = $objToolkit->listButton(
-                getLinkAdmin("packagemanager", "uploadPackage", "provider=".__CLASS__."&systemid=".$arrOnePackage["systemid"], $objLang->getLang("package_install", "packagemanager"), $objLang->getLang("package_install", "packagemanager"), "icon_downloads.png")
+                getLinkAdmin(
+                    "packagemanager",
+                    "uploadPackage",
+                    "provider=".__CLASS__."&systemid=".$arrOnePackage["systemid"],
+                    $objLang->getLang("package_install", "packagemanager"),
+                    $objLang->getLang("package_install", "packagemanager"),
+                    "icon_downloads.png"
+                )
             );
 
 

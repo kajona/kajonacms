@@ -11,7 +11,7 @@
  * The class_ldap acts as a ldap-connector and is used by the usersources-subsystem as a login-provider.
  * It is configured by the ldap.php file located at /system/config.
  * Please refer to this file in order to see how source-systes may be connected.
- * 
+ *
  * @package modul_system
  * @author sidler@mulchprod.de
  * @since 3.4.1
@@ -20,7 +20,6 @@
 class class_ldap {
 
     /**
-     *
      * @var class_config
      */
     private $objConfig;
@@ -29,27 +28,25 @@ class class_ldap {
      * @var Resource
      */
     private $objCx = null;
-    
+
     /**
-     *
      * @var class_ldap
      */
     private static $objInstance = null;
-	
 
-	/**
-	 * Constructor
-	 *
-	 */
-	private function __construct() {
+
+    /**
+     * Constructor
+
+     */
+    private function __construct() {
         $this->objConfig = class_config::getInstance("ldap.php");
         $this->connect();
-	}
-    
+    }
+
     public function __destruct() {
         ldap_close($this->objCx);
     }
-    
 
 
     /**
@@ -58,45 +55,46 @@ class class_ldap {
      */
     private function connect() {
         if($this->objCx == null) {
-            $this->objCx = ldap_connect($this->objConfig->getConfig("ldap_server"), $this->objConfig->getConfig("ldap_port") );
-            
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("new ldap-connection to ".$this->objConfig->getConfig("ldap_server").":".$this->objConfig->getConfig("ldap_port"), class_logger::$levelInfo);
-            
+            $this->objCx = ldap_connect($this->objConfig->getConfig("ldap_server"), $this->objConfig->getConfig("ldap_port"));
+
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new ldap-connection to ".$this->objConfig->getConfig("ldap_server").":".$this->objConfig->getConfig("ldap_port"), class_logger::$levelInfo);
+
             $this->internalBind();
         }
     }
-    
+
     /**
      * Returns an instance of class_ldap, the connection is setup on first call.
-     * 
-     * @return class_ldap 
+     *
+     * @return class_ldap
      */
     public static function getInstance() {
         if(self::$objInstance == null)
             self::$objInstance = new class_ldap();
-        
+
         return self::$objInstance;
     }
-    
+
     /**
      * Authenticates an user against the current ldap-connection.
      * Please be aware that this method only tries to authenticate the user,
-     * the binding is released immediatelly. Afterwards the credentials
+     * the binding is released immediately. Afterwards the credentials
      * given in the config-file are used again.
-     * 
+     *
      * @param string $strUsername
      * @param string $strPassword
      * @param string $strContext
-     * @return bool 
+     *
+     * @return bool
      */
     public function authenticateUser($strUsername, $strPassword, $strContext = "") {
-        
+
         if($strContext != "")
             $strUsername = $this->objConfig->getConfig("ldap_common_name")."=".$strUsername.",".$strContext;
-        
+
         $bitBind = @ldap_bind($this->objCx, $strUsername, $strPassword);
         $this->internalBind();
-        
+
         return $bitBind;
     }
 
@@ -113,9 +111,10 @@ class class_ldap {
         }
         else {
             $bitBind = @ldap_bind(
-                        $this->objCx, 
-                        $this->objConfig->getConfig("ldap_bind_username"), 
-                        $this->objConfig->getConfig("ldap_bind_userpwd") );
+                $this->objCx,
+                $this->objConfig->getConfig("ldap_bind_username"),
+                $this->objConfig->getConfig("ldap_bind_userpwd")
+            );
         }
 
         if($bitBind === false) {
@@ -134,13 +133,13 @@ class class_ldap {
      */
     public function getMembersOfGroup($strGroupDistinguishedName) {
         $arrReturn = array();
-        
+
         //search the group itself
         $objResult = @ldap_search($this->objCx, $strGroupDistinguishedName, $this->objConfig->getConfig("ldap_group_filter"));
-        
+
         if($objResult !== false) {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
-            
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
+
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->objConfig->getConfig("ldap_group_attribute_member"));
@@ -154,7 +153,7 @@ class class_ldap {
         else {
             throw new class_exception("loading of group failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
-        
+
         return $arrReturn;
     }
 
@@ -170,9 +169,9 @@ class class_ldap {
     public function getNumberOfGroupMembers($strGroupDistinguishedName) {
         //search the group itself
         $objResult = @ldap_search($this->objCx, $strGroupDistinguishedName, $this->objConfig->getConfig("ldap_group_filter"));
-        
+
         if($objResult !== false) {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             if($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->objConfig->getConfig("ldap_group_attribute_member"));
@@ -196,24 +195,24 @@ class class_ldap {
      */
     public function isUserMemberOfGroup($strUserDN, $strGroupDN) {
         $bitReturn = false;
-        
+
         //search the group itself
         $strQuery = $this->objConfig->getConfig("ldap_group_isUserMemberOf");
         $strQuery = uniStrReplace("?", $strUserDN, $strQuery);
         $objResult = @ldap_search($this->objCx, $strGroupDN, $strQuery);
-        
+
         if($objResult !== false) {
             $intCount = ldap_count_entries($this->objCx, $objResult);
             if($intCount == 1)
                 $bitReturn = true;
             else
                 $bitReturn = false;
-            
+
         }
         else {
             throw new class_exception("loading of group-memberships failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
-        
+
         return $bitReturn;
     }
 
@@ -228,34 +227,34 @@ class class_ldap {
      */
     public function getUserDetailsByDN($strUsername) {
         $arrReturn = false;
-        
+
         //search the group itself
         $objResult = @ldap_search($this->objCx, $strUsername, $this->objConfig->getConfig("ldap_user_filter"));
-        
+
         if($objResult !== false) {
             $arrReturn = array();
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
-            
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
+
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while($arrResult !== false) {
-                
+
                 $arrReturn = array();
-                $arrReturn["username"]      = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_username"));
+                $arrReturn["username"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_username"));
                 $arrReturn["mail"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_mail"));
                 if($arrReturn["mail"] == "")
                     $arrReturn["mail"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_mail_fallback"));
-                $arrReturn["familyname"]    = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_familyname"));
-                $arrReturn["givenname"]     = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_givenname"));
-                $arrReturn["identifier"]    = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_common_identifier"));
-                
-                
+                $arrReturn["familyname"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_familyname"));
+                $arrReturn["givenname"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_givenname"));
+                $arrReturn["identifier"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_common_identifier"));
+
+
                 $arrResult = ldap_next_entry($this->objCx, $arrResult);
             }
         }
         else {
             throw new class_exception("loading of group failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
-        
+
         return $arrReturn;
     }
 
@@ -270,20 +269,20 @@ class class_ldap {
      */
     public function getUserdetailsByName($strUsername) {
         $arrReturn = false;
-        
+
         $strUserFilter = $this->objConfig->getConfig("ldap_user_search_filter");
         $strUserFilter = uniStrReplace("?", $strUsername, $strUserFilter);
-        
-        
+
+
         //search the group itself
         $objResult = @ldap_search($this->objCx, $this->objConfig->getConfig("ldap_user_base_dn"), $strUserFilter);
-        
+
         if($objResult !== false) {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
-            
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
+
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while($arrResult !== false) {
-                
+
                 $arrTemp = array();
                 $arrTemp["username"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_username"));
                 $arrTemp["mail"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_mail"));
@@ -292,33 +291,34 @@ class class_ldap {
                 $arrTemp["familyname"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_familyname"));
                 $arrTemp["givenname"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_user_attribute_givenname"));
                 $arrTemp["identifier"] = $this->getStrAttribute($arrResult, $this->objConfig->getConfig("ldap_common_identifier"));
-                
+
                 $arrReturn[] = $arrTemp;
-                
+
                 $arrResult = ldap_next_entry($this->objCx, $arrResult);
             }
         }
         else {
             throw new class_exception("loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Loads a single attribute from a given resultset
-     * 
-     * @param object $arrResult
+     *
+     * @param Resource $arrResult
      * @param string $strKey
-     * @return string 
+     *
+     * @return string
      */
     private function getStrAttribute($arrResult, $strKey) {
         $strReturn = "";
-        
+
         $arrValues = @ldap_get_values($this->objCx, $arrResult, $strKey);
         if($arrValues["count"] > 0)
             $strReturn = $arrValues[0];
-        
+
         return $strReturn;
     }
 }

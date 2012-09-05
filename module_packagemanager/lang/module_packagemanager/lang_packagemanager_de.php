@@ -59,3 +59,7 @@ $lang["systemtask_templatepackimport_name"] = "Template-Pack importieren";
 $lang["type_MODULE"]                     = "Modul-Paket";
 $lang["type_TEMPLATE"]                   = "Template-Pack";
 $lang["package_target_writable"]         = "Für die Installation werden Schreibrechte auf folgendem Ordner benötigt:";
+$lang["update_notification_intro"]        = "Für ein installiertes Paket ist eine neue Version verfügbar.";
+$lang["update_notification_package"]        = "Betreffendes Paket:";
+$lang["update_notification_verinst"]        = "Installierte Version:";
+$lang["update_notification_verav"]        = "Verfügbare Version:";

@@ -64,7 +64,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         if(!is_dir(_realpath_.$strSource))
             throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
 
-        class_logger::getInstance("moving ".$strSource." to /core/".$strTarget, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to /core/".$strTarget, class_logger::$levelInfo);
 
         $objFilesystem = new class_filesystem();
         //set a chmod before copying the files - at least try to
@@ -110,7 +110,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
             //skip samplecontent files
             if(uniStrpos($strOneInstaller, "element") === false) {
-                class_logger::getInstance("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
+                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
                 //trigger update or install
                 $strName = uniSubstr($strOneInstaller, 0, -4);
                 /** @var $objInstaller interface_installer */
@@ -123,7 +123,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         foreach($arrInstaller as $strOneInstaller) {
             //skip samplecontent files
             if(uniStrpos($strOneInstaller, "element") !== false) {
-                class_logger::getInstance("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
+                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
                 //trigger update or install
                 $strName = uniSubstr($strOneInstaller, 0, -4);
                 /** @var $objInstaller interface_installer */

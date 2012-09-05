@@ -64,7 +64,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("saved new ldap group ".$this->getStrSystemid(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("saved new ldap group ".$this->getStrSystemid(), class_logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO "._dbprefix_."user_group_ldap
@@ -73,7 +73,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn()));
         }
         else {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("updated ldap group ".$this->getSystemid(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated ldap group ".$this->getSystemid(), class_logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."user_group_ldap
                             SET group_ldap_dn=?
                           WHERE group_ldap_id=?";

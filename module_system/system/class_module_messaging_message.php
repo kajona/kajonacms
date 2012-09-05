@@ -14,10 +14,9 @@
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_messaging
- *
  * @targetTable messages.message_id
  */
-class class_module_messaging_message extends class_model implements interface_model, interface_admin_listable  {
+class class_module_messaging_message extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
@@ -66,7 +65,7 @@ class class_module_messaging_message extends class_model implements interface_mo
         $this->setArrModuleEntry("modul", "messaging");
         $this->setArrModuleEntry("moduleId", _messaging_module_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
@@ -79,6 +78,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * When creating a new record, the current date is set as relevant.
+     *
      * @return bool
      */
     protected function onInsertToDb() {
@@ -88,6 +88,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * Updates the record
+     *
      * @return bool
      */
     protected function updateStateToDb() {
@@ -107,6 +108,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -129,6 +131,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -137,6 +140,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -175,7 +179,35 @@ class class_module_messaging_message extends class_model implements interface_mo
 
 
     /**
-     * Returns the number of mesages for a single user - ignoring the messages states.
+     * Returns an array of all messages matching the passed identifier
+     *
+     * @param string $strIdentifier
+     * @param bool|int $intStart
+     * @param bool|int $intEnd
+     *
+     * @return class_module_messaging_message[]
+     * @static
+     */
+    public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
+        $strQuery = "SELECT system_id
+                     FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
+		            WHERE system_id = message_id
+		              AND message_internalidentifier = ?
+		              AND system_date_id = system_id
+		         ORDER BY message_read ASC, system_date_start DESC";
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strIdentifier), $intStart, $intEnd);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId)
+            $arrReturn[] = new class_module_messaging_message($arrOneId["system_id"]);
+
+        return $arrReturn;
+    }
+
+
+
+    /**
+     * Returns the number of messages for a single user - ignoring the messages states.
      *
      * @param string $strUserid
      * @param bool $bitOnlyUnread
@@ -185,7 +217,6 @@ class class_module_messaging_message extends class_model implements interface_mo
     public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
 
         $arrParams = array($strUserid);
-
 
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."messages, "._dbprefix_."system
@@ -206,7 +237,6 @@ class class_module_messaging_message extends class_model implements interface_mo
             $this->bitOnReadTrigger = true;
 
         $this->bitRead = $bitRead;
-
 
     }
 
@@ -286,6 +316,5 @@ class class_module_messaging_message extends class_model implements interface_mo
     public function getStrMessageProvider() {
         return $this->strMessageProvider;
     }
-
 
 }

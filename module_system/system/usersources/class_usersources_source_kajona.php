@@ -150,7 +150,7 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
      */
     public static function encryptPassword($strPassword, $strSalt = "", $bitMD5Encryption = false) {
         if($bitMD5Encryption) {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("usage of old md5-encrypted password!", class_logger::$levelWarning);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("usage of old md5-encrypted password!", class_logger::$levelWarning);
             return md5($strPassword);
         }
 

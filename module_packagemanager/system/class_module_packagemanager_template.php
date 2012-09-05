@@ -14,10 +14,9 @@
  * @package module_packagemanager
  * @author sidler@mulchprod.de
  * @since 4.0
- *
  * @targetTable templatepacks.templatepack_id
  */
-class class_module_packagemanager_template extends class_model implements interface_model, interface_admin_listable  {
+class class_module_packagemanager_template extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
@@ -40,7 +39,7 @@ class class_module_packagemanager_template extends class_model implements interf
         $this->setArrModuleEntry("modul", "packagemanager");
         $this->setArrModuleEntry("moduleId", _packagemanager_module_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
@@ -62,6 +61,7 @@ class class_module_packagemanager_template extends class_model implements interf
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -80,6 +80,7 @@ class class_module_packagemanager_template extends class_model implements interf
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -90,7 +91,7 @@ class class_module_packagemanager_template extends class_model implements interf
 
     /**
      * Initialises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
         parent::initObjectInternal();
@@ -115,8 +116,10 @@ class class_module_packagemanager_template extends class_model implements interf
      * Fetches the list of packs available
      *
      * @static
+     *
      * @param null|int $intStart
      * @param null|int $intEnd
+     *
      * @return class_module_packagemanager_template[]
      */
     public static function getAllTemplatepacks($intStart = null, $intEnd = null) {
@@ -150,6 +153,7 @@ class class_module_packagemanager_template extends class_model implements interf
     /**
      * Synchronized the list of template-packs available in the filesystem
      * with the list of packs stored at the database.
+     *
      * @static
      */
     public static function syncTemplatepacks() {
@@ -216,7 +220,7 @@ class class_module_packagemanager_template extends class_model implements interf
             $objMetadata->autoInit(_templatepath_."/".$this->strName);
             return $objMetadata;
         }
-        catch (class_exception $objEx) {
+        catch(class_exception $objEx) {
 
         }
 

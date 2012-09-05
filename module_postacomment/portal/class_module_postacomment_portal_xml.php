@@ -18,26 +18,26 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
 
     private $strErrors;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
         $this->setArrModuleEntry("moduleId", _postacomment_modul_id_);
         $this->setArrModuleEntry("modul", "postacomment");
         parent::__construct();
-	}
+    }
 
 
-	/**
-	 * saves a post in the database and returns the post as html.
-	 * In case of missing fields, the form is returned again
-	 *
-	 * @return string
+    /**
+     * saves a post in the database and returns the post as html.
+     * In case of missing fields, the form is returned again
+     *
+     * @return string
      * @permissons right1
-	 */
-	protected function actionSavePost() {
+     */
+    protected function actionSavePost() {
 
-	    $strXMLContent = "";
+        $strXMLContent = "";
 
         //validate needed fields
         if(!$this->validateForm()) {
@@ -118,31 +118,30 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
 
         class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return $strXMLContent;
-	}
-
+    }
 
 
     /**
-	 * Validates the form data provided by the user
-	 *
-	 * @return bool
-	 */
-	public function validateForm() {
-	    $bitReturn = true;
+     * Validates the form data provided by the user
+     *
+     * @return bool
+     */
+    public function validateForm() {
+        $bitReturn = true;
 
-	    $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
-	    if(uniStrlen($this->getParam("comment_name")) < 2) {
-	        $bitReturn = false;
-	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
-	    }
-	    if(uniStrlen($this->getParam("comment_message")) < 2) {
-	        $bitReturn = false;
-	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
-	    }
-	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
-	        $bitReturn = false;
-	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
-	    }
-	    return $bitReturn;
-	}
+        $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
+        if(uniStrlen($this->getParam("comment_name")) < 2) {
+            $bitReturn = false;
+            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
+        }
+        if(uniStrlen($this->getParam("comment_message")) < 2) {
+            $bitReturn = false;
+            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
+        }
+        if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
+            $bitReturn = false;
+            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
+        }
+        return $bitReturn;
+    }
 }

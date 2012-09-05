@@ -53,7 +53,7 @@ class class_core_eventdispatcher {
         $arrListener = self::getStatusChangedListeners();
         /** @var interface_statuschanged_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating statusChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid." status: ".$intNewStatus, class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating statusChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid." status: ".$intNewStatus, class_logger::$levelInfo);
             $bitReturn = $bitReturn && $objOneListener->handleStatusChangedEvent($strSystemid, $intNewStatus);
         }
 
@@ -78,7 +78,7 @@ class class_core_eventdispatcher {
         $arrListener = self::getRecordDeletedListeners();
         /** @var interface_recorddeleted_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating recordDeletedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating recordDeletedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
             $bitReturn = $bitReturn && $objOneListener->handleRecordDeletedEvent($strSystemid, $strClass);
         }
 
@@ -104,7 +104,7 @@ class class_core_eventdispatcher {
         $arrListener = self::getPrevidChangedListeners();
         /** @var interface_previdchanged_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating previdChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating previdChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
             $bitReturn = $bitReturn && $objOneListener->handlePrevidChangedEvent($strSystemid, $strOldPrevid, $strNewPrevid);
         }
 
@@ -129,7 +129,7 @@ class class_core_eventdispatcher {
         $arrListener = self::getRecordCopiedListeners();
         /** @var interface_recordcopied_listener $objOneListener */
         foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::$EVENTS)->addLogRow("propagating recordCopiedEvent to ".get_class($objOneListener)." oldsysid: ".$strOldSystemid." newsysid: ".$strNewSystemid, class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating recordCopiedEvent to ".get_class($objOneListener)." oldsysid: ".$strOldSystemid." newsysid: ".$strNewSystemid, class_logger::$levelInfo);
             $bitReturn = $bitReturn && $objOneListener->handleRecordCopiedEvent($strOldSystemid, $strNewSystemid);
         }
 

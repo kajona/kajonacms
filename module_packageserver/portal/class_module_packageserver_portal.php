@@ -27,18 +27,16 @@ class class_module_packageserver_portal extends class_portal implements interfac
         parent::__construct($arrElementData);
     }
 
-	
 
-	/**
-	 * Returns a list of all packages available.
+    /**
+     * Returns a list of all packages available.
      * By default a json-encoded array-like structure.
-	 *
-	 * @return string|json
-     * @permissions view
      *
+     * @return string|json
+     * @permissions view
      * @xml
-	 */
-	protected function actionList() {
+     */
+    protected function actionList() {
 
         $arrPackages = array();
 
@@ -52,11 +50,11 @@ class class_module_packageserver_portal extends class_portal implements interfac
                 $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
 
                 $arrPackages[] = array(
-                    "systemid" => $objOneFile->getSystemid(),
-                    "title" => $objMetadata->getObjMetadata()->getStrTitle(),
-                    "version" => $objMetadata->getObjMetadata()->getStrVersion(),
+                    "systemid"    => $objOneFile->getSystemid(),
+                    "title"       => $objMetadata->getObjMetadata()->getStrTitle(),
+                    "version"     => $objMetadata->getObjMetadata()->getStrVersion(),
                     "description" => $objMetadata->getObjMetadata()->getStrDescription(),
-                    "type" => $objMetadata->getObjMetadata()->getStrType()
+                    "type"        => $objMetadata->getObjMetadata()->getStrType()
                 );
 
             }
@@ -68,7 +66,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
 
         class_module_packageserver_log::generateDlLog("", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         $strReturn = json_encode($arrPackages);
         return $strReturn;
     }
@@ -78,6 +76,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
      * of the nested folders.
      *
      * @param $strParentId
+     *
      * @return class_module_mediamanager_file[]
      */
     private function getAllPackages($strParentId) {
@@ -99,7 +98,6 @@ class class_module_packageserver_portal extends class_portal implements interfac
     /**
      * Searches a list of packages and returns all of the infos found relating that packages.
      * Therefore, the package-names should be sent as a comma-separated list, e.g.:
-     *
      * xml.php?module=packageserver&action=searchPackages&title=system,pages,mediamanager
      *
      * @xml
@@ -121,11 +119,11 @@ class class_module_packageserver_portal extends class_portal implements interfac
                 if(in_array($objMetadata->getObjMetadata()->getStrTitle(), $arrSearch)) {
 
                     $arrReturn[] = array(
-                        "systemid" => $objOneFile->getSystemid(),
-                        "title" => $objMetadata->getObjMetadata()->getStrTitle(),
-                        "version" => $objMetadata->getObjMetadata()->getStrVersion(),
+                        "systemid"    => $objOneFile->getSystemid(),
+                        "title"       => $objMetadata->getObjMetadata()->getStrTitle(),
+                        "version"     => $objMetadata->getObjMetadata()->getStrVersion(),
                         "description" => $objMetadata->getObjMetadata()->getStrDescription(),
-                        "type" => $objMetadata->getObjMetadata()->getStrType()
+                        "type"        => $objMetadata->getObjMetadata()->getStrType()
                     );
 
                 }
@@ -137,8 +135,6 @@ class class_module_packageserver_portal extends class_portal implements interfac
         }
 
         class_module_packageserver_log::generateDlLog($this->getParam("title"), $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
-
-
         class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }

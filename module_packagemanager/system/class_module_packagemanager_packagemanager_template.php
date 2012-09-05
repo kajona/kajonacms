@@ -69,7 +69,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
         $objFilesystem = new class_filesystem();
         $objFilesystem->chmod("/templates/".$strTarget, 0777);
 
-        class_logger::getInstance("moving ".$strSource." to /templates/".$strTarget, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to /templates/".$strTarget, class_logger::$levelInfo);
 
         $objFilesystem->folderCopyRecursive($strSource, "/templates/".$strTarget, true);
         $this->objMetadata->setStrPath("/templates/".$strTarget);

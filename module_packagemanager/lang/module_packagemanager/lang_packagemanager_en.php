@@ -59,3 +59,7 @@ $lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
 $lang["type_MODULE"]                     = "Module-package";
 $lang["type_TEMPLATE"]                   = "Template-pack";
 $lang["package_target_writable"]         = "To install the package, write permissions are required in the following directory:";
+$lang["update_notification_intro"]        = "A new version is available for an installed package.";
+$lang["update_notification_package"]        = "Respective package:";
+$lang["update_notification_verinst"]        = "Installed version:";
+$lang["update_notification_verav"]        = "Available version:";

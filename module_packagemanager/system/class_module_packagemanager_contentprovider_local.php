@@ -75,11 +75,11 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
         $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
         if(in_array($strSuffix, array(".zip"))) {
             if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                class_logger::getInstance()->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, class_logger::$levelInfo);
+                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, class_logger::$levelInfo);
                 return $strTarget;
             }
         }
-        class_logger::getInstance()->addLogRow("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder", class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder", class_logger::$levelInfo);
         @unlink($arrSource["tmp_name"]);
 
         return null;

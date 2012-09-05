@@ -75,18 +75,26 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
 
             //search for new versions
-            $strLatestVersion = $objManager->searchLatestVersion($objHandler);
+            $bitUpdateAvailable = $objManager->updateAvailable($objHandler);
 
-            if($strLatestVersion == null) {
+            if($bitUpdateAvailable == null) {
                 $strActions .= $this->objToolkit->listButton(
                     getImageAdmin("icon_updateError.png", $this->getLang("package_noversion"))
                 );
             }
             else {
                 //compare the version to trigger additional actions
-                if(version_compare($strLatestVersion, $objHandler->getObjMetadata()->getStrVersion(), ">")) {
+                if($bitUpdateAvailable) {
+                    $strLatestVersion = $objManager->searchLatestVersion($objHandler);
                     $strActions .= $this->objToolkit->listButton(
-                        getLinkAdmin($this->getArrModule("modul"), "initPackageUpdate", "&package=".$objHandler->getObjMetadata()->getStrPath(), $this->getLang("package_updatefound")." ".$strLatestVersion, $this->getLang("package_updatefound")." ".$strLatestVersion, "icon_update.png" )
+                        getLinkAdmin(
+                            $this->getArrModule("modul"),
+                            "initPackageUpdate",
+                            "&package=".$objHandler->getObjMetadata()->getStrPath(),
+                            $this->getLang("package_updatefound")." ".$strLatestVersion,
+                            $this->getLang("package_updatefound")." ".$strLatestVersion,
+                            "icon_update.png"
+                        )
                     );
                 }
                 else {

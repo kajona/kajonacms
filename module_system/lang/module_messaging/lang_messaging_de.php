@@ -19,3 +19,4 @@ $lang["modul_titel"]                     = "Nachrichten";
 $lang["provider_bymail"]                 = "E-Mail Benachrichtigung";
 $lang["provider_enabled"]                = "Aktiv";
 $lang["actionShowAll"]                   = "Alle Nachrichten anzeigen";
+$lang["messageprovider_packageupdate_name"] = "Update-Meldungen";

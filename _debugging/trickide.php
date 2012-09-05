@@ -22,6 +22,7 @@ define("_admin_skin_default_", "");
 define("_system_mod_rewrite_", "");
 define("_system_release_time_", "");
 define("_pages_errorpage_", "");
+define("_system_dbdump_amount_", 5);
 define("_system_admin_email_", "");
 define("_pages_newdisabled_", "");
 define("_admin_only_https_", "false");

@@ -450,7 +450,7 @@ class class_db_postgres implements interface_db_driver {
 		//Now do a systemfork
 		$intTemp = "";
 		$strResult = system($strCommand, $intTemp);
-        class_logger::getInstance(class_logger::$DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, class_logger::$levelInfo);
         return $intTemp == 0;
     }
 
@@ -472,7 +472,7 @@ class class_db_postgres implements interface_db_driver {
         $strCommand = $this->strRestoreBin." -q -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
-        class_logger::getInstance(class_logger::$DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
 	    return $intTemp == 0;
     }
 

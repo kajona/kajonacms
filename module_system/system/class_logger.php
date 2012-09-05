@@ -16,11 +16,12 @@
  */
 final class class_logger {
 
-    public static $SYSTEMLOG = "systemlog.log";
-    public static $DBLOG = "dblayer.log";
-    public static $USERSOURCES = "usersources.log";
-    public static $QUERIES = "dbqueries.log";
-    public static $EVENTS = "events.log";
+    const SYSTEMLOG = "systemlog.log";
+    const DBLOG = "dblayer.log";
+    const USERSOURCES = "usersources.log";
+    const QUERIES = "dbqueries.log";
+    const EVENTS = "events.log";
+    const PACKAGEMANAGEMENT = "packagemanagement.log";
 
     /**
      * Level to be used for real errors
@@ -80,7 +81,7 @@ final class class_logger {
      */
     public static function getInstance($strLogfile = "") {
         if($strLogfile == "")
-            $strLogfile = self::$SYSTEMLOG;
+            $strLogfile = self::SYSTEMLOG;
 
         if(!isset(self::$arrInstances[$strLogfile])) {
             self::$arrInstances[$strLogfile] = new class_logger($strLogfile);

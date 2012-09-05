@@ -48,7 +48,7 @@ class class_module_packagemanager_manager {
         $arrAvailable = $this->getAvailablePackages();
         foreach($arrAvailable as $objOnePackage) {
             if($objOnePackage->getStrTitle() == $strName)
-               return $objOnePackage;
+                return $objOnePackage;
         }
 
         return null;
@@ -58,6 +58,7 @@ class class_module_packagemanager_manager {
      * Loads the matching packagemanager for a given path.
      *
      * @param $strPath
+     *
      * @return interface_packagemanager_packagemanager|null
      */
     public function getPackageManagerForPath($strPath) {
@@ -85,12 +86,13 @@ class class_module_packagemanager_manager {
      * The matching packagemanager is returned.
      *
      * @param $strPackagePath
+     *
      * @return interface_packagemanager_packagemanager
      */
     public function extractPackage($strPackagePath) {
         $strTargetFolder = generateSystemid();
 
-        class_logger::getInstance("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder, class_logger::$levelInfo);
 
         $objZip = new class_zip();
         $objZip->extractArchive($strPackagePath, _projectpath_."/temp/".$strTargetFolder);
@@ -124,6 +126,7 @@ class class_module_packagemanager_manager {
      * Validates, if a given path represents a valid package
      *
      * @param $strPath
+     *
      * @return bool
      */
     public function validatePackage($strPath) {
@@ -147,6 +150,7 @@ class class_module_packagemanager_manager {
      * first match is returned.
      *
      * @param interface_packagemanager_packagemanager $objPackage
+     *
      * @return string|null
      */
     public function searchLatestVersion(interface_packagemanager_packagemanager $objPackage) {
@@ -165,12 +169,55 @@ class class_module_packagemanager_manager {
     }
 
     /**
+     * Validates a packages' latest version and compares it to the version currently installed.
+     *
+     * @param interface_packagemanager_packagemanager $objPackage
+     *
+     * @return bool or null of the package could not be found
+     */
+    public function updateAvailable(interface_packagemanager_packagemanager $objPackage) {
+        $strLatestVersion = $this->searchLatestVersion($objPackage);
+        if($strLatestVersion !== null) {
+            if($strLatestVersion != null && version_compare($strLatestVersion, $objPackage->getObjMetadata()->getStrVersion(), ">")) {
+                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow(
+                    "found update for package ".$objPackage->getObjMetadata()->getStrTitle().", installed: ".$objPackage->getObjMetadata()->getStrVersion()." available: ".$strLatestVersion, class_logger::$levelInfo
+                );
+
+                $this->sendUpdateAvailableMessage($objPackage, $strLatestVersion);
+
+                return true;
+            }
+            else
+                return false;
+        }
+
+        return null;
+    }
+
+    private function sendUpdateAvailableMessage(interface_packagemanager_packagemanager $objPackage, $strLatestVersion) {
+        //check, if not already sent
+        $strIdentifier = sha1(__CLASS__.$objPackage->getObjMetadata()->getStrTitle().$strLatestVersion);
+
+        if(count(class_module_messaging_message::getMessagesByIdentifier($strIdentifier)) == 0) {
+
+            $strMailtext = class_carrier::getInstance()->getObjLang()->getLang("update_notification_intro", "packagemanager")."\n";
+            $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_package", "packagemanager")." ".$objPackage->getObjMetadata()->getStrTitle()."\n";
+            $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verinst", "packagemanager")." ".$objPackage->getObjMetadata()->getStrVersion()."\n";
+            $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verav", "packagemanager")." ".$strLatestVersion."\n";
+
+            $objMessageHandler = new class_module_messaging_messagehandler();
+            $objMessageHandler->sendMessage($strMailtext, new class_module_user_group(_admins_group_id_), new class_messageprovider_packageupdate(), $strIdentifier);
+        }
+    }
+
+    /**
      * Triggers the update of the passed package.
      * It is evaluated, if a new version is available.
      * The provider itself is called via initPackageUpdate, so it's to providers choice
      * to decide what action to take.
      *
      * @param interface_packagemanager_packagemanager $objPackage
+     *
      * @return mixed
      */
     public function updatePackage(interface_packagemanager_packagemanager $objPackage) {

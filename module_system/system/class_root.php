@@ -226,7 +226,7 @@ abstract class class_root {
                     $strColumn = $arrColumn[1];
 
                 if(!isset($arrRow[$strColumn])) {
-                    //class_logger::getInstance(class_logger::$DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
+                    //class_logger::getInstance(class_logger::DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
                     continue;
                 }
 

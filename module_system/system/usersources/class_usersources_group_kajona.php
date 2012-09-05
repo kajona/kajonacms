@@ -69,7 +69,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("saved new kajona group ".$this->getStrSystemid(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("saved new kajona group ".$this->getStrSystemid(), class_logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona
@@ -78,7 +78,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDesc()));
         }
         else {
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("updated kajona group ".$this->getSystemid(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated kajona group ".$this->getSystemid(), class_logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."user_group_kajona
                             SET group_desc=?
                           WHERE group_id=?";
@@ -157,7 +157,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	 * @return bool
 	 */
 	public function deleteGroup() {
-	    class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("deleted kajona group with id ".$this->getSystemid(), class_logger::$levelInfo);
+	    class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted kajona group with id ".$this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUsersFromCurrentGroup();
         $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona WHERE group_id=?";
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));

@@ -97,7 +97,7 @@ class class_usersources_user_ldap extends class_model implements interface_model
 
                         ) VALUES (?,?,?,?,?)";
 
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("new ldap user: ".$this->getStrDN(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new ldap user: ".$this->getStrDN(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -116,7 +116,7 @@ class class_usersources_user_ldap extends class_model implements interface_model
                    );
                    
 
-            class_logger::getInstance(class_logger::$USERSOURCES)->addLogRow("updated user ".$this->getStrDN(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user ".$this->getStrDN(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }

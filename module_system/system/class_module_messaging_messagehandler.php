@@ -36,16 +36,17 @@ class class_module_messaging_messagehandler {
 
     /**
      * Sends a message.
-     * If the list of recipients containes a group, the message is duplicated for each member.
+     * If the list of recipients contains a group, the message is duplicated for each member.
      *
      * @param string $strContent
      * @param class_module_user_group[]|class_module_user_user[]|class_module_user_group|class_module_user_user $arrRecipients
      * @param interface_messageprovider $objProvider
+     * @param string $strInternalIdentifier
+     *
      * @return bool
      */
-    public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider) {
+    public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider, $strInternalIdentifier = "") {
         $objValidator = new class_email_validator();
-        $strInternalIdentifier = generateSystemid();
 
         if($arrRecipients instanceof class_module_user_group || $arrRecipients instanceof class_module_user_user)
             $arrRecipients = array($arrRecipients);
