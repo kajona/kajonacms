@@ -45,6 +45,11 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
 
     private function processSingleClass($strClassname) {
         $objReflection = new class_reflection($strClassname);
+
+        $objPhpRef = new ReflectionClass($strClassname);
+        if(!$objPhpRef->implementsInterface("interface_admin_listable"))
+            return;
+
         $arrTargetTables = $objReflection->getAnnotationValuesFromClass("@targetTable");
 
         if(count($arrTargetTables) > 0 ) {

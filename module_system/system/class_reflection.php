@@ -60,7 +60,7 @@ class class_reflection {
      *
      * @throws class_exception
      */
-	public function __construct($strSourceClass) {
+    public function __construct($strSourceClass) {
 
         if(is_object($strSourceClass))
             $this->strSourceClass = get_class($strSourceClass);
@@ -81,7 +81,7 @@ class class_reflection {
 
         $this->arrCurrentCache = &self::$arrAnnotationsCache[$this->strSourceClass];
         $this->objReflectionClass = new ReflectionClass($this->strSourceClass);
-	}
+    }
 
     function __destruct() {
         if(self::$bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {

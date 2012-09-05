@@ -13,8 +13,8 @@
  * @package module_search
  * @author sidler@mulchprod.de
  */
-class class_module_search_commons extends class_model implements interface_model  {
-    
+class class_module_search_commons extends class_model implements interface_model {
+
 
     /**
      * Constructor to create a valid object
@@ -30,6 +30,7 @@ class class_module_search_commons extends class_model implements interface_model
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -44,20 +45,19 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_search_result[]
      */
-	public function doPortalSearch($strSearchterm) {
+    public function doPortalSearch($strSearchterm) {
         $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
-	    if(uniStrlen($strSearchterm) == 0)
-	       return array();
-	       
-	    //log the query
-	    class_module_search_log::generateLogEntry($strSearchterm);
+        if(uniStrlen($strSearchterm) == 0)
+            return array();
 
-		//Search for search-plugins
+        //log the query
+        class_module_search_log::generateLogEntry($strSearchterm);
+
+        //Search for search-plugins
         $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins", array(".php"));
         return $this->doSearch($strSearchterm, $arrSearchPlugins);
 
-	}
-
+    }
 
 
     /**
@@ -99,7 +99,7 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @param $strSearchterm
      * @param $arrSearchPlugins
-     * @param null|object $objSortFunc
+     * @param null|callable $objSortFunc
      *
      * @return array|class_search_result[]
      */
@@ -108,7 +108,7 @@ class class_module_search_commons extends class_model implements interface_model
 
         foreach($arrSearchPlugins as $strOnePlugin) {
             //Check, if not the interface
-            if(uniStrpos($strOnePlugin, "searchdef_pages_" ) === false) {
+            if(uniStrpos($strOnePlugin, "searchdef_pages_") === false) {
                 $strClassname = str_replace(".php", "", $strOnePlugin);
                 /** @var $objPlugin interface_search_plugin */
                 $objPlugin = new $strClassname($strSearchterm);
@@ -130,7 +130,6 @@ class class_module_search_commons extends class_model implements interface_model
         uasort($arrHits, $objSortFunc);
 
 
-
         return $arrHits;
     }
 
@@ -138,6 +137,7 @@ class class_module_search_commons extends class_model implements interface_model
      * Merges duplicates in the passed array.
      *
      * @param class_search_result[] $arrResults
+     *
      * @return class_search_result[]
      */
     private function mergeDuplicates($arrResults) {
@@ -148,7 +148,7 @@ class class_module_search_commons extends class_model implements interface_model
 
             if(isset($arrReturn[$objOneResult->getStrSortHash()])) {
                 $objResult = $arrReturn[$objOneResult->getStrSortHash()];
-                $objResult->setIntHits($objResult->getIntHits()+1);
+                $objResult->setIntHits($objResult->getIntHits() + 1);
             }
             else {
                 $arrReturn[$objOneResult->getStrSortHash()] = $objOneResult;
