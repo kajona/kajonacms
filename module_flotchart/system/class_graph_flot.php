@@ -23,6 +23,7 @@ class class_graph_flot implements interface_graph {
      * @var class_graph_flot_chartdata_base
      */
     private $objChartData = null;
+    private $strChartId = null;
 
     private $intWidth = 600;
     private $intHeight = 350;
@@ -35,7 +36,7 @@ class class_graph_flot implements interface_graph {
     
     //line char, bar chart, pie chart
     private $bShowLegend = true;
-    private $strGraphTitle = "";
+    private $strGraphTitle = "&nbsp;";
     private $strBackgroundColor="#FFFFFF";
     private $strFont = "Verdana, Arial, Helvetica, sans-serifs";
     private $strFontColor ="#000000";
@@ -189,15 +190,20 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->setStrXAxisTitle($this->strXAxisTitle);
         $this->objChartData->setStrYAxisTitle($this->strYAxisTitle);
         $this->objChartData->setArrXAxisTickLabels($this->arrXAxisTickLabels);
+        $this->strChartId = generateSystemid();
+        $this->objChartData->setChartId($this->strChartId);
         
         //create chart
-        $strChartId = generateSystemid();
-        $strChartCode = $this->objChartData->showGraph($strChartId);
+        $strChartCode = $this->objChartData->showGraph($this->strChartId );
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "<div style=\"text-align:center; width:".$this->intWidth."px; \">".$this->strGraphTitle;
-        $strReturn = $strReturn."\t <div id=\"" . $strChartId . "\" style=\"font-size:11px; font-family:".$this->strFont."; width:".$this->intWidth."px; height:".$this->intHeight."px\"></div>";
-        $strReturn = $strReturn."</div>";
+        $strReturn = "\n <div id=\"chart_" . $this->strChartId . "\">";
+            $strDivTitle =  "\n\t <div id=\"title_" . $this->strChartId . "\"   style=\"text-align:center; width:".$this->intWidth."px; \"> ".$this->strGraphTitle."</div>";
+            $strDivChart =  "\n\t <div id=\"" . $this->strChartId . "\"         style=\"font-size:11px; font-family:".$this->strFont."; width:".$this->intWidth."px; height:".$this->intHeight."px\"> &nbsp; </div>";
+            $strDivLegend = "\n\t <div id=\"legend_" . $this->strChartId . "\"  style=\"position:relative;bottom:".$this->intHeight."px;left:".$this->intWidth."px;\"> &nbsp; </div>";
+            
+            $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend;
+        $strReturn = $strReturn."\n</div>\n";
         //TODO: eventually create all required css-code based on the current properties. this would make the request to flot.css obsolete
 
         $strReturn .= "<script type='text/javascript'>
@@ -207,16 +213,17 @@ class class_graph_flot implements interface_graph {
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
+                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
                 ], function() {
-                        console.log('triggering flot for chart ".$strChartId."');
+                        console.log('triggering flot for chart ".$this->strChartId ."');
                     ".$strChartCode."
                 });
             });
         </script>";
 
         
-        $toolTip = $this->objChartData->showChartToolTips($strChartId);
+        $toolTip = $this->objChartData->showChartToolTips($this->strChartId );
 
         return $strReturn.$toolTip;
     }

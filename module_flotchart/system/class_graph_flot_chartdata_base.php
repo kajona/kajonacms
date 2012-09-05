@@ -21,6 +21,9 @@ abstract class class_graph_flot_chartdata_base {
     protected $arrFlotSeriesData = array();
     protected $arrChartTypes = array();
 
+    //chart id
+    protected $strChartId = null;
+    
     //line and barchart
     protected $strXAxisTitle = "";
     protected $strYAxisTitle = "";
@@ -45,6 +48,11 @@ abstract class class_graph_flot_chartdata_base {
         $this->arrChartTypes["lines"] = "lines: {show:true}, points:{show:true} ";
         $this->arrChartTypes["pie"] = "pie: {show:true}";
     }
+    
+    public function setChartId($strChartId) {
+        $this->strChartId = $strChartId;
+    }
+    
     
     public function setBitRenderLegend($bitRenderLegend) {
         if($bitRenderLegend) {

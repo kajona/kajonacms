@@ -27,6 +27,7 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                            color:'".$this->strFontColor."',
                            ticks:".$this->ticksToJSON()."
                         }";
+        
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
                             axisLabelUseCanvas: true, 
                             axisLabelPadding:15,
@@ -34,9 +35,11 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                             color:'".$this->strFontColor."'
                         }";
 
-        $legend = "legend: {show:".$this->bShowLegend."}";
+        $legend = "legend: {show:".$this->bShowLegend.",
+                            container:$('#legend_".$this->strChartId."')
+                            }";
         
-        $hoverable = "grid: { hoverable: true, 
+        $grid = "grid: { hoverable: true, 
                               clickable: true,
                               backgroundColor:'".$this->strBackgroundColor."'   
                             }";
@@ -46,7 +49,7 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         $options.=$xaxis . ",";
         $options.=$yaxis . ",";
         $options.=$legend . ",";
-        $options.=$hoverable;
+        $options.=$grid;
 
         return $options;
     }

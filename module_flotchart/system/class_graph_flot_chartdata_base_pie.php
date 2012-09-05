@@ -51,7 +51,7 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
                 show: " . $this->bShowLegend . "
             }";
 
-        $hoverable = "
+        $grid = "
             grid: { 
                 hoverable: true, 
                 clickable: true,
@@ -61,7 +61,7 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
         $options = "";
         $options.=$series . ",";
         $options.=$legend . ",";
-        $options.=$hoverable;
+        $options.=$grid;
         
         return $options;
     }
