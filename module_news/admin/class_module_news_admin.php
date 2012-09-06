@@ -381,6 +381,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
      * @return string
      */
 	protected function actionNewNews($strMode = "new", class_admin_formgenerator $objForm = null) {
+        $strReturn = "";
         $objNews = new class_module_news_news();
         if($strMode == "edit") {
             $objNews = new class_module_news_news($this->getSystemid());
@@ -388,13 +389,31 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
 
             if(!$objNews->rightEdit())
                 return $this->getLang("commons_error_permissions");
+
+            //search the languages maintained
+            $objLanguageManager = class_module_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+            if($objLanguageManager != null) {
+
+                $arrMaintained = $objLanguageManager->getArrLanguageSet();
+                $arrDD = array();
+                foreach($arrMaintained as $strLanguageId => $strSystemid) {
+                    $objLanguage = new class_module_languages_language($strLanguageId);
+                    $arrDD[$strSystemid] = $this->getLang("lang_".$objLanguage->getStrName() , "languages");
+                }
+
+                class_module_languages_admin::enableLanguageSwitch();
+                class_module_languages_admin::setArrLanguageSwitchEntries($arrDD);
+                class_module_languages_admin::setStrOnChangeHandler("window.location='".getLinkAdminHref("news", "editNews").(_system_mod_rewrite_ == "true" ? "?" : "&")."systemid='+this.value+'&pe=".$this->getParam("pe")."';");
+                class_module_languages_admin::setStrActiveKey($this->getSystemid());
+            }
         }
 
         if($objForm == null)
             $objForm = $this->getNewsAdminForm($objNews);
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveNews"));
+        $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveNews"));
+        return $strReturn;
     }
 
 

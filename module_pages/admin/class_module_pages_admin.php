@@ -90,6 +90,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      */
     protected function actionList() {
 
+        class_module_languages_admin::enableLanguageSwitch();
+
         $bitPeMode = $this->getParam("pe") != "";
 
         //Collect the pages belonging to the current parent
@@ -100,19 +102,10 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator->setArraySection($arrPages);
         $strPages = $this->renderList($objArraySectionIterator, true, "pagesList", true);
 
-        $strPathNavi = "";
-
-        if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
-            $arrToolbarEntries = array();
-            $objLanguages = new class_module_languages_admin();
-            $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
-            $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
-        }
-
         if($bitPeMode)
-            $strReturn = $strPathNavi.$strPages;
+            $strReturn = $strPages;
         else
-            $strReturn = $strPathNavi.$this->generateTreeView($strPages);
+            $strReturn = $this->generateTreeView($strPages);
 
         return $strReturn;
     }
@@ -306,20 +299,14 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     protected function actionListAll() {
         $strReturn = "";
 
+        class_module_languages_admin::enableLanguageSwitch();
+
         $objArraySectionIterator = new class_array_section_iterator(class_module_pages_page::getNumberOfPagesAvailable());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator);
 
-        $strPathNavi = "";
-        if(count(class_module_languages_language::getAllLanguages(true)) > 1) {
-            $arrToolbarEntries = array();
-            $objLanguages = new class_module_languages_admin();
-            $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
-            $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
-        }
-
-        return $strPathNavi.$strReturn;
+        return $strReturn;
     }
 
 
@@ -363,8 +350,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.png);\">".$this->getLang("contentToolbar_content")."</a>";
                 $arrToolbarEntries[] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.png);\">".$this->getLang("contentToolbar_preview")."</a>";
             }
-            $objLanguages = new class_module_languages_admin();
-            $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
+            class_module_languages_admin::enableLanguageSwitch();
             if($this->getParam("pe") != 1)
                 $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
         }

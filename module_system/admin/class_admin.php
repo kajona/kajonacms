@@ -487,6 +487,7 @@ abstract class class_admin {
 		$this->arrOutput["login"] = $this->getOutputLogin();
 		$this->arrOutput["tagSelector"] = $this->objToolkit->getAdminskinTagSelector();
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
+		$this->arrOutput["languageswitch"] = (class_module_system_module::getModuleByName("languages") != null ? class_module_system_module::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
 		$this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
 		$this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = "._system_browser_cachebuster_.";</script>";

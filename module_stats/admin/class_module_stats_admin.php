@@ -100,17 +100,37 @@ class class_module_stats_admin extends class_admin implements interface_admin {
      */
     protected function actionList() {
         //In every case, we should generate the date-selector
-        $strReturn = $this->processDates();
+        $this->processDates();
 
         $strAction = $this->getParam("action");
-        if($strAction == "")
+        if($strAction == "") {
             $strAction = "statsCommon";
+            $this->setParam("action", $strAction);
+        }
+
+
 
         //And now we have to load the requested plugin
-        $strReturn .= $this->loadRequestedPlugin($strAction);
-        
-        return $strReturn;
+        return $this->loadRequestedPlugin($strAction);
     }
+
+    /**
+     * Creates a pathnavigation through all folders till the current page / folder
+     *
+     * @return array
+     */
+    protected function getArrOutputNaviEntries() {
+        $arrPathLinks = parent::getArrOutputNaviEntries();
+
+        foreach($this->getReports() as $objOneReport) {
+            if($objOneReport->getReportCommand() == $this->getParam("action")) {
+                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $objOneReport->getReportCommand(), "", $objOneReport->getReportTitle());
+            }
+        }
+
+        return $arrPathLinks;
+    }
+
 
     /**
      * Loads the given plugin, i.e. the given report.

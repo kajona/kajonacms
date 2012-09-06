@@ -159,7 +159,7 @@ Divider to split up a page in logical sections
 
 data list header. Used to open a table to print data
 <datalist_header>
-<table class="table table-striped">
+<table class="table table-striped table-condensed">
 </datalist_header>
 
 data list footer. at the bottom of the datatable
@@ -173,7 +173,7 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head_header>
 
 <datalist_column_head>
-		<td><strong>%%value%%</strong></td>
+    <th>%%value%%</th>
 </datalist_column_head>
 
 <datalist_column_head_footer>
@@ -198,7 +198,7 @@ One Column in a row (data record) - the header, the content, the footer, providi
 </datalist_column_header_2>
 
 <datalist_column_2>
-		<td class="dataValue">%%value%%</td>
+    <td class="dataValue">%%value%%</td>
 </datalist_column_2>
 
 <datalist_column_footer_2>
@@ -277,7 +277,7 @@ Textarea
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
-            <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%readonly%%>%%value%%</textarea>
+            <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" rows="4" %%readonly%%>%%value%%</textarea>
         </div>
     </div>
 </input_textarea>
@@ -510,7 +510,7 @@ Same as above, but using an image to fold / unfold the content
 
 A precent-beam to illustrate proportions
 <percent_beam>
-    <div class="progress progress-striped active" style="width: 30%;" title="%%percent%%%">
+    <div class="progress progress-striped active"  title="%%percent%%%">
         <div class="bar" style="width: %%percent%%%;"></div>
     </div>
 </percent_beam>
@@ -992,17 +992,17 @@ Displays the new element button
 
 A single button, represents one language. Put together in the language-switch
 <language_switch_button>
-    <option value="%%language%%">%%languageName%%</option>
+    <option value="%%languageKey%%">%%languageName%%</option>
 </language_switch_button>
 
 A button for the active language
 <language_switch_button_active>
-    <option value="%%language%%" selected="selected">%%languageName%%</option>
+    <option value="%%languageKey%%" selected="selected">%%languageName%%</option>
 </language_switch_button_active>
 
 The language switch surrounds the buttons
 <language_switch>
-<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="KAJONA.admin.switchLanguage(this.value);">%%languagebuttons%%</select></div>
+    <select id="languageChooser" class="input-small" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------

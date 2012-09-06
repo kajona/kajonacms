@@ -1366,31 +1366,34 @@ class class_toolkit_admin extends class_toolkit {
      * Creates the sourrounding code of a language switch, places the buttons
      *
      * @param string $strLanguageButtons
+     * @param $strOnChangeHandler
+     *
      * @return string
      */
-    public function getLanguageSwitch($strLanguageButtons) {
+    public function getLanguageSwitch($strLanguageButtons, $strOnChangeHandler) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "language_switch");
         $arrTemplate = array();
         $arrTemplate["languagebuttons"] = $strLanguageButtons;
+        $arrTemplate["onchangehandler"] = $strOnChangeHandler;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
     /**
      * Creates the code for one button for a specified language, part of a language switch
      *
-     * @param string $strLanguage
+     * @param string $strKey
      * @param string $strLanguageName  The full name of the language
      * @param bool $bitActive
      * @return string
      */
-    public function getLanguageButton($strLanguage, $strLanguageName, $bitActive = false) {
+    public function getLanguageButton($strKey, $strLanguageName, $bitActive = false) {
         //active language?
         if($bitActive)
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "language_switch_button_active");
         else
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "language_switch_button");
         $arrTemplate = array();
-        $arrTemplate["language"] = $strLanguage;
+        $arrTemplate["languageKey"] = $strKey;
         $arrTemplate["languageName"] = $strLanguageName;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }

@@ -61,16 +61,13 @@ class class_module_pages_content_admin extends class_admin implements interface_
 	 */
 	protected function actionList() {
 		$strReturn = "";
+        class_module_languages_admin::enableLanguageSwitch();
         $objPage = new class_module_pages_page($this->getSystemid());
         //get infos about the page
         $arrToolbarEntries = array();
         $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
         $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.png);\">".$this->getLang("contentToolbar_content")."</a>";
         $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.png);\">".$this->getLang("contentToolbar_preview")."</a>";
-
-        //if languages are installed, present a language switch right here
-        $objLanguages = new class_module_languages_admin();
-        $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
         if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);

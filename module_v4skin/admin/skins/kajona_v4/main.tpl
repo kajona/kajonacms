@@ -46,13 +46,9 @@
                         <i id="icon-lupe"></i>
                         <input type="text" class="search-query" placeholder="Suchbegriff" id="globalSearchInput">
                     </form>
-                    <select id="languageChooser" class="input-small">
-                        <option>English</option>
-                        <option>Deutsch</option>
-                    </select>
+                    %%languageswitch%%
 
                     %%aspectChooser%%
-
                     <button id="portaleditor">
                         Portaleditor
                         <i class="icon-share"></i>

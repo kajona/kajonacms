@@ -15,6 +15,11 @@
  */
 class class_module_languages_admin extends class_admin_simple implements interface_admin {
 
+    private static $arrLanguageSwitchEntries = null;
+    private static $strOnChangeHandler = "KAJONA.admin.switchLanguage(this.value);";
+    private static $strActiveKey = "";
+
+
     /**
      * Constructor
      *
@@ -202,23 +207,73 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 	 */
 	public function getLanguageSwitch() {
 	    $strReturn = "";
-        //Load all languages available
-        $arrObjLanguages = class_module_languages_language::getAllLanguages(true);
-        //create a button for each of them
         $strButtons = "";
-        if(count($arrObjLanguages) > 1) {
-            foreach ($arrObjLanguages as $objOneLanguage) {
+        if(self::$arrLanguageSwitchEntries != null && count(self::$arrLanguageSwitchEntries) > 1) {
+            foreach (self::$arrLanguageSwitchEntries as $strKey => $strValue) {
             	$strButtons .= $this->objToolkit->getLanguageButton(
-                    $objOneLanguage->getStrName(),
-                    $this->getLang("lang_".$objOneLanguage->getStrName()),
-            	    ($objOneLanguage->getStrName() == $this->getLanguageToWorkOn() ? true : false)
+                    $strKey,
+                    $strValue,
+            	    $strKey == self::$strActiveKey
                 );
             }
 
-            $strReturn = $this->objToolkit->getLanguageSwitch($strButtons);
+            $strReturn = $this->objToolkit->getLanguageSwitch($strButtons, self::$strOnChangeHandler);
         }
 
         return $strReturn;
 	}
+
+    /**
+     * Enables the common language switch, switching the backends language to work on.
+     * If you want to create a custom switch, use setArrLanguageSwitchEntries and setStrOnChangeHandler
+     * to customize all switch-content.
+     * @static
+     *
+     */
+    public static function enableLanguageSwitch() {
+        if(self::$arrLanguageSwitchEntries == null) {
+            $arrObjLanguages = class_module_languages_language::getAllLanguages(true);
+            if(count($arrObjLanguages) > 1) {
+                self::$arrLanguageSwitchEntries = array();
+                foreach($arrObjLanguages as $objOneLang) {
+                    self::$arrLanguageSwitchEntries[$objOneLang->getStrName()] = class_carrier::getInstance()->getObjLang()->getLang("lang_".$objOneLang->getStrName(), "languages");
+                }
+                $objSystemCommon = new class_module_system_common();
+                self::$strActiveKey = $objSystemCommon->getStrAdminLanguageToWorkOn();
+            }
+        }
+    }
+
+    /**
+     * Pass custom entries to the current switch, replacing the default ones.
+     * Schema key => value
+     * @static
+     *
+     * @param $arrLanguageSwitchEntries
+     */
+    public static function setArrLanguageSwitchEntries($arrLanguageSwitchEntries) {
+        self::$arrLanguageSwitchEntries = $arrLanguageSwitchEntries;
+    }
+
+    /**
+     * Change the default on-change handler of the languages dropdown to a custom function.
+     * @static
+     *
+     * @param $onChangeHandler
+     */
+    public static function setStrOnChangeHandler($onChangeHandler) {
+        self::$strOnChangeHandler = $onChangeHandler;
+    }
+
+    /**
+     * Set the currently active key for the language switch
+     *
+     * @static
+     *
+     * @param $strActiveKey
+     */
+    public static function setStrActiveKey($strActiveKey) {
+        self::$strActiveKey = $strActiveKey;
+    }
 
 }
