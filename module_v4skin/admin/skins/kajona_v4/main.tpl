@@ -61,9 +61,9 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid pathNaviContainer">
         <div class="row-fluid">
-            <div class="span2">&nbsp;</div>
+            <div class="span2" style="z-index: 0 !important;">&nbsp;</div>
             <div class="span10">
                 %%path%%
             </div>
@@ -87,7 +87,7 @@
                         Modules
                     </div>
                 </a>
-                <div class="nav-collapse" id="moduleNavigation">
+                <div class="accordion" id="moduleNavigation">
                     %%moduleSitemap%%
                 </div>
             </div>

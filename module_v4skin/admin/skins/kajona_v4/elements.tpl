@@ -1508,27 +1508,39 @@ It containes a list of aspects and provides the possibility to switch the differ
 -- BACKEND NAVIGATION -----------------------------------------------------------------------------------
 
 <sitemap_wrapper>
-    <ul class="nav nav-list">
+    <div class="nav-header">Kajona V4</div>
         %%level%%
-    </ul>
+
 </sitemap_wrapper>
 
 <sitemap_module_wrapper>
-    <li class="dropdown">
-        <a class="dropdown-toggle"  data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
-        <ul class="dropdown-menu">
-            %%actions%%
-        </ul>
-    </li>
-</sitemap_module_wrapper>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+                %%moduleName%%
+            </a>
+        </div>
+        <div id="%%systemid%%" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <ul>%%actions%%</ul>
+            </div>
+        </div>
+    </div>
+</sitemap_module_wrapper>*
 
 <sitemap_module_wrapper_active>
-<li class="dropdown active">
-    <a class="dropdown-toggle"  data-target="#" href="%%moduleHref%%">%%moduleName%%</a>
-    <ul class="dropdown-menu">
-        %%actions%%
-    </ul>
-</li>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle active" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+                %%moduleName%%
+            </a>
+        </div>
+        <div id="%%systemid%%" class="accordion-body collapse in">
+            <div class="accordion-inner">
+                <ul>%%actions%%</ul>
+            </div>
+        </div>
+    </div>
 </sitemap_module_wrapper_active>
 
 <sitemap_action_entry>
@@ -1540,5 +1552,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_divider_entry>
 
 <sitemap_group_entry>
-<li class="nav-header">%%moduleName%%</li>
+<!--<li class="nav-header">%%moduleName%%</li>-->
 </sitemap_group_entry>
+
+

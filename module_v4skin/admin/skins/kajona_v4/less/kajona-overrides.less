@@ -52,6 +52,59 @@ body.login {
     position:relative;
     top:-10px;
 
+    .accordion-group {
+        .border-radius(0px);
+        border: 0px;
+        margin: 0;
+    }
+
+    .accordion-inner {
+        border-top: 0;
+        padding: 0;
+        background:url(../img/navbar-inner-background.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
+        color: @white;
+
+        ul {
+            margin: 0 0 1px 0;
+
+            list-style: none;
+
+            li {
+
+                a {
+                    display: block;
+                    padding: 2px 15px 2px 2px;
+                }
+
+                &.divider {
+                    background-color: @white;
+                    border-bottom: 0px;
+                    height: 1px;
+                    margin: 3px 1px;
+                    overflow: hidden;
+                }
+            }
+        }
+
+    }
+
+    .accordion-group .accordion-heading a {
+        padding: 6px 15px;
+        background-color: @kajonaLightGray;
+        margin-bottom:1px;
+        font-size:@baseFontSize + 2;
+        color:#626262;
+        border-color:@green;
+        border-style: solid;
+        border-width: 0px 0px 0px 10px;
+    }
+
+    .accordion-group .accordion-heading a.accordion-toggle.active  {
+        color:@white;
+        text-shadow:none;
+        background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
+    }
+
     .btn-navbar {
         display: none;
     }
@@ -68,82 +121,84 @@ body.login {
         text-transform: uppercase;
     }
 
-    li.dropdown:hover > .dropdown-menu {
-        display: block;
-    }
+//    li.dropdown:hover > .dropdown-menu {
+//        display: block;
+//    }
 
-    .nav-list > li > a {
-        padding: 6px 15px;
-        background-color: @kajonaLightGray;
-        margin-bottom:1px;
-        font-size:@baseFontSize + 2;
-        color:#626262;
-        border-color:@green;
-        border-style: solid;
-        border-width: 0px 0px 0px 10px;
-    }
+//    .nav-list > li > a,
+//    .accordion-group .accordion-heading a {
+//        padding: 6px 15px;
+//        background-color: @kajonaLightGray;
+//        margin-bottom:1px;
+//        font-size:@baseFontSize + 2;
+//        color:#626262;
+//        border-color:@green;
+//        border-style: solid;
+//        border-width: 0px 0px 0px 10px;
+//    }
 
-    .nav-list > .active  a,
-    .nav-list > .active  a:hover,
-    .nav > li > a:hover,
-    .nav > a.dropdown-toggle,
-    .nav li.open a.dropdown-toggle {
-        color:@white;
-        text-shadow:none;
-        background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
-    }
+//    .nav-list > .active  a,
+//    .nav-list > .active  a:hover,
+//    .nav > li > a:hover,
+//    .nav > a.dropdown-toggle,
+//    .nav li.open a.dropdown-toggle,
+//    .accordion-group .accordion-heading a.accordion-toggle.active  {
+//        color:@white;
+//        text-shadow:none;
+//        background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
+//    }
 
-    ul.nav > li > ul > li > a {
-        background: none !important;
-    }
+//    ul.nav > li > ul > li > a {
+//        background: none !important;
+//    }
 
 
-    .nav-list .divider {
-        background-color: @white;
-        border-bottom: 0px;
-        height: 1px;
-        margin: 9px 1px;
-        overflow: hidden;
-    }
+//    .nav-list .divider {
+//        background-color: @white;
+//        border-bottom: 0px;
+//        height: 1px;
+//        margin: 9px 1px;
+//        overflow: hidden;
+//    }
 
-    .dropdown-menu {
-        background-clip: none;
-        background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
-        border:0px;
-        .border-radius(0px);
-        .box-shadow(none);
-        display: none;
-        float: left;
-        left: 100%;
-        list-style: none outside none;
-        margin: 1px 0 0;
-        min-width: 160px;
-        padding: 4px 0;
-        position: absolute;
-        top: -1px;
-        z-index: 1000;
-        text-align:left;
-        color:@white;
-
-        a {
-            clear: both;
-            color: @white;
-            display: block;
-            font-weight: normal;
-            font-size:@baseFontSize + 2;
-            line-height: 20px;
-            padding: 4px 15px;
-            white-space: nowrap;
-        }
-
-        a:hover,
-        .active > a,
-        .active > a:hover {
-            background: none;
-            color: #434343;
-            text-decoration: none;
-        }
-    }
+//    .dropdown-menu {
+//        background-clip: none;
+//        background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
+//        border:0px;
+//        .border-radius(0px);
+//        .box-shadow(none);
+//        display: none;
+//        float: left;
+//        left: 100%;
+//        list-style: none outside none;
+//        margin: 1px 0 0;
+//        min-width: 160px;
+//        padding: 4px 0;
+//        position: absolute;
+//        top: -1px;
+//        z-index: 1000;
+//        text-align:left;
+//        color:@white;
+//
+//        a {
+//            clear: both;
+//            color: @white;
+//            display: block;
+//            font-weight: normal;
+//            font-size:@baseFontSize + 2;
+//            line-height: 20px;
+//            padding: 4px 15px;
+//            white-space: nowrap;
+//        }
+//
+//        a:hover,
+//        .active > a,
+//        .active > a:hover {
+//            background: none;
+//            color: #434343;
+//            text-decoration: none;
+//        }
+//    }
 }
 
 .userNotificationsDropdown {
@@ -522,7 +577,7 @@ body.login {
         }
 
         .savechanges {
-            margin: 20px 0 0 180px;
+            margin: 20px 0 0 220px;
             border: 4px solid @grayLight;
             background: @kajonaLightGray none;
             .border-radius(0px);

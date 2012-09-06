@@ -1240,6 +1240,7 @@ class class_toolkit_admin extends class_toolkit {
             $arrModuleLevel = array(
                 "module" => getLinkAdmin($objOneInstance->getObjModule()->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName())),
                 "actions" => $strActions,
+                "systemid" => $objOneInstance->getObjModule()->getSystemid(),
                 "moduleTitle" => $objOneInstance->getObjModule()->getStrName(),
                 "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName()),
                 "moduleHref" => getLinkAdminHref($objOneInstance->getObjModule()->getStrName(),"")
