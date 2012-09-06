@@ -63,7 +63,7 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->setStrGraphTitle("A Pie Chart");
         $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
-        $objGraph->setBitRenderLegend(false);
+        $objGraph->setBitRenderLegend(true);
         echo $objGraph->renderGraph();
         
         echo"<br/>";

@@ -229,7 +229,7 @@ class class_graph_flot implements interface_graph {
         //Create Legend Div
         if($this->bShowLegend) {
             $legendHeight=$chartHeight-$titleHeight-$xAxisHeight;
-            $legendWidth=110;
+            $legendWidth=140;
             $legendLeft=$this->intWidth-$legendWidth-$xAxisHeight;
             $legendBottom=$legendHeight+2;
             $legendId="legend_" . $this->strChartId;

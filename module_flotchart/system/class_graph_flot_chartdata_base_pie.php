@@ -48,7 +48,8 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
 
         $legend ="
             legend: {
-                show: " . $this->bShowLegend . "
+                show: " . $this->bShowLegend . ",
+                container:$('#legend_".$this->strChartId."')
             }";
 
         $grid = "
