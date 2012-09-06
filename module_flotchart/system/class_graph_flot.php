@@ -36,7 +36,7 @@ class class_graph_flot implements interface_graph {
     
     //line char, bar chart, pie chart
     private $bShowLegend = true;
-    private $strGraphTitle = "&nbsp;";
+    private $strGraphTitle = "";
     private $strBackgroundColor="#FFFFFF";
     private $strFont = "Verdana, Arial, Helvetica, sans-serifs";
     private $strFontColor ="#000000";
@@ -194,44 +194,58 @@ class class_graph_flot implements interface_graph {
         
         //create chart
         $strChartCode = $this->objChartData->showGraph($this->strChartId );
-        
-        //generate the wrapping js-code and all requirements
-        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
 
-        //border-style:solid;border-width:1px;
+        //divs
         $strDivTitle = "";
         $strDivChart = "";
         $strDivLegend = "";
+        
+        //withd and heights of the divs
         $titleHeight=0;
         $titleWidth=0;
         $legendHeight=0;
         $legendWidth=0;
-        $xAxisHeight=20;
-        $yAxisWidth=20;
+        $xAxisHeight=0;
+        $yAxisWidth=0;
         $chartHeight = $this->intHeight;
         $chartWidth = $this->intWidth;
 
-        //Title Div
-        if($strDivTitle!="&nbsp;") {
+        //Calculate X-Axis Height
+        if($this->strXAxisTitle!="") {
+            $xAxisHeight=15;
+        }
+        //Calculate Y-Axis Width
+        if($this->strYAxisTitle!="") {
+            $yAxisWidth=15;
+        }
+        //Create Title Div
+        if($strDivTitle!="") {
             $titleHeight = 15;
             $titleWidth=$this->intWidth;
-            $strDivTitle =  "<div id=\"title_" . $this->strChartId . "\"   style=\"text-align:center;width:".$titleWidth."px; height:".$titleHeight."px;\"> ".$this->strGraphTitle."</div>";
+            $titleId = "title_" . $this->strChartId;
+            $titleStyles = "text-align:center;width:".$titleWidth."px; height:".$titleHeight."px;";
+            $strDivTitle =  "<div id=\"".$titleId."\"   style=\"".$titleStyles."\"> ".$this->strGraphTitle."</div>";
         }
-        
-        //Legend Div
+        //Create Legend Div
         if($this->bShowLegend) {
             $legendHeight=$chartHeight-$titleHeight-$xAxisHeight;
             $legendWidth=110;
             $legendLeft=$this->intWidth-$legendWidth-$xAxisHeight;
             $legendBottom=$legendHeight+2;
-            $strDivLegend = "<div id=\"legend_" . $this->strChartId . "\"  style=\"position:relative;height:".$legendHeight."px;width:".$legendWidth."px; left:".$legendLeft."px;bottom:".$legendBottom."px;\" > &nbsp; </div>";
+            $legendId="legend_" . $this->strChartId;
+            $legendStyles="position:relative;height:".$legendHeight."px;width:".$legendWidth."px; left:".$legendLeft."px;bottom:".$legendBottom."px;";
+            $strDivLegend = "<div id=\"".$legendId."\"  style=\"".$legendStyles."\" > &nbsp; </div>";
         }
 
-        //Chart Div
+        //Create Chart Div
         $chartHeight = $chartHeight-$titleHeight-$xAxisHeight;
         $chartWidth = $chartWidth-$legendWidth-$yAxisWidth;
-        $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"font-size:11px; font-family:".$this->strFont.";width:".$chartWidth."px; height:".$chartHeight."px; \" > &nbsp; </div>";
+        $chartStyles = "font-size:11px; font-family:".$this->strFont.";width:".$chartWidth."px; height:".$chartHeight."px;";
+        $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"".$chartStyles." \" > &nbsp; </div>";
         
+        
+        //generate the wrapping js-code and all requirements
+        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
         $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend."</div>";
         $strReturn .= "<script type='text/javascript'>
 
