@@ -22,19 +22,24 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
         $objGraph->addLinePlot(array(4,7,1,2), "serie 3");
         $objGraph->addLinePlot(array(4,3,2,1), "serie 4");
-        $objGraph->setBitRenderLegend(false);
+        $objGraph->setBitRenderLegend(true);
         $objGraph->setIntXAxisAngle(-20);
         $objGraph->setStrXAxisTitle("XXX");
         $objGraph->setStrYAxisTitle("YYY");
         $objGraph->setStrFontColor("red");
         $objGraph->setStrBackgroundColor("#F0F0F0");
         $objGraph->setStrGraphTitle("My First Line Chart");
+        $objGraph->setIntHeight(500);
+        $objGraph->setIntWidth(700);
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->addBarChartSet(array(1,4,3,6), "serie 1");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
+        $objGraph->setIntHeight(150);
+        $objGraph->setIntWidth(150);
+        
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;

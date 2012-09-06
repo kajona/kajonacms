@@ -190,22 +190,49 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->setStrXAxisTitle($this->strXAxisTitle);
         $this->objChartData->setStrYAxisTitle($this->strYAxisTitle);
         $this->objChartData->setArrXAxisTickLabels($this->arrXAxisTickLabels);
-        $this->strChartId = generateSystemid();
-        $this->objChartData->setChartId($this->strChartId);
+        $this->objChartData->setChartId($this->strChartId = generateSystemid());
         
         //create chart
         $strChartCode = $this->objChartData->showGraph($this->strChartId );
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "\n <div id=\"chart_" . $this->strChartId . "\">";
-            $strDivTitle =  "\n\t <div id=\"title_" . $this->strChartId . "\"   style=\"text-align:center; width:".$this->intWidth."px; \"> ".$this->strGraphTitle."</div>";
-            $strDivChart =  "\n\t <div id=\"" . $this->strChartId . "\"         style=\"font-size:11px; font-family:".$this->strFont."; width:".$this->intWidth."px; height:".$this->intHeight."px\"> &nbsp; </div>";
-            $strDivLegend = "\n\t <div id=\"legend_" . $this->strChartId . "\"  style=\"position:relative;bottom:".$this->intHeight."px;left:".$this->intWidth."px;\"> &nbsp; </div>";
-            
-            $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend;
-        $strReturn = $strReturn."\n</div>\n";
-        //TODO: eventually create all required css-code based on the current properties. this would make the request to flot.css obsolete
+        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
 
+        //border-style:solid;border-width:1px;
+        $strDivTitle = "";
+        $strDivChart = "";
+        $strDivLegend = "";
+        $titleHeight=0;
+        $titleWidth=0;
+        $legendHeight=0;
+        $legendWidth=0;
+        $xAxisHeight=20;
+        $yAxisWidth=20;
+        $chartHeight = $this->intHeight;
+        $chartWidth = $this->intWidth;
+
+        //Title Div
+        if($strDivTitle!="&nbsp;") {
+            $titleHeight = 15;
+            $titleWidth=$this->intWidth;
+            $strDivTitle =  "<div id=\"title_" . $this->strChartId . "\"   style=\"text-align:center;width:".$titleWidth."px; height:".$titleHeight."px;\"> ".$this->strGraphTitle."</div>";
+        }
+        
+        //Legend Div
+        if($this->bShowLegend) {
+            $legendHeight=$chartHeight-$titleHeight-$xAxisHeight;
+            $legendWidth=110;
+            $legendLeft=$this->intWidth-$legendWidth-$xAxisHeight;
+            $legendBottom=$legendHeight+2;
+            $strDivLegend = "<div id=\"legend_" . $this->strChartId . "\"  style=\"position:relative;height:".$legendHeight."px;width:".$legendWidth."px; left:".$legendLeft."px;bottom:".$legendBottom."px;\" > &nbsp; </div>";
+        }
+
+        //Chart Div
+        $chartHeight = $chartHeight-$titleHeight-$xAxisHeight;
+        $chartWidth = $chartWidth-$legendWidth-$yAxisWidth;
+        $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"font-size:11px; font-family:".$this->strFont.";width:".$chartWidth."px; height:".$chartHeight."px; \" > &nbsp; </div>";
+        
+        $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend."</div>";
         $strReturn .= "<script type='text/javascript'>
 
             KAJONA.admin.loader.loadFile(['/core/module_flotchart/admin/scripts/js/flot/jquery.flot.js'], function() {
