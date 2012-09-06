@@ -25,8 +25,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         $this->setArrModuleEntry("modul", "pages");
         $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_PAGES_GROUP);
-
         parent::__construct();
     }
 

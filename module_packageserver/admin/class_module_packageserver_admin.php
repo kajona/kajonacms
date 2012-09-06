@@ -21,12 +21,10 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      */
     public function __construct() {
 
-        parent::__construct();
         $this->setStrLangBase("packageserver");
-
         $this->setArrModuleEntry("modul", "packageserver");
         $this->setArrModuleEntry("moduleId", _packageserver_module_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_SYSTEM_GROUP);
+        parent::__construct();
     }
 
     public function getOutputModuleNavi() {

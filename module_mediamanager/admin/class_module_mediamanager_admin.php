@@ -28,7 +28,6 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 	public function __construct() {
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 		$this->setArrModuleEntry("modul", "mediamanager");
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_PAGES_GROUP);
 		parent::__construct();
 
         if($this->getParam("pe") == "1")

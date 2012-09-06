@@ -28,7 +28,6 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
 	public function __construct() {
         $this->setArrModuleEntry("moduleId", _news_module_id_);
         $this->setArrModuleEntry("modul", "news");
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_PAGES_GROUP);
         parent::__construct();
 	}
 

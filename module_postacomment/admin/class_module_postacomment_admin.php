@@ -23,7 +23,6 @@ class class_module_postacomment_admin extends class_admin_simple implements inte
 	public function __construct() {
         $this->setArrModuleEntry("modul", "postacomment");
         $this->setArrModuleEntry("moduleId", _postacomment_modul_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_USERCONTENT_GROUP);
         parent::__construct();
 	}
 

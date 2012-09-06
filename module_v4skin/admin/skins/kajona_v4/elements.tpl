@@ -1551,8 +1551,4 @@ It containes a list of aspects and provides the possibility to switch the differ
 <li class="divider"></li>
 </sitemap_divider_entry>
 
-<sitemap_group_entry>
-<!--<li class="nav-header">%%moduleName%%</li>-->
-</sitemap_group_entry>
-
 

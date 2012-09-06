@@ -24,7 +24,6 @@ class class_module_votings_admin extends class_admin_simple implements interface
 	public function __construct() {
         $this->setArrModuleEntry("modul", "votings");
         $this->setArrModuleEntry("moduleId", _votings_module_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_USERCONTENT_GROUP);
         parent::__construct();
 	}
 

@@ -16,11 +16,6 @@
  */
 class class_admin_helper {
 
-
-    const STR_PAGES_GROUP          = "1_pages";
-    const STR_SYSTEM_GROUP         = "3_system";
-    const STR_USERCONTENT_GROUP    = "2_usercontent";
-
     /**
      * Adds a menu-button to the second entry of the path-array. The menu renders the list of all modules installed,
      * including a quick-jump link.

@@ -28,7 +28,6 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
 	public function __construct() {
         $this->setArrModuleEntry("modul", "eventmanager");
         $this->setArrModuleEntry("moduleId", _eventmanager_module_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_USERCONTENT_GROUP);
         parent::__construct();
 
 	}

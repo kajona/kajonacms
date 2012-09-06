@@ -75,18 +75,8 @@
     <div class="row-fluid">
 
         <!-- MODULE NAVIGATION -->
-        <div class="span2">
-            <div class="sidebar-nav">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <div class="pull-left">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </div>
-                    <div class="pull-left">
-                        Modules
-                    </div>
-                </a>
+        <div class="span2 ">
+            <div class="sidebar-nav hidden-phone hidden-tablet ">
                 <div class="accordion" id="moduleNavigation">
                     %%moduleSitemap%%
                 </div>

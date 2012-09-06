@@ -25,7 +25,6 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 	public function __construct() {
         $this->setArrModuleEntry("moduleId", _workflows_module_id_);
         $this->setArrModuleEntry("modul", "workflows");
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_SYSTEM_GROUP);
         parent::__construct();
 
         //set default action

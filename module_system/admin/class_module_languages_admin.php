@@ -22,7 +22,6 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 	public function __construct() {
         $this->setArrModuleEntry("modul", "languages");
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-        $this->setArrModuleEntry("adminGroup", class_admin_helper::STR_SYSTEM_GROUP);
 		parent::__construct();
 
 	}

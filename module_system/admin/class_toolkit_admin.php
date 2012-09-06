@@ -1178,8 +1178,6 @@ class class_toolkit_admin extends class_toolkit {
         $strModuleActiveID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper_active");
         $strActionID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_action_entry");
         $strDividerID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_divider_entry");
-        $strGroupID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_group_entry");
-
         $strModules = "";
 
         if($strCurrentModule == "elemente")
@@ -1196,30 +1194,8 @@ class class_toolkit_admin extends class_toolkit {
             }
         }
 
-        //sort by group and sort
-        uasort($arrAdminInstances, function(class_admin $objA, class_admin $objB) {
-
-            if($objA->getArrModule("adminGroup") == "")
-                $objA->setArrModuleEntry("adminGroup", "4_commons");
-
-            if($objB->getArrModule("adminGroup") == "")
-                $objB->setArrModuleEntry("adminGroup", "4_commons");
-
-            if($objA->getArrModule("adminGroup") == $objB->getArrModule("adminGroup"))
-                return $objA->getObjModule()->getIntSort() > $objB->getObjModule()->getIntSort();
-            else
-                return strcmp($objA->getArrModule("adminGroup"), $objB->getArrModule("adminGroup"));
-
-        });
-
-        $strPrevGroup = "";
 
         foreach ($arrAdminInstances as $objOneInstance) {
-
-            if($strPrevGroup != $objOneInstance->getArrModule("adminGroup")) {
-                $strPrevGroup = $objOneInstance->getArrModule("adminGroup");
-                $strModules .=  $this->objTemplate->fillTemplate(array("moduleName" => class_carrier::getInstance()->getObjLang()->getLang("group_title_".$strPrevGroup, $objOneInstance->getObjModule()->getStrName())), $strGroupID);
-            }
 
             $arrActions = class_admin_helper::getModuleActionNaviHelper($objOneInstance);
 
