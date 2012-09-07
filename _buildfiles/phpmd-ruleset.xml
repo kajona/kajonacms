@@ -13,10 +13,6 @@
     <!-- Import the entire unused code rule set -->
     <rule ref="rulesets/unusedcode.xml"/>
 
-
-
-    <rule ref="rulesets/codesize.xml" />
-
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
         <reportLevel>15</reportLevel>
     </rule>
@@ -28,6 +24,11 @@
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <minimum>150</minimum>
     </rule>
+
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
+    <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
+    <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
+    <rule ref="rulesets/codesize.xml/TooManyFields" />
 
 
     <rule ref="rulesets/codesize.xml/TooManyMethods">
