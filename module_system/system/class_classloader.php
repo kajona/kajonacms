@@ -201,6 +201,16 @@ class class_classloader {
             }
         }
 
+        //scan for overwrites
+        if(is_dir(_realpath_."/project".$strFolder)) {
+            $arrTempFiles = scandir(_realpath_."/project".$strFolder);
+            foreach($arrTempFiles as $strSingleFile) {
+                if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
+                    $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
+                }
+            }
+        }
+
         return $arrFiles;
     }
 
@@ -224,7 +234,7 @@ class class_classloader {
     }
 
     /**
-     * Returns the list of modules index by the classloader, so residing under /core
+     * Returns the list of modules indexed by the classloader, so residing under /core
      * @return string[]
      */
     public function getArrModules() {

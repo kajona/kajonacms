@@ -61,6 +61,13 @@ class class_installer_packageserver extends class_installer_base {
         $this->registerConstant("_packageserver_repo_id_", $objRepo->getSystemid(), class_module_system_setting::$int_TYPE_STRING, _packageserver_module_id_);
 
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
+
         return $strReturn;
 
     }
@@ -69,7 +76,7 @@ class class_installer_packageserver extends class_installer_base {
     public function update() {
         $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 

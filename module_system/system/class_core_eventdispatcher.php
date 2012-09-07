@@ -138,9 +138,45 @@ class class_core_eventdispatcher {
 
 
     /**
+     * Triggers all model-classes implementing the interface interface_userfirstlogin_listener and notifies them about a
+     * users first login.
+     *
+     * @static
+     *
+     * @param $strUserid
+     *
+     * @return bool
+     * @see interface_userfirstlogin_listener
+     */
+    public static function notifyUserFirstLoginListeners($strUserid) {
+        $bitReturn = true;
+        $arrListener = self::getUserFirstLoginListeners();
+        foreach($arrListener as $objOneListener) {
+            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating userFirstLoginEvent to ".get_class($objOneListener)." userid: ".$strUserid, class_logger::$levelInfo);
+            $bitReturn = $bitReturn && $objOneListener->handleUserFirstLoginEvent($strUserid);
+        }
+
+        return $bitReturn;
+    }
+
+
+    /**
      * Loads all objects registered to ne notified in case of status-changes
      * @static
-     * @return interface_recorddeleted_listener
+     * @return interface_userfirstlogin_listener[]
+     */
+    private static function getUserFirstLoginListeners() {
+        if(self::$arrRecordDeletedListener == null) {
+            self::$arrRecordDeletedListener = self::loadInterfaceImplementers("interface_userfirstlogin_listener");
+        }
+
+        return self::$arrRecordDeletedListener;
+    }
+
+    /**
+     * Loads all objects registered to ne notified in case of status-changes
+     * @static
+     * @return interface_recorddeleted_listener[]
      */
     private static function getRecordDeletedListeners() {
         if(self::$arrRecordDeletedListener == null) {
@@ -153,7 +189,7 @@ class class_core_eventdispatcher {
     /**
      * Loads all objects registered to ne notified in case of status-changes
      * @static
-     * @return interface_statuschanged_listener
+     * @return interface_statuschanged_listener[]
      */
     private static function getStatusChangedListeners() {
         if(self::$arrStatusChangedListener == null) {
@@ -167,7 +203,7 @@ class class_core_eventdispatcher {
     /**
      * Loads all objects registered to ne notified in case of previd-changes
      * @static
-     * @return interface_previdchanged_listener
+     * @return interface_previdchanged_listener[]
      */
     private static function getPrevidChangedListeners() {
         if(self::$arrPrevidChangedListener == null) {
@@ -181,7 +217,7 @@ class class_core_eventdispatcher {
     /**
      * Loads all objects registered to ne notified in case of previd-changes
      * @static
-     * @return interface_recordcopied_listener
+     * @return interface_recordcopied_listener[]
      */
     private static function getRecordCopiedListeners() {
         if(self::$arrRecordCopiedListener == null) {

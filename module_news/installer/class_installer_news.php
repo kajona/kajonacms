@@ -123,6 +123,13 @@ class class_installer_news extends class_installer_base implements interface_ins
             $strReturn .= "Element already installed!...\n";
         }
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
+
 		return $strReturn;
 
 	}
@@ -174,6 +181,12 @@ class class_installer_news extends class_installer_base implements interface_ins
         $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
         $this->objDB->_pQuery($strQuery, array("_news_search_resultpage_"));
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
 
 
         $strReturn .= "Updating module-versions...\n";

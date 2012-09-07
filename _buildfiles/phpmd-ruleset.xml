@@ -13,26 +13,40 @@
     <!-- Import the entire unused code rule set -->
     <rule ref="rulesets/unusedcode.xml"/>
 
+
+
+
+
+    <rule ref="rulesets/codesize.xml" />
+
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
-        <reportLevel>15</reportLevel>
+        <properties>
+            <property name="reportLevel" value="15" />
+        </properties>
     </rule>
 
     <rule ref="rulesets/codesize.xml/NPathComplexity">
-        <minimum>220</minimum>
+        <properties>
+            <property name="minimum" value="220" />
+        </properties>
     </rule>
 
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
-        <minimum>150</minimum>
+        <properties>
+            <property name="minimum" value="150" />
+        </properties>
     </rule>
 
-    <rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
-    <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
-    <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
-    <rule ref="rulesets/codesize.xml/TooManyFields" />
+    <!--<rule ref="rulesets/codesize.xml/ExcessiveClassLength" />-->
+    <!--<rule ref="rulesets/codesize.xml/ExcessiveParameterList" />-->
+    <!--<rule ref="rulesets/codesize.xml/ExcessivePublicCount" />-->
+    <!--<rule ref="rulesets/codesize.xml/TooManyFields" />-->
 
 
     <rule ref="rulesets/codesize.xml/TooManyMethods">
-        <minimum>25</minimum>
+        <properties>
+            <property name="minimum" value="25" />
+        </properties>
     </rule>
 
 

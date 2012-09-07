@@ -1952,7 +1952,7 @@ class class_toolkit_admin extends class_toolkit {
                 $arrSubtemplate = array();
                 //start on dashboard since the current module may not be visible in another aspect
                 $arrSubtemplate["value"] = getLinkAdminHref("dashboard", "", "&aspect=".$objSingleAspect->getSystemid());
-                $arrSubtemplate["name"] = $objSingleAspect->getStrName();
+                $arrSubtemplate["name"] = $objSingleAspect->getStrDisplayName();
                 $arrSubtemplate["selected"] = $strCurrentId == $objSingleAspect->getSystemid() ? "selected=\"selected\"" : "";
 
                 $arrTemplate["options"] .= $this->objTemplate->fillTemplate($arrSubtemplate, $strTemplateRowID);

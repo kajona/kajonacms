@@ -46,8 +46,28 @@ class class_adminwidget_workflows extends class_adminwidget implements interface
         $strReturn .= $this->widgetText(class_module_workflows_workflow::getPendingWorkflowsForUserCount(class_carrier::getInstance()->getObjSession()->getUserID()));
         $strReturn .= $this->widgetText(getLinkAdmin("workflows", "myList", "", $this->getLang("workflows_show")));
         return $strReturn;
+    }
 
+    /**
+     * This callback is triggered on a users' first login into the system.
+     * You may use this method to install a widget as a default widget to
+     * a users dashboard.
+     *
+     * @param $strUserid
+     *
+     * @return bool
+     */
+    public function onFistLogin($strUserid) {
+        if(class_module_system_module::getModuleByName("workflows") !== null && class_module_system_aspect::getAspectByName("management") !== null) {
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrColumn("column2");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrClass(__CLASS__);
+            $objDashboard->setStrContent("");
+            return $objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getAspectByName("management")->getSystemid()));
+        }
 
+        return true;
     }
 
 

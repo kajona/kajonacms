@@ -30,9 +30,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0", $this->getLang("modul_rechte_root"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("actionList"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getLang("actionSystemInfo"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getLang("actionSystemSettings"), "", "", true, "adminnavi"));
@@ -44,6 +41,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("actionSystemSessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getLang("actionAbout"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0", $this->getLang("modul_rechte_root"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -213,7 +213,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objModule->setStrAspect(implode(",", $arrParams));
 
         $objModule->updateObjectToDb();
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "moduleList"));
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     }
 
 
@@ -588,22 +588,24 @@ class class_module_system_admin extends class_admin_simple implements interface_
      * @permissions right3
      */
     protected function actionSystemlog() {
-        $strReturn = "";
 
         //load logfiles available
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/log", array(".log"));
+
+        $arrTabs = array();
+
         foreach($arrFiles as $strName) {
-            $strReturn .= $this->objToolkit->formHeadline($strName);
             $objFilesystem->openFilePointer(_projectpath_."/log/".$strName, "r");
             $strLogContent = $objFilesystem->readLastLinesFromFile();
             $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
             $arrLogEntries = explode("\r", $strLogContent);
-            $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries);
             $objFilesystem->closeFilePointer();
+
+            $arrTabs[$strName] = $this->objToolkit->getPreformatted($arrLogEntries);
         }
 
-        return $strReturn;
+        return $this->objToolkit->getTabbedContent($arrTabs);
     }
 
     /**

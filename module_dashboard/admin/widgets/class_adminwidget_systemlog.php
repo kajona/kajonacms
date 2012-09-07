@@ -45,12 +45,18 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
      */
     public function getWidgetOutput() {
         $strReturn = "";
-        $strLogContent = class_logger::getInstance()->getLogFileContent();
-        $arrLogEntries = explode("\n", $strLogContent);
-        $arrLogEntries = array_reverse($arrLogEntries);
+        $objFilesystem = new class_filesystem();
+        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/log", array(".log"));
 
-        for($intI = 0; $intI <= $this->getFieldValue("nrofrows") && $intI < 10 && $intI < count($arrLogEntries); $intI++ ) {
-            $strLog = htmlToString($arrLogEntries[$intI], true);
+        foreach($arrFiles as $strName) {
+            $objFilesystem->openFilePointer(_projectpath_."/log/".$strName, "r");
+            $strLogContent = $objFilesystem->readLastLinesFromFile($this->getFieldValue("nrofrows"));
+            $objFilesystem->closeFilePointer();
+
+            $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
+            //$arrLogEntries = explode("\r", $strLogContent);
+
+            $strLog = htmlToString($strLogContent, true);
             $strLog = uniStrReplace(
                 array("INFO", "ERROR", "WARNING"),
                 array(
@@ -60,22 +66,33 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
                 ),
                 $strLog
             );
-            $strReturn .= $this->widgetText($strLog);
-        }
+            $strReturn .= $this->widgetText(("<pre>".$strLog."</pre>"));
 
-        $strReturn .= $this->widgetSeparator();
-
-        $strLogContent = (is_file(_realpath_._projectpath_."/log/php.log") ? file_get_contents(_realpath_._projectpath_."/log/php.log") : "");
-        $arrLogEntries = explode("\n", $strLogContent);
-        $arrLogEntries = array_reverse($arrLogEntries);
-
-        for($intI = 0; $intI <= $this->getFieldValue("nrofrows") && $intI < 10 && $intI < count($arrLogEntries); $intI++ ) {
-            $strLog = htmlToString($arrLogEntries[$intI], true);
-
-            $strReturn .= $this->widgetText($strLog);
         }
 
         return $strReturn;
+    }
+
+    /**
+     * This callback is triggered on a users' first login into the system.
+     * You may use this method to install a widget as a default widget to
+     * a users dashboard.
+     *
+     * @param $strUserid
+     *
+     * @return bool
+     */
+    public function onFistLogin($strUserid) {
+        if(class_module_system_module::getModuleByName("system") !== null && class_module_system_aspect::getAspectByName("management") !== null) {
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrColumn("column3");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrClass(__CLASS__);
+            $objDashboard->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"1\";}");
+            return $objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getAspectByName("management")->getSystemid()));
+        }
+
+        return true;
     }
 
 

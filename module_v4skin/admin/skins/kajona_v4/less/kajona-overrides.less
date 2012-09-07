@@ -272,6 +272,7 @@ body.login {
     position: fixed;
     background-color: @white;
     border: 1px solid @menuBorder !important;
+    .box-shadow(0 5px 10px rgba(0,0,0,.2));
 
     li a {
         cursor: pointer;
@@ -344,7 +345,6 @@ body.login {
     background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
     border:0px;
     .border-radius(0px);
-    .box-shadow(none);
     display: none;
     list-style: none outside none;
     margin: 1px 0 0;
@@ -476,6 +476,15 @@ body.login {
 
 
 #content {
+
+    pre {
+        font-size: @baseFontSize - 2;
+    }
+
+    .pre-scrollable {
+        max-height: 400px;
+    }
+
     .contentTopbar {
         padding-top: 25px;
     }

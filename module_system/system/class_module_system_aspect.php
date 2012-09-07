@@ -55,7 +55,12 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrName();
+        //try to load the name from the lang-files
+        $strLabel = $this->getLang("aspect_".$this->getStrName(), "system");
+        if($strLabel != "!aspect_".$this->getStrName()."!")
+            return $strLabel;
+        else
+            return $this->getStrName();
     }
 
     /**

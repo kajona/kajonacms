@@ -36,12 +36,12 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
     	$arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "myList", "", $this->getLang("module_mylist"), "", "", true, "adminnavi"));
     	$arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
     	$arrReturn[] = array("", "");
         $arrReturn[] = array("right1", getLinkAdmin($this->getArrModule("modul"), "listHandlers", "", $this->getLang("actionListHandlers"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
     	//$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "triggerWorkflows", "", $this->getLang("module_trigger"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}

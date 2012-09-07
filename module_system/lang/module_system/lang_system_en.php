@@ -89,6 +89,7 @@ $lang["fehler_setzen"]                   = "Error saving permissions";
 $lang["filebrowser"]                     = "Select a file";
 $lang["form_aspect_default"]             = "Default aspect:";
 $lang["form_aspect_name"]                = "Name:";
+$lang["form_aspect_name_hint"]           = "The name is used as an internal identifier. To localize an aspects' title, create a lang-entry named lang_NAME.";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Extensions loaded";
 $lang["gifread"]                         = "GIF read-support";

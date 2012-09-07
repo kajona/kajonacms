@@ -62,6 +62,28 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         return $strReturn;
     }
 
+    /**
+     * This callback is triggered on a users' first login into the system.
+     * You may use this method to install a widget as a default widget to
+     * a users dashboard.
+     *
+     * @param $strUserid
+     *
+     * @return bool
+     */
+    public function onFistLogin($strUserid) {
+        if(class_module_system_module::getModuleByName("pages") !== null && class_module_system_aspect::getAspectByName("content") !== null) {
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrColumn("column1");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrClass(__CLASS__);
+            $objDashboard->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"4\";}");
+            return $objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getAspectByName("content")->getSystemid()));
+        }
+
+        return true;
+    }
+
 
     /**
      * Return a short (!) name of the widget.

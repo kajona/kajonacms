@@ -15,7 +15,7 @@
  *
  * @targetTable dashboard.dashboard_id
  */
-class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener {
+class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener, interface_userfirstlogin_listener {
 
     /**
      * @var string
@@ -255,41 +255,28 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
     /**
-     * Creates an initial set of widgets to be displayed to new users.
-     * NOTE: Low-level variant!
+     * Callback method, triggered each time a user logs into the system for the very first time.
+     * May be used to trigger actions or initial setups for the user.
      *
-     * @param string $strUserid
+     * @param $strUserid
+     *
      * @return bool
      */
-    public function createInitialWidgetsForUser($strUserid) {
+    public function handleUserFirstLoginEvent($strUserid) {
         $bitReturn = true;
 
+        //get all widgets and call them in order
+        $arrWidgets = $this->getListOfWidgetsAvailable();
+        foreach($arrWidgets as $strOneWidgetClass) {
+            /** @var $objInstance interface_adminwidget */
+            $objInstance = new $strOneWidgetClass();
 
-        $arrWidgets = array();
-        $arrWidgets[] = array("class_adminwidget_systeminfo", "a:3:{s:3:\"php\";s:7:\"checked\";s:6:\"server\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}", "column1");
-        $arrWidgets[] = array("class_adminwidget_note", "a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.4\";}", "column2");
-        $arrWidgets[] = array("class_adminwidget_systemlog", "a:1:{s:8:\"nrofrows\";s:1:\"5\";}", "column3");
-        $arrWidgets[] = array("class_adminwidget_systemcheck", "a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}", "column3");
+            $bitReturn = $bitReturn && $objInstance->onFistLogin($strUserid);
 
-        if(class_exists("class_adminwidget_lastmodifiedpages"))
-            $arrWidgets[] = array("class_adminwidget_lastmodifiedpages", "a:1:{s:8:\"nrofrows\";s:1:\"4\";}", "column2");
-
-
-        foreach($arrWidgets as $arrOneWidget) {
-
-            $objDashboard = new class_module_dashboard_widget();
-            $objDashboard->setStrColumn($arrOneWidget[2]);
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrClass($arrOneWidget[0]);
-            $objDashboard->setStrContent($arrOneWidget[1]);
-            if(!$objDashboard->updateObjectToDb(self::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getCurrentAspectId())))
-                $bitReturn = false;
         }
-
 
         return $bitReturn;
     }
-
 
 
     public function setStrColumn($strColumn) {

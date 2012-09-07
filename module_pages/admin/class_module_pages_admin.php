@@ -31,8 +31,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getLang("modul_liste_alle"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -42,6 +40,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getLang("modul_element_neu"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "updatePlaceholder", "", $this->getLang("updatePlaceholder"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 

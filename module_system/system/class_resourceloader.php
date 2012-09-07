@@ -292,6 +292,7 @@ class class_resourceloader {
             }
         }
 
+
         //check if the same is available in the projects-folder and overwrite the first hits
         if(is_dir(_realpath_._projectpath_."/".$strFolder)) {
             $arrContent = scandir(_realpath_._projectpath_."/".$strFolder);
@@ -303,8 +304,8 @@ class class_resourceloader {
                     $strKey = array_search($strSingleEntry, $arrReturn);
                     if($strKey !== false) {
                         unset($arrReturn[$strKey]);
-                        $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
+                    $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 
                 }
                 else {
@@ -314,9 +315,10 @@ class class_resourceloader {
                         $strKey = array_search($strSingleEntry, $arrReturn);
                         if($strKey !== false) {
                             unset($arrReturn[$strKey]);
-                            $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                         }
+                        $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
+
                 }
 
             }

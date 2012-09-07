@@ -85,6 +85,13 @@ class class_installer_navigation extends class_installer_base implements interfa
             $strReturn .= "Element already installed!...\n";
         }
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
+
 
 		return $strReturn;
 
@@ -122,6 +129,13 @@ class class_installer_navigation extends class_installer_base implements interfa
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( 'class_module_navigation_point', $arrOneRow["system_id"] ) );
+        }
+
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
         }
 
         $strReturn .= "Updating module-versions...\n";

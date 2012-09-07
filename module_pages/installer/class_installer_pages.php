@@ -245,6 +245,14 @@ class class_installer_pages extends class_installer_base implements interface_in
         if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
             $strReturn .= "An error occured! ...\n";
 
+
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
+
 		return $strReturn;
 
 	}
@@ -351,6 +359,12 @@ class class_installer_pages extends class_installer_base implements interface_in
             $this->objDB->_pQuery($strQuery, array($arrOneRow["element_id"]));
         }
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.1");

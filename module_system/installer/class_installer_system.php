@@ -444,12 +444,16 @@ class class_installer_system extends class_installer_base implements interface_i
         $strAdminLanguage = $this->objSession->getAdminLanguage();
 
         //creating a new default-aspect
-        $strReturn .= "Registering new default aspect...\n";
+        $strReturn .= "Registering new default aspects...\n";
         $objAspect = new class_module_system_aspect();
-        $objAspect->setStrName("default");
+        $objAspect->setStrName("content");
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
         class_module_system_aspect::setCurrentAspectId($objAspect->getSystemid());
+
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName("management");
+        $objAspect->updateObjectToDb();
 
         $objUser = new class_module_user_user();
         $objUser->setStrUsername($strUsername);
@@ -467,6 +471,20 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Registered Admin in Admin-Group...\n";
 
 
+
+        $strReturn .= "Assigning modules to default aspects...\n";
+        $objModule = class_module_system_module::getModuleByName("system");
+        $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+        $objModule->updateObjectToDb();
+
+        $objModule = class_module_system_module::getModuleByName("user");
+        $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+        $objModule->updateObjectToDb();
+
+        $objModule = class_module_system_module::getModuleByName("languages");
+        $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+        $objModule->updateObjectToDb();
+
         return $strReturn;
     }
 
@@ -481,30 +499,29 @@ class class_installer_system extends class_installer_base implements interface_i
     public function update() {
         $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $strReturn .= "Version found:\n\t Module: ".$this->objMetadata->getStrTitle().", Version: ".$this->objMetadata->getStrVersion()."\n\n";
 
-
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9.1") {
             $strReturn .= $this->update_3491_3492();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9.2") {
             $strReturn .= $this->update_3492_3493();
             $this->objDB->flushQueryCache();
@@ -659,8 +676,32 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_pQuery($strQuery, array()))
             $strReturn .= "An error occured! ...\n";
 
-
         $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_log")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_log_sessid")." ) ", array());
+
+        $strReturn .= "Creating default aspects...\n";
+
+        if(class_module_system_aspect::getAspectByName("management") == null && class_module_system_aspect::getAspectByName("content") == null) {
+            $objAspect = new class_module_system_aspect();
+            $objAspect->setStrName("content");
+            $objAspect->updateObjectToDb();
+            $objAspect = new class_module_system_aspect();
+            $objAspect->setStrName("management");
+            $objAspect->updateObjectToDb();
+
+            $strReturn .= "Assigning modules to default aspects...\n";
+            $objModule = class_module_system_module::getModuleByName("system");
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+            $objModule->updateObjectToDb();
+
+            $objModule = class_module_system_module::getModuleByName("user");
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+            $objModule->updateObjectToDb();
+
+            $objModule = class_module_system_module::getModuleByName("languages");
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
+
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.3");

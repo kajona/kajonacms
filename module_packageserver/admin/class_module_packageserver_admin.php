@@ -21,18 +21,18 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      */
     public function __construct() {
 
+        parent::__construct();
         $this->setStrLangBase("packageserver");
         $this->setArrModuleEntry("modul", "packageserver");
         $this->setArrModuleEntry("moduleId", _packageserver_module_id_);
-        parent::__construct();
     }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("actionList"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "logs", "", $this->getLang("actionLogs"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }

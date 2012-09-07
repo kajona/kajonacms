@@ -57,6 +57,13 @@ class class_installer_packagemanager extends class_installer_base implements int
             $objPack->setIntRecordStatus(1);
         }
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("management") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
+
 		return $strReturn;
 
 	}

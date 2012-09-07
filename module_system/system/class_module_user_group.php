@@ -114,7 +114,7 @@ class class_module_user_group extends class_model implements interface_model, in
     public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
-            class_logger::getInstance()->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), class_logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO "._dbprefix_."user_group
@@ -135,7 +135,7 @@ class class_module_user_group extends class_model implements interface_model, in
             return $bitReturn;
         }
         else {
-            class_logger::getInstance()->addLogRow("updated group ".$this->getStrName(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated group ".$this->getStrName(), class_logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."user_group
                             SET group_subsystem=?,
                                 group_name=?
@@ -200,7 +200,7 @@ class class_module_user_group extends class_model implements interface_model, in
 	 * @return bool
 	 */
 	public function deleteObject() {
-	    class_logger::getInstance()->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
+	    class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
 
         //Delete related group
         $this->getObjSourceGroup()->deleteGroup();

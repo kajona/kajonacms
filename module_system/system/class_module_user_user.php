@@ -154,7 +154,7 @@ class class_module_user_user extends class_model implements interface_model, int
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
-            class_logger::getInstance()->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
 
             $bitReturn = $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -178,11 +178,6 @@ class class_module_user_user extends class_model implements interface_model, int
             $objTargetUser->setNewRecordId($this->getSystemid());
             $this->objDB->flushQueryCache();
 
-            //intial dashboard widgets
-            if(class_module_system_module::getModuleByName("dashboard") != null) {
-                $objDashboard = new class_module_dashboard_widget();
-                $objDashboard->createInitialWidgetsForUser($this->getSystemid());
-            }
             return $bitReturn;
         }
         else {
@@ -201,7 +196,7 @@ class class_module_user_user extends class_model implements interface_model, int
                );
 
 
-            class_logger::getInstance()->addLogRow("updated userfor subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
     }
@@ -274,7 +269,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return bool
      */
     public function deleteObject() {
-        class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
         //call other models that may be interested
         $this->getObjSourceUser()->deleteUser();

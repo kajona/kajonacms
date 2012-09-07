@@ -117,9 +117,31 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
 
 
     /**
+     * This callback is triggered on a users' first login into the system.
+     * You may use this method to install a widget as a default widget to
+     * a users dashboard.
+     *
+     * @param $strUserid
+     *
+     * @return bool
+     */
+    public function onFistLogin($strUserid) {
+        if( class_module_system_aspect::getAspectByName("content") !== null) {
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrColumn("column3");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrClass(__CLASS__);
+            $objDashboard->setStrContent("a:2:{s:7:\"feedurl\";s:39:\"http://www.kajona.de/kajona_news_en.rss\";s:5:\"posts\";s:1:\"4\";}");
+            return $objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getAspectByName("content")->getSystemid()));
+        }
+
+        return true;
+    }
+
+    /**
      * Return a short (!) name of the widget.
      *
-     * @return
+     * @return string
      */
     public function getWidgetName() {
         return $this->getLang("rssfeed_name");

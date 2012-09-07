@@ -81,14 +81,14 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
         //Load all plugins available and create the navigation
         $arrPlugins = $this->getReports();
 
         foreach($arrPlugins as $objPlugin)
             $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi"));
 
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
 	}
 

@@ -31,7 +31,7 @@ class class_admin_helper {
     public static function getAdminPathNavi($arrPathEntries, $strSourceModule = "") {
         //modify some of the entries
         $arrMenuEntries = array();
-        $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
+        $arrModules = class_module_system_module::getModulesInNaviAsArray();
         foreach($arrModules as $arrOneModule) {
             $arrCurMenuEntry = array(
                 "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),

@@ -76,8 +76,14 @@ class class_installer_votings extends class_installer_base implements interface_
             $strReturn .= "Element already installed!...\n";
         }
 
-		return $strReturn;
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
 
+		return $strReturn;
 	}
 
 
@@ -117,6 +123,12 @@ class class_installer_votings extends class_installer_base implements interface_
             $this->objDB->_pQuery($strQuery, array( 'class_module_votings_answer', $arrOneRow["system_id"] ) );
         }
 
+        echo "Setting aspect assignments...\n";
+        if(class_module_system_aspect::getAspectByName("content") != null) {
+            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+            $objModule->updateObjectToDb();
+        }
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("votings", "1.1");

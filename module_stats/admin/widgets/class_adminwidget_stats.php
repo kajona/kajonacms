@@ -129,6 +129,27 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
         return $strReturn;
     }
 
+    /**
+     * This callback is triggered on a users' first login into the system.
+     * You may use this method to install a widget as a default widget to
+     * a users dashboard.
+     *
+     * @param $strUserid
+     *
+     * @return bool
+     */
+    public function onFistLogin($strUserid) {
+        if(class_module_system_module::getModuleByName("stats") !== null && class_module_system_aspect::getAspectByName("management") !== null) {
+            $objDashboard = new class_module_dashboard_widget();
+            $objDashboard->setStrColumn("column2");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrClass(__CLASS__);
+            $objDashboard->setStrContent("a:5:{s:7:\"current\";s:7:\"checked\";s:3:\"day\";s:7:\"checked\";s:4:\"last\";s:7:\"checked\";s:6:\"nrLast\";s:1:\"4\";s:5:\"chart\";s:7:\"checked\";}");
+            return $objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getAspectByName("management")->getSystemid()));
+        }
+
+        return true;
+    }
 
     /**
      * Return a short (!) name of the widget.

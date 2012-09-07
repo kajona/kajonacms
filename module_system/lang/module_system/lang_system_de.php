@@ -89,6 +89,7 @@ $lang["fehler_setzen"]                   = "Fehler beim Speichern der Rechte";
 $lang["filebrowser"]                     = "Datei auswählen";
 $lang["form_aspect_default"]             = "Standard-Aspekt:";
 $lang["form_aspect_name"]                = "Name:";
+$lang["form_aspect_name_hint"]           = "Der Name wird als interner Titel verwendet. Um einen Aspekt zu lokalisieren, kann dieser über einen Lang-Eintrag (aspect_NAME) gelabelt werden.";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Geladene Erweiterungen";
 $lang["gifread"]                         = "GIF Read Support";

@@ -419,6 +419,11 @@ final class class_session {
 
         if($objUser->getIntActive() == 1) {
 
+            //trigger listeners on first login
+            if($objUser->getIntLogins() == 0) {
+                class_core_eventdispatcher::notifyUserFirstLoginListeners($objUser->getSystemid());
+            }
+
             $objUser->setIntLogins($objUser->getIntLogins() + 1);
             $objUser->setIntLastLogin(time());
             $objUser->updateObjectToDb();

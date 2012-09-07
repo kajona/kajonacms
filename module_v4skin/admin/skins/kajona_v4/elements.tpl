@@ -887,7 +887,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 Used to print pre-formatted text, e.g. log-file contents
 <preformatted>
-    <pre class="pre-scrollable">%%pretext%%</pre>
+    <pre class="code pre-scrollable">%%pretext%%</pre>
 </preformatted>
 
 ---------------------------------------------------------------------------------------------------------
