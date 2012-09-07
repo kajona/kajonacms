@@ -46,13 +46,6 @@ class class_installer_dashboard extends class_installer_base implements interfac
         //the dashboard
         $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_dashboard_admin_xml.php");
 
-        //up till now, the default widgets are still missing - create them.
-        $arrUsers = class_module_user_user::getAllUsers();
-        foreach($arrUsers as $objOneUser) {
-            $objDashboard = new class_module_dashboard_widget();
-            $objDashboard->createInitialWidgetsForUser($objOneUser->getSystemid());
-        }
-
         return $strReturn;
 	}
 
