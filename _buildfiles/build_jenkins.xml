@@ -79,7 +79,7 @@
     <target name="buildSqliteFast" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phploc,phpunit,
+					    					lint,phploc,phpunitFast,
 					    					buildFullZip, buildLightZip" />
 
 
@@ -92,12 +92,12 @@
     <target name="buildMysql" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectMysql,
-					    					phpunit" />
+					    					phpunitFast" />
 
     <target name="buildOracle" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectOracle,
-					    					phpunit" />
+					    					phpunitFast" />
 
     <target name="buildFullZipOnly" depends="
                                             cleanFilesystem, init,
@@ -357,6 +357,13 @@
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="${path.phpunit}" failonerror="true">
             <arg line="--configuration ${basedir}/phpunit.xml " />
+            <arg path="${basedir}${projectPath}" />
+        </exec>
+    </target>
+
+    <target name="phpunitFast" description="Run unit tests with PHPUnit">
+        <exec executable="${path.phpunit}" failonerror="true">
+            <arg line="--configuration ${basedir}/phpunit_fast.xml " />
             <arg path="${basedir}${projectPath}" />
         </exec>
     </target>
