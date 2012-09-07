@@ -102,8 +102,8 @@ class class_test_charts_ezcTest extends class_testbase  {
         $objGraph->setBit3d(false);
 
         $objGraph->addBarChartSet(array(4,5,7,8,5,14,13,12,3), "bar");
-        $objGraph->addLinePlot   (array(8,5,7,8,4,12,10,11,9), "serie 1");
-        $objGraph->addLinePlot(   array(3,4,6,2,5,2 ,5, 3, 4), "serie 2");
+        $objGraph->addLinePlot(array(8,5,7,8,4,12,10,11,9), "serie 1");
+        $objGraph->addLinePlot(array(3,4,6,2,5,2 ,5, 3, 4), "serie 2");
 
         $objGraph->saveGraph(_images_cachepath_."/graph6.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph6.png");

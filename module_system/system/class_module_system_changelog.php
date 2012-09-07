@@ -20,13 +20,13 @@
  * @see class_logger
  */
 class
-class_module_system_changelog extends class_model implements interface_model  {
+class_module_system_changelog extends class_model implements interface_model {
 
     private static $arrOldValueCache = array();
 
 
-    public static $STR_ACTION_EDIT      = "actionEdit";
-    public static $STR_ACTION_DELETE    = "actionDelete";
+    public static $STR_ACTION_EDIT = "actionEdit";
+    public static $STR_ACTION_DELETE = "actionDelete";
 
 
     /**
@@ -38,12 +38,13 @@ class_module_system_changelog extends class_model implements interface_model  {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -59,11 +60,14 @@ class_module_system_changelog extends class_model implements interface_model  {
 
 
     /**
-     * Reads all properties marked with the annotation @versionable.
+     * Reads all properties marked with the annotation
+     *
+     * @versionable.
      * The state is cached in a static array mapped to the objects systemid.
      * In consequence, this means that only objects with a valid systemid are scanned for properties under versioning.
      *
      * @param interface_versionable $objCurrentObject
+     *
      * @return array|null
      */
     public function readOldValues(interface_versionable $objCurrentObject) {
@@ -117,7 +121,6 @@ class_module_system_changelog extends class_model implements interface_model  {
     }
 
 
-
     private function createChangeArray($objSourceModel) {
         $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
 
@@ -145,7 +148,6 @@ class_module_system_changelog extends class_model implements interface_model  {
      * Creates an entry in the systemlog leveled as information, too.
      * By default entries with same old- and new-values are dropped.
      * The passed object has to implement interface_versionable.
-     *
      * If $bitDeleteAction isset to true, the change will behave in a way like deleting a record. This means the new-value will be empty on save.
      * If not set manually, the system will try to detect if it's a delete operation based on the current action.
      *
@@ -170,7 +172,6 @@ class_module_system_changelog extends class_model implements interface_model  {
         }
 
 
-
         //changes require at least kajona 3.4.9
         $arrModul = class_module_system_module::getPlainModuleData("system", false);
         if(version_compare($arrModul["module_version"], "3.4.9") < 0)
@@ -189,18 +190,18 @@ class_module_system_changelog extends class_model implements interface_model  {
                 if(isset($arrChangeSet["newvalue"]))
                     $strNewvalue = $arrChangeSet["newvalue"];
 
-                $strProperty= $arrChangeSet["property"];
+                $strProperty = $arrChangeSet["property"];
 
                 if($strOldvalue instanceof class_date)
                     $strOldvalue = $strOldvalue->getLongTimestamp();
 
                 if($strNewvalue instanceof class_date)
-                    $strNewvalue= $strNewvalue->getLongTimestamp();
+                    $strNewvalue = $strNewvalue->getLongTimestamp();
 
                 if($bitDeleteAction || ($bitDeleteAction === null && $strAction == self::$STR_ACTION_DELETE))
                     $strNewvalue = "";
 
-                if(!$bitForceEntry && ($strOldvalue == $strNewvalue) )
+                if(!$bitForceEntry && ($strOldvalue == $strNewvalue))
                     continue;
 
                 class_logger::getInstance()->addLogRow(
@@ -221,18 +222,21 @@ class_module_system_changelog extends class_model implements interface_model  {
                       change_newvalue) VALUES
                      (?,?,?,?,?,?,?,?,?,?)";
 
-                $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array(
-                    generateSystemid(),
-                    class_date::getCurrentTimestamp(),
-                    $objSourceModel->getSystemid(),
-                    $objSourceModel->getPrevid(),
-                    $this->objSession->getUserID(),
-                    get_class($objSourceModel),
-                    $strAction,
-                    $strProperty,
-                    $strOldvalue,
-                    $strNewvalue
-                ));
+                $bitReturn = $bitReturn && $this->objDB->_pQuery(
+                    $strQuery,
+                    array(
+                        generateSystemid(),
+                        class_date::getCurrentTimestamp(),
+                        $objSourceModel->getSystemid(),
+                        $objSourceModel->getPrevid(),
+                        $this->objSession->getUserID(),
+                        get_class($objSourceModel),
+                        $strAction,
+                        $strProperty,
+                        $strOldvalue,
+                        $strNewvalue
+                    )
+                );
             }
         }
 
@@ -246,12 +250,13 @@ class_module_system_changelog extends class_model implements interface_model  {
      * @param string $strSystemidFilter
      * @param null|int $intStart
      * @param null|int $intEnd
+     *
      * @return class_changelog_container[]
      */
     public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
         $strQuery = "SELECT *
                        FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? ": "")."
+                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? " : "")."
                    ORDER BY change_date DESC";
 
         $arrParams = array();
@@ -280,12 +285,13 @@ class_module_system_changelog extends class_model implements interface_model  {
      * Counts the number of logentries available
      *
      * @param string $strSystemidFilter
+     *
      * @return int
      */
     public static function getLogEntriesCount($strSystemidFilter = "") {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? ": "")."";
+                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? " : "")."";
 
         $arrParams = array();
         if($strSystemidFilter != "")
@@ -296,7 +302,7 @@ class_module_system_changelog extends class_model implements interface_model  {
     }
 
 
-     /**
+    /**
      * Creates the list of logentries, based on a flexible but specific filter-list
      *
      * @param string $strSystemidFilter
@@ -304,6 +310,7 @@ class_module_system_changelog extends class_model implements interface_model  {
      * @param string $strPropertyFilter
      * @param string $strOldvalueFilter
      * @param string $strNewvalueFilter
+     *
      * @return class_changelog_container
      */
     public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
@@ -364,8 +371,10 @@ class_module_system_changelog extends class_model implements interface_model  {
      * Please be aware of the consequences when shifting change-records!
      *
      * @static
+     *
      * @param $strSystemid
      * @param class_date $objNewDate
+     *
      * @return bool
      */
     public static function shiftLogEntries($strSystemid, $objNewDate) {
@@ -381,9 +390,11 @@ class_module_system_changelog extends class_model implements interface_model  {
      * Fetches a single value from the change-sets, if not unique the latest value for the specified date is returned.
      *
      * @static
+     *
      * @param $strSystemid
      * @param $strProperty
      * @param class_date $objDate
+     *
      * @return bool
      */
     public static function getValueForDate($strSystemid, $strProperty, class_date $objDate) {
@@ -404,6 +415,7 @@ class_module_system_changelog extends class_model implements interface_model  {
     /**
      * Deletes the current object from the system
      * Overwrite!
+     *
      * @return bool
      */
     public function deleteObject() {
@@ -450,7 +462,6 @@ final class class_changelog_container {
     }
 
     /**
-     *
      * @return interface_versionable
      */
     public function getObjTarget() {
@@ -461,7 +472,6 @@ final class class_changelog_container {
     }
 
     /**
-     *
      * @return class_date
      */
     public function getObjDate() {
@@ -500,6 +510,5 @@ final class class_changelog_container {
     public function getStrProperty() {
         return $this->strProperty;
     }
-
 
 }

@@ -22,7 +22,7 @@ class class_testbase extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
 
-        echo "\n\nlogging test-setUp on ".get_class($this)." @ ".timeToString(time())."...\n";
+        //echo "\n\nlogging test-setUp on ".get_class($this)." @ ".timeToString(time())."...\n";
 
         if(!defined("_block_config_db_loading_")) {
             define("_block_config_db_loading_", true);
