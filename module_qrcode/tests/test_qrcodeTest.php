@@ -5,6 +5,7 @@ class class_test_qrcode extends class_testbase  {
 
     public function testQrcode() {
 
+        echo "test qrcode...\n";
 
         $objQrCode = new class_qrcode();
 

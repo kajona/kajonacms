@@ -46,7 +46,7 @@ class class_testbase extends PHPUnit_Framework_TestCase {
      * For the sake of phpunit
      */
     public function testTest() {
-
+        echo "logging test-exec on ".__CLASS__."...\n";
     }
 
     protected function flushDBCache() {

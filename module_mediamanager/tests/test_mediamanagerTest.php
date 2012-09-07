@@ -6,6 +6,8 @@ class class_mediamanagerTest extends class_testbase  {
 
     public function testFileSync() {
 
+        echo "test mediamanager...\n";
+
         $objFilesystem = new class_filesystem();
         $objFilesystem->folderCreate(_filespath_."/images/autotest");
 

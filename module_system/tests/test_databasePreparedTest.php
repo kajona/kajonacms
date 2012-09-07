@@ -2,7 +2,7 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
-class class_test_databasePrepared extends class_testbase  {
+class class_test_databasePrepared extends class_testbase {
 
 
     public function tearDown() {
@@ -24,15 +24,15 @@ class class_test_databasePrepared extends class_testbase  {
         echo "\tcreating a new table...\n";
 
         $arrFields = array();
-		$arrFields["temp_id"]               = array("char20", false);
-		$arrFields["temp_long"]             = array("long", true);
-		$arrFields["temp_double"]           = array("double", true);
-		$arrFields["temp_char10"]           = array("char10", true);
-		$arrFields["temp_char20"]           = array("char20", true);
-		$arrFields["temp_char100"]          = array("char100", true);
-		$arrFields["temp_char254"]          = array("char254", true);
-		$arrFields["temp_char500"]          = array("char500", true);
-		$arrFields["temp_text"]             = array("text", true);
+        $arrFields["temp_id"] = array("char20", false);
+        $arrFields["temp_long"] = array("long", true);
+        $arrFields["temp_double"] = array("double", true);
+        $arrFields["temp_char10"] = array("char10", true);
+        $arrFields["temp_char20"] = array("char20", true);
+        $arrFields["temp_char100"] = array("char100", true);
+        $arrFields["temp_char254"] = array("char254", true);
+        $arrFields["temp_char500"] = array("char500", true);
+        $arrFields["temp_text"] = array("text", true);
 
         $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
 
@@ -44,7 +44,7 @@ class class_test_databasePrepared extends class_testbase  {
                 VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $this->assertTrue($objDB->_pQuery($strQuery, array(generateSystemid(),  ("123456".$intI), ("23.45".$intI), $intI, "char20".$intI, "char100".$intI, "char254".$intI, "char500".$intI, "text".$intI)), "testDataBase insert");
+            $this->assertTrue($objDB->_pQuery($strQuery, array(generateSystemid(), ("123456".$intI), ("23.45".$intI), $intI, "char20".$intI, "char100".$intI, "char254".$intI, "char500".$intI, "text".$intI)), "testDataBase insert");
         }
 
 
@@ -52,65 +52,64 @@ class class_test_databasePrepared extends class_testbase  {
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPRow($strQuery, array());
         $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
-        $this->assertEquals($arrRow["temp_char10"] , "1", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_char10"], "1", "testDataBase getRow content");
 
 
         echo "\tgetRow test2\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char10 = ? ORDER BY temp_long ASC";
         $arrRow = $objDB->getPRow($strQuery, array('2'));
         $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
-        $this->assertEquals($arrRow["temp_char10"] , "2", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_char10"], "2", "testDataBase getRow content");
 
         echo "\tgetArray test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array());
-        $this->assertEquals(count($arrRow) , 50, "testDataBase getArray count");
+        $this->assertEquals(count($arrRow), 50, "testDataBase getArray count");
 
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
-            $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArray content");
+            $this->assertEquals($arrSingleRow["temp_char10"], $intI++, "testDataBase getArray content");
 
         echo "\tgetArray test2\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest  WHERE temp_char10 = ? ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array('2'));
-        $this->assertEquals(count($arrRow) , 1, "testDataBase getArray count");
+        $this->assertEquals(count($arrRow), 1, "testDataBase getArray count");
 
         echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array(), 0, 9);
-        $this->assertEquals(count($arrRow) , 10, "testDataBase getArraySection count");
+        $this->assertEquals(count($arrRow), 10, "testDataBase getArraySection count");
 
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
-            $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection content");
+            $this->assertEquals($arrSingleRow["temp_char10"], $intI++, "testDataBase getArraySection content");
 
         $this->flushDBCache();
         echo "\tgetArraySection param test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char10 LIKE ? ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array("%"), 0, 9);
-        $this->assertEquals(count($arrRow) , 10, "testDataBase getArraySection param count");
+        $this->assertEquals(count($arrRow), 10, "testDataBase getArraySection param count");
 
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
-            $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection param content");
+            $this->assertEquals($arrSingleRow["temp_char10"], $intI++, "testDataBase getArraySection param content");
 
 
         echo "\tgetArray test 2 params\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest  WHERE temp_char10 = ? AND temp_char20 = ? ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array('2', 'char202'));
-        $this->assertEquals(count($arrRow) , 1, "testDataBase getArray 2 params count");
+        $this->assertEquals(count($arrRow), 1, "testDataBase getArray 2 params count");
 
 
         echo "\tgetArray test null params\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest  WHERE temp_char10 = ? AND temp_char20 = ? ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array('2', null));
-        $this->assertEquals(count($arrRow) , 0, "testDataBase getArray 2 params count");
+        $this->assertEquals(count($arrRow), 0, "testDataBase getArray 2 params count");
 
         echo "\tdeleting table\n";
 
         $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
-
 
     }
 

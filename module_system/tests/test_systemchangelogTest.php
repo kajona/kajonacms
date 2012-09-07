@@ -13,6 +13,7 @@ class test_systemchangelogTest extends class_testbase {
 
     public function testChangelog() {
 
+        echo "test system changelog...\n";
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 

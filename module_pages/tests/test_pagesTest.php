@@ -2,8 +2,7 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
-class class_test_pages extends class_testbase  {
-
+class class_test_pages extends class_testbase {
 
 
     public function test() {
@@ -13,7 +12,7 @@ class class_test_pages extends class_testbase  {
         echo "testing module_pages\n";
 
         //pages at startup:
-        $intPagesAtStartup = count(class_module_pages_folder::getPagesInFolder( class_module_system_module::getModuleByName("pages")->getSystemid() ));
+        $intPagesAtStartup = count(class_module_pages_folder::getPagesInFolder(class_module_system_module::getModuleByName("pages")->getSystemid()));
         $objDB->flushQueryCache();
 
 
@@ -25,7 +24,7 @@ class class_test_pages extends class_testbase  {
 
         echo "\tcreate 10 folders using the model...\n";
         $arrFoldersCreated = array();
-        for($intI =0; $intI < 10; $intI++) {
+        for($intI = 0; $intI < 10; $intI++) {
             $objFolder = new class_module_pages_folder();
             $objFolder->setStrName("testfolder_".$intI);
             $objFolder->updateObjectToDb($strTestFolderID);
@@ -42,7 +41,7 @@ class class_test_pages extends class_testbase  {
 
         echo "\tcreate 10 pages on root level using the model...\n";
         $arrPagesCreated = array();
-        for($intI =0; $intI < 10; $intI++) {
+        for($intI = 0; $intI < 10; $intI++) {
             $objPages = new class_module_pages_page();
             $objPages->setStrName("autotest_".$intI);
             $objPages->setStrTemplate("kajona_demo.tpl");
@@ -55,7 +54,7 @@ class class_test_pages extends class_testbase  {
         }
 
         $arrPagesAtLevel = class_module_pages_folder::getPagesInFolder(class_module_system_module::getModuleByName("pages")->getSystemid());
-        $this->assertEquals(count($arrPagesAtLevel), 10+$intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
+        $this->assertEquals(count($arrPagesAtLevel), 10 + $intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
 
         echo "\tdeleting pages created...\n";
         foreach($arrPagesCreated as $strOnePageID) {
@@ -78,8 +77,6 @@ class class_test_pages extends class_testbase  {
         $this->assertEquals(count($arrFoldersAtLevel), 0, __FILE__." checkNrOfFoldersAtLevel");
 
 
-
-
         echo"\tdeleting folder...\n";
         $objFolder = new class_module_pages_folder($strTestFolderID);
         $objFolder->deleteObject();
@@ -90,7 +87,6 @@ class class_test_pages extends class_testbase  {
     public function testCopyPage() {
 
         $strTitle = generateSystemid();
-
 
 
         $objPage = new class_module_pages_page();
@@ -122,8 +118,6 @@ class class_test_pages extends class_testbase  {
         $objElement->doBeforeSaveToDb();
         $objElement->updateForeignElement();
         $objElement->doAfterSaveToDb();
-
-
 
 
         //copy the page itself
@@ -167,7 +161,6 @@ class class_test_pages extends class_testbase  {
 
         $this->assertNotEquals($arrOldElementData["content_id"], $arrNewElementData["content_id"]);
         $this->assertEquals($arrOldElementData["paragraph_title"], $arrNewElementData["paragraph_title"]);
-
 
 
         $objNewPage->deleteObject();

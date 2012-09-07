@@ -28,7 +28,7 @@ class class_test_user extends class_testbase  {
         $arrUsersCreated = array();
         for($intI =0; $intI < 10; $intI++) {
             $objUser = new class_module_user_user();
-           // $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
+            //$objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
             $strUsername = "user_".generateSystemid();
             $objUser->setStrUsername($strUsername);
             $objUser->updateObjectToDb();

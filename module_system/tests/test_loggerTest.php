@@ -10,6 +10,8 @@ class class_test_loggerTest extends class_testbase  {
 
     public function testLogger() {
 
+        echo "test logger...\n";
+
         $objLogger = class_logger::getInstance("test.log");
 
         $objLogger->setIntLogLevel(class_logger::$levelError);

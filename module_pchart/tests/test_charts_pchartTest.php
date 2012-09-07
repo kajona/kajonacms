@@ -4,7 +4,7 @@ require_once (__DIR__ . "/../../module_system/system/class_testbase.php");
 class class_test_charts_pchart extends class_testbase  {
 
     public function testCharts() {
-
+        echo "test pchart...\n";
 
         srand((double)microtime()*1000000);
         //--- system kernel -------------------------------------------------------------------------------------

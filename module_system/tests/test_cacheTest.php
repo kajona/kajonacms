@@ -10,6 +10,8 @@ class class_test_cache extends class_testbase  {
     protected function setUp() {
         self::$strTestId = generateSystemid();
         parent::setUp();
+
+        echo "test cache...\n";
     }
 
 

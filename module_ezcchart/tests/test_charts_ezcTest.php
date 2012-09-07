@@ -5,6 +5,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
     public function testCharts() {
 
+        echo "test ezc...\n";
 
         srand((double)microtime()*1000000);
         //--- system kernel -------------------------------------------------------------------------------------

@@ -2,8 +2,7 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
-class class_test_generalModelTest extends class_testbase  {
-
+class class_test_generalModelTest extends class_testbase {
 
 
     public function testModuleModels() {
@@ -27,15 +26,20 @@ class class_test_generalModelTest extends class_testbase  {
                 $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
                 if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
 
-                    if(!in_array($objClass->getName(), array(
-                        "class_module_pages_element",
-                        "class_module_languages_languageset",
-                        "class_module_system_session",
-                        "class_module_system_setting",
-                        "class_module_user_group",
-                        "class_module_user_user",
-                        "class_module_workflows_workflow",
-                        "class_module_pages_pageelement")) ) {
+                    if(!in_array(
+                        $objClass->getName(),
+                        array(
+                            "class_module_pages_element",
+                            "class_module_languages_languageset",
+                            "class_module_system_session",
+                            "class_module_system_setting",
+                            "class_module_user_group",
+                            "class_module_user_user",
+                            "class_module_workflows_workflow",
+                            "class_module_pages_pageelement"
+                        )
+                    )
+                    ) {
 
                         $arrClassInstances[] = $objClass->newInstance();
                     }
@@ -73,8 +77,6 @@ class class_test_generalModelTest extends class_testbase  {
         class_carrier::getInstance()->getObjRights()->setBitTestMode(false);
 
     }
-
-
 
 }
 

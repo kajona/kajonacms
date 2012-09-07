@@ -63,6 +63,8 @@ class class_test_autonavigationtest extends class_testbase  {
      */
     public function testGeneration() {
 
+        echo "test auto navigation...\n";
+
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objTestNavigation = new class_module_navigation_tree();
