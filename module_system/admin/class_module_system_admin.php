@@ -457,7 +457,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneTask->getStrTaskname(),
-                    getImageAdmin("icon_dot.png"),
+                    getImageAdmin("icon_systemtask.png"),
                     $this->objToolkit->listButton($strLink),
                     $intI++
                 );

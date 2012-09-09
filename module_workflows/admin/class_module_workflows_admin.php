@@ -350,7 +350,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionInstantiateHandler"), "icon_workflowNew.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionInstantiateHandler"), "icon_workflowTrigger.png"))
             );
         }
         if($objListEntry instanceof class_module_workflows_workflow) {
