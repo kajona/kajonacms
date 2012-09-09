@@ -227,7 +227,7 @@ class class_mail {
 
 
 			//Kajona Headers to avoid being marked as spam
-			$this->arrHeader[] = "X-Mailer: Kajona Mailer V3".$this->strEndOfLine;
+			$this->arrHeader[] = "X-Mailer: Kajona Mailer V4".$this->strEndOfLine;
 			$this->arrHeader[] = "Message-ID: <".generateSystemid()."_kajona@".getServer("SERVER_NAME").">".$this->strEndOfLine;
 
 			//header for multipartmails?

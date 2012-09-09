@@ -61,7 +61,7 @@ class class_installer_packageserver extends class_installer_base {
         $this->registerConstant("_packageserver_repo_id_", $objRepo->getSystemid(), class_module_system_setting::$int_TYPE_STRING, _packageserver_module_id_);
 
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());

@@ -4,12 +4,12 @@
 <head>
     <link href="_webpath_/templates/default/css/kajona.css?_system_browser_cachebuster_" rel="stylesheet" type="text/css" />
     %%kajona_head%%
-    <title>%%additionalTitle%%%%title%% | Kajona³</title>
+    <title>%%additionalTitle%%%%title%% | Kajona</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="robots" content="index, follow" />
     <meta name="description" content="%%description%%" />
     <meta name="keywords" content="%%keywords%%" />
-    <link rel="alternate" type="application/rss+xml" title="Kajona³ news" href="_webpath_/xml.php?module=news&amp;action=newsFeed&amp;feedTitle=kajona_news" />
+    <link rel="alternate" type="application/rss+xml" title="Kajona news" href="_webpath_/xml.php?module=news&amp;action=newsFeed&amp;feedTitle=kajona_news" />
     <link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body>

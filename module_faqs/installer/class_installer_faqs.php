@@ -94,7 +94,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
        }
 
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
@@ -147,7 +147,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->objDB->_pQuery($strQuery, array("_faqs_search_resultpage_"));
 
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());

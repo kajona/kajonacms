@@ -88,7 +88,7 @@ class class_installer_guestbook extends class_installer_base  {
             $strReturn .= "Element already installed!...\n";
         }
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
@@ -141,7 +141,7 @@ class class_installer_guestbook extends class_installer_base  {
         $this->objDB->_pQuery($strQuery, array("_guestbook_search_resultpage_"));
 
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());

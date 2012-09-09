@@ -66,7 +66,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 
         $strReturn .= "Module registered. Module-ID: ".$strSystemID." \n";
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
@@ -102,7 +102,7 @@ class class_installer_rating extends class_installer_base implements interface_i
         $objModule->setStrNamePortal("class_module_rating_portal.php");
         $objModule->updateObjectToDb();
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());

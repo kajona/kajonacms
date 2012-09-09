@@ -105,6 +105,10 @@ class class_installer {
             $this->adminLoginData();
         }
 
+        elseif($_GET["step"] == "modeSelect") {
+            $this->modeSelect();
+        }
+
         elseif($_GET["step"] == "install") {
             $this->createModuleInstalls();
         }
@@ -214,16 +218,6 @@ class class_installer {
             $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "configwizard_form", true);
             $strReturn .= $this->objTemplates->fillTemplate(
                 array(
-                    "config_intro"     => $this->getLang("installer_config_intro"),
-                    "config_hostname"  => $this->getLang("installer_config_dbhostname"),
-                    "config_username"  => $this->getLang("installer_config_dbusername"),
-                    "config_password"  => $this->getLang("installer_config_dbpassword"),
-                    "config_port"      => $this->getLang("installer_config_dbport"),
-                    "config_portinfo"  => $this->getLang("installer_config_dbportinfo"),
-                    "config_driver"    => $this->getLang("installer_config_dbdriver"),
-                    "config_dbname"    => $this->getLang("installer_config_dbname"),
-                    "config_prefix"    => $this->getLang("installer_config_dbprefix"),
-                    "config_save"      => $this->getLang("installer_config_write"),
                     "mysqliInfo"       => $strMysqliInfo,
                     "sqlite3Info"      => $strSqlite3Info,
                     "postgresInfo"     => $strPostgresInfo,
@@ -265,7 +259,6 @@ class class_installer {
 
     /**
      * Collects the data required to create a valid admin-login
-
      */
     public function adminLoginData() {
         $bitUserInstalled = false;
@@ -297,26 +290,36 @@ class class_installer {
                 $this->objSession->setSession("install_username", $strUsername);
                 $this->objSession->setSession("install_password", $strPassword);
                 $this->objSession->setSession("install_email", $strEmail);
-                header("Location: "._webpath_."/installer.php?step=install");
+                header("Location: "._webpath_."/installer.php?step=modeSelect");
             }
         }
 
         if($bitShowForm) {
             $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "loginwizard_form", true);
-            $this->strOutput .= $this->objTemplates->fillTemplate(
-                array(
-                    "login_username" => $this->getLang("installer_login_username"),
-                    "login_password" => $this->getLang("installer_login_password"),
-                    "login_email"    => $this->getLang("installer_login_email"),
-                    "login_save"     => $this->getLang("installer_login_save")
-                ), 
-                $strTemplateID
-            );
+            $this->strOutput .= $this->objTemplates->fillTemplate(array(), $strTemplateID);
         }
 
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
         if($bitUserInstalled || ($this->objSession->getSession("install_username") !== false && $this->objSession->getSession("install_password") !== false))
-            $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=install");
+            $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=modeSelect");
+    }
+
+    /**
+     * The form to select the installer mode - everything automatically or a manual selection
+     */
+    public function modeSelect() {
+
+        $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "modeselect_content", true);
+        $this->strOutput .= $this->objTemplates->fillTemplate(
+            array(
+                "link_autoinstall" => _webpath_."/installer.php?step=finish&autoInstall=true",
+                "link_manualinstall" => _webpath_."/installer.php?step=install"
+            ),
+            $strTemplateID
+        );
+
+        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
+
     }
 
     /**
@@ -344,19 +347,6 @@ class class_installer {
         $strInstallLog = "";
 
         $objManager = new class_module_packagemanager_manager();
-
-        //Is there a module to be updated?
-        if(isset($_GET["update"])) {
-
-            //search the matching modules
-            foreach($this->arrMetadata as $objOneMetadata) {
-                if($_GET["update"] == "installer_".$objOneMetadata->getStrTitle()) {
-                    $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
-                    $strInstallLog .= $objHandler->installOrUpdate();
-                }
-            }
-
-        }
 
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
@@ -546,6 +536,11 @@ class class_installer {
     public function finish() {
         $strReturn = "";
 
+        if($_GET["autoInstall"] == "true") {
+            $this->strLogfile = $this->processAutoInstall();
+        }
+
+
         $this->objSession->sessionUnset("install_username");
         $this->objSession->sessionUnset("install_password");
 
@@ -556,6 +551,60 @@ class class_installer {
 
         $this->strOutput = $strReturn;
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=samplecontent");
+    }
+
+
+    private function processAutoInstall() {
+        $strReturn = "";
+
+        $strReturn .= "Searching for packages to be installed...\n";
+        $objManager = new class_module_packagemanager_manager();
+        $arrPackageMetadata = $objManager->getAvailablePackages();
+
+        $arrPackagesToInstall = array();
+        foreach($arrPackageMetadata as $objOneMetadata) {
+            if(!in_array($objOneMetadata->getStrTitle(), array("samplecontent")))
+                $arrPackagesToInstall[] = $objOneMetadata;
+        }
+
+        $strReturn .= "Number of packages found: ".count($arrPackagesToInstall)."\n";
+        $strReturn .= "\n\n";
+
+        $intMaxLoops = 0;
+        $strReturn .= "starting installations...\n";
+        while(count($arrPackagesToInstall) > 0 && ++$intMaxLoops < 100) {
+            foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
+
+                $strReturn .= "------------------------------\n";
+
+                if(!$objOneMetadata->getBitProvidesInstaller()) {
+                    $strReturn .= "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n";
+                    unset($arrPackagesToInstall[$intKey]);
+                    continue;
+                }
+
+                $strReturn .= "Installing ".$objOneMetadata->getStrTitle()."...\n";
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+                if(!$objHandler->isInstallable()) {
+                    $strReturn .= "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements\n";
+                    continue;
+                }
+
+                $strReturn .= $objHandler->installOrUpdate();
+                unset($arrPackagesToInstall[$intKey]);
+                $strReturn .= "\n";
+            }
+        }
+
+
+        $strReturn .= "Installing samplecontent...\n";
+        $objHandler = $objManager->getPackageManagerForPath("/core/module_samplecontent");
+        if($objHandler != null)
+            $strReturn .= $objHandler->installOrUpdate();
+
+
+        return $strReturn;
     }
 
 
@@ -585,6 +634,7 @@ class class_installer {
             "phpsettings"   => $this->getLang("installer_step_phpsettings"),
             "config"        => $this->getLang("installer_step_dbsettings"),
             "loginData"     => $this->getLang("installer_step_adminsettings"),
+            "modeSelect"     => $this->getLang("installer_step_modeselect"),
             "install"       => $this->getLang("installer_step_modules"),
             "samplecontent" => $this->getLang("installer_step_samplecontent"),
             "finish"        => $this->getLang("installer_step_finish"),
@@ -635,18 +685,8 @@ class class_installer {
      * @return string
      */
     private function callScriptlets($strContent) {
-        $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
-
-        foreach($arrScriptletFiles as $strOneScriptlet) {
-            $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
-            /** @var $objScriptlet interface_scriptlet */
-            $objScriptlet = new $strOneScriptlet();
-
-            if($objScriptlet instanceof interface_scriptlet)
-                $strContent = $objScriptlet->processContent($strContent);
-        }
-
-        return $strContent;
+        $objHelper = new class_scriptlet_helper();
+        return $objHelper->processString($strContent);
     }
 
 
@@ -656,9 +696,6 @@ class class_installer {
      * @return bool
      */
     public function checkDefaultValues() {
-        //use return true to disable config-check
-        //return true;
-        //Load the config to parse it
         return is_file($this->STR_PROJECT_CONFIG_FILE);
     }
 
@@ -684,18 +721,6 @@ class class_installer {
     public function getBackwardLink($strHref) {
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "installer_backward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_prev")), $strTemplateID);
-    }
-
-    /**
-     * Loads a text
-     *
-     * @param string $strKey
-     *
-     * @return string
-     * @deprecated use getLang instead
-     */
-    public function getText($strKey) {
-        return $this->objLang->getLang($strKey, "system");
     }
 
     /**

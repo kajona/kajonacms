@@ -462,7 +462,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
         //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.
         $strHeader  = "<!--\n";
-        $strHeader .= "Website powered by Kajona³ Open Source Content Management Framework\n";
+        $strHeader .= "Website powered by Kajona Open Source Content Management Framework\n";
         $strHeader .= "For more information about Kajona see http://www.kajona.de\n";
         $strHeader .= "-->\n";
 

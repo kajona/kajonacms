@@ -7,10 +7,10 @@
     <script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
     %%head%%
 	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
-	<title>Kajona³ admin [%%moduletitle%%]</title>
+	<title>Kajona admin [%%moduletitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />
-	<meta name="generator" content="Kajona³, www.kajona.de" />
+	<meta name="generator" content="Kajona, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body class="portalEditor">

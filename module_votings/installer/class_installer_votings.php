@@ -76,7 +76,7 @@ class class_installer_votings extends class_installer_base implements interface_
             $strReturn .= "Element already installed!...\n";
         }
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
@@ -123,7 +123,7 @@ class class_installer_votings extends class_installer_base implements interface_
             $this->objDB->_pQuery($strQuery, array( 'class_module_votings_answer', $arrOneRow["system_id"] ) );
         }
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());

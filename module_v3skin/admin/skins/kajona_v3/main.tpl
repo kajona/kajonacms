@@ -9,10 +9,10 @@
     %%head%%
 	<script type="text/javascript" src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
 	<script type="text/javascript" src="_skinwebpath_/js/v3skin.js?_system_browser_cachebuster_"></script>
-	<title>Kajona³ admin [%%webpathTitle%%]</title>
+	<title>Kajona admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />
-	<meta name="generator" content="Kajona³, www.kajona.de" />
+	<meta name="generator" content="Kajona, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -68,7 +68,7 @@
 			<td id="footerRightCorner"></td>
 		</tr>
 		<tr>
-			<td colspan="4" id="copyright">&copy; 2012 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
+			<td colspan="4" id="copyright">&copy; 2012 <a href="http://www.kajona.de" target="_blank" title="Kajona CMS - empowering your content">Kajona</a></td>
 		</tr>
 	</tbody>
 </table>

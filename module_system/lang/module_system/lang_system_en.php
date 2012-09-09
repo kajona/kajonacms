@@ -291,6 +291,15 @@ $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
 
+
+
+$lang["installer_step_modeselect"]      = "Choose installation mode";
+$lang["installer_mode_manual"] = "Manual installation";
+$lang["installer_mode_manual_hint"] = "Manual selection of the modules to install. The installation of the samplecontent may be skipped.";
+$lang["installer_mode_auto"] = "Automatic installtion";
+$lang["installer_mode_auto_hint"] = "All modules available and their samplecontents are installed.";
+
+
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Settings", 5 => "Systemtasks", 6 => "Systemlog", 7 => "", 8 => "Aspects");

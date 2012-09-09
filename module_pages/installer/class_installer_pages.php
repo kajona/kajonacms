@@ -246,7 +246,7 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= "An error occured! ...\n";
 
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
@@ -359,7 +359,7 @@ class class_installer_pages extends class_installer_base implements interface_in
             $this->objDB->_pQuery($strQuery, array($arrOneRow["element_id"]));
         }
 
-        echo "Setting aspect assignments...\n";
+        $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());

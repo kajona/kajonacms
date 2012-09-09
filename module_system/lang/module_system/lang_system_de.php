@@ -291,6 +291,13 @@ $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
 
+
+$lang["installer_step_modeselect"]      = "Installationsart wählen";
+$lang["installer_mode_manual"] = "Manuelle Installation";
+$lang["installer_mode_manual_hint"] = "Die zu installierende Module können manuell ausgewählt werden, die Installation der Beispielinhalte kann überprungen werden.";
+$lang["installer_mode_auto"] = "Automatische Installation";
+$lang["installer_mode_auto_hint"] = "Alle verfügbaren Module und Beispielinhalte werden installiert.";
+
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Einstellungen",  5 => "Systemtasks", 6 => "Systemlog", 7 => "", 8 => "Aspekte");
