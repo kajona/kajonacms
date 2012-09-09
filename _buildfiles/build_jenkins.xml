@@ -33,7 +33,7 @@
     <!-- generated zips will be placed here (full, light) -->
     <property name="packagesPath" value="/packages" />
     <!-- temp-folder, required to build the packages -->
-    <property name="tempPath"     value="/temp" />
+    <property name="tempPath"     value="/temp/kajona" />
 
 
 
@@ -112,6 +112,7 @@
         <mkdir  dir="${basedir}${packagesPath}"/>
 
         <delete dir="${basedir}${tempPath}"/>
+        <delete dir="${basedir}${tempPath}/../" />
         <mkdir  dir="${basedir}${tempPath}"/>
         <mkdir  dir="${basedir}${tempPath}/core"/>
 
@@ -174,7 +175,7 @@
         <antcall target="compileLess" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
-            <fileset dir="${basedir}${tempPath}" />
+            <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
 
@@ -206,7 +207,7 @@
         <antcall target="compileLess" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
-            <fileset dir="${basedir}${tempPath}" />
+            <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
 

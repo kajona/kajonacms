@@ -9,8 +9,8 @@ include __DIR__.'/lessc.inc.php';
 $less = new lessc;
 
 $arrFilesToCompile = array(
-    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/less/bootstrap.less" => __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/less/styles.css",
-    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/less/responsive.less" => __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/less/responsive.css"
+    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/styles.css",
+    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/responsive.less" => __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/responsive.css"
 );
 
 $strSkinReplacement = "";
@@ -20,9 +20,9 @@ $strSkinReplacement = <<<TXT
 TXT;
 
 $arrFilesToUpdate = array(
-    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/main.tpl",
-    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/folderview.tpl",
-    __DIR__."/../temp/core/module_v4skin/admin/skins/kajona_v4/login.tpl"
+    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/main.tpl",
+    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/folderview.tpl",
+    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/login.tpl"
 );
 
 
