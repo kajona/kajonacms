@@ -147,22 +147,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
         return $arrReturn;
     }
 
-
-    /**
-     * Counts the number of workflows handlers available
-     * @return int
-     */
-    public static function getAllworkflowHandlersCount() {
-        $strQuery = "SELECT COUNT(*) FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."workflows_handler
-                      WHERE system_id = workflows_handler_id";
-
-       $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-       return $arrRow["COUNT(*)"];
-    }
-
-
     /**
      * Synchronizes the list of handlers available on the filesystem compared to the list
      * of handlers available in the database.

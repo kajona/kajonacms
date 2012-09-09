@@ -223,10 +223,14 @@ class class_module_system_module extends class_model implements interface_model,
 
     /**
      * Counts the number of modules available
+     *
      * @static
+     *
+     * @param string $strPrevid
+     *
      * @return int
      */
-    public static function getAllModulesCount() {
+    public static function getObjectCount($strPrevid = "") {
         return count(self::loadModuleData());
     }
 

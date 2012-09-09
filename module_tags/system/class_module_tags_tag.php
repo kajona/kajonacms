@@ -121,19 +121,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return $arrReturn;
     }
 
-    /**
-     * Returns the number of tags available
-     *
-     * @return int
-     */
-    public static function getNumberOfTags() {
-
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."tags_tag";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
 
     /**
      * Returns the list of tags related with the systemid passed.

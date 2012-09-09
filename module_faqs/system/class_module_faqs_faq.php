@@ -215,7 +215,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @return mixed
      * @static
      */
-    public static function getFaqsCount($strFilter = "") {
+    public static function getObjectCount($strFilter = "") {
         $arrParams = array();
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)

@@ -397,7 +397,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 		//Iterate over all elements to sort out
 		$arrElementsOnPlaceholder = array();
-		foreach($arrElementsOnPage as $strKey => $arrOneElementOnPage) {
+		foreach($arrElementsOnPage as $arrOneElementOnPage) {
 			if($this->getStrPlaceholder() == $arrOneElementOnPage["page_element_ph_placeholder"])
 				$arrElementsOnPlaceholder[] = $arrOneElementOnPage;
 		}
@@ -412,7 +412,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param int $intNewPosition
      * @param bool $bitOnlySameModule
      *
-     * @return
+     * @return void
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
     public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
@@ -494,7 +494,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @param string $strMode up || down
      *
-     * @return string|void "" in case of success
+     * @return void
      * @see class_root::setPosition($strDirection = "upwards")
      * @deprecated
      */
@@ -505,9 +505,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         for($intI = 1; $intI <= count($arrElementsOnPlaceholder); $intI++) {
             if($arrElementsOnPlaceholder[$intI-1]["system_id"] == $this->getSystemid()) {
                 if($strMode == "up")
-                    return $this->setAbsolutePosition($intI-1);
+                    $this->setAbsolutePosition($intI-1);
                 else
-                    return $this->setAbsolutePosition($intI+1);
+                    $this->setAbsolutePosition($intI+1);
+
+                break;
             }
         }
 	}
@@ -617,7 +619,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         return $bitReturn;
 	}
 
-    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function getStrPlaceholder() {
         return $this->strPlaceholder;

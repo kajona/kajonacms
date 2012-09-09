@@ -80,7 +80,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 	 */
 	protected function actionList() {
 
-        $objIterator = new class_array_section_iterator(class_module_workflows_workflow::getAllworkflowsCount());
+        $objIterator = new class_array_section_iterator(class_module_workflows_workflow::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_workflows_workflow::getAllworkflows($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -390,7 +390,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
         $strReturn = $this->objToolkit->formHeadline($this->getLang("actionListHandlers"));
 
-        $objIterator = new class_array_section_iterator(class_module_workflows_handler::getAllworkflowHandlersCount());
+        $objIterator = new class_array_section_iterator(class_module_workflows_handler::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_workflows_handler::getAllworkflowHandlers($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

@@ -158,7 +158,7 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
 	 */
 	protected function actionList() {
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_eventmanager_event::getAllEventsCount());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_eventmanager_event::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_eventmanager_event::getAllEvents($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
@@ -262,7 +262,7 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
         }
         $strReturn .= $this->objToolkit->divider();
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_eventmanager_participant::getAllParticipantsCount($this->getSystemid()));
+        $objArraySectionIterator = new class_array_section_iterator(class_module_eventmanager_participant::getObjectCount($this->getSystemid()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_eventmanager_participant::getAllParticipants($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 

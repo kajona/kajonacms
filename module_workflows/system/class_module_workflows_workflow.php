@@ -403,25 +403,6 @@ class class_module_workflows_workflow extends class_model implements interface_m
         return $arrReturn;
     }
 
-
-    /**
-     * Counts the number of workflows available
-     * @return int
-     */
-    public static function getAllworkflowsCount() {
-
-        $strQuery = "SELECT COUNT(*) FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = system_date_id";
-
-       $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-       return $arrRow["COUNT(*)"];
-    }
-
-
     /**
      * Returns the current workflow-handler
      *

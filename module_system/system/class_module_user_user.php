@@ -239,7 +239,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @param string $strUsernameFilter
      * @return int
      */
-    public static function getNumberOfUsers($strUsernameFilter = "") {
+    public static function getObjectCount($strUsernameFilter = "") {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? ";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsernameFilter."%"));
 		return $arrRow["COUNT(*)"];

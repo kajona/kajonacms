@@ -114,23 +114,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 	}
 
     /**
-     * counts all available repos
-     *
-     *
-     * @return int
-     * @static
-     */
-    public static function getAllReposCount() {
-        $strQuery = "SELECT COUNT(*)
-		               FROM "._dbprefix_."mediamanager_repo,
-						    "._dbprefix_."system
-				      WHERE repo_id = system_id";
-        $objDB = class_carrier::getInstance()->getObjDB();
-        $arrRow = $objDB->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
-
-    /**
      * Syncs the complete repo with the filesystem. Adds new files and removes delete files to and
      * from the db.
      *

@@ -311,7 +311,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function actionListTemplates() {
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_packagemanager_template::getAllTemplatepacksCount());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_packagemanager_template::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
             class_module_packagemanager_template::getAllTemplatepacks($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())

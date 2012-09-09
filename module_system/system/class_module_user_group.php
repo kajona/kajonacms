@@ -177,9 +177,12 @@ class class_module_user_group extends class_model implements interface_model, in
 
     /**
      * Fetches the number of groups available
+     *
+     * @param string $strPrevid
+     *
      * @return int
      */
-    public static function getNumberOfGroups() {
+    public static function getObjectCount($strPrevid = "") {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user_group";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];

@@ -48,7 +48,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
      */
     protected function actionList() {
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getNumberOfTags());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_tags_tag::getAllTags($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 

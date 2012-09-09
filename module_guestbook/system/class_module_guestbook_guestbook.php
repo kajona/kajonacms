@@ -112,24 +112,6 @@ class class_module_guestbook_guestbook extends class_model implements interface_
 		return $arrReturn;
 	}
 
-
-    /**
-     * Loads all guestbooks
-     *
-     * @return int
-     * @static
-     */
-    public static function getGuestbooksCount() {
-        $strQuery = "SELECT COUNT(*)
-						FROM "._dbprefix_."guestbook_book, "._dbprefix_."system
-						WHERE system_id = guestbook_id";
-
-        $arrRow =  class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
-
-
-
     /**
      * @param string $strGuestbookTitle
      */

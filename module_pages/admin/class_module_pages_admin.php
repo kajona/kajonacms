@@ -301,7 +301,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         class_module_languages_admin::enableLanguageSwitch();
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_pages_page::getNumberOfPagesAvailable());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_pages_page::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator);
@@ -681,7 +681,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     protected function actionListElements() {
         $strReturn = "";
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_pages_element::getElementCount());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_pages_element::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_pages_element::getAllElements($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator, false, "elementList");

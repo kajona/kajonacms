@@ -106,8 +106,8 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 	 */
 	protected function actionList() {
 
-        $objIterator = new class_array_section_iterator(class_module_faqs_category::getCategoriesCount());
-        $objIterator->setIntElementsPerPage(class_module_faqs_category::getCategoriesCount());
+        $objIterator = new class_array_section_iterator(class_module_faqs_category::getObjectCount());
+        $objIterator->setIntElementsPerPage(class_module_faqs_category::getObjectCount());
         $objIterator->setPageNumber(1);
         $objIterator->setArraySection(class_module_faqs_category::getCategories($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -116,7 +116,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
         $strReturn .= $this->objToolkit->divider();
 
-        $objIterator = new class_array_section_iterator(class_module_faqs_faq::getFaqsCount($this->getParam("filterId")));
+        $objIterator = new class_array_section_iterator(class_module_faqs_faq::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_faqs_faq::getFaqsList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

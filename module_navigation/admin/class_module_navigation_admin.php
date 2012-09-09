@@ -69,7 +69,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         //Decide, whether to return the list of navigation or the layer of a navigation
         if($this->getSystemid() == "" || $this->getSystemid() == $this->getObjModule()->getSystemid()) {
 
-            $objIterator = new class_array_section_iterator(class_module_navigation_tree::getAllNavisCount());
+            $objIterator = new class_array_section_iterator(class_module_navigation_tree::getObjectCount(class_module_system_module::getModuleIdByNr(_navigation_modul_id_)));
             $objIterator->setPageNumber($this->getParam("pv"));
             $objIterator->setArraySection(class_module_navigation_tree::getAllNavis($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
             return $this->renderList($objIterator);
@@ -77,7 +77,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         }
         else {
 
-            $objIterator = new class_array_section_iterator(class_module_navigation_point::getNaviLayerCount($this->getSystemid()));
+            $objIterator = new class_array_section_iterator(class_module_navigation_point::getObjectCount($this->getSystemid()));
             $objIterator->setPageNumber($this->getParam("pv"));
             $objIterator->setIntElementsPerPage($objIterator->getNumberOfElements());
             $objIterator->setArraySection(class_module_navigation_point::getNaviLayer($this->getSystemid()));

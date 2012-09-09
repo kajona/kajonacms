@@ -8,8 +8,6 @@
 
 /**
  * A model-class for template-packs.
- * Since not part of the regular system-table, it only acts as some kind of
- * wrapper.
  *
  * @package module_packagemanager
  * @author sidler@mulchprod.de
@@ -124,7 +122,9 @@ class class_module_packagemanager_template extends class_model implements interf
      */
     public static function getAllTemplatepacks($intStart = null, $intEnd = null) {
         $strQuery = "SELECT templatepack_id
-                       FROM "._dbprefix_."templatepacks
+                       FROM "._dbprefix_."templatepacks,
+                            "._dbprefix_."system
+                      WHERE system_id = templatepack_id
                    ORDER BY templatepack_name ASC ";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
@@ -136,19 +136,6 @@ class class_module_packagemanager_template extends class_model implements interf
         return $arrReturn;
     }
 
-    /**
-     * Fetches the list of packs available
-     *
-     * @static
-     * @return int
-     */
-    public static function getAllTemplatepacksCount() {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."templatepacks ";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
 
     /**
      * Synchronized the list of template-packs available in the filesystem

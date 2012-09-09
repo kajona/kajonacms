@@ -245,7 +245,7 @@ class class_module_news_news extends class_model implements interface_model, int
 	 * @param string $strFilter
 	 * @return int
 	 */
-	public static function getNewsCount($strFilter = "") {
+	public static function getObjectCount($strFilter = "") {
         $arrParams = array();
         if($strFilter != "") {
 			$strQuery = "SELECT COUNT(*)

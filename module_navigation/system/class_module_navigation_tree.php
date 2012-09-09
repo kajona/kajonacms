@@ -105,24 +105,6 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
 
     /**
-     * Returns the number of navigation available
-     *
-     * @return int
-     * @static
-     */
-    public static function getAllNavisCount() {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."navigation, "._dbprefix_."system
-                     WHERE system_id = navigation_id
-                       AND system_prev_id = ?
-                       AND system_module_nr = ?";
-
-        $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
-        return $arrReturn["COUNT(*)"];
-    }
-
-
-    /**
      * Looks up a navigation by its name
      *
      * @param string $strName

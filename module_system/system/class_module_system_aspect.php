@@ -140,7 +140,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @param bool $bitJustActive
      * @return int
      */
-    public static function getNumberOfAspectsAvailable($bitJustActive = false) {
+    public static function getObjectCount($bitJustActive = false) {
     	$strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
                      WHERE system_id = aspect_id

@@ -107,9 +107,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionList() {
 
-        $objIterator = new class_array_section_iterator(class_module_system_module::getAllModulesCount());
+        $objIterator = new class_array_section_iterator(class_module_system_module::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setIntElementsPerPage(class_module_system_module::getAllModulesCount());
+        $objIterator->setIntElementsPerPage(class_module_system_module::getObjectCount());
         $objIterator->setArraySection(class_module_system_module::getAllModules($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         return $this->renderList($objIterator, true, "moduleList");
@@ -703,7 +703,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionAspects() {
 
-        $objIterator = new class_array_section_iterator(class_module_system_aspect::getNumberOfAspectsAvailable());
+        $objIterator = new class_array_section_iterator(class_module_system_aspect::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_system_aspect::getAllAspects(false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

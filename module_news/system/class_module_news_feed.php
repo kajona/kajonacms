@@ -143,21 +143,6 @@ class class_module_news_feed extends class_model implements interface_model, int
 		return $arrReturn;
 	}
 
-    /**
-     * Counts all newsfeeds
-     *
-     * @return int
-     * @static
-     */
-    public static function getAllFeedsCount() {
-        $strQuery = "SELECT COUNT(*)
-	                   FROM "._dbprefix_."news_feed,
-	                        "._dbprefix_."system
-	                   WHERE news_feed_id = system_id";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrIds["COUNT(*)"];
-    }
-
 	/**
 	 * Load a newsfeed using a urltitle
 	 *

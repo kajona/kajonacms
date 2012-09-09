@@ -331,22 +331,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 	}
 
 	/**
-	 * Fetches the total number of pages available
-	 *
-     * @param bool $bitIncludeAlias
-	 * @return int
-	 */
-	public static function getNumberOfPagesAvailable( $bitIncludeAlias = true) {
-	    $strQuery = "SELECT COUNT(*)
-					FROM "._dbprefix_."page,
-					"._dbprefix_."system
-					WHERE system_id = page_id
-                    ".($bitIncludeAlias ? "" : " AND page_type = 0 ")." ";
-		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-		return $arrRow["COUNT(*)"];
-	}
-
-	/**
 	 * Returns a new page-instance, using the given name
 	 *
 	 * @param string $strName

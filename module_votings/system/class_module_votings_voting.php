@@ -154,22 +154,6 @@ class class_module_votings_voting extends class_model implements interface_model
 		return $arrReturn;
 	}
 
-    /**
-     * Counts all votings in the table
-     *
-     * @param bool $bitOnlyActive
-     * @return int
-     * @static
-     */
-    public static function getVotingsCount($bitOnlyActive = false) {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."votings_voting,
-						"._dbprefix_."system
-						WHERE system_id = votings_voting_id
-						".($bitOnlyActive ? " AND system_status = 1 ": "" )."";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
 
     /**
      * Loads the answers related to the current question

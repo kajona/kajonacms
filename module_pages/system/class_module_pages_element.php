@@ -13,7 +13,6 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable element.element_id
- * @todo make real records out of the element-records, so with a matching systemid
  */
 class class_module_pages_element extends class_model implements interface_model, interface_admin_listable {
 
@@ -158,17 +157,6 @@ class class_module_pages_element extends class_model implements interface_model,
         return $arrReturn;
     }
 
-    /**
-     * Counts the number of elements available
-     *
-     * @static
-     * @return int
-     */
-    public static function getElementCount() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element";
-        $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrReturn["COUNT(*)"];
-    }
 
     /**
      * Returns the element using the given element-name
@@ -204,7 +192,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * it for further usings.
      *
      * @throws class_exception
-     * @return object An instance of the admin-class linked by the current element
+     * @return interface_admin_element|class_element_admin An instance of the admin-class linked by the current element
      */
     public function getAdminElementInstance() {
         //Build the class-name

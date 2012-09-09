@@ -130,22 +130,6 @@ class class_module_eventmanager_participant extends class_model implements inter
 		return $arrReturn;
 	}
 
-    /**
-     * Counts the number of participants for a single systemid
-     * @param string $strEventId
-     * @return int
-     */
-    public static function getAllParticipantsCount($strEventId) {
-		$strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."em_participant,
-						     "._dbprefix_."system
-				      WHERE system_id = em_pt_id
-                        AND system_prev_id = ?
-                   ORDER BY em_pt_email ASC, em_pt_lastname ASC";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId));
-        return $arrRow["COUNT(*)"];
-	}
 
     /**
      * Returns a human readable name of the action stored with the changeset.

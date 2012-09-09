@@ -482,7 +482,7 @@ abstract class class_admin {
 		$this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries(), $this->getArrModule("modul"));
         $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
-        if(class_module_system_aspect::getNumberOfAspectsAvailable(true) > 1)
+        if(class_module_system_aspect::getObjectCount(true) > 1)
             $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
 		$this->arrOutput["login"] = $this->getOutputLogin();
 		$this->arrOutput["tagSelector"] = $this->objToolkit->getAdminskinTagSelector();

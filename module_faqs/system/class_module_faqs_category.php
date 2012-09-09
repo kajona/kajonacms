@@ -102,26 +102,6 @@ class class_module_faqs_category extends class_model implements interface_model,
 		return $arrReturn;
 	}
 
-    /**
-     * Loads all available categories from the db
-     *
-     * @param bool $bitOnlyActive
-     * @return mixed
-     * @static
-     */
-    public static function getCategoriesCount($bitOnlyActive = false) {
-        $strQuery = "SELECT COUNT(*)
-                      FROM "._dbprefix_."faqs_category,
-						"._dbprefix_."system
-						WHERE system_id = faqs_cat_id
-						".($bitOnlyActive ? " AND system_status = 1 ": "" )."
-						ORDER BY faqs_cat_title";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
-
-
 	/**
 	 * Loads all categories, the given faq is in
 	 *

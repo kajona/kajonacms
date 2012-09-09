@@ -157,7 +157,7 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
 	 */
 	protected function actionList() {
 
-        $objIterator = new class_array_section_iterator(class_module_guestbook_guestbook::getGuestbooksCount());
+        $objIterator = new class_array_section_iterator(class_module_guestbook_guestbook::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_guestbook_guestbook::getGuestbooks($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

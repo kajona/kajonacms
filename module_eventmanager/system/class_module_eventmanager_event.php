@@ -109,7 +109,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
             $strCenter .= " - ".dateToString($this->getObjEndDate());
 
         if($this->getIntRegistrationRequired()) {
-            $strCenter .= ", ". class_module_eventmanager_participant::getAllParticipantsCount($this->getSystemid())." ".$this->getLang("event_participant");
+            $strCenter .= ", ". class_module_eventmanager_participant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
         }
 
         $strCenter .= ")";
@@ -206,22 +206,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
             $arrReturn[] = new class_module_eventmanager_event($arrSingleRow["system_id"]);
 
         return $arrReturn;
-    }
-
-    /**
-     * Returns the total number of events available
-     * @return int
-     */
-    public static function getAllEventsCount() {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."em_event,
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_date
-                      WHERE system_id = em_ev_id
-                        AND system_id = system_date_id
-                      ORDER BY system_date_start DESC, em_ev_title ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
     }
 
     /**

@@ -97,22 +97,6 @@ class class_module_news_category extends class_model implements interface_model,
 		return $arrReturn;
 	}
 
-    /**
-     * Counts all available categories in the db
-     *
-     * @return int
-     * @static
-     */
-    public static function getCategoriesCount() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."news_category,
-						"._dbprefix_."system
-						WHERE system_id = news_cat_id
-						ORDER BY news_cat_title";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
-
 	/**
 	 * Loads all categories, the given news is in
 	 *

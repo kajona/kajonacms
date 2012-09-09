@@ -279,6 +279,40 @@ abstract class class_root {
     }
 
 
+    /**
+     * A generic approach to count hte number of object currently available.
+     * This method is only a simple approach to determin the number of instances in the
+     * database, if you need more specific counts, overwrite this method or add your own
+     * implementation to the derived class.
+     *
+     * @param string $strPrevid
+     *
+     * @return int
+     */
+    public static function getObjectCount($strPrevid = "") {
+        $objAnnotations = new class_reflection(get_called_class());
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+
+        if(count($arrTargetTables) == 1) {
+            $arrSingleTable = explode(".", $arrTargetTables[0]);
+            //build the query
+            $arrParams = array();
+            $strQuery = "SELECT COUNT(*)
+                           FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrSingleTable[0]).",
+                                "._dbprefix_."system
+                          WHERE system_id = ".class_carrier::getInstance()->getObjDB()->encloseColumnName($arrSingleTable[1])."
+                           ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."";
+
+            if($strPrevid != "")
+                $arrParams[] = $strPrevid;
+
+            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+            return $arrRow["COUNT(*)"];
+        }
+
+        return 0;
+    }
+
 
    /**
     * Deletes the current object from the system.

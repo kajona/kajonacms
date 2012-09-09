@@ -148,24 +148,6 @@ class class_module_navigation_point extends class_model implements interface_mod
         return $arrReturn;
 	}
 
-    /**
-     * Loads the number of navigation points one layer under the given systemid
-     *
-     * @param string $strSystemid
-     * @param bool
-     * @return int
-     * @static
-     */
-    public static function getNaviLayerCount($strSystemid, $bitJustActive = false) {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."navigation, "._dbprefix_."system
-                             WHERE system_id = navigation_id
-                             AND system_prev_id = ?
-                             AND system_module_nr = ?
-                             ".($bitJustActive ? " AND system_status = 1 ": "")."";
-
-        $arrReturn = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid, _navigation_modul_id_));
-        return $arrReturn["COUNT(*)"];
-    }
 
     /**
      * Generates a navigation layer for the portal.

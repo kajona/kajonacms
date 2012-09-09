@@ -129,7 +129,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 	 */
 	protected function actionList() {
 
-        $objIterator = new class_array_section_iterator(class_module_mediamanager_repo::getAllReposCount());
+        $objIterator = new class_array_section_iterator(class_module_mediamanager_repo::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_mediamanager_repo::getAllRepos($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

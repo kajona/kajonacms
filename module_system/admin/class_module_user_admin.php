@@ -98,7 +98,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->formClose();
         $strReturn .= $this->objToolkit->divider();
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getNumberOfUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
+        $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_user_user::getAllUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
@@ -554,7 +554,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * @permissions view
 	 */
     protected function actionGroupList() {
-        $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getNumberOfGroups());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
