@@ -198,7 +198,6 @@ class class_module_rating_rate extends class_model implements interface_model, i
 
         //ok, so delete matching records
         //fetch the matching ids..
-        //TODO: could be changed to a direct deletion instead of a select & delete combination. a single delete could be faster.
         $strQuery = "SELECT rating_id
                      FROM "._dbprefix_."rating"."
                      WHERE rating_systemid = ? ";
@@ -206,17 +205,19 @@ class class_module_rating_rate extends class_model implements interface_model, i
 
         if(count($arrRows) > 0) {
         	foreach ($arrRows as $arrOneRow) {
-        		$strQuery = "DELETE FROM "._dbprefix_."rating"." WHERE rating_id= ?";
-        		$bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
-        		$bitReturn = $bitReturn && $this->deleteSystemRecord($arrOneRow["rating_id"]);
-
-        		//delete the entries from the history-table
-        		$strQuery = "DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ";
-        		$bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
+                $objRating = new class_module_rating_rate($arrOneRow["rating_id"]);
+                $bitReturn = $bitReturn && $objRating->deleteObject();
         	}
         }
 
         return $bitReturn;
+    }
+
+    protected function deleteObjectInternal() {
+        //delete the corresponding history entries
+        $strQuery = "DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ";
+        $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        return parent::deleteObjectInternal();
     }
 
 

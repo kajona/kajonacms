@@ -1636,6 +1636,7 @@ abstract class class_root {
      * @param bool $intStatus
      *
      * @throws class_exception
+     * @deprecated user setIntRecordStatus() instead
      * @return bool
      * @todo: systemid param handling
      */
