@@ -27,8 +27,6 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
     private $objToolkit;
     private $objDB;
 
-    private $arrModule;
-
     /**
      * Constructor
      */

@@ -10,7 +10,7 @@
 /**
  * Imports a xml-based page into the system. Tries to be as error-safe as possible.
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_systemtask_pageimport extends class_systemtask_base implements interface_admin_systemtask {

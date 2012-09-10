@@ -10,7 +10,7 @@
 /**
  * Exports a page into a xml-structure.
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_systemtask_pageexport extends class_systemtask_base implements interface_admin_systemtask {

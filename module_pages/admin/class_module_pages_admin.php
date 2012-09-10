@@ -866,7 +866,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      * Checks, if a new element already exists
      *
      * @return bool
-     */
+     * @todo may be removed?
+     *
     private function checkElementExisting() {
         $objElement = class_module_pages_element::getElement($this->getParam("element_name"));
         if($objElement != null && $objElement->getSystemid() != $this->getParam("elementid")) {
@@ -875,7 +876,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else
             return false;
-    }
+    }*/
 
 
     /**

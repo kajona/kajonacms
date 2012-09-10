@@ -24,14 +24,11 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
     private $objToolkit;
     private $objDB;
 
-    private $arrModule;
 
     /**
      * Constructor
-
      */
     public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts) {
-
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;

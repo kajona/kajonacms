@@ -44,7 +44,7 @@ class class_module_postacomment_search_portal implements interface_search_plugin
      * Searches the guestbook-posts
      *
      */
-	private function searchPostacomment() {
+    private function searchPostacomment() {
 
         $objLanguages = new class_module_languages_language();
 
@@ -125,27 +125,8 @@ class class_module_postacomment_search_portal implements interface_search_plugin
                 }
             }
         }
-	}
-
-    private function getElementData(class_module_guestbook_post $objPost) {
-        $strQuery =  "SELECT page_name, guestbook_amount, page_id
-                       FROM "._dbprefix_."element_guestbook,
-                            "._dbprefix_."page_element,
-                            "._dbprefix_."page,
-                            "._dbprefix_."system
-                      WHERE guestbook_id = ?
-                        AND content_id = page_element_id
-                        AND content_id = system_id
-                        AND system_prev_id = page_id
-                        AND system_status = 1
-                        AND page_element_ph_language = ? " ;
-
-        $objLanguages = new class_module_languages_language();
-
-        $arrRows = $this->objDB->getPArray($strQuery, array($objPost->getPrevId(), $objLanguages->getStrPortalLanguage()));
-
-        return $arrRows;
     }
+
 
 }
 

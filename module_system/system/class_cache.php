@@ -107,10 +107,10 @@ class class_cache  {
 
         //first run - search the internal cache
         foreach(self::$arrInternalCache as $arrSingleCacheEntry) {
-            if($arrSingleCacheEntry["cache_source"] == $strSourceName &&
-                $arrSingleCacheEntry["cache_hash1"] == $strHash1 &&
-                ($strHash2 == null || $arrSingleCacheEntry["cache_hash2"] == $strHash2) &&
-                ($strLanguage == null || $arrSingleCacheEntry["cache_language"] == $strLanguage)
+            if($arrSingleCacheEntry["cache_source"] == $strSourceName
+                && $arrSingleCacheEntry["cache_hash1"] == $strHash1
+                && ($strHash2 == null || $arrSingleCacheEntry["cache_hash2"] == $strHash2)
+                && ($strLanguage == null || $arrSingleCacheEntry["cache_language"] == $strLanguage)
             ) {
 
                 $objCacheEntry = new class_cache(
@@ -199,6 +199,7 @@ class class_cache  {
      * Saves the object to the database.
      * Differs between update or insert.
      *
+     * @throws class_exception
      * @return bool
      */
     public function updateObjectToDb() {
@@ -301,7 +302,7 @@ class class_cache  {
 
     /**
      * Returns the list of sources currently stored to the cache
-     * @return type
+     * @return string
      */
     public static function getCacheSources() {
         $strQuery = "SELECT DISTINCT cache_source FROM  "._dbprefix_."cache";
@@ -417,7 +418,7 @@ class class_cache  {
         return $arrCaches["COUNT(*)"];
     }
 
-    private function increaseCacheEntryHits() {
+    public function increaseCacheEntryHits() {
         $strQuery = "UPDATE "._dbprefix_."cache SET cache_hits = cache_hits+1 WHERE cache_id=? ";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strCacheId));
     }
