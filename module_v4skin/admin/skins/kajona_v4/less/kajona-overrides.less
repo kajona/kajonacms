@@ -29,14 +29,7 @@ body {
     }
 }
 
-/* the login page */
-body.login {
-    background-color: lighten(@kajonaLightGray, 5%);
-    .modal-header {
-        background:url(../img/pusteblume.png) right -45px no-repeat @grayDarker;
-        color: @white;
-    }
-}
+
 
 .sidebar-nav {
 
@@ -322,6 +315,7 @@ body.login {
     padding-left: 20px;
     padding-right: 20px;
     filter: none;
+    border: 0px;
 
     .navbar-search {
         margin-top:12px;
@@ -872,7 +866,7 @@ label {
 }
 
 .popover {
-    width: 300px;
+    width: 400px;
     border: 2px solid @grayDark;
     .popover-title {
         font-size: @baseFontSize;
@@ -911,4 +905,33 @@ label {
         }
     }
 
+}
+
+
+
+
+/* the login page */
+body.login {
+    background-color: lighten(@kajonaLightGray, 5%);
+    .modal-header {
+        background:url(../img/pusteblume.png) right -45px no-repeat @grayDarker;
+        color: @white;
+    }
+
+    #content {
+
+        form {
+            .control-label {
+                width: 120px;
+            }
+
+            .controls {
+                margin-left: 140px;
+            }
+
+            .savechanges {
+                margin: 20px 0 0 140px;
+            }
+        }
+    }
 }

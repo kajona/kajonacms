@@ -325,9 +325,8 @@ class class_module_workflows_workflow extends class_model implements interface_m
                       WHERE system_id = workflows_id
                         AND system_id = system_date_id
                         ".$arrTemp[0]."
-                        AND ( workflows_state = ?  )
-                        AND ( system_date_start > ? OR system_date_start = 0 )
-                   ORDER BY system_date_start DESC";
+                        AND  workflows_state = ?
+                        AND ( system_date_start > ? OR system_date_start = 0 ) ";
 
         $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
         $arrParams[] = class_date::getCurrentTimestamp();
@@ -437,6 +436,9 @@ class class_module_workflows_workflow extends class_model implements interface_m
      */
     private static function getUserWhereStatement($arrUsers) {
 
+        if(!is_array($arrUsers))
+            $arrUsers = array($arrUsers);
+
         $arrParams = array();
         if(count($arrUsers) == 0)
             return "";
@@ -450,7 +452,8 @@ class class_module_workflows_workflow extends class_model implements interface_m
             $arrParams[] = "%".dbsafeString($strOneUser)."%";
         }
 
-        $strWhere = "AND( ".$strWhere." )";
+        if($strWhere != "")
+            $strWhere = "AND ( ".$strWhere." )";
         $arrReturn = array($strWhere, $arrParams);
         return $arrReturn;
     }
