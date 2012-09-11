@@ -19,6 +19,7 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn element_name
+     * @listOrder
      */
     private $strName = "";
 
@@ -135,28 +136,6 @@ class class_module_pages_element extends class_model implements interface_model,
         $objAdminInstance = $this->getAdminElementInstance();
         return $objAdminInstance->getElementDescription();
     }
-
-    /**
-     * Loads all installed Elements
-     *
-     * @param bool|int $intStart
-     * @param bool|int $intEnd
-     *
-     * @return class_module_pages_element[]
-     * @static
-     */
-    public static function getAllElements($intStart = null, $intEnd = null) {
-        $strQuery = "SELECT element_id FROM "._dbprefix_."element ORDER BY element_name";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_pages_element($arrOneId["element_id"]);
-
-        return $arrReturn;
-    }
-
 
     /**
      * Returns the element using the given element-name

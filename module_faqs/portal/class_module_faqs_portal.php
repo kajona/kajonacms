@@ -40,7 +40,7 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
 		//load categories
 		$arrCategories = array();
 		if($this->arrElementData["faqs_category"] == "0") {
-		    $arrCategories = class_module_faqs_category::getCategories(null, null, true);
+		    $arrCategories = class_module_faqs_category::getObjectList();
 		}
 		else {
 		    $arrCategories[] = new class_module_faqs_category($this->arrElementData["faqs_category"]);
@@ -59,8 +59,12 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
     		    $arrFaqs = class_module_faqs_faq::loadListFaqsPortal(1);
     		    $objCategory = new class_module_faqs_category();
     		}
-    		else
+    		else {
+                if($objCategory->getIntRecordStatus() == 0)
+                    continue;
+
     		    $arrFaqs = class_module_faqs_faq::loadListFaqsPortal($objCategory->getSystemid());
+            }
 
             $strFaqTemplateID = $this->objTemplate->readTemplate("/module_faqs/".$this->arrElementData["faqs_template"], "faq_faq");
             $strFaqs = "";

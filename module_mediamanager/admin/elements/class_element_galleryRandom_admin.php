@@ -36,7 +36,7 @@ class class_element_galleryRandom_admin extends class_element_admin implements i
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all galleries
-        $arrRawGals = class_module_mediamanager_repo::getAllRepos();
+        $arrRawGals = class_module_mediamanager_repo::getObjectList();
         $arrGalleries = array();
         foreach ($arrRawGals as $objOneGal)
             $arrGalleries[$objOneGal->getSystemid()] = $objOneGal->getStrTitle();

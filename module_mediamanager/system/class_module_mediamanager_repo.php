@@ -25,6 +25,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_title
+     * @listOrder
      */
     private $strTitle = "";
 
@@ -87,31 +88,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     public function getStrDisplayName() {
         return $this->getStrTitle();
     }
-
-
-    /**
-     * loads all available repos
-     *
-     * @param $intStart
-     * @param $intEnd
-     *
-     * @return class_module_mediamanager_repo[]
-     * @static
-     */
-	public static function getAllRepos($intStart = null, $intEnd = null) {
-		$strQuery = "SELECT system_id
-		               FROM "._dbprefix_."mediamanager_repo,
-						    "._dbprefix_."system
-				      WHERE repo_id = system_id
-		    	   ORDER BY repo_title ASC";
-		$objDB = class_carrier::getInstance()->getObjDB();
-        $arrIds = $objDB->getPArray($strQuery, array(), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach ($arrIds as $arrOneRecord) {
-        	$arrReturn[] = new class_module_mediamanager_repo($arrOneRecord["system_id"]);
-        }
-        return $arrReturn;
-	}
 
     /**
      * Syncs the complete repo with the filesystem. Adds new files and removes delete files to and

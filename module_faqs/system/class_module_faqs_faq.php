@@ -178,7 +178,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @return mixed
      * @static
      */
-	public static function getFaqsList($strFilter = "", $intStart = null, $intEnd = null) {
+	public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
         $arrParams = array();
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id

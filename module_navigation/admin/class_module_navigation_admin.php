@@ -71,7 +71,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
             $objIterator = new class_array_section_iterator(class_module_navigation_tree::getObjectCount(class_module_system_module::getModuleIdByNr(_navigation_modul_id_)));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setArraySection(class_module_navigation_tree::getAllNavis($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+            $objIterator->setArraySection(class_module_navigation_tree::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
             return $this->renderList($objIterator);
 
         }

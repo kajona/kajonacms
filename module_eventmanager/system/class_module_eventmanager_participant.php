@@ -36,6 +36,7 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_email
      * @versionable
+     * @listOrder
      */
     private $strEmail = "";
 
@@ -103,33 +104,6 @@ class class_module_eventmanager_participant extends class_model implements inter
     public function getStrDisplayName() {
         return $this->getStrEmail() .( $this->getStrLastname() != "" || $this->getStrForename() != "" ? $this->getStrLastname().", ".$this->getStrForename() : "");
     }
-
-
-    /**
-     * Loads all participants for a single event
-     *
-     * @param string $strEventId
-     * @param bool|int $intStart
-     * @param bool|int $intEnd
-     *
-     * @return class_module_eventmanager_participant[]
-     */
-	public static function getAllParticipants($strEventId, $intStart = false, $intEnd = false) {
-		$strQuery = "SELECT system_id 
-                       FROM "._dbprefix_."em_participant,
-						     "._dbprefix_."system
-				      WHERE system_id = em_pt_id
-                        AND system_prev_id = ?
-                   ORDER BY em_pt_email ASC, em_pt_lastname ASC";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strEventId), $intStart, $intEnd);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_eventmanager_participant($arrOneId["system_id"]);
-
-		return $arrReturn;
-	}
-
 
     /**
      * Returns a human readable name of the action stored with the changeset.

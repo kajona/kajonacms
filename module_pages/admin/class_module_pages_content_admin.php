@@ -104,7 +104,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
         $arrElementsOnPageCopy = $arrElementsOnPage;
 
         //Loading all Elements installed on the system ("RAW"-Elements)
-        $arrElementsInSystem = class_module_pages_element::getAllElements();
+        $arrElementsInSystem = class_module_pages_element::getObjectList();
 
 
         //So, loop through the placeholders and check, if there's any element already belonging to this one
@@ -541,7 +541,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 
             //step one: language selection
-            $arrLanguages = class_module_languages_language::getAllLanguages(true);
+            $arrLanguages = class_module_languages_language::getObjectList(true);
             $arrLanguageDD = array();
             foreach($arrLanguages as $objSingleLanguage)
                 $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getLang("lang_".$objSingleLanguage->getStrName(), "languages");

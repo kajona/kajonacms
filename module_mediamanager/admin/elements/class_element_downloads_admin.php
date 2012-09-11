@@ -37,7 +37,7 @@ class class_element_downloads_admin extends class_element_admin implements inter
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all archives
-        $arrObjArchs = class_module_mediamanager_repo::getAllRepos();
+        $arrObjArchs = class_module_mediamanager_repo::getObjectList();
         $arrArchives = array();
         foreach ($arrObjArchs as $objOneArchive)
             $arrArchives[$objOneArchive->getSystemid()] = $objOneArchive->getStrDisplayName();

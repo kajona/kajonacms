@@ -21,6 +21,7 @@ class class_module_guestbook_guestbook extends class_model implements interface_
     /**
      * @var string
      * @tableColumn guestbook_book.guestbook_title
+     * @listOrder
      */
     private $strGuestbookTitle = "";
 
@@ -88,29 +89,6 @@ class class_module_guestbook_guestbook extends class_model implements interface_
     protected function onInsertToDb() {
         return $this->objRights->addGroupToRight(_guests_group_id_, $this->getSystemid(), "right1");
     }
-
-
-    /**
-     * Loads all guestbooks
-     *
-     * @param null $intStart
-     * @param null $intEnd
-     * @return class_module_guestbook_guestbook[]
-     * @static
-     */
-	public static function getGuestbooks($intStart = null, $intEnd = null) {
-		$strQuery = "SELECT system_id
-						FROM "._dbprefix_."guestbook_book, "._dbprefix_."system
-						WHERE system_id = guestbook_id
-						ORDER BY guestbook_title";
-
-		$arrIds =  class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-		$arrReturn = array();
-		foreach ($arrIds as $arrOneId)
-		  $arrReturn[] = new class_module_guestbook_guestbook($arrOneId["system_id"]);
-
-		return $arrReturn;
-	}
 
     /**
      * @param string $strGuestbookTitle

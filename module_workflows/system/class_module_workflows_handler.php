@@ -24,6 +24,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_class
+     * @listOrder
      */
     private $strHandlerClass = "";
 
@@ -123,31 +124,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
     }
 
     /**
-     * Retrieves the list of workflow-handlers available
-     *
-     * @param bool|int $intStart
-     * @param bool|int $intEnd
-     * @return class_module_workflows_handler[]
-     */
-    public static function getAllworkflowHandlers($intStart = false, $intEnd = false) {
-        $strQuery = "SELECT system_id FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."workflows_handler
-                      WHERE system_id = workflows_handler_id
-                   ORDER BY workflows_handler_class ASC";
-
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_workflows_handler($arrSingleRow["system_id"]);
-        }
-
-        return $arrReturn;
-    }
-
-    /**
      * Synchronizes the list of handlers available on the filesystem compared to the list
      * of handlers available in the database.
      * Adds or removes handlers from or to the database.
@@ -174,7 +150,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
         }
 
         //find workflows to remove
-        $arrWorkflows = self::getAllworkflowHandlers();
+        $arrWorkflows = self::getObjectList();
         foreach($arrWorkflows as $objOneWorkflow) {
             if(!in_array($objOneWorkflow->getStrHandlerClass().".php", $arrFiles))
                 $objOneWorkflow->deleteObject();

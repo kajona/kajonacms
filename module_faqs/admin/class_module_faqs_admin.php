@@ -109,7 +109,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
         $objIterator = new class_array_section_iterator(class_module_faqs_category::getObjectCount());
         $objIterator->setIntElementsPerPage(class_module_faqs_category::getObjectCount());
         $objIterator->setPageNumber(1);
-        $objIterator->setArraySection(class_module_faqs_category::getCategories($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_faqs_category::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn = $this->renderList($objIterator, false, class_module_faqs_admin::STR_CAT_LIST);
 
@@ -118,7 +118,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
         $objIterator = new class_array_section_iterator(class_module_faqs_faq::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_faqs_faq::getFaqsList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_faqs_faq::getObjectList( $this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objIterator, false, class_module_faqs_admin::STR_FAQ_LIST);
 
@@ -227,7 +227,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
         $objForm = new class_admin_formgenerator("faq", $objFaq);
         $objForm->generateFieldsFromObject();
 
-        $arrCats = class_module_faqs_category::getCategories();
+        $arrCats = class_module_faqs_category::getObjectList();
         if (count($arrCats) > 0)
             $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
 

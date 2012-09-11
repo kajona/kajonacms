@@ -98,7 +98,7 @@ class class_module_system_aspect extends class_model implements interface_model,
     protected function updateStateToDb() {
 
         //if no other aspect exists, we have a new default aspect
-        $arrObjAspects = class_module_system_aspect::getAllAspects();
+        $arrObjAspects = class_module_system_aspect::getObjectList();
         if(count($arrObjAspects) == 0) {
         	$this->setBitDefault(1);
         }
@@ -119,7 +119,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return class_module_system_aspect[]
      * @static
      */
-    public static function getAllAspects($bitJustActive = false, $intStart = null, $intEnd = null) {
+    public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
 		             WHERE system_id = aspect_id
@@ -174,7 +174,7 @@ class class_module_system_aspect extends class_model implements interface_model,
         parent::deleteObjectInternal();
 
 		//if we have just one aspect remaining, set this one as default
-        $arrObjAspects = class_module_system_aspect::getAllAspects();
+        $arrObjAspects = class_module_system_aspect::getObjectList();
         if(count($arrObjAspects) == 1) {
         	$objOneLanguage = $arrObjAspects[0];
         	$objOneLanguage->setBitDefault(1);
@@ -205,8 +205,8 @@ class class_module_system_aspect extends class_model implements interface_model,
             return new class_module_system_aspect($arrRow["system_id"]);
         }
         else {
-            if(count(class_module_system_aspect::getAllAspects(true)) > 0) {
-                $arrAspects = class_module_system_aspect::getAllAspects(true);
+            if(count(class_module_system_aspect::getObjectList(true)) > 0) {
+                $arrAspects = class_module_system_aspect::getObjectList(true);
                 foreach($arrAspects as $objOneAspect)
                     if($objOneAspect->rightView())
                         return $objOneAspect;

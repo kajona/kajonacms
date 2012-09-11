@@ -124,7 +124,7 @@ class class_installer_guestbook extends class_installer_base  {
 
         $strReturn .= "Adding classes for existing records...\n";
         $strReturn .= "Guestbooks\n";
-        foreach(class_module_guestbook_guestbook::getGuestbooks() as $objOneBook) {
+        foreach(class_module_guestbook_guestbook::getObjectList() as $objOneBook) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( get_class($objOneBook), $objOneBook->getSystemid() ) );
         }

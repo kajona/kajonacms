@@ -34,7 +34,7 @@ class class_element_votings_admin extends class_element_admin implements interfa
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all votings available
-        $arrRawVotings = class_module_votings_voting::getVotings(true);
+        $arrRawVotings = class_module_votings_voting::getObjectList(true);
         $arrVotings = array();
 
         foreach ($arrRawVotings as $objOneVoting)

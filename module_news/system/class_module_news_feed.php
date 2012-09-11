@@ -20,6 +20,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_title
+     * @listOrder
      */
     private $strTitle = "";
 
@@ -119,29 +120,6 @@ class class_module_news_feed extends class_model implements interface_model, int
     public function getStrDisplayName() {
         return $this->getStrTitle();
     }
-
-
-    /**
-     * Loads all newsfeeds
-     *
-     * @param null $intStart
-     * @param null $intEnd
-     *
-     * @return class_module_news_feed[]
-     * @static
-     */
-	public static function getAllFeeds($intStart = null, $intEnd = null) {
-	    $strQuery = "SELECT system_id
-	                   FROM "._dbprefix_."news_feed,
-	                        "._dbprefix_."system
-	                   WHERE news_feed_id = system_id";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_news_feed($arrOneId["system_id"]);
-
-		return $arrReturn;
-	}
 
 	/**
 	 * Load a newsfeed using a urltitle

@@ -280,8 +280,8 @@ abstract class class_root {
 
 
     /**
-     * A generic approach to count hte number of object currently available.
-     * This method is only a simple approach to determin the number of instances in the
+     * A generic approach to count the number of object currently available.
+     * This method is only a simple approach to determine the number of instances in the
      * database, if you need more specific counts, overwrite this method or add your own
      * implementation to the derived class.
      *
@@ -311,6 +311,77 @@ abstract class class_root {
         }
 
         return 0;
+    }
+
+    /**
+     * A generic approach to load a list of objects currently available.
+     * This method is only a simple approach to determine the instances in the
+     * database, if you need more specific loaders, overwrite this method or add your own
+     * implementation to the derived class.
+     *
+     * @param string $strPrevid
+     * @param null|int $intStart
+     * @param null|int $intEnd
+     *
+     * @return self[]
+     */
+    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
+        $objAnnotations = new class_reflection(get_called_class());
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
+
+        $arrReturn = array();
+
+        if(count($arrTargetTables) == 1) {
+            //try to load the sort criteria
+            $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation("@listOrder");
+
+            $strOrderBy = " ORDER BY system_comment ASC ";
+            if(count($arrPropertiesOrder) > 0) {
+                $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
+
+                foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
+                    if(isset($arrPropertiesORM[$strProperty])) {
+
+                        $strColumn = "";
+                        $arrColumn = explode(".", $arrPropertiesORM[$strProperty]);
+                        if(count($arrColumn) == 2)
+                            $strColumn = $arrColumn[1];
+
+
+                        //get order
+                        $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
+                        //get column
+
+                        if($strColumn != "") {
+                            $strOrderBy = " ORDER BY ".$strColumn." ".$strOrder;
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            $arrSingleTable = explode(".", $arrTargetTables[0]);
+            //build the query
+            $arrParams = array();
+            $strQuery = "SELECT system_id
+                           FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrSingleTable[0]).",
+                                "._dbprefix_."system
+                          WHERE system_id = ".class_carrier::getInstance()->getObjDB()->encloseColumnName($arrSingleTable[1])."
+                           ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."
+                           ".$strOrderBy;
+
+            if($strPrevid != "")
+                $arrParams[] = $strPrevid;
+
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+
+            foreach($arrRows as $arrOneRow) {
+                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+            }
+        }
+
+        return $arrReturn;
     }
 
 

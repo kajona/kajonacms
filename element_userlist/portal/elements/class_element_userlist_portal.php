@@ -134,7 +134,7 @@ class class_element_userlist_portal extends class_element_portal implements inte
             }
         }
         else {
-            $arrUser = class_module_user_user::getAllUsers();
+            $arrUser = class_module_user_user::getObjectList();
         }
 
         //filter against inactive?

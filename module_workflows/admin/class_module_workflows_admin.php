@@ -392,7 +392,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
         $objIterator = new class_array_section_iterator(class_module_workflows_handler::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_workflows_handler::getAllworkflowHandlers($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_workflows_handler::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objIterator, false, self::STR_LIST_HANDLER);
         return $strReturn;

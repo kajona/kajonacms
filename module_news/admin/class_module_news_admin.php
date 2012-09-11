@@ -142,7 +142,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
         $objIterator = new class_array_section_iterator(class_module_news_category::getObjectCount());
         $objIterator->setIntElementsPerPage(class_module_news_category::getObjectCount());
         $objIterator->setPageNumber(1);
-        $objIterator->setArraySection(class_module_news_category::getCategories($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_news_category::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn = $this->renderList($objIterator, false, class_module_news_admin::STR_CAT_LIST);
 
@@ -151,7 +151,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
 
         $objIterator = new class_array_section_iterator(class_module_news_news::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_news_news::getNewsList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_news_news::getObjectList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objIterator, false, class_module_news_admin::STR_NEWS_LIST);
 
@@ -174,7 +174,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addtolanguage"));
 
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "assignToLanguageset"));
-                $arrLanguages = class_module_languages_language::getAllLanguages();
+                $arrLanguages = class_module_languages_language::getObjectList();
                 $arrDropdown = array();
                 foreach($arrLanguages as $objOneLanguage)
                     $arrDropdown[$objOneLanguage->getSystemid()] = $this->getLang("lang_".$objOneLanguage->getStrName() , "languages");
@@ -193,7 +193,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
 
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_maintainlanguages"));
 
-                $arrLanguages = class_module_languages_language::getAllLanguages();
+                $arrLanguages = class_module_languages_language::getObjectList();
 
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
@@ -224,7 +224,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
                     $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addnewstolanguage"));
 
                     $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "addNewsToLanguageset"));
-                    $arrLanguages = class_module_languages_language::getAllLanguages();
+                    $arrLanguages = class_module_languages_language::getObjectList();
                     $arrDropdown = array();
                     foreach($arrLanguages as $objOneLanguage)
                         if(!in_array($objOneLanguage->getSystemid(), $arrMaintainedLanguages))
@@ -233,7 +233,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
                     $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getLang("commons_language_field"));
 
 
-                    $arrNews = class_module_news_news::getNewsList();
+                    $arrNews = class_module_news_news::getObjectList();
                     $arrDropdown = array();
                     foreach($arrNews as $objOneNews)
                         if(class_module_languages_languageset::getLanguagesetForSystemid($objOneNews->getSystemid()) == null)
@@ -421,7 +421,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
         $objForm = new class_admin_formgenerator("news", $objNews);
         $objForm->generateFieldsFromObject();
 
-        $arrCats = class_module_news_category::getCategories();
+        $arrCats = class_module_news_category::getObjectList();
         if (count($arrCats) > 0)
             $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
 
@@ -506,7 +506,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
     protected function actionListNewsFeed() {
         $objIterator = new class_array_section_iterator(class_module_news_feed::getObjectCount());
         $objIterator->setPageNumber(1);
-        $objIterator->setArraySection(class_module_news_feed::getAllFeeds($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_news_feed::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         return $this->renderList($objIterator, false, class_module_news_admin::STR_FEED_LIST);
     }
@@ -555,7 +555,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
         $objForm = new class_admin_formgenerator("feed", $objFeed);
         $objForm->generateFieldsFromObject();
 
-        $arrNewsCats = class_module_news_category::getCategories();
+        $arrNewsCats = class_module_news_category::getObjectList();
         $arrCatsDD = array();
         foreach ($arrNewsCats as $objOneCat)
             $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
@@ -618,7 +618,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
     protected function actionListCategories() {
 		$strReturn = "";
         if($this->getObjModule()->rightView()) {
-    		$arrCategories = class_module_news_category::getCategories();
+    		$arrCategories = class_module_news_category::getObjectList();
             $strReturn .= "<categories>\n";
             foreach($arrCategories as $objOneCategory) {
                 if($objOneCategory->rightView()) {
@@ -654,7 +654,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
     protected function actionListNews() {
 		$strReturn = "";
         if($this->getObjModule()->rightView()) {
-    		$arrNews = class_module_news_news::getNewsList();
+    		$arrNews = class_module_news_news::getObjectList();
             $strReturn .= "<newslist>\n";
             foreach($arrNews as $objOneNews) {
                 if($objOneNews->rightView()) {

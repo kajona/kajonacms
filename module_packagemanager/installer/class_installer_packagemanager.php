@@ -51,7 +51,7 @@ class class_installer_packagemanager extends class_installer_base implements int
         $strReturn .= "Initial templatepack sync...\n";
         class_module_packagemanager_template::syncTemplatepacks();
 
-        $arrPacks = class_module_packagemanager_template::getAllTemplatepacks();
+        $arrPacks = class_module_packagemanager_template::getObjectList();
         if(count($arrPacks) > 0) {
             $objPack = $arrPacks[0];
             $objPack->setIntRecordStatus(1);

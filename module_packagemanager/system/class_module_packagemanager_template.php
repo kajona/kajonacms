@@ -19,6 +19,7 @@ class class_module_packagemanager_template extends class_model implements interf
     /**
      * @var string
      * @tableColumn templatepack_name
+     * @listOrder
      */
     private $strName = "";
 
@@ -111,33 +112,6 @@ class class_module_packagemanager_template extends class_model implements interf
     }
 
     /**
-     * Fetches the list of packs available
-     *
-     * @static
-     *
-     * @param null|int $intStart
-     * @param null|int $intEnd
-     *
-     * @return class_module_packagemanager_template[]
-     */
-    public static function getAllTemplatepacks($intStart = null, $intEnd = null) {
-        $strQuery = "SELECT templatepack_id
-                       FROM "._dbprefix_."templatepacks,
-                            "._dbprefix_."system
-                      WHERE system_id = templatepack_id
-                   ORDER BY templatepack_name ASC ";
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrRows as $arrOneRow)
-            $arrReturn[] = new class_module_packagemanager_template($arrOneRow["templatepack_id"]);
-
-        return $arrReturn;
-    }
-
-
-    /**
      * Synchronized the list of template-packs available in the filesystem
      * with the list of packs stored at the database.
      *
@@ -149,7 +123,7 @@ class class_module_packagemanager_template extends class_model implements interf
         $arrFolders = $objFilesystem->getCompleteList("/templates");
 
         //scan packs installed
-        $arrPacksInstalled = self::getAllTemplatepacks();
+        $arrPacksInstalled = self::getObjectList();
 
         foreach($arrFolders["folders"] as $strOneFolder) {
             $bitFolderFound = false;

@@ -39,7 +39,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
 		$strReturn = "";
 		//Load all guestbooks available
 
-        $objGuestbooks = class_module_guestbook_guestbook::getGuestbooks();
+        $objGuestbooks = class_module_guestbook_guestbook::getObjectList();
         $arrGuestbooks = array();
         foreach ($objGuestbooks as $objOneGuestbook)
             $arrGuestbooks[$objOneGuestbook->getSystemid()] = $objOneGuestbook->getStrGuestbookTitle();

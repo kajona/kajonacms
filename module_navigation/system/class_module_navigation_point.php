@@ -135,10 +135,9 @@ class class_module_navigation_point extends class_model implements interface_mod
 	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
     			             AND system_prev_id = ?
-    			             AND system_module_nr = ?
     			             ".($bitJustActive ? " AND system_status = 1 ": "")."
     			             ORDER BY system_sort ASC, system_comment ASC";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, _navigation_modul_id_));
+	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
             $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);

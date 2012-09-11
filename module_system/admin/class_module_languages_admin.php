@@ -52,7 +52,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_languages_language::getNumberOfLanguagesAvailable());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_languages_language::getAllLanguages(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_languages_language::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator);
 
@@ -186,7 +186,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
             //check if the current active one was deleted. if, then reset. #kajona trace id 613
             if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
                 $this->objDB->flushQueryCache();
-                $arrLangs = class_module_languages_language::getAllLanguages();
+                $arrLangs = class_module_languages_language::getObjectList();
                 if(count($arrLangs) > 0 ) {
                     $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
                 }
@@ -232,7 +232,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      */
     public static function enableLanguageSwitch() {
         if(self::$arrLanguageSwitchEntries == null) {
-            $arrObjLanguages = class_module_languages_language::getAllLanguages(true);
+            $arrObjLanguages = class_module_languages_language::getObjectList(true);
             if(count($arrObjLanguages) > 1) {
                 self::$arrLanguageSwitchEntries = array();
                 foreach($arrObjLanguages as $objOneLang) {

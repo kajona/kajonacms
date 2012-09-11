@@ -68,7 +68,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 			//Get Rights
 			$arrRights = $objRights->getArrayRights($objTargetRecord->getSystemid());
 			//Get groups
-			$arrGroups = class_module_user_group::getAllGroups();
+			$arrGroups = class_module_user_group::getObjectList();
 
 			//Determine name of the record
 			if($objTargetRecord->getStrRecordComment() == "")
@@ -304,7 +304,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 				$intInherit = 0;
 
 			//Get Groups
-            $arrGroups = class_module_user_group::getAllGroups();
+            $arrGroups = class_module_user_group::getObjectList();
 
             $strView = _admins_group_id_;
             $strEdit = _admins_group_id_;

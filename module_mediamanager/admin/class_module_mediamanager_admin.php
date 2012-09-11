@@ -131,7 +131,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
         $objIterator = new class_array_section_iterator(class_module_mediamanager_repo::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_mediamanager_repo::getAllRepos($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_mediamanager_repo::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         return $this->renderList($objIterator);
 
@@ -403,7 +403,7 @@ HTML;
      */
     protected function actionMassSync() {
 
-        $arrRepos = class_module_mediamanager_repo::getAllRepos();
+        $arrRepos = class_module_mediamanager_repo::getObjectList();
         $arrSyncs = array("insert" => 0, "delete" => 0);
         foreach($arrRepos as $objOneRepo) {
             if($objOneRepo->rightEdit()) {
@@ -640,7 +640,7 @@ HTML;
         //list repos or contents?
         if($this->getSystemid() == "") {
             //Load the repos
-            $arrObjRepos = class_module_mediamanager_repo::getAllRepos();
+            $arrObjRepos = class_module_mediamanager_repo::getObjectList();
             $intI = 0;
             //Print every repo
             /** @var class_module_mediamanager_repo $objOneRepo */

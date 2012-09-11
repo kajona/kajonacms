@@ -52,7 +52,7 @@ class class_element_portalregistration_admin extends class_element_admin impleme
             $strReturn .= $this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" ));
 
 		//Load groups available
-		$arrGroups = class_module_user_group::getAllGroups();
+		$arrGroups = class_module_user_group::getObjectList();
 		$arrGroupsDD = array();
 		foreach ($arrGroups as $objOneGroup) {
             if($objOneGroup->getStrSubsystem() == "kajona")

@@ -37,7 +37,7 @@ class class_element_portalupload_admin extends class_element_admin implements in
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
 
-		$arrDlArchives = class_module_mediamanager_repo::getAllRepos();
+		$arrDlArchives = class_module_mediamanager_repo::getObjectList();
 		
 		//Build the form
 		//Load the available templates

@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Model for a faqscategory
+ * Model for a faqs category
  *
  * @package module_faqs
  * @author sidler@mulchprod.de
@@ -20,6 +20,7 @@ class class_module_faqs_category extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn faqs_category.faqs_cat_title
+     * @listOrder asc
      */
     private $strTitle = "";
 
@@ -76,31 +77,6 @@ class class_module_faqs_category extends class_model implements interface_model,
         return $this->getStrTitle();
     }
 
-
-    /**
-     * Loads all available categories from the db
-     *
-     * @param null $intStart
-     * @param null $intEnd
-     * @param bool $bitOnlyActive
-     *
-     * @return class_module_faqs_category[]
-     * @static
-     */
-	public static function getCategories($intStart = null, $intEnd = null, $bitOnlyActive = false) {
-		$strQuery = "SELECT system_id FROM "._dbprefix_."faqs_category,
-						"._dbprefix_."system
-						WHERE system_id = faqs_cat_id
-						".($bitOnlyActive ? " AND system_status = 1 ": "" )."
-						ORDER BY faqs_cat_title";
-
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_faqs_category($arrOneId["system_id"]);
-
-		return $arrReturn;
-	}
 
 	/**
 	 * Loads all categories, the given faq is in

@@ -154,7 +154,7 @@ class class_module_guestbook_portal extends class_portal implements interface_po
             $objMessageHandler = new class_module_messaging_messagehandler();
 
             $arrGroups = array();
-            $allGroups = class_module_user_group::getAllGroups();
+            $allGroups = class_module_user_group::getObjectList();
             foreach($allGroups as $objOneGroup) {
                 if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
                     $arrGroups[] = $objOneGroup;

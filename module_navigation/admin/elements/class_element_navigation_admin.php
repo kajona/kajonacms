@@ -37,7 +37,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 		$strReturn = "";
 
         $arrNavigationsDropdown = array();
-        foreach(class_module_navigation_tree::getAllNavis() as $objOneNavigation)
+        foreach(class_module_navigation_tree::getObjectList() as $objOneNavigation)
             $arrNavigationsDropdown[$objOneNavigation->getSystemid()] = $objOneNavigation->getStrDisplayName();
 
 		//Build the form

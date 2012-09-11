@@ -159,7 +159,7 @@ class class_module_guestbook_admin extends class_admin_simple implements interfa
 
         $objIterator = new class_array_section_iterator(class_module_guestbook_guestbook::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_guestbook_guestbook::getGuestbooks($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(class_module_guestbook_guestbook::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         return $this->renderList($objIterator);
 	}

@@ -269,7 +269,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
         $objLanguages = new class_module_languages_language();
         $strCurrentLanguage = $objLanguages->getStrAdminLanguageToWorkOn();
 
-        $arrLanguages = class_module_languages_language::getAllLanguages();
+        $arrLanguages = class_module_languages_language::getObjectList();
         foreach($arrLanguages as $objOneLanguage) {
             $objLanguages->setStrAdminLanguageToWorkOn($objOneLanguage->getStrName());
 

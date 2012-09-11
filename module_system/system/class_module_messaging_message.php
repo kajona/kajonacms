@@ -161,7 +161,10 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @return class_module_messaging_message[]
      * @static
      */
-    public static function getMessagesForUser($strUserid, $intStart = null, $intEnd = null) {
+    public static function getObjectList($strUserid = "", $intStart = null, $intEnd = null) {
+        if($strUserid == "")
+            $strUserid = class_carrier::getInstance()->getObjSession()->getUserID();
+
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
 		            WHERE system_id = message_id

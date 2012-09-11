@@ -45,7 +45,7 @@ class class_element_userlist_admin extends class_element_admin implements interf
 		}
 
         //load the available groups
-        $arrGroups = class_module_user_group::getAllGroups();
+        $arrGroups = class_module_user_group::getObjectList();
 		$arrGroupsDD = array();
         $arrGroupsDD[0] = $this->getLang("userlist_all");
 		if(count($arrGroups) > 0) {

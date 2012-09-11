@@ -119,7 +119,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
         $strReturn .= "Adding classes for existing records...\n";
         $strReturn .= "Trees\n";
-        foreach(class_module_navigation_tree::getAllNavis() as $objOneModule) {
+        foreach(class_module_navigation_tree::getObjectList() as $objOneModule) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
             $this->objDB->_pQuery($strQuery, array( get_class($objOneModule), $objOneModule->getSystemid() ) );
         }

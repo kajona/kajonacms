@@ -71,7 +71,7 @@ class class_module_votings_admin extends class_admin_simple implements interface
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_votings_voting::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_votings_voting::getVotings(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_votings_voting::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator);
 	}

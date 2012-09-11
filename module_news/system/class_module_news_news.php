@@ -203,7 +203,7 @@ class class_module_news_news extends class_model implements interface_model, int
 	 * @return class_module_news_news[]
 	 * @static
 	 */
-	public static function getNewsList($strFilter = "", $intStart = null, $intEnd = null) {
+	public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
         $arrParams = array();
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id

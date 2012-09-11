@@ -17,7 +17,7 @@ class class_test_messaging extends class_testbase  {
         $objGroup = new class_module_user_group(_admins_group_id_);
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
-        $arrMessages = class_module_messaging_message::getMessagesForUser($arrUsers[0]);
+        $arrMessages = class_module_messaging_message::getObjectList($arrUsers[0]);
 
         foreach($arrMessages as $objOneMessage) {
             if($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "class_messageprovider_exceptions") {
@@ -42,7 +42,7 @@ class class_test_messaging extends class_testbase  {
         $objGroup = new class_module_user_group(_admins_group_id_);
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
-        $arrMessages = class_module_messaging_message::getMessagesForUser($arrUsers[0]);
+        $arrMessages = class_module_messaging_message::getObjectList($arrUsers[0]);
 
         $intUnread = class_module_messaging_message::getNumberOfMessagesForUser($arrUsers[0], true);
 

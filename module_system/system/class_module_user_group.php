@@ -164,7 +164,7 @@ class class_module_user_group extends class_model implements interface_model, in
      * @return class_module_user_group[]
      * @static
      */
-	public static function getAllGroups($intStart = null, $intEnd = null) {
+	public static function getObjectList($intStart = null, $intEnd = null) {
 		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);

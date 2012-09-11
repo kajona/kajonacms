@@ -221,7 +221,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @param bool|int $intEnd
      * @return class_module_user_user[]
      */
-    public static function getAllUsers($strUsernameFilter = "", $intStart = null, $intEnd = null) {
+    public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strUsernameFilter."%"), $intStart, $intEnd);

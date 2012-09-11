@@ -139,7 +139,7 @@ class class_module_votings_voting extends class_model implements interface_model
      * @return class_module_votings_voting[]
      * @static
      */
-	public static function getVotings($bitOnlyActive = false, $intStart = false, $intEnd = false) {
+	public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
 		$strQuery = "SELECT system_id FROM "._dbprefix_."votings_voting,
 						"._dbprefix_."system
 						WHERE system_id = votings_voting_id

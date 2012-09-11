@@ -292,7 +292,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
         $strReturn .= "Setting new element-classes...\n";
-        $arrElements = class_module_pages_element::getAllElements();
+        $arrElements = class_module_pages_element::getObjectList();
         /** @var class_module_pages_element $objOneElement */
         foreach($arrElements as $objOneElement) {
             $objOneElement->setStrClassAdmin(uniStrReplace(".php", "_admin.php", $objOneElement->getStrClassAdmin()));

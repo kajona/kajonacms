@@ -1944,7 +1944,7 @@ class class_toolkit_admin extends class_toolkit {
 
         //process rows
         $strCurrentId = class_module_system_aspect::getCurrentAspectId();
-        $arrAspects = class_module_system_aspect::getAllAspects(true);
+        $arrAspects = class_module_system_aspect::getObjectList(true);
 
         $intNrOfAspects = 0;
         foreach($arrAspects as $objSingleAspect) {

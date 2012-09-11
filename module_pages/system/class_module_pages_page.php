@@ -303,11 +303,10 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @param int $intStart
      * @param int $intEnd
      * @param string $strFilter
-     * @param bool $bitIncludeAlias
      * @return class_module_pages_page[]
      * @static
      */
-	public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "", $bitIncludeAlias = true) {
+	public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "") {
         $arrParams = array();
 
         if($strFilter != "")
@@ -318,7 +317,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 					"._dbprefix_."system
 					WHERE system_id = page_id
 					".($strFilter != "" ? " AND page_name like ? " : "" )."
-                    ".($bitIncludeAlias ? "" : " AND page_type = 0 ")."
 					ORDER BY page_name ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);

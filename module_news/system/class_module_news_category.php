@@ -20,6 +20,7 @@ class class_module_news_category extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn news_category.news_cat_title
+     * @listOrder
      */
     private $strTitle = "";
 
@@ -75,27 +76,6 @@ class class_module_news_category extends class_model implements interface_model,
     public function getStrDisplayName() {
         return $this->getStrTitle();
     }
-
-
-    /**
-	 * Loads all available categories from the db
-	 *
-	 * @return class_module_news_category[]
-	 * @static
-	 */
-	public static function getCategories() {
-		$strQuery = "SELECT system_id FROM "._dbprefix_."news_category,
-						"._dbprefix_."system
-						WHERE system_id = news_cat_id
-						ORDER BY news_cat_title";
-
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_news_category($arrOneId["system_id"]);
-
-		return $arrReturn;
-	}
 
 	/**
 	 * Loads all categories, the given news is in

@@ -130,7 +130,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         $objArraySectionIterator = new class_array_section_iterator(class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            class_module_messaging_message::getMessagesForUser(
+            class_module_messaging_message::getObjectList(
                 $this->objSession->getUserID(),
                 $objArraySectionIterator->calculateStartPos(),
                 $objArraySectionIterator->calculateEndPos()
@@ -215,7 +215,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5 ;
 
-        $arrMessages = class_module_messaging_message::getMessagesForUser($this->objSession->getUserID(), 0, $intMaxAmount-1);
+        $arrMessages = class_module_messaging_message::getObjectList($this->objSession->getUserID(), 0, $intMaxAmount-1);
         $arrReturn = array();
         foreach($arrMessages as $objOneMessage) {
             $arrReturn[] = array(

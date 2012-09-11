@@ -683,7 +683,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_pages_element::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_pages_element::getAllElements($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_pages_element::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator, false, "elementList");
 
         return $strReturn;

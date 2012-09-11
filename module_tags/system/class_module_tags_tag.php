@@ -25,6 +25,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * @var string
      * @tableColumn tags_tag_name
+     * @listOrder
      */
     private $strName;
 
@@ -93,32 +94,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
             return parent::deleteObjectInternal();
 
         return false;
-    }
-
-    /**
-     * Returns a list of tags available
-     *
-     * @param int|null $intStart
-     * @param int|null $intEnd
-     * @return class_module_tags_tag[]
-     */
-    public static function getAllTags($intStart = null, $intEnd = null) {
-
-        $strQuery = "SELECT tags_tag_id
-                       FROM "._dbprefix_."tags_tag,
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right
-                     WHERE tags_tag_id = system_id
-                       AND system_id = right_id
-                   ORDER BY tags_tag_name ASC";
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tag_id"]);
-        }
-
-        return $arrReturn;
     }
 
 

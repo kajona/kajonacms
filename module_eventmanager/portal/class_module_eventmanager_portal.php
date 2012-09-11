@@ -131,7 +131,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
             $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
 
             $arrTemplate["maximumParticipants"] = $objEvent->getIntParticipantsLimit();
-            $arrTemplate["currentParticipants"] = count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()));
+            $arrTemplate["currentParticipants"] = count(class_module_eventmanager_participant::getObjectList($this->getSystemid()));
 
             if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->rightRight1()) {
                 $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle());

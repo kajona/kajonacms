@@ -141,8 +141,8 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
 
         $strReturn .= "Updating widget db-structure...\n";
-        $arrUsers = class_module_user_user::getAllUsers();
-        $arrAspects = class_module_system_aspect::getAllAspects();
+        $arrUsers = class_module_user_user::getObjectList();
+        $arrAspects = class_module_system_aspect::getObjectList();
 
 
         $strReturn .= "Enabling dashboard in navigation...\n";

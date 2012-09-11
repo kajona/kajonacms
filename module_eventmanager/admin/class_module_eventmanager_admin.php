@@ -264,7 +264,7 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_eventmanager_participant::getObjectCount($this->getSystemid()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_eventmanager_participant::getAllParticipants($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_eventmanager_participant::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objArraySectionIterator, false, self::STR_LIST_PARTICPANTS);
         return $strReturn;

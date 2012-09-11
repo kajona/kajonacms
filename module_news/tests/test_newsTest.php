@@ -23,7 +23,7 @@ class class_test_news extends class_testbase  {
         
         $this->flushDBCache();
         $this->assertEquals(0, count(class_module_news_category::getNewsMember($objNews->getSystemid())), __FILE__." check cats for news");
-        $this->assertEquals(0, count(class_module_news_news::getNewsList($objCat->getSystemid())), __FILE__." check news for cat");
+        $this->assertEquals(0, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
         
         
         
@@ -41,13 +41,13 @@ class class_test_news extends class_testbase  {
         $objCat = new class_module_news_category($strCatId);
         
         $this->assertEquals(1, count(class_module_news_category::getNewsMember($objNews->getSystemid())), __FILE__." check cats for news");
-        $this->assertEquals(1, count(class_module_news_news::getNewsList($objCat->getSystemid())), __FILE__." check news for cat");
+        $this->assertEquals(1, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
 
         echo "deleting news...\n";
         $this->assertTrue($objNews->deleteObject(), __FILE__." delete news");
         
         $this->flushDBCache();
-        $this->assertEquals(0, count(class_module_news_news::getNewsList($objCat->getSystemid())), __FILE__." check news for cat");
+        $this->assertEquals(0, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
         
         $this->assertTrue($objCat->deleteObject(), __FILE__." delete cat");
     }

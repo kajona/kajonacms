@@ -40,7 +40,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
 
 		$strReturn = "";
 
-        $arrObjLanguages = class_module_languages_language::getAllLanguages(true);
+        $arrObjLanguages = class_module_languages_language::getObjectList(true);
 
         //load the languageset in order to generate more specific switches
         $objLanguageset = class_module_languages_languageset::getLanguagesetForSystemid($this->getParam("systemid"));

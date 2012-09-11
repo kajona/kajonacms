@@ -100,7 +100,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_user_user::getAllUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_user_user::getObjectList($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objArraySectionIterator, false, "userList");
         return $strReturn;
@@ -556,7 +556,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionGroupList() {
         $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_user_group::getObjectList($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator, false, "groupList");
     }
@@ -954,7 +954,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strFormElement = $this->getParam("form_element");
         if($this->getSystemid() == "") {
             //show groups
-            $arrUsers = class_module_user_group::getAllGroups();
+            $arrUsers = class_module_user_group::getObjectList();
             $strReturn .= $this->objToolkit->listHeader();
             $intI = 0;
             foreach($arrUsers as $objSingleGroup) {

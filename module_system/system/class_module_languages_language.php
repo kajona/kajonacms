@@ -90,7 +90,7 @@ class class_module_languages_language extends class_model implements interface_m
     protected function updateStateToDb() {
 
         //if no other language exists, we have a new default language
-        $arrObjLanguages = class_module_languages_language::getAllLanguages();
+        $arrObjLanguages = class_module_languages_language::getObjectList();
         if(count($arrObjLanguages) == 0 ) {
         	$this->setBitDefault(1);
         }
@@ -110,7 +110,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @return class_module_languages_language[]
      * @static
      */
-    public static function getAllLanguages($bitJustActive = false, $intStart = null, $intEnd = null) {
+    public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."languages, "._dbprefix_."system
 		             WHERE system_id = language_id
@@ -186,7 +186,7 @@ class class_module_languages_language extends class_model implements interface_m
         parent::deleteObjectInternal();
 
 		 //if we have just one language remaining, set this one as default
-        $arrObjLanguages = class_module_languages_language::getAllLanguages();
+        $arrObjLanguages = class_module_languages_language::getObjectList();
         if(count($arrObjLanguages) == 1) {
         	$objOneLanguage = $arrObjLanguages[0];
         	$objOneLanguage->setBitDefault(1);
@@ -369,8 +369,8 @@ class class_module_languages_language extends class_model implements interface_m
             return new class_module_languages_language($arrRow["system_id"]);
         }
         else {
-            if(count(class_module_languages_language::getAllLanguages(true)) > 0) {
-                $arrLangs = class_module_languages_language::getAllLanguages(true);
+            if(count(class_module_languages_language::getObjectList(true)) > 0) {
+                $arrLangs = class_module_languages_language::getObjectList(true);
                 return $arrLangs[0];
             }
 
