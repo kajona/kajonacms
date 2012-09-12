@@ -19,7 +19,6 @@ abstract class class_element_portal extends class_portal {
     private $strCacheAddon = "";
 
     /**
-     *
      * @var class_module_pages_pageelement
      */
     private $objElementData;
@@ -29,52 +28,53 @@ abstract class class_element_portal extends class_portal {
      *
      * @param class_module_pages_pageelement $objElementData
      */
-	public function __construct($objElementData) {
-		parent::__construct();
+    public function __construct($objElementData) {
+        parent::__construct();
 
         $this->setArrModuleEntry("modul", "elements");
         $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
 
 
-		$this->setSystemid($objElementData->getSystemid());
-		//merge the attributes of $objElementData to the array
-		$this->arrElementData["page_element_ph_placeholder"] = $objElementData->getStrPlaceholder();
-		$this->arrElementData["page_element_ph_name"] = $objElementData->getStrName();
-		$this->arrElementData["page_element_ph_element"] = $objElementData->getStrElement();
-		$this->arrElementData["page_element_ph_title"] = $objElementData->getStrTitle(false);
+        $this->setSystemid($objElementData->getSystemid());
+        //merge the attributes of $objElementData to the array
+        $this->arrElementData["page_element_ph_placeholder"] = $objElementData->getStrPlaceholder();
+        $this->arrElementData["page_element_ph_name"] = $objElementData->getStrName();
+        $this->arrElementData["page_element_ph_element"] = $objElementData->getStrElement();
+        $this->arrElementData["page_element_ph_title"] = $objElementData->getStrTitle(false);
 
         $this->objElementData = $objElementData;
-	}
+    }
 
 
-	/**
-	 * Loads the content out of the elements-table
-	 *
-	 * @param string $strSystemid
-	 * @return mixed
-	 */
-	public function getElementContent($strSystemid) {
-	    //table given?
-	    if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "") {
-    		$strQuery = "SELECT *
+    /**
+     * Loads the content out of the elements-table
+     *
+     * @param string $strSystemid
+     *
+     * @return mixed
+     */
+    public function getElementContent($strSystemid) {
+        //table given?
+        if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "") {
+            $strQuery = "SELECT *
     						FROM ".$this->arrModule["table"]."
     						WHERE content_id = ? ";
-    		return $this->objDB->getPRow($strQuery, array($strSystemid));
-	    }
-	    else
-	       return array();
+            return $this->objDB->getPRow($strQuery, array($strSystemid));
+        }
+        else
+            return array();
 
-	}
+    }
 
-	/**
-	 * Invokes the element to do the work
-	 * If enabled, passes to addPortalEditorCode(). This adds the element-based pe-code.
-	 * If modules want to create pe code, they have to call the static method addPortalEditorCode
-	 * on their own!
-	 *
-	 * @return string
-	 */
-	public function getElementOutput() {
+    /**
+     * Invokes the element to do the work
+     * If enabled, passes to addPortalEditorCode(). This adds the element-based pe-code.
+     * If modules want to create pe code, they have to call the static method addPortalEditorCode
+     * on their own!
+     *
+     * @return string
+     */
+    public function getElementOutput() {
         $strReturn = "";
         //load the data from the database
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
@@ -102,9 +102,9 @@ abstract class class_element_portal extends class_portal {
                     $strReturn = $this->loadData();
             }
             else
-               $strReturn = $this->loadData();
-            }
-        catch (class_exception $objEx) {
+                $strReturn = $this->loadData();
+        }
+        catch(class_exception $objEx) {
             //an error occured during content generation. redirect to error page
             $objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
@@ -114,11 +114,11 @@ abstract class class_element_portal extends class_portal {
             $strReturn = $objEx->getMessage();
         }
 
-	    //add an anchor to jump to, but exclude navigation-elements
-	    $strReturn = $this->getAnchorTag().$strReturn;
+        //add an anchor to jump to, but exclude navigation-elements
+        $strReturn = $this->getAnchorTag().$strReturn;
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
      * Tries to load the content of the element from cache.
@@ -159,6 +159,7 @@ abstract class class_element_portal extends class_portal {
      * content-generation is triggered again.
      *
      * @param string $strElementOutput
+     *
      * @since 3.3.1
      */
     public function saveElementToCache($strElementOutput = "") {
@@ -170,7 +171,7 @@ abstract class class_element_portal extends class_portal {
         //load the matching cache-entry
         $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);
         $objCacheEntry->setStrContent($strElementOutput);
-        $objCacheEntry->setIntLeasetime(time()+$this->objElementData->getIntCachetime());
+        $objCacheEntry->setIntLeasetime(time() + $this->objElementData->getIntCachetime());
 
         $objCacheEntry->updateObjectToDb();
     }
@@ -202,25 +203,26 @@ abstract class class_element_portal extends class_portal {
     }
 
 
-	/**
-	 * Creates the code surrounding the element.
-	 * Creates the "entry" to the portal-editor
-	 *
-	 * @param string $strContent elements' output
-	 * @param string $strSystemid elements' systemid
-	 * @param array $arrConfig : pe_module, pe_action, [pe_action_new, pe_action_new_params]
-	 * @return string
-	 * @static
-	 */
-	public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig) {
+    /**
+     * Creates the code surrounding the element.
+     * Creates the "entry" to the portal-editor
+     *
+     * @param string $strContent elements' output
+     * @param string $strSystemid elements' systemid
+     * @param array $arrConfig : pe_module, pe_action, [pe_action_new, pe_action_new_params]
+     *
+     * @return string
+     * @static
+     */
+    public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig) {
         $strReturn = "";
 
         if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
-            if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true" ) {
+            if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
 
-            	//switch the text-language temporary
-            	$strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
+                //switch the text-language temporary
+                $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
                 class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
 
                 //fetch the language to set the correct admin-lang
@@ -236,7 +238,6 @@ abstract class class_element_portal extends class_portal {
                     $strModule = $arrConfig["pe_module"];
                 }
                 //---------------------------------------------------
-
 
 
                 //---------------------------------------------------
@@ -365,7 +366,7 @@ abstract class class_element_portal extends class_portal {
         else
             $strReturn = $strContent;
         return $strReturn;
-	}
+    }
 
 
     public static function addPortalEditorSetActiveCode($strContent, $strSystemid, $arrConfig) {
@@ -373,10 +374,10 @@ abstract class class_element_portal extends class_portal {
 
         if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
-            if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true" ) {
+            if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
 
-            	//switch the text-language temporary
-            	$strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
+                //switch the text-language temporary
+                $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
                 class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
 
                 //fetch the language to set the correct admin-lang
@@ -423,7 +424,7 @@ abstract class class_element_portal extends class_portal {
         else
             $strReturn = $strContent;
         return $strReturn;
-	}
+    }
 
     /**
      * Generates the link to create an element at a placeholder not yet existing
@@ -462,6 +463,7 @@ abstract class class_element_portal extends class_portal {
      *
      * @param string $strPlaceholder
      * @param string $strContentElements
+     *
      * @return string
      * @static
      */
@@ -480,24 +482,24 @@ abstract class class_element_portal extends class_portal {
         return class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonWrapper($strPlaceholder, $strPlaceholderClean, $strLabel, $strContentElements);
     }
 
-	/**
-	 * Dummy method, element needs to overwrite it
-	 *
-	 * @return string
-	 */
-	protected function loadData() {
-	    return "Element needs to overwrite loadData()!";
-	}
+    /**
+     * Dummy method, element needs to overwrite it
+     *
+     * @return string
+     */
+    protected function loadData() {
+        return "Element needs to overwrite loadData()!";
+    }
 
-	/**
-	 * Generates an anchor tag enabling navigation-points to jump to specific page-elements.
-	 * can be overwritten by subclasses
-	 *
-	 * @return string
-	 */
-	protected function getAnchorTag() {
-		return "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>";
-	}
+    /**
+     * Generates an anchor tag enabling navigation-points to jump to specific page-elements.
+     * can be overwritten by subclasses
+     *
+     * @return string
+     */
+    protected function getAnchorTag() {
+        return "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>";
+    }
 
     /**
      * Use this method to set additional cache-key-addons.
@@ -509,7 +511,6 @@ abstract class class_element_portal extends class_portal {
     public function setStrCacheAddon($strCacheAddon) {
         $this->strCacheAddon .= $strCacheAddon;
     }
-
 
 
     /**
@@ -525,12 +526,10 @@ abstract class class_element_portal extends class_portal {
      *        array( node => class_module_navigation_point, subnodes => array(...))
      *    )
      * )
-     *
      * If you don't want to create additional navigation entries, don't overwrite this method.
      *
      * @see class_module_navigation_tree::getCompleteNaviStructure()
      * @see class_module_navigation_point::getDynamicNaviLayer()
-     *
      * @return array|bool
      * @since 4.0
      */

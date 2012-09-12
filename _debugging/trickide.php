@@ -27,3 +27,4 @@ define("_system_admin_email_", "");
 define("_pages_newdisabled_", "");
 define("_admin_only_https_", "false");
 define("_corepath_", __DIR__."/../");
+define("_pages_cacheenabled_", "true");

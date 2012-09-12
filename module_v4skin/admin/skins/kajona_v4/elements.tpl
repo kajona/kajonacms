@@ -546,27 +546,6 @@ A fieldset to structure logical sections
 </tabbed_content_tabcontent>
 
 
-    ---
-
-<form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
-    in form %%tabid%%
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%tabid%%</label>
-
-        <div class="controls">
-            <select name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
-        </div>
-    </div>
-    <div class="formText"><div class="spacer"></div><div class="%%class%%">%%text%%</div></div><br />
-    <div class="control-group">
-        <button type="submit" class="btn savechanges %%class%%" %%disabled%% %%eventhandler%%>
-        <span class="btn-text">%%tabid%%</span>
-        <span class="statusicon"></span>
-        </button>
-    </div>
-</form>
-</div>
-    ----
 
 ---------------------------------------------------------------------------------------------------------
 -- SPECIAL SECTIONS -------------------------------------------------------------------------------------
@@ -899,44 +878,50 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
-    <style>
-        .peButtonNew {
-            display: none;
-        }
-    </style>
 
-	<div class="peDialog" id="peDialog">
-	    <div class="hd" id="peDialog_title">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
-	    <div class="bd" id="peDialog_content">
-	        <!-- filled by js -->
-	    </div>
-	</div>
+    <!-- KAJONA_BUILD_LESS_START -->
+    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="_skinwebpath_/less/less.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
+
+    <div class="modal hide fade fullsize" id="peDialog">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body" id="peDialog_content">
+            <!-- filled by js -->
+        </div>
+    </div>
 
 	<script type="text/javascript">
 		var peDialog;
-		KAJONA.admin.lang["pe_dialog_close_warning"] = "%%pe_dialog_close_warning%%";
-        KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
+		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
+        KAJONA.admin.loader.loadFile([
+            "_skinwebpath_/js/kajona_dialog.js",
+            "_skinwebpath_/js/bootstrap-modal.js",
+            "_skinwebpath_/js/bootstrap-dropdown.js"
+        ], function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
 		}, true);
 	</script>
 
     <div id="peToolbar" style="display: none;">
-    	<div class="logo"></div>
 		<div class="info">
 			<table>
 				<tbody>
 		            <tr>
 			            <td rowspan="2" style="width: 100%; text-align: center; vertical-align: middle;">%%pe_iconbar%%</td>
-		                <td class="key" style="vertical-align: bottom;">%%pe_status_page%%</td>
+		                <td class="key" style="vertical-align: bottom;">[lang,pe_status_page,pages]</td>
 		                <td class="value" style="vertical-align: bottom;">%%pe_status_page_val%%</td>
-		                <td class="key" style="vertical-align: bottom;">%%pe_status_time%%</td>
+		                <td class="key" style="vertical-align: bottom;">[lang,pe_status_time,pages]</td>
 		                <td class="value" style="vertical-align: bottom;">%%pe_status_time_val%%</td>
 		                <td rowspan="2" style="text-align: right; vertical-align: top;">%%pe_disable%%</td>
 		            </tr>
 		            <tr>
-		                <td class="key" style="vertical-align: top;">%%pe_status_status%%</td>
+		                <td class="key" style="vertical-align: top;">[lang,pe_status_status,pages]</td>
 		                <td class="value" style="vertical-align: top;">%%pe_status_status_val%%</td>
-		                <td class="key" style="vertical-align: top;">%%pe_status_autor%%</td>
+		                <td class="key" style="vertical-align: top;">[lang,pe_status_autor,pages]</td>
 		                <td class="value" style="vertical-align: top;">%%pe_status_autor_val%%</td>
 		            </tr>
 	            </tbody>
@@ -964,22 +949,19 @@ Possible placeholders: %%link_complete%%, %%name%%, %%href%%
 
 Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
 <pe_actionNew>
-    {
-        element: "%%element%%",
-        elementName: "%%elementName%%",
-        elementHref: "%%elementHref%%"
-    },
+    <li ><a href="#" onclick="KAJONA.admin.portaleditor.openDialog('%%elementHref%%')">%%elementName%% (%%element%%)</a></li>
 </pe_actionNew>
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" rel="tooltip"><img src="_skinwebpath_/pics/icon_new.png" alt="" /></a>
-    <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
-	<script type="text/javascript">
-		KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [
-			%%contentElements%%
-		]);
-	</script>
+    <div id="menuContainer_%%placeholder%%" class="dropdown">
+        <img src="_skinwebpath_/pics/icon_new.png" role="button" data-toggle="dropdown" title="%%label%% %%placeholderName%%" rel="tooltip" class="peNewButton" />
+        <div class="dropdown-menu peContextMenu" role="menu">
+            <ul >
+                %%contentElements%%
+            </ul>
+        </div>
+    </div>
 </pe_actionNewWrapper>
 
 

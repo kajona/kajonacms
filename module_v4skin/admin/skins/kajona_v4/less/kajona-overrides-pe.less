@@ -1,0 +1,192 @@
+
+
+/* P O R T A L E D I T O R   T O O L B A R */
+#peToolbar {
+
+    background: url("../img/navbar-inner-background.png") no-repeat scroll 300px 0 #E5E5E5;
+    height: 36px;
+    border-bottom: 1px solid #CECECE;
+
+    z-index: 1000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #575757;
+    font-size: 10px;
+    white-space: nowrap;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    display: block !important;
+
+    table {
+        height: 36px;
+        border: none;
+
+        td {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            color: #575757;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+    }
+
+    .info {
+        height: 45px;
+        margin-left: 200px;
+
+        td.key {
+            padding-right: 5px;
+            text-align: right;
+        }
+
+        td.value {
+            padding-right: 20px;
+            text-align: left;
+        }
+    }
+}
+
+#peToolbarSpacer {
+    clear: both;
+    height: 36px;
+}
+
+
+
+
+
+.pe_inactiveElement {
+    border: 1px solid #333333;
+    border-radius: 2px;
+    padding: 3px;
+    margin: 2px 0 2px 0px;
+    background-color: #cccccc;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+
+/* P O R T A L E D I T O R   C O N T A I N E R */
+.peContainerOut {
+    display: inline !important;
+    border: none !important;
+}
+
+.peContainerHover {
+    display: block !important;
+    outline: 1px solid #333333 !important;
+
+    .menuHover {
+        position: absolute !important;
+        border: none !important;
+        display: block !important;
+        margin: -17px 0 0 -1px !important;
+
+        .actions {
+            display: block !important;
+            background-color: #333333 !important;
+            font-family: Verdana, Arial, Helvetica, sans-serif !important;
+            font-size: 11px !important;
+            text-align: left !important;
+            padding: 1px 3px 2px 3px !important;
+            text-transform: none !important;
+            -webkit-border-radius: 3px 3px 0 0;
+            -moz-border-radius: 3px 3px 0 0;
+            border-radius: 3px 3px 0 0;
+            line-height: 14px !important;
+
+            a, a:link, a:visited, a:hover, a:active, a:focus {
+                font-family: Verdana, Arial, Helvetica, sans-serif !important;
+                font-size: 11px !important;
+                color: #ffffff !important;
+                text-decoration: none !important;
+                font-weight: normal !important;
+                background: none !important;
+                padding: 0 2px 0 2px !important;
+                margin: 0 !important;
+                text-transform: none !important;
+                letter-spacing: normal !important;
+                line-height: 14px !important;
+                border: none !important;
+                outline: none !important;
+                display: inline !important;
+                width: auto !important;
+                height: auto !important;
+                text-shadow: none !important;
+            }
+
+            a:hover, a:active, a:focus {
+                text-decoration: underline !important;
+            }
+        }
+    }
+
+    .peContainerHover .menuHover {
+        margin: -1px 0 0 -1px !important;
+    }
+}
+
+.peNewButton {
+    margin-bottom: 2px !important;
+    display: block !important;
+    border: none !important;
+    width: 22px !important;
+    height: 22px !important;
+    cursor: pointer;
+}
+
+.peContextMenu {
+    background-color: #fff !important;
+    ul {
+        padding: 0;
+        list-style: none;
+        margin: 0;
+    }
+}
+
+
+/* Hallo Inline Editor */
+body *[data-kajona-editable] {
+    outline: 1px dotted #cccccc;
+}
+
+body *[data-kajona-editable] {
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+/*outline: 2px dotted rgba(0, 255, 0, 0);*/
+}
+
+body *[data-kajona-editable]:hover {
+    outline: 1px dotted #cccccc;
+    background-color: #cccccc;
+}
+
+.hallotoolbar {
+    .ui-button .ui-button-text {
+    /*line-height: auto !important;*/
+        font-size: 0.7em !important;
+    }
+}
+
+
+/* DIALOGS / MODALS / BACKDROPS */
+.modal-backdrop,
+.modal-backdrop.fade.in {
+    .opacity(60);
+}
+
+.modal {
+    text-align: left;
+
+    iframe {
+        border: none;
+    }
+
+    .modal-header {
+        border: none;
+    }
+
+    .modal-body {
+        max-height: none;
+    }
+}

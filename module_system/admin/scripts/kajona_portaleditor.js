@@ -169,18 +169,37 @@ KAJONA.util.Loader = function () {
 KAJONA.admin.portaleditor = {
 	objPlaceholderWithElements: {},
 
+    initPortaleditor : function() {
+
+        KAJONA.admin.loader.loadFile([
+            "/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js",
+            "/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css",
+            "/core/module_system/admin/scripts/jquery/jquery.htmlClean.min.js",
+            "/core/module_pages/admin/scripts/rangy/rangy-core.js",
+            "/core/module_pages/admin/scripts/halloeditor/hallo-min.js",
+            "/core/module_pages/admin/scripts/halloeditor/halloformat.js",
+            "/core/module_pages/admin/scripts/halloeditor/headings.js",
+            "/core/module_pages/admin/scripts/halloeditor/lists.js",
+            "/core/module_pages/admin/scripts/halloeditor/reundo.js",
+            "/core/module_pages/admin/scripts/halloeditor/link.js",
+            "/core/module_pages/admin/scripts/halloeditor/hallo.css",
+            "/core/module_pages/admin/scripts/halloeditor/fontawesome/css/font-awesome.css",
+        ], function() {
+
+            KAJONA.admin.portaleditor.RTE.init();
+        });
+
+
+    },
+
 	showActions: function (elementSysId) {
-	    var divElement = document.getElementById('container_'+elementSysId);
-	    divElement.className="peContainerHover";
-	    var menuElement = document.getElementById('menu_'+elementSysId);
-	    menuElement.className="menuHover";
+	    $('#container_'+elementSysId).attr('class', 'peContainerHover');
+	    $('#menu_'+elementSysId).attr('class', 'menuHover');
 	},
 
 	hideActions: function (elementSysId) {
-		var divElement = document.getElementById('container_'+elementSysId);
-		divElement.className="peContainerOut";
-		var menuElement = document.getElementById('menu_'+elementSysId);
-	    menuElement.className="menuOut";
+		$('#container_'+elementSysId).attr('class', 'peContainerOut');
+		$('#menu_'+elementSysId).attr('class', 'menuOut');
 	},
 
 	switchEnabled: function (bitStatus) {
@@ -213,7 +232,7 @@ KAJONA.admin.portaleditor = {
 	    if(bitClose) {
 	    	peDialog.hide();
 
-	    	//remove iframe
+	    	//reset iframe
 	    	peDialog.setContentRaw("");
 	    }
 	},
@@ -223,43 +242,9 @@ KAJONA.admin.portaleditor = {
 			placeholderName: strPlaceholderName,
 			elements: arrElements
 		};
-	},
-
-	showNewElementMenu: function (strPlaceholder, objAttach) {
-
-		var arrPlaceholder = this.objPlaceholderWithElements[strPlaceholder];
-		var arrElements = arrPlaceholder["elements"];
-		var menu;
-
-        //TODO: migrate to non-yui menu
-        /*
-		if (YAHOO.lang.isUndefined(arrPlaceholder["menu"])) {
-			arrPlaceholder["menu"] = menu = new YAHOO.widget.Menu("menu_"+strPlaceholder, {
-				shadow: false,
-				lazyLoad: true
-			});
-
-			var handleClick = function (strType, arrArgs, objElement) {
-				KAJONA.admin.portaleditor.openDialog(objElement.elementHref);
-			};
-
-			for (var i=0; i<arrElements.length; i++) {
-				var e = arrElements[i];
-                if(typeof e != 'undefined')
-                    menu.addItem({ text: e.elementName, onclick: {fn: handleClick, obj: e} });
-			}
-			menu.setItemGroupTitle(arrPlaceholder.placeholderName, 0);
-
-			menu.render("menuContainer_"+strPlaceholder);
-		} else {
-			menu = arrPlaceholder["menu"];
-		}
-		var buttonRegion = YAHOO.util.Region.getRegion(objAttach);
-		menu.cfg.setProperty("x", buttonRegion.left);
-		menu.cfg.setProperty("y", buttonRegion.top);
-		menu.show();
-		*/
 	}
+
+
 };
 
 KAJONA.admin.portaleditor.RTE = {};
@@ -284,7 +269,7 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         });
     });
     console.groupEnd('savePage');
-    $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace(".gif", "Disabled.gif"));
+    $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace(".png", "Disabled.png"));
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
 

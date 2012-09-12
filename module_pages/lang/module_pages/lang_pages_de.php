@@ -117,6 +117,7 @@ $lang["pe_status_autor"]                 = "Letzter Autor:";
 $lang["pe_status_page"]                  = "Seite:";
 $lang["pe_status_status"]                = "Status:";
 $lang["pe_status_time"]                  = "Letzte Änderung:";
+$lang["pe_rte_save"]                     = "Vorgenommene Änderungen speichern";
 $lang["plNew"]                           = "Neuer Platzhalter:";
 $lang["plRename"]                        = "Anpassen";
 $lang["plToUpdate"]                      = "Alter Platzhalter:";
