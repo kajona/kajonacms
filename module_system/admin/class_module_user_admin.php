@@ -556,7 +556,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionGroupList() {
         $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_user_group::getObjectList($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(class_module_user_group::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator, false, "groupList");
     }
