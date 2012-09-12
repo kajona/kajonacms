@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Anzahl Datensätze pro Seite:";
@@ -38,8 +38,8 @@ $lang["_system_release_time_hint"]       = "Nach dieser Dauer in Sekunden wird e
 $lang["_system_use_dbcache_"]            = "Datenbankcache aktiv:";
 $lang["_system_use_dbcache_hint"]        = "Aktiviert/deaktiviert den systeminternen Cache für Datenbankabfragen.";
 $lang["about_part1"]                     = "<h2>Kajona V3 - Open Source Content Management System</h2>Kajona V 3.4.1, Codename \"connectivity\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
-$lang["about_part2"]                     = "<h2>Entwicklungsleitung</h2><ul><li><a href=\"https://www.xing.com/profile/Stefan_Idler\" target=\"_blank\">Stefan Idler</a>, <a href=\"mailto:sidler@kajona.de\">sidler@kajona.de</a> (Projektleitung, Technische Leitung, Entwicklung)</li><li><a href=\"https://www.xing.com/profile/Jakob_Schroeter\" target=\"_blank\">Jakob Schröter</a>, <a href=\"mailto:jschroeter@kajona.de\">jschroeter@kajona.de</a> (Leitung Frontend, Entwicklung)</li></ul><h2>Contributors / Entwickler</h2><ul><li><a href=\"https://www.xing.com/profile/Florian_Feigenbutz\" target=\"_blank\">Florian Feigenbutz</a></li><li>Thomas Hertwig</li><li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li><li>Mario Lange</li><li><a href=\"mailto:ph.wolfer@googlemail.com\" target=\"_blank\">Philipp Wolfer</a></li></ul><h2>Übersetzungen</h2><ul><li>Bulgarisch: <a href=\"mailto:contact@rudee.info\">Rumen Emilov</a></li><li>Portugiesisch: <a href=\"http://www.nunocruz.com\" target=\"_blank\">Nuno Cruz</a></li><li>Russisch: <a href=\"https://www.xing.com/profile/Ksenia_KramVinogradova\" target=\"_blank\">Ksenia Kram</a>, <a href=\"https://www.xing.com/profile/Michael_Kram\" target=\"_blank\">Michael Kram</a></li><li>Schwedisch: <a href=\"mailto:villa.carlberg@telia.com\">Per Gunnarsson</a></li></ul>";
-$lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li><li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>CKEditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.ckeditor.com/\" target=\"_blank\">http://www.ckeditor.com/</a></li><li>ez components (charts):<br /><a href=\"http://ezcomponents.org\" target=\"_blank\">http://ezcomponents.org</a></li><li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li></ul>";
+$lang["about_part2"]                     = "<h2>Entwicklungsleitung</h2><ul><li><a href=\"https://www.xing.com/profile/Stefan_Idler\" target=\"_blank\">Stefan Idler</a>, <a href=\"mailto:sidler@kajona.de\">sidler@kajona.de</a> (Projektleitung, Technische Leitung, Entwicklung)</li></ul><h2>Contributors / Entwickler</h2><ul><li>Stefan Bongartz</li><li><a href=\"https://www.xing.com/profile/Florian_Feigenbutz\" target=\"_blank\">Florian Feigenbutz</a></li><li>Thomas Hertwig</li><li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li><li>Mario Lange</li><li>Stefan Meyer</li><li><a href=\"https://www.xing.com/profile/Jakob_Schroeter\" target=\"_blank\">Jakob Schröter</a>, <a href=\"mailto:jschroeter@kajona.de\">jschroeter@kajona.de</a></li><li><a href=\"mailto:ph.wolfer@googlemail.com\" target=\"_blank\">Philipp Wolfer</a></li></ul><h2>Übersetzungen</h2><ul><li>Bulgarisch: <a href=\"mailto:contact@rudee.info\">Rumen Emilov</a></li><li>Portugiesisch: <a href=\"http://www.nunocruz.com\" target=\"_blank\">Nuno Cruz</a></li><li>Russisch: <a href=\"https://www.xing.com/profile/Ksenia_KramVinogradova\" target=\"_blank\">Ksenia Kram</a>, <a href=\"https://www.xing.com/profile/Michael_Kram\" target=\"_blank\">Michael Kram</a></li><li>Schwedisch: <a href=\"mailto:villa.carlberg@telia.com\">Per Gunnarsson</a></li></ul>";
+$lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Oxygen Icons, <a href=\"http://www.oxygen-icons.org/\" target=\"blank\">http://www.oxygen-icons.org/</a></li><li>browscap.ini: Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>CKEditor: Frederico Caldeira Knabben, <a href=\"http://www.ckeditor.com/\" target=\"_blank\">http://www.ckeditor.com/</a></li><li>ez components (charts): <a href=\"http://ezcomponents.org\" target=\"_blank\">http://ezcomponents.org</a></li><li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Bootstrap, <a href=\"http://twitter.github.com/bootstrap/\" target=\"_blank\">http://twitter.github.com/bootstrap/</a></li><li>Hallo Editor, <a href=\"http://hallojs.org/\" target=\"_blank\">http://hallojs.org/</a></li><li>Fine Uploader, <a href=\"http://fineuploader.com/\" target=\"_blank\">http://fineuploader.com/</a></li></ul>";
 $lang["about_part4"]                     = "<h2>Spenden</h2><p>Wenn Ihnen Kajona gefällt und Sie das Projekt unterstützen möchten können Sie hier an das Projekt spenden: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Spenden via PayPal\" class=\"inputSubmit\" /></form>";
 $lang["actionAbout"]                     = "Über Kajona";
 $lang["actionAspects"]                   = "Aspekte";
@@ -126,6 +126,10 @@ $lang["installer_login_password"]        = "Passwort:";
 $lang["installer_login_save"]            = "Benutzer anlegen";
 $lang["installer_login_username"]        = "Benutzername:";
 $lang["installer_missing"]               = "fehlen";
+$lang["installer_mode_auto"]             = "Automatische Installation";
+$lang["installer_mode_auto_hint"]        = "Alle verfügbaren Module und Beispielinhalte werden installiert.";
+$lang["installer_mode_manual"]           = "Manuelle Installation";
+$lang["installer_mode_manual_hint"]      = "Die zu installierende Module können manuell ausgewählt werden, die Installation der Beispielinhalte kann überprungen werden.";
 $lang["installer_module_notinstalled"]   = "Modul ist nicht installiert";
 $lang["installer_modules_found"]         = "<b>Installation/Update der Module</b><br /><br />Bitte wählen Sie die Module aus, die Sie installieren möchten:<br /><br />";
 $lang["installer_modules_needed"]        = "Zur Installation benötigte Module: ";
@@ -141,6 +145,7 @@ $lang["installer_samplecontent"]         = "<b>Installation der Beispielinhalte<
 $lang["installer_step_adminsettings"]    = "Administrationszugang";
 $lang["installer_step_dbsettings"]       = "Datenbankeinstellungen";
 $lang["installer_step_finish"]           = "Abschluss";
+$lang["installer_step_modeselect"]       = "Installationsart wählen";
 $lang["installer_step_modules"]          = "Module";
 $lang["installer_step_phpsettings"]      = "PHP-Konfiguration";
 $lang["installer_step_samplecontent"]    = "Beispielinhalte";
@@ -201,9 +206,9 @@ $lang["session_status"]                  = "Status";
 $lang["session_username"]                = "Benutzer";
 $lang["session_valid"]                   = "Gültig bis";
 $lang["setAbsolutePosOk"]                = "Speichern der Position erfolgreich";
+$lang["setPrevIdOk"]                     = "Speichern des neuen Eltern-Knotens erfolgreich";
 $lang["setStatusError"]                  = "Fehler beim Ändern des Status";
 $lang["setStatusOk"]                     = "Ändern des Status erfolgreich";
-$lang["setPrevIdOk"]                     = "Speichern des neuen Eltern-Knotens erfolgreich";
 $lang["settings_updated"]                = "Einstellungen wurden geändert.";
 $lang["setzen_erfolg"]                   = "Rechte erfolgreich gespeichert";
 $lang["speicherplatz"]                   = "Speicherplatz";
@@ -290,13 +295,6 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
-
-
-$lang["installer_step_modeselect"]      = "Installationsart wählen";
-$lang["installer_mode_manual"] = "Manuelle Installation";
-$lang["installer_mode_manual_hint"] = "Die zu installierende Module können manuell ausgewählt werden, die Installation der Beispielinhalte kann überprungen werden.";
-$lang["installer_mode_auto"] = "Automatische Installation";
-$lang["installer_mode_auto_hint"] = "Alle verfügbaren Module und Beispielinhalte werden installiert.";
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
