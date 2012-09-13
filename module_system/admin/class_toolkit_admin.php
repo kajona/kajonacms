@@ -700,6 +700,50 @@ class class_toolkit_admin extends class_toolkit {
 
 
     /*"*****************************************************************************************************/
+    // --- GRID-Elements ------------------------------------------------------------------------------------
+
+    /**
+     * Creates the code to start a sortable grid.
+     * By default, a grid is sortable.
+     * @return string
+     */
+    public function gridHeader() {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_header");
+        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+    }
+
+    /**
+     * Renders a single entry of the current grid.
+     *
+     * @param interface_admin_gridable|class_model|interface_model $objEntry
+     * @param $strActions
+     *
+     * @return string
+     */
+    public function gridEntry(interface_admin_gridable $objEntry, $strActions) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
+        $arrTemplate = array(
+            "title" => $objEntry->getStrDisplayName(),
+            "image" => $objEntry->getStrGridIcon(),
+            "actions" => $strActions,
+            "systemid" => $objEntry->getSystemid(),
+            "subtitle" => $objEntry->getStrLongDescription(),
+            "info" => $objEntry->getStrAdditionalInfo()
+        );
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * Renders the closing elements of a grid.
+     * @return string
+     */
+    public function gridFooter() {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_footer");
+        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+    }
+
+    /*"*****************************************************************************************************/
     // --- LIST-Elements ------------------------------------------------------------------------------------
 
     /**

@@ -285,7 +285,7 @@ HTML;
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
 
-        return $strJsCode.$strActions.$this->renderList($objIterator, true, class_module_mediamanager_admin::INT_LISTTYPE_FOLDER);
+        return $strJsCode.$strActions.$this->renderFloatingGrid($objIterator, true, class_module_mediamanager_admin::INT_LISTTYPE_FOLDER);
 
 
     }

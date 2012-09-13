@@ -14,7 +14,7 @@
  *
  * @targetTable mediamanager_file.file_id
  */
-class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_listable {
+class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable {
 
 
     public static $INT_TYPE_FILE = 0;
@@ -86,7 +86,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         if($this->getIntType() == self::$INT_TYPE_FOLDER)
             return "icon_folderClosed.png";
 
-
         //get the filetype
         $arrMime  = class_carrier::getInstance()->getObjToolkit("admin")->mimeType($this->getStrFilename());
         $strImage = $arrMime[2];
@@ -97,6 +96,28 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         }
         return array($strImage, $strAlt);
     }
+
+    /**
+     * Returns the image the be used in a grid-view.
+     * Make sure to return the full url, otherwise the
+     * img-tag may be broken
+     *
+     * @return string the full url to the image that should be embedded into the grid
+     */
+    public function getStrGridIcon() {
+        if($this->getIntType() == self::$INT_TYPE_FOLDER)
+            return "http://placehold.it/260x180";
+
+        //get the filetype
+        $arrMime  = class_carrier::getInstance()->getObjToolkit("admin")->mimeType($this->getStrFilename());
+
+        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
+            return _webpath_."/image.php?image=".urlencode($this->getStrFilename())."&amp;fixedWidth=260&amp;fixedHeight=180";
+        }
+
+        return "http://placehold.it/260x180";
+    }
+
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.

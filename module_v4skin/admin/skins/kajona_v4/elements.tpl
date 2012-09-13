@@ -11,6 +11,58 @@ your own cool skin. Just modify the sections you'd like to. Don't forget the css
 templates!
 
 
+---------------------------------------------------------------------------------------------------------
+-- GRID ELEMENTS ----------------------------------------------------------------------------------------
+
+<grid_header>
+<div class="grid">
+    <ul class="thumbnails gallery sortable">
+</grid_header>
+
+<grid_footer>
+    </ul>
+</div>
+<script type="text/javascript">
+$(function() {
+    $('.grid > ul.sortable').sortable( {
+        items: 'li[data-systemid!=""]',
+        handle: 'div.thumbnail',
+        cursor: 'move',
+        start: function(event, ui) {
+            oldPos = ui.item.index()
+        },
+        stop: function(event, ui) {
+            if(oldPos != ui.item.index()) {
+                 KAJONA.admin.ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1);
+            }
+            oldPos = 0;
+        },
+        delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+    });
+});
+</script>
+</grid_footer>
+
+<grid_entry>
+<li class="span3" data-systemid="%%systemid%%" >
+    <div class="thumbnail" >
+        <h5 >%%title%%</h5>
+        <div class="contentWrapper" style="background: url(%%image%%) center no-repeat;">
+            <div class="metainfo">
+                <div>%%info%%</div>
+                <div>%%subtitle%%</div>
+            </div>
+        </div>
+            <!--<img src="%%image%%" alt="">-->
+
+
+        <div class="actions">
+            %%actions%%
+        </div>
+
+    </div>
+</li>
+</grid_entry>
 
 ---------------------------------------------------------------------------------------------------------
 -- LIST ELEMENTS ----------------------------------------------------------------------------------------
@@ -25,9 +77,6 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-
-
-
     $(function() {
 
         var bitMoveToTree = false;
@@ -376,6 +425,11 @@ Upload-Field for multiple files with progress bar
                 });
 
                 $('table.admintable').bind("dragenter", function(e) {
+                    jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
+                    jsDialog_0.init();
+                });
+
+                $('div.grid').bind("dragenter", function(e) {
                     jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
                     jsDialog_0.init();
                 });

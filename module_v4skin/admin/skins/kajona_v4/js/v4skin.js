@@ -52,53 +52,6 @@ $(function () {
 
 
 
-
-    //sidebar responsive
-    $('.nav-collapse').on('show', function () {
-        var collapsible = $(this);
-        window.setTimeout(function () {
-            collapsible.css({
-                overflow: 'visible',
-                height: 'auto'
-            });
-        }, 500);
-    });
-
-    $('.nav-collapse').on('hide', function () {
-        $(this).css('overflow', '');
-    });
-
-
-
-
-    $('#myModal1').on('show', function () {
-        var $modal = $(this);
-        var $progressbar = $modal.find('.progress > .bar');
-        var progress = 0;
-
-        var interval = window.setInterval(function () {
-            progress += 10;
-            $progressbar.css('width', progress + '%');
-
-            if (progress >= 100) {
-                $modal.modal('hide');
-
-                window.clearInterval(interval);
-                $progressbar.css('width', '0%');
-            }
-        }, 1000);
-
-    });
-
-
-    // insert demo thumbnails
-    var $thumb = $('.gallery li').first();
-    for (var i = 2; i < 12; i++) {
-        var $newThumb = $thumb.clone();
-        $newThumb.find('.number').html(i);
-        $('.gallery').append($newThumb);
-    }
-
     // init popovers & tooltips
     $('#content a[rel=popover]').popover();
 

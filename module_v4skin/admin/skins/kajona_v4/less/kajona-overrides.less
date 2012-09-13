@@ -247,21 +247,6 @@ body {
 }
 
 
-
-.gallery .thumbnail .actions {
-    opacity: 0;
-    @transition: opacity linear .2s;
-    .transition(@transition);
-}
-
-.gallery .thumbnail:hover .actions {
-    opacity: 1;
-}
-
-.thumbnails > li {
-    margin-left: 30px !important;
-}
-
 .ui-autocomplete {
     max-height: 300px;
     overflow-y: auto;
@@ -482,6 +467,56 @@ body {
     pre {
         font-size: @baseFontSize - 2;
     }
+
+	.thumbnails {
+
+		li {
+			margin-left: 10px !important;
+		}
+
+		.thumbnail {
+			.border-radius(0px);
+			display: block;
+			line-height: 1;
+			padding: 4px;
+			cursor: move;
+
+			h5 {
+				margin: 0;
+				font-size: @baseFontSize - 4;
+			}
+
+			.contentWrapper {
+				height: 180px;
+				width: 100%;
+
+				.metainfo {
+					.transition(opacity linear .2s);
+					.opacity(10);
+					background-color: @white;
+					padding: 5px;
+					font-size: @baseFontSize - 4;
+				}
+			}
+
+			.actions {
+				.opacity(0);
+				.transition(opacity linear .2s);
+
+			}
+
+			&:hover {
+
+				.contentWrapper .metainfo {
+					.opacity(90);
+				}
+
+				.actions {
+					.opacity(100);
+				}
+			}
+		}
+	}
 
     .pre-scrollable {
         max-height: 400px;
@@ -727,14 +762,7 @@ label {
 
 
 
-.thumbnail {
-  border: 1px solid #DDDDDD;
-  .border-radius(0px);
-  .box-shadow(none);
-  display: block;
-  line-height: 1;
-  padding: 4px;
-}
+
 
 
 

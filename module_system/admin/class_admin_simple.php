@@ -95,6 +95,83 @@ abstract class class_admin_simple extends class_admin {
 
 
     /**
+     * Renders a list of items in a floatable "thumbnail" view, so a grid.
+     * Please be aware, that the combination of paging and grids may result in unpredictable ordering.
+     * As soon as the list is sortable, the page-size should be at least the same as the number of elements
+     *
+     * @param class_array_section_iterator $objArraySectionIterator
+     * @param bool $bitSortable
+     * @param string $strListIdentifier an internal identifier to check the current parent-list
+     * @param bool $bitAllowTreeDrop
+     *
+     * @throws class_exception
+     * @return string
+     */
+    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false) {
+        $strReturn = "";
+
+        if($objArraySectionIterator->getNrOfPages() > 1) {
+            throw new class_exception("sortable lists with more than one page are not supported!", class_exception::$level_ERROR);
+        }
+
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon);
+        $arrIterables = $arrPageViews["elements"];
+
+
+
+        $strListActions = "";
+        if($this->renderLevelUpAction($strListIdentifier) != "") {
+            $strListActions .= $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier));
+        }
+
+        if(is_array($this->getNewEntryAction($strListIdentifier)) || $this->getNewEntryAction($strListIdentifier) != "") {
+            if(is_array($this->getNewEntryAction($strListIdentifier))) {
+                $strListActions .= implode("", $this->getNewEntryAction($strListIdentifier));
+            }
+            else
+                $strListActions .= $this->getNewEntryAction($strListIdentifier);
+        }
+
+        if($strListActions != "") {
+            $strReturn .= $this->objToolkit->listHeader();
+            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $strListActions, 0);
+            $strReturn .= $this->objToolkit->listFooter();
+        }
+
+
+        if(count($arrIterables) == 0)
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
+
+
+        if(count($arrIterables) > 0) {
+
+            $strReturn .= $this->objToolkit->gridHeader();
+
+            /** @var $objOneIterable class_model|interface_model|interface_admin_gridable */
+            foreach($arrIterables as $objOneIterable) {
+
+                if(!$objOneIterable->rightView() || !$objOneIterable instanceof interface_admin_gridable)
+                    continue;
+
+                $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
+                $strReturn .= $this->objToolkit->gridEntry($objOneIterable, $strActions);
+            }
+
+            $strReturn .= $this->objToolkit->gridFooter();
+        }
+
+
+
+
+        $strReturn .= $arrPageViews["pageview"];
+
+        return $strReturn;
+    }
+
+
+
+
+    /**
      * Renders a list of items, target is the common admin-list.
      * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
      * As soon as the list is sortable, the page-size should be at least the same as the number of elements
