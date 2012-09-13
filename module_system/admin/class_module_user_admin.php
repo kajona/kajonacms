@@ -926,10 +926,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrRows[$intI][]	= $arrLogs[$intI]["user_log_ip"];
             $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrLogs[$intI]["user_log_ip"];
             $strUtraceLinkText = "http://www.utrace.de/whois/".$arrLogs[$intI]["user_log_ip"];
-            if($arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1")
-                $arrRows[$intI][]	= getLinkPortal("", $strUtraceLinkMap, "_parent", getImageAdmin("icon_earth.png")) ." ". getLinkPortal("", $strUtraceLinkText, "_parent", getImageAdmin("icon_text.png"));
+            if($arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1") 
+                $arrRows[$intI][]	= $this->objToolkit->listButton("<a href=\"".$strUtraceLinkMap."\" target=\"_blank\" title=\"".$this->getLang("login_utrace_showmap")."\" rel=\"tooltip\">".getImageAdmin("icon_earth.png"))
+                               . " " .$this->objToolkit->listButton("<a href=\"".$strUtraceLinkText."\" target=\"_blank\" title=\"".$this->getLang("login_utrace_showtext")."\" rel=\"tooltip\">".getImageAdmin("icon_text.png"));
             else 
-                $arrRows[$intI][]	= getImageAdmin("icon_notAvailable.png");            
+                $arrRows[$intI][]	= getImageAdmin("icon_earthDisabled.png", $this->getLang("login_utrace_noinfo")) ." ". getImageAdmin("icon_textDisabled.png", $this->getLang("login_utrace_noinfo"));            
         }
 
         //Building the surrounding table
