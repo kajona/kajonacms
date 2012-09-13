@@ -178,6 +178,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                                         );
                                     }
                                     KAJONA.util.evalScript(data);
+                                    KAJONA.admin.tooltip.initTooltip();
                                 }
                                 else {
                                     KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);

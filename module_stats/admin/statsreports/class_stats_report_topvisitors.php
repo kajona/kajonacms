@@ -91,11 +91,13 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
 
             $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrOneStat["stats_ip"];
             $strUtraceLinkText = "http://www.utrace.de/whois/".$arrOneStat["stats_ip"];
-            if($arrOneStat["stats_ip"] != "127.0.0.1" && $arrOneStat["stats_ip"] != "::1")
-                $arrValues[$intI][]	= getLinkAdminRaw ($strUtraceLinkMap, "uu", $this->objLang->getLang("login_utrace_showmap", "user"), "icon_earth.png", "_blank")
-                               . " " . getLinkAdminRaw ($strUtraceLinkText, "uu", $this->objLang->getLang("login_utrace_showtext", "user"), "icon_text.png", "_blank");
+            if($arrOneStat["stats_ip"] != "127.0.0.1" && $arrOneStat["stats_ip"] != "::1") {
+                $arrValues[$intI][]	= getLinkAdminRaw($strUtraceLinkMap, "", $this->objLang->getLang("login_utrace_showmap", "user"), "icon_earth.png", "_blank")
+                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->objLang->getLang("login_utrace_showtext", "user"), "icon_text.png", "_blank");
+            }
             else 
-                $arrValues[$intI][] = getImageAdmin("icon_earthDisabled.png", $this->objLang->getLang("login_utrace_noinfo", "user")) ." ". getImageAdmin("icon_textDisabled.png", $this->objLang->getLang("login_utrace_noinfo", "user"));
+                $arrValues[$intI][] = getImageAdmin("icon_earthDisabled.png", $this->objLang->getLang("login_utrace_noinfo", "user")) ." "
+                    .getImageAdmin("icon_textDisabled.png", $this->objLang->getLang("login_utrace_noinfo", "user"));
             
             $intI++;
         }

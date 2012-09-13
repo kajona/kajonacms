@@ -11,7 +11,6 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
- *
  * @targetTable mediamanager_file.file_id
  */
 class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable {
@@ -53,8 +52,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     private $intHits = 0;
 
     /**
-     *
      * 0 = file, 1 = folder
+     *
      * @var int
      * @tableColumn file_type
      */
@@ -67,11 +66,11 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-		$this->setArrModuleEntry("modul", "mediamanager");
+        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
+        $this->setArrModuleEntry("modul", "mediamanager");
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
     }
 
     /**
@@ -87,12 +86,12 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             return "icon_folderClosed.png";
 
         //get the filetype
-        $arrMime  = class_carrier::getInstance()->getObjToolkit("admin")->mimeType($this->getStrFilename());
+        $arrMime = class_carrier::getInstance()->getObjToolkit("admin")->mimeType($this->getStrFilename());
         $strImage = $arrMime[2];
         $strAlt = $arrMime[0];
 
         if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
-            $strAlt = "<div class='loadingContainer'><img src='"._webpath_."/image.php?image=".urlencode($this->getStrFilename())."&amp;maxWidth=100&amp;maxHeight=100' /></div>";
+            $strAlt = "<div class='loadingContainer'><img src='" . _webpath_ . "/image.php?image=" . urlencode($this->getStrFilename()) . "&amp;maxWidth=100&amp;maxHeight=100' /></div>";
         }
         return array($strImage, $strAlt);
     }
@@ -105,29 +104,31 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @return string the full url to the image that should be embedded into the grid
      */
     public function getStrGridIcon() {
-        if($this->getIntType() == self::$INT_TYPE_FOLDER)
-            return "http://placehold.it/260x180";
-
-        //get the filetype
-        $arrMime  = class_carrier::getInstance()->getObjToolkit("admin")->mimeType($this->getStrFilename());
-
-        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
-            return _webpath_."/image.php?image=".urlencode($this->getStrFilename())."&amp;fixedWidth=260&amp;fixedHeight=180";
+        if($this->getIntType() == self::$INT_TYPE_FOLDER) {
+            return _webpath_."/core/module_mediamanager/admin/pics/folder_grey.png";
         }
 
-        return "http://placehold.it/260x180";
+        //get the filetype
+        $arrMime = class_carrier::getInstance()->getObjToolkit("admin")->mimeType($this->getStrFilename());
+
+        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
+            return _webpath_ . "/image.php?image=" . urlencode($this->getStrFilename()) . "&amp;fixedWidth=260&amp;fixedHeight=180";
+        }
+
+        return _webpath_."/core/module_mediamanager/admin/pics/file.png";
     }
 
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
         $strReturn = basename($this->getStrFilename());
         if($this->getIntType() == self::$INT_TYPE_FILE) {
-            $strReturn .= ",  ".bytesToString(filesize(_realpath_.$this->getStrFilename()));
-            $strReturn .= ", ".$this->getIntHits()." ".$this->getLang("file_hits", "mediamanager");
+            $strReturn .= ",  " . bytesToString(filesize(_realpath_ . $this->getStrFilename()));
+            $strReturn .= ", " . $this->getIntHits() . " " . $this->getLang("file_hits", "mediamanager");
         }
 
         return $strReturn;
@@ -135,6 +136,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -143,6 +145,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -153,10 +156,12 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         //delete the current file
         $objFilesystem = new class_filesystem();
-        if($this->getIntType() == self::$INT_TYPE_FILE)
+        if($this->getIntType() == self::$INT_TYPE_FILE) {
             $objFilesystem->fileDelete($this->getStrFilename());
-        else
+        }
+        else {
             $objFilesystem->folderDelete($this->getStrFilename());
+        }
 
         return parent::deleteObjectInternal();
     }
@@ -170,29 +175,32 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param bool $bitActiveOnly
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return class_module_mediamanager_file[]
      * @static
      */
-    public static  function loadFilesDB($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null) {
+    public static function loadFilesDB($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null) {
 
         $arrParams = array();
         $arrParams[] = $strPrevID;
-        if($intTypeFilter !== false)
+        if($intTypeFilter !== false) {
             $arrParams[] = $intTypeFilter;
+        }
 
         $strQuery = "SELECT system_id
-                       FROM "._dbprefix_."system,
-                            "._dbprefix_."mediamanager_file
+                       FROM " . _dbprefix_ . "system,
+                            " . _dbprefix_ . "mediamanager_file
                     WHERE system_id = file_id
                       AND system_prev_id = ?
-                        ".($intTypeFilter !== false  ?  " AND file_type = ? " : "")."
-                        ".(!$bitActiveOnly ? "" : " AND system_status = 1 ")."
+                        " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
+                        " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
                         ORDER BY system_sort ASC";
-        $arrIds  = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrIds as $arrOneId)
+        foreach($arrIds as $arrOneId) {
             $arrReturn[] = new class_module_mediamanager_file($arrOneId["system_id"]);
+        }
 
         return $arrReturn;
     }
@@ -203,6 +211,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param string $strPrevID
      * @param bool|int $intTypeFilter
      * @param bool $bitActiveOnly
+     *
      * @return int
      * @static
      */
@@ -210,17 +219,18 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         $arrParams = array();
         $arrParams[] = $strPrevID;
-        if($intTypeFilter !== false)
+        if($intTypeFilter !== false) {
             $arrParams[] = $intTypeFilter;
+        }
 
         $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."system,
-                            "._dbprefix_."mediamanager_file
+                       FROM " . _dbprefix_ . "system,
+                            " . _dbprefix_ . "mediamanager_file
                     WHERE system_id = file_id
                       AND system_prev_id = ?
-                         ".($intTypeFilter !== false  ? " AND file_type = ? " : "" )."
-                        ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."";
-        $arrRow  = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+                         " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
+                        " . (!$bitActiveOnly ? "" : "AND system_status = 1 ") . "";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
 
@@ -232,17 +242,16 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     public function getRepositoryId() {
 
         $strPrevid = $this->getPrevId();
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "mediamanager_repo WHERE repo_id = ?", array($strPrevid));
         while($arrRow["COUNT(*)"] == 0 && $strPrevid != "" && $strPrevid != "0") {
 
             $objFile = new class_module_mediamanager_file($strPrevid);
             $strPrevid = $objFile->getPrevId();
-            $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
+            $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "mediamanager_repo WHERE repo_id = ?", array($strPrevid));
         }
 
         return $strPrevid;
     }
-
 
 
     /**
@@ -255,21 +264,22 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      *
      * @return array [insert, delete]
      */
-	public static function syncRecursive($strPrevID, $strPath, $bitRecursive = true, class_module_mediamanager_repo $objRepo = null) {
+    public static function syncRecursive($strPrevID, $strPath, $bitRecursive = true, class_module_mediamanager_repo $objRepo = null) {
         $arrReturn = array();
-	    $arrReturn["insert"] = 0;
-	    $arrReturn["delete"] = 0;
+        $arrReturn["insert"] = 0;
+        $arrReturn["delete"] = 0;
 
         if($objRepo == null) {
             $objRepo = class_objectfactory::getInstance()->getObject($strPrevID);
-            while($objRepo != null && !$objRepo instanceof class_module_mediamanager_repo)
+            while($objRepo != null && !$objRepo instanceof class_module_mediamanager_repo) {
                 $objRepo = class_objectfactory::getInstance()->getObject($objRepo->getPrevId());
+            }
         }
 
-	    //Load the files in the DB
-		$arrObjDB = class_module_mediamanager_file::loadFilesDB($strPrevID);
-		//Load files and folder from filesystem
-		$objFilesystem = new class_filesystem();
+        //Load the files in the DB
+        $arrObjDB = class_module_mediamanager_file::loadFilesDB($strPrevID);
+        //Load files and folder from filesystem
+        $objFilesystem = new class_filesystem();
 
         //if the repo defines a view-filter, take that one into account
         $arrViewFilter = array();
@@ -277,74 +287,74 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             $arrViewFilter = explode(",", $objRepo->getStrViewFilter());
         }
 
-		$arrFilesystem = $objFilesystem->getCompleteList($strPath, $arrViewFilter, array(), array(".", "..", ".svn"));
+        $arrFilesystem = $objFilesystem->getCompleteList($strPath, $arrViewFilter, array(), array(".", "..", ".svn"));
 
-		//So, lets sync those two arrays
-		//At first the files
-		foreach($arrFilesystem["files"] as $intKeyFS => $arrOneFileFilesystem) {
-			//search the db-array for this file
-			foreach($arrObjDB as $intKeyDB => $objOneFileDB ) {
-				//File or folder
-				if($objOneFileDB->getintType() == self::$INT_TYPE_FILE) {
-					//compare
-					if($objOneFileDB->getStrFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
-						//And unset from both arrays
-						unset($arrFilesystem["files"][$intKeyFS]);
-						unset($arrObjDB[$intKeyDB]);
-					}
-				}
-			}
-		}
+        //So, lets sync those two arrays
+        //At first the files
+        foreach($arrFilesystem["files"] as $intKeyFS => $arrOneFileFilesystem) {
+            //search the db-array for this file
+            foreach($arrObjDB as $intKeyDB => $objOneFileDB) {
+                //File or folder
+                if($objOneFileDB->getintType() == self::$INT_TYPE_FILE) {
+                    //compare
+                    if($objOneFileDB->getStrFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
+                        //And unset from both arrays
+                        unset($arrFilesystem["files"][$intKeyFS]);
+                        unset($arrObjDB[$intKeyDB]);
+                    }
+                }
+            }
+        }
 
-		//And loop the folders
-		foreach($arrFilesystem["folders"] as $intKeyFolder => $strFolder) {
-			//search the array for folders
-			foreach($arrObjDB as $intKeyDB => $objOneFolderDB) {
-				//file or folder?
-				if($objOneFolderDB->getIntType() == self::$INT_TYPE_FOLDER) {
-					//compare
-					if($objOneFolderDB->getStrFilename() == $strPath."/".$strFolder) {
-						//Unset from both
-						unset($arrFilesystem["folders"][$intKeyFolder]);
-						unset($arrObjDB[$intKeyDB]);
-					}
-				}
-			}
-		}
+        //And loop the folders
+        foreach($arrFilesystem["folders"] as $intKeyFolder => $strFolder) {
+            //search the array for folders
+            foreach($arrObjDB as $intKeyDB => $objOneFolderDB) {
+                //file or folder?
+                if($objOneFolderDB->getIntType() == self::$INT_TYPE_FOLDER) {
+                    //compare
+                    if($objOneFolderDB->getStrFilename() == $strPath . "/" . $strFolder) {
+                        //Unset from both
+                        unset($arrFilesystem["folders"][$intKeyFolder]);
+                        unset($arrObjDB[$intKeyDB]);
+                    }
+                }
+            }
+        }
 
-		//the remaining records from the database have to be deleted!
-		if(count($arrObjDB) > 0) {
+        //the remaining records from the database have to be deleted!
+        if(count($arrObjDB) > 0) {
 
-			foreach($arrObjDB as $objOneFileDB) {
+            foreach($arrObjDB as $objOneFileDB) {
                 $objOneFileDB->deleteObject();
                 $arrReturn["delete"]++;
-			}
-		}
+            }
+        }
 
-		//the remaining records from the filesystem have to be added
-		foreach($arrFilesystem["files"] as $arrOneFileFilesystem) {
-			$strFileName = $arrOneFileFilesystem["filename"];
-			$strFileFilename = str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"]);
-			$objFile = new class_module_mediamanager_file();
-			$objFile->setStrFilename($strFileFilename);
-			$objFile->setStrName($strFileName);
-			$objFile->setIntType(self::$INT_TYPE_FILE);
+        //the remaining records from the filesystem have to be added
+        foreach($arrFilesystem["files"] as $arrOneFileFilesystem) {
+            $strFileName = $arrOneFileFilesystem["filename"];
+            $strFileFilename = str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"]);
+            $objFile = new class_module_mediamanager_file();
+            $objFile->setStrFilename($strFileFilename);
+            $objFile->setStrName($strFileName);
+            $objFile->setIntType(self::$INT_TYPE_FILE);
             $objFile->updateObjectToDb($strPrevID);
-			$arrReturn["insert"]++;
-		}
+            $arrReturn["insert"]++;
+        }
 
-		foreach($arrFilesystem["folders"] as $strFolder) {
-			$strFileName = $strFolder;
-			$strFileFilename = $strPath."/".$strFolder;
-			$objFile = new class_module_mediamanager_file();
-			$objFile->setStrFilename($strFileFilename);
-			$objFile->setStrName($strFileName);
-			$objFile->setIntType(self::$INT_TYPE_FOLDER);
+        foreach($arrFilesystem["folders"] as $strFolder) {
+            $strFileName = $strFolder;
+            $strFileFilename = $strPath . "/" . $strFolder;
+            $objFile = new class_module_mediamanager_file();
+            $objFile->setStrFilename($strFileFilename);
+            $objFile->setStrName($strFileName);
+            $objFile->setIntType(self::$INT_TYPE_FOLDER);
             $objFile->updateObjectToDb($strPrevID);
-			$arrReturn["insert"]++;
-		}
+            $arrReturn["insert"]++;
+        }
 
-		//Load subfolders
+        //Load subfolders
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
         if($bitRecursive) {
             $objFolders = class_module_mediamanager_file::loadFilesDB($strPrevID, self::$INT_TYPE_FOLDER);
@@ -355,12 +365,12 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             }
         }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
 
     public function getIntFileSize() {
-        return filesize(_realpath_.$this->getStrFilename());
+        return filesize(_realpath_ . $this->getStrFilename());
     }
 
 
