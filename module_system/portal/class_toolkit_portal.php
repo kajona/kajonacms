@@ -18,30 +18,31 @@
 class class_toolkit_portal extends class_toolkit {
 
 
-	public function __construct() {
-		parent::__construct();
-	}
+    public function __construct() {
+        parent::__construct();
+    }
 
 
-	/**
-	 * Creates a forward / backward pager out of the passed array
-	 *
-	 * @param int $intNumber Records per page
-	 * @param int $intPage current page
-	 * @param string $strForward text for the forwardlink
-	 * @param string $strBack text for the backwardslink
-	 * @param string $strAction action on the targetpage
-	 * @param string $strPage title of the targetpage
-	 * @param mixed $arrData the array of records
-	 * @param string $strAdd additional params
+    /**
+     * Creates a forward / backward pager out of the passed array
+     *
+     * @param int $intNumber Records per page
+     * @param int $intPage current page
+     * @param string $strForward text for the forwardlink
+     * @param string $strBack text for the backwardslink
+     * @param string $strAction action on the targetpage
+     * @param string $strPage title of the targetpage
+     * @param mixed $arrData the array of records
+     * @param string $strAdd additional params
      * @param string $strPvParam the param used to create the pagenumber-entries
-	 * @return mixed array containing the created data:
-	 * 						return => [arrData] = array containing the shortened data
-	 * 								  [strForward] = link to the next page
-	 * 								  [strBack]	= link to the previous page
-	 * 								  [strPages] = Pager ( [0][1] ...)
-	 */
-	public function pager($intNumber, $intPage = 1, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv") {
+     *
+     * @return mixed array containing the created data:
+     *                         return => [arrData] = array containing the shortened data
+     *                                   [strForward] = link to the next page
+     *                                   [strBack]    = link to the previous page
+     *                                   [strPages] = Pager ( [0][1] ...)
+     */
+    public function pager($intNumber, $intPage = 1, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv") {
 
         if($intPage <= 0)
             $intPage = 1;
@@ -49,98 +50,94 @@ class class_toolkit_portal extends class_toolkit {
         if((int)$intNumber <= 0)
             $intNumber = 100;
 
-		$arrReturn = 	array("arrData" 	=> array(),
-							  "strForward" 	=> "",
-							  "strBack" 	=> "",
-							  "strPages" 	=> "");
+        $arrReturn = array(
+            "arrData"        => array(),
+            "strForward"     => "",
+            "strBack"        => "",
+            "strPages"       => ""
+        );
 
+        //create array-iterator
+        $objIterator = new class_array_iterator($arrData);
+        $objIterator->setIntElementsPerPage($intNumber);
 
-		//create array-iterator
-		$objIterator = new class_array_iterator($arrData);
-		$objIterator->setIntElementsPerPage($intNumber);
+        //Anything to create?
+        if($objIterator->getNrOfPages() == 1) {
+            $arrReturn["arrData"] = $arrData;
+        }
+        else {
+            $strLinkPages = "";
+            $strLinkForward = "";
+            $strLinkBack = "";
 
-		//Anything to create?
-		if($objIterator->getNrOfPages() == 1) {
-			$arrReturn["arrData"] = $arrData;
-		}
-		else {
-			$strLinkPages = "";
-			$strLinkForward = "";
-			$strLinkBack = "";
+            $arrReturn["arrData"] = $objIterator->getElementsOnPage($intPage);
 
-			$arrReturn["arrData"] = $objIterator->getElementsOnPage($intPage);
+            //FowardLink
+            if($intPage < $objIterator->getNrOfPages())
+                $strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+            //BackLink
+            if($intPage > 1)
+                $strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
 
-			//FowardLink
-			if($intPage < $objIterator->getNrOfPages())
-				$strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage+1).$strAdd);
-			//BackLink
-			if($intPage > 1)
-				$strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage-1).$strAdd);
-			//Page-Links
-			$strLinkPages = "";
-			if($intNumber == 0)
-				$intNumber = 1;
-
-
-			//just load the current +-6 pages and the first/last +-3
+            //just load the current +-6 pages and the first/last +-3
             $intCounter2 = 1;
             for($intI = 1; $intI <= $objIterator->getNrOfPages(); $intI++) {
                 $bitDisplay = false;
                 if($intCounter2 <= 3) {
                     $bitDisplay = true;
                 }
-                elseif ($intCounter2 >= ($objIterator->getNrOfPages()-3)) {
+                elseif($intCounter2 >= ($objIterator->getNrOfPages() - 3)) {
                     $bitDisplay = true;
                 }
-                elseif ($intCounter2 >= ($intPage-6) && $intCounter2 <= ($intPage+6)) {
+                elseif($intCounter2 >= ($intPage - 6) && $intCounter2 <= ($intPage + 6)) {
                     $bitDisplay = true;
                 }
 
 
                 if($bitDisplay) {
                     if($intI == $intPage)
-    					$strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
-    				else
-    					$strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                        $strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
+                    else
+                        $strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
                 }
                 $intCounter2++;
             }
 
 
+            $arrReturn["strForward"] = $strLinkForward;
+            $arrReturn["strBack"] = $strLinkBack;
+            $arrReturn["strPages"] = $strLinkPages;
+        }
 
-			$arrReturn["strForward"] = $strLinkForward;
-			$arrReturn["strBack"] = $strLinkBack;
-			$arrReturn["strPages"] = $strLinkPages;
-		}
-
-		return $arrReturn;
-	}
-
+        return $arrReturn;
+    }
 
 
     /**
-	 * Creates a forward / backward pager out of the passed array
-	 *
-	 * @param class_array_section_iterator $objArraySectionIterator
-	 * @param string $strForward text for the forwardlink
-	 * @param string $strBack text for the backwardslink
-	 * @param string $strAction action on the targetpage
-	 * @param string $strPage title of the targetpage
-	 * @param string $strAdd additional params
+     * Creates a forward / backward pager out of the passed array
+     *
+     * @param class_array_section_iterator $objArraySectionIterator
+     * @param string $strForward text for the forwardlink
+     * @param string $strBack text for the backwardslink
+     * @param string $strAction action on the targetpage
+     * @param string $strPage title of the targetpage
+     * @param string $strAdd additional params
      * @param string $strPvParam the param used to create the pagenumber-entries
-	 * @return mixed array containing the created data:
-	 * 						return => [arrData] = array containing the shortened data
-	 * 								  [strForward] = link to the next page
-	 * 								  [strBack]	= link to the previous page
-	 * 								  [strPages] = Pager ( [0][1] ...)
-	 */
-	public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv") {
+     *
+     * @return mixed array containing the created data:
+     *                         return => [arrData] = array containing the shortened data
+     *                                   [strForward] = link to the next page
+     *                                   [strBack]    = link to the previous page
+     *                                   [strPages] = Pager ( [0][1] ...)
+     */
+    public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv") {
 
-		$arrReturn = 	array("arrData" 	=> array(),
-							  "strForward" 	=> "",
-							  "strBack" 	=> "",
-							  "strPages" 	=> "");
-
+        $arrReturn = array(
+            "arrData"        => array(),
+            "strForward"     => "",
+            "strBack"        => "",
+            "strPages"       => ""
+        );
 
 
         $strLinkPages = "";
@@ -153,10 +150,10 @@ class class_toolkit_portal extends class_toolkit {
 
         //FowardLink
         if($intPage < $objArraySectionIterator->getNrOfPages())
-            $strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage+1).$strAdd);
+            $strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
         //BackLink
         if($intPage > 1)
-            $strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage-1).$strAdd);
+            $strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
 
 
         //just load the current +-6 pages and the first/last +-3
@@ -166,10 +163,10 @@ class class_toolkit_portal extends class_toolkit {
             if($intCounter2 <= 3) {
                 $bitDisplay = true;
             }
-            elseif ($intCounter2 >= ($objArraySectionIterator->getNrOfPages()-3)) {
+            elseif($intCounter2 >= ($objArraySectionIterator->getNrOfPages() - 3)) {
                 $bitDisplay = true;
             }
-            elseif ($intCounter2 >= ($intPage-6) && $intCounter2 <= ($intPage+6)) {
+            elseif($intCounter2 >= ($intPage - 6) && $intCounter2 <= ($intPage + 6)) {
                 $bitDisplay = true;
             }
 
@@ -189,8 +186,8 @@ class class_toolkit_portal extends class_toolkit {
             $arrReturn["strPages"] = $strLinkPages;
         }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     // ******************************************************************************************************
     // --- PORTALEDITOR -------------------------------------------------------------------------------------
@@ -199,14 +196,15 @@ class class_toolkit_portal extends class_toolkit {
      * Creates the portaleditor toolbar at top of the page
      *
      * @param array $arrContent
+     *
      * @return string
      */
     public function getPeToolbar($arrContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar", true);
-		$strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
 
-		return $strReturn;
+        return $strReturn;
     }
 
     /**
@@ -215,6 +213,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param string $strSystemid
      * @param array $arrLinks
      * @param string $strContent
+     *
      * @return string
      */
     public function getPeActionToolbar($strSystemid, $arrLinks, $strContent) {
@@ -224,7 +223,7 @@ class class_toolkit_portal extends class_toolkit {
 
         $arrTemplate = array();
         $arrTemplate["actionlinks"] = "";
-        foreach ($arrLinks as $strOneLink) {
+        foreach($arrLinks as $strOneLink) {
             if($strOneLink != "") {
                 $arrRowTemplate = array();
                 $arrRowTemplate["link_complete"] = $strOneLink;
@@ -244,10 +243,12 @@ class class_toolkit_portal extends class_toolkit {
 
     /**
      * Loads the link-content to be used when generating a new-icon-link
+     *
      * @param $strPlaceholder
      * @param $strElement
      * @param $strElementName
      * @param $strElementHref
+     *
      * @return string
      */
     public function getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref) {
@@ -264,6 +265,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param $strPlaceholderName
      * @param $strLabel
      * @param $strContentElements
+     *
      * @return string
      */
     public function getPeNewButtonWrapper($strPlaceholder, $strPlaceholderName, $strLabel, $strContentElements) {
@@ -278,14 +280,15 @@ class class_toolkit_portal extends class_toolkit {
      * Creates the portaleditor toolbar at top of the page
      *
      * @param array $arrContent
+     *
      * @return string
      */
     public function getPeInactiveElement($arrContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_inactiveElement", true);
-		$strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
 
-		return $strReturn;
+        return $strReturn;
     }
 
 }

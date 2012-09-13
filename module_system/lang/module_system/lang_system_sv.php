@@ -139,11 +139,11 @@ $lang["installer_modules_found"]         = "<b>Installation/uppdatering av modul
 $lang["installer_modules_needed"]        = "Moduler som måste installeras:";
 $lang["installer_next"]                  = "Nästa steg >";
 $lang["installer_nloaded"]               = "saknas";
-$lang["installer_phpcheck_folder"]       = "<br />Skrivrättigheter på";
+$lang["installer_phpcheck_folder"]       = "Skrivrättigheter på";
 $lang["installer_phpcheck_intro"]        = "<b>Hjärtligt välkommen</b><br /><br />";
 $lang["installer_phpcheck_intro2"]       = "<br />Installationen går i flera steg: <br />Kontroll av rättigheter, konfigurering av databas, referensere för att ha tillgång till administrationen, modulinstallation, elementinstallation och installation av exempel.<br /><br />Beroende på val av moduler kan antalet steg variera.<br /><br /> <b>Före en uppdatering av system vänligen läs<br /><a href=\"http://www.kajona.de/update_311_to_320.html\" target=\"_blank\">Updatehinweise von 3.1.x auf 3.2.0</a><br /><a href=\"http://www.kajona.de/update_32x_to_330.html\" target=\"_blank\">Updatehinweise von 3.2.x auf 3.3.0</a><br /><a href=\"http://www.kajona.de/update_33x_to_340.html\" target=\"_blank\">Updatehinweise von 3.3.x auf 3.4.0</a>.</b><br /><br /><br />Skrivrättigheter till enskilda filer och kataloger liksom<br />tillgänglighet av nödvändiga PHP-moduler  kontrolleras:<br />";
 $lang["installer_phpcheck_lang"]         = "För att ladda upp installer i ett annat språk, använd en av följande länkar:<br /><br />";
-$lang["installer_phpcheck_module"]       = "<br />PHP-Modul ";
+$lang["installer_phpcheck_module"]       = "PHP-Modul ";
 $lang["installer_prev"]                  = "< Föregående steg";
 $lang["installer_samplecontent"]         = "<b>Installation av innehåll till exempel</b><br /><br />Modulen Samplecontent skapar ett antal standardsidor och menyer.<br />och efter att modulerna har installerats kommer olika exempelinnehåll att installeras.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Administratörstillgång";

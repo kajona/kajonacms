@@ -129,17 +129,21 @@ class class_installer {
     public function checkPHPSetting() {
         $strReturn = "";
 
-        $arrFilesAndFolders = array("/project/system/config",
+        $arrFilesAndFolders = array(
+            "/project/system/config",
             "/project/dbdumps",
             "/project/log",
             "/files/cache",
             "/files/images/upload",
             "/files/images/public",
-            "/files/downloads");
+            "/core"
+        );
 
-        $arrModules = array("mbstring",
+        $arrModules = array(
+            "mbstring",
             "gd",
-            "xml");
+            "xml"
+        );
 
         $strReturn .= $this->getLang("installer_phpcheck_intro");
         $strReturn .= $this->getLang("installer_phpcheck_lang");
@@ -154,24 +158,28 @@ class class_installer {
             }
         }
 
-        $strReturn .= "<br />".$this->getLang("installer_phpcheck_intro2");
+        $strReturn .= "<br />".$this->getLang("installer_phpcheck_intro2")."<ul>";
 
         foreach($arrFilesAndFolders as $strOneFile) {
-            $strReturn .= $this->getLang("installer_phpcheck_folder").$strOneFile."...<br />";
+            $strReturn .= "<li>".$this->getLang("installer_phpcheck_folder").$strOneFile." ";
             if(is_writable(_realpath_.$strOneFile))
-                $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"green\">".$this->getLang("installer_given")."</span>.<br />";
+                $strReturn .= "<span class=\"label label-success\">".$this->getLang("installer_given")."</span>.";
             else
-                $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getLang("installer_missing")."</span>!<br />";
+                $strReturn .= "<span class=\"label label-important\">".$this->getLang("installer_missing")."</span>!";
+            $strReturn .= "</li>";
         }
 
         foreach($arrModules as $strOneModule) {
-            $strReturn .= $this->getLang("installer_phpcheck_module").$strOneModule."...<br />";
+            $strReturn .= "<li>".$this->getLang("installer_phpcheck_module").$strOneModule." ";
             if(in_array($strOneModule, get_loaded_extensions()))
-                $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"green\">".$this->getLang("installer_loaded")."</span>.<br />";
+                $strReturn .= " <span class=\"label label-success\">".$this->getLang("installer_loaded")."</span>.";
             else
-                $strReturn .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class=\"red\">".$this->getLang("installer_nloaded")."</span>!<br />";
+                $strReturn .= " <span class=\"label label-important\">".$this->getLang("installer_nloaded")."</span>!";
+
+            $strReturn .= "</li>";
         }
 
+        $strReturn .= "</ul>";
         $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=config");
         $this->strBackwardLink = "";
         $this->strOutput = $strReturn;
@@ -196,22 +204,22 @@ class class_installer {
             $strPostgresInfo = "";
             $strOci8Info = "";
             if(!in_array("mysqli", get_loaded_extensions())) {
-                $strMysqliInfo = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
+                $strMysqliInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
             }
             if(!in_array("pgsql", get_loaded_extensions())) {
-                $strPostgresInfo = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
+                $strPostgresInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
             }
             if(in_array("sqlite3", get_loaded_extensions())) {
-                $strSqlite3Info = "<div class=\"info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
+                $strSqlite3Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
             }
             else {
-                $strSqlite3Info = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
+                $strSqlite3Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
             }
             if(in_array("oci8", get_loaded_extensions())) {
-                $strOci8Info = "<div class=\"info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
+                $strOci8Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
             }
             else {
-                $strOci8Info = "<div class=\"error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
+                $strOci8Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
             }
 
             //configwizard_form
@@ -428,7 +436,7 @@ class class_installer {
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "installer_modules_form", true);
-        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
@@ -522,7 +530,7 @@ class class_installer {
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "installer_samplecontent_form", true);
-        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getLang("installer_install")), $strTemplateID);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=install");
@@ -536,7 +544,7 @@ class class_installer {
     public function finish() {
         $strReturn = "";
 
-        if($_GET["autoInstall"] == "true") {
+        if(isset($_GET["autoInstall"]) && $_GET["autoInstall"] == "true") {
             $this->strLogfile = $this->processAutoInstall();
         }
 

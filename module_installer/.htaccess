@@ -8,6 +8,6 @@
 
 Deny from all
 
-<FilesMatch "\.js$|\.css$|\.png$" >
+<FilesMatch "\.js$|\.css$|\.png$|\.less$|\.ttf$|\.woff$" >
   Allow from all
 </FilesMatch>

@@ -135,11 +135,11 @@ $lang["installer_modules_found"]         = "<b>Install/update the modules</b><br
 $lang["installer_modules_needed"]        = "Modules needed to install: ";
 $lang["installer_next"]                  = "Next step >";
 $lang["installer_nloaded"]               = "missing";
-$lang["installer_phpcheck_folder"]       = "<br />Write-permissions on ";
+$lang["installer_phpcheck_folder"]       = "Write-permissions on ";
 $lang["installer_phpcheck_intro"]        = "<b>Welcome</b><br /><br />";
 $lang["installer_phpcheck_intro2"]       = "<br />The installation of the system is spilt up into serveral steps: <br />Check of permissions, DB-configuration, credentials to access the administration, module-installation, element-installation and installation of the samplecontents.<br /><br />Dependant on the modules choosen, the number of steps can vary.<br /><br /> <b>Before running a system-update please read the <br /><a href=\"http://www.kajona.de/update_311_to_320.html\" target=\"_blank\">update instructions from 3.1.x to 3.2.0</a><br /><a href=\"http://www.kajona.de/update_32x_to_330.html\" target=\"_blank\">update instructions from 3.2.x to 3.3.0</a><br /><a href=\"http://www.kajona.de/update_33x_to_340.html\" target=\"_blank\">update instructions from 3.3.x to 3.4.0</a>.</b><br /><br /><br />The permissions on some files and the availability <br />of needed php-modules are being checked:<br />";
 $lang["installer_phpcheck_lang"]         = "To load the installer using a different language, use one of the following links:<br /><br />";
-$lang["installer_phpcheck_module"]       = "<br />PHP-module ";
+$lang["installer_phpcheck_module"]       = "PHP-module ";
 $lang["installer_prev"]                  = "< Previous step";
 $lang["installer_samplecontent"]         = "<b>Installation of the samplecontent</b><br /><br />The module 'samplecontent' creates a few standard pages and navigation entries.<br />According to the modules installed, additional contents will be created.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Admin access";

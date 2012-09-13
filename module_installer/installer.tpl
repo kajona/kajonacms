@@ -1,68 +1,98 @@
 <installer_main>
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Kajona Installer</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="robots" content="noindex, nofollow" />
-	<meta name="generator" content="Kajona, www.kajona.de" />
-	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="_webpath_/core/module_installer/installer.css" type="text/css" />
+    <meta charset="utf-8">
+    <title>Kajona Installer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="generator" content="Kajona, www.kajona.de" />
+
+    <!-- KAJONA_BUILD_LESS_START -->
+    <link href="_webpath_/core/module_installer/less/bootstrap.less" rel="stylesheet/less">
+    <link href="_webpath_/core/module_installer/less/responsive.less" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="_webpath_/core/module_installer/less/less.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
+
+    <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js"></script>
+    <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="_webpath_/core/module_installer/js/html5.js"></script>
+    <![endif]-->
 </head>
+
+
 <body>
 
-<div id="installerBox">
-	<div class="logo"></div>
-	<div>
-		<div class="topRight">
-			<div class="topLeft">
-				<div class="bottomRight">
-					<div class="bottomLeft">
-						<div class="content">
-							<h1>Kajona Installer %%installer_version%%</h1>
-							<div>
-							%%installer_output%%
-							</div>
-							<br />
-							%%installer_logfile%%
-							<br />
-							<div>
-							  <div style="float: left;">%%installer_backward%%</div>
-							  <div style="float: right;">%%installer_forward%%</div>
-							  <div style="clear: both;"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="progressContainer">
-           		%%installer_progress%%
-        	</div>
-		</div>
+
+<div class="container-fluid">
+<div class="row-fluid">
+
+    <!-- MODULE NAVIGATION -->
+    <div class="span3 ">
+        <div class="sidebar-nav ">
+            <div class="progressContainer">
+                <ul>
+                %%installer_progress%%
+                </ul>
+            </div>
+        </div>
     </div>
-	<div class="copyright">&copy; 2012 <a href="http://www.kajona.de" target="_blank" title="Kajona CMS - empowering your content">Kajona</a></div>
+
+    <!-- CONTENT CONTAINER -->
+    <div class="span9" id="content">
+
+        <div class="contentTopbar clearfix">
+            <h1 class="pull-left">Kajona Installer %%installer_version%%</h1>
+        </div>
+
+        <div>
+        %%installer_output%%
+
+        %%installer_logfile%%
+
+
+        <div class="pagination">
+            <ul>
+                <li>%%installer_backward%%</li>
+                <li>%%installer_forward%%</li>
+            </ul>
+        </div>
+
+        </div>
+
+    </div>
 </div>
+
+<hr>
+
+<footer>
+    <p>powered by <a href="http://www.kajona.de/" target="_blank" title="Kajona - empowering your content">Kajona</a></p>
+</footer>
+
 
 </body>
 </html>
 </installer_main>
 
 <installer_progress_entry>
-    <div>%%entry_name%%</div>
+    <li>%%entry_name%%</li>
 </installer_progress_entry>
 
 <installer_progress_entry_current>
-    <div class="current">%%entry_name%%</div>
+    <li class="active">%%entry_name%%</li>
 </installer_progress_entry_current>
 
 <installer_progress_entry_done>
-    <div class="done">%%entry_name%%</div>
+    <li class="done">%%entry_name%%</li>
 </installer_progress_entry_done>
 
 <installer_log>
 <div class="preText" id="systemlog">
-	<pre><b>%%systemlog%%</b><br />%%log_content%%</pre>
+	<pre class="code pre-scrollable"><b>%%systemlog%%</b><br />%%log_content%%</pre>
 </div>
 <script type="text/javascript">
 var systemlogDiv = document.getElementById("systemlog");
@@ -83,16 +113,16 @@ function switchDriver() {
     var strOci8Info = '%%oci8Info%%';
 
     if(strValue == "mysqli") {
-        document.getElementById('dbInfo').innerHTML = strMysqliInfo;
+        $('#dbInfo').html(strMysqliInfo);
     }
     else if(strValue == "sqlite3") {
-        document.getElementById('dbInfo').innerHTML = strSqlite3Info;
+        $('#dbInfo').html(strSqlite3Info);
     }
     else if(strValue == "postgres") {
-        document.getElementById('dbInfo').innerHTML = strPostgresInfo;
+        $('#dbInfo').html(strPostgresInfo);
     }
     else if(strValue == "oci8") {
-        document.getElementById('dbInfo').innerHTML = strOci8Info;
+        $('#dbInfo').html(strOci8Info);
     }
 
     if(strValue == "sqlite3") {
@@ -119,26 +149,77 @@ function switchDriver() {
 }
 </script>
 <br />
-<form action="_webpath_/installer.php" method="POST">
+<form action="_webpath_/installer.php" method="POST" class="form-horizontal">
 <input type="hidden" name="write" value="true" />
 <div id="dbInfo">
     %%mysqliInfo%%
 </div>
-<div><label for="hostname">[lang,installer_config_dbhostname,system]</label><input type="text" name="hostname" id="hostname" value="localhost" class="inputText" /></div><br />
-<div><label for="username">[lang,installer_config_dbusername,system]</label><input type="text" name="username" id="username" class="inputText" /></div><br />
-<div><label for="password">[lang,installer_config_dbpassword,system]</label><input type="password" name="password" id="password" class="inputText" /></div><br />
-<div><label for="dbname">[lang,installer_config_dbname,system]</label><input type="text" name="dbname" id="dbname" class="inputText" /></div><br />
-<div><label for="dbprefix">[lang,installer_config_dbprefix,system]</label><input type="text" name="dbprefix" id="dbprefix" value="kajona_" class="inputText" /></div><br />
-<div><label for="driver">[lang,installer_config_dbdriver,system]</label><select name="driver" id="driver" class="inputDropdown" onchange="switchDriver();">
+
+    <div class="control-group">
+        <label for="hostname" class="control-label">[lang,installer_config_dbhostname,system]</label>
+        <div class="controls">
+            <input type="text" id="hostname" name="hostname" value="" class="input-xlarge">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="username" class="control-label">[lang,installer_config_dbusername,system]</label>
+        <div class="controls">
+            <input type="text" id="username" name="username" value="" class="input-xlarge">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="password" class="control-label">[lang,installer_config_dbpassword,system]</label>
+        <div class="controls">
+            <input type="password" id="password" name="password" value="" class="input-xlarge">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="dbname" class="control-label">[lang,installer_config_dbname,system]</label>
+        <div class="controls">
+            <input type="text" id="dbname" name="dbname" value="" class="input-xlarge">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="dbprefix" class="control-label">[lang,installer_config_dbprefix,system]</label>
+        <div class="controls">
+            <input type="text" id="dbprefix" name="dbprefix" value="" class="input-xlarge">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="driver" class="control-label">[lang,installer_config_dbdriver,system]</label>
+        <div class="controls">
+            <select name="driver" id="driver" class="input-xlarge" onchange="switchDriver();">
                 <option value="mysqli" selected="selected">MySQL</option>
                 <option value="mysqli">MariaDB</option>
                 <option value="postgres">PostgreSQL</option>
                 <option value="sqlite3">SQLite 3</option>
                 <option value="oci8">Oracle (oci8)</option>
-             </select></div><br />
-<div><label for="port">[lang,installer_config_dbport,system]</label><input type="text" name="port" id="port" class="inputText" /></div><br />
-<div><label ></label>[lang,installer_config_dbportinfo,system]</div><br />
-<div><label for="submit"></label><input type="submit" value="[lang,installer_config_write,system]" class="inputSubmit" /></div><br />
+            </select>
+        </div>
+    </div>
+
+    <div class="controls">
+        <p class="help-block">[lang,installer_config_dbportinfo,system]</p>
+    </div>
+    <div class="control-group">
+        <label for="port" class="control-label">[lang,installer_config_dbport,system]</label>
+        <div class="controls">
+            <input type="text" id="port" name="port" value="" class="input-xlarge">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <button type="submit" class="btn savechanges">
+            <span class="btn-text">[lang,installer_config_write,system]</span>
+            <span class="statusicon"></span>
+        </button>
+    </div>
+
 </form>
 </configwizard_form>
 
@@ -158,12 +239,37 @@ function switchDriver() {
 
 
 <loginwizard_form>
-<form action="_webpath_/installer.php?step=loginData" method="POST">
+<form action="_webpath_/installer.php?step=loginData" method="POST" class="form-horizontal">
 <input type="hidden" name="write" value="true" />
-<div><label for="username">[lang,installer_login_username,system]</label><input type="text" name="username" id="username" class="inputText" /></div><br />
-<div><label for="password">[lang,installer_login_password,system]</label><input type="password" name="password" id="password" class="inputText" /></div><br />
-<div><label for="email">[lang,installer_login_email,system]</label><input type="text" name="email" id="email" class="inputText" /></div><br />
-<div><label for="submit"></label><input type="submit" value="[lang,installer_login_save,system]" class="inputSubmit" /></div><br />
+
+<div class="control-group">
+    <label for="username" class="control-label">[lang,installer_login_username,system]</label>
+    <div class="controls">
+        <input type="text" id="username" name="username" value="" class="input-xlarge">
+    </div>
+</div>
+
+<div class="control-group">
+    <label for="password" class="control-label">[lang,installer_login_password,system]</label>
+    <div class="controls">
+        <input type="password" id="password" name="password" value="" class="input-xlarge">
+    </div>
+</div>
+
+<div class="control-group">
+    <label for="email" class="control-label">[lang,installer_login_email,system]</label>
+    <div class="controls">
+        <input type="text" id="email" name="email" value="" class="input-xlarge">
+    </div>
+</div>
+
+<div class="control-group">
+    <button type="submit" class="btn savechanges">
+        <span class="btn-text">[lang,installer_login_save,system]</span>
+        <span class="statusicon"></span>
+    </button>
+</div>
+
 </form>
 </loginwizard_form>
 
@@ -177,50 +283,50 @@ function switchDriver() {
 
 <installer_modules_form>
 	<form action="_webpath_/installer.php?step=install" method="POST">
+        <table class="table table-striped table-condensed" cellpadding="0" cellspacing="0">
+	        %%module_rows%%
+        </table>
+        <div class="control-group">
+            <button type="submit" class="btn savechanges">
+                <span class="btn-text">[lang,installer_install,system]</span>
+                <span class="statusicon"></span>
+            </button>
+        </div>
 
-	   %%module_rows%%
-	   <br />
-	   <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br />
 	</form>
 </installer_modules_form>
 
 <installer_samplecontent_form>
     <form action="_webpath_/installer.php?step=samplecontent" method="POST">
-
+        <table class="admintable table table-striped table-condensed" cellpadding="0" cellspacing="0">
        %%module_rows%%
-       <br />
-       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br />
+        </table>
+        <div class="control-group">
+            <button type="submit" class="btn savechanges">
+                <span class="btn-text">[lang,installer_install,system]</span>
+                <span class="statusicon"></span>
+            </button>
+        </div>
+
     </form>
 </installer_samplecontent_form>
 
 <installer_modules_row>
-	    <table class="moduleRowTable" cellpadding="0" cellspacing="0">
-	        <tr valign="bottom">
-	            <td rowspan="2" width="30px;"></td>
-	            <td colspan="2" valign="bottom">
-	                %%module_name%%
-	            </td>
-	        </tr>
 	        <tr>
-	            <td width="180px" style="text-indent: 20px;" valign="middle">V %%module_version%%</td>
-	            <td align="left">%%module_hint%%</td>
+	            <td width="30px;"></td>
+	            <td valign="bottom">%%module_name%%</td>
+	            <td>V %%module_version%%</td>
+	            <td>%%module_hint%%</td>
 	        </tr>
-	    </table>
 </installer_modules_row>
 
 <installer_modules_row_installable>
-	    <table class="moduleRowTable installable" cellpadding="0" cellspacing="0">
-	        <tr valign="bottom">
-	            <td rowspan="2" width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" checked="checked"/></td>
-	            <td colspan="2" valign="bottom" onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
-	                %%module_name%%
-	            </td>
-	        </tr>
 	        <tr onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
-	            <td width="180px" style="text-indent: 20px;" valign="middle">V %%module_version%%</td>
-	            <td align="left">%%module_hint%%</td>
+	            <td width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" checked="checked"/></td>
+	            <td >%%module_name%%</td>
+	            <td>V %%module_version%%</td>
+	            <td>%%module_hint%%</td>
 	        </tr>
-	    </table>
 </installer_modules_row_installable>
 
 

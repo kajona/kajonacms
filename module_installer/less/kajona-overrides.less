@@ -1,0 +1,272 @@
+
+@font-face {
+    font-family: 'Dosis';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Dosis Medium'), local('Dosis-Medium'), url(../fonts/dosis/dosis-medium.woff) format('woff'),  url(../fonts/dosis/dosis-medium.ttf) format('ttf');
+}
+@font-face {
+    font-family: 'Dosis';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Dosis Bold'), local('Dosis-Bold'), url(../fonts/dosis/dosis-bold.woff) format('woff'),  url(../fonts/dosis/dosis-bold.ttf) format('tff');
+}
+
+
+
+body {
+    padding-top: 20px;
+    padding-bottom: 40px;
+
+    &.dialogBody,
+    &.portaleditorBody {
+        padding: 0;
+    }
+
+    h2 {
+        font-size: @baseFontSize + 5;
+        line-height: @baseFontSize + 8
+    }
+
+    a {
+      color: @black;
+      text-decoration: underline;
+    }
+
+}
+
+
+
+.sidebar-nav {
+
+    background-color: @white;
+    border:0px;
+    .border-radius(0px);
+    .box-shadow(none);
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding:0px;
+    padding-top: 60px;
+    text-align:right;
+    position:relative;
+
+    .progressContainer {
+      ul {
+        margin: 0 0 1px 0;
+
+        list-style: none;
+
+        li {
+          padding: 6px 15px;
+          background-color: @kajonaLightGray;
+          margin-bottom:1px;
+          font-size:@baseFontSize + 2;
+          color:#626262;
+
+          &.active {
+            color:@white;
+            text-shadow:none;
+            background-color: @green;
+          }
+
+          &.done {
+
+            border-color:@green;
+            border-style: solid;
+            border-width: 0px 0px 0px 10px;
+          }
+        }
+      }
+    }
+
+
+
+
+}
+
+
+#content {
+
+    ul {
+       li {
+          margin: 3px 1px;
+       }
+    }
+
+    pre {
+        font-size: @baseFontSize - 2;
+    }
+
+    .pre-scrollable {
+        max-height: 400px;
+    }
+
+    form {
+        .control-label {
+            width: 200px;
+        }
+
+        .controls {
+            margin-left: 220px;
+        }
+
+        .control-group {
+            margin-bottom: @baseLineHeight - 12;
+        }
+
+        .savechanges {
+            margin: 20px 0 0 220px;
+            border: 4px solid @grayLight;
+            background: @kajonaLightGray none;
+            .border-radius(0px);
+            .box-shadow(none);
+            color: #888888;
+            cursor: pointer;
+            font-size: @baseFontSize + 2;
+            vertical-align: middle;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0px;
+            width: 268px;
+
+            &:hover {
+                color:@black;
+                span.statusicon {
+                    background-color:darken(@green, 10%);
+                }
+            }
+
+            span.btn-text {
+                margin:6px 0 6px 20px;
+                display: inline-block;
+            }
+
+            span.statusicon {
+                width:30px;
+                height:30px;
+                display:inline-block;
+                float:right;
+                background: center center no-repeat;
+                background-color:@green;
+            }
+        }
+    }
+
+    .pagination {
+
+        text-align: center;
+
+        ul {
+            .border-radius(0px);
+            .box-shadow(none);
+            display: inline-block;
+            margin-bottom: 0;
+            margin-left: 0;
+
+            li {
+                a, span {
+                    border-color: #dcdcdc;
+                    border-style: solid;
+                    border-width: 1px;
+                    float: left;
+                    line-height: 30px;
+                    padding: 0 10px;
+                    text-decoration: none;
+                    color:@grayDark;
+                    margin:0 3px;
+                    background-color:@grayLight;
+
+                    &.active {
+                        color:@green;
+                    }
+                }
+
+                &:first-child a, &:last-child a {
+                    border-left-width: 1px;
+                    .border-radius(0px);
+                }
+            }
+        }
+
+    }
+
+
+}
+
+
+
+
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input { //  -moz-transition:none;
+    background-color: @grayLighter;
+    border: 1px solid @grayDarker;
+    .border-radius(0px);
+    .box-shadow(none);
+
+    &.mandatoryFormElement {
+        .box-shadow(0 0 6px @orange+20);
+    }
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  color: @gray;
+  display: inline-block;
+  font-size: @baseFontSize;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 9px;
+  padding: 4px;
+.border-radius(0px);
+}
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+  border-color:@green;
+  .box-shadow(0 0 6px @green+20);
+  outline: 0 none;
+}
+
+textarea {
+    height: auto;
+}
+
+select {
+    height: 30px;
+    padding: 2px 0 2px 8px;
+}
+
+label {
+  color:@gray;
+}
+
+
+
+.container-fluid {
+  padding-left:0px;
+}
+
+.listButton {
+    padding: 0px 2px;
+}
+
+
+:focus {
+  -moz-outline-style:none;
+  outline:medium none;
+}
+
+:-moz-any-link:focus {
+  outline:medium none;
+}
+
+::-moz-selection {
+  background-color:@green;
+  color:@white;
+  text-shadow:none;
+}
+
+::selection {
+  background-color:@green;
+  color:@white;
+  text-shadow:none;
+}
