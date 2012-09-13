@@ -83,6 +83,7 @@ $lang["login_statusTitle"]               = "Logged in as:";
 $lang["login_status_0"]                  = "Login Error";
 $lang["login_status_1"]                  = "Login OK";
 $lang["login_user"]                      = "User";
+$lang["login_utrace"]              = "Utrace Info";
 $lang["loginlog"]                        = "Login log";
 $lang["member_delete_error"]             = "An error occured while deleting user from group";
 $lang["mitglied_loeschen"]               = "Delete user from group";

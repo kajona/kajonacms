@@ -84,6 +84,7 @@ $lang["login_statusTitle"]               = "Angemeldet als:";
 $lang["login_status_0"]                  = "Login Fehler";
 $lang["login_status_1"]                  = "Login OK";
 $lang["login_user"]                      = "Benutzer";
+$lang["login_utrace"]              = "Utrace Info";
 $lang["loginlog"]                        = "Login-Protokoll";
 $lang["member_delete_error"]             = "Fehler beim Entfernen";
 $lang["mitglied_loeschen"]               = "Benutzer aus der Gruppe entfernen";

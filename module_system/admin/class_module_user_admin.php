@@ -924,6 +924,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrRows[$intI][]	= $arrLogs[$intI]["user_log_enddate"] != "" ? dateToString(new class_date($arrLogs[$intI]["user_log_enddate"])) : "";
             $arrRows[$intI][]	= ($arrLogs[$intI]["user_log_status"] == 0 ? $this->getLang("login_status_0") : $this->getLang("login_status_1"));
             $arrRows[$intI][]	= $arrLogs[$intI]["user_log_ip"];
+            $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrLogs[$intI]["user_log_ip"];
+            $strUtraceLinkText = "http://www.utrace.de/whois/".$arrLogs[$intI]["user_log_ip"];
+            if($arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1")
+                $arrRows[$intI][]	= getLinkPortal("", $strUtraceLinkMap, "_parent", getImageAdmin("icon_earth.png")) ." ". getLinkPortal("", $strUtraceLinkText, "_parent", getImageAdmin("icon_text.png"));
+            else 
+                $arrRows[$intI][]	= getImageAdmin("icon_notAvailable.png");            
         }
 
         //Building the surrounding table
@@ -935,6 +941,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrHeader[]	= $this->getLang("login_logoutdate");
         $arrHeader[]	= $this->getLang("login_status");
         $arrHeader[]	= $this->getLang("login_ip");
+        $arrHeader[]	= $this->getLang("login_utrace");
         //and fetch the table
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
         $strReturn .= $arrPageViews["pageview"];

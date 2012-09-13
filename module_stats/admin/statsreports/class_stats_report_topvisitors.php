@@ -88,6 +88,14 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
             }
             $arrValues[$intI][] = $arrOneStat["anzahl"];
             $arrValues[$intI][] = $this->objToolkit->percentBeam($arrOneStat["anzahl"] / $intSum * 100);
+
+            $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrOneStat["stats_ip"];
+            $strUtraceLinkText = "http://www.utrace.de/whois/".$arrOneStat["stats_ip"];
+            if($arrOneStat["stats_ip"] != "127.0.0.1" && $arrOneStat["stats_ip"] != "::1")
+                $arrValues[$intI][]	= getLinkPortal("", $strUtraceLinkMap, "_parent", getImageAdmin("icon_earth.png")) ." ". getLinkPortal("", $strUtraceLinkText, "_parent", getImageAdmin("icon_text.png"));
+            else 
+                $arrValues[$intI][]	= getImageAdmin("icon_notAvailable.png");
+            
             $intI++;
         }
         //HeaderRow
@@ -95,6 +103,7 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
         $arrHeader[] = $this->objLang->getLang("top_visitor_titel", "stats");
         $arrHeader[] = $this->objLang->getLang("commons_hits_header", "stats");
         $arrHeader[] = $this->objLang->getLang("anteil", "stats", "admin");
+        $arrHeader[] = $this->objLang->getLang("login_utrace", "user");
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
