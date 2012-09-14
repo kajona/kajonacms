@@ -21,35 +21,35 @@ abstract class class_root {
      *
      * @var class_config
      */
-	protected $objConfig = null;			//Object containing config-data
-	/**
-	 * Instance of class_db
-	 *
-	 * @var class_db
-	 */
-	protected $objDB = null;				//Object to the database
-	/**
-	 * Instance of class_session
-	 *
-	 * @var class_session
-	 */
-	protected $objSession = null;			//Object containing the session-management
-	/**
-	 * Instance of class_rights
-	 *
-	 * @var class_rights
-	 */
-	protected $objRights = null;			//Object handling the right-stuff
+    protected $objConfig = null; //Object containing config-data
+    /**
+     * Instance of class_db
+     *
+     * @var class_db
+     */
+    protected $objDB = null; //Object to the database
+    /**
+     * Instance of class_session
+     *
+     * @var class_session
+     */
+    protected $objSession = null; //Object containing the session-management
+    /**
+     * Instance of class_rights
+     *
+     * @var class_rights
+     */
+    protected $objRights = null; //Object handling the right-stuff
 
-	/**
-	 * Instance of class_lang
-	 *
-	 * @var class_lang
-	 */
-	private   $objLang = null;				//Object managing the langfiles
+    /**
+     * Instance of class_lang
+     *
+     * @var class_lang
+     */
+    private $objLang = null; //Object managing the langfiles
 
-	private   $strAction;			        //current action to perform (GET/POST)
-	protected $arrModule = array();	        //Array containing information about the current module
+    private $strAction; //current action to perform (GET/POST)
+    protected $arrModule = array(); //Array containing information about the current module
 
 
     private $arrInitRow = null;             //array to be used when loading details from the database. could reduce the amount of queries if populated.
@@ -136,28 +136,29 @@ abstract class class_root {
      * Constructor
      *
      * @param string $strSystemid
+     *
      * @return class_root
      */
-	public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "") {
 
-		//Generating all the needed objects. For this we use our cool cool carrier-object
-		//take care of loading just the necessary objects
-		$objCarrier = class_carrier::getInstance();
-		$this->objConfig = $objCarrier->getObjConfig();
-		$this->objDB = $objCarrier->getObjDB();
-		$this->objSession = $objCarrier->getObjSession();
-   	    $this->objLang = $objCarrier->getObjLang();
-		$this->objRights = $objCarrier->getObjRights();
+        //Generating all the needed objects. For this we use our cool cool carrier-object
+        //take care of loading just the necessary objects
+        $objCarrier = class_carrier::getInstance();
+        $this->objConfig = $objCarrier->getObjConfig();
+        $this->objDB = $objCarrier->getObjDB();
+        $this->objSession = $objCarrier->getObjSession();
+        $this->objLang = $objCarrier->getObjLang();
+        $this->objRights = $objCarrier->getObjRights();
 
-		//And keep the action
-		$this->strAction = $this->getParam("action");
+        //And keep the action
+        $this->strAction = $this->getParam("action");
 
         $this->strSystemid = $strSystemid;
 
-        if($strSystemid != "")
+        if($strSystemid != "") {
             $this->initObject();
-	}
-
+        }
+    }
 
 
     /**
@@ -335,7 +336,7 @@ abstract class class_root {
             //try to load the sort criteria
             $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation("@listOrder");
 
-            $strOrderBy = " ORDER BY system_comment ASC ";
+            $strOrderBy = " ORDER BY system_sort ASC ";
             if(count($arrPropertiesOrder) > 0) {
                 $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
 
@@ -823,22 +824,22 @@ abstract class class_root {
      * @param null|string $strClass
      * @return string The ID used/generated
      */
-	public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1, $strClass = null) {
-		//Do we need a new SystemID?
-		if($strSystemId == "")
-			$strSystemId = generateSystemid();
+    public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1, $strClass = null) {
+        //Do we need a new SystemID?
+        if($strSystemId == "")
+            $strSystemId = generateSystemid();
 
         $this->setStrSystemid($strSystemId);
 
         if($strClass === null)
             $strClass = get_class($this);
 
-		//Given a ModuleNr?
-		if($intModuleNr == "")
-			$intModuleNr = $this->arrModule["moduleId"];
-		//Correct prevID
-		if($strPrevId == "")
-			$strPrevId = 0;
+        //Given a ModuleNr?
+        if($intModuleNr == "")
+            $intModuleNr = $this->arrModule["moduleId"];
+        //Correct prevID
+        if($strPrevId == "")
+            $strPrevId = 0;
 
         //determine the correct new sort-id - append by default
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
@@ -847,90 +848,62 @@ abstract class class_root {
 
         $strComment = uniStrTrim($strComment, 253);
 
-		//So, lets generate the record
-		$strQuery = "INSERT INTO "._dbprefix_."system
-					 ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
-					   system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
-					 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        //So, lets generate the record
+        $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
+                       system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		//Send the query to the db
-		$this->objDB->_pQuery($strQuery, array(
-            $strSystemId,
-            $strPrevId,
-            (int)$intModuleNr,
-            $this->objSession->getUserID(),
-            class_date::getCurrentTimestamp(),
-            $this->objSession->getUserID(),
-            time(),
-            (int)$intStatus,
-            $strComment,
-            (int)($intSiblings+1),
-            $strClass
-        ));
+        //Send the query to the db
+        $this->objDB->_pQuery(
+            $strQuery,
+            array(
+                $strSystemId,
+                $strPrevId,
+                (int)$intModuleNr,
+                $this->objSession->getUserID(),
+                class_date::getCurrentTimestamp(),
+                $this->objSession->getUserID(),
+                time(),
+                (int)$intStatus,
+                $strComment,
+                (int)($intSiblings+1),
+                $strClass
+            )
+        );
 
-		//Do we need a Rights-Record?
-		if($bitRight) {
-			$strQuery = "INSERT INTO "._dbprefix_."system_right
-						 (right_id, right_inherit) VALUES
-						 (?, 1)";
+        //Do we need a Rights-Record?
+        if($bitRight) {
+            $strQuery = "INSERT INTO "._dbprefix_."system_right
+                         (right_id, right_inherit) VALUES
+                         (?, 1)";
 
-			$this->objDB->_pQuery($strQuery, array($strSystemId));
+            $this->objDB->_pQuery($strQuery, array($strSystemId));
             //update rights to inherit
             $this->objRights->setInherited(true, $strSystemId);
-		}
+        }
 
-		class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
 
         $this->objDB->flushQueryCache();
         $this->internalInit();
 
-		return $strSystemId;
+        return $strSystemId;
 
-	}
-
-	/**
-	 * Creates a record in the date table. Make sure to use a proper system-id!
-	 * Up from Kajona V3.3, the signature changed. Pass instances of class_date instead of
-     * int-values.
-	 *
-	 * @param string $strSystemid
-	 * @param class_date $objStartDate
-	 * @param class_date $objEndDate
-	 * @param class_date $objSpecialDate
-	 * @return bool
-	 */
-	public function createDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
-        $intStart = 0;
-        $intEnd = 0;
-        $intSpecial = 0;
-
-        if($objStartDate != null && $objStartDate instanceof class_date)
-            $intStart = $objStartDate->getLongTimestamp();
-
-        if($objEndDate != null && $objEndDate instanceof class_date)
-            $intEnd = $objEndDate->getLongTimestamp();
-
-        if($objSpecialDate != null && $objSpecialDate instanceof class_date)
-            $intSpecial = $objSpecialDate->getLongTimestamp();
-
-	    $strQuery = "INSERT INTO "._dbprefix_."system_date
-	                  (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
-	                  (?, ?, ?, ?)";
-	    return $this->objDB->_pQuery($strQuery, array($strSystemid, $intStart, $intEnd, $intSpecial));
-	}
+    }
 
     /**
-	 * Updates a record in the date table. Make sure to use a proper system-id!
+     * Creates a record in the date table. Make sure to use a proper system-id!
      * Up from Kajona V3.3, the signature changed. Pass instances of class_date instead of
      * int-values.
-	 *
-	 * @param string $strSystemid
-	 * @param class_date $objStartDate
-	 * @param class_date $objEndDate
-	 * @param class_date $objSpecialDate
-	 * @return bool
-	 */
-	public function updateDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
+     *
+     * @param string $strSystemid
+     * @param class_date $objStartDate
+     * @param class_date $objEndDate
+     * @param class_date $objSpecialDate
+     * @return bool
+     */
+    public function createDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
         $intStart = 0;
         $intEnd = 0;
         $intSpecial = 0;
@@ -944,13 +917,44 @@ abstract class class_root {
         if($objSpecialDate != null && $objSpecialDate instanceof class_date)
             $intSpecial = $objSpecialDate->getLongTimestamp();
 
-	    $strQuery = "UPDATE "._dbprefix_."system_date
-	                  SET system_date_start = ?,
-	                      system_date_end = ?,
-	                      system_date_special = ?
-	                WHERE system_date_id = ?";
-	    return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $strSystemid));
-	}
+        $strQuery = "INSERT INTO "._dbprefix_."system_date
+                      (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
+                      (?, ?, ?, ?)";
+        return $this->objDB->_pQuery($strQuery, array($strSystemid, $intStart, $intEnd, $intSpecial));
+    }
+
+    /**
+     * Updates a record in the date table. Make sure to use a proper system-id!
+     * Up from Kajona V3.3, the signature changed. Pass instances of class_date instead of
+     * int-values.
+     *
+     * @param string $strSystemid
+     * @param class_date $objStartDate
+     * @param class_date $objEndDate
+     * @param class_date $objSpecialDate
+     * @return bool
+     */
+    public function updateDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
+        $intStart = 0;
+        $intEnd = 0;
+        $intSpecial = 0;
+
+        if($objStartDate != null && $objStartDate instanceof class_date)
+            $intStart = $objStartDate->getLongTimestamp();
+
+        if($objEndDate != null && $objEndDate instanceof class_date)
+            $intEnd = $objEndDate->getLongTimestamp();
+
+        if($objSpecialDate != null && $objSpecialDate instanceof class_date)
+            $intSpecial = $objSpecialDate->getLongTimestamp();
+
+        $strQuery = "UPDATE "._dbprefix_."system_date
+                      SET system_date_start = ?,
+                          system_date_end = ?,
+                          system_date_special = ?
+                    WHERE system_date_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $strSystemid));
+    }
 
 
     /**
@@ -1045,41 +1049,41 @@ abstract class class_root {
 
     // --- SystemID & System-Table Methods ------------------------------------------------------------------
 
-	/**
-	 * Fetches the number of siblings belonging to the passed systemid
-	 *
-	 * @param string $strSystemid
+    /**
+     * Fetches the number of siblings belonging to the passed systemid
+     *
+     * @param string $strSystemid
      * @param bool $bitUseCache
-	 * @return int
-	 */
-	public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true) {
-	    if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
+     * @return int
+     */
+    public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true) {
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
 
-	    $strQuery = "SELECT COUNT(*)
-					 FROM "._dbprefix_."system as sys1,
-					      "._dbprefix_."system as sys2
-					 WHERE sys1.system_id=?
-					 AND sys2.system_prev_id = sys1.system_prev_id";
-	    $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
-	    return $arrRow["COUNT(*)"];
+        $strQuery = "SELECT COUNT(*)
+                     FROM "._dbprefix_."system as sys1,
+                          "._dbprefix_."system as sys2
+                     WHERE sys1.system_id=?
+                     AND sys2.system_prev_id = sys1.system_prev_id";
+        $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
+        return $arrRow["COUNT(*)"];
 
-	}
+    }
 
-	/**
-	 * Fetches the records placed as child nodes of the current / passed id.
+    /**
+     * Fetches the records placed as child nodes of the current / passed id.
      * <b> Only the IDs are fetched since the current object-context is not available!!! </b>
-	 *
-	 * @param string $strSystemid
-	 * @return string[]
-	 */
-	public function getChildNodesAsIdArray($strSystemid = "") {
-	    if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
+     *
+     * @param string $strSystemid
+     * @return string[]
+     */
+    public function getChildNodesAsIdArray($strSystemid = "") {
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
 
-	    $strQuery = "SELECT system_id
-					 FROM "._dbprefix_."system
-					 WHERE system_prev_id=?
+        $strQuery = "SELECT system_id
+                     FROM "._dbprefix_."system
+                     WHERE system_prev_id=?
                      ORDER BY system_sort ASC";
 
         $arrReturn = array();
@@ -1090,8 +1094,8 @@ abstract class class_root {
                 $arrReturn[] = $arrOneRow["system_id"];
 
 
-	    return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
 
     /**
@@ -1106,8 +1110,8 @@ abstract class class_root {
         $this->objDB->flushQueryCache();
 
         $strQuery = "SELECT system_id, system_sort
-					 FROM "._dbprefix_."system
-					 WHERE system_prev_id=?
+                     FROM "._dbprefix_."system
+                     WHERE system_prev_id=?
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, array($strOldPrevid));
 
@@ -1127,14 +1131,14 @@ abstract class class_root {
         $this->objDB->_pQuery($strQuery, array($intNewCount, $this->getSystemid()));
     }
 
-	/**
-	 * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
-	 *
-	 * @param string $strDirection upwards || downwards
-	 * @return void
+    /**
+     * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
+     *
+     * @param string $strDirection upwards || downwards
+     * @return void
      * @deprecated
-	 */
-	public function setPosition($strDirection = "upwards") {
+     */
+    public function setPosition($strDirection = "upwards") {
 
         //get the old pos
         $intPos = $this->getIntSort();
@@ -1144,7 +1148,7 @@ abstract class class_root {
             $intPos++;
 
         $this->setAbsolutePosition($intPos);
-	}
+    }
 
     /**
      * Sets the position of systemid using a given value.
@@ -1154,33 +1158,33 @@ abstract class class_root {
      *
      * @return void
      */
-	public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
-	    class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
+    public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
+        class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
-		//Load all elements on the same level, so at first get the prev id
-		$strPrevID = $this->getPrevId();
-		$strQuery = "SELECT *
-						 FROM "._dbprefix_."system
-						 WHERE system_prev_id=? AND system_id != '0'
-						 ".($bitOnlySameModule ? " AND system_module_nr = ? " : " ")."
-						 ORDER BY system_sort ASC, system_comment ASC";
+        //Load all elements on the same level, so at first get the prev id
+        $strPrevID = $this->getPrevId();
+        $strQuery = "SELECT *
+                         FROM "._dbprefix_."system
+                         WHERE system_prev_id=? AND system_id != '0'
+                         ".($bitOnlySameModule ? " AND system_module_nr = ? " : " ")."
+                         ORDER BY system_sort ASC, system_comment ASC";
 
         $arrParams = array();
         $arrParams[] = $strPrevID;
         if($bitOnlySameModule)
             $arrParams[] = $this->getIntModuleNr();
 
-		//No caching here to allow multiple shiftings per request
-		$arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);
+        //No caching here to allow multiple shiftings per request
+        $arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);
 
-		//more than one record to set?
-		if(count($arrElements) <= 1)
-			return;
+        //more than one record to set?
+        if(count($arrElements) <= 1)
+            return;
 
-		//senseless new pos?
-		if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
-		    return;
+        //senseless new pos?
+        if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
+            return;
 
         $intCurPos = $this->getIntSort();
 
@@ -1188,7 +1192,7 @@ abstract class class_root {
             return;
 
 
-		//searching the current element to get to know if element should be sorted up- or downwards
+        //searching the current element to get to know if element should be sorted up- or downwards
         $bitSortDown = false;
         $bitSortUp = false;
         if($intNewPosition < $intCurPos)
@@ -1198,230 +1202,230 @@ abstract class class_root {
 
 
         //sort up?
-		if($bitSortUp) {
-			//move the record to be shifted to the wanted pos
-			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=?
-								WHERE system_id=?";
-			$this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
+        if($bitSortUp) {
+            //move the record to be shifted to the wanted pos
+            $strQuery = "UPDATE "._dbprefix_."system
+                                SET system_sort=?
+                                WHERE system_id=?";
+            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
 
-			//start at the pos to be reached and move all one down
-			for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
+            //start at the pos to be reached and move all one down
+            for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
 
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort=?
                             WHERE system_id=?";
                 $this->objDB->_pQuery($strQuery, array($intI+1, $arrElements[$intI-1]["system_id"]));
             }
-		}
+        }
 
-		if($bitSortDown) {
-			//move the record to be shifted to the wanted pos
-			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=?
-								WHERE system_id=?";
-			$this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
+        if($bitSortDown) {
+            //move the record to be shifted to the wanted pos
+            $strQuery = "UPDATE "._dbprefix_."system
+                                SET system_sort=?
+                                WHERE system_id=?";
+            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
 
-			//start at the pos to be reached and move all one up
-			for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
+            //start at the pos to be reached and move all one up
+            for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
 
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort= ?
                             WHERE system_id=?";
                 $this->objDB->_pQuery($strQuery, array($intI-1, $arrElements[$intI-1]["system_id"]));
-			}
-		}
+            }
+        }
 
         //flush the cache
         $this->flushCompletePagesCache();
         $this->objDB->flushQueryCache();
         $this->setIntSort($intNewPosition);
         $this->internalInit();
-	}
+    }
 
-	/**
-	 * Return a complete SystemRecord
-	 *
-	 * @param string $strSystemid
-	 * @return mixed
-	 */
-	public function getSystemRecord($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-		$strQuery = "SELECT * FROM "._dbprefix_."system
-					     LEFT JOIN "._dbprefix_."system_right
-						      ON system_id = right_id
-					     LEFT JOIN "._dbprefix_."system_date
-					          ON system_id = system_date_id
-					         WHERE system_id = ?";
-		return $this->objDB->getPRow($strQuery, array($strSystemid));
-	}
+    /**
+     * Return a complete SystemRecord
+     *
+     * @param string $strSystemid
+     * @return mixed
+     */
+    public function getSystemRecord($strSystemid = "") {
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
+        $strQuery = "SELECT * FROM "._dbprefix_."system
+                         LEFT JOIN "._dbprefix_."system_right
+                              ON system_id = right_id
+                         LEFT JOIN "._dbprefix_."system_date
+                              ON system_id = system_date_id
+                             WHERE system_id = ?";
+        return $this->objDB->getPRow($strQuery, array($strSystemid));
+    }
 
-	/**
-	 * Returns the data for a registered module
-	 *
-	 * @param string $strName
-	 * @param bool $bitCache
-	 * @return mixed
+    /**
+     * Returns the data for a registered module
+     *
+     * @param string $strName
+     * @param bool $bitCache
+     * @return mixed
      * @deprecated
      * @see class_module_system_module::getPlainModuleData($strName, $bitCache)
-	 */
-	public function getModuleData($strName, $bitCache = true) {
+     */
+    public function getModuleData($strName, $bitCache = true) {
         return class_module_system_module::getPlainModuleData($strName, $bitCache);
-	}
+    }
 
-	/**
-	 * Deletes a record from the SystemTable
-	 *
-	 * @param string $strSystemid
-	 * @param bool $bitRight
-	 * @param bool $bitDate
-	 * @return bool
+    /**
+     * Deletes a record from the SystemTable
+     *
+     * @param string $strSystemid
+     * @param bool $bitRight
+     * @param bool $bitDate
+     * @return bool
      * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only called by the test-classes
      *
-	 */
-	public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
+     */
+    public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
 
-		//try to call other modules, maybe wanting to delete anything in addition, if the current record
-		//is going to be deleted
+        //try to call other modules, maybe wanting to delete anything in addition, if the current record
+        //is going to be deleted
         $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
 
-		//Start a tx before deleting anything
-		$this->objDB->transactionBegin();
+        //Start a tx before deleting anything
+        $this->objDB->transactionBegin();
 
-		$strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
+        $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
         $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
 
-		if($bitRight) {
-			$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
+        if($bitRight) {
+            $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
             $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
-		}
+        }
 
         if($bitDate) {
-			$strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
+            $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
             $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
-		}
+        }
 
-		//end tx
-		if($bitResult) {
-		    $this->objDB->transactionCommit();
-		    class_logger::getInstance()->addLogRow("deleted system-record with id ".$strSystemid, class_logger::$levelInfo);
-		}
-		else {
-		    $this->objDB->transactionRollback();;
-		    class_logger::getInstance()->addLogRow("deletion of system-record with id ".$strSystemid." failed", class_logger::$levelWarning);
-		}
+        //end tx
+        if($bitResult) {
+            $this->objDB->transactionCommit();
+            class_logger::getInstance()->addLogRow("deleted system-record with id ".$strSystemid, class_logger::$levelInfo);
+        }
+        else {
+            $this->objDB->transactionRollback();;
+            class_logger::getInstance()->addLogRow("deletion of system-record with id ".$strSystemid." failed", class_logger::$levelWarning);
+        }
 
         //flush the cache
         $this->flushCompletePagesCache();
 
-		return $bitResult;
-	}
+        return $bitResult;
+    }
 
-	/**
-	 * Deletes a record from the rights-table
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function deleteRight($strSystemid) {
-		$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
-		return $this->objDB->_pQuery($strQuery, array($strSystemid));
-	}
+    /**
+     * Deletes a record from the rights-table
+     *
+     * @param string $strSystemid
+     * @return bool
+     */
+    public function deleteRight($strSystemid) {
+        $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($strSystemid));
+    }
 
-	/**
-	 * Generates a sorted array of systemids, reaching from the passed systemid up
-	 * until the assigned module-id
-	 *
-	 * @param string $strSystemid
+    /**
+     * Generates a sorted array of systemids, reaching from the passed systemid up
+     * until the assigned module-id
+     *
+     * @param string $strSystemid
      * @param string $strStopSystemid
-	 * @return mixed
-	 */
-	public function getPathArray($strSystemid = "", $strStopSystemid = "0") {
-		$arrReturn = array();
+     * @return mixed
+     */
+    public function getPathArray($strSystemid = "", $strStopSystemid = "0") {
+        $arrReturn = array();
 
-		if($strSystemid == "") {
-			$strSystemid = $this->getSystemid();
-		}
+        if($strSystemid == "") {
+            $strSystemid = $this->getSystemid();
+        }
 
-		//loop over all parent-records
-		$strTempId = $strSystemid;
-		while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
-			$arrReturn[] = $strTempId;
+        //loop over all parent-records
+        $strTempId = $strSystemid;
+        while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
+            $arrReturn[] = $strTempId;
 
             $objCommon = new class_module_system_common($strTempId);
-			$strTempId = $objCommon->getPrevId();
-		}
+            $strTempId = $objCommon->getPrevId();
+        }
 
-		$arrReturn = array_reverse($arrReturn);
-		return $arrReturn;
-	}
+        $arrReturn = array_reverse($arrReturn);
+        return $arrReturn;
+    }
 
-	/**
-	 * Returns a value from the $arrModule array.
-	 * If the requested key not exists, returns ""
-	 *
-	 * @param string $strKey
-	 * @return string
-	 */
-	public function getArrModule($strKey) {
-	    if(isset($this->arrModule[$strKey]))
-	        return $this->arrModule[$strKey];
-	    else
-	        return "";
-	}
+    /**
+     * Returns a value from the $arrModule array.
+     * If the requested key not exists, returns ""
+     *
+     * @param string $strKey
+     * @return string
+     */
+    public function getArrModule($strKey) {
+        if(isset($this->arrModule[$strKey]))
+            return $this->arrModule[$strKey];
+        else
+            return "";
+    }
 
 
 
     // --- TextMethods --------------------------------------------------------------------------------------
 
     /**
-	 * Used to get Text out of Textfiles
-	 *
-	 * @param string $strName
-	 * @param string $strModule
-	 * @return string
-	 */
-	public function getLang($strName, $strModule = "") {
-		if($strModule == "")
-			$strModule = $this->arrModule["modul"];
+     * Used to get Text out of Textfiles
+     *
+     * @param string $strName
+     * @param string $strModule
+     * @return string
+     */
+    public function getLang($strName, $strModule = "") {
+        if($strModule == "")
+            $strModule = $this->arrModule["modul"];
 
-		//Now we have to ask the Text-Object to return the text
-		return $this->objLang->getLang($strName, $strModule);
-	}
+        //Now we have to ask the Text-Object to return the text
+        return $this->objLang->getLang($strName, $strModule);
+    }
 
-	/**
-	 * Returns the current Text-Object Instance
-	 *
-	 * @return class_lang
-	 */
-	protected function getObjLang() {
-	    return $this->objLang;
-	}
+    /**
+     * Returns the current Text-Object Instance
+     *
+     * @return class_lang
+     */
+    protected function getObjLang() {
+        return $this->objLang;
+    }
 
 
 
 
     // --- PageCache Features -------------------------------------------------------------------------------
 
-	/**
-	 * Deletes the complete Pages-Cache
-	 *
-	 * @return bool
-	 */
-	public function flushCompletePagesCache() {
+    /**
+     * Deletes the complete Pages-Cache
+     *
+     * @return bool
+     */
+    public function flushCompletePagesCache() {
         return class_cache::flushCache("class_element_portal");
-	}
+    }
 
-	/**
-	 * Removes one page from the cache
-	 *
-	 * @param string $strPagename
-	 * @return bool
-	 */
-	public function flushPageFromPagesCache($strPagename) {
-	    return class_cache::flushCache("class_element_portal", $strPagename);
-	}
+    /**
+     * Removes one page from the cache
+     *
+     * @param string $strPagename
+     * @return bool
+     */
+    public function flushPageFromPagesCache($strPagename) {
+        return class_cache::flushCache("class_element_portal", $strPagename);
+    }
 
 
     // --- Portal-Language ----------------------------------------------------------------------------------
@@ -1457,19 +1461,19 @@ abstract class class_root {
     // --- GETTERS / SETTERS ----------------------------------------------------------------------------
 
     /**
-	 * Sets the current SystemID
-	 *
-	 * @param string $strID
-	 * @return bool
-	 */
-	public function setSystemid($strID) {
-		if(validateSystemid($strID)) {
-			$this->strSystemid = $strID;
-			return true;
-		}
-		else
-			return false;
-	}
+     * Sets the current SystemID
+     *
+     * @param string $strID
+     * @return bool
+     */
+    public function setSystemid($strID) {
+        if(validateSystemid($strID)) {
+            $this->strSystemid = $strID;
+            return true;
+        }
+        else
+            return false;
+    }
 
     /**
      * Resets the current systemid
@@ -1478,14 +1482,14 @@ abstract class class_root {
         $this->strSystemid = "";
     }
 
-	/**
-	 * Returns the current SystemID
-	 *
-	 * @return string
-	 */
-	public function getSystemid() {
-		return $this->strSystemid;
-	}
+    /**
+     * Returns the current SystemID
+     *
+     * @return string
+     */
+    public function getSystemid() {
+        return $this->strSystemid;
+    }
 
     public function getStrSystemid() {
         return $this->strSystemid;
@@ -1505,12 +1509,12 @@ abstract class class_root {
      * @throws class_exception
      * @return string
      */
-	public function getPrevId($strSystemid = "") {
+    public function getPrevId($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         return $this->getStrPrevId();
-	}
+    }
 
 
     public function getStrPrevId() {
@@ -1533,12 +1537,12 @@ abstract class class_root {
      * @throws class_exception
      * @return int
      */
-	public function getRecordModuleNr($strSystemid = "") {
+    public function getRecordModuleNr($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         return $this->getIntModuleNr();
-	}
+    }
 
     public function getIntModuleNr() {
         return $this->intModuleNr;
@@ -1564,7 +1568,7 @@ abstract class class_root {
      * @throws class_exception
      * @return string
      */
-	public function getLastEditUser($strSystemid = "") {
+    public function getLastEditUser($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
@@ -1572,22 +1576,22 @@ abstract class class_root {
             $objUser = new class_module_user_user($this->getStrLmUser());
             return $objUser->getStrUsername();
         }
-		else
-		    return "System";
-	}
+        else
+            return "System";
+    }
 
     public function getStrLmUser() {
         return $this->strLmUser;
     }
 
     /**
-	 * Returns the id of the user who last edited the record
-	 *
-	 * @return string
-	 */
-	public function getLastEditUserId() {
+     * Returns the id of the user who last edited the record
+     *
+     * @return string
+     */
+    public function getLastEditUserId() {
         return $this->getStrLmUser();
-	}
+    }
 
     public function setStrLmUser($strLmUser) {
         $this->strLmUser = $strLmUser;
@@ -1692,12 +1696,12 @@ abstract class class_root {
      * @throws class_exception
      * @return int
      */
-	public function getStatus($strSystemid = "") {
+    public function getStatus($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         return $this->getIntRecordStatus();
-	}
+    }
 
     /**
      * If a defined status is passed, it will be set. Ohterwise, it
@@ -1711,7 +1715,7 @@ abstract class class_root {
      * @return bool
      * @todo: systemid param handling
      */
-	public function setStatus($strSystemid = "", $intStatus = false) {
+    public function setStatus($strSystemid = "", $intStatus = false) {
 
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
@@ -1729,7 +1733,7 @@ abstract class class_root {
         $this->updateSystemrecord();
 
         return $bitReturn;
-	}
+    }
 
     /**
      * Sets the internal status. Fires a status-changed event.
@@ -1763,24 +1767,24 @@ abstract class class_root {
      * @throws class_exception
      * @return string
      */
-	public function getRecordComment($strSystemid = "") {
+    public function getRecordComment($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         return $this->getStrRecordComment();
-	}
+    }
 
     /**
-	 * Sets the comment saved with a record
-	 *
-	 * @param string $strNewComment
-	 * @return bool
+     * Sets the comment saved with a record
+     *
+     * @param string $strNewComment
+     * @return bool
      * @deprecated
-	 */
-	public function setRecordComment($strNewComment) {
+     */
+    public function setRecordComment($strNewComment) {
         $this->setStrRecordComment($strNewComment);
         return $this->updateSystemrecord();
-	}
+    }
 
     public function getStrRecordComment() {
         return $this->strRecordComment;
@@ -1813,46 +1817,46 @@ abstract class class_root {
      * @param string $strKey
      * @param mixed $mixedValue Value
      */
-	public function setParam($strKey, $mixedValue) {
+    public function setParam($strKey, $mixedValue) {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
-	}
-
-	/**
-	 * Returns a value from the params-Array
-	 *
-	 * @param string $strKey
-	 * @return string else ""
-	 */
-	public function getParam($strKey) {
-        return class_carrier::getInstance()->getParam($strKey);
-	}
-
-	/**
-	 * Returns the complete Params-Array
-	 *
-	 * @return mixed
-	 */
-	public final function getAllParams() {
-        return class_carrier::getAllParams();
-	}
-
-	/**
-	 * returns the action used for the current request
-	 *
-	 * @return string
-	 */
-	public final function getAction() {
-	    return (string)$this->strAction;
-	}
+    }
 
     /**
-	 * Returns the current instance of the class_rights
-	 *
-	 * @return object
-	 */
-	public function getObjRights() {
-	    return $this->objRights;
-	}
+     * Returns a value from the params-Array
+     *
+     * @param string $strKey
+     * @return string else ""
+     */
+    public function getParam($strKey) {
+        return class_carrier::getInstance()->getParam($strKey);
+    }
+
+    /**
+     * Returns the complete Params-Array
+     *
+     * @return mixed
+     */
+    public final function getAllParams() {
+        return class_carrier::getAllParams();
+    }
+
+    /**
+     * returns the action used for the current request
+     *
+     * @return string
+     */
+    public final function getAction() {
+        return (string)$this->strAction;
+    }
+
+    /**
+     * Returns the current instance of the class_rights
+     *
+     * @return object
+     */
+    public function getObjRights() {
+        return $this->objRights;
+    }
 
     /**
      * Returns an instance of the lockmanager, initialized
