@@ -1876,16 +1876,22 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTagId
      * @param string $strTargetid
      * @param string $strAttribute
+     * @param bool $bitDelete
+     *
      * @return string
      */
-    public function getTagEntry($strTagname, $strTagId, $strTargetid, $strAttribute) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag");
+    public function getTagEntry($strTagname, $strTagId, $strTargetid, $strAttribute, $bitDelete = true) {
+
+        if($bitDelete)
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag_delete");
+        else
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag");
+
         $arrTemplate = array();
         $arrTemplate["tagname"] = $strTagname;
         $arrTemplate["strTagId"] = $strTagId;
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
-        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.png", class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "tags"));
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

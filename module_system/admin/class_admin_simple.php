@@ -373,7 +373,7 @@ abstract class class_admin_simple extends class_admin {
 
     /**
      * Renders the permissions action button for the current record.
-     * @param class_model $objListEntry
+     * @param class_model|interface_model $objListEntry
      * @return string
      */
     protected function renderPermissionsAction(class_model $objListEntry) {
@@ -397,22 +397,20 @@ abstract class class_admin_simple extends class_admin {
 
     /**
      * Renders the icon to edit a records tags
-     * @param class_model $objListEntry
+     * @param class_model|interface_model $objListEntry
      * @return string
      */
     protected function renderTagAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(
-                getLinkAdminDialog(
-                    "tags",
-                    "genericTagForm",
-                    "&systemid=".$objListEntry->getSystemid(),
-                    $this->getLang("commons_edit_tags"),
-                    $this->getLang("commons_edit_tags"),
-                    "icon_tag.png",
-                    $objListEntry->getStrDisplayName()
-                )
-            );
+
+            //the tag list is more complex sind wrapped by a js-logic to load the tags by ajax afterwards
+
+            // @codingStandardsIgnoreStart
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".$objListEntry->getStrDisplayName()."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\"><img src=\""._skinwebpath_."/pics/icon_tag.png\" alt=\"".$this->getLang("commons_edit_tags")."\" align=\"absbottom\" /></a>";
+            // @codingStandardsIgnoreEnd
+            return $this->objToolkit->listButton($strLink);
+
         }
         return "";
     }
@@ -420,7 +418,7 @@ abstract class class_admin_simple extends class_admin {
 
     /**
      * Renders the permissions action button for the current record.
-     * @param class_model $objListEntry
+     * @param class_model|interface_model $objListEntry
      * @return string
      */
     protected function renderCopyAction(class_model $objListEntry) {
@@ -477,7 +475,8 @@ abstract class class_admin_simple extends class_admin {
     /**
      * Renders the button to open the records' change history. In most cases, this is done in a overlay.
      * To open the change-history, the permission "right3" on the system-module is required.
-     * @param class_model $objListEntry
+     *
+     * @param class_model|interface_model $objListEntry
      *
      * @return string
      */

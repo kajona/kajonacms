@@ -1405,18 +1405,29 @@ otherwise the JavaScript will fail!
 </tags_wrapper>
 
 <tags_tag>
-    <span class="label label-info">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> <i class="icon-trash icon-white" id="icon_%%strTagId%%" title="[lang,commons_delete,tag]" rel="tooltip" ></i></a></span>
+    <span class="label label-info">%%tagname%%</span>
     <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
 </tags_tag>
 
+<tags_tag_delete>
+    <span class="label label-info">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> <i class="icon-trash icon-white" id="icon_%%strTagId%%" title="[lang,commons_delete,tag]" rel="tooltip" ></i></a></span>
+    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
+</tags_tag_delete>
+
+
 A tag-selector.
 If you want to use ajax to load a list of proposals on entering a char,
-place ajaxScript before the closing input_tagselector-tag and make sure, that you
-have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
-"ac_results" inside the "ac_container", to generate a resultlist
+place ajaxScript before the closing input_tagselector-tag.
 <input_tagselector>
-     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" /> %%opener%%</div>
-  <br />
+
+    <div class="control-group">
+        <label for="%%name%%" class="control-label">%%title%%</label>
+        <div class="controls">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%">
+            %%opener%%
+        </div>
+    </div>
+
 %%ajaxScript%%
 </input_tagselector>
 

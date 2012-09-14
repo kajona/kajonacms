@@ -81,13 +81,14 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
         $strReturn = "";
         $strSystemid = $this->getSystemid();
         $strAttribute = $this->getParam("attribute");
+        $bitDelete = $this->getParam("delete") != "false";
 
         $arrTags = class_module_tags_tag::getTagsForSystemid($strSystemid, $strAttribute);
 
         $strReturn .=" <tags>";
         foreach($arrTags as $objOneTag) {
 
-            $strReturn .= $this->objToolkit->getTagEntry($objOneTag->getStrName(), $objOneTag->getSystemid(), $strSystemid, $strAttribute);
+            $strReturn .= $this->objToolkit->getTagEntry($objOneTag->getStrName(), $objOneTag->getSystemid(), $strSystemid, $strAttribute, $bitDelete);
         }
 
         $strReturn .= "</tags>";

@@ -17,31 +17,32 @@
  */
 class class_module_tags_admin extends class_admin_simple implements interface_admin {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
         $this->setArrModuleEntry("modul", "tags");
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-		parent::__construct();
+        parent::__construct();
 
-	}
+    }
 
     public function getOutputModuleNavi() {
-	    $arrReturn = array();
+        $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listFavorites", "", $this->getLang("actionListFavorites"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
-	}
+    }
 
     protected function actionNew() {
     }
 
     /**
      * Renders the list of tags available
+     *
      * @return string
      * @autoTestable
      * @permissions view
@@ -62,19 +63,22 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.png")),
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=".$objListEntry->getSystemid(), $this->getLang("actionAddToFavorites"), $this->getLang("actionAddToFavorites"), "icon_favorite.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.png")),
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("actionAddToFavorites"), $this->getLang("actionAddToFavorites"), "icon_favorite.png"))
             );
         }
-        else
+        else {
             return array();
+        }
     }
 
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
-        if($objListEntry instanceof class_module_tags_tag)
+        if($objListEntry instanceof class_module_tags_tag) {
             return parent::renderEditAction($objListEntry);
-        else if($objListEntry->rightEdit())
-            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=".$objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+        }
+        else if($objListEntry->rightEdit()) {
+            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+        }
 
         return "";
     }
@@ -87,11 +91,12 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             if($objListEntry->rightDelete()) {
-                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid()));
+                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid()));
             }
         }
-        else if($objListEntry instanceof class_module_tags_favorite)
+        else if($objListEntry instanceof class_module_tags_favorite) {
             return parent::renderDeleteAction($objListEntry);
+        }
 
         return "";
     }
@@ -99,21 +104,25 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
     /**
      * Generates the form to edit an existing tag
+     *
      * @param \class_admin_formgenerator|null $objForm
+     *
      * @return string
      * @permissions edit
      */
     protected function actionEdit(class_admin_formgenerator $objForm = null) {
         $objTag = new class_module_tags_tag($this->getSystemid());
-		if($objTag->rightEdit()) {
+        if($objTag->rightEdit()) {
 
-            if($objForm == null)
+            if($objForm == null) {
                 $objForm = $this->getAdminForm($objTag);
+            }
 
             return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
-		}
-		else
-			return $this->getLang("commons_error_permissions");
+        }
+        else {
+            return $this->getLang("commons_error_permissions");
+        }
 
     }
 
@@ -127,6 +136,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
     /**
      * Saves the passed tag-data back to the database.
+     *
      * @return string "" in case of success
      * @permissions edit
      */
@@ -135,17 +145,19 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         $objTag = new class_module_tags_tag($this->getSystemid());
         $objForm = $this->getAdminForm($objTag);
 
-        if(!$objForm->validateForm())
+        if(!$objForm->validateForm()) {
             return $this->actionEdit($objForm);
+        }
 
-		if($objTag->rightEdit()) {
+        if($objTag->rightEdit()) {
             $objForm->updateSourceObject();
             $objTag->updateObjectToDb();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             return "";
-		}
-		else
-			return $this->getLang("commons_error_permissions");
+        }
+        else {
+            return $this->getLang("commons_error_permissions");
+        }
     }
 
     /**
@@ -168,8 +180,9 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         if($strListIdentifier == "assignedTagList") {
             //call the original module to render the action-icons
             $objAdminInstance = class_module_system_module::getModuleByName($objOneIterable->getArrModule("modul"))->getAdminInstanceOfConcreteModule();
-            if($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple)
+            if($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple) {
                 return $objAdminInstance->getActionIcons($objOneIterable);
+            }
         }
 
         return parent::getActionIcons($objOneIterable, $strListIdentifier);
@@ -180,6 +193,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
      * Therefore, two params are evaluated:
      *  - the param "systemid"
      *  - the param "attribute"
+     *
      * @return string
      * @permissions edit
      */
@@ -195,6 +209,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
      *
      * @param string $strTargetSystemid the systemid to tag
      * @param string $strAttribute additional info used to differ between tag-sets for a single systemid
+     *
      * @return string
      * @permissions edit
      */
@@ -204,7 +219,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         $strTagsWrapperId = generateSystemid();
 
         $strTagContent .= $this->objToolkit->formHeader(
-            getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;"
+            getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '" . $strTargetSystemid . "', '" . $strAttribute . "');return false;"
         );
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tag_name"));
@@ -217,20 +232,20 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     }
 
     protected function getArrOutputNaviEntries() {
-        $arrEntries =  parent::getArrOutputNaviEntries();
+        $arrEntries = parent::getArrOutputNaviEntries();
 
         if($this->getAction() == "showAssignedRecords") {
             $objListEntry = new class_module_tags_tag($this->getSystemid());
-            $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objListEntry->getSystemid(), $objListEntry->getStrName());
+            $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objListEntry->getSystemid(), $objListEntry->getStrName());
         }
 
         return $arrEntries;
     }
 
 
-
     /**
      * Renders the list of favorites created by the current user
+     *
      * @return string
      * @autoTestable
      * @permissions right1
@@ -246,6 +261,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
 
     /**
      * Adds a single tag to a users list of favorites
+     *
      * @permissons right1
      */
     protected function actionAddToFavorites() {

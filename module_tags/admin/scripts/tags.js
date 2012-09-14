@@ -56,3 +56,23 @@ KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute
         }
     });
 };
+
+KAJONA.admin.tags.loadTagTooltipContent = function(strTargetSystemid, strAttribute, strTargetContainer) {
+    $("#"+strTargetContainer).addClass("loadingContainer");
+
+    KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strTargetSystemid+"&attribute="+strAttribute+"&delete=false", function(data, status, jqXHR) {
+        if(status == 'success') {
+            var intStart = data.indexOf("<tags>")+6;
+            var strContent = data.substr(intStart, data.indexOf("</tags>")-intStart);
+            $("#"+strTargetContainer).removeClass("loadingContainer");
+            $("#"+strTargetContainer).html(strContent);
+            KAJONA.util.evalScript(strContent);
+        }
+        else {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+            $("#"+strTargetContainer).removeClass("loadingContainer");
+        }
+    });
+};
+
+

@@ -402,6 +402,8 @@ KAJONA.admin.tooltip = {
     initTooltip : function() {
         KAJONA.admin.loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.js', '/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css'], function() {
 
+            //common tooltips
+
             $('*[rel=tooltip]').qtip({
                 position: {
                     viewport: $(window)
@@ -410,6 +412,29 @@ KAJONA.admin.tooltip = {
                     classes: 'ui-tooltip-youtube ui-tooltip-shadow'
                 }
             });
+
+            //tag tooltips
+            $('*[rel=tagtooltip]').each( function() {
+                $(this).qtip({
+                    position: {
+                        viewport: $(window)
+                    },
+                    style: {
+                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    },
+                    content: {
+                        text: $(this).attr("title")+"<div id='tags_"+$(this).data('systemid')+"' data-systemid='"+$(this).data('systemid')+"'></div>"
+                    },
+                    events: {
+                        render: function(event, api) {
+                            KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
+                                KAJONA.admin.tags.loadTagTooltipContent($(api.elements.content).find('div').data('systemid'), "", $(api.elements.content).find('div').attr('id'));
+                            })
+                        }
+                    }
+                });
+            })
+
         });
     },
 
