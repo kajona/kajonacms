@@ -354,7 +354,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.png", $this->getLang("pack_active_no_delete")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_deleteDisabled.png", $this->getLang("pack_active_no_delete")));
             }
             else
                 return $this->objToolkit->listDeleteButton(

@@ -566,9 +566,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
             $arrRowData[4] = $strActivity;
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_ton.png");
+                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_delete.png");
             else
-                $arrRowData[5] = getImageAdmin("icon_tonDisabled.png");
+                $arrRowData[5] = getImageAdmin("icon_deleteDisabled.png");
             $arrData[] = $arrRowData;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);

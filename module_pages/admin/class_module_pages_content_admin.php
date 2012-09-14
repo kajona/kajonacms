@@ -141,7 +141,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             }
                             //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
                             $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.png", $this->getLang("ds_gesperrt")));
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonLocked.png", $this->getLang("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("ds_gesperrt")));
                         }
                         else {
                             //if it's the user who locked the record, unlock it now

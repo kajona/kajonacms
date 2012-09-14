@@ -133,7 +133,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
             }
             else {
-                return $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.png", $this->getLang("gruppe_loeschen_x")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_deleteDisabled.png", $this->getLang("gruppe_loeschen_x")));
             }
         }
         return "";

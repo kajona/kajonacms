@@ -207,7 +207,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
                         $arrMaintainedLanguages[] = $objOneLanguage->getSystemid();
                         $objNews = new class_module_news_news($strNewsid);
                         $strNewsName = $objNews->getStrTitle();
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=".$objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_ton.png"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=".$objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete.png"));
                         $strReturn .= $this->objToolkit->genericAdminList($objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName() , "languages").": ".$strNewsName, getImageAdmin("icon_language.png"), $strActions, $intI++);
                     }
                     else {
