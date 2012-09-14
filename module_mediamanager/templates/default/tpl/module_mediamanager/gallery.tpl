@@ -8,12 +8,12 @@
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
-<!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_href, folder_preview -->
+<!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview -->
 <folderlist>
     <table cellspacing="0" class="portalList">
         <tr class="portalListRow1">
             <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.png" /></td>
-            <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
+            <td class="title"><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
         </tr>
         <tr class="portalListRow2">
             <td><img src="[img,%%folder_preview_image_src%%,50,50]" /></td>
@@ -46,7 +46,7 @@ like < filelist >%%file_0%%</ filelist > -->
 <filelist_file>
     <div style="text-align: center;">
         <div><a href="%%file_details_href%%"><img src="[img,%%file_filename%%,100,100]" alt="%%file_subtitle%%" /></a></div>
-        <div>%%file_name%%</div>
+        <div  data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
     </div>
 </filelist_file>
 
@@ -61,11 +61,11 @@ like < filelist >%%file_0%%</ filelist > -->
     <table width="85%" border="0" style="text-align: center;">
         <tr>
             <td width="20%">&nbsp;</td>
-            <td width="60%"><div style="float: left;">%%file_name%%</div><div style="float: right;">%%file_rating%%</div></td>
+            <td width="60%"><div style="float: left;" data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</div><div style="float: right;">%%file_rating%%</div></td>
             <td width="20%">&nbsp;</td>
         </tr>
         <tr>
-            <td colspan="3">%%file_subtitle%%</td>
+            <td colspan="3"  data-kajona-editable="%%file_systemid%%#strSubtitle#plain">%%file_subtitle%%</td>
         </tr>
         <tr>
             <td>&nbsp;</td>

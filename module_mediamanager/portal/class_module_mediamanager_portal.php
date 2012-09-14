@@ -199,6 +199,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                     //Folder
                     if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER) {
                         $arrFolder = array();
+                        $arrFolder["folder_id"] = $objOneFile->getSystemid();
                         $arrFolder["folder_name"] = $objOneFile->getStrName();
                         $arrFolder["folder_description"] = $objOneFile->getStrDescription();
                         $arrFolder["folder_subtitle"] = $objOneFile->getStrSubtitle();

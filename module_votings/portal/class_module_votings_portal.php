@@ -18,12 +18,12 @@ class class_module_votings_portal extends class_portal implements interface_port
     private $STR_COOKIE_NAME = "kajona_voting";
     private $arrCookieValues = array();
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrElementData
-	 */
-	public function __construct($arrElementData) {
+    /**
+     * Constructor
+     *
+     * @param mixed $arrElementData
+     */
+    public function __construct($arrElementData) {
         $this->setArrModuleEntry("moduleId", _votings_module_id_);
         $this->setArrModuleEntry("modul", "votings");
         parent::__construct($arrElementData);
@@ -37,21 +37,19 @@ class class_module_votings_portal extends class_portal implements interface_port
             $this->actionSubmitVoting();
             $this->setAction("list");
         }
-        
-       
-	}
 
-	
+    }
 
-	/**
-	 * Returns a single view of a single voting.
+
+    /**
+     * Returns a single view of a single voting.
      * The mode is choosen from the element-config.
-	 *
-	 * @return string
+     *
+     * @return string
      * @permissions view
-	 */
-	public function actionList() {
-		$strReturn = "";
+     */
+    public function actionList() {
+        $strReturn = "";
 
         //load the associated voting
         $objVoting = new class_module_votings_voting($this->arrElementData["char1"]);
@@ -69,32 +67,37 @@ class class_module_votings_portal extends class_portal implements interface_port
                     //check the start n end dates
                     $objDateStart = null;
                     $objDateEnd = null;
-                    if($objVoting->getLongDateStart() != "" && $objVoting->getLongDateStart() != 0)
-                        $objDateStart = new class_date($objVoting->getLongDateStart() );
-                    if($objVoting->getLongDateEnd() != "" && $objVoting->getLongDateEnd() != 0)
-                        $objDateEnd = new class_date($objVoting->getLongDateEnd() );
+                    if($objVoting->getLongDateStart() != "" && $objVoting->getLongDateStart() != 0) {
+                        $objDateStart = new class_date($objVoting->getLongDateStart());
+                    }
+                    if($objVoting->getLongDateEnd() != "" && $objVoting->getLongDateEnd() != 0) {
+                        $objDateEnd = new class_date($objVoting->getLongDateEnd());
+                    }
 
                     $bitDatesAllow = true;
-                    if($objDateStart != null && $objDateStart->getLongTimestamp() > class_date::getCurrentTimestamp())
+                    if($objDateStart != null && $objDateStart->getLongTimestamp() > class_date::getCurrentTimestamp()) {
                         $bitDatesAllow = false;
+                    }
 
-                    if($objDateEnd != null && $objDateEnd->getLongTimestamp() < class_date::getCurrentTimestamp())
+                    if($objDateEnd != null && $objDateEnd->getLongTimestamp() < class_date::getCurrentTimestamp()) {
                         $bitDatesAllow = false;
+                    }
 
                     //already voted before?
                     if(in_array($objVoting->getSystemid(), $this->arrCookieValues)) {
                         $strVotingContent = $this->getLang("error_voted");
                     }
-                    else if(!$bitDatesAllow ) {
+                    else if(!$bitDatesAllow) {
                         $strVotingContent = $this->getLang("error_dates");
                     }
                     else {
 
                         $strAnswers = "";
-                        $strAnswerTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/".$this->arrElementData["char2"], "voting_voting_option");
+                        $strAnswerTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_voting_option");
                         //load the list of answers
                         $arrAnswers = $objVoting->getAllAnswers(true);
-                        foreach($arrAnswers as /** @var class_module_votings_answer */$objOneAnswer) {
+                        foreach($arrAnswers as /** @var class_module_votings_answer */
+                                $objOneAnswer) {
                             $arrTemplate = array();
                             $arrTemplate["voting_systemid"] = $objVoting->getSystemid();
                             $arrTemplate["answer_systemid"] = $objOneAnswer->getSystemid();
@@ -105,7 +108,7 @@ class class_module_votings_portal extends class_portal implements interface_port
 
 
                         //create the wrapper
-                        $strFormTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/".$this->arrElementData["char2"], "voting_voting");
+                        $strFormTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_voting");
                         $arrTemplate = array();
                         $arrTemplate["voting_answers"] = $strAnswers;
                         $arrTemplate["voting_systemid"] = $objVoting->getSystemid();
@@ -114,41 +117,43 @@ class class_module_votings_portal extends class_portal implements interface_port
                         $strVotingContent .= $this->fillTemplate($arrTemplate, $strFormTemplateID);
                     }
 
-                    
                 }
-                else
+                else {
                     $strVotingContent = $this->getLang("commons_error_permissions");
-
+                }
 
             }
             else if($this->arrElementData["int1"] == 1) {
                 //result mode
-                
+
                 $strAnswers = "";
                 $intTotalVotes = 0;
-                $strAnswerTemplateID = $this->objTemplate->readTemplate("/module_votings/".$this->arrElementData["char2"], "voting_result_answer");
+                $strAnswerTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_result_answer");
                 //load the list of answers
                 $arrAnswers = $objVoting->getAllAnswers(true);
 
                 //first run to sum up
-                foreach($arrAnswers as /** @var class_module_votings_answer */$objOneAnswer) {
+                foreach($arrAnswers as /** @var class_module_votings_answer */
+                        $objOneAnswer) {
                     $intTotalVotes += $objOneAnswer->getIntHits();
                 }
 
-                foreach($arrAnswers as /** @var class_module_votings_answer */$objOneAnswer) {
+                foreach($arrAnswers as /** @var class_module_votings_answer */
+                        $objOneAnswer) {
                     $arrTemplate = array();
                     $arrTemplate["answer_text"] = $objOneAnswer->getStrText();
                     $arrTemplate["answer_hits"] = $objOneAnswer->getIntHits();
+                    $arrTemplate["answer_systemid"] = $objOneAnswer->getSystemid();
 
                     $arrTemplate["answer_percent"] = "0";
                     if($objOneAnswer->getIntHits() > 0) {
-                        $arrTemplate["answer_percent"] = (int)(100 / ($intTotalVotes / $objOneAnswer->getIntHits())) ;
+                        $arrTemplate["answer_percent"] = (int)(100 / ($intTotalVotes / $objOneAnswer->getIntHits()));
                     }
 
                     $strAnswers .= $this->fillTemplate($arrTemplate, $strAnswerTemplateID);
                 }
 
-                $strResultTemplateID = $this->objTemplate->readTemplate("/module_votings/".$this->arrElementData["char2"], "voting_result");
+                $strResultTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_result");
                 $arrTemplate = array();
                 $arrTemplate["voting_answers"] = $strAnswers;
                 $arrTemplate["voting_hits"] = $intTotalVotes;
@@ -156,19 +161,21 @@ class class_module_votings_portal extends class_portal implements interface_port
             }
 
 
-            $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/".$this->arrElementData["char2"], "voting_wrapper");
+            $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_wrapper");
             $arrTemplate = array();
+            $arrTemplate["voting_systemid"] = $objVoting->getSystemid();
             $arrTemplate["voting_title"] = $objVoting->getStrTitle();
             $arrTemplate["voting_content"] = $strVotingContent;
             $strReturn .= $this->fillTemplate($arrTemplate, $strListTemplateID);
 
         }
-        else
+        else {
             $strReturn = $this->getLang("commons_error_permissions");
+        }
 
-        
-		return $strReturn;
-	}
+
+        return $strReturn;
+    }
 
     /**
      * Helper method, does the internal updates of the voting-answers
@@ -185,10 +192,10 @@ class class_module_votings_portal extends class_portal implements interface_port
             //recheck permissions
             if(!in_array($objVoting->getSystemid(), $this->arrCookieValues)) {
                 //load the submitted answer
-                $strAnswerID = $this->getParam("voting_".$objVoting->getSystemid());
+                $strAnswerID = $this->getParam("voting_" . $objVoting->getSystemid());
                 if(validateSystemid($strAnswerID)) {
                     $objAnswer = new class_module_votings_answer($strAnswerID);
-                    $objAnswer->setIntHits($objAnswer->getIntHits()+1);
+                    $objAnswer->setIntHits($objAnswer->getIntHits() + 1);
                     $objAnswer->updateObjectToDb();
 
                     $this->arrCookieValues[] = $objVoting->getSystemid();

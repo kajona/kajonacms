@@ -186,7 +186,7 @@ function switchDriver() {
     <div class="control-group">
         <label for="dbprefix" class="control-label">[lang,installer_config_dbprefix,system]</label>
         <div class="controls">
-            <input type="text" id="dbprefix" name="dbprefix" value="" class="input-xlarge">
+            <input type="text" id="dbprefix" name="dbprefix" value="kajona_" class="input-xlarge">
         </div>
     </div>
 

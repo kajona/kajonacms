@@ -30,26 +30,26 @@
     </div>
 </event_list>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, detailsLinkHref, registerLinkHref -->
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, detailsLinkHref, registerLinkHref, systemid -->
 <event_list_entry>
     <tr>
         <td>%%dateFrom%%</td>
-        <td width="50%">%%title%%</td>
+        <td width="50%" data-kajona-editable="%%systemid%%#strTitle#plain">%%title%%</td>
         <td width="20%"><a href="%%detailsLinkHref%%">[lang,detailslink,eventmanager]</a></td>
         <td width="15%"><a href="%%registerLinkHref%%">[lang,registerlink,eventmanager]</a></td>
     </tr>
 </event_list_entry>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants -->
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants, systemid -->
 <event_details>
     <div>
-        <h2>%%title%%</h2>
-        <p>%%description%%</p>
+        <h2 data-kajona-editable="%%systemid%%#strTitle#plain">%%title%%</h2>
+        <p data-kajona-editable="%%systemid%%#strDescription">%%description%%</p>
         <table>
-            <tr><td>[lang,location,eventmanager]</td><td>%%location%%</td></tr>
+            <tr><td>[lang,location,eventmanager]</td><td data-kajona-editable="%%systemid%%#strLocation#plain">%%location%%</td></tr>
             <tr><td>[lang,dateTimeFrom,eventmanager]</td><td>%%dateTimeFrom%%</td></tr>
             <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
-            <tr><td>[lang,maximumParticipants,eventmanager]</td><td>%%maximumParticipants%%</td></tr>
+            <tr><td>[lang,maximumParticipants,eventmanager]</td><td data-kajona-editable="%%systemid%%#intParticipantsLimit#plain">%%maximumParticipants%%</td></tr>
             <tr><td>[lang,currentParticipants,eventmanager]</td><td>%%currentParticipants%%</td></tr>
         </table>
         %%registerLink%%

@@ -16,15 +16,15 @@
     %%link_back%% %%link_pages%% %%link_forward%%
 </list>
 
-    <!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_href, folder_preview -->
+    <!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview -->
 <folderlist>
     <tr class="portalListRow1">
         <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.png" /></td>
-        <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
+        <td class="title"><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
     </tr>
     <tr class="portalListRow2">
         <td></td>
-        <td class="description">%%folder_description%%</td>
+        <td class="description" data-kajona-editable="%%folder_id%%#strDescription#plain">%%folder_description%%</td>
     </tr>
 </folderlist>
 
@@ -73,7 +73,7 @@
     %%pathnavigation%%
     <div>
         <div>
-            <div style="float: left;" data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div><div style="float: right;">%%file_rating%%</div>
+            <div style="float: left;" data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</div><div style="float: right;">%%file_rating%%</div>
             <div style="clear: both;"></div>
         </div>
         <div>

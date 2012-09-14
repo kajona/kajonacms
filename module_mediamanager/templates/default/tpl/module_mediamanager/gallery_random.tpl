@@ -7,11 +7,11 @@
  -->
 <filedetail>
     <div class="galleryRandom">
-        <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
-        %%file_subtitle%%<br />
+        <div data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</div>
+        <span  data-kajona-editable="%%file_systemid%%#strSubtitle#plain">%%file_subtitle%%</span><br />
         <img src="%%image_src%%" alt="%%file_name%%" /><br />
         %%file_rating%%<br />
-        %%file_description%%
+        <span data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</span>
     </div>
 </filedetail>
 

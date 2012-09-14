@@ -20,14 +20,14 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-            <h2><a href="#" onclick="KAJONA.util.fold('cont_%%news_id%%'); return false;">%%news_title%%</a></h2>
+            <h2><a href="#" onclick="KAJONA.util.fold('cont_%%news_id%%'); return false;" data-kajona-editable="%%news_id%%#strTitle#plain">%%news_title%%</a></h2>
         </div>
         <div class="newsListMore">%%news_start_date%%</div>
         <div class="clearer"></div>
     </div>
     <div class="newsListTeaser">
         <div id="cont_%%news_id%%" style="display: none;">
-            <div>%%news_intro%% %%news_more_link%%</div>
+            <div><span data-kajona-editable="%%news_id%%#strIntro#plain">%%news_intro%%</span> %%news_more_link%%</div>
         </div>
     </div>
 </div>
@@ -39,7 +39,7 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-            <h2><a href="#" onclick="KAJONA.util.fold('cont_%%news_id%%'); return false;">%%news_title%%</a></h2>
+            <h2><a href="#" onclick="KAJONA.util.fold('cont_%%news_id%%'); return false;" data-kajona-editable="%%news_id%%#strTitle#plain">%%news_title%%</a></h2>
         </div>
         <div class="newsListMore">%%news_start_date%%</div>
         <div class="clearer"></div>
@@ -48,7 +48,7 @@
         <div id="cont_%%news_id%%" style="display: none;">
             <div>
                 <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=150&amp;maxHeight=150" alt="%%news_title%%" />
-                %%news_intro%% %%news_more_link%%
+                <span data-kajona-editable="%%news_id%%#strIntro#plain">%%news_intro%%</span> %%news_more_link%%
             </div>
         </div>
     </div>
@@ -59,9 +59,9 @@
 <!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_back_link -->
 <news_detail>
 <div class="newsDetail">
-    <h2>%%news_title%%</h2> %%news_start_date%%
-    <p class="newsTeaser">%%news_intro%%</p>
-    %%news_text%%
+    <h2 data-kajona-editable="%%news_id%%#strTitle#plain">%%news_title%%</h2> %%news_start_date%%
+    <p class="newsTeaser" data-kajona-editable="%%news_id%%#strIntro#plain">%%news_intro%%</p>
+    <p data-kajona-editable="%%news_id%%#strText">%%news_text%%</p>
     <p>%%news_back_link%%</p>
 </div>
 </news_detail>
@@ -70,10 +70,10 @@
 <!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_back_link -->
 <news_detail_image>
 <div class="newsDetail">
-    <h2>%%news_title%%</h2> %%news_start_date%%
-    <p class="newsTeaser">%%news_intro%%</p>
+    <h2 data-kajona-editable="%%news_id%%#strTitle#plain">%%news_title%%</h2> %%news_start_date%%
+    <p class="newsTeaser" data-kajona-editable="%%news_id%%#strIntro#plain">%%news_intro%%</p>
     <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
-    %%news_text%%
+    <p data-kajona-editable="%%news_id%%#strText">%%news_text%%</p>
     <p>%%news_back_link%%</p>
 </div>
 </news_detail_image>

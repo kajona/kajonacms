@@ -16,41 +16,41 @@
  */
 class class_module_eventmanager_portal extends class_portal implements interface_portal {
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed $arrElementData
-	 */
-	public function __construct($arrElementData) {
+    /**
+     * Constructor
+     *
+     * @param mixed $arrElementData
+     */
+    public function __construct($arrElementData) {
         $this->setArrModuleEntry("moduleId", _eventmanager_module_id_);
         $this->setArrModuleEntry("modul", "eventmanager");
         parent::__construct($arrElementData);
 
-	}
+    }
 
 
-	/**
+    /**
      * Creates the list of events available
      *
      * @return string
      * @permissions view
      */
-	protected function actionList() {
-		$strReturn = "";
+    protected function actionList() {
+        $strReturn = "";
         $strEvents = "";
 
         //switch between calendar and list-modes
         if($this->arrElementData["int2"] == "0") {
             //calendar mode
-            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_calendar");
+            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_calendar");
             $arrTemplate = array();
-            $arrTemplate["cal_eventsource"] = _xmlpath_."?module=eventmanager&action=getJsonEvents&page=".$this->getPagename();
+            $arrTemplate["cal_eventsource"] = _xmlpath_ . "?module=eventmanager&action=getJsonEvents&page=" . $this->getPagename();
             $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
         }
         else {
             //list based mode
             $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, null, null, true, $this->arrElementData["int1"]);
-            $strEventTemplateID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_list_entry");
+            $strEventTemplateID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_list_entry");
             foreach($arrEvents as $objOneEvent) {
                 if($objOneEvent->rightView()) {
                     $arrTemplate = array();
@@ -61,26 +61,26 @@ class class_module_eventmanager_portal extends class_portal implements interface
                     $arrTemplate["title"] = $objOneEvent->getStrTitle();
                     $arrTemplate["description"] = $objOneEvent->getStrDescription();
                     $arrTemplate["location"] = $objOneEvent->getStrLocation();
+                    $arrTemplate["systemid"] = $objOneEvent->getSystemid();
                     $arrTemplate["detailsLinkHref"] = getLinkPortalHref($this->getPagename(), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle());
 
                     if($objOneEvent->getIntRegistrationRequired() == "1" && $objOneEvent->rightRight1()) {
                         $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle());
-                        $strRegisterLinkID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_details_registerlink");
+                        $strRegisterLinkID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_registerlink");
                         $arrTemplate["registerLink"] = $this->fillTemplate($arrTemplate, $strRegisterLinkID);
                     }
                     $strEvents .= $this->fillTemplate($arrTemplate, $strEventTemplateID);
                 }
             }
 
-            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_list");
+            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_list");
             $strReturn .= $this->fillTemplate(array("events" => $strEvents), $strWrapperID);
         }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
-     *
      * @xml
      * @return string
      * @permissions view
@@ -88,7 +88,8 @@ class class_module_eventmanager_portal extends class_portal implements interface
     protected function actionGetJsonEvents() {
 
         $arrPrintableEvents = array();
-        $objStartDate = null; $objEndDate = null;
+        $objStartDate = null;
+        $objEndDate = null;
         if($this->getParam("start") != "" && $this->getParam("end") != "") {
             $objStartDate = new class_date($this->getParam("start"));
             $objEndDate = new class_date($this->getParam("end"));
@@ -114,6 +115,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
 
     /**
      * Creates a view of all event-details
+     *
      * @return string
      */
     protected function actionEventDetails() {
@@ -129,22 +131,24 @@ class class_module_eventmanager_portal extends class_portal implements interface
             $arrTemplate["dateFrom"] = dateToString($objEvent->getObjStartDate(), false);
             $arrTemplate["dateTimeUntil"] = dateToString($objEvent->getObjEndDate(), true);
             $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
+            $arrTemplate["systemid"] = $objEvent->getSystemid();
 
             $arrTemplate["maximumParticipants"] = $objEvent->getIntParticipantsLimit();
             $arrTemplate["currentParticipants"] = count(class_module_eventmanager_participant::getObjectList($this->getSystemid()));
 
             if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->rightRight1()) {
                 $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle());
-                $strRegisterLinkID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_details_registerlink");
+                $strRegisterLinkID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_registerlink");
                 $arrTemplate["registerLink"] = $this->fillTemplate($arrTemplate, $strRegisterLinkID);
             }
-            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_details");
+            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details");
             $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
 
             class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
         }
-        else
+        else {
             $strReturn = $this->getLang("commons_error_permissions");
+        }
 
         return $strReturn;
     }
@@ -155,10 +159,11 @@ class class_module_eventmanager_portal extends class_portal implements interface
         if($objEvent->rightView() && $objEvent->rightRight1()) {
 
             if($objEvent->getIntLimitGiven() == "1" &&
-                    $objEvent->getIntParticipantsLimit() <= count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()))) {
+                $objEvent->getIntParticipantsLimit() <= count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()))
+            ) {
 
                 $strMessage = $this->getLang("participantLimitReached");
-                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_register_message");
+                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
                 $strReturn = $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
                 return $strReturn;
             }
@@ -171,21 +176,26 @@ class class_module_eventmanager_portal extends class_portal implements interface
                 $objTextValidator = new class_text_validator();
                 $objMailValidator = new class_email_validator();
 
-                if(!$objTextValidator->validate($this->getParam("forename"), 3))
+                if(!$objTextValidator->validate($this->getParam("forename"), 3)) {
                     $arrErrors[] = $this->getLang("noForename");
+                }
 
-                if(!$objTextValidator->validate($this->getParam("lastname"), 3))
+                if(!$objTextValidator->validate($this->getParam("lastname"), 3)) {
                     $arrErrors[] = $this->getLang("noLastname");
+                }
 
-                if(!$objMailValidator->validate($this->getParam("email")))
-                   $arrErrors[] = $this->getLang("invalidEmailadress");
+                if(!$objMailValidator->validate($this->getParam("email"))) {
+                    $arrErrors[] = $this->getLang("invalidEmailadress");
+                }
 
                 //Check captachcode
-                if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode())
+                if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) {
                     $arrErrors[] = $this->getLang("commons_captcha");
+                }
 
-                if(count($arrErrors) == 0)
-                   $bitForm = false;
+                if(count($arrErrors) == 0) {
+                    $bitForm = false;
+                }
             }
 
             if($bitForm) {
@@ -208,13 +218,13 @@ class class_module_eventmanager_portal extends class_portal implements interface
 
                 $arrTemplate["formErrors"] = "";
                 if(count($arrErrors) > 0) {
-                    $strErrTemplate = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "error_row");
-                    foreach ($arrErrors as $strOneError) {
-                        $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                    $strErrTemplate = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "error_row");
+                    foreach($arrErrors as $strOneError) {
+                        $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                     }
                 }
 
-                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_register");
+                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register");
                 $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
 
             }
@@ -222,7 +232,8 @@ class class_module_eventmanager_portal extends class_portal implements interface
 
                 $strMessage = "";
                 if($objEvent->getIntLimitGiven() == "1" &&
-                    $objEvent->getIntParticipantsLimit() <= count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()))) {
+                    $objEvent->getIntParticipantsLimit() <= count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()))
+                ) {
 
                     $strMessage = $this->getLang("participantLimitReached");
                 }
@@ -245,12 +256,12 @@ class class_module_eventmanager_portal extends class_portal implements interface
                     $objMail->setSubject($this->getLang("registerMailSubject"));
 
                     $strBody = $this->getLang("registerMailBodyIntro");
-                    $strBody .= $objEvent->getStrTitle()."<br />";
-                    $strBody .= dateToString($objEvent->getObjStartDate(), true)."<br />";
-                    $strBody .= $objEvent->getStrLocation()."<br />";
+                    $strBody .= $objEvent->getStrTitle() . "<br />";
+                    $strBody .= dateToString($objEvent->getObjStartDate(), true) . "<br />";
+                    $strBody .= $objEvent->getStrLocation() . "<br />";
                     $strBody .= "\n";
-                    $strTemp = getLinkPortalHref($this->getPagename(), "", "participantConfirmation", "&participantId=".$objParticipant->getSystemid(), $this->getSystemid(), "", $objEvent->getStrTitle());
-                    $strBody .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
+                    $strTemp = getLinkPortalHref($this->getPagename(), "", "participantConfirmation", "&participantId=" . $objParticipant->getSystemid(), $this->getSystemid(), "", $objEvent->getStrTitle());
+                    $strBody .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
 
                     $objScriptlet = new class_scriptlet_helper();
                     $strBody = $objScriptlet->processString($strBody);
@@ -264,15 +275,15 @@ class class_module_eventmanager_portal extends class_portal implements interface
                 }
 
 
-
-                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_register_message");
+                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
                 $strReturn .= $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
             }
 
             class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
         }
-        else
+        else {
             $strReturn = $this->getLang("commons_error_permissions");
+        }
 
         return $strReturn;
     }
@@ -291,15 +302,17 @@ class class_module_eventmanager_portal extends class_portal implements interface
                 }
             }
 
-            if($strMessage == "")
+            if($strMessage == "") {
                 $strMessage = $this->getLang("participantErrorConfirmation");
+            }
 
             class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
         }
-        else
+        else {
             $strMessage = $this->getLang("commons_error_permissions");
+        }
 
-        $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "event_register_message");
+        $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
         $strReturn = $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
 
         return $strReturn;

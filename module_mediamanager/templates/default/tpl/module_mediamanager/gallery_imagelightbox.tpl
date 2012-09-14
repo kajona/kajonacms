@@ -43,16 +43,16 @@
     <div>Please note: This template makes use of the jQuery plugin "lightbox". Make sure to respect the projects <a href="http://fancyapps.com/fancybox/#license" target="_blank">licence</a>.</div>
 </list>
 
-<!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_href, folder_preview_image_src -->
+<!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview_image_src -->
 <folderlist>
     <table cellspacing="0" class="portalList">
         <tr class="portalListRow1">
             <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.png" /></td>
-            <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
+            <td class="title"><a href="%%folder_href%%"  data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
         </tr>
         <tr class="portalListRow2">
             <td></td>
-            <td class="description">%%folder_description%%</td>
+            <td class="description" data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</td>
         </tr>
     </table>
 </folderlist>
@@ -65,7 +65,7 @@
         </tr>
         <tr class="portalListRow2">
             <td><img src="[img,%%folder_preview_image_src%%,50,50]" /></td>
-            <td class="description">%%folder_description%%</td>
+            <td class="description" data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</td>
         </tr>
     </table>
 </folderlist_preview>
