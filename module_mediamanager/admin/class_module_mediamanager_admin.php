@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
+*    $Id$                                            *
 ********************************************************************************************************/
 
 /**
@@ -21,22 +21,22 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
     private $strPeAddon = "";
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
-		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-		$this->setArrModuleEntry("modul", "mediamanager");
-		parent::__construct();
+    /**
+     * Constructor
+     *
+     */
+    public function __construct() {
+        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
+        $this->setArrModuleEntry("modul", "mediamanager");
+        parent::__construct();
 
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
-	}
+    }
 
 
-	public function getOutputModuleNavi() {
-	    $arrReturn = array();
+    public function getOutputModuleNavi() {
+        $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("actionNew"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -56,16 +56,22 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     protected function renderAdditionalActions(class_model $objListEntry) {
 
         if($objListEntry instanceof class_module_mediamanager_repo)
-            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")));
+            return array($this->objToolkit->listButton(
+                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")
+            ));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
-            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")));
+            return array($this->objToolkit->listButton(
+                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")
+            ));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
             //add a crop icon?
             $arrMime  = $this->objToolkit->mimeType($objListEntry->getStrFilename());
             if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
-                return array($this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("actionEditImage"), "icon_crop.png")));
+                return array($this->objToolkit->listButton(
+                    getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("actionEditImage"), "icon_crop.png", $objListEntry->getStrDisplayName())
+                ));
             }
 
         }
@@ -121,13 +127,13 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
 
     /**
-	 * Creates a list of all available galleries
-	 *
-	 * @return string
+     * Creates a list of all available galleries
+     *
+     * @return string
      * @permissions view
      * @autoTestable
-	 */
-	protected function actionList() {
+     */
+    protected function actionList() {
 
         $objIterator = new class_array_section_iterator(class_module_mediamanager_repo::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
@@ -135,7 +141,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
         return $this->renderList($objIterator);
 
-	}
+    }
 
 
     /**
@@ -191,7 +197,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
      * @autoTestable
      * @return string
      */
-	protected function actionNew($strMode = "new", class_admin_formgenerator $objForm = null) {
+    protected function actionNew($strMode = "new", class_admin_formgenerator $objForm = null) {
 
         $objRepo = new class_module_mediamanager_repo();
         if($strMode == "edit") {
@@ -207,7 +213,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
         return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveRepo"));
 
-	}
+    }
 
     private function getAdminForm(class_module_mediamanager_repo $objRepo) {
         $objForm = new class_admin_formgenerator("repo", $objRepo);
@@ -302,15 +308,6 @@ HTML;
 
         $strReturn = "";
 
-        $strPath = "";
-        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objCurFile */
-        $objCurFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
-
-        if($objCurFile instanceof class_module_mediamanager_file)
-            $strPath = $objCurFile->getStrFilename();
-        if($objCurFile instanceof class_module_mediamanager_repo)
-            $strPath = $objCurFile->getStrPath();
-
         //Build code for create-dialog
         $strDialog = $this->objToolkit->formInputText("folderName", $this->getLang("commons_name"));
 
@@ -403,6 +400,7 @@ HTML;
      */
     protected function actionMassSync() {
 
+        /** @var $arrRepos class_module_mediamanager_repo[] */
         $arrRepos = class_module_mediamanager_repo::getObjectList();
         $arrSyncs = array("insert" => 0, "delete" => 0);
         foreach($arrRepos as $objOneRepo) {
@@ -569,7 +567,7 @@ HTML;
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 
-				</script>";
+                </script>";
 
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(1);
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(3);
