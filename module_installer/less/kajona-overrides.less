@@ -15,8 +15,12 @@
 
 
 body {
-    padding-top: 20px;
-    padding-bottom: 40px;
+
+    background-color: lighten(@kajonaLightGray, 5%);
+    .modal-header {
+        background:url(../pics/pusteblume.png) right -45px no-repeat @grayDarker;
+        color: @white;
+    }
 
     &.dialogBody,
     &.portaleditorBody {
@@ -33,53 +37,44 @@ body {
       text-decoration: underline;
     }
 
-}
+
+    .navbar {
+        .navbar-inner {
+            .border-radius(0px);
+
+            li {
+                a {
+                    padding-right: 30px;
+                    margin-right: 5px;
+                    background: url(../pics/ok_missing.png) right no-repeat;
+                    color: @black;
+                    cursor: progress;
+
+                    &:hover {
+                        color: @black !important;
+                    }
+                }
+
+                &.active a {
+                    color: @black;
+                    background: url(../pics/arrow_down.png) right no-repeat;
+                }
+
+                &.done a {
+                    background: url(../pics/ok.png) right no-repeat;
+                }
+            }
 
 
 
-.sidebar-nav {
 
-    background-color: @white;
-    border:0px;
-    .border-radius(0px);
-    .box-shadow(none);
-    margin-bottom: 20px;
-    min-height: 20px;
-    padding:0px;
-    padding-top: 60px;
-    text-align:right;
-    position:relative;
-
-    .progressContainer {
-      ul {
-        margin: 0 0 1px 0;
-
-        list-style: none;
-
-        li {
-          padding: 6px 15px;
-          background-color: @kajonaLightGray;
-          margin-bottom:1px;
-          font-size:@baseFontSize + 2;
-          color:#626262;
-
-          &.active {
-            color:@white;
-            text-shadow:none;
-            background-color: @green;
-          }
-
-          &.done {
-
-            border-color:@green;
-            border-style: solid;
-            border-width: 0px 0px 0px 10px;
-          }
         }
-      }
     }
 
-
+    footer {
+        padding: 40px;
+        text-align: center;
+    }
 
 
 }
@@ -94,7 +89,7 @@ body {
     }
 
     pre {
-        font-size: @baseFontSize - 2;
+        font-size: @baseFontSize - 4;
     }
 
     .pre-scrollable {
@@ -153,43 +148,7 @@ body {
         }
     }
 
-    .pagination {
 
-        text-align: center;
-
-        ul {
-            .border-radius(0px);
-            .box-shadow(none);
-            display: inline-block;
-            margin-bottom: 0;
-            margin-left: 0;
-
-            li {
-                a, span {
-                    border-color: #dcdcdc;
-                    border-style: solid;
-                    border-width: 1px;
-                    float: left;
-                    line-height: 30px;
-                    padding: 0 10px;
-                    text-decoration: none;
-                    color:@grayDark;
-                    margin:0 3px;
-                    background-color:@grayLight;
-
-                    &.active {
-                        color:@green;
-                    }
-                }
-
-                &:first-child a, &:last-child a {
-                    border-left-width: 1px;
-                    .border-radius(0px);
-                }
-            }
-        }
-
-    }
 
 
 }
@@ -269,4 +228,11 @@ label {
   background-color:@green;
   color:@white;
   text-shadow:none;
+}
+
+
+.modal {
+    position: relative;
+    margin: 0 0 0 -400px;
+    width: 800px;
 }

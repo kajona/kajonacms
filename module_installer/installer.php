@@ -608,7 +608,7 @@ class class_installer {
 
         $strReturn .= "Installing samplecontent...\n";
         $objHandler = $objManager->getPackageManagerForPath("/core/module_samplecontent");
-        if($objHandler != null)
+        if($objHandler != null && $objHandler->isInstallable())
             $strReturn .= $objHandler->installOrUpdate();
 
 

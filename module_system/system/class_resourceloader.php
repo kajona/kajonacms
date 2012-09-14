@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
+*    $Id$                                            *
 ********************************************************************************************************/
 
 /**
@@ -222,7 +222,7 @@ class class_resourceloader {
 
                     if(substr($strSingleEntry, -4) == ".php") {
                         $arrReturn["/core/".$strSingleModule._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
-					}
+                    }
                 }
             }
         }
@@ -275,18 +275,18 @@ class class_resourceloader {
                 foreach($arrContent as $strSingleEntry) {
 
                     if(($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_corepath_."/".$strSingleModule.$strFolder."/".$strSingleEntry))) {
-						//Wanted Type?
-						if(count($arrExtensionFilter)==0) {
-							$arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
-						}
-						else {
-						    //check, if suffix is in allowed list
-						    $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
-							if(in_array($strFileSuffix, $arrExtensionFilter)) {
-								$arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
-							}
-						}
-					}
+                        //Wanted Type?
+                        if(count($arrExtensionFilter)==0) {
+                            $arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        }
+                        else {
+                            //check, if suffix is in allowed list
+                            $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
+                            if(in_array($strFileSuffix, $arrExtensionFilter)) {
+                                $arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                            }
+                        }
+                    }
 
                 }
             }

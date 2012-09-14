@@ -80,7 +80,7 @@ class class_classloader {
                 $this->arrModules = array_filter(
                     $this->arrModules,
                     function($strValue) {
-                        return preg_match("/(module|element|_)+.*/i", $strValue);
+                        return preg_match("/(module|element|_)+(.*)/i", $strValue) && is_dir(_corepath_."/".$strValue);
                     }
                 );
 

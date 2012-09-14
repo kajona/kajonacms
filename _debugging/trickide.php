@@ -29,3 +29,4 @@ define("_admin_only_https_", "false");
 define("_corepath_", __DIR__."/../");
 define("_pages_cacheenabled_", "true");
 define("_stats_nrofrecords_", "");
+define("_packagemanager_defaulttemplate_", "");

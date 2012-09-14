@@ -27,50 +27,50 @@
 
 <body>
 
+<div class="navbar ">
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                %%installer_progress%%
+            </ul>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid">
 <div class="row-fluid">
 
-    <!-- MODULE NAVIGATION -->
-    <div class="span3 ">
-        <div class="sidebar-nav ">
-            <div class="progressContainer">
-                <ul>
-                %%installer_progress%%
-                </ul>
-            </div>
-        </div>
-    </div>
+
+
 
     <!-- CONTENT CONTAINER -->
-    <div class="span9" id="content">
+    <div class="span12" id="content">
 
-        <div class="contentTopbar clearfix">
-            <h1 class="pull-left">Kajona Installer %%installer_version%%</h1>
+        <div class="modal" id="loginContainer">
+            <div class="modal-header">
+                <h3 id="loginContainer_title">Kajona Installer %%installer_version%%</h3>
+            </div>
+            <div class="modal-body">
+                <div id="loginContainer_content">
+
+                    %%installer_output%%
+
+                    %%installer_logfile%%
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                %%installer_backward%%
+                %%installer_forward%%
+            </div>
         </div>
 
-        <div>
-        %%installer_output%%
-
-        %%installer_logfile%%
-
-
-        <div class="pagination">
-            <ul>
-                <li>%%installer_backward%%</li>
-                <li>%%installer_forward%%</li>
-            </ul>
-        </div>
-
-        </div>
 
     </div>
 </div>
 
-<hr>
-
 <footer>
-    <p>powered by <a href="http://www.kajona.de/" target="_blank" title="Kajona - empowering your content">Kajona</a></p>
+    <a href="http://www.kajona.de" target="_blank">Kajona - empowering your content</a>
 </footer>
 
 
@@ -79,15 +79,15 @@
 </installer_main>
 
 <installer_progress_entry>
-    <li>%%entry_name%%</li>
+    <li><a href="#">%%entry_name%%</a></li>
 </installer_progress_entry>
 
 <installer_progress_entry_current>
-    <li class="active">%%entry_name%%</li>
+    <li class="active"><a href="#">%%entry_name%%</a></li>
 </installer_progress_entry_current>
 
 <installer_progress_entry_done>
-    <li class="done">%%entry_name%%</li>
+    <li class="done"><a href="#">%%entry_name%%</a></li>
 </installer_progress_entry_done>
 
 <installer_log>
@@ -273,12 +273,13 @@ function switchDriver() {
 </form>
 </loginwizard_form>
 
+
 <installer_forward_link>
-<a href="%%href%%"><b>%%text%%</b></a>
+<a href="%%href%%" class="btn btn-primary">%%text%%</a>
 </installer_forward_link>
 
 <installer_backward_link>
-<a href="%%href%%">%%text%%</a>
+<a href="%%href%%" class="btn">%%text%%</a>
 </installer_backward_link>
 
 <installer_modules_form>
