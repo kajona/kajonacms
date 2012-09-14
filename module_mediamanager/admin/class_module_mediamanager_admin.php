@@ -546,7 +546,7 @@ HTML;
                 getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop.png")
             );
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled.png", "accept_icon")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_accept.png", "accept_icon")
             )." ";
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
