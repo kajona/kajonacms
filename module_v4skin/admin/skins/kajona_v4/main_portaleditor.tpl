@@ -18,8 +18,9 @@
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
     %%head%%
+    <script src="_webpath_/core/module_system/system/scripts/loader.js?_system_browser_cachebuster_"></script>
     <script src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
-    <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
+
 
     <script>
 
@@ -67,6 +68,7 @@
 <script src="_skinwebpath_/js/bootstrap-button.js"></script>
 <script src="_skinwebpath_/js/bootstrap-collapse.js"></script>
 <script src="_skinwebpath_/js/bootstrap-carousel.js"></script>
+<script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 <!--<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>-->
 <!--<script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>-->
 
