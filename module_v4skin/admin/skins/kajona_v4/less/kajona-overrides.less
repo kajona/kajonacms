@@ -629,6 +629,19 @@ body {
 
     }
 
+	#massactionsWrapper {
+		.opacity(0);
+		.transition(all linear .2s);
+		margin-top: -50px;
+		float: left;
+		display: none;
+
+		&.visible {
+			display: block;
+			.opacity(100);
+			.transition(all linear .2s);
+		}
+	}
 
 }
 
@@ -821,6 +834,12 @@ label {
 
         td.checkbox {
             padding: 0;
+
+			input {
+				vertical-align: middle;
+				float: none;
+				margin-left: 0;
+			}
         }
 
         td.image {

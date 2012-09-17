@@ -10,6 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["aspect_content"]                  = "Inhalte";
+$lang["aspect_management"]               = "Verwaltung";
 $lang["commons_accept"]                  = "Übernehmen";
 $lang["commons_all_categories"]          = "Alle Kategorien";
 $lang["commons_back"]                    = "Zurück";
@@ -23,6 +25,8 @@ $lang["commons_create_folder"]           = "Neuer Ordner";
 $lang["commons_date"]                    = "Datum";
 $lang["commons_delete"]                  = "Löschen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["commons_delete_error"]            = "Fehler beim Löschen des Datensatzes";
+$lang["commons_delete_ok"]               = "Datensatz erfolgreich gelöscht";
 $lang["commons_description"]             = "Beschreibung:";
 $lang["commons_edit_copy"]               = "Kopie erstellen";
 $lang["commons_edit_history"]            = "Änderungshistorie anzeigen";
@@ -38,6 +42,11 @@ $lang["commons_list_edit"]               = "Bearbeiten";
 $lang["commons_list_empty"]              = "Kein Datensatz vorhanden";
 $lang["commons_list_new"]                = "Neuen Datensatz anlegen";
 $lang["commons_locked"]                  = "Datensatz ist gesperrt";
+$lang["commons_massaction_confirm"]      = "Möchten Sie die Aktion <b>%title%</b> wirklich für die gewählten %amount% Datensätze ausführen?";
+$lang["commons_massaction_delete"]       = "Ausgewählte Datensätze löschen";
+$lang["commons_massaction_disable"]      = "Ausgewählte Datensätze inaktiv setzen";
+$lang["commons_massaction_enable"]       = "Ausgewählte Datensätze aktiv setzen";
+$lang["commons_massaction_title"]        = "Sammelaktion ausführen";
 $lang["commons_module_permissions"]      = "Modul-Rechte";
 $lang["commons_name"]                    = "Name:";
 $lang["commons_next"]                    = "weiter";
@@ -51,8 +60,7 @@ $lang["commons_result_page"]             = "Treffer-Seite:";
 $lang["commons_save"]                    = "Speichern";
 $lang["commons_sort_totree"]             = "Übergeordneten Knoten durch Fallenlassen im Baum anpassen";
 $lang["commons_sort_vertical"]           = "Reihenfolge durch Drag n Drop anpassen";
+$lang["commons_start"]                   = "Starten";
 $lang["commons_title"]                   = "Titel:";
 $lang["commons_unlock"]                  = "Datensatz entsperren";
 $lang["commons_yes"]                     = "Ja";
-$lang["aspect_content"]                  = "Inhalte";
-$lang["aspect_management"]               = "Verwaltung";

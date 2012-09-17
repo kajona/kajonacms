@@ -10,6 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["aspect_content"]                  = "Contents";
+$lang["aspect_management"]               = "Administration";
 $lang["commons_accept"]                  = "Accept";
 $lang["commons_all_categories"]          = "All categories";
 $lang["commons_back"]                    = "Back";
@@ -23,6 +25,8 @@ $lang["commons_create_folder"]           = "Create folder";
 $lang["commons_date"]                    = "Date";
 $lang["commons_delete"]                  = "Delete";
 $lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
+$lang["commons_delete_error"]            = "Error deleting the record";
+$lang["commons_delete_ok"]               = "Record deleted successfully";
 $lang["commons_description"]             = "Description:";
 $lang["commons_edit_copy"]               = "Create copy";
 $lang["commons_edit_history"]            = "Show change-history";
@@ -38,6 +42,11 @@ $lang["commons_list_edit"]               = "Edit";
 $lang["commons_list_empty"]              = "No record created";
 $lang["commons_list_new"]                = "Create new record";
 $lang["commons_locked"]                  = "Record is locked";
+$lang["commons_massaction_confirm"]      = "Do you really want to execute the action <b>%title%</b> for the selected %amount% records?";
+$lang["commons_massaction_delete"]       = "Delete selected records";
+$lang["commons_massaction_disable"]      = "Set selected records inactive";
+$lang["commons_massaction_enable"]       = "Set selected records active";
+$lang["commons_massaction_title"]        = "Trigger mutiple actions";
 $lang["commons_module_permissions"]      = "Module permissions";
 $lang["commons_name"]                    = "Name:";
 $lang["commons_next"]                    = "next";
@@ -51,8 +60,7 @@ $lang["commons_result_page"]             = "Result page:";
 $lang["commons_save"]                    = "Save";
 $lang["commons_sort_totree"]             = "Set Parent-Node by dropping to the tree";
 $lang["commons_sort_vertical"]           = "Change order using drag n drop";
+$lang["commons_start"]                   = "Start";
 $lang["commons_title"]                   = "Title:";
 $lang["commons_unlock"]                  = "Unlock record";
 $lang["commons_yes"]                     = "Yes";
-$lang["aspect_content"]                  = "Contents";
-$lang["aspect_management"]               = "Administration";

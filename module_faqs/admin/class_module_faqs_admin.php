@@ -113,9 +113,6 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
         $strReturn = $this->renderList($objIterator, false, class_module_faqs_admin::STR_CAT_LIST);
 
-
-        $strReturn .= $this->objToolkit->divider();
-
         $objIterator = new class_array_section_iterator(class_module_faqs_faq::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_faqs_faq::getObjectList( $this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
@@ -126,8 +123,13 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
 	}
 
+    protected function getMassActionHandlers($strListIdentifier) {
+        if($strListIdentifier == class_module_faqs_admin::STR_FAQ_LIST)
+            return $this->getDefaultActionHandlers();
+        return parent::getMassActionHandlers($strListIdentifier);
+    }
 
-    
+
     protected function actionEditCat() {
         return $this->actionNewCat("edit");
     }

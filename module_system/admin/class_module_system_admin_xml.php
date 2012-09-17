@@ -32,6 +32,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	 * Updates the aboslute position of a single record, relative to its siblings
 	 *
 	 * @return string
+     * @permissions edit
 	 */
 	protected function actionSetAbsolutePosition() {
 	    $strReturn = "";
@@ -68,12 +69,18 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	 * Changes the status of the current systemid
 	 *
 	 * @return string
+     * @permissions edit
 	 */
 	protected function actionSetStatus() {
 	    $strReturn = "";
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
-	    if($objCommon->rightEdit()) {
-    	    if($objCommon->setStatus()) {
+	    if($objCommon != null && $objCommon->rightEdit()) {
+
+            $intNewStatus = $this->getParam("status");
+            if($intNewStatus == "")
+                $intNewStatus = $objCommon->getIntRecordStatus() == 0 ? 1 : 0;
+
+    	    if($objCommon->setIntRecordStatus($intNewStatus)) {
     	        $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
     	    }
@@ -88,10 +95,39 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 	    return $strReturn;
 	}
 
+
+
+    /**
+     * Changes the status of the current systemid
+     *
+     * @return string
+     * @permissions delete
+     */
+    protected function actionDelete() {
+        $strReturn = "";
+        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objCommon != null && $objCommon->rightDelete()) {
+            $strName = $objCommon->getStrDisplayName();
+            if($objCommon->deleteObject()) {
+                $strReturn .= "<message>".$strName." - ".$this->getLang("commons_delete_ok")."</message>";
+                $this->flushCompletePagesCache();
+            }
+            else
+                $strReturn .= "<error>".$strName." - ".$this->getLang("commons_delete_error")."</error>";
+        }
+        else {
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+        }
+
+        return $strReturn;
+    }
+
     /**
      * Sets the prev-id of a record.
      * expects the param prevId
      * @return string
+     * @permissions edit
      */
     protected function actionSetPrevid() {
         $strReturn = "";

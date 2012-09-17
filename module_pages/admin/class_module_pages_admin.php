@@ -17,6 +17,10 @@
  */
 class class_module_pages_admin extends class_admin_simple implements interface_admin {
 
+    const STR_LIST_ALLPAGES = "STR_LIST_ALLPAGES";
+    const STR_LIST_PAGES = "STR_LIST_PAGES";
+    const STR_LIST_ELEMENTS = "STR_LIST_ELEMENTS";
+
     /**
      * Constructor
 
@@ -81,6 +85,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     }
 
 
+    protected function getMassActionHandlers($strListIdentifier) {
+        if($strListIdentifier == class_module_pages_admin::STR_LIST_PAGES || $strListIdentifier == class_module_pages_admin::STR_LIST_ALLPAGES)
+            return $this->getDefaultActionHandlers();
+
+        return array();
+    }
+
     /**
      * Creates a list of sites in the current folder
      *
@@ -100,7 +111,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator->setPageNumber(1);
         $objArraySectionIterator->setIntElementsPerPage($objArraySectionIterator->getNumberOfElements());
         $objArraySectionIterator->setArraySection($arrPages);
-        $strPages = $this->renderList($objArraySectionIterator, true, "pagesList", true);
+        $strPages = $this->renderList($objArraySectionIterator, true, class_module_pages_admin::STR_LIST_PAGES, true);
 
         if($bitPeMode)
             $strReturn = $strPages;
@@ -111,7 +122,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     }
 
     protected function renderLevelUpAction($strListIdentifier) {
-        if($strListIdentifier == "pagesList") {
+        if($strListIdentifier == class_module_pages_admin::STR_LIST_PAGES) {
             if(validateSystemid($this->getSystemid()) && $this->getSystemid() != $this->getObjModule()->getSystemid()) {
                 $objPrevFolder = new class_module_pages_folder($this->getSystemid());
                 return $this->objToolkit->listButton(
@@ -263,7 +274,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         $arrReturn = array();
 
-        if($strListIdentifier != "elementList" && $this->getObjModule()->rightEdit()) {
+        if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(
                 getLinkAdmin($this->getArrModule("modul"), "newPage", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu"), $this->getLang("modul_neu"), "icon_new.png")
             );
@@ -272,14 +283,14 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             );
 
         }
-        if($strListIdentifier != "elementList" && $this->getObjModule()->rightRight2()) {
+        if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightRight2()) {
             if((!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getObjModule()->getSystemid()))
                 $arrReturn[] = $this->objToolkit->listButton(
                     getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new.png")
                 );
 
         }
-        if($strListIdentifier == "elementList" && $this->getObjModule()->rightRight1()) {
+        if($strListIdentifier == class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightRight1()) {
             $arrReturn[] = $this->objToolkit->listButton(
                 getLinkAdmin($this->getArrModule("modul"), "newElement", "", $this->getLang("modul_element_neu"), $this->getLang("modul_element_neu"), "icon_new.png")
             );
@@ -304,7 +315,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator = new class_array_section_iterator(class_module_pages_page::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-        $strReturn .= $this->renderList($objArraySectionIterator);
+        $strReturn .= $this->renderList($objArraySectionIterator, false, class_module_pages_admin::STR_LIST_ALLPAGES);
 
         return $strReturn;
     }
@@ -684,7 +695,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objArraySectionIterator = new class_array_section_iterator(class_module_pages_element::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_pages_element::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-        $strReturn .= $this->renderList($objArraySectionIterator, false, "elementList");
+        $strReturn .= $this->renderList($objArraySectionIterator, false, class_module_pages_admin::STR_LIST_ELEMENTS);
 
         return $strReturn;
     }

@@ -634,7 +634,7 @@ KAJONA.admin.ajax = {
 						link.attr('title', strActiveText);
 					}
 
-                    KAJONA.admin.util.tooltip.addTooltip(link);
+                    KAJONA.admin.tooltip.addTooltip(link);
 				}
         	}
             else{
@@ -676,6 +676,95 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
         if($("#"+this))
             $("#"+this).closest(".control-group").addClass("error");
     });
+};
+
+KAJONA.admin.lists = {
+    arrSystemids : [],
+    strConfirm : '',
+    strCurrentUrl : '',
+    strCurrentTitle : '',
+    strDialogTitle : '',
+    strDialogStart : '',
+    intTotal : 0,
+
+
+    updateToolbar : function() {
+        if($("table.admintable  input:checked").length == 0) {
+            $('#massactionsWrapper').removeClass("visible");
+        }
+        else {
+            $('#massactionsWrapper').addClass("visible");
+        }
+    },
+
+    triggerAction : function(strTitle, strUrl) {
+        KAJONA.admin.lists.arrSystemids = [];
+        KAJONA.admin.lists.strCurrentUrl = strUrl;
+        KAJONA.admin.lists.strCurrentTitle = strTitle;
+
+        //get the selected elements
+        $("table.admintable  input:checked").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_") {
+                var sysid = $(this).closest("tr").data('systemid');
+                if(sysid != "")
+                    KAJONA.admin.lists.arrSystemids.push(sysid);
+            }
+        });
+
+
+        if(KAJONA.admin.lists.arrSystemids.length == 0)
+            return;
+
+        var curConfirm = KAJONA.admin.lists.strConfirm.replace('%amount%', KAJONA.admin.lists.arrSystemids.length);
+        curConfirm = curConfirm.replace('%title%', strTitle);
+
+        jsDialog_1.setTitle(KAJONA.admin.lists.strDialogTitle);
+        jsDialog_1.setContent(curConfirm, KAJONA.admin.lists.strDialogStart,  'javascript:KAJONA.admin.lists.executeActions();');
+        jsDialog_1.init();
+
+        //reset pending list on hide
+        $('#'+jsDialog_1.containerId).on('hidden', function () {
+            KAJONA.admin.lists.arrSystemids = [];
+        });
+
+        return false;
+    },
+
+    executeActions : function() {
+        console.log("starting execution");
+        KAJONA.admin.lists.intTotal = KAJONA.admin.lists.arrSystemids.length;
+
+        $('#massActionsProgress > .progresstitle').text(KAJONA.admin.lists.strCurrentTitle);
+        $('#massActionsProgress > .total').text(KAJONA.admin.lists.intTotal);
+        jsDialog_1.setContentRaw($('#massActionsProgress').html());
+
+        KAJONA.admin.lists.triggerSingleAction();
+    },
+
+    triggerSingleAction : function() {
+        if(KAJONA.admin.lists.arrSystemids.length > 0 && KAJONA.admin.lists.intTotal > 0) {
+            $('.mass_progressed').text((KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length +1));
+            $('.progress > .bar').css('width', ( (KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length) / KAJONA.admin.lists.intTotal   * 100)+'%');
+
+            var strUrl = KAJONA.admin.lists.strCurrentUrl.replace("%systemid%", KAJONA.admin.lists.arrSystemids[0]);
+            KAJONA.admin.lists.arrSystemids.shift();
+
+            $.ajax({
+                type: 'POST',
+                url: strUrl,
+                success: function() {
+                    KAJONA.admin.lists.triggerSingleAction();
+                },
+                dataType: 'text'
+            });
+        }
+        else {
+            document.location.reload();
+        }
+
+
+
+    }
 };
 
 /**

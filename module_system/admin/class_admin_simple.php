@@ -207,6 +207,8 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier)), $intI++);
         }
 
+        $arrMassActions = $this->getMassActionHandlers($strListIdentifier);
+
         if(count($arrIterables) > 0) {
 
             /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
@@ -216,9 +218,10 @@ abstract class class_admin_simple extends class_admin {
                     continue;
 
                 $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
-                $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++);
+                $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++, count($arrMassActions) > 0);
             }
         }
+
 
         if(is_array($this->getNewEntryAction($strListIdentifier)) || $this->getNewEntryAction($strListIdentifier) != "") {
             if(is_array($this->getNewEntryAction($strListIdentifier))) {
@@ -232,6 +235,10 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->dragableListFooter($strListId);
         else
             $strReturn .= $this->objToolkit->listFooter();
+
+        if(count($arrMassActions) > 0)
+            $strReturn .= $this->objToolkit->renderMassActionHandlers($arrMassActions);
+
 
         $strReturn .= $arrPageViews["pageview"];
 
@@ -470,6 +477,28 @@ abstract class class_admin_simple extends class_admin {
                 );
         }
         return "";
+    }
+
+    /**
+     * Overwrite this method if you want to provide a handler for a mass-action.
+     * If one or more handler(s) are returned, the checkboxes to select a list of records
+     * are rendered.
+     *
+     * @param $strListIdentifier
+     *
+     * @return class_admin_massaction[]
+     */
+    protected function getMassActionHandlers($strListIdentifier) {
+        return array();
+    }
+
+
+    protected function getDefaultActionHandlers() {
+        return array(
+            new class_admin_massaction(getImageAdmin("icon_delete.png"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_massaction_delete")),
+            new class_admin_massaction(getImageAdmin("icon_enabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_massaction_enable")),
+            new class_admin_massaction(getImageAdmin("icon_disabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_massaction_disable")),
+        );
     }
 
     /**

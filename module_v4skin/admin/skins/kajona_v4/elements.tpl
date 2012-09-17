@@ -138,6 +138,11 @@ Optional Element to close a list
 The general list will replace all other list types in the future.
 It is responsible for rendering the different admin-lists.
 Currently, there are two modes: with and without a description.
+
+<generallist_checkbox>
+    <input type="checkbox" name="kj_cb_%%systemid%%" id="kj_cb_%%systemid%%" onchange="KAJONA.admin.lists.updateToolbar();">
+</generallist_checkbox>
+
 <generallist_1>
     <tbody>
         <tr data-systemid="%%listitemid%%" class="generalListSet1">
@@ -200,6 +205,29 @@ Currently, there are two modes: with and without a description.
     </tbody>
 </generallist_desc_2>
 
+
+<massactions_wrapper>
+<div id="massactionsWrapper">
+    %%entries%%
+    <div id="massActionsProgress" style="display: none;">
+        <h5 class="progresstitle"></h5>
+        <span class="mass_progressed">0</span> / <span class="total">0</span>
+        <div class="progress progress-striped active" title="">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    KAJONA.admin.lists.strConfirm = '[lang,commons_massaction_confirm,pages]';
+    KAJONA.admin.lists.strDialogTitle = '[lang,commons_massaction_title,pages]';
+    KAJONA.admin.lists.strDialogStart = '[lang,commons_start,pages]';
+    KAJONA.admin.lists.updateToolbar();
+</script>
+</massactions_wrapper>
+
+<massactions_entry>
+    <a href="#" onclick="KAJONA.admin.lists.triggerAction('%%title%%', '%%targeturl%%');return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
+</massactions_entry>
 
 Divider to split up a page in logical sections
 <divider>
@@ -727,22 +755,6 @@ This Section is used to display a few special details about the current page bei
   </tr>
 </table><br /><br />
 </page_infobox>
-
-Infobox used by the filemanager
-<filemanager_infobox>
-<table class="statusFilemanager">
-  <tr>
-    <td style="padding-bottom: 5px;"></td>
-    <td style="text-align: right; white-space: nowrap;" rowspan="2">%%nrfilestitle%% %%files%%<br />%%nrfoldertitle%% %%folders%%</td>
-  </tr>
-  <tr>
-    <td class="actions">%%actions%%</td>
-  </tr>
-  <tr>
-    <td colspan="2" class="actions">%%extraactions%%</td>
-  </tr>
-</table>
-</filemanager_infobox>
 
 ---------------------------------------------------------------------------------------------------------
 -- RIGHTS MANAGEMENT ------------------------------------------------------------------------------------

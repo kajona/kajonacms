@@ -586,7 +586,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strAddons
      * @return string
      */
-    public function formInputDropdown($strName, $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "inputDropdown", $bitEnabled = true, $strAddons = "") {
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "inputDropdown", $bitEnabled = true, $strAddons = "") {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
@@ -804,14 +804,14 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Renders a simple admin-object, implementing interface_model
      *
-     * @param interface_admin_listable|interface_model $objEntry
+     * @param interface_admin_listable|interface_model|class_model $objEntry
      * @param $strActions
      * @param $intCount
-     * @return string
+     * @param bool $bitCheckbox
      *
-     * @todo: add checkbox functionality
+     * @return string
      */
-    public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount) {
+    public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount, $bitCheckbox = false) {
         $strImage = $objEntry->getStrIcon();
         if(is_array($strImage))
             $strImage = getImageAdmin($strImage[0], $strImage[1]);
@@ -824,7 +824,8 @@ class class_toolkit_admin extends class_toolkit {
             $strActions,
             $intCount,
             $objEntry->getStrAdditionalInfo(),
-            $objEntry->getStrLongDescription()
+            $objEntry->getStrLongDescription(),
+            $bitCheckbox
         );
     }
 
@@ -838,19 +839,23 @@ class class_toolkit_admin extends class_toolkit {
      * @param $intCount
      * @param string $strAdditionalInfo
      * @param string $strDescription
-     * @return string
+     * @param bool $bitCheckbox
      *
-     * @todo: add checkbox functionality
+     * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "") {
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false) {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
-        $arrTemplate["checkbox"] = "";
         $arrTemplate["image"] = $strIcon;
         $arrTemplate["title"] = $strName;
         $arrTemplate["center"] = $strAdditionalInfo;
         $arrTemplate["actions"] = $strActions;
         $arrTemplate["description"] = $strDescription;
+
+        if($bitCheckbox) {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_checkbox");
+            $arrTemplate["checkbox"] = $this->objTemplate->fillTemplate(array("systemid" => $strId), $strTemplateID);
+        }
 
         if($strDescription != "")
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc_".(($intCount % 2)+1));
@@ -860,6 +865,32 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
+    /**
+     *
+     * @param \class_admin_massaction[] $arrActions
+     *
+     * @return string
+     */
+    public function renderMassActionHandlers(array $arrActions) {
+        $strEntries = "";
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "massactions_entry");
+
+        foreach($arrActions as $objOneAction) {
+            $strEntries .= $this->objTemplate->fillTemplate(
+                array(
+                    "title" => $objOneAction->getStrTitle(),
+                    "icon" => $objOneAction->getStrIcon(),
+                    "targeturl" => $objOneAction->getStrTargetUrl()
+                ),
+                $strTemplateID
+            );
+        }
+
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "massactions_wrapper");
+        $strReturn = $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
+        $strReturn .= $this->jsDialog(1);
+        return $strReturn;
+    }
 
     /**
      * Returns a table filled with infos
@@ -868,7 +899,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param mixed $arrValues every entry is one row
      * @return string
      */
-    public function dataTable($arrHeader, $arrValues) {
+    public function dataTable(array $arrHeader, array $arrValues) {
         $strReturn = "";
         $intCounter = "";
         //The Table header & the templates
@@ -1106,26 +1137,15 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns a infox used by the filemanager
-     *
-     * @param mixed $arrContent
-     * @return string
-     * @deprecated
-     */
-    public function getFilemanagerInfoBox($arrContent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "filemanager_infobox");
-        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
-    }
-
-    /**
      * Creates the page to view & manipulate image.
      *
      * @since 3.2
      * @replace class_toolkit_admin::getFileDetails()
      * @param array $arrContent
      * @return string
+     *
      */
-    public function getMediamanagerImageDetails($arrContent) {
+    public function getMediamanagerImageDetails(array $arrContent) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "mediamanager_image_details");
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
@@ -1161,7 +1181,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function getTabbedContent($arrTabs) {
+    public function getTabbedContent(array $arrTabs) {
 
         $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_wrapper");
         $strHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabheader");
@@ -1199,7 +1219,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @since 3.4.0
      */
-    public function getLoginStatus($arrElements) {
+    public function getLoginStatus(array $arrElements) {
         //Loading a small login-form
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
         $strReturn = $this->objTemplate->fillTemplate($arrElements, $strTemplateID);
@@ -1285,7 +1305,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param mixed $arrEntries
      * @return string
      */
-    public function getPathNavigation($arrEntries) {
+    public function getPathNavigation(array $arrEntries) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "path_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "path_entry");
         $strRows = "";
@@ -1306,7 +1326,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param int $intActiveEntry Array-counting, so first element is 0, last is array-length - 1
      * @return string
      */
-    public function getContentToolbar($arrEntries, $intActiveEntry = -1) {
+    public function getContentToolbar(array $arrEntries, $intActiveEntry = -1) {
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_wrapper");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry");
         $strTemplateActiveEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry_active");
@@ -1459,7 +1479,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @deprecated migrate to getSimplePageview instead!
      */
-    public function getPageview($arrData, $intCurrentpage, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
+    public function getPageview(array $arrData, $intCurrentpage, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
         $arrReturn = array();
 
         if($intCurrentpage <= 0)
@@ -1617,7 +1637,7 @@ class class_toolkit_admin extends class_toolkit {
     // --- Adminwidget / Dashboard --------------------------------------------------------------------------
 
 
-    public function getMainDashboard($arrColumns) {
+    public function getMainDashboard(array $arrColumns) {
         return $this->objTemplate->fillTemplate(
             array("entries" => implode("", $arrColumns)),
             $this->objTemplate->readTemplate("/elements.tpl", "dashboard_wrapper")
@@ -1985,6 +2005,15 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+    /**
+     * Renders the list of aspects available
+     * @param $strLastModule
+     * @param $strLastAction
+     * @param $strLastSystemid
+     *
+     * @return string
+     * @todo param handling? remove params?
+     */
     public function getAspectChooser($strLastModule, $strLastAction, $strLastSystemid) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "aspect_chooser");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "aspect_chooser_entry");
@@ -2041,7 +2070,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param array $arrEntries
      * @return string
      */
-    public function getCalendarLegend($arrEntries) {
+    public function getCalendarLegend(array $arrEntries) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_legend");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_legend_entry");
 
@@ -2058,7 +2087,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param array $arrEntries
      * @return string
      */
-    public function getCalendarFilter($arrEntries) {
+    public function getCalendarFilter(array $arrEntries) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_filter");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_filter_entry");
 
@@ -2116,7 +2145,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @since 3.4
      */
-    public function getCalendarHeaderRow($arrHeader) {
+    public function getCalendarHeaderRow(array $arrHeader) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_header_row");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_header_entry");
 
@@ -2185,8 +2214,9 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strIdentifier
      * @param string[] $arrEntries
      * @return string
+     * @todo remove backend js parts
      */
-    public function registerMenu($strIdentifier, $arrEntries) {
+    public function registerMenu($strIdentifier, array $arrEntries) {
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry");
         $strDividerTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_divider_entry");
         $strSubmenuTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_submenucontainer_entry");
