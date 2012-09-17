@@ -956,7 +956,42 @@ label {
 
 }
 
+/* chosen select replacement */
+.chzn-container {
+	font-size: @baseFontSize !important;
+}
 
+.chzn-container-single {
+	.chzn-single {
+		color: @gray !important;
+		font-size: @baseFontSize !important;
+		height: 20px !important;
+		line-height: 20px !important;
+		padding: 4px !important;
+		.border-radius(0px) !important;
+		background-image: none !important;
+		-webkit-box-shadow: none !important;
+		-moz-box-shadow: none !important;
+		box-shadow: none !important;
+
+	}
+}
+
+.chzn-container .chzn-results .highlighted {
+	color: @white !important;
+	background-image: none !important;
+	background-color: @linkColor !important;
+}
+
+.chzn-container-active {
+	border-color: @green !important;
+	.box-shadow(0 0 6px @green+20);
+
+	.chzn-single {
+		border: 1px solid @grayDarker !important;
+
+	}
+}
 
 
 /* the login page */

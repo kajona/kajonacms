@@ -282,6 +282,14 @@ Dropdown
             <select name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
+
+    <script type="text/javascript">
+    KAJONA.admin.loader.loadFile(["_skinwebpath_/js/chosen/chosen.jquery.min.js", "_skinwebpath_/js/chosen/chosen.css"], function() {
+        var id = '#%%name%%'.replace("[", "\\[");
+        var id = id.replace("]", "\\]");
+        $(id).chosen();
+    }, true);
+    </script>
 </input_dropdown>
 
 <input_dropdown_row>
