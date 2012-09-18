@@ -193,18 +193,29 @@ class class_module_news_news extends class_model implements interface_model, int
     }
 
     /**
-	 * Loads all news from the database
-	 * if passed, the filter is used to load the news of the given category
-	 * If a start and end value is given, just a section of the list is being loaded
-	 *
-	 * @param string $strFilter
-	 * @param int $intStart
-	 * @param int $intEnd
-	 * @return class_module_news_news[]
-	 * @static
-	 */
-	public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
+     * Loads all news from the database
+     * if passed, the filter is used to load the news of the given category
+     * If a start and end value is given, just a section of the list is being loaded
+     *
+     * @param string $strFilter
+     * @param int $intStart
+     * @param int $intEnd
+     * @param class_date $objStartDate
+     * @param class_date $objEndDate
+     *
+     * @return class_module_news_news[]
+     * @static
+     */
+	public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null) {
         $arrParams = array();
+
+        $strDateWhere = "";
+        if($objStartDate != null && $objEndDate != null) {
+            $strDateWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
+            $arrParams[] = $objStartDate->getLongTimestamp();
+            $arrParams[] = $objEndDate->getLongTimestamp();
+        }
+
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id
 							FROM "._dbprefix_."news,
@@ -214,6 +225,7 @@ class class_module_news_news extends class_model implements interface_model, int
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
+							  ".$strDateWhere."
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
             $arrParams = array(dbsafeString($strFilter));
@@ -225,6 +237,7 @@ class class_module_news_news extends class_model implements interface_model, int
 							      "._dbprefix_."system_date
 							WHERE system_id = news_id
 							  AND system_id = system_date_id
+							  ".$strDateWhere."
 							ORDER BY system_date_start DESC";
 		}
 

@@ -17,7 +17,7 @@
  */
 class class_module_eventmanager_admin extends class_admin_simple implements interface_admin, interface_calendarsource_admin {
 
-    public static $STR_CALENDAR_FILTER_EVENT = "STR_CALENDAR_FILTER_EVENT";
+    const STR_CALENDAR_FILTER_EVENT = "STR_CALENDAR_FILTER_EVENT";
 
     const STR_LIST_PARTICPANTS = "STR_LIST_PARTICIPANTS";
 
@@ -361,7 +361,7 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
         $arrEntries = array();
 
 
-        if($this->objSession->getSession(self::$STR_CALENDAR_FILTER_EVENT) != "disabled") {
+        if($this->objSession->getSession(self::STR_CALENDAR_FILTER_EVENT) != "disabled") {
             $arrEvents = class_module_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
             foreach($arrEvents as $objOneEvent) {
 
@@ -398,7 +398,7 @@ class class_module_eventmanager_admin extends class_admin_simple implements inte
      */
     public function getArrFilterEntries() {
         return array(
-            self::$STR_CALENDAR_FILTER_EVENT => $this->getLang("calendar_filter_event"),
+            self::STR_CALENDAR_FILTER_EVENT => $this->getLang("calendar_filter_event"),
         );
     }
 
