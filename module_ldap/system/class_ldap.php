@@ -12,7 +12,7 @@
  * It is configured by the ldap.php file located at /system/config.
  * Please refer to this file in order to see how source-systes may be connected.
  *
- * @package module_ldaps
+ * @package module_ldap
  * @author sidler@mulchprod.de
  * @since 3.4.1
  * @see /system/config/config.php
