@@ -148,9 +148,6 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
 
         $strReturn = $this->renderList($objIterator, false, class_module_news_admin::STR_CAT_LIST);
 
-
-        $strReturn .= $this->objToolkit->divider();
-
         $objIterator = new class_array_section_iterator(class_module_news_news::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_news_news::getObjectList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
