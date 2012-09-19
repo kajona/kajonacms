@@ -206,28 +206,28 @@ Currently, there are two modes: with and without a description.
 </generallist_desc_2>
 
 
-<massactions_wrapper>
-<div id="massactionsWrapper">
+<batchactions_wrapper>
+<div class="batchActionsWrapper">
     %%entries%%
-    <div id="massActionsProgress" style="display: none;">
+    <div class="batchActionsProgress" style="display: none;">
         <h5 class="progresstitle"></h5>
-        <span class="mass_progressed">0</span> / <span class="total">0</span>
+        <span class="batch_progressed">0</span> / <span class="total">0</span>
         <div class="progress progress-striped active" title="">
             <div class="bar" style="width: 0%;"></div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    KAJONA.admin.lists.strConfirm = '[lang,commons_massaction_confirm,pages]';
-    KAJONA.admin.lists.strDialogTitle = '[lang,commons_massaction_title,pages]';
+    KAJONA.admin.lists.strConfirm = '[lang,commons_batchaction_confirm,pages]';
+    KAJONA.admin.lists.strDialogTitle = '[lang,commons_batchaction_title,pages]';
     KAJONA.admin.lists.strDialogStart = '[lang,commons_start,pages]';
     KAJONA.admin.lists.updateToolbar();
 </script>
-</massactions_wrapper>
+</batchactions_wrapper>
 
-<massactions_entry>
+<batchactions_entry>
     <a href="#" onclick="KAJONA.admin.lists.triggerAction('%%title%%', '%%targeturl%%');return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
-</massactions_entry>
+</batchactions_entry>
 
 Divider to split up a page in logical sections
 <divider>

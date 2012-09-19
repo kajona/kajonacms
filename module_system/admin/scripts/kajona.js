@@ -690,10 +690,10 @@ KAJONA.admin.lists = {
 
     updateToolbar : function() {
         if($("table.admintable  input:checked").length == 0) {
-            $('#massactionsWrapper').removeClass("visible");
+            $('.batchActionsWrapper').removeClass("visible");
         }
         else {
-            $('#massactionsWrapper').addClass("visible");
+            $('.batchActionsWrapper').addClass("visible");
         }
     },
 
@@ -734,16 +734,16 @@ KAJONA.admin.lists = {
         console.log("starting execution");
         KAJONA.admin.lists.intTotal = KAJONA.admin.lists.arrSystemids.length;
 
-        $('#massActionsProgress > .progresstitle').text(KAJONA.admin.lists.strCurrentTitle);
-        $('#massActionsProgress > .total').text(KAJONA.admin.lists.intTotal);
-        jsDialog_1.setContentRaw($('#massActionsProgress').html());
+        $('.batchActionsProgress > .progresstitle').text(KAJONA.admin.lists.strCurrentTitle);
+        $('.batchActionsProgress > .total').text(KAJONA.admin.lists.intTotal);
+        jsDialog_1.setContentRaw($('.batchActionsProgress').html());
 
         KAJONA.admin.lists.triggerSingleAction();
     },
 
     triggerSingleAction : function() {
         if(KAJONA.admin.lists.arrSystemids.length > 0 && KAJONA.admin.lists.intTotal > 0) {
-            $('.mass_progressed').text((KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length +1));
+            $('.batch_progressed').text((KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length +1));
             $('.progress > .bar').css('width', ( (KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length) / KAJONA.admin.lists.intTotal   * 100)+'%');
 
             var strUrl = KAJONA.admin.lists.strCurrentUrl.replace("%systemid%", KAJONA.admin.lists.arrSystemids[0]);
@@ -759,6 +759,10 @@ KAJONA.admin.lists = {
             });
         }
         else {
+            $('.batch_progressed').text((KAJONA.admin.lists.intTotal));
+            $('.progress > .bar').css('width', 100+'%');
+
+
             document.location.reload();
         }
 

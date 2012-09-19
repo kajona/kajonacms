@@ -237,7 +237,7 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->listFooter();
 
         if(count($arrMassActions) > 0)
-            $strReturn .= $this->objToolkit->renderMassActionHandlers($arrMassActions);
+            $strReturn .= $this->objToolkit->renderBatchActionHandlers($arrMassActions);
 
 
         $strReturn .= $arrPageViews["pageview"];
@@ -486,7 +486,7 @@ abstract class class_admin_simple extends class_admin {
      *
      * @param $strListIdentifier
      *
-     * @return class_admin_massaction[]
+     * @return class_admin_batchaction[]
      */
     protected function getMassActionHandlers($strListIdentifier) {
         return array();
@@ -495,9 +495,9 @@ abstract class class_admin_simple extends class_admin {
 
     protected function getDefaultActionHandlers() {
         return array(
-            new class_admin_massaction(getImageAdmin("icon_delete.png"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_massaction_delete")),
-            new class_admin_massaction(getImageAdmin("icon_enabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_massaction_enable")),
-            new class_admin_massaction(getImageAdmin("icon_disabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_massaction_disable")),
+            new class_admin_batchaction(getImageAdmin("icon_delete.png"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
+            new class_admin_batchaction(getImageAdmin("icon_enabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable")),
+            new class_admin_batchaction(getImageAdmin("icon_disabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable")),
         );
     }
 

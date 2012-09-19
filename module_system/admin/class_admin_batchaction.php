@@ -18,7 +18,7 @@
  * @since 4.0
  * @package module_system
  */
-class class_admin_massaction {
+class class_admin_batchaction {
     private $strIcon;
     private $strTitle;
     private $strTargetUrl;

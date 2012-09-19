@@ -867,13 +867,13 @@ class class_toolkit_admin extends class_toolkit {
 
     /**
      *
-     * @param \class_admin_massaction[] $arrActions
+     * @param \class_admin_batchaction[] $arrActions
      *
      * @return string
      */
-    public function renderMassActionHandlers(array $arrActions) {
+    public function renderBatchActionHandlers(array $arrActions) {
         $strEntries = "";
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "massactions_entry");
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "batchactions_entry");
 
         foreach($arrActions as $objOneAction) {
             $strEntries .= $this->objTemplate->fillTemplate(
@@ -886,7 +886,7 @@ class class_toolkit_admin extends class_toolkit {
             );
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "massactions_wrapper");
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "batchactions_wrapper");
         $strReturn = $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
         $strReturn .= $this->jsDialog(1);
         return $strReturn;
