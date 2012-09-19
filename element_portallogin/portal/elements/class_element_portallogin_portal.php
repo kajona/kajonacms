@@ -114,7 +114,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
                     $objUser->setStrAuthcode("");
                     $objUser->updateObjectToDb();
                     
-                    class_logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
+                    class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
 
                     $strReturn .= $this->getLang("resetSuccess");
                 }
