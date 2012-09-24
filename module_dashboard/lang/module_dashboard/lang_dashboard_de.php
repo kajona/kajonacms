@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["actionCalendar"]                  = "Kalender";
@@ -22,6 +22,7 @@ $lang["column2"]                         = "Spalte 2";
 $lang["column3"]                         = "Spalte 3";
 $lang["editWidget"]                      = "Widget bearbeiten";
 $lang["errorSavingWidget"]               = "Fehler beim Speichern des Widgets";
+$lang["globalSearchPlaceholder"]         = "Suchbegriff";
 $lang["modul_titel"]                     = "Übersicht";
 $lang["moduleRights"]                    = "Rechte";
 $lang["quickhelp_addWidgetToDashboard"]  = "Das Hinzufügen neuer Widgets zum Dashboard ist ein zweistufiger Prozess. Im ersten Schritt kann das hinzuzufügende Widget samt der Zielspalte bestimmt werden, im zweiten Schritt kann das anzulegende Widget konfiguriert werden.";

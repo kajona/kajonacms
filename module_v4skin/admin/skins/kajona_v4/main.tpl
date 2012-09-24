@@ -45,7 +45,7 @@
                 <div class="span8" style="text-align: right;">
                     <form class="navbar-search pull-left">
                         <i id="icon-lupe"></i>
-                        <input type="text" class="search-query" placeholder="Suchbegriff" id="globalSearchInput">
+                        <input type="text" class="search-query" placeholder="[lang,globalSearchPlaceholder,dashboard]" id="globalSearchInput">
                     </form>
                     %%languageswitch%%
 

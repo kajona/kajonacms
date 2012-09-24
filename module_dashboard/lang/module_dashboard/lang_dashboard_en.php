@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["actionCalendar"]                  = "Sitemap";
@@ -22,6 +22,7 @@ $lang["column2"]                         = "Column 2";
 $lang["column3"]                         = "Column 3";
 $lang["editWidget"]                      = "Edit widget";
 $lang["errorSavingWidget"]               = "Error saving the widget";
+$lang["globalSearchPlaceholder"]         = "Searchquery";
 $lang["modul_titel"]                     = "Overview";
 $lang["moduleRights"]                    = "Permissions";
 $lang["quickhelp_addWidgetToDashboard"]  = "To add a widget to the dashboard, you have to run a process consisting of two steps. In the first step, choose the widget to add and the column to pin it. In the second step, the widget itself can be configured.";
