@@ -357,7 +357,7 @@ HTML;
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputHidden("mutliuploadSystemid", $this->getSystemid());
 
-        $strReturn .= $this->objToolkit->formInputUploadMultiple("mediamanager_upload", $this->getLang("mediamanager_upload"), $objCurFile->getStrUploadFilter(), true, true);
+        $strReturn .= $this->objToolkit->formInputUploadMultiple("mediamanager_upload", $this->getLang("mediamanager_upload"), $objCurFile->getStrUploadFilter());
         $strReturn .= $this->objToolkit->formClose();
 
         if($this->getParam("datei_upload_final") != "") {

@@ -334,7 +334,7 @@ Checkbox
         <label for="%%name%%" class="control-label"></label>
         <div class="controls">
             <label class="checkbox">
-                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" %%checked%%>
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%%>
                 %%title%%
             </label>
         </div>
@@ -399,7 +399,6 @@ Upload-Field for multiple files with progress bar
 
         <div id="uploadContainerWrapper" class="well well-small">
             <div id="uploadContainer" >
-                <noscript>%%fallbackContent%%</noscript>
             </div>
             <div class="alert alert-info">
                 <button type="button" class="close" data-dismiss="alert">×</button>
@@ -500,7 +499,7 @@ function is called after selecting a date, e.g. to hide the calendar
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
+            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge %%class%%" size="16" type="text" value="%%valuePlain%%">
             <script>
                 KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js"], function() {
                     KAJONA.admin.loader.loadFile(["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
@@ -544,18 +543,6 @@ function is called after selecting a date, e.g. to hide the calendar
             </script>
         </div>
     </div>
-
-	<!--<div><label for="%%titleDay%%">%%title%% </label>-->
-		<!--<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />-->
-		<!--<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />-->
-		<!--<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />-->
-        <!--<a href="#" onclick="KAJONA.admin.calendar.showCalendar('%%calendarId%%', '%%calendarContainerId%%', this); return false;"><img src="_skinwebpath_/pics/icon_calendar.png" alt="" /></a>-->
-
-        <!--<input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />-->
-		<!--<input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />-->
-
-		<!--<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>-->
-	<!--</div><br />-->
 </input_datetime_simple>
 
 A page-selector.

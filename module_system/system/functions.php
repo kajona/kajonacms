@@ -530,18 +530,16 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @param string $strImage
  * @param string $strAlt
  * @param bool $bitNoAlt
- * @param string $strId
- * @param string $strStyle
+ *
  * @return string
  * @todo move to toolkit
- * @todo switch to popover instead of tooltip
  */
-function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $strStyle="") {
-    return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" ".($strAlt != "" ? " rel=\"tooltip\" " : "" )."  ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
+function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false) {
+    return "<img src=\""._skinwebpath_."/pics/".$strImage."\" ".($bitNoAlt ? " title=\"\" " : " alt=\"".$strAlt."\" title=\"".$strAlt."\" rel=\"tooltip\"  ")."  />";
 }
 
 /**
- * Determins the rights-filename of a system-record. Looks up if the record
+ * Determines the rights-filename of a system-record. Looks up if the record
  * uses its' own rights or inherits the rights from another record.
  *
  * @param string $strSystemid

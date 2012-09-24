@@ -38,7 +38,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @since 3.2.0.9
      */
-    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "inputDate", $bitWithTime = false) {
+    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false) {
         //check passed param
         if($objDateToShow != null && !$objDateToShow instanceof class_date)
             throw new class_exception("param passed to class_toolkit_admin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
@@ -73,8 +73,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarId"] = $strName;
         $strContainerId = $strName."_calendarContainer";
         $arrTemplate["calendarContainerId"] = $strContainerId;
-	    $arrTemplate["calendarLang_weekday"] =" [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
-	    $arrTemplate["calendarLang_month"]   =" [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
+        $arrTemplate["calendarLang_weekday"] = " [" . class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system") . "]\n";
+        $arrTemplate["calendarLang_month"] = " [" . class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system") . "]\n";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -181,8 +181,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
-/*"*****************************************************************************************************/
-// --- FORM-Elements ------------------------------------------------------------------------------------
+    /*"*****************************************************************************************************/
+    // --- FORM-Elements ------------------------------------------------------------------------------------
 
     /**
      * Returns a checkbox
@@ -197,6 +197,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkbox");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
+        $arrTemplate["class"] = $strClass;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["checked"] = ($bitChecked ? "checked=\"checked\"" : "");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -228,7 +229,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitReadonly
      * @return string
      */
-    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "inputText", $strOpener = "", $bitReadonly = false) {
+    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_text");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -251,7 +252,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitElements
      * @return string
      */
-    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText", $bitElements = true) {
+    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -309,7 +310,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false) {
+    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -387,7 +388,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @since 3.3.4
      */
-    public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "inputText") {
+    public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "") {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
@@ -414,7 +415,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @since 3.4.0
      */
-    public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
+    public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "") {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
@@ -457,7 +458,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitReadonly
      * @return string
      */
-    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "inputTextarea", $bitReadonly = false) {
+    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "", $bitReadonly = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_textarea");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -478,7 +479,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputPassword($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
+    public function formInputPassword($strName, $strTitle = "", $strValue = "", $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_password");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -498,7 +499,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitEnabled
      * @return string
      */
-    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "inputSubmit", $bitEnabled = true) {
+    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "", $bitEnabled = true) {
         if($strValue === null)
             $strValue = class_carrier::getInstance()->getObjLang()->getLang("commons_save", "system");
 
@@ -520,7 +521,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "inputText") {
+    public function formInputUpload($strName, $strTitle = "", $strClass = "") {
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
@@ -540,11 +541,9 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strName
      * @param string $strTitle
      * @param string $strAllowedFileTypes
-     * @param bool $bitMultiple
-     * @param bool $bitFallback
      * @return string
      */
-    public function formInputUploadMultiple($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false, $bitFallback = false) {
+    public function formInputUploadMultiple($strName, $strTitle, $strAllowedFileTypes) {
 
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
@@ -563,14 +562,6 @@ class class_toolkit_admin extends class_toolkit {
 
         $arrTemplate["upload_multiple_errorFilesize"] = $objText->getLang("upload_multiple_errorFilesize", "mediamanager")." ".bytesToString($objConfig->getPhpMaxUploadSize());
 
-        if ($bitFallback) {
-            $strFallbackForm = $this->formInputUpload($strName, $strTitle);
-            $strFallbackForm .= $this->formInputSubmit($objText->getLang("upload_multiple_uploadFiles", "mediamanager"));
-            $arrTemplate["fallbackContent"] = $strFallbackForm;
-        } else {
-            $arrTemplate["fallbackContent"] = $objText->getLang("upload_multiple_errorFlash", "mediamanager");
-        }
-
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -586,7 +577,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strAddons
      * @return string
      */
-    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "inputDropdown", $bitEnabled = true, $strAddons = "") {
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "") {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
@@ -655,7 +646,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formTextRow($strText, $strClass = "text") {
+    public function formTextRow($strText, $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row_form");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
@@ -670,7 +661,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formHeadline($strText, $strClass = "heading") {
+    public function formHeadline($strText, $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "headline_form");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
