@@ -50,7 +50,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
         if(!intWidth) {
             if($('#' + this.containerId).hasClass("fullsize")) {
-                intWidth = $(window).width() * 0.6;
+                intWidth = $(window).width() * 0.8;
             }
             else
                 intWidth = 400;
@@ -61,7 +61,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
                 intHeight = $(window).height() * 0.6;
             }
             else
-                intHeight = '100%';
+                intHeight = '';
         }
 
         $('#' + this.containerId).modal({
@@ -77,7 +77,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
 
         if(this.iframeURL != null) {
-            $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight-50)+' name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
+            $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight)+'" name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
             this.iframeURL = null;
         }
 

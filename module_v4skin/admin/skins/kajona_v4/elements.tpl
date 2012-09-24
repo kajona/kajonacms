@@ -892,17 +892,19 @@ The following sections are used to display the path-navigations, e.g. used by th
 -- CONTENT TOOLBAR --------------------------------------------------------------------------------------
 
 <contentToolbar_wrapper>
-    <table class="contentToolbar">
-        <tr>%%entries%%</tr>
-    </table>
+    <div class="navbar contentToolbar">
+        <div class="navbar-inner ">
+            <ul class="nav">%%entries%%</ul>
+        </div>
+    </div>
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-    <td>%%entry%%</td>
+    <li>%%entry%%</li>
 </contentToolbar_entry>
 
 <contentToolbar_entry_active>
-    <td class="active">%%entry%%</td>
+    <li class="active">%%entry%%</li>
 </contentToolbar_entry_active>
 
 ---------------------------------------------------------------------------------------------------------

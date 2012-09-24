@@ -281,17 +281,7 @@ body {
         clear: both;
     }
 
-    .detailedResults {
-        border-top: 1px solid @grayLight;
-        margin-top: 10px;
-        padding-bottom: 0;
 
-        .ui-state-hover {
-            color: @linkColor;
-            text-decoration: underline;
-            background-color: transparent;
-        }
-    }
 
 }
 
@@ -325,7 +315,7 @@ body {
 
 .search-dropdown-menu {
     background-clip: none;
-    background:url(../img/pusteblume-submenu.png) right bottom no-repeat @green;
+    background:url(../img/pusteblume-submenu.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
     border:0px;
     .border-radius(0px);
     display: none;
@@ -334,49 +324,55 @@ body {
     min-width: 160px;
     padding: 4px 0;
     text-align:left;
-    color:@white;
+    //color:@white;
 
     a {
         clear: both;
-        color: @white;
+        //color: @white;
         display: block;
         font-weight: normal;
-        font-size:@baseFontSize + 2;
+        //font-size:@baseFontSize + 2;
         line-height: 20px;
         padding: 4px 15px;
         white-space: nowrap;
     }
 
-    a:hover,
-    .active > a,
-    .active > a:hover {
-        background: none;
-        color: #434343;
-        text-decoration: none;
+
+
+    h3 {
+        font-weight: normal;
+        line-height: 1;
+    }
+
+    .detailedResults {
+        border-top: 1px solid @grayDark;
+        margin-top: 10px;
+        padding-bottom: 0;
     }
 }
 
 #portaleditor {
-  border:0px;
-		background:none;
-		text-transform:uppercase;
-	 font-weight:700;
-		font-size:@baseFontSize + 4;
-		color:#888;
-		height:24px;
-}
+    border: 0px;
+    background: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: @baseFontSize + 4;
+    color: #888;
+    height: 24px;
 
-#portaleditor:hover {
-  color:darken(#888, 10%);
-}
+    &:hover {
+        color:darken(#888, 10%);
 
-#portaleditor .icon-share {
-  height:21px;
-		width:23px;
-		position:relative;
-		top:3px;
-		margin-left:7px;
-		background:url(../img/portaleditor-arrow.png) left top no-repeat;
+    }
+
+    .icon-share {
+        height:21px;
+        width:23px;
+        position:relative;
+        top:3px;
+        margin-left:7px;
+        background:url(../img/portaleditor-arrow.png) left top no-repeat;
+    }
 }
 
 #icon-user {
@@ -546,10 +542,15 @@ body {
 
         .control-group {
             margin-bottom: @baseLineHeight - 12;
+
+            img {
+                vertical-align: top;
+                padding: 5px 0 0 5px;
+            }
         }
 
         .savechanges {
-            margin: 20px 0 0 220px;
+            margin: 10px 0 0 220px;
             border: 4px solid @grayLight;
             background: @kajonaLightGray none;
             .border-radius(0px);
@@ -740,6 +741,19 @@ body {
 	}
 
 
+    .contentToolbar {
+        .navbar-inner {
+            min-height: 0;
+            background-image: none;
+
+            .nav li a {
+                padding: 7px 15px 7px 24px;
+                background-repeat: no-repeat;
+                background-position: left center;
+
+            }
+        }
+    }
 
 }
 

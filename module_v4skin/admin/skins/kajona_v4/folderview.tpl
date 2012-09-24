@@ -40,7 +40,7 @@
     <div class="row-fluid">
 
         <!-- CONTENT CONTAINER -->
-        <div class="span10" id="content">
+        <div class="span12" id="content">
             %%content%%
         </div>
     </div>

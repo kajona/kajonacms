@@ -620,8 +620,6 @@ HTML;
      * @autoTestable
      */
     protected function actionFolderContentFolderviewMode() {
-        $strReturn = "";
-
         $strReturn = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js');</script>";
 
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
@@ -629,7 +627,6 @@ HTML;
         if ($this->getParam("CKEditorFuncNum") != "") {
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
-
 
         $strTargetfield = $this->getParam("form_element");
 
@@ -646,7 +643,16 @@ HTML;
                 //check rights
                 if($objOneRepo->rightView()) {
                     $strActions = "";
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png"));
+                    $strActions .= $this->objToolkit->listButton(
+                        getLinkAdmin(
+                            $this->getArrModule("modul"),
+                            "folderContentFolderviewMode",
+                            "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(),
+                            "",
+                            $this->getLang("actionOpenFolder"),
+                            "icon_folderActionOpen.png"
+                        )
+                    );
 
                     $strReturn .= $this->objToolkit->simpleAdminList($objOneRepo, $strActions, $intI++);
                 }
@@ -670,9 +676,7 @@ HTML;
                 else
                     $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objFile->getPrevId(), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")), $intI++);
 
-
                 foreach($arrSubfiles as $objOneFile) {
-
 
                     if($objOneFile->rightView()) {
                         $strActions = "";
@@ -695,7 +699,6 @@ HTML;
                             $strValue = _webpath_.$strValue;
                         }
 
-
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
                             $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.png"));
 
@@ -709,7 +712,7 @@ HTML;
                     $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
 
                 $strAddons = $this->generateNewFolderDialogCode();
-                $strAddons .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "inputSubmit");
+                $strAddons .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "btn");
                 $strAddons .= $this->actionUploadFileInternal();
 
                 $strReturn = $strAddons.$strReturn;

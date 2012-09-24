@@ -99,11 +99,16 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("userlist_filter"));
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
-        $strReturn .= $this->objToolkit->divider();
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_user_user::getObjectList($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(
+            class_module_user_user::getObjectList(
+                $this->objSession->getSession($this->STR_FILTER_SESSION_KEY),
+                $objArraySectionIterator->calculateStartPos(),
+                $objArraySectionIterator->calculateEndPos()
+            )
+        );
 
         $strReturn .= $this->renderList($objArraySectionIterator, false, "userList");
         return $strReturn;
