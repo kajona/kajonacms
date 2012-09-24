@@ -51,7 +51,7 @@
 
                     %%aspectChooser%%
                     <button id="portaleditor">
-                        Portaleditor
+                        Portal
                         <i class="icon-share"></i>
                     </button>
                 </div>

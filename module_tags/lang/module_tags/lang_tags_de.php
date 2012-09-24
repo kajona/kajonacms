@@ -7,11 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["actionAddToFavorites"]            = "Als Favorit ablegen";
 $lang["actionListFavorites"]             = "Favoriten anzeigen";
+$lang["actionShowAll"]                   = "Alle Tags anzeigen";
 $lang["actionShowAssignedRecords"]       = "Zugewiesene Datensätze anzeigen";
 $lang["adminskin_tooltip"]               = "Favoriten anzeigen";
 $lang["button_add"]                      = "Hinzufügen";

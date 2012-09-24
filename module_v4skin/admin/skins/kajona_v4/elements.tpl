@@ -699,6 +699,7 @@ Part to display the login status, user is logged in
             $.each($.parseJSON(data), function(index, item) {
                 $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
             });
+            $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='icon-tag'></i> [lang,actionShowAll,tags]</a></li>")
         }
     });
 </script>
