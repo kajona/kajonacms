@@ -50,7 +50,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
         if(!intWidth) {
             if($('#' + this.containerId).hasClass("fullsize")) {
-                intWidth = $(window).width() * 0.8;
+                intWidth = $(window).width() * 0.6;
             }
             else
                 intWidth = 400;

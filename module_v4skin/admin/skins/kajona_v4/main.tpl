@@ -50,10 +50,10 @@
                     %%languageswitch%%
 
                     %%aspectChooser%%
-                    <button id="portaleditor">
+                    <a id="portaleditor" class="btn" href="_webpath_">
                         Portal
                         <i class="icon-share"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

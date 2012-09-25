@@ -109,14 +109,12 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                 $strWidgetId,
                 $strWidgetName,
                 $strGeneratedContent,
-                ($objDashboardWidget->rightEdit() ?
-                    getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.png") : ""),
-                    ($objDashboardWidget->rightDelete() ?
-                    $this->objToolkit->listDeleteButton(
-                        $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
-                        $this->getLang("widgetDeleteQuestion"),
-                        getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
-                    )  : ""),
+                ($objDashboardWidget->rightEdit() ? getLinkAdminDialog("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_pencil.png") : ""),
+                ($objDashboardWidget->rightDelete() ? $this->objToolkit->listDeleteButton(
+                    $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
+                    $this->getLang("widgetDeleteQuestion"),
+                    getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
+                )  : ""),
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
             )
         );
@@ -350,6 +348,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
      */
     protected function actionEditWidget() {
         $strReturn = "";
+        $this->setArrModuleEntry("template", "/folderview.tpl");
         if($this->getParam("saveWidget") == "") {
             $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
             $objWidget = $objDashboardwidget->getConcreteAdminwidget();
@@ -373,7 +372,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             if(!$objDashboardwidget->updateObjectToDb())
                 throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", "&peClose=1"));
         }
 
         return $strReturn;

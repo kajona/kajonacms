@@ -750,22 +750,22 @@ This Section is used to display a few special details about the current page bei
 The following sections specify the layout of the rights-mgmt
 
 <rights_form_header>
-	<div align="left">%%desc%% %%record%% <br /><br /></div>
+	<div>%%desc%% %%record%% <br /><br /></div>
 </rights_form_header>
 
 <rights_form_form>
-<table style="width: 98%;">
-	<tr class="adminListRow1">
-		<td width=\"19%\">&nbsp;</td>
-		<td width=\"9%\">%%title0%%</td>
-		<td width=\"9%\">%%title1%%</td>
-		<td width=\"9%\">%%title2%%</td>
-		<td width=\"9%\">%%title3%%</td>
-		<td width=\"9%\">%%title4%%</td>
-		<td width=\"9%\">%%title5%%</td>
-		<td width=\"9%\">%%title6%%</td>
-		<td width=\"9%\">%%title7%%</td>
-		<td width=\"9%\">%%title8%%</td>
+<table class="table admintable table-striped">
+	<tr class="">
+		<th>&nbsp;</td>
+		<th>%%title0%%</td>
+		<th>%%title1%%</td>
+		<th>%%title2%%</td>
+		<th>%%title3%%</td>
+		<th>%%title4%%</td>
+		<th>%%title5%%</td>
+		<th>%%title6%%</td>
+		<th>%%title7%%</td>
+		<th>%%title8%%</td>
 	</tr>
 	%%rows%%
 </table>
@@ -773,48 +773,48 @@ The following sections specify the layout of the rights-mgmt
 </rights_form_form>
 
 <rights_form_row_1>
-	<tr class="adminListRow1">
-		<td width=\"19%\">%%group%%</td>
-		<td width=\"9%\">%%box0%%</td>
-		<td width=\"9%\">%%box1%%</td>
-		<td width=\"9%\">%%box2%%</td>
-		<td width=\"9%\">%%box3%%</td>
-		<td width=\"9%\">%%box4%%</td>
-		<td width=\"9%\">%%box5%%</td>
-		<td width=\"9%\">%%box6%%</td>
-		<td width=\"9%\">%%box7%%</td>
-		<td width=\"9%\">%%box8%%</td>
+	<tr class="">
+		<td>%%group%%</td>
+		<td>%%box0%%</td>
+		<td>%%box1%%</td>
+		<td>%%box2%%</td>
+		<td>%%box3%%</td>
+		<td>%%box4%%</td>
+		<td>%%box5%%</td>
+		<td>%%box6%%</td>
+		<td>%%box7%%</td>
+		<td>%%box8%%</td>
 	</tr>
 </rights_form_row_1>
 <rights_form_row_2>
-	<tr class="adminListRow2">
-		<td width=\"19%\">%%group%%</td>
-		<td width=\"9%\">%%box0%%</td>
-		<td width=\"9%\">%%box1%%</td>
-		<td width=\"9%\">%%box2%%</td>
-		<td width=\"9%\">%%box3%%</td>
-		<td width=\"9%\">%%box4%%</td>
-		<td width=\"9%\">%%box5%%</td>
-		<td width=\"9%\">%%box6%%</td>
-		<td width=\"9%\">%%box7%%</td>
-		<td width=\"9%\">%%box8%%</td>
+	<tr class="">
+		<td>%%group%%</td>
+		<td>%%box0%%</td>
+		<td>%%box1%%</td>
+		<td>%%box2%%</td>
+		<td>%%box3%%</td>
+		<td>%%box4%%</td>
+		<td>%%box5%%</td>
+		<td>%%box6%%</td>
+		<td>%%box7%%</td>
+		<td>%%box8%%</td>
 	</tr>
 </rights_form_row_2>
 
 <rights_form_inherit>
-<table style="width: 90%;">
-	<tr>
-      <td style="width: 10%;" class="listecontent">%%title%%</td>
-      <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% /></div></td>
-    </tr>
-</table>
+<div class="control-group">
+    <label class="control-label" for="%%name%%">%%title%%</label>
+    <div class="controls">
+        <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+    </div>
+</div>
+
 </rights_form_inherit>
 
 ---------------------------------------------------------------------------------------------------------
 -- FOLDERVIEW -------------------------------------------------------------------------------------------
 
-UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame are removed since no longer needed.
-               Replaced by the section folderview_image_details
+
 
 <mediamanager_image_details>
 <div class="folderview_image_details">
