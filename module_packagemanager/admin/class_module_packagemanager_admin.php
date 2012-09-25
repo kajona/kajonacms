@@ -97,9 +97,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     );
                 }
                 else {
-                    $strActions .= $this->objToolkit->listButton(
-                        getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion)
-                    );
+                    $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")));
                 }
             }
 
@@ -311,6 +309,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function actionListTemplates() {
 
+        class_module_packagemanager_template::syncTemplatepacks();
+
         $objArraySectionIterator = new class_array_section_iterator(class_module_packagemanager_template::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
@@ -348,6 +348,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             else
                 return $this->objToolkit->listStatusButton($objListEntry, true);
         }
+
+        return "";
     }
 
 
@@ -361,6 +363,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     $objListEntry->getStrDisplayName(), $this->getLang("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "deleteTemplate", "&systemid=".$objListEntry->getSystemid()."")
                 );
         }
+
+        return "";
     }
 
     /**
@@ -403,7 +407,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         foreach($arrModules as $strOneModule) {
             //validate if there's a template-folder existing
             if(is_dir(_corepath_."/".$strOneModule."/templates"))
-                $objFormgenerator->addField(new class_formentry_checkbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue(true);
+                $objFormgenerator->addField(new class_formentry_checkbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue($strOneModule == "module_pages");
         }
         return $objFormgenerator;
     }
@@ -436,5 +440,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         }
 
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        return "";
     }
 }
