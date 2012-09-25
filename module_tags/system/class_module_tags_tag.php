@@ -30,6 +30,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     private $strName;
 
     /**
+     * @var
+     * @tableColumn tags_tag_private
+     */
+    private $intPrivate = 0;
+
+    /**
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objects)
@@ -63,7 +69,11 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return $this->getIntAssignments()." ".$this->getLang("tag_assignments", "tags");
+        $strReturn = $this->getIntAssignments()." ".$this->getLang("tag_assignments", "tags");
+        if($this->getIntPrivate() == 1)
+            $strReturn .= ", ".$this->getLang("form_tag_private", "tags");
+
+        return $strReturn;
     }
 
     /**
@@ -107,7 +117,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public static function getTagsForSystemid($strSystemid, $strAttribute = null) {
 
-        $arrParams = array($strSystemid);
+        $arrParams = array($strSystemid, class_carrier::getInstance()->getObjSession()->getUserID());
 
         $strWhere = "";
         if($strAttribute != null) {
@@ -120,6 +130,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                             "._dbprefix_."tags_tag
                       WHERE tags_systemid = ?
                         AND tags_tag_id = tags_tagid
+                        AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                           ".$strWhere."
                    ORDER BY tags_tag_name ASC";
 
@@ -182,9 +193,10 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                             "._dbprefix_."system
                       WHERE tags_tag_id = tags_tagid
                         AND tags_tag_id = system_id
+                        AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                         AND system_status = 1";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID()));
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tagid"]);
@@ -210,9 +222,10 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                             "._dbprefix_."system as system
                       WHERE tags_tagid = ?
                         AND system.system_id = member.tags_systemid
+                        AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                         AND system.system_status = 1";
 
-        return $this->objDB->getPArray($strQuery, array($this->getSystemid()));
+        return $this->objDB->getPArray($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
     }
 
     /**
@@ -223,11 +236,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function getIntAssignments() {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member as member,
-                            "._dbprefix_."system as system
-                      WHERE tags_tagid = ?
-                        AND system.system_id = member.tags_systemid";
+                            "._dbprefix_."tags_tag as tag
+                      WHERE member.tags_tagid = ?
+                        AND member.tags_tagid = tag.tags_tag_id
+                        AND (tags_tag_private IS NULL OR tag.tags_tag_private != 1 OR member.tags_owner IS NULL OR member.tags_owner = '' OR member.tags_owner = ?) ";
 
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
         return $arrRow["COUNT(*)"];
     }
 
@@ -241,12 +255,15 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function getArrAssignedRecords($intStart = null, $intEnd = null) {
         $strQuery = "SELECT system.system_id
                        FROM "._dbprefix_."tags_member as member,
+                            "._dbprefix_."tags_tag,
                             "._dbprefix_."system as system
                       WHERE tags_tagid = ?
+                        AND tags_tagid = tags_tag_id
                         AND system.system_id = member.tags_systemid
+                        AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                    ORDER BY system_comment ASC";
 
-        $arrRecords = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
+        $arrRecords = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $this->objSession->getUserID()), $intStart, $intEnd);
 
         $arrReturn = array();
         foreach($arrRecords as $arrOneRecord)
@@ -267,23 +284,32 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         if($strAttribute == null)
             $strAttribute = "";
 
+        $arrParams = array($strTargetSystemid, $this->getSystemid(), $strAttribute);
+
         $this->objDB->flushQueryCache();
+
+        $strPrivate = "";
+        if($this->getIntPrivate() == 1) {
+            $strPrivate = "AND tags_owner = ?";
+            $arrParams[] = $this->objSession->getUserID();
+        }
 
         //check of not already set
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member
                       WHERE tags_systemid= ?
                         AND tags_tagid = ?
-                        AND tags_attribute = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute), 0, false);
+                        AND tags_attribute = ?
+                        ".$strPrivate;
+        $arrRow = $this->objDB->getPRow($strQuery, $arrParams, 0, false);
         if($arrRow["COUNT(*)"] != 0)
             return true;
 
         $strQuery = "INSERT INTO "._dbprefix_."tags_member
-                      (tags_systemid, tags_tagid, tags_attribute) VALUES
-                      (?, ?, ?)";
+                      (tags_systemid, tags_tagid, tags_attribute, tags_owner) VALUES
+                      (?, ?, ?, ?)";
 
-        return $this->objDB->_pQuery($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute));
+        return $this->objDB->_pQuery($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute, $this->objSession->getUserID()));
     }
 
     /**
@@ -295,12 +321,20 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public function removeFromSystemrecord($strTargetSystemid, $strAttribute = null) {
 
+        $arrParams = array($strTargetSystemid, $strAttribute, $this->getSystemid());
+        $strPrivate = "";
+        if($this->getIntPrivate() == 1) {
+            $strPrivate = "AND (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?)";
+            $arrParams[] = $this->objSession->getUserID();
+        }
+
         $strQuery = "DELETE FROM "._dbprefix_."tags_member
                            WHERE tags_systemid = ?
                              AND tags_attribute = ?
-                             AND tags_tagid = ?";
+                             AND tags_tagid = ?
+                             ".$strPrivate;
 
-        return $this->objDB->_pQuery($strQuery, array($strTargetSystemid, $strAttribute, $this->getSystemid()));
+        return $this->objDB->_pQuery($strQuery, $arrParams);
     }
 
     /**
@@ -335,8 +369,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @param $strOldSystemid
      * @param $strNewSystemid
      *
-     * @internal param $strSystemid
-     * @internal param $intNewStatus
      * @return bool
      */
     public function handleRecordCopiedEvent($strOldSystemid, $strNewSystemid) {
@@ -345,8 +377,8 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                       WHERE tags_systemid = ?";
         $arrRows = $this->objDB->getPArray($strQuery, array($strOldSystemid));
         foreach($arrRows as $arrSingleRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_tagid, tags_systemid, tags_attribute) VALUES (?, ?, ?)";
-            $this->objDB->_pQuery($strQuery, array($arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"]));
+            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?)";
+            $this->objDB->_pQuery($strQuery, array($arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
         }
 
         return true;
@@ -365,6 +397,23 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function setStrName($strName) {
         $this->strName = trim($strName);
     }
+
+    /**
+     * @param  $intPrivate
+     */
+    public function setIntPrivate($intPrivate) {
+        $this->intPrivate = $intPrivate;
+    }
+
+    /**
+     * @return int
+     * @fieldType yesno
+     * @fieldMandatory
+     */
+    public function getIntPrivate() {
+        return $this->intPrivate;
+    }
+
 
 
 }

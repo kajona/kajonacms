@@ -31,6 +31,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$arrFields = array();
 		$arrFields["tags_tag_id"] 		= array("char20", false);
 		$arrFields["tags_tag_name"] 	= array("char254", true);
+		$arrFields["tags_tag_private"] 	= array("int", true);
 
 		if(!$this->objDB->createTable("tags_tag", $arrFields, array("tags_tag_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -42,8 +43,9 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$arrFields["tags_systemid"] 	= array("char20", false);
 		$arrFields["tags_tagid"]        = array("char20", false);
 		$arrFields["tags_attribute"]    = array("char254", true);
+		$arrFields["tags_owner"]        = array("char20", true);
 
-		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_systemid", "tags_tagid", "tags_attribute")))
+		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_systemid", "tags_tagid", "tags_attribute", "tags_owner")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -110,6 +112,12 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_3491();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -135,12 +143,44 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $arrFields["tags_fav_userid"]       = array("char20", true);
 
         if(!$this->objDB->createTable("tags_favorite", $arrFields, array("tags_fav_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("tags", "3.4.9");
+
+        return $strReturn;
+    }
+
+    private function update_349_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
+
+        $strReturn .= "Adding columns for private tag assignments...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
+                    ADD ".$this->objDB->encloseColumnName("tags_owner")." ".$this->objDB->getDatatype("char20")." NULL";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_tag")."
+                    ADD ".$this->objDB->encloseColumnName("tags_tag_private")." ".$this->objDB->getDatatype("int")." NULL";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
+                      DROP PRIMARY KEY,
+                      ADD PRIMARY KEY(tags_systemid, tags_tagid, tags_attribute, tags_owner)";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "3.4.9.1");
 
         return $strReturn;
     }

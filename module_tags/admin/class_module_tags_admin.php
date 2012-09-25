@@ -89,12 +89,12 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
      * @return string
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
-        if($objListEntry instanceof class_module_tags_tag) {
+        if($objListEntry instanceof class_module_tags_favorite) {
             if($objListEntry->rightDelete()) {
                 return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid()));
             }
         }
-        else if($objListEntry instanceof class_module_tags_favorite) {
+        else if($objListEntry instanceof class_module_tags_tag) {
             return parent::renderDeleteAction($objListEntry);
         }
 
