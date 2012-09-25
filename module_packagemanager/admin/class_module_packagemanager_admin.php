@@ -431,6 +431,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $objFilesystem = new class_filesystem();
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName);
+        $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/tpl");
+        $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/css");
+        $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/js");
 
         $arrModules = $this->getParam("pack_modules");
         foreach($arrModules as $strName => $strValue) {
