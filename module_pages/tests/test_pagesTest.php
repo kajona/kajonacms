@@ -44,13 +44,13 @@ class class_test_pages extends class_testbase {
         for($intI = 0; $intI < 10; $intI++) {
             $objPages = new class_module_pages_page();
             $objPages->setStrName("autotest_".$intI);
-            $objPages->setStrTemplate("kajona_demo.tpl");
+            $objPages->setStrTemplate("standard.tpl");
             $objPages->updateObjectToDb();
             $strPageID = $objPages->getSystemid();
             $arrPagesCreated[] = $strPageID;
             $objPage = new class_module_pages_page($strPageID);
             $this->assertEquals($objPage->getStrName(), "autotest_".$intI, __FILE__." checkNameOfPageCreated");
-            $this->assertEquals($objPage->getStrTemplate(), "kajona_demo.tpl", __FILE__." checkTemplateOfPageCreated");
+            $this->assertEquals($objPage->getStrTemplate(), "standard.tpl", __FILE__." checkTemplateOfPageCreated");
         }
 
         $arrPagesAtLevel = class_module_pages_folder::getPagesInFolder(class_module_system_module::getModuleByName("pages")->getSystemid());
@@ -94,7 +94,7 @@ class class_test_pages extends class_testbase {
         $objPage->setStrBrowsername(generateSystemid());
         $objPage->setStrSeostring(generateSystemid());
         $objPage->setStrDesc(generateSystemid());
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb();
 
         $strOldSystemid = $objPage->getSystemid();

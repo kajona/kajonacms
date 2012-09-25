@@ -40,7 +40,7 @@ class class_installer_sc_formular implements interface_sc_installer  {
         $objPage = new class_module_pages_page();
         $objPage->setStrName("contact");
         $objPage->setStrBrowsername("Contact");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strNaviFolderId);
 
         $strPageId = $objPage->getSystemid();

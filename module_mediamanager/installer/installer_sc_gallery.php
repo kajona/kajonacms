@@ -58,7 +58,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPage = new class_module_pages_page();
         $objPage->setStrName("gallery");
         $objPage->setStrBrowsername("Gallery");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strNaviFolderId);
 
         $strGalleryPageId = $objPage->getSystemid();

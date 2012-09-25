@@ -52,7 +52,7 @@ class class_installer_sc_tags implements interface_sc_installer  {
             else
                 $objPage->setStrBrowsername("Tags");
 
-            $objPage->setStrTemplate("kajona_demo.tpl");
+            $objPage->setStrTemplate("standard.tpl");
             $objPage->updateObjectToDb($strNaviFolderId);
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";

@@ -89,7 +89,7 @@ class class_installer_sc_news implements interface_sc_installer  {
         $objPage = new class_module_pages_page();
         $objPage->setStrName("newsdetails");
         $objPage->setStrBrowsername("News");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb();
         $strNewsdetailsId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";

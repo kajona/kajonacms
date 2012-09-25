@@ -42,7 +42,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPage = new class_module_pages_page();
         $objPage->setStrName("postacomment");
         $objPage->setStrBrowsername("Postacomment Sample");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strNaviFolderId);
 
         $strPostacommentPageID = $objPage->getSystemid();

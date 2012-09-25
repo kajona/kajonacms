@@ -20,7 +20,7 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPage1->setStrName("testpage1");
         $objPage1->setStrBrowsername("testpage1");
         $objPage1->setIntType(class_module_pages_page::$INT_TYPE_PAGE);
-        $objPage1->setStrTemplate("kajona_demo.tpl");
+        $objPage1->setStrTemplate("standard.tpl");
         $objPage1->updateObjectToDb($objFolder->getSystemid());
         self::$strPage1Systemid = $objPage1->getSystemid();
 
@@ -44,7 +44,7 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPage3->setStrName("testpage2a");
         $objPage3->setStrBrowsername("testpage2a");
         $objPage3->setIntType(class_module_pages_page::$INT_TYPE_PAGE);
-        $objPage3->setStrTemplate("kajona_demo.tpl");
+        $objPage3->setStrTemplate("standard.tpl");
         $objPage3->updateObjectToDb($objPage2->getSystemid());
         self::$strPage2aSystemid = $objPage3->getSystemid();
 

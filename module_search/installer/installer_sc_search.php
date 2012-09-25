@@ -52,7 +52,7 @@ class class_installer_sc_search implements interface_sc_installer  {
             else
                 $objPage->setStrBrowsername("Search results");
 
-            $objPage->setStrTemplate("kajona_demo.tpl");
+            $objPage->setStrTemplate("standard.tpl");
             $objPage->updateObjectToDb($strSystemFolderId);
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";

@@ -37,7 +37,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
         $strReturn .= "Setting default template...\n";
         $objConstant = class_module_system_setting::getConfigByName("_pages_defaulttemplate_");
-        $objConstant->setStrValue("kajona_demo.tpl");
+        $objConstant->setStrValue("standard.tpl");
         $objConstant->updateObjectToDb();
 
 
@@ -67,7 +67,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $objPage->setStrBrowsername("Welcome");
         }
 
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb();
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
@@ -157,7 +157,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $objPage->setStrBrowsername("Error");
 
 
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strSystemFolderID);
         $strErrorPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
@@ -231,7 +231,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $objPage->setStrBrowsername("Impressum");
         else
             $objPage->setStrBrowsername("Imprint");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strSystemFolderID);
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
@@ -319,7 +319,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $objPage->setStrBrowsername("Beispielseite 1");
         else
             $objPage->setStrBrowsername("Sample page 1");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strMainnavigationFolderID);
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
@@ -401,7 +401,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $objPage->setStrBrowsername("Beispiel-Unterseite 1");
         else
             $objPage->setStrBrowsername("Sample subpage 1");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strSamplePageId);
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";

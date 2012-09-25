@@ -116,7 +116,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objPage = new class_module_pages_page();
         $objPage->setStrName("sitemap");
         $objPage->setStrBrowsername("Sitemap");
-        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb();
         $strSitemapId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSitemapId."\n";
