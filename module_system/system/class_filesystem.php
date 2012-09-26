@@ -311,14 +311,14 @@ class class_filesystem {
             if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file(_realpath_.$strTargetDir."/".$strOneEntry))) {
 
                 if(!is_dir(_realpath_.$strTargetDir)) {
-                    mkdir(_realpath_.$strTargetDir);
+                    mkdir(_realpath_.$strTargetDir, 0777, true);
                 }
 
                 copy(_realpath_.$strSourceDir."/".$strOneEntry, _realpath_.$strTargetDir."/".$strOneEntry);
             }
             else if(is_dir(_realpath_.$strSourceDir."/".$strOneEntry)) {
                 if(!is_dir(_realpath_.$strTargetDir."/".$strOneEntry)) {
-                    mkdir(_realpath_.$strTargetDir."/".$strOneEntry);
+                    mkdir(_realpath_.$strTargetDir."/".$strOneEntry, 0777, true);
                 }
 
                 $this->folderCopyRecursive($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry, $bitOverwrite);

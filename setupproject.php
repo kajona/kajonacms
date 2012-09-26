@@ -62,6 +62,7 @@ class class_project_setup {
 
         self::createClassloaderConfig();
         self::createLangProjectEntry();
+        self::createDefaultTemplateEntry();
 
 
         echo "searching for files on root-path...\n";
@@ -145,7 +146,7 @@ Kajona V4 lang subsystem.
 
     Since Kajona V4, it is possible to change the default-lang files by deploying them inside the projects'
     lang-folder.
-    This provides a way to change texts and lables without breaking them during the next system-update.
+    This provides a way to change texts and labels without breaking them during the next system-update.
 
     Example: By default, the Template-Manager is titled "Packagemanagement".
     The entry is created by the file
@@ -167,6 +168,26 @@ Kajona V4 lang subsystem.
 
 TXT;
         file_put_contents(_realpath_."/project/lang/readme.txt", $strContent);
+    }
+
+    private static function createDefaultTemplateEntry() {
+        $strContent = <<<TXT
+
+Kajona V4 default template-pack.
+
+Please don't change anything within this folder, updated may break your changes
+and overwrite them without further warning.
+
+If you want to adjust or change anything, create a new template pack using the
+backend (module package-management, list templates, create new template) and
+select the templates to redefine.
+
+Afterwards change the files in your new templatepack and activate the pack
+in the backend via the package-management.
+
+
+TXT;
+        file_put_contents(_realpath_."/templates/default/readme.txt", $strContent);
     }
 
 

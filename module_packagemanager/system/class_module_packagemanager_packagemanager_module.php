@@ -79,6 +79,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $objFilesystem->folderDeleteRecursive($strSource);
     }
 
+
     /**
      * Invokes the installer, if given.
      * The installer itself is capable of detecting whether an update or a plain installation is required.
@@ -131,6 +132,17 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
                 $strReturn .= $objInstaller->installOrUpdate();
             }
         }
+
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /core/".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
+        $strReturn .= "Updating default template pack...\n";
+        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js"))
+            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
+
+        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css"))
+            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
+
+        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"))
+            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
 
         return $strReturn;
     }
