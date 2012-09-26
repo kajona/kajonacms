@@ -37,5 +37,8 @@ class class_formentry_image extends class_formentry_base implements interface_fo
         return $strReturn;
     }
 
+    public function getStrValue() {
+        return uniStrReplace(_webpath_, "", parent::getStrValue());
+    }
 
 }

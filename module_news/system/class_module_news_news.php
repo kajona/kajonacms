@@ -12,10 +12,9 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
- *
  * @targetTable news.news_id
  */
-class class_module_news_news extends class_model implements interface_model, interface_admin_listable  {
+class class_module_news_news extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
@@ -89,7 +88,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return $this->getIntHits()." ".$this->getLang("commons_hits_header", "news");
+        return $this->getIntHits() . " " . $this->getLang("commons_hits_header", "news");
     }
 
     /**
@@ -98,9 +97,9 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        return "S: ".dateToString(new class_date($this->getIntDateStart()), false)
-            .($this->getIntDateEnd() != 0 ?" E: ".dateToString(new class_date($this->getIntDateEnd()), false) : "" )
-            .($this->getIntDateSpecial() != 0 ? " A: ".dateToString(new class_date($this->getIntDateSpecial()), false) : "" );
+        return "S: " . dateToString(new class_date($this->getIntDateStart()), false)
+            . ($this->getIntDateEnd() != 0 ? " E: " . dateToString(new class_date($this->getIntDateEnd()), false) : "")
+            . ($this->getIntDateSpecial() != 0 ? " A: " . dateToString(new class_date($this->getIntDateSpecial()), false) : "");
     }
 
     /**
@@ -118,7 +117,7 @@ class class_module_news_news extends class_model implements interface_model, int
         $this->setIntDateEnd($arrRow["system_date_end"]);
         $this->setIntDateStart($arrRow["system_date_start"]);
         $this->setIntDateSpecial($arrRow["system_date_special"]);
-     }
+    }
 
     /**
      * saves the current object as a new object to the database
@@ -131,14 +130,17 @@ class class_module_news_news extends class_model implements interface_model, int
         $objEndDate = null;
         $objSpecialDate = null;
 
-        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "")
+        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "") {
             $objStartDate = new class_date($this->getIntDateStart());
+        }
 
-        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "")
+        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "") {
             $objEndDate = new class_date($this->getIntDateEnd());
+        }
 
-        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "")
+        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "") {
             $objSpecialDate = new class_date($this->getIntDateSpecial());
+        }
 
         $bitReturn = $this->createDateRecord($this->getSystemid(), $objStartDate, $objEndDate, $objSpecialDate);
 
@@ -152,14 +154,17 @@ class class_module_news_news extends class_model implements interface_model, int
         $objEndDate = null;
         $objSpecialDate = null;
 
-        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "")
+        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "") {
             $objStartDate = new class_date($this->getIntDateStart());
+        }
 
-        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "")
+        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "") {
             $objEndDate = new class_date($this->getIntDateEnd());
+        }
 
-        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "")
+        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "") {
             $objSpecialDate = new class_date($this->getIntDateSpecial());
+        }
 
         //dates
         $this->updateDateRecord($this->getSystemid(), $objStartDate, $objEndDate, $objSpecialDate);
@@ -169,11 +174,12 @@ class class_module_news_news extends class_model implements interface_model, int
             class_module_news_category::deleteNewsMemberships($this->getSystemid());
             //insert all memberships
             foreach($this->arrCats as $strCatID => $strValue) {
-                $strQuery = "INSERT INTO "._dbprefix_."news_member
+                $strQuery = "INSERT INTO " . _dbprefix_ . "news_member
                             (newsmem_id, newsmem_news, newsmem_category) VALUES
                             (?, ?, ?)";
-                if(!$this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID)))
+                if(!$this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID))) {
                     return false;
+                }
             }
         }
 
@@ -206,7 +212,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return class_module_news_news[]
      * @static
      */
-	public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null) {
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null) {
         $arrParams = array();
 
         $strDateWhere = "";
@@ -216,70 +222,72 @@ class class_module_news_news extends class_model implements interface_model, int
             $arrParams[] = $objEndDate->getLongTimestamp();
         }
 
-		if($strFilter != "") {
-			$strQuery = "SELECT system_id
-							FROM "._dbprefix_."news,
-							      "._dbprefix_."system,
-							      "._dbprefix_."system_date,
-							      "._dbprefix_."news_member
+        if($strFilter != "") {
+            $strQuery = "SELECT system_id
+							FROM " . _dbprefix_ . "news,
+							      " . _dbprefix_ . "system,
+							      " . _dbprefix_ . "system_date,
+							      " . _dbprefix_ . "news_member
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
-							  ".$strDateWhere."
+							  " . $strDateWhere . "
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
             $arrParams = array(dbsafeString($strFilter));
-		}
-		else {
-			$strQuery = "SELECT system_id
-							FROM "._dbprefix_."news,
-							      "._dbprefix_."system,
-							      "._dbprefix_."system_date
+        }
+        else {
+            $strQuery = "SELECT system_id
+							FROM " . _dbprefix_ . "news,
+							      " . _dbprefix_ . "system,
+							      " . _dbprefix_ . "system_date
 							WHERE system_id = news_id
 							  AND system_id = system_date_id
-							  ".$strDateWhere."
+							  " . $strDateWhere . "
 							ORDER BY system_date_start DESC";
-		}
+        }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
 
-	/**
-	 * Calculates the number of news available for the
-	 * given cat or in total.
-	 *
-	 * @param string $strFilter
-	 * @return int
-	 */
-	public static function getObjectCount($strFilter = "") {
+    /**
+     * Calculates the number of news available for the
+     * given cat or in total.
+     *
+     * @param string $strFilter
+     *
+     * @return int
+     */
+    public static function getObjectCount($strFilter = "") {
         $arrParams = array();
         if($strFilter != "") {
-			$strQuery = "SELECT COUNT(*)
-							FROM "._dbprefix_."news_member
+            $strQuery = "SELECT COUNT(*)
+							FROM " . _dbprefix_ . "news_member
 							WHERE newsmem_category = ?";
             $arrParams[] = $strFilter;
-		}
-		else {
-			$strQuery = "SELECT COUNT(*)
-							FROM "._dbprefix_."news";
-		}
+        }
+        else {
+            $strQuery = "SELECT COUNT(*)
+							FROM " . _dbprefix_ . "news";
+        }
 
-		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-		return $arrRow["COUNT(*)"];
-	}
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        return $arrRow["COUNT(*)"];
+    }
 
-	/**
-	 * Deletes the given news and all relating memberships
-	 *
-	 * @return bool
-	 */
+    /**
+     * Deletes the given news and all relating memberships
+     *
+     * @return bool
+     */
     public function deleteObject() {
         //Delete memberships
         if(class_module_news_category::deleteNewsMemberships($this->getSystemid())) {
@@ -314,87 +322,92 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return class_module_news_news[]
      * @static
      */
-	public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = null, $intEnd = null) {
+    public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = null, $intEnd = null) {
         $arrParams = array();
-		$longNow = class_date::getCurrentTimestamp();
-		//Get Timeintervall
-		if($intMode == "0") {
-			//Regular news
-			$strTime  = "AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))";
-		}
-		elseif($intMode == "1") {
-			//Archivnews
-			$strTime = "AND (system_date_special < ? AND system_date_special IS NOT NULL AND system_date_special != 0)";
-		}
-		else
-			$strTime = "";
-            
-		//check if news should be ordered de- or ascending
-		if ($intOrder == 0) {
-			$strOrder  = "DESC";
-		} else {
-			$strOrder  = "ASC";
-		}
+        $longNow = class_date::getCurrentTimestamp();
+        //Get Timeintervall
+        if($intMode == "0") {
+            //Regular news
+            $strTime = "AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))";
+        }
+        elseif($intMode == "1") {
+            //Archivnews
+            $strTime = "AND (system_date_special < ? AND system_date_special IS NOT NULL AND system_date_special != 0)";
+        }
+        else {
+            $strTime = "";
+        }
+
+        //check if news should be ordered de- or ascending
+        if($intOrder == 0) {
+            $strOrder = "DESC";
+        }
+        else {
+            $strOrder = "ASC";
+        }
 
         if($strCat != "0") {
             $strQuery = "SELECT system_id
-                            FROM "._dbprefix_."news,
-                                 "._dbprefix_."news_member,
-                                 "._dbprefix_."system,
-                                 "._dbprefix_."system_date
+                            FROM " . _dbprefix_ . "news,
+                                 " . _dbprefix_ . "news_member,
+                                 " . _dbprefix_ . "system,
+                                 " . _dbprefix_ . "system_date
                             WHERE system_id = news_id
                               AND system_id = system_date_id
                               AND news_id = newsmem_news
                               AND newsmem_category = ?
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                ".$strTime."
+                                " . $strTime . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-                            ORDER BY system_date_start ".$strOrder;
+                            ORDER BY system_date_start " . $strOrder;
             $arrParams[] = $strCat;
             $arrParams[] = $longNow;
-            if($strTime != "")
+            if($strTime != "") {
                 $arrParams[] = $longNow;
+            }
             $arrParams[] = $longNow;
-            
+
         }
         else {
-             $strQuery = "SELECT system_id
-                            FROM "._dbprefix_."news,
-                                 "._dbprefix_."system,
-                                 "._dbprefix_."system_date
+            $strQuery = "SELECT system_id
+                            FROM " . _dbprefix_ . "news,
+                                 " . _dbprefix_ . "system,
+                                 " . _dbprefix_ . "system_date
                             WHERE system_id = news_id
                               AND system_id = system_date_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                ".$strTime."
+                                " . $strTime . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-                            ORDER BY system_date_start ".$strOrder;
-             
+                            ORDER BY system_date_start " . $strOrder;
+
             $arrParams[] = $longNow;
-            if($strTime != "")
+            if($strTime != "") {
                 $arrParams[] = $longNow;
+            }
             $arrParams[] = $longNow;
         }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
-	/**
-	 * Increments the hits counter of the current object
-	 *
-	 * @return bool
-	 */
-	public function increaseHits() {
-	    $strQuery = "UPDATE "._dbprefix_."news SET news_hits = ? WHERE news_id= ? ";
-		return $this->objDB->_pQuery($strQuery, array($this->getIntHits()+1, $this->getSystemid()));
-	}
+    /**
+     * Increments the hits counter of the current object
+     *
+     * @return bool
+     */
+    public function increaseHits() {
+        $strQuery = "UPDATE " . _dbprefix_ . "news SET news_hits = ? WHERE news_id= ? ";
+        return $this->objDB->_pQuery($strQuery, array($this->getIntHits() + 1, $this->getSystemid()));
+    }
 
     /**
      * @return string
@@ -429,6 +442,7 @@ class class_module_news_news extends class_model implements interface_model, int
     public function getStrImage() {
         return $this->strImage;
     }
+
     public function getIntHits() {
         return $this->intHits;
     }
@@ -465,27 +479,35 @@ class class_module_news_news extends class_model implements interface_model, int
         $this->strTitle = $strTitle;
         $this->bitTitleChanged = true;
     }
+
     public function setStrIntro($strIntro) {
         $this->strIntro = $strIntro;
     }
+
     public function setStrText($strText) {
         $this->strText = $strText;
     }
+
     public function setStrImage($strImage) {
         $this->strImage = $strImage;
     }
+
     public function setIntHits($intHits) {
         $this->intHits = $intHits;
     }
+
     public function setIntDateStart($intDateStart) {
         $this->longDateStart = $intDateStart;
     }
+
     public function setIntDateEnd($intDateEnd) {
         $this->longDateEnd = $intDateEnd;
     }
+
     public function setIntDateSpecial($intDateSpecial) {
         $this->longDateSpecial = $intDateSpecial;
     }
+
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
     }
@@ -493,6 +515,5 @@ class class_module_news_news extends class_model implements interface_model, int
     public function setBitUpdateMemberships($bitUpdateMemberships) {
         $this->bitUpdateMemberships = $bitUpdateMemberships;
     }
-
 
 }
