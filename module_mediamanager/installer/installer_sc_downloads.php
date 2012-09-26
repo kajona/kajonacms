@@ -48,6 +48,9 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $strReturn .= "Adding download-permissions for guests...\n";
         class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objDownloads->getSystemid(), "right2");
 
+        $strReturn .= "Adding rating-permissions for guests...\n";
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objDownloads->getSystemid(), "right3");
+
         $strReturn .= "Creating new downloads page...\n";
 
         $objPage = new class_module_pages_page();

@@ -310,7 +310,7 @@ class class_installer {
         }
 
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
-        if($bitUserInstalled || ($this->objSession->getSession("install_username") !== false && $this->objSession->getSession("install_password") !== false))
+        if($bitUserInstalled)
             $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=modeSelect");
     }
 

@@ -1,6 +1,6 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
+<!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward, file_rating -->
 <list>
 
     <script type="text/javascript">

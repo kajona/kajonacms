@@ -41,7 +41,7 @@ like < filelist >%%file_0%%</ filelist > -->
 
 <!-- represents a single file
      available placeholders: image_detail_src, file_filename, file_name, file_subtitle, file_description, file_size, file_hits, file_details_href,
-                             file_owner, file_lmtime, file_link, file_link_href, file_id, file_link_qrcode
+                             file_owner, file_lmtime, file_link, file_link_href, file_id, file_link_qrcode, file_rating
 -->
 <filelist_file>
     <div style="text-align: center;">

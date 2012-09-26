@@ -422,9 +422,9 @@ class class_installer_system extends class_installer_base implements interface_i
         if($this->objSession->getSession("install_username") !== false && $this->objSession->getSession("install_username") != "" &&
             $this->objSession->getSession("install_password") !== false && $this->objSession->getSession("install_password") != ""
         ) {
-            $strUsername = dbsafeString($this->objSession->getSession("install_username"));
-            $strPassword = dbsafeString($this->objSession->getSession("install_password"));
-            $strEmail = dbsafeString($this->objSession->getSession("install_email"));
+            $strUsername = ($this->objSession->getSession("install_username"));
+            $strPassword = ($this->objSession->getSession("install_password"));
+            $strEmail = ($this->objSession->getSession("install_email"));
         }
 
         //create a default language

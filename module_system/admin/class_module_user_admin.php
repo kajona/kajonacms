@@ -392,7 +392,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $objForm->getField("user_username")->setBitReadonly(true);
             }
 
-            $objForm->getField("user_skin")->setStrValue($objUser->getStrAdminskin());
+            if($objUser->getStrAdminskin() != "")
+                $objForm->getField("user_skin")->setStrValue($objUser->getStrAdminskin());
             $objForm->getField("user_language")->setStrValue($objUser->getStrAdminlanguage());
 
             if(!$bitSelfedit) {

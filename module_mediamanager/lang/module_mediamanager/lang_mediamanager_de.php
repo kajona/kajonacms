@@ -83,4 +83,4 @@ $lang["xmlupload_error_notWritable"]     = "Zielordner nicht beschreibbar";
 $lang["xmlupload_success"]               = "Upload erfolgreich";
 
 //non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Download", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Download", 6 => "Voting", 7 => "", 8 => "");

@@ -52,14 +52,14 @@ class class_module_mediamanager_portal extends class_portal implements interface
     private function addPortaleditorCode($strReturn) {
 
         $arrPeConfig = array(
-                              "pe_module" => "mediamanager",
-                              "pe_action_edit" => "openFolder",
-                              "pe_action_edit_params" => "&systemid=".$this->arrElementData["repo_id"],
-                              "pe_action_new" => "",
-                              "pe_action_new_params" => "",
-                              "pe_action_delete" => "",
-                              "pe_action_delete_params" => ""
-                            );
+            "pe_module"               => "mediamanager",
+            "pe_action_edit"          => "openFolder",
+            "pe_action_edit_params"   => "&systemid=" . $this->arrElementData["repo_id"],
+            "pe_action_new"           => "",
+            "pe_action_new_params"    => "",
+            "pe_action_delete"        => "",
+            "pe_action_delete_params" => ""
+        );
 
         //open a subfolder?
         if($this->getParam("action") == "mediaFolder" && validateSystemid($this->getSystemid()))
@@ -176,6 +176,19 @@ class class_module_mediamanager_portal extends class_portal implements interface
                                 $objQrCode->setIntSize(1);
                                 $arrFileTemplate["file_link_qrcode"] = "<img src=\"_webpath_".$objQrCode->getImageForString($arrFileTemplate["file_link_href"])."\" alt=\"".$this->getLang("download_link")."\"/>";
                             }
+                        }
+
+                        //ratings available?
+                        if($objOneFile->getFloatRating() !== null) {
+                            /** @var $objRating class_module_rating_portal */
+                            $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                            $arrFileTemplate["file_rating"] = $objRating->buildRatingBar(
+                                $objOneFile->getFloatRating(),
+                                $objOneFile->getIntRatingHits(),
+                                $objOneFile->getSystemid(),
+                                $objOneFile->isRateableByUser(),
+                                $objOneFile->rightRight3()
+                            );
                         }
 
                         $arrFileTemplate["file_details_href"] = getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getStrPortalLanguage(), $objOneFile->getStrName());
@@ -333,7 +346,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                 $objFile->getIntRatingHits(),
                 $objFile->getSystemid(),
                 $objFile->isRateableByUser(),
-                $objFile->rightRight2()
+                $objFile->rightRight3()
             );
         }
 
