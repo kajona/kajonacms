@@ -81,28 +81,26 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
         if($strOneEntry == "." || $strOneEntry == "..")
             continue;
 
-        if(is_file(_realpath_.$strPath)) {
-            if(substr($strOneEntry, 0, 5) == "lang_" ) {
+        if(is_file(_realpath_.$strPath) && substr($strOneEntry, 0, 5) == "lang_") {
 
-                $arrTemp = explode("_", substr($strOneEntry, 0, -4));
-                //regular lang file found, parse contents
-                $lang = array();
-                include _realpath_.$strPath;
+            $arrTemp = explode("_", substr($strOneEntry, 0, -4));
+            //regular lang file found, parse contents
+            $lang = array();
+            include _realpath_.$strPath;
 
-                foreach($lang as $strKey => $strValue) {
+            foreach($lang as $strKey => $strValue) {
 
-                    $strModul = $arrTemp[1];
+                $strModul = $arrTemp[1];
 
-                    $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey);
-                    if($arrTemp[2] == "de") $objTemp->strDe = $strValue;
-                    if($arrTemp[2] == "en") $objTemp->strEn = $strValue;
-                    if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
-                    if($arrTemp[2] == "bg") $objTemp->strBg = $strValue;
-                    if($arrTemp[2] == "ru") $objTemp->strRu = $strValue;
-                    if($arrTemp[2] == "sv") $objTemp->strSv = $strValue;
+                $objTemp = debug_get_langhelper($arrEntries, $strModul, $strKey);
+                if($arrTemp[2] == "de") $objTemp->strDe = $strValue;
+                if($arrTemp[2] == "en") $objTemp->strEn = $strValue;
+                if($arrTemp[2] == "pt") $objTemp->strPt = $strValue;
+                if($arrTemp[2] == "bg") $objTemp->strBg = $strValue;
+                if($arrTemp[2] == "ru") $objTemp->strRu = $strValue;
+                if($arrTemp[2] == "sv") $objTemp->strSv = $strValue;
 
 
-                }
             }
         }
 

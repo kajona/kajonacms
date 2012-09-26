@@ -100,17 +100,17 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(
+        $objIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
+        $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objIterator->setArraySection(
             class_module_user_user::getObjectList(
                 $this->objSession->getSession($this->STR_FILTER_SESSION_KEY),
-                $objArraySectionIterator->calculateStartPos(),
-                $objArraySectionIterator->calculateEndPos()
+                $objIterator->calculateStartPos(),
+                $objIterator->calculateEndPos()
             )
         );
 
-        $strReturn .= $this->renderList($objArraySectionIterator, false, "userList");
+        $strReturn .= $this->renderList($objIterator, false, "userList");
         return $strReturn;
     }
 
@@ -774,12 +774,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $strReturn .= $this->objToolkit->formHeadline($this->getLang("group_memberlist") . "\"" . $objGroup->getStrName() . "\"");
             $objUsersources = new class_module_user_sourcefactory();
 
-            $objArraySectionIterator = new class_array_section_iterator($objSourceGroup->getNumberOfMembers());
-            $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
-            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-            $objArraySectionIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+            $objIterator = new class_array_section_iterator($objSourceGroup->getNumberOfMembers());
+            $objIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+            $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-            $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
+            $arrPageViews = $this->objToolkit->getSimplePageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
             $arrMembers = $arrPageViews["elements"];
 
             $strReturn .= $this->objToolkit->listHeader();
@@ -789,9 +789,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
                 $strAction = "";
                 if($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
-                    $strAction .= $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername() . " (" . $objSingleMember->getStrForename() . " " . $objSingleMember->getStrName() . ")"
-                        , $this->getLang("mitglied_loeschen_frage")
-                        , getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=" . $objGroup->getSystemid() . "&userid=" . $objSingleMember->getSystemid()));
+                    $strAction .= $this->objToolkit->listDeleteButton(
+                        $objSingleMember->getStrUsername() . " (" . $objSingleMember->getStrForename() . " " . $objSingleMember->getStrName() . ")",
+                        $this->getLang("mitglied_loeschen_frage"),
+                        getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=" . $objGroup->getSystemid() . "&userid=" . $objSingleMember->getSystemid())
+                    );
                 }
                 $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user.png"), $strAction, $intI++);
             }
@@ -965,12 +967,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn = "";
         //fetch log-rows
         $objLogbook = new class_module_user_log();
-        $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
-        $objArraySectionIterator->setIntElementsPerPage(_user_log_nrofrecords_);
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_user_log::getLoginLogs($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
+        $objIterator->setIntElementsPerPage(_user_log_nrofrecords_);
+        $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objIterator->setArraySection(class_module_user_log::getLoginLogs($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "loginlog");
+        $arrPageViews = $this->objToolkit->getSimplePageview($objIterator, "user", "loginlog");
         $arrLogs = $arrPageViews["elements"];
 
         $arrRows = array();

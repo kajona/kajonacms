@@ -438,7 +438,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 			//Loading the data of the corresponding site
 			$objPage = new class_module_pages_page($strPageSystemid);
-			$this->flushPageFromPagesCache($objPage->getStrName());
+			$this->flushCompletePagesCache();
 
             $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
 
@@ -767,7 +767,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
                     //Loading the data of the corresp site
                     $objPage = new class_module_pages_page($strPageSystemid);
-                    $this->flushPageFromPagesCache($objPage->getStrName());
+                    $this->flushCompletePagesCache();
 
                     $strReturn = "<message><success>element update succeeded</success></message>";
                 }
