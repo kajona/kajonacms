@@ -133,9 +133,11 @@ class class_installer {
             "/project/system/config",
             "/project/dbdumps",
             "/project/log",
+            "/project/temp",
             "/files/cache",
-            "/files/images/upload",
-            "/files/images/public",
+            "/files/images",
+            "/files/public",
+            "/files/downloads",
             "/core"
         );
 

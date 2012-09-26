@@ -430,7 +430,7 @@ HTML;
      * @return string
      */
     protected function actionEditFile(class_admin_formgenerator $objForm = null) {
-        if($this->strPeAddon == "")
+        if($this->strPeAddon == "" && $this->getParam("source") != "search")
             $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $objFile = new class_module_mediamanager_file($this->getSystemid());
@@ -441,6 +441,7 @@ HTML;
         if($objForm == null)
             $objForm = $this->getFileAdminForm($objFile);
 
+        $objForm->addField(new class_formentry_hidden("", "source"))->setStrValue($this->getParam("source"));
         return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveFile"));
 
     }
@@ -472,7 +473,11 @@ HTML;
 
             $this->flushCompletePagesCache();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "&peClose=1&systemid=".$objFile->getPrevId()));
+
+            if($this->getParam("source") != "")
+                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&systemid=".$objFile->getPrevId()));
+            else
+                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&peClose=1&systemid=".$objFile->getPrevId()));
             return "";
         }
 

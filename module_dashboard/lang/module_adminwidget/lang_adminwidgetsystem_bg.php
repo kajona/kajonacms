@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["note_content"]                    = "Съдържание";
@@ -28,12 +28,9 @@ $lang["syslog_name"]                     = "Системен доклад ";
 $lang["syslog_nrofrows"]                 = "Брой на вписвания ";
 $lang["systemcheck_checkboxkajona"]      = "Свери Kajona ";
 $lang["systemcheck_checkboxphp"]         = "Свери PHP ";
-$lang["systemcheck_kajona_configper"]    = "Права върху config.php: ";
-$lang["systemcheck_kajona_dbdumpsper"]   = "Права върху /system/dbdumbs: ";
-$lang["systemcheck_kajona_debug"]        = "/debug присъствие: ";
-$lang["systemcheck_kajona_debugper"]     = "Права върху /system/debug: ";
-$lang["systemcheck_kajona_installer"]    = "/installer присъствие: ";
-$lang["systemcheck_kajona_piccacheper"]  = "Права върху  "._images_cachepath_.":";
+$lang["systemcheck_kajona_debug"]        = "/debug.php присъствие: ";
+$lang["systemcheck_kajona_installer"]    = "/installer.php присъствие: ";
+$lang["systemcheck_kajona_writeper"]     = "Права върху";
 $lang["systemcheck_name"]                = "Системна проверка ";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";

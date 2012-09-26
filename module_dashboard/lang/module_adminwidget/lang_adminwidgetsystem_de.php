@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["note_content"]                    = "Inhalt:";
@@ -16,6 +16,7 @@ $lang["sysinfo_checkboxkajona"]          = "Kajona Informationen anzeigen";
 $lang["sysinfo_checkboxphp"]             = "PHP-Informationen anzeigen";
 $lang["sysinfo_checkboxserver"]          = "Server-Informationen anzeigen";
 $lang["sysinfo_kajona_nrOfModules"]      = "Anzahl Kajonamodule: ";
+$lang["sysinfo_kajona_nrOfPackages"]     = "Anzahl Kajonapakete:";
 $lang["sysinfo_kajona_version"]          = "Kajona Version: ";
 $lang["sysinfo_kajona_versionAvail"]     = "Neuste Version: ";
 $lang["sysinfo_name"]                    = "Systeminformationen";
@@ -28,12 +29,9 @@ $lang["syslog_name"]                     = "Systemlog";
 $lang["syslog_nrofrows"]                 = "Anzahl Einträge:";
 $lang["systemcheck_checkboxkajona"]      = "Kajona Check";
 $lang["systemcheck_checkboxphp"]         = "PHP Check";
-$lang["systemcheck_kajona_configper"]    = "Schreibrechte auf config.php: ";
-$lang["systemcheck_kajona_dbdumpsper"]   = "Schreibrechte auf /system/dbdumps: ";
-$lang["systemcheck_kajona_debug"]        = "/debug vorhanden: ";
-$lang["systemcheck_kajona_debugper"]     = "Schreibrechte auf /system/debug: ";
-$lang["systemcheck_kajona_installer"]    = "/installer vorhanden: ";
-$lang["systemcheck_kajona_piccacheper"]  = "Schreibrechte auf "._images_cachepath_.": ";
+$lang["systemcheck_kajona_debug"]        = "/debug.php vorhanden: ";
+$lang["systemcheck_kajona_installer"]    = "/installer.php vorhanden: ";
+$lang["systemcheck_kajona_writeper"]     = "Schreibrechte auf";
 $lang["systemcheck_name"]                = "Systemcheck";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";

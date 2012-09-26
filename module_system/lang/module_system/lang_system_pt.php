@@ -83,7 +83,7 @@ $lang["installer_config_intro"]          = "<b>Configure o acesso à base de dad
 $lang["installer_config_write"]          = "Guardar em config.php";
 $lang["installer_elements_found"]        = "<b>instalação dos elementos da página</b><br /><br />Seleccione qual dos elementos encontrados pretende instalar:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Divirta-se a utilizar o Kajona!";
-$lang["installer_finish_hints"]          = "Deverá configurar a permissão de acesso ao ficheiro config /system/config/config.php para modo de leitura.<br />Adicionalmente, deverá remover a pasta /installer/ completamente por razões de segurança.<br /><br /><br />A administração está agora disponível em:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />O Portal(sistema) encontra-se disponível em:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
+$lang["installer_finish_hints"]          = "Deverá configurar a permissão de acesso ao ficheiro config /project/system/config/config.php para modo de leitura.<br />Adicionalmente, deverá remover a pasta /installer.php completamente por razões de segurança.<br /><br /><br />A administração está agora disponível em:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />O Portal(sistema) encontra-se disponível em:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
 $lang["installer_finish_intro"]          = "<b>Instalação terminada</b><br /><br />";
 $lang["installer_given"]                 = "dada";
 $lang["installer_install"]               = "Instalar";

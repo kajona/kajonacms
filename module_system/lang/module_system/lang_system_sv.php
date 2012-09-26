@@ -121,7 +121,7 @@ $lang["installer_config_intro"]          = "<b>Inställningar av databasen</b><b
 $lang["installer_config_write"]          = "Spara till config.php";
 $lang["installer_elements_found"]        = "<b>Installation av sidoelement</b><br />Vänligen välj det sidoelement som du vill installera:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Ha så roligt med Kajona!";
-$lang["installer_finish_hints"]          = "Du bör nu ta bort skrivrättigheterna till filen /system/config/config.php.<br />Dessutom bör du av säkerhetsskäl helt ta bort mappen  /installer/ <br /><br /><br />Administrationsmiljön kan nu nås under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />Portalen kan nås under: <br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
+$lang["installer_finish_hints"]          = "Du bör nu ta bort skrivrättigheterna till filen /project/system/config/config.php.<br />Dessutom bör du av säkerhetsskäl helt ta bort filen  /installer.php <br /><br /><br />Administrationsmiljön kan nu nås under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />Portalen kan nås under: <br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
 $lang["installer_finish_intro"]          = "<b>Installationen är avslutad</b><br /><br />";
 $lang["installer_given"]                 = "tillgänglig";
 $lang["installer_install"]               = "installlera";

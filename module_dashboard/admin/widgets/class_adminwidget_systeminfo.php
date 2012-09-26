@@ -54,17 +54,23 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("server") == "checked") {
-            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_system").php_uname("s")." ".php_uname("r"));
-            if (@disk_total_space(_realpath_)) {
-	            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_diskspace").bytesToString(@disk_total_space(_realpath_)));
-	            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_diskspacef").bytesToString(@disk_free_space(_realpath_)));
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_server_system") . php_uname("s") . " " . php_uname("r"));
+            if(@disk_total_space(_realpath_)) {
+                $strReturn .= $this->widgetText($this->getLang("sysinfo_server_diskspace") . bytesToString(@disk_total_space(_realpath_)));
+                $strReturn .= $this->widgetText($this->getLang("sysinfo_server_diskspacef") . bytesToString(@disk_free_space(_realpath_)));
             }
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
-            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_version").class_module_system_module::getModuleByName("system")->getStrVersion());
-            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_versionAvail").$this->getLatestKernelVersion());
-            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_nrOfModules").count(class_module_system_module::getAllModules()));
+
+            $objManager = new class_module_packagemanager_manager();
+            $arrPackageMetadata = $objManager->getAvailablePackages();
+
+
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_version")." ".class_module_system_module::getModuleByName("system")->getStrVersion());
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_versionAvail")." ".$this->getLatestKernelVersion());
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_nrOfModules")." ".count(class_module_system_module::getAllModules()));
+            $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_nrOfPackages")." ".count($arrPackageMetadata));
         }
         return $strReturn;
     }

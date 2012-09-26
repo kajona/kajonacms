@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["note_content"]                    = "Content:";
@@ -16,6 +16,7 @@ $lang["sysinfo_checkboxkajona"]          = "Show kajona information";
 $lang["sysinfo_checkboxphp"]             = "Show PHP information";
 $lang["sysinfo_checkboxserver"]          = "Show server information";
 $lang["sysinfo_kajona_nrOfModules"]      = "Number of modules: ";
+$lang["sysinfo_kajona_nrOfPackages"]     = "Number of Kajonapackages:";
 $lang["sysinfo_kajona_version"]          = "Kajona Version: ";
 $lang["sysinfo_kajona_versionAvail"]     = "Latest Version: ";
 $lang["sysinfo_name"]                    = "Systeminformation";
@@ -28,12 +29,9 @@ $lang["syslog_name"]                     = "Systemlog";
 $lang["syslog_nrofrows"]                 = "Number of entries:";
 $lang["systemcheck_checkboxkajona"]      = "Kajona Check";
 $lang["systemcheck_checkboxphp"]         = "PHP Check";
-$lang["systemcheck_kajona_configper"]    = "Writeperm. on config.php: ";
-$lang["systemcheck_kajona_dbdumpsper"]   = "Writeperm. on /system/dbdumps: ";
-$lang["systemcheck_kajona_debug"]        = "/debug present: ";
-$lang["systemcheck_kajona_debugper"]     = "Writeperm. on /system/debug: ";
-$lang["systemcheck_kajona_installer"]    = "/installer present: ";
-$lang["systemcheck_kajona_piccacheper"]  = "Writeperm. on "._images_cachepath_.": ";
+$lang["systemcheck_kajona_debug"]        = "/debug.php present: ";
+$lang["systemcheck_kajona_installer"]    = "/installer.php present: ";
+$lang["systemcheck_kajona_writeper"]     = "Writeperm. on";
 $lang["systemcheck_name"]                = "Systemcheck";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";

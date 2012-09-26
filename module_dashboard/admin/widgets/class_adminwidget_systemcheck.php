@@ -67,27 +67,49 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
-            $strReturn .= "FIXME";
-            /*
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_installer").(is_dir(_realpath_."/installer") ?
+
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_installer").(is_file(_realpath_."/installer.php") ?
                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_debug").(is_dir(_realpath_."/debug") ?
+                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>")
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_debug").(is_file(_realpath_."/debug.php") ?
                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_configper").( is_writable(_systempath_."/config/config.php") ?
+                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>")
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_writeper")." /project/system/config/config.php ".( is_writable(_realpath_."/project/system/config/config.php") ?
                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_debugper").( is_writable(_systempath_."/debug/") ?
+                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>")
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_writeper")." /project/log/ ".( is_writable(_realpath_."/project/log/") ?
                         "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>" ));
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_dbdumpsper").( is_writable(_systempath_."/dbdumps/") ?
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>" )
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_writeper")." /project/dbdumps/ ".( is_writable(_realpath_."/project/dbdumps/") ?
                         "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getLang("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._images_cachepath_) ?
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_writeper")." /project/temp ".( is_writable(_realpath_."/project/temp") ?
+                    "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
+                    "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_writeper")." "._images_cachepath_." ".( is_writable(_realpath_."/"._images_cachepath_) ?
                         "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>"));
-            */
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
+            );
+            $strReturn .= $this->widgetText(
+                $this->getLang("systemcheck_kajona_writeper")." /core ".( is_writable(_realpath_."/core") ?
+                    "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
+                    "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
+            );
+
+
 
         }
         return "<div class=\"adminwidget_systemcheck\">".$strReturn."</div>";

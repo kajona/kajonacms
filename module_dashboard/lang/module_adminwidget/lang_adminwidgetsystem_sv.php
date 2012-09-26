@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["note_content"]                    = "Innehåll:";
@@ -28,12 +28,9 @@ $lang["syslog_name"]                     = "Systemlogg";
 $lang["syslog_nrofrows"]                 = "Antal poster";
 $lang["systemcheck_checkboxkajona"]      = "Kajona kontroll";
 $lang["systemcheck_checkboxphp"]         = "PHP kontroll";
-$lang["systemcheck_kajona_configper"]    = "Skrivrättigheter på config.php:";
-$lang["systemcheck_kajona_dbdumpsper"]   = "Skrivrättigheter på /system/dbdumps:";
-$lang["systemcheck_kajona_debug"]        = "/debug tillgänglig";
-$lang["systemcheck_kajona_debugper"]     = "Skrivrättigheter på /system/debug:";
-$lang["systemcheck_kajona_installer"]    = "/installer tillgänglig:";
-$lang["systemcheck_kajona_piccacheper"]  = "Skrivrättigheter på "._images_cachepath_.": ";
+$lang["systemcheck_kajona_debug"]        = "/debug.php tillgänglig";
+$lang["systemcheck_kajona_installer"]    = "/installer.php tillgänglig:";
+$lang["systemcheck_kajona_writeper"]     = "Skrivrättigheter på";
 $lang["systemcheck_name"]                = "Systemkontroll";
 $lang["systemcheck_no"]                  = "Nej";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
