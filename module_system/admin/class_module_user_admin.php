@@ -197,11 +197,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($objListEntry instanceof class_module_user_group) {
             if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_) {
                 if($objListEntry->rightEdit()) {
-                    return $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("gruppe_bearbeiten"), "icon_pencil.png"));
+                    return $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("gruppe_bearbeiten"), "icon_edit.png"));
                 }
             }
             else {
-                return $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.png", $this->getLang("gruppe_bearbeiten_x")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_editDisabled.png", $this->getLang("gruppe_bearbeiten_x")));
             }
         }
         return parent::renderEditAction($objListEntry);

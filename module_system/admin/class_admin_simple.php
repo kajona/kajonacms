@@ -295,7 +295,7 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.png", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_editLocked.png", $this->getLang("commons_locked")));
             }
 
             if($bitDialog)
@@ -306,7 +306,7 @@ abstract class class_admin_simple extends class_admin {
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
-                        "icon_pencil.png"
+                        "icon_edit.png"
                     )
                 );
             else
@@ -317,7 +317,7 @@ abstract class class_admin_simple extends class_admin {
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
-                        "icon_pencil.png"
+                        "icon_edit.png"
                     )
                 );
         }

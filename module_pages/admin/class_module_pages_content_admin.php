@@ -65,7 +65,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
         $objPage = new class_module_pages_page($this->getSystemid());
         //get infos about the page
         $arrToolbarEntries = array();
-        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
+        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_edit.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
         $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.png);\">".$this->getLang("contentToolbar_content")."</a>";
         $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.png);\">".$this->getLang("contentToolbar_preview")."</a>";
 
@@ -140,7 +140,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.png"));
                             }
                             //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_pencilLocked.png", $this->getLang("ds_gesperrt")));
+                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked.png", $this->getLang("ds_gesperrt")));
                             $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("ds_gesperrt")));
                         }
                         else {
@@ -148,7 +148,7 @@ class class_module_pages_content_admin extends class_admin implements interface_
                             if($objLockmanager->isLockedByCurrentUser())
                                 $objLockmanager->unlockRecord();
 
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_pencil.png"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit.png"));
                             $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                         }
 

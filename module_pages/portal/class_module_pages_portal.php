@@ -386,7 +386,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $arrPeContents["pe_iconbar"] .= getLinkAdmin(
                     "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
                     $this->getLang("pe_icon_edit", "pages"),
-                    "icon_pencil.png"
+                    "icon_edit.png"
                 );
                 $arrPeContents["pe_iconbar"] .= "&nbsp;";
 

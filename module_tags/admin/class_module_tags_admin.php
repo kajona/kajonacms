@@ -77,7 +77,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
             return parent::renderEditAction($objListEntry);
         }
         else if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"));
         }
 
         return "";

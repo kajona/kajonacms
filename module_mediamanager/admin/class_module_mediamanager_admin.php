@@ -107,9 +107,9 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         if($objListEntry instanceof class_module_mediamanager_file) {
             if($objListEntry->rightEdit()) {
                 if($this->strPeAddon != "")
-                    return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+                    return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"));
                 else
-                    return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_pencil.png"));
+                    return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"));
             }
 
             return "";

@@ -150,7 +150,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         "&systemid=".$objListEntry->getSystemid(),
                         $this->getLang("element_bearbeiten"),
                         $this->getLang("element_bearbeiten"),
-                        "icon_pencil.png"
+                        "icon_edit.png"
                     )
                 );
         }
@@ -357,7 +357,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $arrToolbarEntries = array();
         if(!$bitAlias) {
             if($strMode == "edit") {
-                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
+                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_edit.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
                 $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.png);\">".$this->getLang("contentToolbar_content")."</a>";
                 $arrToolbarEntries[] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.png);\">".$this->getLang("contentToolbar_preview")."</a>";
             }

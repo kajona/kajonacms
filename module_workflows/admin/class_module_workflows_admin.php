@@ -300,7 +300,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_workflows_handler) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionEditHandler"), "icon_pencil.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionEditHandler"), "icon_edit.png"));
         }
         return parent::renderEditAction($objListEntry, $bitDialog);
     }
