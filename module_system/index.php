@@ -8,13 +8,13 @@
 ********************************************************************************************************/
 
 
-
-
 //Determing the area to load
-if(issetGet("admin") && getGet("admin") == 1)
-	define("_admin_", true);
-else
-	define("_admin_", false);
+if(issetGet("admin") && getGet("admin") == 1) {
+    define("_admin_", true);
+}
+else {
+    define("_admin_", false);
+}
 
 define("_autotesting_", false);
 
@@ -25,36 +25,41 @@ define("_autotesting_", false);
  *
  * @package module_system
  */
-class class_index  {
+class class_index {
 
     /**
      * @var class_response_object
      */
     public $objResponse;
 
-	public function __construct() {
-		class_carrier::getInstance();
-	}
+    public function __construct() {
+        class_carrier::getInstance();
+    }
 
     public function processRequest() {
 
         $strModule = getGet("module");
-        if($strModule == "")
+        if($strModule == "") {
             $strModule = getPost("module");
+        }
 
-        if($strModule == "" && _admin_)
+        if($strModule == "" && _admin_) {
             $strModule = "dashboard";
+        }
 
-        if($strModule == "" && !_admin_)
+        if($strModule == "" && !_admin_) {
             $strModule = "pages";
+        }
 
         $strAction = getGet("action");
-        if($strAction == "")
+        if($strAction == "") {
             $strAction = getPost("action");
+        }
 
         $strLanguageParam = getGet("language");
-        if($strLanguageParam == "")
+        if($strLanguageParam == "") {
             $strLanguageParam = getPost("language");
+        }
 
 
         $this->objResponse = class_response_object::getInstance();
