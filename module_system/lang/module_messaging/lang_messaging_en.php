@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["actionConfig"]                    = "Settings";
-$lang["actionView"]                      = "Detailed view";
+$lang["actionEdit"]                      = "Detailed view";
 $lang["delete_question"]                 = "Do you really want to delete the message &quot;<b>%%element_name%%</b>&quot;?";
 $lang["message_prolog"]                  = "You got a new message. To open the message, use the link below. A copy of the message is attached.";
 $lang["message_subject"]                 = "New message received";

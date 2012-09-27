@@ -15,10 +15,9 @@
  * @author sidler@mulchprod.de
  * @since 3.3.0
  */
-class class_lockmanager  {
+class class_lockmanager {
 
     /**
-     *
      * @var class_module_system_common
      */
     private $objSystemCommon;
@@ -27,27 +26,28 @@ class class_lockmanager  {
 
     /**
      * Constructor
+     *
      * @param string $strSystemid
      */
-	public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "") {
         $this->objSystemCommon = new class_module_system_common($strSystemid);
         $this->strSystemid = $strSystemid;
 
         $this->unlockOldRecords();
-	}
+    }
 
     /**
-	 * Locks a systemrecord for the current user
-	 *
-	 * @return bool
-	 */
+     * Locks a systemrecord for the current user
+     *
+     * @return bool
+     */
     public function lockRecord() {
-		$strQuery = "UPDATE "._dbprefix_."system
+        $strQuery = "UPDATE " . _dbprefix_ . "system
 						SET system_lock_id=?,
 						    system_lock_time = ?
 						WHERE system_id =?";
 
-		if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid ))) {
+        if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid))) {
             class_carrier::getInstance()->getObjDB()->flushQueryCache();
             $this->objSystemCommon = new class_module_system_common($this->strSystemid);
             return true;
@@ -66,18 +66,18 @@ class class_lockmanager  {
     }
 
     /**
-	 * Unlocks a dataRecord as long as the record is locked by the current one
-	 *
+     * Unlocks a dataRecord as long as the record is locked by the current one
+     *
      * @param bool $bitForceUnlock unlocks the record, even if the user is not the owner of the lock. must be an admin therefore!
-	 * @return bool
-	 */
-	public function unlockRecord($bitForceUnlock = false)	{
-        if($this->isLockedByCurrentUser() ||
-            ($bitForceUnlock && in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()) )
+     *
+     * @return bool
+     */
+    public function unlockRecord($bitForceUnlock = false) {
+        if($this->isLockedByCurrentUser()
+            || ($bitForceUnlock && in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()))
         ) {
 
-
-            $strQuery = "UPDATE "._dbprefix_."system
+            $strQuery = "UPDATE " . _dbprefix_ . "system
                             SET system_lock_id='0'
                             WHERE system_id=? ";
             if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
@@ -88,7 +88,7 @@ class class_lockmanager  {
         }
 
         return false;
-	}
+    }
 
     /**
      * Checks if the record is locked for the current user and so not accessible.
@@ -99,8 +99,9 @@ class class_lockmanager  {
     public function isAccessibleForCurrentUser() {
         $strLockId = $this->getLockId();
         if(validateSystemid($strLockId)) {
-            if($strLockId != class_carrier::getInstance()->getObjSession()->getUserID())
+            if($strLockId != class_carrier::getInstance()->getObjSession()->getUserID()) {
                 return false;
+            }
         }
 
         return true;
@@ -115,8 +116,9 @@ class class_lockmanager  {
     public function isLockedByCurrentUser() {
         $strLockId = $this->getLockId();
         if(validateSystemid($strLockId)) {
-            if($strLockId == class_carrier::getInstance()->getObjSession()->getUserID())
+            if($strLockId == class_carrier::getInstance()->getObjSession()->getUserID()) {
                 return true;
+            }
         }
 
         return false;
@@ -130,25 +132,26 @@ class class_lockmanager  {
      */
     public function isUnlockableForCurrentUser() {
 
-        if(in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()))
+        if(in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray())) {
             return true;
+        }
 
         return false;
     }
 
 
     /**
-	 * Unlocks records locked passed the defined max-locktime
-	 *
-	 * @return bool
-	 */
-	private function unlockOldRecords() {
-	    $intMinTime = time() - _system_lock_maxtime_;
-	    $strQuery = "UPDATE "._dbprefix_."system
+     * Unlocks records locked passed the defined max-locktime
+     *
+     * @return bool
+     */
+    private function unlockOldRecords() {
+        $intMinTime = time() - _system_lock_maxtime_;
+        $strQuery = "UPDATE " . _dbprefix_ . "system
 						SET system_lock_id='0'
 				      WHERE system_lock_time <= ?";
-	    return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intMinTime));
-	}
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intMinTime));
+    }
 
     /**
      * Fetches the current user-id locking the record
@@ -156,10 +159,12 @@ class class_lockmanager  {
      * @return string
      */
     private function getLockId() {
-        if($this->objSystemCommon->getStrLockId() != "")
+        if($this->objSystemCommon->getStrLockId() != "") {
             return $this->objSystemCommon->getStrLockId();
-        else
+        }
+        else {
             return "0";
+        }
     }
 
 }

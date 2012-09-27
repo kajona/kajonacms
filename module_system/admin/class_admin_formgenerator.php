@@ -107,6 +107,8 @@ class class_admin_formgenerator {
      * @param $strTargetURI
      * @param int $intButtonConfig a list of buttons to attach to the end of the form. if you need more then the obligatory save-button,
      *                             pass them combined by a bitwise or, e.g. class_admin_formgenerator::$BIT_BUTTON_SUBMIT | class_admin_formgenerator::$BIT_BUTTON_CANCEL
+     *
+     * @throws class_exception
      * @return string
      */
     public function renderForm($strTargetURI, $intButtonConfig = 2) {
@@ -142,6 +144,15 @@ class class_admin_formgenerator {
             $objField = current($this->arrFields);
             $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
         }
+
+        //lock the record to avoid multiple edit-sessions
+
+
+        if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
+            $this->objSourceobject->getLockManager()->lockRecord();
+        else
+            throw new class_exception("current record is already locked, cannot be locked for the current user", class_exception::$level_ERROR);
+
 
         return $strReturn;
     }

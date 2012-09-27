@@ -354,7 +354,7 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("i=con_tonLocked.png", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("commons_locked")));
             }
 
             return $this->objToolkit->listDeleteButton(

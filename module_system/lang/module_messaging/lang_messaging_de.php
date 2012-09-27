@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["actionConfig"]                    = "Einstellungen";
-$lang["actionView"]                      = "Detail-Ansicht";
+$lang["actionEdit"]                      = "Detail-Ansicht";
 $lang["delete_question"]                 = "Möchten Sie die Nachricht &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["message_prolog"]                  = "Eine neue Nachricht ist eingetroffen. Zum Lesen der Nachricht können Sie den nachstehenden Link verwenden. Eine Kopie der Nachricht folgt.";
 $lang["message_subject"]                 = "Neue Nachricht erhalten";

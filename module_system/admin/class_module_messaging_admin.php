@@ -108,8 +108,8 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
                     $objListEntry->getArrModule("modul"),
                     "edit",
                     "&systemid=".$objListEntry->getSystemid(),
-                    $this->getLang("commons_list_edit"),
-                    $this->getLang("commons_list_edit"),
+                    $this->getLang("actionEdit"),
+                    $this->getLang("actionEdit"),
                     "icon_lens.png"
                 )
             );

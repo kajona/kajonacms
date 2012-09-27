@@ -427,6 +427,9 @@ abstract class class_root {
      */
     public function deleteObject() {
 
+        if(!$this->getLockManager()->isAccessibleForCurrentUser())
+            return false;
+
         if(!$this instanceof interface_model)
             throw new class_exception("delete operation required interface_model to be implemented", class_exception::$level_ERROR);
 
@@ -479,9 +482,13 @@ abstract class class_root {
      */
     public function updateObjectToDb($strPrevId = false) {
         $bitCommit = true;
-
+        /** @var $this class_root|interface_model */
         if(!$this instanceof interface_model)
             throw new class_exception("current object must implemented interface_model", class_exception::$level_FATALERROR);
+
+        if(!$this->getLockManager()->isAccessibleForCurrentUser()) {
+            throw new class_exception("current object is locked", class_exception::$level_ERROR);
+        }
 
         $this->objDB->transactionBegin();
 
@@ -514,7 +521,7 @@ abstract class class_root {
                                                 (".$this->objDB->encloseColumnName($arrSingleTable[1]).") VALUES
                                                 (?) ";
 
-                        if(!$this->objDB->_pQuery($strQuery, array($this->getStrSystemid()) ))
+                        if(!$this->objDB->_pQuery($strQuery, array($this->getStrSystemid())))
                             $bitCommit = false;
                     }
                 }
@@ -549,6 +556,8 @@ abstract class class_root {
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
+            //unlock the record
+            $this->getLockManager()->unlockRecord();
             $bitReturn = true;
             class_logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelInfo);
         }

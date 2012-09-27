@@ -222,7 +222,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendPasswordFinal"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("user_resend_password_hint"));
         $strReturn .= $this->objToolkit->formTextRow($this->getLang("user_username") . " " . $objUser->getStrUsername());
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("user_email") . " " . $objUser->getStrEmail());
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("form_user_email") . " " . $objUser->getStrEmail());
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();

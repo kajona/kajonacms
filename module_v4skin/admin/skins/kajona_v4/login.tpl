@@ -53,6 +53,10 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    document.getElementById('name').focus();
+</script>
+
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/bootstrap-transition.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/bootstrap-alert.js?_system_browser_cachebuster_"></script>
