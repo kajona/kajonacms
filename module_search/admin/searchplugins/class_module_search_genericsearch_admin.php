@@ -67,7 +67,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
             $arrParams = array();
 
             $arrProperties = $objReflection->getPropertiesWithAnnotation("@tableColumn");
-            foreach($arrProperties as $strPropertyName => $strColumn) {
+            foreach($arrProperties as $strColumn) {
 
                 $arrColumn = explode(".", $strColumn);
                 if(count($arrColumn) == 2)
@@ -88,7 +88,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
             foreach($arrRows as $arrOneRow) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
 
-                if($objInstance != null) {
+                if($objInstance != null && $objInstance->rightView()) {
                     $objResult = new class_search_result();
                     $objResult->setObjObject($objInstance);
                     $this->arrHits[] = $objResult;

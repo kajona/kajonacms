@@ -16,7 +16,7 @@
 
 body {
     padding-top: 70px;
-    padding-bottom: 40px;
+    //padding-bottom: 40px;
 
     &.dialogBody,
     &.portaleditorBody {
@@ -27,11 +27,13 @@ body {
         font-size: @baseFontSize + 5;
         line-height: @baseFontSize + 8
     }
-
-
-
 }
 
+footer {
+    text-align: center;
+    border-top: 1px solid @hrBorder;
+    margin: 10px 0;
+}
 
 
 .sidebar-nav {
@@ -468,8 +470,9 @@ body {
         color: @white;
     }
 
-    pre {
+    pre, code {
         font-size: @baseFontSize - 2;
+        color: @textColor;
     }
 
 	.thumbnails {

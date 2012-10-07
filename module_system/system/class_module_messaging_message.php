@@ -69,6 +69,11 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     }
 
+    public function rightView() {
+        return parent::rightView() && $this->getStrUser() == $this->objSession->getUserID();
+    }
+
+
     protected function initObjectInternal() {
         parent::initObjectInternal();
         $arrInitRow = $this->getArrInitRow();

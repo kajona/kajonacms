@@ -94,8 +94,6 @@
         </div>
     </div>
 
-    <hr>
-
     <footer>
         <p>powered by <a href="http://www.kajona.de/" target="_blank" title="Kajona - empowering your content">Kajona</a></p>
     </footer>
