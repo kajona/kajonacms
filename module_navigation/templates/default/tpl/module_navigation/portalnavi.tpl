@@ -9,11 +9,11 @@
 <level_1_wrapper><ul>%%level1%%</ul></level_1_wrapper>
 
 <level_1_active>
-<li>%%link%% &middot;</li>
+<li>%%link%%</li>
 </level_1_active>
 
 <level_1_inactive>
-<li>%%link%% &middot;</li>
+<li>%%link%%</li>
 </level_1_inactive>
 
 <level_1_inactive_last>
