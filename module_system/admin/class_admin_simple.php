@@ -87,7 +87,7 @@ abstract class class_admin_simple extends class_admin {
             if(!$objRecord->copyObject())
                 throw new class_exception("error creating a copy of object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&systemid=".$objRecord->getPrevId()));
         }
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
