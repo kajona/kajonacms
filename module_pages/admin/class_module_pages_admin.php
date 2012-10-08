@@ -429,7 +429,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         if(!validateSystemid($strFolderId) && validateSystemid($strParentId)) {
             $objParent = class_objectfactory::getInstance()->getObject($strParentId);
             $strFolderId = $objParent->getSystemid();
-            $strFolderName = $objParent->getStrDisplayName();
+            if($objParent->getSystemid() != $this->getObjModule()->getSystemid())
+                $strFolderName = $objParent->getStrDisplayName();
         }
         $objForm->addField(new class_formentry_text("page", "folder_name"))->setStrValue($strFolderName)->setBitReadonly(true)->setStrOpener($strPagesBrowser)->setStrLabel($this->getLang("page_folder_name"));
         $objForm->addField(new class_formentry_hidden("page", "folder_name_id"))->setStrValue($strFolderId);
