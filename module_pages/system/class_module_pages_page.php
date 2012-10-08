@@ -208,17 +208,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
 		//Create the system-record
 		if(_pages_newdisabled_ == "true")
-            $this->setStatus();
-
-
-        //set the matching sort-id
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_module_nr = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getStrPrevId(), _pages_modul_id_));
-        $intSiblings = $arrRow["COUNT(*)"];
-
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
-        $this->objDB->_pQuery($strQuery, array($intSiblings, $this->getSystemid()));
-        $this->setIntSort($intSiblings);
+            $this->setIntRecordStatus(0);
 
         return true;
     }
