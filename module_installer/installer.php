@@ -441,7 +441,7 @@ class class_installer {
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
-        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
+        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=modeSelect");
         $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=samplecontent");
     }
 
