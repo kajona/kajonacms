@@ -284,7 +284,7 @@ function switchDriver() {
 
 <installer_modules_form>
 	<form action="_webpath_/installer.php?step=install" method="POST">
-        <table class="table table-striped table-condensed" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-condensed table-hover" cellpadding="0" cellspacing="0">
 	        %%module_rows%%
         </table>
         <div class="control-group">
@@ -299,7 +299,7 @@ function switchDriver() {
 
 <installer_samplecontent_form>
     <form action="_webpath_/installer.php?step=samplecontent" method="POST">
-        <table class="admintable table table-striped table-condensed" cellpadding="0" cellspacing="0">
+        <table class="admintable table table-striped table-condensed table-hover" cellpadding="0" cellspacing="0">
        %%module_rows%%
         </table>
         <div class="control-group">
@@ -322,11 +322,11 @@ function switchDriver() {
 </installer_modules_row>
 
 <installer_modules_row_installable>
-	        <tr onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
+	        <tr>
 	            <td width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" checked="checked"/></td>
-	            <td >%%module_name%%</td>
-	            <td>V %%module_version%%</td>
-	            <td>%%module_hint%%</td>
+	            <td onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">%%module_name%%</td>
+	            <td onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">V %%module_version%%</td>
+	            <td onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">%%module_hint%%</td>
 	        </tr>
 </installer_modules_row_installable>
 
