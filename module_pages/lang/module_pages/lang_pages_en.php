@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Page-cache enabled:";
@@ -109,6 +109,7 @@ $lang["pe_icon_page"]                    = "Edit page details";
 $lang["pe_inactiveElement"]              = "Inactive element";
 $lang["pe_new"]                          = "New element at placeholder:";
 $lang["pe_new_old"]                      = "Create";
+$lang["pe_rte_save"]                     = "Save changes";
 $lang["pe_setactive"]                    = "Set active";
 $lang["pe_setinactive"]                  = "Set inactive";
 $lang["pe_shiftDown"]                    = "Shift down";
@@ -117,7 +118,6 @@ $lang["pe_status_autor"]                 = "Last author:";
 $lang["pe_status_page"]                  = "Page:";
 $lang["pe_status_status"]                = "Status:";
 $lang["pe_status_time"]                  = "Last modification:";
-$lang["pe_rte_save"]                     = "Save changes";
 $lang["plNew"]                           = "New placeholder:";
 $lang["plRename"]                        = "Update";
 $lang["plToUpdate"]                      = "Old placeholder:";
@@ -146,6 +146,7 @@ $lang["required_ordner_name"]            = "Name of the superior page / folder";
 $lang["seite_bearbeiten"]                = "Edit page";
 $lang["seite_copy"]                      = "Copy page";
 $lang["seite_inhalte"]                   = "Edit page content";
+$lang["seite_inhalte_alias"]             = "Edit page content of linked page";
 $lang["seite_loeschen"]                  = "Delete page";
 $lang["seite_loeschen_erfolg"]           = "Page was delete successfully";
 $lang["seite_loeschen_frage"]            = "Do you really want to delete the page &quot;<b>%%element_name%%</b>&quot;? All pages and folders below the current page are delete, too.";

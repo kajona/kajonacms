@@ -216,7 +216,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $objTargetPage = class_module_pages_page::getPageByName($objListEntry->getStrAlias());
                 if(!$bitPeMode && $objTargetPage->rightEdit())
                     $arrReturn[] = $this->objToolkit->listButton(
-                        getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte"), "icon_page.png")
+                        getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte_alias"), "icon_page_alias.png")
                     );
 
                 $arrReturn[] = $this->objToolkit->listButton(

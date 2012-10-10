@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Seitencache aktiv:";
@@ -109,6 +109,7 @@ $lang["pe_icon_page"]                    = "Grunddaten der Seite bearbeiten";
 $lang["pe_inactiveElement"]              = "Deaktiviertes Element";
 $lang["pe_new"]                          = "Neues Element an Platzhalter:";
 $lang["pe_new_old"]                      = "Anlegen";
+$lang["pe_rte_save"]                     = "Vorgenommene Änderungen speichern";
 $lang["pe_setactive"]                    = "Aktivieren";
 $lang["pe_setinactive"]                  = "Deaktivieren";
 $lang["pe_shiftDown"]                    = "Nach unten";
@@ -117,7 +118,6 @@ $lang["pe_status_autor"]                 = "Letzter Autor:";
 $lang["pe_status_page"]                  = "Seite:";
 $lang["pe_status_status"]                = "Status:";
 $lang["pe_status_time"]                  = "Letzte Änderung:";
-$lang["pe_rte_save"]                     = "Vorgenommene Änderungen speichern";
 $lang["plNew"]                           = "Neuer Platzhalter:";
 $lang["plRename"]                        = "Anpassen";
 $lang["plToUpdate"]                      = "Alter Platzhalter:";
@@ -146,6 +146,7 @@ $lang["required_ordner_name"]            = "Name des übergeordneten Ordners / S
 $lang["seite_bearbeiten"]                = "Seite bearbeiten";
 $lang["seite_copy"]                      = "Seite kopieren";
 $lang["seite_inhalte"]                   = "Seiteninhalte bearbeiten";
+$lang["seite_inhalte_alias"]             = "Seiteninhalte der verknüpften Seiten bearbeiten";
 $lang["seite_loeschen"]                  = "Seite löschen";
 $lang["seite_loeschen_erfolg"]           = "Seite erfolgreich gelöscht";
 $lang["seite_loeschen_frage"]            = "Möchten Sie die Seite &quot;<b>%%element_name%%</b>&quot; wirklich löschen? Alle darunter angelegten Seiten werden ebenfalls gelöscht!";
