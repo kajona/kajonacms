@@ -5,8 +5,14 @@ div.hallotoolbar {
     border-radius: 6px;
     font-size: 12pt;
     line-height: 1.1em;
-    width: 260px;
     z-index: 500;
+}
+
+div.halloEditIndicator {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 4px;
+    border-radius: 4px;
 }
 
 /* Drag n Drop */
@@ -26,12 +32,24 @@ div.hallotoolbar {
 }
 
 .dropdown-menu {
-    width: 200px;
+    width: "200px";
     background-color: #eeeeec;
 }
 
 .dropdown-target .selected {
     background-color: #729fcf;
+}
+
+button.blockselector, button.blockselector:focus{
+	display:block;
+	width: 100%;
+	margin:0px;
+	padding: 0px;
+	background: transparent;
+	border: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	outline: none;
 }
 
 .bigOverlay, .smallOverlay {

@@ -177,11 +177,6 @@ KAJONA.admin.portaleditor = {
             "/core/module_system/admin/scripts/jquery/jquery.htmlClean.min.js",
             "/core/module_pages/admin/scripts/rangy/rangy-core.js",
             "/core/module_pages/admin/scripts/halloeditor/hallo-min.js",
-            "/core/module_pages/admin/scripts/halloeditor/halloformat.js",
-            "/core/module_pages/admin/scripts/halloeditor/headings.js",
-            "/core/module_pages/admin/scripts/halloeditor/lists.js",
-            "/core/module_pages/admin/scripts/halloeditor/reundo.js",
-            "/core/module_pages/admin/scripts/halloeditor/link.js",
             "/core/module_pages/admin/scripts/halloeditor/hallo.css",
             "/core/module_pages/admin/scripts/halloeditor/fontawesome/css/font-awesome.css",
         ], function() {
