@@ -242,9 +242,9 @@
 
 
     <target name="compileLess" description="Compiles the less files and inserts them into to tpl files">
-        <!--<exec executable="php" dir="${basedir}"  failonerror="on" >
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f lessc/v4setup.php "/>
-        </exec>-->
+        </exec>
     </target>
 
 
