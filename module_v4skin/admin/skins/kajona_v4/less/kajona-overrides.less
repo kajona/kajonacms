@@ -23,9 +23,13 @@ body {
         padding: 0;
     }
 
+    h1 {
+        font-size: @baseFontSize + 12;
+    }
+
     h2 {
-        font-size: @baseFontSize + 5;
-        line-height: @baseFontSize + 8
+        font-size: @baseFontSize + 4;
+        line-height: @baseFontSize + 7;
     }
 }
 
@@ -297,6 +301,7 @@ footer {
     padding-right: 20px;
     filter: none;
     border: 0px;
+    border-bottom: 1px solid darken(@kajonaLightGray, 5%);
 
     .navbar-search {
         margin-top:12px;
@@ -326,14 +331,11 @@ footer {
     min-width: 160px;
     padding: 4px 0;
     text-align:left;
-    //color:@white;
 
     a {
         clear: both;
-        //color: @white;
         display: block;
         font-weight: normal;
-        //font-size:@baseFontSize + 2;
         line-height: 20px;
         padding: 4px 15px;
         white-space: nowrap;
@@ -716,14 +718,10 @@ footer {
 	}
 
 	div.calendarEvent {
-		background-color: lighten(#DEDF45, 40%);
-		border: 1px solid #DEDF45;
-		padding: 0px 2px;
-		margin: 2px;
+        #calendar > .event(#DEDF45);
 
 		&.calendarNews {
-			border: 1px solid #077ff9;
-			background-color: lighten(#077FF9, 40%);
+            #calendar > .event(#077ff9);
 		}
 	}
 

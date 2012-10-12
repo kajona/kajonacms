@@ -15,7 +15,7 @@ $arrFilesToCompile = array(
 
 
     __DIR__."/../temp/kajona/core/module_installer/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_installer/less/styles.css",
-    __DIR__."/../temp/kajona/core/module_installer/less/responsive.less" => __DIR__."/../temp/kajona/core/module_installer/less/responsive.css",
+    __DIR__."/../temp/kajona/core/module_installer/less/responsive.less" => __DIR__."/../temp/kajona/core/module_installer/less/responsive.css"
 );
 
 $strSkinReplacement = "";
@@ -27,7 +27,7 @@ TXT;
 $strInstallerReplacement = "";
 $strInstallerReplacement = <<<TXT
     <link rel="stylesheet" href="_webpath_/core/module_installer/less/styles.css?_system_browser_cachebuster_" type="text/css" />
-    <link rel="stylesheet" href="__webpath_/core/module_installer/less/responsive.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/core/module_installer/less/responsive.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 
