@@ -234,6 +234,7 @@ function switchDriver() {
     <div>
         <a href="%%link_manualinstall%%">[lang,installer_mode_manual,system]</a>
         <p>[lang,installer_mode_manual_hint,system]</p>
+        <div class="alert alert-info">[lang,installer_mode_hint,system]</div>
     </div>
 </modeselect_content>
 

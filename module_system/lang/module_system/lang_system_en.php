@@ -128,6 +128,7 @@ $lang["installer_login_username"]        = "Username:";
 $lang["installer_missing"]               = "missing";
 $lang["installer_mode_auto"]             = "Automatic installtion";
 $lang["installer_mode_auto_hint"]        = "All modules available and their samplecontents are installed.";
+$lang["installer_mode_hint"]             = "Attention: When updating a system you have to select the manual mode.";
 $lang["installer_mode_manual"]           = "Manual installation";
 $lang["installer_mode_manual_hint"]      = "Manual selection of the modules to install. The installation of the samplecontent may be skipped.";
 $lang["installer_module_notinstalled"]   = "Module not installed";
