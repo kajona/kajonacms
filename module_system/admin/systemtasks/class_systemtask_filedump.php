@@ -16,24 +16,21 @@
 class class_systemtask_filedump extends class_systemtask_base implements interface_admin_systemtask {
 
     private $arrFoldersToInclude = array(
-        "/system/config",
-        "/portal/pics/upload",
-        "/portal/downloads",
-        "/portal/css",
+        "/files",
+        "/project",
         "/templates"
     );
 
 
     private $arrFilesToInclude = array(
-        "/portal/global_includes.php",
         "/.htaccess"
     );
 
-	/**
-	 * contructor to call the base constructor
-	 */
-	public function __construct() {
-		parent::__construct();
+    /**
+     * contructor to call the base constructor
+     */
+    public function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -49,7 +46,7 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
      * @return string
      */
     public function getStrInternalTaskName() {
-    	return "filedump";
+        return "filedump";
     }
 
     /**
@@ -57,7 +54,7 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getLang("systemtask_filedump_name");
+        return $this->getLang("systemtask_filedump_name");
     }
 
     /**
@@ -66,7 +63,7 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
      */
     public function executeTask() {
 
-        $strFilename = "/backup_".time().".zip";
+        $strFilename = "/backup_" . time() . ".zip";
 
         $objZip = new class_zip();
         $objZip->openArchiveForWriting($strFilename);
@@ -78,11 +75,12 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
             $objZip->addFile($strOneFile);
         }
 
-        if($objZip->closeArchive())
-            return $this->getLang("systemtask_filedump_success").$strFilename;
-        else
+        if($objZip->closeArchive()) {
+            return $this->getLang("systemtask_filedump_success") . $strFilename;
+        }
+        else {
             return $this->getLang("systemtask_filedump_error");
+        }
     }
-
 
 }
