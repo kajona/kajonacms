@@ -39,28 +39,61 @@ class class_v3_v4_postupdate {
         }
         echo ".. installed.\n";
 
-        //FIXME: gallery update
         echo "\n\n<b>Galleries</b>\n";
         if(!$this->updateGalleries())
             return false;
 
-        //FIXME: downloads update
         echo "\n\n<b>Downloads</b>\n";
         if(!$this->updateDownloads())
             return false;
-
 
         echo "\n\n<b>Filemanager</b>\n";
         if(!$this->updateFilemanager())
             return false;
 
 
+        echo "\n\n<b>v3 Templates</b>\n";
+        if(!$this->activateTemplate())
+            return false;
+
         echo "\n\n<b>Update succeeded. \nPlease remove the file ".__FILE__." from the filesystem.</b>\n";
 
         echo "</pre>";
+
+        return true;
     }
 
 
+    private function activateTemplate() {
+        echo "Searching for a v3 template to activate...\n";
+        if(!is_dir(_realpath_."/templates/v3template")) {
+            echo "no template found, nothing to do.\n";
+            return true;
+        }
+
+        echo "Templatepack v3template found\n";
+        class_module_packagemanager_template::syncTemplatepacks();
+        $arrPackages = class_module_packagemanager_template::getObjectList();
+        /** @var class_module_packagemanager_template $objOnePackage */
+        foreach($arrPackages as $objOnePackage) {
+            if($objOnePackage->getStrName() == "v3template") {
+                echo "setting the template-pack active...\n";
+                $objOnePackage->setIntRecordStatus(1);
+
+                echo "If you didn't change the templates in v3, delete the unmodified ones from /templates/v3template/tpl.\n";
+                echo "Otherwise make sure to update the references to js and css files and consider to upgrade your js-implementation to the now-standard jQuery instead of YUI.\n";
+                echo "For css-files, the new path would be:\n";
+                echo "  _webpath_/templates/v3template/css/filename.css\n";
+                echo "For js-files, the new path would be:\n";
+                echo "  _webpath_/templates/v3template/js/filename.js\n";
+
+                return true;
+            }
+        }
+
+        echo "ERROR: no matching template-pack found in the database. set up your templates manually.\n";
+        return true;
+    }
 
 
 
