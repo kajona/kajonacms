@@ -16,16 +16,22 @@
             <xs:element type="xs:string" name="version" maxOccurs="1" minOccurs="1"/>
             <xs:element type="xs:string" name="author" maxOccurs="1" minOccurs="1"/>
             <xs:element type="xs:string" name="target" maxOccurs="1" minOccurs="1"/>
-
             <xs:element type="typeType" name="type" maxOccurs="1" minOccurs="1" />
             <xs:element type="boolType" name="providesInstaller" maxOccurs="1" minOccurs="1" />
-
-            <xs:element type="xs:string" name="requiredModules" maxOccurs="1" minOccurs="1"/>
-            <xs:element type="xs:string" name="minSystemVersion" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="requiredModule" name="requiredModules" maxOccurs="1" minOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
-
+    <xs:complexType name="requiredModule">
+        <xs:sequence>
+            <xs:element name="module" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                    <xs:attribute name="name" type="xs:string"/>
+                    <xs:attribute name="version" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:simpleType name="typeType" >
         <xs:restriction base="xs:string">

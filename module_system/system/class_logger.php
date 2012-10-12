@@ -66,6 +66,7 @@ final class class_logger {
 
     /**
      * Doing nothing but being private
+     *
      * @param $strLogfile
      */
     private function __construct($strLogfile) {
@@ -77,11 +78,13 @@ final class class_logger {
      * returns the current instance of this class
      *
      * @param string $strLogfile
+     *
      * @return class_logger
      */
     public static function getInstance($strLogfile = "") {
-        if($strLogfile == "")
+        if($strLogfile == "") {
             $strLogfile = self::SYSTEMLOG;
+        }
 
         if(!isset(self::$arrInstances[$strLogfile])) {
             self::$arrInstances[$strLogfile] = new class_logger($strLogfile);
@@ -106,46 +109,54 @@ final class class_logger {
         $arrStack = debug_backtrace();
 
         //check, if there someting to write
-        if($this->intLogLevel == 0)
+        if($this->intLogLevel == 0) {
             return;
+        }
         //errors in level >=1
-        if($intLevel == self::$levelError && $this->intLogLevel < 1)
+        if($intLevel == self::$levelError && $this->intLogLevel < 1) {
             return;
+        }
         //warnings in level >=2
-        if($intLevel == self::$levelWarning && $this->intLogLevel < 2)
+        if($intLevel == self::$levelWarning && $this->intLogLevel < 2) {
             return;
+        }
         //infos in level >=3
-        if($intLevel == self::$levelInfo && $this->intLogLevel < 3)
+        if($intLevel == self::$levelInfo && $this->intLogLevel < 3) {
             return;
+        }
 
         //a log row has the following scheme:
         // YYYY-MM-DD HH:MM:SS LEVEL USERID (USERNAME) MESSAGE
         $strDate = strftime("%Y-%m-%d %H:%M:%S", time());
         $strLevel = "";
-        if($intLevel == self::$levelError)
+        if($intLevel == self::$levelError) {
             $strLevel = "ERROR";
-        elseif ($intLevel == self::$levelInfo)
+        }
+        elseif($intLevel == self::$levelInfo) {
             $strLevel = "INFO";
-        elseif ($intLevel == self::$levelWarning)
+        }
+        elseif($intLevel == self::$levelWarning) {
             $strLevel = "WARNING";
+        }
 
         $strSessid = "";
         if(!$bitSkipSessionData && class_carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
             $strSessid = class_carrier::getInstance()->getObjSession()->getInternalSessionId();
-            $strSessid .= " (".class_carrier::getInstance()->getObjSession()->getUsername().")";
+            $strSessid .= " (" . class_carrier::getInstance()->getObjSession()->getUsername() . ")";
         }
 
         $strMessage = uniStrReplace(array("\r", "\n"), array(" ", " "), $strMessage);
 
         $strFileInfo = "";
-        if(isset($arrStack[1]) && isset($arrStack[1]["file"]))
-            $strFileInfo = basename($arrStack[1]["file"]).":".$arrStack[1]["function"].":".$arrStack[1]["line"];
+        if(isset($arrStack[1]) && isset($arrStack[1]["file"])) {
+            $strFileInfo = basename($arrStack[1]["file"]) . ":" . $arrStack[1]["function"] . ":" . $arrStack[1]["line"];
+        }
 
-        $strText = $strDate." ".$strLevel." ".$strSessid." ".$strFileInfo." ".$strMessage."\r\n";
+        $strText = $strDate . " " . $strLevel . " " . $strSessid . " " . $strFileInfo . " " . $strMessage . "\r\n";
 
-		$handle = fopen(_realpath_._projectpath_."/log/".$this->strFilename, "a");
-		fwrite($handle, $strText);
-		fclose($handle);
+        $handle = fopen(_realpath_ . "/project/log/" . $this->strFilename, "a");
+        fwrite($handle, $strText);
+        fclose($handle);
     }
 
     /**
@@ -155,10 +166,11 @@ final class class_logger {
      */
     public function getLogFileContent() {
         $objFile = new class_filesystem();
-        if(!is_file(_realpath_._projectpath_."/log/".$this->strFilename))
+        if(!is_file(_realpath_ . "/project/log/" . $this->strFilename)) {
             return "";
+        }
 
-        $objFile->openFilePointer(_projectpath_."/log/".$this->strFilename, "r");
+        $objFile->openFilePointer("/project/log/" . $this->strFilename, "r");
         return $objFile->readLastLinesFromFile(25);
     }
 
@@ -170,12 +182,13 @@ final class class_logger {
      */
     public function getPhpLogFileContent() {
         $objFile = new class_filesystem();
-        $objFile->openFilePointer(_projectpath_."/log/php.log", "r");
+        $objFile->openFilePointer("/project/log/php.log", "r");
         return $objFile->readLastLinesFromFile(25);
     }
 
     /**
      * Sets the loggers logging-level aka. the granularity
+     *
      * @param $intLogLevel
      */
     public function setIntLogLevel($intLogLevel) {

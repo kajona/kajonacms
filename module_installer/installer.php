@@ -75,7 +75,7 @@ class class_installer {
         }
 
         $this->STR_ORIG_CONFIG_FILE = _corepath_."/module_system/system/config/config.php";
-        $this->STR_PROJECT_CONFIG_FILE = _realpath_._projectpath_."/system/config/config.php";
+        $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/system/config/config.php";
     }
 
 
@@ -372,7 +372,13 @@ class class_installer {
                 }
 
             }
+
         }
+
+        class_objectfactory::getInstance()->flushCache();
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        class_module_system_module::flushCache();
+        $this->loadInstaller();
 
 
         $this->strLogfile = $strInstallLog;
@@ -401,31 +407,22 @@ class class_installer {
             $arrTemplate["module_hint"] = "";
 
             if($objHandler->getVersionInstalled() !== null) {
-                $arrTemplate["module_hint"] = $this->getLang("installer_versioninstalled", "system").$objHandler->getVersionInstalled();
+                $arrTemplate["module_hint"] .= $this->getLang("installer_versioninstalled", "system").$objHandler->getVersionInstalled()."<br />";
             }
-            else {
-                //check missing modules
-                $strRequired = "";
-                $arrModules = explode(",", $objHandler->getObjMetadata()->getStrRequiredModules());
-                foreach($arrModules as $strOneModule) {
-                    if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
-                        $strRequired .= $strOneModule.", ";
-                }
 
-                if(trim($strRequired) != "") {
-                    $arrTemplate["module_hint"] = $this->getLang("installer_modules_needed", "system").substr($strRequired, 0, -2);
-                }
-                else {
-                    //check, if a min version of the system is needed
-                    if($objOneMetadata->getStrMinVersion() != "") {
-                        //the systems version to compare to
-                        $objSystem = class_module_system_module::getModuleByName("system");
-                        if($objSystem == null || version_compare($objOneMetadata->getStrMinVersion(), $objSystem->getStrVersion(), ">")) {
-                            $arrTemplate["module_hint"] = $this->getLang("installer_systemversion_needed", "system").$objOneMetadata->getStrMinVersion()."<br />";
-                        }
-                    }
+            //check missing modules
+            $strRequired = "";
+            $arrModules = $objHandler->getObjMetadata()->getArrRequiredModules();
+            foreach($arrModules as $strOneModule => $strVersion) {
+                if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
+                    $strRequired .= $strOneModule.", ";
+
+                else if(version_compare($strVersion, class_module_system_module::getModuleByName(trim($strOneModule))->getStrVersion(), ">")) {
+                    $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." => ".$strVersion."<br />";
                 }
             }
+
+
 
             if($objHandler->isInstallable()) {
                 $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);

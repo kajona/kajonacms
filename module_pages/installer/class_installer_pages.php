@@ -268,17 +268,17 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
         }
@@ -291,7 +291,29 @@ class class_installer_pages extends class_installer_base implements interface_in
     private function update_342_349() {
         $strReturn = "Updating 3.4.2 to 3.4.9...\n";
 
+        $strReturn .= "Altering element-table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                    ADD ".$this->objDB->encloseColumnName("element_config1")." ".$this->objDB->getDatatype("char254")." NULL,
+                    ADD ".$this->objDB->encloseColumnName("element_config2")." ".$this->objDB->getDatatype("char254")." NULL,
+                    ADD ".$this->objDB->encloseColumnName("element_config3")." ".$this->objDB->getDatatype("text")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
         $strReturn .= "Setting new element-classes...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."element";
+        $arrElements = $this->objDB->getPArray($strQuery, array());
+        foreach($arrElements as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."element SET element_class_portal = ?, element_class_admin = ? WHERE element_id = ?";
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    uniStrReplace(".php", "_portal.php", $arrOneRow["element_class_portal"]),
+                    uniStrReplace(".php", "_admin.php", $arrOneRow["element_class_admin"]),
+                    $arrOneRow["element_id"]
+                )
+            );
+        }
         $arrElements = class_module_pages_element::getObjectList();
         /** @var class_module_pages_element $objOneElement */
         foreach($arrElements as $objOneElement) {
@@ -329,15 +351,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
     private function update_349_3491() {
         $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
-
-        $strReturn .= "Altering element-table...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")."
-                    ADD ".$this->objDB->encloseColumnName("element_config1")." ".$this->objDB->getDatatype("char254")." NULL,
-                    ADD ".$this->objDB->encloseColumnName("element_config2")." ".$this->objDB->getDatatype("char254")." NULL,
-                    ADD ".$this->objDB->encloseColumnName("element_config3")." ".$this->objDB->getDatatype("text")." NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
 
 
         $strReturn .= "Migrating elements to real records...\n";

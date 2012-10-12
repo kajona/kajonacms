@@ -271,7 +271,8 @@ abstract class class_root {
                 $this->intRecordStatus = $arrRow["system_status"];
                 $this->strRecordComment = $arrRow["system_comment"];
                 $this->longCreateDate = $arrRow["system_create_date"];
-                $this->strRecordClass = $arrRow["system_class"];
+                if(isset($arrRow["system_class"]))
+                    $this->strRecordClass = $arrRow["system_class"];
 
                 $this->strOldPrevId = $this->strPrevId;
 

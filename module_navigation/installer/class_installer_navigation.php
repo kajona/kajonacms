@@ -119,9 +119,13 @@ class class_installer_navigation extends class_installer_base implements interfa
 
         $strReturn .= "Adding classes for existing records...\n";
         $strReturn .= "Trees\n";
-        foreach(class_module_navigation_tree::getObjectList() as $objOneModule) {
+        $arrRows = $this->objDB->getPArray(
+            "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system WHERE system_id = navigation_id AND system_prev_id = ? AND (system_class IS NULL OR system_class = '')",
+            array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_))
+        );
+        foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( get_class($objOneModule), $objOneModule->getSystemid() ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_navigation_tree', $arrOneRow["system_id"] ) );
         }
 
         $strReturn .= "Navigation Points\n";

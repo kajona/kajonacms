@@ -132,14 +132,14 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $arrRows = $this->objDB->getPArray("SELECT faqs_id FROM "._dbprefix_."faqs, "._dbprefix_."system WHERE system_id = faqs_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_faqs_faq', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_faqs_faq', $arrOneRow["faqs_id"] ) );
         }
 
         $strReturn .= "Categories\n";
         $arrRows = $this->objDB->getPArray("SELECT faqs_cat_id FROM "._dbprefix_."faqs_category, "._dbprefix_."system WHERE system_id = faqs_cat_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_faqs_category', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_faqs_category', $arrOneRow["faqs_cat_id"] ) );
         }
 
         $strReturn .= "Removing old constants\n";

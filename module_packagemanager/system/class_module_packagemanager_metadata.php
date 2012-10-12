@@ -23,11 +23,11 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     private $strAuthor;
     private $strType;
     private $bitProvidesInstaller;
-    private $strRequiredModules;
-    private $strMinVersion;
+    private $arrRequiredModules = array();
 
     private $strContentprovider;
     private $strPath;
+
 
 
 
@@ -74,7 +74,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
 
 
     public function __toString() {
-        return "Title: ".$this->getStrTitle()." Version: ".$this->getStrVersion()." Type: ".$this->getStrType()." Target: ".$this->getStrTarget();
+        return "Title: ".$this->getStrTitle()." Version: ".$this->getStrVersion()." Type: ".$this->getStrType()." Target: ".$this->getStrTarget()." Dependencies: ".print_r($this->getArrRequiredModules(), true);
     }
 
     /**
@@ -141,8 +141,25 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         $this->setStrTarget($arrXml["package"]["0"]["target"]["0"]["value"]);
         $this->setStrType($arrXml["package"]["0"]["type"]["0"]["value"]);
         $this->setBitProvidesInstaller($arrXml["package"]["0"]["providesInstaller"]["0"]["value"] == "TRUE");
-        $this->setStrRequiredModules($arrXml["package"]["0"]["requiredModules"]["0"]["value"]);
-        $this->setStrMinVersion($arrXml["package"]["0"]["minSystemVersion"]["0"]["value"]);
+
+        if(is_array($arrXml["package"]["0"]["requiredModules"])) {
+            foreach($arrXml["package"]["0"]["requiredModules"] as $arrModules) {
+                if(is_array($arrModules)) {
+                    foreach($arrModules as $arrTempModule) {
+                        if(is_array($arrTempModule)) {
+                            foreach($arrTempModule as $arrOneModule) {
+                                if(isset($arrOneModule["attributes"]["name"])) {
+                                    $strModule = $arrOneModule["attributes"]["name"];
+                                    $strVersion = $arrOneModule["attributes"]["version"];
+                                    $this->arrRequiredModules[$strModule] = $strVersion;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -219,21 +236,15 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         return $this->bitProvidesInstaller;
     }
 
-    public function setStrMinVersion($strMinVersion) {
-        $this->strMinVersion = $strMinVersion;
+    public function setArrRequiredModules($arrRequiredModules) {
+        $this->arrRequiredModules = $arrRequiredModules;
     }
 
-    public function getStrMinVersion() {
-        return $this->strMinVersion;
+    public function getArrRequiredModules() {
+        return $this->arrRequiredModules;
     }
 
-    public function setStrRequiredModules($strRequiredModules) {
-        $this->strRequiredModules = $strRequiredModules;
-    }
 
-    public function getStrRequiredModules() {
-        return $this->strRequiredModules;
-    }
 
 
 }

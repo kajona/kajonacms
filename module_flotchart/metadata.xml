@@ -10,6 +10,7 @@
     <target>module_flotchart</target>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
-    <requiredModules>system</requiredModules>
-    <minSystemVersion>3.4.9</minSystemVersion>
+    <requiredModules>
+        <module name="system" version="3.4.9.3" />
+    </requiredModules>
 </package>

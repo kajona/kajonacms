@@ -53,7 +53,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
 
 	public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement("rssfeed")->getStrVersion() == "3.4.9") {
+        if(class_module_pages_element::getElement("rssfeed")->getStrVersion() == "3.4.2") {
             $strReturn .= $this->postUpdate_342_349();
             $this->objDB->flushQueryCache();
         }

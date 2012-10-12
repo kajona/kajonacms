@@ -167,26 +167,22 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         if(!$this->getObjMetadata()->getBitProvidesInstaller())
             return false;
 
-        //check if required modules are given
-        $arrRequiredModules = explode(",", $this->objMetadata->getStrRequiredModules());
-        foreach($arrRequiredModules as $strOneModule) {
+        //check if required modules are given in matching versions
+        $arrRequiredModules = $this->objMetadata->getArrRequiredModules();
+        foreach($arrRequiredModules as $strOneModule => $strMinVersion) {
+
             if(trim($strOneModule) != "") {
                 $objModule = class_module_system_module::getModuleByName(trim($strOneModule));
                 if($objModule === null)
                     return false;
+
+                if(version_compare($strMinVersion, $objModule->getStrVersion(), ">"))
+                    return false;
             }
         }
 
-        //validate min system-version
-        $strVersion = $this->objMetadata->getStrMinVersion();
-        if($strVersion != "") {
-            $objSystem = class_module_system_module::getModuleByName("system");
-            if($objSystem == null || version_compare($strVersion, $objSystem->getStrVersion(), ">")) {
-                return false;
-            }
-        }
 
-        //compare versions
+        //compare versions of installed elements
 
         //version compare - depending on module or element
         if(uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {

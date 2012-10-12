@@ -68,9 +68,6 @@ class class_installer_element_portallogin extends class_installer_base implement
 
 
 	public function update() {
-	}
-
-    public function postUpdate() {
         $strReturn = "";
 
         if(class_module_pages_element::getElement("portallogin")->getStrVersion() == "3.4.2") {

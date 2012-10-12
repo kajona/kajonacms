@@ -10,6 +10,8 @@
     <target>element_languageswitch</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
-    <requiredModules>system,pages,languages</requiredModules>
-    <minSystemVersion>3.4.9</minSystemVersion>
+    <requiredModules>
+        <module name="system" version="3.4.9.3" />
+        <module name="pages" version="3.4.9.1" />
+    </requiredModules>
 </package>

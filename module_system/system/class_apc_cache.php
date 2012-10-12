@@ -58,6 +58,10 @@ class class_apc_cache  {
      * @return array|bool
      */
     public function addValue($strKey, $objValue, $intTtl = 180) {
+
+        if(!is_numeric($intTtl))
+            $intTtl = 180;
+
         $strKey = $this->strSystemKey.$strKey;
         if(!$this->bitAPCInstalled)
             return self::$arrFallbackCache[$strKey] = $objValue;

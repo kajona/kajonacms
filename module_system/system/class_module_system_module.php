@@ -11,10 +11,9 @@
  * Model for a single system-module
  *
  * @package module_system
- *
  * @targetTable system_module.module_id
  */
-class class_module_system_module extends class_model implements interface_model, interface_admin_listable  {
+class class_module_system_module extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
@@ -93,11 +92,12 @@ class class_module_system_module extends class_model implements interface_model,
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
 
-        if(validateSystemid($strSystemid))
+        if(validateSystemid($strSystemid)) {
             self::$arrModules[$strSystemid] = $this;
+        }
     }
 
     /**
@@ -113,10 +113,10 @@ class class_module_system_module extends class_model implements interface_model,
      */
     private static function loadModuleData($bitCache = true) {
         $strQuery = "SELECT *
-                       FROM "._dbprefix_."system_right,
-                            "._dbprefix_."system_module,
-                            "._dbprefix_."system
-                  LEFT JOIN "._dbprefix_."system_date
+                       FROM " . _dbprefix_ . "system_right,
+                            " . _dbprefix_ . "system_module,
+                            " . _dbprefix_ . "system
+                  LEFT JOIN " . _dbprefix_ . "system_date
                          ON system_id = system_date_id
                       WHERE system_id = right_id
                         AND system_id=module_id
@@ -154,6 +154,7 @@ class class_module_system_module extends class_model implements interface_model,
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -173,10 +174,11 @@ class class_module_system_module extends class_model implements interface_model,
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return "V ".$this->getStrVersion()." &nbsp;(".timeToString($this->getIntDate(), true).")";
+        return "V " . $this->getStrVersion() . " &nbsp;(" . timeToString($this->getIntDate(), true) . ")";
     }
 
     /**
@@ -186,10 +188,12 @@ class class_module_system_module extends class_model implements interface_model,
      */
     public function getStrLongDescription() {
         $objAdminInstance = $this->getAdminInstanceOfConcreteModule();
-        if($objAdminInstance != null)
+        if($objAdminInstance != null) {
             $strDescription = $objAdminInstance->getModuleDescription();
-        else
+        }
+        else {
             $strDescription = "";
+        }
 
         return $strDescription;
     }
@@ -199,27 +203,30 @@ class class_module_system_module extends class_model implements interface_model,
      *
      * @param bool $intStart
      * @param bool $intEnd
+     *
      * @return class_module_system_module[]
      * @static
      */
-	public static function getAllModules($intStart = null, $intEnd = null) {
+    public static function getAllModules($intStart = null, $intEnd = null) {
         $arrRows = self::loadModuleData();
 
-		$arrReturn = array();
+        $arrReturn = array();
         $intI = 0;
-		foreach($arrRows as $arrOneRow) {
+        foreach($arrRows as $arrOneRow) {
             if($intStart != null && $intEnd != null) {
-                if($intI >= $intStart && $intI <= $intEnd)
-		            $arrReturn[] = class_module_system_module::getModuleBySystemid($arrOneRow["module_id"]);
+                if($intI >= $intStart && $intI <= $intEnd) {
+                    $arrReturn[] = class_module_system_module::getModuleBySystemid($arrOneRow["module_id"]);
+                }
             }
-            else
+            else {
                 $arrReturn[] = class_module_system_module::getModuleBySystemid($arrOneRow["module_id"]);
+            }
 
             $intI++;
         }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     /**
      * Counts the number of modules available
@@ -234,47 +241,56 @@ class class_module_system_module extends class_model implements interface_model,
         return count(self::loadModuleData());
     }
 
-	/**
+    /**
      * Tries to look up a module using the given name
-	 *
-	 * @param string $strName
-	 * @param bool $bitIgnoreStatus
-	 * @return class_module_system_module
-	 * @static
-	 */
-	public static function getModuleByName($strName, $bitIgnoreStatus = false) {
-        if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0)
+     *
+     * @param string $strName
+     * @param bool $bitIgnoreStatus
+     *
+     * @return class_module_system_module
+     * @static
+     */
+    public static function getModuleByName($strName, $bitIgnoreStatus = false) {
+        if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0) {
             return null;
+        }
 
 
         //check if the module is already cached
-        foreach(self::$arrModules as $objOneModule)
-            if(!$bitIgnoreStatus && $objOneModule->getStrName() == $strName)
+        foreach(self::$arrModules as $objOneModule) {
+            if(!$bitIgnoreStatus && $objOneModule->getStrName() == $strName) {
                 return $objOneModule;
+            }
+        }
 
 
         $arrModules = self::loadModuleData();
         $arrRow = array();
-		foreach($arrModules as $arrOneModule) {
-		    if($arrOneModule["module_name"] == $strName)
-		       $arrRow = $arrOneModule;
-		}
+        foreach($arrModules as $arrOneModule) {
+            if($arrOneModule["module_name"] == $strName) {
+                $arrRow = $arrOneModule;
+            }
+        }
 
-		if(count($arrRow) >= 1) {
+        if(count($arrRow) >= 1) {
             //check the status right here - better performance due to cached queries
             if(!$bitIgnoreStatus) {
-                if($arrRow["system_status"] == "1")
+                if($arrRow["system_status"] == "1") {
                     return self::getModuleBySystemid($arrRow["module_id"]);
-                else
+                }
+                else {
                     return null;
+                }
 
             }
-            else
+            else {
                 return self::getModuleBySystemid($arrRow["module_id"]);
+            }
         }
-		else
-		    return null;
-	}
+        else {
+            return null;
+        }
+    }
 
 
     /**
@@ -282,12 +298,14 @@ class class_module_system_module extends class_model implements interface_model,
      * For modules, this is the preferred way of generating instances.
      *
      * @param $strSystemid
+     *
      * @return class_module_system_module
      * @static
      */
     public static function getModuleBySystemid($strSystemid) {
-        if(isset(self::$arrModules[$strSystemid]))
+        if(isset(self::$arrModules[$strSystemid])) {
             return self::$arrModules[$strSystemid];
+        }
 
         return new class_module_system_module($strSystemid);
 
@@ -297,50 +315,55 @@ class class_module_system_module extends class_model implements interface_model,
      * Looks up the id of a module using the passed module-number
      *
      * @param $strNr
+     *
      * @return string $strNr
      * @static
      */
-	public static function getModuleIdByNr($strNr) {
-		$arrModules = self::loadModuleData();
+    public static function getModuleIdByNr($strNr) {
+        $arrModules = self::loadModuleData();
         $arrRow = array();
-		foreach($arrModules as $arrOneModule) {
-		    if($arrOneModule["module_nr"] == $strNr)
-		       $arrRow = $arrOneModule;
-		}
+        foreach($arrModules as $arrOneModule) {
+            if($arrOneModule["module_nr"] == $strNr) {
+                $arrRow = $arrOneModule;
+            }
+        }
 
-		if(count($arrRow) >= 1)
-		    return $arrRow["module_id"];
-		else
-		    return "";
-	}
+        if(count($arrRow) >= 1) {
+            return $arrRow["module_id"];
+        }
+        else {
+            return "";
+        }
+    }
 
-	/**
-	 * Looks up all modules being active and allowed to appear in the admin-navigation
-	 * Creates a simple array, NO OBJECTS
-	 *
+    /**
+     * Looks up all modules being active and allowed to appear in the admin-navigation
+     * Creates a simple array, NO OBJECTS
+     *
      * @param string $strAspectFilter
-	 * @return class_module_system_module[]
-	 * @static
-	 */
-	public static function getModulesInNaviAsArray($strAspectFilter = "") {
+     *
+     * @return class_module_system_module[]
+     * @static
+     */
+    public static function getModulesInNaviAsArray($strAspectFilter = "") {
 
         $arrParams = array();
         if($strAspectFilter != "") {
-            $arrParams[] = "%".$strAspectFilter."%";
+            $arrParams[] = "%" . $strAspectFilter . "%";
             $strAspectFilter = " AND (module_aspect = '' OR module_aspect IS NULL OR module_aspect LIKE ? )";
         }
 
-	    //Loading all Modules
-		$strQuery = "SELECT module_id, module_name
-		               FROM "._dbprefix_."system_module,
-		                    "._dbprefix_."system
+        //Loading all Modules
+        $strQuery = "SELECT module_id, module_name
+		               FROM " . _dbprefix_ . "system_module,
+		                    " . _dbprefix_ . "system
 		              WHERE module_navigation = 1
 		                AND system_status = 1
 		                AND module_id = system_id
-                            ".$strAspectFilter."
+                            " . $strAspectFilter . "
 		              ORDER BY system_sort ASC, system_comment ASC";
-		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-	}
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+    }
 
     /**
      * Factory method, creates an instance of the admin-module referenced by the current
@@ -348,20 +371,24 @@ class class_module_system_module extends class_model implements interface_model,
      * The object returned is being initialized with a systemid optionally.
      *
      * @param string $strSystemid
+     *
      * @return interface_admin|class_admin
      */
     public function getAdminInstanceOfConcreteModule($strSystemid = "") {
         if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNameAdmin());
-            if(validateSystemid($strSystemid))
+            if(validateSystemid($strSystemid)) {
                 $objModule = new $strClassname($strSystemid);
-            else
+            }
+            else {
                 $objModule = new $strClassname();
+            }
             return $objModule;
         }
-        else
+        else {
             return null;
+        }
     }
 
     /**
@@ -370,20 +397,24 @@ class class_module_system_module extends class_model implements interface_model,
      * The object returned is being initialized with the config-array optionally.
      *
      * @param string $arrElementData
+     *
      * @return interface_portal
      */
     public function getPortalInstanceOfConcreteModule($arrElementData = null) {
         if($this->getStrNamePortal() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNamePortal());
-            if(is_array($arrElementData))
+            if(is_array($arrElementData)) {
                 $objModule = new $strClassname($arrElementData);
-            else
+            }
+            else {
                 $objModule = new $strClassname(array());
+            }
             return $objModule;
         }
-        else
+        else {
             return null;
+        }
     }
 
     /**
@@ -391,44 +422,57 @@ class class_module_system_module extends class_model implements interface_model,
      *
      * @param string $strName
      * @param bool $bitCache
+     *
      * @return mixed
      */
     public static function getPlainModuleData($strName, $bitCache = true) {
         $arrModules = self::loadModuleData($bitCache);
 
         foreach($arrModules as $arrOneModule) {
-            if($arrOneModule["module_name"] == $strName)
+            if($arrOneModule["module_name"] == $strName) {
                 return $arrOneModule;
+            }
         }
 
         return array();
     }
 
+    public static function flushCache() {
+        self::$arrModules = array();
+    }
 
     public function getStrName() {
         return $this->strName;
     }
+
     public function getStrNamePortal() {
         return $this->strNamePortal;
     }
+
     public function getStrXmlNamePortal() {
         return $this->strXmlNamePortal;
     }
+
     public function getStrNameAdmin() {
         return $this->strNameAdmin;
     }
+
     public function getStrXmlNameAdmin() {
         return $this->strXmlNameAdmin;
     }
+
     public function getStrVersion() {
         return $this->strVersion;
     }
+
     public function getIntDate() {
         return $this->intDate;
     }
+
     public function getIntNavigation() {
         return $this->intNavigation;
     }
+
     public function getIntNr() {
         return $this->intNr;
     }
@@ -436,30 +480,39 @@ class class_module_system_module extends class_model implements interface_model,
     public function setStrName($strName) {
         $this->strName = $strName;
     }
+
     public function setStrNamePortal($strPortal) {
         $this->strNamePortal = $strPortal;
     }
+
     public function setStrXmlNamePortal($strXmlPortal) {
         $this->strXmlNamePortal = $strXmlPortal;
     }
+
     public function setStrNameAdmin($strAdmin) {
         $this->strNameAdmin = $strAdmin;
     }
+
     public function setStrXmlNameAdmin($strXmlAdmin) {
         $this->strXmlNameAdmin = $strXmlAdmin;
     }
+
     public function setStrVersion($strVersion) {
         $this->strVersion = $strVersion;
     }
+
     public function setIntDate($intDate) {
         $this->intDate = $intDate;
     }
+
     public function setIntNavigation($intNavigation) {
         $this->intNavigation = $intNavigation;
     }
+
     public function setIntNr($intNr) {
         $this->intNr = $intNr;
     }
+
     public function getStrAspect() {
         return $this->strAspect;
     }
@@ -467,6 +520,5 @@ class class_module_system_module extends class_model implements interface_model,
     public function setStrAspect($strAspect) {
         $this->strAspect = $strAspect;
     }
-
 
 }

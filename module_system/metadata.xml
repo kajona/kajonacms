@@ -11,5 +11,4 @@
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules />
-    <minSystemVersion />
 </package>

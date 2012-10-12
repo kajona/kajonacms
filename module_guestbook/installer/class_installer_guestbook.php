@@ -124,16 +124,17 @@ class class_installer_guestbook extends class_installer_base  {
 
         $strReturn .= "Adding classes for existing records...\n";
         $strReturn .= "Guestbooks\n";
-        foreach(class_module_guestbook_guestbook::getObjectList() as $objOneBook) {
+        $arrRows = $this->objDB->getPArray("SELECT guestbook_id FROM "._dbprefix_."guestbook_book, "._dbprefix_."system WHERE system_id = guestbook_id AND (system_class IS NULL OR system_class = '')", array());
+        foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( get_class($objOneBook), $objOneBook->getSystemid() ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_guestbook_guestbook', $arrOneRow["guestbook_id"] ) );
         }
 
         $strReturn .= "Posts\n";
         $arrRows = $this->objDB->getPArray("SELECT guestbook_post_id FROM "._dbprefix_."guestbook_post, "._dbprefix_."system WHERE system_id = guestbook_post_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_guestbook_post', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_guestbook_post', $arrOneRow["guestbook_post_id"] ) );
         }
 
         $strReturn .= "Removing old constants\n";

@@ -10,6 +10,9 @@
     <target>module_packageserver</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
-    <requiredModules>system,mediamanager,packagemanager</requiredModules>
-    <minSystemVersion>3.4.9</minSystemVersion>
+    <requiredModules>
+        <module name="system" version="3.4.9.3" />
+        <module name="mediamanager" version="3.4.9" />
+        <module name="packagemanager" version="3.4.9" />
+    </requiredModules>
 </package>

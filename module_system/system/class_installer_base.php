@@ -30,7 +30,7 @@ abstract class class_installer_base extends class_root implements interface_inst
 
         $strReturn = "";
 
-        if(uniStrpos($this->objMetadata->getStrTitle(), "element_") !== false) {
+        if(uniStrpos($this->objMetadata->getStrTitle(), "element_") !== false || uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {
             $objModule = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
 
         }

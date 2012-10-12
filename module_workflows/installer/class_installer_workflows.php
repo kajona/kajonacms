@@ -97,19 +97,19 @@ class class_installer_workflows extends class_installer_base implements interfac
         $arrRows = $this->objDB->getPArray("SELECT workflows_id FROM "._dbprefix_."workflows, "._dbprefix_."system WHERE system_id = workflows_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_workflow', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_workflow', $arrOneRow["workflows_id"] ) );
         }
 
         $strReturn .= "Handler\n";
         $arrRows = $this->objDB->getPArray("SELECT workflows_handler_id FROM "._dbprefix_."workflows_handler, "._dbprefix_."system WHERE system_id = workflows_handler_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_handler', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_handler', $arrOneRow["workflows_handler_id"] ) );
         }
 
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->arrModule["name"], "3.4.9");
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9");
         return $strReturn;
     }
 }

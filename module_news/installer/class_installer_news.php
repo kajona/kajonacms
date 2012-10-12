@@ -160,21 +160,21 @@ class class_installer_news extends class_installer_base implements interface_ins
         $arrRows = $this->objDB->getPArray("SELECT news_id FROM "._dbprefix_."news, "._dbprefix_."system WHERE system_id = news_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_news_news', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_news_news', $arrOneRow["news_id"] ) );
         }
 
         $strReturn .= "Categories\n";
         $arrRows = $this->objDB->getPArray("SELECT news_cat_id FROM "._dbprefix_."news_category, "._dbprefix_."system WHERE system_id = news_cat_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_news_category', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_news_category', $arrOneRow["news_cat_id"] ) );
         }
 
         $strReturn .= "Feeds\n";
         $arrRows = $this->objDB->getPArray("SELECT news_feed_id FROM "._dbprefix_."news_feed, "._dbprefix_."system WHERE system_id = news_feed_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_news_feed', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_news_feed', $arrOneRow["news_feed_id"] ) );
         }
 
         $strReturn .= "Removing old constants\n";

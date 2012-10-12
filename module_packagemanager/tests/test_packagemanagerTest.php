@@ -67,8 +67,16 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertEquals("module_autotest", $objMetadata->getStrTarget());
         $this->assertEquals(class_module_packagemanager_manager::$STR_TYPE_MODULE, $objMetadata->getStrType());
         $this->assertEquals(false, $objMetadata->getBitProvidesInstaller());
-        $this->assertEquals("system,pages", $objMetadata->getStrRequiredModules());
-        $this->assertEquals("3.4.1", $objMetadata->getStrMinVersion());
+
+        $arrRequired = $objMetadata->getArrRequiredModules();
+        $arrModules = array_keys($arrRequired);
+        $arrVersion = array_values($arrRequired);
+
+        $this->assertEquals("system", $arrModules[0]);
+        $this->assertEquals("3.4.1", $arrVersion[0]);
+
+        $this->assertEquals("pages", $arrModules[1]);
+        $this->assertEquals("3.4.2", $arrVersion[1]);
 
         $objFilesystem->folderDeleteRecursive("/core/module_autotest");
         $objFilesystem->fileDelete(_projectpath_."/temp/autotest.zip");
@@ -104,8 +112,10 @@ class class_test_packagemanager extends class_testbase  {
     <target>module_autotest</target>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
-    <requiredModules>system,pages</requiredModules>
-    <minSystemVersion>3.4.1</minSystemVersion>
+    <requiredModules>
+        <module name="system" version="3.4.1" />
+        <module name="pages" version="3.4.2" />
+    </requiredModules>
 </package>
 XML;
     }

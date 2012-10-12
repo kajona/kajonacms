@@ -10,6 +10,9 @@
     <target>element_portalupload</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
-    <requiredModules>system,pages,mediamanager</requiredModules>
-    <minSystemVersion>3.4.9</minSystemVersion>
+    <requiredModules>
+        <module name="system" version="3.4.9.3" />
+        <module name="pages" version="3.4.9.1" />
+        <module name="mediamanager" version="3.4.9" />
+    </requiredModules>
 </package>
