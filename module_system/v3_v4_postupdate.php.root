@@ -11,12 +11,6 @@ require_once './core/bootstrap.php';
 
 
 
-/*
- * TODO: Migrate Ratings (Downloads, Gallery)
- */
-
-
-
 class class_v3_v4_postupdate {
 
     /**
@@ -70,7 +64,7 @@ class class_v3_v4_postupdate {
 
     private function updateBackendSkin() {
         echo "Updating users to use v4 instead of v3 skin\n";
-        $strQuery = "UPDATE "._dbprefix_."user SET user_admin_skin = 'kajona_v4' WHERE user_admin_skin = 'kajona_v3'";
+        $strQuery = "UPDATE "._dbprefix_."user SET user_admin_skin = 'kajona_v4' WHERE user_admin_skin = 'kajona_v3' OR user_admin_skin=''";
         return $this->objDB->_pQuery($strQuery, array());
     }
 
@@ -190,6 +184,7 @@ class class_v3_v4_postupdate {
                     $objOneFile->updateObjectToDb();
 
                     $this->moveComments($arrOneOldFile["downloads_id"], $objOneFile->getSystemid());
+                    $this->migrateRatings($arrOneOldFile["downloads_id"], $objOneFile->getSystemid());
 
                     echo "...update succeeded\n";
 
@@ -297,6 +292,7 @@ class class_v3_v4_postupdate {
                     $objOneFile->updateObjectToDb();
 
                     $this->moveComments($arrOneOldFile["pic_id"], $objOneFile->getSystemid());
+                    $this->migrateRatings($arrOneOldFile["pic_id"], $objOneFile->getSystemid());
 
                     echo "...update succeeded\n";
 
@@ -455,6 +451,13 @@ class class_v3_v4_postupdate {
         }
 
         return $strOldPath;
+    }
+
+    private function migrateRatings($strOldSystemid, $strNewSystemid) {
+        if(class_module_system_module::getModuleByName("rating") != null) {
+            $strQuery = "UPDATE "._dbprefix_."rating SET rating_systemid = ? WHERE rating_systemid = ?";
+            $this->objDB->_pQuery($strQuery, array($strNewSystemid, $strOldSystemid));
+        }
     }
 }
 
