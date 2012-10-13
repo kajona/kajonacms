@@ -56,6 +56,10 @@ class class_v3_v4_postupdate {
         if(!$this->activateTemplate())
             return false;
 
+
+        echo "\n\n<b>Backend-Skin</b>\n";
+        $this->updateBackendSkin();
+
         echo "\n\n<b>Update succeeded. \nPlease remove the file ".__FILE__." from the filesystem.</b>\n";
 
         echo "</pre>";
@@ -64,7 +68,15 @@ class class_v3_v4_postupdate {
     }
 
 
+    private function updateBackendSkin() {
+        echo "Updating users to use v4 instead of v3 skin\n";
+        $strQuery = "UPDATE "._dbprefix_."user SET user_admin_skin = 'kajona_v4' WHERE user_admin_skin = 'kajona_v3'";
+        return $this->objDB->_pQuery($strQuery, array());
+    }
+
+
     private function activateTemplate() {
+
         echo "Searching for a v3 template to activate...\n";
         if(!is_dir(_realpath_."/templates/v3template")) {
             echo "no template found, nothing to do.\n";
