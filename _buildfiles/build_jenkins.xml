@@ -161,7 +161,7 @@
                 <include name="element_*/**"/>
                 <include name="module_*/*/**"/>
                 <include name="template_*/*/**"/>
-                <include name="_debugging/*/**"/>
+                <!--<include name="_debugging/*/**"/>-->
                 <include name="*.php"/>
 
             </fileset>
@@ -173,6 +173,8 @@
         </exec>
 
         <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -205,6 +207,8 @@
         </exec>
 
         <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -239,15 +243,69 @@
     </target>
 
 
-
-
     <target name="compileLess" description="Compiles the less files and inserts them into to tpl files">
+        <echo>Compiling less files</echo>
         <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f lessc/v4setup.php "/>
         </exec>
+
+        <delete>
+            <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
+        </delete>
     </target>
 
 
+
+    <target name="compressCss" description="Minifies the css files using the yui compressor">
+        <echo>Compressing css files</echo>
+
+        <copy todir="${basedir}${tempPath}">
+            <fileset dir="${basedir}${tempPath}">
+                <include name="**/*.css"/>
+            </fileset>
+            <globmapper from="*.css" to="*-full.css"/>
+        </copy>
+
+        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true">
+            <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
+            <arg line="-jar"/>
+            <arg path="yuicompressor-2.4.6.jar"/>
+            <arg line="--charset utf-8"/>
+            <arg line="-o"/>
+            <mapper type="glob" from="*-full.css" to="*.css"/>
+            <targetfile/>
+            <srcfile/>
+        </apply>
+    </target>
+
+
+    <target name="compressJs" description="Minifies the js files using the yui compressor">
+        <echo>Compressing js files</echo>
+
+        <copy todir="${basedir}${tempPath}"> <!-- add verbose="true" to see the list of applied files -->
+            <fileset dir="${basedir}${tempPath}">
+                <include name="**/*.js"/>
+                <exclude name="**/*min.js" />
+                <exclude name="**/jquery*.js" />
+                <exclude name="**/ckeditor/**/*.js" />
+                <exclude name="**/halloeditor/**/*.js" />
+                <exclude name="**/rangy/**/*.js" />
+            </fileset>
+            <globmapper from="*.js" to="*-full.js"/>
+        </copy>
+
+        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true">
+            <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
+            <arg line="-jar"/>
+            <arg path="yuicompressor-2.4.6.jar"/>
+            <arg line="--charset utf-8"/>
+            <arg line="-o"/>
+            <mapper type="glob" from="*-full.js" to="*.js"/>
+            <targetfile/>
+            <srcfile/>
+        </apply>
+    </target>
 
 
     <target name="lint" description="Perform syntax check of sourcecode files">
