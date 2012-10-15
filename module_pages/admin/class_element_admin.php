@@ -132,7 +132,7 @@ abstract class class_element_admin extends class_admin {
 	 */
 	public final function loadElementData() {
 	    //Element-Table given?
-	    if($this->arrModule["table"] != "") {
+	    if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "") {
     		$strQuery = "SELECT *
     					 FROM ".$this->arrModule["table"].",
     					 	  "._dbprefix_."element,
