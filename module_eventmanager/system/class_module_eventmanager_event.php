@@ -62,13 +62,13 @@ class class_module_eventmanager_event extends class_model implements interface_m
     private $intParticipantsLimit = 0;
 
     /**
-     * @var int
+     * @var class_date
      * @versionable
      */
     private $objStartDate;
 
     /**
-     * @var int
+     * @var class_date
      * @versionable
      */
     private $objEndDate;
@@ -366,6 +366,9 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     }
 
+    /**
+     * @return class_date
+     */
     public function getObjStartDate() {
         return $this->objStartDate;
     }
@@ -392,6 +395,9 @@ class class_module_eventmanager_event extends class_model implements interface_m
             $this->objEndDate = null;
     }
 
+    /**
+     * @return class_date
+     */
     public function getObjEndDate() {
         return $this->objEndDate;
     }

@@ -73,47 +73,26 @@ class class_module_news_portal_xml extends class_portal implements interface_xml
 	 * @return string
 	 */
 	private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews) {
-        $strReturn = "";
 
-        //tricky: htmldecode everything
-        $strTitle = xmlSafeString($strTitle);
-        $strDesc = xmlSafeString($strDesc);
+        $objFeed = new class_rssfeed();
+        $objFeed->setStrTitle($strTitle);
+        $objFeed->setStrLink($strLink);
+        $objFeed->setStrDesc($strDesc);
 
-        $strReturn .=
-        "<rss version=\"2.0\">\n"
-	    ."    <channel>\n";
-
-	    //Build the feed-description
-	    $strReturn .=
-	    "        <title>".$strTitle."</title>\n"
-		."        <link>".$strLink."</link>\n"
-		."        <description>".$strDesc."</description>\n"
-		."        <generator>Kajona, www.kajona.de</generator>\n";
-
-        //And now all news
         foreach($arrNews as $objOneNews) {
             if($objOneNews->rightView()) {
-
-                $objOneNews->setStrIntro(xmlSafeString($objOneNews->getStrIntro()));
                 $objDate = new class_date($objOneNews->getIntDateStart());
-                $intTime = mktime($objDate->getIntHour(), $objDate->getIntMin(), $objDate->getIntSec(), $objDate->getIntMonth(), $objDate->getIntDay(), $objDate->getIntYear());
 
-                $strReturn .=
-                 "        <item>\n"
-			    ."            <title>".xmlSafeString($objOneNews->getStrTitle())."</title>\n"
-			    ."            <link>".getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle())."</link>\n"
-			    ."            <guid isPermaLink=\"false\">".$objOneNews->getSystemid()."</guid>\n"
-			    ."            <description>".xmlSafeString($objOneNews->getStrIntro())."</description>\n"
-			    ."            <pubDate>".strftime("%a, %d %b %Y %H:%M:%S GMT", $intTime)."</pubDate>\n"
-		        ."        </item>\n";
-
+                $objFeed->addElement(
+                    $objOneNews->getStrTitle(),
+                    getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()),
+                    $objOneNews->getSystemid(),
+                    $objOneNews->getStrIntro(),
+                    mktime($objDate->getIntHour(), $objDate->getIntMin(), $objDate->getIntSec(), $objDate->getIntMonth(), $objDate->getIntDay(), $objDate->getIntYear())
+                );
             }
         }
 
-
-	    $strReturn .=
-        "    </channel>\n"
-        ."</rss>";
-        return $strReturn;
+        return $objFeed->generateFeed();
 	}
 }

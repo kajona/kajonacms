@@ -1,5 +1,5 @@
 
-
+<!-- available placeholders: cal_eventsource, rssurl -->
 <event_calendar>
     <script type='text/javascript'>
         KAJONA.portal.loader.loadFile([
@@ -18,15 +18,17 @@
         }, true);
     </script>
     <div id="eventmanagerCalendar"></div>
+    <p><a href="%%rssurl%%">[lang,rssfeed,eventmanager]</a></p>
 </event_calendar>
 
 
-<!-- available placeholders: folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
+<!-- available placeholders: events, rssurl -->
 <event_list>
     <div>
         <table width="90%">
             %%events%%
         </table>
+        <p><a href="%%rssurl%%">[lang,rssfeed,eventmanager]</a></p>
     </div>
 </event_list>
 

@@ -45,6 +45,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
             $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_calendar");
             $arrTemplate = array();
             $arrTemplate["cal_eventsource"] = _xmlpath_ . "?module=eventmanager&action=getJsonEvents&page=" . $this->getPagename();
+            $arrTemplate["rssurl"] = _xmlpath_ . "?module=eventmanager&action=eventRssFeed&page=" . $this->getPagename();
             $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
         }
         else {
@@ -73,14 +74,17 @@ class class_module_eventmanager_portal extends class_portal implements interface
                 }
             }
 
+            $strRssUrl = _xmlpath_ . "?module=eventmanager&action=eventRssFeed&page=" . $this->getPagename();
             $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_list");
-            $strReturn .= $this->fillTemplate(array("events" => $strEvents), $strWrapperID);
+            $strReturn .= $this->fillTemplate(array("events" => $strEvents, "rssurl" => $strRssUrl), $strWrapperID);
         }
 
         return $strReturn;
     }
 
     /**
+     * Returns all eventes in json-format.
+     * Expects the params start & end.
      * @xml
      * @return string
      * @permissions view
@@ -95,7 +99,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
             $objEndDate = new class_date($this->getParam("end"));
         }
 
-        $arrEvents = class_module_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
+        $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, $objStartDate, $objEndDate, true);
         foreach($arrEvents as $objOneEvent) {
             if($objOneEvent->rightView()) {
                 $arrSingleEvent = array();
@@ -110,6 +114,32 @@ class class_module_eventmanager_portal extends class_portal implements interface
 
         class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrPrintableEvents);
+    }
+
+    /**
+     * Renders the current list of events in a rss-feed.
+     * Expecets the param pagename for rendering the detail-links
+     * @permissions view
+     * @xml
+     */
+    protected function actionEventRssFeed() {
+        $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, null, null, true);
+
+        $objFeed = new class_rssfeed();
+        $objFeed->setStrTitle($this->getLang("modul_titel"));
+
+        foreach($arrEvents as $objOneEvent) {
+            if($objOneEvent->rightView()) {
+                $objFeed->addElement(
+                    $objOneEvent->getStrTitle(),
+                    getLinkPortalHref($this->getParam("pagename"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()),
+                    $objOneEvent->getSystemid(),
+                    $objOneEvent->getStrDescription(),
+                    $objOneEvent->getObjStartDate()->getTimeInOldStyle()
+                );
+            }
+        }
+        return $objFeed->generateFeed();
     }
 
 

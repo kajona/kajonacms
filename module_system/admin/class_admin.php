@@ -492,7 +492,6 @@ abstract class class_admin {
     /**
      * Removes one page from the cache
      *
-     * @param string $strPagename
      * @deprecated use flushCompletePagesCache() instead
      * @return bool
      */

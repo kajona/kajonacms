@@ -72,6 +72,7 @@ $lang["registerMailSubject"]             = "Please confirm your registration";
 $lang["registerSubmit"]                  = "Register";
 $lang["registerlink"]                    = "Register";
 $lang["show_history"]                    = "Show change-history";
+$lang["rssfeed"]                         = "Show rssfeed of event";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Participate", 5 => "", 6 => "", 7 => "", 8 => "");

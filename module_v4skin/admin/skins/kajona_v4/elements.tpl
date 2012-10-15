@@ -953,7 +953,7 @@ pe_iconbar, pe_disable
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">×</button>
         </div>
-        <div class="modal-body" id="peDialog_content">
+        <div class="modal-body peLoadingContainer" id="peDialog_content">
             <!-- filled by js -->
         </div>
     </div>

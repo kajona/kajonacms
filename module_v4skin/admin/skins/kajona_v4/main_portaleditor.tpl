@@ -82,7 +82,7 @@
         <h3>BROWSER</h3>
     </div>
     <div class="modal-body">
-        <div id="folderviewDialog_content"><!-- filled by js --></div>
+        <div id="folderviewDialog_content" class="loadingContainer"><!-- filled by js --></div>
     </div>
 </div>
 
