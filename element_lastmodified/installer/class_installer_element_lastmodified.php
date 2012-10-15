@@ -18,7 +18,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
+        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
         parent::__construct();
 
 	}
