@@ -215,7 +215,15 @@ class class_module_languages_language extends class_model implements interface_m
                         SET page_element_ph_language = ?
                         WHERE page_element_ph_language = ?";
 
-        $bitCommit = ($this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage)) && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage)));
+        $strQuery3 = "UPDATE "._dbprefix_."page_folderproperties
+                        SET folderproperties_language = ?
+                        WHERE folderproperties_language = ?";
+
+        $bitCommit = (
+            $this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage))
+            && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage))
+            && $this->objDB->_pQuery($strQuery3, array($this->getStrName(), $strSourceLanguage))
+        );
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
