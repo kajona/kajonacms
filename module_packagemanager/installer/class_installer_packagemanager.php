@@ -46,7 +46,7 @@ class class_installer_packagemanager extends class_installer_base implements int
         );
 
 		$strReturn .= "Registering system-constants...\n";
-        $this->registerConstant("_packagemanager_defaulttemplate_", "", class_module_system_setting::$int_TYPE_STRING, _packagemanager_module_id_);
+        $this->registerConstant("_packagemanager_defaulttemplate_", "default", class_module_system_setting::$int_TYPE_STRING, _packagemanager_module_id_);
 
         $strReturn .= "Initial templatepack sync...\n";
         class_module_packagemanager_template::syncTemplatepacks();

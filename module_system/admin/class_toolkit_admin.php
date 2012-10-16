@@ -1981,7 +1981,9 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["icon_tooltip"] = class_carrier::getInstance()->getObjLang()->getLang("adminskin_tooltip", "tags");
 
         $arrMenuEntries = array();
-        $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
+        $arrFavorites = array();
+        if(class_module_system_module::getModuleByName("tags") !== null)
+            $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
 
         foreach($arrFavorites as $objOneFavorite)
             $arrMenuEntries[] = array(
