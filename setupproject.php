@@ -85,8 +85,17 @@ class class_project_setup {
 
 
         foreach($arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule."/templates"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates", array(".tpl"));
+            if(is_dir(_corepath_."/".$strSingleModule."/templates")) {
+                $arrEntries = scandir(_corepath_."/".$strSingleModule."/templates");
+                foreach($arrEntries as $strOneFolder) {
+                    if($strOneFolder != "." && $strOneFolder != ".." && is_dir(_corepath_."/".$strSingleModule."/templates/".$strOneFolder)) {
+                        if($strOneFolder == "default")
+                            self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates", array(".tpl"));
+                        else
+                            self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates");
+                    }
+                }
+            }
 
             if(is_dir(_corepath_."/".$strSingleModule."/files"))
                 self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_."/files");

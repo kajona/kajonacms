@@ -46,7 +46,7 @@ class class_module_search_portal extends class_portal implements interface_porta
 
 		$arrTemplate = array();
 		if($this->strSearchterm != "")
-			$arrTemplate["suche_term"] = $this->strSearchterm;
+			$arrTemplate["search_term"] = $this->strSearchterm;
 
 		$strPage = $this->arrElementData["search_page"]	;
 		if($strPage == "")

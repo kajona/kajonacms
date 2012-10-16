@@ -1,9 +1,9 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: action, suche_term -->
+<!-- available placeholders: action, search_term -->
 <search_form>
     <form name="searchResultForm" method="post" action="%%action%%" accept-charset="UTF-8">
-        <div><label for="resultSearchterm">[lang,searchterm_label,search]:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" onkeyup="KAJONA.portal.search.queryBackend();" /></div><br />
+        <div><label for="resultSearchterm">[lang,searchterm_label,search]:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%search_term%%" class="inputText" onkeyup="KAJONA.portal.search.queryBackend();" /></div><br />
         <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="[lang,submit_label,search]" class="button" /></div><br />
     </form>
 

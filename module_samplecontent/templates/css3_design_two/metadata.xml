@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>css3_design_two</title>
+    <description>A simple, css3 based template</description>
+    <version>1.0</version>
+    <author>Kajona Team, css3templates.co.uk</author>
+    <target>css3_design_two</target>
+    <type>TEMPLATE</type>
+    <providesInstaller>FALSE</providesInstaller>
+    <requiredModules />
+</package>
