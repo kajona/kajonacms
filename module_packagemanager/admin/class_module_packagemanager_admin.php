@@ -136,8 +136,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_type")." ".$this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version")." ".$objHandler->getObjMetadata()->getStrVersion());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules")." ".$objHandler->getObjMetadata()->getStrRequiredModules());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_minversion")." ".$objHandler->getObjMetadata()->getStrMinVersion());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules")." ".print_r($objHandler->getObjMetadata()->getArrRequiredModules(), true));
 
 
             if(!$objHandler->getObjMetadata()->getBitProvidesInstaller() || $objHandler->isInstallable()) {
