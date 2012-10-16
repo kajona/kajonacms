@@ -59,9 +59,9 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         if($this->getSystemid() == "")
             $this->setSystemid(_packageserver_repo_id_);
 
-        $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid()));
+        $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, false, true));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
+        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
 
         return $this->renderList($objIterator);
     }
@@ -131,7 +131,10 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_type")." ".$objHandler->getObjMetadata()->getStrType());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version")." ".$objHandler->getObjMetadata()->getStrVersion());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules")." ".print_r($objHandler->getObjMetadata()->getArrRequiredModules(), true));
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules"));
+            foreach($objHandler->getObjMetadata()->getArrRequiredModules() as $strOneModule => $strVersion) {
+                $strReturn .= $this->objToolkit->getTextRow($strOneModule." >= ".$strVersion);
+            }
 
         }
 

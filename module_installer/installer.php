@@ -418,7 +418,7 @@ class class_installer {
                     $strRequired .= $strOneModule.", ";
 
                 else if(version_compare($strVersion, class_module_system_module::getModuleByName(trim($strOneModule))->getStrVersion(), ">")) {
-                    $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." => ".$strVersion."<br />";
+                    $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." >= ".$strVersion."<br />";
                 }
             }
 

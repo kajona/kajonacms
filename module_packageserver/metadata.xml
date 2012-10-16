@@ -12,7 +12,7 @@
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="3.4.9.3" />
-        <module name="mediamanager" version="3.4.9" />
+        <module name="mediamanager" version="3.4.9.1" />
         <module name="packagemanager" version="3.4.9" />
     </requiredModules>
 </package>

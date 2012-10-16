@@ -19,7 +19,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     public static $INT_TYPE_FILE = 0;
     public static $INT_TYPE_FOLDER = 1;
 
-
     /**
      * @var string
      * @tableColumn file_name
@@ -58,6 +57,12 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @tableColumn file_type
      */
     private $intType = 0;
+
+    /**
+     * @var int
+     * @tableColumn file_ispackage
+     */
+    private $bitIspackage = 0;
 
 
     /**
@@ -175,11 +180,12 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param bool $bitActiveOnly
      * @param int $intStart
      * @param int $intEnd
+     * @param bool $bitOnlyPackages
      *
      * @return class_module_mediamanager_file[]
      * @static
      */
-    public static function loadFilesDB($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null) {
+    public static function loadFilesDB($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null, $bitOnlyPackages = false) {
 
         $arrParams = array();
         $arrParams[] = $strPrevID;
@@ -194,6 +200,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                       AND system_prev_id = ?
                         " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
+                        " . (!$bitOnlyPackages ? "" : " AND file_ispackage = 1 ") . "
                         ORDER BY system_sort ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -211,11 +218,12 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param string $strPrevID
      * @param bool|int $intTypeFilter
      * @param bool $bitActiveOnly
+     * @param bool $bitOnlyPackages
      *
      * @return int
      * @static
      */
-    public static function getFileCount($strPrevID, $intTypeFilter = false, $bitActiveOnly = false) {
+    public static function getFileCount($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $bitOnlyPackages = false) {
 
         $arrParams = array();
         $arrParams[] = $strPrevID;
@@ -229,7 +237,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                     WHERE system_id = file_id
                       AND system_prev_id = ?
                          " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
-                        " . (!$bitActiveOnly ? "" : "AND system_status = 1 ") . "";
+                        " . (!$bitActiveOnly ? "" : "AND system_status = 1 ") . "
+                        " . (!$bitOnlyPackages ? "" : " AND file_ispackage = 1 ") . "";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
@@ -339,6 +348,15 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             $objFile->setStrFilename($strFileFilename);
             $objFile->setStrName($strFileName);
             $objFile->setIntType(self::$INT_TYPE_FILE);
+
+            //check if its a valid package
+            if(uniSubstr($strFileFilename, -4) == ".zip") {
+                $objZip = new class_zip();
+                $strMetadata = $objZip->getFileFromArchive($strFileFilename, "/metadata.xml");
+                if($strMetadata !== false)
+                    $objFile->setBitIspackage(1);
+            }
+
             $objFile->updateObjectToDb($strPrevID);
             $arrReturn["insert"]++;
         }
@@ -433,6 +451,21 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     public function getIntType() {
         return (int)$this->intType;
     }
+
+    /**
+     * @param int $bitIspackage
+     */
+    public function setBitIspackage($bitIspackage) {
+        $this->bitIspackage = $bitIspackage;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBitIspackage() {
+        return $this->bitIspackage;
+    }
+
 
 }
 

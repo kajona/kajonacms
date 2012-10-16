@@ -141,6 +141,11 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
     }
 
+    protected function getMassActionHandlers($strListIdentifier) {
+        return $this->getDefaultActionHandlers();
+    }
+
+
     /**
      * @return string
      * @permissions edit

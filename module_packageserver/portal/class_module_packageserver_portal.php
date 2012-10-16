@@ -82,7 +82,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
     private function getAllPackages($strParentId) {
         $arrReturn = array();
 
-        $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, false, true);
+        $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, false, true, null, null, true);
 
         foreach($arrSubfiles as $objOneFile) {
             if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)

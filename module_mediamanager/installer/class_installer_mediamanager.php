@@ -49,6 +49,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		$arrFields["file_subtitle"] 		= array("char254", true);
 		$arrFields["file_hits"] 			= array("int", true);
 		$arrFields["file_type"] 			= array("int", true);
+		$arrFields["file_ispackage"]    	= array("int", true);
 
 		if(!$this->objDB->createTable("mediamanager_file", $arrFields, array("file_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -87,8 +88,35 @@ class class_installer_mediamanager extends class_installer_base implements inter
 
 
 	public function update() {
-	    return "";
+        $strReturn = "";
+        //check installed version and to which version we can update
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+
+        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_3491();
+        }
+
+        return $strReturn."\n\n";
 	}
+
+
+    private function update_349_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
+
+        $strReturn .= "Altering element-table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
+                    ADD ".$this->objDB->encloseColumnName("file_ispackage")." ".$this->objDB->getDatatype("int")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.1");
+        return $strReturn;
+    }
 
 
 
