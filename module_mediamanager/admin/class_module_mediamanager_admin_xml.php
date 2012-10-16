@@ -271,10 +271,9 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
         else
             return "<error>mediamanager repo could not be loaded</error>";
 
+        $strResult = 0;
 
-        $strResult .= $this->getLang("sync_end")."<br />";
-        $strResult .= $this->getLang("sync_add").$arrSyncs["insert"]."<br />".$this->getLang("sync_del").$arrSyncs["delete"];
-
+        $strResult += $arrSyncs["insert"]+$arrSyncs["delete"];
         $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
 
         class_logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);

@@ -131,8 +131,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_type")." ".$objHandler->getObjMetadata()->getStrType());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version")." ".$objHandler->getObjMetadata()->getStrVersion());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules")." ".$objHandler->getObjMetadata()->getStrRequiredModules());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_minversion")." ".$objHandler->getObjMetadata()->getStrMinVersion());
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules")." ".print_r($objHandler->getObjMetadata()->getArrRequiredModules(), true));
 
         }
 

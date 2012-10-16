@@ -271,15 +271,26 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
         $strJsCode = "";
         if($this->getParam("sync") == "true") {
-            $strSystemid = $this->getSystemid();
             $strJsCode = <<<HTML
             <script type="text/javascript">
                 KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
-                    KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", KAJONA.admin.ajax.regularCallback);
+                    KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", function(data, status, jqXHR) {
+                        if(status == 'success') {
+                            console.log("sync response: "+data);
+                            if(data.indexOf("<repo>0</repo>") == -1) {
+                                //show a dialog to reload the current page
+                                jsDialog_1.setTitle('{$this->getLang('repo_change')}'); jsDialog_1.setContent('{$this->getLang('repo_change_hint')}', '{$this->getLang('repo_reload')}', 'javascript:document.location.reload();'); jsDialog_1.init();
+                            }
+                        }
+                        else {
+                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
+                        }
+                    })
                 });
+
             </script>
 HTML;
-
+            $strJsCode .= $this->objToolkit->jsDialog(1);
         }
 
         $strActions = "";
