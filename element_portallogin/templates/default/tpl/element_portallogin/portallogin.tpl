@@ -1,5 +1,5 @@
 <portallogin_loginform>
-<form name="formContact" method="post" action="%%action%%" accept-charset="UTF-8">
+<form name="formPortallogin" method="post" action="%%action%%" accept-charset="UTF-8">
 	<div><label for="portallogin_username">[lang,username,elements]</label><input type="text" name="portallogin_username" id="portallogin_username" value="%%portallogin_username%%" class="inputText" /></div><br />
 	<div><label for="portallogin_password">[lang,password,elements]</label><input type="password" name="portallogin_password" id="portallogin_password" value="%%portallogin_password%%" class="inputText" /></div><br />
 	<div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,login,elements]" class="button" /></div><br />

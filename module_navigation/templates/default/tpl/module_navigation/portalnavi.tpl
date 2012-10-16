@@ -6,7 +6,7 @@
 <!-- available placeholders in each section: link, text, href, target, image, image_src, page_intern, page_extern, level(x+1), lastmodified -->
 
 
-<level_1_wrapper><ul>%%level1%%</ul></level_1_wrapper>
+<level_1_wrapper><nav id="portalnav"><ul>%%level1%%</ul></nav></level_1_wrapper>
 
 <level_1_active>
 <li>%%link%%</li>

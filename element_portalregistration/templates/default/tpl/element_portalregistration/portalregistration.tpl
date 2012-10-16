@@ -1,5 +1,5 @@
 <portalregistration_userdataform>
-<form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
+<form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off" class="element_portalregistration">
     %%formErrors%%
     <div><label for="username">[lang,pr_usernameTitle,elements]</label><input type="text" name="username" id="username" value="%%username%%" class="inputText" /></div><br />
     <div><label for="password">[lang,pr_passwordTitle,elements]</label><input type="password" name="password" id="password" value="%%password%%" class="inputText" /></div><br />

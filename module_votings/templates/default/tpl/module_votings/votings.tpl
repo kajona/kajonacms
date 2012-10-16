@@ -1,7 +1,7 @@
 
 <!-- Template API: voting_systemid, voting_title, voting_content-->
 <voting_wrapper>
-    <div>
+    <div class="voting">
         <h3 data-kajona-editable="%%voting_systemid%%#strTitle#plain">%%voting_title%%</h3>
         %%voting_content%%
     </div>
@@ -10,7 +10,7 @@
 
 <!-- Template API: voting_systemid, voting_action, voting_answers-->
 <voting_voting>
-    <form method="post" action="%%voting_action%%" id="voting_%%voting_systemid%%">
+    <form method="post" action="%%voting_action%%" id="voting_%%voting_systemid%%" class="votingForm">
         <table width="80%">
             %%voting_answers%%
         </table>
@@ -38,7 +38,7 @@
 
 <!-- Template API: voting_systemid, voting_action, voting_answers-->
 <voting_result>
-    <table width="80%">
+    <table width="80%" class="votingResult">
         %%voting_answers%%
         <tr>
             <td colspan="2">[lang,voting_hits,votings] %%voting_hits%%</td>

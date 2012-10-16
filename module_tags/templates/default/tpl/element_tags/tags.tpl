@@ -1,7 +1,7 @@
 
 <!-- available placeholders: tags -->
 <tags>
-    <div>
+    <div class="tags">
         %%tags%%
     </div>
 </tags>

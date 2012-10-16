@@ -11,7 +11,7 @@
 
 <!-- available placeholders: post_name, post_name_plain, post_email, post_page, post_text, post_date -->
 <post>
-    <table>
+    <table class="guestbookPost">
         <tr>
             <td>[lang,post_name_from,guestbook]: %%post_name_plain%%</td>
             <td style="text-align: right;">%%post_date%%</td>
@@ -32,7 +32,7 @@
 <!-- available placeholders: eintragen_fehler, gb_post_name, gb_post_email, gb_post_text, gb_post_page, action -->
 <entry_form>
     <ul>%%eintragen_fehler%%</ul>
-    <form name="form1" method="post" action="%%action%%" accept-charset="UTF-8">
+    <form name="form1" method="post" action="%%action%%" accept-charset="UTF-8" class="guestbookForm">
         <div><label for="gb_post_name">[lang,post_name_text,guestbook]*:</label><input type="text" name="gb_post_name" id="gb_post_name" value="%%gb_post_name%%" class="inputText" /></div><br />
         <div><label for="gb_post_email">[lang,post_mail_text,guestbook]*:</label><input type="text" name="gb_post_email" id="gb_post_email" value="%%gb_post_email%%" class="inputText" /></div><br />
         <div><label for="gb_post_page">[lang,post_page_text,guestbook]:</label><input type="text" name="gb_post_page" id="gb_post_page" value="%%gb_post_page%%" class="inputText" /></div><br />

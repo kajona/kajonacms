@@ -45,7 +45,7 @@
 	</div>
     <script type="text/javascript">
         $(function() {
-		    if (document.getElementById('formComment_%%comment_systemid%%_errors').getElementsByTagName('li').length != 0) {
+		    if($('#formComment_%%comment_systemid%%_errors li').length != 0) {
 			    KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); 
 		    }
         });

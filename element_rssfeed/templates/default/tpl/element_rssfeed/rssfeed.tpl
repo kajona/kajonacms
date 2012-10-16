@@ -2,7 +2,7 @@
 
 <!-- available placeholders: feed_title, feed_link, feed_description, feed_content -->
 <rssfeed_feed>
-    <div class="rssfeed">
+    <div class="element_rssfeed">
         <p>
             [lang,commons_title,elements] %%feed_title%% (%%feed_link%%)<br />
             [lang,commons_description,elements] %%feed_description%%

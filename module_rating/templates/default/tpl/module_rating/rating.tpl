@@ -4,10 +4,7 @@
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        if (typeof bitKajonaRatingsLoaded == "undefined") {
-            $.getScript(KAJONA_WEBPATH+"/templates/default/js/rating.js?"+_system_browser_cachebuster_);
-            var bitKajonaRatingsLoaded = true;
-        }
+        KAJONA.portal.loader.loadFile("/templates/default/js/rating.js");
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="KAJONA.portal.tooltip.add(this, '%%rating_bar_title%%');">

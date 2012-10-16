@@ -24,7 +24,7 @@
 
 <!-- available placeholders: events, rssurl -->
 <event_list>
-    <div>
+    <div class="eventmanagerList">
         <table width="90%">
             %%events%%
         </table>
@@ -44,7 +44,7 @@
 
 <!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants, systemid -->
 <event_details>
-    <div>
+    <div class="eventmanagerDetails">
         <h2 data-kajona-editable="%%systemid%%#strTitle#plain">%%title%%</h2>
         <p data-kajona-editable="%%systemid%%#strDescription">%%description%%</p>
         <table>

@@ -2,12 +2,10 @@
 
 <!-- available placeholders: action, suche_term -->
 <search_form>
-    <div class="boxContent">
-    <form name="searchform" method="post" action="%%action%%" accept-charset="UTF-8">
+    <form name="searchForm" method="post" action="%%action%%" accept-charset="UTF-8">
         <label for="searchterm">[lang,searchterm_label,search]</label><input type="text" name="searchterm" id="searchterm" value="%%suche_term%%" class="inputTextShort" />
         <input type="submit" name="Submit" value="[lang,submit_label,search]" class="buttonShort" />
     </form>
-    </div>
 </search_form>
 
 <!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
