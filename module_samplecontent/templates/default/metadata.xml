@@ -11,5 +11,4 @@
     <type>TEMPLATE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules />
-    <minSystemVersion />
 </package>

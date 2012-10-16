@@ -647,10 +647,10 @@ class class_image {
 
         //load font
         $strPath = class_resourceloader::getInstance()->getPathForFile("/system/fonts/" . $strFont);
-        if($strPath !== false && is_file($strPath) && function_exists("imagefttext")) {
+        if($strPath !== false && is_file(_realpath_.$strPath) && function_exists("imagefttext")) {
             $strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
             imagealphablending($this->objImage, true);
-            @imagefttext($this->objImage, $intSize, $intAngle, $intX, $intY, $intColor, _corepath_ . "/module_system/system/fonts/" . $strFont, $strText);
+            @imagefttext($this->objImage, $intSize, $intAngle, $intX, $intY, $intColor, _realpath_ . $strPath, $strText);
             imagealphablending($this->objImage, false);
         }
 
