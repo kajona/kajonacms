@@ -13,7 +13,7 @@
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class class_scriptlet_constants implements interface_scriptlet {
+class class_scriptlet_xconstants implements interface_scriptlet {
 
     /**
      * Processes the content.

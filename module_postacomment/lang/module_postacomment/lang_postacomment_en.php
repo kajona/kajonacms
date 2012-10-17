@@ -27,7 +27,7 @@ $lang["pac_newmail_body"]                = "A new comment was posted:";
 
 $lang["form_message_label"]              = "Message";
 $lang["form_name_label"]                 = "Name";
-$lang["form_comment_title"]              = "Subject";
+$lang["form_subject_label"]              = "Subject";
 $lang["form_submit_label"]               = "Submit";
 $lang["form_comment_username"]              = "Name:";
 $lang["postacomment_empty"]              = "No comments made till now";

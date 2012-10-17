@@ -206,7 +206,7 @@ class class_template {
      * @deprecated use scriptlets instead
      */
     public function fillConstants() {
-        $objConstantScriptlet = new class_scriptlet_constants();
+        $objConstantScriptlet = new class_scriptlet_xconstants();
         $this->strTempTemplate = $objConstantScriptlet->processContent($this->strTempTemplate);
     }
 

@@ -138,7 +138,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules"));
             foreach($objHandler->getObjMetadata()->getArrRequiredModules() as $strOneModule => $strVersion) {
-                $strReturn .= $this->objToolkit->getTextRow($strOneModule." => ".$strVersion);
+                $strReturn .= $this->objToolkit->getTextRow($strOneModule." >= ".$strVersion);
             }
 
 

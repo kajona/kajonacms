@@ -64,6 +64,30 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     private $bitIspackage = 0;
 
+    /**
+     * @var int
+     * @tableColumn file_cat
+     */
+    private $intCat = -1;
+
+    /**
+     * @var string
+     * @tableColumn file_screen1
+     */
+    private $strScreen1 = "";
+
+    /**
+     * @var string
+     * @tableColumn file_screen2
+     */
+    private $strScreen2 = "";
+
+    /**
+     * @var string
+     * @tableColumn file_screen3
+     */
+    private $strScreen3 = "";
+
 
     /**
      * Constructor to create a valid object
@@ -210,6 +234,31 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         }
 
         return $arrReturn;
+    }
+
+
+    /**
+     * Loads a single folder for a given path. Please be aware that you have to pass the previd, too
+     *
+     * @param $strPrevId
+     * @param $strPath
+     *
+     * @return class_module_mediamanager_file
+     */
+    public static function getFolderForPath($strPrevId, $strPath) {
+
+        $strQuery = "SELECT system_id
+                       FROM " . _dbprefix_ . "system,
+                            " . _dbprefix_ . "mediamanager_file
+                    WHERE system_id = file_id
+                      AND file_type = ?
+                      AND system_prev_id = ?
+                      AND file_filename = ?";
+        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(self::$INT_TYPE_FOLDER, $strPrevId, $strPath));
+        if(isset($arrId["system_id"]) && validateSystemid($arrId["system_id"]))
+            return new class_module_mediamanager_file($arrId["system_id"]);
+        else
+            return null;
     }
 
     /**
@@ -465,6 +514,63 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     public function getBitIspackage() {
         return $this->bitIspackage;
     }
+
+    /**
+     * @param int $intCat
+     */
+    public function setIntCat($intCat) {
+        $this->intCat = $intCat;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntCat() {
+        return $this->intCat;
+    }
+
+    /**
+     * @param string $strScreen1
+     */
+    public function setStrScreen1($strScreen1) {
+        $this->strScreen1 = $strScreen1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrScreen1() {
+        return $this->strScreen1;
+    }
+
+    /**
+     * @param string $strScreen2
+     */
+    public function setStrScreen2($strScreen2) {
+        $this->strScreen2 = $strScreen2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrScreen2() {
+        return $this->strScreen2;
+    }
+
+    /**
+     * @param string $strScreen3
+     */
+    public function setStrScreen3($strScreen3) {
+        $this->strScreen3 = $strScreen3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrScreen3() {
+        return $this->strScreen3;
+    }
+
 
 
 }
