@@ -51,6 +51,7 @@ $lang["package_version"]                 = "Version:";
 $lang["provider_error_package"]          = "The packages is no valid archive.";
 $lang["provider_error_transfer"]         = "Error while transfering the package.";
 $lang["provider_kajona"]                 = "Official Kajona packages";
+$lang["provider_kajonabase"]             = "Community packages from kajonabase.net";
 $lang["provider_local"]                  = "Upload to the system";
 $lang["provider_local_file"]             = "File:";
 $lang["provider_local_uploadhint"]       = "Upload ZIP-Packages to the system. Packages may be templates, modules or elements. Packages have to contain a file metadata.xml.";

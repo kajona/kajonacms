@@ -169,7 +169,7 @@ class class_remoteloader {
 		if(class_carrier::getInstance()->getObjConfig()->getPhpIni("allow_url_fopen") != 1)
             return false;
 
-		$strReturn = @file_get_contents( $this->strProtocolHeader.
+		$strReturn = file_get_contents( $this->strProtocolHeader.
 		                                 $this->strHost.
 		                                ($this->intPort > 0 ? ":".$this->intPort : "" ).
 		                                 $this->strQueryParams);
