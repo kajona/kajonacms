@@ -76,15 +76,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             //search for new versions
             $bitUpdateAvailable = $objManager->updateAvailable($objHandler);
 
-            if($bitUpdateAvailable == null) {
+            if($bitUpdateAvailable === null) {
                 $strActions .= $this->objToolkit->listButton(
                     getImageAdmin("icon_updateError.png", $this->getLang("package_noversion"))
                 );
             }
             else {
                 //compare the version to trigger additional actions
+                $strLatestVersion = $objManager->searchLatestVersion($objHandler);
                 if($bitUpdateAvailable) {
-                    $strLatestVersion = $objManager->searchLatestVersion($objHandler);
                     $strActions .= $this->objToolkit->listButton(
                         getLinkAdmin(
                             $this->getArrModule("modul"),
@@ -97,7 +97,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     );
                 }
                 else {
-                    $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")));
+                    $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion));
                 }
             }
 
@@ -203,7 +203,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->formClose();
             }
             else {
-                if($objHandler instanceof class_module_packagemanager_packagemanager_module)
+                if($objHandler instanceof class_module_packagemanager_packagemanager_template)
+                    $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+                else
                     $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
             }
         }
