@@ -217,6 +217,9 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             $arrParams[] = $intTypeFilter;
         }
 
+        if($bitOnlyPackages)
+            $arrParams[] = self::$INT_TYPE_FOLDER;
+
         $strQuery = "SELECT system_id
                        FROM " . _dbprefix_ . "system,
                             " . _dbprefix_ . "mediamanager_file
@@ -224,7 +227,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                       AND system_prev_id = ?
                         " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
-                        " . (!$bitOnlyPackages ? "" : " AND file_ispackage = 1 ") . "
+                        " . (!$bitOnlyPackages ? "" : " AND (file_ispackage = 1 OR file_type= ? ) ") . "
                         ORDER BY system_sort ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -280,6 +283,9 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             $arrParams[] = $intTypeFilter;
         }
 
+        if($bitOnlyPackages)
+            $arrParams[] = self::$INT_TYPE_FOLDER;
+
         $strQuery = "SELECT COUNT(*)
                        FROM " . _dbprefix_ . "system,
                             " . _dbprefix_ . "mediamanager_file
@@ -287,7 +293,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                       AND system_prev_id = ?
                          " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
                         " . (!$bitActiveOnly ? "" : "AND system_status = 1 ") . "
-                        " . (!$bitOnlyPackages ? "" : " AND file_ispackage = 1 ") . "";
+                        " . (!$bitOnlyPackages ? "" : " AND (file_ispackage = 1 OR file_type= ? ) ") . "";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
