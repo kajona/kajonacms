@@ -11,7 +11,7 @@
 <!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
 <search_hitlist>
     <div class="searchHitList">
-        <div>[lang,hitlist_text1,search] "%%search_term%%" [lang,hitlist_text2,search] %%search_nrresults [lang,hitlist_text3,search]:</div><br />
+        <div>[lang,hitlist_text1,search] "%%search_term%%" [lang,hitlist_text2,search] %%search_nrresults%% [lang,hitlist_text3,search]:</div><br />
         <ul>%%hitlist%%</ul>
         <div align="center">%%link_back%%&nbsp;&nbsp;%%link_overview%%&nbsp;&nbsp;%%link_forward%%</div>
     </div>
