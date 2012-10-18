@@ -682,7 +682,18 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Creating default aspects...\n";
 
-        if(class_module_system_aspect::getAspectByName("management") == null && class_module_system_aspect::getAspectByName("content") == null) {
+        $arrAspects = class_module_system_aspect::getObjectList();
+
+        if(
+            (count($arrAspects) == 0 || (count($arrAspects) == 1 && $arrAspects[0]->getStrName() == "default"))
+            && class_module_system_aspect::getAspectByName("management") == null
+            && class_module_system_aspect::getAspectByName("content") == null
+        ) {
+
+            if(count($arrAspects) == 1 && $arrAspects[0]->getStrName() == "default")
+                $arrAspects[0]->deleteObject();
+
+
             $objAspect = new class_module_system_aspect();
             $objAspect->setStrName("content");
             $objAspect->updateObjectToDb();

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack:";
@@ -45,6 +45,8 @@ $lang["package_notinstallable"]          = "Paket kann nicht installiert werden.
 $lang["package_noupdate"]                = "Es liegt keine neuere Version vor. Aktuellste Version:";
 $lang["package_noversion"]               = "Das System konnte kein passendes, verfügbares Paket ermitteln";
 $lang["package_remote_errorloading"]     = "Fehler bei der Abfrage der verfügbaren Pakete.";
+$lang["package_searchupdate"]            = "Suche nach Updates läuft...";
+$lang["package_target_writable"]         = "Für die Installation werden Schreibrechte auf folgendem Ordner benötigt:";
 $lang["package_type"]                    = "Typ:";
 $lang["package_updatefound"]             = "Update des Pakets auf die neuste Version ";
 $lang["package_version"]                 = "Version:";
@@ -59,8 +61,7 @@ $lang["provider_select"]                 = "Provider auswählen";
 $lang["systemtask_templatepackimport_name"] = "Template-Pack importieren";
 $lang["type_MODULE"]                     = "Modul-Paket";
 $lang["type_TEMPLATE"]                   = "Template-Pack";
-$lang["package_target_writable"]         = "Für die Installation werden Schreibrechte auf folgendem Ordner benötigt:";
-$lang["update_notification_intro"]        = "Für ein installiertes Paket ist eine neue Version verfügbar.";
-$lang["update_notification_package"]        = "Betreffendes Paket:";
-$lang["update_notification_verinst"]        = "Installierte Version:";
-$lang["update_notification_verav"]        = "Verfügbare Version:";
+$lang["update_notification_intro"]       = "Für ein installiertes Paket ist eine neue Version verfügbar.";
+$lang["update_notification_package"]     = "Betreffendes Paket:";
+$lang["update_notification_verav"]       = "Verfügbare Version:";
+$lang["update_notification_verinst"]     = "Installierte Version:";

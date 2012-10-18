@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Active template-pack:";
@@ -45,6 +45,8 @@ $lang["package_notinstallable"]          = "Package can't be installed.";
 $lang["package_noupdate"]                = "There's no new version available. Latest version:";
 $lang["package_noversion"]               = "The system failed to find a matching remote package";
 $lang["package_remote_errorloading"]     = "Error loading the list of packages.";
+$lang["package_searchupdate"]            = "Searching for updates...";
+$lang["package_target_writable"]         = "To install the package, write permissions are required in the following directory:";
 $lang["package_type"]                    = "Type:";
 $lang["package_updatefound"]             = "Update the package to the latest version ";
 $lang["package_version"]                 = "Version:";
@@ -59,8 +61,7 @@ $lang["provider_select"]                 = "Select provider";
 $lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
 $lang["type_MODULE"]                     = "Module-package";
 $lang["type_TEMPLATE"]                   = "Template-pack";
-$lang["package_target_writable"]         = "To install the package, write permissions are required in the following directory:";
-$lang["update_notification_intro"]        = "A new version is available for an installed package.";
-$lang["update_notification_package"]        = "Respective package:";
-$lang["update_notification_verinst"]        = "Installed version:";
-$lang["update_notification_verav"]        = "Available version:";
+$lang["update_notification_intro"]       = "A new version is available for an installed package.";
+$lang["update_notification_package"]     = "Respective package:";
+$lang["update_notification_verav"]       = "Available version:";
+$lang["update_notification_verinst"]     = "Installed version:";

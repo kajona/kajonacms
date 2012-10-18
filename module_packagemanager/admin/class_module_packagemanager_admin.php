@@ -73,8 +73,24 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 );
             }
 
+
+            $strActions .= $this->objToolkit->listButton("<span id=\"updateWrapper".$objOneMetadata->getStrTitle()."\">".getImageAdmin("loadingSmall.gif", $this->getLang("package_searchupdate"))."</span>");
+            $strActions .= "<script type='text/javascript'>
+            $(function() {
+                KAJONA.admin.ajax.genericAjaxCall('packagemanager', 'getUpdateIcon', '&package=".$objOneMetadata->getStrTitle()."', function(data, status, jqXHR) {
+                    if(status == 'success') {
+                        $('#updateWrapper".$objOneMetadata->getStrTitle()."').html(data);
+                        KAJONA.util.evalScript(data);
+                    }
+                else {
+                        KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
+                    }
+                });
+            });
+            </script>";
+
             //search for new versions
-            $bitUpdateAvailable = $objManager->updateAvailable($objHandler);
+           /* $bitUpdateAvailable = $objManager->updateAvailable($objHandler);
 
             if($bitUpdateAvailable === null) {
                 $strActions .= $this->objToolkit->listButton(
@@ -99,7 +115,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 else {
                     $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion));
                 }
-            }
+            }*/
 
 
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
@@ -114,6 +130,57 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         return $strReturn;
     }
 
+    /**
+     * @xml
+     * @permissions view,edit
+     * @return string
+     */
+    protected function actionGetUpdateIcon() {
+
+        $strPackage = $this->getParam("package");
+        $objManager = new class_module_packagemanager_manager();
+        $arrPackages = $objManager->getAvailablePackages();
+
+        //close session to avoid blocking
+        $this->objSession->sessionClose();
+
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_HTML);
+
+        foreach($arrPackages as $objOneMetadata) {
+
+            if($objOneMetadata->getStrTitle() == $strPackage) {
+
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+                $bitUpdateAvailable = $objManager->updateAvailable($objHandler);
+
+                if($bitUpdateAvailable === null) {
+                    return getImageAdmin("icon_updateError.png", $this->getLang("package_noversion"));
+                }
+                else {
+                    //compare the version to trigger additional actions
+                    $strLatestVersion = $objManager->searchLatestVersion($objHandler);
+                    if($bitUpdateAvailable) {
+                        return getLinkAdmin(
+                            $this->getArrModule("modul"),
+                            "initPackageUpdate",
+                            "&package=".$objHandler->getObjMetadata()->getStrPath(),
+                            $this->getLang("package_updatefound")." ".$strLatestVersion,
+                            $this->getLang("package_updatefound")." ".$strLatestVersion,
+                            "icon_update.png"
+                        );
+
+                    }
+                    else {
+                        return getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion);
+                    }
+                }
+
+                break;
+            }
+        }
+
+        return getImageAdmin("icon_updateError.png", $this->getLang("package_noversion"));
+    }
 
     /**
      * Validates a local package, renders the metadata
@@ -449,4 +516,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
         return "";
     }
+
+
 }
