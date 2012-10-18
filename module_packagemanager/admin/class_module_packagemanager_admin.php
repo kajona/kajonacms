@@ -60,9 +60,22 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $objManager = new class_module_packagemanager_manager();
         $arrPackages = $objManager->getAvailablePackages();
 
+
+        $objArrayIterator = new class_array_iterator($arrPackages);
+        $objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+
+        $objArraySectionIterator = new class_array_section_iterator(count($arrPackages));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
+
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
+        $arrIterables = $arrPageViews["elements"];
+
+
+
         $strReturn .= $this->objToolkit->listHeader();
         $intI = 0;
-        foreach($arrPackages as $objOneMetadata) {
+        foreach($arrIterables as $objOneMetadata) {
 
             $strActions = "";
             $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
@@ -78,45 +91,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strActions .= "<script type='text/javascript'>
             $(function() {
                 KAJONA.admin.ajax.genericAjaxCall('packagemanager', 'getUpdateIcon', '&package=".$objOneMetadata->getStrTitle()."', function(data, status, jqXHR) {
-                    if(status == 'success') {
-                        $('#updateWrapper".$objOneMetadata->getStrTitle()."').html(data);
-                        KAJONA.util.evalScript(data);
-                    }
-                else {
-                        KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
-                    }
-                });
-            });
+                    if(status == 'success') { $('#updateWrapper".$objOneMetadata->getStrTitle()."').html(data); KAJONA.util.evalScript(data); }
+                    else {KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);}
+                }); });
             </script>";
-
-            //search for new versions
-           /* $bitUpdateAvailable = $objManager->updateAvailable($objHandler);
-
-            if($bitUpdateAvailable === null) {
-                $strActions .= $this->objToolkit->listButton(
-                    getImageAdmin("icon_updateError.png", $this->getLang("package_noversion"))
-                );
-            }
-            else {
-                //compare the version to trigger additional actions
-                $strLatestVersion = $objManager->searchLatestVersion($objHandler);
-                if($bitUpdateAvailable) {
-                    $strActions .= $this->objToolkit->listButton(
-                        getLinkAdmin(
-                            $this->getArrModule("modul"),
-                            "initPackageUpdate",
-                            "&package=".$objHandler->getObjMetadata()->getStrPath(),
-                            $this->getLang("package_updatefound")." ".$strLatestVersion,
-                            $this->getLang("package_updatefound")." ".$strLatestVersion,
-                            "icon_update.png"
-                        )
-                    );
-                }
-                else {
-                    $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion));
-                }
-            }*/
-
 
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
@@ -127,10 +105,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strReturn .= $this->objToolkit->listFooter();
 
+        $strReturn .= $arrPageViews["pageview"];
+
         return $strReturn;
     }
 
     /**
+     * Checks if an update is available for a single package.
+     * Renders the matching icon and tooltip or the link to update a package.
+     *
      * @xml
      * @permissions view,edit
      * @return string
@@ -168,7 +151,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                             $this->getLang("package_updatefound")." ".$strLatestVersion,
                             "icon_update.png"
                         );
-
                     }
                     else {
                         return getImageAdmin("icon_updateDisabled.png", $this->getLang("package_noupdate")." ".$strLatestVersion);

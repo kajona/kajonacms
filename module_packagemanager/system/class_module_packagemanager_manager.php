@@ -30,8 +30,15 @@ class class_module_packagemanager_manager {
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
         $arrReturn = array_merge($arrReturn, $objModuleProvider->getInstalledPackages());
 
+
+
+
+        usort($arrReturn, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) {
+            return strcmp($objA->getStrTitle(), $objB->getStrTitle());
+        });
+
         $objPackageProvider = new class_module_packagemanager_packagemanager_template();
-        $arrReturn = array_merge($arrReturn, $objPackageProvider->getInstalledPackages());
+        $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
 
         return $arrReturn;
     }
