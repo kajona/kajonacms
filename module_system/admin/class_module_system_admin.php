@@ -95,6 +95,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objInstance instanceof class_module_system_aspect)
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editAspect", "&systemid=".$objInstance->getSystemid()));
+
+        if($objInstance instanceof class_module_system_module)
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
     }
 
 
