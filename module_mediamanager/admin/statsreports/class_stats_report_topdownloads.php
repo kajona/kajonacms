@@ -24,8 +24,6 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
 	private $objToolkit;
 	private $objDB;
 
-	private $arrModule;
-
 	/**
 	 * Constructor
 	 *

@@ -200,7 +200,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
         if($this->getParam("doCalendarFilter") != "") {
             //update filter-criteria
-            foreach($arrFilterEntries as $strOneId => $strName) {
+            foreach(array_keys($arrFilterEntries) as $strOneId) {
                 if($this->getParam($strOneId) != "")
                     $this->objSession->sessionUnset($strOneId);
                 else

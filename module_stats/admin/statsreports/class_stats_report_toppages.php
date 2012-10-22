@@ -122,7 +122,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
         $arrPlots = array();
         $arrLabels = array();
         $intCount = 1;
-        foreach($arrPages as $strName => $arrOnePage) {
+        foreach($arrPages as $arrOnePage) {
             $arrGraphData[] = $arrOnePage["anzahl"];
             $arrLabels[] = $intCount;
             if($intCount <= 6) {
@@ -160,7 +160,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
                 $arrTickLabels[] = date("d.m.", $this->intDateStart);
                 foreach($arrPlots as $strPage => &$arrOnePlot) {
                     $arrOnePlot[$intCount] = 0;
-                    foreach($arrPagesData as $intKey => $arrOnePage) {
+                    foreach($arrPagesData as $arrOnePage) {
                         if($arrOnePage["name"] == $strPage) {
                             $arrOnePlot[$intCount] += $arrOnePage["anzahl"];
                         }

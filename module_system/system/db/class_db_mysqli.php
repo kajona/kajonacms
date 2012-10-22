@@ -130,7 +130,7 @@ class class_db_mysqli implements interface_db_driver {
 		$resultSet = @mysqli_query($this->linkDB, $strQuery);
 		if(!$resultSet)
 			return false;
-		while($arrRow = @mysqli_fetch_array($resultSet)) {
+		while($arrRow = @mysqli_fetch_array($resultSet, MYSQLI_BOTH)) {
 			$arrReturn[$intCounter++] = $arrRow;
 		}
 		return $arrReturn;
@@ -465,6 +465,7 @@ class class_db_mysqli implements interface_db_driver {
      *
      * @param string $strFilename
      * @param array $arrTables
+     * @return bool
      */
     public function dbExport($strFilename, $arrTables) {
         $strFilename = _realpath_.$strFilename;
@@ -478,7 +479,7 @@ class class_db_mysqli implements interface_db_driver {
         $strCommand = $this->strDumpBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." ".$strTables." > \"".$strFilename."\"";
 		//Now do a systemfork
 		$intTemp = "";
-		$strResult = system($strCommand, $intTemp);
+		system($strCommand, $intTemp);
         class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, class_logger::$levelInfo);
         return $intTemp == 0;
     }
@@ -499,7 +500,7 @@ class class_db_mysqli implements interface_db_driver {
 
         $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
-        $strResult = system($strCommand, $intTemp);
+        system($strCommand, $intTemp);
         class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
 	    return $intTemp == 0;
     }

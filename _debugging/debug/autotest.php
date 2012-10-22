@@ -210,7 +210,6 @@ final class class_testLogger {
         if($intLevel == self::$levelInfo && $this->intLogLevel < 3)
             return;
 
-        $strLevel = "";
         if($intLevel == self::$levelError)
             $strMessage = "<span style=\"color: red;\">ERROR &gt;&gt;&gt;</span> ".$strMessage." <span style=\"color: red;\">&lt;&lt;&lt;</span>";
         elseif ($intLevel == self::$levelInfo)

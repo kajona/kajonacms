@@ -140,7 +140,6 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         $arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
 
-        $arrBrowserGiven = &$this->arrBrowserGiven;
         $arrBrowserGiven2 = &$this->arrBrowserGiven2;
 
         //Search the best matching pattern
@@ -236,7 +235,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
             $arrTickLabels[$intCount] = date("d.m.", $this->intDateStart);
             foreach($arrPlots as $strSystem => &$arrOnePlot) {
                 $arrOnePlot[$intCount] = 0;
-                if(key_exists($strSystem, $arrSystemData)) {
+                if(array_key_exists($strSystem, $arrSystemData)) {
                     $arrOnePlot[$intCount] = (int)$arrSystemData[$strSystem];
                 }
 

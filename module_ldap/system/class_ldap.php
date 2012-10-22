@@ -126,16 +126,16 @@ class class_ldap {
      * Loads all members of the passed group-identifier.
      * This list may not be limited to users, all members are returned.
      *
-     * @param string $strGroupDistinguishedName
+     * @param string $strGroupDN
      *
      * @throws class_exception
      * @return string[] array of distinguished names
      */
-    public function getMembersOfGroup($strGroupDistinguishedName) {
+    public function getMembersOfGroup($strGroupDN) {
         $arrReturn = array();
 
         //search the group itself
-        $objResult = @ldap_search($this->objCx, $strGroupDistinguishedName, $this->objConfig->getConfig("ldap_group_filter"));
+        $objResult = @ldap_search($this->objCx, $strGroupDN, $this->objConfig->getConfig("ldap_group_filter"));
 
         if($objResult !== false) {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
@@ -161,14 +161,14 @@ class class_ldap {
      * Counts the number of group-members
      * This list may not be limited to users, all members are returned as defined by the filter
      *
-     * @param string $strGroupDistinguishedName
+     * @param string $strGroupDN
      *
      * @throws class_exception
      * @return int
      */
-    public function getNumberOfGroupMembers($strGroupDistinguishedName) {
+    public function getNumberOfGroupMembers($strGroupDN) {
         //search the group itself
-        $objResult = @ldap_search($this->objCx, $strGroupDistinguishedName, $this->objConfig->getConfig("ldap_group_filter"));
+        $objResult = @ldap_search($this->objCx, $strGroupDN, $this->objConfig->getConfig("ldap_group_filter"));
 
         if($objResult !== false) {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
