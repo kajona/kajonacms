@@ -197,6 +197,8 @@
                 <include name="module_samplecontent/*/**"/>
                 <include name="module_packagemanager/*/**"/>
                 <include name="module_system/**"/>
+                <include name="module_search/**"/>
+                <include name="module_tags/**"/>
                 <include name="module_installer/*/**"/>
                 <include name="module_v4skin/*/**"/>
                 <include name="*.php"/>
