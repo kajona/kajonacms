@@ -176,6 +176,8 @@
         <antcall target="compressCss" />
         <antcall target="compressJs" />
 
+        <antcall target="cleanZipContent" />
+
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
@@ -210,6 +212,8 @@
         <antcall target="compressCss" />
         <antcall target="compressJs" />
 
+        <antcall target="cleanZipContent" />
+
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
@@ -243,16 +247,22 @@
     </target>
 
 
+
+
+    <target name="cleanZipContent" description="Removes internal files used by the development not to be included into the build zips">
+        <delete>
+            <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
+        </delete>
+    </target>
+
+
     <target name="compileLess" description="Compiles the less files and inserts them into to tpl files">
         <echo>Compiling less files</echo>
         <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f lessc/v4setup.php "/>
         </exec>
-
-        <delete>
-            <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
-            <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
-        </delete>
     </target>
 
 
