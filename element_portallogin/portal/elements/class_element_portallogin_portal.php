@@ -20,10 +20,10 @@ class class_element_portallogin_portal extends class_element_portal implements i
      *
      * @param class_module_pages_pageelement|mixed $objElementData
      */
-	public function __construct($objElementData) {
+    public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_plogin");
-	}
+        $this->setArrModuleEntry("table", _dbprefix_ . "element_plogin");
+    }
 
     /**
      * Checks what to do and invokes the proper method
@@ -32,57 +32,59 @@ class class_element_portallogin_portal extends class_element_portal implements i
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
 
-		if($this->getParam("action") == "portalLogin") {
-		    if($this->doLogin()) {
-		         if($this->arrElementData["portallogin_success"] != "") {
-		             $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_success"]));
-		         }
-		         else {
-		             $this->portalReload(getLinkPortalHref($this->getPagename()));
-		         }
-		    }
-		    else {
-                if($this->arrElementData["portallogin_error"] != "") {
-		             $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_error"]));
+        if($this->getParam("action") == "portalLogin") {
+            if($this->doLogin()) {
+                if($this->arrElementData["portallogin_success"] != "") {
+                    $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_success"]));
                 }
-		    }
-		}
-		elseif ($this->getParam("action") == "portalLogout") {
-		    $this->doLogout();
-		    if($this->arrElementData["portallogin_logout_success"] != "") {
-		        $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_logout_success"]));
+                else {
+                    $this->portalReload(getLinkPortalHref($this->getPagename()));
+                }
             }
             else {
-		        $this->portalReload(getLinkPortalHref($this->getPagename()));
-		    }
-		}
+                if($this->arrElementData["portallogin_error"] != "") {
+                    $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_error"]));
+                }
+            }
+        }
+        elseif($this->getParam("action") == "portalLogout") {
+            $this->doLogout();
+            if($this->arrElementData["portallogin_logout_success"] != "") {
+                $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_logout_success"]));
+            }
+            else {
+                $this->portalReload(getLinkPortalHref($this->getPagename()));
+            }
+        }
 
 
-		if(!$this->objSession->isLoggedin()) {
+        if(!$this->objSession->isLoggedin()) {
 
             if($this->getAction() == "portalLoginReset") {
                 $strReturn .= $this->resetForm();
             }
-            elseif ($this->getAction() == "portalResetPwd") {
+            elseif($this->getAction() == "portalResetPwd") {
                 $strReturn .= $this->newPwdForm();
             }
-            else
+            else {
                 $strReturn .= $this->loginForm();
-		}
-		else {
-		    if($this->getParam("action") == "portalEditProfile")
-		        $strReturn .= $this->editUserData();
-		    else
-		        $strReturn .= $this->statusArea();
-		}
+            }
+        }
+        else {
+            if($this->getParam("action") == "portalEditProfile") {
+                $strReturn .= $this->editUserData();
+            }
+            else {
+                $strReturn .= $this->statusArea();
+            }
+        }
 
 
-
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
     /**
@@ -90,13 +92,13 @@ class class_element_portallogin_portal extends class_element_portal implements i
      *
      * @return string
      */
-	private function newPwdForm() {
+    private function newPwdForm() {
         $strReturn = "";
 
         if($this->getParam("reset") != "" && getPost("reset") != "") {
             //try to load the user
-            
-            
+
+
             $objUser = new class_module_user_user($this->getParam("systemid"));
             if($objUser->getStrAuthcode() != "" && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrUsername() != "") {
                 //check the submitted passwords.
@@ -110,33 +112,34 @@ class class_element_portallogin_portal extends class_element_portal implements i
                         $objUser->getObjSourceUser()->setStrPass($strPass1);
                         $objUser->getObjSourceUser()->updateObjectToDb();
                     }
-                        
+
                     $objUser->setStrAuthcode("");
                     $objUser->updateObjectToDb();
-                    
-                    class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
+
+                    class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("changed password of user " . $objUser->getStrUsername(), class_logger::$levelInfo);
 
                     $strReturn .= $this->getLang("resetSuccess");
                 }
-                else
+                else {
                     $strReturn .= $this->getLang("resetError");
+                }
             }
-            else
+            else {
                 $strReturn .= $this->getLang("resetError");
-
+            }
 
         }
         else {
 
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_newpwdform");
+            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_newpwdform");
             $arrTemplate = array();
 
             //check sysid & authcode
             $objUser = new class_module_user_user($this->getParam("systemid"));
-            
-            
+
+
             if($objUser->getStrAuthcode() != "" && $objUser->getStrAuthcode() == $this->getParam("authcode")) {
-            
+
                 $arrTemplate["portallogin_action"] = "portalResetPwd";
                 $arrTemplate["portallogin_systemid"] = $this->getParam("systemid");
                 $arrTemplate["portallogin_authcode"] = $this->getParam("authcode");
@@ -145,12 +148,13 @@ class class_element_portallogin_portal extends class_element_portal implements i
                 $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
             }
-            else
+            else {
                 $strReturn .= "Permission Error";
+            }
         }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
     /**
@@ -158,7 +162,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
      *
      * @return string
      */
-	private function resetForm() {
+    private function resetForm() {
         $strReturn = "";
 
         if($this->getParam("reset") != "" && getPost("reset") != "") {
@@ -175,8 +179,8 @@ class class_element_portallogin_portal extends class_element_portal implements i
                     $objUser->updateObjectToDb();
 
                     $strMailContent = $this->getLang("resetemailBody");
-                    $strTemp = getLinkPortalHref($this->getPagename(), "", "portalResetPwd", "systemid=".$objUser->getSystemid()."&authcode=".$strAuthcode);
-                    $strMailContent .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
+                    $strTemp = getLinkPortalHref($this->getPagename(), "", "portalResetPwd", "systemid=" . $objUser->getSystemid() . "&authcode=" . $strAuthcode);
+                    $strMailContent .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
 
                     $objScriptlets = new class_scriptlet_helper();
                     $strMailContent = $objScriptlets->processString($strMailContent);
@@ -191,11 +195,11 @@ class class_element_portallogin_portal extends class_element_portal implements i
                     $strReturn .= $this->getLang("resetMailSuccess");
                 }
             }
-            
+
         }
         else {
 
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_resetform");
+            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_resetform");
             $arrTemplate = array();
             $arrTemplate["portallogin_action"] = "portalLoginReset";
             $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
@@ -203,8 +207,8 @@ class class_element_portallogin_portal extends class_element_portal implements i
             $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
         }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
     /**
@@ -214,75 +218,81 @@ class class_element_portallogin_portal extends class_element_portal implements i
      *
      * @return string
      */
-	private function loginForm() {
-        $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_loginform");
+    private function loginForm() {
+        $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_loginform");
 
-		$arrTemplate = array();
+        $arrTemplate = array();
         $arrTemplate["portallogin_action"] = "portalLogin";
 
-        $strPwdPage = $this->arrElementData["portallogin_pwdforgot"] != "" ? $this->arrElementData["portallogin_pwdforgot"]  : $this->getPagename();
+        $strPwdPage = $this->arrElementData["portallogin_pwdforgot"] != "" ? $this->arrElementData["portallogin_pwdforgot"] : $this->getPagename();
         $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($strPwdPage, "", "", $this->getLang("pwdForgotLink"), "portalLoginReset");
 
-		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
-		return $this->fillTemplate($arrTemplate, $strTemplateID);
-	}
+        $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
+        return $this->fillTemplate($arrTemplate, $strTemplateID);
+    }
 
-	/**
-	 * Creates a small status-area, providing a link to logout
-	 *
-	 * @return string
-	 */
-	private function statusArea() {
-        $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_status");
+    /**
+     * Creates a small status-area, providing a link to logout
+     *
+     * @return string
+     */
+    private function statusArea() {
+        $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_status");
         $arrTemplate = array();
         $arrTemplate["loggedin_label"] = $this->getLang("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
         $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getLang("logoutlink"), "portalLogout");
 
         $strProfileeditpage = $this->getPagename();
-        if($this->arrElementData["portallogin_profile"] != "")
+        if($this->arrElementData["portallogin_profile"] != "") {
             $strProfileeditpage = $this->arrElementData["portallogin_profile"];
+        }
 
         $arrTemplate["editprofilelink"] = getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile");
-	    return $this->fillTemplate($arrTemplate, $strTemplateID);
-	}
+        return $this->fillTemplate($arrTemplate, $strTemplateID);
+    }
 
 
-	/**
-	 * Creates a form to edit a users data
-	 *
-	 * @return string
-	 */
-	private function editUserData() {
+    /**
+     * Creates a form to edit a users data
+     *
+     * @return string
+     */
+    private function editUserData() {
 
-	    $arrErrors = array();
-	    $bitForm = true;
-	    //what to do?
-	    if($this->getParam("submitUserForm") != "") {
-	        if($this->getParam("password") != "") {
-	            if($this->getParam("password") != $this->getParam("password2"))
-	               $arrErrors[] = $this->getLang("passwordsUnequal");
-	        }
+        $arrErrors = array();
+        $bitForm = true;
+        //what to do?
+        if($this->getParam("submitUserForm") != "") {
+            if($this->getParam("password") != "") {
+                if($this->getParam("password") != $this->getParam("password2")) {
+                    $arrErrors[] = $this->getLang("passwordsUnequal");
+                }
+            }
 
             $objValidator = new class_email_validator();
-	        if(!$objValidator->validate($this->getParam("email")))
-               $arrErrors[] = $this->getLang("invalidEmailadress");
+            if(!$objValidator->validate($this->getParam("email"))) {
+                $arrErrors[] = $this->getLang("invalidEmailadress");
+            }
 
-	        if(count($arrErrors) == 0)
-               $bitForm = false;
-	    }
+            if(count($arrErrors) == 0) {
+                $bitForm = false;
+            }
+        }
 
-	    if($bitForm) {
-            if($this->arrElementData["portallogin_editmode"] == 1)
-                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform_complete");
-            else
-                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform_minimal");
+        if($bitForm) {
+            if($this->arrElementData["portallogin_editmode"] == 1) {
+                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_userdataform_complete");
+            }
+            else {
+                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_userdataform_minimal");
+            }
             $arrTemplate = array();
 
-            
+
             $objUser = new class_module_user_user($this->objSession->getUserID());
             if($objUser->getObjSourceUser()->isEditable() && $objUser->getStrSubsystem() == "kajona" && $objUser->getObjSourceUser() instanceof class_usersources_user_kajona) {
-                
+
                 $arrTemplate["username"] = $objUser->getStrUsername();
                 $arrTemplate["email"] = $objUser->getObjSourceUser()->getStrEmail();
                 $arrTemplate["forename"] = $objUser->getObjSourceUser()->getStrForename();
@@ -303,20 +313,21 @@ class class_element_portallogin_portal extends class_element_portal implements i
 
                 $arrTemplate["formErrors"] = "";
                 if(count($arrErrors) > 0) {
-                    foreach ($arrErrors as $strOneError) {
-                        $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
-                        $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                    foreach($arrErrors as $strOneError) {
+                        $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "errorRow");
+                        $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                     }
                 }
 
                 return $this->fillTemplate($arrTemplate, $strTemplateID);
             }
-            else
+            else {
                 return "Login provider not supported.";
-	    }
-	    else {
+            }
+        }
+        else {
             $objUser = new class_module_user_user($this->objSession->getUserID());
-            
+
             if($objUser->getObjSourceUser() instanceof class_usersources_user_kajona) {
 
                 $objUser->getObjSourceUser()->setStrEmail($this->getParam("email"));
@@ -340,13 +351,13 @@ class class_element_portallogin_portal extends class_element_portal implements i
                 }
 
                 $objUser->getObjSourceUser()->updateObjectToDb();
-            
+
             }
             $this->portalReload(getLinkPortalHref($this->getPagename()));
 
-	    }
+        }
         return "";
-	}
+    }
 
 
     /**
@@ -355,27 +366,28 @@ class class_element_portallogin_portal extends class_element_portal implements i
      *
      * @return bool
      */
-	private function doLogin() {
-	    $strUsername = htmlToString($this->getParam("portallogin_username"), true);
-	    $strPassword = htmlToString($this->getParam("portallogin_password"), true);
+    private function doLogin() {
+        $strUsername = htmlToString($this->getParam("portallogin_username"), true);
+        $strPassword = htmlToString($this->getParam("portallogin_password"), true);
 
-	    if($this->objSession->login($strUsername, $strPassword)) {
-	        if(!$this->objSession->isPortal()) {
-	            $this->objSession->logout();
-	            return false;
-	        }
-	        else
-	           return true;
-	    }
-	    return false;
-	}
+        if($this->objSession->login($strUsername, $strPassword)) {
+            if(!$this->objSession->isPortal()) {
+                $this->objSession->logout();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
-	/**
-	 * Logs the user out off the system
-	 */
-	private function doLogout() {
+    /**
+     * Logs the user out off the system
+     */
+    private function doLogout() {
         $this->objSession->logout();
-	}
+    }
 
 }
