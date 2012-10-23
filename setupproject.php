@@ -44,7 +44,7 @@ class class_project_setup {
         self::checkDir("/project/lang");
         self::checkDir("/project/system");
         self::checkDir("/project/system/config");
-        self::checkDir("/project/system/classes");
+        //self::checkDir("/project/system/classes");
         self::checkDir("/project/portal");
         self::checkDir("/project/temp");
         self::checkDir("/templates");
@@ -60,7 +60,7 @@ class class_project_setup {
         self::checkDir("/templates/default/tpl");
         self::checkDir("/templates/default/pics");
 
-        self::createClassloaderConfig();
+        //self::createClassloaderConfig();
         self::createLangProjectEntry();
         self::createDefaultTemplateEntry();
 
