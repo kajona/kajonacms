@@ -121,7 +121,7 @@ class class_classloader {
      * Loads an merges all class-mappings as defined in the class-loader config-file.
      *
      * @see /project/system/classes/classloader.xml
-     * @todo currently dsiabled, no longer required?
+     * @todo currently disabled, no longer required?
      */
     private function loadClassloaderConfig() {
         if(is_file(_realpath_."/project/system/classes/classloader.xml")) {
