@@ -187,10 +187,10 @@ interface interface_db_driver {
      * Creates an db-dump usind the given filename. the filename is relative to _realpath_
      * The dump must include, and ONLY include the pass tables
      *
-     * @param string $strPath
+     * @param $strFilename
      * @param array $arrTables
-     * @return bool Indicates, if the dump worked or not
      *
+     * @return bool Indicates, if the dump worked or not
      */
     public function dbExport($strFilename, $arrTables);
 
@@ -206,7 +206,7 @@ interface interface_db_driver {
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
      *
-     * @param string $strColum
+     * @param $strColumn
      * @return string
      */
     public function encloseColumnName($strColumn);

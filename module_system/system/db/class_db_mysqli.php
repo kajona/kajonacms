@@ -14,14 +14,14 @@
  */
 class class_db_mysqli implements interface_db_driver {
 
-    private $linkDB;						//DB-Link
+    private $linkDB; //DB-Link
     private $strHost = "";
     private $strUsername = "";
     private $strPass = "";
     private $strDbName = "";
     private $intPort = "";
-    private $strDumpBin = "mysqldump";              //Binary to dump db (if not in path, add the path here)
-    private $strRestoreBin = "mysql";               //Binary to dump db (if not in path, add the path here)
+    private $strDumpBin = "mysqldump"; //Binary to dump db (if not in path, add the path here)
+    private $strRestoreBin = "mysql"; //Binary to dump db (if not in path, add the path here)
     private $arrStatementsCache = array();
 
     private $strErrorMessage = "";
@@ -34,39 +34,41 @@ class class_db_mysqli implements interface_db_driver {
      * @param string $strPass
      * @param string $strDbName
      * @param int $intPort
+     *
      * @return bool
      * @throws class_exception
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
-        if($intPort == "")
-			$intPort = "3306";
+        if($intPort == "") {
+            $intPort = "3306";
+        }
 
-		//save connection-details
-		$this->strHost = $strHost;
-		$this->strUsername = $strUsername;
-		$this->strPass = $strPass;
-		$this->strDbName = $strDbName;
-		$this->intPort = $intPort;
+        //save connection-details
+        $this->strHost = $strHost;
+        $this->strUsername = $strUsername;
+        $this->strPass = $strPass;
+        $this->strDbName = $strDbName;
+        $this->intPort = $intPort;
 
-		$this->linkDB = @mysqli_connect($strHost, $strUsername, $strPass, $strDbName, $intPort);
-		if($this->linkDB !== false) {
-			if(@mysqli_select_db($this->linkDB, $strDbName)) {
-			    //erst ab mysql-client-bib > 4
-			    //mysqli_set_charset($this->linkDB, "utf8");
+        $this->linkDB = @mysqli_connect($strHost, $strUsername, $strPass, $strDbName, $intPort);
+        if($this->linkDB !== false) {
+            if(@mysqli_select_db($this->linkDB, $strDbName)) {
+                //erst ab mysql-client-bib > 4
+                //mysqli_set_charset($this->linkDB, "utf8");
                 $this->_query("SET NAMES 'utf8'");
                 $this->_query("SET CHARACTER SET utf8");
                 $this->_query("SET character_set_connection ='utf8'");
                 $this->_query("SET character_set_database ='utf8'");
                 $this->_query("SET character_set_server ='utf8'");
-				return true;
-			}
-			else {
-				throw new class_exception("Error selecting database", class_exception::$level_FATALERROR);
-			}
-		}
-		else {
-			throw new class_exception("Error connecting to database", class_exception::$level_FATALERROR);
-		}
+                return true;
+            }
+            else {
+                throw new class_exception("Error selecting database", class_exception::$level_FATALERROR);
+            }
+        }
+        else {
+            throw new class_exception("Error connecting to database", class_exception::$level_FATALERROR);
+        }
     }
 
     /**
@@ -80,10 +82,11 @@ class class_db_mysqli implements interface_db_driver {
      * Sends a query (e.g. an update) to the database
      *
      * @param string $strQuery
+     *
      * @return bool
      */
     public function _query($strQuery) {
-		$bitReturn = @mysqli_query($this->linkDB, $strQuery);
+        $bitReturn = @mysqli_query($this->linkDB, $strQuery);
         return $bitReturn;
     }
 
@@ -93,6 +96,7 @@ class class_db_mysqli implements interface_db_driver {
      *
      * @param string $strQuery
      * @param array $arrParams
+     *
      * @return bool
      * @since 3.4
      */
@@ -122,18 +126,20 @@ class class_db_mysqli implements interface_db_driver {
      * This method is used to retrieve an array of resultsets from the database
      *
      * @param string $strQuery
+     *
      * @return mixed
      */
     public function getArray($strQuery) {
         $arrReturn = array();
         $intCounter = 0;
-		$resultSet = @mysqli_query($this->linkDB, $strQuery);
-		if(!$resultSet)
-			return false;
-		while($arrRow = @mysqli_fetch_array($resultSet, MYSQLI_BOTH)) {
-			$arrReturn[$intCounter++] = $arrRow;
-		}
-		return $arrReturn;
+        $resultSet = @mysqli_query($this->linkDB, $strQuery);
+        if(!$resultSet) {
+            return false;
+        }
+        while($arrRow = @mysqli_fetch_array($resultSet, MYSQLI_BOTH)) {
+            $arrReturn[$intCounter++] = $arrRow;
+        }
+        return $arrReturn;
     }
 
     /**
@@ -142,6 +148,7 @@ class class_db_mysqli implements interface_db_driver {
      *
      * @param string $strQuery
      * @param array $arrParams
+     *
      * @since 3.4
      * @return array
      */
@@ -160,8 +167,9 @@ class class_db_mysqli implements interface_db_driver {
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
             }
 
-            if(!mysqli_stmt_execute($objStatement))
+            if(!mysqli_stmt_execute($objStatement)) {
                 return false;
+            }
 
             //should remain here due to the bug http://bugs.php.net/bug.php?id=47928
             mysqli_stmt_store_result($objStatement);
@@ -169,23 +177,24 @@ class class_db_mysqli implements interface_db_driver {
             $objMetadata = mysqli_stmt_result_metadata($objStatement);
             $arrParams = array();
             $arrRow = array();
-            while ($objField = $objMetadata->fetch_field()) {
+            while($objField = $objMetadata->fetch_field()) {
                 $arrParams[] = &$arrRow[$objField->name];
             }
 
             call_user_func_array(array($objStatement, 'bind_result'), $arrParams);
 
-            while ($objStatement->fetch()) {
+            while($objStatement->fetch()) {
                 $arrSingleRow = array();
-                foreach($arrRow as $key => $val)  {
+                foreach($arrRow as $key => $val) {
                     $arrSingleRow[$key] = $val;
                 }
                 $arrReturn[] = $arrSingleRow;
             }
 
         }
-        else
+        else {
             return false;
+        }
 
         return $arrReturn;
     }
@@ -197,13 +206,14 @@ class class_db_mysqli implements interface_db_driver {
      * @param string $strQuery
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd) {
         //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart +1;
+        $intEnd = $intEnd - $intStart + 1;
         //add the limits to the query
-        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
+        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
         //and load the array
         return $this->getArray($strQuery);
     }
@@ -218,14 +228,15 @@ class class_db_mysqli implements interface_db_driver {
      * @param array $arrParams
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      * @since 3.4
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
         //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart +1;
+        $intEnd = $intEnd - $intStart + 1;
         //add the limits to the query
-        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
+        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
         //and load the array
         return $this->getPArray($strQuery, $arrParams);
     }
@@ -237,10 +248,10 @@ class class_db_mysqli implements interface_db_driver {
      * @return string
      */
     public function getError() {
-		$strError = $this->strErrorMessage. " ".@mysqli_error($this->linkDB);
+        $strError = $this->strErrorMessage . " " . @mysqli_error($this->linkDB);
         $this->strErrorMessage = "";
 
-		return $strError;
+        return $strError;
     }
 
     /**
@@ -249,11 +260,11 @@ class class_db_mysqli implements interface_db_driver {
      * @return mixed
      */
     public function getTables() {
-		$arrTemp = $this->getArray("SHOW TABLE STATUS");
-    	foreach($arrTemp as $intKey => $arrOneTemp) {
-			$arrTemp[$intKey]["name"] = $arrTemp[$intKey]["Name"];
-		}
-		return $arrTemp;
+        $arrTemp = $this->getArray("SHOW TABLE STATUS");
+        foreach($arrTemp as $intKey => $arrOneTemp) {
+            $arrTemp[$intKey]["name"] = $arrTemp[$intKey]["Name"];
+        }
+        return $arrTemp;
     }
 
     /**
@@ -262,15 +273,16 @@ class class_db_mysqli implements interface_db_driver {
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
+     *
      * @return array
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".dbsafeString($strTableName));
-        foreach ($arrTemp as $arrOneColumn) {
+        $arrTemp = $this->getArray("SHOW COLUMNS FROM " . dbsafeString($strTableName));
+        foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
-                        "columnName" => $arrOneColumn["Field"],
-                        "columnType" => $arrOneColumn["Type"],
+                "columnName" => $arrOneColumn["Field"],
+                "columnType" => $arrOneColumn["Type"],
             );
         }
         return $arrReturn;
@@ -291,33 +303,45 @@ class class_db_mysqli implements interface_db_driver {
      *      longtext
      *
      * @param string $strType
+     *
      * @return string
      */
     public function getDatatype($strType) {
-    	$strReturn = "";
+        $strReturn = "";
 
-        if($strType == "int")
+        if($strType == "int") {
             $strReturn .= " INT ";
-        elseif($strType == "long")
+        }
+        elseif($strType == "long") {
             $strReturn .= " BIGINT ";
-        elseif($strType == "double")
+        }
+        elseif($strType == "double") {
             $strReturn .= " DOUBLE ";
-        elseif($strType == "char10")
+        }
+        elseif($strType == "char10") {
             $strReturn .= " VARCHAR( 10 ) ";
-        elseif($strType == "char20")
+        }
+        elseif($strType == "char20") {
             $strReturn .= " VARCHAR( 20 ) ";
-        elseif($strType == "char100")
+        }
+        elseif($strType == "char100") {
             $strReturn .= " VARCHAR( 100 ) ";
-        elseif($strType == "char254")
+        }
+        elseif($strType == "char254") {
             $strReturn .= " VARCHAR( 254 ) ";
-        elseif($strType == "char500")
+        }
+        elseif($strType == "char500") {
             $strReturn .= " VARCHAR( 500 ) ";
-        elseif($strType == "text")
+        }
+        elseif($strType == "text") {
             $strReturn .= " TEXT ";
-        elseif($strType == "longtext")
+        }
+        elseif($strType == "longtext") {
             $strReturn .= " LONGTEXT ";
-        else
+        }
+        else {
             $strReturn .= " VARCHAR( 254 ) ";
+        }
 
         return $strReturn;
     }
@@ -329,15 +353,15 @@ class class_db_mysqli implements interface_db_driver {
      * The array of fields should have the following structure
      * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
      * whereas datatype is one of the following:
-     * 		int
+     *         int
      *      long
-     * 		double
-     * 		char10
-     * 		char20
-     * 		char100
-     * 		char254
+     *         double
+     *         char10
+     *         char20
+     *         char100
+     *         char254
      *      char500
-     * 		text
+     *         text
      *      longtext
      *
      * @param string $strName
@@ -345,116 +369,122 @@ class class_db_mysqli implements interface_db_driver {
      * @param array $arrKeys array of primary keys
      * @param array $arrIndices array of additional indices
      * @param bool $bitTxSafe Should the table support transactions?
+     *
      * @return bool
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
-    	$strQuery = "";
+        $strQuery = "";
 
-    	//build the mysql code
-    	$strQuery .= "CREATE TABLE IF NOT EXISTS `"._dbprefix_.$strName."` ( \n";
+        //build the mysql code
+        $strQuery .= "CREATE TABLE IF NOT EXISTS `" . _dbprefix_ . $strName . "` ( \n";
 
-    	//loop the fields
-    	foreach($arrFields as $strFieldName => $arrColumnSettings) {
-    		$strQuery .= " `".$strFieldName."` ";
+        //loop the fields
+        foreach($arrFields as $strFieldName => $arrColumnSettings) {
+            $strQuery .= " `" . $strFieldName . "` ";
 
-    		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
+            $strQuery .= $this->getDatatype($arrColumnSettings[0]);
 
-    		//any default?
-    		if(isset($arrColumnSettings[2]))
-    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";
+            //any default?
+            if(isset($arrColumnSettings[2])) {
+                $strQuery .= "DEFAULT " . $arrColumnSettings[2] . " ";
+            }
 
-    		//nullable?
-    		if($arrColumnSettings[1] === true) {
-    			$strQuery .= " NULL , \n";
-    		}
-    		else {
-    			$strQuery .= " NOT NULL , \n";
-    		}
+            //nullable?
+            if($arrColumnSettings[1] === true) {
+                $strQuery .= " NULL , \n";
+            }
+            else {
+                $strQuery .= " NOT NULL , \n";
+            }
 
-    	}
+        }
 
-    	//primary keys
-    	$strQuery .= " PRIMARY KEY ( `".implode("` , `", $arrKeys)."` ) \n";
+        //primary keys
+        $strQuery .= " PRIMARY KEY ( `" . implode("` , `", $arrKeys) . "` ) \n";
 
-    	if(count($arrIndices) > 0) {
+        if(count($arrIndices) > 0) {
             foreach($arrIndices as $strOneIndex) {
-                $strQuery .= ", INDEX ( `".$strOneIndex."` ) \n ";
+                $strQuery .= ", INDEX ( `" . $strOneIndex . "` ) \n ";
             }
         }
 
 
-    	$strQuery .= ") ";
+        $strQuery .= ") ";
 
-        if(!$bitTxSafe)
+        if(!$bitTxSafe) {
             $strQuery .= " ENGINE = myisam CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
-        else
+        }
+        else {
             $strQuery .= " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+        }
 
         return $this->_query($strQuery);
     }
 
     /**
      * Starts a transaction
-     *
+
      */
     public function transactionBegin() {
         //Autocommit 0 setzten
-		$strQuery = "SET AUTOCOMMIT = 0";
-		$strQuery2 = "BEGIN";
-		$this->_query($strQuery);
-		$this->_query($strQuery2);
+        $strQuery = "SET AUTOCOMMIT = 0";
+        $strQuery2 = "BEGIN";
+        $this->_query($strQuery);
+        $this->_query($strQuery2);
     }
 
     /**
      * Ends a successfull operation by Commiting the transaction
-     *
+
      */
     public function transactionCommit() {
         $str_query = "COMMIT";
-		$str_query2 = "SET AUTOCOMMIT = 1";
-		$this->_query($str_query);
-		$this->_query($str_query2);
+        $str_query2 = "SET AUTOCOMMIT = 1";
+        $this->_query($str_query);
+        $this->_query($str_query2);
     }
 
     /**
      * Ends a non-successfull transaction by using a rollback
-     *
+
      */
     public function transactionRollback() {
         $strQuery = "ROLLBACK";
-		$strQuery2 = "SET AUTOCOMMIT = 1";
-		$this->_query($strQuery);
-		$this->_query($strQuery2);
+        $strQuery2 = "SET AUTOCOMMIT = 1";
+        $this->_query($strQuery);
+        $this->_query($strQuery2);
     }
 
     public function getDbInfo() {
         $arrReturn = array();
         $arrReturn["dbdriver"] = "mysqli-extension";
-        $arrReturn["dbserver"] = "MySQL ".mysqli_get_server_info($this->linkDB);
+        $arrReturn["dbserver"] = "MySQL " . mysqli_get_server_info($this->linkDB);
         $arrReturn["dbclient"] = mysqli_get_client_info($this->linkDB);
         $arrReturn["dbconnection"] = mysqli_get_host_info($this->linkDB);
         return $arrReturn;
     }
 
-	/**
+    /**
      * Allows the db-driver to add database-specific surrounding to column-names.
      * E.g. needed by the mysql-drivers
      *
      * @param string $strColumn
+     *
      * @return string
      */
     public function encloseColumnName($strColumn) {
-    	return "`".$strColumn."`";
+        return "`" . $strColumn . "`";
     }
 
     /**
      * Allows the db-driver to add database-specific surrounding to table-names.
      *
      * @param string $strTable
+     *
      * @return string
      */
     public function encloseTableName($strTable) {
-        return "`".$strTable."`";
+        return "`" . $strTable . "`";
     }
 
 
@@ -465,22 +495,23 @@ class class_db_mysqli implements interface_db_driver {
      *
      * @param string $strFilename
      * @param array $arrTables
+     *
      * @return bool
      */
     public function dbExport($strFilename, $arrTables) {
-        $strFilename = _realpath_.$strFilename;
+        $strFilename = _realpath_ . $strFilename;
         $strTables = implode(" ", $arrTables);
         $strParamPass = "";
 
-        if ($this->strPass != "") {
-        	$strParamPass = " -p\"".$this->strPass."\"";
+        if($this->strPass != "") {
+            $strParamPass = " -p\"" . $this->strPass . "\"";
         }
 
-        $strCommand = $this->strDumpBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." ".$strTables." > \"".$strFilename."\"";
-		//Now do a systemfork
-		$intTemp = "";
-		system($strCommand, $intTemp);
-        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, class_logger::$levelInfo);
+        $strCommand = $this->strDumpBin . " -h" . $this->strHost . " -u" . $this->strUsername . $strParamPass . " -P" . $this->intPort . " " . $this->strDbName . " " . $strTables . " > \"" . $strFilename . "\"";
+        //Now do a systemfork
+        $intTemp = "";
+        system($strCommand, $intTemp);
+        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, class_logger::$levelInfo);
         return $intTemp == 0;
     }
 
@@ -488,34 +519,38 @@ class class_db_mysqli implements interface_db_driver {
      * Imports the given db-dump to the database
      *
      * @param string $strFilename
+     *
      * @return bool
      */
     public function dbImport($strFilename) {
-        $strFilename = _realpath_.$strFilename;
+        $strFilename = _realpath_ . $strFilename;
         $strParamPass = "";
 
-        if ($this->strPass != "") {
-            $strParamPass = " -p\"".$this->strPass."\"";
+        if($this->strPass != "") {
+            $strParamPass = " -p\"" . $this->strPass . "\"";
         }
 
-        $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+        $strCommand = $this->strRestoreBin . " -h" . $this->strHost . " -u" . $this->strUsername . $strParamPass . " -P" . $this->intPort . " " . $this->strDbName . " < \"" . $strFilename . "\"";
         $intTemp = "";
         system($strCommand, $intTemp);
-        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
-	    return $intTemp == 0;
+        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strRestoreBin . " exited with code " . $intTemp, class_logger::$levelInfo);
+        return $intTemp == 0;
     }
 
     /**
      * Converts a simple array into a an array of references.
      * Required for PHP > 5.3
+     *
      * @param array $arrValues
+     *
      * @return array
      */
-    private function refValues($arrValues){
-        if (strnatcmp(phpversion(), '5.3') >= 0) { //Reference is required for PHP 5.3+
+    private function refValues($arrValues) {
+        if(strnatcmp(phpversion(), '5.3') >= 0) { //Reference is required for PHP 5.3+
             $refs = array();
-            foreach($arrValues as $key => $value)
+            foreach($arrValues as $key => $value) {
                 $refs[$key] = &$arrValues[$key];
+            }
             return $refs;
         }
         return $arrValues;
@@ -525,14 +560,16 @@ class class_db_mysqli implements interface_db_driver {
      * Prepares a statement or uses an instance from the cache
      *
      * @param string $strQuery
+     *
      * @return mysqli_stmt
      */
     private function getPreparedStatement($strQuery) {
 
         $strName = md5($strQuery);
 
-        if(isset($this->arrStatementsCache[$strName]))
+        if(isset($this->arrStatementsCache[$strName])) {
             return $this->arrStatementsCache[$strName];
+        }
 
         $objStatement = mysqli_stmt_init($this->linkDB);
         if(!mysqli_stmt_prepare($objStatement, $strQuery)) {
