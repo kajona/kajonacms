@@ -44,7 +44,7 @@ KAJONA.util.Loader = function () {
 
                 //execute callback and delete it so it won't get called again
                 if (bitCallback) {
-                    console.log('requirements all given, triggering callback. loaded: '+arrCallbacks[i].requiredModules);
+                    //console.log('requirements all given, triggering callback. loaded: '+arrCallbacks[i].requiredModules);
                     arrCallbacks[i].callback();
                     delete arrCallbacks[i];
                 }
@@ -146,7 +146,7 @@ KAJONA.util.Loader = function () {
 
             })
             .fail(function(jqxhr, settings, exception) {
-                console.warn('loading file '+strPath+' failed: '+exception);
+                //console.warn('loading file '+strPath+' failed: '+exception);
             });
     }
 
