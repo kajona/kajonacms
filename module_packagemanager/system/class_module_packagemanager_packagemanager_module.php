@@ -41,7 +41,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
                 $arrReturn[] = $objMetadata;
             }
             catch(class_exception $objEx) {
-                $i = 1;
+
             }
         }
 

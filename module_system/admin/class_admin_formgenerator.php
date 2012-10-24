@@ -35,8 +35,6 @@ class class_admin_formgenerator {
     const  BIT_BUTTON_CANCEL = 8;
 
 
-    private $intButtonConfig = 2;
-
     /**
      * The list of form-entries
      *
@@ -146,8 +144,6 @@ class class_admin_formgenerator {
         }
 
         //lock the record to avoid multiple edit-sessions
-
-
         if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
             $this->objSourceobject->getLockManager()->lockRecord();
         else

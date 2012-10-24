@@ -14,7 +14,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_module_system_setting extends class_model implements interface_model, interface_versionable  {
+class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
 
     //0 = bool, 1 = int, 2 = string, 3 = page
@@ -69,17 +69,17 @@ class class_module_system_setting extends class_model implements interface_model
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Initalises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system_config WHERE system_config_id = ?";
+        $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->setStrName($arrRow["system_config_name"]);
@@ -92,6 +92,7 @@ class class_module_system_setting extends class_model implements interface_model
 
     /**
      * Deletes the current object from the system
+     *
      * @return bool
      */
     public function deleteObject() {
@@ -101,6 +102,7 @@ class class_module_system_setting extends class_model implements interface_model
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -124,27 +126,28 @@ class class_module_system_setting extends class_model implements interface_model
      * Only the value is updated!!!
      *
      * @param bool $strPrevId
+     *
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
 
         if(!class_module_system_setting::checkConfigExisting($this->getStrName())) {
-            class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("new constant " . $this->getStrName() . " with value " . $this->getStrValue(), class_logger::$levelInfo);
 
 
-            $strQuery = "INSERT INTO "._dbprefix_."system_config
+            $strQuery = "INSERT INTO " . _dbprefix_ . "system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
                         (?, ?, ?, ?, ?)";
             return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getStrName(), $this->getStrValue(), (int)$this->getIntType(), (int)$this->getIntModule()));
         }
         else {
 
-            class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("updated constant " . $this->getStrName() . " to value " . $this->getStrValue(), class_logger::$levelInfo);
 
             $objChangelog = new class_module_system_changelog();
             $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
-            $strQuery = "UPDATE "._dbprefix_."system_config
+            $strQuery = "UPDATE " . _dbprefix_ . "system_config
                         SET system_config_value = ?
                       WHERE system_config_name = ?";
             return $this->objDB->_pQuery($strQuery, array($this->getStrValue(), $this->getStrName()));
@@ -154,64 +157,71 @@ class class_module_system_setting extends class_model implements interface_model
 
     /**
      * Renames a constant in the database.
+     *
      * @param string $strNewName
+     *
      * @return bool
      */
     public function renameConstant($strNewName) {
-    	class_logger::getInstance()->addLogRow("renamed constant ".$this->getStrName() ." to ".$strNewName, class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("renamed constant " . $this->getStrName() . " to " . $strNewName, class_logger::$levelInfo);
 
 
-        $strQuery = "UPDATE "._dbprefix_."system_config
+        $strQuery = "UPDATE " . _dbprefix_ . "system_config
                     SET system_config_name = ? WHERE system_config_name = ?";
 
-        $bitReturn =  $this->objDB->_pQuery($strQuery, array($strNewName, $this->getStrName()));
+        $bitReturn = $this->objDB->_pQuery($strQuery, array($strNewName, $this->getStrName()));
         $this->strName = $strNewName;
         return $bitReturn;
     }
 
     /**
-	 * Fetches all Configs from the database
-	 *
-	 * @return class_module_system_setting[]
-	 * @static
-	 */
-	public static function getAllConfigValues() {
-	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config ORDER BY system_config_module ASC";
+     * Fetches all Configs from the database
+     *
+     * @return class_module_system_setting[]
+     * @static
+     */
+    public static function getAllConfigValues() {
+        $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_system_setting($arrOneId["system_config_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_system_setting($arrOneId["system_config_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     /**
      * Fetches a Configs selected by name
      *
      * @param $strName
+     *
      * @return class_module_system_setting|null
      * @static
      */
-	public static function getConfigByName($strName) {
-	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+    public static function getConfigByName($strName) {
+        $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config WHERE system_config_name = ?";
         $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-        if(isset($arrId["system_config_id"]))
-		    return new class_module_system_setting($arrId["system_config_id"]);
-        else
+        if(isset($arrId["system_config_id"])) {
+            return new class_module_system_setting($arrId["system_config_id"]);
+        }
+        else {
             return null;
-	}
+        }
+    }
 
-	/**
-	 * Checks, if a config-value is already existing
-	 *
-	 * @param string $strName
-	 * @return boolean
-	 */
-	public static function checkConfigExisting($strName) {
-	    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+    /**
+     * Checks, if a config-value is already existing
+     *
+     * @param string $strName
+     *
+     * @return boolean
+     */
+    public static function checkConfigExisting($strName) {
+        $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "system_config WHERE system_config_name = ?";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-		return $arrRow["COUNT(*)"] == 1;
-	}
+        return $arrRow["COUNT(*)"] == 1;
+    }
 
     public function getVersionActionName($strAction) {
         return $strAction;
@@ -232,12 +242,15 @@ class class_module_system_setting extends class_model implements interface_model
     public function getStrName() {
         return $this->strName;
     }
+
     public function getStrValue() {
         return $this->strValue;
     }
+
     public function getIntType() {
         return $this->intType;
     }
+
     public function getIntModule() {
         return $this->intModule;
     }
@@ -245,12 +258,15 @@ class class_module_system_setting extends class_model implements interface_model
     public function setStrName($strName) {
         $this->strName = $strName;
     }
+
     public function setStrValue($strValue) {
-        $this->strValue= $strValue;
+        $this->strValue = $strValue;
     }
+
     public function setIntType($intType) {
         $this->intType = $intType;
     }
+
     public function setIntModule($intModule) {
         $this->intModule = $intModule;
     }

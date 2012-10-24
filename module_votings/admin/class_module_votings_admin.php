@@ -18,25 +18,25 @@ class class_module_votings_admin extends class_admin_simple implements interface
 
     const STR_LIST_ANSWER = "STR_LIST_ANSWER";
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
         $this->setArrModuleEntry("modul", "votings");
         $this->setArrModuleEntry("moduleId", _votings_module_id_);
         parent::__construct();
-	}
+    }
 
 
-	public function getOutputModuleNavi() {
-	    $arrReturn = array();
-    	$arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-    	$arrReturn[] = array("", "");
-		$arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "newVoting", "", $this->getLang("actionNewVoting"), "", "", true, "adminnavi"));
+    public function getOutputModuleNavi() {
+        $arrReturn = array();
+        $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-		return $arrReturn;
-	}
+        $arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "newVoting", "", $this->getLang("actionNewVoting"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        return $arrReturn;
+    }
 
 
     protected function getArrOutputNaviEntries() {
@@ -48,10 +48,10 @@ class class_module_votings_admin extends class_admin_simple implements interface
             $objInstance = class_objectfactory::getInstance()->getObject($strOneVoting);
 
             if($objInstance instanceof class_module_votings_answer) {
-                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$objInstance->getPrevId(), $objInstance->getStrDisplayName());
+                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $objInstance->getPrevId(), $objInstance->getStrDisplayName());
             }
             if($objInstance instanceof class_module_votings_voting) {
-                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$strOneVoting, $objInstance->getStrDisplayName());
+                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $strOneVoting, $objInstance->getStrDisplayName());
             }
         }
 
@@ -59,28 +59,28 @@ class class_module_votings_admin extends class_admin_simple implements interface
     }
 
 
-	/**
-	 * Returns a list of all categories and all votings
-	 * The list can be filtered by categories
-	 *
-	 * @return string
+    /**
+     * Returns a list of all categories and all votings
+     * The list can be filtered by categories
+     *
+     * @return string
      * @autoTestable
      * @permissions view
-	 */
-	protected function actionList() {
+     */
+    protected function actionList() {
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_votings_voting::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_votings_voting::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator);
-	}
+    }
 
     protected function renderAdditionalActions(class_model $objListEntry) {
 
         if($objListEntry->rightEdit() && $objListEntry instanceof class_module_votings_voting) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionListAnswers"), "icon_folderActionOpen.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionListAnswers"), "icon_folderActionOpen.png"))
             );
         }
 
@@ -91,12 +91,13 @@ class class_module_votings_admin extends class_admin_simple implements interface
         if($strListIdentifier == self::STR_LIST_ANSWER) {
             if($this->getObjModule()->rightEdit()) {
                 return array(
-                    getLinkAdmin($this->getArrModule("modul"), "newAnswer", "&systemid=".$this->getSystemid(), $this->getLang("actionNewAnswer"), $this->getLang("actionNewAnswer"), "icon_new.png")
+                    getLinkAdmin($this->getArrModule("modul"), "newAnswer", "&systemid=" . $this->getSystemid(), $this->getLang("actionNewAnswer"), $this->getLang("actionNewAnswer"), "icon_new.png")
                 );
             }
         }
-        else
+        else {
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
+        }
 
         return array();
     }
@@ -107,12 +108,13 @@ class class_module_votings_admin extends class_admin_simple implements interface
                 return $this->objToolkit->listDeleteButton(
                     $objListEntry->getStrDisplayName(),
                     $this->getLang("voting_delete_answer", $this->getArrModule("modul")),
-                    getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid())
+                    getLinkAdminHref($this->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
                 );
             }
         }
-        else
+        else {
             return parent::renderDeleteAction($objListEntry);
+        }
 
         return "";
     }
@@ -137,11 +139,13 @@ class class_module_votings_admin extends class_admin_simple implements interface
      */
     protected function actionEdit() {
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objObject->rightEdit() && $objObject instanceof class_module_votings_answer)
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editAnswer", "&systemid=".$objObject->getSystemid()));
+        if($objObject->rightEdit() && $objObject instanceof class_module_votings_answer) {
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editAnswer", "&systemid=" . $objObject->getSystemid()));
+        }
 
-        if($objObject->rightEdit() && $objObject instanceof class_module_votings_voting)
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editVoting", "&systemid=".$objObject->getSystemid()));
+        if($objObject->rightEdit() && $objObject instanceof class_module_votings_voting) {
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editVoting", "&systemid=" . $objObject->getSystemid()));
+        }
 
         return "";
     }
@@ -150,7 +154,6 @@ class class_module_votings_admin extends class_admin_simple implements interface
     protected function actionEditVoting() {
         return $this->actionNewVoting("edit");
     }
-
 
 
     /**
@@ -169,12 +172,14 @@ class class_module_votings_admin extends class_admin_simple implements interface
         if($strMode == "edit") {
             $objVoting = new class_module_votings_voting($this->getSystemid());
 
-            if(!$objVoting->rightEdit())
+            if(!$objVoting->rightEdit()) {
                 return $this->getLang("commons_error_permissions");
+            }
         }
 
-        if($objForm == null)
+        if($objForm == null) {
             $objForm = $this->getVotingAdminForm($objVoting);
+        }
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
         return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveVoting"));
@@ -196,16 +201,19 @@ class class_module_votings_admin extends class_admin_simple implements interface
     protected function actionSaveVoting() {
         $objVoting = null;
 
-        if($this->getParam("mode") == "new")
+        if($this->getParam("mode") == "new") {
             $objVoting = new class_module_votings_voting();
+        }
 
-        else if($this->getParam("mode") == "edit")
+        else if($this->getParam("mode") == "edit") {
             $objVoting = new class_module_votings_voting($this->getSystemid());
+        }
 
         if($objVoting != null) {
             $objForm = $this->getVotingAdminForm($objVoting);
-            if(!$objForm->validateForm())
+            if(!$objForm->validateForm()) {
                 return $this->actionNewVoting($this->getParam("mode"), $objForm);
+            }
 
             $objForm->updateSourceObject();
             $objVoting->updateObjectToDb();
@@ -218,15 +226,13 @@ class class_module_votings_admin extends class_admin_simple implements interface
     }
 
 
-
-
     /**
-	 * Returns a list of all answers of the voting selected before
-	 *
-	 * @return string
+     * Returns a list of all answers of the voting selected before
+     *
+     * @return string
      * @permissions view
-	 */
-	protected function actionListAnswers() {
+     */
+    protected function actionListAnswers() {
 
         $objVoting = new class_module_votings_voting($this->getSystemid());
         $strReturn = $this->objToolkit->formHeadline($objVoting->getStrTitle());
@@ -236,8 +242,8 @@ class class_module_votings_admin extends class_admin_simple implements interface
         $objArraySectionIterator->setIntElementsPerPage($objVoting->getAllAnswersCount());
         $objArraySectionIterator->setArraySection($objVoting->getAllAnswers($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        return $strReturn.$this->renderList($objArraySectionIterator, true, self::STR_LIST_ANSWER);
-	}
+        return $strReturn . $this->renderList($objArraySectionIterator, true, self::STR_LIST_ANSWER);
+    }
 
     protected function actionEditAnswer() {
         return $this->actionNewAnswer("edit");
@@ -260,18 +266,22 @@ class class_module_votings_admin extends class_admin_simple implements interface
         if($strMode == "edit") {
             $objAnswer = new class_module_votings_answer($this->getSystemid());
 
-            if(!$objAnswer->rightEdit())
+            if(!$objAnswer->rightEdit()) {
                 return $this->getLang("commons_error_permissions");
+            }
         }
 
-        if($objForm == null)
+        if($objForm == null) {
             $objForm = $this->getVotingAnswerForm($objAnswer);
+        }
 
         if(!validateSystemid($this->getParam("votingid"))) {
-            if($strMode == "new")
+            if($strMode == "new") {
                 $this->setParam("votingid", $this->getSystemid());
-            else
+            }
+            else {
                 $this->setParam("votingid", $objAnswer->getPrevId());
+            }
         }
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
@@ -295,21 +305,24 @@ class class_module_votings_admin extends class_admin_simple implements interface
     protected function actionSaveAnswer() {
         $objAnswer = null;
 
-        if($this->getParam("mode") == "new")
+        if($this->getParam("mode") == "new") {
             $objAnswer = new class_module_votings_answer();
+        }
 
-        else if($this->getParam("mode") == "edit")
+        else if($this->getParam("mode") == "edit") {
             $objAnswer = new class_module_votings_answer($this->getSystemid());
+        }
 
         if($objAnswer != null) {
             $objForm = $this->getVotingAnswerForm($objAnswer);
-            if(!$objForm->validateForm())
+            if(!$objForm->validateForm()) {
                 return $this->actionNewAnswer($this->getParam("mode"), $objForm);
+            }
 
             $objForm->updateSourceObject();
             $objAnswer->updateObjectToDb($this->getParam("votingid"));
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listAnswers", "&systemid=".$this->getParam("votingid")));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listAnswers", "&systemid=" . $this->getParam("votingid")));
             return "";
         }
 

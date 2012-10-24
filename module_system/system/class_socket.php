@@ -50,28 +50,28 @@ class class_socket {
      *
      * @var string
      */
-    private static $strTypeStream = SOCK_STREAM;
+    public static $strTypeStream = SOCK_STREAM;
 
     /**
      * Socket of type raw, implement the protocol yourself
      *
      * @var string
      */
-    private static $strTypeRaw = SOCK_RAW;
+    public static $strTypeRaw = SOCK_RAW;
 
     /**
      * Use tcp as protocol
      *
      * @var string
      */
-    private static $strProtoTcp = "tcp";
+    public static $strProtoTcp = "tcp";
 
     /**
      * use udp as protocol
      *
      * @var string
      */
-    private static $strProtoUdp = "udp";
+    public static $strProtoUdp = "udp";
 
     /**
      * Number of bytes to be read from the socket at once
@@ -104,6 +104,8 @@ class class_socket {
      *
      * @param string $strHostname
      * @param int $intPort
+     *
+     * @throws class_exception
      */
     public function __construct($strHostname, $intPort) {
         $this->intPort = $intPort;
