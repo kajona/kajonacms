@@ -14,11 +14,15 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
+class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable {
 
     /**
      * @var string
      * @versionable
+     *
+     * @fieldMandatory
+     * @fieldType text
+     * @fieldLabel ordner_name
      */
     private $strName = "";
     private $strLanguage = "";
@@ -36,24 +40,26 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
 
         //init the object with the language currently selected - admin or portal
-		if(defined("_admin_") && _admin_ === true)
-		    $this->setStrLanguage($this->getStrAdminLanguageToWorkOn());
-		else
-		    $this->setStrLanguage($this->getStrPortalLanguage());
+        if(defined("_admin_") && _admin_ === true) {
+            $this->setStrLanguage($this->getStrAdminLanguageToWorkOn());
+        }
+        else {
+            $this->setStrLanguage($this->getStrPortalLanguage());
+        }
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
     }
 
 
     protected function onInsertToDb() {
 
         //set the matching sort-id
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_module_nr = ?";
+        $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "system WHERE system_prev_id = ? AND system_module_nr = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getStrPrevId(), _pages_folder_id_));
         $intSiblings = $arrRow["COUNT(*)"];
 
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
+        $strQuery = "UPDATE " . _dbprefix_ . "system SET system_sort = ? where system_id = ?";
         $this->objDB->_pQuery($strQuery, array($intSiblings, $this->getSystemid()));
         $this->setIntSort($intSiblings);
 
@@ -63,6 +69,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -82,6 +89,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -90,6 +98,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -99,15 +108,15 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     /**
      * Initalises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
         //load content language-dependant
         $strQuery = "SELECT *
-                    FROM "._dbprefix_."page_folderproperties
+                    FROM " . _dbprefix_ . "page_folderproperties
                     WHERE folderproperties_id = ?
                       AND folderproperties_language = ?";
-        $arrPropRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage() ));
+        $arrPropRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
         if(count($arrPropRow) == 0) {
             $arrPropRow["folderproperties_name"] = "";
             $arrPropRow["folderproperties_language"] = "";
@@ -130,185 +139,196 @@ class class_module_pages_folder extends class_model implements interface_model, 
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
-        class_logger::getInstance()->addLogRow("updated folder ".$this->getStrName(), class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("updated folder " . $this->getStrName(), class_logger::$levelInfo);
 
         //and the properties record
-		//properties for this language already existing?
-		$strCountQuery = "SELECT COUNT(*) FROM "._dbprefix_."page_folderproperties
+        //properties for this language already existing?
+        $strCountQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "page_folderproperties
 		                 WHERE folderproperties_id=?
 		                   AND folderproperties_language=?";
-		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage() ));
+        $arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()));
 
         $strQuery = "";
         $arrParams = array();
-		if((int)$arrCountRow["COUNT(*)"] >= 1) {
-		    //Already existing, updating properties
-    		$strQuery = "UPDATE  "._dbprefix_."page_folderproperties
+        if((int)$arrCountRow["COUNT(*)"] >= 1) {
+            //Already existing, updating properties
+            $strQuery = "UPDATE  " . _dbprefix_ . "page_folderproperties
     					    SET folderproperties_name=?
     				      WHERE folderproperties_id=?
     			      	    AND folderproperties_language=?";
 
             $arrParams = array($this->getStrName(), $this->getSystemid(), $this->getStrLanguage());
-		}
-		else {
-		    //Not existing, create one
-		    $strQuery = "INSERT INTO "._dbprefix_."page_folderproperties
+        }
+        else {
+            //Not existing, create one
+            $strQuery = "INSERT INTO " . _dbprefix_ . "page_folderproperties
 						(folderproperties_id, folderproperties_name, folderproperties_language) VALUES
 						(?,?,?)";
 
             $arrParams = array($this->getSystemid(), $this->getStrName(), $this->getStrLanguage());
-		}
+        }
 
-        return $this->objDB->_pQuery($strQuery, $arrParams) ;
+        return $this->objDB->_pQuery($strQuery, $arrParams);
 
     }
 
     /**
-	 * Returns a list of folders under the given systemid
-	 *
-	 * @param string $strSystemid
-	 * @return class_module_pages_folder[]
-	 * @static
-	 */
-	public static function getFolderList($strSystemid = "") {
-		if(!validateSystemid($strSystemid))
-			$strSystemid = class_module_system_module::getModuleByName("pages")->getSystemid();
+     * Returns a list of folders under the given systemid
+     *
+     * @param string $strSystemid
+     *
+     * @return class_module_pages_folder[]
+     * @static
+     */
+    public static function getFolderList($strSystemid = "") {
+        if(!validateSystemid($strSystemid)) {
+            $strSystemid = class_module_system_module::getModuleByName("pages")->getSystemid();
+        }
 
-		//Get all folders
-		$strQuery = "SELECT system_id FROM "._dbprefix_."system
+        //Get all folders
+        $strQuery = "SELECT system_id FROM " . _dbprefix_ . "system
 		              WHERE system_module_nr=?
 		                AND system_prev_id=?
 		             ORDER BY system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(_pages_folder_id_, $strSystemid));
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_pages_folder($arrOneId["system_id"]);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(_pages_folder_id_, $strSystemid));
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_pages_folder($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
 
-	/**
-	 * Changes Position of a folder in the system-tree
-	 *
-	 * @param string $strFolderID
-	 * @param string $strNewPrevID
-	 * @return bool
-	 * @static
-	 */
-	public static function moveFolder($strFolderID, $strNewPrevID) {
+    /**
+     * Changes Position of a folder in the system-tree
+     *
+     * @param string $strFolderID
+     * @param string $strNewPrevID
+     *
+     * @return bool
+     * @static
+     */
+    public static function moveFolder($strFolderID, $strNewPrevID) {
 
-        if(!validateSystemid($strNewPrevID))
+        if(!validateSystemid($strNewPrevID)) {
             $strNewPrevID = class_module_system_module::getModuleByName("pages")->getSystemid();
+        }
 
-		$strQuery = "UPDATE "._dbprefix_."system
+        $strQuery = "UPDATE " . _dbprefix_ . "system
 		              SET  system_prev_id=?
 		              WHERE system_id=?
 		                AND system_module_nr=?";
-		return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strFolderID, _pages_folder_id_));
-	}
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strFolderID, _pages_folder_id_));
+    }
 
 
-	/**
-	 * Changes Position of a site in the system-tree
-	 *
-	 * @param string $strSiteID
-	 * @param string $strNewPrevID
-	 * @return bool
-	 * @static
-	 */
-	public static function moveSite($strSiteID, $strNewPrevID) {
+    /**
+     * Changes Position of a site in the system-tree
+     *
+     * @param string $strSiteID
+     * @param string $strNewPrevID
+     *
+     * @return bool
+     * @static
+     */
+    public static function moveSite($strSiteID, $strNewPrevID) {
 
-        if(!validateSystemid($strNewPrevID))
+        if(!validateSystemid($strNewPrevID)) {
             $strNewPrevID = class_module_system_module::getModuleByName("pages")->getSystemid();
+        }
 
 
-		$strQuery = "UPDATE "._dbprefix_."system
+        $strQuery = "UPDATE " . _dbprefix_ . "system
 		              SET system_prev_id=?
 		              WHERE system_id=?
 		              AND system_module_nr=?";
-		return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strSiteID, _pages_modul_id_));
-	}
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strSiteID, _pages_modul_id_));
+    }
 
 
-	/**
-	 * Returns all Pages listed in a given folder
-	 *
-	 * @param string $strFolderid
-	 * @return class_module_pages_page[]
-	 * @static
-	 */
-	public static function getPagesInFolder($strFolderid = "") {
-		if(!validateSystemid($strFolderid))
-			$strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+    /**
+     * Returns all Pages listed in a given folder
+     *
+     * @param string $strFolderid
+     *
+     * @return class_module_pages_page[]
+     * @static
+     */
+    public static function getPagesInFolder($strFolderid = "") {
+        if(!validateSystemid($strFolderid)) {
+            $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+        }
 
-		$strQuery = "SELECT system_id
-						FROM "._dbprefix_."page as page,
-							 "._dbprefix_."system as system
+        $strQuery = "SELECT system_id
+						FROM " . _dbprefix_ . "page as page,
+							 " . _dbprefix_ . "system as system
 						WHERE system.system_prev_id=?
 							AND system.system_module_nr=?
 							AND system.system_id = page.page_id
 						ORDER BY system.system_sort ASC ";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $strFolderid, _pages_modul_id_ ) );
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_pages_page($arrOneId["system_id"]);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_));
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_pages_page($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     /**
      * Returns the list of pages and folders, so containing both object types, being located
      * under a given systemid.
      *
      * @param string $strFolderid
+     *
      * @return class_module_pages_page[] | class_module_pages_folder[]
      */
     public static function getPagesAndFolderList($strFolderid = "") {
-        if(!validateSystemid($strFolderid))
-			$strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+        if(!validateSystemid($strFolderid)) {
+            $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+        }
 
-		$strQuery = "SELECT system_id, system_module_nr
-						FROM "._dbprefix_."system
+        $strQuery = "SELECT system_id, system_module_nr
+						FROM " . _dbprefix_ . "system
 						WHERE system_prev_id=?
 							AND (system_module_nr = ? OR system_module_nr = ? )
 							ORDER BY system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
-		$arrReturn = array();
-		foreach($arrIds as $arrOneRecord) {
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
+        $arrReturn = array();
+        foreach($arrIds as $arrOneRecord) {
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
         }
 
-		return $arrReturn;
+        return $arrReturn;
     }
 
 
-
-	/**
-	 * Deletes a folder from the systems,
-	 * All pages and folders under the current record are deleted, too.
-	 *
-	 * @return bool
-	 */
-	protected function deleteObjectInternal() {
+    /**
+     * Deletes a folder from the systems,
+     * All pages and folders under the current record are deleted, too.
+     *
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
         //delete the folder-properties
-        $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";
+        $strQuery = "DELETE FROM " . _dbprefix_ . "page_folderproperties WHERE folderproperties_id = ?";
         $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 
         return parent::deleteObjectInternal();
-	}
-
-
+    }
 
 
     public function getVersionActionName($strAction) {
-        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT)
+        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
             return $this->getLang("pages_ordner_edit", "pages");
-        else if($strAction == class_module_system_changelog::$STR_ACTION_DELETE)
+        }
+        else if($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
             return $this->getLang("pages_ordner_delete", "pages");
+        }
 
         return $strAction;
     }
@@ -327,7 +347,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     /**
      * @return string
-     * @fieldMandatory
+     *
      */
     public function getStrName() {
         return $this->strName;
@@ -344,6 +364,5 @@ class class_module_pages_folder extends class_model implements interface_model, 
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
-
 
 }

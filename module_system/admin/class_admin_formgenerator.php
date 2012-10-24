@@ -166,14 +166,11 @@ class class_admin_formgenerator {
     public function generateFieldsFromObject() {
 
         //load all methods
-        $objReflection = new ReflectionClass($this->objSourceobject);
         $objAnnotations = new class_reflection($this->objSourceobject);
 
-        $arrMethods = $objReflection->getMethods();
-        foreach($arrMethods as $objOneMethod) {
-            if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType")) {
-                $this->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit", "getLong"), array(), $objOneMethod->name)));
-            }
+        $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@fieldType");
+        foreach($arrProperties as $strPropertyName => $strDataType) {
+            $this->addDynamicField($strPropertyName);
         }
 
         return;
@@ -197,26 +194,32 @@ class class_admin_formgenerator {
         if($strGetter === null)
             throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
 
-        $strType      = $objReflection->getMethodAnnotationValue($strGetter, self::STR_TYPE_ANNOTATION);
-        $strValidator = $objReflection->getMethodAnnotationValue($strGetter, self::STR_VALIDATOR_ANNOTATION);
-        $strMandatory = $objReflection->getMethodAnnotationValue($strGetter, self::STR_MANDATORY_ANNOTATION);
-        $strLabel     = $objReflection->getMethodAnnotationValue($strGetter, self::STR_LABEL_ANNOTATION);
+        //load detailed properties
 
-        if($strType === false)
+        $strType      = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_TYPE_ANNOTATION);
+        $strValidator = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_VALIDATOR_ANNOTATION);
+        $strMandatory = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_MANDATORY_ANNOTATION);
+        $strLabel     = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_LABEL_ANNOTATION);
+
+        if($strType === null)
             $strType = "text";
 
+        $strStart = uniSubstr($strPropertyName, 0, 3);
+        if(in_array($strStart, array("int", "long", "bit", "str")))
+            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
+
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
-        if($strLabel !== false) {
+        if($strLabel !== null) {
             $objField->updateLabel($strLabel);
         }
 
         $bitMandatory = false;
-        if($strMandatory !== false && $strMandatory !== "false")
+        if($strMandatory !== null && $strMandatory !== "false")
             $bitMandatory = true;
 
         $objField->setBitMandatory($bitMandatory);
 
-        if($strValidator !== false) {
+        if($strValidator !== null) {
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
         }
 

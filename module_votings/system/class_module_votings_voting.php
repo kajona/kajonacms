@@ -13,7 +13,6 @@
  *
  * @package module_votings
  * @author sidler@mulchprod.de
- *
  * @targetTable votings_voting.votings_voting_id
  */
 class class_module_votings_voting extends class_model implements interface_model, interface_admin_listable {
@@ -21,10 +20,23 @@ class class_module_votings_voting extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn votings_voting.votings_voting_title
+     *
+     * @fieldType textarea
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strTitle = "";
 
+    /**
+     * @var int
+     * @fieldType date
+     */
     private $longDateStart = 0;
+
+    /**
+     * @var int
+     * @fieldType date
+     */
     private $longDateEnd = 0;
 
 
@@ -98,14 +110,16 @@ class class_module_votings_voting extends class_model implements interface_model
         $objStartDate = null;
         $objEndDate = null;
 
-        if($this->getLongDateStart() != 0 && $this->getLongDateStart() != "")
+        if($this->getLongDateStart() != 0 && $this->getLongDateStart() != "") {
             $objStartDate = new class_date($this->getLongDateStart());
+        }
 
-        if($this->getLongDateEnd() != 0 && $this->getLongDateEnd() != "")
+        if($this->getLongDateEnd() != 0 && $this->getLongDateEnd() != "") {
             $objEndDate = new class_date($this->getLongDateEnd());
+        }
 
         $this->updateDateRecord($this->getSystemid(), $objStartDate, $objEndDate);
-		return parent::updateStateToDb();
+        return parent::updateStateToDb();
     }
 
     /**
@@ -117,13 +131,15 @@ class class_module_votings_voting extends class_model implements interface_model
     protected function onInsertToDb() {
         $objStartDate = null;
         $objEndDate = null;
-        if($this->getLongDateStart() != 0 && $this->getLongDateStart() != "")
+        if($this->getLongDateStart() != 0 && $this->getLongDateStart() != "") {
             $objStartDate = new class_date($this->getLongDateStart());
+        }
 
-        if($this->getLongDateEnd() != 0 && $this->getLongDateEnd() != "")
+        if($this->getLongDateEnd() != 0 && $this->getLongDateEnd() != "") {
             $objEndDate = new class_date($this->getLongDateEnd());
+        }
 
-	    //dates
+        //dates
         return $this->createDateRecord($this->getSystemid(), $objStartDate, $objEndDate);
     }
 
@@ -139,20 +155,21 @@ class class_module_votings_voting extends class_model implements interface_model
      * @return class_module_votings_voting[]
      * @static
      */
-	public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
-		$strQuery = "SELECT system_id FROM "._dbprefix_."votings_voting,
-						"._dbprefix_."system
+    public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
+        $strQuery = "SELECT system_id FROM " . _dbprefix_ . "votings_voting,
+						" . _dbprefix_ . "system
 						WHERE system_id = votings_voting_id
-						".($bitOnlyActive ? " AND system_status = 1 ": "" )."
+						" . ($bitOnlyActive ? " AND system_status = 1 " : "") . "
 						ORDER BY votings_voting_title";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_votings_voting($arrOneId["system_id"]);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_votings_voting($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
 
     /**
@@ -167,16 +184,17 @@ class class_module_votings_voting extends class_model implements interface_model
     public function getAllAnswers($bitOnlyActive = false, $intStart = null, $intEnd = null) {
 
         $strQuery = "SELECT system_id
-                       FROM "._dbprefix_."votings_answer,  "._dbprefix_."system
+                       FROM " . _dbprefix_ . "votings_answer,  " . _dbprefix_ . "system
                       WHERE system_prev_id=?
                         AND system_id = votings_answer_id
-                        ".($bitOnlyActive ? " AND system_status = 1 ": "" )."
+                        " . ($bitOnlyActive ? " AND system_status = 1 " : "") . "
                       ORDER BY system_sort ASC, votings_answer_text ASC";
         $arrQuery = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrQuery as $arrSingleRow)
+        foreach($arrQuery as $arrSingleRow) {
             $arrReturn[] = new class_module_votings_answer($arrSingleRow["system_id"]);
+        }
 
         return $arrReturn;
     }
@@ -185,24 +203,19 @@ class class_module_votings_voting extends class_model implements interface_model
      * Counts the answers related to the current question
      *
      * @param bool $bitOnlyActive
+     *
      * @return int
      */
     public function getAllAnswersCount($bitOnlyActive = false) {
         $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."votings_answer,  "._dbprefix_."system
+                       FROM " . _dbprefix_ . "votings_answer,  " . _dbprefix_ . "system
                       WHERE system_prev_id=?
                         AND system_id = votings_answer_id
-                        ".($bitOnlyActive ? " AND system_status = 1 ": "" )."";
+                        " . ($bitOnlyActive ? " AND system_status = 1 " : "") . "";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         return $arrRow["COUNT(*)"];
     }
 
-    /**
-     * @return string
-     * @fieldType textarea
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }
@@ -211,10 +224,6 @@ class class_module_votings_voting extends class_model implements interface_model
         $this->strTitle = $strTitle;
     }
 
-    /**
-     * @return string
-     * @fieldType date
-     */
     public function getLongDateStart() {
         return $this->longDateStart;
     }
@@ -223,10 +232,6 @@ class class_module_votings_voting extends class_model implements interface_model
         $this->longDateStart = $longDateStart;
     }
 
-    /**
-     * @return string
-     * @fieldType date
-     */
     public function getLongDateEnd() {
         return $this->longDateEnd;
     }
@@ -234,7 +239,5 @@ class class_module_votings_voting extends class_model implements interface_model
     public function setLongDateEnd($longDateEnd) {
         $this->longDateEnd = $longDateEnd;
     }
-
-
 
 }

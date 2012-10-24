@@ -21,6 +21,9 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * @var string
      * @tableColumn navigation_name
      * @listOrder
+     *
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strName = "";
 
@@ -173,11 +176,6 @@ class class_module_navigation_tree extends class_model implements interface_mode
     }
 
 
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrName() {
         return $this->strName;
     }

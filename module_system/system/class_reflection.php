@@ -249,6 +249,36 @@ class class_reflection {
         return $arrReturn;
     }
 
+    /**
+     * Searches a given annotation for a specified property. If given, the value is returned, otherwise (when not found) null is returned.
+     *
+     * @param $strProperty
+     * @param $strAnnotation
+     *
+     * @return null|string
+     */
+    public function getAnnotationValueForProperty($strProperty, $strAnnotation) {
+        $arrProperties = $this->objReflectionClass->getProperties();
+
+        foreach($arrProperties as $objOneProperty) {
+            if($objOneProperty->getName() == $strProperty) {
+                $strLine = $this->searchAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+                if($strLine !== false) {
+                    return trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
+                }
+            }
+        }
+
+        //check if there's a base-class -> inheritance
+        $objBaseClass = $this->objReflectionClass->getParentClass();
+        if($objBaseClass !== false) {
+            $objBaseAnnotations = new class_reflection($objBaseClass->getName());
+            return $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation);
+        }
+
+        return null;
+    }
+
 
     /**
      * Searches an object for a given properties' setter method.

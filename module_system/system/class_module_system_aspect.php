@@ -25,12 +25,18 @@ class class_module_system_aspect extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn aspect_name
+     *
+     * @fieldType text
+     * @fieldMandatory
      */
     private $strName = "";
 
     /**
      * @var bool
      * @tableColumn aspect_default
+     *
+     * @fieldType yesno
+     * @fieldMandatory
      */
     private $bitDefault = false;
 
@@ -309,21 +315,10 @@ class class_module_system_aspect extends class_model implements interface_model,
         $this->bitDefault = $bitDefault;
     }
 
-    /**
-     * @return string
-     *
-     * @fieldType text
-     * @fieldMandatory
-     */
     public function getStrName() {
         return $this->strName;
     }
 
-    /**
-     * @return bool
-     * @fieldType yesno
-     * @fieldMandatory
-     */
     public function getBitDefault() {
         return $this->bitDefault;
     }

@@ -12,32 +12,40 @@
  *
  * @package module_guestbook
  * @author sidler@mulchprod.de
- *
  * @targetTable guestbook_post.guestbook_post_id
  */
-class class_module_guestbook_post extends class_model implements interface_model, interface_admin_listable  {
+class class_module_guestbook_post extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_name
+     *
+     * @fieldType text
      */
     private $strGuestbookPostName = "";
 
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_email
+     *
+     * @fieldType text
+     * @fieldValidator email
      */
     private $strGuestbookPostEmail = "";
 
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_page
+     *
+     * @fieldType text
      */
     private $strGuestbookPostPage = "";
 
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_text
+     *
+     * @fieldType textarea
      */
     private $strGuestbookPostText = "";
 
@@ -54,11 +62,11 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-		$this->setArrModuleEntry("moduleId", _guestbook_module_id_);
-		$this->setArrModuleEntry("modul", "guestbook");
+        $this->setArrModuleEntry("moduleId", _guestbook_module_id_);
+        $this->setArrModuleEntry("modul", "guestbook");
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
     }
 
 
@@ -75,14 +83,16 @@ class class_module_guestbook_post extends class_model implements interface_model
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return timeToString($this->getIntGuestbookPostDate(), false) . " ".$this->getStrGuestbookPostEmail();
+        return timeToString($this->getIntGuestbookPostDate(), false) . " " . $this->getStrGuestbookPostEmail();
     }
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -91,14 +101,12 @@ class class_module_guestbook_post extends class_model implements interface_model
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
         return $this->getStrGuestbookPostName();
     }
-
-
-
 
 
     /**
@@ -108,8 +116,9 @@ class class_module_guestbook_post extends class_model implements interface_model
      */
     protected function onInsertToDb() {
         $objGuestbook = new class_module_guestbook_guestbook($this->getPrevId());
-        if($objGuestbook->getIntGuestbookModerated() == "1")
+        if($objGuestbook->getIntGuestbookModerated() == "1") {
             $this->setIntRecordStatus(0, false);
+        }
 
         return true;
     }
@@ -126,24 +135,24 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @return class_module_guestbook_post[]
      * @static
      */
-	public static function getPosts($strPrevId = "", $bitJustActive = false, $intStart = null, $intEnd = null) {
-	    $strQuery = "SELECT system_id
-						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
+    public static function getPosts($strPrevId = "", $bitJustActive = false, $intStart = null, $intEnd = null) {
+        $strQuery = "SELECT system_id
+						FROM " . _dbprefix_ . "guestbook_post, " . _dbprefix_ . "system
 						WHERE system_id = guestbook_post_id
 						  AND system_prev_id=?
-						  ".($bitJustActive ? " AND system_status = 1" : "" )."
+						  " . ($bitJustActive ? " AND system_status = 1" : "") . "
 						ORDER BY guestbook_post_date DESC";
 
-	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $arrPosts = $objDB->getPArray($strQuery, array($strPrevId), $intStart, $intEnd);
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $arrPosts = $objDB->getPArray($strQuery, array($strPrevId), $intStart, $intEnd);
 
-	    $arrReturn = array();
-	    //load all posts as objects
-	    foreach($arrPosts as $arrOnePostID) {
+        $arrReturn = array();
+        //load all posts as objects
+        foreach($arrPosts as $arrOnePostID) {
             $arrReturn[] = new class_module_guestbook_post($arrOnePostID["system_id"]);
-	    }
-		return $arrReturn;
-	}
+        }
+        return $arrReturn;
+    }
 
     /**
      * Looks up the posts available
@@ -154,18 +163,17 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @return int
      * @static
      */
-	public static function getPostsCount($strPrevID = "", $bitJustActive = false) {
-	    $strQuery = "SELECT COUNT(*)
-						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
+    public static function getPostsCount($strPrevID = "", $bitJustActive = false) {
+        $strQuery = "SELECT COUNT(*)
+						FROM " . _dbprefix_ . "guestbook_post, " . _dbprefix_ . "system
 						WHERE system_id = guestbook_post_id
 						  AND system_prev_id=?
-						  ".($bitJustActive ? " AND system_status = 1" : "" )."";
+						  " . ($bitJustActive ? " AND system_status = 1" : "") . "";
 
-	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $arrRow = $objDB->getPRow($strQuery, array($strPrevID));
-	    return $arrRow["COUNT(*)"];
-	}
-
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $arrRow = $objDB->getPRow($strQuery, array($strPrevID));
+        return $arrRow["COUNT(*)"];
+    }
 
 
     public function setIntGuestbookPostDate($intGuestbookPostDate) {
@@ -180,11 +188,6 @@ class class_module_guestbook_post extends class_model implements interface_model
         $this->strGuestbookPostEmail = $strGuestbookPostEmail;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldValidator email
-     */
     public function getStrGuestbookPostEmail() {
         return $this->strGuestbookPostEmail;
     }
@@ -193,10 +196,6 @@ class class_module_guestbook_post extends class_model implements interface_model
         $this->strGuestbookPostName = $strGuestbookPostName;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrGuestbookPostName() {
         return $this->strGuestbookPostName;
     }
@@ -208,10 +207,6 @@ class class_module_guestbook_post extends class_model implements interface_model
         $this->strGuestbookPostPage = $strGuestbookPostPage;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrGuestbookPostPage() {
         return $this->strGuestbookPostPage;
     }
@@ -220,10 +215,6 @@ class class_module_guestbook_post extends class_model implements interface_model
         $this->strGuestbookPostText = $strGuestbookPostText;
     }
 
-    /**
-     * @return string
-     * @fieldType textarea
-     */
     public function getStrGuestbookPostText() {
         return $this->strGuestbookPostText;
     }

@@ -22,6 +22,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_name
+     *
+     * @fieldType text
      */
     private $strName = "";
 
@@ -35,12 +37,16 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @var string
      * @tableColumn file_description
      * @blockEscaping
+     *
+     * @fieldType wysiwygsmall
      */
     private $strDescription = "";
 
     /**
      * @var string
      * @tableColumn file_subtitle
+     *
+     * @fieldType text
      */
     private $strSubtitle = "";
 
@@ -446,7 +452,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         return filesize(_realpath_ . $this->getStrFilename());
     }
 
-
     public function setStrName($strName) {
         $this->strName = $strName;
     }
@@ -473,7 +478,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * @return string
-     * @fieldType text
      */
     public function getStrName() {
         return $this->strName;
@@ -483,18 +487,10 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         return $this->strFilename;
     }
 
-    /**
-     * @return string
-     * @fieldType wysiwygsmall
-     */
     public function getStrDescription() {
         return $this->strDescription;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrSubtitle() {
         return $this->strSubtitle;
     }

@@ -73,6 +73,10 @@ class class_test_reflection extends class_testbase  {
         $this->assertEquals("valA1", $arrValues[2]);
         $this->assertEquals("propertyA1", $arrKeys[2]);
 
+
+        $this->assertEquals("valB1", $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest"));
+        $this->assertEquals("valA1", $objAnnotations->getAnnotationValueForProperty("propertyA1", "@propertyTest"));
+
     }
 
     public function testGetGetters() {

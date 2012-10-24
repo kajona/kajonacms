@@ -20,18 +20,28 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_name
+     *
+     * @fieldMandatory
+     * @fieldType text
+     * @fieldLabel commons_name
      */
     private $strName = "";
 
     /**
      * @var string
      * @tableColumn navigation_page_e
+     *
+     * @fieldType file
+     * @fieldLabel navigation_page_e
      */
     private $strPageE = "";
 
     /**
      * @var string
      * @tableColumn navigation_page_i
+     *
+     * @fieldType page
+     * @fieldLabel navigation_page_i
      */
     private $strPageI = "";
 
@@ -44,12 +54,18 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_target
+     *
+     * @fieldType dropdown
+     * @fieldLabel navigation_target
      */
     private $strTarget = "";
 
     /**
      * @var string
      * @tableColumn navigation_image
+     *
+     * @fieldType image
+     * @fieldLabel commons_image
      */
     private $strImage = "";
 
@@ -316,49 +332,22 @@ class class_module_navigation_point extends class_model implements interface_mod
     }
 
 
-
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldType text
-     * @fieldLabel commons_name
-     */
     public function getStrName() {
         return $this->strName;
     }
 
-    /**
-     * @return string
-     * @fieldType page
-     * @fieldLabel navigation_page_i
-     */
     public function getStrPageI() {
         return uniStrtolower($this->strPageI);
     }
 
-    /**
-     * @return string
-     * @fieldType file
-     * @fieldLabel navigation_page_e
-     */
     public function getStrPageE() {
         return $this->strPageE;
     }
 
-    /**
-     * @return string
-     * @fieldType dropdown
-     * @fieldLabel navigation_target
-     */
     public function getStrTarget() {
         return $this->strTarget != "" ? $this->strTarget : "_self";
     }
 
-    /**
-     * @return string
-     * @fieldType image
-     * @fieldLabel commons_image
-     */
     public function getStrImage() {
         return $this->strImage;
     }

@@ -18,15 +18,74 @@
  */
 class class_usersources_user_kajona extends class_model implements interface_model, interface_usersources_user {
 
+    /**
+     * @var string
+     * @fieldType password
+     */
     private $strPass = "";
+
+    /**
+     *
+     * For formular-fakeing only!
+     * @var string
+     * @fieldType password
+     */
+    private $strPass2 = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     * @fieldValidator email
+     * @fieldMandatory
+     */
     private $strEmail = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strForename = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strName = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strStreet = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strPostal = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strCity = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strTel = "";
+
+    /**
+     * @var string
+     * @fieldType text
+     */
     private $strMobile = "";
+
+    /**
+     * @var int
+     * @fieldType date
+     */
     private $longDate = 0;
 
     private $strSalt = "";
@@ -260,18 +319,10 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
-    /**
-     * @return string
-     * @fieldType password
-     */
     public function getStrPass() {
         return $this->strPass;
     }
 
-    /**
-     * @return string
-     * @fieldType password
-     */
     public function getStrPass2() {
         return "";
     }
@@ -279,28 +330,14 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     public function setStrPass2($strValue) {
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldValidator email
-     * @fieldMandatory
-     */
     public function getStrEmail() {
         return $this->strEmail;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrForename() {
         return $this->strForename;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrName() {
         return $this->strName;
     }
@@ -312,8 +349,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     public function getStrFinalPass() {
         return $this->strFinalPass;
     }
-
-
 
     public function setStrPass($strPass) {
         if(trim($strPass) != "") {
@@ -334,10 +369,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strName = $strName;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrStreet() {
         return $this->strStreet;
     }
@@ -346,10 +377,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strStreet = $strStreet;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrPostal() {
         return $this->strPostal;
     }
@@ -358,10 +385,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strPostal = $strPostal;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrCity() {
         return $this->strCity;
     }
@@ -370,10 +393,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strCity = $strCity;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrTel() {
         return $this->strTel;
     }
@@ -382,10 +401,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strTel = $strTel;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrMobile() {
         return $this->strMobile;
     }
@@ -394,10 +409,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->strMobile = $strMobile;
     }
 
-    /**
-     * @return int
-     * @fieldType date
-     */
     public function getLongDate() {
         return $this->longDate;
     }

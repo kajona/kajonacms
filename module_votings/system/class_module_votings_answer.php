@@ -20,6 +20,9 @@ class class_module_votings_answer extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn votings_answer.votings_answer_text
+     *
+     * @fieldType textarea
+     * @fieldMandatory
      */
     private $strText = "";
 
@@ -80,12 +83,6 @@ class class_module_votings_answer extends class_model implements interface_model
         parent::__construct($strSystemid);
     }
 
-
-    /**
-     * @return string
-     * @fieldType textarea
-     * @fieldMandatory
-     */
     public function getStrText() {
         return $this->strText;
     }

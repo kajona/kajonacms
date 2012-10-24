@@ -236,7 +236,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $objFolder = new class_module_pages_folder($objTree->getStrFolderId());
 
-        $objForm->addDynamicField("name");
+        $objForm->addDynamicField("strName");
         $objForm->addField(new class_formentry_text("navi", "folder_i", null))->setStrValue($objFolder->getStrName())->setBitReadonly(true)->setStrOpener($strFolderBrowser)->setStrLabel($this->getLang("navigation_folder_i"));
         $objForm->addField(new class_formentry_hidden("navi", "folder_i_id"))->setStrValue($objFolder->getSystemid());
 

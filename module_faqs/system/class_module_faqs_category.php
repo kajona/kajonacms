@@ -12,15 +12,18 @@
  *
  * @package module_faqs
  * @author sidler@mulchprod.de
- *
  * @targetTable faqs_category.faqs_cat_id
  */
-class class_module_faqs_category extends class_model implements interface_model, interface_admin_listable  {
+class class_module_faqs_category extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn faqs_category.faqs_cat_title
      * @listOrder asc
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strTitle = "";
 
@@ -78,54 +81,51 @@ class class_module_faqs_category extends class_model implements interface_model,
     }
 
 
-	/**
-	 * Loads all categories, the given faq is in
-	 *
-	 * @param string $strSystemid
-	 * @return class_module_faqs_category[]
-	 * @static
-	 */
-	public static function getFaqsMember($strSystemid) {
-	    $strQuery = "SELECT faqsmem_category as system_id FROM "._dbprefix_."faqs_member
+    /**
+     * Loads all categories, the given faq is in
+     *
+     * @param string $strSystemid
+     *
+     * @return class_module_faqs_category[]
+     * @static
+     */
+    public static function getFaqsMember($strSystemid) {
+        $strQuery = "SELECT faqsmem_category as system_id FROM " . _dbprefix_ . "faqs_member
 	                   WHERE faqsmem_faq = ? ";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_faqs_category($arrOneId["system_id"]);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_faqs_category($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
 
     /**
      * Deletes all memberships of the given FAQ
      *
      * @param string $strSystemid FAQ-ID
+     *
      * @return bool
      */
     public static function deleteFaqsMemberships($strSystemid) {
-        $strQuery = "DELETE FROM "._dbprefix_."faqs_member
+        $strQuery = "DELETE FROM " . _dbprefix_ . "faqs_member
 	                  WHERE faqsmem_faq = ? ";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid));
     }
 
-	public function deleteObject() {
+    public function deleteObject() {
 
-	    //start by deleting from members and cat table
-        $strQuery = "DELETE FROM "._dbprefix_."faqs_member WHERE faqsmem_category = ? ";
+        //start by deleting from members and cat table
+        $strQuery = "DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ";
 
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             return parent::deleteObject();
         }
         return false;
-	}
+    }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }

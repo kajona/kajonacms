@@ -26,12 +26,18 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @var string
      * @tableColumn tags_tag_name
      * @listOrder
+     *
+     * @fieldType text
+     * @fieldMandatory
      */
     private $strName;
 
     /**
      * @var
      * @tableColumn tags_tag_private
+     *
+     * @fieldType yesno
+     * @fieldMandatory
      */
     private $intPrivate = 0;
 
@@ -385,11 +391,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     }
 
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     */
     public function getStrName() {
         return $this->strName;
     }
@@ -398,22 +399,13 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         $this->strName = trim($strName);
     }
 
-    /**
-     * @param  $intPrivate
-     */
     public function setIntPrivate($intPrivate) {
         $this->intPrivate = $intPrivate;
     }
 
-    /**
-     * @return int
-     * @fieldType yesno
-     * @fieldMandatory
-     */
     public function getIntPrivate() {
         return $this->intPrivate;
     }
-
 
 
 }

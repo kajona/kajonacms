@@ -12,15 +12,17 @@
  *
  * @package module_faqs
  * @author sidler@mulchprod.de
- *
  * @targetTable faqs.faqs_id
  */
-class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable  {
+class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable {
 
     /**
      * @var string
      * @tableColumn faqs.faqs_question
      * @versionable
+     *
+     * @fieldType text
+     * @fieldMandatory
      */
     private $strQuestion = "";
 
@@ -29,6 +31,9 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @tableColumn faqs.faqs_answer
      * @blockEscaping
      * @versionable
+     *
+     * @fieldType wysiwygsmall
+     * @fieldMandatory
      */
     private $strAnswer = "";
 
@@ -145,7 +150,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
             class_module_faqs_category::deleteFaqsMemberships($this->getSystemid());
             //insert all memberships
             foreach(array_keys($this->arrCats) as $strCatID) {
-                $strQuery = "INSERT INTO "._dbprefix_."faqs_member
+                $strQuery = "INSERT INTO " . _dbprefix_ . "faqs_member
                             (faqsmem_id, faqsmem_faq, faqsmem_category) VALUES
                             (?, ?, ?)";
 
@@ -178,40 +183,42 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @return mixed
      * @static
      */
-	public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
         $arrParams = array();
-		if($strFilter != "") {
-			$strQuery = "SELECT system_id
-							FROM "._dbprefix_."faqs,
-							     "._dbprefix_."system,
-							     "._dbprefix_."faqs_member
+        if($strFilter != "") {
+            $strQuery = "SELECT system_id
+							FROM " . _dbprefix_ . "faqs,
+							     " . _dbprefix_ . "system,
+							     " . _dbprefix_ . "faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
 							ORDER BY faqs_question ASC";
             $arrParams[] = $strFilter;
-		}
-		else {
-			$strQuery = "SELECT system_id
-							FROM "._dbprefix_."faqs,
-							     "._dbprefix_."system
+        }
+        else {
+            $strQuery = "SELECT system_id
+							FROM " . _dbprefix_ . "faqs,
+							     " . _dbprefix_ . "system
 							WHERE system_id = faqs_id
 							ORDER BY faqs_question ASC";
-		}
+        }
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     /**
      * Loads all faqs from the database
      * if passed, the filter is used to load the faqs of the given category
      *
      * @param string $strFilter
+     *
      * @return mixed
      * @static
      */
@@ -219,9 +226,9 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
         $arrParams = array();
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
-							FROM "._dbprefix_."faqs,
-							     "._dbprefix_."system,
-							     "._dbprefix_."faqs_member
+							FROM " . _dbprefix_ . "faqs,
+							     " . _dbprefix_ . "system,
+							     " . _dbprefix_ . "faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
@@ -230,8 +237,8 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
         }
         else {
             $strQuery = "SELECT COUNT(*)
-							FROM "._dbprefix_."faqs,
-							     "._dbprefix_."system
+							FROM " . _dbprefix_ . "faqs,
+							     " . _dbprefix_ . "system
 							WHERE system_id = faqs_id
 							ORDER BY faqs_question ASC";
         }
@@ -241,70 +248,61 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     }
 
 
-	public function deleteObject() {
-	    //Delete memberships
-	    if(class_module_faqs_category::deleteFaqsMemberships($this->getSystemid())) {
+    public function deleteObject() {
+        //Delete memberships
+        if(class_module_faqs_category::deleteFaqsMemberships($this->getSystemid())) {
             return parent::deleteObject();
-	    }
-	    return false;
-	}
+        }
+        return false;
+    }
 
 
-	/**
-	 * Loads all faqs from the db assigned to the passed cat
-	 *
-	 * @param string $strCat
-	 * @return class_module_faqs_faq[]
-	 * @static
-	 */
-	public static function loadListFaqsPortal($strCat) {
+    /**
+     * Loads all faqs from the db assigned to the passed cat
+     *
+     * @param string $strCat
+     *
+     * @return class_module_faqs_faq[]
+     * @static
+     */
+    public static function loadListFaqsPortal($strCat) {
         $arrParams = array();
-		if($strCat == 1) {
-		    $strQuery = "SELECT system_id
-    						FROM "._dbprefix_."faqs,
-    		                     "._dbprefix_."system
+        if($strCat == 1) {
+            $strQuery = "SELECT system_id
+    						FROM " . _dbprefix_ . "faqs,
+    		                     " . _dbprefix_ . "system
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
     						ORDER BY faqs_question ASC";
-		}
-		else {
-    		$strQuery = "SELECT system_id
-    						FROM "._dbprefix_."faqs,
-    						     "._dbprefix_."faqs_member,
-    		                     "._dbprefix_."system
+        }
+        else {
+            $strQuery = "SELECT system_id
+    						FROM " . _dbprefix_ . "faqs,
+    						     " . _dbprefix_ . "faqs_member,
+    		                     " . _dbprefix_ . "system
     		                WHERE system_id = faqs_id
     		                  AND faqs_id = faqsmem_faq
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
     						ORDER BY faqs_question ASC";
             $arrParams[] = $strCat;
-		}
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+        }
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     */
     public function getStrQuestion() {
         return $this->strQuestion;
     }
 
-    /**
-     * @return string
-     * @fieldType wysiwygsmall
-     * @fieldMandatory
-     */
     public function getStrAnswer() {
         return $this->strAnswer;
     }
-
 
     public function getArrCats() {
         return $this->arrCats;
@@ -313,6 +311,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     public function setStrAnswer($strAnswer) {
         $this->strAnswer = $strAnswer;
     }
+
     public function setStrQuestion($strQuestion) {
         $this->strQuestion = $strQuestion;
     }
@@ -324,6 +323,5 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     public function setUpdateBitMemberships($updateBitMemberships) {
         $this->updateBitMemberships = $updateBitMemberships;
     }
-
 
 }

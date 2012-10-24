@@ -169,13 +169,8 @@ class class_module_votings_admin extends class_admin_simple implements interface
     protected function actionNewVoting($strMode = "new", class_admin_formgenerator $objForm = null) {
 
         $objVoting = new class_module_votings_voting();
-        if($strMode == "edit") {
+        if($strMode == "edit")
             $objVoting = new class_module_votings_voting($this->getSystemid());
-
-            if(!$objVoting->rightEdit()) {
-                return $this->getLang("commons_error_permissions");
-            }
-        }
 
         if($objForm == null) {
             $objForm = $this->getVotingAdminForm($objVoting);
@@ -201,13 +196,10 @@ class class_module_votings_admin extends class_admin_simple implements interface
     protected function actionSaveVoting() {
         $objVoting = null;
 
-        if($this->getParam("mode") == "new") {
+        if($this->getParam("mode") == "new")
             $objVoting = new class_module_votings_voting();
-        }
-
-        else if($this->getParam("mode") == "edit") {
+        else if($this->getParam("mode") == "edit")
             $objVoting = new class_module_votings_voting($this->getSystemid());
-        }
 
         if($objVoting != null) {
             $objForm = $this->getVotingAdminForm($objVoting);

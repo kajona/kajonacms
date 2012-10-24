@@ -22,6 +22,10 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_forename
      * @versionable
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel participant_forename
      */
     private $strForename = "";
 
@@ -29,6 +33,10 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_lastname
      * @versionable
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel participant_lastname
      */
     private $strLastname = "";
 
@@ -37,6 +45,11 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @tableColumn em_participant.em_pt_email
      * @versionable
      * @listOrder
+     *
+     * @fieldType text
+     * @fieldValidator email
+     * @fieldMandatory
+     * @fieldLabel participant_email
      */
     private $strEmail = "";
 
@@ -44,6 +57,9 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_phone
      * @versionable
+     *
+     * @fieldType text
+     * @fieldLabel participant_phone
      */
     private $strPhone = "";
 
@@ -51,6 +67,9 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_comment
      * @versionable
+     *
+     * @fieldType textarea
+     * @fieldLabel participant_comment
      */
     private $strComment = "";
 
@@ -153,12 +172,6 @@ class class_module_eventmanager_participant extends class_model implements inter
     }
 
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel participant_forename
-     */
     public function getStrForename() {
         return $this->strForename;
     }
@@ -167,12 +180,6 @@ class class_module_eventmanager_participant extends class_model implements inter
         $this->strForename = $strForename;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel participant_lastname
-     */
     public function getStrLastname() {
         return $this->strLastname;
     }
@@ -181,13 +188,6 @@ class class_module_eventmanager_participant extends class_model implements inter
         $this->strLastname = $strLastname;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldValidator email
-     * @fieldMandatory
-     * @fieldLabel participant_email
-     */
     public function getStrEmail() {
         return $this->strEmail;
     }
@@ -196,11 +196,6 @@ class class_module_eventmanager_participant extends class_model implements inter
         $this->strEmail = $strEmail;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldLabel participant_phone
-     */
     public function getStrPhone() {
         return $this->strPhone;
     }
@@ -209,11 +204,6 @@ class class_module_eventmanager_participant extends class_model implements inter
         $this->strPhone = $strPhone;
     }
 
-    /**
-     * @return string
-     * @fieldType textarea
-     * @fieldLabel participant_comment
-     */
     public function getStrComment() {
         return $this->strComment;
     }

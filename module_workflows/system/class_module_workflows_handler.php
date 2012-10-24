@@ -31,18 +31,24 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val1
+     *
+     * @fieldType text
      */
     private $strConfigVal1 = "";
 
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val2
+     *
+     * @fieldType text
      */
     private $strConfigVal2 = "";
 
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val3
+     *
+     * @fieldType text
      */
     private $strConfigVal3 = "";
 
@@ -181,10 +187,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
         $this->strHandlerClass = $strHandlerClass;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrConfigVal1() {
         return $this->strConfigVal1;
     }
@@ -193,10 +195,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
         $this->strConfigVal1 = $strConfigVal1;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrConfigVal2() {
         return $this->strConfigVal2;
     }
@@ -205,10 +203,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
         $this->strConfigVal2 = $strConfigVal2;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrConfigVal3() {
         return $this->strConfigVal3;
     }

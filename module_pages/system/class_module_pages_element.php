@@ -20,30 +20,44 @@ class class_module_pages_element extends class_model implements interface_model,
      * @var string
      * @tableColumn element_name
      * @listOrder
+     *
+     * @fieldMandatory
+     * @fieldType text
+     * @fieldLabel commons_name
      */
     private $strName = "";
 
     /**
      * @var string
      * @tableColumn element_class_portal
+     *
+     * @fieldType dropdown
      */
     private $strClassPortal = "";
 
     /**
      * @var string
      * @tableColumn element_class_admin
+     *
+     * @fieldType dropdown
      */
     private $strClassAdmin = "";
 
     /**
      * @var string
      * @tableColumn element_repeat
+     *
+     * @fieldType yesno
      */
     private $intRepeat = "";
 
     /**
      * @var string
      * @tableColumn element_cachetime
+     *
+     * @fieldMandatory
+     * @fieldValidator numeric
+     * @fieldType text
      */
     private $intCachetime = "";
 
@@ -187,46 +201,22 @@ class class_module_pages_element extends class_model implements interface_model,
     }
 
 
-    /**
-     * @fieldMandatory
-     * @fieldType text
-     * @return string
-     * @fieldLabel commons_name
-     */
     public function getStrName() {
         return $this->strName;
     }
 
-    /**
-     * @return string
-     * @fieldType dropdown
-     */
     public function getStrClassPortal() {
         return $this->strClassPortal;
     }
 
-    /**
-     * @return string
-     * @fieldType dropdown
-     */
     public function getStrClassAdmin() {
         return $this->strClassAdmin;
     }
 
-    /**
-     * @return int
-     * @fieldType yesno
-     */
     public function getIntRepeat() {
         return (int)$this->intRepeat;
     }
 
-    /**
-     * @fieldMandatory
-     * @fieldValidator numeric
-     * @fieldType text
-     * @return string
-     */
     public function getIntCachetime() {
         return $this->intCachetime;
     }

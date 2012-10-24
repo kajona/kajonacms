@@ -410,14 +410,14 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         if($bitAlias)
             $objForm->addField(new class_formentry_hidden("page", "name"))->setStrValue(generateSystemid())->setStrLabel($this->getLang("name"));
         else
-            $objForm->addDynamicField("name")->setStrLabel($this->getLang("name"));
+            $objForm->addDynamicField("strName")->setStrLabel($this->getLang("name"));
 
         $objForm->addDynamicField("browsername")->setStrLabel($this->getLang("browsername"));
 
         if(!$bitAlias) {
-            $objForm->addDynamicField("seostring")->setStrLabel($this->getLang("seostring"));
-            $objForm->addDynamicField("desc")->setStrLabel($this->getLang("commons_description"));
-            $objForm->addDynamicField("keywords")->setStrLabel($this->getLang("keywords"));
+            $objForm->addDynamicField("strSeostring")->setStrLabel($this->getLang("seostring"));
+            $objForm->addDynamicField("strDescription")->setStrLabel($this->getLang("commons_description"));
+            $objForm->addDynamicField("strKeywords")->setStrLabel($this->getLang("keywords"));
         }
 
         $strParentId = $objPage->getPrevId();
@@ -438,7 +438,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         if(!$bitAlias) {
 
             /** @var $objField class_formentry_base */
-            $objField = $objForm->addDynamicField("template")->setArrKeyValues($arrTemplatesDD)->setStrLabel($this->getLang("template"));
+            $objField = $objForm->addDynamicField("strTemplate")->setArrKeyValues($arrTemplatesDD)->setStrLabel($this->getLang("template"));
             if($strMode == "edit" && $objPage->getStrTemplate() == "")
                 $objField->setStrHint($this->getLang("templateNotSelectedBefore"));
 
@@ -454,7 +454,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         }
         else {
-            $objForm->addDynamicField("alias")->setStrHint($this->getLang("page_alias_hint"))->setBitMandatory(true)->setStrLabel($this->getLang("page_alias"));
+            $objForm->addDynamicField("strAlias")->setStrHint($this->getLang("page_alias_hint"))->setBitMandatory(true)->setStrLabel($this->getLang("page_alias"));
         }
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
@@ -573,8 +573,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
     private function getFolderForm(class_module_pages_folder $objFolder) {
         $objForm = new class_admin_formgenerator("folder", $objFolder);
-        $objForm->addDynamicField("name")->setStrLabel($this->getLang("ordner_name"));
-
+        $objForm->generateFieldsFromObject();
         return $objForm;
     }
 
@@ -767,15 +766,15 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         if($objElement->getSystemid() != "") {
             $objAdminInstance = $objElement->getAdminElementInstance();
             if($objAdminInstance->getConfigVal1Name() != "") {
-                $objForm->addDynamicField("configval1")->setStrLabel($objAdminInstance->getConfigVal1Name());
+                $objForm->addDynamicField("strConfigval1")->setStrLabel($objAdminInstance->getConfigVal1Name());
             }
 
             if($objAdminInstance->getConfigVal2Name() != "") {
-                $objForm->addDynamicField("configval2")->setStrLabel($objAdminInstance->getConfigVal2Name());
+                $objForm->addDynamicField("strConfigval2")->setStrLabel($objAdminInstance->getConfigVal2Name());
             }
 
             if($objAdminInstance->getConfigVal3Name() != "") {
-                $objForm->addDynamicField("configval3")->setStrLabel($objAdminInstance->getConfigVal3Name());
+                $objForm->addDynamicField("strConfigval3")->setStrLabel($objAdminInstance->getConfigVal3Name());
             }
         }
 

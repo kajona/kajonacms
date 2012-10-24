@@ -22,33 +22,33 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
     /**
      * Constructor
-     *
+
      */
-	public function __construct() {
+    public function __construct() {
         $this->setArrModuleEntry("modul", "languages");
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-		parent::__construct();
+        parent::__construct();
 
-	}
+    }
 
 
     public function getOutputModuleNavi() {
-	    $arrReturn = array();
+        $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
-	}
+    }
 
 
     /**
-	 * Returns a list of the languages
-	 *
-	 * @return string
+     * Returns a list of the languages
+     *
+     * @return string
      * @permissions view
-	 */
-	protected function actionList() {
+     */
+    protected function actionList() {
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_languages_language::getNumberOfLanguagesAvailable());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -56,7 +56,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
         return $this->renderList($objArraySectionIterator);
 
-	}
+    }
 
     protected function renderCopyAction(class_model $objListEntry) {
         return "";
@@ -75,23 +75,27 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      * Creates the form to edit an existing language, or to create a new language
      *
      * @param string $strMode
+     *
      * @return string
      * @permissions edit
      */
-	protected function actionNew($strMode = "new") {
+    protected function actionNew($strMode = "new") {
 
-	    $objLang = new class_module_languages_language();
-	    $arrLanguages = $objLang->getAllLanguagesAvailable();
-	    $arrLanguagesDD = array();
-	    foreach ($arrLanguages as $strLangShort)
-	       $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
+        $objLang = new class_module_languages_language();
+        $arrLanguages = $objLang->getAllLanguagesAvailable();
+        $arrLanguagesDD = array();
+        foreach($arrLanguages as $strLangShort) {
+            $arrLanguagesDD[$strLangShort] = $this->getLang("lang_" . $strLangShort);
+        }
 
-        if($strMode == "new")
+        if($strMode == "new") {
             $objLanguage = new class_module_languages_language();
+        }
         else {
             $objLanguage = new class_module_languages_language($this->getSystemid());
-            if(!$objLanguage->rightEdit())
+            if(!$objLanguage->rightEdit()) {
                 return $this->getLang("commons_error_permissions");
+            }
         }
 
         $objForm = $this->getAdminForm($objLanguage);
@@ -99,11 +103,13 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
         return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
 
-	}
+    }
 
     /**
      * Creates the admin-form object
+     *
      * @param class_module_languages_language $objLanguage
+     *
      * @return class_admin_formgenerator
      */
     private function getAdminForm(class_module_languages_language $objLanguage) {
@@ -111,12 +117,13 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         $objLang = new class_module_languages_language();
         $arrLanguages = $objLang->getAllLanguagesAvailable();
         $arrLanguagesDD = array();
-        foreach ($arrLanguages as $strLangShort)
-           $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
+        foreach($arrLanguages as $strLangShort) {
+            $arrLanguagesDD[$strLangShort] = $this->getLang("lang_" . $strLangShort);
+        }
 
         $objForm = new class_admin_formgenerator("language", $objLanguage);
-        $objForm->addDynamicField("name")->setArrKeyValues($arrLanguagesDD);
-        $objForm->addDynamicField("default");
+        $objForm->addDynamicField("strName")->setArrKeyValues($arrLanguagesDD);
+        $objForm->addDynamicField("bitDefault");
 
         return $objForm;
     }
@@ -128,46 +135,51 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      * @return string, "" in case of success
      * @permissions edit
      */
-	protected function actionSaveLanguage() {
+    protected function actionSaveLanguage() {
         $strOldLang = "";
-	    if($this->getParam("mode") == "new") {
+        if($this->getParam("mode") == "new") {
             $objLanguage = new class_module_languages_language();
         }
         else {
             $objLanguage = new class_module_languages_language($this->getSystemid());
             $strOldLang = $objLanguage->getStrName();
-            if(!$objLanguage->rightEdit())
+            if(!$objLanguage->rightEdit()) {
                 return $this->getLang("commons_error_permissions");
+            }
         }
 
         $objForm = $this->getAdminForm($objLanguage);
         $objForm->updateSourceObject();
 
 
-	    if($this->getParam("mode") == "new") {
+        if($this->getParam("mode") == "new") {
             //language already existing?
-            if(class_module_languages_language::getLanguageByName($objLanguage->getStrName()) !== false)
-               return $this->getLang("language_existing");
+            if(class_module_languages_language::getLanguageByName($objLanguage->getStrName()) !== false) {
+                return $this->getLang("language_existing");
+            }
         }
-        elseif ($this->getParam("mode") == "edit") {
+        elseif($this->getParam("mode") == "edit") {
             $objTestLang = class_module_languages_language::getLanguageByName($objLanguage->getStrName());
-            if($objTestLang !== false && $objTestLang->getSystemid() != $objLanguage->getSystemid())
-               return $this->getLang("language_existing");
+            if($objTestLang !== false && $objTestLang->getSystemid() != $objLanguage->getSystemid()) {
+                return $this->getLang("language_existing");
+            }
         }
 
-        if(!$objLanguage->updateObjectToDb() )
+        if(!$objLanguage->updateObjectToDb()) {
             throw new class_exception("Error creating new language", class_exception::$level_ERROR);
+        }
 
-        if ($this->getParam("mode") == "edit") {
+        if($this->getParam("mode") == "edit") {
             //move contents to a new language
             if($strOldLang != $objLanguage->getStrName()) {
-                if(!$objLanguage->moveContentsToCurrentLanguage($strOldLang))
+                if(!$objLanguage->moveContentsToCurrentLanguage($strOldLang)) {
                     throw new class_exception("Error moving contents to new language", class_exception::$level_ERROR);
+                }
             }
         }
 
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-	}
+    }
 
     /**
      * Deletes the language
@@ -176,44 +188,46 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      * @return string
      * @permissions delete
      */
-	protected function actionDelete() {
-	    $strReturn = "";
+    protected function actionDelete() {
+        $strReturn = "";
         $objLang = new class_module_languages_language($this->getSystemid());
         if($objLang->rightDelete()) {
-            if(!$objLang->deleteObject())
+            if(!$objLang->deleteObject()) {
                 throw new class_exception("Error deleting language", class_exception::$level_ERROR);
+            }
 
             //check if the current active one was deleted. if, then reset. #kajona trace id 613
             if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
                 $this->objDB->flushQueryCache();
                 $arrLangs = class_module_languages_language::getObjectList();
-                if(count($arrLangs) > 0 ) {
+                if(count($arrLangs) > 0) {
                     $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
                 }
             }
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
-        else
-		    $strReturn = $this->getLang("commons_error_permissions");
-		return $strReturn;
-	}
+        else {
+            $strReturn = $this->getLang("commons_error_permissions");
+        }
+        return $strReturn;
+    }
 
-	/**
-	 * Creates a language-switch as ready-to-output html-code
-	 * If there's just one language installed, an empty string is returned
-	 *
-	 * @return string
-	 */
-	public function getLanguageSwitch() {
-	    $strReturn = "";
+    /**
+     * Creates a language-switch as ready-to-output html-code
+     * If there's just one language installed, an empty string is returned
+     *
+     * @return string
+     */
+    public function getLanguageSwitch() {
+        $strReturn = "";
         $strButtons = "";
         if(self::$arrLanguageSwitchEntries != null && count(self::$arrLanguageSwitchEntries) > 1) {
-            foreach (self::$arrLanguageSwitchEntries as $strKey => $strValue) {
-            	$strButtons .= $this->objToolkit->getLanguageButton(
+            foreach(self::$arrLanguageSwitchEntries as $strKey => $strValue) {
+                $strButtons .= $this->objToolkit->getLanguageButton(
                     $strKey,
                     $strValue,
-            	    $strKey == self::$strActiveKey
+                    $strKey == self::$strActiveKey
                 );
             }
 
@@ -221,14 +235,14 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         }
 
         return $strReturn;
-	}
+    }
 
     /**
      * Enables the common language switch, switching the backends language to work on.
      * If you want to create a custom switch, use setArrLanguageSwitchEntries and setStrOnChangeHandler
      * to customize all switch-content.
-     * @static
      *
+     * @static
      */
     public static function enableLanguageSwitch() {
         if(self::$arrLanguageSwitchEntries == null) {
@@ -236,7 +250,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
             if(count($arrObjLanguages) > 1) {
                 self::$arrLanguageSwitchEntries = array();
                 foreach($arrObjLanguages as $objOneLang) {
-                    self::$arrLanguageSwitchEntries[$objOneLang->getStrName()] = class_carrier::getInstance()->getObjLang()->getLang("lang_".$objOneLang->getStrName(), "languages");
+                    self::$arrLanguageSwitchEntries[$objOneLang->getStrName()] = class_carrier::getInstance()->getObjLang()->getLang("lang_" . $objOneLang->getStrName(), "languages");
                 }
                 $objSystemCommon = new class_module_system_common();
                 self::$strActiveKey = $objSystemCommon->getStrAdminLanguageToWorkOn();
@@ -247,6 +261,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
     /**
      * Pass custom entries to the current switch, replacing the default ones.
      * Schema key => value
+     *
      * @static
      *
      * @param $arrLanguageSwitchEntries
@@ -257,6 +272,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
     /**
      * Change the default on-change handler of the languages dropdown to a custom function.
+     *
      * @static
      *
      * @param $onChangeHandler

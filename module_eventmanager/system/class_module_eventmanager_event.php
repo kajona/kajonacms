@@ -22,6 +22,10 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var string
      * @tableColumn em_event.em_ev_title
      * @versionable
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strTitle = "";
 
@@ -30,6 +34,9 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @tableColumn em_event.em_ev_description
      * @versionable
      * @blockEscaping
+     *
+     * @fieldType wysiwygsmall
+     * @fieldLabel commons_description
      */
     private $strDescription = "";
 
@@ -37,6 +44,9 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var string
      * @tableColumn em_event.em_ev_location
      * @versionable
+     *
+     * @fieldType textarea
+     * @fieldLabel event_location
      */
     private $strLocation = "";
 
@@ -44,6 +54,10 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var int
      * @tableColumn em_event.em_ev_participant_registration
      * @versionable
+     *
+     * @fieldType yesno
+     * @fieldMandatory
+     * @fieldLabel event_registration
      */
     private $intRegistrationRequired = 0;
 
@@ -51,6 +65,9 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var int
      * @tableColumn em_event.em_ev_participant_limit
      * @versionable
+     *
+     * @fieldType yesno
+     * @fieldLabel event_limitparticipants
      */
     private $intLimitGiven = 0;
 
@@ -58,6 +75,10 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var int
      * @tableColumn em_event.em_ev_participant_max
      * @versionable
+     *
+     * @fieldType text
+     * @fieldValidator numeric
+     * @fieldLabel event_maxparticipants
      */
     private $intParticipantsLimit = 0;
 
@@ -72,6 +93,22 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @versionable
      */
     private $objEndDate;
+
+    /**
+     * for formgeneration only
+     * @var
+     * @fieldType datetime
+     * @fieldLabel event_end
+     */
+    private $longEndDate;
+
+    /**
+     * for formgeneration only
+     * @var
+     * @fieldType datetime
+     * @fieldLabel event_start
+     */
+    private $longStartDate;
 
 
 
@@ -264,12 +301,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
 
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }
@@ -278,11 +309,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
         $this->strTitle = $strTitle;
     }
 
-    /**
-     * @return string
-     * @fieldType wysiwygsmall
-     * @fieldLabel commons_description
-     */
     public function getStrDescription() {
         return $this->strDescription;
     }
@@ -291,11 +317,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
         $this->strDescription = $strDescription;
     }
 
-    /**
-     * @return string
-     * @fieldType textarea
-     * @fieldLabel event_location
-     */
     public function getStrLocation() {
         return $this->strLocation;
     }
@@ -304,12 +325,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
         $this->strLocation = $strLocation;
     }
 
-    /**
-     * @return string
-     * @fieldType yesno
-     * @fieldMandatory
-     * @fieldLabel event_registration
-     */
     public function getIntRegistrationRequired() {
         return $this->intRegistrationRequired;
     }
@@ -318,11 +333,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
         $this->intRegistrationRequired = $intRegistration;
     }
 
-    /**
-     * @return string
-     * @fieldType yesno
-     * @fieldLabel event_limitparticipants
-     */
     public function getIntLimitGiven() {
         return $this->intLimitGiven;
     }
@@ -331,12 +341,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
         $this->intLimitGiven = $intLimitGiven;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldValidator numeric
-     * @fieldLabel event_maxparticipants
-     */
     public function getIntParticipantsLimit() {
         return $this->intParticipantsLimit;
     }
@@ -348,9 +352,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     /**
      * @return class_date
-     * @fieldType datetime
-     * @fieldMandatory
-     * @fieldLabel event_start
      */
     public function getLongStartDate() {
         if($this->objStartDate instanceof class_date)
@@ -379,8 +380,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     /**
      * @return class_date
-     * @fieldType datetime
-     * @fieldLabel event_end
+     *
      */
     public function getLongEndDate() {
         if($this->objEndDate instanceof class_date)

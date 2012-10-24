@@ -448,16 +448,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //generic
         //adding elements is more generic right here - load all methods
         if($objUser->isEditable()) {
-            $objReflection = new ReflectionClass($objUser);
             $objAnnotations = new class_reflection($objUser);
+            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@fieldType");
 
-            $arrMethods = $objReflection->getMethods();
-            foreach($arrMethods as $objOneMethod) {
-                if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType")) {
-                    $objField = $objForm->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit", "getLong"), array(), $objOneMethod->name)));
-                    if($objField->getStrEntryName() == "user_pass" && $strMode == "new") {
-                        $objField->setBitMandatory(true);
-                    }
+            foreach($arrProperties as $strProperty => $strValue) {
+                $objField = $objForm->addDynamicField($strProperty);
+                if($objField->getStrEntryName() == "user_pass" && $strMode == "new") {
+                    $objField->setBitMandatory(true);
                 }
             }
         }
@@ -695,14 +692,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         if($objGroup->isEditable()) {
             //adding elements is more generic right here - load all methods
-            $objReflection = new ReflectionClass($objGroup);
             $objAnnotations = new class_reflection($objGroup);
 
-            $arrMethods = $objReflection->getMethods();
-            foreach($arrMethods as $objOneMethod) {
-                if($objAnnotations->hasMethodAnnotation($objOneMethod->name, "@fieldType")) {
-                    $objForm->addDynamicField(uniStrtolower(uniStrReplace(array("getStr", "getInt", "getBit", "getLong"), array(), $objOneMethod->name)));
-                }
+            $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@fieldType");
+
+            foreach($arrProperties as $strProperty => $strValue) {
+                $objForm->addDynamicField($strProperty);
             }
 
         }

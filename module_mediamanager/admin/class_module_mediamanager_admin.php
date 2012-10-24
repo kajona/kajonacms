@@ -217,7 +217,8 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
     private function getAdminForm(class_module_mediamanager_repo $objRepo) {
         $objForm = new class_admin_formgenerator("repo", $objRepo);
-        $objField = $objForm->addDynamicField("path");
+        $objForm->addDynamicField("strTitle");
+        $objField = $objForm->addDynamicField("strPath");
         $objField->setStrOpener(getLinkAdminDialog("mediamanager", "folderListFolderview", "&form_element=".$objField->getStrEntryName(), $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.png", $this->getLang("commons_open_browser")));
         $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
         $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));

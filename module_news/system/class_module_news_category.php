@@ -12,15 +12,17 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
- *
  * @targetTable news_category.news_cat_id
  */
-class class_module_news_category extends class_model implements interface_model, interface_admin_listable  {
+class class_module_news_category extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn news_category.news_cat_title
      * @listOrder
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strTitle = "";
 
@@ -77,51 +79,48 @@ class class_module_news_category extends class_model implements interface_model,
         return $this->getStrTitle();
     }
 
-	/**
-	 * Loads all categories, the given news is in
-	 *
-	 * @param string $strSystemid
-	 * @return class_module_news_category[]
-	 * @static
-	 */
-	public static function getNewsMember($strSystemid) {
-	    $strQuery = "SELECT newsmem_category as system_id FROM "._dbprefix_."news_member
+    /**
+     * Loads all categories, the given news is in
+     *
+     * @param string $strSystemid
+     *
+     * @return class_module_news_category[]
+     * @static
+     */
+    public static function getNewsMember($strSystemid) {
+        $strQuery = "SELECT newsmem_category as system_id FROM " . _dbprefix_ . "news_member
 	                   WHERE newsmem_news = ? ";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_news_category($arrOneId["system_id"]);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_news_category($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
-	/**
-	 * Deletes all memberships of the given NEWS
-	 *
-	 * @param string $strSystemid NEWS-ID
-	 * @return bool
-	 */
-	public static function deleteNewsMemberships($strSystemid) {
-	    $strQuery = "DELETE FROM "._dbprefix_."news_member
+    /**
+     * Deletes all memberships of the given NEWS
+     *
+     * @param string $strSystemid NEWS-ID
+     *
+     * @return bool
+     */
+    public static function deleteNewsMemberships($strSystemid) {
+        $strQuery = "DELETE FROM " . _dbprefix_ . "news_member
 	                  WHERE newsmem_news = ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid));
-	}
+    }
 
-	public function deleteObject() {
-	    //start by deleting from members an cat table
-        $strQuery = "DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = ?";
+    public function deleteObject() {
+        //start by deleting from members an cat table
+        $strQuery = "DELETE FROM " . _dbprefix_ . "news_member WHERE newsmem_category = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             return parent::deleteObject();
         }
         return false;
-	}
+    }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }

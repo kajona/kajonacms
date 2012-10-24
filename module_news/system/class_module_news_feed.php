@@ -12,45 +12,59 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
- *
  * @targetTable news_feed.news_feed_id
  */
-class class_module_news_feed extends class_model implements interface_model, interface_admin_listable  {
+class class_module_news_feed extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn news_feed.news_feed_title
      * @listOrder
+     *
+     * @fieldType text
+     * @fieldMandatory
      */
     private $strTitle = "";
 
     /**
      * @var string
      * @tableColumn news_feed.news_feed_urltitle
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strUrlTitle = "";
 
     /**
      * @var string
      * @tableColumn news_feed.news_feed_link
+     *
+     * @fieldType text
      */
     private $strLink = "";
 
     /**
      * @var string
      * @tableColumn news_feed.news_feed_desc
+     *
+     * @fieldType textarea
      */
     private $strDesc = "";
 
     /**
      * @var string
      * @tableColumn news_feed.news_feed_page
+     * @fieldType page
+     * @fieldMandatory
      */
     private $strPage = "";
 
     /**
      * @var string
      * @tableColumn news_feed.news_feed_cat
+     *
+     * @fieldType dropdown
      */
     private $strCat = "";
 
@@ -97,7 +111,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return $this->getIntHits()." ".$this->getLang("commons_hits_header", "news");
+        return $this->getIntHits() . " " . $this->getLang("commons_hits_header", "news");
     }
 
     /**
@@ -106,10 +120,12 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        if(_system_mod_rewrite_ == "true")
-            return  _webpath_."/".$this->getStrUrlTitle().".rss";
-        else
-            return _webpath_."/xml.php?module=news&action=newsFeed&feedTitle=".$this->getStrUrlTitle();
+        if(_system_mod_rewrite_ == "true") {
+            return _webpath_ . "/" . $this->getStrUrlTitle() . ".rss";
+        }
+        else {
+            return _webpath_ . "/xml.php?module=news&action=newsFeed&feedTitle=" . $this->getStrUrlTitle();
+        }
     }
 
     /**
@@ -121,55 +137,59 @@ class class_module_news_feed extends class_model implements interface_model, int
         return $this->getStrTitle();
     }
 
-	/**
-	 * Load a newsfeed using a urltitle
-	 *
-	 * @param string $strFeedTitle
-	 * @return class_module_news_feed
-	 * @static
-	 */
-	public static function getFeedByUrlName($strFeedTitle) {
-	    $strQuery = "SELECT system_id
-	                   FROM "._dbprefix_."news_feed,
-	                        "._dbprefix_."system
+    /**
+     * Load a newsfeed using a urltitle
+     *
+     * @param string $strFeedTitle
+     *
+     * @return class_module_news_feed
+     * @static
+     */
+    public static function getFeedByUrlName($strFeedTitle) {
+        $strQuery = "SELECT system_id
+	                   FROM " . _dbprefix_ . "news_feed,
+	                        " . _dbprefix_ . "system
 	                   WHERE news_feed_id = system_id
 	                     AND news_feed_urltitle = ? ";
-	    $arrOneId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFeedTitle));
-	    if(isset($arrOneId["system_id"]))
-		    return new class_module_news_feed($arrOneId["system_id"]);
-		else
-		    return null;
-	}
+        $arrOneId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFeedTitle));
+        if(isset($arrOneId["system_id"])) {
+            return new class_module_news_feed($arrOneId["system_id"]);
+        }
+        else {
+            return null;
+        }
+    }
 
 
-	/**
-	 * Increments the hits-counter by one
-	 *
-	 * @return bool
-	 */
-	public function incrementNewsCounter() {
-	    $strQuery = "UPDATE "._dbprefix_."news_feed SET news_feed_hits = news_feed_hits+1 WHERE news_feed_id = ?";
+    /**
+     * Increments the hits-counter by one
+     *
+     * @return bool
+     */
+    public function incrementNewsCounter() {
+        $strQuery = "UPDATE " . _dbprefix_ . "news_feed SET news_feed_hits = news_feed_hits+1 WHERE news_feed_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-	}
+    }
 
-	/**
-	 * Loads all news from the database
-	 * if passed, the filter is used to load the news of the given category
-	 *
-	 * @param string $strFilter
+    /**
+     * Loads all news from the database
+     * if passed, the filter is used to load the news of the given category
+     *
+     * @param string $strFilter
      * @param int $intAmount
-	 * @return mixed
-	 * @static
-	 */
-	public static function getNewsList($strFilter = "", $intAmount = 0) {
-	    $intNow = class_date::getCurrentTimestamp();
+     *
+     * @return mixed
+     * @static
+     */
+    public static function getNewsList($strFilter = "", $intAmount = 0) {
+        $intNow = class_date::getCurrentTimestamp();
         $arrParams = array($intNow, $intNow, $intNow);
-		if($strFilter != "") {
-			$strQuery = "SELECT *
-							FROM  "._dbprefix_."news,
-							      "._dbprefix_."system,
-							      "._dbprefix_."system_date,
-							      "._dbprefix_."news_member
+        if($strFilter != "") {
+            $strQuery = "SELECT *
+							FROM  " . _dbprefix_ . "news,
+							      " . _dbprefix_ . "system,
+							      " . _dbprefix_ . "system_date,
+							      " . _dbprefix_ . "news_member
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
@@ -180,12 +200,12 @@ class class_module_news_feed extends class_model implements interface_model, int
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
             $arrParams[] = $strFilter;
-		}
-		else {
-			$strQuery = "SELECT *
-							FROM "._dbprefix_."news,
-							      "._dbprefix_."system,
-							      "._dbprefix_."system_date
+        }
+        else {
+            $strQuery = "SELECT *
+							FROM " . _dbprefix_ . "news,
+							      " . _dbprefix_ . "system,
+							      " . _dbprefix_ . "system_date
 							WHERE system_id = news_id
 							  AND system_id = system_date_id
 							  AND system_status = 1
@@ -193,73 +213,45 @@ class class_module_news_feed extends class_model implements interface_model, int
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
 							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
 							ORDER BY system_date_start DESC";
-		}
+        }
 
         $intStart = null;
         $intEnd = null;
         if($intAmount > 0) {
             $intStart = 0;
-            $intEnd = $intAmount-1;
+            $intEnd = $intAmount - 1;
         }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
-
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrUrlTitle() {
         return $this->strUrlTitle;
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     */
     public function getStrLink() {
         return $this->strLink;
     }
 
-    /**
-     * @return string
-     * @fieldType textarea
-     */
     public function getStrDesc() {
         return $this->strDesc;
     }
 
-    /**
-     * @return string
-     * @fieldType page
-     * @fieldMandatory
-     */
     public function getStrPage() {
         return $this->strPage;
     }
 
-    /**
-     * @return string
-     * @fieldType dropdown
-     */
     public function getStrCat() {
         return $this->strCat;
     }
@@ -271,21 +263,27 @@ class class_module_news_feed extends class_model implements interface_model, int
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
     }
+
     public function setStrUrlTitle($strUrlTitle) {
         $this->strUrlTitle = $strUrlTitle;
     }
+
     public function setStrLink($strLink) {
         $this->strLink = $strLink;
     }
+
     public function setStrDesc($strDesc) {
         $this->strDesc = $strDesc;
     }
+
     public function setStrPage($strPage) {
         $this->strPage = $strPage;
     }
+
     public function setStrCat($strCat) {
         $this->strCat = $strCat;
     }
+
     public function setIntHits($intHits) {
         $this->intHits = $intHits;
     }
@@ -298,5 +296,4 @@ class class_module_news_feed extends class_model implements interface_model, int
         $this->intAmount = $intAmount;
     }
 
-    
 }

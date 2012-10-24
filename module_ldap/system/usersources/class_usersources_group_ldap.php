@@ -11,13 +11,18 @@
 /**
  * Represents a single group inside the directory.
  * Main functionality is to map to a DN inside the ldap.
- * 
+ *
  * @author sidler@mulchprod.de
  * @since 3.4.1
  * @package module_ldap
  */
 class class_usersources_group_ldap extends class_model implements interface_model, interface_usersources_group {
 
+    /**
+     * @var string
+     * @fieldType text
+     * @fieldMandatory
+     */
     private $strDn = "";
 
     /**
@@ -34,6 +39,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -42,10 +48,10 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
     /**
      * Initalises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."user_group_ldap WHERE group_ldap_id=?";
+        $strQuery = "SELECT * FROM " . _dbprefix_ . "user_group_ldap WHERE group_ldap_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
@@ -64,17 +70,17 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("saved new ldap group ".$this->getStrSystemid(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("saved new ldap group " . $this->getStrSystemid(), class_logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
-            $strQuery = "INSERT INTO "._dbprefix_."user_group_ldap
+            $strQuery = "INSERT INTO " . _dbprefix_ . "user_group_ldap
                           (group_ldap_id, group_ldap_dn) VALUES
                           (?, ?)";
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn()));
         }
         else {
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated ldap group ".$this->getSystemid(), class_logger::$levelInfo);
-            $strQuery = "UPDATE "._dbprefix_."user_group_ldap
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated ldap group " . $this->getSystemid(), class_logger::$levelInfo);
+            $strQuery = "UPDATE " . _dbprefix_ . "user_group_ldap
                             SET group_ldap_dn=?
                           WHERE group_ldap_id=?";
             return $this->objDB->_pQuery($strQuery, array($this->getStrDn(), $this->getSystemid()));
@@ -91,18 +97,19 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     protected function updateStateToDb() {
         return true;
     }
-    
+
     /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the
      * subsystem may fail.
-     * 
+     *
      * @param string $strId
+     *
      * @return void
      */
     public function setNewRecordId($strId) {
-        $strQuery = "UPDATE "._dbprefix_."user_group_ldap SET group_ldap_id = ? WHERE group_ldap_id = ?";
+        $strQuery = "UPDATE " . _dbprefix_ . "user_group_ldap SET group_ldap_id = ? WHERE group_ldap_id = ?";
         $this->objDB->_pQuery($strQuery, array($strId, $this->getSystemid()));
         $this->setSystemid($strId);
     }
@@ -110,19 +117,20 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     /**
      * Returns an array of user-ids associated with the current group.
      * If possible, pageing should be supported
-     * 
+     *
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      */
-	public function getUserIdsForGroup($intStart = null, $intEnd = null) {
-        
-		$arrReturn = array();
+    public function getUserIdsForGroup($intStart = null, $intEnd = null) {
+
+        $arrReturn = array();
         //load all members from ldap
         $objLdap = class_ldap::getInstance();
         $arrMembers = $objLdap->getMembersOfGroup($this->getStrDn());
         $objSource = new class_usersources_source_ldap();
-        
+
         foreach($arrMembers as $strOneMemberDn) {
             //check if the user exists in the kajona-database
             $objUser = $objSource->getUserByDn($strOneMemberDn);
@@ -149,59 +157,65 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
                     $this->objDB->flushQueryCache();
                 }
-                
+
                 $arrReturn[] = $objUser->getSystemid();
             }
         }
 
-		return $arrReturn;
+        return $arrReturn;
     }
 
     /**
      * Returns the number of members of the current group.
+     *
      * @return int
      */
     public function getNumberOfMembers() {
         $objLdap = class_ldap::getInstance();
         try {
             return $objLdap->getNumberOfGroupMembers($this->getStrDn());
-        } catch (class_exception $objEx) {
+        }
+        catch(class_exception $objEx) {
             return "n.a.";
         }
-	}
+    }
 
-	/**
-	 * Deletes the given group
-	 *
-	 * @return bool
-	 */
-	public function deleteGroup() {
-	    class_logger::getInstance()->addLogRow("deleted ldap group with id ".$this->getSystemid(), class_logger::$levelInfo);
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_ldap WHERE group_ldap_id=?";
+    /**
+     * Deletes the given group
+     *
+     * @return bool
+     */
+    public function deleteGroup() {
+        class_logger::getInstance()->addLogRow("deleted ldap group with id " . $this->getSystemid(), class_logger::$levelInfo);
+        $strQuery = "DELETE FROM " . _dbprefix_ . "user_group_ldap WHERE group_ldap_id=?";
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-	}
+    }
 
     /**
      * Deletes the current object from the system
+     *
      * @return bool
      */
     public function deleteObject() {
         return $this->deleteObject();
     }
-    
+
     /**
-	 * Adds a new member to the group - if possible
-	 * @param interface_usersources_user $objUser
+     * Adds a new member to the group - if possible
+     *
+     * @param interface_usersources_user $objUser
+     *
      * @return bool
      */
-	public function addMember(interface_usersources_user $objUser) {
+    public function addMember(interface_usersources_user $objUser) {
         return true;
     }
-    
-    
+
+
     /**
      * Defines whether the current group-properties (e.g. the name) may be edited or is read-only
+     *
      * @return bool
      */
     public function isEditable() {
@@ -210,20 +224,16 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
 
     /**
-	 * Removes a member from the current group - if possible.
-	 * @param interface_usersources_user $objUser
+     * Removes a member from the current group - if possible.
+     *
+     * @param interface_usersources_user $objUser
+     *
      * @return bool
      */
     public function removeMember(interface_usersources_user $objUser) {
-       return false;
+        return false;
     }
 
-
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     */
     public function getStrDn() {
         return $this->strDn;
     }
@@ -231,6 +241,5 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     public function setStrDn($strDn) {
         $this->strDn = $strDn;
     }
-
 
 }

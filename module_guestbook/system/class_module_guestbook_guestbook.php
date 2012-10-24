@@ -22,12 +22,19 @@ class class_module_guestbook_guestbook extends class_model implements interface_
      * @var string
      * @tableColumn guestbook_book.guestbook_title
      * @listOrder
+     *
+     * @fieldMandatory
+     * @fieldType text
+     * @fieldLabel commons_title
      */
     private $strGuestbookTitle = "";
 
     /**
      * @var int
      * @tableColumn guestbook_book.guestbook_moderated
+     *
+     * @fieldMandatory
+     * @fieldType yesno
      */
     private $intGuestbookModerated = 0;
 
@@ -97,12 +104,6 @@ class class_module_guestbook_guestbook extends class_model implements interface_
         $this->strGuestbookTitle = $strGuestbookTitle;
     }
 
-    /**
-     * @fieldMandatory
-     * @fieldType text
-     * @return string
-     * @fieldLabel commons_title
-     */
     public function getStrGuestbookTitle() {
         return $this->strGuestbookTitle;
     }
@@ -115,11 +116,6 @@ class class_module_guestbook_guestbook extends class_model implements interface_
         $this->intGuestbookModerated = $intGuestbookModerated;
     }
 
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldType yesno
-     */
     public function getIntGuestbookModerated() {
         return $this->intGuestbookModerated;
     }

@@ -11,14 +11,16 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
- *
  * @targetTable mediamanager_repo.repo_id
  */
-class class_module_mediamanager_repo extends class_model implements interface_model, interface_admin_listable  {
+class class_module_mediamanager_repo extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_path
+     * @fieldMandatory
+     * @fieldValidator folder
+     * @fieldLabel commons_path
      */
     private $strPath = "";
 
@@ -26,18 +28,22 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @var string
      * @tableColumn mediamanager_repo.repo_title
      * @listOrder
+     * @fieldLabel commons_title
+     * @fieldType text
      */
     private $strTitle = "";
 
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_upload_filter
+     * @fieldType text
      */
     private $strUploadFilter = "";
 
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_view_filter
+     * @fieldType text
      */
     private $strViewFilter = "";
 
@@ -47,11 +53,11 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-		$this->setArrModuleEntry("modul", "mediamanager");
+        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
+        $this->setArrModuleEntry("modul", "mediamanager");
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
     }
 
     /**
@@ -67,6 +73,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -75,6 +82,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -83,6 +91,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -100,21 +109,10 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     }
 
 
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldValidator folder
-     * @fieldLabel commons_path
-     */
     public function getStrPath() {
         return $this->strPath;
     }
 
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }
@@ -155,7 +153,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     public function getStrViewFilter() {
         return $this->strViewFilter;
     }
-
 
 }
 

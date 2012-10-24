@@ -19,12 +19,18 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news.news_title
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel commons_title
      */
     private $strTitle = "";
 
     /**
      * @var string
      * @tableColumn news.news_image
+     *
+     * @fieldType image
      */
     private $strImage = "";
 
@@ -37,6 +43,7 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news.news_intro
+     * @fieldType textarea
      */
     private $strIntro = "";
 
@@ -44,11 +51,27 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var string
      * @tableColumn news.news_text
      * @blockEscaping
+     *
+     * @fieldType wysiwygsmall
      */
     private $strText = "";
 
+    /**
+     * @var int
+     * @fieldType date
+     */
     private $longDateStart = 0;
+
+    /**
+     * @var int
+     * @fieldType date
+     */
     private $longDateEnd = 0;
+
+    /**
+     * @var int
+     * @fieldType date
+     */
     private $longDateSpecial = 0;
 
     private $arrCats = null;
@@ -409,36 +432,18 @@ class class_module_news_news extends class_model implements interface_model, int
         return $this->objDB->_pQuery($strQuery, array($this->getIntHits() + 1, $this->getSystemid()));
     }
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldMandatory
-     * @fieldLabel commons_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }
 
-    /**
-     * @return string
-     * @fieldType textarea
-     */
     public function getStrIntro() {
         return $this->strIntro;
     }
 
-    /**
-     * @return string
-     * @fieldType wysiwygsmall
-     */
     public function getStrText() {
         return $this->strText;
     }
 
-    /**
-     * @return string
-     * @fieldType image
-     */
     public function getStrImage() {
         return $this->strImage;
     }
@@ -447,28 +452,40 @@ class class_module_news_news extends class_model implements interface_model, int
         return $this->intHits;
     }
 
-    /**
-     * @return string
-     * @fieldType date
-     */
     public function getIntDateStart() {
         return $this->longDateStart;
     }
 
-    /**
-     * @return string
-     * @fieldType date
-     */
     public function getIntDateEnd() {
         return $this->longDateEnd;
     }
 
-    /**
-     * @return string
-     * @fieldType date
-     */
     public function getIntDateSpecial() {
         return $this->longDateSpecial;
+    }
+
+    public function setLongDateEnd($longDateEnd) {
+        $this->longDateEnd = $longDateEnd;
+    }
+
+    public function getLongDateEnd() {
+        return $this->longDateEnd;
+    }
+
+    public function setLongDateSpecial($longDateSpecial) {
+        $this->longDateSpecial = $longDateSpecial;
+    }
+
+    public function getLongDateSpecial() {
+        return $this->longDateSpecial;
+    }
+
+    public function setLongDateStart($longDateStart) {
+        $this->longDateStart = $longDateStart;
+    }
+
+    public function getLongDateStart() {
+        return $this->longDateStart;
     }
 
     public function getArrCats() {

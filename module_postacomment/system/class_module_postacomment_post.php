@@ -20,18 +20,28 @@ class class_module_postacomment_post extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn postacomment_title
+     *
+     * @fieldType text
+     * @fieldLabel form_comment_title
      */
     private $strTitle;
 
     /**
      * @var string
      * @tableColumn postacomment_comment
+     *
+     * @fieldMandatory
+     * @fieldType textarea
+     * @fieldLabel postacomment_comment
      */
     private $strComment;
 
     /**
      * @var string
      * @tableColumn postacomment_username
+     *
+     * @fieldMandatory
+     * @fieldType text
      */
     private $strUsername;
 
@@ -233,30 +243,14 @@ class class_module_postacomment_post extends class_model implements interface_mo
     }
 
 
-    /**
-     * @return string
-     * @fieldType text
-     * @fieldLabel form_comment_title
-     */
     public function getStrTitle() {
         return $this->strTitle;
     }
 
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldType textarea
-     * @fieldLabel postacomment_comment
-     */
     public function getStrComment() {
         return $this->strComment;
     }
 
-    /**
-     * @return string
-     * @fieldMandatory
-     * @fieldType text
-     */
     public function getStrUsername() {
         return $this->strUsername;
     }
