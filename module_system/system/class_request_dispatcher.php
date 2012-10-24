@@ -238,7 +238,8 @@ class class_request_dispatcher {
             if(_xmlLoader_ === false) {
                 if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
                     class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
-                    throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
+                    return "";
+                    //throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
                 }
             }
 

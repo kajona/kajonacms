@@ -147,4 +147,7 @@
       .on('keydown.dropdown.data-api touchstart.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
   })
 
+
+    $('.dropdown-menu').on('touchstart.dropdown.data-api', function(e) { e.stopPropagation() })
+
 }(window.jQuery);
