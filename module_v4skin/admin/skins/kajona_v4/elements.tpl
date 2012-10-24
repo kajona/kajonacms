@@ -409,7 +409,7 @@ Upload-Field for multiple files with progress bar
 
         <script type="text/javascript">
             KAJONA.admin.loader.loadFile([
-                "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.js",
+                "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.min.js",
                 "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.css"
             ], function() {
 
