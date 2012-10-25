@@ -30,7 +30,7 @@
 <div id="contentWrapper">
 
     <header>
-        <div id="headerLogo"><img src="_webpath_/templates/default/pics/default/logo.jpg" /></div>
+        <div id="headerLogo"><a href="_webpath_"><img src="_webpath_/templates/default/pics/default/logo.jpg" /></a></div>
     </header>
 
     <section>
