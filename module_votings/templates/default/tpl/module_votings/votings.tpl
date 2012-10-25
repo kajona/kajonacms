@@ -53,7 +53,7 @@
         <td colspan="2" data-kajona-editable="%%answer_systemid%%#strText#plain">%%answer_text%%</td>
     </tr>
     <tr>
-        <td width="80%"><img src="_webpath_/templates/default/pics/kajona/icon_progressbar.gif" height="15" width="%%answer_percent%%%" alt="%%answer_percent%%%" /></td>
+        <td width="80%"><img src="_webpath_/templates/default/pics/default/icon_progressbar.gif" height="15" width="%%answer_percent%%%" alt="%%answer_percent%%%" /></td>
         <td>%%answer_hits%% / %%answer_percent%% %</td>
     </tr>
 </voting_result_answer>

@@ -19,7 +19,7 @@
     <!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview -->
 <folderlist>
     <tr class="portalListRow1">
-        <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.png" /></td>
+        <td class="image"><img src="_webpath_/templates/default/pics/default/icon_folderClosed.png" /></td>
         <td class="title"><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
     </tr>
     <tr class="portalListRow2">
@@ -43,7 +43,7 @@
 -->
 <filelist_file>
     <tr class="portalListRow1">
-        <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_downloads.png" /></td>
+        <td class="image"><img src="_webpath_/templates/default/pics/default/icon_downloads.png" /></td>
         <td class="title"><a href="%%file_details_href%%" data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</a></td>
         <td class="center">%%file_size%%</td>
         <td class="actions">%%file_link%%</td>

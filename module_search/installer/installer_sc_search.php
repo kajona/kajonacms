@@ -13,7 +13,7 @@
  *
  * @package module_search
  */
-class class_installer_sc_search implements interface_sc_installer  {
+class class_installer_sc_search implements interface_sc_installer {
 
     /**
      * @var class_db
@@ -25,7 +25,7 @@ class class_installer_sc_search implements interface_sc_installer  {
 
     /**
      * Does the hard work: installs the module and registers needed constants
-     *
+
      */
     public function install() {
         $strReturn = "";
@@ -43,94 +43,115 @@ class class_installer_sc_search implements interface_sc_installer  {
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
-        $strReturn .= "Creating search page\n";
-            $objPage = new class_module_pages_page();
-            $objPage->setStrName("search");
 
-            if($this->strContentLanguage == "de")
-                $objPage->setStrBrowsername("Suchergebnisse");
-            else
-                $objPage->setStrBrowsername("Search results");
+        $strReturn .= "Adding search-element to master page\n";
 
-            $objPage->setStrTemplate("standard.tpl");
-            $objPage->updateObjectToDb($strSystemFolderId);
-            $strSearchresultsId = $objPage->getSystemid();
-            $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
-            $strReturn .= "Adding search-element to new page\n";
-            
-            if(class_module_pages_element::getElement("search") != null) {
-                $objPagelement = new class_module_pages_pageelement();
-                $objPagelement->setStrPlaceholder("results_search");
-                $objPagelement->setStrName("results");
-                $objPagelement->setStrElement("search");
-                $objPagelement->updateObjectToDb($strSearchresultsId);
-                $strElementId = $objPagelement->getSystemid();
-                 $strQuery = "UPDATE "._dbprefix_."element_search
+        if($this->strMasterID != "" && class_module_pages_element::getElement("search") != null) {
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("mastersearch_search");
+            $objPagelement->setStrName("mastersearch");
+            $objPagelement->setStrElement("search");
+            $objPagelement->updateObjectToDb($this->strMasterID);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_search
                                     SET search_template = ?,
                                         search_amount = ?,
                                         search_page = ?
                                     WHERE content_id = ?";
-                    if($this->objDB->_pQuery($strQuery, array("search_ajax.tpl", 0, "", $strElementId)))
-                        $strReturn .= "Search element created.\n";
-                    else
-                        $strReturn .= "Error creating search element.\n";
+            if($this->objDB->_pQuery($strQuery, array("search_ajax_small.tpl", 0, "", $strElementId)))
+                $strReturn .= "Search element created.\n";
+            else
+                $strReturn .= "Error creating search element.\n";
+        }
+
+        $strReturn .= "Creating search page\n";
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("search");
+
+        if($this->strContentLanguage == "de")
+            $objPage->setStrBrowsername("Suchergebnisse");
+        else
+            $objPage->setStrBrowsername("Search results");
+
+        $objPage->setStrTemplate("standard.tpl");
+        $objPage->updateObjectToDb($strSystemFolderId);
+        $strSearchresultsId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
+        $strReturn .= "Adding search-element to new page\n";
+
+        if(class_module_pages_element::getElement("search") != null) {
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("results_search");
+            $objPagelement->setStrName("results");
+            $objPagelement->setStrElement("search");
+            $objPagelement->updateObjectToDb($strSearchresultsId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_search
+                                    SET search_template = ?,
+                                        search_amount = ?,
+                                        search_page = ?
+                                    WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("search_ajax.tpl", 0, "", $strElementId)))
+                $strReturn .= "Search element created.\n";
+            else
+                $strReturn .= "Error creating search element.\n";
+        }
+
+
+        $strReturn .= "Adding headline-element to new page\n";
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strSearchresultsId);
+            $strElementId = $objPagelement->getSystemid();
+
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams = array("Suchergebnisse", $strElementId);
             }
-            
-            
-            $strReturn .= "Adding headline-element to new page\n";
-            if(class_module_pages_element::getElement("row") != null) {
-                $objPagelement = new class_module_pages_pageelement();
-                $objPagelement->setStrPlaceholder("headline_row");
-                $objPagelement->setStrName("headline");
-                $objPagelement->setStrElement("row");
-                $objPagelement->updateObjectToDb($strSearchresultsId);
-                $strElementId = $objPagelement->getSystemid();
+            else {
+                $arrParams = array("Search results", $strElementId);
+            }
 
-                $arrParams = array();
-                if($this->strContentLanguage == "de") {
-                    $arrParams = array("Suchergebnisse", $strElementId);
-                }
-                else {
-                    $arrParams = array("Search results", $strElementId);
-                }
-
-                $strQuery = "UPDATE "._dbprefix_."element_paragraph
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                     SET paragraph_title = ?
                                     WHERE content_id = ?";
 
-                if($this->objDB->_pQuery($strQuery, $arrParams))
-                    $strReturn .= "Headline element created.\n";
-                else
-                    $strReturn .= "Error creating headline element.\n";
-            }
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        }
 
-            $strReturn .= "Creating navigation point.\n";
+        $strReturn .= "Creating navigation point.\n";
 
-            //navigations installed?
+        //navigations installed?
+        $objModule = null;
+        try {
+            $objModule = class_module_system_module::getModuleByName("navigation", true);
+        }
+        catch(class_exception $objException) {
             $objModule = null;
-	        try {
-	            $objModule = class_module_system_module::getModuleByName("navigation", true);
-	        }
-	        catch (class_exception $objException) {
-	            $objModule = null;
-	        }
-	        if($objModule != null) {
+        }
+        if($objModule != null) {
 
-		        $objNavi = class_module_navigation_tree::getNavigationByName("portalnavigation");
-		        $strTreeId = $objNavi->getSystemid();
+            $objNavi = class_module_navigation_tree::getNavigationByName("portalnavigation");
+            $strTreeId = $objNavi->getSystemid();
 
-		        $objNaviPoint = new class_module_navigation_point();
-		        if($this->strContentLanguage == "de") {
-		            $objNaviPoint->setStrName("Suche");
-		        }
-		        else {
-		        	$objNaviPoint->setStrName("Search");
-		        }
-
-		        $objNaviPoint->setStrPageI("search");
-		        $objNaviPoint->updateObjectToDb($strTreeId);
-		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+            $objNaviPoint = new class_module_navigation_point();
+            if($this->strContentLanguage == "de") {
+                $objNaviPoint->setStrName("Suche");
             }
+            else {
+                $objNaviPoint->setStrName("Search");
+            }
+
+            $objNaviPoint->setStrPageI("search");
+            $objNaviPoint->updateObjectToDb($strTreeId);
+            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+        }
 
         return $strReturn;
     }

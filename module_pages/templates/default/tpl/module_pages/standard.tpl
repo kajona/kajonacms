@@ -45,6 +45,7 @@
         <div>
             <div class="contentLeft">
                 %%mastertopnews_news%%
+                <div><a href="_webpath_/xml.php?module=news&amp;action=newsFeed&amp;feedTitle=kajona_news" ><img src="_webpath_/templates/default/pics/default/rss.png" /></a></div>
             </div>
             <div class="contentRight">
                 <!-- Please note that the following list is only for demo-purposes.

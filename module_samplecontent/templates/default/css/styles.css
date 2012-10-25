@@ -1,5 +1,4 @@
 /*"******************************************************************************************************
-*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
@@ -13,360 +12,403 @@
 	system-update.
 */
 
+html {
+    height: 100%;
+}
 
 body {
-    text-align: center;
-    background-color: #a5a5a5;
-    margin: 0px;
-    padding: 0px;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    color: #3b3b3b;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    height: 100%;
+    color: #606060;
+
+    background-color: #050505;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#050505), to(#2a2e31));
+    background: -webkit-linear-gradient(top, #2a2e31, #050505);
+    background: -moz-linear-gradient(top, #2a2e31, #050505);
+    background: -ms-linear-gradient(top, #2a2e31, #050505);
+    background: -o-linear-gradient(top, #2a2e31, #050505);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-table, td {
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    color: #3b3b3b;
-    border: none;
-}
-
-table td {
-    vertical-align: top;
-}
-
-a.hiddenAnchor {
-    margin: 0px !important;
-    padding: 0px !important;
-    border: none !important;
-    display: inline !important;
-    position: absolute !important;
-}
-
-a, a:link, a:visited {
-    color: #246b39;
-    text-decoration: none;
-}
-
-a:hover, a:active, a:focus {
-     text-decoration: underline;
-}
-
-img {
-    border: none;
-}
-
-.clearer {
-    clear: both !important;
+a {
+    color: #3093cc;
 }
 
 
-/* H E A D L I N E S */
 h1 {
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0 0 10px 0;
-    padding: 0px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
-h2 {
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    margin: 0 0 5px 0;
-    padding: 0px;
+div#contentWrapper {
+    width:970px;
+    margin:0px auto;
+    background-color: #FFF;
 }
 
-/* L A Y O U T */
-#bodyContainer {
+footer {
+    background-color: #505050;
+
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#212121), to(#505050));
+    background: -webkit-linear-gradient(top, #505050, #212121);
+    background: -moz-linear-gradient(top, #505050, #212121);
+    background: -ms-linear-gradient(top, #505050, #212121);
+    background: -o-linear-gradient(top, #505050, #212121);
+}
+
+nav#mainnav  {
+    border-bottom: 1px solid #dadada;
+    height: 30px;
+}
+
+
+header, section, footer {
+    padding: 10px;
+}
+
+div.topSearch {
+    margin-top: -28px;
+    display: inline;
+    float: right;
+}
+
+div.topSearch input {
+    border: 1px solid #e0e0e0;
+    background-color: #f8f8f8;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-image: url(../pics/default/search.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+div.topSearch #searchResultSmall {
     position: absolute;
-    left: 50%;
-    margin: 0 -450px;
-	padding-bottom: 20px;
-    width: 900px;
-    top: 20px;
+    display: none;
+    background-color: #ffffff;
+    border: 1px solid #979797;
+    padding: 4px;
+    max-width: 200px;
+    -webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+
 }
 
-#logoHeaderHeader {
-    height: 70px;
-    background-color: #ffffff;
+
+div.contentLeft {
+    width: 20%;
+    float: left;
+    vertical-align: top;
+}
+div.contentRight {
+    margin-left: 24%;
     vertical-align: top;
 }
 
-#imageHeader {
-    width: 900px;
-    height: 180px;
-    background-image: url(../pics/kajona/header1.jpg);
-    background-repeat: no-repeat;
-}
 
-#mainContainer {
-    background-color: #ffffff;
-    padding: 0 15px 0 15px;
-}
-
-
-#headerLogo {
+div.kjParagraph img {
     float: left;
-    background-image: url(../pics/kajona/headerlogo.png);
-    background-repeat: no-repeat;
-    width: 217px;
-    height: 59px;
-    margin-left: 5px;
-    margin-top: 6px;
+    border: 1px solid #dadada;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 2px;
+    margin: 2px;
+}
+div.newsList {
+    margin-bottom: 20px;
+    padding: 0 0 4px 0;
+    border-bottom: 1px dotted #606060;
 }
 
-#headerLogoR {
-    float: right;
-    background-image: url(../pics/kajona/headerlogor.png);
-    background-repeat: no-repeat;
-    width: 189px;
-    height: 32px;
-    margin-right: 5px;
-    margin-top: 30px;
+div.newsList .newsListMore {
+    font-style: italic;
+    font-size: 9px;
+    color: #b1b1b1;
 }
 
-#portalNaviContainer {
-    height: 15px;
-    border-bottom: 1px solid #a5a5a5;
-    padding: 3px 0 3px 0;
+div.newsList .newsListTitle h2 {
+    padding: 0px;
+    margin: 2px;
 }
 
-#mainContentContainer {
+div.newsList .newsListTitle h2 a {
+    text-decoration: none;
+    color:  #606060;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+table.portalList {
+    width: 100%;
+}
+
+table.portalList tr.portalListRow1 {
+    background-color: #f1f1f1;
+}
+
+table.portalList td.title {
     text-align: left;
 }
 
-#footerContainer {
-    border-top: 1px solid #a5a5a5;
-    height: 15px;
-    padding: 2px;
+#headerImage {
+    margin-top: 30px;
+    border: 1px solid #dadada;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    height: 300px;
+    background-image: url(../pics/default/header.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-#footerContainer a {
-    color: #3b3b3b;
+
+
+ul.mainnavul li {
+}
+
+ul.mainnavul li a {
+    padding: 0 5px 0 5px;
+    line-height: 30px;
+    text-decoration: none;
+    color: #777777;
+}
+
+
+
+ul.mainnavul ul {
+    background-color: #1e1e1e;
+    color: #A2A2A2;
+
+}
+
+ul.mainnavul a.active, ul.mainnavul ul a {
+    color: #d1d1d1;
     text-decoration: none;
 }
 
-#mainNaviContainer {
-    width: 130px;
-    float: left;
-    padding-top: 33px;
+ul.mainnavul li.active {
+    background-color: #1e1e1e;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1e1e1e), to(#515151));
+    background: -webkit-linear-gradient(top, #515151, #1e1e1e);
+    background: -moz-linear-gradient(top, #515151, #1e1e1e);
+    background: -ms-linear-gradient(top, #515151, #1e1e1e);
+    background: -o-linear-gradient(top, #515151, #1e1e1e);
+
+    color: #777777;
 }
 
-#pNaviContainer {
-    float: right;
-}
-
-#contentContainer {
-    border-left: 1px solid #a5a5a5;
-    float: right;
-    width: 690px;
-    padding: 30px 20px 0 25px;
-}
-
-.contentSpacer {
-    border: none;
-    height: 15px;
-}
-
-
-/* N A V I G A T I O N S */
-#mainNaviContainer a, #mainNaviContainer a:link, #mainNaviContainer a:visited {
-    color: #3b3b3b;
-    font-size: 13px;
-    font-family: Verdana, arial, sans-serif;
-    font-weight: bold;
+nav#breadcrumbnav {
     text-decoration: none;
+    padding: 5px;
 }
 
-#mainNaviContainer a:hover, #mainNaviContainer a:active, #mainNaviContainer a:focus {
-    text-decoration: underline;
-}
-
-#mainNaviContainer ul {
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-/* level 1 */
-#mainNaviContainer ul li {
-    padding: 0 0 10px 0;
-    margin: 0px;
-}
-
-#mainNaviContainer ul li a.active, #mainNaviContainer ul li a.active:link, #mainNaviContainer ul li a.active:visited {
-    text-decoration: underline;
-}
-
-/* level 2 */
-#mainNaviContainer ul ul li {
+nav#breadcrumbnav ul {
     padding: 0;
-    margin: 0 0 0 10px;
+    margin: 0;
 }
-
-#mainNaviContainer ul ul li a, #mainNaviContainer ul ul li a:link, #mainNaviContainer ul ul li a:visited {
-    font-size: 10px;
-	font-weight: normal;
-}
-
-#mainNaviContainer ul ul li a.active, #mainNaviContainer ul ul li a.active:link, #mainNaviContainer ul ul li a.active:visited {
-    text-decoration: underline;
-}
-
-
-#pNaviContainer ul {
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-#pNaviContainer ul li {
+nav#breadcrumbnav ul li {
     display: inline;
 }
 
-#pNaviContainer a, #pNaviContainer a:link, #pNaviContainer a:visited {
-    text-decoration: none;
-    color: #3b3b3b;
+nav#breadcrumbnav ul li:after {
+    content: " > ";
 }
 
-#pNaviContainer a:hover, #pNaviContainer a:active, #pNaviContainer a:focus {
-    text-decoration: underline;
-}
-
-
-/** F O R M S **/
-#contentContainer form label {
-    display: block;
-    float: left;
-    width: 30%;
-    height: 20px;
-    padding: 2px 0 0 0;
-}
-
-#contentContainer form br {
-    clear: both;
-}
-
-.inputText, .inputTextShort, .inputDate {
-    background-image: url(../pics/kajona/forms_input_back.png);
-    background-repeat: repeat-x;
-    padding: 2px 0 3px 4px;
-    margin: 0 3px 2px 0;
-    display: block;
-    float: left;
-    width: 176px;
-    border: 1px solid #c2c2c2;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+footer, footer a {
     font-size: 11px;
-    color: #737373;
+    color: #dedede;
+    font-weight: bold;
 }
 
-.inputTextarea, .inputTextareaLarge {
-    background-image: url(../pics/kajona/forms_input_back.png);
-    background-repeat: repeat-x;
-    padding: 1px 0 0 4px;
-    margin: 0 3px 0 0;
-    display: block;
+footer li {
+    display: inline;
+    margin: 0 2px 0 2px;
+}
+
+footer .portalnavi {
     float: left;
-    width: 176px;
-    height: 50px;
-    border: 1px solid #c2c2c2;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #737373;
 }
 
-.inputTextareaLarge {
-    width: 300px;
-    height: 150px;
+footer nav#portalnav {
+    display: inline;
 }
 
-.inputText:focus, .inputTextShort:focus, .inputTextarea:focus, .inputDropdown:focus, .inputDate:focus {
-    color: #000000;
-}
-
-.button, .buttonShort {
-    background-image: url(../pics/kajona/forms_button_back_31.png);
-    background-repeat: repeat-x;
-    background-position: left center;
-    padding: 2px 0 3px 15px;
-    margin: 8px 0 0 0;
-    display: block;
-    float: left;
-    width: 182px;
-    border: 1px solid #c2c2c2;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #737373;
-    text-align: left;
-    cursor: pointer;
-}
-
-.button:hover, .buttonShort:hover, .button:focus, .buttonShort:focus {
-    color: #000000;
-}
-
-/* L I S T S */
-.portalList {
-    width: 100%;
+footer .portalnavi ul {
+    margin: 0;
     padding: 0;
+    display: inline;
+}
+
+footer nav#portalnav:after {
+    content: " | ";
+}
+
+footer .copyright {
+    float: right;
+}
+
+footer .languageswitch {
+    display: inline;
+}
+
+footer .languageswitch ul {
+    display: inline;
+}
+
+
+
+
+/* navigation */
+html body ul.mainnavul ul
+,html body ul.mainnavul ul li {
+    width:180px;
+}
+html body ul.mainnavul ul ul {
+    margin:0 0 0 180px;
+}
+
+ul.mainnavul
+,ul.mainnavul * {
+    margin:0; padding:0;
+}
+
+ul.mainnavul {
+    display:block;    position:relative;
+}
+ul.mainnavul li {
+    display:block;    list-style:none;    float:left;    position:relative;
+}
+ul.mainnavul li:hover {
+    visibility:inherit; /* fixes IE7 'sticky bug' */
+}
+ul.mainnavul a,
+ul.mainnavul span {
+    display:block;    position:relative;
+}
+ul.mainnavul ul {
+    position:absolute;    left:0;    width:150px;    top:auto;    left:-999999px;
+}
+ul.mainnavul ul a,
+ul.mainnavul ul span {
+    zoom:1; /* IE6/7 fix */
+}
+ul.mainnavul ul li {
+    float:left; /* Must always be floated otherwise there will be a rogue 1px margin-bottom in IE6/7 */    width:150px;
+}
+ul.mainnavul ul ul {
+    top:0;    margin:0 0 0 150px
+}
+
+ul.mainnavul li:hover ul,ul.mainnavul li:focus ul,ul.mainnavul li.sf-hover ul { /*first level*/
+    left:auto;
+}
+ul.mainnavul li:hover ul ul,ul.mainnavul li:focus ul ul,ul.mainnavul li.sf-hover ul ul {
+    left:-999999px;
+}
+ul.mainnavul ul li:hover ul,ul.mainnavul ul li:focus ul,ul.mainnavul ul li.sf-hover ul {/*second level*/
+    left:auto;
+}
+ul.mainnavul ul li:hover ul ul,ul.mainnavul ul li:focus ul ul,ul.mainnavul ul li.sf-hover ul ul {
+    left:-999999px;
+}
+ul.mainnavul ul ul li:hover ul,ul.mainnavul ul ul li:focus ul,ul.mainnavul ul ul li.sf-hover ul {/*third level*/
+    left:auto;
+}
+ul.mainnavul ul ul li:hover ul ul,ul.mainnavul ul ul li:focus ul ul,ul.mainnavul ul ul li.sf-hover ul ul {
+    left:-999999px;
+}
+ul.mainnavul ul ul ul li:hover ul,ul.mainnavul ul ul ul li:focus ul,ul.mainnavul ul ul ul li.sf-hover ul {/*fourth level*/
+    left:auto;
+}
+ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mainnavul ul ul ul li.sf-hover ul ul {
+    left:-999999px;
+}
+
+
+
+
+/* MODULE-Specific Addons */
+
+/* R A T I N G   B A R (http://www.komodomedia.com/blog/2007/01/css-star-rating-redux/) */
+.inline-rating-bar {
+    display: -moz-inline-block;
+    display: -moz-inline-box;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.rating-icon,
+.rating-icon a:hover,
+.rating-icon a:active,
+.rating-icon a:focus,
+.rating-icon .current-rating{
+    background: url(../pics/default/rating_icons.png) left -1000px repeat-x;
+}
+.rating-icon{
+    position: relative;
+    width: 65px;
+    height: 13px;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-position: left top;
+}
+.rating-icon li{
+    display: inline;
+}
+.rating-icon a,
+.rating-icon .current-rating{
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-indent: -1000em;
+    height: 13px;
+    line-height: 13px;
+    outline: none;
+    overflow: hidden;
     border: none;
 }
-
-.portalListRow1 {
-    height: 22px;
-    background-color: #f0f0f0;
+.rating-icon a:hover,
+.rating-icon a:active,
+.rating-icon a:focus{
+    background-position: left bottom;
 }
-
-.portalListRow1:hover, .portalListRow1:hover td {
-    background-color: #DFDFDF;
-    color: #000000;
+.rating-icon a.icon-1{
+    width: 20%;
+    z-index: 6;
 }
-
-.portalListRow1 td{
-    vertical-align: middle;
+.rating-icon a.icon-2{
+    width: 40%;
+    z-index: 5;
 }
-
-.portalListRow1 .image {
-    padding-left: 2px;
-    padding-right: 3px;
+.rating-icon a.icon-3{
+    width: 60%;
+    z-index: 4;
 }
-
-.portalListRow1 .title {
+.rating-icon a.icon-4{
+    width: 80%;
+    z-index: 3;
+}
+.rating-icon a.icon-5{
     width: 100%;
-    padding-left: 2px;
-    padding-right: 5px;
+    z-index: 2;
+}
+.rating-icon .current-rating{
+    z-index: 1;
+    background-position: left center;
 }
 
-.portalListRow1 .center {
-    white-space: nowrap;
-    padding-right: 5px;
-}
-
-.portalListRow1 .actions {
-    white-space: nowrap;
-    vertical-align: middle;
-    text-align: right;
-}
-
-.portalListRow2 {
-    height: 22px;
-}
-.portalListRow2 .description {
-    vertical-align: middle;
-    text-align: left;
-    padding-left: 2px;
-}
-
-.portalListRow1 .actions img {
-    margin-right: 2px;
-}
-
-.portalListRow1 .rating, .portalListRow2 .rating {
-    white-space: nowrap;
-}
 
 /* T O O L T I P */
 .kajonaTooltip {
@@ -375,95 +417,54 @@ h2 {
     font-size: 10px;
     text-align: left;
     background-color: #ffffff;
-    border: 1px solid #00e800;
+    border: 1px solid #979797;
     padding: 4px;
     max-width: 200px;
     -webkit-box-shadow: 2px 2px 5px -3px #000000;
     -moz-box-shadow: 2px 2px 5px -3px #000000;
     box-shadow: 2px 2px 5px -3px #000000;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+/* MEDIAMANAGER */
+.mmPathnavigation {
+    display: none;
 }
 
 
-/* E L E M E N T  P A R A G R A P H */
-.element_paragraph_image {
-    float: right;
-    margin: 0 0px 10px 10px;
-}
-
-/* E L E M E N T  I M A G E */
-.element_image {
-    margin-bottom: 10px;
-}
-
-/* E L E M E N T  T A G T O */
-.element_tagto {
-    font-size: 12px;
-}
-
-/* E L E M E N T  L A N G U A G E S W I T C H */
-#languageSwitchContainer {
+/* FORMS */
+.contentRight form label {
+    display: block;
     float: left;
+    text-align: right;
+    width: 20%;
+    height: 20px;
+    padding: 2px 4px 0 0;
 }
 
-#languageSwitchContainer a {
-    color: #3b3b3b;
-    text-decoration: none;
-    text-transform: uppercase;
+.contentRight form br {
+    clear: both;
 }
 
-#languageSwitchContainer a:hover {
-    text-decoration: underline;
-}
-
-/* N E W S */
-.newsList {
-	margin-bottom: 10px;
-}
-.newsListHeader {
-    background-color: #f0f0f0;
-}
-.newsListTitle {
+.contentRight form input, .contentRight form textarea {
+    border: 1px solid #dadada;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    display: block;
     float: left;
-    background-image: url(../pics/kajona/news_button_31.gif);
-    background-repeat: no-repeat;
-    text-indent: 15px;
-}
-.newsListTitle h2 {
-    font-size: 11px;
-    font-weight: bold;
-    margin: 0px;
-}
-.newsListMore {
-    float: right;
-}
-.newsListTeaser {
-    background-color: #32b059;
-}
-.newsListTeaser div {
-    margin-left: 10px;
-    background-color: #ffffff;
-    padding-left: 5px;
-}
-.newsDetail, .newsDetail p {
-}
-.newsDetail h2 {
-    font-weight: bold;
-}
-.newsTeaser {
-    margin-top: 20px;
-    font-style: italic;
-}
-.newsDetail img {
-    margin: 5px;
+    width: 176px;
 }
 
-/* Template: demo_bloglike.tpl */
-.newsListBlog {
-    margin-bottom: 8px;
+.contentRight form textarea {
+    width: 300px;
 }
-.newsListBlog p {
-    padding: 0;
-    margin: 0;
+
+
+.contentRight form input[type="button"]:hover, .contentRight form input[type="button"]:focus {
+    color: #000000;
 }
 
 /* S E A R C H */
@@ -471,37 +472,9 @@ h2 {
     background-color: #ffff00;
 }
 
-/* F A Q S */
-.faqCategory {
-    padding-bottom: 20px;
-}
-
-.faqCategory .faqCategoryTitle {
-    font-style: italic;
-}
-
-.faqCategory .faqCategoryTitle h3 {
-    padding: 0px;
-    margin: 0px;
-    padding-bottom: 2px;
-}
-
-.faqFaq {
-    border: 1px solid #f0f0f0;
-    margin-bottom: 2px;
-}
-
-.faqFaq .faqFaqAnswer {
-    margin: 2px;
-}
-
-.faqFaq .faqFaqQuestion {
-    background-color: #f0f0f0;
-}
-
 /* P O S T A C O M M E N T */
 #postaCommentForm {
-	display: none;
+    display: none;
     margin-bottom: 5px;
 }
 
@@ -536,90 +509,4 @@ h2 {
 .pacRating {
     float: right;
     padding: 1px 1px 0 1px;
-}
-
-/* G U E S T B O O K */
-.guestbook .posts table {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-/* G A L L E R Y */
-.picstrip .currentPic {
-	margin: 0 4px 0 4px;
-}
-
-.picstrip .currentPic img {
-	border: 3px solid #a5a5a5;
-}
-
-
-/* R A T I N G   B A R (http://www.komodomedia.com/blog/2007/01/css-star-rating-redux/) */
-.inline-rating-bar {
-	display: -moz-inline-block;
-	display: -moz-inline-box;
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.rating-icon,
-.rating-icon a:hover,
-.rating-icon a:active,
-.rating-icon a:focus,
-.rating-icon .current-rating{
-	background: url(../pics/kajona/rating_icons.png) left -1000px repeat-x;
-}
-.rating-icon{
-	position: relative;
-	width: 65px;
-	height: 13px;
-	overflow: hidden;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	background-position: left top;
-}
-.rating-icon li{
-	display: inline;
-}
-.rating-icon a,
-.rating-icon .current-rating{
-	position: absolute;
-	top: 0;
-	left: 0;
-	text-indent: -1000em;
-	height: 13px;
-	line-height: 13px;
-	outline: none;
-	overflow: hidden;
-	border: none;
-}
-.rating-icon a:hover,
-.rating-icon a:active,
-.rating-icon a:focus{
-	background-position: left bottom;
-}
-.rating-icon a.icon-1{
-	width: 20%;
-	z-index: 6;
-}
-.rating-icon a.icon-2{
-	width: 40%;
-	z-index: 5;
-}
-.rating-icon a.icon-3{
-	width: 60%;
-	z-index: 4;
-}
-.rating-icon a.icon-4{
-	width: 80%;
-	z-index: 3;
-}
-.rating-icon a.icon-5{
-	width: 100%;
-	z-index: 2;
-}
-.rating-icon .current-rating{
-	z-index: 1;
-	background-position: left center;
 }

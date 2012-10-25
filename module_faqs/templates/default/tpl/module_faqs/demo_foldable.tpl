@@ -21,7 +21,7 @@
         <div class="faqFaqQuestion">
             <table cellspacing="0" class="portalList">
                 <tr class="portalListRow1">
-                    <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_question.gif" /></td>
+                    <td class="image"><img src="_webpath_/templates/default/pics/default/icon_question.gif" /></td>
                     <td class="title"><a href="#" onclick="KAJONA.util.fold('%%faq_systemid%%'); return false;" data-kajona-editable="%%faq_systemid%%#strQuestion#plain">%%faq_question%%</a></td>
                     <td class="rating">%%faq_rating%%</td>
                 </tr>

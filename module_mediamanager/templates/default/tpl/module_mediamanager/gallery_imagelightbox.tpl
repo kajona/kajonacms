@@ -47,7 +47,7 @@
 <folderlist>
     <table cellspacing="0" class="portalList">
         <tr class="portalListRow1">
-            <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.png" /></td>
+            <td class="image"><img src="_webpath_/templates/default/pics/default/icon_folderClosed.png" /></td>
             <td class="title"><a href="%%folder_href%%"  data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
         </tr>
         <tr class="portalListRow2">
@@ -60,7 +60,7 @@
 <folderlist_preview>
     <table cellspacing="0" class="portalList">
         <tr class="portalListRow1">
-            <td class="image"><img src="_webpath_/templates/default/pics/kajona/icon_folderClosed.png" /></td>
+            <td class="image"><img src="_webpath_/templates/default/pics/default/icon_folderClosed.png" /></td>
             <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
         </tr>
         <tr class="portalListRow2">

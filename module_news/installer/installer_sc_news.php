@@ -37,7 +37,7 @@ class class_installer_sc_news implements interface_sc_installer  {
             $this->strIndexID = $objIndex->getSystemid();
 
         if($objMaster != null)
-            $this->strMasterID = $objIndex->getSystemid();
+            $this->strMasterID = $objMaster->getSystemid();
 
         $strReturn .= "Creating new category...\n";
         $objNewsCategory = new class_module_news_category();
@@ -91,7 +91,7 @@ class class_installer_sc_news implements interface_sc_installer  {
                 $objPagelement->setStrPlaceholder("mastertopnews_news");
                 $objPagelement->setStrName("mastertopnews");
                 $objPagelement->setStrElement("news");
-                $objPagelement->updateObjectToDb($this->strIndexID);
+                $objPagelement->updateObjectToDb($this->strMasterID);
                 $strElementId = $objPagelement->getSystemid();
                 $strQuery = "UPDATE "._dbprefix_."element_news
                                 SET news_category=?,
