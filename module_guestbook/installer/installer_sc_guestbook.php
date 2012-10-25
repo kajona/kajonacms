@@ -39,7 +39,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $strReturn .= "Creating new guestbook...\n";
         $objGuestbook = new class_module_guestbook_guestbook();
         $objGuestbook->setStrGuestbookTitle("Guestbook");
-        $objGuestbook->setIntGuestbookModerated(1);
+        $objGuestbook->setIntGuestbookModerated(0);
         $objGuestbook->updateObjectToDb();
         $strGuestbookID = $objGuestbook->getSystemid();
         $strReturn .= "ID of new guestbook: ".$strGuestbookID."\n";

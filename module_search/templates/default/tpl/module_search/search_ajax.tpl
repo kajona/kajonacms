@@ -32,7 +32,7 @@
 
                 searchRunning = true;
                 KAJONA.portal.search.strLastQuery = strCurrentQuery;
-                $('#searchResult').html("<div style='height: 50px; background-image: url(_webpath_/templates/default/pics/kajona/loading.gif); background-repeat: no-repeat; background-position: center;'></div>");
+                $('#searchResult').html("<div style='height: 50px; background-image: url(_webpath_/templates/default/pics/default/loading.gif); background-repeat: no-repeat; background-position: center;'></div>");
 
                 $.post(post_target, post_data, function(data, textStatus) {
                     $('#searchResult').html("<ul></ul>");

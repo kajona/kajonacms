@@ -20,6 +20,8 @@
 
 <level_2_inactive></level_2_inactive>
 
+<level_3_active>
 <li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a></li>
+</level_3_active>
 
 <level_3_inactive></level_3_inactive>

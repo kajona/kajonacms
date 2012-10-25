@@ -111,17 +111,25 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $arrParams = array();
             if($this->strContentLanguage == "de") {
                 $arrParams[] = "Herzlichen Glückwunsch!";
-                $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
-                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
-                $arrParams[] = "/files/images/samples/P3197800.JPG";
+                $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V4.<br />
+                                Nehmen Sie sich die Zeit und betrachten Sie die einzelnen Seiten, die mit Beispielinhalten befüllt wurde. Sie gelangen jederzeit auf diese
+                                Seite durch den Link &quot;Home&quot; zurück.<br/>
+                                Um die Inhalte der Webseite zu verändern sollten Sie sich als erstes am Administrationsbereich <a href='_webpath_/admin'>anmelden</a>.
+                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a><br/>
+                                Das gesamte Kajona-Team wünscht viel Spa&szlig; beim Verwalten der Webseite mit Kajona!";
+                $arrParams[] = "/files/images/upload/teaser.jpg";
                 $arrParams[] = $strElementId;
 
             }
             else {
                 $arrParams[] = "Congratulations!";
-                $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona!<br />
-                                 For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
-                $arrParams[] = "/files/images/samples/P3197800.JPG";
+                $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona V4!<br />
+                                Take some time and watch the pages already created and have a look at the sample-contents assigned to those page.
+                                You may return to this page any time by clicking the &quot;home&quot; link.<br/>
+                                To modify the contents of this webpage you have to <a href='_webpath_/admin'>log in</a> at the adminstration-backend.
+                                For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a><br/>
+                                The Kajona-Team hopes you'll enjoy managing your website with Kajona!";
+                $arrParams[] = "/files/images/upload/teaser.jpg";
                 $arrParams[] = $strElementId;
             }
 
@@ -283,7 +291,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                                Telefon<br />
                                E-Mail<br />
                                <br />
-                               Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\">Kajona</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona\" /></a><br />";
+                               Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\">Kajona</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\"><img src=\"_webpath_/templates/default/pics/default/kajona_poweredby.png\" alt=\"Kajona\" /></a><br />";
                 $arrParams[] = $strElementId;
 
             }
@@ -296,7 +304,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                                Phone<br />
                                Mail<br />
                                <br />
-                               Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\">Kajona</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona\" /></a><br />";
+                               Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\">Kajona</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\"><img src=\"_webpath_/templates/default/pics/default/kajona_poweredby.png\" alt=\"Kajona\" /></a><br />";
                 $arrParams[] = $strElementId;
             }
 

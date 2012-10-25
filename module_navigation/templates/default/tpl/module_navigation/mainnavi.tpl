@@ -6,14 +6,14 @@
 <!-- available placeholders in each section: link, text, href, target, image, image_src, page_intern, page_extern, level(x+1), lastmodified -->
 
 
-<level_1_wrapper><nav id="mainnav"><ul>%%level1%%</ul></nav></level_1_wrapper>
+<level_1_wrapper><nav id="mainnav"><ul class="mainnavul">%%level1%%</ul></nav></level_1_wrapper>
 
 <level_1_active>
-<li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level2%%</li>
+<li class="active"><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level2%%</li>
 </level_1_active>
 
 <level_1_inactive>
-<li><a href="%%href%%" target="%%target%%">%%text%%</a></li>
+<li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level2%%</li>
 </level_1_inactive>
 
 
@@ -26,7 +26,7 @@
 </level_2_active>
 
 <level_2_inactive>
-<li><a href="%%href%%" target="%%target%%">%%text%%</a></li>
+<li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level2%%</li>
 </level_2_inactive>
 
 
@@ -39,5 +39,5 @@
 </level_3_active>
 
 <level_3_inactive>
-<li><a href="%%href%%" target="%%target%%">%%text%%</a></li>
+<li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level2%%</li>
 </level_3_inactive>

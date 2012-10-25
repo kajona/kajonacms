@@ -106,7 +106,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
                           "pe_action_edit_params" => "&systemid=".$objOneNews->getSystemid(),
                           "pe_action_new" => "newNews",
                           "pe_action_new_params" => "",
-                          "pe_action_delete" => "deleteNews",
+                          "pe_action_delete" => "delete",
                           "pe_action_delete_params" => "&systemid=".$objOneNews->getSystemid()
                     );
 				    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig);

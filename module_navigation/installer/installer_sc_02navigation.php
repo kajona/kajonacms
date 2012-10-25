@@ -110,6 +110,28 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                     $strReturn .= "Error creating navigation element.\n";
 
             }
+
+            $strReturn .= "Adding pathnavigation to master page\n";
+            $strReturn .= "ID of master page: ".$this->strMasterID."\n";
+
+            if(class_module_pages_element::getElement("navigation") != null) {
+                $objPagelement = new class_module_pages_pageelement();
+                $objPagelement->setStrPlaceholder("masterpathnavi_navigation");
+                $objPagelement->setStrName("masterpathnavi");
+                $objPagelement->setStrElement("navigation");
+                $objPagelement->updateObjectToDb($this->strMasterID);
+                $strElementId = $objPagelement->getSystemid();
+                $strQuery = "UPDATE "._dbprefix_."element_navigation
+                                SET navigation_id= ?,
+                                    navigation_template = ?,
+                                    navigation_mode = ?
+                                WHERE content_id = ?";
+                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "breadcrumbnavi.tpl", "tree", $strElementId)))
+                    $strReturn .= "Navigation element created.\n";
+                else
+                    $strReturn .= "Error creating navigation element.\n";
+
+            }
         }
 
         $strReturn .= "Creating simple sitemap...\n";

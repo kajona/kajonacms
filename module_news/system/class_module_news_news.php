@@ -59,18 +59,21 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var int
      * @fieldType date
+     * @fieldLabel form_news_datestart
      */
     private $longDateStart = 0;
 
     /**
      * @var int
      * @fieldType date
+     * @fieldLabel form_news_dateend
      */
     private $longDateEnd = 0;
 
     /**
      * @var int
      * @fieldType date
+     * @fieldLabel form_news_datespecial
      */
     private $longDateSpecial = 0;
 

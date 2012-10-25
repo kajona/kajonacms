@@ -25,7 +25,7 @@ KAJONA.portal.postacomment = (function() {
         }
 
         //show loading animation
-        $("#postacommentFormWrapper_"+strSystemId).html('<div align="center" class="loading"><img src="'+KAJONA_WEBPATH+'/templates/default/pics/kajona/loading.gif" /></div>');
+        $("#postacommentFormWrapper_"+strSystemId).html('<div align="center" class="loading"><img src="'+KAJONA_WEBPATH+'/templates/default/pics/default/loading.gif" /></div>');
 
         //hide button
         $('#postaCommentButton_'+strSystemId).css('display', 'none');

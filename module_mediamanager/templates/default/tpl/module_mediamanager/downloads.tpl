@@ -2,7 +2,7 @@
 
 <!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
-    <p>%%pathnavigation%%</p>
+    <div class="mmPathnavigation">%%pathnavigation%%</div>
     <p>
         <table cellspacing="0" class="portalList">
             %%folderlist%%

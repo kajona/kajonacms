@@ -21,6 +21,7 @@ class class_installer_sc_news implements interface_sc_installer  {
     private $strContentLanguage;
 
     private $strIndexID = "";
+    private $strMasterID = "";
 
     /**
      * Does the hard work: installs the module and registers needed constants
@@ -31,8 +32,12 @@ class class_installer_sc_news implements interface_sc_installer  {
 
         //search the index page
         $objIndex = class_module_pages_page::getPageByName("index");
+        $objMaster = class_module_pages_page::getPageByName("master");
         if($objIndex != null)
             $this->strIndexID = $objIndex->getSystemid();
+
+        if($objMaster != null)
+            $this->strMasterID = $objIndex->getSystemid();
 
         $strReturn .= "Creating new category...\n";
         $objNewsCategory = new class_module_news_category();
@@ -44,12 +49,12 @@ class class_installer_sc_news implements interface_sc_installer  {
         $objNews = new class_module_news_news();
 
         if($this->strContentLanguage == "de") {
-            $objNews->setStrTitle("Kajona wurde erfolgreich installiert");
+            $objNews->setStrTitle("Erfolgreich installiert");
             $objNews->setStrText("Eine weitere Installation von Kajona V3 war erfolgreich. Für weitere Infomationen zu Kajona besuchen Sie www.kajona.de.");
             $objNews->setStrIntro("Kajona wurde erfolgreich installiert...");
         }
         else {
-            $objNews->setStrTitle("Installation was successful");
+            $objNews->setStrTitle("Installation successful");
             $objNews->setStrText("Another installation of Kajona was successful. For further information, support or proposals, please visit our website: www.kajona.de");
             $objNews->setStrIntro("Kajona installed successfully...");
         }
@@ -60,13 +65,31 @@ class class_installer_sc_news implements interface_sc_installer  {
         $objNews->updateObjectToDb();
         $strNewsId = $objNews->getSystemid();
         $strReturn .= "ID of new news: ".$strNewsId."\n";
-        $strReturn .= "Adding news element to the index-page...\n";
-        if($this->strIndexID != "") {
+
+
+        $strReturn .= "Creating news\n";
+        $objNews = new class_module_news_news();
+
+        $objNews->setStrTitle("Sed non enim est");
+        $objNews->setStrText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non enim est, id hendrerit metus. Sed tempor quam sed ante viverra porta. Quisque sagittis egestas tortor, in euismod sapien iaculis at. Nullam vitae nunc tortor. Mauris justo lectus, bibendum et rutrum id, fringilla eget ipsum. Nullam volutpat sodales mollis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis tempor ante eget justo blandit imperdiet. Praesent ut risus tempus metus sagittis fermentum eget eu elit. Mauris consequat ornare massa, a rhoncus enim sodales auctor. Duis lacinia dignissim eros vel mollis. Etiam metus tortor, pellentesque eu ultricies sit amet, elementum et dolor. Proin tincidunt nunc id magna volutpat lobortis. Vivamus metus quam, accumsan eget vestibulum vel, rutrum sit amet mauris. Phasellus lectus leo, vulputate eget molestie et, consectetur nec urna. ");
+        $objNews->setStrIntro("Quisque sagittis egestas tortor");
+
+        $objNews->setIntDateStart(class_date::getCurrentTimestamp());
+        $objNews->setArrCats(array($strCategoryID => 1));
+        $objNews->setBitUpdateMemberships(true);
+        $objNews->updateObjectToDb();
+        $strNewsId = $objNews->getSystemid();
+        $strReturn .= "ID of new news: ".$strNewsId."\n";
+
+
+
+        $strReturn .= "Adding news element to the master-page...\n";
+        if($this->strMasterID != "") {
             
             if(class_module_pages_element::getElement("news") != null) {
                 $objPagelement = new class_module_pages_pageelement();
-                $objPagelement->setStrPlaceholder("news_news");
-                $objPagelement->setStrName("news");
+                $objPagelement->setStrPlaceholder("mastertopnews_news");
+                $objPagelement->setStrName("mastertopnews");
                 $objPagelement->setStrElement("news");
                 $objPagelement->updateObjectToDb($this->strIndexID);
                 $strElementId = $objPagelement->getSystemid();

@@ -1,4 +1,6 @@
 %%mastermainnavi_navigation%%
 %%masterportalnavi_navigation%%
-%%mastermodified_lastmodified%%
+%%masterpathnavi_navigation%%
 %%masterlanguageswitch_languageswitch%%
+%%mastertopnews_news%%
+%%mastersearch_search%%

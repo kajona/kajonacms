@@ -36,7 +36,7 @@
 
     </script>
 
-    <p>%%pathnavigation%%</p>
+    <div class="mmPathnavigation">%%pathnavigation%%</div>
     %%folderlist%%
     <ul id="pv_%%systemid%%">%%filelist%%</ul>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
