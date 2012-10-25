@@ -45,6 +45,6 @@ class class_email_validator implements interface_validator {
      * @return string
      */
     public function getStrName() {
-        return "text";
+        return "email";
     }
 }
