@@ -3,7 +3,9 @@
 <!-- available placeholders: action, search_term -->
 <search_form>
     <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8">
-        <input type="text" name="searchterm" id="resultSearchtermSmall" value="%%search_term%%" onkeyup="KAJONA.portal.searchSmall.queryBackend();" onblur="$('#searchResultSmall').css('display', 'none');" autocomplete="off" />
+        <input type="text" name="searchterm" id="resultSearchtermSmall" value="%%search_term%%"
+               onkeyup="KAJONA.portal.searchSmall.queryBackend();"
+               onblur="window.setTimeout( function() { $('#searchResultSmall').css('display', 'none');}, 200)" autocomplete="off" />
     </form>
 
     <div id="searchResultSmall"></div>
