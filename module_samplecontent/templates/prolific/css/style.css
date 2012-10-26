@@ -275,7 +275,7 @@ ul.list li.first {
 .rating-icon a:active,
 .rating-icon a:focus,
 .rating-icon .current-rating{
-    background: url(../../default/pics/kajona/rating_icons.png) left -1000px repeat-x;
+    background: url(../../default/pics/default/rating_icons.png) left -1000px repeat-x;
 }
 .rating-icon{
     position: relative;
