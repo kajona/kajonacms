@@ -184,6 +184,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_type")." ".$this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version")." ".$objHandler->getObjMetadata()->getStrVersion());
+            if($objHandler->getVersionInstalled() != null) {
+                $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version_installed")." ".$objHandler->getVersionInstalled());
+
+            }
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules"));
             foreach($objHandler->getObjMetadata()->getArrRequiredModules() as $strOneModule => $strVersion) {
@@ -193,7 +197,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if(!$objHandler->getObjMetadata()->getBitProvidesInstaller() || $objHandler->isInstallable()) {
 
-                $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".$objHandler->getStrTargetPath());
+                if($objHandler->getVersionInstalled() != null)
+                    $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".$objHandler->getStrTargetPath());
+                else
+                    $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".dirname($objHandler->getStrTargetPath()));
 
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
                 $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);

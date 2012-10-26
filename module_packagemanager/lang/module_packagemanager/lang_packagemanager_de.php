@@ -50,6 +50,7 @@ $lang["package_target_writable"]         = "Für die Installation werden Schreib
 $lang["package_type"]                    = "Typ:";
 $lang["package_updatefound"]             = "Update des Pakets auf die neuste Version ";
 $lang["package_version"]                 = "Version:";
+$lang["package_version_installed"]       = "Installierte Version:";
 $lang["provider_error_package"]          = "Das geladene Paket stellt kein gültiges Archiv dar.";
 $lang["provider_error_transfer"]         = "Fehler beim Transfer des Paketes.";
 $lang["provider_kajona"]                 = "Offizielle Kajona Pakete";

@@ -115,6 +115,16 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      * @return string|null
      */
     public function getVersionInstalled() {
+
+        $strTarget = $this->objMetadata->getStrTarget();
+
+        if(is_dir(_realpath_."/templates/".$strTarget)) {
+            $objManager = new class_module_packagemanager_metadata();
+            $objManager->autoInit("/templates/".$strTarget);
+            return $objManager->getStrVersion();
+        }
+
+
         return null;
     }
 

@@ -50,6 +50,7 @@ $lang["package_target_writable"]         = "To install the package, write permis
 $lang["package_type"]                    = "Type:";
 $lang["package_updatefound"]             = "Update the package to the latest version ";
 $lang["package_version"]                 = "Version:";
+$lang["package_version_installed"]       = "Version installed:";
 $lang["provider_error_package"]          = "The packages is no valid archive.";
 $lang["provider_error_transfer"]         = "Error while transfering the package.";
 $lang["provider_kajona"]                 = "Official Kajona packages";
