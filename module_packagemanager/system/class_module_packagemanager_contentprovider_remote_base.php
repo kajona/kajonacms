@@ -102,7 +102,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
                 getLinkAdmin(
                     "packagemanager",
                     "uploadPackage",
-                    "provider=".__CLASS__."&systemid=".$arrOnePackage["systemid"],
+                    "provider=".get_class($this)."&systemid=".$arrOnePackage["systemid"],
                     $objLang->getLang("package_install", "packagemanager"),
                     $objLang->getLang("package_install", "packagemanager"),
                     "icon_downloads.png"
