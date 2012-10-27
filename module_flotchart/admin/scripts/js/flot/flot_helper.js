@@ -5,6 +5,9 @@
 
 var flotHelper = {};
 
+flotHelper.tooltipOffsetX = 5;
+flotHelper.tooltipOffsetY = -60;
+
 flotHelper.getTickFormatter = function(angle, val, axis) {
     /* Safari */
     var safari = "-webkit-transform: rotate("+angle+"deg); ";
@@ -25,8 +28,8 @@ flotHelper.showTooltip = function(x, y, contents, color) {
     $('<div id=\"tooltip\">' + contents + '</div>').css( {
         position: 'absolute',
         display: 'none',
-        top: y + 5,
-        left: x + 5,
+        top: y + flotHelper.tooltipOffsetX,
+        left: x + flotHelper.tooltipOffsetY,
         border: '1px solid '+color,
         padding: '2px',
         'background-color': '#fee',
@@ -40,10 +43,16 @@ flotHelper.doToolTip = function(event, pos, item) {
 
 
     if (item) {
+        //if series and datapoint are the same do nothings
         if(previousPoint == item.dataIndex && previousSeries == item.seriesIndex) {
-            return;
+            //move tooltip if still in the same series
+            $('#tooltip').css( {
+                top: pos.pageY + flotHelper.tooltipOffsetX,
+                left: pos.pageX + flotHelper.tooltipOffsetY
+            })
         }
         
+        //create new tooltip if series or datapoint changes
         if (previousPoint != item.dataIndex || previousSeries != item.seriesIndex) {
             previousPoint = item.dataIndex;
             previousSeries = item.seriesIndex;
@@ -53,7 +62,6 @@ flotHelper.doToolTip = function(event, pos, item) {
             y = item.datapoint[1],
             color = item.series.color,
             content = '<u>'+item.series.label+'</u>\n';
- 
             
             var ticks = item.series.xaxis.ticks;
             var label = ticks[item.dataIndex].label;
@@ -86,8 +94,8 @@ flotHelper.doToolTip = function(event, pos, item) {
 };
 
 flotHelper.showPieToolTip = function(event, pos, item) {
-    
     if(item) {
+        //changed tooltip if series changes
         if (previousSeries != item.seriesIndex) {
             $('#tooltip').remove();
             previousSeries = item.seriesIndex;
@@ -96,10 +104,10 @@ flotHelper.showPieToolTip = function(event, pos, item) {
             var content = '<span style=\"\">'+'<u>'+item.series.label+'</u><br/>'+percent.toFixed(2)+'%</span>';
             flotHelper.showTooltip(pos.pageX, pos.pageY, content, item.series.color);
         } else {
-            //move tooltip
+            //move tooltip if still in the same series
             $('#tooltip').css( {
-                top: pos.pageY + 5,
-                left: pos.pageX + 5
+                top: pos.pageY + flotHelper.tooltipOffsetX,
+                left: pos.pageX + flotHelper.tooltipOffsetY
             })
         }
     }
@@ -110,7 +118,6 @@ flotHelper.showPieToolTip = function(event, pos, item) {
 };
 
 flotHelper.getTickArray = function(angle, axis, tickArray) {
-    
     //hack for executing the tickFormatter even if the value of a tick is being set
     tickArray.forEach(function(tick) {
         if(tick[1]) {
