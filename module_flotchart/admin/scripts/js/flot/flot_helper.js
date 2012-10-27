@@ -47,13 +47,12 @@ flotHelper.doToolTip = function(event, pos, item) {
             var x = item.datapoint[0].toFixed(3),
             y = item.datapoint[1].toFixed(3),
             color = item.series.color,
-            conten = '';
+            content = '';
  
             if(item.series.xaxis.ticks) {
                 var tick = item.series.xaxis.ticks[item.dataIndex].label;
                 x = tick;
-                content = '<b>'+item.series.label+'</b>'
-                +'<br/>' + x + ' = ' + y, color;
+                content = '<b>'+item.series.label+'</b><br/>' + x + ' = ' + y, color;
             }
             else {
                 content = '<b>'+item.series.label+'</b>'
@@ -68,6 +67,34 @@ flotHelper.doToolTip = function(event, pos, item) {
     else {
         $('#tooltip').remove();
         previousPoint = null;            
+    }
+}
+
+flotHelper.showPieToolTip = function(event, pos, item) {
+    
+    if(item) {
+        if (previousPoint != item.seriesIndex) {
+            $('#tooltip').remove();
+            previousPoint = item.seriesIndex;
+            
+            
+      
+            //create new tooltip
+            var percent = parseFloat(item.series.percent).toFixed(2);
+            var content = '<span style=\"font-weight: bold; \">'+item.series.label+' ('+percent+'%)</span>';
+            flotHelper.showTooltip(pos.pageX, pos.pageY, content, item.series.color);
+        } else {
+            //move tooltip
+            $('#tooltip').css( {
+                top: pos.pageY + 5,
+                left: pos.pageX + 5
+            })
+        }
+        
+    }
+    else {
+        $('#tooltip').remove(); 
+        previousPoint = null;
     }
 }
 

@@ -20,8 +20,8 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
 
     protected $bShowLabels = true;
     protected $labelStyleSheets = "font-size:11px ;text-align:center; padding:2px; color:white";
-    protected $dLabelRadius = 0.6;
-    protected $dTilt = 0.7;
+    protected $dLabelRadius = 0.8;
+    protected $dTilt = 1;
     protected $dLabelBackroundOpacity = 0.8;
     protected $dPieChartRaduis = 1;
 
@@ -129,18 +129,8 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
     }
 
     public function showChartToolTips($strChartId) {
-        $tooltip =
-                "<script type='text/javascript'>
-                $(\"#" . $strChartId . "\").bind(\"plothover\", pieHover);
-                function pieHover(event, pos, obj) {
-                    if (!obj)
-                        return;
-
-                    percent = parseFloat(obj.series.percent).toFixed(2);
-                    $(\"#pieHover\").html('<span style=\"font-weight: bold; color: '+obj.series.color+'\">'+obj.series.label+' ('+percent+'%)</span>');
-                }
-                </script>";
-
+        $tooltip = "var previousPoint = null; \n
+                    $('#" . $strChartId . "').bind('plothover', flotHelper.showPieToolTip);";
         return $tooltip;
     }
 
