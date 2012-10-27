@@ -129,7 +129,8 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
     }
 
     public function showChartToolTips($strChartId) {
-        $tooltip = "var previousPoint = null; \n
+        $tooltip = "var previousSeries = null; \n
+                    var previousPoint = null; \n
                     $('#" . $strChartId . "').bind('plothover', flotHelper.showPieToolTip);";
         return $tooltip;
     }

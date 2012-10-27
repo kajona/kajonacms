@@ -27,11 +27,11 @@ flotHelper.showTooltip = function(x, y, contents, color) {
         display: 'none',
         top: y + 5,
         left: x + 5,
-        border: '2px solid '+color,
+        border: '1px solid '+color,
         padding: '2px',
         'background-color': '#fee',
         opacity: 0.80
-    }).appendTo("body").fadeIn(200);
+    }).appendTo("body").show();
 };
 
 flotHelper.doToolTip = function(event, pos, item) {
@@ -40,8 +40,15 @@ flotHelper.doToolTip = function(event, pos, item) {
 
 
     if (item) {
-        if (previousPoint != item.dataIndex) {
+        console.debug(item);
+        
+        if(previousPoint == item.dataIndex && previousSeries == item.seriesIndex) {
+            return;
+        }
+        
+        if (previousPoint != item.dataIndex || previousSeries != item.seriesIndex) {
             previousPoint = item.dataIndex;
+            previousSeries = item.seriesIndex;
 
             $('#tooltip').remove();
             var x = item.datapoint[0].toFixed(3),
@@ -52,7 +59,7 @@ flotHelper.doToolTip = function(event, pos, item) {
             if(item.series.xaxis.ticks) {
                 var tick = item.series.xaxis.ticks[item.dataIndex].label;
                 x = tick;
-                content = '<b>'+item.series.label+'</b><br/>' + x + ' = ' + y, color;
+                content = '<b>'+item.series.label+'</b><br/>' + x + ' = ' + y;
             }
             else {
                 content = '<b>'+item.series.label+'</b>'
@@ -61,21 +68,23 @@ flotHelper.doToolTip = function(event, pos, item) {
                 +'<br/>'
                 +'y = ' + y
             }
-            flotHelper.showTooltip(item.pageX, item.pageY, content, color);
+            flotHelper.showTooltip(pos.pageX, pos.pageY, content, color);
         }
     }
     else {
+        console.debug("else");
         $('#tooltip').remove();
-        previousPoint = null;            
+        previousPoint = null;  
+        previousSeries = null;
     }
 }
 
 flotHelper.showPieToolTip = function(event, pos, item) {
     
     if(item) {
-        if (previousPoint != item.seriesIndex) {
+        if (previousSeries != item.seriesIndex) {
             $('#tooltip').remove();
-            previousPoint = item.seriesIndex;
+            previousSeries = item.seriesIndex;
             
             
       
@@ -94,7 +103,7 @@ flotHelper.showPieToolTip = function(event, pos, item) {
     }
     else {
         $('#tooltip').remove(); 
-        previousPoint = null;
+        previousSeries = null;
     }
 }
 

@@ -41,10 +41,11 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                             container:$('#legend_".$this->strChartId."')
                             }";
         
-        $grid = "grid: { hoverable: true, 
-                              clickable: true,
-                              backgroundColor:'".$this->strBackgroundColor."'   
-                            }";
+        $grid = "grid: {borderWidth: 1,
+                        hoverable: true, 
+                        clickable: true,
+                        backgroundColor:'".$this->strBackgroundColor."'   
+                    }";
 
 
         $options = "";
@@ -104,7 +105,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
     }
     
     public function showChartToolTips($strChartId) {
-        $tooltip = "var previousPoint = null;
+        $tooltip = "var previousSeries = null; \n
+                    var previousPoint = null; \n
                     $(\"#" . $strChartId . "\").bind(\"plothover\",flotHelper.doToolTip);";
 
         return $tooltip;
