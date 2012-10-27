@@ -71,6 +71,8 @@
                 %%votings_votings%%
                 %%maps_maps%%
 
+
+
                 <div align="right">
                     <div id="fb-root"></div>
                     <script>(function(d, s, id) {

@@ -4,8 +4,8 @@
 	    <input type="hidden" name="submitPortaluploadForm" value="1" />
 	    <input type="hidden" name="portaluploadDlfolder" value="%%portaluploadDlfolder%%" />
 	    %%formErrors%%%%portaluploadSuccess%%
-	    <div><label for="portaluploadFile">[lang,portaluploadFileTitle,elements]</label><input type="file" name="portaluploadFile" id="portaluploadFile" class="inputText" /></div><br />
-	    <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,portaluploadSubmitTitle,elements]" class="button" /></div><br />
+	    <div><label for="portaluploadFile">[lang,portaluploadFileTitle,elements]</label><input type="file" name="portaluploadFile" id="portaluploadFile" class="inputText" /></div>
+	    <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,portaluploadSubmitTitle,elements]" class="button" /></div>
 	</form>
 </div>
 </portalupload_uploadform>

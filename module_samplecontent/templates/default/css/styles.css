@@ -436,26 +436,23 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
 
 /* FORMS */
 .contentRight form label {
-    display: block;
-    float: left;
+    display: inline-block;
     text-align: right;
     width: 20%;
     height: 20px;
     padding: 2px 4px 0 0;
 }
 
-.contentRight form br {
-    clear: both;
-}
+
 
 .contentRight form input, .contentRight form textarea {
     border: 1px solid #dadada;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
-    display: block;
-    float: left;
+    display: inline-block;
     width: 176px;
+    margin: 3px 0;
 }
 
 .contentRight form textarea {
@@ -510,3 +507,4 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
     float: right;
     padding: 1px 1px 0 1px;
 }
+

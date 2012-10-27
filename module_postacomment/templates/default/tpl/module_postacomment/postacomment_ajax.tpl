@@ -38,12 +38,12 @@
     		<ul>
     		    %%validation_errors%%
     		</ul>
-    		<div><label for="comment_name_%%comment_systemid%%">[lang,form_name_label,postacomment]*:</label><input type="text" name="comment_name" id="comment_name_%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div><br />
-    		<div><label for="comment_subject_%%comment_systemid%%">[lang,form_subject_label,postacomment]:</label><input type="text" name="comment_subject" id="comment_subject_%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
-    		<div><label for="comment_message_%%comment_systemid%%">[lang,form_message_label,postacomment]*:</label><textarea name="comment_message" id="comment_message_%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
-    		<div><label for="kajonaCaptcha_%%comment_systemid%%"></label><span id="kajonaCaptcha_%%comment_systemid%%"></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%'); return false;">[lang,commons_captcha_reload,postacomment]</a>)</div><br />
-    		<div><label for="form_captcha_%%comment_systemid%%">[lang,commons_captcha,postacomment]*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" autocomplete="off" /></div><br /><br />
-    		<div><label for="comment_submit_%%comment_systemid%%"></label><input type="submit" name="submit" value="[lang,form_submit_label,postacomment]" id="comment_submit_%%comment_systemid%%" class="button" /></div><br />
+    		<div><label for="comment_name_%%comment_systemid%%">[lang,form_name_label,postacomment]*:</label><input type="text" name="comment_name" id="comment_name_%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div>
+    		<div><label for="comment_subject_%%comment_systemid%%">[lang,form_subject_label,postacomment]:</label><input type="text" name="comment_subject" id="comment_subject_%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div>
+    		<div><label for="comment_message_%%comment_systemid%%">[lang,form_message_label,postacomment]*:</label><textarea name="comment_message" id="comment_message_%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br />
+    		<div><label for="kajonaCaptcha_%%comment_systemid%%"></label><span id="kajonaCaptcha_%%comment_systemid%%"></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%'); return false;">[lang,commons_captcha_reload,postacomment]</a>)</div>
+    		<div><label for="form_captcha_%%comment_systemid%%">[lang,commons_captcha,postacomment]*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" autocomplete="off" /></div><br />
+    		<div><label for="comment_submit_%%comment_systemid%%"></label><input type="submit" name="submit" value="[lang,form_submit_label,postacomment]" id="comment_submit_%%comment_systemid%%" class="button" /></div>
     		<input type="hidden" name="comment_template" value="%%comment_template%%" />
             <input type="hidden" name="comment_systemid" value="%%comment_systemid%%" />
             <input type="hidden" name="comment_page" value="%%comment_page%%" />

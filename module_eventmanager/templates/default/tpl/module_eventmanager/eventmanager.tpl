@@ -76,14 +76,14 @@
         
         <form name="formEventRegistration" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
             %%formErrors%%
-            <div><label for="forename">[lang,forename,eventmanager]</label><input type="text" name="forename" id="forename" value="%%forename%%" class="inputText" /></div><br />
-            <div><label for="lastname">[lang,lastname,eventmanager]</label><input type="text" name="lastname" id="lastname" value="%%lastname%%" class="inputText" /></div><br />
-            <div><label for="email">[lang,email,eventmanager]</label><input type="text" name="email" id="email" value="%%email%%" class="inputText" /></div><br />
-            <div><label for="phone">[lang,phone,eventmanager]</label><input type="text" name="phone" id="phone" value="%%phone%%" class="inputText" /></div><br />
-            <div><label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div><br />
-            <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">[lang,commons_captcha_reload,eventmanager]</a>)</div><br />
-            <div><label for="form_captcha">[lang,commons_captcha,eventmanager]</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div><br />
-            <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div><br />
+            <div><label for="forename">[lang,forename,eventmanager]</label><input type="text" name="forename" id="forename" value="%%forename%%" class="inputText" /></div>
+            <div><label for="lastname">[lang,lastname,eventmanager]</label><input type="text" name="lastname" id="lastname" value="%%lastname%%" class="inputText" /></div>
+            <div><label for="email">[lang,email,eventmanager]</label><input type="text" name="email" id="email" value="%%email%%" class="inputText" /></div>
+            <div><label for="phone">[lang,phone,eventmanager]</label><input type="text" name="phone" id="phone" value="%%phone%%" class="inputText" /></div>
+            <div><label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div>
+            <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">[lang,commons_captcha_reload,eventmanager]</a>)</div>
+            <div><label for="form_captcha">[lang,commons_captcha,eventmanager]</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div>
+            <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
             <input type="hidden" name="submitUserRegistration" value="1" />
         </form>
 
