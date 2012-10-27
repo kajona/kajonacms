@@ -75,14 +75,7 @@ class class_classloader {
             }
             else {
 
-                $this->arrModules = scandir(_corepath_);
-
-                $this->arrModules = array_filter(
-                    $this->arrModules,
-                    function($strValue) {
-                        return preg_match("/(module|element|_)+(.*)/i", $strValue) && is_dir(_corepath_."/".$strValue);
-                    }
-                );
+                $this->scanModules();
 
                 $this->indexAvailableCodefiles();
                 //$this->loadClassloaderConfig();
@@ -107,14 +100,31 @@ class class_classloader {
         }
     }
 
+    private function scanModules() {
+        $this->arrModules = scandir(_corepath_);
+
+        $this->arrModules = array_filter(
+            $this->arrModules,
+            function($strValue) {
+                return preg_match("/(module|element|_)+(.*)/i", $strValue) && is_dir(_corepath_."/".$strValue);
+            }
+        );
+    }
+
     /**
-     * Flushes the chache-files.
+     * Flushes the cache-files.
      * Use this method if you added new modules / classes.
+     * The classes are reinitialized automatically.
      */
     public function flushCache() {
         $objFilesystem = new class_filesystem();
         $objFilesystem->fileDelete($this->strModulesCacheFile);
         $objFilesystem->fileDelete($this->strClassesCacheFile);
+
+        $this->arrFiles = array();
+        $this->arrModules = array();
+        $this->scanModules();
+        $this->indexAvailableCodefiles();
     }
 
     /**
