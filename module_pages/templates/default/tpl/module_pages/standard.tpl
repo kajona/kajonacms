@@ -17,7 +17,7 @@
     <link href="_webpath_/templates/default/css/styles.css?_system_browser_cachebuster_" rel="stylesheet" type="text/css" />
 
     %%kajona_head%%
-    <script src="_webpath_/templates/default/js/modernizr-2.6.1.min.js"></script>
+    <script src="_webpath_/templates/default/js/modernizr-2.6.2.min.js"></script>
     <script src="_webpath_/templates/default/js/jquery.easing-sooper.js"></script>
     <script src="_webpath_/templates/default/js/jquery.sooperfish.min.js"></script>
     <link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
