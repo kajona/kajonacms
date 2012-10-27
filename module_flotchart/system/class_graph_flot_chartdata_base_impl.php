@@ -25,7 +25,7 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                            axisLabelPadding:15,
                            axisLabelFontFamily:'".$this->strFont."',
                            color:'".$this->strFontColor."',
-                           ticks:".$this->ticksToJSON()."
+                           ticks:".$this->ticksToJSON()."   
                         }";
         
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
@@ -55,14 +55,47 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
     }
 
     public function ticksToJSON() {
-        if(count($this->arrXAxisTickLabels)==0)
+        $nrLableTicks = count($this->arrXAxisTickLabels);
+        if($nrLableTicks==0) {
             return "null";
+        }
+        
+        //calculate no of ticks 
+        $noTicks = null;
+        if($this->intNrOfWrittenLabels != null) {
+            if($this->intNrOfWrittenLabels > 0) {
+                $noTicks = ceil($nrLableTicks / $this->intNrOfWrittenLabels);
+            }
+            else if($this->intNrOfWrittenLabels <= 0) {
+                $noTicks = 0; 
+            }
+        }
         
         $data = "[";
         foreach ($this->arrXAxisTickLabels as $intKey => $objValue) {
-            $data.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
+            
+            //calculate if tick should be included in the chart
+            $modResult = null;
+            if($noTicks != null) {
+                if($noTicks > 0) {
+                    $modResult = $intKey % $noTicks;
+                }
+                else if($noTicks == 0) {
+                    $modResult = 0;  
+                }
+            }
+            
+            //add tick
+            if($modResult == null || ($modResult != null && $modResult == 0)) {
+                $data.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
+            }
         }
-        $data = substr($data, 0, -1);
+        
+        //cut off last ",".
+        if(strlen($data) > 1) {
+            $data = substr($data, 0, -1);
+        }
+        
         $data.="]";
         return $data;
     }

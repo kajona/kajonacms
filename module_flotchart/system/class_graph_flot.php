@@ -33,13 +33,14 @@ class class_graph_flot implements interface_graph {
     private $strYAxisTitle = "";
     private $intXAxisAngle = 0;
     private $arrXAxisTickLabels = array();
+    private $intNrOfWrittenLabels = null;
     
     //line char, bar chart, pie chart
     private $bShowLegend = true;
     private $strGraphTitle = "";
-    private $strBackgroundColor="#FFFFFF";
+    private $strBackgroundColor="#FFFFFF";//white
     private $strFont = "Verdana, Arial, Helvetica, sans-serifs";
-    private $strFontColor ="#000000";
+    private $strFontColor ="#000000";//black
     
     
     /**
@@ -118,8 +119,9 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->saveGraph($strFilename);
     }
 
-    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
+    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = null) {
         $this->arrXAxisTickLabels = $arrXAxisTickLabels;
+        $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
     }
 
     public function setBitRenderLegend($bitRenderLegend) {
@@ -189,7 +191,7 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->setStrGraphTitle($this->strGraphTitle);
         $this->objChartData->setStrXAxisTitle($this->strXAxisTitle);
         $this->objChartData->setStrYAxisTitle($this->strYAxisTitle);
-        $this->objChartData->setArrXAxisTickLabels($this->arrXAxisTickLabels);
+        $this->objChartData->setArrXAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabels);
         $this->objChartData->setChartId($this->strChartId = generateSystemid());
         
         //create chart
@@ -263,7 +265,7 @@ class class_graph_flot implements interface_graph {
             });
         </script>";
 
-        
+        //enable tooltips
         $toolTip = $this->objChartData->showChartToolTips($this->strChartId );
 
         return $strReturn.$toolTip;
