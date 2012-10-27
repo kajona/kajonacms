@@ -52,7 +52,7 @@ flotHelper.doToolTip = function(event, pos, item) {
             var x = item.datapoint[0],
             y = item.datapoint[1],
             color = item.series.color,
-            content = item.series.label+'\n';
+            content = '<u>'+item.series.label+'</u>\n';
  
             
             var ticks = item.series.xaxis.ticks;
@@ -79,7 +79,6 @@ flotHelper.doToolTip = function(event, pos, item) {
         }
     }
     else {
-        console.debug("else");
         $('#tooltip').remove();
         previousPoint = null;  
         previousSeries = null;
@@ -94,7 +93,7 @@ flotHelper.showPieToolTip = function(event, pos, item) {
             previousSeries = item.seriesIndex;
             //create new tooltip
             var percent = parseFloat(item.series.percent);
-            var content = '<span style=\"font-weight: bold; \">'+item.series.label+' ('+percent+'%)</span>';
+            var content = '<span style=\"\">'+'<u>'+item.series.label+'</u><br/>'+percent.toFixed(2)+'%</span>';
             flotHelper.showTooltip(pos.pageX, pos.pageY, content, item.series.color);
         } else {
             //move tooltip
