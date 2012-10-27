@@ -822,6 +822,10 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
             //trim string
             $strAddKeys = uniStrTrim($strAddKeys, 100, "");
 
+            if($strLanguage != "") {
+                $strHref .= $strLanguage."/";
+            }
+            
             $strPath = $objPage->getStrPath();
             
             if($strPath == "") {
@@ -836,16 +840,14 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 
             //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
             //but: special case: just pagename & language
-            if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
-                $strHref .= $strPageI.".".$strLanguage.".html";
-            elseif($strAction == "" && $strSystemid == "" && $strLanguage == "")
+            if($strAction == "" && $strSystemid == "" && $strAddKeys == "")
+                $strHref .= $strPageI.".html";
+            elseif($strAction == "" && $strSystemid == "")
                 $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
-            elseif($strAction != "" && $strSystemid == "" && $strLanguage == "")
+            elseif($strAction != "" && $strSystemid == "")
                 $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
-            elseif($strSystemid != "" && $strLanguage == "")
-                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
             else
-                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
+                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
 
             //params?
             if($strParams != "")

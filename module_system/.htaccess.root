@@ -44,26 +44,33 @@
 ######################################## PORTAL REWRITING #################################################
 
 # source: page.seo.action.systemid.language
+# Only required for backward compatibility
 #RewriteRule ^(.*?/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]{2})\.html  index.php?page=$2&action=$4&systemid=$5&language=$6 [QSA,L]
 
+# source: language/page.seo.action.systemid
+#RewriteRule ^(([a-z]{2})/)(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]{2})\.html  index.php?page=$4&action=$6&systemid=$7&language=$2 [QSA,L]
+
 # source: page.seo.action.systemid
-#RewriteRule ^(.*?/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$2&action=$4&systemid=$5 [QSA,L]
+#RewriteRule ^(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$2&action=$4&systemid=$5 [QSA,L]
+
+# source: language/page.seo.action
+#RewriteRule ^(([a-z]{2})/)(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$4&action=$6&language=$2 [QSA,L]
 
 # source: page.seo.action
-#RewriteRule ^(.*?/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$2&action=$4 [QSA,L]
+#RewriteRule ^(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$2&action=$4 [QSA,L]
 
 # source: page.language
+# Only required for backward compatibility
 #RewriteRule ^(.*?/)?([0-9a-z\_\-]+)\.([a-z]{2})\.html  index.php?page=$2&language=$3 [QSA,L]
 
-# source: page.seo
-#RewriteRule ^(.*?/)?([0-9a-z\_\-]+)\.(.*)\.html  index.php?page=$2 [QSA,L]
+# source: language/page[.seo]
+#RewriteRule ^(([a-z]{2})/)(.*/)?([0-9a-z\_\-]+)(\.(.*))?\.html  index.php?page=$4&language=$2 [QSA,L]
 
-# source: page
-#RewriteRule ^(.*?/)?([0-9a-z\_\-]+)\.html  index.php?page=$2 [QSA,L]
+# source: page[.seo]
+#RewriteRule ^(.*/)?([0-9a-z\_\-]+)(\.(.*))?\.html  index.php?page=$2 [QSA,L]
 
 # rss-feeds
 #RewriteRule ^([0-9a-z\_\-]+)\.rss  xml.php?module=news&action=newsFeed&feedTitle=$1 [L]
-
 
 
 ######################################## PHP ##############################################################
