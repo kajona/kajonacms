@@ -19,7 +19,9 @@
 class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_base{
 
     public function optionsToJSON() {
-        $xaxis = "xaxis: { tickFormatter:function(val, axis) {return  flotHelper.getTickFormatter(".$this->intXAxisAngle.", val)}, 
+        $xaxis = "xaxis: { tickFormatter:function(val, axis) {
+                                return flotHelper.getTickFormatter(".$this->intXAxisAngle.", val, axis);
+                            }, 
                            axisLabel: '" . $this->strXAxisTitle . "',
                            axisLabelUseCanvas: true, 
                            axisLabelPadding:15,
@@ -71,77 +73,39 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
             }
         }
         
-        $data = "[";
+        $tickArray = "[";
         foreach ($this->arrXAxisTickLabels as $intKey => $objValue) {
             
             //calculate if tick should be included in the chart
-            $modResult = null;
+            $moduloResult = null;
             if($noTicks != null) {
                 if($noTicks > 0) {
-                    $modResult = $intKey % $noTicks;
+                    $moduloResult = $intKey % $noTicks;
                 }
                 else if($noTicks == 0) {
-                    $modResult = 0;  
+                    $moduloResult = 0;  
                 }
             }
             
             //add tick
-            if($modResult == null || ($modResult != null && $modResult == 0)) {
-                $data.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
+            if($moduloResult == null || ($moduloResult != null && $moduloResult == 0)) {
+                $tickArray.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
             }
         }
         
-        //cut off last ",".
-        if(strlen($data) > 1) {
-            $data = substr($data, 0, -1);
-        }
         
-        $data.="]";
-        return $data;
+        //cut off last ",".
+        if(strlen($tickArray) > 1) {
+            $tickArray = substr($tickArray, 0, -1);
+        }
+        $tickArray.="]";
+        
+        return $tickArray;
     }
     
     public function showChartToolTips($strChartId) {
-        $tooltip =
-                "<script type='text/javascript'>
-                    function showTooltip(x, y, contents, z) {
-                        $('<div id=\"tooltip\">' + contents + '</div>').css( {
-                            position: 'absolute',
-                            display: 'none',
-                            top: y + 5,
-                            left: x + 5,
-                            border: '2px solid '+z,
-                            padding: '2px',
-                            'background-color': '#fee',
-                            opacity: 0.80
-                        }).appendTo(\"body\").fadeIn(200);
-                    }
-
-                    var previousPoint = null;
-                    $(\"#" . $strChartId . "\").bind(\"plothover\", function (event, pos, item) {
-                        $(\"#x\").text(pos.x.toFixed(2));
-                        $(\"#y\").text(pos.y.toFixed(2));
-
-
-                        if (item) {
-                            if (previousPoint != item.dataIndex) {
-                                previousPoint = item.dataIndex;
-
-                                $(\"#tooltip\").remove();
-                                var x = item.datapoint[0].toFixed(2),
-                                    y = item.datapoint[1].toFixed(2),
-                                    z = item.series.color;
-
-                                showTooltip(item.pageX, item.pageY,
-                                            '<b>'+item.series.label+'</b><br/>' + x + ' = ' + y, z);
-                            }
-                        }
-                        else {
-                            $(\"#tooltip\").remove();
-                            previousPoint = null;            
-                        }
-
-                    });
-                </script>";
+        $tooltip = "var previousPoint = null;
+                    $(\"#" . $strChartId . "\").bind(\"plothover\",flotHelper.doToolTip);";
 
         return $tooltip;
     }

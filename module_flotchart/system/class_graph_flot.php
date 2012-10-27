@@ -196,7 +196,8 @@ class class_graph_flot implements interface_graph {
         
         //create chart
         $strChartCode = $this->objChartData->showGraph($this->strChartId );
-
+        $toolTip = $this->objChartData->showChartToolTips($this->strChartId );
+        
         //divs
         $strDivTitle = "";
         $strDivChart = "";
@@ -260,15 +261,13 @@ class class_graph_flot implements interface_graph {
                     '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
                 ], function() {
                         console.log('triggering flot for chart ".$this->strChartId ."');
-                    ".$strChartCode."
+                    ".$strChartCode." \n".$toolTip."    
                 });
             });
         </script>";
 
         //enable tooltips
-        $toolTip = $this->objChartData->showChartToolTips($this->strChartId );
-
-        return $strReturn.$toolTip;
+        return $strReturn;
     }
 
 }
