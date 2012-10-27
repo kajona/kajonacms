@@ -403,9 +403,21 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">"
                     .getImageAdmin("icon_enabled.png", $this->getLang("pe_disable", "pages"))."</a>";
 
+
+                //$ != undefined
+
                 //Load portaleditor javascript (even if it's maybe already loaded in portal)
-                $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
-                $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
+                $strPeToolbar .= "<script type='text/javascript'>
+                    if($) {
+                        KAJONA.portal.loader.loadFile(['/core/module_system/admin/scripts/kajona_portaleditor.js']);
+                    }
+                    else {
+                        KAJONA.portal.loader.loadFile([
+                            '/core/module_system/admin/scripts/jquery/jquery.min.js',
+                            '/core/module_system/admin/scripts/kajona_portaleditor.js'
+                        ]);
+                    }
+                </script>";
                 //Load portaleditor styles
                 $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
 

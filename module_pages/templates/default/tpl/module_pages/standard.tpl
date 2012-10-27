@@ -103,7 +103,7 @@
     </footer>
 
     <script type="text/javascript">
-    $(document).ready(function() {
+    $(function() {
         $('ul.mainnavul').sooperfish();
     });
     </script>
