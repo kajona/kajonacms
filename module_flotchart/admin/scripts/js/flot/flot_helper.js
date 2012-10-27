@@ -62,15 +62,15 @@ flotHelper.doToolTip = function(event, pos, item) {
             y = item.datapoint[1],
             color = item.series.color,
             content = '<u>'+item.series.label+'</u>\n';
-            
+
             var ticks = item.series.xaxis.ticks;
             var label = ticks[item.dataIndex].label;
-            
+
             /*
-            * in general all labels are bieng process by flotHelper.getTickFormatter
-            * the first value of this regex is always the value within the div-Tag the
-            * getTickFormatter produces
-            */
+             * in general all labels are bieng process by flotHelper.getTickFormatter
+             * the first value of this regex is always the value within the div-Tag the
+             * getTickFormatter produces
+             */
             var labelvalue = label.match(/^<div.+>(.*?)<\/div>/)[1];
             
             if(isNaN(labelvalue)) {
@@ -117,13 +117,41 @@ flotHelper.showPieToolTip = function(event, pos, item) {
     }
 };
 
-flotHelper.getTickArray = function(angle, axis, tickArray) {
-    //hack for executing the tickFormatter even if the value of a tick is being set
-    tickArray.forEach(function(tick) {
-        if(tick[1]) {
-            tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
+flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
+    var nrLableTicks = tickArray.length;
+    var noTicks = null;
+    
+    if(noOfWrittenLabels != null) {
+        if(noOfWrittenLabels > 0) {
+            noTicks = Math.ceil(nrLableTicks / noOfWrittenLabels);
         }
-    })
+        else if(noOfWrittenLabels <= 0) {
+            noTicks = 0; 
+        }
+    }
+
+    //iterate ticks
+    tickArray.forEach(function(tick, index) {
+        //calculate if tick should be included in the chart
+        var moduloResult = null;
+        if(noTicks != null) {
+            if(noTicks > 0) {
+                moduloResult = index % noTicks;
+            }
+            else if(noTicks == 0) {
+                moduloResult = 0;  
+            }
+            
+            //set tick value to axis.min -1 so that is will not be diaplayed in the chart
+            if(!moduloResult == 0 || !moduloResult == null ) {
+                tick[0] =  axis.min -1;
+            }
+            //hack for executing the tickFormatter even if the value of a tick is being set
+            if(tick[1]) {
+                tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
+            }
+        }
+    });
     
     return tickArray;
 };

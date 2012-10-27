@@ -59,44 +59,17 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
 
     public function ticksToJSON() {
         $tickArray = "";
-        $noTicks = null;
-        $nrLableTicks = count($this->arrXAxisTickLabels);
-        
-        if($nrLableTicks==0) {
+
+        if(count($this->arrXAxisTickLabels)==0) {
             return "null";
         }
         
-        //calculate no of ticks 
-        $noTicks = null;
-        if($this->intNrOfWrittenLabels != null) {
-            if($this->intNrOfWrittenLabels > 0) {
-                $noTicks = ceil($nrLableTicks / $this->intNrOfWrittenLabels);
-            }
-            else if($this->intNrOfWrittenLabels <= 0) {
-                $noTicks = 0; 
-            }
-        }
         
         //iterate labels
         foreach ($this->arrXAxisTickLabels as $intKey => $objValue) {
-            //calculate if tick should be included in the chart
-            $moduloResult = null;
-            if($noTicks != null) {
-                if($noTicks > 0) {
-                    $moduloResult = $intKey % $noTicks;
-                }
-                else if($noTicks == 0) {
-                    $moduloResult = 0;  
-                }
-            }
-            
-            //add tick
-            if($moduloResult == null || ($moduloResult != null && $moduloResult == 0)) {
-                $tickArray.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
-            }
+            $tickArray.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
         }
         
-        //cut off last ",".
         if(strlen($tickArray) > 0) {
             $tickArray = substr($tickArray, 0, -1);
         }
@@ -107,7 +80,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         return "function(axis) {
                 var angle = eval(".$this->intXAxisAngle.");
                 var tickArray = eval(".$tickArray.");
-                return flotHelper.getTickArray.call(this, angle, axis, tickArray);
+                var noOfWrittenLabels = eval(".$this->intNrOfWrittenLabels.");
+                return flotHelper.getTickArray.call(this, angle, axis, tickArray, noOfWrittenLabels);
             }";
     }
     
