@@ -818,9 +818,21 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
             $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
             if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                 $strAddKeys .= "__";
-
+            
             //trim string
             $strAddKeys = uniStrTrim($strAddKeys, 100, "");
+
+            $strPath = $objPage->getStrPath();
+            
+            if($strPath == "") {
+                $objPage->updatePath();
+                $strPath = $objPage->getStrPath();
+                $objPage->updateObjectToDb();
+            }
+            
+            if($strPath != "") {
+                $strHref .= $strPath."/";
+            }
 
             //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
             //but: special case: just pagename & language

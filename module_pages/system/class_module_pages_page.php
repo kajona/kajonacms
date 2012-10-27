@@ -86,6 +86,12 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @fieldType page
      */
     private $strAlias = "";
+    
+    /**
+     * @var string
+     * @versionable
+     */
+    private $strPath = "";
 
     private $strOldName;
     private $intOldType;
@@ -194,6 +200,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $arrPropRow["pageproperties_seostring"] = "";
                 $arrPropRow["pageproperties_language"] = "";
                 $arrPropRow["pageproperties_alias"] = "";
+                $arrPropRow["pageproperties_path"] = "";
             }
             //merge both
             $arrRow = array_merge($arrRow, $arrPropRow);
@@ -205,6 +212,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             $this->setStrSeostring($arrRow["pageproperties_seostring"]);
             $this->setStrLanguage($arrRow["pageproperties_language"]);
             $this->setStrAlias($arrRow["pageproperties_alias"]);
+            $this->setStrPath($arrRow["pageproperties_path"]);
 
 
             $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
@@ -230,7 +238,9 @@ class class_module_pages_page extends class_model implements interface_model, in
         if(_pages_newdisabled_ == "true") {
             $this->setIntRecordStatus(0);
         }
-
+        
+        $this->updatePath();
+        
         return true;
     }
 
@@ -250,6 +260,8 @@ class class_module_pages_page extends class_model implements interface_model, in
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
+        $this->updatePath();
+
         //Update the baserecord
         $bitBaseUpdate = parent::updateStateToDb();
 
@@ -268,7 +280,8 @@ class class_module_pages_page extends class_model implements interface_model, in
     						pageproperties_keywords=?,
     						pageproperties_browsername=?,
     						pageproperties_seostring=?,
-    						pageproperties_alias=?
+    						pageproperties_alias=?,
+                                                pageproperties_path=?
     						WHERE pageproperties_id=?
     						  AND pageproperties_language=?";
 
@@ -279,6 +292,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $this->getStrBrowsername(),
                 $this->getStrSeostring(),
                 $this->getStrAlias(),
+                $this->getStrPath(),
                 $this->getSystemid(),
                 $this->getStrLanguage()
             );
@@ -287,8 +301,8 @@ class class_module_pages_page extends class_model implements interface_model, in
             //Not existing, create one
             $strQuery2 = "INSERT INTO " . _dbprefix_ . "page_properties
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
-						 pageproperties_seostring, pageproperties_alias, pageproperties_language) VALUES
-						(?, ?, ?, ?, ?, ?, ?, ?)";
+						 pageproperties_seostring, pageproperties_alias, pageproperties_language, pageproperties_path) VALUES
+						(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $arrParams = array(
                 $this->getSystemid(),
@@ -298,12 +312,45 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $this->getStrBrowsername(),
                 $this->getStrSeostring(),
                 $this->getStrAlias(),
-                $this->getStrLanguage()
+                $this->getStrLanguage(),
+                $this->getStrPath()
             );
         }
+        
+        $bitBaseUpdate &= $this->objDB->_pQuery($strQuery2, $arrParams);
+        
+        $arrChildIds = $this->getChildNodesAsIdArray();
+        
+        foreach ($arrChildIds as $strChildId) {
+            $objInstance = class_objectfactory::getInstance()->getObject($strChildId);
+            $objInstance->updateObjectToDb();
+        }
 
-        return ($bitBaseUpdate && $this->objDB->_pQuery($strQuery2, $arrParams));
-
+        return $bitBaseUpdate;
+    }
+    
+    /**
+     * Updates the navigation path of this page based on the parent's name.
+     */
+    public function updatePath() {
+        $arrPathIds = $this->getPathArray("", _pages_modul_id_);
+        $arrPathIds = array_slice($arrPathIds, 0, count($arrPathIds) - 1);
+        $arrPathNames = array();
+        
+        foreach ($arrPathIds as $strParentId) {
+            $objInstance = class_objectfactory::getInstance()->getObject($strParentId);
+            
+            if($objInstance instanceof class_module_pages_page) {
+                $arrPathNames[] = urlSafeString($objInstance->getStrBrowsername());
+            }
+            //elseif($objInstance instanceof class_module_pages_folder) {
+            //    $arrPathNames[] = urlSafeString($objInstance->getStrName());
+            //}
+        }
+        
+        $arrPathNames[] = urlSafeString($this->getStrBrowsername());
+        
+        $this->strPath = implode("/", $arrPathNames);
     }
 
 
@@ -631,6 +678,10 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
+    
+    public function setStrPath($strPath) {
+        $this->strPath = $strPath;
+    }
 
     public function getIntType() {
         return $this->intType;
@@ -662,6 +713,11 @@ class class_module_pages_page extends class_model implements interface_model, in
         return $this->strDescription;
     }
 
-
+    /**
+     * @return string
+     */
+    public function getStrPath() {
+        return $this->strPath;
+    }
 
 }

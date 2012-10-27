@@ -60,7 +60,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["pageproperties_template"] 	= array("char254", true);
 		$arrFields["pageproperties_seostring"] 	= array("char254", true);
 		$arrFields["pageproperties_language"] 	= array("char20", true);
-		$arrFields["pageproperties_alias"] 	    = array("char254", true);
+		$arrFields["pageproperties_alias"] 	= array("char254", true);
+                $arrFields["pageproperties_path"] 	= array("char254", true);
 
 		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language"), array("pageproperties_language")))
 			$strReturn .= "An error occured! ...\n";
@@ -282,6 +283,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         if($arrModul["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
         }
+        
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_3492();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -385,6 +391,19 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.4.9.1");
         $this->updateElementVersion("paragraph", "3.4.9.1");
         $this->updateElementVersion("image", "3.4.9.1");
+        return $strReturn;
+    }
+    
+    private function update_3491_3492() {
+        $strReturn .= "Altering page_properties-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_properties")."
+                    ADD ".$this->objDB->encloseColumnName("pageproperties_path")." ".$this->objDB->getDatatype("char254")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.2");
+        
         return $strReturn;
     }
 }
