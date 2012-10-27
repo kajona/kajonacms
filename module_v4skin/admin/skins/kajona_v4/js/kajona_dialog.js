@@ -47,14 +47,11 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
     this.init = function(intWidth, intHeight) {
 
-
-        if(!intWidth) {
-            if($('#' + this.containerId).hasClass("fullsize")) {
-                intWidth = $(window).width() * 0.6;
-            }
-            else
-                intWidth = 400;
-        }
+        var $modal = $('#' + this.containerId).modal({
+            backdrop: true,
+            keyboard: false,
+            show: true
+        });
 
         if(!intHeight) {
             if($('#' + this.containerId).hasClass("fullsize")) {
@@ -64,17 +61,35 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
                 intHeight = '';
         }
 
-        $('#' + this.containerId).modal({
-            backdrop: true,
-            keyboard: false,
-            show: true
-        }).css({
-            width: intWidth,
-            'margin-left': function () {
-                return -($(this).width() / 2);
-            }
-        });
 
+        var isStackedDialog = !!(window.frameElement && window.frameElement.nodeName && window.frameElement.nodeName.toLowerCase() == 'iframe');
+
+        if (!isStackedDialog) {
+            if(!intWidth) {
+                if($('#' + this.containerId).hasClass("fullsize")) {
+                    intWidth = $(window).width() * 0.6;
+                }
+                else
+                    intWidth = 400;
+            }
+
+            $modal.css({
+                width: intWidth,
+                'margin-left': function () {
+                    return -($(this).width() / 2);
+                }
+            });
+        } else {
+            $modal.css({
+                width: '96%',
+                'margin-left': function () {
+                    return -($(this).width() / 2);
+                },
+                'padding-top': 5
+            });
+
+            intHeight = $(window).height();
+        }
 
         if(this.iframeURL != null) {
             $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight)+'" name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
