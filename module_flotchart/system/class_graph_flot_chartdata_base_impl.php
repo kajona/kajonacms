@@ -58,7 +58,10 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
     }
 
     public function ticksToJSON() {
+        $tickArray = "";
+        $noTicks = null;
         $nrLableTicks = count($this->arrXAxisTickLabels);
+        
         if($nrLableTicks==0) {
             return "null";
         }
@@ -74,9 +77,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
             }
         }
         
-        $tickArray = "[";
+        //iterate labels
         foreach ($this->arrXAxisTickLabels as $intKey => $objValue) {
-            
             //calculate if tick should be included in the chart
             $moduloResult = null;
             if($noTicks != null) {
@@ -94,14 +96,19 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
             }
         }
         
-        
         //cut off last ",".
-        if(strlen($tickArray) > 1) {
+        if(strlen($tickArray) > 0) {
             $tickArray = substr($tickArray, 0, -1);
         }
-        $tickArray.="]";
         
-        return $tickArray;
+        $tickArray = "[".$tickArray."]";
+        
+        //return the tick generator function
+        return "function(axis) {
+                var angle = eval(".$this->intXAxisAngle.");
+                var tickArray = eval(".$tickArray.");
+                return flotHelper.getTickArray.call(this, angle, axis, tickArray);
+            }";
     }
     
     public function showChartToolTips($strChartId) {
