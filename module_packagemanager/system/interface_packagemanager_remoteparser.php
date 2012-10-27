@@ -6,21 +6,29 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+
 /**
- * A simple content-provider used to upload archives from the kajonabase-repo.
- * Provides both, a search and a download-part.
+ * A remote parser knows how to handle the result of a queried remote content provider.
+ * It handles various versions of the remote API results.
  *
- * @module module_packagemanager
- * @author sidler@mulchprod.de
  * @author flo@mediaskills.org
  * @since 4.0
+ * @package module_packagemanager
  */
-class class_module_packagemanager_contentprovider_kajonabase extends class_module_packagemanager_contentprovider_remote_base {
+interface interface_packagemanager_remoteparser {
 
-    function __construct() {
-        parent::__construct("provider_kajonabase", "v4.kajonabase.net",
-            "/xml.php?module=packageserver&action=list",
-            "/xml.php?module=packageserver&action=searchPackages&title=",
-            "/download.php");
-    }
+    /**
+     * Returns the array of packages within the boundary of start and end index.
+     *
+     * @abstract
+     * @return array
+     */
+    public function getArrPackages();
+
+    /**
+     * Returns the code to navigate between existing pages.
+     *
+     * @return string
+     */
+    public function paginationFooter();
 }

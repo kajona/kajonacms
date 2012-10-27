@@ -14,7 +14,6 @@
  */
 class class_module_packageserver_portal extends class_portal implements interface_portal {
 
-
     /**
      * Constructor
      *
@@ -37,38 +36,72 @@ class class_module_packageserver_portal extends class_portal implements interfac
      * @xml
      */
     protected function actionList() {
-
         $arrPackages = array();
 
-        $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_);
-        $objManager = new class_module_packagemanager_manager();
+        $intStart = $this->ensureNumericValue($this->getParam("start"), null);
+        $intEnd = $this->ensureNumericValue($this->getParam("end"), null);
+        $intTypeFilter = $this->ensureNumericValue($this->getParam("type"), false);
 
-        foreach($arrDBFiles as $objOneFile) {
+        if ($this->isValidPagingParameter($intStart)
+            && $this->isValidPagingParameter($intEnd)) {
 
-            try {
+            if ($intEnd >= $intStart) {
+                // TODO $arrUnpagedDBFiles is only required for total number of results - maybe use simple SQL count?
+                $arrUnpagedDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter);
+                $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter, $intStart, $intEnd);
+                $objManager = new class_module_packagemanager_manager();
 
-                $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
+                foreach($arrDBFiles as $objOneFile) {
 
-                $arrPackages[] = array(
-                    "systemid"    => $objOneFile->getSystemid(),
-                    "title"       => $objMetadata->getObjMetadata()->getStrTitle(),
-                    "version"     => $objMetadata->getObjMetadata()->getStrVersion(),
-                    "description" => $objMetadata->getObjMetadata()->getStrDescription(),
-                    "type"        => $objMetadata->getObjMetadata()->getStrType()
-                );
+                    try {
 
+                        $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
+
+                        $arrPackages[] = array(
+                            "systemid"    => $objOneFile->getSystemid(),
+                            "title"       => $objMetadata->getObjMetadata()->getStrTitle(),
+                            "version"     => $objMetadata->getObjMetadata()->getStrVersion(),
+                            "description" => $objMetadata->getObjMetadata()->getStrDescription(),
+                            "type"        => $objMetadata->getObjMetadata()->getStrType()
+                        );
+
+                    }
+                    catch(class_exception $objEx) {
+
+                    }
+                }
+
+
+                class_module_packageserver_log::generateDlLog("", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
+
+                class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
             }
-            catch(class_exception $objEx) {
 
-            }
         }
 
+        $result = array();
+        $result['numberOfTotalItems'] = count($arrUnpagedDBFiles);
+        $result['items'] = $arrPackages;
 
-        class_module_packageserver_log::generateDlLog("", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
-
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
-        $strReturn = json_encode($arrPackages);
+        $strReturn = json_encode($result);
         return $strReturn;
+    }
+
+    private function ensureNumericValue($strParam, $objDefaultValue) {
+        if ($strParam === null || trim($strParam) === "") {
+            return $objDefaultValue;
+        } elseif (!is_numeric($strParam)) {
+            // type filter has unknown value
+            return $objDefaultValue;
+        }
+        return $strParam;
+    }
+
+    private function isValidPagingParameter($parameter) {
+        if ($parameter === null || (is_numeric($parameter) && (int) $parameter >= 0)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -76,13 +109,16 @@ class class_module_packageserver_portal extends class_portal implements interfac
      * of the nested folders.
      *
      * @param $strParentId
+     * @param int|bool $intTypeFilter
+     * @param int $intStart
+     * @param int $intEnd
      *
      * @return class_module_mediamanager_file[]
      */
-    private function getAllPackages($strParentId) {
+    private function getAllPackages($strParentId, $intTypeFilter = false, $intStart = null, $intEnd = null) {
         $arrReturn = array();
 
-        $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, false, true, null, null, true);
+        $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, $intTypeFilter, true, $intStart, $intEnd, true);
 
         foreach($arrSubfiles as $objOneFile) {
             if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)

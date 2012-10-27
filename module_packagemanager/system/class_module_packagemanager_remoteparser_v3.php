@@ -3,24 +3,31 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                  *
+*	$Id: class_module_packagemanager_remoteparser_v3.php 4999 2012-09-05 12:17:37Z sidler $             *
 ********************************************************************************************************/
 
 /**
- * A simple content-provider used to upload archives from the kajonabase-repo.
- * Provides both, a search and a download-part.
+ * A remote parser which handles results of Kajona's package manager API provided by version 3.x.
  *
  * @module module_packagemanager
- * @author sidler@mulchprod.de
  * @author flo@mediaskills.org
  * @since 4.0
  */
-class class_module_packagemanager_contentprovider_kajonabase extends class_module_packagemanager_contentprovider_remote_base {
+class class_module_packagemanager_remoteparser_v3 implements interface_packagemanager_remoteparser {
 
-    function __construct() {
-        parent::__construct("provider_kajonabase", "v4.kajonabase.net",
-            "/xml.php?module=packageserver&action=list",
-            "/xml.php?module=packageserver&action=searchPackages&title=",
-            "/download.php");
+    private $arrPackages;
+
+    function __construct($arrRemoteResponse) {
+        $this->arrPackages = $arrRemoteResponse;
     }
+
+    public function getArrPackages() {
+        return $this->arrPackages;
+    }
+
+    public function paginationFooter() {
+        return "";
+    }
+
+
 }
