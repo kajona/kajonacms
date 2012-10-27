@@ -20,44 +20,44 @@ class class_element_directorybrowser_portal extends class_element_portal impleme
      *
      * @param class_module_pages_pageelement $objElementData
      */
-	public function __construct($objElementData) {
-		parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-	}
+    public function __construct($objElementData) {
+        parent::__construct($objElementData);
+        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
+    }
 
     /**
      * Loads the feed and displays it
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
+    public function loadData() {
         $strReturn = "";
 
         //Load all files in the folder
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist($this->arrElementData["char2"]);
-        
-        
-		$strWrapperTemplateID = $this->objTemplate->readTemplate("/element_directorybrowser/".$this->arrElementData["char1"], "directorybrowser_wrapper");
-        $strEntryTemplateID = $this->objTemplate->readTemplate("/element_directorybrowser/".$this->arrElementData["char1"], "directorybrowser_entry");
-        
-		$strContent = "";
+
+
+        $strWrapperTemplateID = $this->objTemplate->readTemplate("/element_directorybrowser/" . $this->arrElementData["char1"], "directorybrowser_wrapper");
+        $strEntryTemplateID = $this->objTemplate->readTemplate("/element_directorybrowser/" . $this->arrElementData["char1"], "directorybrowser_entry");
+
+        $strContent = "";
         foreach($arrFiles as $strOneFile) {
-            $arrDetails = $objFilesystem->getFileDetails($this->arrElementData["char2"]."/".$strOneFile);
-            
+            $arrDetails = $objFilesystem->getFileDetails($this->arrElementData["char2"] . "/" . $strOneFile);
+
             $arrTemplate = array();
             $arrTemplate["file_name"] = $arrDetails["filename"];
-            $arrTemplate["file_href"] = _webpath_.$this->arrElementData["char2"]."/".$strOneFile;
+            $arrTemplate["file_href"] = _webpath_ . $this->arrElementData["char2"] . "/" . $strOneFile;
             $arrTemplate["file_date"] = timeToString($arrDetails["filechange"]);
             $arrTemplate["file_size"] = bytesToString($arrDetails["filesize"]);
-            
+
             $strContent .= $this->fillTemplate($arrTemplate, $strEntryTemplateID);
         }
 
 
-		$strReturn .= $this->fillTemplate(array("files" => $strContent), $strWrapperTemplateID);
+        $strReturn .= $this->fillTemplate(array("files" => $strContent), $strWrapperTemplateID);
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }
