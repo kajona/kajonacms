@@ -14,7 +14,9 @@ class class_test_charts_flotTest extends class_testbase  {
         //JS-Imports for minimal system setup
         echo "<script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '"._system_browser_cachebuster_."';</script>\n";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
+        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/system/scripts/loader.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona.js\"></script>";
+        
 
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
@@ -39,6 +41,7 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
         $objGraph->setIntHeight(150);
         $objGraph->setIntWidth(150);
+        $objGraph->setBitRenderLegend(false);
         
         echo $objGraph->renderGraph();
         
