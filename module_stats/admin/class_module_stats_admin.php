@@ -159,7 +159,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
 
     /**
-     * Creates a small form to set the date-intervall of the current report
+     * Creates a small form to set the date-interval of the current report
      *
      * @param \interface_admin_statsreports|null $objReport
      *
@@ -176,7 +176,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         $strReturn .= $this->objToolkit->formDateSingle("start", $this->getLang("start"), $this->objDateStart);
         $strReturn .= $this->objToolkit->formDateSingle("end", $this->getLang("ende"), $this->objDateEnd);
 
-        //create intervall dropdown?
+        //create interval dropdown?
         if($objReport != null) {
             if($objReport instanceof interface_admin_statsreports) {
                 if($objReport->isIntervalable()) {
