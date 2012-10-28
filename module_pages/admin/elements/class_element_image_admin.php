@@ -78,6 +78,8 @@ class class_element_image_admin extends class_element_admin implements interface
      */
     public function getContentTitle() {
         $arrData = $this->loadElementData();
+        if(!isset($arrData["image_image"]))
+            $arrData["image_image"] = "";
         return uniStrTrim(htmlStripTags($arrData["image_image"]), 60);
     }
 
