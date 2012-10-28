@@ -159,9 +159,9 @@ class class_module_search_admin extends class_admin_simple implements interface_
         }
 
         $objArrayIterator->setArrElements($arrObjects);
-        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
+        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage(1));
 
-        $strReturn.= $this->renderList($objArraySectionIterator, false, "searchResultList");
+        $strReturn.= $this->renderList($objArraySectionIterator, false, "searchResultList", false, "&search_query=".$objSearch->getStrQuery());
         return $strReturn;
     }
 
