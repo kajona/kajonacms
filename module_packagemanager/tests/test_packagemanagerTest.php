@@ -90,7 +90,7 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertEquals(3, count($arrProviders));
 
 
-        $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[0]));
+        $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[2]));
     }
 
 
