@@ -258,14 +258,14 @@ class class_graph_flot implements interface_graph {
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
+                    '/core/module_flotchart/admin/scripts/js/flot/excanvas.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
                 ], function() {
-                        console.log('triggering flot for chart ".$this->strChartId ."');
                     ".$strChartCode." \n".$toolTip."    
                 });
             });
         </script>";
-
+//<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
         //enable tooltips
         return $strReturn;
     }

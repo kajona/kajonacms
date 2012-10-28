@@ -23,7 +23,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                                 return flotHelper.getTickFormatter(".$this->intXAxisAngle.", val, axis);
                             }, 
                            axisLabel: '" . $this->strXAxisTitle . "',
-                           axisLabelUseCanvas: true, 
+                           axisLabelUseHtml: false,
+                           axisLabelUseCanvas: false, 
                            axisLabelPadding:15,
                            axisLabelFontFamily:'".$this->strFont."',
                            color:'".$this->strFontColor."',
@@ -31,7 +32,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                         }";
         
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
-                            axisLabelUseCanvas: true, 
+                            axisLabelUseHtml: false,
+                            axisLabelUseCanvas: false, 
                             axisLabelPadding:15,
                             axisLabelFontFamily:'".$this->strFont."',
                             color:'".$this->strFontColor."'

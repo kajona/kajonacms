@@ -77,9 +77,9 @@ flotHelper.doToolTip = function(event, pos, item) {
             }
             else {
                 content += '<br/>'
-                +'x = ' + x
-                +'<br/>'
-                +'y = ' + y 
+                    +'x = ' + x
+                    +'<br/>'
+                    +'y = ' + y 
             }
             flotHelper.showTooltip(pos.pageX, pos.pageY, content, color);
         }
@@ -129,7 +129,9 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     }
 
     //iterate ticks
-    tickArray.forEach(function(tick, index) {
+    for(var index = 0; index<tickArray.length; index++ ) {
+        var tick = tickArray[index];
+ 
         //calculate if tick should be included in the chart
         var moduloResult = null;
         if(noTicks != null) {
@@ -149,7 +151,7 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
         if(tick[1]) {
             tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
         }
-    });
+    };
     
     return tickArray;
 };
