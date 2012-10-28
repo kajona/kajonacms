@@ -16,7 +16,10 @@
  */
 class class_module_pages_elementssearch_admin implements interface_search_plugin  {
 
-    private $strSearchterm = "";
+    /*
+     * @var class_module_search_search
+     */
+    private $objSearch = "";
 
     /**
      * @var class_db
@@ -32,7 +35,7 @@ class class_module_pages_elementssearch_admin implements interface_search_plugin
 
     public function  __construct(class_module_search_search $objSearch) {
 
-        $this->strSearchterm = $objSearch->getStrQuery();
+        $this->objSearch = $objSearch;
 
 
         $this->objDB = class_carrier::getInstance()->getObjDB();
@@ -49,7 +52,7 @@ class class_module_pages_elementssearch_admin implements interface_search_plugin
             $arrParams = array();
             foreach($arrColumns as $strOneColumn) {
                 $arrWhere[] = $this->objDB->encloseColumnName($strOneColumn)." LIKE ? ";
-                $arrParams[] = "%".$this->strSearchterm."%";
+                $arrParams[] = "%".$this->objSearch->getStrQuery()."%";
             }
 
             $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
@@ -61,6 +64,7 @@ class class_module_pages_elementssearch_admin implements interface_search_plugin
 						      "._dbprefix_."system
 						 WHERE system_id = page_element_id
 						   AND content_id = page_element_id
+						   AND system_module_nr in (".implode(",",$this->objSearch->getFilterModulesFilter()).")
 						   AND   ".$strWhere."";
 
             $arrElements = $this->objDB->getPArray($strQuery, $arrParams);

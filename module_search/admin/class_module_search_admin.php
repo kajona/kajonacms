@@ -131,6 +131,9 @@ class class_module_search_admin extends class_admin_simple implements interface_
         if($this->getParam("search_query") != "") {
             $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("search_query")), true));
         }
+        if($this->getParam("search_filter_modules") != "") {
+            $objSearch->setStrFilterModules(htmlToString(urldecode($this->getParam("search_filter_modules")), true));
+        }
 
         // Search Form
         $objForm = $this->getSearchAdminForm($objSearch);
@@ -324,6 +327,22 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         $objForm = new class_admin_formgenerator("search", $objSearch);
         $objForm->generateFieldsFromObject();
+
+        // Load filterable modules
+        $arrModules = $this->objDB->getPArray("SELECT DISTINCT system_module_nr as module_nr,  module_name
+            FROM kajona_system INNER JOIN kajona_system_module
+            on system_module_nr = module_nr
+            ORDER BY module_name ASC", array());
+
+
+        foreach ($arrModules as $arrEntry){
+            $arrFilterModules[$arrEntry["module_nr"]] = $arrEntry["module_name"];
+        }
+
+
+        $arrFilterModules = array_merge(array(implode(",",array_keys( $arrFilterModules))=>$this->getLang("select_all")), $arrFilterModules);
+
+        $objForm->addField(new class_formentry_dropdown("search", "filter_modules"))->setArrKeyValues($arrFilterModules)->setStrValue($this->getParam("search_filter_modules"))->setStrLabel($this->getLang("search_modules"));
 
         return $objForm;
     }

@@ -20,7 +20,10 @@
  */
 class class_module_pages_search_admin implements interface_search_plugin  {
 
-    private $strSearchterm = "";
+    /*
+     * @var class_module_search_search
+     */
+    private $objSearch = "";
 
     /**
      * @var class_db
@@ -34,7 +37,7 @@ class class_module_pages_search_admin implements interface_search_plugin  {
 
     public function  __construct(class_module_search_search $objSearch) {
 
-        $this->strSearchterm = $objSearch->getStrQuery();
+        $this->objSearch = $objSearch;
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
@@ -61,10 +64,10 @@ class class_module_pages_search_admin implements interface_search_plugin  {
             "pageproperties_browsername LIKE ?"
         );
         $arrParams = array(
-            "%".$this->strSearchterm."%",
-            "%".$this->strSearchterm."%",
-            "%".$this->strSearchterm."%",
-            "%".$this->strSearchterm."%"
+            "%".$this->objSearch->getStrQuery()."%",
+            "%".$this->objSearch->getStrQuery()."%",
+            "%".$this->objSearch->getStrQuery()."%",
+            "%".$this->objSearch->getStrQuery()."%"
         );
 
         $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
@@ -77,6 +80,7 @@ class class_module_pages_search_admin implements interface_search_plugin  {
                      WHERE pageproperties_id = page_id
                        AND system_id = page_id
                        AND system_status = 1
+                       AND system_module_nr in (".implode(",",$this->objSearch->getFilterModulesFilter()).")
                        AND   ".$strWhere."";
 
         $arrElements = $this->objDB->getPArray($strQuery, $arrParams);

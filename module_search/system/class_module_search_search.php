@@ -92,8 +92,8 @@ class class_module_search_search extends class_model implements interface_model,
 
         if (count($arrFilterModules) == 0)
         {
-            $arrReturn = $this->objDB->getPArray("SELECT DISTINCT module_nr
-                FROM kajona_system_module", array());
+            $arrReturn = $this->objDB->getPArray("SELECT DISTINCT system_module_nr as module_nr
+                FROM kajona_system", array());
 
             foreach ($arrReturn as $arrEntry){
                 $arrFilterModules[] = $arrEntry["module_nr"];
