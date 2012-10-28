@@ -289,10 +289,6 @@ class class_reflection {
      */
     public function getSetter($strPropertyName) {
 
-        $strSetter = "set".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
         $strSetter = "setStr".$strPropertyName;
         if(method_exists($this->strSourceClass, $strSetter))
             return $strSetter;
@@ -313,6 +309,10 @@ class class_reflection {
         if(method_exists($this->strSourceClass, $strSetter))
             return $strSetter;
 
+        $strSetter = "set".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
         return null;
     }
 
@@ -325,10 +325,6 @@ class class_reflection {
      * @return null|string
      */
     public function getGetter($strPropertyName) {
-
-        $strSetter = "get".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
 
         $strSetter = "getStr".$strPropertyName;
         if(method_exists($this->strSourceClass, $strSetter))
@@ -347,6 +343,10 @@ class class_reflection {
             return $strSetter;
 
         $strSetter = "getLong".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "get".$strPropertyName;
         if(method_exists($this->strSourceClass, $strSetter))
             return $strSetter;
 
