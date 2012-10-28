@@ -395,6 +395,8 @@ class class_installer_pages extends class_installer_base implements interface_in
     }
     
     private function update_3491_3492() {
+        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
+        
         $strReturn .= "Altering page_properties-table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_properties")."
                     ADD ".$this->objDB->encloseColumnName("pageproperties_path")." ".$this->objDB->getDatatype("char254")." NULL";

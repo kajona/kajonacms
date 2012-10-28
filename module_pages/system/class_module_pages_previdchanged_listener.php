@@ -36,7 +36,6 @@ class class_module_pages_previdchanged_listener implements interface_previdchang
         $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
         
         if ($objInstance instanceof class_module_pages_page) {
-            //$objInstance->updatePath();
             $objInstance->updateObjectToDb();
         }
     }
