@@ -150,7 +150,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         if(isset($arrPlugins[$strPlugin])) {
 
             $strReturn .= $this->getInlineLoadingCode($strPlugin);
-            //place date-selctor before
+            //place date-selector before
             $strReturn = $this->createDateSelector($arrPlugins[$strPlugin]) . $strReturn;
         }
 
