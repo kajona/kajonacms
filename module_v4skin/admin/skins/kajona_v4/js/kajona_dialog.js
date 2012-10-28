@@ -81,11 +81,10 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             });
         } else {
             $modal.css({
-                width: '96%',
-                'margin-left': function () {
-                    return -($(this).width() / 2);
-                },
-                'padding-top': 5
+                width: '97%',
+                'margin-left': 0,
+                'padding-top': 5,
+                left: 10
             });
 
             intHeight = $(window).height();
