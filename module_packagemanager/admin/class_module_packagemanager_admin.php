@@ -81,8 +81,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if($objHandler->isInstallable()) {
                 $strActions .= $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "processPackage", "&package=".$objOneMetadata->getStrPath(), $this->getLang("package_install"), $this->getLang("package_installocally"), "icon_downloads.png")
-                );
+                    getLinkAdminDialog($this->getArrModule("modul"), "processPackage", "&package=".$objOneMetadata->getStrPath(), $this->getLang("package_install"), $this->getLang("package_installocally"), "icon_downloads.png", $this->getLang("package_install")));
             }
 
 
@@ -256,19 +255,19 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             if($objHandler->getObjMetadata()->getBitProvidesInstaller())
                 $strLog .= $objHandler->installOrUpdate();
 
+            $strOnSubmit = 'window.parent.parent.location.reload();';
             if($strLog !== "") {
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("package_install_success"));
                 $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
 
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "list"));
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "list"),
+                    "", "", "javascript:".$strOnSubmit);
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
                 $strReturn .= $this->objToolkit->formClose();
             }
             else {
-                if($objHandler instanceof class_module_packagemanager_packagemanager_template)
-                    $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
-                else
-                    $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+                // break out of dialog and remove iframes by reloading main window
+                $strReturn .= '<script>'.$strOnSubmit.'</script>';
             }
         }
 
