@@ -18,12 +18,6 @@ class class_seleniumsuite {
     
     function __construct() {
         class_carrier::getInstance();
-        /*
-        $this->strTestsFolder = _realpath_."/core/_testing/commontests";
-        $this->strProjectFolder = _realpath_."/project";
-        $this->strSeleniumFolder = $this->strProjectFolder."/seleniumtesting";
-        $this->strSelTempFolder = $this->strSeleniumFolder."/temp";
-        */
         $this->strCommonTestsFolder    = "/core/_testing/commontests";
         $this->strProjectFolder  = "/project";
         $this->strSeleniumFolder = $this->strProjectFolder."/seleniumtesting";
@@ -132,7 +126,7 @@ class class_copydown extends class_seleniumsuite {
     
     
     public function selectorform () {                
-        echo "\n\nThis will generate the files for your Selenium Testingsuite (COPY DOWN)";
+        echo "\n\nThis will generate the files for your Selenium Testingsuite (<b>'COPY DOWN'</b>)";
         echo "<form method=\"post\">";
         echo "\nThe following parameter will be used. Please change if necessary. E.g. you can change the hostname to test on another machine.\n";
         $arrSystemParameter = $this->getSystemParameter();
@@ -152,18 +146,25 @@ class class_copydown extends class_seleniumsuite {
 
 class class_copyup extends class_seleniumsuite {
     public function generator() {   
-        if(issetPost("doGenerate") && issetPost("SCHEME") && issetPost("HOSTNAME") && issetPost("URLPATHNAME")   ) {            
-            $this->checkExistingDir($this->strTestsFolder);            
+        if(issetPost("doGenerate") && issetPost("SCHEME") && issetPost("HOSTNAME") && issetPost("URLPATHNAME")   ) {                   
             $objFilesystem = new class_filesystem();
-            $arrFiles = $objFilesystem->getFilelist("/debug/selenium", array(".html"));
-            echo "\n Found ".count($arrFiles)." test(s) in '/debug/selenium' \n\n";
+            $this->checkExistingDir($this->strSeleniumFolder);            
+            $this->checkWriteableDir($objFilesystem, $this->strSeleniumFolder);            
+            $this->deleteFolder($objFilesystem, $this->strSelTempFolder);
+            echo "\n Creating folder ".$this->strSelTempFolder;
+            $objFilesystem->folderCreate($this->strSelTempFolder);
+            
+            echo "\n\n### Processing Selenium files... ###\n";            
+            echo "\n Searching for available Selenium tests...\n";
+            $arrFiles = $objFilesystem->getFilelist($this->strSeleniumFolder, array(".html"));
+            echo "\n Found ".count($arrFiles)." files(s) in '".$this->strSeleniumFolder."' \n\n";
             if(count($arrFiles) == 0)
                 echo "\n\n :-(   No Files found.";
             else {
                 foreach ($arrFiles as $strOneFile) {
                     if(substr($strOneFile, 0,5) == "proj_") {
                         echo "\n  Processing file: ".$strOneFile;
-                        $strContentCurrentFile = file_get_contents(_realpath_."/debug/selenium/".$strOneFile);
+                        $strContentCurrentFile = file_get_contents(_realpath_.$this->strSeleniumFolder."/".$strOneFile);
                         $arrReplacements = array();
                         $arrReplacements[] = "XxxSCHEMExxX";
                         $arrReplacements[] = "XxxHOSTNAMExxX";
@@ -174,23 +175,23 @@ class class_copyup extends class_seleniumsuite {
                         $arrSearches[] = $_POST["URLPATHNAME"];
 
                         $strNewFileContent = uniStrReplace($arrSearches, $arrReplacements, $strContentCurrentFile);
-                        $strNewFileName = $this->strTestsFolder."/".substr($strOneFile, 5); // proj_ = 5
+                        $strNewFileName = _realpath_.$this->strSelTempFolder."/".substr($strOneFile, 5); // proj_ = 5
                         file_put_contents($strNewFileName, $strNewFileContent);
                         chmod($strNewFileName, 0777);
                     }
                     else 
                         echo "\n  <b>WARNING: Found file ".$strOneFile.", but will not use it! Files need the prefix 'proj_' to be used!</b>";
                 }               
-            }            
+            }         
         }
-        echo "\n\n\n\n<b>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nPlease remeber to use copy2project.php to copy the files back to trunk before check in!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</b>";
+        echo "\n\n\n\nYou will find your new files in "._realpath_.$this->strSelTempFolder."\n<b>Please remeber to distribute these files to the appropiate module_xxxx folder under core!!!</b>";
     }
     
     
     public function selectorform() {
-        echo "++++++ Generator for Selenium Testsuite: COPY UP +++++\n\n";
+        echo "\n\nThis will copy your Selenium files to temp and replace the parameter of your environment (<b>'COPY UP'</b>)";
         echo "<form method=\"post\">";
-        echo "\n\nThe script will replace the following parameter with placeholders. Please change if you used differend values in your testsuite.\n";
+        echo "\nThe following parameter will be replaced by placeholders. Please change if you used differend values in your testsuite.\n";
         $arrSystemParameter = $this->getSystemParameter();
         foreach($arrSystemParameter as $key => $strOneParameter) 
             echo "\n ".$key.": <input size=\"45\" type=\"text\" name=\"".$key."\" value=\"".$strOneParameter."\" /> \n\n";
@@ -240,7 +241,7 @@ else {
 }
 
 
-echo "\n\n\n <a href=\"?\">Testing startpage</a>";
+echo "\n\n\n <a href=\"".$_SERVER['PHP_SELF']."\">Testing startpage</a>";
 echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                           |\n";
