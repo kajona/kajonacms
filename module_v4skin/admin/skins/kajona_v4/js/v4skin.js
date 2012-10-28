@@ -16,6 +16,10 @@ $(function () {
             ul.append('<li class="detailedResults"><a href="#">View detailed search results</a></li>');
             ul.addClass('dropdown-menu');
             ul.addClass('search-dropdown-menu');
+
+            ul.find('.detailedResults a').click(function () {
+                $('.navbar-search').submit();
+            });
         },
         _renderItem: function (ul, item) {
             return $('<li class="clearfix"></li>')

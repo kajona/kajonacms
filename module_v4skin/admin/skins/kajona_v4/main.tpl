@@ -43,7 +43,7 @@
                     %%login%%
                 </div>
                 <div class="span8" style="text-align: right;">
-                    <form class="navbar-search pull-left" action="#">
+                    <form class="navbar-search pull-left" action="">
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
                         <input type="hidden" name="action" value="search">
