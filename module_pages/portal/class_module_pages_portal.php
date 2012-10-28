@@ -406,27 +406,25 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     .getImageAdmin("icon_enabled.png", $this->getLang("pe_disable", "pages"))."</a>";
 
 
-                //$ != undefined
-
                 //Load portaleditor javascript (even if it's maybe already loaded in portal)
                 $strPeToolbar .= "<script type='text/javascript'>
                     if($) {
-                        KAJONA.portal.loader.loadFile(['/core/module_system/admin/scripts/kajona_portaleditor.js']);
+                        KAJONA.portal.loader.loadFile(['/core/module_system/admin/scripts/kajona_portaleditor.js'], function() {
+                            $(KAJONA.admin.portaleditor.initPortaleditor);
+                        });
                     }
                     else {
                         KAJONA.portal.loader.loadFile([
                             '/core/module_system/admin/scripts/jquery/jquery.min.js',
                             '/core/module_system/admin/scripts/kajona_portaleditor.js'
-                        ]);
+                        ], function() {
+                            $(KAJONA.admin.portaleditor.initPortaleditor);
+                        });
                     }
                 </script>";
                 //Load portaleditor styles
                 $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
 
-
-                $strPeToolbar .= "<script type='text/javascript'>
-                    $(KAJONA.admin.portaleditor.initPortaleditor);
-                </script>";
 
                 //The toolbar has to be added right after the body-tag - to generate correct html-code
                 $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));

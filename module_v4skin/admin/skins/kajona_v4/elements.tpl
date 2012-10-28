@@ -976,7 +976,7 @@ pe_iconbar, pe_disable
 	<script type="text/javascript">
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
-        KAJONA.admin.loader.loadFile([
+        KAJONA.portal.loader.loadFile([
             "_skinwebpath_/js/kajona_dialog.js",
             "_skinwebpath_/js/bootstrap-modal.js",
             "_skinwebpath_/js/bootstrap-dropdown.js"
