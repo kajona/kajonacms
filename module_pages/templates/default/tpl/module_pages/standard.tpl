@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index, follow">
 
+    <link rel="canonical" href="%%canonicalUrl%%" />
     <link rel="stylesheet" href="_webpath_/templates/default/css/normalize.css">
     <link rel="stylesheet" href="_webpath_/templates/default/css/main.css">
 

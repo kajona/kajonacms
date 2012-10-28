@@ -348,6 +348,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
         $arrTemplate["keywords"] = $objPageData->getStrKeywords();
         $arrTemplate["title"] = $objPageData->getStrBrowsername();
         $arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
+        $arrTemplate["canonicalUrl"] = getLinkPortalHref($objPageData->getStrName(), "", $this->getParam("action"), "", $this->getParam("systemid"));
+        
         //Include the $arrGlobal Elements
         $arrGlobal = array();
         $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");

@@ -15,6 +15,7 @@ Released   : 20120719
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
         <title>%%additionalTitle%%%%title%% | Kajona</title>
+                <link rel="canonical" href="%%canonicalUrl%%" />
 		<link href="http://fonts.googleapis.com/css?family=Abel" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" type="text/css" href="_webpath_/templates/prolific/css/style.css" />
         %%kajona_head%%
