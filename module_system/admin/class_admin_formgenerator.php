@@ -30,9 +30,10 @@ class class_admin_formgenerator {
     const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
     const  STR_LABEL_ANNOTATION     = "@fieldLabel";
 
-    const  BIT_BUTTON_SUBMIT = 2;
+    const  BIT_BUTTON_SAVE = 2;
     const  BIT_BUTTON_CLOSE  = 4;
     const  BIT_BUTTON_CANCEL = 8;
+    const  BIT_BUTTON_SUBMIT = 16;
 
 
     /**
@@ -104,7 +105,7 @@ class class_admin_formgenerator {
     /**
      * @param $strTargetURI
      * @param int $intButtonConfig a list of buttons to attach to the end of the form. if you need more then the obligatory save-button,
-     *                             pass them combined by a bitwise or, e.g. class_admin_formgenerator::$BIT_BUTTON_SUBMIT | class_admin_formgenerator::$BIT_BUTTON_CANCEL
+     *                             pass them combined by a bitwise or, e.g. class_admin_formgenerator::BIT_BUTTON_SAVE | class_admin_formgenerator::$BIT_BUTTON_CANCEL
      *
      * @throws class_exception
      * @return string
@@ -125,6 +126,9 @@ class class_admin_formgenerator {
             $strReturn .= $objOneField->renderField();
 
         if($intButtonConfig & self::BIT_BUTTON_SUBMIT)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_submit", "system"), "submit");
+
+        if($intButtonConfig & self::BIT_BUTTON_SAVE)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submit");
 
         if($intButtonConfig & self::BIT_BUTTON_CANCEL)

@@ -58,6 +58,7 @@ $lang["commons_page_success"]            = "Seite im Erfolgsfall (optional):";
 $lang["commons_path"]                    = "Pfad:";
 $lang["commons_result_page"]             = "Treffer-Seite:";
 $lang["commons_save"]                    = "Speichern";
+$lang["commons_submit"]                  = "Absenden";
 $lang["commons_sort_totree"]             = "Übergeordneten Knoten durch Fallenlassen im Baum anpassen";
 $lang["commons_sort_vertical"]           = "Reihenfolge durch Drag n Drop anpassen";
 $lang["commons_start"]                   = "Starten";
