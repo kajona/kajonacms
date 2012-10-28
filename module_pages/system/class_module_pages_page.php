@@ -132,7 +132,12 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrBrowsername();
+        $strName = $this->getStrBrowsername();
+        
+        if ($strName == "")
+            $strName = $this->getStrName ();
+        
+        return $strName;
     }
 
     /**
@@ -198,7 +203,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $arrPropRow["pageproperties_keywords"] = "";
                 $arrPropRow["pageproperties_template"] = "";
                 $arrPropRow["pageproperties_seostring"] = "";
-                $arrPropRow["pageproperties_language"] = "";
+                $arrPropRow["pageproperties_language"] = $this->getStrLanguage();
                 $arrPropRow["pageproperties_alias"] = "";
                 $arrPropRow["pageproperties_path"] = "";
             }
@@ -210,7 +215,6 @@ class class_module_pages_page extends class_model implements interface_model, in
             $this->setStrKeywords($arrRow["pageproperties_keywords"]);
             $this->setStrTemplate($arrRow["pageproperties_template"]);
             $this->setStrSeostring($arrRow["pageproperties_seostring"]);
-            $this->setStrLanguage($arrRow["pageproperties_language"]);
             $this->setStrAlias($arrRow["pageproperties_alias"]);
             $this->setStrPath($arrRow["pageproperties_path"]);
 
