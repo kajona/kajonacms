@@ -118,9 +118,9 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         var keySplitted = key.split('#');
 
         var data = {
-            systemid:keySplitted[0],
-            property:keySplitted[1],
-            value:value
+            systemid: keySplitted[0],
+            property: keySplitted[1],
+            value: value
         };
 
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data, function () {
@@ -214,10 +214,10 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
         //generate hallo editor config
         var halloConfig = {
-            plugins:{
-                halloreundo:{}
+            plugins: {
+                halloreundo: {}
             },
-            modified:function (event, obj) {
+            modified: function (event, obj) {
                 var attr = $(this).attr('data-kajona-editable');
 
                 $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace("Disabled", ""));
@@ -228,16 +228,30 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
         if (!isPlaintext) {
             halloConfig.plugins = {
-                halloformat:{},
-                hallolists:{},
-                halloreundo:{},
-                hallolink:{}
+                halloformat: {},
+                hallolists: {},
+                halloreundo: {},
+                hallolink: {}
 
             };
         }
 
         //finally init hallo editor
         editable.hallo(halloConfig);
+    });
+
+    // warn user if there are unsaved changes when leaving the page
+    $(window).on('beforeunload', function () {
+        // check if there are unsaved changes
+        var unsavedChanges = false;
+        $.each(KAJONA.admin.portaleditor.RTE.modifiedFields, function () {
+            unsavedChanges = true;
+            return false;
+        });
+
+        if (unsavedChanges) {
+            return KAJONA.admin.lang.pe_rte_unsavedChanges;
+        }
     });
 };
 

@@ -110,6 +110,7 @@ $lang["pe_inactiveElement"]              = "Deaktiviertes Element";
 $lang["pe_new"]                          = "Neues Element an Platzhalter:";
 $lang["pe_new_old"]                      = "Anlegen";
 $lang["pe_rte_save"]                     = "Vorgenommene Änderungen speichern";
+$lang["pe_rte_unsavedChanges"]           = "Möchten Sie die noch nicht gespeicherten Änderungen wirklich verwerfen?";
 $lang["pe_setactive"]                    = "Aktivieren";
 $lang["pe_setinactive"]                  = "Deaktivieren";
 $lang["pe_shiftDown"]                    = "Nach unten";
