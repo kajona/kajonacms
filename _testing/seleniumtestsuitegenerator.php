@@ -18,10 +18,16 @@ class class_seleniumsuite {
     
     function __construct() {
         class_carrier::getInstance();
+        /*
         $this->strTestsFolder = _realpath_."/core/_testing/commontests";
         $this->strProjectFolder = _realpath_."/project";
         $this->strSeleniumFolder = $this->strProjectFolder."/seleniumtesting";
         $this->strSelTempFolder = $this->strSeleniumFolder."/temp";
+        */
+        $this->strCommonTestsFolder    = "/core/_testing/commontests";
+        $this->strProjectFolder  = "/project";
+        $this->strSeleniumFolder = $this->strProjectFolder."/seleniumtesting";
+        $this->strSelTempFolder  = $this->strSeleniumFolder."/temp";
     }
 
     public function getSystemParameter() {
@@ -35,36 +41,50 @@ class class_seleniumsuite {
     }
     
     public function checkExistingDir($strDirName) {        
-        if(is_dir($strDirName))
+        if(is_dir(_realpath_.$strDirName))
             echo "\n Ok, found folder ".$strDirName;
         else
             DIE("\n\n ERROR: The folder  '".$strDirName."' does not exist!!");
     }
         
-    public function checkProjectDir($objFilesystem) {        
-        if($objFilesystem->isWritable("project"))    // do NOT $this->strProjectFolder at this point!!!! isWriteable uses _realpath_ !!
-            echo "\n Ok, project folder is writeable.";
+    public function checkWriteableDir($objFilesystem, $strDirName) {        
+        if($objFilesystem->isWritable($strDirName))
+            echo "\n Ok, ".$strDirName." is writeable.";
         else
-            DIE("\n\n ERROR: The project folder is NOT writeable!!\n Please change permissions of ".$this->strProjectFolder." to let the webserver write in it.");
-            echo $objFilesystem->isWritable($this->strProjectFolder); 
+            DIE("\n\n ERROR: ".$strDirName." is NOT writeable!!\n Please change permissions to let the webserver write in it.");
+    }
+    
+    public function deleteFolder($objFilesystem, $strDirName) {
+        if(is_dir(_realpath_.$strDirName)) {
+            echo "\n Found existing folder ".$strDirName.", delete it...";
+
+            $boolDeleteAction = @$objFilesystem->folderDeleteRecursive($strDirName);
+            if($boolDeleteAction === false)
+                DIE("\n\n ERROR: Folder ".$strDirName." can not be deleted! Permission denied!");
+
+        }
+        else 
+            echo "\n Ok, ".$strDirName." does not already exist.";
     }
 
-} // class_seleniumsuite zu
+} // class_seleniumsuite end
 
 
 class class_copydown extends class_seleniumsuite {
     public function generator() {
         if(issetPost("doGenerate") && issetPost("SCHEME") && issetPost("HOSTNAME") && issetPost("URLPATHNAME")   ) {            
-            $this->checkExistingDir($this->strTestsFolder);            
+            $this->checkExistingDir($this->strCommonTestsFolder);            
+            $this->checkExistingDir($this->strProjectFolder);            
             $objFilesystem = new class_filesystem();
-            $this->checkProjectDir($objFilesystem);             
-            $this->deleteSeleniumFolder($objFilesystem);
+            $this->checkWriteableDir($objFilesystem, $this->strProjectFolder);             
+            $this->deleteFolder($objFilesystem, $this->strSeleniumFolder);
             
-            echo "\nCreating testsuite...\n";  
-            $objFilesystem->folderCreate("/project/seleniumtesting");
+            echo "\n\n### Creating testsuite... ###\n";
+            echo "\n Creating folder ".$this->strSeleniumFolder;
+            $objFilesystem->folderCreate($this->strSeleniumFolder);
+            
             echo "\n Searching for available Selenium tests...\n";
-
-            $arrFiles = $objFilesystem->getFilelist($this->strTestsFolder, array(".html", ".htm"));
+            $arrFiles = $objFilesystem->getFilelist($this->strCommonTestsFolder, array(".html", ".htm"));
             echo "\n Found ".count($arrFiles)." test(s)\n\n";
             if(count($arrFiles) == 0)
                 echo "\n\n :-(   No Files found.";
@@ -83,7 +103,7 @@ class class_copydown extends class_seleniumsuite {
 
                 foreach ($arrFiles as $strOneFile) {
                     echo "\n  Processing file: ".$strOneFile;
-                    $strContentCurrentFile = file_get_contents($this->strTestsFolder."/".$strOneFile);
+                    $strContentCurrentFile = file_get_contents(_realpath_.$this->strCommonTestsFolder."/".$strOneFile);
                     $arrSearches = array();
                     $arrSearches[] = "XxxSCHEMExxX";
                     $arrSearches[] = "XxxHOSTNAMExxX";
@@ -94,7 +114,7 @@ class class_copydown extends class_seleniumsuite {
                     $arrReplacements[] = $_POST["URLPATHNAME"];
 
                     $strNewFileContent = uniStrReplace($arrSearches, $arrReplacements, $strContentCurrentFile);
-                    $strFileName = "selenium/proj_".$strOneFile;
+                    $strFileName = _realpath_.$this->strSeleniumFolder."/proj_".$strOneFile;
                     file_put_contents($strFileName, $strNewFileContent);
                     chmod($strFileName, 0777);
                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"proj_".$strOneFile."\">".$strOneFile."</a></td></tr>";
@@ -104,8 +124,8 @@ class class_copydown extends class_seleniumsuite {
 </body>
 </html>";
                 echo "\n\n  Write master file for testsuite";
-                file_put_contents("selenium/_Testsuite.htm", $strContentTestsuiteFile);
-                echo "\n\n\n If you want to see your files click <a href=\"selenium\">here</a> (webserver has to allow file listing)";
+                file_put_contents(_realpath_.$this->strSeleniumFolder."/_Testsuite.htm", $strContentTestsuiteFile);
+                echo "\n\n\n<b>You will find your new files in "._realpath_.$this->strSeleniumFolder."</b>";
             }
         }
     }    
@@ -125,16 +145,7 @@ class class_copydown extends class_seleniumsuite {
         echo "<input type=\"hidden\" name=\"doGenerate\" value=\"1\" />";
         echo "<input type=\"submit\" value=\"Cool! Create testsuite now!\" />";
         echo "</form>";
-    }
-    
-    private function deleteSeleniumFolder($objFilesystem) {
-        if(is_dir($this->strSeleniumFolder)) {
-            echo "\n Found existing selenium folder, delete it...";
-            $boolDeleteAction = @$objFilesystem->folderDeleteRecursive("/project/seleniumtesting");
-            if($boolDeleteAction === false)
-                DIE("\n\n ERROR: Folder /project/seleniumtesting can not be deleted! Permission denied!");
-        }        
-    }
+    }    
 
 } // class_copydown zu
 
@@ -221,7 +232,7 @@ else {
     echo "<form method=\"post\">";
     echo "<input type=\"hidden\" name=\"doStart\" value=\"1\" />";
     echo "\n<input type=\"radio\" name=\"copydirection\" value=\"down\" checked /> <b>GENERATE testingsuite ('copy down')</b> (will copy files TO ".$objSeleniumGenerator->strSeleniumFolder.")\n      -> Use this to get a set of files for your Selenium testing.\n      -> You can use this set to test your project with Selenium IDE.\n      -> The new files will get the prefix 'proj_'.";
-    echo "\n<input type=\"radio\" name=\"copydirection\" value=\"up\" /> <b>CLEANUP projectfiles</b> (will copy files FROM ".$objSeleniumGenerator->strSeleniumFolder.")\n      -> Use this to copy your changed files from the testingsuite to a temporary folder and let the parameter be anonymized.\n      -> You have to distribute your new to the module_xxxxx/tests folder later manually.\n      -> Files with prefix 'proj_' will be used and the prefix will be removed.";
+    echo "\n<input type=\"radio\" name=\"copydirection\" value=\"up\" /> <b>CLEANUP projectfiles</b> (will copy files FROM ".$objSeleniumGenerator->strSeleniumFolder." to a temp folder)\n      -> Use this to copy your changed files from the testingsuite to a temporary folder and let the parameter be anonymized.\n      -> You have to distribute your new to the module_xxxxx/tests folder later manually.\n      -> Files with prefix 'proj_' will be used and the prefix will be removed.";
     echo "\n\n<b> WARNING!! All existing files in destination folders will be deleted/overwritten!!!</b>\n";
     echo "\n\n<input type=\"submit\" value=\"Start\" />";
     echo "</form>";
