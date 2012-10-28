@@ -507,8 +507,8 @@ class class_installer {
             else {
                 //check missing modules
                 $strRequired = "";
-                $arrModules = explode(",", $objHandler->getObjMetadata()->getStrRequiredModules());
-                foreach($arrModules as $strOneModule) {
+                $arrModules = $objHandler->getObjMetadata()->getArrRequiredModules();
+                foreach($arrModules as $strOneModule => $strVersion) {
                     if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
                         $strRequired .= $strOneModule.", ";
                 }
