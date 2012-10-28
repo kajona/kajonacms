@@ -101,18 +101,19 @@ abstract class class_admin_simple extends class_admin {
      *
      * @param class_array_section_iterator $objArraySectionIterator
      * @param string $strListIdentifier an internal identifier to check the current parent-list
+     * @param string $strPagerAddon
      *
      * @throws class_exception
      * @return string
      */
-    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "") {
+    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "") {
         $strReturn = "";
 
         if($objArraySectionIterator->getNrOfPages() > 1) {
             throw new class_exception("sortable lists with more than one page are not supported!", class_exception::$level_ERROR);
         }
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon);
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
         $arrIterables = $arrPageViews["elements"];
 
 
@@ -167,8 +168,6 @@ abstract class class_admin_simple extends class_admin {
     }
 
 
-
-
     /**
      * Renders a list of items, target is the common admin-list.
      * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
@@ -178,11 +177,12 @@ abstract class class_admin_simple extends class_admin {
      * @param bool $bitSortable
      * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param bool $bitAllowTreeDrop
+     * @param string $strPagerAddon
      *
      * @throws class_exception
      * @return string
      */
-    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false) {
+    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "") {
         $strReturn = "";
         $intI = 0;
 
@@ -192,7 +192,7 @@ abstract class class_admin_simple extends class_admin {
 
         $strListId = generateSystemid();
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon);
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
         $arrIterables = $arrPageViews["elements"];
 
         if(count($arrIterables) == 0)
