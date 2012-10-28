@@ -49,6 +49,7 @@ $lang["header_ip"]                       = "IP/Hostname";
 $lang["header_user"]                     = "User";
 $lang["image_dimensions"]                = "Image dimensions:";
 $lang["logbook_hint_date"]               = "Deletes all logbook entries recorded before the given date.";
+$lang["max_size"]                        = "Max File Size:";
 $lang["mediamanager_upload"]             = "Select file:";
 $lang["modul_titel"]                     = "Mediamananger";
 $lang["module_action_new"]               = "New repository";
