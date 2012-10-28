@@ -119,6 +119,7 @@ abstract class class_graph_flot_chartdata_base {
         $strOptions = $this->optionsToJSON();
 
         return " $(document).ready(function() {
+            ".$this->showChartToolTips($strChartId)."\n
             $.plot($(\"#" . $strChartId . "\"), [" . $strData . "], {" . $strOptions . "});
          });";
     }

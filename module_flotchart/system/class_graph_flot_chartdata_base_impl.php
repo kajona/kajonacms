@@ -60,36 +60,22 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
     }
 
     public function ticksToJSON() {
-        $tickArray = "";
-
         if(count($this->arrXAxisTickLabels)==0) {
             return "null";
         }
-        
-        
-        //iterate labels
-        foreach ($this->arrXAxisTickLabels as $intKey => $objValue) {
-            $tickArray.= "[".$intKey.",'".$this->arrXAxisTickLabels[$intKey]."'],";
-        }
-        
-        if(strlen($tickArray) > 0) {
-            $tickArray = substr($tickArray, 0, -1);
-        }
-        
-        $tickArray = "[".$tickArray."]";
-        
+
         //return the tick generator function
         return "function(axis) {
                 var angle = eval(".$this->intXAxisAngle.");
-                var tickArray = eval(".$tickArray.");
+                var tickArray = eval(".json_encode($this->arrXAxisTickLabels).");
                 var noOfWrittenLabels = eval(".$this->intNrOfWrittenLabels.");
                 return flotHelper.getTickArray.call(this, angle, axis, tickArray, noOfWrittenLabels);
             }";
     }
     
     public function showChartToolTips($strChartId) {
-        $tooltip = "var previousSeries = null; \n
-                    var previousPoint = null; \n
+        $tooltip = "previousSeries = null; \n
+                    previousPoint = null; \n
                     $(\"#" . $strChartId . "\").bind(\"plothover\",flotHelper.doToolTip);";
 
         return $tooltip;
