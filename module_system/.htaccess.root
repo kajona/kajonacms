@@ -25,8 +25,8 @@
 # skip all requests not ending with .html or .rss - they don't have any rewrite rules (little performance tweak)
 #RewriteRule !\.(html|rss)$ - [L]
 
-######################################## ADMIN REWRITING ##################################################
 
+######################################## ADMIN REWRITING ##################################################
 
 # xml rewriting. source: /xml/admin/module/action/systemid/
 #RewriteRule !^xml/admin/ - [S=3]
@@ -40,6 +40,7 @@
 #RewriteRule ^admin/([a-z\_]+)/([a-zA-Z]*)/([0-9a-z]*)\.html  index.php?admin=1&module=$1&action=$2&systemid=$3 [QSA,L]
 #RewriteRule ^admin/([a-z\_]+)/([a-zA-Z]*)\.html  index.php?admin=1&module=$1&action=$2 [QSA,L]
 #RewriteRule ^admin/([a-z\_]+)\.html  index.php?admin=1&module=$1 [QSA,L]
+
 
 ######################################## PORTAL REWRITING #################################################
 
@@ -96,29 +97,124 @@
 #php_value error_log project/log/php.log
 
 
-
 ######################################## PERFORMANCE ######################################################
+# borrowed from HTML5 Boilerplate; http://html5boilerplate.com/
 
-# recommended: enable these lines to activate gzip compression for all output including js, css and xml
-# please note that there's no need for enabling gzip-compression in Kajona's system settings then
+# Proper mime types
 
-#AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript text/json application/javascript application/json application/x-javascript
-# Netscape 4.x and IE 5.5/6.0 sometimes don't like compressed js and css files
-#BrowserMatch ^Mozilla/4 gzip-only-text/html
-# Sometimes Opera pretends to be IE with "Mozilla/4.0"
-#BrowserMatch \bOpera !gzip-only-text/html
-# luckily IE >=7 handles gzipped files correctly
-#BrowserMatch \bMSIE\s[789] !gzip-only-text/html
+# JavaScript
+#   Normalize to standard type (it's sniffed in IE anyways)
+#   tools.ietf.org/html/rfc4329#section-7.2
+AddType application/javascript         js jsonp
+AddType application/json               json
 
-# only enable when you know what you're doing: set browser caching of static files to 1 week
-#<FilesMatch "\.(js|css|jpg|jpeg|png|gif|ico|swf|woff|eot|svg|ttf)$">
-#    <IfModule headers_module>
-#        Header set Cache-Control "max-age=604800, public"
-#        Header unset Last-Modified
-#        Header set Expires "Thu, 31 Dec 2020 20:00:00 GMT"
-#    </IfModule>
-#    <IfModule expires_module>
-#        ExpiresActive On
-#        ExpiresDefault "access plus 1 week"
-#    </IfModule>
-#</FilesMatch>
+# Audio
+AddType audio/ogg                      oga ogg
+AddType audio/mp4                      m4a f4a f4b
+
+# Video
+AddType video/ogg                      ogv
+AddType video/mp4                      mp4 m4v f4v f4p
+AddType video/webm                     webm
+AddType video/x-flv                    flv
+
+# SVG
+#   Required for svg webfonts on iPad
+#   twitter.com/FontSquirrel/status/14855840545
+AddType     image/svg+xml              svg svgz
+AddEncoding gzip                       svgz
+
+# Webfonts
+AddType application/vnd.ms-fontobject  eot
+AddType application/x-font-ttf         ttf ttc
+AddType font/opentype                  otf
+AddType application/x-font-woff        woff
+
+# Assorted types
+AddType image/x-icon                        ico
+AddType image/webp                          webp
+AddType application/xml                     rss atom xml rdf
+AddType application/x-chrome-extension      crx
+AddType application/x-opera-extension       oex
+AddType application/x-xpinstall             xpi
+AddType application/octet-stream            safariextz
+AddType application/x-web-app-manifest+json webapp
+AddType text/x-vcard                        vcf
+AddType application/x-shockwave-flash       swf
+AddType text/vtt                            vtt
+
+# Compression
+
+<IfModule mod_deflate.c>
+  # Force deflate for mangled headers developer.yahoo.com/blogs/ydn/posts/2010/12/pushing-beyond-gzipping/
+  <IfModule mod_setenvif.c>
+    <IfModule mod_headers.c>
+      SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+      RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+    </IfModule>
+  </IfModule>
+
+  # Compress all output labeled with one of the following MIME-types
+  <IfModule mod_filter.c>
+    AddOutputFilterByType DEFLATE application/atom+xml \
+                                  application/javascript \
+                                  application/json \
+                                  application/rss+xml \
+                                  application/vnd.ms-fontobject \
+                                  application/x-font-ttf \
+                                  application/xhtml+xml \
+                                  application/xml \
+                                  font/opentype \
+                                  image/svg+xml \
+                                  image/x-icon \
+                                  text/css \
+                                  text/html \
+                                  text/plain \
+                                  text/x-component \
+                                  text/xml
+  </IfModule>
+</IfModule>
+
+# Expires headers (for better cache control)
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+
+# Perhaps better to whitelist expires rules? Perhaps.
+  ExpiresDefault                          "access plus 1 week"
+
+# Your document html
+  ExpiresByType text/html                 "access plus 0 seconds"
+
+# Data
+  ExpiresByType text/xml                  "access plus 0 seconds"
+  ExpiresByType application/xml           "access plus 0 seconds"
+  ExpiresByType application/json          "access plus 0 seconds"
+
+# Feed
+  ExpiresByType application/rss+xml       "access plus 1 hour"
+  ExpiresByType application/atom+xml      "access plus 1 hour"
+
+# Favicon (cannot be renamed)
+  ExpiresByType image/x-icon              "access plus 1 week"
+
+# Media: images, video, audio
+  ExpiresByType image/gif                 "access plus 1 day"
+  ExpiresByType image/png                 "access plus 1 day"
+  ExpiresByType image/jpeg                "access plus 1 day"
+  ExpiresByType video/ogg                 "access plus 1 day"
+  ExpiresByType audio/ogg                 "access plus 1 day"
+  ExpiresByType video/mp4                 "access plus 1 day"
+  ExpiresByType video/webm                "access plus 1 day"
+
+# Webfonts
+  ExpiresByType application/x-font-ttf    "access plus 1 month"
+  ExpiresByType font/opentype             "access plus 1 month"
+  ExpiresByType application/x-font-woff   "access plus 1 month"
+  ExpiresByType image/svg+xml             "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+
+# CSS and JavaScript
+  ExpiresByType text/css                  "access plus 1 day"
+  ExpiresByType application/javascript    "access plus 1 day"
+</IfModule>
