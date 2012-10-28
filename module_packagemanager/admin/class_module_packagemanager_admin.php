@@ -53,7 +53,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @autoTestable
      */
     protected function actionList() {
-
         class_module_packagemanager_template::syncTemplatepacks();
 
         $strReturn = "";
@@ -99,7 +98,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
 
-        $strAddActions = $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png"));
+        $strAddActions = $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png", $this->getLang("actionUploadPackage")));
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
 
 
@@ -172,6 +171,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @return string
      */
     protected function actionProcessPackage() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+
         $strReturn = "";
         $strFile = $this->getParam("package");
 
@@ -214,8 +215,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
 
         }
-        else
-            return $this->getLang("provider_error_package");
+        else {
+            $strError = $this->getLang("provider_error_package");
+            $strError .= getLinkAdminRaw('javascript:history.back();', $this->getLang('back'));
+            $strReturn .= $this->objToolkit->warningBox($strError);
+        }
 
         return $strReturn;
     }
@@ -225,6 +229,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @return string
      */
     protected function actionInstallPackage() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+
         $strReturn = "";
         $strLog = "";
         $strFile = $this->getParam("package");
@@ -290,25 +296,25 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @autoTestable
      */
     protected function actionAddPackage() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+
+        $strReturn = "";
+
         $objManager = new class_module_packagemanager_manager();
         $arrContentProvider = $objManager->getContentproviders();
         if($this->getParam("provider") == "") {
-            $strReturn = $this->objToolkit->listHeader();
+            $arrTabs = array();
 
-            $intI = 0;
             foreach($arrContentProvider as $objOneProvider) {
-                $strReturn .= $this->objToolkit->genericAdminList(
-                    generateSystemid(),
-                    $objOneProvider->getDisplayTitle(),
-                    getImageAdmin("icon_dot.png"),
-                    $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept.png")),
-                    $intI++
-                );
+                $strIFrameSrc = getLinkAdminHref($this->getArrModule("modul"), "addPackage", "&provider=".get_class($objOneProvider));
+
+                $arrTabs[$objOneProvider->getDisplayTitle()] = $this->objToolkit->getIFrame($strIFrameSrc);
             }
 
-            $strReturn .= $this->objToolkit->listFooter();
+            $strReturn .= $this->objToolkit->getTabbedContent($arrTabs, true);
             return $strReturn;
         }
+
 
         $strProvider = $this->getParam("provider");
         $objProvider = null;
@@ -316,8 +322,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             if(get_class($objOneProvider) == $strProvider)
                 $objProvider = $objOneProvider;
 
-        if($objProvider == null)
-            return $this->getLang("commons_error_permissions");
+        if($objProvider == null) {
+            return $this->renderError("commons_error_permissions");
+        }
 
         try {
             $strReturn = $objProvider->renderPackageList();
@@ -333,6 +340,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @return string
      */
     protected function actionUploadPackage() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+
         $objManager = new class_module_packagemanager_manager();
         $arrContentProvider = $objManager->getContentproviders();
 
@@ -347,8 +356,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strFile = $objProvider->processPackageUpload();
 
-        if($strFile == null)
-            return $this->getLang("provider_error_transfer", "packagemanager");
+        if($strFile == null) {
+            return $this->renderError("provider_error_transfer", "packagemanager");
+        }
 
         if(!$objManager->validatePackage($strFile)) {
             $objFilesystem = new class_filesystem();
@@ -360,7 +370,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         return "";
     }
 
-
+    protected function renderError($strLangName, $strLangModule = null) {
+        $strError = $this->getLang($strLangName, $strLangModule);
+        $strError .= ' ' . getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
+        return $this->objToolkit->warningBox($strError);
+    }
 
     /**
      * @return string
@@ -443,7 +457,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @permissions edit
      */
     protected function actionEdit() {
-        return $this->getLang("commons_error_permissions");
+        return $this->renderError("commons_error_permissions");
     }
 
     /**

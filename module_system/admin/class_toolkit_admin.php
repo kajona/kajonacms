@@ -1169,10 +1169,11 @@ class class_toolkit_admin extends class_toolkit {
      * arraykey => tabname
      * arrayvalue => tabcontent
      * @param $arrTabs array(key => content)
+     * @param $bitFullHeight whether the tab content should use full height
      *
      * @return string
      */
-    public function getTabbedContent(array $arrTabs) {
+    public function getTabbedContent(array $arrTabs, $bitFullHeight = false) {
 
         $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_wrapper");
         $strHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabheader");
@@ -1188,7 +1189,7 @@ class class_toolkit_admin extends class_toolkit {
             $strClassaddon = "";
         }
 
-        return $this->objTemplate->fillTemplate(array("tabheader" => $strTabs, "tabcontent" => $strTabContent), $strWrapperID);
+        return $this->objTemplate->fillTemplate(array("tabheader" => $strTabs, "tabcontent" => $strTabContent, "classaddon" => ($bitFullHeight === true ? 'fullHeight' : '')), $strWrapperID);
     }
 
     /**
@@ -1201,6 +1202,19 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "graph_container");
         $arrContent = array();
         $arrContent["imgsrc"] = $strImgSrc;
+        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
+    }
+
+    /**
+     * Includes an IFrame with the given URL
+     *
+     * @param string $strIFrameSrc
+     * @return string
+     */
+    public function getIFrame($strIFrameSrc) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "iframe_container");
+        $arrContent = array();
+        $arrContent["iframesrc"] = $strIFrameSrc;
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 

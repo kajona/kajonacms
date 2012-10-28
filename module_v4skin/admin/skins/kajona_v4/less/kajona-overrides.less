@@ -955,7 +955,10 @@ label {
 			}
         }
 
-        td.image {
+        td.image img {
+          width: 22px;
+          height: 22px;
+          max-width: none;
         }
 
         td.listsorthandle, td.treedrag {
@@ -1038,6 +1041,17 @@ label {
     }
 
 }
+
+/* TABS */
+.tab-content.fullHeight {
+    height: 100%;
+    overflow: inherit;
+
+    .tab-pane {
+      height: 100%;
+    }
+}
+
 
 /* TOOLTIPS */
 .ui-tooltip-content {

@@ -602,14 +602,29 @@ A fieldset to structure logical sections
 </graph_container>
 
 
+<iframe_container>
+    <iframe src="%%iframesrc%%" class="loadingContainer" width="100%" height="100%" frameborder="0"></iframe>
+</iframe_container>
+
+
 <tabbed_content_wrapper>
     <ul class="nav nav-tabs" id="myTab">
         %%tabheader%%
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content %%classaddon%%">
         %%tabcontent%%
     </div>
+
+    <script>
+        $(function () {
+            var $tabContent = $('.tab-content.fullHeight');
+            var tabNavHeight = $tabContent.parent().children('.nav-tabs').outerHeight(true);
+            var height = $tabContent.first().height();
+
+            $tabContent.height(height - tabNavHeight - 10);
+        });
+    </script>
 </tabbed_content_wrapper>
 
 <tabbed_content_tabheader>
