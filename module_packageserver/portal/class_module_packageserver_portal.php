@@ -134,7 +134,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
     /**
      * Searches a list of packages and returns all of the infos found relating that packages.
      * Therefore, the package-names should be sent as a comma-separated list, e.g.:
-     * xml.php?module=packageserver&action=searchPackages&title=system,pages,mediamanager
+     * xml.php?module=packageserver&action=searchPackages&title=system,pages,mediamanager&type=1
      *
      * @xml
      * @return string|json
@@ -142,8 +142,9 @@ class class_module_packageserver_portal extends class_portal implements interfac
     protected function actionSearchPackages() {
         $arrReturn = array();
         $arrSearch = explode(",", $this->getParam("title"));
+        $intTypeFilter = $this->ensureNumericValue($this->getParam("type"), false);
 
-        $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_);
+        $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter);
         $objManager = new class_module_packagemanager_manager();
 
         foreach($arrDBFiles as $objOneFile) {

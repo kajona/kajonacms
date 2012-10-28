@@ -31,6 +31,6 @@ class class_module_packagemanager_contentprovider_kajona extends class_module_pa
             $strDownloadUrl = str_replace("http://".$_SERVER["HTTP_HOST"], "", _webpath_)."/download.php";
         }
 
-        parent::__construct("provider_kajona", $strBrowseHost, $strBrowseUrl, $strSearchUrl, $strDownloadUrl);
+        parent::__construct("provider_kajona", $strBrowseHost, $strBrowseUrl, $strSearchUrl, $strDownloadUrl, __CLASS__);
     }
 }

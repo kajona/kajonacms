@@ -22,18 +22,34 @@
  */
 abstract class class_module_packagemanager_contentprovider_remote_base implements interface_packagemanager_contentprovider {
 
+    private static $STR_MODULE_NAME = "packagemanager";
+    private static $STR_SESSION_KEY_NAME = "STR_SESSION_KEY_NAME";
+    private static $STR_SESSION_KEY_TYPE = "STR_SESSION_KEY_TYPE";
+
     private $STR_BROWSE_HOST = "";
     private $STR_BROWSE_URL = "";
     private $STR_SEARCH_URL = "";
     private $STR_DOWNLOAD_URL = "";
     private $STR_PROVIDER_NAME;
+    private $CLASS_NAME;
 
-    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strSearchUrl, $strDownloadUrl) {
+    /**
+     * @var string
+     */
+    private $strPackageName;
+
+    /**
+     * @var int
+     */
+    private $intType;
+
+    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strSearchUrl, $strDownloadUrl, $strClassName) {
         $this->STR_PROVIDER_NAME = $strProviderName;
         $this->STR_BROWSE_HOST = $strBrowseHost;
         $this->STR_BROWSE_URL = $strBrowseUrl;
         $this->STR_SEARCH_URL = $strSearchUrl;
         $this->STR_DOWNLOAD_URL = $strDownloadUrl;
+        $this->CLASS_NAME = $strClassName;
     }
 
 
@@ -43,7 +59,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      * @return mixed
      */
     public function getDisplayTitle() {
-        return class_carrier::getInstance()->getObjLang()->getLang($this->STR_PROVIDER_NAME, "packagemanager");
+        return class_carrier::getInstance()->getObjLang()->getLang($this->STR_PROVIDER_NAME, self::$STR_MODULE_NAME);
     }
 
     /**
@@ -64,24 +80,20 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     public function renderPackageList() {
         $intStart = ($this->getPageNumber() - 1) * _admin_nr_of_rows_;
         $intEnd = $intStart + _admin_nr_of_rows_ - 1;
-        $intType = 0;
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $objLang = class_carrier::getInstance()->getObjLang();
-        $strReturn = "";
-
-        $strReturn .= $objToolkit->listHeader();
 
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&start=".$intStart."&end=".$intEnd."&type=".$intType."&domain=".urlencode(_webpath_));
+        $objRemoteloader->setStrQueryParams($this->buildQueryParams($intStart, $intEnd));
 
         $strResponse = "";
         try {
             $strResponse = $objRemoteloader->getRemoteContent();
         }
         catch (class_exception $objEx) {
-            return $objLang->getLang("package_remote_errorloading", "packagemanager");
+            return $objLang->getLang("package_remote_errorloading", self::$STR_MODULE_NAME);
         }
 
         $arrResponse = json_decode($strResponse, true);
@@ -90,38 +102,39 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
             $this->getPageNumber(), $intStart, $intEnd, $this->STR_PROVIDER_NAME);
 
         $arrPackages = $remoteParser->getArrPackages();
-        if($arrPackages == null) {
-            $arrPackages = array();
-        }
 
-        if(count($arrPackages) == 0)
+        $strReturn = $this->createFilterCriteria();
+
+        $strReturn .= $objToolkit->listHeader();
+
+        if(!$this->containsItems($arrPackages)) {
             $strReturn .= $objToolkit->getTextRow($objLang->getLang("commons_list_empty", null));
-
-        $intI = 0;
-        foreach($arrPackages as $arrOnePackage) {
-            $strAction = $objToolkit->listButton(
-                getLinkAdmin(
-                    "packagemanager",
-                    "uploadPackage",
-                    "provider=".get_class($this)."&systemid=".$arrOnePackage["systemid"],
-                    $objLang->getLang("package_install", "packagemanager"),
-                    $objLang->getLang("package_install", "packagemanager"),
-                    "icon_downloads.png"
-                )
-            );
-
-
-            $strIcon = "icon_module.png";
-            if($arrOnePackage["type"] == "TEMPLATE")
-                $strIcon = "icon_dot.png";
+        } else {
+            $intI = 0;
+            foreach($arrPackages as $arrOnePackage) {
+                $strAction = $objToolkit->listButton(
+                    getLinkAdmin(
+                        self::$STR_MODULE_NAME,
+                        "uploadPackage",
+                        "provider=".get_class($this)."&systemid=".$arrOnePackage["systemid"],
+                        $objLang->getLang("package_install", self::$STR_MODULE_NAME),
+                        $objLang->getLang("package_install", self::$STR_MODULE_NAME),
+                        "icon_downloads.png"
+                    )
+                );
 
 
-            $arrOnePackage["version"] = $objLang->getLang("type_".$arrOnePackage["type"], "packagemanager").", V ".$arrOnePackage["version"];
+                $strIcon = "icon_module.png";
+                if($arrOnePackage["type"] == "TEMPLATE")
+                    $strIcon = "icon_dot.png";
 
 
-            $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin($strIcon), $strAction, $intI++, $arrOnePackage["version"], $arrOnePackage["description"]);
+                $arrOnePackage["version"] = $objLang->getLang("type_".$arrOnePackage["type"], self::$STR_MODULE_NAME).", V ".$arrOnePackage["version"];
+
+
+                $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin($strIcon), $strAction, $intI++, $arrOnePackage["version"], $arrOnePackage["description"]);
+            }
         }
-
 
         $strReturn .= $objToolkit->listFooter();
 
@@ -130,13 +143,104 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         return $strReturn;
     }
 
+    private function buildQueryParams($intStart, $intEnd) {
+        $strQuery = "";
+        if ($this->getParam("name") != "") {
+            // build search query with filters for name + paging + type
+            $strQuery .= $this->STR_SEARCH_URL;
+            $strQuery .= $this->getParam("name");
+        } else {
+            // build search query with filters for paging + type
+            $strQuery .= $this->STR_BROWSE_URL;
+        }
+
+        return $strQuery."&start=".$intStart."&end=".$intEnd.
+            $this->buildQueryParamType()."&domain=".urlencode(_webpath_);
+    }
+
+    private function buildQueryParamType() {
+        if ($this->getParam("type") != "") {
+            if (is_numeric($this->getParam("type"))) {
+                $intType = (int) $this->getParam("type");
+                if ($intType >= 0) {
+                    return "&type=". $intType;
+                }
+            }
+        }
+        return "";
+    }
+
+    private function getParam($strParamName) {
+        return class_carrier::getInstance()->getParam($strParamName);
+    }
+
+    private function containsItems($arrResult) {
+        return $arrResult != null && count($arrResult) > 0;
+    }
+
+    private function createFilterCriteria() {
+        $this->processFilterArguments();
+
+        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objLang = class_carrier::getInstance()->getObjLang();
+
+        $strReturn = "";
+
+        //And create the selector
+        $strReturn .= $objToolkit->formHeader(getLinkAdminHref(self::$STR_MODULE_NAME,
+            $this->getParam("action"), "&provider=".$this->CLASS_NAME));
+        $strReturn .= $objToolkit->formInputHidden("action", $this->getParam("action"));
+        $strReturn .= $objToolkit->formInputHidden("filter", "true");
+        $strReturn .= $objToolkit->formInputText("name", $objLang->getLang("name", self::$STR_MODULE_NAME), $this->strPackageName);
+
+        $arrTypeOption = array();
+        $arrTypeOption["-1"] = $objLang->getLang("all", self::$STR_MODULE_NAME);
+        $arrTypeOption["0"] = $objLang->getLang("element", self::$STR_MODULE_NAME);
+        $arrTypeOption["1"] = $objLang->getLang("template", self::$STR_MODULE_NAME);
+        $arrTypeOption["2"] = $objLang->getLang("tutorial", self::$STR_MODULE_NAME);
+        $arrTypeOption["3"] = $objLang->getLang("module", self::$STR_MODULE_NAME);
+        $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->intType);
+
+        $strReturn .= $objToolkit->formInputSubmit($objLang->getLang("filter", self::$STR_MODULE_NAME));
+        $strReturn .= $objToolkit->formClose();
+
+        return $strReturn;
+    }
+
+    /**
+     * Creates values of the passed filter argument values
+     */
+    private function processFilterArguments() {
+        if($this->getParam("filter") == "true") {
+
+            $this->strPackageName = "";
+            if($this->getParam("name") != "") {
+                $this->strPackageName = $this->getParam("name");
+            }
+            else {
+                $this->strPackageName = "";
+            }
+            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_NAME, $this->strPackageName);
+
+            if($this->getParam("type") != "") {
+                $this->intType = (int)$this->getParam("type");
+            }
+            else {
+                $this->intType = -1;
+            }
+
+
+            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_TYPE, $this->intType);
+        }
+    }
+
     /**
      * Returns the number of the current page.
      *
      * @return int
      */
     private function getPageNumber() {
-        return (int)(class_carrier::getInstance()->getParam("pv") != "" ? class_carrier::getInstance()->getParam("pv") : 1);
+        return (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1);
     }
 
     /**
@@ -154,7 +258,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $objRemoteloader->setBitCacheEnabled(false);
 
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrQueryParams($this->STR_DOWNLOAD_URL."?systemid=".class_carrier::getInstance()->getParam("systemid"));
+        $objRemoteloader->setStrQueryParams($this->STR_DOWNLOAD_URL."?systemid=".$this->getParam("systemid"));
 
         $strResponse = $objRemoteloader->getRemoteContent();
         file_put_contents(_realpath_._projectpath_."/temp/".$strFilename, $strResponse);
@@ -210,7 +314,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $arrMetadata = $this->searchPackage($strTitle);
 
         if(isset($arrMetadata["systemid"])) {
-            $strUrl = getLinkAdminHref("packagemanager", "uploadPackage", "&provider=".__CLASS__."&systemid=".$arrMetadata["systemid"]);
+            $strUrl = getLinkAdminHref(self::$STR_MODULE_NAME, "uploadPackage", "&provider=".__CLASS__."&systemid=".$arrMetadata["systemid"]);
 
             $strUrl = str_replace("_webpath_", _webpath_, $strUrl);
             $strUrl = str_replace("_indexpath_", _indexpath_, $strUrl);
