@@ -50,12 +50,15 @@ class class_module_search_commons extends class_model implements interface_model
         if(uniStrlen($strSearchterm) == 0)
             return array();
 
+        $objSearch = new class_module_search_search();
+        $objSearch->setStrQuery($strSearchterm);
+
         //log the query
         class_module_search_log::generateLogEntry($strSearchterm);
 
         //Search for search-plugins
         $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins", array(".php"));
-        return $this->doSearch($strSearchterm, $arrSearchPlugins);
+        return $this->doSearch($objSearch, $arrSearchPlugins);
 
     }
 
@@ -64,12 +67,12 @@ class class_module_search_commons extends class_model implements interface_model
      * Calls the single search-functions, sorts the results and creates the output.
      * Method for portal-searches.
      *
-     * @param $strSearchterm
+     * @param $objSearch class_module_search_search
      *
      * @return class_search_result[]
      */
-    public function doAdminSearch($strSearchterm) {
-        $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
+    public function doAdminSearch(class_module_search_search $objSearch) {
+        $strSearchterm = trim(uniStrReplace("%", "", $objSearch->getStrQuery()));
         if(uniStrlen($strSearchterm) == 0)
             return array();
 
@@ -90,20 +93,20 @@ class class_module_search_commons extends class_model implements interface_model
         };
 
 
-        return $this->doSearch($strSearchterm, $arrSearchPlugins, $objSearchFunc);
+        return $this->doSearch($objSearch, $arrSearchPlugins, $objSearchFunc);
 
     }
 
     /**
      * Internal wrapper, triggers the final search.
      *
-     * @param $strSearchterm
+     * @param $objSearch class_module_search_search
      * @param $arrSearchPlugins
      * @param null|callable $objSortFunc
      *
      * @return array|class_search_result[]
      */
-    private function doSearch($strSearchterm, $arrSearchPlugins, $objSortFunc = null) {
+    private function doSearch($objSearch, $arrSearchPlugins, $objSortFunc = null) {
         $arrHits = array();
 
         foreach($arrSearchPlugins as $strOnePlugin) {
@@ -111,7 +114,7 @@ class class_module_search_commons extends class_model implements interface_model
             if(uniStrpos($strOnePlugin, "searchdef_pages_") === false) {
                 $strClassname = str_replace(".php", "", $strOnePlugin);
                 /** @var $objPlugin interface_search_plugin */
-                $objPlugin = new $strClassname($strSearchterm);
+                $objPlugin = new $strClassname($objSearch);
                 if($objPlugin instanceof interface_search_plugin) {
                     $arrHits = array_merge($arrHits, $objPlugin->doSearch());
                 }

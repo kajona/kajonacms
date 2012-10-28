@@ -18,9 +18,9 @@ interface interface_search_plugin {
     /**
      * Constructor, receiving the term to search for
      *
-     * @param string $strSearchterm as db-query
+     * @param class_module_search_search $objSearch as db-query
      */
-    public function __construct($strSearchterm);
+    public function __construct(class_module_search_search $objSearch);
 
 
     /**

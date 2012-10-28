@@ -28,9 +28,24 @@ class class_installer_search extends class_installer_base implements interface_i
 
 
     public function install() {
-		$strReturn = "Installing search-log table...\n";
 
-		$arrFields = array();
+        //Table for search
+        $strReturn = "Installing table search_search...\n";
+
+        $arrFields = array();
+        $arrFields["search_search_id"] 		= array("char20", false);
+        $arrFields["search_search_query"] 	= array("char254", true);
+        $arrFields["search_search_filter_modules"] 	= array("char254", true);
+
+        $arrFields["search_search_private"] = array("int", true);
+
+        if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        //Table for search log entry
+        $strReturn .= "Installing search-log table...\n";
+
+        $arrFields = array();
 		$arrFields["search_log_id"] 	  = array("char20", false);
 		$arrFields["search_log_date"] 	  = array("int", true);
 		$arrFields["search_log_query"] 	  = array("char254", true);
@@ -54,8 +69,7 @@ class class_installer_search extends class_installer_base implements interface_i
 
 		$strReturn .= "Registering module...\n";
 		//register the module
-		$this->registerModule("search", _search_module_id_, "class_module_search_portal.php", "class_module_search_admin.php", $this->objMetadata->getStrVersion() , false, "class_module_search_portal_xml.php");
-
+		$this->registerModule("search", _search_module_id_, "class_module_search_portal.php", "class_module_search_admin.php", $this->objMetadata->getStrVersion() , true, "class_module_search_portal_xml.php");
 
         if(class_module_pages_element::getElement("search") == null) {
             $objElement = new class_module_pages_element();
@@ -89,6 +103,11 @@ class class_installer_search extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9") {
+
+            $strReturn .= $this->update_342_3491();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -105,6 +124,32 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.4.9");
         $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("search", "3.4.9");
+        return $strReturn;
+    }
+
+    private function update_342_3491() {
+        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
+
+        $strReturn .= "Make module visible in navigation...\n";
+        $objModule = class_module_system_module::getModuleByName("search");
+        $objModule->setIntNavigation(1);
+        $objModule->updateObjectToDb();
+
+        //Table for search
+        $strReturn .= "Installing table search_search...\n";
+
+        $arrFields = array();
+        $arrFields["search_search_id"] 		= array("char20", false);
+        $arrFields["search_search_query"] 	= array("char254", true);
+        $arrFields["search_search_filter_modules"] 	= array("char254", true);
+        $arrFields["search_search_private"] = array("int", true);
+
+        if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "3.4.9.1");
         $this->updateElementVersion("search", "3.4.9");
         return $strReturn;
     }

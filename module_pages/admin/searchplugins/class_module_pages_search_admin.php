@@ -32,9 +32,9 @@ class class_module_pages_search_admin implements interface_search_plugin  {
      */
     private $arrHits = array();
 
-    public function  __construct($strSearchterm) {
+    public function  __construct(class_module_search_search $objSearch) {
 
-        $this->strSearchterm = $strSearchterm;
+        $this->strSearchterm = $objSearch->getStrQuery();
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
@@ -87,6 +87,4 @@ class class_module_pages_search_admin implements interface_search_plugin  {
             $this->arrHits[] = $objResult;
         }
 	}
-
-
 }

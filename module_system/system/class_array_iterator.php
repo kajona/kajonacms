@@ -30,19 +30,27 @@ class class_array_iterator implements interface_iterator {
 	public function __construct($arrElements) {
 
         $this->intElementsPerPage = _admin_nr_of_rows_;
+        $this->setArrElements($arrElements);
+    }
+
+    /**
+     * Sets the ArrElements
+     *
+     * @param $arrElements
+     */
+    public function setArrElements($arrElements)
+    {
+        $this->arrElements = array();
 
         //Loop over elements to create numeric indices
-        if(count($arrElements) > 0) {
+        if (count($arrElements) > 0) {
             foreach ($arrElements as $objOneElement) {
                 $this->arrElements[] = $objOneElement;
             }
         }
-        else {
-            $this->arrElements = array();
-        }
-	}
+    }
 
-	/**
+    /**
      * Returns the current element
      *
      * @return mixed

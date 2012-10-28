@@ -33,7 +33,7 @@ $(function () {
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    query: request.term,
+                    search_query: request.term,
                     module: 'search',
                     action: 'searchXml',
                     asJson: '1'

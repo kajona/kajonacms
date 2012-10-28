@@ -18,6 +18,8 @@
 class class_module_search_genericsearch_admin implements interface_search_plugin  {
 
     private $strSearchterm;
+    /* @var class_module_search_search */
+    private $objSearch;
 
     /**
      * @var class_search_result
@@ -25,8 +27,8 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
     private $arrHits = array();
     private $objDB;
 
-    public function  __construct($strSearchterm) {
-        $this->strSearchterm = $strSearchterm;
+    public function  __construct(class_module_search_search $objSearch) {
+        $this->objSearch = $objSearch;
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
@@ -36,7 +38,15 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
         //get all model-classes to scan
         $arrClasses = $this->getModelReflectionClasses();
 
-        foreach($arrClasses as $strOneClass)
+        $arrClassesFiltered = array();
+        foreach($arrClasses as $strOneClass){
+            $objOneClass = new $strOneClass();
+            if ( in_array($objOneClass->getArrModule("moduleId"), $this->objSearch->getFilterModulesFilter()))
+                $arrClassesFiltered[] = $strOneClass;
+        }
+
+
+        foreach($arrClassesFiltered as $strOneClass)
             $this->processSingleClass($strOneClass);
 
         return $this->arrHits;
@@ -74,7 +84,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                     $strColumn = _dbprefix_.$strColumn;
 
                 $arrWhere[] = $strColumn ." LIKE ? ";
-                $arrParams[] = "%".$this->strSearchterm."%";
+                $arrParams[] = "%".$this->objSearch->getStrQuery()."%";
             }
 
             $strQuery = "SELECT system_id
@@ -109,7 +119,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
         foreach($arrFiles as $strOneFile) {
             if(uniStripos($strOneFile, "class_module_") !== false) {
                 $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
-                if(!$objClass->isAbstract()) {
+                if(!$objClass->isAbstract() && $objClass->implementsInterface("interface_admin_listable") && $objClass->isSubclassOf("class_root")) {
                     $arrReturn[] = uniSubstr($strOneFile, 0, -4);
                 }
             }

@@ -24,9 +24,9 @@ class class_module_postacomment_search_portal implements interface_search_plugin
 
     private $objDB;
 
-    public function  __construct($strSearchterm) {
+    public function  __construct(class_module_search_search $objSearch) {
 
-        $this->strSearchterm = $strSearchterm;
+        $this->strSearchterm = $objSearch->getStrQuery();
 
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
@@ -126,7 +126,5 @@ class class_module_postacomment_search_portal implements interface_search_plugin
             }
         }
     }
-
-
 }
 

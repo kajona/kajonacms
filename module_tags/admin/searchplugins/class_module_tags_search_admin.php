@@ -23,8 +23,8 @@ class class_module_tags_search_admin implements interface_search_plugin  {
      */
     private $objDB;
 
-    public function  __construct($strSearchterm) {
-        $this->strSearchterm = $strSearchterm;
+    public function  __construct(class_module_search_search $objSearch) {
+        $this->strSearchterm = $objSearch->getStrQuery();
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 

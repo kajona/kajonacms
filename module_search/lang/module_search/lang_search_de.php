@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["modul_titel"]                     = "Suche";
 $lang["header_amount"]                   = "Anzahl";
 $lang["header_query"]                    = "Suchbegriff";
 $lang["stats_title"]                     = "Suchanfragen";
@@ -18,3 +19,7 @@ $lang["hitlist_text2"]                   = "ergab";
 $lang["hitlist_text3"]                   = "Treffer";
 $lang["searchterm_label"]                = "Suchbegriff";
 $lang["submit_label"]                    = "Suchen";
+$lang["search_search"]                   = "Suche";
+$lang["form_search_query"]               = "Suchbegriff";
+$lang["actionExecuteSearch"]             = "Suche ausführen";
+$lang["action_new"]                       = "Suche anlegen";

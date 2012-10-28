@@ -14,7 +14,7 @@
  * @package module_search
  * @author sidler@mulchprod.de
  */
-class class_module_search_admin extends class_admin implements interface_admin {
+class class_module_search_admin extends class_admin_simple implements interface_admin {
 
     private static $INT_MAX_NR_OF_RESULTS = 30;
 
@@ -28,6 +28,161 @@ class class_module_search_admin extends class_admin implements interface_admin {
         parent::__construct();
     }
 
+    public function getOutputModuleNavi()
+    {
+        $arrReturn = array();
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "search", "", $this->getLang("search_search"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+
+        return $arrReturn;
+    }
+
+    /**
+     * Renders the form to create a new entry
+     * @return string
+     * @permissions edit
+     */
+    protected function actionNew($strMode = "new", class_admin_formgenerator $objForm = null)
+    {
+        $objSearch = new class_module_search_search();
+        if($strMode == "edit") {
+            $objSearch = new class_module_search_search($this->getSystemid());
+
+            if(!$objSearch->rightEdit())
+                return $this->getLang("commons_error_permissions");
+        }
+
+        if($objForm == null)
+            $objForm = $this->getSearchAdminForm($objSearch);
+
+        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
+        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save"));
+    }
+
+    /**
+     * Renders the form to edit an existing entry
+     * @return string
+     * @permissions edit
+     */
+    protected function actionEdit()
+    {
+        return $this->actionNew("edit");
+    }
+
+    /**
+     * Saves the passed values as a new category to the db
+     *
+     * @return string "" in case of success
+     * @permissions edit
+     */
+    protected function actionSave() {
+        $objSearch = null;
+
+        if($this->getParam("mode") == "new")
+            $objSearch = new class_module_search_search();
+
+        else if($this->getParam("mode") == "edit")
+            $objSearch = new class_module_search_search($this->getSystemid());
+
+        if($objSearch != null) {
+            $objForm = $this->getSearchAdminForm($objSearch);
+            if(!$objForm->validateForm())
+                return $this->actionNew($this->getParam("mode"), $objForm);
+
+            $objForm->updateSourceObject();
+            $objSearch->updateObjectToDb();
+
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
+            return "";
+        }
+
+        return $this->getLang("commons_error_permissions");
+    }
+
+    /**
+     * Renders the general list of records
+     * @return string
+     * @permissions view
+     */
+    protected function actionList()
+    {
+        $objArraySectionIterator = new class_array_section_iterator(class_module_votings_voting::getObjectCount());
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_search_search::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        return $this->renderList($objArraySectionIterator);
+    }
+
+    /**
+     * Renders the search form with results
+     * @permissions view
+     * @return string
+     */
+    protected function actionSearch() {
+
+        $strReturn = "";
+
+        $objSearch = new class_module_search_search($this->getParam("systemid"));
+
+        if($this->getParam("search_query") != "") {
+            $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("search_query")), true));
+        }
+
+        // Search Form
+        $objForm = $this->getSearchAdminForm($objSearch);
+        $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "search"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
+
+        // Execute Search
+        $arrResult = array();
+        $objSearchCommons = new class_module_search_commons();
+        if($objSearch->getStrQuery() != "") {
+            $arrResult = $objSearchCommons->doAdminSearch($objSearch);
+        }
+
+        $objArrayIterator = new class_array_iterator($arrResult);
+        $objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+
+        $objArraySectionIterator = new class_array_section_iterator(count($arrResult));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
+
+        $arrResult =  $objArraySectionIterator->getArrayExtended(true);
+
+        $arrObjects = array();
+        /** @var $objSearchResult class_search_result */
+        foreach ($arrResult as $objSearchResult){
+            $arrObjects[] =  $objSearchResult->getObjObject();
+        }
+
+        $objArrayIterator->setArrElements($arrObjects);
+        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
+
+        $strReturn.= $this->renderList($objArraySectionIterator, false, "searchResultList");
+        return $strReturn;
+    }
+
+    public function getActionIcons($objOneIterable, $strListIdentifier = "") {
+        if($strListIdentifier == "searchResultList") {
+            //call the original module to render the action-icons
+            $objAdminInstance = class_module_system_module::getModuleByName($objOneIterable->getArrModule("modul"))->getAdminInstanceOfConcreteModule();
+            if($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple) {
+                return $objAdminInstance->getActionIcons($objOneIterable);
+            }
+        }
+
+        return parent::getActionIcons($objOneIterable, $strListIdentifier);
+    }
+
+
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false)
+    {
+        if ($strListIdentifier != "searchResultList")
+            return parent::getNewEntryAction($strListIdentifier, $bitDialog);
+    }
 
     /**
      * Searches for a passed string
@@ -40,14 +195,17 @@ class class_module_search_admin extends class_admin implements interface_admin {
         $strReturn = "";
 
         $strSearchterm = "";
-        if($this->getParam("query") != "") {
-            $strSearchterm = htmlToString(urldecode($this->getParam("query")), true);
+        if($this->getParam("search_query") != "") {
+            $strSearchterm = htmlToString(urldecode($this->getParam("search_query")), true);
         }
+
+        $objSearch = new class_module_search_search();
+        $objSearch->setStrQuery($strSearchterm);
 
         $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
         if($strSearchterm != "") {
-            $arrResult = $objSearchCommons->doAdminSearch($strSearchterm);
+            $arrResult = $objSearchCommons->doAdminSearch($objSearch);
         }
 
         if($this->getParam("asJson") != "")
@@ -97,7 +255,6 @@ class class_module_search_admin extends class_admin implements interface_admin {
 
             $arrItems[] = $arrItem;
         }
-
 
         $objResult = $arrItems;
         class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
@@ -157,4 +314,29 @@ class class_module_search_admin extends class_admin implements interface_admin {
         $strReturn .= "</search>";
         return $strReturn;
     }
+
+    /**
+     * @param class_search_search $objSearch
+     *
+     * @return class_admin_formgenerator
+     */
+    public function getSearchAdminForm($objSearch){
+
+        $objForm = new class_admin_formgenerator("search", $objSearch);
+        $objForm->generateFieldsFromObject();
+
+        return $objForm;
+    }
+
+    protected function renderAdditionalActions(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_search_search) {
+            return array(
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "search", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("actionExecuteSearch"), $this->getLang("actionExecuteSearch"), "icon_lens.png")),
+            );
+        }
+        else {
+            return array();
+        }
+    }
+
 }

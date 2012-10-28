@@ -30,8 +30,8 @@ class class_module_pages_elementsearch_portal implements interface_search_plugin
 
     private $arrTables = array();
 
-    public function  __construct($strSearchterm) {
-        $this->strSearchterm = $strSearchterm;
+    public function  __construct(class_module_search_search $objSearch) {
+        $this->strSearchterm = $objSearch->getStrQuery();
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
