@@ -41,7 +41,6 @@ flotHelper.doToolTip = function(event, pos, item) {
     $('#x').text(pos.x);
     $('#y').text(pos.y);
 
-
     if (item) {
         //if series and datapoint are the same do nothings
         if(previousPoint == item.dataIndex && previousSeries == item.seriesIndex) {
@@ -65,7 +64,6 @@ flotHelper.doToolTip = function(event, pos, item) {
 
             var ticks = item.series.xaxis.ticks;
             var label = ticks[item.dataIndex].label;
-
             /*
              * in general all labels are bieng process by flotHelper.getTickFormatter
              * the first value of this regex is always the value within the div-Tag the
@@ -141,15 +139,15 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
             else if(noTicks == 0) {
                 moduloResult = 0;  
             }
+        }
             
-            //set tick value to axis.min -1 so that is will not be diaplayed in the chart
-            if(!moduloResult == 0 || !moduloResult == null ) {
-                tick[0] =  axis.min -1;
-            }
-            //hack for executing the tickFormatter even if the value of a tick is being set
-            if(tick[1]) {
-                tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
-            }
+        //set tick value to axis.min -1 so that is will not be diaplayed in the chart
+        if(!moduloResult == 0 || !moduloResult == null ) {
+            tick[0] =  axis.min -1;
+        }
+        //hack for executing the tickFormatter even if the value of a tick is being set
+        if(tick[1]) {
+            tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
         }
     });
     
