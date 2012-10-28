@@ -90,11 +90,12 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
             $this->getPageNumber(), $intStart, $intEnd, $this->STR_PROVIDER_NAME);
 
         $arrPackages = $remoteParser->getArrPackages();
-        if($arrPackages == null)
-            throw new class_exception("Failed to load remote-packages:  ".strip_tags($strResponse), class_exception::$level_ERROR);
+        if($arrPackages == null) {
+            $arrPackages = array();
+        }
 
         if(count($arrPackages) == 0)
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
+            $strReturn .= $objToolkit->getTextRow($objLang->getLang("commons_list_empty", null));
 
         $intI = 0;
         foreach($arrPackages as $arrOnePackage) {
