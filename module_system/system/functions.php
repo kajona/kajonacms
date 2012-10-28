@@ -359,11 +359,11 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
 
         //scheme: /admin/module.action.systemid
         if($strModule != "" && $strAction == "" && $strSystemid == "")
-            $strLink = _webpath_."/xml/admin/".$strModule.".html";
+            $strLink = _webpath_."/xml/admin/".$strModule;
         else if($strModule != "" && $strAction != "" && $strSystemid == "")
-            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction.".html";
+            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction;
         else
-            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
+            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction."/".$strSystemid;
 
         if(count($arrParams) > 0)
             $strLink .= "?".implode("&amp;", $arrParams);
