@@ -502,7 +502,10 @@ function is called after selecting a date, e.g. to hide the calendar
             <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge %%class%%" size="16" type="text" value="%%valuePlain%%">
             <script>
                 KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js"], function() {
-                    KAJONA.admin.loader.loadFile(["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                    var arrSecondFiles = ["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
+                    if('%%calendarLang%%' == 'en')
+                        arrSecondFiles = [];
+                    KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
                         var format = '%%dateFormat%%';
                         format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                         $('#%%calendarId%%').datepicker({

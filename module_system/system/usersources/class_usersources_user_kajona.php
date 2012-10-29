@@ -85,6 +85,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     /**
      * @var int
      * @fieldType date
+     * @fieldLabel form_user_date
      */
     private $longDate = 0;
 
