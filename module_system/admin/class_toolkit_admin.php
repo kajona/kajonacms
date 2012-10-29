@@ -1168,8 +1168,9 @@ class class_toolkit_admin extends class_toolkit {
      * The params is expected as
      * arraykey => tabname
      * arrayvalue => tabcontent
+     *
      * @param $arrTabs array(key => content)
-     * @param $bitFullHeight whether the tab content should use full height
+     * @param bool$bitFullHeight whether the tab content should use full height
      *
      * @return string
      */

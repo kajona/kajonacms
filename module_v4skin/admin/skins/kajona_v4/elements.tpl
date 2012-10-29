@@ -696,23 +696,23 @@ Part to display the login status, user is logged in
         </ul>
     </div>
 <script type="text/javascript">
-    KAJONA.admin.messaging.getUnreadCount(function(intCount) {
+
+    KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
         var $userNotificationsCount = $('#userNotificationsCount');
-        $userNotificationsCount.text(intCount);
-        if (intCount > 0) {
+        $userNotificationsCount.text(objResponse.messageCount);
+        if (objResponse.messageCount > 0) {
             $userNotificationsCount.show();
         } else {
             $userNotificationsCount.hide();
         }
-        KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
-            $.each(objResponse, function(index, item) {
-                if(item.unread == 0)
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> <b>"+item.title+"</b></a></li>");
-                else
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
-            });
-            $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,actionShowAll,messaging]</a></li>");
+
+        $.each(objResponse.messages, function(index, item) {
+            if(item.unread == 0)
+                $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> <b>"+item.title+"</b></a></li>");
+            else
+                $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
         });
+        $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,actionShowAll,messaging]</a></li>");
     });
 
     KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {

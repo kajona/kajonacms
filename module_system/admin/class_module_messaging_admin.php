@@ -231,6 +231,11 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
             );
         }
 
+        $arrReturn = array(
+            "messages" => $arrReturn,
+            "messageCount" => class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), true)
+        );
+
         return json_encode($arrReturn);
     }
 
