@@ -109,7 +109,7 @@ $lang["installer_config_intro"]          = "<b>Set up database-access</b><br /><
 $lang["installer_config_write"]          = "Save to config.php";
 $lang["installer_dbdriver_na"]           = "We are sorry, but the selected database-driver is not available on the system. Please install the following PHP-extension in order to use the driver:";
 $lang["installer_dbdriver_oci8"]         = "Attention: The Oracle-driver is still under development.";
-$lang["installer_dbdriver_sqlite3"]      = "The SQLite-driver creates a database stored at /system/db. Therefore the database name is used as the filename, all other values are not taken into account.";
+$lang["installer_dbdriver_sqlite3"]      = "The SQLite-driver creates a database stored at /project/dbdumps. Therefore the database name is used as the filename, all other values are not taken into account.";
 $lang["installer_elements_found"]        = "<b>Installation of the page elements</b><br /><br />Select which of the found page elements you want to install:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Have fun using Kajona!";
 $lang["installer_finish_hints"]          = "You should set back the write permission on /project/system/config/config.php to read-only permission.<br />Additionally, you should remove the file /installer.php completely out of security reasons.<br /><br /><br />The administation in now available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />The portal is available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";

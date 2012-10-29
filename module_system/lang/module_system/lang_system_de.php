@@ -109,7 +109,7 @@ $lang["installer_config_intro"]          = "<b>Datenbankeinstellungen erfassen</
 $lang["installer_config_write"]          = "In config.php speichern";
 $lang["installer_dbdriver_na"]           = "Es tut uns leid, aber der gewählte Datenbanktreiber ist auf dem System nicht verfügbar. Bitte installieren Sie die nachstehende PHP-Erweiterung um den Treiber zu verwenden:";
 $lang["installer_dbdriver_oci8"]         = "Achtung: Der Oracle-Treiber befindet sich noch im Teststadium.";
-$lang["installer_dbdriver_sqlite3"]      = "Der SQLite-Treiber legt die Datenbank im Verzeichnis /system/db/ ab. Hierbei gilt der Datenbankname als Dateiname, alle anderen Werte sind nicht weiter von Belang.";
+$lang["installer_dbdriver_sqlite3"]      = "Der SQLite-Treiber legt die Datenbank im Verzeichnis /project/dbdumps ab. Hierbei gilt der Datenbankname als Dateiname, alle anderen Werte sind nicht weiter von Belang.";
 $lang["installer_elements_found"]        = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Wir wünschen viel Spaß mit Kajona!";
 $lang["installer_finish_hints"]          = "Sie sollten nun die Schreibrechte auf die Datei /project/system/config/config.php auf Leserechte zurücksetzen.<br />Zusätzlich sollte aus Sicherheitsgründen die Datei /installer.php unbedingt komplett gelöscht werden.<br /><br /><br />Die Administrationsoberfläche erreichen Sie nun unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />Das Portal erreichen Sie unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
