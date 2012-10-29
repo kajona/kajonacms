@@ -15,8 +15,9 @@
  */
 class class_module_packagemanager_manager {
 
-    public static $STR_TYPE_MODULE = "MODULE";
-    public static $STR_TYPE_TEMPLATE = "TEMPLATE";
+    const STR_TYPE_MODULE = "MODULE";
+    const STR_TYPE_ELEMENT = "ELEMENT";
+    const STR_TYPE_TEMPLATE = "TEMPLATE";
 
     /**
      * Queries the local filesystem in order to find all packages available.
@@ -29,9 +30,6 @@ class class_module_packagemanager_manager {
 
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
         $arrReturn = array_merge($arrReturn, $objModuleProvider->getInstalledPackages());
-
-
-
 
         usort($arrReturn, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) {
             return strcmp($objA->getStrTitle(), $objB->getStrTitle());
@@ -74,13 +72,18 @@ class class_module_packagemanager_manager {
 
         $objManager = null;
 
-        if($objMetadata->getStrType() == self::$STR_TYPE_MODULE) {
+        if($objMetadata->getStrType() == self::STR_TYPE_MODULE) {
             $objManager = new class_module_packagemanager_packagemanager_module();
             $objManager->setObjMetadata($objMetadata);
         }
 
-        if($objMetadata->getStrType() == self::$STR_TYPE_TEMPLATE) {
+        if($objMetadata->getStrType() == self::STR_TYPE_TEMPLATE) {
             $objManager = new class_module_packagemanager_packagemanager_template();
+            $objManager->setObjMetadata($objMetadata);
+        }
+
+        if($objMetadata->getStrType() == self::STR_TYPE_ELEMENT) {
+            $objManager = new class_module_packagemanager_packagemanager_element();
             $objManager->setObjMetadata($objMetadata);
         }
 

@@ -19,7 +19,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     /**
      * @var class_module_packagemanager_metadata
      */
-    private $objMetadata;
+    protected $objMetadata;
 
 
     /**
@@ -106,10 +106,11 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         //start with modules
         foreach($arrInstaller as $strOneInstaller) {
 
+            //skip samplecontent files
             if(uniStrpos($strOneInstaller, "class_") === false)
                 continue;
 
-            //skip samplecontent files
+            //skip element installers at first run
             if(uniStrpos($strOneInstaller, "element") === false) {
                 class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
                 //trigger update or install
@@ -133,20 +134,28 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             }
         }
 
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /core/".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
+
         $strReturn .= "Updating default template pack...\n";
+        $this->updateDefaultTemplate();
+
+
+        return $strReturn;
+    }
+
+
+    protected function updateDefaultTemplate() {
+        $objFilesystem = new class_filesystem();
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /core/".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
         if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js"))
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
 
         if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css"))
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
 
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"))
+        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"));
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
 
-        return $strReturn;
     }
-
 
     public function setObjMetadata($objMetadata) {
         $this->objMetadata = $objMetadata;
@@ -183,30 +192,16 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
 
         //compare versions of installed elements
+        $objModule = class_module_system_module::getModuleByName($this->getObjMetadata()->getStrTitle());
+        if($objModule !== null) {
+            if(version_compare($this->objMetadata->getStrVersion(), $objModule->getStrVersion(), ">"))
+                return true;
+            else
+                return false;
+        }
+        else
+            return true;
 
-        //version compare - depending on module or element
-        if(uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {
-            $objElement = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
-            if($objElement !== null) {
-                if(version_compare($this->objMetadata->getStrVersion(), $objElement->getStrVersion(), ">"))
-                    return true;
-                else
-                    return false;
-            }
-            else
-                return true;
-        }
-        else {
-            $objModule = class_module_system_module::getModuleByName($this->getObjMetadata()->getStrTitle());
-            if($objModule !== null) {
-                if(version_compare($this->objMetadata->getStrVersion(), $objModule->getStrVersion(), ">"))
-                    return true;
-                else
-                    return false;
-            }
-            else
-                return true;
-        }
 
     }
 
@@ -218,24 +213,12 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      */
     public function getVersionInstalled() {
         //version compare - depending on module or element
-        if(uniStrpos($this->objMetadata->getStrTarget(), "element_") !== false) {
+        $objModule = class_module_system_module::getModuleByName($this->getObjMetadata()->getStrTitle());
+        if($objModule !== null)
+            return $objModule->getStrVersion();
+        else
+            return null;
 
-            if(class_module_system_module::getModuleByName("pages") === null)
-                return null;
-
-            $objElement = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
-            if($objElement !== null)
-                return $objElement->getStrVersion();
-            else
-                return null;
-        }
-        else {
-            $objModule = class_module_system_module::getModuleByName($this->getObjMetadata()->getStrTitle());
-            if($objModule !== null)
-                return $objModule->getStrVersion();
-            else
-                return null;
-        }
     }
 
     /**

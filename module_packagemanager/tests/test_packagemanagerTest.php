@@ -65,7 +65,7 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertEquals("3.9.1", $objMetadata->getStrVersion());
         $this->assertEquals("Kajona Team", $objMetadata->getStrAuthor());
         $this->assertEquals("module_autotest", $objMetadata->getStrTarget());
-        $this->assertEquals(class_module_packagemanager_manager::$STR_TYPE_MODULE, $objMetadata->getStrType());
+        $this->assertEquals(class_module_packagemanager_manager::STR_TYPE_MODULE, $objMetadata->getStrType());
         $this->assertEquals(false, $objMetadata->getBitProvidesInstaller());
 
         $arrRequired = $objMetadata->getArrRequiredModules();

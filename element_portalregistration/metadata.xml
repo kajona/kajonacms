@@ -8,7 +8,7 @@
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_portalregistration</target>
-    <type>MODULE</type>
+    <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="3.4.9.3" />

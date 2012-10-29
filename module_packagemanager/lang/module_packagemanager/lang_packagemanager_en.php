@@ -69,6 +69,7 @@ $lang["template"]                        = "Template";
 $lang["tutorial"]                        = "Tutorial";
 $lang["type"]                            = "Type";
 $lang["type_MODULE"]                     = "Module-package";
+$lang["type_ELEMENT"]                   = "Element-package";
 $lang["type_TEMPLATE"]                   = "Template-pack";
 $lang["update_notification_intro"]       = "A new version is available for an installed package.";
 $lang["update_notification_package"]     = "Respective package:";
