@@ -22,6 +22,7 @@ final class class_logger {
     const QUERIES = "dbqueries.log";
     const EVENTS = "events.log";
     const PACKAGEMANAGEMENT = "packagemanagement.log";
+    const LANG = "lang.log";
 
     /**
      * Level to be used for real errors
