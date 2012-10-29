@@ -15,7 +15,8 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_content_admin extends class_admin implements interface_admin {
+class class_module_pages_content_admin extends class_admin_simple implements interface_admin {
+
 	/**
 	 * Constructor
 	 *
@@ -128,35 +129,9 @@ class class_module_pages_content_admin extends class_admin implements interface_
                     if($bitSamePlaceholder) {
                         $bitHit = true;
 
-                        $objLockmanager = $objOneElementOnPage->getLockManager();
 
-                        //Create a row to handle the element, check all necessary stuff such as locking etc
-                        $strActions = "";
-                        //First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
-                        //won't be visible
-                        if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                            //So, return a button, if we have an admin in front of us
-                            if($objLockmanager->isUnlockableForCurrentUser() ) {
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.png"));
-                            }
-                            //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked.png", $this->getLang("ds_gesperrt")));
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("ds_gesperrt")));
-                        }
-                        else {
-                            //if it's the user who locked the record, unlock it now
-                            if($objLockmanager->isLockedByCurrentUser())
-                                $objLockmanager->unlockRecord();
 
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit.png"));
-                            $strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-                        }
-
-                        //The Icons to sort the list and to copy the element
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.png"));
-
-                        //The status-icons
-                        $strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
+                        $strActions = $this->getActionIcons($objOneElementOnPage);
 
                         //Put all Output together
                         $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, $intI++);
@@ -238,6 +213,64 @@ class class_module_pages_content_admin extends class_admin implements interface_
 
 		return $strReturn;
 	}
+
+    /**
+     * @param class_model|interface_admin_listable|interface_model|class_module_pages_pageelement $objOneIterable
+     * @param string $strListIdentifier
+     *
+     * @return string
+     */
+    public function getActionIcons($objOneIterable, $strListIdentifier = "") {
+        $strActions = "";
+
+        if($objOneIterable instanceof class_module_pages_pageelement) {
+            $objLockmanager = $objOneIterable->getLockManager();
+
+            //Create a row to handle the element, check all necessary stuff such as locking etc
+            $strActions = "";
+            //First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
+            //won't be visible
+            if(!$objLockmanager->isAccessibleForCurrentUser()) {
+                //So, return a button, if we have an admin in front of us
+                if($objLockmanager->isUnlockableForCurrentUser() ) {
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.png"));
+                }
+                //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
+                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked.png", $this->getLang("ds_gesperrt")));
+                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("ds_gesperrt")));
+            }
+            else {
+                //if it's the user who locked the record, unlock it now
+                if($objLockmanager->isLockedByCurrentUser())
+                    $objLockmanager->unlockRecord();
+
+                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit.png"));
+                $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName(). ($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : "" ), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+            }
+
+            //The Icons to sort the list and to copy the element
+            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.png"));
+
+            //The status-icons
+            $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
+
+        }
+        else if($objOneIterable instanceof class_module_pages_element) {
+            $objAdminInstance = class_module_system_module::getModuleByName("pages")->getAdminInstanceOfConcreteModule();
+            if($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple) {
+                return $objAdminInstance->getActionIcons($objOneIterable);
+            }
+        }
+
+
+        return $strActions;
+    }
+
+
+
+
+
+
 
     /**
      * Loads the form to create a new element

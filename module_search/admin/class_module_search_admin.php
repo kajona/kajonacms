@@ -153,7 +153,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
 
-        $arrResult =  $objArraySectionIterator->getArrayExtended(true);
+        $arrResult = $objArraySectionIterator->getArrayExtended(true);
 
         $arrObjects = array();
         /** @var $objSearchResult class_search_result */
