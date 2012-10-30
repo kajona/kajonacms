@@ -162,6 +162,8 @@ class class_module_packagemanager_manager {
      * @param interface_packagemanager_packagemanager $objPackage
      *
      * @return string|null
+     *
+     * @todo maybe load all external packages, this could reduce the number of external requests per source to one
      */
     public function searchLatestVersion(interface_packagemanager_packagemanager $objPackage) {
         $arrProvider = $this->getContentproviders();

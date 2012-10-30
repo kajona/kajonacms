@@ -74,7 +74,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @var int
      * @tableColumn file_cat
      */
-    private $intCat = -1;
+    private $strCat = "";
 
     /**
      * @var string
@@ -201,6 +201,32 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         return parent::deleteObjectInternal();
     }
 
+    protected function updateStateToDb() {
+
+        //check if its a valid package
+        if(uniSubstr($this->getStrFilename(), -4) == ".zip") {
+            $this->updatePackageInformation();
+        }
+
+        return parent::updateStateToDb();
+    }
+
+    /**
+     * Updates the internal information of the file based on the metadata.xml
+     */
+    private function updatePackageInformation() {
+        $objZip = new class_zip();
+        $strMetadata = $objZip->getFileFromArchive($this->getStrFilename(), "/metadata.xml");
+        if($strMetadata !== false) {
+            $objMetadata = new class_module_packagemanager_metadata();
+            $objMetadata->autoInit($this->getStrFilename());
+            $this->setBitIspackage(1);
+            $this->setStrCat($objMetadata->getStrType());
+        }
+        else
+            $this->setBitIspackage(0);
+    }
+
 
     /**
      * Loads all files ( & folders) under the given systemid available in the db but using section limitations
@@ -243,6 +269,69 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         }
 
         return $arrReturn;
+    }
+
+
+    /**
+     * Returns a list of all packages available
+     *
+     * @param bool $strCategoryFilter
+     * @param bool $bitActiveOnly
+     * @param null $intStart
+     * @param null $intEnd
+     *
+     * @return array
+     */
+    public static function getFlatPackageList($strCategoryFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null) {
+
+        $arrParams = array();
+        if($strCategoryFilter !== false) {
+            $arrParams[] = $strCategoryFilter;
+        }
+
+        $strQuery = "SELECT system_id
+                       FROM " . _dbprefix_ . "system,
+                            " . _dbprefix_ . "mediamanager_file
+                    WHERE system_id = file_id
+                      AND file_ispackage = 1
+                        " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
+                        " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
+                        ORDER BY system_sort ASC";
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_mediamanager_file($arrOneId["system_id"]);
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Counts the number of packages available
+     *
+     * @param bool $strCategoryFilter
+     * @param bool $bitActiveOnly
+     *
+     * @return mixed
+     */
+    public static function getFlatPackageListCount($strCategoryFilter = false, $bitActiveOnly = false) {
+
+        $arrParams = array();
+        if($strCategoryFilter !== false) {
+            $arrParams[] = $strCategoryFilter;
+        }
+
+        $strQuery = "SELECT COUNT(*)
+                       FROM " . _dbprefix_ . "system,
+                            " . _dbprefix_ . "mediamanager_file
+                    WHERE system_id = file_id
+                      AND file_ispackage = 1
+                        " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
+                        " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
+                        ";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        return $arrRow["COUNT(*)"];
     }
 
 
@@ -410,14 +499,6 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             $objFile->setStrName($strFileName);
             $objFile->setIntType(self::$INT_TYPE_FILE);
 
-            //check if its a valid package
-            if(uniSubstr($strFileFilename, -4) == ".zip") {
-                $objZip = new class_zip();
-                $strMetadata = $objZip->getFileFromArchive($strFileFilename, "/metadata.xml");
-                if($strMetadata !== false)
-                    $objFile->setBitIspackage(1);
-            }
-
             $objFile->updateObjectToDb($strPrevID);
             $arrReturn["insert"]++;
         }
@@ -446,6 +527,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         return $arrReturn;
     }
+
 
 
     public function getIntFileSize() {
@@ -520,15 +602,15 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @param int $intCat
      */
-    public function setIntCat($intCat) {
-        $this->intCat = $intCat;
+    public function setStrCat($intCat) {
+        $this->strCat = $intCat;
     }
 
     /**
      * @return int
      */
-    public function getIntCat() {
-        return $this->intCat;
+    public function getStrCat() {
+        return $this->strCat;
     }
 
     /**

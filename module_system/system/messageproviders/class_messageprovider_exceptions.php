@@ -22,7 +22,6 @@ class class_messageprovider_exceptions implements interface_messageprovider {
      * @param class_module_messaging_message $objMessage
      */
     public function onDelete(class_module_messaging_message $objMessage) {
-        // TODO: Implement onDelete() method.
     }
 
     /**
@@ -31,7 +30,6 @@ class class_messageprovider_exceptions implements interface_messageprovider {
      * @param class_module_messaging_message $objMessage
      */
     public function onSetRead(class_module_messaging_message $objMessage) {
-        // TODO: Implement onSetRead() method.
     }
 
     /**

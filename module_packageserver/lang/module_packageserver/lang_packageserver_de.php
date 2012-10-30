@@ -11,6 +11,7 @@
 
 //editable entries
 $lang["_packageserver_repo_id_"]         = "Paket-Repository:";
+$lang["_packageserver_repo_id_hint"]         = "Per Standard (leeres Feld) durchsucht der Package-Server alle Repositories (bessere Performance), wenn gewünscht kann die Suche aber auf ein Repository beschränkt werden.";
 $lang["actionList"]                      = "Pakete";
 $lang["actionLogs"]                      = "Protokoll";
 $lang["actionShowInfo"]                  = "Detail-Informationen";

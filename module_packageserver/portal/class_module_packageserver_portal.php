@@ -37,6 +37,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
      */
     protected function actionList() {
         $arrPackages = array();
+        $intNrOfFiles = 0;
 
         $intStart = $this->ensureNumericValue($this->getParam("start"), null);
         $intEnd = $this->ensureNumericValue($this->getParam("end"), null);
@@ -46,8 +47,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
             && $this->isValidPagingParameter($intEnd)) {
 
             if ($intEnd >= $intStart) {
-                // TODO $arrUnpagedDBFiles is only required for total number of results - maybe use simple SQL count?
-                $arrUnpagedDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter);
+                $intNrOfFiles = $this->getAllPackagesCount(_packageserver_repo_id_, $intTypeFilter);
                 $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter, $intStart, $intEnd);
                 $objManager = new class_module_packagemanager_manager();
 
@@ -80,7 +80,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
         }
 
         $result = array();
-        $result['numberOfTotalItems'] = count($arrUnpagedDBFiles);
+        $result['numberOfTotalItems'] = $intNrOfFiles;
         $result['items'] = $arrPackages;
 
         $strReturn = json_encode($result);
@@ -109,25 +109,46 @@ class class_module_packageserver_portal extends class_portal implements interfac
      * of the nested folders.
      *
      * @param $strParentId
-     * @param int|bool $intTypeFilter
+     * @param int|bool $strCategoryFilter
      * @param int $intStart
      * @param int $intEnd
      *
      * @return class_module_mediamanager_file[]
+     *
      */
-    private function getAllPackages($strParentId, $intTypeFilter = false, $intStart = null, $intEnd = null) {
+    private function getAllPackages($strParentId, $strCategoryFilter = false, $intStart = null, $intEnd = null) {
         $arrReturn = array();
 
-        $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, $intTypeFilter, true, $intStart, $intEnd, true);
+        if(validateSystemid($strParentId)) {
+            $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, $strCategoryFilter, true, $intStart, $intEnd, true);
 
-        foreach($arrSubfiles as $objOneFile) {
-            if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
-                $arrReturn[] = $objOneFile;
-            else
-                $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
+            foreach($arrSubfiles as $objOneFile) {
+                if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
+                    $arrReturn[] = $objOneFile;
+                else
+                    $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
+            }
+        }
+        else {
+            $arrReturn = class_module_mediamanager_file::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd);
         }
 
         return $arrReturn;
+    }
+
+    /**
+     * Internal helper, triggers the counting of packages available for the current request
+     * @param $strParentId
+     * @param bool $strCategoryFilterFilter
+     *
+     * @return int
+     *
+     */
+    private function getAllPackagesCount($strParentId, $strCategoryFilterFilter = false) {
+        if(validateSystemid($strParentId))
+            return count($this->getAllPackages($strParentId, $strCategoryFilterFilter));
+        else
+            return class_module_mediamanager_file::getFlatPackageListCount($strCategoryFilterFilter, true);
     }
 
 

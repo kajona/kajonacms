@@ -49,7 +49,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		$arrFields["file_subtitle"] 		= array("char254", true);
 		$arrFields["file_hits"] 			= array("int", true);
 		$arrFields["file_type"] 			= array("int", true);
-		$arrFields["file_cat"]  			= array("int", true);
+		$arrFields["file_cat"]  			= array("char254", true);
 		$arrFields["file_screen1"]      	= array("char254", true);
 		$arrFields["file_screen2"]      	= array("char254", true);
 		$arrFields["file_screen3"]      	= array("char254", true);
@@ -108,6 +108,11 @@ class class_installer_mediamanager extends class_installer_base implements inter
             $strReturn .= $this->update_3491_3492();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.2") {
+            $strReturn .= $this->update_3492_3493();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -145,6 +150,21 @@ class class_installer_mediamanager extends class_installer_base implements inter
         return $strReturn;
     }
 
+
+    private function update_3492_3493() {
+        $strReturn = "Updating 3.4.9.2 to 3.4.9.3...\n";
+
+        $strReturn .= "Altering element-table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
+                    CHANGE ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->getDatatype("char254")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.3");
+        return $strReturn;
+    }
 
 
 }

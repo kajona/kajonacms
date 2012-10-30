@@ -56,12 +56,20 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      */
     protected function actionOpenFolder() {
 
-        if($this->getSystemid() == "")
-            $this->setSystemid(_packageserver_repo_id_);
+        if(validateSystemid(_packageserver_repo_id_)) {
+            if($this->getSystemid() == "")
+                $this->setSystemid(_packageserver_repo_id_);
 
-        $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, false, true));
-        $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
+            $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, false, true));
+            $objIterator->setPageNumber($this->getParam("pv"));
+            $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
+
+        }
+        else {
+            $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFlatPackageListCount(false, false));
+            $objIterator->setPageNumber($this->getParam("pv"));
+            $objIterator->setArraySection(class_module_mediamanager_file::getFlatPackageList(false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
+        }
 
         return $this->renderList($objIterator);
     }

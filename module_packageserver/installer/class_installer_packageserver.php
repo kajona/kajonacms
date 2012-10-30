@@ -58,7 +58,7 @@ class class_installer_packageserver extends class_installer_base {
 
 
         $strReturn .= "Registering system-constants...\n";
-        $this->registerConstant("_packageserver_repo_id_", $objRepo->getSystemid(), class_module_system_setting::$int_TYPE_STRING, _packageserver_module_id_);
+        $this->registerConstant("_packageserver_repo_id_", "", class_module_system_setting::$int_TYPE_STRING, _packageserver_module_id_);
 
 
         $strReturn .= "Setting aspect assignments...\n";
