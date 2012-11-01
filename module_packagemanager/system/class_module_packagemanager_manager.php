@@ -19,6 +19,9 @@ class class_module_packagemanager_manager {
     const STR_TYPE_ELEMENT = "ELEMENT";
     const STR_TYPE_TEMPLATE = "TEMPLATE";
 
+
+    public static $arrLatestVersion = null;
+
     /**
      * Queries the local filesystem in order to find all packages available.
      * This may include packages of all providers.
@@ -154,41 +157,81 @@ class class_module_packagemanager_manager {
     }
 
     /**
-     * Searches the latest version of a given package.
-     * If found, the version itself is returned.
-     * Therefore, all providers are called in order of appearance, the
-     * first match is returned.
+     * Scans all packages available and tries to load the latest version available.
+     * All packages found are returned in a list like
+     * array(packagename => version)
+     * In addition, the update-availble messages are triggered internally.
      *
-     * @param interface_packagemanager_packagemanager $objPackage
-     *
-     * @return string|null
-     *
-     * @todo maybe load all external packages, this could reduce the number of external requests per source to one
+     * @return array
      */
-    public function searchLatestVersion(interface_packagemanager_packagemanager $objPackage) {
+    public function scanForUpdates() {
+
+        $objManager = new class_module_packagemanager_manager();
+        $arrVersions = $objManager->getArrLatestVersion();
+
+        foreach($arrVersions as $strOneModule => $strOneVersion) {
+            $objMetadata = $objManager->getPackage($strOneModule);
+            if($objMetadata != null) {
+                $objManager->updateAvailable($objManager->getPackageManagerForPath($objMetadata->getStrPath()), $strOneVersion);
+            }
+        }
+
+        return $arrVersions;
+    }
+
+
+    /**
+     * Internal helper, searches for all packages currently installed if a new version is available.
+     * Therefore every source is queries only once.
+     *
+     * @return array array( array("title" => "version") )
+     */
+    private function getArrLatestVersion() {
+        $arrPackages = $this->getAvailablePackages();
+
+        $arrQueries = array();
+        foreach($arrPackages as $objOneMetadata) {
+            $arrQueries[$objOneMetadata->getStrTitle()] = $objOneMetadata;
+        }
+
+        $arrResult = array();
         $arrProvider = $this->getContentproviders();
 
         foreach($arrProvider as $objOneProvider) {
-            $arrModule = $objOneProvider->searchPackage($objPackage->getObjMetadata()->getStrTitle());
+            $arrRemoteVersions = $objOneProvider->searchPackage(implode(",", array_keys($arrQueries)));
 
-            if($arrModule != null && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
-                return $arrModule["version"];
+            foreach($arrRemoteVersions as $arrOneRemotePackage) {
+                $arrResult[$arrOneRemotePackage["title"]] = $arrOneRemotePackage["version"];
+                unset($arrQueries[$arrOneRemotePackage["title"]]);
             }
 
         }
 
-        return null;
+        return $arrResult;
     }
+
 
     /**
      * Validates a packages' latest version and compares it to the version currently installed.
+     * Optionally, a version to compare may be passed.
      *
      * @param interface_packagemanager_packagemanager $objPackage
+     * @param string $strVersionToCompare
      *
      * @return bool or null of the package could not be found
      */
-    public function updateAvailable(interface_packagemanager_packagemanager $objPackage) {
-        $strLatestVersion = $this->searchLatestVersion($objPackage);
+    public function updateAvailable(interface_packagemanager_packagemanager $objPackage, $strVersionToCompare = "") {
+
+        if($strVersionToCompare === "") {
+            $arrRemotePackages = $this->getArrLatestVersion();
+            if(isset($arrRemotePackages[$objPackage->getObjMetadata()->getStrTitle()]))
+                $strLatestVersion = $arrRemotePackages[$objPackage->getObjMetadata()->getStrTitle()];
+            else
+                $strLatestVersion = null;
+        }
+        else
+            $strLatestVersion = $strVersionToCompare;
+
         if($strLatestVersion !== null) {
             if($strLatestVersion != null && version_compare($strLatestVersion, $objPackage->getObjMetadata()->getStrVersion(), ">")) {
                 class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow(

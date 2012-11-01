@@ -39,9 +39,9 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     private $strPackageName;
 
     /**
-     * @var int
+     * @var string
      */
-    private $intType;
+    private $strTypeFilter;
 
     function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strSearchUrl, $strDownloadUrl, $strClassName) {
         $this->STR_PROVIDER_NAME = $strProviderName;
@@ -98,8 +98,9 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $arrResponse = json_decode($strResponse, true);
 
-        $remoteParser = class_module_packagemanager_remoteparser_factory::getRemoteParser($arrResponse,
-            $this->getPageNumber(), $intStart, $intEnd, $this->STR_PROVIDER_NAME);
+        $remoteParser = class_module_packagemanager_remoteparser_factory::getRemoteParser(
+            $arrResponse, $this->getPageNumber(), $intStart, $intEnd, $this->STR_PROVIDER_NAME
+        );
 
         $arrPackages = $remoteParser->getArrPackages();
 
@@ -187,19 +188,19 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $strReturn = "";
 
         //And create the selector
-        $strReturn .= $objToolkit->formHeader(getLinkAdminHref(self::$STR_MODULE_NAME,
-            $this->getParam("action"), "&provider=".$this->CLASS_NAME));
+        $strReturn .= $objToolkit->formHeader(
+            getLinkAdminHref(self::$STR_MODULE_NAME, $this->getParam("action"), "&provider=".$this->CLASS_NAME)
+        );
         $strReturn .= $objToolkit->formInputHidden("action", $this->getParam("action"));
         $strReturn .= $objToolkit->formInputHidden("filter", "true");
         $strReturn .= $objToolkit->formInputText("name", $objLang->getLang("name", self::$STR_MODULE_NAME), $this->strPackageName);
 
         $arrTypeOption = array();
-        $arrTypeOption["-1"] = $objLang->getLang("all", self::$STR_MODULE_NAME);
-        $arrTypeOption["0"] = $objLang->getLang("element", self::$STR_MODULE_NAME);
-        $arrTypeOption["1"] = $objLang->getLang("template", self::$STR_MODULE_NAME);
-        $arrTypeOption["2"] = $objLang->getLang("tutorial", self::$STR_MODULE_NAME);
-        $arrTypeOption["3"] = $objLang->getLang("module", self::$STR_MODULE_NAME);
-        $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->intType);
+        $arrTypeOption[""] = $objLang->getLang("all", self::$STR_MODULE_NAME);
+        $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_ELEMENT] = $objLang->getLang("element", self::$STR_MODULE_NAME);
+        $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_TEMPLATE] = $objLang->getLang("template", self::$STR_MODULE_NAME);
+        $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_MODULE] = $objLang->getLang("module", self::$STR_MODULE_NAME);
+        $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->strTypeFilter);
 
         $strReturn .= $objToolkit->formInputSubmit($objLang->getLang("filter", self::$STR_MODULE_NAME));
         $strReturn .= $objToolkit->formClose();
@@ -223,14 +224,14 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
             class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_NAME, $this->strPackageName);
 
             if($this->getParam("type") != "") {
-                $this->intType = (int)$this->getParam("type");
+                $this->strTypeFilter = $this->getParam("type");
             }
             else {
-                $this->intType = -1;
+                $this->strTypeFilter = "";
             }
 
 
-            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_TYPE, $this->intType);
+            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_TYPE, $this->strTypeFilter);
         }
     }
 
@@ -268,14 +269,14 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     }
 
     /**
-     * Searches for a single, given package.
+     * Searches for a list of packages, the title may be a comma-separated list of package-names
      * If found, the packages' metadata is returned.
      * The basic array-syntax should be used, so
      * array("title", "version", "description", "systemid")
      *
      * @param $strTitle
      *
-     * @return string|null
+     * @return array
      */
     public function searchPackage($strTitle) {
 
@@ -283,21 +284,15 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
         $objRemoteloader->setStrQueryParams($this->STR_SEARCH_URL.$strTitle."&domain=".urlencode(_webpath_));
 
-        $strPackages = "";
         try {
             $strPackages = $objRemoteloader->getRemoteContent();
         }
         catch(class_exception $objEx) {
-            return null;
+            return array();
         }
 
         $arrPackages = json_decode($strPackages, true);
-
-        if(count($arrPackages) > 0)
-            return $arrPackages[0];
-
-        return null;
-
+        return $arrPackages;
     }
 
 

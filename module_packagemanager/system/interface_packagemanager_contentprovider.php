@@ -55,14 +55,15 @@ interface interface_packagemanager_contentprovider {
     public function processPackageUpload();
 
     /**
-     * Searches for a single, given package.
+     * Searches for a list of packages, the title may be a comma-separated list of package-names
      * If found, the packages' metadata is returned.
-     * The basic array-syntax should be used, so
+     * The basic array-syntax should be used, so an array of
      * array("title", "version", "description", "systemid")
+     * has to be returned.
      *
      * @abstract
      * @param $strTitle
-     * @return string|null
+     * @return array
      */
     public function searchPackage($strTitle);
 

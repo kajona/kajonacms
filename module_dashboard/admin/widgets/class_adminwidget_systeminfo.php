@@ -114,11 +114,11 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
     private function getLatestKernelVersion() {
 
         $objManager = new class_module_packagemanager_manager();
-        $objHandler = $objManager->getPackageManagerForPath("/core/module_system/");
-        $strVersion = $objManager->searchLatestVersion($objHandler);
+        $arrPackages = $objManager->scanForUpdates();
 
-        if($strVersion == "")
-            $strVersion = "n.a.";
+        $strVersion = "n.a.";
+        if(isset($arrPackages["system"]))
+            $strVersion = $arrPackages["system"];
 
         return $strVersion;
     }

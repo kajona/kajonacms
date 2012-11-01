@@ -93,10 +93,10 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      *
      * @param $strTitle
      *
-     * @return string|null
+     * @return array
      */
     public function searchPackage($strTitle) {
-        return null;
+        return array();
     }
 
     /**

@@ -126,6 +126,7 @@ KAJONA.admin.mediamanager.imageEditor = {
 
         var callback = function(data, status, jqXHR) {
             if(status == 'success') {
+
         		var iE = KAJONA.admin.mediamanager.imageEditor;
                 KAJONA.admin.statusDisplay.displayXMLMessage(data);
                 iE.fm_cropObj.destroy();
@@ -144,6 +145,8 @@ KAJONA.admin.mediamanager.imageEditor = {
                 }
 
                 iE.cropArea = null;
+
+                location.reload();
                 hide_fm_screenlock_dialog();
             }
             else {

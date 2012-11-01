@@ -152,7 +152,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css"))
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
 
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"));
+        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"))
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
 
     }
