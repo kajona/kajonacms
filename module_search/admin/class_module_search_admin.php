@@ -110,7 +110,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
      */
     protected function actionList()
     {
-        $objArraySectionIterator = new class_array_section_iterator(class_module_votings_voting::getObjectCount());
+        $objArraySectionIterator = new class_array_section_iterator(class_module_search_search::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_search_search::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
@@ -319,7 +319,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
     }
 
     /**
-     * @param class_search_search $objSearch
+     * @param class_module_search_search $objSearch
      *
      * @return class_admin_formgenerator
      */
