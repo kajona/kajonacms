@@ -687,6 +687,16 @@ KAJONA.admin.lists = {
     strDialogStart : '',
     intTotal : 0,
 
+    toggleAllFields : function() {
+        //batchActionSwitch
+        $("table.admintable input[type='checkbox']").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_") {
+                var strValue = $('#batchActionSwitch').attr('checked') == 'checked';
+                $(this).attr('checked', strValue);
+                console.log(strValue);
+            }
+        });
+    },
 
     updateToolbar : function() {
         if($("table.admintable  input:checked").length == 0) {

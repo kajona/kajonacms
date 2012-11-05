@@ -285,7 +285,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     						pageproperties_browsername=?,
     						pageproperties_seostring=?,
     						pageproperties_alias=?,
-                                                pageproperties_path=?
+                            pageproperties_path=?
     						WHERE pageproperties_id=?
     						  AND pageproperties_language=?";
 
