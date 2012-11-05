@@ -833,7 +833,13 @@ class class_module_system_admin extends class_admin_simple implements interface_
     protected function actionAbout() {
         $strReturn = "";
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part1"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2_header"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2a_header"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2a"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2b_header"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2b"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part3_header"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part3"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part4"));
         return $strReturn;
