@@ -22,6 +22,7 @@ class class_module_languages_language extends class_model implements interface_m
      *
      * @fieldType dropdown
      * @fieldMandatory
+     * @fieldValidator twochars
      */
     private $strName = "";
 

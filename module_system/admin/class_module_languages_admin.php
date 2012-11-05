@@ -149,6 +149,11 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         }
 
         $objForm = $this->getAdminForm($objLanguage);
+
+        if(!$objForm->validateForm())
+            return $this->actionNew($this->getParam("mode"), $objForm);
+
+
         $objForm->updateSourceObject();
 
 
