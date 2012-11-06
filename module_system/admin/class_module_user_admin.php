@@ -134,7 +134,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($objListEntry instanceof class_module_user_group) {
             if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_) {
                 if($objListEntry->rightDelete()) {
-                    return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("gruppe_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "groupDelete", "&systemid=" . $objListEntry->getSystemid()));
+                    return $this->objToolkit->listDeleteButton(
+                        $objListEntry->getStrDisplayName(), $this->getLang("gruppe_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "groupDelete", "&systemid=" . $objListEntry->getSystemid())
+                    );
                 }
             }
             else {
@@ -462,8 +464,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //system-settings
         $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("user_system"));
 
-        $objForm->addField(new class_formentry_dropdown("user", "skin"))->setArrKeyValues($arrSkins)->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : _admin_skin_default_))->setStrLabel($this->getLang("user_skin"));
-        $objForm->addField(new class_formentry_dropdown("user", "language"))->setArrKeyValues($arrLang)->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))->setStrLabel($this->getLang("user_language"));
+        $objForm->addField(
+            new class_formentry_dropdown("user", "skin"))->setArrKeyValues($arrSkins)->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : _admin_skin_default_))->setStrLabel($this->getLang("user_skin")
+        );
+        $objForm->addField(
+            new class_formentry_dropdown("user", "language"))->setArrKeyValues($arrLang)->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))->setStrLabel($this->getLang("user_language")
+        );
 
 
         if(!$bitSelfedit) {
@@ -1027,7 +1033,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $intI = 0;
             foreach($arrUsers as $objSingleGroup) {
                 $strAction = "";
-                $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=" . $this->getParam("form_element") . "&systemid=" . $objSingleGroup->getSystemid() . "&filter=" . $this->getParam("filter"), $this->getLang("user_browser_show"), $this->getLang("user_browser_show"), "icon_folderActionOpen.png"));
+                $strAction .= $this->objToolkit->listButton(
+                    getLinkAdmin("user", "userBrowser", "&form_element=" . $this->getParam("form_element") . "&systemid=" . $objSingleGroup->getSystemid() . "&filter=" . $this->getParam("filter"), $this->getLang("user_browser_show"), $this->getLang("user_browser_show"), "icon_folderActionOpen.png")
+                );
 
                 if($this->getParam("allowGroup") == "1") {
                     $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"" . $this->getLang("group_accept") . "\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['" . $strFormElement . "', '" . addslashes($objSingleGroup->getStrName()) . "'], ['" . $strFormElement . "_id', '" . $objSingleGroup->getSystemid() . "']]);\">" . getImageAdmin("icon_accept.png"));
@@ -1044,7 +1052,22 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $strReturn .= $this->objToolkit->listHeader();
             $intI = 0;
 
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup"), $this->getLang("user_list_parent"), $this->getLang("user_list_parent"), "icon_folderActionLevelup.png")), $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList(
+                generateSystemid(),
+                "",
+                "",
+                $this->objToolkit->listButton(
+                    getLinkAdmin(
+                        $this->arrModule["modul"],
+                        "userBrowser",
+                        "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup"),
+                        $this->getLang("user_list_parent"),
+                        $this->getLang("user_list_parent"),
+                        "icon_folderActionLevelup.png"
+                    )
+                ),
+                $intI++
+            );
             foreach($arrUsers as $strSingleUser) {
                 $objSingleUser = new class_module_user_user($strSingleUser);
 

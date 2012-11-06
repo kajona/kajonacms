@@ -225,11 +225,13 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function getListOfAssignments() {
         $strQuery = "SELECT member.*
                        FROM "._dbprefix_."tags_member as member,
-                            "._dbprefix_."system as system
+                            "._dbprefix_."system as system,
+                            "._dbprefix_."tags_tag as tag
                       WHERE tags_tagid = ?
                         AND system.system_id = member.tags_systemid
+                        AND member.tags_tagid = tag.tags_tag_id
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
-                        AND system.system_status = 1";
+                        ";
 
         return $this->objDB->getPArray($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
     }
@@ -242,10 +244,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function getIntAssignments() {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member as member,
-                            "._dbprefix_."tags_tag as tag
+                            "._dbprefix_."tags_tag as tag,
+                            "._dbprefix_."system as system
                       WHERE member.tags_tagid = ?
                         AND member.tags_tagid = tag.tags_tag_id
-                        AND (tags_tag_private IS NULL OR tag.tags_tag_private != 1 OR member.tags_owner IS NULL OR member.tags_owner = '' OR member.tags_owner = ?) ";
+                        AND system.system_id = member.tags_systemid
+                        AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?)) ";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
         return $arrRow["COUNT(*)"];
@@ -390,6 +394,32 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return true;
     }
 
+    public function copyObject($strNewPrevid = "") {
+
+        $strPrefix = $this->getStrName()."_";
+        $intCount = 1;
+
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."tags_tag WHERE tags_tag_name = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($strPrefix.$intCount));
+
+        while($arrRow["COUNT(*)"] > 0) {
+            $arrRow = $this->objDB->getPRow($strQuery, array($strPrefix.++$intCount));
+        }
+
+        $this->setStrName($strPrefix.$intCount);
+
+        //save assigned records
+        $arrRecords = $this->getListOfAssignments();
+
+        parent::copyObject($strNewPrevid);
+
+        //copy the tag assignments
+        foreach($arrRecords as $arrOneRecord) {
+            $this->assignToSystemrecord($arrOneRecord["tags_systemid"]);
+        }
+
+        return true;
+    }
 
     public function getStrName() {
         return $this->strName;
