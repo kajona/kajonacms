@@ -1210,12 +1210,15 @@ class class_toolkit_admin extends class_toolkit {
      * Includes an IFrame with the given URL
      *
      * @param string $strIFrameSrc
+     * @param string $strIframeId
+     *
      * @return string
      */
-    public function getIFrame($strIFrameSrc) {
+    public function getIFrame($strIFrameSrc, $strIframeId = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "iframe_container");
         $arrContent = array();
         $arrContent["iframesrc"] = $strIFrameSrc;
+        $arrContent["iframeid"] = $strIframeId !== "" ? $strIframeId : generateSystemid();
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 

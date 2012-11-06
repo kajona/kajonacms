@@ -3,7 +3,7 @@
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                  *
+*	$Id$ *
 ********************************************************************************************************/
 
 /**
@@ -18,9 +18,13 @@
 class class_module_packagemanager_contentprovider_kajonabase extends class_module_packagemanager_contentprovider_remote_base {
 
     function __construct() {
-        parent::__construct("provider_kajonabase", "v4.kajonabase.net",
+        parent::__construct(
+            "provider_kajonabase",
+            "v4.kajonabase.net",
             "/xml.php?module=packageserver&action=list",
             "/xml.php?module=packageserver&action=searchPackages&title=",
-            "/download.php", __CLASS__);
+            "/download.php",
+            __CLASS__
+        );
     }
 }

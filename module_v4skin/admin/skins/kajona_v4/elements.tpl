@@ -607,7 +607,32 @@ A fieldset to structure logical sections
 
 
 <iframe_container>
-    <iframe src="%%iframesrc%%" class="loadingContainer" width="100%" height="100%" frameborder="0"></iframe>
+    <iframe src="%%iframesrc%%" id="%%iframeid%%" class="loadingContainer seamless" width="100%" height="100%" frameborder="0" seamless ></iframe>
+
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            var frame = $('iframe#%%iframeid%%');
+            frame.load(function() {
+                $('.tab-content.fullHeight iframe').each(function() {
+
+                    var frame = document.getElementById('%%iframeid%%');
+                    innerDoc = (frame.contentDocument) ?
+                        frame.contentDocument : frame.contentWindow.document;
+
+                    var intHeight = (innerDoc.body.scrollHeight + 10);
+
+                    if($(this).height() < intHeight) {
+                        $(this).height(intHeight);
+
+                        console.warn('updated height');
+                    }
+                    else
+                        console.warn('no height update');
+                });
+            });
+
+        });
+    </script>
 </iframe_container>
 
 
@@ -619,16 +644,6 @@ A fieldset to structure logical sections
     <div class="tab-content %%classaddon%%">
         %%tabcontent%%
     </div>
-
-    <script>
-        $(function () {
-            var $tabContent = $('.tab-content.fullHeight');
-            var tabNavHeight = $tabContent.parent().children('.nav-tabs').outerHeight(true);
-            var height = $tabContent.first().height();
-
-            $tabContent.height(height - tabNavHeight - 10);
-        });
-    </script>
 </tabbed_content_wrapper>
 
 <tabbed_content_tabheader>

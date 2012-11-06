@@ -82,7 +82,16 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if($objHandler->isInstallable()) {
                 $strActions .= $this->objToolkit->listButton(
-                    getLinkAdminDialog($this->getArrModule("modul"), "processPackage", "&package=".$objOneMetadata->getStrPath(), $this->getLang("package_install"), $this->getLang("package_installocally"), "icon_downloads.png", $this->getLang("package_install")));
+                    getLinkAdminDialog(
+                        $this->getArrModule("modul"),
+                        "processPackage",
+                        "&package=".$objOneMetadata->getStrPath(),
+                        $this->getLang("package_install"),
+                        $this->getLang("package_installocally"),
+                        "icon_downloads.png",
+                        $this->getLang("package_install")
+                    )
+                );
             }
 
 
@@ -97,7 +106,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
 
-        $strAddActions = $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png", $this->getLang("actionUploadPackage")));
+        $strAddActions = $this->objToolkit->listButton(
+            getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png", $this->getLang("actionUploadPackage"))
+        );
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
 
         $strReturn .= $this->objToolkit->listFooter();
@@ -411,8 +422,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
-            //$strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "download", "", $this->getLang("action_download"), $this->getLang("action_download"), "icon_install.png"));
-            $strReturn .= $this->objToolkit->listButton(getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_upload.png", $this->getLang("actionUploadPackage")));
+            $strReturn .= $this->objToolkit->listButton(
+                getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_upload.png", $this->getLang("actionUploadPackage"))
+            );
             $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new.png"));
         }
 
