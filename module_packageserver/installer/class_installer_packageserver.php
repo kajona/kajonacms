@@ -31,7 +31,7 @@ class class_installer_packageserver extends class_installer_base {
 
         $arrFields = array();
         $arrFields["log_id"] = array("char20", false);
-        $arrFields["log_query"] = array("char254", true);
+        $arrFields["log_query"] = array("text", true);
         $arrFields["log_ip"] = array("char254", true);
         $arrFields["log_hostname"] = array("char254", true);
         $arrFields["log_date"] = array("long", true);

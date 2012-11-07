@@ -40,12 +40,13 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$strReturn .= "Installing table tags_member...\n";
 
         $arrFields = array();
+		$arrFields["tags_memberid"]     = array("char20", false);
 		$arrFields["tags_systemid"] 	= array("char20", false);
 		$arrFields["tags_tagid"]        = array("char20", false);
 		$arrFields["tags_attribute"]    = array("char254", true);
 		$arrFields["tags_owner"]        = array("char20", true);
 
-		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_systemid", "tags_tagid", "tags_attribute", "tags_owner")))
+		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_memberid"), array("tags_systemid", "tags_tagid", "tags_attribute", "tags_owner")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -118,6 +119,12 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_3492();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -172,7 +179,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
                       DROP PRIMARY KEY,
-                      ADD PRIMARY KEY(tags_systemid, tags_tagid, tags_attribute, tags_owner)";
+                      ADD PRIMARY KEY(tags_systemid, tags_tagid, tags_owner)";
 
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occurred! ...\n";
@@ -185,5 +192,59 @@ class class_installer_tags extends class_installer_base implements interface_ins
         return $strReturn;
     }
 
+    private function update_3491_3492() {
+        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
+
+        $strReturn .= "Updating tag assignment table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
+                    ADD ".$this->objDB->encloseColumnName("tags_memberid")." ".$this->objDB->getDatatype("char20")." ";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occurred! ...\n";
+
+        //fill default ids
+        $strQuery = "SELECT * FROM ".$this->objDB->encloseTableName(_dbprefix_."tags_member")." WHERE tags_memberid = '' OR tags_memberid IS NULL";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrSingleRow) {
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
+                           SET tags_memberid = ?
+                         WHERE tags_systemid = ?
+                           AND tags_tagid = ?
+                           AND tags_attribute = ?
+                           AND tags_owner = ?";
+
+            $this->objDB->_pQuery($strQuery, array(
+                generateSystemid(),
+                $arrSingleRow["tags_systemid"],
+                $arrSingleRow["tags_tagid"],
+                $arrSingleRow["tags_attribute"],
+                $arrSingleRow["tags_owner"]
+            ));
+        }
+
+
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
+                      DROP PRIMARY KEY,
+                      ADD PRIMARY KEY(tags_memberid)";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Adding index to table tags_member\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")." ADD INDEX ( ".$this->objDB->encloseColumnName("tags_systemid")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")." ADD INDEX ( ".$this->objDB->encloseColumnName("tags_tagid")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")." ADD INDEX ( ".$this->objDB->encloseColumnName("tags_attribute")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")." ADD INDEX ( ".$this->objDB->encloseColumnName("tags_owner")." ) ", array());
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "3.4.9.2");
+
+        return $strReturn;
+    }
 
 }

@@ -97,12 +97,15 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 }
                 catch(class_exception $objException) {
                     $strPagename = _pages_errorpage_;
+                    $this->setParam("page", _pages_errorpage_);
                     //revert to the old language - fallback didn't work
                     $objDefaultLang->setStrPortalLanguage($strPreviousLang);
                 }
             }
-            else
+            else {
                 $strPagename = _pages_errorpage_;
+                $this->setParam("page", _pages_errorpage_);
+            }
 
 
             $objPageData = class_module_pages_page::getPageByName($strPagename);

@@ -53,8 +53,11 @@ class class_installer_packagemanager extends class_installer_base implements int
 
         $arrPacks = class_module_packagemanager_template::getObjectList();
         if(count($arrPacks) > 0) {
-            $objPack = $arrPacks[0];
-            $objPack->setIntRecordStatus(1);
+            //search the default package
+            foreach($arrPacks as $objOnePack) {
+                if($objOnePack->getStrName() == "default")
+                    $objOnePack->setIntRecordStatus(1);
+            }
         }
 
         $strReturn .= "Setting aspect assignments...\n";

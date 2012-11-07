@@ -316,10 +316,10 @@ class class_module_tags_tag extends class_model implements interface_model, inte
             return true;
 
         $strQuery = "INSERT INTO "._dbprefix_."tags_member
-                      (tags_systemid, tags_tagid, tags_attribute, tags_owner) VALUES
-                      (?, ?, ?, ?)";
+                      (tags_memberid, tags_systemid, tags_tagid, tags_attribute, tags_owner) VALUES
+                      (?, ?, ?, ?, ?)";
 
-        return $this->objDB->_pQuery($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute, $this->objSession->getUserID()));
+        return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $strTargetSystemid, $this->getSystemid(), $strAttribute, $this->objSession->getUserID()));
     }
 
     /**
@@ -387,8 +387,8 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                       WHERE tags_systemid = ?";
         $arrRows = $this->objDB->getPArray($strQuery, array($strOldSystemid));
         foreach($arrRows as $arrSingleRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?)";
-            $this->objDB->_pQuery($strQuery, array($arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
+            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_memberid, tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?)";
+            $this->objDB->_pQuery($strQuery, array(generateSystemid(), $arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
         }
 
         return true;

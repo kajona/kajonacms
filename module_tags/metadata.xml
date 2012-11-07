@@ -5,7 +5,7 @@
         >
     <title>tags</title>
     <description>Tags are used to connect objects with keywords.</description>
-    <version>3.4.9.1</version>
+    <version>3.4.9.2</version>
     <author>Kajona Team</author>
     <target>module_tags</target>
     <type>MODULE</type>
