@@ -230,9 +230,7 @@ KAJONA.admin.portaleditor.RTE.init = function () {
             halloConfig.plugins = {
                 halloformat: {},
                 hallolists: {},
-                halloreundo: {},
-                hallolink: {}
-
+                halloreundo: {}
             };
         }
 
