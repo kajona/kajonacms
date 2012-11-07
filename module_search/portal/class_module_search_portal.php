@@ -86,7 +86,7 @@ class class_module_search_portal extends class_portal implements interface_porta
                 continue;
 
             $objPage = class_module_pages_page::getPageByName($objHit->getStrPagename());
-            if(!$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
+            if($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
                 continue;
 
             $arrRow = array();

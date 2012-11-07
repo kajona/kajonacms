@@ -554,6 +554,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objPage = null;
             if($this->getParam("copyElement_page") != "") {
                 $objPage = class_module_pages_page::getPageByName($this->getParam("copyElement_page"));
+                if($objPage == null)
+                    throw new class_exception("failed to load page ".$this->getParam("copyElement_page"), class_exception::$level_ERROR);
                 $objPage->setStrLanguage($objLang->getStrName());
                 $objPage->initObject();
             }

@@ -154,7 +154,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         $strImportPrevName = $arrMetadata["prevname"][0]["value"];
         if($strImportPrevName != "") {
             $objPage = class_module_pages_page::getPageByName($strImportPrevName);
-            if(validateSystemid($objPage->getSystemid())) {
+            if($objPage !== null) {
                 $strPrevId = $objPage->getSystemid();
             }
         }
@@ -173,7 +173,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         //check if an existing page should be replaced
         if($bitReplaceExisting) {
             $objPage = class_module_pages_page::getPageByName($strPagename);
-            if(validateSystemid($objPage->getSystemid())) {
+            if($objPage !== null) {
                 $strPrevId = $objPage->getPrevId();
                 $objPage->deleteObject();
             }

@@ -393,18 +393,24 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
     /**
-     * Returns a new page-instance, using the given name
+     * Returns a new page-instance, using the given name.
+     * If not found, null is returned instead
      *
      * @param string $strName
      *
-     * @return class_module_pages_page
+     * @return class_module_pages_page|null
      */
     public static function getPageByName($strName) {
         $strQuery = "SELECT page_id
 						FROM " . _dbprefix_ . "page
 						WHERE page_name= ?";
         $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-        return new class_module_pages_page((isset($arrId["page_id"]) ? $arrId["page_id"] : ""));
+
+        if(isset($arrId["page_id"]))
+            return new class_module_pages_page($arrId["page_id"]);
+        else
+            return null;
+
     }
 
     /**

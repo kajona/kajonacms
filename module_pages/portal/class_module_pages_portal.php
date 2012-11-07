@@ -54,18 +54,19 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
         //check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
         $bitErrorpage = false;
-        if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$objPageData->rightView()))
+        if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView()))
             $bitErrorpage = true;
 
 
         //but: if count != 0 && preview && rights:
-        if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $objPageData->rightEdit())
+        if($bitErrorpage && $objPageData != null && $this->getParam("preview") == "1" && $objPageData->rightEdit())
             $bitErrorpage = false;
 
 
         //check, if the template could be loaded
         try {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
+            if(!$bitErrorpage)
+                $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         }
         catch(class_exception $objException) {
             $bitErrorpage = true;
@@ -76,11 +77,11 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //try to send the correct header
             //page not found
-            if($objPageData->getStrName() == "" || $objPageData->getStatus() != 1)
+            if($objPageData == null || $objPageData->getStatus() != 1)
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
 
             //user is not allowed to view the page
-            if($objPageData->getStrName() != "" && !$objPageData->rightView())
+            if($objPageData != null && !$objPageData->rightView())
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
 
 
@@ -92,10 +93,20 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
                 $objPageData = class_module_pages_page::getPageByName($strPagename);
 
+                $bitErrorpage = false;
+
+
                 try {
-                    $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
+                    if($objPageData != null)
+                        $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
+                    else
+                        $bitErrorpage = true;
                 }
                 catch(class_exception $objException) {
+                    $bitErrorpage = true;
+                }
+
+                if($bitErrorpage) {
                     $strPagename = _pages_errorpage_;
                     $this->setParam("page", _pages_errorpage_);
                     //revert to the old language - fallback didn't work
@@ -111,7 +122,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
             $objPageData = class_module_pages_page::getPageByName($strPagename);
 
             //check, if the page is enabled and if the rights are given, too
-            if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$objPageData->rightView())) {
+            if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView())) {
                 //Whoops. Nothing to output here
                 throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
             }
@@ -145,7 +156,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
         //If there's a master-page, load elements on that, too
         $objMasterData = class_module_pages_page::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
-        if($objMasterData->getStrName() != "") {
+        if($objMasterData != null) {
             $arrElementsOnMaster = array();
             if($bitPeRequested)
                 $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());

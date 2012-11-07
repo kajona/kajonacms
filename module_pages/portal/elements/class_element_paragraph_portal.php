@@ -13,28 +13,28 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_element_paragraph_portal extends class_element_portal implements  interface_portal_element {
+class class_element_paragraph_portal extends class_element_portal implements interface_portal_element {
 
     /**
      * Constructor
      *
      * @param $objElementData
      */
-	public function __construct($objElementData) {
-		parent::__construct($objElementData);
+    public function __construct($objElementData) {
+        parent::__construct($objElementData);
 
         $this->setArrModuleEntry("table", _dbprefix_."element_paragraph");
-	}
+    }
 
 
-	/**
-	 * Does a little "make-up" to the contents
-	 *
-	 * @return string
-	 */
-	public function loadData() {
+    /**
+     * Does a little "make-up" to the contents
+     *
+     * @return string
+     */
+    public function loadData() {
 
-		$strReturn = "";
+        $strReturn = "";
 
         $strTemplate = $this->arrElementData["paragraph_template"];
         //fallback
@@ -43,11 +43,13 @@ class class_element_paragraph_portal extends class_element_portal implements  in
 
         //choose template section
         $strTemplateSection = "paragraph";
-        if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
+        if($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
             $strTemplateSection = "paragraph_image_link";
-        } else if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
+        }
+        else if($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
             $strTemplateSection = "paragraph_image";
-        } else if ($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
+        }
+        else if($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
             $strTemplateSection = "paragraph_link";
         }
 
@@ -60,22 +62,21 @@ class class_element_paragraph_portal extends class_element_portal implements  in
         }
 
         if($this->arrElementData["paragraph_link"] != "") {
-		    //internal page?
-		    $objPage = class_module_pages_page::getPageByName($this->arrElementData["paragraph_link"]);
-		    if($objPage->getStrName() != "")
-			    $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
-			else
-			    $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);
-		}
+            //internal page?
+            if(class_module_pages_page::getPageByName($this->arrElementData["paragraph_link"]) !== null)
+                $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
+            else
+                $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);
+        }
 
-		if($this->arrElementData["paragraph_title"] != "") {
-			$strTemplateTitleID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph_title_tag");
-			$this->arrElementData["paragraph_title_tag"] = $this->fillTemplate($this->arrElementData, $strTemplateTitleID);
-		}
+        if($this->arrElementData["paragraph_title"] != "") {
+            $strTemplateTitleID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph_title_tag");
+            $this->arrElementData["paragraph_title_tag"] = $this->fillTemplate($this->arrElementData, $strTemplateTitleID);
+        }
 
         $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
 
         return $strReturn;
-	}
+    }
 
 }

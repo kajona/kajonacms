@@ -391,7 +391,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
                             //check, if the element is installed on the current page
                             $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
                             //maybe on the masters-page?
-                            if($objElement == null)
+                            if($objElement == null && $objMasterPageData != null)
                                 $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
 
                             if($objElement != null) {
@@ -463,13 +463,21 @@ class class_module_navigation_portal extends class_portal implements interface_p
         $arrTemp["href"] = getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
         $arrTemp["target"] = $objPointData->getStrTarget();
         if($objPointData->getStrImage() != "") {
-            $arrTemp["image"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" alt=\"".$arrTemp["text"]."\"/>", $objPointData->getStrLinkAction(), "", $objPointData->getStrSystemid());
+            $arrTemp["image"] = getLinkPortal(
+                $arrTemp["page_intern"],
+                $arrTemp["page_extern"],
+                $objPointData->getStrTarget(),
+                "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" alt=\"".$arrTemp["text"]."\"/>",
+                $objPointData->getStrLinkAction(),
+                "",
+                $objPointData->getStrSystemid()
+            );
             $arrTemp["image_src"] = $objPointData->getStrImage();
         }
 
         if($objPointData->getStrPageI() != "") {
             $objPage = class_module_pages_page::getPageByName($objPointData->getStrPageI());
-            if($objPage->getIntLmTime() != "")
+            if($objPage != null && $objPage->getIntLmTime() != "")
                 $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getIntLmTime());
         }
 

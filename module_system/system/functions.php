@@ -808,35 +808,39 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
         $bitRegularLink = true;
         if(_system_mod_rewrite_ == "true") {
 
+            $strAddKeys = "";
+
             //used later to add seo-relevant keywords
             $objPage = class_module_pages_page::getPageByName($strPageI);
-            if($strLanguage != "") {
-                $objPage->setStrLanguage($strLanguage);
-                $objPage->initObject();
-            }
+            if($objPage !== null) {
+                if($strLanguage != "") {
+                    $objPage->setStrLanguage($strLanguage);
+                    $objPage->initObject();
+                }
 
-            $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
-            if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
-                $strAddKeys .= "__";
-            
-            //trim string
-            $strAddKeys = uniStrTrim($strAddKeys, 100, "");
+                $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
+                if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
+                    $strAddKeys .= "__";
 
-            if($strLanguage != "") {
-                $strHref .= $strLanguage."/";
-            }
-            
-            $strPath = $objPage->getStrPath();
-            
-            if($strPath == "") {
-                $objPage->updatePath();
+                //trim string
+                $strAddKeys = uniStrTrim($strAddKeys, 100, "");
+
+                if($strLanguage != "")
+                    $strHref .= $strLanguage."/";
+
                 $strPath = $objPage->getStrPath();
-                $objPage->updateObjectToDb();
+                if($strPath == "") {
+                    $objPage->updatePath();
+                    $strPath = $objPage->getStrPath();
+                    $objPage->updateObjectToDb();
+                }
+                if($strPath != "") {
+                    $strHref .= $strPath."/";
+                }
+
             }
             
-            if($strPath != "") {
-                $strHref .= $strPath."/";
-            }
+
 
             //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
             //but: special case: just pagename & language
@@ -866,12 +870,13 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
         }
 
         if($bitRegularLink)
-            $strHref = "_indexpath_"."?".($strPageI != "" ? "page=".$strPageI : "" )."".
-                                      ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
-                                      ($strAction != "" ? "&amp;action=".$strAction : "").
-                                      ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-                                      ($strParams != "" ? "&amp;".$strParams : "" ).
-                                      ($strAnchor != "" ? "#".$strAnchor : "")."";
+            $strHref = "_indexpath_"."?".
+                ($strPageI != "" ? "page=".$strPageI : "" )."".
+                ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
+                ($strAction != "" ? "&amp;action=".$strAction : "").
+                ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
+                ($strParams != "" ? "&amp;".$strParams : "" ).
+                ($strAnchor != "" ? "#".$strAnchor : "")."";
     }
     else {
         $strHref = $strPageE;

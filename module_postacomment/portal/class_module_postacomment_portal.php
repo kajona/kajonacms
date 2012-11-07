@@ -49,7 +49,7 @@ class class_module_postacomment_portal extends class_portal implements interface
         if($this->getSystemid() != "")
             $strSystemidfilter = $this->getSystemid();
 
-        if($strPagefilter === null)
+        if($strPagefilter === null && class_module_pages_page::getPageByName($this->getPagename()) !== null)
             $strPagefilter = class_module_pages_page::getPageByName($this->getPagename())->getSystemid();
 
         $intNrOfPosts = isset($this->arrElementData["int1"]) ? $this->arrElementData["int1"] : 0;
@@ -58,7 +58,9 @@ class class_module_postacomment_portal extends class_portal implements interface
         $objArraySectionIterator = new class_array_section_iterator(class_module_postacomment_post::getNumberOfPostsAvailable(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage()));
         $objArraySectionIterator->setIntElementsPerPage($intNrOfPosts);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1));
-        $objArraySectionIterator->setArraySection(class_module_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(
+            class_module_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+        );
 
 
         //params to add?
@@ -179,7 +181,10 @@ class class_module_postacomment_portal extends class_portal implements interface
         if($this->getSystemid() != "")
             $strSystemidfilter = $this->getSystemid();
 
-        $strPagefilter = class_module_pages_page::getPageByName($this->getPagename())->getSystemid();
+        if(class_module_pages_page::getPageByName($this->getPagename() !== null))
+            $strPagefilter = class_module_pages_page::getPageByName($this->getPagename())->getSystemid();
+        else
+            $strPagefilter = "";
 
         $objPost = new class_module_postacomment_post();
         $objPost->setStrUsername($this->getParam("comment_name"));

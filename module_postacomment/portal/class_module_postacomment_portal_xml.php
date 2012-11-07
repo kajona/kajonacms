@@ -74,7 +74,10 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
             //save the post to the db
             //pageid or systemid to filter?
             $strSystemidfilter = $this->getParam("comment_systemid");
-            $strPagefilter = class_module_pages_page::getPageByName($this->getParam("comment_page"))->getSystemid();
+            if(class_module_pages_page::getPageByName($this->getParam("comment_page")) !== null)
+                $strPagefilter = class_module_pages_page::getPageByName($this->getParam("comment_page"))->getSystemid();
+            else
+                $strPagefilter = "";
 
             $objPost = new class_module_postacomment_post();
             $objPost->setStrUsername($this->getParam("comment_name"));

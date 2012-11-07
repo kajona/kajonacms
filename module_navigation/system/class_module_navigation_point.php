@@ -12,15 +12,13 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
- *
  * @targetTable navigation.navigation_id
  */
-class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable  {
+class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn navigation_name
-     *
      * @fieldMandatory
      * @fieldType text
      * @fieldLabel commons_name
@@ -30,7 +28,6 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_page_e
-     *
      * @fieldType file
      * @fieldLabel navigation_page_e
      */
@@ -39,7 +36,6 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_page_i
-     *
      * @fieldType page
      * @fieldLabel navigation_page_i
      */
@@ -54,7 +50,6 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_target
-     *
      * @fieldType dropdown
      * @fieldLabel navigation_target
      */
@@ -63,7 +58,6 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_image
-     *
      * @fieldType image
      * @fieldLabel commons_image
      */
@@ -71,12 +65,14 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * Internal field, used for navigation nodes added by other modules
+     *
      * @var string
      */
     private $strLinkAction = "";
 
     /**
      * Internal field, used for navigation nodes added by other modules
+     *
      * @var string
      */
     private $strLinkSystemid = "";
@@ -90,13 +86,14 @@ class class_module_navigation_point extends class_model implements interface_mod
         $this->setArrModuleEntry("modul", "navigation");
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -116,6 +113,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -132,6 +130,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -140,20 +139,21 @@ class class_module_navigation_point extends class_model implements interface_mod
 
 
     /**
-	 * Loads all navigation points one layer under the given systemid
-	 *
-	 * @param string $strSystemid
-	 * @param bool
-	 * @return mixed
-	 * @static
-	 */
-	public static function getNaviLayer($strSystemid, $bitJustActive = false) {
-	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
+     * Loads all navigation points one layer under the given systemid
+     *
+     * @param string $strSystemid
+     * @param bool
+     *
+     * @return class_module_navigation_point[]
+     * @static
+     */
+    public static function getNaviLayer($strSystemid, $bitJustActive = false) {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
     			             AND system_prev_id = ?
-    			             ".($bitJustActive ? " AND system_status = 1 ": "")."
+    			             ".($bitJustActive ? " AND system_status = 1 " : "")."
     			             ORDER BY system_sort ASC, system_comment ASC";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
             $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);
@@ -161,7 +161,7 @@ class class_module_navigation_point extends class_model implements interface_mod
         }
 
         return $arrReturn;
-	}
+    }
 
 
     /**
@@ -172,6 +172,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * linked to the current point.
      *
      * @param string $strSystemid
+     *
      * @return class_module_navigation_point
      */
     public static function getDynamicNaviLayer($strSystemid) {
@@ -200,33 +201,33 @@ class class_module_navigation_point extends class_model implements interface_mod
         }
 
 
-
         return $arrReturn;
     }
 
 
-	/**
-	 * Loads all navigation-points linking on the passed page
-	 *
-	 * @param string $strPagename
-	 * @static
-	 * @return mixed
-	 */
-	public static function loadPagePoint($strPagename) {
-	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $arrReturn = array();
-	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
+    /**
+     * Loads all navigation-points linking on the passed page
+     *
+     * @param string $strPagename
+     *
+     * @static
+     * @return mixed
+     */
+    public static function loadPagePoint($strPagename) {
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $arrReturn = array();
+        $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
     			             AND system_module_nr = ?
     			             AND navigation_page_i = ?
     			             AND system_status = 1";
-	    $arrIds = $objDB->getPArray($strQuery, array(_navigation_modul_id_, $strPagename));
+        $arrIds = $objDB->getPArray($strQuery, array(_navigation_modul_id_, $strPagename));
 
-	    foreach($arrIds as $arrOneId)
+        foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_navigation_point($arrOneId["system_id"]);
 
         return $arrReturn;
-	}
+    }
 
 
     /**
@@ -235,6 +236,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * This node is used for portal-actions only, so there's no way to edit the node.
      *
      * @param string $strSourceId
+     *
      * @return class_module_navigation_point[]|array
      * @since 3.4
      */
@@ -252,7 +254,7 @@ class class_module_navigation_point extends class_model implements interface_mod
             if($objOneEntry instanceof class_module_pages_page) {
 
                 //validate if the page to be links has a template assigned and at least a single element created
-                if( $objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
+                if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
 
                     $objPoint = new class_module_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
@@ -300,14 +302,16 @@ class class_module_navigation_point extends class_model implements interface_mod
      * entries.
      *
      * @see class_element_portal::getNavigationEntries()
+     *
      * @param class_module_pages_page $objPage
+     *
      * @return class_module_navigation_point[]|array
      * @since 4.0
      */
     private static function getAdditionalEntriesForPage(class_module_pages_page $objPage) {
         $arrReturn = array();
         $objLanguage = new class_module_languages_language();
-        $arrElements =  class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
+        $arrElements = class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
 
         $strOldPageName = $objPage->getParam("page");
 
@@ -315,7 +319,7 @@ class class_module_navigation_point extends class_model implements interface_mod
             //Build the class-name for the object
             $strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
 
-            /** @var  class_element_portal $objElement  */
+            /** @var  class_element_portal $objElement */
             $objElement = new $strClassname($objOneElementOnPage);
             $objElement->setParam("page", $objPage->getStrName());
 
@@ -355,12 +359,15 @@ class class_module_navigation_point extends class_model implements interface_mod
     public function setStrName($strName) {
         $this->strName = $strName;
     }
+
     public function setStrPageE($strPageE) {
         $this->strPageE = $strPageE;
     }
+
     public function setStrPageI($strPageI) {
         $this->strPageI = $strPageI;
     }
+
     public function setStrTarget($strTarget) {
         $this->strTarget = $strTarget;
     }
@@ -369,9 +376,11 @@ class class_module_navigation_point extends class_model implements interface_mod
         $strImage = uniStrReplace(_webpath_, "", $strImage);
         $this->strImage = $strImage;
     }
+
     public function getStrFolderI() {
         return $this->strFolderI;
     }
+
     public function setStrFolderI($strFolderI) {
         $this->strFolderI = $strFolderI;
     }
@@ -403,6 +412,5 @@ class class_module_navigation_point extends class_model implements interface_mod
     public function getStrLinkSystemid() {
         return $this->strLinkSystemid;
     }
-
 
 }

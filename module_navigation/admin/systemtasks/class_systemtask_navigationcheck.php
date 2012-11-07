@@ -83,7 +83,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
     }
 
 
-    private function processSinglePoint($objPoint) {
+    private function processSinglePoint(class_module_navigation_point $objPoint) {
         $strReturn = "";
         $bitError = false;
 
@@ -101,7 +101,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
             //try to load internal page and check if it exists
             $objPage = class_module_pages_page::getPageByName($objPoint->getStrPageI());
 
-            if($objPage->getSystemid() == "") {
+            if($objPage == null) {
                 $strReturn .= $this->getLang("systemtask_navigationcheck_invalidInternal")." ".$objPoint->getStrPageI().")";
                 $bitError = true;
             } else {

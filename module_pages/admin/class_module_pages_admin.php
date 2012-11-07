@@ -214,7 +214,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $arrReturn = array();
             if($objListEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
                 $objTargetPage = class_module_pages_page::getPageByName($objListEntry->getStrAlias());
-                if(!$bitPeMode && $objTargetPage->rightEdit())
+                if(!$bitPeMode && $objTargetPage != null && $objTargetPage->rightEdit())
                     $arrReturn[] = $this->objToolkit->listButton(
                         getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte_alias"), "icon_page_alias.png")
                     );
@@ -391,7 +391,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         //remove template of master-page when editing a regular page
         $objMasterPage = class_module_pages_page::getPageByName("master");
-        if($objPage->getSystemid() == "" || ($objMasterPage->getSystemid() != $objPage->getSystemid())) {
+        if($objMasterPage != null && ($objPage->getSystemid() == "" || ($objMasterPage->getSystemid() != $objPage->getSystemid()))) {
             unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
         }
 
@@ -1112,7 +1112,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     if($objSingleEntry instanceof class_module_pages_page) {
 
                         $strTargetId = $objSingleEntry->getSystemid();
-                        if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
+                        if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS && class_module_pages_page::getPageByName($objSingleEntry->getStrAlias()) != null)
                             $strTargetId = class_module_pages_page::getPageByName($objSingleEntry->getStrAlias())->getSystemid();
 
                         $arrReturn[] = array(

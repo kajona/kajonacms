@@ -20,21 +20,22 @@ class class_element_lastmodified_portal extends class_element_portal implements 
      *
      * @param class_module_pages_pageelement|mixed $objElementData
      */
-	public function __construct($objElementData) {
-		parent::__construct($objElementData);
-	}
+    public function __construct($objElementData) {
+        parent::__construct($objElementData);
+    }
 
     /**
      * Looks up the last modified-date of the current page
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
         //load the current page
         $objPage = class_module_pages_page::getPageByName($this->getPagename());
-        $strReturn .= $this->getLang("lastmodified").timeToString($objPage->getIntLmTime());
-		return $strReturn;
-	}
+        if($objPage != null)
+            $strReturn .= $this->getLang("lastmodified").timeToString($objPage->getIntLmTime());
+        return $strReturn;
+    }
 
 }

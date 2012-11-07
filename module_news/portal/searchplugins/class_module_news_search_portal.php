@@ -84,6 +84,9 @@ class class_module_news_search_portal implements interface_search_plugin  {
 
                     $objDetails = class_module_pages_page::getPageByName($arrOnePage["news_detailspage"]);
 
+                    if($objDetails == null)
+                        continue;
+
                     if(isset($this->arrHits[$objNews->getSystemid().$objDetails->getSystemid()])) {
                         $objResult = $this->arrHits[$objNews->getSystemid().$objDetails->getSystemid()];
                         $objResult->setIntHits($objResult->getIntHits()+1);

@@ -58,7 +58,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
 
         //load the page itself
         $objPage = class_module_pages_page::getPageByName($this->getParam("pageExport"));
-        if(validateSystemid($objPage->getSystemid())) {
+        if($objPage !== null) {
 
             $objSystem = class_module_system_module::getModuleByName("system");
 
