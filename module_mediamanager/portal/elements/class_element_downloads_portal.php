@@ -20,14 +20,14 @@ class class_element_downloads_portal extends class_element_portal implements int
      *
      * @param $objElementData
      */
-	public function __construct($objElementData) {
-		$this->setArrModuleEntry("name", "element_downloads");
-		$this->setArrModuleEntry("table", _dbprefix_."element_downloads");
-		parent::__construct($objElementData);
+    public function __construct($objElementData) {
+        $this->setArrModuleEntry("name", "element_downloads");
+        $this->setArrModuleEntry("table", _dbprefix_."element_downloads");
+        parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
         $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
-	}
+    }
 
 
     /**
@@ -35,23 +35,23 @@ class class_element_downloads_portal extends class_element_portal implements int
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
 
         $objDownloadsModule = class_module_system_module::getModuleByName("mediamanager");
-		if($objDownloadsModule != null) {
+        if($objDownloadsModule != null) {
 
             $this->arrElementData["repo_id"] = $this->arrElementData["download_id"];
             $this->arrElementData["repo_elementsperpage"] = $this->arrElementData["download_amount"];
             $this->arrElementData["repo_template"] = $this->arrElementData["download_template"];
 
 
-    		$objDownloads = $objDownloadsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+            $objDownloads = $objDownloadsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objDownloads->action();
-		}
+        }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
     public function getNavigationEntries() {
         $arrData = $this->getElementContent($this->getSystemid());
@@ -73,6 +73,5 @@ class class_element_downloads_portal extends class_element_portal implements int
 
         return false;
     }
-
 
 }

@@ -157,6 +157,11 @@ class class_module_navigation_portal extends class_portal implements interface_p
             $arrOneChild = $arrChilds[$intI];
             //Check the rights
             if($arrOneChild["node"]->rightView()) {
+
+                //check if it's a foreign node and whether foreign nodes should be included
+                if($arrOneChild["node"]->getBitIsForeignNode() && $this->arrElementData["navigation_foreign"] === 0)
+                    continue;
+
                 //current point active?
                 $bitActive = false;
                 if(uniStripos($strStack, $arrOneChild["node"]->getSystemid()) !== false)

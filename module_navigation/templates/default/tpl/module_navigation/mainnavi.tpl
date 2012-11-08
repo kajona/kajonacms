@@ -26,7 +26,7 @@
 </level_2_active>
 
 <level_2_inactive>
-<li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level2%%</li>
+<li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level3%%</li>
 </level_2_inactive>
 
 
@@ -39,5 +39,5 @@
 </level_3_active>
 
 <level_3_inactive>
-<li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level2%%</li>
+<li><a href="%%href%%" target="%%target%%">%%text%%</a></li>
 </level_3_inactive>

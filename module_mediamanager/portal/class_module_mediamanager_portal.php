@@ -693,6 +693,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
         $objPoint->setSystemid($objRepo->getSystemid());
         $objPoint->setStrLinkSystemid($objRepo->getSystemid());
         $objPoint->setStrLinkAction("mediaFolder");
+        $objPoint->setBitIsForeignNode(true);
 
         $arrReturn["node"] = $objPoint;
         $arrReturn["subnodes"] = $this->getNavigationNodesHelper($objPoint->getSystemid());
@@ -714,6 +715,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
             $objPoint->setSystemid($objOneFolder->getSystemid());
             $objPoint->setStrLinkSystemid($objOneFolder->getSystemid());
             $objPoint->setStrLinkAction("mediaFolder");
+            $objPoint->setBitIsForeignNode(true);
 
             $arrTemp = array(
                 "node" => $objPoint,
