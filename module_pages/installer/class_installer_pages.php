@@ -320,22 +320,40 @@ class class_installer_pages extends class_installer_base implements interface_in
                 )
             );
         }
-        $arrElements = class_module_pages_element::getObjectList();
-        /** @var class_module_pages_element $objOneElement */
-        foreach($arrElements as $objOneElement) {
-            $objOneElement->setStrClassAdmin(uniStrReplace(".php", "_admin.php", $objOneElement->getStrClassAdmin()));
-            $objOneElement->setStrClassPortal(uniStrReplace(".php", "_portal.php", $objOneElement->getStrClassPortal()));
-            $objOneElement->updateObjectToDb();
+
+        $arrElementData = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."element", array());
+        foreach($arrElementData as $arrOneRow) {
+
+            $strReturn .= "Updating element classes for element ".$arrOneRow["element_name"]."\n";
+
+            $strQuery = "UPDATE "._dbprefix_."element
+                            SET element_class_portal = ?,
+                                element_class_admin = ?
+                          WHERE element_id = ?";
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    uniStrReplace(".php", "_portal.php", $arrOneRow["element_class_portal"]),
+                    uniStrReplace(".php", "_admin.php", $arrOneRow["element_class_admin"]),
+                    $arrOneRow["element_id"]
+                )
+            );
+
         }
+
 
         $strReturn .= "Pages & Folders\n";
         $arrRows = $this->objDB->getPArray("SELECT system_id, system_module_nr FROM "._dbprefix_."page, "._dbprefix_."system WHERE system_id = page_id AND (system_class IS NULL OR system_class = '')", array());
         foreach($arrRows as $arrOneRow) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            if($arrOneRow["system_module_nr"] == _pages_folder_id_)
-                $this->objDB->_pQuery($strQuery, array( 'class_module_pages_folder', $arrOneRow["system_id"] ) );
-            else
-                $this->objDB->_pQuery($strQuery, array( 'class_module_pages_page', $arrOneRow["system_id"] ) );
+            $this->objDB->_pQuery($strQuery, array( 'class_module_pages_page', $arrOneRow["system_id"] ) );
+        }
+
+        $strReturn .= "Pages & Folders\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_module_nr = ? AND system_prev_id != '0' AND (system_class IS NULL OR system_class = '')", array(_pages_folder_id_));
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_pages_folder', $arrOneRow["system_id"] ) );
         }
 
         $strReturn .= "Elements\n";
@@ -349,16 +367,16 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9");
         $strReturn .= "Updating element-version...\n";
-        $this->updateElementVersion("row", "3.4.9");
-        $this->updateElementVersion("paragraph", "3.4.9");
-        $this->updateElementVersion("image", "3.4.9");
+        //$this->updateElementVersion("row", "3.4.9");
+        //$this->updateElementVersion("paragraph", "3.4.9");
+        //$this->updateElementVersion("image", "3.4.9");
         return $strReturn;
     }
 
     private function update_349_3491() {
         $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
 
-
+        $this->objDB->flushQueryCache();
         $strReturn .= "Migrating elements to real records...\n";
         $strQuery = "SELECT * FROM "._dbprefix_."element ";
         $arrRows = $this->objDB->getPArray($strQuery, array());

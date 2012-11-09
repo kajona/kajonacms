@@ -26,12 +26,19 @@ class class_v3_v4_postupdate {
         echo "<b>Kajona v4 Post Update</b>\n\n";
         echo "Running post-update scripts to finalize a v3 to v4 update\n\n";
 
+        echo "<b>Attention! \nIn order to have v4 working properly, you have to remove the following entries (if present) \nfrom your config file at /system/config/config.php:\n\n";
+        echo "    \$config[\"images_cachepath\"]     = \"/portal/pics/cache/\" \n";
+        echo "    All \$config = array(); lines \n";
+        echo "    All \$debug = array(); lines \n";
+
+        echo "</b>\n\n";
+
         echo "Checking installation state of mediamanager...\n";
         if(!in_array(_dbprefix_."mediamanager_repo", $this->objDB->getTables())) {
             echo "<b>Install the module mediamanager before proceeding the upgrade. Aborting.</b>";
             return false;
         }
-        echo ".. installed.\n";
+        echo "... installed.\n";
 
         echo "\n\n<b>Galleries</b>\n";
         if(!$this->updateGalleries())
@@ -45,20 +52,77 @@ class class_v3_v4_postupdate {
         if(!$this->updateFilemanager())
             return false;
 
-
         echo "\n\n<b>v3 Templates</b>\n";
         if(!$this->activateTemplate())
             return false;
 
-
         echo "\n\n<b>Backend-Skin</b>\n";
         $this->updateBackendSkin();
+
+        echo "\n\n<b>Linked Files</b>\n";
+        $this->updateFilesystemReferences();
 
         echo "\n\n<b>Update succeeded. \nPlease remove the file ".__FILE__." from the filesystem.</b>\n";
 
         echo "</pre>";
 
         return true;
+    }
+
+
+    private function updateFilesystemReferences() {
+        echo "Searching for linked files...\n";
+        $arrTablesGiven = $this->objDB->getTables();
+
+        $arrReplacements = array(
+            "/portal/pics/" => "/files/images/",
+            "/portal/downloads/" => "/files/downloads/"
+        );
+
+        $arrTablesToScan = array(
+            array("element_paragraph", "content_id", "paragraph_content"),
+            array("element_paragraph", "content_id", "paragraph_image"),
+            array("element_formular", "content_id", "formular_success"),
+            array("element_formular", "content_id", "formular_error"),
+            array("element_image", "content_id", "image_image"),
+            array("element_tellafriend", "content_id", "tellafriend_error"),
+            array("element_tellafriend", "content_id", "tellafriend_success"),
+            array("element_universal", "content_id", "char1"),
+            array("element_universal", "content_id", "char2"),
+            array("element_universal", "content_id", "char3"),
+
+            array("em_event", "em_ev_id", "em_ev_description"),
+            array("faqs", "faqs_id", "faqs_answer"),
+            array("news", "news_id", "news_text"),
+            array("news", "news_id", "news_image")
+        );
+
+        echo "Scanning...\n";
+        foreach($arrTablesToScan as $arrConfig) {
+
+            if(in_array(_dbprefix_.$arrConfig[0], $arrTablesGiven)) {
+                echo " ".$arrConfig[0].", column ".$arrConfig[2]."\n";
+
+                foreach($arrReplacements as $strSearch => $strReplace) {
+
+
+                    $strQuery = "SELECT * FROM "._dbprefix_.$arrConfig[0]." WHERE ".$arrConfig[2]." LIKE ?";
+                    $arrRows = $this->objDB->getPArray($strQuery, array("%".$strSearch."%"));
+                    if(count($arrRows) > 0) {
+                        echo "   searching for ".$strSearch.", found ".count($arrRows)." image references\n";
+                        foreach($arrRows as $arrOneRow) {
+                            $strQuery = "UPDATE "._dbprefix_.$arrConfig[0]." SET ".$arrConfig[2]." = ? WHERE ".$arrConfig[1]." = ?";
+
+                            $this->objDB->_pQuery($strQuery, array(uniStrReplace($strSearch, $strReplace, $arrOneRow[$arrConfig[2]]), $arrOneRow[$arrConfig[1]]));
+                            echo "      updated entry with id ".$arrOneRow[$arrConfig[1]]."\n";
+                        }
+                    }
+
+                }
+
+            }
+
+        }
     }
 
 
@@ -143,7 +207,7 @@ class class_v3_v4_postupdate {
             echo "migrating downloads data...\n";
             $this->updateDownloadsLevel($objRepo->getSystemid(), $arrOneArchive["archive_id"]);
 
-            echo "updateing existing downloads-elements...\n";
+            echo "updating existing downloads-elements...\n";
             $strQuery = "UPDATE "._dbprefix_."element_downloads SET download_id = ? WHERE download_id = ?";
             $this->objDB->_pQuery($strQuery, array($objRepo->getSystemid(), $arrOneArchive["archive_id"]));
 
@@ -254,7 +318,7 @@ class class_v3_v4_postupdate {
             echo "migrating image data...\n";
             $this->updateGalleryLevel($objRepo->getSystemid(), $arrOneGallery["gallery_id"]);
 
-            echo "updateing existing gallery-elements...\n";
+            echo "updating existing gallery-elements...\n";
             $strQuery = "UPDATE "._dbprefix_."element_gallery SET gallery_id = ? WHERE gallery_id = ?";
             $this->objDB->_pQuery($strQuery, array($objRepo->getSystemid(), $arrOneGallery["gallery_id"]));
 
@@ -442,12 +506,12 @@ class class_v3_v4_postupdate {
     }
 
     private function convertOldPath($strOldPath) {
-        if(uniStripos($strOldPath, "/downloads") !== false) {
-            return _filespath_.uniSubstr($strOldPath, uniStripos($strOldPath, "/downloads"));
+        if(uniStripos($strOldPath, "/portal/downloads") !== false) {
+            return uniStrReplace("/portal/downloads", "/files/downloads", $strOldPath);
         }
 
-        if(uniStripos($strOldPath, "/pics") !== false) {
-            return _filespath_."/images".uniSubstr($strOldPath, uniStripos($strOldPath, "/pics")+5 );
+        if(uniStripos($strOldPath, "/portal/pics") !== false) {
+            return uniStrReplace("/portal/pics", "/files/images", $strOldPath);
         }
 
         return $strOldPath;
