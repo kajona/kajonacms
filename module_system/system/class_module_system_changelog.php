@@ -79,6 +79,12 @@ class_module_system_changelog extends class_model implements interface_model {
         return null;
     }
 
+    /**
+     * Scans the passed object and tries to find all properties marked with the annotation @versionable.
+     * @param interface_versionable $objCurrentObject
+     *
+     * @return array|null
+     */
     private function readVersionableProperties(interface_versionable $objCurrentObject) {
         if(validateSystemid($objCurrentObject->getSystemid())) {
             $arrOldValues = array();
@@ -120,7 +126,12 @@ class_module_system_changelog extends class_model implements interface_model {
             return null;
     }
 
-
+    /**
+     * Builds the change-array based on the old- and new values
+     * @param $objSourceModel
+     *
+     * @return array
+     */
     private function createChangeArray($objSourceModel) {
         $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
 
@@ -142,6 +153,29 @@ class_module_system_changelog extends class_model implements interface_model {
         return $arrReturn;
     }
 
+    /**
+     * May be used to add changes to the change-track manually. In most cases, createLogEntry should be sufficient since
+     * it takes care of everything automatically.
+     * When using this method, pass an array of entries like:
+     * array(
+     *   array("property" => "", "oldvalue" => "", "newvalue" => ""),
+     *   array("property" => "", "oldvalue" => "", "newvalue" => "")
+     * )
+     *
+     * @param interface_versionable $objSourceModel
+     * @param $strAction
+     * @param $arrEntries
+     * @param bool $bitForceEntry if set to true, an entry will be created even if the values didn't change
+     *
+     * @throws class_exception
+     * @return bool
+     */
+    public function processChanges(interface_versionable $objSourceModel, $strAction, $arrEntries, $bitForceEntry = false) {
+        if(!$this->isVersioningAvailable($objSourceModel))
+            return true;
+
+        return $this->processChangeArray($arrEntries, $objSourceModel, $strAction, $bitForceEntry);
+    }
 
     /**
      * Generates a new entry in the modification log storing all relevant information.
@@ -161,14 +195,27 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return bool
      */
     public function createLogEntry(interface_versionable $objSourceModel, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
-        $bitReturn = true;
 
+        if(!$this->isVersioningAvailable($objSourceModel))
+            return true;
+
+        return $this->processChangeArray($this->createChangeArray($objSourceModel), $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
+    }
+
+    /**
+     * Checks if version is enabled in general and for the passed object
+     *
+     * @param interface_versionable $objSourceModel
+     *
+     * @return bool
+     * @throws class_exception
+     */
+    private function isVersioningAvailable(interface_versionable $objSourceModel) {
         if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
             return true;
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
-            return true;
         }
 
 
@@ -177,10 +224,26 @@ class_module_system_changelog extends class_model implements interface_model {
         if(version_compare($arrModul["module_version"], "3.4.9") < 0)
             return false;
 
-        $arrChanges = $this->createChangeArray($objSourceModel);
+        return true;
+    }
+
+    /**
+     * Processes the internal change-array and creates all related records.
+     *
+     * @param array $arrChanges
+     * @param interface_versionable $objSourceModel
+     * @param $strAction
+     * @param bool $bitForceEntry
+     * @param bool $bitDeleteAction
+     *
+     * @return bool
+     */
+    private function processChangeArray(array $arrChanges, interface_versionable $objSourceModel, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
+        $bitReturn = true;
 
         if(is_array($arrChanges) && in_array(_dbprefix_."changelog", $this->objDB->getTables())) {
             foreach($arrChanges as $arrChangeSet) {
+
 
                 $strOldvalue = "";
                 if(isset($arrChangeSet["oldvalue"]))
@@ -191,6 +254,26 @@ class_module_system_changelog extends class_model implements interface_model {
                     $strNewvalue = $arrChangeSet["newvalue"];
 
                 $strProperty = $arrChangeSet["property"];
+
+
+                //array may be processed automatically, too
+                if(is_array($strOldvalue) && is_array($strNewvalue)) {
+
+                    $arrArrayChanges = array();
+                    foreach($strNewvalue as $strOneId) {
+                        if(!in_array($strOneId, $strOldvalue))
+                            $arrArrayChanges[] = array("property" => $strProperty, "oldvalue" => "", "newvalue" => $strOneId);
+                    }
+
+                    foreach($strOldvalue as $strOneId) {
+                        if(!in_array($strOneId, $strNewvalue))
+                            $arrArrayChanges[] = array("property" => $strProperty, "oldvalue" => $strOneId, "newvalue" => "");
+                    }
+
+                    $this->processChangeArray($arrArrayChanges, $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
+                    continue;
+                }
+
 
                 if($strOldvalue instanceof class_date)
                     $strOldvalue = $strOldvalue->getLongTimestamp();
@@ -205,7 +288,8 @@ class_module_system_changelog extends class_model implements interface_model {
                     continue;
 
                 class_logger::getInstance()->addLogRow(
-                    "change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60),
+                    "change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: "
+                    .uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60),
                     class_logger::$levelInfo
                 );
 
@@ -239,9 +323,9 @@ class_module_system_changelog extends class_model implements interface_model {
                 );
             }
         }
-
         return $bitReturn;
     }
+
 
     /**
      * Creates the list of logentries, either without a systemid-based filter
@@ -311,7 +395,7 @@ class_module_system_changelog extends class_model implements interface_model {
      * @param string $strOldvalueFilter
      * @param string $strNewvalueFilter
      *
-     * @return class_changelog_container
+     * @return class_changelog_container[]
      */
     public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
 

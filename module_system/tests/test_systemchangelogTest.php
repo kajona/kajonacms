@@ -11,9 +11,42 @@ require_once (__DIR__."/../../module_system/system/interface_versionable.php");
  */
 class test_systemchangelogTest extends class_testbase {
 
+    public function testChangelogArrayHandling() {
+
+        $arrOld = array(1, 2, 3, 4, 5);
+        $arrNew = array(      3, 4, 5, 6, 7);
+
+        $arrChanges = array(
+            array("property" => "testArray", "oldvalue" => $arrOld, "newvalue" => $arrNew)
+        );
+
+        $strSystemid = generateSystemid();
+        $objDummy = new dummyObject($strSystemid);
+
+        $objChanges = new class_module_system_changelog();
+
+        $this->assertEquals(0, class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $objChanges->processChanges($objDummy, "arrayTest", $arrChanges);
+        $this->flushDBCache();
+        $this->assertEquals(class_module_system_changelog::getLogEntriesCount($strSystemid), 4);
+
+        $arrChanges = class_module_system_changelog::getSpecificEntries($strSystemid, "arrayTest", "testArray");
+        $this->assertEquals(4, count($arrChanges));
+
+        foreach($arrChanges as $objOneChangeSet) {
+            if($objOneChangeSet->getStrOldValue() != "") {
+                $this->assertTrue(in_array($objOneChangeSet->getStrOldValue(), array(1, 2)));
+            }
+
+            if($objOneChangeSet->getStrNewValue() != "") {
+                $this->assertTrue(in_array($objOneChangeSet->getStrNewValue(), array(6, 7)));
+            }
+        }
+    }
+
     public function testChangelog() {
 
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        $this->flushDBCache();
 
         $objChanges = new class_module_system_changelog();
 

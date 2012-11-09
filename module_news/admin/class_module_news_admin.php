@@ -217,11 +217,15 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
                         $objNews = new class_module_news_news($strNewsid);
                         $strNewsName = $objNews->getStrTitle();
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=" . $objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete.png"));
-                        $strReturn .= $this->objToolkit->genericAdminList($objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $strNewsName, getImageAdmin("icon_language.png"), $strActions, $intI++);
+                        $strReturn .= $this->objToolkit->genericAdminList(
+                            $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $strNewsName, getImageAdmin("icon_language.png"), $strActions, $intI++
+                        );
                     }
                     else {
                         $intNrOfUnassigned++;
-                        $strReturn .= $this->objToolkit->genericAdminList($objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $this->getLang("languageset_news_na"), getImageAdmin("icon_language.png"), $strActions, $intI++);
+                        $strReturn .= $this->objToolkit->genericAdminList(
+                            $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $this->getLang("languageset_news_na"), getImageAdmin("icon_language.png"), $strActions, $intI++
+                        );
                     }
 
                 }
@@ -488,17 +492,7 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
             $objForm->updateSourceObject();
 
 
-            //parse passed dates
-            $objStartDate = new class_date("0");
-            $objStartDate->generateDateFromParams("news_datestart", $this->getAllParams());
-            $objEndDate = new class_date("0");
-            $objEndDate->generateDateFromParams("news_dateend", $this->getAllParams());
-            $objArchiveDate = new class_date("0");
-            $objArchiveDate->generateDateFromParams("news_datespecial", $this->getAllParams());
 
-            $objNews->setIntDateStart($objStartDate->getLongTimestamp());
-            $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
-            $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
 
             $arrParams = $this->getAllParams();
             $arrCats = array();

@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  * @targetTable news.news_id
  */
-class class_module_news_news extends class_model implements interface_model, interface_admin_listable {
+class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable {
 
     /**
      * @var string
@@ -23,6 +23,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @fieldType text
      * @fieldMandatory
      * @fieldLabel commons_title
+     *
+     * @versionable
      */
     private $strTitle = "";
 
@@ -31,6 +33,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @tableColumn news.news_image
      *
      * @fieldType image
+     *
+     * @versionable
      */
     private $strImage = "";
 
@@ -44,6 +48,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var string
      * @tableColumn news.news_intro
      * @fieldType textarea
+     *
+     * @versionable
      */
     private $strIntro = "";
 
@@ -53,6 +59,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @blockEscaping
      *
      * @fieldType wysiwygsmall
+     *
+     * @versionable
      */
     private $strText = "";
 
@@ -60,6 +68,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var int
      * @fieldType date
      * @fieldLabel form_news_datestart
+     *
+     * @versionable
      */
     private $longDateStart = 0;
 
@@ -67,6 +77,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var int
      * @fieldType date
      * @fieldLabel form_news_dateend
+     *
+     * @versionable
      */
     private $longDateEnd = 0;
 
@@ -74,6 +86,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var int
      * @fieldType date
      * @fieldLabel form_news_datespecial
+     *
+     * @versionable
      */
     private $longDateSpecial = 0;
 
@@ -197,6 +211,22 @@ class class_module_news_news extends class_model implements interface_model, int
 
 
         if($this->bitUpdateMemberships) {
+
+            //add records to the change-history manually
+            $arrOldAssignments = class_module_news_category::getNewsMember($this->getSystemid());
+
+            $arrOldGroupIds = array();
+            foreach($arrOldAssignments as $objOneAssignment)
+                $arrOldGroupIds[] = $objOneAssignment->getSystemid();
+
+            $arrNewGroupIds = array_keys($this->arrCats);
+
+            $arrChanges = array(
+                array("property" => "assignedCategories", "oldvalue" => $arrOldGroupIds, "newvalue" => $arrNewGroupIds)
+            );
+            $objChanges = new class_module_system_changelog();
+            $objChanges->processChanges($this, "editCategoryAssignments", $arrChanges);
+
             class_module_news_category::deleteNewsMemberships($this->getSystemid());
             //insert all memberships
             foreach($this->arrCats as $strCatID => $strValue) {
@@ -434,6 +464,59 @@ class class_module_news_news extends class_model implements interface_model, int
         $strQuery = "UPDATE " . _dbprefix_ . "news SET news_hits = ? WHERE news_id= ? ";
         return $this->objDB->_pQuery($strQuery, array($this->getIntHits() + 1, $this->getSystemid()));
     }
+
+    /**
+     * Returns a human readable name of the action stored with the changeset.
+     *
+     * @param string $strAction the technical actionname
+     *
+     * @return string the human readable name
+     */
+    public function getVersionActionName($strAction) {
+        return $strAction;
+    }
+
+    /**
+     * Returns a human readable name of the record / object stored with the changeset.
+     *
+     * @return string the human readable name
+     */
+    public function getVersionRecordName() {
+        return "news";
+    }
+
+    /**
+     * Returns a human readable name of the property-name stored with the changeset.
+     *
+     * @param string $strProperty the technical property-name
+     *
+     * @return string the human readable name
+     */
+    public function getVersionPropertyName($strProperty) {
+        return $strProperty;
+    }
+
+    /**
+     * Renders a stored value. Allows the class to modify the value to display, e.g. to
+     * replace a timestamp by a readable string.
+     *
+     * @param string $strProperty
+     * @param string $strValue
+     *
+     * @return string
+     */
+    public function renderVersionValue($strProperty, $strValue) {
+        if(($strProperty == "longDateStart" || $strProperty == "longDateEnd" || $strProperty == "longDateSpecial") && $strValue > 0)
+            return dateToString(new class_date($strValue), false);
+
+        else if($strProperty == "assignedCategories" && validateSystemid($strValue)) {
+            $objCategory = new class_module_news_category($strValue);
+            return $objCategory->getStrTitle();
+        }
+
+        return $strValue;
+    }
+
 
     public function getStrTitle() {
         return $this->strTitle;
