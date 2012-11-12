@@ -20,3 +20,4 @@ $lang["provider_bymail"]                 = "Email notifications";
 $lang["provider_enabled"]                = "Enabled";
 $lang["actionShowAll"]                   = "Show all messages";
 $lang["messageprovider_packageupdate_name"] = "Update-Messages";
+$lang["batchaction_read"]                = "Mark as read";

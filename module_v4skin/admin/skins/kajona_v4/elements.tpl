@@ -208,7 +208,7 @@ Currently, there are two modes: with and without a description.
 
 <batchactions_wrapper>
 <div class="batchActionsWrapper">
-    <input type="checkbox" id="batchActionSwitch" rel="tooltip" title="[lang,commons_select_all,system]" onclick="KAJONA.admin.lists.toggleAllFields();" checked="" >
+    <input type="checkbox" id="batchActionSwitch" rel="tooltip" title="[lang,commons_select_all,system]" onclick="KAJONA.admin.lists.toggleAllFields();" >
     %%entries%%
     <div class="batchActionsProgress" style="display: none;">
         <h5 class="progresstitle"></h5>

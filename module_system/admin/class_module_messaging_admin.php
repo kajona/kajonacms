@@ -142,7 +142,29 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
     }
 
     protected function getMassActionHandlers($strListIdentifier) {
-        return $this->getDefaultActionHandlers();
+        $arrDefault = $this->getDefaultActionHandlers();
+        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mail.png"), getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
+        return $arrDefault;
+    }
+
+
+    /**
+     * Marks a single message as read
+     *
+     * @return string
+     * @xml
+     * @permissions view
+     */
+    protected function actionSetRead() {
+        $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objMessage instanceof class_module_messaging_message) {
+            $objMessage->setBitRead(true);
+            $objMessage->updateObjectToDb();
+
+            return "<message><success /></message>";
+        }
+
+        return "<message><error /></message>";
     }
 
 
