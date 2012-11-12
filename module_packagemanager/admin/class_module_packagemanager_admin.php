@@ -328,8 +328,25 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $objManager = new class_module_packagemanager_manager();
         $arrContentProvider = $objManager->getContentproviders();
         if($this->getParam("provider") == "") {
-            $arrTabs = array();
 
+            //todo: temporary switched back to a simple list until the problems with tabs height and the dropdowns width' are resolved completely.
+            // in addition this reduces the workload on both, client, server and remote repositories
+
+            $strReturn .= $this->objToolkit->listHeader();
+            $intI = 0;
+            foreach($arrContentProvider as $objOneProvider) {
+                $strReturn .= $this->objToolkit->genericAdminList(
+                    generateSystemid(),
+                    $objOneProvider->getDisplayTitle(),
+                    getImageAdmin("icon_systemtask.png"),
+                    getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept.png"),
+                    $intI++
+                );
+            }
+            $strReturn .= $this->objToolkit->listFooter();
+
+            /* old tab code start ///////
+            $arrTabs = array();
             foreach($arrContentProvider as $objOneProvider) {
                 $strIFrameSrc = getLinkAdminHref($this->getArrModule("modul"), "addPackage", "&provider=".get_class($objOneProvider));
 
@@ -337,6 +354,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
 
             $strReturn .= $this->objToolkit->getTabbedContent($arrTabs, true);
+
+            ///////old tab code end */
             return $strReturn;
         }
 
