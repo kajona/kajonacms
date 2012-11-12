@@ -452,4 +452,15 @@
     </target>
 
 
+    <target name="odt2pdf" description="converts odt files to pdfs" depends="cleanFilesystem, init, buildProject">
+        <apply executable="unoconv" parallel="false" dest="${basedir}${projectPath}" verbose="true">
+            <arg line="-f pdf"/>
+            <fileset dir="${basedir}${projectPath}" includes="**/*.odt"/>
+            <arg value="-o" />
+            <targetfile/>
+            <srcfile/>
+            <mapper type="glob" from="*.odt" to="*.pdf"/>
+        </apply>
+    </target>
+
 </project>
