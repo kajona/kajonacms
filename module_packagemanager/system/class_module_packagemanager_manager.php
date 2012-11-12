@@ -33,13 +33,37 @@ class class_module_packagemanager_manager {
 
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
         $arrReturn = array_merge($arrReturn, $objModuleProvider->getInstalledPackages());
-
-        usort($arrReturn, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) {
-            return strcmp($objA->getStrTitle(), $objB->getStrTitle());
-        });
+        $objManager = new class_module_packagemanager_manager();
 
         $objPackageProvider = new class_module_packagemanager_packagemanager_template();
         $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
+
+
+        usort($arrReturn, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($objManager) {
+
+            $objHandlerA = $objManager->getPackageManagerForPath($objA->getStrPath());
+            $objHandlerB = $objManager->getPackageManagerForPath($objB->getStrPath());
+
+            if($objA->getStrType() == class_module_packagemanager_manager::STR_TYPE_TEMPLATE && $objB->getStrType() != class_module_packagemanager_manager::STR_TYPE_TEMPLATE)
+                return -1;
+            else if($objA->getStrType() != class_module_packagemanager_manager::STR_TYPE_TEMPLATE && $objB->getStrType() == class_module_packagemanager_manager::STR_TYPE_TEMPLATE)
+                return 1;
+
+            if($objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
+                return strcmp($objA->getStrTitle(), $objB->getStrTitle());
+            }
+
+
+            if($objHandlerA->isInstallable() && !$objHandlerB->isInstallable()) {
+                return -1;
+            }
+
+            if(!$objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
+                return 1;
+            }
+
+            return strcmp($objA->getStrTitle(), $objB->getStrTitle());
+        });
 
         return $arrReturn;
     }
