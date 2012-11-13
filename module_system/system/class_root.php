@@ -615,6 +615,8 @@ abstract class class_root {
         else
             $this->objDB->transactionRollback();
 
+        $this->objDB->flushQueryCache();
+
         return $bitReturn;
     }
 

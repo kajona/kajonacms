@@ -271,10 +271,11 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         //and the properties record
         //properties for this language already existing?
-        $strCountQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "page_properties
+        $strCountQuery = "SELECT COUNT(*)
+                          FROM " . _dbprefix_ . "page_properties
 		                 WHERE pageproperties_id= ?
 		                   AND pageproperties_language= ?";
-        $arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()));
+        $arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()), 0, false);
 
         if((int)$arrCountRow["COUNT(*)"] >= 1) {
             //Already existing, updating properties
@@ -286,8 +287,8 @@ class class_module_pages_page extends class_model implements interface_model, in
     						pageproperties_seostring=?,
     						pageproperties_alias=?,
                             pageproperties_path=?
-    						WHERE pageproperties_id=?
-    						  AND pageproperties_language=?";
+    				  WHERE pageproperties_id=?
+    				    AND pageproperties_language=?";
 
             $arrParams = array(
                 $this->getStrDesc(),
