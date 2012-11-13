@@ -24,7 +24,7 @@
 
 # Enable rewrite rules for html and rss suffixes as well as for requests containing xml/admin, but skip
 # rewriting for .js files
-RewriteRule (!\.html|!\.rss|!xml/admin(.*)|\.js)$ - [L]
+#RewriteRule (!\.html|!\.rss|!xml/admin(.*)|\.js)$ - [L]
 
 
 ######################################## ADMIN REWRITING ##################################################
