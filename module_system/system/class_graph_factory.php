@@ -31,6 +31,28 @@ class class_graph_factory {
      * @return interface_graph
      */
     public static function getGraphInstance($strType = "") {
+
+        $arrTypes = array(
+            self::$STR_TYPE_EZC,
+            self::$STR_TYPE_FLOT,
+            self::$STR_TYPE_PCHART
+        );
+
+        if(!in_array($strType, $arrTypes)) {
+            if(defined("_system_graph_type_")) {
+                if(_system_graph_type_ == "flot")
+                    $strType = self::$STR_TYPE_FLOT;
+                else if(_system_graph_type_ == "ezc")
+                    $strType = self::$STR_TYPE_EZC;
+                else if(_system_graph_type_ == "pchart")
+                    $strType = self::$STR_TYPE_PCHART;
+                else
+                    $strType = _system_graph_type_;
+            }
+            else
+                $strType = self::$STR_TYPE_FLOT;
+        }
+
         if($strType == self::$STR_TYPE_EZC) {
             return new class_graph_ezc();
         }
@@ -40,17 +62,7 @@ class class_graph_factory {
         else if($strType == self::$STR_TYPE_FLOT) {
             return new class_graph_flot();
         }
-        else {
-            if(defined("_system_graph_type_")) {
-                if(_system_graph_type_ == "pchart") {
-                    return new class_graph_pchart();
-                }
-                else if(_system_graph_type_ == "flot") {
-                    return new class_graph_flot();
-                }
-            }
-        }
 
-        return new class_graph_ezc();
+        return new class_graph_flot();
     }
 }

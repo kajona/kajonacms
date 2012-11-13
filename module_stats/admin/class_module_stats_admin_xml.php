@@ -61,7 +61,6 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
     protected function actionGetReport() {
         $strPlugin = $this->getParam("plugin");
         $strReturn = "";
-        $objFilesystem = new class_filesystem();
         $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
 
         foreach($arrPlugins as $strOnePlugin) {
