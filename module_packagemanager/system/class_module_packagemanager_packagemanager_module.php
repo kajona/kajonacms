@@ -191,18 +191,28 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
                             //TODO: ugly hack to get the list of packages available, only to avoid array-modified warnings when sorting the list of packages
                             $objMetadata = new class_module_packagemanager_metadata();
                             $objMetadata->autoInit("/core/".$strOneFolder);
+
+                            //but: if the package provides an installer and was not resolved by the previous calls,
+                            //we shouldn't include it here
+                            if($objMetadata->getBitProvidesInstaller())
+                                $objMetadata = null;
                         }
 
                     }
 
-                    if($objMetadata === null || version_compare($strMinVersion, $objMetadata->getStrVersion(), ">")) {
+                    //no package found
+                    if($objMetadata === null) {
                         return false;
                     }
 
+                    //package found, but wrong version
+                    if(version_compare($strMinVersion, $objMetadata->getStrVersion(), ">"))
+                        return false;
+
                 }
-                else{
-                    if(version_compare($strMinVersion, $objModule->getStrVersion(), ">"))
-                       return false;
+                //module found, but wrong version
+                else if(version_compare($strMinVersion, $objModule->getStrVersion(), ">")) {
+                    return false;
                 }
             }
         }

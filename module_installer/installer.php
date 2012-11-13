@@ -421,7 +421,7 @@ class class_installer {
                     $objPackagemanager = new class_module_packagemanager_manager();
                     $objPackage = $objPackagemanager->getPackage($strOneModule);
 
-                    if($objPackage == null || version_compare($strVersion, $objPackage->getStrVersion(), ">")) {
+                    if($objPackage === null || $objPackage->getBitProvidesInstaller() || version_compare($strVersion, $objPackage->getStrVersion(), ">")) {
                         $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." >= ".$strVersion."<br />";
                     }
 
