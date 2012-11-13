@@ -71,7 +71,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
                     }
                 }
 
-                class_module_packageserver_log::generateDlLog("", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
+                class_module_packageserver_log::generateDlLog($strNameFilter !== false ? $strNameFilter : "", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
                 class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
             }
         }
