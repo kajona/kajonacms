@@ -791,7 +791,9 @@ abstract class class_root {
                             system_create_date = ?
                       WHERE system_id = ? ";
 
-        $bitReturn = $this->objDB->_pQuery($strQuery, array(
+        $bitReturn = $this->objDB->_pQuery(
+            $strQuery,
+            array(
                     $this->getStrPrevId(),
                     (int)$this->getIntModuleNr(),
                     (int)$this->getIntSort(),
@@ -805,7 +807,8 @@ abstract class class_root {
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
-        ));
+            )
+        );
 
         $this->objDB->flushQueryCache();
 
@@ -1141,6 +1144,27 @@ abstract class class_root {
         $this->objDB->_pQuery($strQuery, array($intNewCount, $this->getSystemid()));
     }
 
+    private function fixSortOnDelete($strSystemidToDelete) {
+
+        $strQuery = "SELECT system_id, system_sort
+                     FROM "._dbprefix_."system
+                     WHERE system_prev_id=?
+                     ORDER BY system_sort ASC";
+        $arrSiblings = $this->objDB->getPArray($strQuery, array($this->getStrPrevId()));
+
+        $bitHit = false;
+        foreach($arrSiblings as $arrOneSibling) {
+
+            if($bitHit) {
+                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id = ?";
+                $this->objDB->_pQuery($strQuery, array($arrOneSibling["system_id"]));
+            }
+
+            if($arrOneSibling["system_id"] == $strSystemidToDelete)
+                $bitHit = true;
+        }
+    }
+
     /**
      * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
      *
@@ -1294,7 +1318,7 @@ abstract class class_root {
      * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only called by the test-classes
      *
      */
-    public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
+    public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
 
         //try to call other modules, maybe wanting to delete anything in addition, if the current record
         //is going to be deleted
@@ -1302,6 +1326,8 @@ abstract class class_root {
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
+
+        $this->fixSortOnDelete($strSystemid);
 
         $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
         $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
@@ -1331,6 +1357,7 @@ abstract class class_root {
 
         return $bitResult;
     }
+
 
     /**
      * Deletes a record from the rights-table
