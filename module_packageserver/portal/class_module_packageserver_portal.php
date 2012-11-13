@@ -41,14 +41,15 @@ class class_module_packageserver_portal extends class_portal implements interfac
 
         $intStart = $this->ensureNumericValue($this->getParam("start"), null);
         $intEnd = $this->ensureNumericValue($this->getParam("end"), null);
-        $intTypeFilter = $this->ensureNumericValue($this->getParam("type"), false);
+        $strTypeFilter = $this->isValidCategoryFilter($this->getParam("type")) ? $this->getParam("type") : false;
 
-        if ($this->isValidPagingParameter($intStart)
-            && $this->isValidPagingParameter($intEnd)) {
+        $strNameFilter = trim($this->getParam("title")) != "" ? trim($this->getParam("title")) : false;
+
+        if ($this->isValidPagingParameter($intStart) && $this->isValidPagingParameter($intEnd)) {
 
             if ($intEnd >= $intStart) {
-                $intNrOfFiles = $this->getAllPackagesCount(_packageserver_repo_id_, $intTypeFilter);
-                $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter, $intStart, $intEnd);
+                $intNrOfFiles = $this->getAllPackagesCount(_packageserver_repo_id_, $strTypeFilter, $strNameFilter);
+                $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $strTypeFilter, $intStart, $intEnd, $strNameFilter);
                 $objManager = new class_module_packagemanager_manager();
 
                 foreach($arrDBFiles as $objOneFile) {
@@ -56,7 +57,6 @@ class class_module_packageserver_portal extends class_portal implements interfac
                     try {
 
                         $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
-
                         $arrPackages[] = array(
                             "systemid"    => $objOneFile->getSystemid(),
                             "title"       => $objMetadata->getObjMetadata()->getStrTitle(),
@@ -71,12 +71,9 @@ class class_module_packageserver_portal extends class_portal implements interfac
                     }
                 }
 
-
                 class_module_packageserver_log::generateDlLog("", $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
-
                 class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
             }
-
         }
 
         $result = array();
@@ -97,6 +94,15 @@ class class_module_packageserver_portal extends class_portal implements interfac
         return $strParam;
     }
 
+    private function isValidCategoryFilter($strParam) {
+        $arrTypes = array(
+            class_module_packagemanager_manager::STR_TYPE_ELEMENT,
+            class_module_packagemanager_manager::STR_TYPE_MODULE,
+            class_module_packagemanager_manager::STR_TYPE_TEMPLATE
+        );
+        return in_array($strParam, $arrTypes);
+    }
+
     private function isValidPagingParameter($parameter) {
         if ($parameter === null || (is_numeric($parameter) && (int) $parameter >= 0)) {
             return true;
@@ -112,25 +118,50 @@ class class_module_packageserver_portal extends class_portal implements interfac
      * @param int|bool $strCategoryFilter
      * @param int $intStart
      * @param int $intEnd
+     * @param bool $strNameFilter
      *
      * @return class_module_mediamanager_file[]
-     *
      */
-    private function getAllPackages($strParentId, $strCategoryFilter = false, $intStart = null, $intEnd = null) {
+    private function getAllPackages($strParentId, $strCategoryFilter = false, $intStart = null, $intEnd = null, $strNameFilter = false) {
         $arrReturn = array();
 
         if(validateSystemid($strParentId)) {
-            $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, $strCategoryFilter, true, $intStart, $intEnd, true);
+
+            $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, false, true, null, null, true);
 
             foreach($arrSubfiles as $objOneFile) {
-                if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
-                    $arrReturn[] = $objOneFile;
+                if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+
+                    //filename based check if the file should be included
+                    if($strNameFilter !== false) {
+                        if(uniStrpos($strNameFilter, ",") !== false) {
+                            if(in_array($objOneFile->getStrName(), explode(",", $strNameFilter)))
+                                $arrReturn[] = $objOneFile;
+                        }
+                        else if(uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter)
+                            $arrReturn[] = $objOneFile;
+                    }
+                    else
+                        $arrReturn[] = $objOneFile;
+                }
                 else
                     $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
             }
+
+            if($intStart !== null && $intEnd !== null && $intStart > 0 && $intEnd > $intStart) {
+                if($intEnd > count($arrReturn))
+                    $intEnd = count($arrReturn);
+
+                $arrTemp = array();
+                for($intI = $intStart; $intI <= $intEnd; $intI++)
+                    $arrTemp[] = $arrReturn[$intI];
+
+                $arrReturn = $arrTemp;
+
+            }
         }
         else {
-            $arrReturn = class_module_mediamanager_file::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd);
+            $arrReturn = class_module_mediamanager_file::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd, $strNameFilter);
         }
 
         return $arrReturn;
@@ -138,63 +169,19 @@ class class_module_packageserver_portal extends class_portal implements interfac
 
     /**
      * Internal helper, triggers the counting of packages available for the current request
+     *
      * @param $strParentId
      * @param bool $strCategoryFilterFilter
+     * @param bool $strNameFilter
      *
      * @return int
-     *
      */
-    private function getAllPackagesCount($strParentId, $strCategoryFilterFilter = false) {
+    private function getAllPackagesCount($strParentId, $strCategoryFilterFilter = false, $strNameFilter = false) {
         if(validateSystemid($strParentId))
-            return count($this->getAllPackages($strParentId, $strCategoryFilterFilter));
+            return count($this->getAllPackages($strParentId, $strCategoryFilterFilter, null, null, $strNameFilter));
         else
-            return class_module_mediamanager_file::getFlatPackageListCount($strCategoryFilterFilter, true);
+            return class_module_mediamanager_file::getFlatPackageListCount($strCategoryFilterFilter, true, $strNameFilter);
     }
 
-
-    /**
-     * Searches a list of packages and returns all of the infos found relating that packages.
-     * Therefore, the package-names should be sent as a comma-separated list, e.g.:
-     * xml.php?module=packageserver&action=searchPackages&title=system,pages,mediamanager&type=1
-     *
-     * @xml
-     * @return string|json
-     */
-    protected function actionSearchPackages() {
-        $arrReturn = array();
-        $arrSearch = explode(",", $this->getParam("title"));
-        $intTypeFilter = $this->ensureNumericValue($this->getParam("type"), false);
-
-        $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $intTypeFilter);
-        $objManager = new class_module_packagemanager_manager();
-
-        foreach($arrDBFiles as $objOneFile) {
-
-            try {
-
-                $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
-
-                if(in_array($objMetadata->getObjMetadata()->getStrTitle(), $arrSearch)) {
-
-                    $arrReturn[] = array(
-                        "systemid"    => $objOneFile->getSystemid(),
-                        "title"       => $objMetadata->getObjMetadata()->getStrTitle(),
-                        "version"     => $objMetadata->getObjMetadata()->getStrVersion(),
-                        "description" => $objMetadata->getObjMetadata()->getStrDescription(),
-                        "type"        => $objMetadata->getObjMetadata()->getStrType()
-                    );
-
-                }
-
-            }
-            catch(class_exception $objEx) {
-
-            }
-        }
-
-        class_module_packageserver_log::generateDlLog($this->getParam("title"), $_SERVER["REMOTE_ADDR"], urldecode($this->getParam("domain")));
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
-        return json_encode($arrReturn);
-    }
 
 }

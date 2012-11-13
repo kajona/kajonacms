@@ -22,7 +22,6 @@ class class_module_packagemanager_contentprovider_kajonabase extends class_modul
             "provider_kajonabase",
             "v4.kajonabase.net",
             "/xml.php?module=packageserver&action=list",
-            "/xml.php?module=packageserver&action=searchPackages&title=",
             "/download.php",
             __CLASS__
         );

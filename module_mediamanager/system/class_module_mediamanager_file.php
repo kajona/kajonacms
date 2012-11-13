@@ -279,14 +279,32 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param bool $bitActiveOnly
      * @param null $intStart
      * @param null $intEnd
+     * @param bool $strNameFilter
      *
      * @return array
      */
-    public static function getFlatPackageList($strCategoryFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null) {
+    public static function getFlatPackageList($strCategoryFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null, $strNameFilter = false) {
 
         $arrParams = array();
-        if($strCategoryFilter !== false) {
+        if($strCategoryFilter !== false)
             $arrParams[] = $strCategoryFilter;
+
+
+        $strWhere = "";
+        if($strNameFilter !== false) {
+            if(uniStrpos($strNameFilter, ",") !== false) {
+                $arrWhere = array();
+                foreach(explode(",", $strNameFilter) as $strOneLike) {
+                    $arrWhere[] = " file_name = ?";
+                    $arrParams[] = trim($strOneLike);
+                }
+
+                $strWhere = "AND ( ".implode(" OR ", $arrWhere)." )";
+            }
+            else {
+                $arrParams[] = $strNameFilter."%";
+                $strWhere = "AND file_name LIKE ?";
+            }
         }
 
         $strQuery = "SELECT system_id
@@ -296,6 +314,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                       AND file_ispackage = 1
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
                         " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
+                        " . $strWhere . "
                         ORDER BY system_sort ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -312,14 +331,32 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      *
      * @param bool $strCategoryFilter
      * @param bool $bitActiveOnly
+     * @param bool $strNameFilter
      *
      * @return mixed
      */
-    public static function getFlatPackageListCount($strCategoryFilter = false, $bitActiveOnly = false) {
+    public static function getFlatPackageListCount($strCategoryFilter = false, $bitActiveOnly = false, $strNameFilter = false) {
 
         $arrParams = array();
-        if($strCategoryFilter !== false) {
+        if($strCategoryFilter !== false)
             $arrParams[] = $strCategoryFilter;
+
+
+        $strWhere = "";
+        if($strNameFilter !== false) {
+            if(uniStrpos($strNameFilter, ",") !== false) {
+                $arrWhere = array();
+                foreach(explode(",", $strNameFilter) as $strOneLike) {
+                    $arrWhere[] = " file_name = ?";
+                    $arrParams[] = trim($strOneLike);
+                }
+
+                $strWhere = "AND ( ".implode(" OR ", $arrWhere)." )";
+            }
+            else {
+                $arrParams[] = $strNameFilter."%";
+                $strWhere = "AND file_name LIKE ?";
+            }
         }
 
         $strQuery = "SELECT COUNT(*)
@@ -329,6 +366,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                       AND file_ispackage = 1
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
                         " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
+                        " . $strWhere . "
                         ";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];

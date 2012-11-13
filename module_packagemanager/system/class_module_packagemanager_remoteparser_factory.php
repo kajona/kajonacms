@@ -26,11 +26,16 @@ class class_module_packagemanager_remoteparser_factory {
      * @param string $strProviderName
      * @return class_module_packagemanager_remoteparser_v3|class_module_packagemanager_remoteparser_v4
      */
-    public static function getRemoteParser(array $remoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName) {
-        if (array_key_exists('numberOfTotalItems', $remoteResponse)
-            && array_key_exists('items', $remoteResponse)) {
-            return new class_module_packagemanager_remoteparser_v4($remoteResponse, $intPageNumber,
-                $intStart, $intEnd, $strProviderName);
+    public static function getRemoteParser(array $remoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName, $strPagerAddon = "") {
+        if (array_key_exists('numberOfTotalItems', $remoteResponse) && array_key_exists('items', $remoteResponse)) {
+            return new class_module_packagemanager_remoteparser_v4(
+                $remoteResponse,
+                $intPageNumber,
+                $intStart,
+                $intEnd,
+                $strProviderName,
+                $strPagerAddon
+            );
         }
         return new class_module_packagemanager_remoteparser_v3($remoteResponse);
     }

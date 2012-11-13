@@ -23,31 +23,18 @@
 abstract class class_module_packagemanager_contentprovider_remote_base implements interface_packagemanager_contentprovider {
 
     private static $STR_MODULE_NAME = "packagemanager";
-    private static $STR_SESSION_KEY_NAME = "STR_SESSION_KEY_NAME";
-    private static $STR_SESSION_KEY_TYPE = "STR_SESSION_KEY_TYPE";
 
     private $STR_BROWSE_HOST = "";
     private $STR_BROWSE_URL = "";
-    private $STR_SEARCH_URL = "";
     private $STR_DOWNLOAD_URL = "";
     private $STR_PROVIDER_NAME;
     private $CLASS_NAME;
 
-    /**
-     * @var string
-     */
-    private $strPackageName;
 
-    /**
-     * @var string
-     */
-    private $strTypeFilter;
-
-    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strSearchUrl, $strDownloadUrl, $strClassName) {
+    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName) {
         $this->STR_PROVIDER_NAME = $strProviderName;
         $this->STR_BROWSE_HOST = $strBrowseHost;
         $this->STR_BROWSE_URL = $strBrowseUrl;
-        $this->STR_SEARCH_URL = $strSearchUrl;
         $this->STR_DOWNLOAD_URL = $strDownloadUrl;
         $this->CLASS_NAME = $strClassName;
     }
@@ -98,11 +85,11 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $arrResponse = json_decode($strResponse, true);
 
-        $remoteParser = class_module_packagemanager_remoteparser_factory::getRemoteParser(
-            $arrResponse, $this->getPageNumber(), $intStart, $intEnd, $this->STR_PROVIDER_NAME
+        $objRemoteParser = class_module_packagemanager_remoteparser_factory::getRemoteParser(
+            $arrResponse, $this->getPageNumber(), $intStart, $intEnd, get_class($this), "&name=".urlencode($this->getParam("name"))."&type=".$this->getParam("type")
         );
 
-        $arrPackages = $remoteParser->getArrPackages();
+        $arrPackages = $objRemoteParser->getArrPackages();
 
         $strReturn = $this->createFilterCriteria();
 
@@ -139,37 +126,34 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $strReturn .= $objToolkit->listFooter();
 
-        $strReturn .= $remoteParser->paginationFooter();
+        $strReturn .= $objRemoteParser->paginationFooter();
 
         return $strReturn;
     }
 
     private function buildQueryParams($intStart, $intEnd) {
-        $strQuery = "";
+        $strQuery = $this->STR_BROWSE_URL;
         if ($this->getParam("name") != "") {
             // build search query with filters for name + paging + type
-            $strQuery .= $this->STR_SEARCH_URL;
-            $strQuery .= $this->getParam("name");
-        } else {
-            // build search query with filters for paging + type
-            $strQuery .= $this->STR_BROWSE_URL;
+            $strQuery .= "&title=".$this->getParam("name");
         }
 
-        return $strQuery."&start=".$intStart."&end=".$intEnd.
-            $this->buildQueryParamType()."&domain=".urlencode(_webpath_);
-    }
+        $arrTypes = array(
+            class_module_packagemanager_manager::STR_TYPE_ELEMENT,
+            class_module_packagemanager_manager::STR_TYPE_MODULE,
+            class_module_packagemanager_manager::STR_TYPE_TEMPLATE
+        );
 
-    private function buildQueryParamType() {
         if ($this->getParam("type") != "") {
-            if (is_numeric($this->getParam("type"))) {
-                $intType = (int) $this->getParam("type");
-                if ($intType >= 0) {
-                    return "&type=". $intType;
-                }
+            if (in_array($this->getParam("type"), $arrTypes)) {
+                $strQuery .= "&type=". $this->getParam("type");
             }
         }
-        return "";
+
+        return $strQuery."&start=".$intStart."&end=".$intEnd."&domain=".urlencode(_webpath_);
     }
+
+
 
     private function getParam($strParamName) {
         return class_carrier::getInstance()->getParam($strParamName);
@@ -180,7 +164,6 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     }
 
     private function createFilterCriteria() {
-        $this->processFilterArguments();
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $objLang = class_carrier::getInstance()->getObjLang();
@@ -193,46 +176,19 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         );
         $strReturn .= $objToolkit->formInputHidden("action", $this->getParam("action"));
         $strReturn .= $objToolkit->formInputHidden("filter", "true");
-        $strReturn .= $objToolkit->formInputText("name", $objLang->getLang("name", self::$STR_MODULE_NAME), $this->strPackageName);
+        $strReturn .= $objToolkit->formInputText("name", $objLang->getLang("name", self::$STR_MODULE_NAME), $this->getParam("name"));
 
         $arrTypeOption = array();
         $arrTypeOption[""] = $objLang->getLang("all", self::$STR_MODULE_NAME);
         $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_ELEMENT] = $objLang->getLang("element", self::$STR_MODULE_NAME);
         $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_TEMPLATE] = $objLang->getLang("template", self::$STR_MODULE_NAME);
         $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_MODULE] = $objLang->getLang("module", self::$STR_MODULE_NAME);
-        $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->strTypeFilter);
+        $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->getParam("type"));
 
         $strReturn .= $objToolkit->formInputSubmit($objLang->getLang("filter", self::$STR_MODULE_NAME));
         $strReturn .= $objToolkit->formClose();
 
         return $strReturn;
-    }
-
-    /**
-     * Creates values of the passed filter argument values
-     */
-    private function processFilterArguments() {
-        if($this->getParam("filter") == "true") {
-
-            $this->strPackageName = "";
-            if($this->getParam("name") != "") {
-                $this->strPackageName = $this->getParam("name");
-            }
-            else {
-                $this->strPackageName = "";
-            }
-            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_NAME, $this->strPackageName);
-
-            if($this->getParam("type") != "") {
-                $this->strTypeFilter = $this->getParam("type");
-            }
-            else {
-                $this->strTypeFilter = "";
-            }
-
-
-            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_TYPE, $this->strTypeFilter);
-        }
     }
 
     /**
@@ -282,7 +238,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrQueryParams($this->STR_SEARCH_URL.$strTitle."&domain=".urlencode(_webpath_));
+        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&title=".$strTitle."&domain=".urlencode(_webpath_));
 
         try {
             $strPackages = $objRemoteloader->getRemoteContent();
@@ -292,7 +248,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         }
 
         $arrPackages = json_decode($strPackages, true);
-        return $arrPackages;
+        return $arrPackages["items"];
     }
 
 
