@@ -182,8 +182,28 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
             if(trim($strOneModule) != "") {
                 $objModule = class_module_system_module::getModuleByName(trim($strOneModule));
-                if($objModule === null)
+                if($objModule === null) {
+
+                    $objPackagemanager = new class_module_packagemanager_manager();
+                    //$objPackage = $objPackagemanager->getPackage($strOneModule);
+                    $arrModules = class_resourceloader::getInstance()->getArrModules();
+                    foreach($arrModules as $strOneFolder) {
+                        if(uniStrpos($strOneFolder, $strOneModule) !== false) {
+                            //TODO: ugly hack to get the list of packagess available, only to avoid array-modified warnings when sorting the list of packages
+                            $objMetadata = new class_module_packagemanager_metadata();
+                            $objMetadata->autoInit("/core/".$strOneFolder);
+
+                            if($objMetadata != null && version_compare($strMinVersion, $objMetadata->getStrVersion(), "<=")) {
+                                return true;
+                            }
+
+                            break;
+                        }
+
+                    }
+
                     return false;
+                }
 
                 if(version_compare($strMinVersion, $objModule->getStrVersion(), ">"))
                     return false;

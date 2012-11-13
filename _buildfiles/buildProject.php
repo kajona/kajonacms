@@ -87,7 +87,7 @@ class Testmanager {
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
                 if(!$objHandler->isInstallable()) {
-                    echo "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements";
+                    echo "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements\n";
                     continue;
                 }
 

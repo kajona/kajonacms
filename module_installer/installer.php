@@ -346,6 +346,8 @@ class class_installer {
             if($objOneModule->getBitProvidesInstaller())
                 $this->arrMetadata[] = $objOneModule;
 
+        $this->arrMetadata = $objManager->sortPackages($this->arrMetadata);
+
     }
 
     /**
@@ -411,16 +413,25 @@ class class_installer {
             }
 
             //check missing modules
-            $strRequired = "";
             $arrModules = $objHandler->getObjMetadata()->getArrRequiredModules();
             foreach($arrModules as $strOneModule => $strVersion) {
-                if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
-                    $strRequired .= $strOneModule.", ";
+                if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null) {
+
+                    //check if a corresponding module is available
+                    $objPackagemanager = new class_module_packagemanager_manager();
+                    $objPackage = $objPackagemanager->getPackage($strOneModule);
+
+                    if($objPackage == null || version_compare($strVersion, $objPackage->getStrVersion(), ">")) {
+                        $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." >= ".$strVersion."<br />";
+                    }
+
+                }
 
                 else if(version_compare($strVersion, class_module_system_module::getModuleByName(trim($strOneModule))->getStrVersion(), ">")) {
                     $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." >= ".$strVersion."<br />";
                 }
             }
+
 
 
 

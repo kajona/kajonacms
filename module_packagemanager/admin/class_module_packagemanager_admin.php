@@ -58,6 +58,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strReturn = "";
         $objManager = new class_module_packagemanager_manager();
         $arrPackages = $objManager->getAvailablePackages();
+        $arrPackages = $objManager->sortPackages($arrPackages);
 
 
         $objArrayIterator = new class_array_iterator($arrPackages);

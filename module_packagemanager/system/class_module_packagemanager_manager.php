@@ -33,13 +33,22 @@ class class_module_packagemanager_manager {
 
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
         $arrReturn = array_merge($arrReturn, $objModuleProvider->getInstalledPackages());
-        $objManager = new class_module_packagemanager_manager();
 
         $objPackageProvider = new class_module_packagemanager_packagemanager_template();
         $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
 
+        return $arrReturn;
+    }
 
-        usort($arrReturn, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($objManager) {
+    /**
+     * Sorts the array of packages ordered by the installation state, the type and the title
+     * @param class_module_packagemanager_metadata[] $arrPackages
+     *
+     * @return class_module_packagemanager_metadata[]
+     */
+    public function sortPackages(array $arrPackages) {
+        $objManager = new class_module_packagemanager_manager();
+        usort($arrPackages, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($objManager) {
 
             $objHandlerA = $objManager->getPackageManagerForPath($objA->getStrPath());
             $objHandlerB = $objManager->getPackageManagerForPath($objB->getStrPath());
@@ -65,7 +74,7 @@ class class_module_packagemanager_manager {
             return strcmp($objA->getStrTitle(), $objB->getStrTitle());
         });
 
-        return $arrReturn;
+        return $arrPackages;
     }
 
     /**
