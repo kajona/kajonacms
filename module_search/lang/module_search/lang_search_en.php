@@ -25,4 +25,4 @@ $lang["form_search_query"]               = "Searchterm";
 $lang["search_modules"]                  = "Module";
 $lang["actionExecuteSearch"]             = "Exectue search";
 $lang["action_new"]                      = "New Search";
-$lang["select_all"]                      = "all";
+$lang["select_all"]                      = "All modules";
