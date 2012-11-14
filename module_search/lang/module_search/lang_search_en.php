@@ -26,3 +26,4 @@ $lang["search_modules"]                  = "Module";
 $lang["actionExecuteSearch"]             = "Exectue search";
 $lang["action_new"]                      = "New Search";
 $lang["select_all"]                      = "All modules";
+$lang["form_additionalheader"]           = "Additional filter";

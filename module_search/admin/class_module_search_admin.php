@@ -362,7 +362,14 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrFilterModules = $objSearch->getPossibleModulesForFilter();
         $objForm->getField("filtermodules")->setArrKeyValues($arrFilterModules);
 
-        $objForm->addField(new class_formentry_checkbox("search", "filter_all"))->setStrLabel($this->getLang("select_all"))->setStrValue($objSearch->getStrInternalFilterModules() == -1);
+        $objForm->addField(new class_formentry_checkbox("search", "filter_all"))->setStrLabel($this->getLang("select_all"))->setStrValue($objSearch->getStrInternalFilterModules() == "-1");
+
+        $bitVisible = $objSearch->getStrInternalFilterModules() != -1;
+
+        $objForm->setStrHiddenGroupTitle($this->getLang("form_additionalheader"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("filtermodules"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("search_filter_all"));
+        $objForm->setBitHiddenElementsVisible($bitVisible);
 
         return $objForm;
     }

@@ -32,7 +32,7 @@ class class_module_search_search extends class_model implements interface_model,
      * @tableColumn search_search_filter_modules
      * @listOrder
      */
-    private $strInternalFilterModules;
+    private $strInternalFilterModules = "-1";
 
     /**
      * For form-generation only
@@ -53,7 +53,6 @@ class class_module_search_search extends class_model implements interface_model,
 
         $this->setArrModuleEntry("modul", "search");
         $this->setArrModuleEntry("moduleId", _search_module_id_);
-        $this->strInternalFilterModules = "";
 
         parent::__construct($strSystemid);
 

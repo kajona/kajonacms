@@ -57,6 +57,10 @@ class class_admin_formgenerator {
 
     private $arrValidationErrors = array();
 
+    private $arrHiddenElements = array();
+    private $strHiddenGroupTitle = "additional fields";
+    private $bitHiddenElementsVisible = false;
+
     /**
      * Creates a new instance of the form-generator.
      *
@@ -122,8 +126,16 @@ class class_admin_formgenerator {
         $strReturn .= $objToolkit->formHeader($strTargetURI);
         $strReturn .= $objToolkit->getValidationErrors($this);
 
-        foreach($this->arrFields as $objOneField)
-            $strReturn .= $objOneField->renderField();
+        $strHidden = "";
+        foreach($this->arrFields as $objOneField) {
+            if(in_array($objOneField->getStrEntryName(), $this->arrHiddenElements))
+                $strHidden .= $objOneField->renderField();
+            else
+                $strReturn .= $objOneField->renderField();
+        }
+
+        if($strHidden != "")
+            $strReturn .= $objToolkit->formOptionalElementsWrapper($strHidden, $this->strHiddenGroupTitle, $this->bitHiddenElementsVisible);
 
         if($intButtonConfig & self::BIT_BUTTON_SUBMIT)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_submit", "system"), "submit");
@@ -324,5 +336,32 @@ class class_admin_formgenerator {
         else
             return null;
     }
+
+    /**
+     * Sets the name of the group of hidden elements
+     *
+     * @param $strHiddenGroupTitle
+     */
+    public function setStrHiddenGroupTitle($strHiddenGroupTitle) {
+        $this->strHiddenGroupTitle = $strHiddenGroupTitle;
+    }
+
+    /**
+     * Moves a single field to the list of hidden elements
+     *
+     * @param class_formentry_base $objField
+     */
+    public function addFieldToHiddenGroup(class_formentry_base $objField) {
+        $this->arrHiddenElements[] = $objField->getStrEntryName();
+    }
+
+    /**
+     * Makes the group of hidden elements visible or hides the content on page-load
+     * @param $bitHiddenElementsVisible
+     */
+    public function setBitHiddenElementsVisible($bitHiddenElementsVisible) {
+        $this->bitHiddenElementsVisible = $bitHiddenElementsVisible;
+    }
+
 
 }
