@@ -16,7 +16,7 @@
  */
 class class_module_pages_elementssearch_admin implements interface_search_plugin  {
 
-    /*
+    /**
      * @var class_module_search_search
      */
     private $objSearch = "";
@@ -64,7 +64,7 @@ class class_module_pages_elementssearch_admin implements interface_search_plugin
 						      "._dbprefix_."system
 						 WHERE system_id = page_element_id
 						   AND content_id = page_element_id
-						   AND system_module_nr in (".implode(",",$this->objSearch->getFilterModulesFilter()).")
+						   AND system_module_nr in (".implode(",", $this->objSearch->getArrFilterModules()).")
 						   AND   ".$strWhere."";
 
             $arrElements = $this->objDB->getPArray($strQuery, $arrParams);

@@ -603,6 +603,46 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+
+    /**
+     * Returning a complete dropdown but in multiselect-style
+     *
+     * @param string $strName
+     * @param mixed $arrKeyValues
+     * @param string $strTitle
+     * @param array $arrKeysSelected
+     * @param string $strClass
+     * @param bool $bitEnabled
+     * @param string $strAddons
+     * @return string
+     */
+    public function formInputMultiselect($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $strClass = "", $bitEnabled = true, $strAddons = "") {
+        $strOptions = "";
+        $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_multiselect_row");
+        $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_multiselect_row_selected");
+        //Iterating over the array to create the options
+        foreach ($arrKeyValues as $strKey => $strValue) {
+            $arrTemplate = array();
+            $arrTemplate["key"] = $strKey;
+            $arrTemplate["value"] = $strValue;
+            if(in_array($strKey, $arrKeysSelected))
+                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
+            else
+                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
+        }
+
+        $arrTemplate = array();
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_multiselect");
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["class"] = $strClass;
+        $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
+        $arrTemplate["options"] = $strOptions;
+        $arrTemplate["addons"] = $strAddons;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+
     /**
      * Creates the header needed to open a form-element
      *

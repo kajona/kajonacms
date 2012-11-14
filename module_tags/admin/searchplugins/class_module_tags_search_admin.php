@@ -51,7 +51,7 @@ class class_module_tags_search_admin implements interface_search_plugin  {
 
             }
 
-       }
+        }
 
         return $arrHits;
     }

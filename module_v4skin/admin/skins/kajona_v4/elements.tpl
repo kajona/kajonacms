@@ -329,6 +329,25 @@ Dropdown
 <option value="%%key%%" selected="selected">%%value%%</option>
 </input_dropdown_row_selected>
 
+
+Multiselect
+<input_multiselect>
+    <div class="control-group">
+        <label for="%%name%%[]" class="control-label">%%title%%</label>
+        <div class="controls">
+            <select name="%%name%%[]" id="%%name%%" class="input-xlarge %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
+        </div>
+    </div>
+</input_multiselect>
+
+<input_multiselect_row>
+    <option value="%%key%%">%%value%%</option>
+</input_multiselect_row>
+
+<input_multiselect_row_selected>
+    <option value="%%key%%" selected="selected">%%value%%</option>
+</input_multiselect_row_selected>
+
 Checkbox
 <input_checkbox>
     <div class="control-group">

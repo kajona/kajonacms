@@ -309,6 +309,10 @@ class class_reflection {
         if(method_exists($this->strSourceClass, $strSetter))
             return $strSetter;
 
+        $strSetter = "setArr".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
         $strSetter = "set".$strPropertyName;
         if(method_exists($this->strSourceClass, $strSetter))
             return $strSetter;
@@ -343,6 +347,10 @@ class class_reflection {
             return $strSetter;
 
         $strSetter = "getLong".$strPropertyName;
+        if(method_exists($this->strSourceClass, $strSetter))
+            return $strSetter;
+
+        $strSetter = "getArr".$strPropertyName;
         if(method_exists($this->strSourceClass, $strSetter))
             return $strSetter;
 

@@ -233,7 +233,7 @@ class class_carrier {
      *
      */
     private static function initParamsArray() {
-        if(self::$arrParams == null)
+        if(self::$arrParams === null)
             self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
     }
 

@@ -12,15 +12,14 @@
  * Search plugin of the pages-module. Searches the configured page-elements and the pages-data.
  * To add page-elements written on your own, create the appropriate array-entries.
  * In detail: Create a row for each table-row, you want to search
- *
  * e.g: $arrSearch["pages_elements"]["table_to_search"][] = "row_to_search"
  *
  * @package module_pages
  * @author sidler@mulchprod.de
  */
-class class_module_pages_search_admin implements interface_search_plugin  {
+class class_module_pages_search_admin implements interface_search_plugin {
 
-    /*
+    /**
      * @var class_module_search_search
      */
     private $objSearch = "";
@@ -48,14 +47,13 @@ class class_module_pages_search_admin implements interface_search_plugin  {
     }
 
 
-
     /**
      * searches the pages for the given term
      *
      * @return void
      * @internal param mixed $arrTableConfig
      */
-	private function searchPages() {
+    private function searchPages() {
 
         $arrWhere = array(
             "page_name LIKE ?",
@@ -64,24 +62,24 @@ class class_module_pages_search_admin implements interface_search_plugin  {
             "pageproperties_browsername LIKE ?"
         );
         $arrParams = array(
-            "%".$this->objSearch->getStrQuery()."%",
-            "%".$this->objSearch->getStrQuery()."%",
-            "%".$this->objSearch->getStrQuery()."%",
-            "%".$this->objSearch->getStrQuery()."%"
+            "%" . $this->objSearch->getStrQuery() . "%",
+            "%" . $this->objSearch->getStrQuery() . "%",
+            "%" . $this->objSearch->getStrQuery() . "%",
+            "%" . $this->objSearch->getStrQuery() . "%"
         );
 
-        $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
+        $strWhere = "( " . implode(" OR ", $arrWhere) . " ) ";
 
         //build query
         $strQuery = "SELECT page_id
-                     FROM "._dbprefix_."page,
-                          "._dbprefix_."page_properties,
-                          "._dbprefix_."system
+                     FROM " . _dbprefix_ . "page,
+                          " . _dbprefix_ . "page_properties,
+                          " . _dbprefix_ . "system
                      WHERE pageproperties_id = page_id
                        AND system_id = page_id
                        AND system_status = 1
-                       AND system_module_nr in (".implode(",",$this->objSearch->getFilterModulesFilter()).")
-                       AND   ".$strWhere."";
+                       AND system_module_nr in (" . implode(",", $this->objSearch->getArrFilterModules()) . ")
+                       AND   " . $strWhere . "";
 
         $arrElements = $this->objDB->getPArray($strQuery, $arrParams);
         foreach($arrElements as $arrOneEntry) {
@@ -90,5 +88,5 @@ class class_module_pages_search_admin implements interface_search_plugin  {
             $objResult->setObjObject($objPost);
             $this->arrHits[] = $objResult;
         }
-	}
+    }
 }

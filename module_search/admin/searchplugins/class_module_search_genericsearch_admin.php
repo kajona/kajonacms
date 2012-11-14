@@ -40,8 +40,9 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
 
         $arrClassesFiltered = array();
         foreach($arrClasses as $strOneClass){
+            /** @var $objOneClass interface_admin_listable|class_model */
             $objOneClass = new $strOneClass();
-            if ( in_array($objOneClass->getArrModule("moduleId"), $this->objSearch->getFilterModulesFilter()))
+            if ( in_array($objOneClass->getArrModule("moduleId"), $this->objSearch->getArrFilterModules()))
                 $arrClassesFiltered[] = $strOneClass;
         }
 

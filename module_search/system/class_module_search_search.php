@@ -13,7 +13,6 @@
  * @package module_search
  * @author tim.kiefer@kojikui.de
  * @since 3.4
- *
  * @targetTable search_search.search_search_id
  */
 class class_module_search_search extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable {
@@ -33,24 +32,16 @@ class class_module_search_search extends class_model implements interface_model,
      * @tableColumn search_search_filter_modules
      * @listOrder
      */
-    private $strFilterModules;
+    private $strInternalFilterModules;
 
     /**
-     * @param string $strFilterModules
+     * For form-generation only
+     *
+     * @var array
+     * @fieldType multiselect
+     * @fieldLabel search_modules
      */
-    public function setStrFilterModules($strFilterModules)
-    {
-        $this->strFilterModules = $strFilterModules;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrFilterModules()
-    {
-        return "";
-        //return $this->strFilterModules;
-    }
+    private $arrFilterModules = array();
 
 
     /**
@@ -62,7 +53,7 @@ class class_module_search_search extends class_model implements interface_model,
 
         $this->setArrModuleEntry("modul", "search");
         $this->setArrModuleEntry("moduleId", _search_module_id_);
-        $this->strFilterModules = "";
+        $this->strInternalFilterModules = "";
 
         parent::__construct($strSystemid);
 
@@ -81,22 +72,30 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return array
      */
-    public function getFilterModules(){
-        if (uniStrlen($this->strFilterModules)>0)
-           return explode(",", $this->strFilterModules);
+    public function getFilterModules() {
+        if(uniStrlen($this->strInternalFilterModules) > 0) {
+            return explode(",", $this->strInternalFilterModules);
+        }
         return array();
     }
 
-    public function getFilterModulesFilter(){
-        $arrFilterModules = $this->getFilterModules();
+    /**
+     * Returns all modules available in the module-table.
+     * Limited to those with a proper title, so
+     * a subset of getModuleIds() / all module-entries
+     * @return array
+     */
+    public function getPossibleModulesForFilter() {
 
-        if (count($arrFilterModules) == 0)
-        {
-            $arrReturn = $this->objDB->getPArray("SELECT DISTINCT system_module_nr as module_nr
-                FROM kajona_system", array());
+        $arrFilterModules = array();
 
-            foreach ($arrReturn as $arrEntry){
-                $arrFilterModules[] = $arrEntry["module_nr"];
+        $arrModules = class_module_system_module::getAllModules();
+        $arrNrs = $this->getModuleNumbers();
+        foreach($arrModules as $objOneModule) {
+            if(in_array($objOneModule->getIntNr(), $arrNrs) && $objOneModule->rightView()) {
+                $strName = $this->getLang("modul_titel", $objOneModule->getStrName());
+                if($strName != "!modul_titel!")
+                    $arrFilterModules[$objOneModule->getIntNr()] = $strName;
             }
         }
 
@@ -104,12 +103,29 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
+     * Fetches the list of module-ids currently available in the system-table
+     * @return array
+     */
+    private function getModuleNumbers() {
+        $strQuery = "SELECT DISTINCT system_module_nr FROM "._dbprefix_."system";
+
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = $arrOneRow["system_module_nr"];
+        }
+
+        return $arrReturn;
+    }
+
+    /**
      * Sets the filter modules
      *
      * @param $arrFilterModules
      */
-    public function setFilterModules($arrFilterModules){
-        $this->strFilterModules = implode(",", $arrFilterModules);
+    public function setFilterModules($arrFilterModules) {
+        $this->strInternalFilterModules = implode(",", $arrFilterModules);
     }
 
     /**
@@ -126,6 +142,7 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -135,16 +152,15 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
-    public function getStrAdditionalInfo()
-    {
+    public function getStrAdditionalInfo() {
         return "";
     }
 
     /**
      * @return string
-     *
      */
     public function getStrQuery() {
         return $this->strQuery;
@@ -153,5 +169,39 @@ class class_module_search_search extends class_model implements interface_model,
     public function setStrQuery($strQuery) {
         $this->strQuery = trim($strQuery);
     }
+
+    /**
+     * @param array $arrFilterModules
+     */
+    public function setArrFilterModules($arrFilterModules) {
+        $this->strInternalFilterModules = implode(",", $arrFilterModules);
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrFilterModules() {
+        if($this->strInternalFilterModules != "" && $this->strInternalFilterModules != "-1") {
+            return explode(",", $this->strInternalFilterModules);
+        }
+        else {
+            return $this->getModuleNumbers();
+        }
+    }
+
+    /**
+     * @param string $strFilterModules
+     */
+    public function setStrInternalFilterModules($strFilterModules) {
+        $this->strInternalFilterModules = $strFilterModules;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrInternalFilterModules() {
+        return $this->strInternalFilterModules;
+    }
+
 
 }

@@ -209,7 +209,7 @@ class class_admin_formgenerator {
             $strType = "text";
 
         $strStart = uniSubstr($strPropertyName, 0, 3);
-        if(in_array($strStart, array("int", "long", "bit", "str")))
+        if(in_array($strStart, array("int", "long", "bit", "str", "arr")))
             $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
 
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
