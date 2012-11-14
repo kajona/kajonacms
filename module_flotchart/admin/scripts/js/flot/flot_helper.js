@@ -56,30 +56,36 @@ flotHelper.doToolTip = function(event, pos, item) {
             previousPoint = item.dataIndex;
             previousSeries = item.seriesIndex;
 
+
             $('#tooltip').remove();
             var x = item.datapoint[0],
             y = item.datapoint[1],
             color = item.series.color,
-            content = '<u>'+item.series.label+'</u>\n';
-
+            seriesLabel = item.series.label,
+            content = '';
+            
+            
+            if(seriesLabel && seriesLabel.length>1)
+            {
+                content = '<u>'+seriesLabel+'</u><br/>'; 
+            }
             var ticks = item.series.xaxis.ticks;
-            var label = ticks[item.dataIndex].label;
+            var tickLabel = ticks[previousPoint].label;
             /*
              * in general all labels are bieng process by flotHelper.getTickFormatter
              * the first value of this regex is always the value within the div-Tag the
              * getTickFormatter produces
              */
-            var labelvalue = label.match(/^<div.+>(.*?)<\/div>/)[1];
+            var tickLabelValue = tickLabel.match(/^<div.+>(.*?)<\/div>/)[1];
             
-            if(isNaN(labelvalue)) {
-                x = labelvalue;
-                content += '<br/>' + x + ' = ' + y;
+            if(isNaN(tickLabelValue)) {
+                x = tickLabelValue;
+                content += x + ' = ' + y;
             }
             else {
-                content += '<br/>'
-                    +'x = ' + x
-                    +'<br/>'
-                    +'y = ' + y 
+                content +='x = ' + x 
+                +'<br/>' 
+                +'y = ' + y;
             }
             flotHelper.showTooltip(pos.pageX, pos.pageY, content, color);
         }
@@ -119,6 +125,13 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     var nrLableTicks = tickArray.length;
     var noTicks = null;
     
+    
+    //create the tick array format --> [[0,'v0'],[1,'v1'],[1,'v2']]
+    tickArray = $.map(tickArray, function(tick, index){
+        return [[index, tick]]
+    });
+
+    //calculate which ticks should be rendered
     if(noOfWrittenLabels != null) {
         if(noOfWrittenLabels > 0) {
             noTicks = Math.ceil(nrLableTicks / noOfWrittenLabels);
@@ -129,9 +142,7 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     }
 
     //iterate ticks
-    for(var index = 0; index<tickArray.length; index++ ) {
-        var tick = tickArray[index];
- 
+    $.each(tickArray, function(index, tick) {
         //calculate if tick should be included in the chart
         var moduloResult = null;
         if(noTicks != null) {
@@ -151,7 +162,7 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
         if(tick[1]) {
             tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
         }
-    };
+    });
     
     return tickArray;
 };
