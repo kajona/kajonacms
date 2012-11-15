@@ -177,10 +177,12 @@ class class_remoteloader {
             return false;
         }
 
-        $strReturn = file_get_contents($this->strProtocolHeader .
+        $strReturn = @file_get_contents(
+            $this->strProtocolHeader.
             $this->strHost .
             ($this->intPort > 0 ? ":" . $this->intPort : "") .
-            $this->strQueryParams);
+            $this->strQueryParams
+        );
 
         return $strReturn;
     }
