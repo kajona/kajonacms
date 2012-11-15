@@ -81,7 +81,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
 
         }
 
-        $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getLang("systemtask_dbimport_file"));
+        $strReturn .= $this->objToolkit->formInputRadiogroup("dbImportFile", $arrOptions, $this->getLang("systemtask_dbimport_file"));
 
         return $strReturn;
     }

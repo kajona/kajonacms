@@ -348,6 +348,33 @@ Multiselect
     <option value="%%key%%" selected="selected">%%value%%</option>
 </input_multiselect_row_selected>
 
+
+Radiogroup
+<input_radiogroup>
+    <div class="control-group">
+        <label class="control-label">%%title%%</label>
+        <div class="controls">
+            %%radios%%
+        </div>
+    </div>
+</input_radiogroup>
+
+
+<input_radiogroup_row>
+    <label class="radio">
+        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" %%disabled%%>
+        %%value%%
+    </label>
+</input_radiogroup_row>
+
+<input_radiogroup_row_selected>
+    <label class="radio">
+        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" checked %%disabled%%>
+        %%value%%
+    </label>
+</input_radiogroup_row_selected>
+
+
 Checkbox
 <input_checkbox>
     <div class="control-group">
