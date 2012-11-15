@@ -88,7 +88,8 @@ class class_module_news_category extends class_model implements interface_model,
      * @static
      */
     public static function getNewsMember($strSystemid) {
-        $strQuery = "SELECT newsmem_category as system_id FROM " . _dbprefix_ . "news_member
+        $strQuery = "SELECT newsmem_category as system_id
+                       FROM " . _dbprefix_."news_member
 	                   WHERE newsmem_news = ? ";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
         $arrReturn = array();

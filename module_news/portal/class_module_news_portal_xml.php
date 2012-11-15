@@ -84,6 +84,8 @@ class class_module_news_portal_xml extends class_portal implements interface_xml
         foreach($arrNews as $objOneNews) {
             if($objOneNews->rightView()) {
                 $objDate = $objOneNews->getObjStartDate();
+                if($objDate == null)
+                    $objDate = new class_date();
 
                 $objFeed->addElement(
                     $objOneNews->getStrTitle(),

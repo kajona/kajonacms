@@ -232,12 +232,12 @@ class class_module_news_news extends class_model implements interface_model, int
         if($strFilter != "") {
             $strQuery = "SELECT system_id
 							FROM " . _dbprefix_ . "news,
-							      " . _dbprefix_ . "system,
-							      " . _dbprefix_ . "system_date,
-							      " . _dbprefix_ . "news_member
+							      " . _dbprefix_ . "news_member,
+							      " . _dbprefix_ . "system
+						LEFT JOIN " . _dbprefix_ . "system_date
+						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
-							  AND news_id = system_date_id
 							  " . $strDateWhere . "
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
@@ -246,10 +246,10 @@ class class_module_news_news extends class_model implements interface_model, int
         else {
             $strQuery = "SELECT system_id
 							FROM " . _dbprefix_ . "news,
-							      " . _dbprefix_ . "system,
-							      " . _dbprefix_ . "system_date
+							      " . _dbprefix_ . "system
+					    LEFT JOIN " . _dbprefix_ . "system_date
+						       ON system_id = system_date_id
 							WHERE system_id = news_id
-							  AND system_id = system_date_id
 							  " . $strDateWhere . "
 							ORDER BY system_date_start DESC";
         }
@@ -357,10 +357,10 @@ class class_module_news_news extends class_model implements interface_model, int
             $strQuery = "SELECT system_id
                             FROM " . _dbprefix_ . "news,
                                  " . _dbprefix_ . "news_member,
-                                 " . _dbprefix_ . "system,
-                                 " . _dbprefix_ . "system_date
+                                 " . _dbprefix_ . "system
+                       LEFT JOIN " . _dbprefix_ . "system_date
+                              ON system_id = system_date_id
                             WHERE system_id = news_id
-                              AND system_id = system_date_id
                               AND news_id = newsmem_news
                               AND newsmem_category = ?
                               AND system_status = 1
@@ -379,10 +379,10 @@ class class_module_news_news extends class_model implements interface_model, int
         else {
             $strQuery = "SELECT system_id
                             FROM " . _dbprefix_ . "news,
-                                 " . _dbprefix_ . "system,
-                                 " . _dbprefix_ . "system_date
+                                 " . _dbprefix_ . "system
+                        LEFT JOIN " . _dbprefix_ . "system_date
+                               ON system_id = system_date_id
                             WHERE system_id = news_id
-                              AND system_id = system_date_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 " . $strTime . "
