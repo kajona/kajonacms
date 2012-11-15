@@ -718,9 +718,6 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
             $objValue = $objValue->getSystemid();
         });
 
-        $objStartDate = new class_date($objNews->getIntDateStart());
-        $objEndDate = new class_date($objNews->getIntDateEnd());
-        $objArchiveDate = new class_date($objNews->getIntDateSpecial());
 
         if($objNews->rightView()) {
             $strReturn .= " <news>\n";
@@ -730,9 +727,9 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
             $strReturn .= "   <text>" . xmlSafeString($objNews->getStrText()) . "</text>";
             $strReturn .= "   <image>" . xmlSafeString($objNews->getStrImage()) . "</image>";
             $strReturn .= "   <categories>" . xmlSafeString(implode(",", $arrCats)) . "</categories>";
-            $strReturn .= "   <startdate>" . xmlSafeString($objStartDate->getTimeInOldStyle()) . "</startdate>";
-            $strReturn .= "   <enddate>" . xmlSafeString($objEndDate->getTimeInOldStyle()) . "</enddate>";
-            $strReturn .= "   <archivedate>" . xmlSafeString($objArchiveDate->getTimeInOldStyle()) . "</archivedate>";
+            $strReturn .= "   <startdate>" . xmlSafeString($objNews->getObjStartDate() != null ? $objNews->getObjStartDate()->getTimeInOldStyle() : "") . "</startdate>";
+            $strReturn .= "   <enddate>" . xmlSafeString($objNews->getObjEndDate() != null ? $objNews->getObjEndDate()->getTimeInOldStyle() : "") . "</enddate>";
+            $strReturn .= "   <archivedate>" . xmlSafeString($objNews->getObjDateSpecial() != null ? $objNews->getObjDateSpecial()->getTimeInOldStyle() : "") . "</archivedate>";
             $strReturn .= " </news>\n";
         }
         else {
@@ -766,17 +763,17 @@ class class_module_news_admin extends class_admin_simple implements interface_ad
 
             if($this->getParam("startdate") > 0) {
                 $objDate = new class_date($this->getParam("startdate"));
-                $objNews->setIntDateStart($objDate->getLongTimestamp());
+                $objNews->setObjDateStart($objDate);
             }
 
             if($this->getParam("enddate") > 0) {
                 $objDate = new class_date($this->getParam("enddate"));
-                $objNews->setIntDateEnd($objDate->getLongTimestamp());
+                $objNews->setObjDateEnd($objDate);
             }
 
             if($this->getParam("archivedate") > 0) {
                 $objDate = new class_date($this->getParam("archivedate"));
-                $objNews->setIntDateSpecial($objDate->getLongTimestamp());
+                $objNews->setObjDateSpecial($objDate);
             }
 
             $objNews->setArrCats($arrCats);

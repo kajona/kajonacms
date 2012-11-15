@@ -104,6 +104,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
 
         $strReturn .= "<content><![CDATA[";
 
+        /** @var interface_calendarsource_admin[] $arrRelevantModules  */
         $arrRelevantModules = array();
 
         //fetch modules relevant for processing

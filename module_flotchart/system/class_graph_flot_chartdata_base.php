@@ -18,6 +18,9 @@
  */
 abstract class class_graph_flot_chartdata_base {
 
+    /**
+     * @var class_graph_flot_seriesdata[]
+     */
     protected $arrFlotSeriesData = array();
     protected $arrChartTypes = array();
 
@@ -90,7 +93,7 @@ abstract class class_graph_flot_chartdata_base {
 
     public function setStrYAxisTitle($strTitle) {
         $this->strYAxisTitle = $strTitle;
-     }
+    }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
         $this->arrXAxisTickLabels = $arrXAxisTickLabels;
@@ -126,7 +129,7 @@ abstract class class_graph_flot_chartdata_base {
 
     public function dataToJSON() {
         $data = "";
-        foreach ($this->arrFlotSeriesData as $intKey => $objValue) {
+        foreach ($this->arrFlotSeriesData as $objValue) {
             $data.= $objValue->toJSON() . ",";
         }
         $data = substr($data, 0, -1);

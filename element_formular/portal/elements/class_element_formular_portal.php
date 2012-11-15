@@ -20,10 +20,10 @@ class class_element_formular_portal extends class_element_portal implements inte
      *
      * @param class_module_pages_pageelement|mixed $objElementData
      */
-	public function __construct($objElementData) {
-		parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_formular");
-	}
+    public function __construct($objElementData) {
+        parent::__construct($objElementData);
+        $this->setArrModuleEntry("table", _dbprefix_ . "element_formular");
+    }
 
     /**
      * Loads the navigation-class and passes control
@@ -31,20 +31,21 @@ class class_element_formular_portal extends class_element_portal implements inte
      * @throws class_exception
      * @return string
      */
-	public function loadData() {
+    public function loadData() {
 
 
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/forms/".$this->arrElementData["formular_class"]);
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/forms/" . $this->arrElementData["formular_class"]);
 
-        if($strPath === false)
-            throw new class_exception("failed to load form-class ".$this->arrElementData["formular_class"], class_exception::$level_ERROR);
+        if($strPath === false) {
+            throw new class_exception("failed to load form-class " . $this->arrElementData["formular_class"], class_exception::$level_ERROR);
+        }
 
-		require_once(_realpath_.$strPath);
-		$strClassname = uniStrReplace(".php", "", $this->arrElementData["formular_class"]);
-		$objForm = new $strClassname($this->arrElementData);
+        require_once(_realpath_ . $strPath);
+        $strClassname = uniStrReplace(".php", "", $this->arrElementData["formular_class"]);
+        $objForm = new $strClassname($this->arrElementData);
         $strReturn = $objForm->action();
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }
