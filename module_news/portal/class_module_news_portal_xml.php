@@ -15,41 +15,43 @@
  * @author sidler@mulchprod.de
  */
 class class_module_news_portal_xml extends class_portal implements interface_xml_portal {
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct() {
         $this->setArrModuleEntry("moduleId", _news_module_id_);
         $this->setArrModuleEntry("modul", "news");
         parent::__construct();
 
-	}
+    }
 
 
-	
-	/**
-	 * This method loads all data to needed for a newsfeed
-	 *
-	 * @return string
-	 */
-	protected function actionNewsFeed() {
-	    $strReturn = "";
+    /**
+     * This method loads all data to needed for a newsfeed
+     *
+     * @return string
+     */
+    protected function actionNewsFeed() {
+        $strReturn = "";
 
         //if no sysid was given, try to load from feedname
         $objNewsfeed = null;
-		if($this->getParam("feedTitle") != "")
-		    $objNewsfeed = class_module_news_feed::getFeedByUrlName($this->getParam("feedTitle"));
+        if($this->getParam("feedTitle") != "") {
+            $objNewsfeed = class_module_news_feed::getFeedByUrlName($this->getParam("feedTitle"));
+        }
 
         if($objNewsfeed != null) {
 
             //and load all news belonging to the selected category
-            if($objNewsfeed->getStrCat() != "0")
+            if($objNewsfeed->getStrCat() != "0") {
                 $arrNews = class_module_news_feed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
-            else
+            }
+            else {
                 $arrNews = class_module_news_feed::getNewsList("", $objNewsfeed->getIntAmount());
+            }
 
             $strReturn .= $this->createNewsfeedXML($objNewsfeed->getStrTitle(), $objNewsfeed->getStrLink(), $objNewsfeed->getStrDesc(), $objNewsfeed->getStrPage(), $arrNews);
-            
+
             //and count the request
             $objNewsfeed->incrementNewsCounter();
         }
@@ -57,22 +59,22 @@ class class_module_news_portal_xml extends class_portal implements interface_xml
             $strReturn .= $this->createNewsfeedXML("", "", "", "", array());
         }
 
-        
 
         return $strReturn;
-	}
+    }
 
-	/**
-	 * Responsible for creating the xml-feed
-	 *
-	 * @param string $strTitle
-	 * @param string $strLink
-	 * @param string $strDesc
-	 * @param string $strPage
-	 * @param class_module_news_news[] $arrNews
-	 * @return string
-	 */
-	private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews) {
+    /**
+     * Responsible for creating the xml-feed
+     *
+     * @param string $strTitle
+     * @param string $strLink
+     * @param string $strDesc
+     * @param string $strPage
+     * @param class_module_news_news[] $arrNews
+     *
+     * @return string
+     */
+    private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews) {
 
         $objFeed = new class_rssfeed();
         $objFeed->setStrTitle($strTitle);
@@ -81,7 +83,7 @@ class class_module_news_portal_xml extends class_portal implements interface_xml
 
         foreach($arrNews as $objOneNews) {
             if($objOneNews->rightView()) {
-                $objDate = new class_date($objOneNews->getIntDateStart());
+                $objDate = $objOneNews->getObjStartDate();
 
                 $objFeed->addElement(
                     $objOneNews->getStrTitle(),
@@ -94,5 +96,5 @@ class class_module_news_portal_xml extends class_portal implements interface_xml
         }
 
         return $objFeed->generateFeed();
-	}
+    }
 }

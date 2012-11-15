@@ -11,14 +11,8 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_datetime extends class_formentry_base implements interface_formentry {
+class class_formentry_datetime extends class_formentry_date {
 
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
-        parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
-
-        //set the default validator
-        $this->setObjValidator(new class_date_validator());
-   }
 
     /**
      * Renders the field itself.
@@ -33,39 +27,14 @@ class class_formentry_datetime extends class_formentry_base implements interface
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $objDate = null;
-        if($this->getStrValue() != "")
+        if($this->getStrValue() instanceof class_date)
+            $objDate = $this->getStrValue();
+        else if($this->getStrValue() != "")
             $objDate = new class_date($this->getStrValue());
 
         $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "inputDate", true);
 
         return $strReturn;
     }
-
-
-
-    protected function updateValue() {
-        $arrParams = class_carrier::getAllParams();
-        if((isset($arrParams[$this->getStrEntryName()."_day"]) && $arrParams[$this->getStrEntryName()."_day"] != "") || isset($arrParams[$this->getStrEntryName()])) {
-
-            if(isset($arrParams[$this->getStrEntryName()]) && $arrParams[$this->getStrEntryName()] == "") {
-                $this->setStrValue("");
-            }
-            else {
-                $objDate = new class_date();
-                $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
-                $this->setStrValue($objDate->getLongTimestamp());
-            }
-        }
-        else
-            $this->setStrValue($this->getValueFromObject());
-
-    }
-
-    public function validateValue() {
-        $objDate = new class_date("0");
-        $objDate->generateDateFromParams($this->getStrEntryName(), class_carrier::getAllParams());
-        return $this->getObjValidator()->validate($objDate);
-    }
-
 
 }

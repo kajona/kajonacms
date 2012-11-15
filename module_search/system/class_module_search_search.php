@@ -41,7 +41,19 @@ class class_module_search_search extends class_model implements interface_model,
      * @fieldType multiselect
      * @fieldLabel search_modules
      */
-    private $arrFilterModules = array();
+    private $arrFormFilterModules = array();
+
+    /**
+     * @var null
+     * @fieldType date
+     */
+    private $objChangeStartdate = null;
+
+    /**
+     * @var null
+     * @fieldType date
+     */
+    private $objChangeEnddate= null;
 
 
     /**
@@ -59,12 +71,9 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     public function getStrDisplayName() {
-        return $this->getStrName();
-    }
-
-    public function getStrName() {
         return $this->getStrQuery();
     }
+
 
     /**
      * Returns the filter modules to edit the filter modules
@@ -169,12 +178,6 @@ class class_module_search_search extends class_model implements interface_model,
         $this->strQuery = trim($strQuery);
     }
 
-    /**
-     * @param array $arrFilterModules
-     */
-    public function setArrFilterModules($arrFilterModules) {
-        $this->strInternalFilterModules = implode(",", $arrFilterModules);
-    }
 
     /**
      * @return array
@@ -189,6 +192,27 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
+     * @param array $arrFormFilterModules
+     */
+    public function setArrFormFilterModules($arrFormFilterModules) {
+        $this->strInternalFilterModules = implode(",", $arrFormFilterModules);
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrFormFilterModules() {
+        if($this->strInternalFilterModules != "" && $this->strInternalFilterModules != "-1") {
+            return explode(",", $this->strInternalFilterModules);
+        }
+        else {
+            return array();
+        }
+    }
+
+
+
+    /**
      * @param string $strFilterModules
      */
     public function setStrInternalFilterModules($strFilterModules) {
@@ -201,6 +225,35 @@ class class_module_search_search extends class_model implements interface_model,
     public function getStrInternalFilterModules() {
         return $this->strInternalFilterModules;
     }
+
+    /**
+     * @param class_date $objChangeEnddate
+     */
+    public function setObjChangeEnddate($objChangeEnddate) {
+        $this->setObjEndDate($objChangeEnddate);
+    }
+
+    /**
+     * @return class_date
+     */
+    public function getObjChangeEnddate() {
+        return $this->getObjEndDate();
+    }
+
+    /**
+     * @param class_date $objChangeStartdate
+     */
+    public function setObjChangeStartdate($objChangeStartdate) {
+        $this->setObjStartDate($objChangeStartdate);
+    }
+
+    /**
+     * @return class_date
+     */
+    public function getObjChangeStartdate() {
+        return $this->getObjStartDate();
+    }
+
 
 
 }

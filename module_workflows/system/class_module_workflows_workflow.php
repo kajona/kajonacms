@@ -49,8 +49,6 @@ class class_module_workflows_workflow extends class_model implements interface_m
      */
     private $intRuns = "0";
 
-    private $objTriggerdate = null;
-
     /**
      * @var string
      * @tableColumn workflows.workflows_responsible
@@ -155,35 +153,15 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
 
     /**
-     * Initalises the current object, if a systemid was given
-     *
-     */
-    protected function initObjectInternal() {
-        parent::initObjectInternal();
-        $arrRow = $this->getArrInitRow();
-
-        if($arrRow["system_date_start"] != "0")
-            $this->setObjTriggerdate(new class_date($arrRow["system_date_start"]));
-    }
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $this->bitSaved = true;
-        $this->updateDateRecord($this->getSystemid(), $this->getObjTriggerdate());
-        return parent::updateStateToDb();
-    }
-
-    /**
      * Creates the matching date-records
      * @return bool
      */
     protected function onInsertToDb() {
+        //the creation of a date-record is forced for workflows
         return $this->createDateRecord($this->getSystemid());
     }
+
+
 
 
     /**
@@ -480,11 +458,11 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_date
      */
     public function getObjTriggerdate() {
-        return $this->objTriggerdate;
+        return $this->getObjStartDate();
     }
 
     public function setObjTriggerdate($objTriggerdate) {
-        $this->objTriggerdate = $objTriggerdate;
+        $this->setObjStartDate($objTriggerdate);
     }
 
     public function getStrResponsible() {

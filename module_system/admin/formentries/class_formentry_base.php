@@ -250,5 +250,10 @@ class class_formentry_base {
         return $this->bitReadonly;
     }
 
+    public function getStrSourceProperty() {
+        return $this->strSourceProperty;
+    }
+
+
 
 }

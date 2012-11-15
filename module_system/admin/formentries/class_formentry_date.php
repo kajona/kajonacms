@@ -13,12 +13,13 @@
  */
 class class_formentry_date extends class_formentry_base implements interface_formentry {
 
+
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
         $this->setObjValidator(new class_date_validator());
-   }
+    }
 
     /**
      * Renders the field itself.
@@ -33,7 +34,9 @@ class class_formentry_date extends class_formentry_base implements interface_for
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $objDate = null;
-        if($this->getStrValue() != "")
+        if($this->getStrValue() instanceof class_date)
+            $objDate = $this->getStrValue();
+        else if($this->getStrValue() != "")
             $objDate = new class_date($this->getStrValue());
 
         $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate);
@@ -66,6 +69,14 @@ class class_formentry_date extends class_formentry_base implements interface_for
         $objDate->generateDateFromParams($this->getStrEntryName(), class_carrier::getAllParams());
         return $this->getObjValidator()->validate($objDate);
     }
+
+    public function setValueToObject() {
+
+        if(uniSubstr($this->getStrSourceProperty(), 0, 3) == "obj" && !$this->getStrValue() instanceof class_date&& $this->getStrValue() > 0)
+            $this->setStrValue(new class_date($this->getStrValue()));
+        return parent::setValueToObject();
+    }
+
 
 
 }

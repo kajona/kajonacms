@@ -71,6 +71,9 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return array|null
      */
     public function readOldValues(interface_versionable $objCurrentObject) {
+        if(!$this->isVersioningAvailable($objCurrentObject))
+            return null;
+
         if(validateSystemid($objCurrentObject->getSystemid())) {
             $arrOldValues = $this->readVersionableProperties($objCurrentObject);
             self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
@@ -86,6 +89,9 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return array|null
      */
     private function readVersionableProperties(interface_versionable $objCurrentObject) {
+        if(!$this->isVersioningAvailable($objCurrentObject))
+            return null;
+
         if(validateSystemid($objCurrentObject->getSystemid())) {
             $arrOldValues = array();
 
@@ -195,7 +201,6 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return bool
      */
     public function createLogEntry(interface_versionable $objSourceModel, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
-
         if(!$this->isVersioningAvailable($objSourceModel))
             return true;
 
@@ -212,7 +217,7 @@ class_module_system_changelog extends class_model implements interface_model {
      */
     private function isVersioningAvailable(interface_versionable $objSourceModel) {
         if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
-            return true;
+            return false;
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);

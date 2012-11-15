@@ -65,31 +65,38 @@ class class_module_news_news extends class_model implements interface_model, int
     private $strText = "";
 
     /**
+     * For form-rendering and versioning only
+     *
      * @var int
      * @fieldType date
      * @fieldLabel form_news_datestart
+     * @fieldMandatory
      *
      * @versionable
      */
-    private $longDateStart = 0;
+    private $objDateStart = 0;
 
     /**
+     * For form-rendering and versioning only
+     *
      * @var int
      * @fieldType date
      * @fieldLabel form_news_dateend
      *
      * @versionable
      */
-    private $longDateEnd = 0;
+    private $objDateEnd = 0;
 
     /**
+     * For form-rendering and versioning only
+     *
      * @var int
      * @fieldType date
      * @fieldLabel form_news_datespecial
      *
      * @versionable
      */
-    private $longDateSpecial = 0;
+    private $objDateSpecial = 0;
 
     private $arrCats = null;
 
@@ -137,9 +144,9 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        return "S: " . dateToString(new class_date($this->getIntDateStart()), false)
-            . ($this->getIntDateEnd() != 0 ? " E: " . dateToString(new class_date($this->getIntDateEnd()), false) : "")
-            . ($this->getIntDateSpecial() != 0 ? " A: " . dateToString(new class_date($this->getIntDateSpecial()), false) : "");
+        return "S: " . dateToString($this->getObjStartDate(), false)
+            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), false) : "")
+            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), false) : "");
     }
 
     /**
@@ -151,64 +158,8 @@ class class_module_news_news extends class_model implements interface_model, int
         return $this->getStrTitle();
     }
 
-    protected function initObjectInternal() {
-        parent::initObjectInternal();
-        $arrRow = $this->getArrInitRow();
-        $this->setIntDateEnd($arrRow["system_date_end"]);
-        $this->setIntDateStart($arrRow["system_date_start"]);
-        $this->setIntDateSpecial($arrRow["system_date_special"]);
-    }
-
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    protected function onInsertToDb() {
-
-        $objStartDate = null;
-        $objEndDate = null;
-        $objSpecialDate = null;
-
-        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "") {
-            $objStartDate = new class_date($this->getIntDateStart());
-        }
-
-        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "") {
-            $objEndDate = new class_date($this->getIntDateEnd());
-        }
-
-        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "") {
-            $objSpecialDate = new class_date($this->getIntDateSpecial());
-        }
-
-        $bitReturn = $this->createDateRecord($this->getSystemid(), $objStartDate, $objEndDate, $objSpecialDate);
-
-        return $bitReturn;
-    }
-
 
     protected function updateStateToDb() {
-
-        $objStartDate = null;
-        $objEndDate = null;
-        $objSpecialDate = null;
-
-        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "") {
-            $objStartDate = new class_date($this->getIntDateStart());
-        }
-
-        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "") {
-            $objEndDate = new class_date($this->getIntDateEnd());
-        }
-
-        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "") {
-            $objSpecialDate = new class_date($this->getIntDateSpecial());
-        }
-
-        //dates
-        $this->updateDateRecord($this->getSystemid(), $objStartDate, $objEndDate, $objSpecialDate);
-
 
         if($this->bitUpdateMemberships) {
 
@@ -506,7 +457,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function renderVersionValue($strProperty, $strValue) {
-        if(($strProperty == "longDateStart" || $strProperty == "longDateEnd" || $strProperty == "longDateSpecial") && $strValue > 0)
+        if(($strProperty == "objDateStart" || $strProperty == "objDateEnd" || $strProperty == "objDateSpecial") && $strValue > 0)
             return dateToString(new class_date($strValue), false);
 
         else if($strProperty == "assignedCategories" && validateSystemid($strValue)) {
@@ -538,40 +489,35 @@ class class_module_news_news extends class_model implements interface_model, int
         return $this->intHits;
     }
 
-    public function getIntDateStart() {
-        return $this->longDateStart;
+
+    public function setObjDateEnd($objEndDate) {
+        if($objEndDate == "")
+            $objEndDate = null;
+        $this->setObjEndDate($objEndDate);
     }
 
-    public function getIntDateEnd() {
-        return $this->longDateEnd;
+    public function getObjDateEnd() {
+        return $this->getObjEndDate();
     }
 
-    public function getIntDateSpecial() {
-        return $this->longDateSpecial;
+    public function setObjDateSpecial($objDateSpecial) {
+        if($objDateSpecial == "")
+            $objDateSpecial = null;
+        $this->setObjSpecialDate($objDateSpecial);
     }
 
-    public function setLongDateEnd($longDateEnd) {
-        $this->longDateEnd = $longDateEnd;
+    public function getObjDateSpecial() {
+        return $this->getObjSpecialDate();
     }
 
-    public function getLongDateEnd() {
-        return $this->longDateEnd;
+    public function setObjDateStart($objStartDate) {
+        if($objStartDate == "")
+            $objStartDate = null;
+        $this->setObjStartDate($objStartDate);
     }
 
-    public function setLongDateSpecial($longDateSpecial) {
-        $this->longDateSpecial = $longDateSpecial;
-    }
-
-    public function getLongDateSpecial() {
-        return $this->longDateSpecial;
-    }
-
-    public function setLongDateStart($longDateStart) {
-        $this->longDateStart = $longDateStart;
-    }
-
-    public function getLongDateStart() {
-        return $this->longDateStart;
+    public function getObjDateStart() {
+        return $this->getObjStartDate();
     }
 
     public function getArrCats() {
@@ -597,18 +543,6 @@ class class_module_news_news extends class_model implements interface_model, int
 
     public function setIntHits($intHits) {
         $this->intHits = $intHits;
-    }
-
-    public function setIntDateStart($intDateStart) {
-        $this->longDateStart = $intDateStart;
-    }
-
-    public function setIntDateEnd($intDateEnd) {
-        $this->longDateEnd = $intDateEnd;
-    }
-
-    public function setIntDateSpecial($intDateSpecial) {
-        $this->longDateSpecial = $intDateSpecial;
     }
 
     public function setArrCats($arrCats) {

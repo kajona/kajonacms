@@ -131,6 +131,26 @@ abstract class class_root {
      */
     private $longCreateDate;
 
+    /**
+     * The start-date of the date-table
+     * @var class_date
+     */
+    private $objStartDate = null;
+
+    /**
+     * The end date of the date-table
+     * @var class_date
+     */
+    private $objEndDate = null;
+
+    /**
+     * The special-date of the date-table
+     * @var class_date
+     */
+    private $objSpecialDate = null;
+
+    private $bitDatesChanges = false;
+
 
     /**
      * Constructor
@@ -170,7 +190,7 @@ abstract class class_root {
         $this->internalInit();
 
         //if given, read versioning information
-        if(defined("_system_changehistory_enabled_") && _system_changehistory_enabled_ == "true" && $this instanceof interface_versionable) {
+        if($this instanceof interface_versionable) {
             $objChangelog = new class_module_system_changelog();
             $objChangelog->readOldValues($this);
         }
@@ -241,7 +261,6 @@ abstract class class_root {
 
     /**
      * Init the current record with the system-fields
-     * @todo: add dates?
      */
     private final function internalInit() {
 
@@ -253,6 +272,8 @@ abstract class class_root {
             else {
                 $strQuery = "SELECT *
                                FROM "._dbprefix_."system
+                          LEFT JOIN "._dbprefix_."system_date
+                                 ON system_id = system_date_id
                               WHERE system_id = ? ";
                 $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
             }
@@ -276,7 +297,18 @@ abstract class class_root {
 
                 $this->strOldPrevId = $this->strPrevId;
 
+                if($arrRow["system_date_start"] > 0)
+                    $this->objStartDate = new class_date($arrRow["system_date_start"]);
+
+                if($arrRow["system_date_end"] > 0)
+                    $this->objEndDate = new class_date($arrRow["system_date_end"]);
+
+                if($arrRow["system_date_special"] > 0)
+                    $this->objSpecialDate = new class_date($arrRow["system_date_special"]);
+
             }
+
+            $this->bitDatesChanges = false;
         }
     }
 
@@ -398,7 +430,7 @@ abstract class class_root {
     protected function deleteObjectInternal() {
         $bitReturn = true;
 
-        if(defined("_system_changehistory_enabled_") && _system_changehistory_enabled_ == "true" && $this instanceof interface_versionable) {
+        if($this instanceof interface_versionable) {
             $objChanges = new class_module_system_changelog();
             $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
         }
@@ -423,8 +455,6 @@ abstract class class_root {
      *
      * @throws class_exception
      * @return bool
-     *
-     * @todo add change table integration
      */
     public function deleteObject() {
 
@@ -433,6 +463,11 @@ abstract class class_root {
 
         if(!$this instanceof interface_model)
             throw new class_exception("delete operation required interface_model to be implemented", class_exception::$level_ERROR);
+
+        if($this instanceof interface_versionable) {
+            $objChanges = new class_module_system_changelog();
+            $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
+        }
 
         $this->objDB->transactionBegin();
 
@@ -508,7 +543,10 @@ abstract class class_root {
             }
 
             //create the new systemrecord
+            //store date-bit temporary
+            $bitDates = $this->bitDatesChanges;
             $this->createSystemRecord($strPrevId, $this->getStrDisplayName());
+            $this->bitDatesChanges = $bitDates;
 
             if(validateSystemid($this->getStrSystemid())) {
 
@@ -621,23 +659,25 @@ abstract class class_root {
     }
 
 
-   /**
-    * Internal helper, checks if a child-node is the descendant of a given base-node
-    * @param $strBaseId
-    * @param $strChildId
-    * @return bool
-    */
+    /**
+     * Internal helper, checks if a child-node is the descendant of a given base-node
+     *
+     * @param $strBaseId
+     * @param $strChildId
+     *
+     * @return bool
+     */
     private function isSystemidChildNode($strBaseId, $strChildId) {
 
-       while(validateSystemid($strChildId)) {
-           $objCommon = new class_module_system_common($strChildId);
-           if($objCommon->getSystemid() == $strBaseId)
-               return true;
-           else
-               return $this->isSystemidChildNode($strBaseId, $objCommon->getPrevId());
-       }
+        while(validateSystemid($strChildId)) {
+            $objCommon = new class_module_system_common($strChildId);
+            if($objCommon->getSystemid() == $strBaseId)
+                return true;
+            else
+                return $this->isSystemidChildNode($strBaseId, $objCommon->getPrevId());
+        }
 
-       return false;
+        return false;
     }
 
 
@@ -655,7 +695,7 @@ abstract class class_root {
 
         if(validateSystemid($this->getSystemid())) {
 
-            if(defined("_system_changehistory_enabled_") && _system_changehistory_enabled_ == "true" && $this instanceof interface_versionable) {
+            if($this instanceof interface_versionable) {
                 $objChanges = new class_module_system_changelog();
                 $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
             }
@@ -812,6 +852,11 @@ abstract class class_root {
             )
         );
 
+
+        if($this->bitDatesChanges) {
+            $this->processDateChanges();
+        }
+
         $this->objDB->flushQueryCache();
 
         if($this->strOldPrevId != $this->strPrevId) {
@@ -908,6 +953,47 @@ abstract class class_root {
     }
 
     /**
+     * Process date changes handles the insert and update of date-objects.
+     * It replaces the old createDate and updateDate methods
+     * @return bool
+     */
+    private function processDateChanges() {
+
+        $intStart = 0;
+        $intEnd = 0;
+        $intSpecial = 0;
+
+        if($this->objStartDate != null && $this->objStartDate instanceof class_date)
+            $intStart = $this->objStartDate->getLongTimestamp();
+
+        if($this->objEndDate != null && $this->objEndDate instanceof class_date)
+            $intEnd = $this->objEndDate->getLongTimestamp();
+
+        if($this->objSpecialDate != null && $this->objSpecialDate instanceof class_date)
+            $intSpecial = $this->objSpecialDate->getLongTimestamp();
+
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        if($arrRow["COUNT(*)"] == 0) {
+            //insert
+            $strQuery = "INSERT INTO "._dbprefix_."system_date
+                      (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
+                      (?, ?, ?, ?)";
+            return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $intStart, $intEnd, $intSpecial));
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."system_date
+                      SET system_date_start = ?,
+                          system_date_end = ?,
+                          system_date_special = ?
+                    WHERE system_date_id = ?";
+            return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $this->getSystemid()));
+        }
+    }
+
+
+
+    /**
      * Creates a record in the date table. Make sure to use a proper system-id!
      * Up from Kajona V3.3, the signature changed. Pass instances of class_date instead of
      * int-values.
@@ -916,6 +1002,7 @@ abstract class class_root {
      * @param class_date $objStartDate
      * @param class_date $objEndDate
      * @param class_date $objSpecialDate
+     * @deprecated use the internal date-objects to have all dates handled automatically
      * @return bool
      */
     public function createDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
@@ -947,6 +1034,7 @@ abstract class class_root {
      * @param class_date $objStartDate
      * @param class_date $objEndDate
      * @param class_date $objSpecialDate
+     * @deprecated use the internal date-objects to have all dates handled automatically
      * @return bool
      */
     public function updateDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
@@ -1942,6 +2030,53 @@ abstract class class_root {
     public function getArrInitRow() {
         return $this->arrInitRow;
     }
+
+    /**
+     * @param \class_date $objEndDate
+     */
+    public function setObjEndDate($objEndDate) {
+        $this->objEndDate = $objEndDate;
+        $this->bitDatesChanges = true;
+    }
+
+    /**
+     * @return class_date
+     */
+    public function getObjEndDate() {
+        return $this->objEndDate;
+    }
+
+    /**
+     * @param \class_date $objSpecialDate
+     */
+    public function setObjSpecialDate($objSpecialDate) {
+        $this->objSpecialDate = $objSpecialDate;
+        $this->bitDatesChanges = true;
+    }
+
+    /**
+     * @return class_date
+     */
+    public function getObjSpecialDate() {
+        return $this->objSpecialDate;
+    }
+
+    /**
+     * @param class_date $objStartDate
+     */
+    public function setObjStartDate($objStartDate) {
+        $this->bitDatesChanges = true;
+        $this->objStartDate = $objStartDate;
+
+    }
+
+    /**
+     * @return class_date
+     */
+    public function getObjStartDate() {
+        return $this->objStartDate;
+    }
+
 
 
 }

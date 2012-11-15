@@ -29,9 +29,10 @@ class class_date {
 
     /**
      * Creates an instance of the class_date an initialises it with the current date.
+     *
      * @param string $longInitValue
      */
-	public function __construct($longInitValue = "") {
+    public function __construct($longInitValue = "") {
 
         if($longInitValue == "") {
             $this->setTimeInOldStyle(time());
@@ -40,12 +41,14 @@ class class_date {
             $this->setLongTimestamp("00000000000000");
         }
         else {
-            if(strlen($longInitValue) == 14)
+            if(strlen($longInitValue) == 14) {
                 $this->setLongTimestamp($longInitValue);
-            else
+            }
+            else {
                 $this->setTimeInOldStyle($longInitValue);
+            }
         }
-	}
+    }
 
     /**
      * Returns the string-based version of the long-value currently maintained.
@@ -53,11 +56,12 @@ class class_date {
      * @return string
      */
     public function __toString() {
-        return $this->longTimestamp."";
+        return $this->longTimestamp . "";
     }
 
     /**
      * Generates a long-timestamp of the current time
+     *
      * @return long
      */
     public static function getCurrentTimestamp() {
@@ -84,26 +88,38 @@ class class_date {
         $intMinute = 00;
         $intSecond = 00;
 
-        if(isset($arrParams[$strFieldname."_year"]) && $arrParams[$strFieldname."_year"] != "")
-            $intYear = (int)$arrParams[$strFieldname."_year"];
+        if(isset($arrParams[$strFieldname . "_year"]) && $arrParams[$strFieldname . "_year"] != "") {
+            $intYear = (int)$arrParams[$strFieldname . "_year"];
+        }
 
-        if(isset($arrParams[$strFieldname."_month"]) && $arrParams[$strFieldname."_month"] != "")
-            $intMonth = (int)$arrParams[$strFieldname."_month"];
+        if(isset($arrParams[$strFieldname . "_month"]) && $arrParams[$strFieldname . "_month"] != "") {
+            $intMonth = (int)$arrParams[$strFieldname . "_month"];
+        }
 
-        if(isset($arrParams[$strFieldname."_day"]) && $arrParams[$strFieldname."_day"] != "")
-            $intDay = (int)$arrParams[$strFieldname."_day"];
+        if(isset($arrParams[$strFieldname . "_day"]) && $arrParams[$strFieldname . "_day"] != "") {
+            $intDay = (int)$arrParams[$strFieldname . "_day"];
+        }
 
-        if(isset($arrParams[$strFieldname."_hour"]) && $arrParams[$strFieldname."_hour"] != "")
-            $intHour = (int)$arrParams[$strFieldname."_hour"];
+        if(isset($arrParams[$strFieldname . "_hour"]) && $arrParams[$strFieldname . "_hour"] != "") {
+            $intHour = (int)$arrParams[$strFieldname . "_hour"];
+        }
 
-        if(isset($arrParams[$strFieldname."_minute"]) && $arrParams[$strFieldname."_minute"] != "")
-            $intMinute = (int)$arrParams[$strFieldname."_minute"];
+        if(isset($arrParams[$strFieldname . "_minute"]) && $arrParams[$strFieldname . "_minute"] != "") {
+            $intMinute = (int)$arrParams[$strFieldname . "_minute"];
+        }
 
-        if(isset($arrParams[$strFieldname."_second"]) && $arrParams[$strFieldname."_second"] != "")
-            $intMinute = (int)$arrParams[$strFieldname."_second"];
+        if(isset($arrParams[$strFieldname . "_second"]) && $arrParams[$strFieldname . "_second"] != "") {
+            $intMinute = (int)$arrParams[$strFieldname . "_second"];
+        }
 
         //see if the other parts may be read directly
         if(isset($arrParams[$strFieldname])) {
+
+            if(strlen($arrParams[$strFieldname]) == strlen($this->strStringFormat)) {
+                $this->setLongTimestamp($arrParams[$strFieldname]);
+                return;
+            }
+
             $objDateTime = DateTime::createFromFormat(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $arrParams[$strFieldname]);
             if($objDateTime) {
                 $intTimestamp = $objDateTime->getTimestamp();
@@ -127,6 +143,7 @@ class class_date {
      * PHPs' time() returns 32Bit ints, too.
      *
      * @param int $intTimestamp
+     *
      * @return \class_date
      */
     public function setTimeInOldStyle($intTimestamp) {
@@ -170,7 +187,7 @@ class class_date {
      * @return \class_date
      */
     public function setPreviousDay() {
-        $this->setTimeInOldStyle($this->getTimeInOldStyle()-24*3600);
+        $this->setTimeInOldStyle($this->getTimeInOldStyle() - 24 * 3600);
         return $this;
     }
 
@@ -182,7 +199,7 @@ class class_date {
      * @return \class_date
      */
     public function setNextDay() {
-        $this->setTimeInOldStyle($this->getTimeInOldStyle()+24*3600);
+        $this->setTimeInOldStyle($this->getTimeInOldStyle() + 24 * 3600);
         return $this;
     }
 
@@ -190,13 +207,16 @@ class class_date {
      * Swap the year part
      *
      * @param int $intYear
+     *
      * @return \class_date
      */
     public function setIntYear($intYear) {
-        if(uniStrlen($intYear) == 2)
-            $intYear = "20".$intYear;
-        if(uniStrlen($intYear) == 1)
-            $intYear = "200".$intYear;
+        if(uniStrlen($intYear) == 2) {
+            $intYear = "20" . $intYear;
+        }
+        if(uniStrlen($intYear) == 1) {
+            $intYear = "200" . $intYear;
+        }
 
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
@@ -207,11 +227,13 @@ class class_date {
      * Swap the month part
      *
      * @param int $intMonth
+     *
      * @return \class_date
      */
     public function setIntMonth($intMonth) {
-        if($intMonth < 1 || $intMonth > 12)
-            return;
+        if($intMonth < 1 || $intMonth > 12) {
+            return $this;
+        }
 
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
@@ -222,11 +244,13 @@ class class_date {
      * Swap the day part
      *
      * @param int $intDay
+     *
      * @return \class_date
      */
     public function setIntDay($intDay) {
-        if($intDay < 1 || $intDay > 31)
-            return;
+        if($intDay < 1 || $intDay > 31) {
+            return $this;
+        }
 
         $strDay = sprintf("%02s", $intDay);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strDay, 6, 2);
@@ -242,8 +266,9 @@ class class_date {
      * @return \class_date
      */
     public function setIntHour($intHour, $bitForce = false) {
-        if(!$bitForce && ($intHour < 0 || $intHour > 23))
-            return;
+        if(!$bitForce && ($intHour < 0 || $intHour > 23)) {
+            return $this;
+        }
 
         $strHour = sprintf("%02s", $intHour);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strHour, 8, 2);
@@ -259,8 +284,9 @@ class class_date {
      * @return \class_date
      */
     public function setIntMin($intMin, $bitForce = false) {
-        if(!$bitForce && ($intMin < 0 || $intMin > 59))
-            return;
+        if(!$bitForce && ($intMin < 0 || $intMin > 59)) {
+            return $this;
+        }
 
         $strMin = sprintf("%02s", $intMin);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMin, 10, 2);
@@ -276,8 +302,9 @@ class class_date {
      * @return \class_date
      */
     public function setIntSec($intSec, $bitForce = false) {
-        if(!$bitForce && ($intSec < 0 || $intSec > 59))
-            return;
+        if(!$bitForce && ($intSec < 0 || $intSec > 59)) {
+            return $this;
+        }
 
         $strSec = sprintf("%02s", $intSec);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strSec, 12, 2);
@@ -351,16 +378,16 @@ class class_date {
      * Set the current timestamp
      *
      * @param long $longTimestamp
+     *
      * @return \class_date
      */
     public function setLongTimestamp($longTimestamp) {
-        if(uniEreg("([0-9]){14}", $longTimestamp))
+        if(uniEreg("([0-9]){14}", $longTimestamp)) {
             $this->longTimestamp = $longTimestamp;
+        }
 
         return $this;
     }
-
-
 
 }
 

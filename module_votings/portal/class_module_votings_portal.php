@@ -65,14 +65,8 @@ class class_module_votings_portal extends class_portal implements interface_port
                 if($objVoting->rightRight1()) {
 
                     //check the start n end dates
-                    $objDateStart = null;
-                    $objDateEnd = null;
-                    if($objVoting->getLongDateStart() != "" && $objVoting->getLongDateStart() != 0) {
-                        $objDateStart = new class_date($objVoting->getLongDateStart());
-                    }
-                    if($objVoting->getLongDateEnd() != "" && $objVoting->getLongDateEnd() != 0) {
-                        $objDateEnd = new class_date($objVoting->getLongDateEnd());
-                    }
+                    $objDateStart = $objVoting->getObjStartDate();
+                    $objDateEnd = $objVoting->getObjEndDate();
 
                     $bitDatesAllow = true;
                     if($objDateStart != null && $objDateStart->getLongTimestamp() > class_date::getCurrentTimestamp()) {

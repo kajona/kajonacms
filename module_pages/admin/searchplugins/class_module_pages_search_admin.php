@@ -70,6 +70,16 @@ class class_module_pages_search_admin implements interface_search_plugin {
 
         $strWhere = "( " . implode(" OR ", $arrWhere) . " ) ";
 
+        if($this->objSearch->getObjChangeEnddate() != null) {
+            $arrParams[] = $this->objSearch->getObjChangeEnddate()->getTimeInOldStyle();
+            $strWhere .= "AND system_lm_time <= ? ";
+        }
+
+        if($this->objSearch->getObjChangeStartdate() != null) {
+            $arrParams[] = $this->objSearch->getObjChangeStartdate()->getTimeInOldStyle();
+            $strWhere .= "AND system_lm_time >= ? ";
+        }
+
         //build query
         $strQuery = "SELECT page_id
                      FROM " . _dbprefix_ . "page,

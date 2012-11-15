@@ -83,33 +83,23 @@ class class_module_eventmanager_event extends class_model implements interface_m
     private $intParticipantsLimit = 0;
 
     /**
+     * For form generation only
      * @var class_date
      * @versionable
+     * @fieldType datetime
+     * @fieldLabel event_start
+     * @fieldMandatory
      */
     private $objStartDate;
 
     /**
+     * For form-generation only
      * @var class_date
      * @versionable
-     */
-    private $objEndDate;
-
-    /**
-     * for formgeneration only
-     * @var
      * @fieldType datetime
      * @fieldLabel event_end
      */
-    private $longEndDate;
-
-    /**
-     * for formgeneration only
-     * @var
-     * @fieldType datetime
-     * @fieldLabel event_start
-     */
-    private $longStartDate;
-
+    private $objEndDate;
 
 
     /**
@@ -171,39 +161,6 @@ class class_module_eventmanager_event extends class_model implements interface_m
         return $this->getStrTitle();
     }
 
-
-    public function initObjectInternal() {
-        parent::initObjectInternal();
-        $arrRow = $this->getArrInitRow();
-
-        if($arrRow["system_date_start"] > 0) {
-            $this->setObjStartDate(new class_date($arrRow["system_date_start"]));
-        }
-
-        if($arrRow["system_date_end"] > 0) {
-            $this->setObjEndDate(new class_date($arrRow["system_date_end"]));
-        }
-
-    }
-
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        $this->updateDateRecord($this->getSystemid(), $this->getObjStartDate(), $this->getObjEndDate());
-        return parent::updateStateToDb();
-
-
-    }
-
-    /**
-     * Creates the initial date-entries
-     */
-    protected function onInsertToDb() {
-        return $this->createDateRecord($this->getSystemid());
-    }
 
     /**
      * Returns a list of events available
@@ -289,7 +246,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @return string
      */
     public function renderVersionValue($strProperty, $strValue) {
-        if( ($strProperty == "enddate" || $strProperty == "startdate") && $strValue != "") {
+        if( ($strProperty == "objEndDate" || $strProperty == "objStartDate") && $strValue != "") {
             return dateToString(new class_date($strValue));
         }
         if($strProperty == "limitGiven" || $strProperty == "registrationRequired") {
@@ -350,62 +307,4 @@ class class_module_eventmanager_event extends class_model implements interface_m
     }
 
 
-    /**
-     * @return class_date
-     */
-    public function getLongStartDate() {
-        if($this->objStartDate instanceof class_date)
-            return $this->objStartDate->getLongTimestamp();
-        return "";
-    }
-
-    public function setLongStartDate($longStartDate) {
-        if($longStartDate != "")
-            $this->objStartDate = new class_date($longStartDate);
-        else
-            $this->objStartDate = null;
-
-    }
-
-    /**
-     * @return class_date
-     */
-    public function getObjStartDate() {
-        return $this->objStartDate;
-    }
-
-    public function setObjStartDate($objStartDate) {
-        $this->objStartDate = $objStartDate;
-    }
-
-    /**
-     * @return class_date
-     *
-     */
-    public function getLongEndDate() {
-        if($this->objEndDate instanceof class_date)
-            return $this->objEndDate->getLongTimestamp();
-        return "";
-    }
-
-    public function setLongEndDate($longEndDate) {
-        if($longEndDate != "")
-            $this->objEndDate = new class_date($longEndDate);
-        else
-            $this->objEndDate = null;
-    }
-
-    /**
-     * @return class_date
-     */
-    public function getObjEndDate() {
-        return $this->objEndDate;
-    }
-
-    public function setObjEndDate($objEndDate) {
-        $this->objEndDate = $objEndDate;
-    }
-
-
-    
 }

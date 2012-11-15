@@ -188,9 +188,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
         $objEvent = new class_module_eventmanager_event($this->getSystemid());
         if($objEvent->rightView() && $objEvent->rightRight1()) {
 
-            if($objEvent->getIntLimitGiven() == "1" &&
-                $objEvent->getIntParticipantsLimit() <= count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()))
-            ) {
+            if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getObjectCount($this->getSystemid())) {
 
                 $strMessage = $this->getLang("participantLimitReached");
                 $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
@@ -261,9 +259,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
             else {
 
                 $strMessage = "";
-                if($objEvent->getIntLimitGiven() == "1" &&
-                    $objEvent->getIntParticipantsLimit() <= count(class_module_eventmanager_participant::getAllParticipants($this->getSystemid()))
-                ) {
+                if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getObjectCount($this->getSystemid())) {
 
                     $strMessage = $this->getLang("participantLimitReached");
                 }
@@ -323,7 +319,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
         $objEvent = new class_module_eventmanager_event($this->getSystemid());
         if($objEvent->rightView() && $objEvent->rightRight1() && validateSystemid($this->getParam("participantId"))) {
 
-            $arrParticipants = class_module_eventmanager_participant::getAllParticipants($objEvent->getSystemid());
+            $arrParticipants = class_module_eventmanager_participant::getObjectList($objEvent->getSystemid());
             foreach($arrParticipants as $objOneParticipant) {
                 if($objOneParticipant->getSystemid() == $this->getParam("participantId")) {
                     $objOneParticipant->setStatus("", "1");

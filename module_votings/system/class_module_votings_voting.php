@@ -30,14 +30,16 @@ class class_module_votings_voting extends class_model implements interface_model
     /**
      * @var int
      * @fieldType date
+     * @fieldLabel form_voting_datestart
      */
-    private $longDateStart = 0;
+    private $objStartDate = null;
 
     /**
      * @var int
      * @fieldType date
+     * @fieldLabel form_voting_dateend
      */
-    private $longDateEnd = 0;
+    private $objEndDate = null;
 
 
     /**
@@ -49,14 +51,6 @@ class class_module_votings_voting extends class_model implements interface_model
         $this->setArrModuleEntry("moduleId", _votings_module_id_);
         $this->setArrModuleEntry("modul", "votings");
         parent::__construct($strSystemid);
-    }
-
-
-    public function initObjectInternal() {
-        parent::initObjectInternal();
-        $arrRow = $this->getArrInitRow();
-        $this->setLongDateEnd($arrRow["system_date_end"]);
-        $this->setLongDateStart($arrRow["system_date_start"]);
     }
 
     /**
@@ -96,51 +90,6 @@ class class_module_votings_voting extends class_model implements interface_model
      */
     public function getStrDisplayName() {
         return $this->getStrTitle();
-    }
-
-
-    /**
-     * saves the current object with all its params back to the database.
-     * This method is called from the framework automatically.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        $objStartDate = null;
-        $objEndDate = null;
-
-        if($this->getLongDateStart() != 0 && $this->getLongDateStart() != "") {
-            $objStartDate = new class_date($this->getLongDateStart());
-        }
-
-        if($this->getLongDateEnd() != 0 && $this->getLongDateEnd() != "") {
-            $objEndDate = new class_date($this->getLongDateEnd());
-        }
-
-        $this->updateDateRecord($this->getSystemid(), $objStartDate, $objEndDate);
-        return parent::updateStateToDb();
-    }
-
-    /**
-     * if a new record is created, don't forget to add the dates submitted
-     * This method is called from the framework automatically.
-     *
-     * @return bool
-     */
-    protected function onInsertToDb() {
-        $objStartDate = null;
-        $objEndDate = null;
-        if($this->getLongDateStart() != 0 && $this->getLongDateStart() != "") {
-            $objStartDate = new class_date($this->getLongDateStart());
-        }
-
-        if($this->getLongDateEnd() != 0 && $this->getLongDateEnd() != "") {
-            $objEndDate = new class_date($this->getLongDateEnd());
-        }
-
-        //dates
-        return $this->createDateRecord($this->getSystemid(), $objStartDate, $objEndDate);
     }
 
 
@@ -224,20 +173,5 @@ class class_module_votings_voting extends class_model implements interface_model
         $this->strTitle = $strTitle;
     }
 
-    public function getLongDateStart() {
-        return $this->longDateStart;
-    }
-
-    public function setLongDateStart($longDateStart) {
-        $this->longDateStart = $longDateStart;
-    }
-
-    public function getLongDateEnd() {
-        return $this->longDateEnd;
-    }
-
-    public function setLongDateEnd($longDateEnd) {
-        $this->longDateEnd = $longDateEnd;
-    }
 
 }

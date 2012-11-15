@@ -27,3 +27,6 @@ $lang["actionExecuteSearch"]             = "Exectue search";
 $lang["action_new"]                      = "New Search";
 $lang["select_all"]                      = "All modules";
 $lang["form_additionalheader"]           = "Additional filter";
+$lang["delete_question"]                 = "Do you really want to delete the search &quot;<b>%%element_name%%</b>&quot;?";
+$lang["form_search_objChangeStartdate"]  = "Change from";
+$lang["form_search_objChangeEnddate"]    = "Change to";

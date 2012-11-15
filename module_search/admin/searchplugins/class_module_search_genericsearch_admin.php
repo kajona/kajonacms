@@ -88,6 +88,16 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                 $arrParams[] = "%".$this->objSearch->getStrQuery()."%";
             }
 
+            if($this->objSearch->getObjChangeEnddate() != null) {
+                $arrParams[] = $this->objSearch->getObjChangeEnddate()->getTimeInOldStyle();
+                $strWhere .= "AND system_lm_time <= ? ";
+            }
+
+            if($this->objSearch->getObjChangeStartdate() != null) {
+                $arrParams[] = $this->objSearch->getObjChangeStartdate()->getTimeInOldStyle();
+                $strWhere .= "AND system_lm_time >= ? ";
+            }
+
             $strQuery = "SELECT system_id
                           FROM ".implode(", ", $arrTables)." ,
                                ".$this->objDB->encloseTableName(_dbprefix_."system")."

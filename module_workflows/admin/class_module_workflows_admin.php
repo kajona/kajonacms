@@ -98,9 +98,13 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
      */
     protected function actionMyList() {
 
-        $objIterator = new class_array_section_iterator(class_module_workflows_workflow::getPendingWorkflowsForUserCount(array_merge(array($this->objSession->getUserID()), $this->objSession->getGroupIdsAsArray())));
+        $objIterator = new class_array_section_iterator(
+            class_module_workflows_workflow::getPendingWorkflowsForUserCount(array_merge(array($this->objSession->getUserID()), $this->objSession->getGroupIdsAsArray()))
+        );
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_workflows_workflow::getPendingWorkflowsForUser(array_merge(array($this->objSession->getUserID()), $this->objSession->getGroupIdsAsArray()), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(
+            class_module_workflows_workflow::getPendingWorkflowsForUser(array_merge(array($this->objSession->getUserID()), $this->objSession->getGroupIdsAsArray()), $objIterator->calculateStartPos(), $objIterator->calculateEndPos())
+        );
 
         return $this->renderList($objIterator);
     }

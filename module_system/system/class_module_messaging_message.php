@@ -37,11 +37,6 @@ class class_module_messaging_message extends class_model implements interface_mo
     private $strUser = "";
 
     /**
-     * @var class_date
-     */
-    private $objDate = null;
-
-    /**
      * @var string
      * @tableColumn message_internalidentifier
      */
@@ -74,30 +69,12 @@ class class_module_messaging_message extends class_model implements interface_mo
     }
 
 
-    protected function initObjectInternal() {
-        parent::initObjectInternal();
-        $arrInitRow = $this->getArrInitRow();
-        $this->setObjDate(new class_date($arrInitRow["system_date_start"]));
-    }
-
-
-    /**
-     * When creating a new record, the current date is set as relevant.
-     *
-     * @return bool
-     */
-    protected function onInsertToDb() {
-        $this->setObjDate(new class_date());
-        return $this->createDateRecord($this->getSystemid(), $this->getObjDate());
-    }
-
     /**
      * Updates the record
      *
      * @return bool
      */
     protected function updateStateToDb() {
-        $this->updateDateRecord($this->getSystemid(), $this->getObjDate());
         $bitReturn = parent::updateStateToDb();
 
         if($this->bitOnReadTrigger && $this->getStrMessageProvider() != "") {
@@ -171,11 +148,10 @@ class class_module_messaging_message extends class_model implements interface_mo
             $strUserid = class_carrier::getInstance()->getObjSession()->getUserID();
 
         $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
+                     FROM "._dbprefix_."messages, "._dbprefix_."system
 		            WHERE system_id = message_id
 		              AND message_user = ?
-		              AND system_date_id = system_id
-		         ORDER BY message_read ASC, system_date_start DESC";
+		         ORDER BY message_read ASC, system_create_date DESC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
         $arrReturn = array();
@@ -198,11 +174,10 @@ class class_module_messaging_message extends class_model implements interface_mo
      */
     public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages, "._dbprefix_."system, "._dbprefix_."system_date
+                     FROM "._dbprefix_."messages, "._dbprefix_."system
 		            WHERE system_id = message_id
 		              AND message_internalidentifier = ?
-		              AND system_date_id = system_id
-		         ORDER BY message_read ASC, system_date_start DESC";
+		         ORDER BY message_read ASC, system_create_date DESC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strIdentifier), $intStart, $intEnd);
         $arrReturn = array();
@@ -298,17 +273,10 @@ class class_module_messaging_message extends class_model implements interface_mo
     }
 
     /**
-     * @param \class_date $objDate
-     */
-    public function setObjDate($objDate) {
-        $this->objDate = $objDate;
-    }
-
-    /**
      * @return \class_date
      */
     public function getObjDate() {
-        return $this->objDate;
+        return $this->getObjCreateDate();
     }
 
     /**

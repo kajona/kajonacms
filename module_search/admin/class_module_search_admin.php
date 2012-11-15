@@ -16,7 +16,7 @@
  */
 class class_module_search_admin extends class_admin_simple implements interface_admin {
 
-    private static $INT_MAX_NR_OF_RESULTS = 30;
+    const INT_MAX_NR_OF_RESULTS = 30;
 
     /**
      * Constructor
@@ -141,14 +141,10 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $strReturn = "";
 
         $objSearch = new class_module_search_search($this->getParam("systemid"));
+        $objForm = $this->getSearchAdminForm($objSearch);
+        $objForm->updateSourceObject();
 
-        if($this->getParam("search_query") != "") {
-            $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("search_query")), true));
-        }
-        if($this->getParam("search_filtermodules") != "" && is_array($this->getParam("search_filtermodules"))) {
-            $objSearch->setArrFilterModules($this->getParam("search_filtermodules"));
-        }
-        else if($this->getParam("filtermodules") != "") {
+        if($this->getParam("filtermodules") != "") {
             $objSearch->setStrInternalFilterModules($this->getParam("filtermodules"));
         }
         if($this->getParam("search_filter_all") != "")
@@ -166,7 +162,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         }
 
         $objArrayIterator = new class_array_iterator($arrResult);
-        if($this->getParam("pv") > 1 && count($objArrayIterator->getElementsOnPage((int)($this->getParam("pv")) == 0)))
+        if($this->getParam("pv") > 1 && count($objArrayIterator->getElementsOnPage((int)($this->getParam("pv")))) == 0)
             $this->setParam("pv", 1);
 
         $objArraySectionIterator = new class_array_section_iterator(count($arrResult));
@@ -184,7 +180,20 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $objArrayIterator->setArrElements($arrObjects);
         $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage(1));
 
-        $strReturn .= $this->renderList($objArraySectionIterator, false, "searchResultList", false, "&search_query=" . $objSearch->getStrQuery()."&filtermodules=".implode(",", $objSearch->getArrFilterModules()));
+        $strQueryAppend = "&filtermodules=".$objSearch->getStrInternalFilterModules();
+
+        if($objSearch->getObjChangeStartdate() != null)
+            $strQueryAppend .= "&search_objchangestartdate=".$objSearch->getObjChangeStartdate()->getLongTimestamp();
+        if($objSearch->getObjChangeEnddate() != null)
+            $strQueryAppend .= "&search_objchangeenddate=".$objSearch->getObjChangeEnddate()->getLongTimestamp();
+
+        $strReturn .= $this->renderList(
+            $objArraySectionIterator,
+            false,
+            "searchResultList",
+            false,
+            "&search_query=".$objSearch->getStrQuery().$strQueryAppend
+        );
         return $strReturn;
     }
 
@@ -258,7 +267,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
                 continue;
             }
 
-            if(++$intI > self::$INT_MAX_NR_OF_RESULTS) {
+            if(++$intI > self::INT_MAX_NR_OF_RESULTS) {
                 break;
             }
 
@@ -316,7 +325,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
                 continue;
             }
 
-            if(++$intI > self::$INT_MAX_NR_OF_RESULTS) {
+            if(++$intI > self::INT_MAX_NR_OF_RESULTS) {
                 break;
             }
 
@@ -360,15 +369,19 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         // Load filterable modules
         $arrFilterModules = $objSearch->getPossibleModulesForFilter();
-        $objForm->getField("filtermodules")->setArrKeyValues($arrFilterModules);
+        $objForm->getField("formfiltermodules")->setArrKeyValues($arrFilterModules);
 
-        $objForm->addField(new class_formentry_checkbox("search", "filter_all"))->setStrLabel($this->getLang("select_all"))->setStrValue($objSearch->getStrInternalFilterModules() == "-1");
+        $objForm->addField(new class_formentry_checkbox("search", "filter_all"))->setStrLabel($this->getLang("select_all"))->setStrValue(
+            $objSearch->getStrInternalFilterModules() == "-1" || $objSearch->getStrInternalFilterModules() == ""
+        );
 
-        $bitVisible = $objSearch->getStrInternalFilterModules() != -1;
+        $bitVisible = ($objSearch->getStrInternalFilterModules() != "-1" && $objSearch->getStrInternalFilterModules() != "") || $objSearch->getObjChangeEnddate() != null || $objSearch->getObjChangeStartdate() != null;
 
         $objForm->setStrHiddenGroupTitle($this->getLang("form_additionalheader"));
-        $objForm->addFieldToHiddenGroup($objForm->getField("filtermodules"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("formfiltermodules"));
         $objForm->addFieldToHiddenGroup($objForm->getField("search_filter_all"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("objChangeStartdate"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("objChangeEnddate"));
         $objForm->setBitHiddenElementsVisible($bitVisible);
 
         return $objForm;
