@@ -352,37 +352,37 @@
         </exec>
     </target>
 
-    <target name="phpmd"
-            description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-        <exec executable="${path.phpmd}">
-            <arg path="${basedir}${projectPath}" />
-            <arg value="text" />
-            <arg value="--exclude " />
-            <arg value="*yui*,*tcpdf*,*fonts*,*pchart*,*ezcomponents*,*phpexcel*,*phpqrcode*" />
-            <arg value="${basedir}/phpmd-ruleset.xml" />
-        </exec>
-    </target>
+    <!--<target name="phpmd"-->
+            <!--description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">-->
+        <!--<exec executable="${path.phpmd}">-->
+            <!--<arg path="${basedir}${projectPath}" />-->
+            <!--<arg value="text" />-->
+            <!--<arg value="--exclude " />-->
+            <!--<arg value="*yui*,*tcpdf*,*fonts*,*pchart*,*ezcomponents*,*phpexcel*,*phpqrcode*" />-->
+            <!--<arg value="${basedir}/phpmd-ruleset.xml" />-->
+        <!--</exec>-->
+    <!--</target>-->
 
     <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
         <exec executable="${path.phpmd}">
             <arg path="${basedir}${projectPath}" />
             <arg value="xml" />
-            <arg value="${basedir}/phpmd-ruleset.xml" />
             <arg value="--exclude" />
             <arg value="*yui*,*tcpdf*,*fonts*,*pchart*,*ezcomponents*,*phpexcel*,*phpqrcode*" />
             <arg value="--reportfile" />
             <arg value="${basedir}${buildPath}/logs/pmd.xml" />
+            <arg value="${basedir}/phpmd-ruleset.xml" />
         </exec>
     </target>
 
-    <target name="phpcs"
-            description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
-        <exec executable="${path.phpcs}">
-            <arg value="--tab-width=4" />
-            <arg value="--standard=${basedir}/phpcs-ruleset.xml" />
-            <arg path="${basedir}${projectPath}" />
-        </exec>
-    </target>
+    <!--<target name="phpcs"-->
+            <!--description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">-->
+        <!--<exec executable="${path.phpcs}">-->
+            <!--<arg value="--tab-width=4" />-->
+            <!--<arg value="--standard=${basedir}/phpcs-ruleset.xml" />-->
+            <!--<arg path="${basedir}${projectPath}" />-->
+        <!--</exec>-->
+    <!--</target>-->
 
     <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec executable="${path.phpcs}" output="/dev/null">
@@ -405,11 +405,11 @@
 
 
     <!-- currently disabled in favor of phpdocumentor -->
-    <target name="phpdox" description="Generate API documentation using phpDox">
-        <exec executable="phpdox">
-            <arg line="--file ${basedir}/phpdox.xml" />
-        </exec>
-    </target>
+    <!--<target name="phpdox" description="Generate API documentation using phpDox">-->
+        <!--<exec executable="phpdox">-->
+            <!--<arg line="--file ${basedir}/phpdox.xml" />-->
+        <!--</exec>-->
+    <!--</target>-->
 
 
     <!-- requires phpDocumentor, binary phpdoc -->
