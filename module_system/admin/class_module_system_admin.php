@@ -445,16 +445,22 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 //generate the link to execute the task
                 $strLink = "";
                 if($objOneTask->generateAdminForm() != "") {
-                    $strLink = getLinkAdmin("system", "systemTasks", "&task=".$objOneTask->getStrInternalTaskName(),
+                    $strLink = getLinkAdmin(
+                        "system",
+                        "systemTasks",
+                        "&task=".$objOneTask->getStrInternalTaskName(),
                         $objOneTask->getStrTaskname(),
                         $this->getLang("systemtask_run"),
-                        "icon_accept.png");
+                        "icon_accept.png"
+                    );
                 }
                 else {
-                    $strLink = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
+                    $strLink = getLinkAdminManual(
+                        "href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
                         "",
                         $this->getLang("systemtask_run"),
-                        "icon_accept.png");
+                        "icon_accept.png"
+                    );
                 }
 
                 $strReturn .= $this->objToolkit->genericAdminList(

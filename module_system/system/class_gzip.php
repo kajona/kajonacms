@@ -16,27 +16,27 @@
  */
 class class_gzip {
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
-	}
+    /**
+     * Constructor
+     */
+    public function __construct() {
+    }
 
-	/**
-	 * Tries to compress a given file.
-	 * If the passed filename was test.txt, the created file is named
-	 * test.txt.gz
-	 *
-	 * @param string $strFilename
-	 * @param bool $bitDeleteSource
-	 * @throws class_exception
-	 * @return bool
-	 */
-	public function compressFile($strFilename, $bitDeleteSource = false) {
-	    if(strpos($strFilename, _realpath_) === false)
+    /**
+     * Tries to compress a given file.
+     * If the passed filename was test.txt, the created file is named
+     * test.txt.gz
+     *
+     * @param string $strFilename
+     * @param bool $bitDeleteSource
+     *
+     * @throws class_exception
+     * @return bool
+     */
+    public function compressFile($strFilename, $bitDeleteSource = false) {
+        if(strpos($strFilename, _realpath_) === false)
             $strFilename = _realpath_.$strFilename;
-	    //Check if sourcefile exists
+        //Check if sourcefile exists
         $strTargetFilename = $strFilename.".gz";
         if(file_exists($strFilename) && is_file($strFilename)) {
             //try to open target file pointer
@@ -67,27 +67,28 @@ class class_gzip {
         else
             throw new class_exception("Sourcefile not valid", class_exception::$level_ERROR);
 
-	    return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Tries to decompress a given file.
-	 * If the passed filename was test.txt.gz, the created file is named
-	 * test.txt
-	 *
-	 * @param string $strFilename
-	 * @throws class_exception
-	 * @return bool
-	 */
-	public function decompressFile($strFilename) {
-	    if(substr($strFilename, -3) != ".gz")
-	       throw new class_exception("sourcefile ".$strFilename." no valid .gz file", class_exception::$level_ERROR);
+    /**
+     * Tries to decompress a given file.
+     * If the passed filename was test.txt.gz, the created file is named
+     * test.txt
+     *
+     * @param string $strFilename
+     *
+     * @throws class_exception
+     * @return bool
+     */
+    public function decompressFile($strFilename) {
+        if(substr($strFilename, -3) != ".gz")
+            throw new class_exception("sourcefile ".$strFilename." no valid .gz file", class_exception::$level_ERROR);
 
-	    if(strpos($strFilename, _realpath_) === false)
+        if(strpos($strFilename, _realpath_) === false)
             $strFilename = _realpath_.$strFilename;
 
-	    //Check if sourcefile exists
-        $strTargetFilename = substr($strFilename, 0, strlen($strFilename)-3);
+        //Check if sourcefile exists
+        $strTargetFilename = substr($strFilename, 0, strlen($strFilename) - 3);
 
         if(file_exists($strFilename) && is_file($strFilename)) {
             //try to open sourcefile
@@ -96,7 +97,7 @@ class class_gzip {
                 if($objTargetPointer = fopen($strTargetFilename, "wb")) {
                     //Loop over filecontent
                     while(!gzeof($objSourcePointer)) {
-                        fwrite($objTargetPointer, gzread($objSourcePointer,  1024 * 512));
+                        fwrite($objTargetPointer, gzread($objSourcePointer, 1024 * 512));
                         //$strContent .= gzread($objSourcePointer,  1024 * 512);
                     }
                     @gzclose($objSourcePointer);
@@ -105,11 +106,10 @@ class class_gzip {
                     return true;
 
                 }
-                else  {
+                else {
                     @gzclose($objSourcePointer);
                     throw new class_exception("can't write to targetfile ", class_exception::$level_ERROR);
                 }
-
 
             }
             else {
@@ -121,29 +121,29 @@ class class_gzip {
         else
             throw new class_exception("Sourcefile not valid", class_exception::$level_ERROR);
 
-	    return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Tries to compress the content passed using a gzip compression.
-	 * If the browser supports encoded content, a header is sent and the string is returned being compressed,
-	 * otherwise the string is returned "as is"
-	 *
-	 * @param string $strContent
-	 * @return string
-	 */
-	public function compressOutput($strContent) {
+    /**
+     * Tries to compress the content passed using a gzip compression.
+     * If the browser supports encoded content, a header is sent and the string is returned being compressed,
+     * otherwise the string is returned "as is"
+     *
+     * @param string $strContent
+     *
+     * @return string
+     */
+    public function compressOutput($strContent) {
 
         if(defined("_system_output_gzip_") && _system_output_gzip_ == "true" && strpos(getServer("HTTP_ACCEPT_ENCODING"), "gzip") !== false) {
             //header to browser
             class_response_object::getInstance()->addHeader("Content-Encoding: gzip");
             $strContent = gzencode($strContent);
             return $strContent;
-	    }
-	    else
-	        return $strContent;
-	}
-
+        }
+        else
+            return $strContent;
+    }
 
 }
 

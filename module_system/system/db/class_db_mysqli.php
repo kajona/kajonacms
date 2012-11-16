@@ -14,6 +14,9 @@
  */
 class class_db_mysqli implements interface_db_driver {
 
+    /**
+     * @var mysqli
+     */
     private $linkDB; //DB-Link
     private $strHost = "";
     private $strUsername = "";
@@ -50,9 +53,9 @@ class class_db_mysqli implements interface_db_driver {
         $this->strDbName = $strDbName;
         $this->intPort = $intPort;
 
-        $this->linkDB = @mysqli_connect($strHost, $strUsername, $strPass, $strDbName, $intPort);
+        $this->linkDB = new mysqli($strHost, $strUsername, $strPass, $strDbName, $intPort);
         if($this->linkDB !== false) {
-            if(@mysqli_select_db($this->linkDB, $strDbName)) {
+            if($this->linkDB->select_db($strDbName)) {
                 //erst ab mysql-client-bib > 4
                 //mysqli_set_charset($this->linkDB, "utf8");
                 $this->_query("SET NAMES 'utf8'");
@@ -86,7 +89,7 @@ class class_db_mysqli implements interface_db_driver {
      * @return bool
      */
     public function _query($strQuery) {
-        $bitReturn = @mysqli_query($this->linkDB, $strQuery);
+        $bitReturn = $this->linkDB->query($strQuery);
         return $bitReturn;
     }
 
@@ -116,7 +119,7 @@ class class_db_mysqli implements interface_db_driver {
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
             }
 
-            $bitReturn = @mysqli_stmt_execute($objStatement);
+            $bitReturn = $objStatement->execute();
         }
 
         return $bitReturn;
@@ -132,11 +135,11 @@ class class_db_mysqli implements interface_db_driver {
     public function getArray($strQuery) {
         $arrReturn = array();
         $intCounter = 0;
-        $resultSet = @mysqli_query($this->linkDB, $strQuery);
+        $resultSet = $this->linkDB->query($strQuery);
         if(!$resultSet) {
             return false;
         }
-        while($arrRow = @mysqli_fetch_array($resultSet, MYSQLI_BOTH)) {
+        while($arrRow = $resultSet->fetch_array(MYSQLI_BOTH)) {
             $arrReturn[$intCounter++] = $arrRow;
         }
         return $arrReturn;
@@ -167,14 +170,14 @@ class class_db_mysqli implements interface_db_driver {
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
             }
 
-            if(!mysqli_stmt_execute($objStatement)) {
+            if(!$objStatement->execute()) {
                 return false;
             }
 
             //should remain here due to the bug http://bugs.php.net/bug.php?id=47928
-            mysqli_stmt_store_result($objStatement);
+            $objStatement->store_result();
 
-            $objMetadata = mysqli_stmt_result_metadata($objStatement);
+            $objMetadata = $objStatement->result_metadata();
             $arrParams = array();
             $arrRow = array();
             while($objField = $objMetadata->fetch_field()) {
@@ -248,7 +251,7 @@ class class_db_mysqli implements interface_db_driver {
      * @return string
      */
     public function getError() {
-        $strError = $this->strErrorMessage . " " . @mysqli_error($this->linkDB);
+        $strError = $this->strErrorMessage . " " . $this->linkDB->error;
         $this->strErrorMessage = "";
 
         return $strError;
@@ -458,9 +461,9 @@ class class_db_mysqli implements interface_db_driver {
     public function getDbInfo() {
         $arrReturn = array();
         $arrReturn["dbdriver"] = "mysqli-extension";
-        $arrReturn["dbserver"] = "MySQL " . mysqli_get_server_info($this->linkDB);
-        $arrReturn["dbclient"] = mysqli_get_client_info($this->linkDB);
-        $arrReturn["dbconnection"] = mysqli_get_host_info($this->linkDB);
+        $arrReturn["dbserver"] = "MySQL " . $this->linkDB->server_info;
+        $arrReturn["dbclient"] =  $this->linkDB->client_info;
+        $arrReturn["dbconnection"] = $this->linkDB->host_info;
         return $arrReturn;
     }
 
@@ -488,7 +491,7 @@ class class_db_mysqli implements interface_db_driver {
     }
 
 
-//--- DUMP & RESTORE ------------------------------------------------------------------------------------
+    //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 
     /**
      * Dumps the current db
@@ -511,7 +514,11 @@ class class_db_mysqli implements interface_db_driver {
         //Now do a systemfork
         $intTemp = "";
         system($strCommand, $intTemp);
-        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, class_logger::$levelInfo);
+        if($intTemp == 0)
+            class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, class_logger::$levelInfo);
+        else
+            class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, class_logger::$levelWarning);
+
         return $intTemp == 0;
     }
 
@@ -533,7 +540,10 @@ class class_db_mysqli implements interface_db_driver {
         $strCommand = $this->strRestoreBin . " -h" . $this->strHost . " -u" . $this->strUsername . $strParamPass . " -P" . $this->intPort . " " . $this->strDbName . " < \"" . $strFilename . "\"";
         $intTemp = "";
         system($strCommand, $intTemp);
-        class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strRestoreBin . " exited with code " . $intTemp, class_logger::$levelInfo);
+        if($intTemp == 0)
+            class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, class_logger::$levelInfo);
+        else
+            class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, class_logger::$levelWarning);
         return $intTemp == 0;
     }
 
@@ -571,8 +581,8 @@ class class_db_mysqli implements interface_db_driver {
             return $this->arrStatementsCache[$strName];
         }
 
-        $objStatement = mysqli_stmt_init($this->linkDB);
-        if(!mysqli_stmt_prepare($objStatement, $strQuery)) {
+        $objStatement = $this->linkDB->stmt_init();
+        if(!$objStatement->prepare($strQuery)) {
             $this->strErrorMessage = $objStatement->error;
             return false;
         }

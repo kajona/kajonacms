@@ -780,7 +780,8 @@ class class_db {
         if($bitDump == true) {
             $objGzip = new class_gzip();
             try {
-                $objGzip->compressFile($strTargetFilename, true);
+                if(!$objGzip->compressFile($strTargetFilename, true))
+                    class_logger::getInstance(class_logger::DBLOG)->addLogRow("Failed to compress (gzip) the file ".basename($strTargetFilename)."", class_logger::$levelWarning);
             }
             catch(class_exception $objExc) {
                 $objExc->processException();
@@ -813,8 +814,10 @@ class class_db {
             try {
                 if($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename))
                     $strFilename = substr($strFilename, 0, strlen($strFilename) - 3);
-                else
+                else {
+                    class_logger::getInstance(class_logger::DBLOG)->addLogRow("Failed to decompress (gzip) the file ".basename($strFilename)."", class_logger::$levelWarning);
                     return false;
+                }
             }
             catch(class_exception $objExc) {
                 $objExc->processException();

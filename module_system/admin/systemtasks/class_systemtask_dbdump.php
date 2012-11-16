@@ -19,11 +19,11 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
         "stats_data", "stats_ip2country", "cache"
     );
 
-	/**
-	 * contructor to call the base constructor
-	 */
-	public function __construct() {
-		parent::__construct();
+    /**
+     * contructor to call the base constructor
+     */
+    public function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -39,7 +39,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
      * @return string
      */
     public function getStrInternalTaskName() {
-    	return "dbdump";
+        return "dbdump";
     }
 
     /**
@@ -47,7 +47,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getLang("systemtask_dbexport_name");
+        return $this->getLang("systemtask_dbexport_name");
     }
 
     /**
@@ -60,7 +60,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
         if($this->getParam("excludeTables") == "1")
             $arrToExclude = $this->arrTablesToExlucde;
 
-    	if(class_carrier::getInstance()->getObjDB()->dumpDb($arrToExclude))
+        if(class_carrier::getInstance()->getObjDB()->dumpDb($arrToExclude))
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_success"));
         else
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_error"));
@@ -73,8 +73,8 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     public function getAdminForm() {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formTextRow($this->getLang("systemtask_dbexport_exclude_intro"));
-        $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes")), $this->getLang("systemtask_dbexport_excludetitle") );
-    	return $strReturn;
+        $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes")), $this->getLang("systemtask_dbexport_excludetitle"));
+        return $strReturn;
     }
 
     /**

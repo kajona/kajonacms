@@ -326,28 +326,15 @@ class class_module_system_common extends class_model implements interface_model 
 		$intSizeIndex = 0;
 		//Bestimmen der Datenbankgroesse
 		switch($this->objConfig->getConfig("dbdriver")) {
-		case "mysql":
-			foreach($arrTables as $arrTable) {
-				$intNumber++;
-				$intSizeData += $arrTable["Data_length"];
-				$intSizeIndex += $arrTable["Index_length"];
-			}
-			$arrInfo = $this->objDB->getDbInfo();
-			$arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
-			$arrReturn["datenbankserver"] = $arrInfo["dbserver"];
-			$arrReturn["datenbankclient"] = $arrInfo["dbclient"];
-			$arrReturn["datenbankverbindung"] = $arrInfo["dbconnection"];
-			$arrReturn["anzahltabellen"] = $intNumber;
-			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
-			$arrReturn["groessedaten"] = bytesToString($intSizeData);
-			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
-			break;
 
 		case "mysqli":
+        case "mysql":
 			foreach($arrTables as $arrTable) {
 				$intNumber++;
-				$intSizeData += $arrTable["Data_length"];
-				$intSizeIndex += $arrTable["Index_length"];
+                if(isset($arrTable["Data_length"]))
+                    $intSizeData += $arrTable["Data_length"];
+                if(isset($arrTable["Index_length"]))
+                    $intSizeIndex += $arrTable["Index_length"];
 			}
 			$arrInfo = $this->objDB->getDbInfo();
 			$arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
@@ -357,7 +344,6 @@ class class_module_system_common extends class_model implements interface_model 
 			$arrReturn["anzahltabellen"] = $intNumber;
 			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
 			$arrReturn["groessedaten"] = bytesToString($intSizeData);
-			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 
 		case "postgres":
@@ -374,7 +360,6 @@ class class_module_system_common extends class_model implements interface_model 
 			$arrReturn["anzahltabellen"] = $intNumber;
 			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
 			$arrReturn["groessedaten"] = bytesToString($intSizeData);
-			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 
 		default:
