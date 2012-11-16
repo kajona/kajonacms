@@ -75,10 +75,13 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
                 $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_") + 1, (uniStrpos($strOneFile, ".") - uniStrrpos($strOneFile, "_")));
 
             if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
-                $arrOptions[$strOneFile] = $strOneFile." (".timeToString($strTimestamp)." - ".bytesToString($arrDetails["filesize"]).")";
-            else
-                $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")";
+                $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")"
+                                ."<br />".$this->getLang("systemtask_dbimport_datefilename")." ".timeToString($strTimestamp)
+                                ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);
 
+            else
+                $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")"
+                                ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);
         }
 
         $strReturn .= $this->objToolkit->formInputRadiogroup("dbImportFile", $arrOptions, $this->getLang("systemtask_dbimport_file"));

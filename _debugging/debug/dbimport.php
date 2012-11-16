@@ -36,25 +36,39 @@ else {
     if($objFilesystem->isWritable("/project/dbdumps")) {
         echo "Searching dbdumps available...\n";
 
-        $arrFiles = $objFilesystem->getFilelist(_projectpath_."dbdumps/", array(".zip", ".gz", ".sql"));
+        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".zip", ".gz", ".sql"));
         echo "Found ".count($arrFiles)." dump(s)\n\n";
 
         echo "<form method='post'>";
         echo "Dump to import:\n";
-        echo "<select name='dumpname' type='dropdown'>";
+        
+        $arrImportfileData = array();
         foreach ($arrFiles as $strOneFile) {
-            $arrDetails = $objFilesystem->getFileDetails(_projectpath_."dbdumps/".$strOneFile);
+            $strFileInfo ="";
+            $arrDetails = $objFilesystem->getFileDetails(_projectpath_."/dbdumps/".$strOneFile);
 
             $strTimestamp = "";
             if(uniStrpos($strOneFile, "_") !== false)
                 $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_")+1, (uniStrpos($strOneFile, ".")-uniStrrpos($strOneFile, "_")));
 
+            
             if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
-                echo "<option id='".$strOneFile."' value='".$strOneFile."'>".$strOneFile." (".timeToString($strTimestamp)." - ".bytesToString($arrDetails["filesize"]).")</option>";
+                //if the timestamp is the last part of the filename, we can use $strTimestamp
+                $strFileInfo = $strOneFile
+                    ." (".bytesToString($arrDetails['filesize']).")"
+                    ."\nTimestamp according to file name: ".timeToString($strTimestamp)
+                    ."\nTimestamp according to file info: ".timeToString($arrDetails['filechange']);
             else
-                echo "<option id='".$strOneFile."' value='".$strOneFile."'>".$strOneFile." (".bytesToString($arrDetails["filesize"]).")</option>";
+                $strFileInfo = $strOneFile
+                    ." (".bytesToString($arrDetails['filesize']).")"
+                    ."\nTimestamp according to file info: ".timeToString($arrDetails['filechange']);
+            
+            $arrImportfileData[$strOneFile] = $strFileInfo;            
         }
-        echo "</select>";
+        
+        $objToolkit = $objCarrier->getObjToolkit("admin");
+        echo $objToolkit->formInputRadiogroup("dumpname", $arrImportfileData, "","", "class");
+         
         echo "<input type='hidden' name='doimport' value='1' />";
         echo "<input type='submit' value='import' />";
         echo "</form>";
