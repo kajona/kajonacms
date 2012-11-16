@@ -113,5 +113,45 @@ class class_test_databasePrepared extends class_testbase {
 
     }
 
+
+
+    public function testFloatHandling() {
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        echo "testing float handling...\n";
+
+        echo "\tcreating a new table...\n";
+
+        $arrFields = array();
+        $arrFields["temp_id"] = array("char20", false);
+        $arrFields["temp_long"] = array("long", true);
+        $arrFields["temp_double"] = array("double", true);
+
+        $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
+
+
+
+        $strQuery = "INSERT INTO "._dbprefix_."temp_autotest
+            (temp_id, temp_long, temp_double) VALUES (?, ?, ?)";
+
+        $this->assertTrue($objDB->_pQuery($strQuery, array("id1", 123456, 1.7)), "testTx insert");
+        $this->assertTrue($objDB->_pQuery($strQuery, array("id2", "123456", "1.7")), "testTx insert");
+
+        $arrRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_id = ?", array("id1"));
+
+        $this->assertEquals($arrRow["temp_long"], 123456);
+        $this->assertEquals($arrRow["temp_double"], 1.7);
+
+        $arrRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_id = ?", array("id2"));
+
+        $this->assertEquals($arrRow["temp_long"], 123456);
+        $this->assertEquals($arrRow["temp_double"], 1.7);
+
+        $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
+        $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
+
+        echo "\tdeleting table\n";
+    }
 }
 
