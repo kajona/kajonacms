@@ -28,7 +28,7 @@ Selenium.prototype.doErrorCheckOnPage = function() {
 	Assert.notMatches("STB: Check for PHP Error Messages", "regexpi:warning:|notice:|parse error|fatal" , allText);
 	LOG.info("Check for missing lang entry...");	
 	Assert.notMatches("STB: Check for missing lang entry", "regexp:![a-zA-Z0-9_-]+!" , allText);
-}
+};
 
 
 
@@ -55,3 +55,4 @@ Selenium.prototype.assertTextPresentCount = function(expectedText, count) {
         Assert.fail("'" + expectedText + "' count doesn't match. Found " + allText.match(pattern).length + " matches");
     }
 };
+
