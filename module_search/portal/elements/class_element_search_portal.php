@@ -23,22 +23,22 @@ class class_element_search_portal extends class_element_portal implements interf
         parent::__construct($objElementData);
         $this->setArrModuleEntry("table", _dbprefix_."element_search");
         $this->setStrCacheAddon(getPost("searchterm").getGet("searchterm"));
-	}
+    }
 
     /**
      * Loads the search-class and passes control
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
-		//Load the data
-		$objSearchModule = class_module_system_module::getModuleByName("search");
-		if($objSearchModule != null) {
-    		$objSearch = $objSearchModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+    public function loadData() {
+        $strReturn = "";
+        //Load the data
+        $objSearchModule = class_module_system_module::getModuleByName("search");
+        if($objSearchModule != null) {
+            $objSearch = $objSearchModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objSearch->action();
-		}
-		return $strReturn;
-	}
+        }
+        return $strReturn;
+    }
 
 }

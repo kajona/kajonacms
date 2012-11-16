@@ -2,13 +2,13 @@
 
 <!-- available placeholders: action, search_term -->
 <search_form>
-    <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8">
+    <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8" onsubmit="return false;">
         <input type="text" name="searchterm" id="resultSearchtermSmall" value="%%search_term%%"
                onkeyup="KAJONA.portal.searchSmall.queryBackend();"
                onblur="window.setTimeout( function() { $('#searchResultSmall').css('display', 'none');}, 200)" autocomplete="off" />
     </form>
 
-    <div id="searchResultSmall"></div>
+    <div id="searchResultSmall" ></div>
     <div id="resultSetHeaderSmall" style="display: none;">[lang,hitlist_text1,search] <span id="spanSearchtermSmall"></span> [lang,hitlist_text2,search] <span id="spanSearchamountSmall"></span> [lang,hitlist_text3,search]:</div>
 
 
@@ -34,7 +34,7 @@
 
                 searchRunning = true;
                 KAJONA.portal.searchSmall.strLastQuery = strCurrentQuery;
-                $('#searchResultSmall').html("<div style='height: 50px; background-image: url(_webpath_/templates/default/pics/default/loading.gif); background-repeat: no-repeat; background-position: center;'></div>");
+                $('#searchResultSmall').html("<div style='height: 50px; width: 50px; background-image: url(_webpath_/templates/default/pics/default/loading.gif); background-repeat: no-repeat; background-position: center;'></div>");
 
                 $.post(post_target, post_data, function(data, textStatus) {
 
@@ -62,7 +62,7 @@
 
     <!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
 <search_hitlist>
-<div id="plainListSmall" class="searchHitList">
+<div id="plainListSmall" class="searchHitList" style="display: none;">
     <ul>%%hitlist%%</ul>
     <div align="center">%%link_back%%&nbsp;&nbsp;%%link_overview%%&nbsp;&nbsp;%%link_forward%%</div>
 </div>
