@@ -28,7 +28,7 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @var bool
      * @tableColumn message_read
      */
-    private $bitRead = false;
+    private $bitRead = 0;
 
     /**
      * @var string

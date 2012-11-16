@@ -12,7 +12,7 @@
  *
  * @package module_news
  */
-class class_module_news_search_portal implements interface_search_plugin  {
+class class_module_news_search_portal implements interface_search_plugin {
 
     private $strSearchterm;
     /**
@@ -38,10 +38,9 @@ class class_module_news_search_portal implements interface_search_plugin  {
 
 
     /**
-	 * searches the news for the given string
-	 *
-	 */
-	private function searchNews() {
+     * searches the news for the given string
+     */
+    private function searchNews() {
 
         $arrWhere = array(
             "news_image LIKE ?",
@@ -56,10 +55,10 @@ class class_module_news_search_portal implements interface_search_plugin  {
             "%".$this->strSearchterm."%"
         );
 
-        $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
+        $strWhere = "( ".implode(" OR ", $arrWhere)." ) ";
 
         //Query bauen
-        $strQuery ="SELECT system_id
+        $strQuery = "SELECT system_id
                       FROM "._dbprefix_."news,
                            "._dbprefix_."system
                      WHERE ".$strWhere."
@@ -89,7 +88,7 @@ class class_module_news_search_portal implements interface_search_plugin  {
 
                     if(isset($this->arrHits[$objNews->getSystemid().$objDetails->getSystemid()])) {
                         $objResult = $this->arrHits[$objNews->getSystemid().$objDetails->getSystemid()];
-                        $objResult->setIntHits($objResult->getIntHits()+1);
+                        $objResult->setIntHits($objResult->getIntHits() + 1);
                     }
                     else {
 
@@ -107,14 +106,13 @@ class class_module_news_search_portal implements interface_search_plugin  {
                 }
             }
         }
-	}
-
+    }
 
 
     private function getElementData(class_module_news_news $objNews) {
         //search a news-details page
 
-        $strQuery =  "SELECT news_detailspage
+        $strQuery = "SELECT news_detailspage
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,
                             "._dbprefix_."news,
@@ -124,7 +122,7 @@ class class_module_news_search_portal implements interface_search_plugin  {
                       WHERE news_id = ?
                         AND content_id = page_element_id
                         AND content_id = system_id
-                        AND ( news_category = 0 OR (
+                        AND ( news_category = '0' OR (
                                 news_category = newsmem_category
                                 AND newsmem_news = news_id
                            )
@@ -132,7 +130,7 @@ class class_module_news_search_portal implements interface_search_plugin  {
                         AND system_prev_id = page_id
                         AND system_status = 1
                         AND news_view = 0
-                        AND page_element_ph_language = ? " ;
+                        AND page_element_ph_language = ? ";
 
         $objLanguages = new class_module_languages_language();
 
@@ -140,6 +138,5 @@ class class_module_news_search_portal implements interface_search_plugin  {
 
         return $arrRows;
     }
-
 
 }

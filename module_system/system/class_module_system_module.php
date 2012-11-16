@@ -52,19 +52,19 @@ class class_module_system_module extends class_model implements interface_model,
     private $strVersion = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn module_date
      */
     private $intDate = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn module_navigation
      */
     private $intNavigation = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn module_nr
      */
     private $intNr = "";

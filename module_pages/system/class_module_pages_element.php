@@ -44,7 +44,7 @@ class class_module_pages_element extends class_model implements interface_model,
     private $strClassAdmin = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn element_repeat
      *
      * @fieldType yesno
@@ -52,7 +52,7 @@ class class_module_pages_element extends class_model implements interface_model,
     private $intRepeat = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn element_cachetime
      *
      * @fieldMandatory

@@ -121,7 +121,21 @@ class class_module_pages_elementsearch_portal implements interface_search_plugin
                     if(!isset($this->arrTables[$strTable]))
                         $this->arrTables[$strTable] = array();
 
+                    $arrTableInfo = $this->objDB->getColumnsOfTable($strTable);
+
                     foreach($arrColumns as $strOneColumn) {
+
+                        $bitSkip = false;
+                        foreach($arrTableInfo as $arrOneConfig) {
+                            if($arrOneConfig["columnName"] == $strOneColumn && uniStrpos("int", $arrOneConfig["columnType"]) !== false) {
+                                $bitSkip = true;
+                                break;
+                            }
+                        }
+
+                        if($bitSkip)
+                            continue;
+
                         if(!in_array($strOneColumn, $this->arrTables[$strTable]))
                             $this->arrTables[$strTable][] = $strOneColumn;
                     }

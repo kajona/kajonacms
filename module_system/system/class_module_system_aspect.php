@@ -17,15 +17,13 @@
  * @package module_system
  * @since 3.4
  * @author sidler@mulchprod.de
- *
  * @targetTable aspects.aspect_id
  */
-class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable  {
+class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn aspect_name
-     *
      * @fieldType text
      * @fieldMandatory
      */
@@ -34,11 +32,10 @@ class class_module_system_aspect extends class_model implements interface_model,
     /**
      * @var bool
      * @tableColumn aspect_default
-     *
      * @fieldType yesno
      * @fieldMandatory
      */
-    private $bitDefault = false;
+    private $bitDefault = 0;
 
     private static $STR_SESSION_ASPECT_KEY = "STR_SESSION_ASPECT_KEY";
     private static $STR_SESSION_ASPECT_OBJECT = "STR_SESSION_ASPECT_OBJECT";
@@ -52,12 +49,13 @@ class class_module_system_aspect extends class_model implements interface_model,
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -82,6 +80,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -90,6 +89,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -106,7 +106,7 @@ class class_module_system_aspect extends class_model implements interface_model,
         //if no other aspect exists, we have a new default aspect
         $arrObjAspects = class_module_system_aspect::getObjectList();
         if(count($arrObjAspects) == 0) {
-        	$this->setBitDefault(1);
+            $this->setBitDefault(1);
         }
 
         if($this->getBitDefault() == 1)
@@ -122,6 +122,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @param bool $bitJustActive
      * @param bool|int $intStart
      * @param bool|int $intEnd
+     *
      * @return class_module_system_aspect[]
      * @static
      */
@@ -129,7 +130,7 @@ class class_module_system_aspect extends class_model implements interface_model,
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
 		             WHERE system_id = aspect_id
-		             ".($bitJustActive ? "AND system_status != 0 ": "")."
+		             ".($bitJustActive ? "AND system_status != 0 " : "")."
 		             ORDER BY system_sort ASC, aspect_name ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
         $arrReturn = array();
@@ -144,13 +145,14 @@ class class_module_system_aspect extends class_model implements interface_model,
      * Returns the number of aspectss installed in the system
      *
      * @param bool $bitJustActive
+     *
      * @return int
      */
     public static function getObjectCount($bitJustActive = false) {
-    	$strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
                      WHERE system_id = aspect_id
-                     ".($bitJustActive ? "AND system_status != 0 ": "")."";
+                     ".($bitJustActive ? "AND system_status != 0 " : "")."";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
         return (int)$arrRow["COUNT(*)"];
@@ -179,17 +181,16 @@ class class_module_system_aspect extends class_model implements interface_model,
     protected function deleteObjectInternal() {
         parent::deleteObjectInternal();
 
-		//if we have just one aspect remaining, set this one as default
+        //if we have just one aspect remaining, set this one as default
         $arrObjAspects = class_module_system_aspect::getObjectList();
         if(count($arrObjAspects) == 1) {
-        	$objOneLanguage = $arrObjAspects[0];
-        	$objOneLanguage->setBitDefault(1);
-        	$objOneLanguage->updateObjectToDb();
+            $objOneLanguage = $arrObjAspects[0];
+            $objOneLanguage->setBitDefault(1);
+            $objOneLanguage->updateObjectToDb();
         }
 
         return true;
     }
-
 
 
     /**
@@ -226,6 +227,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * Returns an aspect by name, ignoring the status
      *
      * @param string $strName
+     *
      * @return class_module_system_aspect or null if not found
      */
     public static function getAspectByName($strName) {
@@ -298,7 +300,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @param string $strAspectId
      */
     public static function setCurrentAspectId($strAspectId) {
-        if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY) ) {
+        if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY)) {
             class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
         }
     }

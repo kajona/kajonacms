@@ -14,13 +14,12 @@
  * @package module_user
  * @author sidler@mulchprod.de
  */
-class class_module_user_group extends class_model implements interface_model, interface_admin_listable  {
+class class_module_user_group extends class_model implements interface_model, interface_admin_listable {
 
     private $strSubsystem = "kajona";
     private $strName = "";
 
     /**
-     *
      * @var interface_usersources_group
      */
     private $objSourceGroup;
@@ -35,12 +34,13 @@ class class_module_user_group extends class_model implements interface_model, in
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -60,6 +60,7 @@ class class_module_user_group extends class_model implements interface_model, in
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -68,6 +69,7 @@ class class_module_user_group extends class_model implements interface_model, in
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -94,10 +96,10 @@ class class_module_user_group extends class_model implements interface_model, in
 
     /**
      * Initialises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."user_group WHERE group_id=?";
+        $strQuery = "SELECT * FROM "._dbprefix_."user_group WHERE group_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
@@ -110,6 +112,7 @@ class class_module_user_group extends class_model implements interface_model, in
      * Updates the current object to the database
      *
      * @param bool $strPrevId
+     *
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -167,16 +170,16 @@ class class_module_user_group extends class_model implements interface_model, in
      * @return class_module_user_group[]
      * @static
      */
-	public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
-		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
+    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_user_group($arrOneId["group_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId)
+            $arrReturn[] = new class_module_user_group($arrOneId["group_id"]);
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
     /**
      * Fetches the number of groups available
@@ -193,6 +196,7 @@ class class_module_user_group extends class_model implements interface_model, in
 
     /**
      * Returns the number of members of the current group.
+     *
      * @return int
      */
     public function getNumberOfMembers() {
@@ -200,13 +204,13 @@ class class_module_user_group extends class_model implements interface_model, in
         return $this->objSourceGroup->getNumberOfMembers();
     }
 
-	/**
-	 * Deletes the given group
-	 *
-	 * @return bool
-	 */
-	public function deleteObject() {
-	    class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
+    /**
+     * Deletes the given group
+     *
+     * @return bool
+     */
+    public function deleteObject() {
+        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
 
         //Delete related group
         $this->getObjSourceGroup()->deleteGroup();
@@ -215,7 +219,7 @@ class class_module_user_group extends class_model implements interface_model, in
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         return $bitReturn;
-	}
+    }
 
     /**
      * Loads the mapped source-object
@@ -229,14 +233,15 @@ class class_module_user_group extends class_model implements interface_model, in
 
     /**
      * Loads a group by its name, returns null of not found
-     * @param string $strName
-     * @return class_module_user_group
      *
+     * @param string $strName
+     *
+     * @return class_module_user_group
      */
     public static function getGroupByName($strName) {
-		$objFactory = new class_module_user_sourcefactory();
+        $objFactory = new class_module_user_sourcefactory();
         return $objFactory->getGroupByName($strName);
-	}
+    }
 
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
@@ -249,7 +254,6 @@ class class_module_user_group extends class_model implements interface_model, in
     }
 
     /**
-     *
      * @return interface_usersources_group
      */
     public function getObjSourceGroup() {
@@ -268,6 +272,5 @@ class class_module_user_group extends class_model implements interface_model, in
     public function setStrName($strName) {
         $this->strName = $strName;
     }
-
 
 }

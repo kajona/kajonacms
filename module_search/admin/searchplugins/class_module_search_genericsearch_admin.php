@@ -78,7 +78,13 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
             $arrParams = array();
 
             $arrProperties = $objReflection->getPropertiesWithAnnotation("@tableColumn");
-            foreach($arrProperties as $strColumn) {
+            foreach($arrProperties as $strProperty => $strColumn) {
+
+                //is it a string-based field?
+                $strTypeAnnotation = $objReflection->getAnnotationValueForProperty($strProperty, "@var");
+
+                if($strTypeAnnotation == "int" || $strTypeAnnotation == "long" || $strTypeAnnotation == "bool")
+                    continue;
 
                 $arrColumn = explode(".", $strColumn);
                 if(count($arrColumn) == 2)

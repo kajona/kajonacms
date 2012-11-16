@@ -33,7 +33,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     private $strName;
 
     /**
-     * @var
+     * @var int
      * @tableColumn tags_tag_private
      *
      * @fieldType yesno

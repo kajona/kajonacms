@@ -38,13 +38,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
     private $strAffectedSystemid = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn workflows.workflows_state
      */
     private $intState = "1";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn workflows.workflows_runs
      */
     private $intRuns = "0";
@@ -56,13 +56,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
     private $strResponsible = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn workflows.workflows_int1
      */
     private $intInt1 = null;
 
     /**
-     * @var string
+     * @var int
      * @tableColumn workflows.workflows_int2
      */
     private $intInt2 = null;
@@ -80,13 +80,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
     private $strChar2 = "";
 
     /**
-     * @var string
+     * @var int
      * @tableColumn workflows.workflows_date1
      */
     private $longDate1 = 0;
 
     /**
-     * @var string
+     * @var int
      * @tableColumn workflows.workflows_date2
      */
     private $longDate2 = 0;
