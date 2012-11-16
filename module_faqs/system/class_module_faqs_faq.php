@@ -231,16 +231,14 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 							     " . _dbprefix_ . "faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
-							  AND faqsmem_category = ?
-							ORDER BY faqs_question ASC";
+							  AND faqsmem_category = ?";
             $arrParams[] = $strFilter;
         }
         else {
             $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "system
-							WHERE system_id = faqs_id
-							ORDER BY faqs_question ASC";
+							WHERE system_id = faqs_id";
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
