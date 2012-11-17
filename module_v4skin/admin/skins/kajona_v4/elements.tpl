@@ -351,7 +351,7 @@ Multiselect
 
 Radiogroup
 <input_radiogroup>
-    <div class="control-group">
+    <div class="control-group %%class%%">
         <label class="control-label">%%title%%</label>
         <div class="controls">
             %%radios%%
@@ -362,14 +362,14 @@ Radiogroup
 
 <input_radiogroup_row>
     <label class="radio">
-        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" %%disabled%%>
+        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%disabled%%>
         %%value%%
     </label>
 </input_radiogroup_row>
 
 <input_radiogroup_row_selected>
     <label class="radio">
-        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" checked %%disabled%%>
+        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" checked %%disabled%%>
         %%value%%
     </label>
 </input_radiogroup_row_selected>

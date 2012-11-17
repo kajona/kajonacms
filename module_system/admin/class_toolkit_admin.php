@@ -679,6 +679,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["radios"] = $strOptions;
+        $arrTemplate["class"] = $strClass;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
