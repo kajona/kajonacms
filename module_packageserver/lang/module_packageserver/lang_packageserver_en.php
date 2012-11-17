@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["_packageserver_repo_id_"]         = "Package-Repository:";
-$lang["_packageserver_repo_id_hint"]         = "By default, the package-server searches all repositories (improved performance). If required, the search may be limited to a single repository.";
+$lang["_packageserver_repo_id_hint"]     = "By default, the package-server searches all repositories of the mediamanager (improved performance). If required, the search may be limited to a single repository. Specify the system-id of the repository here.";
 $lang["actionList"]                      = "Packages";
 $lang["actionLogs"]                      = "Logfile";
 $lang["actionShowInfo"]                  = "Detailed-View";

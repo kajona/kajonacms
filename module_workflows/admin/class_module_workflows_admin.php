@@ -501,7 +501,9 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $objHandler = new class_module_workflows_handler($this->getSystemid());
         $strReturn .= $this->objToolkit->formHeadline($objHandler->getObjInstanceOfHandler()->getStrName() . " (" . $objHandler->getStrHandlerClass() . ")");
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "startInstance"));
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("instance_systemid_hint"));
         $strReturn .= $this->objToolkit->formInputText("instance_systemid", $this->getLang("instance_systemid"));
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("instance_responsible_hint"));
         $strReturn .= $this->objToolkit->formInputUserSelector("instance_responsible", $this->getLang("instance_responsible"));
         $strReturn .= $this->objToolkit->formInputHidden("instance_responsible_id", "");
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
