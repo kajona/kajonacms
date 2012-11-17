@@ -942,6 +942,7 @@ label {
 /* ADMIN TABLE SETUP */
 
 .table {
+
     td, th {
         padding: 6px;
     }
@@ -951,6 +952,8 @@ label {
     }
 
     &.admintable {
+
+        empty-cells:hide;
 
         td.checkbox {
             padding: 0;
@@ -962,10 +965,15 @@ label {
 			}
         }
 
-        td.image img {
-          width: 22px;
-          height: 22px;
-          max-width: none;
+        td.image {
+
+            width: 22px;
+
+            img {
+              width: 22px;
+              height: 22px;
+              max-width: none;
+            }
         }
 
         td.listsorthandle, td.treedrag {

@@ -34,7 +34,7 @@ $lang["_system_release_time_"]           = "Времетраене на сеси
 $lang["_system_release_time_hint"]       = "След изтичането на времето сесията става невалидна:";
 $lang["_system_use_dbcache_"]            = "Кеш база данни:";
 $lang["_system_use_dbcache_hint"]        = "Активира/деактивира кеш търсене в база данни.";
-$lang["about_part1"]                     = "<h2>Kajona V3 - Система за контрол на съдържанието с отворен код</h2>Kajona V 3.4.1, Кодово име \"connectivity\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />За повече информация или предложения, моля посетете нашия уебсайт.<br />Допълнителна помощ може да намерите в нашия  <a href=\"http://board.kajona.de/\" target=\"_blank\">форум</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V4 - Система за контрол на съдържанието с отворен код</h2>Kajona V 3.4.9 (4.0 Beta), Кодово име \"revolition\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />За повече информация или предложения, моля посетете нашия уебсайт.<br />Допълнителна помощ може да намерите в нашия  <a href=\"http://board.kajona.de/\" target=\"_blank\">форум</a>.";
 $lang["about_part2_header"]              = "<h2>Главни разработчици</h2>";
 $lang["about_part2a_header"]             = "<h2>Сътрудници / Разработчици</h2>";
 $lang["about_part2b_header"]             = "<h2>Преводи</h2>";
