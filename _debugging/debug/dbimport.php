@@ -66,7 +66,7 @@ else {
         }        
         
         foreach($arrImportfileData as $strFilename => $strFileInfo) {
-            echo "\n<input type='radio' name='dumpname' value='$strFilename' />".$strFileInfo;
+            echo "\n<input type='radio' name='dumpname' id='dumpname_".$strFilename."' value='$strFilename' /><label for='dumpname_".$strFilename."'>".$strFileInfo."</label>";
         } 
 
         echo "\n\n<input type='hidden' name='doimport' value='1' />";
@@ -77,7 +77,7 @@ else {
         echo "<span style='color: red;'>WARNING!!\n\nThe folder system/dbdumps is NOT writeable. DB dumps can NOT be imported! </span>\n\n";
 
 
-    echo "searching dbdumps available...\n";
+
 
 }
 
