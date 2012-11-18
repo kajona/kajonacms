@@ -25,14 +25,13 @@ if(issetPost("doimport")) {
     $objDb = $objCarrier->getObjDB();
     echo "importing ".$strFilename."\n";
     if($objDb->importDb($strFilename))
-        echo "import successfull.\n";
+        echo "\n<span style='color: green;font-weight:bold;'>import successfull.</span>\n";
     else
-        echo "import failed.\n";
+        echo "\n<span style='color: red;font-weight:bold;'>import failed!!</span>\n";
 }
 else {
 
     $objFilesystem = new class_filesystem();
-
     if($objFilesystem->isWritable("/project/dbdumps")) {
         echo "Searching dbdumps available...\n";
 
@@ -56,25 +55,26 @@ else {
                 //if the timestamp is the last part of the filename, we can use $strTimestamp
                 $strFileInfo = $strOneFile
                     ." (".bytesToString($arrDetails['filesize']).")"
-                    ."\nTimestamp according to file name: ".timeToString($strTimestamp)
-                    ."\nTimestamp according to file info: ".timeToString($arrDetails['filechange']);
+                    ."\n    Timestamp according to file name: ".timeToString($strTimestamp)
+                    ."\n    Timestamp according to file info: ".timeToString($arrDetails['filechange']);
             else
                 $strFileInfo = $strOneFile
                     ." (".bytesToString($arrDetails['filesize']).")"
-                    ."\nTimestamp according to file info: ".timeToString($arrDetails['filechange']);
+                    ."\n    Timestamp according to file info: ".timeToString($arrDetails['filechange']);
             
             $arrImportfileData[$strOneFile] = $strFileInfo;            
-        }
+        }        
         
-        $objToolkit = $objCarrier->getObjToolkit("admin");
-        echo $objToolkit->formInputRadiogroup("dumpname", $arrImportfileData, "","", "class");
-         
-        echo "<input type='hidden' name='doimport' value='1' />";
+        foreach($arrImportfileData as $strFilename => $strFileInfo) {
+            echo "\n<input type='radio' name='dumpname' value='$strFilename' />".$strFileInfo;
+        } 
+
+        echo "\n\n<input type='hidden' name='doimport' value='1' />";
         echo "<input type='submit' value='import' />";
         echo "</form>";
     }
     else
-        echo "<span style='color: red;'>WARNING!!\n\nThe system/dbdumps is NOT writeable. DB dumps can NOT be imported! </span>\n\n";
+        echo "<span style='color: red;'>WARNING!!\n\nThe folder system/dbdumps is NOT writeable. DB dumps can NOT be imported! </span>\n\n";
 
 
     echo "searching dbdumps available...\n";
