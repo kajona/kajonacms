@@ -508,3 +508,11 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
     padding: 1px 1px 0 1px;
 }
 
+/* V O T I N G S */
+.voting form input[type="radio"] {
+    width: 20px;
+}
+.voting form label {
+    width: auto;
+    text-align: left;
+}

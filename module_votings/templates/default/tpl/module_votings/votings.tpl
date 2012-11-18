@@ -11,9 +11,9 @@
 <!-- Template API: voting_systemid, voting_action, voting_answers-->
 <voting_voting>
     <form method="post" action="%%voting_action%%" id="voting_%%voting_systemid%%" class="votingForm">
-        <table width="80%">
+        <div>
             %%voting_answers%%
-        </table>
+        </div>
 
         <input type="hidden" name="systemid" value="%%voting_systemid%%" />
         <input type="submit" value="[lang,voting_submit,votings]" class="button" />
@@ -25,14 +25,10 @@
 
 <!-- Template API: voting_systemid, answer_systemid, answer_text-->
 <voting_voting_option>
-    <tr>
-        <td width="25">
-            <input type="radio" name="voting_%%voting_systemid%%" value="%%answer_systemid%%" id="option_%%answer_systemid%%"/>
-        </td>
-        <td align="left">
-            <label for="option_%%answer_systemid%%" data-kajona-editable="%%answer_systemid%%#strText#plain">%%answer_text%%</label>
-        </td>
-    </tr>
+    <div>
+        <input type="radio" name="voting_%%voting_systemid%%" value="%%answer_systemid%%" id="option_%%answer_systemid%%"/>
+        <label for="option_%%answer_systemid%%" data-kajona-editable="%%answer_systemid%%#strText#plain">%%answer_text%%</label>
+    </div>
 </voting_voting_option>
 
 
