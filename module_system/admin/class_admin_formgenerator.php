@@ -228,6 +228,10 @@ class class_admin_formgenerator {
         if(in_array($strStart, array("long")))
             $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 4));
 
+        $strStart = uniSubstr($strPropertyName, 0, 5);
+        if(in_array($strStart, array("float")))
+            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 5));
+
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
         if($strLabel !== null) {
             $objField->updateLabel($strLabel);
