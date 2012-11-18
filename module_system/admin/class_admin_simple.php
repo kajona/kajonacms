@@ -207,7 +207,7 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier)), $intI++);
         }
 
-        $arrMassActions = $this->getMassActionHandlers($strListIdentifier);
+        $arrMassActions = $this->getBatchActionHandlers($strListIdentifier);
 
         if(count($arrIterables) > 0) {
 
@@ -488,7 +488,7 @@ abstract class class_admin_simple extends class_admin {
      *
      * @return class_admin_batchaction[]
      */
-    protected function getMassActionHandlers($strListIdentifier) {
+    protected function getBatchActionHandlers($strListIdentifier) {
         return array();
     }
 

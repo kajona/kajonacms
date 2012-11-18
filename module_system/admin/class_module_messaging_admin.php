@@ -141,7 +141,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
     }
 
-    protected function getMassActionHandlers($strListIdentifier) {
+    protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = $this->getDefaultActionHandlers();
         $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mail.png"), getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
         return $arrDefault;

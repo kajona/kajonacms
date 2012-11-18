@@ -85,7 +85,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     }
 
 
-    protected function getMassActionHandlers($strListIdentifier) {
+    protected function getBatchActionHandlers($strListIdentifier) {
         if($strListIdentifier == class_module_pages_admin::STR_LIST_PAGES || $strListIdentifier == class_module_pages_admin::STR_LIST_ALLPAGES)
             return $this->getDefaultActionHandlers();
 

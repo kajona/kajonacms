@@ -128,11 +128,11 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
     }
 
-    protected function getMassActionHandlers($strListIdentifier) {
+    protected function getBatchActionHandlers($strListIdentifier) {
         if($strListIdentifier == class_module_faqs_admin::STR_FAQ_LIST) {
             return $this->getDefaultActionHandlers();
         }
-        return parent::getMassActionHandlers($strListIdentifier);
+        return parent::getBatchActionHandlers($strListIdentifier);
     }
 
 
