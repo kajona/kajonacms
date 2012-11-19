@@ -80,14 +80,14 @@
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phploc,phpunitFast,
-					    					buildFullZip, buildLightZip" />
+					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
 
     <target name="buildSqliteFull" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpcb,
-					    					buildFullZip, buildLightZip" />
+					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
     <target name="buildMysql" depends="
 		    								cleanFilesystem, init,
@@ -179,6 +179,49 @@
         <antcall target="cleanZipContent" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+            <fileset dir="${basedir}${tempPath}/../" />
+        </zip>
+    </target>
+
+    <!-- creates the full-zip including all modules and elements -->
+    <target name="buildAllInOneZip" depends="init" >
+        <delete dir="${basedir}${tempPath}"/>
+        <mkdir  dir="${basedir}${tempPath}"/>
+        <mkdir  dir="${basedir}${tempPath}/core"/>
+
+        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+                <exclude name=".svn"/>
+                <exclude name="element_flash/" />
+                <exclude name="element_maps/" />
+                <exclude name="element_userlist/" />
+                <exclude name="element_mediaplayer/" />
+                <exclude name="module_ldap/" />
+                <exclude name="module_packagserver/" />
+                <exclude name="module_pchart/" />
+                <exclude name="module_workflows/" />
+
+                <include name="element_*/**"/>
+                <include name="module_*/*/**"/>
+                <include name="template_*/*/**"/>
+                <!--<include name="_debugging/*/**"/>-->
+                <include name="*.php"/>
+
+            </fileset>
+
+        </copy>
+
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
+        </exec>
+
+        <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
+
+        <antcall target="cleanZipContent" />
+
+        <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
