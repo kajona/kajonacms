@@ -75,3 +75,5 @@ $lang["update_notification_intro"]       = "Für ein installiertes Paket ist ein
 $lang["update_notification_package"]     = "Betreffendes Paket:";
 $lang["update_notification_verav"]       = "Verfügbare Version:";
 $lang["update_notification_verinst"]     = "Installierte Version:";
+$lang["quickhelp_new"]                   = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
+$lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];

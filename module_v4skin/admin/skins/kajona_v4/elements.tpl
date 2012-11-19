@@ -1147,7 +1147,8 @@ The language switch surrounds the buttons
                 title: '%%title%%',
                 content: '%%text%%',
                 placement: 'bottom',
-                trigger: 'hover'
+                trigger: 'hover',
+                html: true
             }).css("cursor", "help");
         });
     </script>

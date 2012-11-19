@@ -417,7 +417,12 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
     protected function renderError($strLangName, $strLangModule = null) {
         $strError = $this->getLang($strLangName, $strLangModule);
-        $strError .= ' ' . getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
+        $arrHistory = explode("&", $this->getHistory(0));
+
+        if($this->getArrModule("template") == "/folderview.tpl")
+            $strError .= ' ' . getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
+        else
+            $strError .= ' ' . getLinkAdminRaw("" . $arrHistory[0] . "&" . $arrHistory[1], $this->getLang("commons_back"));
         return $this->objToolkit->warningBox($strError);
     }
 
@@ -516,7 +521,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         if($objForm == null)
             $objForm = $this->getPackAdminForm();
 
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "copyPack"));
+        $strReturn = $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "copyPack"));
+        return $strReturn;
     }
 
     private function getPackAdminForm() {
@@ -542,7 +548,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strPackName = $this->getParam("pack_name");
         $strPackName = createFilename($strPackName, true);
 
-        if(is_dir(_realpath_._templatepath_."/".$strPackName))
+        if($strPackName != "" && is_dir(_realpath_._templatepath_."/".$strPackName))
             $objForm->addValidationError("name", $this->getLang("pack_folder_existing"));
 
         if(!$objForm->validateForm())
