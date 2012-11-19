@@ -72,7 +72,7 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
 /**
  * Loads/Reloads the Kajona captcha image with the given element id
  *
- * @param {String} strImageId
+ * @param {String} strCaptchaId
  * @param {Number} intWidth
  */
 KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
@@ -94,7 +94,7 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
     if (document.getElementById(imgID) == undefined) {
         var objImg=document.createElement("img");
         objImg.setAttribute("id", imgID);
-        objImg.setAttribute("src", "image.php?image=kajonaCaptcha&maxWidth="+intWidth+"&reload="+timeCode);
+        objImg.setAttribute("src", KAJONA_WEBPATH+"/image.php?image=kajonaCaptcha&maxWidth="+intWidth+"&reload="+timeCode);
         document.getElementById(containerName).appendChild(objImg);
     } else {
         var objImg = document.getElementById(imgID);
