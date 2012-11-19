@@ -691,10 +691,11 @@ class class_installer_system extends class_installer_base implements interface_i
         ) {
 
             if(count($arrAspects) == 1 && $arrAspects[0]->getStrName() == "default")
-                $arrAspects[0]->deleteObject();
+                $objAspect = $arrAspects[0];
+            else
+                $objAspect = new class_module_system_aspect();
 
 
-            $objAspect = new class_module_system_aspect();
             $objAspect->setStrName("content");
             $objAspect->updateObjectToDb();
             $objAspect = new class_module_system_aspect();
@@ -713,6 +714,14 @@ class class_installer_system extends class_installer_base implements interface_i
             $objModule = class_module_system_module::getModuleByName("languages");
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
             $objModule->updateObjectToDb();
+        }
+
+
+        $strReturn .= "Updating default skin...\n";
+        $objSetting = class_module_system_setting::getConfigByName("_admin_skin_default_");
+        if($objSetting->getStrValue() == "kajona_v3") {
+            $objSetting->setStrValue("kajona_v4");
+            $objSetting->updateObjectToDb();
         }
 
 

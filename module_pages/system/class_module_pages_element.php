@@ -167,17 +167,6 @@ class class_module_pages_element extends class_model implements interface_model,
             return null;
     }
 
-    /**
-     * Deletes one element
-     * Overwrites the base-method, since there's no entry in the system-table
-     *
-     * @return bool
-     */
-    public function deleteObject() {
-        $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id=?";
-        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-    }
-
 
     /**
      * Factory method, creates an instance of the admin-element represented by this page-element.
