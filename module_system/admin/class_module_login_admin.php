@@ -15,6 +15,10 @@
  */
 class class_module_login_admin extends class_admin implements interface_admin {
 
+    const SESSION_REFERER = "LOGIN_SESSION_REFERER";
+    const SESSION_PARAMS = "LOGIN_SESSION_PARAMS";
+    const SESSION_LOAD_FROM_PARAMS = "LOGIN_SESSION_LOAD_FROM_PARAMS";
+
     public function __construct() {
 
         $this->setArrModuleEntry("modul", "login");
@@ -36,8 +40,11 @@ class class_module_login_admin extends class_admin implements interface_admin {
     protected function actionLogin() {
 
         //Save the requested URL
-        if($this->getParam("loginerror") == "")
-            $this->objSession->setSession("loginReferer", getServer("QUERY_STRING"));
+        if($this->getParam("loginerror") == "") {
+            //Store some of the last requests' data
+            $this->objSession->setSession(self::SESSION_REFERER, getServer("QUERY_STRING"));
+            $this->objSession->setSession(self::SESSION_PARAMS, getArrayPost());
+        }
 
         //Loading a small login-form
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
@@ -169,8 +176,11 @@ class class_module_login_admin extends class_admin implements interface_admin {
             $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
             $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
             //any url to redirect?
-            if($this->objSession->getSession("loginReferer") != "")
-                class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession("loginReferer"));
+            if($this->objSession->getSession(self::SESSION_REFERER) != "") {
+                class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));
+                $this->objSession->sessionUnset(self::SESSION_REFERER);
+                $this->objSession->setSession(self::SESSION_LOAD_FROM_PARAMS, "true");
+            }
             else
                 class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
 
