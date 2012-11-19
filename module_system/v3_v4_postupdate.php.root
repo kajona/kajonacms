@@ -33,7 +33,8 @@ class class_v3_v4_postupdate {
 
         echo "\n";
         echo "Please make sure to update your global_includes.php (/project/portal/global_includes.php) file to the latest version.\n";
-        echo "If you didn't modify the file in your v3 installation, you are safe to delete the file at /project/portal/global_includes.php.\n\n";
+        echo "If you didn't modify the file in your v3 installation, you are safe to delete the file at /project/portal/global_includes.php.\n";
+        echo "More information can be found at <a href='http://www.kajona.de/update_342_to_40.html'>http://www.kajona.de/update_342_to_40.html</a>\n\n";
 
         echo "Checking installation state of mediamanager...\n";
         if(!in_array(_dbprefix_."mediamanager_repo", $this->objDB->getTables())) {
