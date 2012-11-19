@@ -1624,14 +1624,14 @@ It containes a list of aspects and provides the possibility to switch the differ
 -- MENU -------------------------------------------------------------------------------------------------
 <contextmenu_wrapper>
     <div class="dropdown-menu generalContextMenu" role="menu">
-        <ul >
+        <ul>
             %%entries%%
         </ul>
     </div>
 </contextmenu_wrapper>
 
 <contextmenu_entry>
-    <li ><a href="#" onclick="%%elementAction%%">%%elementName%%</a></li>
+    <li ><a href="%%elementLink%%">%%elementName%%</a></li>
 </contextmenu_entry>
 
 <contextmenu_divider_entry>
@@ -1640,7 +1640,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 
 <contextmenu_submenucontainer_entry>
     <li class="dropdown-submenu" >
-        <a href="#" onclick="%%elementAction%%">%%elementName%%</a>
+        <a href="%%elementLink%%">%%elementName%%</a>
         <ul class="dropdown-menu">
             %%entries%%
         </ul>

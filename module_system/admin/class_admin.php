@@ -525,7 +525,6 @@ abstract class class_admin {
             $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
         }
         $this->arrOutput["login"] = $this->getOutputLogin();
-        $this->arrOutput["tagSelector"] = $this->objToolkit->getAdminskinTagSelector();
         $this->arrOutput["quickhelp"] = $this->getQuickHelp();
         $this->arrOutput["languageswitch"] = (class_module_system_module::getModuleByName("languages") != null ? class_module_system_module::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $this->arrOutput["module_id"] = $this->arrModule["moduleId"];

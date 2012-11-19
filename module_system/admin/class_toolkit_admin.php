@@ -2068,36 +2068,6 @@ class class_toolkit_admin extends class_toolkit {
 
 
     /**
-     * Generates the ui-elements to access the users favorite tags
-     * @return string
-     * @todo: load favorites by ajax
-     */
-    public function getAdminskinTagSelector() {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminskin_tagselector");
-        //adminskin_tagselector
-        $strMenuId = generateSystemid();
-        $arrTemplate = array();
-        $arrTemplate["icon_tooltip"] = class_carrier::getInstance()->getObjLang()->getLang("adminskin_tooltip", "tags");
-
-        $arrMenuEntries = array();
-        $arrFavorites = array();
-        if(class_module_system_module::getModuleByName("tags") !== null)
-            $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
-
-        foreach($arrFavorites as $objOneFavorite)
-            $arrMenuEntries[] = array(
-                "name" => $objOneFavorite->getStrDisplayName(),
-                "onclick" => "location.href='".getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)."'"
-            );
-
-        $arrTemplate["favorites_menu"] = $this->registerMenu($strMenuId, $arrMenuEntries);
-
-
-        $arrTemplate["favorites_menu_id"] = $strMenuId;
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
-    }
-
-    /**
      * Renders the list of aspects available
      * @param $strLastModule
      * @param $strLastAction
@@ -2296,7 +2266,7 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Creates the markup to render a js-based contex-menu.
      * Each entry is an array with the keys
-     *   array("name" => "xx", "onclick" => "xx", "submenu" => array());
+     *   array("name" => "xx", "link" => "xx", "submenu" => array());
      * The support of submenus depends on the current implementation, so may not be present everywhere!
      * A menu may be shown by calling
      * KAJONA.admin.contextMenu.showElementMenu('$strIdentifier', this)
@@ -2316,9 +2286,13 @@ class class_toolkit_admin extends class_toolkit {
         foreach($arrEntries as $arrOneEntry) {
             $strCurTemplate = $strTemplateEntryID;
 
+            if(!isset($arrOneEntry["link"]))
+                $arrOneEntry["link"] = "";
+
             $arrTemplate = array(
                 "elementName" => $arrOneEntry["name"],
                 "elementAction" => $arrOneEntry["onclick"],
+                "elementLink" => $arrOneEntry["link"],
                 "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"])
             );
 
@@ -2326,6 +2300,9 @@ class class_toolkit_admin extends class_toolkit {
                 $strSubmenu = "";
                 foreach($arrOneEntry["submenu"] as $arrOneSubmenu) {
                     $strCurSubTemplate = $strTemplateEntryID;
+
+                    if(!isset($arrOneSubmenu["link"]))
+                        $arrOneSubmenu["link"] = "";
 
                     if($arrOneSubmenu["name"] == "") {
                         $arrSubTemplate = array();
@@ -2335,6 +2312,7 @@ class class_toolkit_admin extends class_toolkit {
                         $arrSubTemplate = array(
                             "elementName" => $arrOneSubmenu["name"],
                             "elementAction" => $arrOneSubmenu["onclick"],
+                            "elementLink" => $arrOneSubmenu["link"],
                             "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneSubmenu["onclick"])
                         );
                     }

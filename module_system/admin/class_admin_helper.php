@@ -35,7 +35,8 @@ class class_admin_helper {
         foreach($arrModules as $arrOneModule) {
             $arrCurMenuEntry = array(
                 "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
-                "onclick" => "location.href='".getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'"
+                "onclick" => "location.href='".getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
+                "link" => "#"
             );
 
             //fetch the submenu entries
@@ -49,7 +50,8 @@ class class_admin_helper {
 
                         $arrActionMenuEntries[] = array(
                             "name" => $arrLink["name"],
-                            "onclick" => "location.href='".$arrLink["href"]."'"
+                            "onclick" => "location.href='".$arrLink["href"]."'",
+                            "link" => $arrLink["href"]
                         );
                     }
                     else {
