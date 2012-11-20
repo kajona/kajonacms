@@ -240,7 +240,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 
     /**
-     * Loads all Elements on the given page known by the system, so db-sided, not template-sided
+     * Loads all Elements on the given page known by the system, so db-sided, not template-sided.
+     * Returns the list of object
      *
      * @param string $strPageId
      * @param bool $bitJustActive
@@ -250,6 +251,29 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
 
+         //since theres the time as an parameter, theres no need for querying the cache...
+		$arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
+
+		$arrReturn = array();
+		foreach($arrIds as $arrOneId)
+		    $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
+
+		return $arrReturn;
+    }
+
+    /**
+     * Loads the list of elements on a single page.
+     * Returns an array of plain data, not the corresponding objects.
+     * In most cases getElementsOnPage is the right way to go.
+     *
+     * @see class_module_pages_pageeelemtn::getElementsOnPage()
+     * @param $strPageId
+     * @param bool $bitJustActive
+     * @param string $strLanguage
+     *
+     * @return array
+     */
+    public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
         //Calculate the current day as a time-stamp. This improves database-caches e.g. the kajona or mysql-query-cache.
         $objDate = new class_date();
         $objDate->setIntMin(0, true);
@@ -271,33 +295,26 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $arrParams[] = $longToday;
         }
 
-        $strQuery = "SELECT system_id
-						 FROM "._dbprefix_."page_element,
-						      "._dbprefix_."element,
-						      "._dbprefix_."system
-						      LEFT JOIN "._dbprefix_."system_date
-						        ON (system_id = system_date_id)
-						 WHERE system_prev_id= ?
-						   AND page_element_ph_element = element_name
-						   AND system_id = page_element_id
-						   AND page_element_ph_language = ?
-						   " . $strAnd."
-						 ORDER BY page_element_ph_placeholder ASC,
-						 		system_sort ASC";
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."page_element,
+                            "._dbprefix_."element,
+                            "._dbprefix_."system
+                  LEFT JOIN "._dbprefix_."system_date
+                         ON (system_id = system_date_id)
+                      WHERE system_prev_id= ?
+                        AND page_element_ph_element = element_name
+                        AND system_id = page_element_id
+                        AND page_element_ph_language = ?
+                       " . $strAnd."
+                  ORDER BY page_element_ph_placeholder ASC,
+                            system_sort ASC";
 
-        //since theres the time as an parameter, theres no need for querying the cache...
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, null, null, false);
-
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
-
-		return $arrReturn;
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
     }
 
 
 
-	/**
+    /**
      * Loads all Elements on the given ignoring both, status and language
      *
      * @param string $strPageId
@@ -376,7 +393,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
     /**
-     * Helper, loads all elements registered at a single placeholder
+     * Helper, loads all elements registered at a single placeholder,
+     * By default this method ignors the db-cache.
      *
      * @return array
      */

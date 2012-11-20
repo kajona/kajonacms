@@ -514,6 +514,18 @@ abstract class class_element_portal extends class_portal {
 
 
     /**
+     * Pre-check to indicate if a portal-element provides possible navigation entries.
+     * This method has to be static since it is evaluated before the real object instantiation.
+     * You have to overwrite this method in order to have getNavigationEntries() queried, otherwise the methode is ignores completely.
+     *
+     * @return bool
+     */
+    public static function providesNavigationEntries() {
+        return false;
+    }
+
+
+    /**
      * This method may be used, if the current module is able to
      * register own levels in the navigation.
      * See the module mediamanager (gallery, downloads) on how to use
@@ -527,6 +539,9 @@ abstract class class_element_portal extends class_portal {
      *    )
      * )
      * If you don't want to create additional navigation entries, don't overwrite this method.
+     * Otherwise you have to override the method providesNavigationEntries() and return true.
+     * This method is only queried if the static providesNavigationEntries is true since the number of queries
+     * could be reduced drastically due to this pre-check.
      *
      * @see class_module_navigation_tree::getCompleteNaviStructure()
      * @see class_module_navigation_point::getDynamicNaviLayer()

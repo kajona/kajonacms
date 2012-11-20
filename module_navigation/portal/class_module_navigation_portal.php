@@ -37,6 +37,9 @@ class class_module_navigation_portal extends class_portal implements interface_p
      */
     private $arrTempNodes = array();
 
+
+    private static $arrStaticNodes = array();
+
     /**
      * Constructor
      *
@@ -53,8 +56,14 @@ class class_module_navigation_portal extends class_portal implements interface_p
 
         //init with the current navigation, required in all cases
         if(isset($this->arrElementData["navigation_id"])) {
-            $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
-            $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
+
+            if(!isset(self::$arrStaticNodes[$this->arrElementData["navigation_id"]])) {
+                $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+                self::$arrStaticNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
+            }
+
+            $this->arrTempNodes[$this->arrElementData["navigation_id"]] = self::$arrStaticNodes[$this->arrElementData["navigation_id"]];
+
         }
         //set the default navigation mode
         $this->setAction("navigationSitemap");
@@ -176,7 +185,9 @@ class class_module_navigation_portal extends class_portal implements interface_p
                     $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel);
 
                 //And load all points below
-                $strChilds = $this->sitemapRecursive($intLevel + 1, $arrOneChild, $strStack);
+                $strChilds = "";
+                if(uniStrpos($strCurrentPoint, "level".($intLevel + 1)) !== false)
+                    $strChilds = $this->sitemapRecursive($intLevel + 1, $arrOneChild, $strStack);
 
                 //Put the childs below into the current template
                 $this->objTemplate->setTemplate($strCurrentPoint);

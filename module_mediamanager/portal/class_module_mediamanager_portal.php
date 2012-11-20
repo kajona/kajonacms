@@ -469,7 +469,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
             //If theres text to put over the image, manipulate image "inline",
             //otherwise let the work do image.php -> kinda multithreading ;)
             if($strText == "")
-                return "image.php?image=".urlencode($strImage)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight;
+                return _webpath_."/image.php?image=".urlencode($strImage)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight;
 
             //do everything right now
             $arrImageData = getimagesize(_realpath_.$strImage);

@@ -250,7 +250,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
 
-        $arrPages = class_module_pages_folder::getPagesAndFolderList($strSourceId);
+        $arrPages = class_module_pages_folder::getPagesAndFolderList($strSourceId, true);
         $arrReturn = array();
 
         //transform the sublevel
@@ -259,10 +259,12 @@ class class_module_navigation_point extends class_model implements interface_mod
             if($objOneEntry->getStatus() == 0)
                 continue;
 
+            $objLanguage = new class_module_languages_language();
+
             if($objOneEntry instanceof class_module_pages_page) {
 
-                //validate if the page to be links has a template assigned and at least a single element created
-                if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
+                //validate if the page to be linked has a template assigned and at least a single element created
+                if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && count(class_module_pages_pageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)) {
 
                     $objPoint = new class_module_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
@@ -319,21 +321,25 @@ class class_module_navigation_point extends class_model implements interface_mod
     private static function getAdditionalEntriesForPage(class_module_pages_page $objPage) {
         $arrReturn = array();
         $objLanguage = new class_module_languages_language();
-        $arrElements = class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
+        $arrPlainElements = class_module_pages_pageelement::getPlainElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
 
         $strOldPageName = $objPage->getParam("page");
 
-        foreach($arrElements as $objOneElementOnPage) {
+        foreach($arrPlainElements as $arrOneElementOnPage) {
             //Build the class-name for the object
-            $strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
+            $strClassname = uniSubstr($arrOneElementOnPage["element_class_portal"], 0, -4);
 
-            /** @var  class_element_portal $objElement */
-            $objElement = new $strClassname($objOneElementOnPage);
-            $objElement->setParam("page", $objPage->getStrName());
 
-            $arrNavigationPoints = $objElement->getNavigationEntries();
-            if($arrNavigationPoints !== false) {
-                $arrReturn = array_merge($arrReturn, $arrNavigationPoints);
+            if($strClassname::providesNavigationEntries()) {
+
+                /** @var  class_element_portal $objElement */
+                $objElement = new $strClassname(new class_module_pages_pageelement($arrOneElementOnPage["system_id"]));
+                $objElement->setParam("page", $objPage->getStrName());
+
+                $arrNavigationPoints = $objElement->getNavigationEntries();
+                if($arrNavigationPoints !== false) {
+                    $arrReturn = array_merge($arrReturn, $arrNavigationPoints);
+                }
             }
 
         }

@@ -283,10 +283,11 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * under a given systemid.
      *
      * @param string $strFolderid
+     * @param bool $bitOnlyActive
      *
      * @return class_module_pages_page[] | class_module_pages_folder[]
      */
-    public static function getPagesAndFolderList($strFolderid = "") {
+    public static function getPagesAndFolderList($strFolderid = "", $bitOnlyActive = false) {
         if(!validateSystemid($strFolderid)) {
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
@@ -294,8 +295,9 @@ class class_module_pages_folder extends class_model implements interface_model, 
         $strQuery = "SELECT system_id, system_module_nr
 						FROM " . _dbprefix_ . "system
 						WHERE system_prev_id=?
-							AND (system_module_nr = ? OR system_module_nr = ? )
-							ORDER BY system_sort ASC";
+                         AND (system_module_nr = ? OR system_module_nr = ? )
+	                      ".($bitOnlyActive ? " AND system_status = 1 ": "")."
+                    ORDER BY system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
         $arrReturn = array();

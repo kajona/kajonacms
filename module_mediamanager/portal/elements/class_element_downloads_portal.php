@@ -53,6 +53,11 @@ class class_element_downloads_portal extends class_element_portal implements int
         return $strReturn;
     }
 
+    public static function providesNavigationEntries() {
+        return true;
+    }
+
+
     public function getNavigationEntries() {
         $arrData = $this->getElementContent($this->getSystemid());
 
