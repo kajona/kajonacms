@@ -33,7 +33,7 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newFaq", "", $this->getLang("modul_anlegen"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newFaq", "", $this->getLang("module_action_new"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getLang("commons_create_category"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));

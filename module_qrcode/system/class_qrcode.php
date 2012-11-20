@@ -19,7 +19,7 @@ class class_qrcode {
 
     private $intSize = 2;
     private $strCorrectionLevel = "Q";
-    private $intPadding = 2;
+    private $intPadding = 4;
 
 
 
