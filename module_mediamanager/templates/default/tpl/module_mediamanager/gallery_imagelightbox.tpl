@@ -95,7 +95,7 @@
 -->
 <filelist_file>
     <div style="text-align: center;">
-        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb" title="%%file_subtitle%%"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
+        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
         <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
     </div>
 </filelist_file>
