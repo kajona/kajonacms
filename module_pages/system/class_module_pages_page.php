@@ -191,7 +191,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                                "._dbprefix_."page
                      LEFT JOIN "._dbprefix_."page_properties
                             ON page_id = pageproperties_id,
-                               ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                       ".$this->objDB->encloseTableName(_dbprefix_."system")."
                      LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
                          WHERE system_id = right_id
@@ -202,25 +202,27 @@ class class_module_pages_page extends class_model implements interface_model, in
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
         $this->setArrInitRow($arrRow);
 
-        $this->setStrName($arrRow["page_name"]);
-        $this->setStrBrowsername($arrRow["pageproperties_browsername"]);
-        $this->setStrDesc($arrRow["pageproperties_description"]);
-        $this->setStrKeywords($arrRow["pageproperties_keywords"]);
-        $this->setStrTemplate($arrRow["pageproperties_template"]);
-        $this->setStrSeostring($arrRow["pageproperties_seostring"]);
-        $this->setStrAlias($arrRow["pageproperties_alias"]);
-        $this->setStrPath($arrRow["pageproperties_path"]);
+        if(isset($arrRow["page_name"])) {
+            $this->setStrName($arrRow["page_name"]);
+            $this->setStrBrowsername($arrRow["pageproperties_browsername"]);
+            $this->setStrDesc($arrRow["pageproperties_description"]);
+            $this->setStrKeywords($arrRow["pageproperties_keywords"]);
+            $this->setStrTemplate($arrRow["pageproperties_template"]);
+            $this->setStrSeostring($arrRow["pageproperties_seostring"]);
+            $this->setStrAlias($arrRow["pageproperties_alias"]);
+            $this->setStrPath($arrRow["pageproperties_path"]);
 
 
-        $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
-        $this->strOldDescription = $arrRow["pageproperties_description"];
-        $this->strOldKeywords = $arrRow["pageproperties_keywords"];
-        $this->strOldName = $this->strName;
-        $this->intOldType = $this->intType;
-        $this->strOldTemplate = $arrRow["pageproperties_template"];
-        $this->strOldSeostring = $arrRow["pageproperties_seostring"];
-        $this->strOldLanguage = $arrRow["pageproperties_language"];
-        $this->strOldAlias = $arrRow["pageproperties_alias"];
+            $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
+            $this->strOldDescription = $arrRow["pageproperties_description"];
+            $this->strOldKeywords = $arrRow["pageproperties_keywords"];
+            $this->strOldName = $this->strName;
+            $this->intOldType = $this->intType;
+            $this->strOldTemplate = $arrRow["pageproperties_template"];
+            $this->strOldSeostring = $arrRow["pageproperties_seostring"];
+            $this->strOldLanguage = $arrRow["pageproperties_language"];
+            $this->strOldAlias = $arrRow["pageproperties_alias"];
+        }
     }
 
     /**

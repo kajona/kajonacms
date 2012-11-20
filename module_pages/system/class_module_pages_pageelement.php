@@ -281,9 +281,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $objDate->setIntHour(0, true);
 
         $longToday = $objDate->getLongTimestamp();
-
         $arrParams = array($strPageId, $strLanguage);
-
 
         $strAnd = "";
         if($bitJustActive) {
@@ -295,15 +293,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $arrParams[] = $longToday;
         }
 
-        $strQuery = "SELECT *
+        $strQuery = "SELECT system.system_id, element.element_class_portal
                        FROM "._dbprefix_."page_element,
-                            "._dbprefix_."element,
-                            "._dbprefix_."system
+                            "._dbprefix_."element as element,
+                            "._dbprefix_."system as system
                   LEFT JOIN "._dbprefix_."system_date
-                         ON (system_id = system_date_id)
-                      WHERE system_prev_id= ?
-                        AND page_element_ph_element = element_name
-                        AND system_id = page_element_id
+                         ON (system.system_id = system_date_id)
+                      WHERE system.system_prev_id= ?
+                        AND page_element_ph_element = element.element_name
+                        AND system.system_id = page_element_id
                         AND page_element_ph_language = ?
                        " . $strAnd."
                   ORDER BY page_element_ph_placeholder ASC,

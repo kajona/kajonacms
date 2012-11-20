@@ -40,6 +40,14 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPage2->updateObjectToDb($objFolder->getSystemid());
         self::$strPage2Systemid = $objPage2->getSystemid();
 
+        $objPagelement = new class_module_pages_pageelement();
+        $objPagelement->setStrPlaceholder("headline_row");
+        $objPagelement->setStrName("headline");
+        $objPagelement->setStrElement("row");
+        $objPagelement->setStrLanguage($objPage2->getStrAdminLanguageToWorkOn());
+        $objPagelement->updateObjectToDb($objPage2->getSystemid());
+
+
         $objPage3 = new class_module_pages_page();
         $objPage3->setStrName("testpage2a");
         $objPage3->setStrBrowsername("testpage2a");

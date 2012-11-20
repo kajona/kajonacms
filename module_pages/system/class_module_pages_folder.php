@@ -302,7 +302,10 @@ class class_module_pages_folder extends class_model implements interface_model, 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneRecord) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
+            if($arrOneRecord["system_module_nr"] == _pages_modul_id_)
+                $arrReturn[] = new class_module_pages_page($arrOneRecord["system_id"]);
+            else if($arrOneRecord["system_module_nr"] == _pages_folder_id_)
+                $arrReturn[] = new class_module_pages_folder($arrOneRecord["system_id"]);
         }
 
         return $arrReturn;
