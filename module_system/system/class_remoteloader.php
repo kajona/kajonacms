@@ -171,17 +171,25 @@ class class_remoteloader {
      * @return string or false in case of an error
      */
     private function connectByFileGetContents() {
-        $strReturn = "";
 
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("allow_url_fopen") != 1) {
             return false;
         }
 
+        $objCtx = stream_context_create(
+            array(
+                'http' => array(
+                    'timeout' => 1
+                )
+            )
+        );
+
         $strReturn = @file_get_contents(
             $this->strProtocolHeader.
             $this->strHost .
             ($this->intPort > 0 ? ":" . $this->intPort : "") .
-            $this->strQueryParams
+            $this->strQueryParams,
+            false, $objCtx
         );
 
         return $strReturn;
@@ -263,7 +271,7 @@ class class_remoteloader {
 
 
                 $arrUrl = parse_url($this->strProtocolHeader . $this->strHost);
-                $objRemoteResource = @fsockopen($strProtocolAdd . $arrUrl['host'], ($this->intPort > 0 ? $this->intPort : 80), $intErrorNumber, $strErrorString, 10);
+                $objRemoteResource = @fsockopen($strProtocolAdd . $arrUrl['host'], ($this->intPort > 0 ? $this->intPort : 80), $intErrorNumber, $strErrorString, 3);
 
                 if(!isset($arrUrl['path'])) {
                     $arrUrl['path'] = "";
