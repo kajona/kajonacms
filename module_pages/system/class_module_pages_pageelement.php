@@ -17,6 +17,10 @@
  */
 class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable  {
 
+
+    private static $arrInitRowCache = array();
+
+
     /**
      * @var string
      * @tableColumn page_element_ph_placeholder
@@ -113,20 +117,28 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT *
-						 FROM "._dbprefix_."page_element,
-						      "._dbprefix_."element,
-						      "._dbprefix_."system_right,
-						      "._dbprefix_."system
-						  LEFT JOIN "._dbprefix_."system_date
-						    ON (system_id = system_date_id)
-						 WHERE system_id= ?
-						   AND page_element_ph_element = element_name
-						   AND system_id = page_element_id
-						   AND system_id = right_id
-						 ORDER BY page_element_ph_placeholder ASC,
-						 		system_sort ASC";
-		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+
+        //maybe
+        if(isset(self::$arrInitRowCache[$this->getSystemid()])) {
+            $arrRow = self::$arrInitRowCache[$this->getSystemid()];
+        }
+        else {
+            $strQuery = "SELECT *
+                             FROM "._dbprefix_."page_element,
+                                  "._dbprefix_."element,
+                                  "._dbprefix_."system_right,
+                                  "._dbprefix_."system
+                              LEFT JOIN "._dbprefix_."system_date
+                                ON (system_id = system_date_id)
+                             WHERE system_id= ?
+                               AND page_element_ph_element = element_name
+                               AND system_id = page_element_id
+                               AND system_id = right_id
+                             ORDER BY page_element_ph_placeholder ASC,
+                                    system_sort ASC";
+            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+
+        }
         $this->setArrInitRow($arrRow);
 		if(count($arrRow) > 1) {
     		$this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
@@ -293,21 +305,30 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $arrParams[] = $longToday;
         }
 
-        $strQuery = "SELECT system.system_id, element.element_class_portal
+        $strQuery = "SELECT *
                        FROM "._dbprefix_."page_element,
                             "._dbprefix_."element as element,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."system as system
                   LEFT JOIN "._dbprefix_."system_date
                          ON (system.system_id = system_date_id)
                       WHERE system.system_prev_id= ?
                         AND page_element_ph_element = element.element_name
                         AND system.system_id = page_element_id
+                        AND system.system_id = right_id
                         AND page_element_ph_language = ?
                        " . $strAnd."
                   ORDER BY page_element_ph_placeholder ASC,
                             system_sort ASC";
 
-        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+
+        foreach($arrReturn as $arrOneRow) {
+            if(!isset(self::$arrInitRowCache[$arrOneRow["system_id"]]))
+                self::$arrInitRowCache[$arrOneRow["system_id"]] = $arrOneRow;
+        }
+
+        return $arrReturn;
     }
 
 
