@@ -19,16 +19,14 @@
                             type: 'outside'
                         },
                         overlay	: {
-                            opacity : 0.8,
-                            css : {
-                                'background-color' : '#000'
-                            }
+                            opacity : 0.8
                         },
                         thumbs	: {
                             width	: 50,
                             height	: 50
                         }
-                    }
+                    },
+                    type : 'image'
                 });
             });
         });
