@@ -81,7 +81,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["element_config2"] 	    = array("char254", true);
 		$arrFields["element_config3"] 	    = array("text", true);
 
-		if(!$this->objDB->createTable("element", $arrFields, array("element_id")))
+		if(!$this->objDB->createTable("element", $arrFields, array("element_id"), array("element_name")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -96,7 +96,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["page_element_ph_title"]             = array("char254", true);
 		$arrFields["page_element_ph_language"]          = array("char20", true);
 
-		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id")))
+		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id"), array("page_element_ph_placeholder", "page_element_ph_language", "page_element_ph_element")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -270,9 +270,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	    $strReturn = "";
         //check installed version and to which version we can update
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
-
 
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
@@ -287,6 +285,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9.1") {
             $strReturn .= $this->update_3491_3492();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.2") {
+            $strReturn .= $this->update_3492_3493();
         }
 
         return $strReturn."\n\n";
@@ -366,10 +369,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9");
-        $strReturn .= "Updating element-version...\n";
-        //$this->updateElementVersion("row", "3.4.9");
-        //$this->updateElementVersion("paragraph", "3.4.9");
-        //$this->updateElementVersion("image", "3.4.9");
         return $strReturn;
     }
 
@@ -423,7 +422,34 @@ class class_installer_pages extends class_installer_base implements interface_in
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.2");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.9.2");
+        $this->updateElementVersion("paragraph", "3.4.9.2");
+        $this->updateElementVersion("image", "3.4.9.2");
         
+        return $strReturn;
+    }
+
+    private function update_3492_3493() {
+        $strReturn = "Updating 3.4.9.2 to 3.4.9.3...\n";
+
+        $strReturn .= "Adding index to table element\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")." ADD INDEX ( ".$this->objDB->encloseColumnName("element_name")." ) ", array());
+
+        $strReturn .= "Adding index to table page_element\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")." ADD INDEX ( ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")." ADD INDEX ( ".$this->objDB->encloseColumnName("page_element_ph_language")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")." ADD INDEX ( ".$this->objDB->encloseColumnName("page_element_ph_element")." ) ", array());
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.9.3");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.9.3");
+        $this->updateElementVersion("paragraph", "3.4.9.3");
+        $this->updateElementVersion("image", "3.4.9.3");
+
         return $strReturn;
     }
 }
