@@ -134,8 +134,8 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function getStrDisplayName() {
         $strName = $this->getStrBrowsername();
         
-        if ($strName == "")
-            $strName = $this->getStrName ();
+        if($strName == "")
+            $strName = $this->getStrName();
         
         return $strName;
     }
@@ -204,6 +204,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         if(isset($arrRow["page_name"])) {
             $this->setStrName($arrRow["page_name"]);
+            $this->setIntType($arrRow["page_type"]);
             $this->setStrBrowsername($arrRow["pageproperties_browsername"]);
             $this->setStrDesc($arrRow["pageproperties_description"]);
             $this->setStrKeywords($arrRow["pageproperties_keywords"]);
