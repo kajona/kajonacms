@@ -1,7 +1,7 @@
 //   (c) 2004-2006 by MulchProductions, www.mulchprod.de
 //   (c) 2007-2012 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
-//       $Id: kajona.js 4895 2012-08-22 07:32:39Z sidler $
+//       $Id$
 
 if (typeof KAJONA == "undefined") {
     alert('load kajona.js before!');

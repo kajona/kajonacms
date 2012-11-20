@@ -1,6 +1,6 @@
 //   (c) 2007-2012 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
-//       $Id: kajona.js 5047 2012-09-14 10:06:53Z sidler $
+//       $Id$
 
 
 if (typeof KAJONA == "undefined") {
