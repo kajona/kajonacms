@@ -65,12 +65,19 @@ else {
             $arrImportfileData[$strOneFile] = $strFileInfo;            
         }        
         
+        $boolShowButton = false;
         foreach($arrImportfileData as $strFilename => $strFileInfo) {
             echo "\n<input type='radio' name='dumpname' id='dumpname_".$strFilename."' value='$strFilename' /><label for='dumpname_".$strFilename."'>".$strFileInfo."</label>";
+            $boolShowButton = true;
         } 
 
-        echo "\n\n<input type='hidden' name='doimport' value='1' />";
-        echo "<input type='submit' value='import' />";
+        if($boolShowButton) {
+            echo "\n\n<input type='hidden' name='doimport' value='1' />";
+            echo "<input type='submit' value='Import dump' />";
+        }
+	else 
+	    echo "\nNo dump found.";
+        
         echo "</form>";
     }
     else
