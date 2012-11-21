@@ -84,6 +84,8 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     private $bitIsForeignNode = false;
 
+    private $bitIsPagealias = false;
+
 
     /**
      * Constructor to create a valid object
@@ -296,10 +298,10 @@ class class_module_navigation_point extends class_model implements interface_mod
         $objInstance = class_objectfactory::getInstance()->getObject($strSourceId);
         if($objInstance instanceof class_module_pages_page) {
 
-            if($objInstance->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS)
-                $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage(class_module_pages_page::getPageByName($objInstance->getStrAlias())));
-            else
+            if($objInstance->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
                 $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage($objInstance));
+            //else
+            //    $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage(class_module_pages_page::getPageByName($objInstance->getStrAlias())));
 
         }
 
@@ -440,6 +442,15 @@ class class_module_navigation_point extends class_model implements interface_mod
     public function getBitIsForeignNode() {
         return $this->bitIsForeignNode;
     }
+
+    public function setBitIsPagealias($bitIsPagenode) {
+        $this->bitIsPagealias = $bitIsPagenode;
+    }
+
+    public function getBitIsPagealias() {
+        return $this->bitIsPagealias;
+    }
+
 
 
 }
