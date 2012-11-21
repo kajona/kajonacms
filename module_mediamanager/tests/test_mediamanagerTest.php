@@ -26,7 +26,8 @@ class class_mediamanagerTest extends class_testbase  {
         $arrFiles = class_module_mediamanager_file::loadFilesDB($objRepo->getSystemid());
 
         $this->assertEquals(3, count($arrFiles));
-
+        foreach($arrFiles as $objOneFile)
+            $objOneFile->deleteObject();
 
 
         $objRepo->deleteObject();
