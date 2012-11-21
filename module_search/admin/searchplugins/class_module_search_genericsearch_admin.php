@@ -17,7 +17,6 @@
  */
 class class_module_search_genericsearch_admin implements interface_search_plugin  {
 
-    private $strSearchterm;
     /* @var class_module_search_search */
     private $objSearch;
 
