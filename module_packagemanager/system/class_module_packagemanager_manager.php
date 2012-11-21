@@ -42,16 +42,25 @@ class class_module_packagemanager_manager {
 
     /**
      * Sorts the array of packages ordered by the installation state, the type and the title
+     *
      * @param class_module_packagemanager_metadata[] $arrPackages
+     * @param bool $bitByNameOnly
      *
      * @return class_module_packagemanager_metadata[]
      */
-    public function sortPackages(array $arrPackages) {
-        $objManager = new class_module_packagemanager_manager();
-        usort($arrPackages, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($objManager) {
+    public function sortPackages(array $arrPackages, $bitByNameOnly = false) {
+        usort($arrPackages, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($bitByNameOnly) {
+
+            $objManager = new class_module_packagemanager_manager();
 
             $objHandlerA = $objManager->getPackageManagerForPath($objA->getStrPath());
             $objHandlerB = $objManager->getPackageManagerForPath($objB->getStrPath());
+
+
+            if($bitByNameOnly) {
+                return strcmp($objA->getStrTitle(), $objB->getStrTitle());
+            }
+
 
             if($objA->getStrType() == class_module_packagemanager_manager::STR_TYPE_TEMPLATE && $objB->getStrType() != class_module_packagemanager_manager::STR_TYPE_TEMPLATE)
                 return -1;
@@ -232,6 +241,8 @@ class class_module_packagemanager_manager {
 
         foreach($arrProvider as $objOneProvider) {
             $arrRemoteVersions = $objOneProvider->searchPackage(implode(",", array_keys($arrQueries)));
+            if(!is_array($arrRemoteVersions))
+                continue;
 
             foreach($arrRemoteVersions as $arrOneRemotePackage) {
                 $arrResult[$arrOneRemotePackage["title"]] = $arrOneRemotePackage["version"];

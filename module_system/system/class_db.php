@@ -964,13 +964,20 @@ class class_db {
 
     /**
      * Method to flush the query-cache
-
      */
     public function flushQueryCache() {
         //class_logger::getInstance(class_logger::DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
         $this->arrQueryCache = array();
         $this->arrTablesCache = array();
         class_objectfactory::getInstance()->flushCache();
+    }
+
+    /**
+     * Helper to flush the precompiled queries stored at the db-driver.
+     * Use this method with great care!
+     */
+    public function flushPreparedStatementsCache() {
+        $this->objDbDriver->flushQueryCache();
     }
 
     /**

@@ -18,7 +18,6 @@
 class class_db_sqlite3 implements interface_db_driver {
 
     /**
-     *
      * @var SQLite3
      */
     private $linkDB;
@@ -34,6 +33,8 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strPass
      * @param string $strDbName
      * @param int $intPort
+     *
+     * @throws class_exception
      * @return bool
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
@@ -46,7 +47,7 @@ class class_db_sqlite3 implements interface_db_driver {
             if(method_exists($this->linkDB, "busyTimeout"))
                 $this->linkDB->busyTimeout(5000);
         }
-        catch (Exception $e) {
+        catch(Exception $e) {
             throw new class_exception("Error connecting to database: ".$e, class_exception::$level_FATALERROR);
         }
     }
@@ -62,11 +63,12 @@ class class_db_sqlite3 implements interface_db_driver {
      * Sends a query (e.g. an update) to the database
      *
      * @param string $strQuery
+     *
      * @return bool
      */
     public function _query($strQuery) {
         $strQuery = $this->fixQuoting($strQuery);
-        if ($this->linkDB->query($strQuery) === false)
+        if($this->linkDB->query($strQuery) === false)
             return false;
         return true;
     }
@@ -77,6 +79,7 @@ class class_db_sqlite3 implements interface_db_driver {
      *
      * @param string $strQuery
      * @param array $arrParams
+     *
      * @return bool
      * @since 3.4
      */
@@ -99,7 +102,7 @@ class class_db_sqlite3 implements interface_db_driver {
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
         }
 
-        if ($objStmt->execute() === false)
+        if($objStmt->execute() === false)
             return false;
 
         return true;
@@ -109,16 +112,17 @@ class class_db_sqlite3 implements interface_db_driver {
      * This method is used to retrieve an array of resultsets from the database
      *
      * @param string $strQuery
+     *
      * @return array
      */
     public function getArray($strQuery) {
         $strQuery = $this->fixQuoting($strQuery);
         $arrReturn = array();
         $resultSet = $this->linkDB->query($strQuery);
-		if (!$resultSet)
-			return false;
-		while ($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
-			$arrReturn[] = $arrRow;
+        if(!$resultSet)
+            return false;
+        while($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
+            $arrReturn[] = $arrRow;
         return $arrReturn;
     }
 
@@ -129,6 +133,7 @@ class class_db_sqlite3 implements interface_db_driver {
      *
      * @param string $strQuery
      * @param array $arrParams
+     *
      * @since 3.4
      * @return array
      */
@@ -174,6 +179,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strQuery
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd) {
@@ -195,6 +201,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param array $arrParams
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      * @since 3.4
      */
@@ -225,11 +232,11 @@ class class_db_sqlite3 implements interface_db_driver {
      *
      * @return array
      */
-    public function getTables()  {
+    public function getTables() {
         $arrReturn = array();
         $resultSet = $this->linkDB->query("SELECT name FROM sqlite_master WHERE type='table'");
-		while ($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
-        	$arrReturn[] = array("name" => $arrRow["name"]);
+        while($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
+            $arrReturn[] = array("name" => $arrRow["name"]);
         return $arrReturn;
     }
 
@@ -239,9 +246,10 @@ class class_db_sqlite3 implements interface_db_driver {
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
+     *
      * @return array
      */
-    public function getColumnsOfTable($strTableName)  {
+    public function getColumnsOfTable($strTableName) {
         $arrColumns = array();
         $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master WHERE type='table' and name='".$strTableName."'");
         if(!empty($arrTableInfo)) {
@@ -254,11 +262,11 @@ class class_db_sqlite3 implements interface_db_driver {
             // Get all column names and types
             $strColumnDef = $arrMatch[1];
             $intPrimaryKeyPos = strripos($strColumnDef, "PRIMARY KEY");
-            if ($intPrimaryKeyPos !== false)
+            if($intPrimaryKeyPos !== false)
                 $strColumnDef = substr($strColumnDef, 0, $intPrimaryKeyPos);
             preg_match_all("/\s*([a-z_]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
 
-            foreach ($arrMatch as $arrColumnInfo)
+            foreach($arrMatch as $arrColumnInfo)
                 $arrColumns[] = array(
                     "columnName" => $arrColumnInfo[1],
                     "columnType" => $arrColumnInfo[2]
@@ -274,15 +282,15 @@ class class_db_sqlite3 implements interface_db_driver {
      * The array of fields should have the following structure
      * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
      * whereas datatype is one of the following:
-     * 		int
+     *         int
      *      long
-     * 		double
-     * 		char10
-     * 		char20
-     * 		char100
-     * 		char254
+     *         double
+     *         char10
+     *         char20
+     *         char100
+     *         char254
      *      char500
-     * 		text
+     *         text
      *      longtext
      *
      * @param string $strName
@@ -290,48 +298,49 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param array $arrKeys array of primary keys
      * @param array $arrIndices array of additional indices
      * @param bool $bitTxSafe Should the table support transactions?
+     *
      * @return bool
      */
-    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)  {
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
         $arrTables = $this->getTables();
-        foreach ($arrTables as $arrTable)
-            if ($arrTable["name"] == $strName)
+        foreach($arrTables as $arrTable)
+            if($arrTable["name"] == $strName)
                 return true;
 
-    	$strQuery = "";
+        $strQuery = "";
 
-    	//build the mysql code
-    	$strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+        //build the mysql code
+        $strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
 
-    	//loop the fields
-    	foreach($arrFields as $strFieldName => $arrColumnSettings) {
-    		$strQuery .= " ".$strFieldName." ";
+        //loop the fields
+        foreach($arrFields as $strFieldName => $arrColumnSettings) {
+            $strQuery .= " ".$strFieldName." ";
 
-    		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
+            $strQuery .= $this->getDatatype($arrColumnSettings[0]);
 
-    		//any default?
-    		if(isset($arrColumnSettings[2]))
-    			$strQuery .= " DEFAULT ".$arrColumnSettings[2]." ";
+            //any default?
+            if(isset($arrColumnSettings[2]))
+                $strQuery .= " DEFAULT ".$arrColumnSettings[2]." ";
 
             //nullable?
-    		if($arrColumnSettings[1] === true) {
-    			$strQuery .= ", \n";
-    		}
-    		else {
-    			$strQuery .= " NOT NULL, \n";
-    		}
+            if($arrColumnSettings[1] === true) {
+                $strQuery .= ", \n";
+            }
+            else {
+                $strQuery .= " NOT NULL, \n";
+            }
 
-    	}
+        }
 
-    	//primary keys
-    	$strQuery .= " PRIMARY KEY (".implode(", ", $arrKeys).") \n";
+        //primary keys
+        $strQuery .= " PRIMARY KEY (".implode(", ", $arrKeys).") \n";
 
-    	$strQuery .= ") ";
+        $strQuery .= ") ";
 
         $bitCreate = $this->_query($strQuery);
 
         if($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".  implode(", ", $arrIndices).") ";
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_query($strQuery);
         }
 
@@ -341,7 +350,7 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Starts a transaction
-     *
+
      */
     public function transactionBegin() {
         $this->_query("BEGIN TRANSACTION");
@@ -349,7 +358,7 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Ends a successfull operation by Commiting the transaction
-     *
+
      */
     public function transactionCommit() {
         $this->_query("COMMIT TRANSACTION");
@@ -357,10 +366,9 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Ends a non-successfull transaction by using a rollback
-     *
+
      */
-    public function transactionRollback()
-    {
+    public function transactionRollback() {
         $this->_query("ROLLBACK TRANSACTION");
     }
 
@@ -387,10 +395,10 @@ class class_db_sqlite3 implements interface_db_driver {
      * Creates an db-dump usind the given filename. the filename is relative to _realpath_
      * The dump must include, and ONLY include the pass tables
      *
-     * @param string $strPath
+     * @param string $strFilename
      * @param array $arrTables
-     * @return bool Indicates, if the dump worked or not
      *
+     * @return bool Indicates, if the dump worked or not
      */
     public function dbExport($strFilename, $arrTables) {
         // FIXME: Only export relevant tables.
@@ -402,6 +410,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * Imports the given db-dump file to the database. The filename ist relativ to _realpath_
      *
      * @param string $strFilename
+     *
      * @return bool
      */
     public function dbImport($strFilename) {
@@ -413,7 +422,8 @@ class class_db_sqlite3 implements interface_db_driver {
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
      *
-     * @param string $strColum
+     * @param string $strColumn
+     *
      * @return string
      */
     public function encloseColumnName($strColumn) {
@@ -425,6 +435,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * E.g. needed by the mysql-drivers
      *
      * @param string $strTable
+     *
      * @return string
      */
     public function encloseTableName($strTable) {
@@ -446,6 +457,7 @@ class class_db_sqlite3 implements interface_db_driver {
      *      longtext
      *
      * @param string $strType
+     *
      * @return string
      */
     public function getDatatype($strType) {
@@ -479,15 +491,15 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Fixes the quoting of ' in queries.
-     *
      * By default ' is quoted as \', but it must be quoted as '' in sqlite.
      *
-     * @param srtin $strSql
+     * @param string $strSql
+     *
      * @return string
      */
     private function fixQuoting($strSql) {
-        $strSql =  str_replace("\\'", "''", $strSql);
-        $strSql =  str_replace("\\\"", "\"", $strSql);
+        $strSql = str_replace("\\'", "''", $strSql);
+        $strSql = str_replace("\\\"", "\"", $strSql);
         return $strSql;
     }
 
@@ -495,13 +507,14 @@ class class_db_sqlite3 implements interface_db_driver {
      * Transforms the query into a valid sqlite-syntax
      *
      * @param string $strQuery
+     *
      * @return string
      */
     private function processQuery($strQuery) {
         $intCount = 1;
         while(uniStrpos($strQuery, "?") !== false) {
             $intPos = uniStrpos($strQuery, "?");
-            $strQuery = substr($strQuery, 0, $intPos).":param".$intCount++.substr($strQuery, $intPos+1);
+            $strQuery = substr($strQuery, 0, $intPos).":param".$intCount++.substr($strQuery, $intPos + 1);
         }
         return $strQuery;
     }
@@ -510,6 +523,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * Prepares a statement or uses an instance from the cache
      *
      * @param string $strQuery
+     *
      * @return SQLite3Stmt
      */
     private function getPreparedStatement($strQuery) {
@@ -524,5 +538,18 @@ class class_db_sqlite3 implements interface_db_driver {
 
         return $objStmt;
     }
+
+    /**
+     * A method triggered in special cases in order to
+     * have even the caches stored at the db-driver being flushed.
+     * This could get important in case of schema updates since precompiled queries may get invalid due
+     * to updated table definitions.
+     *
+     * @return void
+     */
+    public function flushQueryCache() {
+        $this->arrStatementsCache = array();
+    }
+
 }
 

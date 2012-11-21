@@ -507,7 +507,8 @@ class class_installer_system extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
-            $strReturn .= "Temporary breaking update, please retrigger update sequence...\n";
+            $this->objDB->flushPreparedStatementsCache();
+            $strReturn .= "<b>Temporary breaking update, please retrigger update sequence...</b>\n";
             return $strReturn;
         }
 

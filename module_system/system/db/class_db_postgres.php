@@ -528,5 +528,17 @@ class class_db_postgres implements interface_db_driver {
         return $strSum;
     }
 
+    /**
+     * A method triggered in special cases in order to
+     * have even the caches stored at the db-driver being flushed.
+     * This could get important in case of schema updates since precompiled queries may get invalid due
+     * to updated table definitions.
+     *
+     * @return void
+     */
+    public function flushQueryCache() {
+        $this->arrStatementsCache = array();
+    }
+
 }
 

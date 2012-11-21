@@ -346,7 +346,7 @@ class class_installer {
             if($objOneModule->getBitProvidesInstaller())
                 $this->arrMetadata[] = $objOneModule;
 
-        $this->arrMetadata = $objManager->sortPackages($this->arrMetadata);
+        $this->arrMetadata = $objManager->sortPackages($this->arrMetadata, true);
 
     }
 

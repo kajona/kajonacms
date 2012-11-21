@@ -188,18 +188,42 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
-                               "._dbprefix_."page
-                     LEFT JOIN "._dbprefix_."page_properties
-                            ON page_id = pageproperties_id,
+                               "._dbprefix_."page,
+                               "._dbprefix_."page_properties,
                        ".$this->objDB->encloseTableName(_dbprefix_."system")."
                      LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
                          WHERE system_id = right_id
                            AND system_id = page_id
+                           AND page_id = pageproperties_id
                            AND system_id = ?
                            AND pageproperties_language = ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
+
+        if(!isset($arrRow["page_name"]) || $arrRow["page_name"] == null) {
+            $strQuery = "SELECT *
+                          FROM "._dbprefix_."system_right,
+                               "._dbprefix_."page,
+                   ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
+                         WHERE system_id = right_id
+                           AND system_id = page_id
+                           AND system_id = ? ";
+
+            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+            $arrRow["pageproperties_browsername"] = "";
+            $arrRow["pageproperties_description"] = "";
+            $arrRow["pageproperties_keywords"] = "";
+            $arrRow["pageproperties_template"] = "";
+            $arrRow["pageproperties_seostring"] = "";
+            $arrRow["pageproperties_alias"] = "";
+            $arrRow["pageproperties_path"] = "";
+            $arrRow["pageproperties_language"] = $this->getStrLanguage();
+        }
+
+
         $this->setArrInitRow($arrRow);
 
         if(isset($arrRow["page_name"])) {
@@ -212,6 +236,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             $this->setStrSeostring($arrRow["pageproperties_seostring"]);
             $this->setStrAlias($arrRow["pageproperties_alias"]);
             $this->setStrPath($arrRow["pageproperties_path"]);
+            $this->setStrLanguage($this->getStrLanguage());
 
 
             $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
