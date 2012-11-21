@@ -25,6 +25,7 @@ $lang["cropWarningDialogHeader"]         = "Confirm cropping";
 $lang["cropWarningSaving"]               = "Please note: The cropping affects all usages of the image. Proceed anyway?<br />";
 $lang["cropWarningUnsavedHint"]          = "Your image operations are not saved yet!\\nDo you really want to discard them?\\n\\nPress \'abort\' and double click on the image to save the operations.";
 $lang["delete_question"]                 = "Do you really want to delete the file &quot;<b>%%element_name%%</b>&quot;?<br />All stored details, even in other repositories, will be deleted, too!";
+$lang["delete_question_repo"]            = "Do you really want to delete the repository &quot;<b>%%element_name%%</b>&quot;?<br />All stored details will be deleted, the files themselves will remain in the filesystem.";
 $lang["download_link"]                   = "Download";
 $lang["file_delete_error"]               = "Error deleting the file";
 $lang["file_delete_success"]             = "File deleted succesfully";

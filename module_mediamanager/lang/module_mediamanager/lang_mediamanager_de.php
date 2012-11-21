@@ -25,6 +25,7 @@ $lang["cropWarningDialogHeader"]         = "Zuschneiden bestätigen";
 $lang["cropWarningSaving"]               = "Bitte beachten: Das Zuschneiden betrifft alle Verwendungen des Bildes! Trotzdem forfahren?<br />";
 $lang["cropWarningUnsavedHint"]          = "Ihre Änderungen am Bild wurden noch nicht gespeichert!\\nMöchten Sie die Änderungen wirklich verwerfen?\\n\\nZum Speichern der Änderungen wählen Sie \"Abbrechen\" und machen Sie einen Doppelklick auf das Bild.";
 $lang["delete_question"]                 = "Möchten Sie die Datei &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Dabei werden alle hinterlegten Daten gelöscht, auch in anderen Repositories.";
+$lang["delete_question_repo"]            = "Möchten Sie das Repository &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Dabei werden lediglich die hinterlegten Daten gelöscht, die Dateien im Dateisystem bleiben bestehen.";
 $lang["download_link"]                   = "Download";
 $lang["file_delete_error"]               = "Fehler beim Löschen der Datei";
 $lang["file_delete_success"]             = "Löschen der Datei erfolgreich";

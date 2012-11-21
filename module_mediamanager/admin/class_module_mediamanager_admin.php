@@ -79,6 +79,29 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         return array();
     }
 
+    protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry instanceof class_module_mediamanager_repo) {
+            if($objListEntry->rightDelete()) {
+
+                $objLockmanager = $objListEntry->getLockManager();
+                if(!$objLockmanager->isAccessibleForCurrentUser()) {
+                    return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("commons_locked")));
+                }
+
+                return $this->objToolkit->listDeleteButton(
+                    $objListEntry->getStrDisplayName(),
+                    $this->getLang("delete_question_repo", $objListEntry->getArrModule("modul")),
+                    getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
+                );
+            }
+            else
+                return "";
+        }
+        else
+            return parent::renderDeleteAction($objListEntry);
+    }
+
+
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier != class_module_mediamanager_admin::INT_LISTTYPE_FOLDER)
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
