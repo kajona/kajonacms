@@ -36,36 +36,27 @@
 
     <div class="mmPathnavigation">%%pathnavigation%%</div>
     %%folderlist%%
-    <ul id="pv_%%systemid%%">%%filelist%%</ul>
+    <div id="pv_%%systemid%%">%%filelist%%</div>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
     <div>Please note: This template makes use of the jQuery plugin "lightbox". Make sure to respect the projects <a href="http://fancyapps.com/fancybox/#license" target="_blank">licence</a>.</div>
 </list>
 
 <!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview_image_src -->
 <folderlist>
-    <table cellspacing="0" class="portalList">
-        <tr class="portalListRow1">
-            <td class="image"><img src="_webpath_/templates/default/pics/default/icon_folderClosed.gif" /></td>
-            <td class="title"><a href="%%folder_href%%"  data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
-        </tr>
-        <tr class="portalListRow2">
-            <td></td>
-            <td class="description" data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</td>
-        </tr>
-    </table>
+<div class="mmGalleryFolder">
+    <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
+    <div data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</div>
+</div>
+
 </folderlist>
 
 <folderlist_preview>
-    <table cellspacing="0" class="portalList">
-        <tr class="portalListRow1">
-            <td class="image"><img src="_webpath_/templates/default/pics/default/icon_folderClosed.gif" /></td>
-            <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
-        </tr>
-        <tr class="portalListRow2">
-            <td><img src="[img,%%folder_preview_image_src%%,50,50]" /></td>
-            <td class="description" data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</td>
-        </tr>
-    </table>
+
+<div class="mmGalleryFolder">
+    <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
+    <div><img src="[img,%%folder_preview_image_src%%,50,50]" style="float:left;"/><p data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</p></div>
+</div>
+
 </folderlist_preview>
 
 <!-- the following section is used to wrap a list of files, e.g. in order to build a table.
@@ -73,16 +64,9 @@
      like < filelist >%%file_0%%</ filelist > -->
 <!-- available placeholders: file_(nr) -->
 <filelist>
-    <table width="100%" cellspacing="0">
-        <tr>
-            <td colspan="3">&nbsp;</td>
-        </tr>
-        <tr style="text-align: center;">
-            <td width="33%">%%file_0%%</td>
-            <td width="33%">%%file_1%%</td>
-            <td width="33%">%%file_2%%</td>
-        </tr>
-    </table>
+%%file_0%%
+%%file_1%%
+%%file_2%%
 </filelist>
 
 
@@ -92,8 +76,8 @@
      file_owner, file_lmtime, file_link, file_link_href, file_id, file_link_qrcode
 -->
 <filelist_file>
-    <div style="text-align: center;">
-        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,100,100,max]" alt="%%file_subtitle%%" /></a></div>
+    <div class="mmGalleryImage">
+        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,120,120,fixed]" alt="%%file_subtitle%%" /></a></div>
         <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
     </div>
 </filelist_file>

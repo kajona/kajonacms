@@ -433,6 +433,16 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
     display: none;
 }
 
+.mmGalleryImage {
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+}
+
+.mmGalleryFolder {
+    border-bottom: 1px dotted #606060;
+}
+
 
 /* FORMS */
 .contentRight form label {
