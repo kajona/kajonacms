@@ -30,7 +30,7 @@
     %%paragraph_title_tag%%
     <div data-kajona-editable="%%content_id%%#paragraph_content">%%paragraph_content%%</div><br /><br />
     [lang,link_more_title,elements] <a href="%%paragraph_link%%">%%paragraph_link%%</a>
-<div class="kjParagraph">
+</div>
 </paragraph_link>
 
 <!-- available placeholders: paragraph_title_tag, paragraph_content, paragraph_image, paragraph_link -->
@@ -41,5 +41,5 @@
     <div data-kajona-editable="%%content_id%%#paragraph_content">%%paragraph_content%%</div><br /><br />
     [lang,link_more_title,elements] <a href="%%paragraph_link%%">%%paragraph_link%%</a>
     <div class="clearfix"></div>
-<div class="kjParagraph">
+</div>
 </paragraph_image_link>
