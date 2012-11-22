@@ -22,7 +22,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
     public function __construct() {
         $this->setArrModuleEntry("name", "element_navigation");
         $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
-        $this->setArrModuleEntry("tableColumns", "navigation_id,navigation_template,navigation_mode,navigation_foreign");
+        $this->setArrModuleEntry("tableColumns", "navigation_id,navigation_template,navigation_foreign");
         parent::__construct();
     }
 
@@ -59,9 +59,6 @@ class class_element_navigation_admin extends class_element_admin implements inte
         else
             $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : ""));
 
-        //and finally offer the different modes
-        $arrModes = array("tree" => $this->getLang("modus_baum"), "sitemap" => $this->getLang("modus_sitemap"));
-        $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getLang("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : ""));
 
         $arrYesNo = array(
             1 => $this->getLang("commons_yes"),

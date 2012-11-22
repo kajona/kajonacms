@@ -380,7 +380,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
 
     /**
      * Searches the current page in other navigation-trees found on the current page.
-     * This can be usefull to avoid a session-based "opening" of the current tree.
+     * This can be useful to avoid a session-based "opening" of the current tree.
      * The user may find it confusing, if the current tree remains opened but he clicked
      * a navigation-point of another tree.
      *
@@ -417,37 +417,34 @@ class class_module_navigation_portal extends class_portal implements interface_p
                                 $objRealElement = new class_element_navigation_portal($objElement);
                                 $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
 
-                                if($arrContent["navigation_mode"] == "tree") {
+                                //navigation found. trigger loading of nodes if not yet happend
+                                if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
+                                    $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
 
-                                    //navigation found. trigger loading of nodes if not yet happend
-                                    if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
-                                        $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
-
-                                        if($objNavigation->getStatus() == 0)
-                                            $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
-                                        else
-                                            $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
-                                    }
-
-                                    //search navigation tree
-                                    $this->arrNodeTempHelper = array();
-                                    foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
-                                        $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
-
-                                    $intMaxLevel = 0;
-                                    $objEntry = null;
-                                    foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
-                                        if(count($arrNodes) > 0 && $intLevel >= $intMaxLevel) {
-                                            $intMaxLevel = $intLevel;
-                                            $objEntry = $arrNodes[0];
-                                        }
-                                    }
-
-                                    //jepp, page found in another tree, so return true
-                                    if($objEntry != null)
-                                        return true;
-
+                                    if($objNavigation->getStatus() == 0)
+                                        $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
+                                    else
+                                        $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
                                 }
+
+                                //search navigation tree
+                                $this->arrNodeTempHelper = array();
+                                foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
+                                    $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
+
+                                $intMaxLevel = 0;
+                                $objEntry = null;
+                                foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
+                                    if(count($arrNodes) > 0 && $intLevel >= $intMaxLevel) {
+                                        $intMaxLevel = $intLevel;
+                                        $objEntry = $arrNodes[0];
+                                    }
+                                }
+
+                                //jepp, page found in another tree, so return true
+                                if($objEntry != null)
+                                    return true;
+
                             }
                         }
                     }

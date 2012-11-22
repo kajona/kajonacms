@@ -80,8 +80,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                 $strElementId = $objPagelement->getSystemid();
                 $strQuery = "UPDATE "._dbprefix_."element_navigation
                                 SET navigation_id= ?,
-                                    navigation_template = ?,
-                                    navigation_mode = ?
+                                    navigation_template = ?
                                 WHERE content_id = ?";
                 if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", "tree", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
@@ -101,8 +100,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                 $strElementId = $objPagelement->getSystemid();
                 $strQuery = "UPDATE "._dbprefix_."element_navigation
                                 SET navigation_id= ?,
-                                    navigation_template = ?,
-                                    navigation_mode = ?
+                                    navigation_template = ?
                                 WHERE content_id = ?";
                 if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", "tree", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
@@ -123,8 +121,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                 $strElementId = $objPagelement->getSystemid();
                 $strQuery = "UPDATE "._dbprefix_."element_navigation
                                 SET navigation_id= ?,
-                                    navigation_template = ?,
-                                    navigation_mode = ?
+                                    navigation_template = ?
                                 WHERE content_id = ?";
                 if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "breadcrumbnavi.tpl", "tree", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
@@ -153,8 +150,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_navigation
                             SET navigation_id=?,
-                                navigation_template = ?,
-                                navigation_mode = ?
+                                navigation_template = ?
                                 WHERE content_id = ?";
             if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", "sitemap", $strElementId)))
                 $strReturn .= "Sitemapelement created.\n";

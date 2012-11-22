@@ -116,6 +116,11 @@ class class_installer_navigation extends class_installer_base implements interfa
             $strReturn .= $this->update_349_3491();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_3492();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -171,6 +176,25 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->updateModuleVersion("navigation", "3.4.9.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("navigation", "3.4.9.1");
+
+        return $strReturn;
+    }
+
+    private function update_3491_3492() {
+        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
+
+        $strReturn .= "Removing mode column from navigation element...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_navigation")."
+                    DROP ".$this->objDB->encloseColumnName("navigation_mode")."";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.4.9.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("navigation", "3.4.9.2");
 
         return $strReturn;
     }

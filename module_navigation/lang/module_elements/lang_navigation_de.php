@@ -10,8 +10,5 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["modus_baum"]                      = "Baum";
-$lang["modus_sitemap"]                   = "Sitemap";
-$lang["navigation_mode"]                 = "Modus:";
 $lang["navigation_foreign"]              = "Dritt-Module einschließen:";
 $lang["navigation_foreign_hint"]         = "Wenn aktiviert können Module wie der Medienmanager zusätzliche Einträge in die Navigation einfügen.";
