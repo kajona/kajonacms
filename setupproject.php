@@ -232,13 +232,13 @@ TXT;
 
             if(is_file($strSourceFolder."/".$strOneEntry) && !is_file($strTargetFolder."/".$strOneEntry)) {
                 echo "copying file ".$strSourceFolder."/".$strOneEntry." to ".$strTargetFolder."/".$strOneEntry."\n";
+                if(!is_dir($strTargetFolder))
+                    mkdir($strTargetFolder, 0777, true);
+
                 copy($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
                 chmod($strTargetFolder."/".$strOneEntry, 0777);
             }
             else if(is_dir($strSourceFolder."/".$strOneEntry)) {
-                if(!is_dir($strTargetFolder."/".$strOneEntry))
-                    mkdir($strTargetFolder."/".$strOneEntry, 0777);
-
                 self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry, $arrExcludeSuffix);
             }
         }
