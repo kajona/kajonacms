@@ -197,72 +197,94 @@ class class_installer {
         if($this->checkDefaultValues())
             header("Location: "._webpath_."/installer.php?step=loginData");
 
+        $bitCxCheck = true;
 
-        if(!isset($_POST["write"])) {
+        if(isset($_POST["write"]) && $_POST["write"] == "true") {
 
-            //check for available modules
-            $strMysqliInfo = "";
-            $strSqlite3Info = "";
-            $strPostgresInfo = "";
-            $strOci8Info = "";
-            if(!in_array("mysqli", get_loaded_extensions())) {
-                $strMysqliInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
-            }
-            if(!in_array("pgsql", get_loaded_extensions())) {
-                $strPostgresInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
-            }
-            if(in_array("sqlite3", get_loaded_extensions())) {
-                $strSqlite3Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
-            }
-            else {
-                $strSqlite3Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
-            }
-            if(in_array("oci8", get_loaded_extensions())) {
-                $strOci8Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
-            }
-            else {
-                $strOci8Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
-            }
 
-            //configwizard_form
-            $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "configwizard_form", true);
-            $strReturn .= $this->objTemplates->fillTemplate(
-                array(
-                    "mysqliInfo"       => $strMysqliInfo,
-                    "sqlite3Info"      => $strSqlite3Info,
-                    "postgresInfo"     => $strPostgresInfo,
-                    "oci8Info"         => $strOci8Info
-                ), 
-                $strTemplateID
+            //try to validate the data passed
+            $bitCxCheck = class_carrier::getInstance()->getObjDB()->validateDbCxData(
+                $_POST["driver"],
+                $_POST["hostname"],
+                $_POST["username"],
+                $_POST["password"],
+                $_POST["dbname"],
+                $_POST["port"]
             );
-            $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
 
-        }
-        elseif($_POST["write"] == "true") {
-            //check vor values
-            if($_POST["hostname"] == "" || $_POST["username"] == "" || $_POST["password"] == "" || $_POST["dbname"] == "" || $_POST["driver"] == "") {
-                header("Location: "._webpath_."/installer.php");
+
+            if($bitCxCheck) {
+                $strFileContent = "<?php\n";
+                $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
+                $strFileContent .= "\n";
+                $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
+                $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";
+                $strFileContent .= "  \$config['dbpassword']           = '".$_POST["password"]."';                   //Password \n";
+                $strFileContent .= "  \$config['dbname']               = '".$_POST["dbname"]."';                     //Database name \n";
+                $strFileContent .= "  \$config['dbdriver']             = '".$_POST["driver"]."';                     //DB-Driver \n";
+                $strFileContent .= "  \$config['dbprefix']             = '".$_POST["dbprefix"]."';                   //Table-prefix \n";
+                $strFileContent .= "  \$config['dbport']               = '".$_POST["port"]."';                       //Database port \n";
+
+                $strFileContent .= "\n";
+                //and save to file
+                file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
+                // and reload
+                header("Location: "._webpath_."/installer.php?step=loginData");
+                $this->strOutput = $strReturn;
                 return;
             }
-
-
-            $strFileContent = "<?php\n";
-            $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
-            $strFileContent .= "\n";
-            $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
-            $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";
-            $strFileContent .= "  \$config['dbpassword']           = '".$_POST["password"]."';                   //Password \n";
-            $strFileContent .= "  \$config['dbname']               = '".$_POST["dbname"]."';                     //Database name \n";
-            $strFileContent .= "  \$config['dbdriver']             = '".$_POST["driver"]."';                     //DB-Driver \n";
-            $strFileContent .= "  \$config['dbprefix']             = '".$_POST["dbprefix"]."';                   //Table-prefix \n";
-            $strFileContent .= "  \$config['dbport']               = '".$_POST["port"]."';                       //Database port \n";
-
-            $strFileContent .= "\n";
-            //and save to file
-            file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
-            // and reload
-            header("Location: "._webpath_."/installer.php?step=loginData");
         }
+
+
+        //check for available modules
+        $strMysqliInfo = "";
+        $strSqlite3Info = "";
+        $strPostgresInfo = "";
+        $strOci8Info = "";
+        if(!in_array("mysqli", get_loaded_extensions())) {
+            $strMysqliInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
+        }
+        if(!in_array("pgsql", get_loaded_extensions())) {
+            $strPostgresInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
+        }
+        if(in_array("sqlite3", get_loaded_extensions())) {
+            $strSqlite3Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
+        }
+        else {
+            $strSqlite3Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
+        }
+        if(in_array("oci8", get_loaded_extensions())) {
+            $strOci8Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
+        }
+        else {
+            $strOci8Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
+        }
+
+        $strCxWarning = "";
+        if(!$bitCxCheck) {
+            $strCxWarning = "<div class=\"alert alert-error\">".$this->getLang("installer_dbcx_error")."</div>";
+        }
+
+        //configwizard_form
+        $strTemplateID = $this->objTemplates->readTemplate("/core/module_installer/installer.tpl", "configwizard_form", true);
+        $strReturn .= $this->objTemplates->fillTemplate(
+            array(
+                "mysqliInfo"       => $strMysqliInfo,
+                "sqlite3Info"      => $strSqlite3Info,
+                "postgresInfo"     => $strPostgresInfo,
+                "oci8Info"         => $strOci8Info,
+                "cxWarning"        => $strCxWarning,
+                "postHostname"     => isset($_POST["hostname"]) ? $_POST["hostname"] : "",
+                "postUsername"     => isset($_POST["username"]) ? $_POST["username"] : "",
+                "postDbname"       => isset($_POST["dbname"]) ? $_POST["dbname"] : "",
+                "postDbport"       => isset($_POST["port"]) ? $_POST["port"] : "",
+                "postDbdriver"     => isset($_POST["driver"]) ? $_POST["driver"] : "",
+                "postPrefix"       => isset($_POST["dbprefix"]) != "" ? $_POST["dbprefix"] : "kajona_"
+            ),
+            $strTemplateID
+        );
+        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
+
 
         $this->strOutput = $strReturn;
     }

@@ -1004,4 +1004,43 @@ class class_db {
         return $this->objDbDriver->encloseTableName($strTable);
     }
 
+
+    /**
+     * Tries to validate the passed connection data.
+     * May be used by other classes in order to test some credentials,
+     * e.g. the installer.
+     * The connection established will be closed directly and is not usable by other modules.
+     *
+     * @param $strDriver
+     * @param $strDbHost
+     * @param $strDbUser
+     * @param $strDbPass
+     * @param $strDbName
+     * @param $intDbPort
+     *
+     * @return bool
+     */
+    public function validateDbCxData($strDriver, $strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort) {
+
+        /** @var $objDbDriver interface_db_driver */
+        $objDbDriver = null;
+
+        $strClassname = "class_db_".$strDriver;
+        if(class_exists($strClassname))
+            $objDbDriver = new $strClassname();
+        else
+            return false;
+
+        try {
+            if($objDbDriver->dbconnect($strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)) {
+                $objDbDriver->dbclose();
+                return true;
+            }
+        }
+        catch(class_exception $objEx) {
+            return false;
+        }
+
+        return false;
+    }
 }

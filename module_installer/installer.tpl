@@ -107,6 +107,8 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 function switchDriver() {
     var strValue = document.getElementById('driver').value;
 
+    $('#cxWarning').html("");
+
     var strMysqliInfo = '%%mysqliInfo%%';
     var strPostgresInfo = '%%postgresInfo%%';
     var strSqlite3Info = '%%sqlite3Info%%';
@@ -149,23 +151,24 @@ function switchDriver() {
 }
 </script>
 <br />
-<form action="_webpath_/installer.php" method="POST" class="form-horizontal">
+<form action="_webpath_/installer.php?step=config" method="POST" class="form-horizontal">
 <input type="hidden" name="write" value="true" />
 <div id="dbInfo">
     %%mysqliInfo%%
 </div>
+<div id="cxWarning">%%cxWarning%%</div>
 
     <div class="control-group">
         <label for="hostname" class="control-label">[lang,installer_config_dbhostname,system]</label>
         <div class="controls">
-            <input type="text" id="hostname" name="hostname" value="" class="input-xlarge">
+            <input type="text" id="hostname" name="hostname" value="%%postHostname%%" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
         <label for="username" class="control-label">[lang,installer_config_dbusername,system]</label>
         <div class="controls">
-            <input type="text" id="username" name="username" value="" class="input-xlarge">
+            <input type="text" id="username" name="username" value="%%postUsername%%" class="input-xlarge">
         </div>
     </div>
 
@@ -179,14 +182,14 @@ function switchDriver() {
     <div class="control-group">
         <label for="dbname" class="control-label">[lang,installer_config_dbname,system]</label>
         <div class="controls">
-            <input type="text" id="dbname" name="dbname" value="" class="input-xlarge">
+            <input type="text" id="dbname" name="dbname" value="%%postDbname%%" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
         <label for="dbprefix" class="control-label">[lang,installer_config_dbprefix,system]</label>
         <div class="controls">
-            <input type="text" id="dbprefix" name="dbprefix" value="kajona_" class="input-xlarge">
+            <input type="text" id="dbprefix" name="dbprefix" value="%%postPrefix%%" class="input-xlarge">
         </div>
     </div>
 
@@ -201,6 +204,7 @@ function switchDriver() {
                 <option value="oci8">Oracle (oci8)</option>
             </select>
         </div>
+        <script type="text/javascript">$('#driver').val('%%postDbdriver%%');</script>
     </div>
 
     <div class="controls">
@@ -209,7 +213,7 @@ function switchDriver() {
     <div class="control-group">
         <label for="port" class="control-label">[lang,installer_config_dbport,system]</label>
         <div class="controls">
-            <input type="text" id="port" name="port" value="" class="input-xlarge">
+            <input type="text" id="port" name="port" value="%%postDbport%%" class="input-xlarge">
         </div>
     </div>
 

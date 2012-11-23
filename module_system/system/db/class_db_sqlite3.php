@@ -38,6 +38,10 @@ class class_db_sqlite3 implements interface_db_driver {
      * @return bool
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
+
+        if($strDbName == "")
+            return false;
+
         $this->strDbFile = _projectpath_.'/dbdumps/'.$strDbName.'.db3';
 
         try {
@@ -94,10 +98,10 @@ class class_db_sqlite3 implements interface_db_driver {
         foreach($arrParams as $strOneParam) {
             if($strOneParam == null)
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
-//            else if(is_double($strOneParam))
-//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
-//            else if(is_numeric($strOneParam))
-//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
+            //else if(is_double($strOneParam))
+            //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
+            //else if(is_numeric($strOneParam))
+            //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
             else
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
         }
@@ -149,10 +153,10 @@ class class_db_sqlite3 implements interface_db_driver {
         foreach($arrParams as $strOneParam) {
             if($strOneParam == null)
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
-//            else if(is_double($strOneParam))
-//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
-//            else if(is_numeric($strOneParam))
-//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
+            //else if(is_double($strOneParam))
+            //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
+            //else if(is_numeric($strOneParam))
+            //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
             else
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
         }
@@ -382,7 +386,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @return mixed
      */
     public function getDbInfo() {
-        $arrDB = SQLite3::version();
+        $arrDB = $this->linkDB->version();
         $arrReturn = array();
         $arrReturn["dbdriver"] = "sqlite3-extension";
         $arrReturn["dbserver"] = "SQLite3 ".$arrDB["versionString"]." ".$arrDB["versionNumber"];

@@ -55,11 +55,11 @@ class class_db_oci8 implements interface_db_driver {
         //try to set the NLS_LANG env attribute
         putenv("NLS_LANG=American_America.UTF8");
 
-        $this->linkDB = oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
+        $this->linkDB = @oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
 
 
         if($this->linkDB !== false) {
-            oci_set_client_info($this->linkDB, "Kajona CMS");
+            @oci_set_client_info($this->linkDB, "Kajona CMS");
             return true;
         }
         else {

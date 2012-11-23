@@ -24,6 +24,7 @@ interface interface_db_driver {
      * @param string $strDbName
      * @param int $intPort
      * @return bool
+     * @throws class_exception
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort);
 

@@ -53,9 +53,9 @@ class class_db_mysqli implements interface_db_driver {
         $this->strDbName = $strDbName;
         $this->intPort = $intPort;
 
-        $this->linkDB = new mysqli($strHost, $strUsername, $strPass, $strDbName, $intPort);
+        $this->linkDB = @new mysqli($strHost, $strUsername, $strPass, $strDbName, $intPort);
         if($this->linkDB !== false) {
-            if($this->linkDB->select_db($strDbName)) {
+            if(@$this->linkDB->select_db($strDbName)) {
                 //erst ab mysql-client-bib > 4
                 //mysqli_set_charset($this->linkDB, "utf8");
                 $this->_query("SET NAMES 'utf8'");
@@ -78,7 +78,7 @@ class class_db_mysqli implements interface_db_driver {
      * Closes the connection to the database
      */
     public function dbclose() {
-        @mysqli_close($this->linkDB);
+        $this->linkDB->close();
     }
 
     /**

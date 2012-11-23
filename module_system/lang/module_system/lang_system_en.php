@@ -121,6 +121,7 @@ $lang["installer_finish_closer"]         = "<br />Have fun using Kajona!";
 $lang["installer_finish_hints"]          = "You should set back the write permission on /project/system/config/config.php to read-only permission.<br />Additionally, you should remove the file /installer.php completely out of security reasons.<br /><br /><br />The administation in now available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />The portal is available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
 $lang["installer_finish_hints_update"]   = "<b>Attention: If you updated from a v3 system, please make sure to run the post-update scripts as soon as all modules have been upgraded.</b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Run post-update</a><<br /><br />";
 $lang["installer_finish_intro"]          = "<b>Installation finshed</b><br /><br />";
+$lang["installer_dbcx_error"]            = "Connection to the database could not be established. Please verify the connection credentials.";
 $lang["installer_given"]                 = "given";
 $lang["installer_install"]               = "Install";
 $lang["installer_installpe"]             = "Install page elements";
