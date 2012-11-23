@@ -39,7 +39,7 @@
 
 <!-- represents a single file
     available placeholders: image_detail_src, file_filename, file_name, file_subtitle, file_description, file_size, file_hits, file_details_href,
-                            file_owner, file_lmtime, file_link, file_link_href, file_id, file_link_qrcode, file_rating
+                            file_owner, file_lmtime, file_link, file_link_href, file_id, file_rating
 -->
 <filelist_file>
     <tr class="portalListRow1">
@@ -52,8 +52,7 @@
     <tr class="portalListRow2">
         <td></td>
         <td colspan="4" class="description">
-            <div style="float: left;" data-kajona-editable="%%file_id%%#strDescription">%%file_description%%</div><div style="float: right;">%%file_link_qrcode%%</div>
-            <div style="clear: both;"></div>
+            <div data-kajona-editable="%%file_id%%#strDescription">%%file_description%%</div>
         </td>
     </tr>
 </filelist_file>
@@ -67,7 +66,7 @@
 <!-- available placeholders:
    image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
    file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed),
-   file_owner, file_lmtime, file_link, file_link_href, file_link_qrcode
+   file_owner, file_lmtime, file_link, file_link_href
 -->
 <filedetail>
     %%pathnavigation%%
@@ -81,7 +80,7 @@
             <div style="clear: both;"></div>
         </div>
         <div>
-            <div style="float: right;">%%file_link_qrcode%%</div>
+            <div style="float: right;"><img src="[qrcode,%%file_link_href%%,2]" /></div>
             <div style="float: left;">
                 <div>%%file_filename%%</div>
                 <div data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</div>
