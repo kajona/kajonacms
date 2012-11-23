@@ -302,6 +302,7 @@ class class_module_system_aspect extends class_model implements interface_model,
     public static function setCurrentAspectId($strAspectId) {
         if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY)) {
             class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
+            class_carrier::getInstance()->getObjSession()->setSession(class_module_system_aspect::$STR_SESSION_ASPECT_OBJECT, new class_module_system_aspect($strAspectId), class_session::$intScopeRequest);
         }
     }
 
