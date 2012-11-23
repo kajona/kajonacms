@@ -177,8 +177,6 @@ class class_module_mediamanager_portal extends class_portal implements interface
                         if($objOneFile->rightRight2()) {
                             $arrFileTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
                             $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
-
-                            $objPackagemanager = new class_module_packagemanager_manager();
                         }
 
                         //ratings available?
@@ -304,20 +302,29 @@ class class_module_mediamanager_portal extends class_portal implements interface
         if($objFile->rightRight2()) {
             $arrDetailsTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objFile->getSystemid();
             $arrDetailsTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
-
-            $objPackagemanager = new class_module_packagemanager_manager();
         }
 
         //if its an image, provide additional information
         $strSuffix = uniStrtolower(uniSubstr($objFile->getStrFilename(), uniStrrpos($objFile->getStrFilename(), ".")));
         if(in_array($strSuffix, $this->arrImageTypes) && isset($this->arrElementData["gallery_maxh_d"]) && isset($this->arrElementData["gallery_maxw_d"])) {
             $bitIsImage = true;
-            $arrDetailsTemplate["image_src"] = $this->generateImage($objFile->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
+            $arrDetailsTemplate["image_src"] = $this->generateImage(
+                $objFile->getStrFilename(),
+                $this->arrElementData["gallery_maxh_d"],
+                $this->arrElementData["gallery_maxw_d"],
+                $this->arrElementData["gallery_text"],
+                "10",
+                $this->arrElementData["gallery_text_x"],
+                $this->arrElementData["gallery_text_y"],
+                "dejavusans.ttf",
+                "255,255,255",
+                $this->arrElementData["gallery_overlay"]
+            );
         }
 
         $arrStripIds = $this->getNextPrevIds();
-        $arrDetailsTemplate["backlink"]    = ($arrStripIds["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_back"), "fileDetails", "", $arrStripIds["backward_1"] ) : "" );
-        $arrDetailsTemplate["forwardlink"] = ($arrStripIds["forward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_next"), "fileDetails", "", $arrStripIds["forward_1"] ) : "" );
+        $arrDetailsTemplate["backlink"]    = ($arrStripIds["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_back"), "fileDetails", "", $arrStripIds["backward_1"]) : "" );
+        $arrDetailsTemplate["forwardlink"] = ($arrStripIds["forward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getLang("commons_next"), "fileDetails", "", $arrStripIds["forward_1"]) : "" );
 
         //next /prev 3 files
         for($intI = 1; $intI <= 3; $intI++) {
@@ -377,7 +384,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
 
     /**
-     * Renders a single elementn of the file-strip
+     * Renders a single element of the file-strip
      * @param class_module_mediamanager_file $objCurFile
      * @return string
      */
@@ -468,7 +475,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
             if($intHeight == 0 && $intWidth == 0) {
                 $bitResize = false;
             }
-            else if($arrImageData[0] > $intWidth || $arrImageData[1] > $intHeight)    {
+            else if($arrImageData[0] > $intWidth || $arrImageData[1] > $intHeight) {
                 $bitResize = true;
                 $floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = width, 1 = height
 
@@ -613,6 +620,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
         }
 
         //make array-keys numeric
+        /** @var $arrImagesLevel class_module_mediamanager_file[] */
         $arrImagesLevel = array_values($arrImagesLevel);
         //Search the current image
         $intKeyHit = 0;

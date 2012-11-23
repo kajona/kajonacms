@@ -58,6 +58,10 @@ class class_element_gallery_portal extends class_element_portal implements inter
     public function getNavigationEntries() {
         $arrData = $this->getElementContent($this->getSystemid());
 
+        //skip random galleries
+        if($arrData["gallery_mode"] == "1")
+            return false;
+
         $arrData["repo_id"] = $arrData["gallery_id"];
         $arrData["repo_elementsperpage"] = $arrData["gallery_imagesperpage"];
         $arrData["repo_template"] = $arrData["gallery_template"];
