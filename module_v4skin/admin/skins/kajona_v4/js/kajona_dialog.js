@@ -50,7 +50,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
         var $modal = $('#' + this.containerId).modal({
             backdrop: true,
             keyboard: false,
-            show: true
+            show: false
         });
 
         if(!intHeight) {
@@ -80,6 +80,15 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
                 }
             });
         } else {
+
+            if(this.iframeURL != null) {
+                //open the iframe in a regular popup
+                //workaround for stacked dialogs. if a modal is already opened, the second iframe is loaded in a popup window.
+                //stacked modals still face issues with dimensions and scrolling. (see http://trace.kajona.de/view.php?id=724)
+                window.open(this.iframeURL, $('#' + this.containerId + '_title').text(), 'scrollbars=yes,resizable=yes,width=500,height=500');
+                return;
+            }
+
             $modal.css({
                 width: '97%',
                 'margin-left': 0,
@@ -94,6 +103,9 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight)+'" name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
             this.iframeURL = null;
         }
+
+        //finally show the modal
+        $('#' + this.containerId).modal('show');
 
         if (bitDragging) {
             this.enableDragging();
