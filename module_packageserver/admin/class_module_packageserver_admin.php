@@ -68,7 +68,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         else {
             $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFlatPackageListCount(false, false));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setArraySection(class_module_mediamanager_file::getFlatPackageList(false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
+            $objIterator->setArraySection(class_module_mediamanager_file::getFlatPackageList(false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
         }
 
         return $this->renderList($objIterator);
@@ -86,7 +86,9 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
     protected function renderAdditionalActions(class_model $objListEntry) {
 
         if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
-            return array($this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder", "mediamanager"), "icon_folderActionOpen.png")));
+            return array(
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder", "mediamanager"), "icon_folderActionOpen.png"))
+            );
 
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
@@ -150,6 +152,30 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
 
     }
 
+    /**
+     * Copies the metadata.xml content into the files properties.
+     * @permissions edit
+     * @xml
+     * @return string
+     */
+    protected function actionUpdateDataFromMetadata() {
+        $objPackage = new class_module_mediamanager_file($this->getSystemid());
+        $objZip = new class_zip();
+        $strMetadata = $objZip->getFileFromArchive($objPackage->getStrFilename(), "/metadata.xml");
+        if($strMetadata !== false) {
+            $objMetadata = new class_module_packagemanager_metadata();
+            $objMetadata->autoInit($objPackage->getStrFilename());
+            $objPackage->setStrName($objMetadata->getStrTitle());
+            $objPackage->setStrDescription($objMetadata->getStrDescription());
+            //updateObjectToDb triggers the update of the isPackage and the category flags
+            $objPackage->updateObjectToDb();
+            return "<message><success /></message>";
+        }
+
+        return "<message><error /></message>";
+
+    }
+
 
     /**
      * Show a log of all queries
@@ -192,6 +218,11 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
     }
 
 
+    protected function getBatchActionHandlers($strListIdentifier) {
+        $arrDefault = array();
+        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_text.png"), getLinkAdminXml("packageserver", "updateDataFromMetadata", "&systemid=%systemid%"), $this->getLang("batchaction_metadata"));
+        return $arrDefault;
+    }
 
     /**
      * Generates a path-navigation

@@ -26,3 +26,4 @@ $lang["package_minversion"]              = "Minimal system-version:";
 $lang["package_modules"]                 = "Required modules:";
 $lang["package_type"]                    = "Type:";
 $lang["package_version"]                 = "Version:";
+$lang["batchaction_metadata"]            = "Update the mediamangers file-properties based on the packages metadata.xml";
