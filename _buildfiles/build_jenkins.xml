@@ -227,6 +227,30 @@
         </zip>
     </target>
 
+    <target name="modulePackagesZipHelper" depends="init" description="call this task before using the shellscript in order to generate module-zips">
+        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true"  >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+                <exclude name=".svn"/>
+                <include name="element_*/**"/>
+                <include name="module_*/*/**"/>
+                <include name="template_*/*/**"/>
+                <include name="_debugging/*/**"/>
+                <include name="*.php"/>
+            </fileset>
+        </copy>
+
+        <apply executable="unoconv" parallel="false" dest="${basedir}${tempPath}" verbose="true">
+            <arg line="-f pdf"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
+            <arg value="-o" />
+            <targetfile/>
+            <srcfile/>
+            <mapper type="glob" from="*.odt" to="*.pdf"/>
+        </apply>
+
+        <antcall target="buildPackageHelper" />
+
+    </target>
 
     <target name="buildPackageHelper" description="triggers the project setup and the compilation / compression of css / js files">
         <exec executable="php" dir="${basedir}"  failonerror="on" >
