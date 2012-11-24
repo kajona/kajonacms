@@ -142,17 +142,13 @@
                 <include name="template_*/*/**"/>
                 <include name="_debugging/*/**"/>
                 <include name="*.php"/>
+                <include name="*.htaccess"/>
             </fileset>
-
         </copy>
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
-    <target name="buildFullZip" depends="init" >
-        <delete dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}/core"/>
-
+    <target name="buildFullZip" depends="init,setupPackageFolders" >
         <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
@@ -163,20 +159,11 @@
                 <include name="template_*/*/**"/>
                 <!--<include name="_debugging/*/**"/>-->
                 <include name="*.php"/>
-
+                <include name="*.htaccess"/>
             </fileset>
-
         </copy>
 
-        <exec executable="php" dir="${basedir}"  failonerror="on" >
-            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
-        </exec>
-
-        <antcall target="compileLess" />
-        <antcall target="compressCss" />
-        <antcall target="compressJs" />
-
-        <antcall target="cleanZipContent" />
+        <antcall target="buildPackageHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -184,11 +171,7 @@
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
-    <target name="buildAllInOneZip" depends="init" >
-        <delete dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}/core"/>
-
+    <target name="buildAllInOneZip" depends="init,setupPackageFolders" >
         <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
@@ -206,20 +189,11 @@
                 <include name="template_*/*/**"/>
                 <!--<include name="_debugging/*/**"/>-->
                 <include name="*.php"/>
-
+                <include name="*.htaccess"/>
             </fileset>
-
         </copy>
 
-        <exec executable="php" dir="${basedir}"  failonerror="on" >
-            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
-        </exec>
-
-        <antcall target="compileLess" />
-        <antcall target="compressCss" />
-        <antcall target="compressJs" />
-
-        <antcall target="cleanZipContent" />
+        <antcall target="buildPackageHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -227,11 +201,7 @@
     </target>
 
     <!-- creates the light-zip, only a limited set of modules included -->
-    <target name="buildLightZip" depends="init">
-        <delete dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}/core"/>
-
+    <target name="buildLightZip" depends="init,setupPackageFolders">
         <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
@@ -246,25 +216,33 @@
                 <include name="module_installer/*/**"/>
                 <include name="module_v4skin/*/**"/>
                 <include name="*.php"/>
+                <include name="*.htaccess"/>
             </fileset>
-
         </copy>
 
-        <exec executable="php" dir="${basedir}"  failonerror="on" >
-            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
-        </exec>
-
-        <antcall target="compileLess" />
-        <antcall target="compressCss" />
-        <antcall target="compressJs" />
-
-        <antcall target="cleanZipContent" />
+        <antcall target="buildPackageHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
 
+
+    <target name="buildPackageHelper" description="triggers the project setup and the compilation / compression of css / js files">
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
+        </exec>
+        <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
+        <antcall target="cleanZipContent" />
+    </target>
+
+    <target name="setupPackageFolders" description="deletes the temp-folders and creates the initial structure">
+        <delete dir="${basedir}${tempPath}"/>
+        <mkdir  dir="${basedir}${tempPath}"/>
+        <mkdir  dir="${basedir}${tempPath}/core"/>
+    </target>
 
     <!-- triggers the installation of the project aka. creating the db-structure -->
 
