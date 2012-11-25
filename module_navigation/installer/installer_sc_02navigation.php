@@ -82,7 +82,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                                 SET navigation_id= ?,
                                     navigation_template = ?
                                 WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", "tree", $strElementId)))
+                if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
                 else
                     $strReturn .= "Error creating navigation element.\n";
@@ -102,7 +102,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                                 SET navigation_id= ?,
                                     navigation_template = ?
                                 WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", "tree", $strElementId)))
+                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
                 else
                     $strReturn .= "Error creating navigation element.\n";
@@ -123,7 +123,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                                 SET navigation_id= ?,
                                     navigation_template = ?
                                 WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "breadcrumbnavi.tpl", "tree", $strElementId)))
+                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "breadcrumbnavi.tpl", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
                 else
                     $strReturn .= "Error creating navigation element.\n";
@@ -152,7 +152,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                             SET navigation_id=?,
                                 navigation_template = ?
                                 WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", "sitemap", $strElementId)))
+            if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", $strElementId)))
                 $strReturn .= "Sitemapelement created.\n";
             else
                 $strReturn .= "Error creating sitemapelement.\n";

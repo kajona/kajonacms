@@ -50,10 +50,13 @@ class class_db_sqlite3 implements interface_db_driver {
             $this->_query('PRAGMA short_column_names = ON');
             if(method_exists($this->linkDB, "busyTimeout"))
                 $this->linkDB->busyTimeout(5000);
+
+            return true;
         }
         catch(Exception $e) {
             throw new class_exception("Error connecting to database: ".$e, class_exception::$level_FATALERROR);
         }
+
     }
 
     /**
