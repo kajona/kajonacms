@@ -48,7 +48,6 @@
 
 
 
-<!--<script src="_skinwebpath_/js/jquery-ui-1.8.18.custom.min.js"></script>-->
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/bootstrap-transition.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/bootstrap-alert.js?_system_browser_cachebuster_"></script>
@@ -63,10 +62,6 @@
 <script src="_skinwebpath_/js/bootstrap-carousel.js?_system_browser_cachebuster_"></script>
 
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
-<!--<script src="_skinwebpath_/js/bootstrap-typeahead.js"></script>-->
-<!--<script src="_skinwebpath_/js/bootstrap-datepicker.js"></script>-->
-
-
 
 
 <div class="modal hide fade fullsize" id="folderviewDialog" role="dialog">

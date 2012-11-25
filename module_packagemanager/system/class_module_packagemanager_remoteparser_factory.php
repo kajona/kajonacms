@@ -24,6 +24,8 @@ class class_module_packagemanager_remoteparser_factory {
      * @param int $intStart
      * @param int $intEnd
      * @param string $strProviderName
+     * @param string $strPagerAddon
+     *
      * @return class_module_packagemanager_remoteparser_v3|class_module_packagemanager_remoteparser_v4
      */
     public static function getRemoteParser(array $remoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName, $strPagerAddon = "") {

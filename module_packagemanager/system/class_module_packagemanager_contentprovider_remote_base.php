@@ -84,6 +84,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         }
 
         $arrResponse = json_decode($strResponse, true);
+        if($arrResponse === null)
+            throw new class_exception("Error loading the remote package list. Got: <br />".htmlToString($strResponse, true), class_exception::$level_ERROR);
 
         $objRemoteParser = class_module_packagemanager_remoteparser_factory::getRemoteParser(
             $arrResponse, $this->getPageNumber(), $intStart, $intEnd, get_class($this), "&name=".urlencode($this->getParam("name"))."&type=".$this->getParam("type")

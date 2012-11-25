@@ -94,15 +94,17 @@ class class_remoteloader {
             $strReturn = $this->connectByFileGetContents();
         }
 
+        //fourth: curl
+        if($strReturn === false) {
+            $strReturn = $this->connectViaCurl();
+        }
+
         //third: fsockopen
         if($strReturn === false) {
             $strReturn = $this->connectFSockOpen();
         }
 
-        //fourth: curl
-        if($strReturn === false) {
-            $strReturn = $this->connectViaCurl();
-        }
+
 
         //fifth try: sockets
         if($strReturn === false) {
@@ -124,11 +126,15 @@ class class_remoteloader {
 
         //throw a general error?
         if($strReturn === false) {
-            class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("remoteloader failed. protocol: " . $this->strProtocolHeader . " host: " . $this->strHost . " port: " . $this->intPort . " params: " . $this->strQueryParams, class_logger::$levelWarning);
+            class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow(
+                "remoteloader failed. protocol: " . $this->strProtocolHeader . " host: " . $this->strHost . " port: " . $this->intPort . " params: " . $this->strQueryParams, class_logger::$levelWarning
+            );
             throw new class_exception("Error loading the remote content", class_exception::$level_ERROR);
         }
 
-        class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("new remote-request succeeded. protocol: " . $this->strProtocolHeader . " host: " . $this->strHost . " port: " . $this->intPort . " params: " . $this->strQueryParams, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow(
+            "new remote-request succeeded. protocol: " . $this->strProtocolHeader . " host: " . $this->strHost . " port: " . $this->intPort . " params: " . $this->strQueryParams, class_logger::$levelInfo
+        );
 
         return $strReturn;
     }
@@ -202,7 +208,6 @@ class class_remoteloader {
      * @return string or false in case of an error
      */
     private function connectViaSocket() {
-        $strReturn = "";
 
         //request in list of supported protocols?
         if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
@@ -333,7 +338,6 @@ class class_remoteloader {
      * @return string or false in case of an error
      */
     private function connectViaCurl() {
-        $strReturn = "";
 
         if(!function_exists("curl_exec")) {
             return false;
@@ -343,10 +347,11 @@ class class_remoteloader {
         $objHandle = curl_init();
 
         // set the params
-        curl_setopt($objHandle, CURLOPT_URL, $this->strProtocolHeader .
-            $this->strHost .
-            ($this->intPort > 0 ? ":" . $this->intPort : "") .
-            $this->strQueryParams);
+        curl_setopt(
+            $objHandle,
+            CURLOPT_URL,
+            $this->strProtocolHeader.$this->strHost.($this->intPort > 0 ? ":" . $this->intPort : "").$this->strQueryParams
+        );
         //response-header not needed
         curl_setopt($objHandle, CURLOPT_HEADER, false);
         //return as string

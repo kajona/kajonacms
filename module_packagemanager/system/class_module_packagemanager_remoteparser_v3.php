@@ -12,6 +12,7 @@
  * @module module_packagemanager
  * @author flo@mediaskills.org
  * @since 4.0
+ * @deprecated
  */
 class class_module_packagemanager_remoteparser_v3 implements interface_packagemanager_remoteparser {
 

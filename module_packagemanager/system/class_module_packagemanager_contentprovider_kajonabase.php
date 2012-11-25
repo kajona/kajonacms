@@ -20,7 +20,7 @@ class class_module_packagemanager_contentprovider_kajonabase extends class_modul
     function __construct() {
         parent::__construct(
             "provider_kajonabase",
-            "v4.kajonabase.net",
+            "www.kajonabase.net",
             "/xml.php?module=packageserver&action=list",
             "/download.php",
             __CLASS__
