@@ -148,7 +148,8 @@
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
-    <target name="buildFullZip" depends="init,setupPackageFolders" >
+    <target name="buildFullZip" depends="init" >
+        <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
@@ -171,7 +172,8 @@
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
-    <target name="buildAllInOneZip" depends="init,setupPackageFolders" >
+    <target name="buildAllInOneZip" depends="init" >
+        <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
@@ -183,11 +185,11 @@
                 <exclude name="module_packagserver/" />
                 <exclude name="module_pchart/" />
                 <exclude name="module_workflows/" />
+                <exclude name="module_pdf/" />
 
                 <include name="element_*/**"/>
-                <include name="module_*/*/**"/>
-                <include name="template_*/*/**"/>
-                <!--<include name="_debugging/*/**"/>-->
+                <include name="module_*/**"/>
+                <include name="template_*/**"/>
                 <include name="*.php"/>
                 <include name="*.htaccess"/>
             </fileset>
@@ -201,20 +203,21 @@
     </target>
 
     <!-- creates the light-zip, only a limited set of modules included -->
-    <target name="buildLightZip" depends="init,setupPackageFolders">
+    <target name="buildLightZip" depends="init">
+        <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="module_navigation/*/**"/>
-                <include name="module_pages/*/**"/>
-                <include name="module_samplecontent/*/**"/>
-                <include name="module_packagemanager/*/**"/>
+                <include name="module_navigation/**"/>
+                <include name="module_pages/**"/>
+                <include name="module_samplecontent/**"/>
+                <include name="module_packagemanager/**"/>
                 <include name="module_system/**"/>
                 <include name="module_search/**"/>
                 <include name="module_tags/**"/>
                 <include name="module_dashboard/**"/>
-                <include name="module_installer/*/**"/>
-                <include name="module_v4skin/*/**"/>
+                <include name="module_installer/**"/>
+                <include name="module_v4skin/**"/>
                 <include name="*.php"/>
                 <include name="*.htaccess"/>
             </fileset>
@@ -232,9 +235,9 @@
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
                 <include name="element_*/**"/>
-                <include name="module_*/*/**"/>
-                <include name="template_*/*/**"/>
-                <include name="_debugging/*/**"/>
+                <include name="module_*/**"/>
+                <include name="template_*/**"/>
+                <include name="_debugging/**"/>
                 <include name="*.php"/>
             </fileset>
         </copy>
