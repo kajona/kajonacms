@@ -301,10 +301,11 @@
 
 
     <target name="cleanZipContent" description="Removes internal files used by the development not to be included into the build zips">
-        <delete>
+        <delete includeemptydirs="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
             <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/core/*/tests/**"/>
         </delete>
     </target>
 

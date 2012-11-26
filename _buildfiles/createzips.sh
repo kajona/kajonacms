@@ -32,5 +32,5 @@ echo "Packaging...\n";
 
 echo "calling the ant task modulePackagesZipHelper\n";
 ant -f $PWD/build_jenkins.xml modulePackagesZipHelper
-#createModuleZips
+createModuleZips
 
