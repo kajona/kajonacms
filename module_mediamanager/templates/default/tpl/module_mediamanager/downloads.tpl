@@ -80,7 +80,7 @@
             <div style="clear: both;"></div>
         </div>
         <div>
-            <div style="float: right;"><img src="[qrcode,%%file_link_href%%,2]" /></div>
+            <div style="float: right;" id="qr_%%file_systemid%%"><script type='text/javascript'>if(('[qrcode,%%file_link_href%%,2]').substr(0,8) != '[qrcode,') $("#qr_%%file_systemid%%").html('<img src="[qrcode,%%file_link_href%%,2]" />');</script></div>
             <div style="float: left;">
                 <div>%%file_filename%%</div>
                 <div data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</div>
