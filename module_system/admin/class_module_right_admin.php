@@ -262,7 +262,9 @@ class class_module_right_admin extends class_admin implements interface_admin {
             $strUrlHistory = $this->getHistory(0);
             //Buliding the right-matrix
             $arrHistory = explode("&", $strUrlHistory);
-            $arrTemplate["backlink"] = getLinkAdminRaw("" . $arrHistory[0] . "&" . $arrHistory[1], $this->getLang("commons_back"));
+            if(isset($arrHistory[0]) && isset($arrHistory[1]))
+                $arrTemplate["backlink"] = getLinkAdminRaw("" . $arrHistory[0] . "&" . $arrHistory[1], $this->getLang("commons_back"));
+
             $arrTemplate["desc"] = $this->getLang("desc");
             $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
             //Followed by the form
