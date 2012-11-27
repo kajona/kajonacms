@@ -76,6 +76,10 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
         if(in_array($strSuffix, array(".zip"))) {
             if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
                 class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, class_logger::$levelInfo);
+                class_resourceloader::getInstance()->flushCache();
+                class_classloader::getInstance()->flushCache();
+                class_reflection::flushCache();
+
                 return $strTarget;
             }
         }

@@ -169,13 +169,14 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 //compare the version to trigger additional actions
                 $strLatestVersion = $arrLatestVersion[$strOnePackage];
                 if($bitUpdateAvailable) {
-                    $arrReturn[$strOnePackage] = getLinkAdmin(
+                    $arrReturn[$strOnePackage] = getLinkAdminDialog(
                         $this->getArrModule("modul"),
                         "initPackageUpdate",
                         "&package=".$objHandler->getObjMetadata()->getStrPath(),
                         $this->getLang("package_updatefound")." ".$strLatestVersion,
                         $this->getLang("package_updatefound")." ".$strLatestVersion,
-                        "icon_update.png"
+                        "icon_update.png",
+                        $objHandler->getObjMetadata()->getStrTitle()
                     );
                 }
                 else {
@@ -223,10 +224,27 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if(!$objHandler->getObjMetadata()->getBitProvidesInstaller() || $objHandler->isInstallable()) {
 
-                if($objHandler->getVersionInstalled() != null)
+                $arrNotWritable = array();
+                if($objHandler->getVersionInstalled() != null) {
                     $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".$objHandler->getStrTargetPath());
-                else
+
+                    $this->checkWritableRecursive($objHandler->getStrTargetPath(), $arrNotWritable);
+                }
+                else {
                     $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".dirname($objHandler->getStrTargetPath()));
+                    if(!is_writable(_realpath_.dirname($objHandler->getStrTargetPath())))
+                        $arrNotWritable[] = dirname($objHandler->getStrTargetPath());
+                }
+
+                if(count($arrNotWritable) > 0) {
+                    $strWarning = $this->getLang("package_target_nonwritablelist");
+                    $strWarning.= "<ul>";
+                    foreach($arrNotWritable as $strOnePath)
+                        $strWarning .= "<li>".$strOnePath."</li>";
+                    $strWarning .= "</ul>";
+
+                    $strReturn .= $this->objToolkit->warningBox($strWarning);
+                }
 
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
                 $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);
@@ -573,4 +591,28 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     }
 
 
+    /**
+     * Checks if all content of the passed folder is writable
+     * @param $strFolder
+     * @param $arrErrors
+     */
+    private function checkWritableRecursive($strFolder, &$arrErrors) {
+
+        if(!is_writable(_realpath_.$strFolder))
+            $arrErrors[] = $strFolder;
+
+        $objFilesystem = new class_filesystem();
+        $arrContent = $objFilesystem->getCompleteList($strFolder);
+
+        foreach($arrContent["files"]as $arrOneFile) {
+            if(!is_writable(_realpath_.$strFolder."/".$arrOneFile["filename"]))
+                $arrErrors[] = $strFolder."/".$arrOneFile["filename"];
+        }
+
+        foreach($arrContent["folders"] as $strOneFolder) {
+            $this->checkWritableRecursive($strFolder."/".$strOneFolder, $arrErrors);
+        }
+
+
+    }
 }

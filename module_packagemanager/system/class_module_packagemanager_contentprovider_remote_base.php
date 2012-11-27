@@ -222,6 +222,10 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $strResponse = $objRemoteloader->getRemoteContent();
         file_put_contents(_realpath_._projectpath_."/temp/".$strFilename, $strResponse);
 
+        class_resourceloader::getInstance()->flushCache();
+        class_classloader::getInstance()->flushCache();
+        class_reflection::flushCache();
+
 
         return _projectpath_."/temp/".$strFilename;
     }
@@ -266,8 +270,11 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     public function initPackageUpdate($strTitle) {
         $arrMetadata = $this->searchPackage($strTitle);
 
+        if(count($arrMetadata) == 1)
+            $arrMetadata = $arrMetadata[0];
+
         if(isset($arrMetadata["systemid"])) {
-            $strUrl = getLinkAdminHref(self::$STR_MODULE_NAME, "uploadPackage", "&provider=".__CLASS__."&systemid=".$arrMetadata["systemid"]);
+            $strUrl = getLinkAdminHref(self::$STR_MODULE_NAME, "uploadPackage", "&provider=".get_class($this)."&systemid=".$arrMetadata["systemid"]);
 
             $strUrl = str_replace("_webpath_", _webpath_, $strUrl);
             $strUrl = str_replace("_indexpath_", _indexpath_, $strUrl);

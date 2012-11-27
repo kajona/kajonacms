@@ -317,6 +317,7 @@ class class_module_packagemanager_manager {
      *
      * @param interface_packagemanager_packagemanager $objPackage
      *
+     * @throws class_exception
      * @return mixed
      */
     public function updatePackage(interface_packagemanager_packagemanager $objPackage) {
@@ -325,15 +326,18 @@ class class_module_packagemanager_manager {
         foreach($arrProvider as $objOneProvider) {
             $arrModule = $objOneProvider->searchPackage($objPackage->getObjMetadata()->getStrTitle());
 
-            if($arrModule != null && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
+            if(count($arrModule) == 1)
+                $arrModule = $arrModule[0];
 
+
+            if($arrModule != null && isset($arrModule["title"]) && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
                 $objOneProvider->initPackageUpdate($arrModule["title"]);
+                break;
             }
 
         }
 
-        class_resourceloader::getInstance()->flushCache();
-        class_classloader::getInstance()->flushCache();
-        class_reflection::flushCache();
+        return "Error loading metainformation for package ".$objPackage->getObjMetadata()->getStrTitle();
+
     }
 }

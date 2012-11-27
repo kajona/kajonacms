@@ -77,3 +77,4 @@ $lang["update_notification_verav"]       = "Available version:";
 $lang["update_notification_verinst"]     = "Installed version:";
 $lang["quickhelp_new"]                   = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
 $lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
+$lang["package_target_nonwritablelist"]  = "The following files and folders are not writable and may cause the installation/the update to fail:";
