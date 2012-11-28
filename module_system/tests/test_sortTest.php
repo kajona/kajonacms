@@ -229,6 +229,51 @@ class class_test_sort extends class_testbase {
     }
 
 
+    public function testRandomSortTest() {
+        $objRootPage = new class_module_pages_page();
+
+        $objRootPage->setStrName("randomSortTest");
+        $objRootPage->updateObjectToDb();
+
+        $arrNodes = array();
+
+
+        for($intI = 0; $intI < 5; $intI++) {
+            $objPage = new class_module_pages_page();
+            $objPage->setStrName("l1_".$intI);
+            $objPage->updateObjectToDb($objRootPage->getSystemid());
+
+            $arrNodes[] = $objPage->getSystemid();
+
+            for($intK = 0; $intK < 10; $intK++) {
+                $objPageK = new class_module_pages_page();
+                $objPageK->setStrName("l2_".$intI);
+                $objPageK->updateObjectToDb($objPage->getSystemid());
+
+                $arrNodes[] = $objPageK->getSystemid();
+            }
+        }
+
+        $intMax = count($arrNodes)-1;
+        for($intI = 0; $intI < 50; $intI++) {
+            $objPage = new class_module_pages_page($arrNodes[rand(0, $intMax)]);
+
+            $objPage->updateObjectToDb($arrNodes[rand(0, $intMax)]);
+        }
+
+        $this->validateSingleLevelSort($objRootPage->getSystemid());
+        $objRootPage->deleteObject();
+    }
+
+    private function validateSingleLevelSort($strParentId) {
+        $arrNodes = class_module_pages_folder::getPagesAndFolderList($strParentId);
+
+        for($intI = 1; $intI <= count($arrNodes); $intI++) {
+            $this->validateSingleLevelSort($arrNodes[$intI-1]->getSystemid());
+
+            $this->assertEquals($intI, $arrNodes[$intI-1]->getIntSort());
+        }
+    }
 
 
 }
