@@ -12,10 +12,9 @@
  *
  * @package module_rating
  * @author sidler@mulchprod.de
- *
  * @targetTable rating.rating_id
  */
-class class_module_rating_rate extends class_model implements interface_model, interface_recorddeleted_listener  {
+class class_module_rating_rate extends class_model implements interface_model, interface_recorddeleted_listener {
 
     const RATING_COOKIE = "kj_ratingHistory";
 
@@ -61,7 +60,7 @@ class class_module_rating_rate extends class_model implements interface_model, i
         $this->setArrModuleEntry("modul", "rating");
         $this->setArrModuleEntry("moduleId", _rating_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
     }
 
 
@@ -71,7 +70,7 @@ class class_module_rating_rate extends class_model implements interface_model, i
      * @return string
      */
     public function getStrDisplayName() {
-        return"rating for ".$this->getStrRatingSystemid();
+        return "rating for ".$this->getStrRatingSystemid();
     }
 
 
@@ -79,29 +78,30 @@ class class_module_rating_rate extends class_model implements interface_model, i
      * Adds a rating-value to the record saved in the db
      *
      * @param float $floatRating
+     *
      * @return bool
      */
     public function saveRating($floatRating) {
         if($floatRating < 0 || !$this->isRateableByCurrentUser() || $floatRating > class_module_rating_rate::$intMaxRatingValue)
             return false;
 
-    	$floatRatingOriginal = $floatRating;
+        $floatRatingOriginal = $floatRating;
 
-    	$objRatingAlgo = new class_module_rating_algo_gaussian();
-    	$floatRating = $objRatingAlgo->doRating($this, $floatRating);
+        $objRatingAlgo = new class_module_rating_algo_gaussian();
+        $floatRating = $objRatingAlgo->doRating($this, $floatRating);
 
         class_logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
 
         //update the values to remain consistent
         $this->setFloatRating($floatRating);
-        $this->setIntHits($this->getIntHits()+1);
+        $this->setIntHits($this->getIntHits() + 1);
 
         //save a hint in the history table
         //if($this->objSession->getUserID() != "") {
-        	$strInsert = "INSERT INTO ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
+        $strInsert = "INSERT INTO ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
         	              (rating_history_id, rating_history_rating, rating_history_user, rating_history_timestamp, rating_history_value) VALUES
         	              (?, ?, ?, ?, ?)";
-        	$this->objDB->_pQuery($strInsert, array(generateSystemid(), $this->getSystemid(), $this->objSession->getUserID(), (int)time(), $floatRatingOriginal));
+        $this->objDB->_pQuery($strInsert, array(generateSystemid(), $this->getSystemid(), $this->objSession->getUserID(), (int)time(), $floatRatingOriginal));
         //}
 
         //and save it in a cookie
@@ -120,34 +120,34 @@ class class_module_rating_rate extends class_model implements interface_model, i
      * @return bool
      */
     public function isRateableByCurrentUser() {
-    	$bitReturn = true;
+        $bitReturn = true;
 
-    	//sql-check - only if user is not a guest
-    	$arrRow = array();
-    	$arrRow["COUNT(*)"] = 0;
+        //sql-check - only if user is not a guest
+        $arrRow = array();
+        $arrRow["COUNT(*)"] = 0;
 
-    	if($this->objSession->getUserID() != "") {
-	    	$strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
+        if($this->objSession->getUserID() != "") {
+            $strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
 	    	               WHERE rating_history_rating = ?
 	    	                 AND rating_history_user = ?";
 
-	    	$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID() ));
-    	}
+            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
+        }
 
-    	if($arrRow["COUNT(*)"] == 0) {
-    		//cookie available?
+        if($arrRow["COUNT(*)"] == 0) {
+            //cookie available?
             $objCookie = new class_cookie();
             if($objCookie->getCookie(class_module_rating_rate::RATING_COOKIE) != "") {
-    			$strRatingCookie = $objCookie->getCookie(class_module_rating_rate::RATING_COOKIE);
-    			if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
-    			   $bitReturn = false;
-    			}
-    		}
-    	}
+                $strRatingCookie = $objCookie->getCookie(class_module_rating_rate::RATING_COOKIE);
+                if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
+                    $bitReturn = false;
+                }
+            }
+        }
         else
             $bitReturn = false;
 
-    	return $bitReturn;
+        return $bitReturn;
     }
 
     /**
@@ -156,6 +156,7 @@ class class_module_rating_rate extends class_model implements interface_model, i
      *
      * @param string $strSystemid
      * @param string $strChecksum
+     *
      * @static
      * @return class_module_rating_rate
      */
@@ -164,11 +165,11 @@ class class_module_rating_rate extends class_model implements interface_model, i
         if($strChecksum != "")
             $arrParams[] = $strChecksum;
 
-    	$strQuery = "SELECT rating_id
+        $strQuery = "SELECT rating_id
                      FROM "._dbprefix_."rating
                      WHERE rating_systemid = ?
-                     ".($strChecksum != "" ? " AND rating_checksum = ? " : "" )."";
-    	$arrMatches = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+                     ".($strChecksum != "" ? " AND rating_checksum = ? " : "")."";
+        $arrMatches = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
 
         if(isset($arrMatches["rating_id"]))
             return new class_module_rating_rate($arrMatches["rating_id"]);
@@ -204,10 +205,10 @@ class class_module_rating_rate extends class_model implements interface_model, i
         $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
 
         if(count($arrRows) > 0) {
-        	foreach ($arrRows as $arrOneRow) {
+            foreach($arrRows as $arrOneRow) {
                 $objRating = new class_module_rating_rate($arrOneRow["rating_id"]);
                 $bitReturn = $bitReturn && $objRating->deleteObject();
-        	}
+            }
         }
 
         return $bitReturn;
@@ -229,38 +230,38 @@ class class_module_rating_rate extends class_model implements interface_model, i
      *    rating_history_user --> the systemid if the user who rated or '' in case of a guest
      *    rating_history_timestamp --> timestamp of the rating
      *    rating_history_value --> the value the user rated the record
+     *
      * @return array
      */
     public function getRatingHistoryAsArray() {
-    	$strQuery = "SELECT * FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
+        $strQuery = "SELECT * FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
     	             WHERE ".$this->objDB->encloseColumnName("rating_history_rating")." = ?
     	             ORDER BY ".$this->objDB->encloseColumnName("rating_history_timestamp")." ASC";
 
-    	return $this->objDB->getPArray($strQuery, array($this->getSystemid()));
+        return $this->objDB->getPArray($strQuery, array($this->getSystemid()));
     }
-
 
 
     public function getStrRatingSystemid() {
-    	return $this->strRatingSystemid;
+        return $this->strRatingSystemid;
     }
 
     public function getStrRatingChecksum() {
-    	return $this->strRatingChecksum;
+        return $this->strRatingChecksum;
     }
 
     public function getFloatRating($bitRound = true) {
         if($this->floatRating == "")
             return 0.0;
 
-    	return $this->floatRating;
+        return $this->floatRating;
     }
 
     public function getIntHits() {
         if($this->intHits == "")
             return 0;
 
-    	return $this->intHits;
+        return $this->intHits;
     }
 
 

@@ -1187,6 +1187,7 @@ abstract class class_root {
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
+                       AND system_id != '0'
                      ORDER BY system_sort ASC";
 
         $arrReturn = array();

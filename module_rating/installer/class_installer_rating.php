@@ -81,11 +81,11 @@ class class_installer_rating extends class_installer_base implements interface_i
  	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
@@ -101,6 +101,14 @@ class class_installer_rating extends class_installer_base implements interface_i
         $objModule = class_module_system_module::getModuleByName("rating");
         $objModule->setStrNamePortal("class_module_rating_portal.php");
         $objModule->updateObjectToDb();
+
+
+        $strReturn .= "Adding classes for existing records...\n";
+        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."rating, "._dbprefix_."system WHERE system_id = rating_id AND (system_class IS NULL OR system_class = '')", array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
+            $this->objDB->_pQuery($strQuery, array( 'class_module_rating_rate', $arrOneRow["system_id"] ) );
+        }
 
         $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
