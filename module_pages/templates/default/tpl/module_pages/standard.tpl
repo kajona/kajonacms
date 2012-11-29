@@ -12,15 +12,15 @@
     <meta name="robots" content="index, follow">
 
     <link rel="canonical" href="%%canonicalUrl%%" />
-    <link rel="stylesheet" href="_webpath_/templates/default/css/normalize.css">
-    <link rel="stylesheet" href="_webpath_/templates/default/css/main.css">
+    <link rel="stylesheet" href="_webpath_/templates/default/css/normalize.css?_system_browser_cachebuster_">
+    <link rel="stylesheet" href="_webpath_/templates/default/css/main.css?_system_browser_cachebuster_">
 
     <link href="_webpath_/templates/default/css/styles.css?_system_browser_cachebuster_" rel="stylesheet" type="text/css" />
 
     %%kajona_head%%
-    <script src="_webpath_/templates/default/js/modernizr-2.6.2.min.js"></script>
-    <script src="_webpath_/templates/default/js/jquery.easing-sooper.js"></script>
-    <script src="_webpath_/templates/default/js/jquery.sooperfish.min.js"></script>
+    <script src="_webpath_/templates/default/js/modernizr-2.6.2.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/templates/default/js/jquery.easing-sooper.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/templates/default/js/jquery.sooperfish.min.js?_system_browser_cachebuster_"></script>
     <link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body>
