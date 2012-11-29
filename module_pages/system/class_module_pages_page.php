@@ -264,6 +264,15 @@ class class_module_pages_page extends class_model implements interface_model, in
         }
         
         $this->updatePath();
+
+        //fix the initial sort-id
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."system
+                      WHERE system_prev_id = ?
+                        AND (system_module_nr = ? OR system_module_nr = ?)";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getPrevId(), _pages_modul_id_, _pages_folder_id_));
+
+        $this->setIntSort($arrRow["COUNT(*)"]);
         
         return true;
     }
@@ -376,6 +385,11 @@ class class_module_pages_page extends class_model implements interface_model, in
         $arrPathNames[] = urlSafeString($this->getStrBrowsername());
         
         $this->strPath = implode("/", $arrPathNames);
+    }
+
+
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
+        parent::setAbsolutePosition($intNewPosition, array(_pages_modul_id_, _pages_folder_id_));
     }
 
 

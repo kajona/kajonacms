@@ -54,16 +54,19 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     protected function onInsertToDb() {
 
-        //set the matching sort-id
-        $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "system WHERE system_prev_id = ? AND system_module_nr = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getStrPrevId(), _pages_folder_id_));
-        $intSiblings = $arrRow["COUNT(*)"];
-
-        $strQuery = "UPDATE " . _dbprefix_ . "system SET system_sort = ? where system_id = ?";
-        $this->objDB->_pQuery($strQuery, array($intSiblings, $this->getSystemid()));
-        $this->setIntSort($intSiblings);
+        //fix the initial sort-id
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."system
+                      WHERE system_prev_id = ?
+                        AND (system_module_nr = ? OR system_module_nr = ?)";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getPrevId(), _pages_modul_id_, _pages_folder_id_));
+        $this->setIntSort($arrRow["COUNT(*)"]);
 
         return parent::onInsertToDb();
+    }
+
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
+        parent::setAbsolutePosition($intNewPosition, array(_pages_modul_id_, _pages_folder_id_));
     }
 
 
@@ -199,54 +202,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
         return $arrReturn;
     }
-
-
-    /**
-     * Changes Position of a folder in the system-tree
-     *
-     * @param string $strFolderID
-     * @param string $strNewPrevID
-     *
-     * @return bool
-     * @static
-     */
-    public static function moveFolder($strFolderID, $strNewPrevID) {
-
-        if(!validateSystemid($strNewPrevID)) {
-            $strNewPrevID = class_module_system_module::getModuleByName("pages")->getSystemid();
-        }
-
-        $strQuery = "UPDATE " . _dbprefix_ . "system
-		              SET  system_prev_id=?
-		              WHERE system_id=?
-		                AND system_module_nr=?";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strFolderID, _pages_folder_id_));
-    }
-
-
-    /**
-     * Changes Position of a site in the system-tree
-     *
-     * @param string $strSiteID
-     * @param string $strNewPrevID
-     *
-     * @return bool
-     * @static
-     */
-    public static function moveSite($strSiteID, $strNewPrevID) {
-
-        if(!validateSystemid($strNewPrevID)) {
-            $strNewPrevID = class_module_system_module::getModuleByName("pages")->getSystemid();
-        }
-
-
-        $strQuery = "UPDATE " . _dbprefix_ . "system
-		              SET system_prev_id=?
-		              WHERE system_id=?
-		              AND system_module_nr=?";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strSiteID, _pages_modul_id_));
-    }
-
 
     /**
      * Returns all Pages listed in a given folder

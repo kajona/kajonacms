@@ -21,26 +21,26 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
     /**
      * Constructor
      */
-	public function __construct() {
+    public function __construct() {
         $this->setArrModuleEntry("modul", "system");
         $this->setArrModuleEntry("moduleId", _system_modul_id_);
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
 
-	/**
-	 * Updates the aboslute position of a single record, relative to its siblings
-	 *
-	 * @return string
+    /**
+     * Updates the aboslute position of a single record, relative to its siblings
+     *
+     * @return string
      * @permissions edit
-	 */
-	protected function actionSetAbsolutePosition() {
-	    $strReturn = "";
+     */
+    protected function actionSetAbsolutePosition() {
+        $strReturn = "";
 
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $intNewPos = $this->getParam("listPos");
-		//check permissions
-		if($objCommon != null && $objCommon->rightEdit() && $intNewPos != "") {
+        //check permissions
+        if($objCommon != null && $objCommon->rightEdit() && $intNewPos != "") {
 
             //there is a different mode for page-elements, catch now
             //store edit date
@@ -54,47 +54,46 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 $objCommon->setAbsolutePosition($intNewPos);
             }
 
-		    $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setAbsolutePosOk")."</message>";
-		    $this->flushCompletePagesCache();
-		}
-		else {
+            $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setAbsolutePosOk")."</message>";
+            $this->flushCompletePagesCache();
+        }
+        else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
-	}
+    }
 
-	/**
-	 * Changes the status of the current systemid
-	 *
-	 * @return string
+    /**
+     * Changes the status of the current systemid
+     *
+     * @return string
      * @permissions edit
-	 */
-	protected function actionSetStatus() {
-	    $strReturn = "";
+     */
+    protected function actionSetStatus() {
+        $strReturn = "";
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
-	    if($objCommon != null && $objCommon->rightEdit()) {
+        if($objCommon != null && $objCommon->rightEdit()) {
 
             $intNewStatus = $this->getParam("status");
             if($intNewStatus == "")
                 $intNewStatus = $objCommon->getIntRecordStatus() == 0 ? 1 : 0;
 
-    	    if($objCommon->setIntRecordStatus($intNewStatus)) {
-    	        $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."</message>";
-    	        $this->flushCompletePagesCache();
-    	    }
-    	    else
+            if($objCommon->setIntRecordStatus($intNewStatus)) {
+                $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."</message>";
+                $this->flushCompletePagesCache();
+            }
+            else
                 $strReturn .= "<error>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusError")."</error>";
-	    }
-	    else {
+        }
+        else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
-	    return $strReturn;
-	}
-
+        return $strReturn;
+    }
 
 
     /**
@@ -126,6 +125,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
     /**
      * Sets the prev-id of a record.
      * expects the param prevId
+     *
      * @return string
      * @permissions edit
      */
@@ -171,8 +171,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
             asort($arrFiles);
             //search for the matching task
-            foreach ($arrFiles as $strOneFile) {
-                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
+            foreach($arrFiles as $strOneFile) {
+                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
 
                     //instantiate the current task
                     $strClassname = uniStrReplace(".php", "", $strOneFile);
@@ -188,7 +188,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                         if($objTask->getStrProgressInformation() != "")
                             $strTaskOutput .= $objTask->getStrProgressInformation();
 
-                        if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
+                        if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100)) {
                             $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
                         }
                         else {
@@ -208,7 +208,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             }
         }
 
-	    return $strReturn;
+        return $strReturn;
     }
 
     /**
@@ -276,9 +276,9 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
             $intTempPos = uniStrpos($strSingleRow, " ");
             $strLevel = uniSubstr($strSingleRow, 0, $intTempPos);
-            $strSingleRow = uniSubstr($strSingleRow, $intTempPos+1);
+            $strSingleRow = uniSubstr($strSingleRow, $intTempPos + 1);
 
-            $intTempPos = uniStrpos($strSingleRow, ")")+1;
+            $intTempPos = uniStrpos($strSingleRow, ")") + 1;
             $strSession = uniSubstr($strSingleRow, 0, $intTempPos);
 
             $strLogEntry = uniSubstr($strSingleRow, $intTempPos);
@@ -293,7 +293,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             $strReturn .= "\t\t<level>".$strLevel."</level>\n";
             $strReturn .= "\t\t<date>".$strDate."</date>\n";
             $strReturn .= "\t\t<session>".$strSession."</session>\n";
-            $strReturn .= "\t\t<content>".  xmlSafeString(strip_tags($strLogEntry))."</content>\n";
+            $strReturn .= "\t\t<content>".xmlSafeString(strip_tags($strLogEntry))."</content>\n";
 
             $strReturn .= "\t</entry>\n";
         }
@@ -307,7 +307,6 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
     /**
      * Generates a xml-based set of information about the current system and evironment
-     *
      * Returned structure:
      * <info>
      *    <infoset name="xx">
@@ -331,8 +330,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $strReturn .= "<infoset name=\"PHP\">";
         foreach($arrInfos as $strKey => $strValue) {
             $strReturn .= "<entry>";
-            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
             $strReturn .= "</entry>";
         }
         $strReturn .= "</infoset>";
@@ -341,8 +340,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $strReturn .= "<infoset name=\"Webserver\">";
         foreach($arrInfos as $strKey => $strValue) {
             $strReturn .= "<entry>";
-            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
             $strReturn .= "</entry>";
         }
         $strReturn .= "</infoset>";
@@ -351,8 +350,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $strReturn .= "<infoset name=\"Database\">";
         foreach($arrInfos as $strKey => $strValue) {
             $strReturn .= "<entry>";
-            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
             $strReturn .= "</entry>";
         }
         $strReturn .= "</infoset>";
@@ -361,8 +360,8 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $strReturn .= "<infoset name=\"GD Lib\">";
         foreach($arrInfos as $strKey => $strValue) {
             $strReturn .= "<entry>";
-            $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
+            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
             $strReturn .= "</entry>";
         }
         $strReturn .= "</infoset>";
@@ -393,16 +392,15 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $arrModules = class_module_system_module::getAllModules();
         foreach($arrModules as $objSingleModule) {
             $strReturn .= "<module>";
-            $strReturn .= "<name>".  xmlSafeString($objSingleModule->getStrName())."</name>";
-            $strReturn .= "<version>".  xmlSafeString($objSingleModule->getStrVersion())."</version>";
+            $strReturn .= "<name>".xmlSafeString($objSingleModule->getStrName())."</name>";
+            $strReturn .= "<version>".xmlSafeString($objSingleModule->getStrVersion())."</version>";
             $strReturn .= "</module>";
         }
 
         $strReturn .= "</modules>";
 
-		return $strReturn;
+        return $strReturn;
     }
-
 
 
     /**
@@ -427,7 +425,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         $arrSessions = class_module_system_session::getAllActiveSessions();
         $strReturn .= "<sessions>";
 
-        foreach ($arrSessions as $objOneSession) {
+        foreach($arrSessions as $objOneSession) {
 
             $strReturn .= "<session>";
 
@@ -443,7 +441,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             else
                 $strLoginStatus = $this->getLang("session_loggedout");
 
-             //find out what the user is doing...
+            //find out what the user is doing...
             $strLastUrl = $objOneSession->getStrLasturl();
             if(uniStrpos($strLastUrl, "?") !== false)
                 $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
@@ -451,7 +449,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
             if(uniStrpos($strLastUrl, "admin=1") !== false) {
                 $strActivity .= $this->getLang("session_admin");
-                foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                     $arrUrlParam = explode("=", $strOneParam);
                     if($arrUrlParam[0] == "module")
                         $strActivity .= $arrUrlParam[1];
@@ -462,7 +460,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 if($strLastUrl == "")
                     $strActivity .= _pages_indexpage_;
                 else {
-                    foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                    foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);
                         if($arrUrlParam[0] == "page")
                             $strActivity .= $arrUrlParam[1];
@@ -474,10 +472,10 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 }
             }
 
-            $strReturn .= "<username>".  xmlSafeString($strUsername)."</username>";
-            $strReturn .= "<loginstatus>".  xmlSafeString($strLoginStatus)."</loginstatus>";
-            $strReturn .= "<releasetime>".  xmlSafeString(timeToString($objOneSession->getIntReleasetime()))."</releasetime>";
-            $strReturn .= "<activity>".  xmlSafeString($strActivity)."</activity>";
+            $strReturn .= "<username>".xmlSafeString($strUsername)."</username>";
+            $strReturn .= "<loginstatus>".xmlSafeString($strLoginStatus)."</loginstatus>";
+            $strReturn .= "<releasetime>".xmlSafeString(timeToString($objOneSession->getIntReleasetime()))."</releasetime>";
+            $strReturn .= "<activity>".xmlSafeString($strActivity)."</activity>";
 
             $strReturn .= "</session>";
         }

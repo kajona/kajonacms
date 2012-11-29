@@ -12,10 +12,9 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
- *
  * @targetTable page_element.page_element_id
  */
-class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable  {
+class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable {
 
 
     private static $arrInitRowCache = array();
@@ -73,15 +72,16 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $this->setArrModuleEntry("modul", "pages_content");
         $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
 
-		parent::__construct( $strSystemid);
+        parent::__construct($strSystemid);
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrName() . " (".$this->getStrReadableName() . ")" ." - ". $this->getStrTitle(true);
+        return $this->getStrName()." (".$this->getStrReadableName().")"." - ".$this->getStrTitle(true);
     }
 
     /**
@@ -97,6 +97,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -105,6 +106,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -114,7 +116,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * Initalises the current object, if a systemid was given
-     *
+
      */
     protected function initObjectInternal() {
 
@@ -140,13 +142,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         }
         $this->setArrInitRow($arrRow);
-		if(count($arrRow) > 1) {
-    		$this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
-    		$this->setStrName($arrRow["page_element_ph_name"]);
-    		$this->setStrElement($arrRow["page_element_ph_element"]);
-    		$this->setStrTitle($arrRow["page_element_ph_title"]);
-    		$this->setStrLanguage($arrRow["page_element_ph_language"]);
-    		$this->setStrClassAdmin($arrRow["element_class_admin"]);
+        if(count($arrRow) > 1) {
+            $this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
+            $this->setStrName($arrRow["page_element_ph_name"]);
+            $this->setStrElement($arrRow["page_element_ph_element"]);
+            $this->setStrTitle($arrRow["page_element_ph_title"]);
+            $this->setStrLanguage($arrRow["page_element_ph_language"]);
+            $this->setStrClassAdmin($arrRow["element_class_admin"]);
             $this->setStrClassPortal($arrRow["element_class_portal"]);
             $this->setIntCachetime($arrRow["element_cachetime"]);
             $this->setIntRepeat($arrRow["element_repeat"]);
@@ -158,10 +160,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             if($arrRow["system_date_start"] > 0)
                 $this->intStartDate = $arrRow["system_date_start"];
 
-           if($arrRow["system_date_end"] > 0)
+            if($arrRow["system_date_end"] > 0)
                 $this->intEndDate = $arrRow["system_date_end"];
 
-		}
+        }
     }
 
     /**
@@ -195,12 +197,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         //shift it to the last position by default
         //As a special feature, we set the element as the last
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
-        $this->setIntSort(count($this->getSortedElementsAtPlaceholder())+1);
-        $this->objDB->_pQuery($strQuery, array(count($this->getSortedElementsAtPlaceholder())+1 , $this->getSystemid() ));
+        $this->setIntSort(count($this->getSortedElementsAtPlaceholder()) + 1);
+        $this->objDB->_pQuery($strQuery, array(count($this->getSortedElementsAtPlaceholder()) + 1, $this->getSystemid()));
         //And shift this element one pos up to get correct order on systemtables
 
         $this->objDB->flushQueryCache();
-
 
 
         return true;
@@ -212,6 +213,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * This copy includes the records in the elements' foreign tables
      *
      * @param string $strNewPage
+     *
      * @return class_module_pages_pageelement the new element or null in case of an error
      */
     public function copyObject($strNewPage = "") {
@@ -258,19 +260,20 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strPageId
      * @param bool $bitJustActive
      * @param string $strLanguage
+     *
      * @return class_module_pages_pageelement[]
      * @static
      */
     public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
 
-         //since theres the time as an parameter, theres no need for querying the cache...
-		$arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
+        //since theres the time as an parameter, theres no need for querying the cache...
+        $arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId)
+            $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
 
-		return $arrReturn;
+        return $arrReturn;
     }
 
     /**
@@ -279,6 +282,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * In most cases getElementsOnPage is the right way to go.
      *
      * @see class_module_pages_pageeelemtn::getElementsOnPage()
+     *
      * @param $strPageId
      * @param bool $bitJustActive
      * @param string $strLanguage
@@ -317,7 +321,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                         AND system.system_id = page_element_id
                         AND system.system_id = right_id
                         AND page_element_ph_language = ?
-                       " . $strAnd."
+                       ".$strAnd."
                   ORDER BY page_element_ph_placeholder ASC,
                             system_sort ASC";
 
@@ -332,11 +336,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
 
-
     /**
      * Loads all Elements on the given ignoring both, status and language
      *
      * @param string $strPageId
+     *
      * @return class_module_pages_pageelement[]
      * @static
      */
@@ -352,13 +356,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId)
+            $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
 
-		return $arrReturn;
+        return $arrReturn;
     }
 
     /**
@@ -369,10 +373,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strPlaceholder
      * @param string $strLanguage
      * @param bool $bitJustActive
+     *
      * @return class_module_pages_pageelement or NULL of no element was found.
      */
     public static function getElementByPlaceholderAndPage($strPageId, $strPlaceholder, $strLanguage, $bitJustActive = true) {
-    	$strAnd = "";
+        $strAnd = "";
 
         $arrParams = array($strPageId, $strLanguage, $strPlaceholder);
 
@@ -396,7 +401,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                            AND system_id = page_element_id
                            AND page_element_ph_language = ?
                            AND page_element_ph_placeholder = ?
-                           " . $strAnd."
+                           ".$strAnd."
                          ORDER BY page_element_ph_placeholder ASC,
                                 system_sort ASC";
 
@@ -406,7 +411,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             return (new class_module_pages_pageelement($arrIds[0]["system_id"]));
         }
         else {
-        	return null;
+            return null;
         }
 
     }
@@ -430,14 +435,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
-		$arrElementsOnPage = $this->objDB->getPArray($strQuery, array( $this->getPrevId(), $this->getStrLanguage() ), null, null, false);
+        $arrElementsOnPage = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $this->getStrLanguage()), null, null, false);
 
-		//Iterate over all elements to sort out
-		$arrElementsOnPlaceholder = array();
-		foreach($arrElementsOnPage as $arrOneElementOnPage) {
-			if($this->getStrPlaceholder() == $arrOneElementOnPage["page_element_ph_placeholder"])
-				$arrElementsOnPlaceholder[] = $arrOneElementOnPage;
-		}
+        //Iterate over all elements to sort out
+        $arrElementsOnPlaceholder = array();
+        foreach($arrElementsOnPage as $arrOneElementOnPage) {
+            if($this->getStrPlaceholder() == $arrOneElementOnPage["page_element_ph_placeholder"])
+                $arrElementsOnPlaceholder[] = $arrOneElementOnPage;
+        }
 
         return $arrElementsOnPlaceholder;
     }
@@ -447,12 +452,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * Sets the position of an element using a given value.
      *
      * @param int $intNewPosition
-     * @param bool $bitOnlySameModule
+     * @param bool $arrRestrictionModules
      *
      * @return void
      * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
      */
-    public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
@@ -496,7 +501,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort=?
                             WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI+1, $arrElements[$intI-1]["system_id"]));
+                $this->objDB->_pQuery($strQuery, array($intI + 1, $arrElements[$intI - 1]["system_id"]));
             }
         }
 
@@ -508,12 +513,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
 
             //start at the pos to be reached and move all one up
-            for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
+            for($intI = $intCurPos + 1; $intI <= $intNewPosition; $intI++) {
 
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort= ?
                             WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI-1, $arrElements[$intI-1]["system_id"]));
+                $this->objDB->_pQuery($strQuery, array($intI - 1, $arrElements[$intI - 1]["system_id"]));
             }
         }
 
@@ -535,33 +540,32 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @see class_root::setPosition($strDirection = "upwards")
      * @deprecated
      */
-	public function setPosition($strMode = "up") {
+    public function setPosition($strMode = "up") {
 
         $arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();
 
         for($intI = 1; $intI <= count($arrElementsOnPlaceholder); $intI++) {
-            if($arrElementsOnPlaceholder[$intI-1]["system_id"] == $this->getSystemid()) {
+            if($arrElementsOnPlaceholder[$intI - 1]["system_id"] == $this->getSystemid()) {
                 if($strMode == "up")
-                    $this->setAbsolutePosition($intI-1);
+                    $this->setAbsolutePosition($intI - 1);
                 else
-                    $this->setAbsolutePosition($intI+1);
+                    $this->setAbsolutePosition($intI + 1);
 
                 break;
             }
         }
-	}
+    }
 
 
-
-	/**
-	 * Deletes the element from the system-tables, also from the foreign-element-tables
-	 *
-	 * @return bool
-	 */
+    /**
+     * Deletes the element from the system-tables, also from the foreign-element-tables
+     *
+     * @return bool
+     */
     protected function deleteObjectInternal() {
-	    //Load the Element-Data
-		//Build the class-name
-		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
+        //Load the Element-Data
+        //Build the class-name
+        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
 
         if($strElementClass != "") {
             //and finally create the object
@@ -576,54 +580,56 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             }
         }
 
-		//Delete from page_element table
+        //Delete from page_element table
         parent::deleteObjectInternal();
 
-		//Loading the data of the corresponding site
-		$objPage = new class_module_pages_page($this->getPrevId());
+        //Loading the data of the corresponding site
+        $objPage = new class_module_pages_page($this->getPrevId());
         class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Tries to assign all page-elements not yet assigned to a language.
-	 *
-	 * @param string $strTargetLanguage
-	 * @return bool
-	 */
-	public static function assignNullElements($strTargetLanguage) {
+    /**
+     * Tries to assign all page-elements not yet assigned to a language.
+     *
+     * @param string $strTargetLanguage
+     *
+     * @return bool
+     */
+    public static function assignNullElements($strTargetLanguage) {
         //Load all non-assigned props
         $strQuery = "SELECT page_element_id FROM "._dbprefix_."page_element
                      WHERE page_element_ph_language = '' OR page_element_ph_language IS NULL";
         $arrElementIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
-        foreach ($arrElementIds as $arrOneId) {
+        foreach($arrElementIds as $arrOneId) {
             $strId = $arrOneId["page_element_id"];
             $strUpdate = "UPDATE "._dbprefix_."page_element
                           SET page_element_ph_language = ?
                           WHERE page_element_id = ?";
 
-            if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array( $strTargetLanguage, $strId ) ))
+            if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId)))
                 return false;
 
         }
 
-	    return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Updates placeholders in the db. Replaces all placeholders with a new one, if the template of elements' page
-	 * corresponds to the given one
-	 *
-	 * @param string $strTemplate
-	 * @param string $strOldPlaceholder
-	 * @param string $strNewPlaceholder
-	 * @return bool
-	 */
-	public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder) {
-	    $bitReturn = true;
-	    //Fetch all pages
+    /**
+     * Updates placeholders in the db. Replaces all placeholders with a new one, if the template of elements' page
+     * corresponds to the given one
+     *
+     * @param string $strTemplate
+     * @param string $strOldPlaceholder
+     * @param string $strNewPlaceholder
+     *
+     * @return bool
+     */
+    public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder) {
+        $bitReturn = true;
+        //Fetch all pages
         $arrObjPages = class_module_pages_page::getAllPages();
         foreach($arrObjPages as $objOnePage) {
             if($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
@@ -638,11 +644,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
-		        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $objOnePage->getSystemid() ) );
-		        $arrPageElements = array();
-		        foreach ($arrIds as $arrOneRow) {
-		            $arrPageElements[] = new class_module_pages_pageelement($arrOneRow["system_id"]);
-		        }
+                $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objOnePage->getSystemid()));
+                $arrPageElements = array();
+                foreach($arrIds as $arrOneRow) {
+                    $arrPageElements[] = new class_module_pages_pageelement($arrOneRow["system_id"]);
+                }
 
                 foreach($arrPageElements as $objOnePageelement) {
                     if($objOnePageelement->getStrPlaceholder() == $strOldPlaceholder) {
@@ -654,15 +660,17 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             }
         }
         return $bitReturn;
-	}
+    }
 
 
     public function getStrPlaceholder() {
         return $this->strPlaceholder;
     }
+
     public function getStrName() {
         return $this->strName;
     }
+
     public function getStrElement() {
         return $this->strElement;
     }
@@ -686,6 +694,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * calls getContentTitle() to get an title
      *
      * @param bool $bitClever disables the loading by using an instance of the element
+     *
      * @return string
      */
     public function getStrTitle($bitClever = false) {
@@ -701,21 +710,27 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     public function getStrClassPortal() {
         return $this->strClassPortal;
     }
+
     public function getStrClassAdmin() {
         return $this->strClassAdmin;
     }
+
     public function getIntCachetime() {
         return $this->intCachetime;
     }
+
     public function getIntRepeat() {
         return $this->intRepeat;
     }
+
     public function getStrLanguage() {
         return $this->strLanguage;
     }
+
     public function getStartDate() {
         return $this->intStartDate;
     }
+
     public function getEndDate() {
         return $this->intEndDate;
     }
@@ -723,27 +738,35 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     public function setStrPlaceholder($strPlaceholder) {
         $this->strPlaceholder = $strPlaceholder;
     }
+
     public function setStrName($strName) {
         $this->strName = $strName;
     }
+
     public function setStrElement($strElement) {
         $this->strElement = $strElement;
     }
+
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
     }
+
     private function setStrClassPortal($strClassPortal) {
         $this->strClassPortal = $strClassPortal;
     }
+
     private function setStrClassAdmin($strClassAdmin) {
         $this->strClassAdmin = $strClassAdmin;
     }
+
     private function setIntCachetime($intCachtime) {
         $this->intCachetime = $intCachtime;
     }
+
     private function setIntRepeat($intRepeat) {
         $this->intRepeat = $intRepeat;
     }
+
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }

@@ -526,6 +526,9 @@ abstract class class_root {
             throw new class_exception("current object is locked", class_exception::$level_ERROR);
         }
 
+        if(is_object($strPrevId) && $strPrevId instanceof class_root)
+            $strPrevId = $strPrevId->getSystemid();
+
         $this->objDB->transactionBegin();
 
         //current systemid given? if not, create a new record.
@@ -900,6 +903,8 @@ abstract class class_root {
         //Correct prevID
         if($strPrevId == "")
             $strPrevId = 0;
+
+        $this->setStrPrevId($strPrevId);
 
         //determine the correct new sort-id - append by default
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
@@ -1279,26 +1284,35 @@ abstract class class_root {
      * Sets the position of systemid using a given value.
      *
      * @param int $intNewPosition
-     * @param bool $bitOnlySameModule If set to true, the siblings are loaded based on the same module-id
+     * @param array|bool $arrRestrictionModules If an array of module-ids is passed, the determination of siblings will be limited to the module-records matching one of the module-ids
      *
      * @return void
      */
-    public function setAbsolutePosition($intNewPosition, $bitOnlySameModule = false) {
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
+
+        $arrParams = array();
+        $arrParams[] = $this->getPrevId();
+
+        $strWhere = "";
+        if($arrRestrictionModules && is_array($arrRestrictionModules)) {
+            $arrMarks = array();
+            foreach($arrRestrictionModules as $strOneId) {
+                $arrMarks[] = "?";
+                $arrParams[] = $strOneId;
+            }
+            $strWhere = "AND system_module_nr IN ( ".implode(", ", $arrMarks)." )";
+
+        }
+
         //Load all elements on the same level, so at first get the prev id
-        $strPrevID = $this->getPrevId();
         $strQuery = "SELECT *
                          FROM "._dbprefix_."system
                          WHERE system_prev_id=? AND system_id != '0'
-                         ".($bitOnlySameModule ? " AND system_module_nr = ? " : " ")."
+                         ".$strWhere."
                          ORDER BY system_sort ASC, system_comment ASC";
-
-        $arrParams = array();
-        $arrParams[] = $strPrevID;
-        if($bitOnlySameModule)
-            $arrParams[] = $this->getIntModuleNr();
 
         //No caching here to allow multiple shiftings per request
         $arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);
