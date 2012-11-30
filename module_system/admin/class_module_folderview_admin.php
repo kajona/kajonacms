@@ -55,7 +55,8 @@ class class_module_folderview_admin extends class_admin implements interface_adm
             getLinkAdmin(
                 "pages",
                 "pagesFolderBrowser",
-                "&pages=1&form_element=" . $this->getParam("form_element") . "&bit_link=1", $this->getLang("wysiwygPagesBrowser"),
+                "&pages=1&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                $this->getLang("wysiwygPagesBrowser"),
                 $this->getLang("wysiwygPagesBrowser"),
                 "icon_folderActionOpen.png"
             )
