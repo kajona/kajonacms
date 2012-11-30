@@ -506,12 +506,16 @@ class class_module_pages_page extends class_model implements interface_model, in
      * If properties are already existing, the record won't be modified
      *
      * @param string $strTargetLanguage
+     * @param bool $bitForce if true, all entries will be updated
      *
      * @return bool
      */
-    public static function assignNullProperties($strTargetLanguage) {
+    public static function assignNullProperties($strTargetLanguage, $bitForce = false) {
         //Load all non-assigned props
-        $strQuery = "SELECT pageproperties_id FROM " . _dbprefix_ . "page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
+        if($bitForce)
+            $strQuery = "SELECT pageproperties_id FROM " . _dbprefix_ . "page_properties";
+        else
+            $strQuery = "SELECT pageproperties_id FROM " . _dbprefix_ . "page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
         $arrPropIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         foreach($arrPropIds as $arrOneId) {
@@ -525,8 +529,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             if((int)$arrCount["COUNT(*)"] == 0) {
                 $strUpdate = "UPDATE " . _dbprefix_ . "page_properties
                               SET pageproperties_language = ?
-                              WHERE ( pageproperties_language = '' OR pageproperties_language IS NULL )
-                                 AND pageproperties_id = ? ";
+                              WHERE pageproperties_id = ? ";
 
                 if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
                     return false;

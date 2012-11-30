@@ -34,8 +34,10 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {
 
+            $strReturn .= " Target language: de\n";
+
             if(class_exists("class_module_pages_page", false) || class_classloader::getInstance()->loadClass("class_module_pages_page") !== false)
-                class_module_pages_page::assignNullProperties("de");
+                class_module_pages_page::assignNullProperties("de", true);
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
                 class_module_pages_pageelement::assignNullElements("de");
 
@@ -44,8 +46,10 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
         }
         else {
 
+            $strReturn .= " Target language: en\n";
+
             if(class_exists("class_module_pages_page", false) || class_classloader::getInstance()->loadClass("class_module_pages_page") !== false)
-                class_module_pages_page::assignNullProperties("en");
+                class_module_pages_page::assignNullProperties("en", true);
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
                 class_module_pages_pageelement::assignNullElements("en");
 

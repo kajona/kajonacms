@@ -69,7 +69,6 @@ class class_installer {
                 $objCookie = new class_cookie();
                 $objCookie->setCookie("adminlanguage", getGet("language"));
 
-
             }
         }
         else {
