@@ -405,45 +405,47 @@ class class_module_navigation_portal extends class_portal implements interface_p
 
                             //seems as we have a navigation-element different than the current one.
                             //check, if the element is installed on the current page
-                            $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
+                            $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
                             //maybe on the masters-page?
-                            if($objElement == null && $objMasterPageData != null)
-                                $objElement = class_module_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
+                            if(count($arrElements) == 0 && $objMasterPageData != null)
+                                $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
 
-                            if($objElement != null) {
-                                //wohooooo, an element was found.
-                                //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
-                                //load the real-pageelement
-                                $objRealElement = new class_element_navigation_portal($objElement);
-                                $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
+                            if(count($arrElements) > 0) {
+                                foreach($arrElements as $objElement) {
+                                    //wohooooo, an element was found.
+                                    //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
+                                    //load the real-pageelement
+                                    $objRealElement = new class_element_navigation_portal($objElement);
+                                    $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
 
-                                //navigation found. trigger loading of nodes if not yet happend
-                                if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
-                                    $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
+                                    //navigation found. trigger loading of nodes if not yet happend
+                                    if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
+                                        $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
 
-                                    if($objNavigation->getStatus() == 0)
-                                        $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
-                                    else
-                                        $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
-                                }
-
-                                //search navigation tree
-                                $this->arrNodeTempHelper = array();
-                                foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
-                                    $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
-
-                                $intMaxLevel = 0;
-                                $objEntry = null;
-                                foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
-                                    if(count($arrNodes) > 0 && $intLevel >= $intMaxLevel) {
-                                        $intMaxLevel = $intLevel;
-                                        $objEntry = $arrNodes[0];
+                                        if($objNavigation->getStatus() == 0)
+                                            $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
+                                        else
+                                            $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
                                     }
-                                }
 
-                                //jepp, page found in another tree, so return true
-                                if($objEntry != null)
-                                    return true;
+                                    //search navigation tree
+                                    $this->arrNodeTempHelper = array();
+                                    foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
+                                        $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
+
+                                    $intMaxLevel = 0;
+                                    $objEntry = null;
+                                    foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
+                                        if(count($arrNodes) > 0 && $intLevel >= $intMaxLevel) {
+                                            $intMaxLevel = $intLevel;
+                                            $objEntry = $arrNodes[0];
+                                        }
+                                    }
+
+                                    //jepp, page found in another tree, so return true
+                                    if($objEntry != null)
+                                        return true;
+                                }
 
                             }
                         }
