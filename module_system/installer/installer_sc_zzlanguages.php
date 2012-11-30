@@ -38,6 +38,9 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                 class_module_pages_page::assignNullProperties("de");
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
                 class_module_pages_pageelement::assignNullElements("de");
+
+            $objLang = new class_module_languages_language();
+            $objLang->setStrAdminLanguageToWorkOn("de");
         }
         else {
 
@@ -45,6 +48,9 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                 class_module_pages_page::assignNullProperties("en");
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
                 class_module_pages_pageelement::assignNullElements("en");
+
+            $objLang = new class_module_languages_language();
+            $objLang->setStrAdminLanguageToWorkOn("en");
 
         }
 

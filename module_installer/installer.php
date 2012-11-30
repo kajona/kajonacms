@@ -63,11 +63,14 @@ class class_installer {
 
         //set a different language?
         if(issetGet("language")) {
-            if(in_array(getGet("language"), explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"))))
+            if(in_array(getGet("language"), explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
                 $this->objLang->setStrTextLanguage(getGet("language"));
-            //and save to a cookie
-            $objCookie = new class_cookie();
-            $objCookie->setCookie("adminlanguage", getGet("language"));
+                //and save to a cookie
+                $objCookie = new class_cookie();
+                $objCookie->setCookie("adminlanguage", getGet("language"));
+
+
+            }
         }
         else {
             //init correct text-file handling as in admins

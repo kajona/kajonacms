@@ -212,6 +212,7 @@
                 <include name="module_pages/**"/>
                 <include name="module_samplecontent/**"/>
                 <include name="module_packagemanager/**"/>
+                <include name="module_mediamanager/**"/>
                 <include name="module_system/**"/>
                 <include name="module_search/**"/>
                 <include name="module_tags/**"/>
