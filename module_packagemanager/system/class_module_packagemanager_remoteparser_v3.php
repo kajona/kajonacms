@@ -9,7 +9,7 @@
 /**
  * A remote parser which handles results of Kajona's package manager API provided by version 3.x.
  *
- * @module module_packagemanager
+ * @package module_packagemanager
  * @author flo@mediaskills.org
  * @since 4.0
  * @deprecated

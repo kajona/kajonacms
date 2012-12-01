@@ -1,5 +1,4 @@
 <?php
-
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
@@ -12,7 +11,7 @@
  * This class could be used to create graphs based on the flot API.
  * Flot renders charts on the client side.
  *
- * @package module_system
+ * @package module_flotchart
  * @since 4.0
  * @author stefan.meyer1@yahoo.de
  */

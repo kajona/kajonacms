@@ -7,9 +7,8 @@
 *	$Id$                                             *
 ********************************************************************************************************/
 
-require_once __DIR__."/ezcomponents/Base/src/base.php";
+require_once __DIR__ . "/ezcomponents/Base/src/base.php";
 spl_autoload_register(array('ezcBase', 'autoload'));
-
 
 
 /**
@@ -17,16 +16,16 @@ spl_autoload_register(array('ezcBase', 'autoload'));
  * ezc renders charts on the serverside and passes them back as images, including full support
  * of SVG images.
  *
- * @package module_system
+ * @package module_ezchart
  * @since 3.4
  * @author sidler@mulchprod.de
  */
 class class_graph_ezc implements interface_graph {
 
 
-	private $strXAxisTitle = "";
-	private $strYAxisTitle = "";
-	private $strGraphTitle = "";
+    private $strXAxisTitle = "";
+    private $strYAxisTitle = "";
+    private $strGraphTitle = "";
 
     private $intWidth = 720;
     private $intHeight = 200;
@@ -50,40 +49,37 @@ class class_graph_ezc implements interface_graph {
     private $intMinValue = 0;
 
 
+    //---------------------------------------------------------------------------------------------------
+    //   The following values are used to separate the graph-modes, because not all
+    //   methods are allowed with every chart-type
 
-	//---------------------------------------------------------------------------------------------------
-	//   The following values are used to separate the graph-modes, because not all
-	//   methods are allowed with every chart-type
-
-	private $GRAPH_TYPE_BAR = 1;
+    private $GRAPH_TYPE_BAR = 1;
     private $GRAPH_TYPE_STACKEDBAR = 4;
-	private $GRAPH_TYPE_LINE = 2;
-	private $GRAPH_TYPE_PIE = 3;
+    private $GRAPH_TYPE_LINE = 2;
+    private $GRAPH_TYPE_PIE = 3;
 
     private $intCurrentGraphMode = -1;
 
-	//---------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------
 
     /**
-     *
      * @var ezcGraphChart
      */
     private $objGraph = null;
 
     /**
-     *
      * @var array
      */
     private $arrDataSets = array();
 
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
+    /**
+     * Constructor
 
-	}
+     */
+    public function __construct() {
+
+    }
 
 
     /**
@@ -104,34 +100,38 @@ class class_graph_ezc implements interface_graph {
      * @throws class_exception
      * @return void
      */
-	public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
+    public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in bar-mode
-            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+            }
         }
 
-		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
+        $this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
 
         $arrEntries = array();
         $intCounter = 0;
         foreach($arrValues as $strValue) {
             $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
 
-            if($strValue > $this->intMaxValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
+            if($strValue > $this->intMaxValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
                 $this->intMaxValue = $strValue;
+            }
 
-            if($strValue < $this->intMinValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
+            if($strValue < $this->intMinValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
                 $this->intMinValue = $strValue;
+            }
 
             $intCounter++;
         }
 
         $this->arrDataSets[$strLegend] = array("data" => new ezcGraphArrayDataSet($arrEntries));
-        if($bitWriteValues)
+        if($bitWriteValues) {
             $this->arrDataSets[$strLegend]["data"]->highlight = true;
+        }
 
-	}
+    }
 
 
     /**
@@ -154,19 +154,22 @@ class class_graph_ezc implements interface_graph {
     public function addStackedBarChartSet($arrValues, $strLegend) {
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
-            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+            }
         }
 
         //add max value from each set to max value
         $intMax = 0;
         $intMin = 0;
         foreach($arrValues as $strValue) {
-            if($strValue > $intMax)
+            if($strValue > $intMax) {
                 $intMax = $strValue;
+            }
 
-            if($strValue < $intMin)
+            if($strValue < $intMin) {
                 $intMin = $strValue;
+            }
         }
 
         $this->intMaxValue += $intMax;
@@ -176,7 +179,7 @@ class class_graph_ezc implements interface_graph {
         $this->addBarChartSet($arrValues, $strLegend);
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
 
-	}
+    }
 
 
     /**
@@ -201,31 +204,38 @@ class class_graph_ezc implements interface_graph {
     public function addLinePlot($arrValues, $strLegend) {
         if($this->intCurrentGraphMode > 0) {
             //in bar mode, its ok. just place on top
-            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR)
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR) {
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+            }
         }
 
 
-        if($this->intCurrentGraphMode < 0)
+        if($this->intCurrentGraphMode < 0) {
             $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
+        }
 
         $arrEntries = array();
         $intCounter = 0;
         foreach($arrValues as $strValue) {
             $strAxisLabel = $this->getArrXAxisEntry($intCounter);
-            if($strAxisLabel != "")
+            if($strAxisLabel != "") {
                 $arrEntries[$strAxisLabel] = $strValue;
-            else
-                $arrEntries[$intCounter+1] = $strValue;
+            }
+            else {
+                $arrEntries[$intCounter + 1] = $strValue;
+            }
 
-            if($strValue < 0)
+            if($strValue < 0) {
                 $strValue *= -2;
+            }
 
-            if($strValue > $this->intMaxValue)
+            if($strValue > $this->intMaxValue) {
                 $this->intMaxValue = $strValue;
+            }
 
-            if($strValue < $this->intMinValue)
+            if($strValue < $this->intMinValue) {
                 $this->intMinValue = $strValue;
+            }
 
             $intCounter++;
         }
@@ -260,13 +270,14 @@ class class_graph_ezc implements interface_graph {
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
 
         $arrEntries = array();
-        foreach($arrValues as $intKey => $strValue)
+        foreach($arrValues as $intKey => $strValue) {
             $arrEntries[$arrLegends[$intKey]] = $strValue;
+        }
 
         $objData = new ezcGraphArrayDataSet($arrEntries);
         $objData->highlight = true;
 
-        $this->arrDataSets[generateSystemid().""] = array("data" => $objData);
+        $this->arrDataSets[generateSystemid() . ""] = array("data" => $objData);
     }
 
 
@@ -285,10 +296,12 @@ class class_graph_ezc implements interface_graph {
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) {
             $this->objGraph = new ezcGraphPieChart();
 
-            if($this->bit3d === null || $this->bit3d === true)
+            if($this->bit3d === null || $this->bit3d === true) {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
-            else
+            }
+            else {
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
+            }
 
             $this->objGraph->palette = $objPalette;
 
@@ -305,18 +318,21 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->renderer->options->dataBorder = .0;
         }
 
-        else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR || $this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR ) {
+        else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR || $this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
             $this->objGraph = new ezcGraphBarChart();
 
-            if($this->bit3d === null || $this->bit3d === true)
+            if($this->bit3d === null || $this->bit3d === true) {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
-            else
+            }
+            else {
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
+            }
 
             $this->objGraph->palette = $objPalette;
 
-            if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
+            if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
                 $this->objGraph->options->stackBars = true;
+            }
 
             //layouting
             if($this->bit3d === null || $this->bit3d === true) {
@@ -325,12 +341,14 @@ class class_graph_ezc implements interface_graph {
             }
         }
 
-        else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE ) {
+        else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE) {
             $this->objGraph = new ezcGraphLineChart();
-            if($this->bit3d === true)
+            if($this->bit3d === true) {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
-            else
+            }
+            else {
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
+            }
 
             $this->objGraph->palette = $objPalette;
 
@@ -344,24 +362,27 @@ class class_graph_ezc implements interface_graph {
         foreach($this->arrDataSets as $strName => $arrSet) {
 
             $this->objGraph->data[$strName] = $arrSet["data"];
-            if(isset($arrSet["symbol"]))
+            if(isset($arrSet["symbol"])) {
                 $this->objGraph->data[$strName]->symbol = $arrSet["symbol"];
+            }
 
-            if(isset($arrSet["displayType"]))
+            if(isset($arrSet["displayType"])) {
                 $this->objGraph->data[$strName]->displayType = $arrSet["displayType"];
+            }
 
         }
 
 
-        if($this->objGraph == null)
+        if($this->objGraph == null) {
             throw new class_exception("trying to render unitialized graph", class_exception::$level_FATALERROR);
+        }
 
 
         //set up params
         $this->objGraph->title = $this->strGraphTitle;
 
         //set the font properties
-        $this->objGraph->options->font = _realpath_.$this->strFont;
+        $this->objGraph->options->font = _realpath_ . $this->strFont;
         $this->objGraph->options->font->color = $this->strFontColor;
         $this->objGraph->options->font->maxFontSize = 9;
 
@@ -380,10 +401,12 @@ class class_graph_ezc implements interface_graph {
 
         if($this->bitRenderLegend === true) {
             //place the legend at the bottom by default
-            if($this->bitLegendPositionBottom)
+            if($this->bitLegendPositionBottom) {
                 $this->objGraph->legend->position = ezcGraph::BOTTOM;
-            else
+            }
+            else {
                 $this->objGraph->legend->position = ezcGraph::RIGHT;
+            }
 
             $this->objGraph->legend->margin = 2;
             $this->objGraph->legend->padding = 1.5;
@@ -393,8 +416,9 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->renderer->options->legendSymbolGleamSize = .9;
             $this->objGraph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
         }
-        else
+        else {
             $this->objGraph->legend = false;
+        }
 
         //x-axis lables?
         if($this->intCurrentGraphMode != $this->GRAPH_TYPE_PIE) {
@@ -406,8 +430,9 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->xAxis->axisSpace = .2;
             }
 
-            if($this->intMaxLabelCount > 1)
+            if($this->intMaxLabelCount > 1) {
                 $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
+            }
 
 
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
@@ -423,45 +448,47 @@ class class_graph_ezc implements interface_graph {
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
 
-            if($intMaxValue <= 0 && $intMinValue < 0)
+            if($intMaxValue <= 0 && $intMinValue < 0) {
                 $this->objGraph->yAxis->max = 0;
+            }
 
             $intTotal = $intMaxValue;
-            if($intMinValue < 0)
+            if($intMinValue < 0) {
                 $intTotal = $intMaxValue - $intMinValue;
+            }
 
             $intTotal = $this->getNextMaxPowValue($intTotal);
 
             if($intTotal != 0) {
                 $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
-                $this->objGraph->yAxis->minorStep = ceil($intTotal / 5)*0.5;
+                $this->objGraph->yAxis->minorStep = ceil($intTotal / 5) * 0.5;
             }
 
         }
 
 
-
-
         //choose the renderer based on the extensions available
-        if(extension_loaded("cairo"))
+        if(extension_loaded("cairo")) {
             $this->objGraph->driver = new ezcGraphCairoOODriver();
-        else
+        }
+        else {
             $this->objGraph->driver = new ezcGraphGdDriver();
+        }
 
         $this->objGraph->renderer->options->axisEndStyle = ezcGraph::NO_SYMBOL;
 
     }
 
     /**
-	 * Does the magic. Creates all necessary stuff and finally
-	 * sends the graph directly (!!!) to the browser.
+     * Does the magic. Creates all necessary stuff and finally
+     * sends the graph directly (!!!) to the browser.
      * Execution should be terminated afterwards.
-	 *
-	 */
-	public function showGraph() {
-		$this->preGraphCreation();
+
+     */
+    public function showGraph() {
+        $this->preGraphCreation();
         $this->objGraph->renderToOutput($this->intWidth, $this->intHeight);
-	}
+    }
 
     /**
      * Does the magic. Creates all necessary stuff and finally
@@ -469,17 +496,18 @@ class class_graph_ezc implements interface_graph {
      *
      * @param $strFilename
      */
-	public function saveGraph($strFilename) {
-		$this->preGraphCreation();
+    public function saveGraph($strFilename) {
+        $this->preGraphCreation();
 
-		if(strpos($strFilename, _realpath_) === false)
-			$strFilename = _realpath_.$strFilename;
+        if(strpos($strFilename, _realpath_) === false) {
+            $strFilename = _realpath_ . $strFilename;
+        }
 
 //        if(strtolower(substr($strFilename, -3) != "svg"))
 //            throw new class_exception("Filename must be a svg-file", class_exception::$level_ERROR);
 
         $this->objGraph->render($this->intWidth, $this->intHeight, $strFilename);
-	}
+    }
 
     /**
      * Common way to get a chart. The engine should save the chart
@@ -492,9 +520,9 @@ class class_graph_ezc implements interface_graph {
      * @return mixed
      */
     public function renderGraph() {
-        $strFilename = _images_cachepath_."/".generateSystemid().".png";
+        $strFilename = _images_cachepath_ . "/" . generateSystemid() . ".png";
         $this->saveGraph($strFilename);
-        return "<img src=\""._webpath_."/".$strFilename."\" alt=\"".$this->strGraphTitle."\" />";
+        return "<img src=\"" . _webpath_ . "/" . $strFilename . "\" alt=\"" . $this->strGraphTitle . "\" />";
     }
 
 
@@ -502,38 +530,39 @@ class class_graph_ezc implements interface_graph {
      * Calculates the next power to base 10 relative to the passed value
      *
      * @param float $floatSource
+     *
      * @return int
      */
     private function getNextMaxPowValue($floatSource) {
         return pow(10, strlen(ceil($floatSource)));
     }
 
-	/**
-	 * Set the title of the x-axis
-	 *
-	 * @param string $strTitle
-	 */
-	public function setStrXAxisTitle($strTitle) {
-		$this->strXAxisTitle = $strTitle;
-	}
+    /**
+     * Set the title of the x-axis
+     *
+     * @param string $strTitle
+     */
+    public function setStrXAxisTitle($strTitle) {
+        $this->strXAxisTitle = $strTitle;
+    }
 
-	/**
-	 * Set the title of the y-axis
-	 *
-	 * @param string $strTitle
-	 */
-	public function setStrYAxisTitle($strTitle) {
-		$this->strYAxisTitle = $strTitle;
-	}
+    /**
+     * Set the title of the y-axis
+     *
+     * @param string $strTitle
+     */
+    public function setStrYAxisTitle($strTitle) {
+        $this->strYAxisTitle = $strTitle;
+    }
 
-	/**
-	 * Set the title of the graph
-	 *
-	 * @param string $strTitle
-	 */
-	public function setStrGraphTitle($strTitle) {
-		$this->strGraphTitle = $strTitle;
-	}
+    /**
+     * Set the title of the graph
+     *
+     * @param string $strTitle
+     */
+    public function setStrGraphTitle($strTitle) {
+        $this->strGraphTitle = $strTitle;
+    }
 
     /**
      * Set the color of the margin-areas, so the color of the area not being
@@ -589,25 +618,27 @@ class class_graph_ezc implements interface_graph {
 //            else
 //                $arrMadeUpLabels = $arrXAxisTickLabels;
 //         else
-             $arrMadeUpLabels = $arrXAxisTickLabels;
+        $arrMadeUpLabels = $arrXAxisTickLabels;
 
 
         $this->arrXAxisLabels = $arrMadeUpLabels;
         $this->intMaxLabelCount = $intNrOfWrittenLabels;
 
-
     }
 
     /**
      * Returns the entry on the x-axis to be rendered
+     *
      * @param int $intPos
+     *
      * @return string
      */
     private function getArrXAxisEntry($intPos) {
         $intCount = 0;
         foreach($this->arrXAxisLabels as $strOneLabel) {
-            if($intCount == $intPos)
+            if($intCount == $intPos) {
                 return $strOneLabel;
+            }
 
             $intCount++;
         }
@@ -653,6 +684,7 @@ class class_graph_ezc implements interface_graph {
 
     /**
      * En- or disables 3d. Otherwise default beaviour.
+     *
      * @param boolean $bit3d
      */
     public function setBit3d($bit3d) {
@@ -686,9 +718,6 @@ class class_graph_ezc implements interface_graph {
     public function setBitLegendPositionBottom($bitLegendPositionBottom) {
         $this->bitLegendPositionBottom = $bitLegendPositionBottom;
     }
-
-
-
 
 }
 

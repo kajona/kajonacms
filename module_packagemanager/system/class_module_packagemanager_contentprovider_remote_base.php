@@ -15,7 +15,7 @@
  *
  * Remote repositories are expected to provide packages using the packageserver module.
  *
- * @module module_packagemanager
+ * @package module_packagemanager
  * @author sidler@mulchprod.de
  * @author flo@mediaskills.org
  * @since 4.0

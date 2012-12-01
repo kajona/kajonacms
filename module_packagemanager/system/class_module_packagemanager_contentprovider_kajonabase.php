@@ -10,7 +10,7 @@
  * A simple content-provider used to upload archives from the kajonabase-repo.
  * Provides both, a search and a download-part.
  *
- * @module module_packagemanager
+ * @package module_packagemanager
  * @author sidler@mulchprod.de
  * @author flo@mediaskills.org
  * @since 4.0

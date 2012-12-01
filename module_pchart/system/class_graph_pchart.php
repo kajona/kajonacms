@@ -15,7 +15,7 @@ require_once(_corepath_."/module_pchart/system/pChart/pData.class");
  * This class could be used to create graphs based on the pChart API.
  * pChart renders charts on the serverside and passes them back as images.
  *
- * @package module_system
+ * @package module_pchart
  * @since 3.3.0
  * @author sidler@mulchprod.de
  */

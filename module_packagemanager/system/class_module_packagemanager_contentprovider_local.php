@@ -9,7 +9,7 @@
 /**
  * A simple content-provider used to upload archives to the local filesytem.
  *
- * @module module_packagemanager
+ * @package module_packagemanager
  * @author sidler@mulchprod.de
  * @since 4.0
  */
