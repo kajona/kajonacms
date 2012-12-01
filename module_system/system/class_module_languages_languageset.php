@@ -12,11 +12,9 @@
  * This allows to couple records to a languageset.
  * The languageswitch is capable to interact with a languageswitch and creates the switch-links
  * with the matching systemid.
- *
- * Please note: Since a languageset only tighs existing records together, it isn't in the regular
+ * Please note: Since a languageset only tights existing records together, it isn't in the regular
  * class_model hierarchy. This also means, that a languageset is not included within the regular
  * object lifecycle and has no representation in the system-table!
- *
  * In most cases creating a new instance via the constructor is useless. Instead use one of the
  * factory methods.
  *
@@ -39,7 +37,7 @@ class class_module_languages_languageset extends class_model implements interfac
         $this->setArrModuleEntry("moduleId", _languages_modul_id_);
 
         //base class
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
@@ -47,7 +45,7 @@ class class_module_languages_languageset extends class_model implements interfac
      * Inits the current object and loads the language-mappings
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM "._dbprefix_."languages_languageset WHERE languageset_id = ?";
+        $strQuery = "SELECT * FROM " . _dbprefix_ . "languages_languageset WHERE languageset_id = ?";
         $arrRow = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
@@ -60,6 +58,7 @@ class class_module_languages_languageset extends class_model implements interfac
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -71,6 +70,7 @@ class class_module_languages_languageset extends class_model implements interfac
      * Updates the current state to the database
      *
      * @param bool $strPrevId
+     *
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -81,16 +81,16 @@ class class_module_languages_languageset extends class_model implements interfac
         }
         else {
             //remove old records
-            $strQuery = "DELETE FROM "._dbprefix_."languages_languageset WHERE languageset_id = ?";
+            $strQuery = "DELETE FROM " . _dbprefix_ . "languages_languageset WHERE languageset_id = ?";
             $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         }
 
 
-        class_logger::getInstance()->addLogRow("updating languageset ".$this->getSystemid(), class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("updating languageset " . $this->getSystemid(), class_logger::$levelInfo);
 
         $bitReturn = true;
         foreach($this->arrLanguageSet as $strLanguage => $strSystemid) {
-            $strQuery = "INSERT INTO "._dbprefix_."languages_languageset
+            $strQuery = "INSERT INTO " . _dbprefix_ . "languages_languageset
                            (languageset_id, languageset_language, languageset_systemid) VALUES
                            (?, ?, ?)";
 
@@ -116,11 +116,13 @@ class class_module_languages_languageset extends class_model implements interfac
      * If no record exists, NULL is returned instead.
      *
      * @param string $strLanguageid
+     *
      * @return string or null
      */
     public function getSystemidForLanguageid($strLanguageid) {
-        if(isset($this->arrLanguageSet[$strLanguageid]))
+        if(isset($this->arrLanguageSet[$strLanguageid])) {
             return $this->arrLanguageSet[$strLanguageid];
+        }
 
         return null;
     }
@@ -129,12 +131,15 @@ class class_module_languages_languageset extends class_model implements interfac
      * Returns the id of the language the passed record is assigned to, null otherwise.
      *
      * @param string $strSystemid
+     *
      * @return string or null
      */
     public function getLanguageidForSystemid($strSystemid) {
-        foreach($this->arrLanguageSet as $strLanguage => $strRecord)
-            if($strSystemid == $strRecord)
+        foreach($this->arrLanguageSet as $strLanguage => $strRecord) {
+            if($strSystemid == $strRecord) {
                 return $strLanguage;
+            }
+        }
 
         return null;
     }
@@ -144,12 +149,14 @@ class class_module_languages_languageset extends class_model implements interfac
      *
      * @param string $strSystemid
      * @param string $strLanguageid
+     *
      * @return bool
      */
     public function setSystemidForLanguageid($strSystemid, $strLanguageid) {
 
-        if(!validateSystemid($strSystemid) || !validateSystemid($strLanguageid))
+        if(!validateSystemid($strSystemid) || !validateSystemid($strLanguageid)) {
             return false;
+        }
 
         $this->arrLanguageSet[$strLanguageid] = $strSystemid;
 
@@ -164,7 +171,7 @@ class class_module_languages_languageset extends class_model implements interfac
     public function removeSystemidFromLanguageeset($strSystemid) {
         foreach($this->arrLanguageSet as $strId => $strSetSystemid) {
             if($strSetSystemid == $strSystemid) {
-                unset($this->arrLanguageSet[$strId]) ;
+                unset($this->arrLanguageSet[$strId]);
                 $this->updateObjectToDb();
                 break;
             }
@@ -176,11 +183,12 @@ class class_module_languages_languageset extends class_model implements interfac
      * If no record is found, null is returned instead.
      *
      * @param string $strSystemid
+     *
      * @return class_module_languages_languageset
      */
     public static function getLanguagesetForSystemid($strSystemid) {
         $strQuery = "SELECT languageset_id
-                       FROM "._dbprefix_."languages_languageset
+                       FROM " . _dbprefix_ . "languages_languageset
                       WHERE languageset_systemid = ?";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
@@ -196,11 +204,12 @@ class class_module_languages_languageset extends class_model implements interfac
     /**
      * Creates a new languageset for the passed systemid and returns the new
      * instance.
-     * If theres a languageset already existing, the languageset is loaded
+     * If there's a languageset already existing, the languageset is loaded
      * instead of creating a new one.
      *
      * @param string $strSystemid
      * @param class_module_languages_language $objTargetLanguage
+     *
      * @return class_module_languages_languageset
      */
     public static function createLanguagesetForSystemid($strSystemid, $objTargetLanguage) {
@@ -224,11 +233,9 @@ class class_module_languages_languageset extends class_model implements interfac
 
     /**
      * Searches for languagesets containing the current systemid. either as a language or a referenced record.
-     *
      * Called whenever a records was deleted using the common methods.
      * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
      * There's no need to register the listener, this is done automatically.
-     *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
      * @param $strSystemid
@@ -238,7 +245,7 @@ class class_module_languages_languageset extends class_model implements interfac
      */
     public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
         //fire a plain query on the database, much faster then searching for matching records
-        $strQuery = "DELETE FROM "._dbprefix_."languages_languageset
+        $strQuery = "DELETE FROM " . _dbprefix_ . "languages_languageset
                       WHERE languageset_language = ?
                          OR languageset_systemid = ?";
 
