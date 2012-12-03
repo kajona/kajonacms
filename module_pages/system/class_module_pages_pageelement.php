@@ -489,6 +489,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             //start at the pos to be reached and move all one down
             for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
 
+                //break for errors created on version pre 4.0
+                if($this->getSystemid() == $arrElements[$intI - 1]["system_id"])
+                    continue;
+
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort=?
                             WHERE system_id=?";
@@ -505,6 +509,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
             //start at the pos to be reached and move all one up
             for($intI = $intCurPos + 1; $intI <= $intNewPosition; $intI++) {
+
+                //break for errors created on version pre 4.0
+                if($this->getSystemid() == $arrElements[$intI - 1]["system_id"])
+                    continue;
 
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort= ?
