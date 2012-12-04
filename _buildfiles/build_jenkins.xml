@@ -309,6 +309,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/less-full.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core/*/tests/**"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
         </delete>
     </target>
 
