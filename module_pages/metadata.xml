@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>pages</title>
-    <description>Pages are the central part of information. A page is rendered in the portal and contains several elements.</description>
+    <description>Pages are the central part of the system. A page is rendered in the portal and contains several page elements, such as paragraphs, tables or even galleries. The layout is based on the integrated template-engine-</description>
     <version>3.4.9.3</version>
     <author>Kajona Team</author>
     <target>module_pages</target>

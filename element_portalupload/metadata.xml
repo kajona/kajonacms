@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>portalupload</title>
-    <description>An element to handle uploads by the portal.</description>
+    <description>Provides a way to allow users to upload their own files into the mediamanager via the portal, so without accessing the backend.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_portalupload</target>

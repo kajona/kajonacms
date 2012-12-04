@@ -186,6 +186,7 @@
                 <exclude name="module_pchart/" />
                 <exclude name="module_workflows/" />
                 <exclude name="module_pdf/" />
+                <exclude name="module_pageimportexport/" />
 
                 <include name="element_*/**"/>
                 <include name="module_*/**"/>

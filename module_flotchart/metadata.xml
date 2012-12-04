@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
     >
     <title>flotchart</title>
-    <description>flot charting engine. Used to render charts on the client-side.</description>
+    <description>flot charting engine. Used to render charts on the client-side, based on the common flot library.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>module_flotchart</target>

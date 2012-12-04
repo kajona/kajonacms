@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>mediaplayer</title>
-    <description>Embed media elements (e.g. movies) into the website.</description>
+    <description>Embed media elements (e.g. movies) into the website using a simple flash-player. Please note that this element makes use of the JWPlayer, you have to respect the projects' licence (http://www.longtailvideo.com/jw-player/)</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_flash</target>

@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>tagto</title>
-    <description>A simple element embedding a "send to your friend" box to the current page.</description>
+    <description>A simple element embedding a "tag to service X" box to the current page, e.g. to facebook, google...</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_tagto</target>

@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>rssfeed</title>
-    <description>Include external rss-/atom sources into your website.</description>
+    <description>Include external rss-/atom feeds into your website.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
     <target>element_rssfeed</target>
