@@ -358,8 +358,8 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_admin_only_https_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
         $this->registerConstant("_system_use_dbcache_", "true", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
-        //3.1: remoteloader max cachtime --> default 30 min
-        $this->registerConstant("_remoteloader_max_cachetime_", 30 * 60, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
+        //3.1: remoteloader max cachtime --> default 60 min
+        $this->registerConstant("_remoteloader_max_cachetime_", 60 * 60, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         //3.2: max session duration
         $this->registerConstant("_system_release_time_", 3600, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
@@ -484,6 +484,18 @@ class class_installer_system extends class_installer_base implements interface_i
         $objModule = class_module_system_module::getModuleByName("languages");
         $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
         $objModule->updateObjectToDb();
+
+
+        $strReturn .= "Trying to copy the *.root files to top-level...\n";
+        $arrFiles = array(
+            "index.php", "image.php", "xml.php", ".htaccess", "v3_v4_postupdate.php"
+        );
+        foreach($arrFiles as $strOneFile) {
+            if(!file_exists(_realpath_."/".$strOneFile)) {
+                if(!copy(_realpath_."/core/module_system/".$strOneFile.".root", _realpath_."/".$strOneFile))
+                    $strReturn .= "<b>Copying the ".$strOneFile.".root to top level failed!!!</b>";
+            }
+        }
 
         return $strReturn;
     }
