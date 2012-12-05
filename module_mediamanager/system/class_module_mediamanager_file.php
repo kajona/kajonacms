@@ -283,7 +283,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param null $intEnd
      * @param bool $strNameFilter
      *
-     * @return array
+     * @return class_module_mediamanager_file[]
      */
     public static function getFlatPackageList($strCategoryFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null, $strNameFilter = false) {
 
@@ -317,7 +317,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
                         " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
                         " . $strWhere . "
-                        ORDER BY system_sort ASC";
+                        ORDER BY file_name ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
         $arrReturn = array();

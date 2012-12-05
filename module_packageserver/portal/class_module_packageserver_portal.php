@@ -159,6 +159,11 @@ class class_module_packageserver_portal extends class_portal implements interfac
                 $arrReturn = $arrTemp;
 
             }
+
+            //sort them by filename
+            usort($arrReturn, function(class_module_mediamanager_file $objA, class_module_mediamanager_file $objB) {
+                return strcmp($objA->getStrName(), $objB->getStrName());
+            });
         }
         else {
             $arrReturn = class_module_mediamanager_file::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd, $strNameFilter);
