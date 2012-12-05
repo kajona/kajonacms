@@ -43,8 +43,7 @@ class class_module_mediamanager_logbook extends class_model implements interface
 		$objDB->_pQuery($strQuery, array(generateSystemid(), (int)time(), basename($objFile->getStrFilename()),
                       class_carrier::getInstance()->getObjSession()->getUsername(), getServer("REMOTE_ADDR")) );
 
-        $objFile->setIntHits($objFile->getIntHits()+1);
-        $objFile->updateObjectToDb();
+        $objFile->increaseHits();
 	}
 
     /**

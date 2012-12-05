@@ -375,8 +375,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
         //Update view counter
         if($bitIsImage) {
-            $objFile->setIntHits($objFile->getIntHits()+1);
-            $objFile->updateObjectToDb();
+            $objFile->increaseHits();
         }
 
         return $this->addPortaleditorCode($strReturn);

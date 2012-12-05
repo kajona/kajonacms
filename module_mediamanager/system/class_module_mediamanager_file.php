@@ -229,6 +229,15 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             $this->setBitIspackage(0);
     }
 
+    /**
+     * Increases a files' hits without touching its last-modified date
+     * @return bool
+     */
+    public function increaseHits() {
+        $this->setIntHits($this->getIntHits()+1);
+        $strQuery = "UPDATE "._dbprefix_."mediamanager_file SET file_hits = file_hits+1 WHERE file_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+    }
 
     /**
      * Loads all files ( & folders) under the given systemid available in the db but using section limitations
