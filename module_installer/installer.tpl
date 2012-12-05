@@ -101,7 +101,7 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 </installer_log>
 
 <configwizard_form>
-    [lang,installer_config_intro,system]
+    [lang,installer_config_intro,installer]
 
 <script type="text/javascript">
 function switchDriver() {
@@ -159,42 +159,42 @@ function switchDriver() {
 <div id="cxWarning">%%cxWarning%%</div>
 
     <div class="control-group">
-        <label for="hostname" class="control-label">[lang,installer_config_dbhostname,system]</label>
+        <label for="hostname" class="control-label">[lang,installer_config_dbhostname,installer]</label>
         <div class="controls">
             <input type="text" id="hostname" name="hostname" value="%%postHostname%%" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
-        <label for="username" class="control-label">[lang,installer_config_dbusername,system]</label>
+        <label for="username" class="control-label">[lang,installer_config_dbusername,installer]</label>
         <div class="controls">
             <input type="text" id="username" name="username" value="%%postUsername%%" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
-        <label for="password" class="control-label">[lang,installer_config_dbpassword,system]</label>
+        <label for="password" class="control-label">[lang,installer_config_dbpassword,installer]</label>
         <div class="controls">
             <input type="password" id="password" name="password" value="" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
-        <label for="dbname" class="control-label">[lang,installer_config_dbname,system]</label>
+        <label for="dbname" class="control-label">[lang,installer_config_dbname,installer]</label>
         <div class="controls">
             <input type="text" id="dbname" name="dbname" value="%%postDbname%%" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
-        <label for="dbprefix" class="control-label">[lang,installer_config_dbprefix,system]</label>
+        <label for="dbprefix" class="control-label">[lang,installer_config_dbprefix,installer]</label>
         <div class="controls">
             <input type="text" id="dbprefix" name="dbprefix" value="%%postPrefix%%" class="input-xlarge">
         </div>
     </div>
 
     <div class="control-group">
-        <label for="driver" class="control-label">[lang,installer_config_dbdriver,system]</label>
+        <label for="driver" class="control-label">[lang,installer_config_dbdriver,installer]</label>
         <div class="controls">
             <select name="driver" id="driver" class="input-xlarge" onchange="switchDriver();">
                 <option value="mysqli" selected="selected">MySQL</option>
@@ -208,10 +208,10 @@ function switchDriver() {
     </div>
 
     <div class="controls">
-        <p class="help-block">[lang,installer_config_dbportinfo,system]</p>
+        <p class="help-block">[lang,installer_config_dbportinfo,installer]</p>
     </div>
     <div class="control-group">
-        <label for="port" class="control-label">[lang,installer_config_dbport,system]</label>
+        <label for="port" class="control-label">[lang,installer_config_dbport,installer]</label>
         <div class="controls">
             <input type="text" id="port" name="port" value="%%postDbport%%" class="input-xlarge">
         </div>
@@ -219,7 +219,7 @@ function switchDriver() {
 
     <div class="control-group">
         <button type="submit" class="btn savechanges">
-            <span class="btn-text">[lang,installer_config_write,system]</span>
+            <span class="btn-text">[lang,installer_config_write,installer]</span>
             <span class="statusicon"></span>
         </button>
     </div>
@@ -229,16 +229,16 @@ function switchDriver() {
 
 
 <modeselect_content>
-    <h2>[lang,installer_step_modeselect,system]</h2>
+    <h2>[lang,installer_step_modeselect,installer]</h2>
     <div>
-        <a href="%%link_autoinstall%%">[lang,installer_mode_auto,system]</a>
-        <p>[lang,installer_mode_auto_hint,system]</p>
+        <a href="%%link_autoinstall%%">[lang,installer_mode_auto,installer]</a>
+        <p>[lang,installer_mode_auto_hint,installer]</p>
     </div>
     <p><br /></p>
     <div>
-        <a href="%%link_manualinstall%%">[lang,installer_mode_manual,system]</a>
-        <p>[lang,installer_mode_manual_hint,system]</p>
-        <div class="alert alert-info">[lang,installer_mode_hint,system]</div>
+        <a href="%%link_manualinstall%%">[lang,installer_mode_manual,installer]</a>
+        <p>[lang,installer_mode_manual_hint,installer]</p>
+        <div class="alert alert-info">[lang,installer_mode_hint,installer]</div>
     </div>
 </modeselect_content>
 
@@ -248,21 +248,21 @@ function switchDriver() {
 <input type="hidden" name="write" value="true" />
 
 <div class="control-group">
-    <label for="username" class="control-label">[lang,installer_login_username,system]</label>
+    <label for="username" class="control-label">[lang,installer_login_username,installer]</label>
     <div class="controls">
         <input type="text" id="username" name="username" value="" class="input-xlarge">
     </div>
 </div>
 
 <div class="control-group">
-    <label for="password" class="control-label">[lang,installer_login_password,system]</label>
+    <label for="password" class="control-label">[lang,installer_login_password,installer]</label>
     <div class="controls">
         <input type="password" id="password" name="password" value="" class="input-xlarge">
     </div>
 </div>
 
 <div class="control-group">
-    <label for="email" class="control-label">[lang,installer_login_email,system]</label>
+    <label for="email" class="control-label">[lang,installer_login_email,installer]</label>
     <div class="controls">
         <input type="text" id="email" name="email" value="" class="input-xlarge">
     </div>
@@ -270,7 +270,7 @@ function switchDriver() {
 
 <div class="control-group">
     <button type="submit" class="btn savechanges">
-        <span class="btn-text">[lang,installer_login_save,system]</span>
+        <span class="btn-text">[lang,installer_login_save,installer]</span>
         <span class="statusicon"></span>
     </button>
 </div>
@@ -294,7 +294,7 @@ function switchDriver() {
         </table>
         <div class="control-group">
             <button type="submit" class="btn savechanges">
-                <span class="btn-text">[lang,installer_install,system]</span>
+                <span class="btn-text">[lang,installer_install,installer]</span>
                 <span class="statusicon"></span>
             </button>
         </div>
@@ -309,7 +309,7 @@ function switchDriver() {
         </table>
         <div class="control-group">
             <button type="submit" class="btn savechanges">
-                <span class="btn-text">[lang,installer_install,system]</span>
+                <span class="btn-text">[lang,installer_install,installer]</span>
                 <span class="statusicon"></span>
             </button>
         </div>

@@ -773,7 +773,7 @@ class class_installer {
      * @return string
      */
     public function getLang($strKey) {
-        return $this->objLang->getLang($strKey, "system");
+        return $this->objLang->getLang($strKey, "installer");
     }
 }
 
