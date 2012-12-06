@@ -68,16 +68,19 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
         }
         if($this->getFieldValue("kajona") == "checked") {
 
-            $strReturn .= $this->widgetText(
-                $this->getLang("systemcheck_kajona_installer").(is_file(_realpath_."/installer.php") ?
-                        "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>")
+
+            $arrFilesAvailable = array(
+                "/installer.php", "/debug.php", "/v3_v4_postupdate.php"
             );
-            $strReturn .= $this->widgetText(
-                $this->getLang("systemcheck_kajona_debug").(is_file(_realpath_."/debug.php") ?
-                        "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getLang("commons_no")."</span>")
-            );
+
+            foreach($arrFilesAvailable as $strOneFile) {
+                $strReturn .= $this->widgetText(
+                    $strOneFile." ".$this->getLang("systemcheck_kajona_filepresent").(is_file(_realpath_.$strOneFile) ?
+                        " <span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
+                        " <span class=\"ok\">".$this->getLang("commons_no")."</span>")
+                );
+            }
+
             $strReturn .= $this->widgetText(
                 $this->getLang("systemcheck_kajona_writeper")." /project/system/config/config.php ".( is_writable(_realpath_."/project/system/config/config.php") ?
                         "<span class=\"nok\">".$this->getLang("commons_yes")."</span>" :
