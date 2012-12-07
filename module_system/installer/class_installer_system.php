@@ -235,7 +235,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["cache_leasetime"] = array("int", true);
         $arrFields["cache_hits"] = array("int", true);
 
-        if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language")))
+        if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language"), false))
             $strReturn .= "An error occured! ...\n";
 
         //languages -------------------------------------------------------------------------------------
