@@ -33,6 +33,10 @@ body {
     background-attachment: fixed;
 }
 
+table {
+    font-size: 10pt;
+}
+
 a {
     color: #3093cc;
 }
