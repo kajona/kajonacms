@@ -122,8 +122,8 @@ abstract class class_element_portal extends class_portal {
 
     /**
      * Tries to load the content of the element from cache.
-     * If a valid entry was found, the cached content is returns.
-     * Of no valid entry was found, false is returned instead.
+     * If a valid entry was found, the cached content is returned.
+     * If no valid entry was found, false is returned instead.
      * In this case, use getElementOutput to load the content.
      *
      * @return string false in case of no matching entry

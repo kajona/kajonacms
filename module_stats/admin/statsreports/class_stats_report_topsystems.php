@@ -26,8 +26,8 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
     private $objDB;
 
 
-    private $arrBrowserGiven;
-    private $arrBrowserGiven2;
+    private $arrBrowserGiven = null;
+    private $arrBrowserGiven2 = null;
     private $arrSystemCache = array();
 
     /**
@@ -38,25 +38,32 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
 
-        //parse browser (browscap.ini)
-        if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true, INI_SCANNER_RAW);
-        }
-        else {
-            $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true);
-        }
 
-        //Update Array once to handle regex
-        $arrSearch = array(".", "+", "^", "$", "!", "{", "}", "(", ")", "]", "[", "*", "?", "#");
-        $arrReplace = array("\.", "\+", "\^", "\$", "\!", "\{", "\}", "\(", "\)", "\]", "\[", ".*", ".", "\#");
+    }
 
-        $arrBrowserGiven2 = array();
-        foreach($arrBrowserGiven as $strSignatureGiven => $arrBrowserData) {
-            $strSignature = str_replace($arrSearch, $arrReplace, $strSignatureGiven);
-            $arrBrowserGiven2[$strSignature] = $arrBrowserData;
+    private function setUpBrowserData() {
+        if($this->arrBrowserGiven == null) {
+            //parse browser (php_browscap.ini)
+            if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
+                $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true, INI_SCANNER_RAW);
+            }
+            else {
+                $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true);
+            }
+
+
+            //Update Array once to handle regex
+            $arrSearch = array(".", "+", "^", "$", "!", "{", "}", "(", ")", "]", "[", "*", "?", "#");
+            $arrReplace = array("\.", "\+", "\^", "\$", "\!", "\{", "\}", "\(", "\)", "\]", "\[", ".*", ".", "\#");
+
+            $arrBrowserGiven2 = array();
+            foreach($arrBrowserGiven as $strSignatureGiven => $arrBrowserData) {
+                $strSignature = str_replace($arrSearch, $arrReplace, $strSignatureGiven);
+                $arrBrowserGiven2[$strSignature] = $arrBrowserData;
+            }
+            $this->arrBrowserGiven = $arrBrowserGiven;
+            $this->arrBrowserGiven2 = $arrBrowserGiven2;
         }
-        $this->arrBrowserGiven = $arrBrowserGiven;
-        $this->arrBrowserGiven2 = $arrBrowserGiven2;
     }
 
     public function setEndDate($intEndDate) {
@@ -84,6 +91,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
     }
 
     public function getReport() {
+        $this->setUpBrowserData();
         $strReturn = "";
 
         //Create Data-table
@@ -179,6 +187,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
     }
 
     public function getReportGraph() {
+        $this->setUpBrowserData();
         $arrReturn = array();
         $arrData = $this->getTopSystem();
 

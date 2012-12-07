@@ -182,8 +182,8 @@ class class_cache  {
     /**
      * Creates a new instance of class_cache.
      * All values are initialized, the one to
-     * specify at contruction time is only the source-name.
-     * The leasetime is set to the current time, so make sure
+     * specify at construction time is only the source-name.
+     * The lease-time is set to the current time, so make sure
      * to increase the time in order to profit from a
      * cached entry.
      * Use the setters to populate the entry with data.

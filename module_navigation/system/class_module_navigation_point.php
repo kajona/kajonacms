@@ -266,7 +266,9 @@ class class_module_navigation_point extends class_model implements interface_mod
             if($objOneEntry instanceof class_module_pages_page) {
 
                 //validate if the page to be linked has a template assigned and at least a single element created
-                if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && count(class_module_pages_pageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)) {
+                if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS
+                    || ($objOneEntry->getStrTemplate() != "" && count(class_module_pages_pageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)
+                ) {
 
                     $objPoint = new class_module_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());

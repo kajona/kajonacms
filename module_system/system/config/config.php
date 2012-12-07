@@ -41,8 +41,9 @@
     $config['https_header_value']   = "on";                                    //If the presence of the header is not enough to validate the https status,
                                                                                //set the required value to compare against here
 
-    $config['cache_texts']          = false;                                   //caches read lang files with the users' session. Enable only on productive
-                                                                               //environments. Could consume up a lot of ram.
+    $config['textcachetime']          = 10;                                    //Number of seconds language-files are cached. Cached entries are shared between sessions. Reduce this amount during
+                                                                               //development (probably changing the lang-files a lot) and set it to a high value as soon as the website is in
+                                                                               //production. Requires APC. Attention: 0 = infinite!
 
     $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers
                                                                                //are queried in the order of appearance. The list is comma-separated, no blanks allowed.

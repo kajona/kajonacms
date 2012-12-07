@@ -128,43 +128,6 @@ class class_classloader {
     }
 
     /**
-     * Loads an merges all class-mappings as defined in the class-loader config-file.
-     *
-     * @see /project/system/classes/classloader.xml
-     * @todo currently disabled, no longer required?
-     */
-    private function loadClassloaderConfig() {
-        if(is_file(_realpath_."/project/system/classes/classloader.xml")) {
-            $objReader = new XMLReader();
-            $objReader->open(_realpath_."/project/system/classes/classloader.xml");
-
-            while($objReader->read() && $objReader->name !== "class");
-
-            while($objReader->name === "class") {
-
-                $strName = "";
-                $strPath = "";
-
-                while($objReader->read() && $objReader->name !== 'name');
-
-                if($objReader->name === "name")
-                    $strName = $objReader->readString();
-
-                while($objReader->read() && $objReader->name !== 'path');
-
-                if($objReader->name === "path")
-                    $strPath = $objReader->readString();
-
-
-                if($strName != "" && $strPath != "")
-                    $this->arrFiles[$strName] = _realpath_.$strPath;
-
-                while($objReader->read() && $objReader->name !== "class");
-            }
-        }
-    }
-
-    /**
      * Indexes all available code-files, so classes.
      * Therefore, all relevant folders are traversed.
      */

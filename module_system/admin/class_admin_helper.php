@@ -108,13 +108,19 @@ class class_admin_helper {
     }
 
     /**
-     * Fetches the list of action for a single module
+     * Fetches the list of actions for a single module, saved to the session for performance reasons
      * @static
      * @param class_admin $objAdminModule
      * @return array
      */
     public static function getModuleActionNaviHelper(class_admin $objAdminModule) {
         if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
+
+            $arrFinalItems = class_carrier::getInstance()->getObjSession()->getSession(__CLASS__."adminNaviEntries".$objAdminModule->getSystemid());
+            if($arrFinalItems !== false)
+                return $arrFinalItems;
+
+
             $objModule = $objAdminModule->getObjModule();
             $arrItems = $objAdminModule->getOutputModuleNavi();
             $arrFinalItems = array();
@@ -129,6 +135,7 @@ class class_admin_helper {
                     $arrFinalItems[] = $arrOneItem[1];
             }
 
+            class_carrier::getInstance()->getObjSession()->setSession(__CLASS__."adminNaviEntries".$objAdminModule->getSystemid(), $arrFinalItems);
             return $arrFinalItems;
         }
         return array();

@@ -455,12 +455,16 @@ class class_rights {
         $arrGroupIds = array();
 
         if(validateSystemid($strUserid)) {
-            $objUser = new class_module_user_user($strUserid);
-            $arrGroupIds = $objUser->getArrGroupIds();
+            if($strUserid == $this->objSession->getUserID()) {
+                $arrGroupIds = $this->objSession->getGroupIdsAsArray();
+            }
+            else {
+                $objUser = new class_module_user_user($strUserid);
+                $arrGroupIds = $objUser->getArrGroupIds();
+            }
         }
         else if(validateSystemid($this->objSession->getUserID())) {
-            $objUser = new class_module_user_user($this->objSession->getUserID());
-            $arrGroupIds = $objUser->getArrGroupIds();
+            $arrGroupIds = $this->objSession->getGroupIdsAsArray();
         }
         else
             $arrGroupIds[] = _guests_group_id_;

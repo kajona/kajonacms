@@ -50,29 +50,29 @@ class class_lang {
 
     private static $objLang = null;
 
+    private $bitSaveToCache = false;
+
     /**
      * Constructor, singleton
      */
     private function __construct() {
         //load texts from session
-        if(class_config::getInstance()->getConfig("cache_texts") === true) {
-            $this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
-            if($this->arrTexts === false) {
-                $this->arrTexts = array();
-            }
+        $this->arrTexts = class_apc_cache::getInstance()->getValue("textSessionCache");
+        if($this->arrTexts === false) {
+            $this->arrTexts = array();
+        }
 
-            $this->arrFallbackTextEntrys = class_session::getInstance()->getSession("textSessionFallbackCache");
-            if($this->arrFallbackTextEntrys === false) {
-                $this->arrFallbackTextEntrys = array();
-            }
+        $this->arrFallbackTextEntrys = class_apc_cache::getInstance()->getValue("textSessionFallbackCache");
+        if($this->arrFallbackTextEntrys === false) {
+            $this->arrFallbackTextEntrys = array();
         }
     }
 
     public function __destruct() {
         //save texts to session
-        if(class_config::getInstance()->getConfig("cache_texts") === true) {
-            class_session::getInstance()->setSession("textSessionCache", $this->arrTexts);
-            class_session::getInstance()->setSession("textSessionFallbackCache", $this->arrFallbackTextEntrys);
+        if($this->bitSaveToCache) {
+            class_apc_cache::getInstance()->addValue("textSessionCache", $this->arrTexts, class_config::getInstance()->getConfig("textcachetime"));
+            class_apc_cache::getInstance()->addValue("textSessionFallbackCache", $this->arrFallbackTextEntrys, class_config::getInstance()->getConfig("textcachetime"));
         }
     }
 
@@ -137,8 +137,9 @@ class class_lang {
                 $strReturn = $this->arrTexts[$this->strLanguage][$this->strCommonsName][$strText];
             }
             else {
-                //Try to find the text using the fallback language
+                //Try to find the text using the fallback language, mark the entry as not resolvable
                 $strReturn = $this->loadFallbackPlaceholder($strModule, $strText);
+                $this->arrTexts[$this->strLanguage][$strModule][$strText] = $strReturn;
             }
         }
 
@@ -251,6 +252,7 @@ class class_lang {
      */
     private function loadAndMergeTextfile($strModule, $strFilename, $strLanguage, &$arrTargetArray) {
         $lang = array();
+        $this->bitSaveToCache = true;
         include_once _realpath_ . $strFilename;
 
         if(!isset($arrTargetArray[$strLanguage])) {
