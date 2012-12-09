@@ -55,24 +55,29 @@ class class_flyimage {
         $this->strFilename = str_replace("../", "", $this->strFilename);
 
         $this->intMaxHeight = (int)getGet("maxHeight");
-        if($this->intMaxHeight < 0)
+        if($this->intMaxHeight < 0) {
             $this->intMaxHeight = 0;
+        }
 
         $this->intMaxWidth = (int)getGet("maxWidth");
-        if($this->intMaxWidth < 0)
+        if($this->intMaxWidth < 0) {
             $this->intMaxWidth = 0;
+        }
 
         $this->intFixedHeight = (int)getGet("fixedHeight");
-        if($this->intFixedHeight < 0 || $this->intFixedHeight > 2000)
+        if($this->intFixedHeight < 0 || $this->intFixedHeight > 2000) {
             $this->intFixedHeight = 0;
+        }
 
         $this->intFixedWidth = (int)getGet("fixedWidth");
-        if($this->intFixedWidth < 0 || $this->intFixedWidth > 2000)
+        if($this->intFixedWidth < 0 || $this->intFixedWidth > 2000) {
             $this->intFixedWidth = 0;
+        }
 
         $this->intQuality = (int)getGet("quality");
-        if($this->intQuality <= 0 || $this->intQuality > 100)
+        if($this->intQuality <= 0 || $this->intQuality > 100) {
             $this->intQuality = 90;
+        }
 
         //ok, all needed constants are set up...
         $this->objImage = new class_image($this->intQuality);
@@ -84,10 +89,10 @@ class class_flyimage {
      */
     public function generateImage() {
         //Load the image-dimensions
-        if(is_file(_realpath_.$this->strFilename) && uniStrpos($this->strFilename, "/files") !== false) {
+        if(is_file(_realpath_ . $this->strFilename) && uniStrpos($this->strFilename, "/files") !== false) {
 
             //check headers, maybe execution could be terminated right here
-            if(checkConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight))) {
+            if(checkConditionalGetHeaders(md5(md5_file(_realpath_ . $this->strFilename) . $this->intMaxWidth . $this->intMaxHeight . $this->intFixedWidth . $this->intFixedHeight))) {
                 class_response_object::getInstance()->sendHeaders();
                 return;
             }
@@ -96,7 +101,7 @@ class class_flyimage {
             $this->objImage->resizeAndCropImage($this->intMaxWidth, $this->intMaxHeight, $this->intFixedWidth, $this->intFixedHeight);
 
             //send the headers for conditional gets
-            setConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight));
+            setConditionalGetHeaders(md5(md5_file(_realpath_ . $this->strFilename) . $this->intMaxWidth . $this->intMaxHeight . $this->intFixedWidth . $this->intFixedHeight));
 
             //TODO: add expires header for browser caching (optional)
             /*
@@ -126,15 +131,19 @@ class class_flyimage {
 
      */
     public function generateCaptchaImage() {
-        if($this->intMaxWidth == 0 || $this->intMaxWidth > 500)
+        if($this->intMaxWidth == 0 || $this->intMaxWidth > 500) {
             $intWidth = 200;
-        else
+        }
+        else {
             $intWidth = $this->intMaxWidth;
+        }
 
-        if($this->intMaxHeight == 0 || $this->intMaxHeight > 500)
+        if($this->intMaxHeight == 0 || $this->intMaxHeight > 500) {
             $intHeight = 50;
-        else
+        }
+        else {
             $intHeight = $this->intMaxHeight;
+        }
 
         $intMinfontSize = 15;
         $intMaxFontSize = 22;
@@ -197,8 +206,8 @@ class class_flyimage {
             $intCol1 = rand(0, 200);
             $intCol2 = rand(0, 200);
             $intCol3 = rand(0, 200);
-            $strColor = "".$intCol1.",".$intCol2.",".$intCol3;
-            $strColorForeground = "".($intCol1 + 50).",".($intCol2 + 50).",".($intCol3 + 50);
+            $strColor = "" . $intCol1 . "," . $intCol2 . "," . $intCol3;
+            $strColorForeground = "" . ($intCol1 + 50) . "," . ($intCol2 + 50) . "," . ($intCol3 + 50);
             //fontsize
             $intSize = rand($intMinfontSize, $intMaxFontSize);
             //calculate x and y pos

@@ -9,10 +9,12 @@
 
 
 //Determine the area to load
-if(issetGet("admin") && getGet("admin") == 1)
-	define("_admin_", true);
-else
-	define("_admin_", false);
+if(issetGet("admin") && getGet("admin") == 1) {
+    define("_admin_", true);
+}
+else {
+    define("_admin_", false);
+}
 
 define("_autotesting_", false);
 
@@ -31,22 +33,25 @@ class class_xml {
 
 
     public function __construct() {
-		class_carrier::getInstance();
+        class_carrier::getInstance();
     }
 
     public function processRequest() {
 
         $strModule = getGet("module");
-        if($strModule == "")
+        if($strModule == "") {
             $strModule = getPost("module");
+        }
 
         $strAction = getGet("action");
-        if($strAction == "")
+        if($strAction == "") {
             $strAction = getPost("action");
+        }
 
         $strLanguageParam = getGet("language");
-        if($strLanguageParam == "")
+        if($strLanguageParam == "") {
             $strLanguageParam = getPost("language");
+        }
 
 
         $this->objResponse = class_response_object::getInstance();
@@ -62,12 +67,14 @@ class class_xml {
             $this->objResponse->setStrContent("<error>An error occurred, malformed request</error>");
         }
 
-        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML)
-            $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n".$this->objResponse->getStrContent());
+        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML) {
+            $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $this->objResponse->getStrContent());
+        }
     }
 
     /**
      * If set to true, the output will be sent without the mandatory xml-head-element
+     *
      * @param bool $bitSuppressXmlHeader
      */
     public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
@@ -75,7 +82,9 @@ class class_xml {
 
     /**
      * Use this method to set a new response type, e.g. json
+     *
      * @static
+     *
      * @param $strReturnContentType
      */
     public static function setStrReturnContentType($strReturnContentType) {
