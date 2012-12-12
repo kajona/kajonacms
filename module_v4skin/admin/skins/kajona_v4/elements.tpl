@@ -264,7 +264,7 @@ One Column in a row (data record) - the header, the content, the footer, providi
 </datalist_column_header_1>
 
 <datalist_column_1>
-		<td class="dataTitle">%%value%%</td>
+    <td>%%value%%</td>
 </datalist_column_1>
 
 <datalist_column_footer_1>
@@ -276,7 +276,7 @@ One Column in a row (data record) - the header, the content, the footer, providi
 </datalist_column_header_2>
 
 <datalist_column_2>
-    <td class="dataValue">%%value%%</td>
+    <td>%%value%%</td>
 </datalist_column_2>
 
 <datalist_column_footer_2>
@@ -637,7 +637,7 @@ Same as above, but using an image to fold / unfold the content
 
 A precent-beam to illustrate proportions
 <percent_beam>
-    <div class="progress progress-striped active"  title="%%percent%%%">
+    <div class="progress progress-striped active"  title="%%percent%%%" rel="tooltip">
         <div class="bar" style="width: %%percent%%%;"></div>
     </div>
 </percent_beam>
