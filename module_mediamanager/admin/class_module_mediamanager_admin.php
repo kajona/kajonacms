@@ -130,9 +130,13 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
         if($objListEntry instanceof class_module_mediamanager_file) {
             if($objListEntry->rightEdit()) {
                 if($this->strPeAddon != "")
-                    return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"));
+                    return $this->objToolkit->listButton(
+                        getLinkAdmin($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png")
+                    );
                 else
-                    return $this->objToolkit->listButton(getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"));
+                    return $this->objToolkit->listButton(
+                        getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png")
+                    );
             }
 
             return "";
@@ -241,7 +245,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     private function getAdminForm(class_module_mediamanager_repo $objRepo) {
         $objForm = new class_admin_formgenerator("repo", $objRepo);
         $objForm->addDynamicField("strTitle");
-        $objField = $objForm->addDynamicField("strPath");
+        $objField = $objForm->addDynamicField("strPath")->setStrHint($this->getLang("mediamanager_path_h"));
         $objField->setStrOpener(getLinkAdminDialog("mediamanager", "folderListFolderview", "&form_element=".$objField->getStrEntryName(), $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.png", $this->getLang("commons_open_browser")));
         $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
         $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));

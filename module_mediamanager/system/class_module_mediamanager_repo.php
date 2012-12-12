@@ -124,6 +124,9 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
 
     public function setStrPath($strPath) {
+        if(uniStrpos(uniSubstr($strPath, 0, 7), "files") === false)
+            $strPath = "/files".$strPath;
+
         $this->strPath = $strPath;
     }
 
