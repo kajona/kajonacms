@@ -856,6 +856,16 @@ HTML;
             $arrLogs[$intKey][2] = $arrOneLog["downloads_log_file"];
             $arrLogs[$intKey][3] = $arrOneLog["downloads_log_user"];
             $arrLogs[$intKey][4] = $arrOneLog["downloads_log_ip"];
+            
+            $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrOneLog["downloads_log_ip"];
+            $strUtraceLinkText = "http://www.utrace.de/whois/".$arrOneLog["downloads_log_ip"];
+            if($arrOneLog["downloads_log_ip"] != "127.0.0.1" && $arrOneLog["downloads_log_ip"] != "::1") {
+                $arrLogs[$intKey][5]	= getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap", "user"), "icon_earth.png", "_blank")
+                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext", "user"), "icon_text.png", "_blank");
+            }
+            else 
+                $arrLogs[$intKey][5] = getImageAdmin("icon_earthDisabled.png", $this->getLang("login_utrace_noinfo", "user")) ." "
+                    .getImageAdmin("icon_textDisabled.png", $this->getLang("login_utrace_noinfo", "user"));            
         }
         //Create a data-table
         $arrHeader = array();
@@ -864,6 +874,7 @@ HTML;
         $arrHeader[2] = $this->getLang("header_file");
         $arrHeader[3] = $this->getLang("header_user");
         $arrHeader[4] = $this->getLang("header_ip");
+        $arrHeader[5] = $this->getLang("login_utrace", "user");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
         $strReturn .= $arrPageViews["pageview"];
 
