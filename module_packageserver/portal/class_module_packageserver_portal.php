@@ -14,6 +14,8 @@
  */
 class class_module_packageserver_portal extends class_portal implements interface_portal {
 
+    const PROTOCOL_VERSION = 4;
+
     /**
      * Constructor
      *
@@ -79,6 +81,7 @@ class class_module_packageserver_portal extends class_portal implements interfac
         $result = array();
         $result['numberOfTotalItems'] = $intNrOfFiles;
         $result['items'] = $arrPackages;
+        $result['protocolVersion'] = self::PROTOCOL_VERSION;
 
         $strReturn = json_encode($result);
         return $strReturn;

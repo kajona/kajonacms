@@ -26,9 +26,23 @@ class class_module_packagemanager_remoteparser_factory {
      * @param string $strProviderName
      * @param string $strPagerAddon
      *
-     * @return class_module_packagemanager_remoteparser_v3|class_module_packagemanager_remoteparser_v4
+     * @return interface_packagemanager_remoteparser
      */
     public static function getRemoteParser(array $remoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName, $strPagerAddon = "") {
+
+        if(array_key_exists('protocolVersion', $remoteResponse)) {
+            if($remoteResponse["protocolVersion"] == 4) {
+                return new class_module_packagemanager_remoteparser_v4(
+                    $remoteResponse,
+                    $intPageNumber,
+                    $intStart,
+                    $intEnd,
+                    $strProviderName,
+                    $strPagerAddon
+                );
+            }
+        }
+
         if (array_key_exists('numberOfTotalItems', $remoteResponse) && array_key_exists('items', $remoteResponse)) {
             return new class_module_packagemanager_remoteparser_v4(
                 $remoteResponse,
@@ -39,6 +53,8 @@ class class_module_packagemanager_remoteparser_factory {
                 $strPagerAddon
             );
         }
+
+        //fallback: the v4 parser
         return new class_module_packagemanager_remoteparser_v3($remoteResponse);
     }
 
