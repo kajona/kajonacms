@@ -43,7 +43,7 @@ KAJONA.admin.portaleditor = {
             "/core/module_pages/admin/scripts/rangy/rangy-core.js",
             "/core/module_pages/admin/scripts/halloeditor/hallo-min.js",
             "/core/module_pages/admin/scripts/halloeditor/hallo.css",
-            "/core/module_pages/admin/scripts/halloeditor/fontawesome/css/font-awesome.css",
+            "/core/module_pages/admin/scripts/halloeditor/fontawesome/css/font-awesome.css"
         ], function() {
 
             KAJONA.admin.portaleditor.RTE.init();
