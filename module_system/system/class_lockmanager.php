@@ -19,6 +19,8 @@ class class_lockmanager {
 
     private $strSystemid = "";
 
+    private static $bitUnlockTriggered = false;
+
     /**
      * Constructor
      *
@@ -117,7 +119,7 @@ class class_lockmanager {
     }
 
     /**
-     * Determins wether the current user is allowed to unlock a record or not.
+     * Determines whether the current user is allowed to unlock a record or not.
      * This is only the case, if the user is member of the admin-group.
      *
      * @return bool
@@ -139,8 +141,14 @@ class class_lockmanager {
      */
     private function unlockOldRecords() {
 
+        if(self::$bitUnlockTriggered)
+            return true;
+
+        self::$bitUnlockTriggered = true;
+
         if(!defined("_system_lock_maxtime_"))
             define("_system_lock_maxtime_", 0);
+
 
         $intMinTime = time() - _system_lock_maxtime_;
         $strQuery = "UPDATE " . _dbprefix_ . "system
@@ -155,8 +163,11 @@ class class_lockmanager {
      * @return string
      */
     private function getLockId() {
-        if(class_objectfactory::getInstance()->getObject($this->strSystemid)->getStrLockId() != "") {
-            return class_objectfactory::getInstance()->getObject($this->strSystemid)->getStrLockId();
+
+        $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
+
+        if(validateSystemid($this->strSystemid) && $objObject != null && $objObject->getStrLockId() != "") {
+            return $objObject->getStrLockId();
         }
         else {
             return "0";
