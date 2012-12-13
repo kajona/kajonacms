@@ -42,7 +42,7 @@ class class_test_packageserver extends class_testbase  {
         $this->assertTrue(isset($arrData["items"]));
         $this->assertTrue(isset($arrData["protocolVersion"]));
 
-        $this->assertEquals(1, $arrData["items"]);
+        $this->assertEquals(1, count($arrData["items"]));
         $arrItem = $arrData["items"][0];
 
         $this->assertTrue(isset($arrItem["systemid"]));
