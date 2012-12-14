@@ -7,7 +7,6 @@
     <description>Displays a map, provides a simple api to to geo-lookups (Yahoo, Google).</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_maps</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

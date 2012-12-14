@@ -7,7 +7,6 @@
     <description>A module to organize frequently asked questions, Questions may be categorized. The different layout modes are achieved by the templates.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>module_faqs</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

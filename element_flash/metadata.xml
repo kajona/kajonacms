@@ -7,7 +7,6 @@
     <description>Embed flash movies into the website.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_flash</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

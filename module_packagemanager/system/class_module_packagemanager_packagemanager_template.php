@@ -61,20 +61,19 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      */
     public function move2Filesystem() {
         $strSource = $this->objMetadata->getStrPath();
-        $strTarget = $this->objMetadata->getStrTarget();
 
         if(!is_dir(_realpath_.$strSource))
             throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->chmod("/templates/".$strTarget, 0777);
+        $objFilesystem->chmod($this->getStrTargetPath(), 0777);
 
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to /templates/".$strTarget, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), class_logger::$levelInfo);
 
-        $objFilesystem->folderCopyRecursive($strSource, "/templates/".$strTarget, true);
-        $this->objMetadata->setStrPath("/templates/".$strTarget);
+        $objFilesystem->folderCopyRecursive($strSource, $this->getStrTargetPath(), true);
+        $this->objMetadata->setStrPath($this->getStrTargetPath());
 
-        $objFilesystem->chmod("/templates/".$strTarget);
+        $objFilesystem->chmod($this->getStrTargetPath());
 
         $objFilesystem->folderDeleteRecursive($strSource);
     }
@@ -116,11 +115,11 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      */
     public function getVersionInstalled() {
 
-        $strTarget = $this->objMetadata->getStrTarget();
+        $strTarget = $this->getStrTargetPath();
 
-        if(is_dir(_realpath_."/templates/".$strTarget)) {
+        if(is_dir(_realpath_.$strTarget)) {
             $objManager = new class_module_packagemanager_metadata();
-            $objManager->autoInit("/templates/".$strTarget);
+            $objManager->autoInit($strTarget);
             return $objManager->getStrVersion();
         }
 
@@ -135,7 +134,11 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      * @return mixed
      */
     public function getStrTargetPath() {
-        return "/templates/".$this->objMetadata->getStrTarget();
+        $strTarget = $this->objMetadata->getStrTarget();
+        if($strTarget == "")
+            $strTarget = uniStrtolower($this->objMetadata->getStrTitle());
+
+        return "/templates/".$strTarget;
     }
 
 }

@@ -1,7 +1,6 @@
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
 
     <!--
-        (c) 2004-2006 by MulchProductions, www.mulchprod.de
         (c) 2007-2012 by Kajona, www.kajona.de
         Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
     -->
@@ -15,7 +14,7 @@
             <xs:element type="xs:string" name="description" maxOccurs="1" minOccurs="1"/>
             <xs:element type="xs:string" name="version" maxOccurs="1" minOccurs="1"/>
             <xs:element type="xs:string" name="author" maxOccurs="1" minOccurs="1"/>
-            <xs:element type="xs:string" name="target" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="target" maxOccurs="1" minOccurs="0"/>
             <xs:element type="typeType" name="type" maxOccurs="1" minOccurs="1" />
             <xs:element type="boolType" name="providesInstaller" maxOccurs="1" minOccurs="1" />
             <xs:element type="requiredModule" name="requiredModules" maxOccurs="1" minOccurs="1"/>

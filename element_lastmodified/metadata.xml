@@ -7,7 +7,6 @@
     <description>Renders the date of the pages' last modification.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_lastmodified</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

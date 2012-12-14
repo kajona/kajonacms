@@ -7,7 +7,6 @@
     <description>A simple module providing a guestbook. New posts may be visible immediately or after an admins' review, depending on the configuration.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>module_guestbook</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

@@ -59,22 +59,21 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      */
     public function move2Filesystem() {
         $strSource = $this->objMetadata->getStrPath();
-        $strTarget = $this->objMetadata->getStrTarget();
 
         if(!is_dir(_realpath_.$strSource))
             throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
 
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to /core/".$strTarget, class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), class_logger::$levelInfo);
 
         $objFilesystem = new class_filesystem();
         //set a chmod before copying the files - at least try to
-        $objFilesystem->chmod("/core/".$strTarget, 0777);
+        $objFilesystem->chmod($this->getStrTargetPath(), 0777);
 
-        $objFilesystem->folderCopyRecursive($strSource, "/core/".$strTarget, true);
-        $this->objMetadata->setStrPath("/core/".$strTarget);
+        $objFilesystem->folderCopyRecursive($strSource, $this->getStrTargetPath(), true);
+        $this->objMetadata->setStrPath($this->getStrTargetPath());
 
         //reset chmod after copying the files
-        $objFilesystem->chmod("/core/".$strTarget);
+        $objFilesystem->chmod($this->getStrTargetPath());
 
         $objFilesystem->folderDeleteRecursive($strSource);
     }
@@ -255,7 +254,12 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * @return mixed
      */
     public function getStrTargetPath() {
-        return "/core/".$this->objMetadata->getStrTarget();
+
+        $strTarget = $this->objMetadata->getStrTarget();
+        if($strTarget == "")
+            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".$this->objMetadata->getStrTitle());
+
+        return "/core/".$strTarget;
     }
 
 }

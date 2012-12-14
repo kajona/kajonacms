@@ -138,7 +138,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         $this->setStrDescription($arrXml["package"]["0"]["description"]["0"]["value"]);
         $this->setStrVersion($arrXml["package"]["0"]["version"]["0"]["value"]);
         $this->setStrAuthor($arrXml["package"]["0"]["author"]["0"]["value"]);
-        $this->setStrTarget($arrXml["package"]["0"]["target"]["0"]["value"]);
+        if(isset($arrXml["package"]["0"]["target"]["0"]["value"]))
+            $this->setStrTarget($arrXml["package"]["0"]["target"]["0"]["value"]);
+        
         $this->setStrType($arrXml["package"]["0"]["type"]["0"]["value"]);
         $this->setBitProvidesInstaller($arrXml["package"]["0"]["providesInstaller"]["0"]["value"] == "TRUE");
 

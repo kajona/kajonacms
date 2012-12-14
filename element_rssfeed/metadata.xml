@@ -7,7 +7,6 @@
     <description>Include external rss-/atom feeds into your website.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_rssfeed</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

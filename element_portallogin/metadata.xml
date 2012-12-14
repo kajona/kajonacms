@@ -7,7 +7,6 @@
     <description>Creates a login-form on your portal-page. If enabled, users are able to change their profile-data and may request a new password (password forgotten functionality).</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_portallogin</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

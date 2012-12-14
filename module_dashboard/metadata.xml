@@ -7,7 +7,6 @@
     <description>The dashboard is the entry-page of the backend. Current information is displayed by simple widgets.</description>
     <version>3.4.9.2</version>
     <author>Kajona Team</author>
-    <target>module_dashboard</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

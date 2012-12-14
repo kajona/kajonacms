@@ -7,7 +7,6 @@
     <description>Renders a table of all users (filtered by groups) and provides a csv download.</description>
     <version>0.3</version>
     <author>Kajona Team</author>
-    <target>element_userlist</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

@@ -7,7 +7,6 @@
     <description>Generates a form to send a mail-notification about the current page to friends.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_tellafriend</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

@@ -7,7 +7,6 @@
     <description>The module search provides a full-text search for both, backend and portal. It respects permissions and status of all records.</description>
     <version>3.4.9.1</version>
     <author>Kajona Team</author>
-    <target>module_search</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

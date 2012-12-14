@@ -7,7 +7,6 @@
     <description>Allows users to sign up and create an account using the portal.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_portalregistration</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

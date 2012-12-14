@@ -7,7 +7,6 @@
     <description>Two systemtask allowing to export and import pages using a xml file.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>module_pageimportexport</target>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>

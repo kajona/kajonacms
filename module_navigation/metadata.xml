@@ -7,7 +7,6 @@
     <description>The module navigation is capable of rendering a navigation-tree, either created manually or rendered out of the current site-structure.</description>
     <version>3.4.9.2</version>
     <author>Kajona Team</author>
-    <target>module_navigation</target>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

@@ -7,7 +7,6 @@
     <description>Embed media elements (e.g. movies) into the website using a simple flash-player. Please note that this element makes use of the JWPlayer, you have to respect the projects' licence (http://www.longtailvideo.com/jw-player/)</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_flash</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

@@ -7,7 +7,6 @@
     <description>Want a "like my page on facebook" button on your site? Then this element is yours.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_facebooklikebox</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

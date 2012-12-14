@@ -7,7 +7,6 @@
     <description>A simple element to switch the portal-language. Provides a basic logic to avoid language-switches when no content is available in other languages. Takes care of possible languagesets, e.g. for module news.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>element_languageswitch</target>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>

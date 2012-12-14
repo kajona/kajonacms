@@ -7,7 +7,6 @@
     <description>pChart is another charting-engine, rendering charts on the serverside. Please respect the licence of the pChart project before making use of it.</description>
     <version>3.4.9</version>
     <author>Kajona Team</author>
-    <target>module_pchart</target>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
