@@ -25,8 +25,12 @@ class class_seleniumsuite {
     }
 
     public function getSystemParameter() {
+
+        $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
+        $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
+
         $arrSystemParameter = array();
-        $arrSystemParameter["SCHEME"] = "https";
+        $arrSystemParameter["SCHEME"] = isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https" : "http";
         $arrSystemParameter["HOSTNAME"] = $_SERVER['SERVER_NAME'];
         $strRequestUri = $_SERVER['REQUEST_URI'];
         $path_parts = pathinfo($strRequestUri);
