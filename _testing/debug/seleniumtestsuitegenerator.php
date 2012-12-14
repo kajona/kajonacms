@@ -46,14 +46,14 @@ class class_seleniumsuite {
             DIE("\n\n ERROR: The folder  '".$strDirName."' does not exist!!");
     }
         
-    public function checkWriteableDir($objFilesystem, $strDirName) {        
+    public function checkWriteableDir(class_filesystem $objFilesystem, $strDirName) {
         if($objFilesystem->isWritable($strDirName))
             echo "\n Ok, ".$strDirName." is writeable.";
         else
             DIE("\n\n ERROR: ".$strDirName." is NOT writeable!!\n Please change permissions to let the webserver write in it.");
     }
     
-    public function deleteFolder($objFilesystem, $strDirName) {
+    public function deleteFolder(class_filesystem $objFilesystem, $strDirName) {
         if(is_dir(_realpath_.$strDirName)) {
             echo "\n Found existing folder ".$strDirName.", delete it...";
 
@@ -95,17 +95,18 @@ class class_copydown extends class_seleniumsuite {
             if(count($arrFiles) == 0)
                 echo "\n\n :-(   No Files found.";
             else {
-                $strContentTestsuiteFile ="                
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
+                $strContentTestsuiteFile = <<<HTML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta content=\"text/html; charset=UTF-8\" http-equiv=\"content-type\" />
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <title>Test Suite</title>
 </head>
 <body>
-<table id=\"suiteTable\" cellpadding=\"1\" cellspacing=\"1\" border=\"1\" class=\"selenium\"><tbody>
-<tr><td><b>Test Suite</b></td></tr>";           
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+HTML;
 
                 $arrSearches = array();
                 $arrSearches[] = "XxxSCHEMExxX";
@@ -127,10 +128,11 @@ class class_copydown extends class_seleniumsuite {
                     chmod($strFileName, 0777);
                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"proj_".$strOneFile."\">".$strOneFile."</a></td></tr>";
                 }
-                $strContentTestsuiteFile .= "\n
+                $strContentTestsuiteFile .= <<<HTML
 </tbody></table>
 </body>
-</html>";
+</html>
+HTML;
                 echo "\n\n  Write master file for testsuite";
                 file_put_contents(_realpath_.$this->strSeleniumFolder."/_Testsuite.htm", $strContentTestsuiteFile);
                 echo "\n\n\n<b>You will find your new files in "._realpath_.$this->strSeleniumFolder."</b>";
@@ -205,7 +207,7 @@ class class_copyup extends class_seleniumsuite {
     public function selectorform() {
         echo "\n\nThis will copy your Selenium files to temp and replace the parameter of your environment (<b>'COPY UP'</b>)";
         echo "<form method=\"post\">";
-        echo "\nThe following parameter will be replaced by placeholders. Please change if you used differend values in your testsuite.\n";
+        echo "\nThe following parameter will be replaced by placeholders. Please change if you used different values in your testsuite.\n";
         $arrSystemParameter = $this->getSystemParameter();
         foreach($arrSystemParameter as $key => $strOneParameter) 
             echo "\n ".$key.": <input size=\"45\" type=\"text\" name=\"".$key."\" value=\"".$strOneParameter."\" /> \n\n";
@@ -247,7 +249,7 @@ else {
     echo "<form method=\"post\">";
     echo "<input type=\"hidden\" name=\"doStart\" value=\"1\" />";
     echo "\n<input type=\"radio\" name=\"copydirection\" value=\"down\" checked /> <b>GENERATE testingsuite ('copy down')</b> (will copy files TO ".$objSeleniumGenerator->strSeleniumFolder.")\n      -> Use this to get a set of files for your Selenium testing.\n      -> You can use this set to test your project with Selenium IDE.\n      -> The new files will get the prefix 'proj_'.";
-    echo "\n<input type=\"radio\" name=\"copydirection\" value=\"up\" /> <b>CLEANUP projectfiles</b> (will copy files FROM ".$objSeleniumGenerator->strSeleniumFolder." to a temp folder)\n      -> Use this to copy your changed files from the testingsuite to a temporary folder and let the parameter be anonymized.\n      -> You have to distribute your new to the module_xxxxx/tests folder later manually.\n      -> Files with prefix 'proj_' will be used and the prefix will be removed.";
+    echo "\n<input type=\"radio\" name=\"copydirection\" value=\"up\" /> <b>CLEANUP projectfiles</b> (will copy files FROM ".$objSeleniumGenerator->strSeleniumFolder." to a temp folder)\n      -> Use this to copy your changed files from the testingsuite to a temporary folder and let the parameter be anonymized.\n      -> You have to distribute your new files to the module_xxxxx/tests folder later manually.\n      -> Files with prefix 'proj_' will be used and the prefix will be removed.";
     echo "\n\n<b> WARNING!! All existing files in destination folders will be deleted/overwritten!!!</b>\n";
     echo "\n\n<input type=\"submit\" value=\"Start\" />";
     echo "</form>";

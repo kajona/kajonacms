@@ -2,7 +2,7 @@
 // add this file to your Selenium IDE (Firefox extension)
 // Options -> "Selenium Core extensions (user-extensions.js)"
 // without this extension some of the test will NOT work!!
-// you can add more than one extention file by adding a comma seperated list of values
+// you can add more than one extension file by adding a comma separated list of values
 // 
 // (C) 2012 by mr.bashshell for Kajona
 
