@@ -7,7 +7,6 @@
     <description>A simple but elegant template</description>
     <version>1.0</version>
     <author>Kajona Team, http://www.freecsstemplates.org/</author>
-    <target>prolific</target>
     <type>TEMPLATE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules />
