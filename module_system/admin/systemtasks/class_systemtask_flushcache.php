@@ -16,7 +16,7 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
 
 
     /**
-     * contructor to call the base constructor
+     * constructor to call the base constructor
      */
     public function __construct() {
         parent::__construct();
@@ -54,13 +54,15 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
 
         //increase the cachebuster, so browsers are forced to reload JS and CSS files
         $objCachebuster = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
-        $objCachebuster->setStrValue((int)$objCachebuster->getStrValue()+1);
+        $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);
         $objCachebuster->updateObjectToDb();
 
-        if(class_cache::flushCache($this->getParam("cacheSource")))
+        if(class_cache::flushCache($this->getParam("cacheSource"))) {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
-        else
+        }
+        else {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_error"));
+        }
     }
 
     /**
@@ -68,13 +70,14 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
      * @return string
      */
     public function getAdminForm() {
-    	$strReturn = "";
-        //show dropdown to select db-dump
+        $strReturn = "";
+        //show dropdown to select cache-source
         $arrSources = class_cache::getCacheSources();
         $arrOptions = array();
         $arrOptions[""] = $this->getLang("systemtask_flushcache_all");
-        foreach($arrSources as $strOneSource)
+        foreach($arrSources as $strOneSource) {
             $arrOptions[$strOneSource] = $strOneSource;
+        }
 
         $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
 
@@ -86,6 +89,6 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
      * @return string
      */
     public function getSubmitParams() {
-        return "&cacheSource=".$this->getParam("cacheSource");
+        return "&cacheSource=" . $this->getParam("cacheSource");
     }
 }

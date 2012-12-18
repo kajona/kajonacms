@@ -18,11 +18,11 @@ abstract class class_systemtask_base {
 
     private $strTextbase = "system";
 
-	/**
-	 * Instance of class_db
-	 *
-	 * @var class_db
-	 */
+    /**
+     * Instance of class_db
+     *
+     * @var class_db
+     */
     private $objDB;
 
     /**
@@ -41,18 +41,19 @@ abstract class class_systemtask_base {
 
     /**
      * URL used to trigger a reload, e.g. during long tasks
+     *
      * @var string
      */
     private $strReloadParam = "";
 
     /**
      * Infos regarding the current process
+     *
      * @var string
      */
     private $strProgressInformation = "";
 
     /**
-     *
      * @var class_module_system_common
      */
     private $objSystemCommon;
@@ -60,6 +61,7 @@ abstract class class_systemtask_base {
     /**
      * Indicates, wether the form to set up the task is a multipart-form or not (e.g.
      * for fileuploads)
+     *
      * @var bool
      */
     private $bitMultipartform = false;
@@ -72,13 +74,13 @@ abstract class class_systemtask_base {
         $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $this->objSystemCommon = new class_module_system_common();
 
-
     }
 
     /**
      * Delegate requests for strings to the text-subsystem
      *
      * @param string $strLangKey
+     *
      * @return string
      */
     protected function getLang($strLangKey) {
@@ -90,25 +92,28 @@ abstract class class_systemtask_base {
      *
      * @param string $strTargetModule
      * @param string $strTargetAction
+     *
      * @return string
      */
     public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks") {
-    	$strReturn = "";
-    	$strFormContent = $this->getAdminForm();
+        $strReturn = "";
+        $strFormContent = $this->getAdminForm();
 
-    	if($strFormContent != "") {
-            if($this->bitMultipartform)
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
-            else
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm");
-    		$strReturn .= $strFormContent;
+        if($strFormContent != "") {
+            if($this->bitMultipartform) {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
+            }
+            else {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm");
+            }
+            $strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
-    		$strReturn .= $this->objToolkit->formInputSubmit($this->objLang->getLang("systemtask_run", "system"));
-    		$strReturn .= $this->objToolkit->formClose();
+            $strReturn .= $this->objToolkit->formInputSubmit($this->objLang->getLang("systemtask_run", "system"));
+            $strReturn .= $this->objToolkit->formClose();
 
-    	}
+        }
 
-    	return $strReturn;
+        return $strReturn;
     }
 
     /**
@@ -124,13 +129,14 @@ abstract class class_systemtask_base {
 
     /**
      * Empty implementation, override in subclass!
-     *
+
      */
-    public function getAdminForm() {}
+    public function getAdminForm() {
+    }
 
     /**
      * Empty implementation, override in subclass!
-     *
+
      */
     public function getSubmitParams() {
         return "";
@@ -138,12 +144,12 @@ abstract class class_systemtask_base {
 
     /**
      * Empty implementation, oveerride in subclass!
-     *
+
      */
-    public function getStrInternalTaskName() {}
+    public function getStrInternalTaskName() {
+    }
 
     /**
-     *
      * @param string $strReloadParam
      */
     public function setStrReloadParam($strReloadParam) {
@@ -151,7 +157,6 @@ abstract class class_systemtask_base {
     }
 
     /**
-     *
      * @return string
      */
     public function getStrReloadParam() {
@@ -159,18 +164,18 @@ abstract class class_systemtask_base {
     }
 
     /**
-     *
      * @return string
      */
     public function getStrReloadUrl() {
-        if($this->strReloadParam != "")
-            return getLinkAdminHref("system", "systemTasks", "&task=".$this->getStrInternalTaskName().$this->strReloadParam);
-        else
+        if($this->strReloadParam != "") {
+            return getLinkAdminHref("system", "systemTasks", "&task=" . $this->getStrInternalTaskName() . $this->strReloadParam);
+        }
+        else {
             return "";
+        }
     }
 
-     /**
-     *
+    /**
      * @param string $strProgressInformation
      */
     public function setStrProgressInformation($strProgressInformation) {
@@ -178,7 +183,6 @@ abstract class class_systemtask_base {
     }
 
     /**
-     *
      * @return string
      */
     public function getStrProgressInformation() {
@@ -190,6 +194,7 @@ abstract class class_systemtask_base {
      * Provides acces to the GET and POST params
      *
      * @param string $strKey
+     *
      * @return mixed
      */
     public function getParam($strKey) {
@@ -201,6 +206,7 @@ abstract class class_systemtask_base {
      *
      * @param string $strKey
      * @param mixed $strValue
+     *
      * @return void
      */
     public function setParam($strKey, $strValue) {
@@ -216,7 +222,5 @@ abstract class class_systemtask_base {
     public function setBitMultipartform($bitMultipartform) {
         $this->bitMultipartform = $bitMultipartform;
     }
-
-
 
 }

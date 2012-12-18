@@ -302,7 +302,7 @@ class class_cache  {
 
     /**
      * Returns the list of sources currently stored to the cache
-     * @return string
+     * @return string[]
      */
     public static function getCacheSources() {
         $strQuery = "SELECT DISTINCT cache_source FROM  "._dbprefix_."cache";

@@ -15,11 +15,11 @@
 class class_systemtask_stats_hostnamelookup extends class_systemtask_base implements interface_admin_systemtask {
 
 
-	/**
-	 * contructor to call the base constructor
-	 */
-	public function __construct() {
-		parent::__construct();
+    /**
+     * constructor to call the base constructor
+     */
+    public function __construct() {
+        parent::__construct();
         $this->setStrTextBase("stats");
     }
 
@@ -36,7 +36,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
      * @return string
      */
     public function getStrInternalTaskName() {
-    	return "statshostnamelookup";
+        return "statshostnamelookup";
     }
 
     /**
@@ -44,7 +44,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
      * @return string
      */
     public function getStrTaskName() {
-    	return $this->getLang("systemtask_hostnamelookup_name");
+        return $this->getLang("systemtask_hostnamelookup_name");
     }
 
     /**
@@ -53,7 +53,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
      */
     public function executeTask() {
         $strMessage = "";
-    	$objWorker = new class_module_stats_worker("");
+        $objWorker = new class_module_stats_worker("");
 
         //Load all IPs to lookup
         $arrIpToLookup = $objWorker->hostnameLookupIpsToLookup();
@@ -63,10 +63,11 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
         }
 
         //check, if we did anything before
-        if($this->getParam("totalCount") == "")
+        if($this->getParam("totalCount") == "") {
             $this->setParam("totalCount", count($arrIpToLookup));
+        }
 
-        $strMessage .= $this->objToolkit->getTextRow($this->getLang("intro_worker_lookup"). $this->getParam("totalCount"));
+        $strMessage .= $this->objToolkit->getTextRow($this->getLang("intro_worker_lookup") . $this->getParam("totalCount"));
 
         //Lookup 10 IPs an load the page again
         for($intI = 0; $intI < 10; $intI++) {
@@ -91,11 +92,12 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
         //and multiply it with the alredy looked up IPs
         $intLookupsDone = ((int)$intTotal - count($arrIpToLookup)) * $floatOnePercent;
         $intLookupsDone = round($intLookupsDone, 2);
-        if($intLookupsDone < 0)
+        if($intLookupsDone < 0) {
             $intLookupsDone = 0;
+        }
 
         $this->setStrProgressInformation($strMessage);
-        $this->setStrReloadParam("&totalCount=".$this->getParam("totalCount"));
+        $this->setStrReloadParam("&totalCount=" . $this->getParam("totalCount"));
 
         return $intLookupsDone;
     }
@@ -105,7 +107,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
      * @return string
      */
     public function getAdminForm() {
-    	return "";
+        return "";
     }
 
 }
