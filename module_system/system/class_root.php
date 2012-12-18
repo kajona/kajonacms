@@ -48,6 +48,11 @@ abstract class class_root {
      */
     private $objLang = null; //Object managing the langfiles
 
+    /**
+     * @var interface_sortmanager
+     */
+    protected $objSortManager = null;
+
     private $strAction; //current action to perform (GET/POST)
     protected $arrModule = array(); //Array containing information about the current module
 
@@ -169,6 +174,8 @@ abstract class class_root {
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
         $this->objRights = $objCarrier->getObjRights();
+
+        $this->objSortManager = new class_common_sortmanager($this);
 
         //And keep the action
         $this->strAction = $this->getParam("action");
@@ -866,7 +873,7 @@ abstract class class_root {
             $this->objDB->flushQueryCache();
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
-            $this->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
+            $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
         }
 
@@ -1206,61 +1213,6 @@ abstract class class_root {
         return $arrReturn;
     }
 
-
-    /**
-     * Fixes the sort-ids when a record is assigned to a new prev-id.
-     * The old siblings have to be shifted, the records new sort-id
-     * is set up by the new number of siblings.
-     *
-     * @param $strOldPrevid
-     * @param $strNewPrevid
-     */
-    private function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid) {
-        $this->objDB->flushQueryCache();
-
-        $strQuery = "SELECT system_id, system_sort
-                     FROM "._dbprefix_."system
-                     WHERE system_prev_id=?
-                     ORDER BY system_sort ASC";
-        $arrSiblings = $this->objDB->getPArray($strQuery, array($strOldPrevid));
-
-        $intI = 1;
-        foreach($arrSiblings as $arrOneSibling) {
-            if($arrOneSibling["system_sort"] != $intI) {
-                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
-                $this->objDB->_pQuery($strQuery, array($intI, $arrOneSibling["system_id"]));
-            }
-            $intI++;
-        }
-
-        //the new sort-id of the new-record may be set up easily
-        $intNewCount = $this->getNumberOfSiblings($this->getSystemid(), false);
-        $this->setIntSort($intNewCount);
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
-        $this->objDB->_pQuery($strQuery, array($intNewCount, $this->getSystemid()));
-    }
-
-    private function fixSortOnDelete($strSystemidToDelete) {
-
-        $strQuery = "SELECT system_id, system_sort
-                     FROM "._dbprefix_."system
-                     WHERE system_prev_id=?
-                     ORDER BY system_sort ASC";
-        $arrSiblings = $this->objDB->getPArray($strQuery, array($this->getStrPrevId()));
-
-        $bitHit = false;
-        foreach($arrSiblings as $arrOneSibling) {
-
-            if($bitHit) {
-                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id = ?";
-                $this->objDB->_pQuery($strQuery, array($arrOneSibling["system_id"]));
-            }
-
-            if($arrOneSibling["system_id"] == $strSystemidToDelete)
-                $bitHit = true;
-        }
-    }
-
     /**
      * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
      *
@@ -1269,15 +1221,7 @@ abstract class class_root {
      * @deprecated
      */
     public function setPosition($strDirection = "upwards") {
-
-        //get the old pos
-        $intPos = $this->getIntSort();
-        if($strDirection == "upwards")
-            $intPos--;
-        else
-            $intPos++;
-
-        $this->setAbsolutePosition($intPos);
+        $this->objSortManager->setPosition($strDirection);
     }
 
     /**
@@ -1289,96 +1233,7 @@ abstract class class_root {
      * @return void
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
-        $this->objDB->flushQueryCache();
-
-
-        $arrParams = array();
-        $arrParams[] = $this->getPrevId();
-
-        $strWhere = "";
-        if($arrRestrictionModules && is_array($arrRestrictionModules)) {
-            $arrMarks = array();
-            foreach($arrRestrictionModules as $strOneId) {
-                $arrMarks[] = "?";
-                $arrParams[] = $strOneId;
-            }
-            $strWhere = "AND system_module_nr IN ( ".implode(", ", $arrMarks)." )";
-
-        }
-
-        //Load all elements on the same level, so at first get the prev id
-        $strQuery = "SELECT *
-                         FROM "._dbprefix_."system
-                         WHERE system_prev_id=? AND system_id != '0'
-                         ".$strWhere."
-                         ORDER BY system_sort ASC, system_comment ASC";
-
-        //No caching here to allow multiple shiftings per request
-        $arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);
-
-        //more than one record to set?
-        if(count($arrElements) <= 1)
-            return;
-
-        //senseless new pos?
-        if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
-            return;
-
-        $intCurPos = $this->getIntSort();
-
-        if($intNewPosition == $intCurPos)
-            return;
-
-
-        //searching the current element to get to know if element should be sorted up- or downwards
-        $bitSortDown = false;
-        $bitSortUp = false;
-        if($intNewPosition < $intCurPos)
-            $bitSortUp = true;
-        else
-            $bitSortDown = true;
-
-
-        //sort up?
-        if($bitSortUp) {
-            //move the record to be shifted to the wanted pos
-            $strQuery = "UPDATE "._dbprefix_."system
-                                SET system_sort=?
-                                WHERE system_id=?";
-            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
-
-            //start at the pos to be reached and move all one down
-            for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
-
-                $strQuery = "UPDATE "._dbprefix_."system
-                            SET system_sort=?
-                            WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI+1, $arrElements[$intI-1]["system_id"]));
-            }
-        }
-
-        if($bitSortDown) {
-            //move the record to be shifted to the wanted pos
-            $strQuery = "UPDATE "._dbprefix_."system
-                                SET system_sort=?
-                                WHERE system_id=?";
-            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
-
-            //start at the pos to be reached and move all one up
-            for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
-
-                $strQuery = "UPDATE "._dbprefix_."system
-                            SET system_sort= ?
-                            WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI-1, $arrElements[$intI-1]["system_id"]));
-            }
-        }
-
-        //flush the cache
-        $this->flushCompletePagesCache();
-        $this->objDB->flushQueryCache();
-        $this->setIntSort($intNewPosition);
+        $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
         $this->internalInit();
     }
 
@@ -1432,7 +1287,7 @@ abstract class class_root {
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
 
-        $this->fixSortOnDelete($strSystemid);
+        $this->objSortManager->fixSortOnDelete($strSystemid);
 
         $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
         $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
@@ -1698,7 +1553,7 @@ abstract class class_root {
         return $this->intSort;
     }
 
-    protected function setIntSort($intSort) {
+    public function setIntSort($intSort) {
         $this->intSort = $intSort;
     }
 

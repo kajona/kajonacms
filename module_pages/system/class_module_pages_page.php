@@ -123,6 +123,8 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         //base class
         parent::__construct($strSystemid);
+
+        $this->objSortManager = new class_pages_sortmanager($this);
     }
 
 
@@ -385,11 +387,6 @@ class class_module_pages_page extends class_model implements interface_model, in
         $arrPathNames[] = urlSafeString($this->getStrBrowsername());
         
         $this->strPath = implode("/", $arrPathNames);
-    }
-
-
-    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        parent::setAbsolutePosition($intNewPosition, array(_pages_modul_id_, _pages_folder_id_));
     }
 
 

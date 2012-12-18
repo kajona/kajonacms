@@ -73,6 +73,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
 
         parent::__construct($strSystemid);
+
+        $this->objSortManager = new class_pageelement_sortmanager($this);
     }
 
     /**
@@ -421,7 +423,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return array
      */
-    private function getSortedElementsAtPlaceholder() {
+    public function getSortedElementsAtPlaceholder() {
 
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
@@ -440,128 +442,28 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 
     /**
-     * Sets the position of an element using a given value.
-     *
-     * @param int $intNewPosition
-     * @param bool $arrRestrictionModules
-     *
-     * @return void
-     * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
-     */
-    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        class_logger::getInstance()->addLogRow("move ".$this->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
-        $this->objDB->flushQueryCache();
-
-        //No caching here to allow multiple shiftings per request
-        $arrElements = $this->getSortedElementsAtPlaceholder();
-
-        //more than one record to set?
-        if(count($arrElements) <= 1)
-            return;
-
-        //senseless new pos?
-        if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
-            return;
-
-        $intCurPos = $this->getIntSort();
-
-        if($intNewPosition == $intCurPos)
-            return;
-
-
-        //searching the current element to get to know if element should be sorted up- or downwards
-        $bitSortDown = false;
-        $bitSortUp = false;
-        if($intNewPosition < $intCurPos)
-            $bitSortUp = true;
-        else
-            $bitSortDown = true;
-
-
-        //sort up?
-        if($bitSortUp) {
-            //move the record to be shifted to the wanted pos
-            $strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=?
-								WHERE system_id=?";
-            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
-
-            //start at the pos to be reached and move all one down
-            for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
-
-                //break for errors created on version pre 4.0
-                if($this->getSystemid() == $arrElements[$intI - 1]["system_id"])
-                    continue;
-
-                $strQuery = "UPDATE "._dbprefix_."system
-                            SET system_sort=?
-                            WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI + 1, $arrElements[$intI - 1]["system_id"]));
-            }
-        }
-
-        if($bitSortDown) {
-            //move the record to be shifted to the wanted pos
-            $strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=?
-								WHERE system_id=?";
-            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->getSystemid()));
-
-            //start at the pos to be reached and move all one up
-            for($intI = $intCurPos + 1; $intI <= $intNewPosition; $intI++) {
-
-                //break for errors created on version pre 4.0
-                if($this->getSystemid() == $arrElements[$intI - 1]["system_id"])
-                    continue;
-
-                $strQuery = "UPDATE "._dbprefix_."system
-                            SET system_sort= ?
-                            WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI - 1, $arrElements[$intI - 1]["system_id"]));
-            }
-        }
-
-        //flush the cache
-        $this->flushCompletePagesCache();
-        $this->objDB->flushQueryCache();
-        $this->setIntSort($intNewPosition);
-    }
-
-    /**
-     * Shifts an element up or down
-     * This is a special implementation, because we don't have the usual system_prev_id relations.
-     * Creates an initial sorting.
-     * Note: Could be optimized!
-     *
-     * @param string $strMode up || down
-     *
-     * @return void
-     * @see class_root::setPosition($strDirection = "upwards")
-     * @deprecated
-     */
-    public function setPosition($strMode = "up") {
-
-        $arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();
-
-        foreach($arrElementsOnPlaceholder as $arrOneElement) {
-            if($arrOneElement["system_id"] == $this->getSystemid()) {
-                if($strMode == "up")
-                    $this->setAbsolutePosition($arrOneElement["system_sort"]-1);
-                else
-                    $this->setAbsolutePosition($arrOneElement["system_sort"]+1);
-
-                break;
-            }
-        }
-    }
-
-
-    /**
      * Deletes the element from the system-tables, also from the foreign-element-tables
      *
      * @return bool
      */
     protected function deleteObjectInternal() {
+
+        //fix the internal sorting
+        $arrElements = $this->getSortedElementsAtPlaceholder();
+
+        $bitHit = false;
+        foreach($arrElements as $arrOneSibling) {
+
+            if($bitHit) {
+                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id = ?";
+                $this->objDB->_pQuery($strQuery, array($arrOneSibling["system_id"]));
+            }
+
+            if($arrOneSibling["system_id"] == $this->getSystemid())
+                $bitHit = true;
+        }
+
+
         //Load the Element-Data
         //Build the class-name
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());

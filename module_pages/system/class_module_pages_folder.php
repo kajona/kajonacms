@@ -49,6 +49,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
         //base class
         parent::__construct($strSystemid);
+
+        $this->objSortManager = new class_pages_sortmanager($this);
     }
 
 
@@ -64,11 +66,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
         return parent::onInsertToDb();
     }
-
-    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        parent::setAbsolutePosition($intNewPosition, array(_pages_modul_id_, _pages_folder_id_));
-    }
-
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
