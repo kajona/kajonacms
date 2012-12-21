@@ -78,6 +78,10 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertEquals("pages", $arrModules[1]);
         $this->assertEquals("3.4.2", $arrVersion[1]);
 
+        $arrImages = $objMetadata->getArrScreenshots();
+        $this->assertEquals(1, count($arrImages));
+        $this->assertEquals("/test.jpg", $arrImages[0]);
+
         $objFilesystem->folderDeleteRecursive("/core/module_autotest");
         $objFilesystem->fileDelete(_projectpath_."/temp/autotest.zip");
 
@@ -116,6 +120,10 @@ class class_test_packagemanager extends class_testbase  {
         <module name="system" version="3.4.1" />
         <module name="pages" version="3.4.2" />
     </requiredModules>
+    <screenshots>
+        <screenshot path="/test.jpg" />
+        <screenshot path="/test2.jpsg" />
+    </screenshots>
 </package>
 XML;
     }
