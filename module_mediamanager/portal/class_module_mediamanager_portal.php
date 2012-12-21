@@ -178,6 +178,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                             $arrFileTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
                             $arrFileTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objOneFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
                         }
+                        $this->fileListTemplateHook($objOneFile, $arrFileTemplate);
 
                         //ratings available?
                         if($objOneFile->getFloatRating() !== null) {
@@ -263,6 +264,15 @@ class class_module_mediamanager_portal extends class_portal implements interface
         return $strReturn;
     }
 
+    /**
+     * Use this hook-method if you want to add additional placeholders to the portal-content of a single file-entry
+     * within a list.
+     * @param class_module_mediamanager_file $objOneFile
+     * @param $arrTemplate
+     */
+    protected function fileListTemplateHook(class_module_mediamanager_file $objOneFile, &$arrTemplate) {
+
+    }
 
 
 
