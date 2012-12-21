@@ -24,6 +24,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     private $strType;
     private $bitProvidesInstaller;
     private $arrRequiredModules = array();
+    private $arrScreenshots = array();
 
     private $strContentprovider;
     private $strPath;
@@ -162,6 +163,25 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
             }
         }
 
+        if(isset($arrXml["package"]["0"]["screenshots"]) && is_array($arrXml["package"]["0"]["screenshots"])) {
+            foreach($arrXml["package"]["0"]["screenshots"] as $arrScreenshots) {
+                if(is_array($arrScreenshots)) {
+                    foreach($arrScreenshots as $arrTempImage) {
+                        if(is_array($arrTempImage)) {
+                            foreach($arrTempImage as $arrOneImage) {
+                                if(isset($arrOneImage["attributes"]["path"])) {
+                                    $strImage = $arrOneImage["attributes"]["path"];
+
+                                    if(in_array(uniStrtolower(uniSubstr($strImage, -4)), array(".jpg", ".jpg", ".gif", ".png")))
+                                        $this->arrScreenshots[] = $strImage;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -244,6 +264,10 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
 
     public function getArrRequiredModules() {
         return $this->arrRequiredModules;
+    }
+
+    public function getArrScreenshots() {
+        return $this->arrScreenshots;
     }
 
 

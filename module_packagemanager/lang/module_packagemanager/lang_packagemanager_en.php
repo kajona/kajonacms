@@ -46,6 +46,7 @@ $lang["package_install_success"]         = "Package installed";
 $lang["package_installocally"]           = "Install package";
 $lang["package_minversion"]              = "Minimal system-version:";
 $lang["package_modules"]                 = "Required modules:";
+$lang["package_screenshots"]                 = "Screenshots:";
 $lang["package_notinstallable"]          = "Package can't be installed.";
 $lang["package_noupdate"]                = "There's no new version available. Latest version:";
 $lang["package_noversion"]               = "The system failed to find a matching remote package";

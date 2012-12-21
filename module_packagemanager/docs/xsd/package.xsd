@@ -18,6 +18,17 @@
             <xs:element type="typeType" name="type" maxOccurs="1" minOccurs="1" />
             <xs:element type="boolType" name="providesInstaller" maxOccurs="1" minOccurs="1" />
             <xs:element type="requiredModule" name="requiredModules" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="screenshotType" name="screenshots" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="screenshotType">
+        <xs:sequence>
+            <xs:element name="screenshot" minOccurs="0" maxOccurs="3">
+                <xs:complexType>
+                    <xs:attribute name="path" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 

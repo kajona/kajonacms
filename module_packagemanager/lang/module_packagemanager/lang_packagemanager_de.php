@@ -46,6 +46,7 @@ $lang["package_install_success"]         = "Paket wurde installiert";
 $lang["package_installocally"]           = "Paket installieren/aktualisieren";
 $lang["package_minversion"]              = "Minimale System-Version:";
 $lang["package_modules"]                 = "Erforderliche Module:";
+$lang["package_screenshots"]                 = "Screenshots:";
 $lang["package_notinstallable"]          = "Paket kann nicht installiert werden.";
 $lang["package_noupdate"]                = "Es liegt keine neuere Version vor. Aktuellste Version:";
 $lang["package_noversion"]               = "Das System konnte kein passendes, verfügbares Paket ermitteln";

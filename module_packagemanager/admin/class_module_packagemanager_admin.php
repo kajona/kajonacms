@@ -221,6 +221,16 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->getTextRow($strOneModule." >= ".$strVersion);
             }
 
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_screenshots"));
+            foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
+                $objZip = new class_zip();
+                $objImage = $objZip->getFileFromArchive($strFile, $strOneScreenshot);
+
+                $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
+                file_put_contents(_realpath_.$strImage, $objImage);
+                $strReturn .= "<img src='"._webpath_."/image.php?image=".urlencode($strImage)."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
+            }
+
 
             if(!$objHandler->getObjMetadata()->getBitProvidesInstaller() || $objHandler->isInstallable()) {
 
