@@ -49,6 +49,7 @@ interface interface_messageprovider {
      *
      * @abstract
      * @return string
+     * @todo validate if still required, may be replaced by the implementing class-name
      */
     public function getStrIdentifier();
 
