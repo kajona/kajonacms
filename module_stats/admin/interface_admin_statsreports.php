@@ -40,7 +40,6 @@ interface interface_admin_statsreports {
     /**
      * This one returns the command that should be used to load THIS plugin.
      * Make sure NOT to conflict with other plugins!
-
      */
     public function getReportCommand();
 
