@@ -4,6 +4,7 @@
 	<div><label for="portallogin_password">[lang,password,elements]</label><input type="password" name="portallogin_password" id="portallogin_password" value="%%portallogin_password%%" class="inputText" /></div>
 	<div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,login,elements]" class="button" /></div><br />
 	<input type="hidden" name="action" value="%%portallogin_action%%" />
+	<input type="hidden" name="pl_systemid" value="%%portallogin_elsystemid%%" />
     <div><label></label>%%portallogin_forgotpwdlink%%</div><br />
 </form>
 </portallogin_loginform>
@@ -24,7 +25,8 @@
     <div><label for="forename">[lang,forenameTitle,elements]</label><input type="text" name="forename" id="forename" value="%%forename%%" class="inputText" /></div>
     <div><label for="name">[lang,nameTitle,elements]</label><input type="text" name="name" id="name" value="%%name%%" class="inputText" /></div>
     <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,userDataSubmit,elements]" class="button" /></div>
-    <input type="hidden" name="submitUserForm" value="1" /> 
+    <input type="hidden" name="submitUserForm" value="1" />
+    <input type="hidden" name="pl_systemid" value="%%portallogin_elsystemid%%" />
 </form>
 </portallogin_userdataform_minimal>
 
@@ -49,6 +51,7 @@
     </div>
     <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,userDataSubmit,elements]" class="button" /></div>
     <input type="hidden" name="submitUserForm" value="1" />
+    <input type="hidden" name="pl_systemid" value="%%portallogin_elsystemid%%" />
 </form>
 </portallogin_userdataform_complete>
 
@@ -65,6 +68,7 @@
 	<div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,resetPwd,elements]" class="button" /></div><br />
 	<input type="hidden" name="action" value="%%portallogin_action%%" />
 	<input type="hidden" name="reset" value="1" />
+    <input type="hidden" name="pl_systemid" value="%%portallogin_elsystemid%%" />
 </form>
 </portallogin_resetform>
 
@@ -79,5 +83,6 @@
 	<input type="hidden" name="systemid" value="%%portallogin_systemid%%" />
 	<input type="hidden" name="authcode" value="%%portallogin_authcode%%" />
 	<input type="hidden" name="reset" value="1" />
+    <input type="hidden" name="pl_systemid" value="%%portallogin_elsystemid%%" />
 </form>
 </portallogin_newpwdform>

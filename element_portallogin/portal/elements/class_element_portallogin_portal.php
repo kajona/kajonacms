@@ -35,6 +35,12 @@ class class_element_portallogin_portal extends class_element_portal implements i
     public function loadData() {
         $strReturn = "";
 
+        $strOldAction = "";
+        if(validateSystemid($this->getParam("pl_systemid")) && $this->getParam("pl_systemid") != $this->arrElementData["content_id"]) {
+            $strOldAction = $this->getParam("action");
+            $this->setParam("action", "");
+        }
+
         if($this->getParam("action") == "portalLogin") {
             if($this->doLogin()) {
                 if($this->arrElementData["portallogin_success"] != "") {
@@ -82,6 +88,8 @@ class class_element_portallogin_portal extends class_element_portal implements i
             }
         }
 
+        if($strOldAction != "")
+            $this->setParam("action", $strOldAction);
 
         return $strReturn;
     }
@@ -144,6 +152,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
                 $arrTemplate["portallogin_systemid"] = $this->getParam("systemid");
                 $arrTemplate["portallogin_authcode"] = $this->getParam("authcode");
                 $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
+                $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
                 $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
                 $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
@@ -203,6 +212,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
             $arrTemplate = array();
             $arrTemplate["portallogin_action"] = "portalLoginReset";
             $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
+            $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
             $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
             $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
         }
@@ -223,9 +233,10 @@ class class_element_portallogin_portal extends class_element_portal implements i
 
         $arrTemplate = array();
         $arrTemplate["portallogin_action"] = "portalLogin";
+        $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
 
         $strPwdPage = $this->arrElementData["portallogin_pwdforgot"] != "" ? $this->arrElementData["portallogin_pwdforgot"] : $this->getPagename();
-        $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($strPwdPage, "", "", $this->getLang("pwdForgotLink"), "portalLoginReset");
+        $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($strPwdPage, "", "", $this->getLang("pwdForgotLink"), "portalLoginReset", "&pl_systemid=".$this->arrElementData["content_id"]);
 
         $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
         return $this->fillTemplate($arrTemplate, $strTemplateID);
@@ -241,14 +252,14 @@ class class_element_portallogin_portal extends class_element_portal implements i
         $arrTemplate = array();
         $arrTemplate["loggedin_label"] = $this->getLang("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
-        $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getLang("logoutlink"), "portalLogout");
+        $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getLang("logoutlink"), "portalLogout", "&pl_systemid=".$this->arrElementData["content_id"]);
 
         $strProfileeditpage = $this->getPagename();
         if($this->arrElementData["portallogin_profile"] != "") {
             $strProfileeditpage = $this->arrElementData["portallogin_profile"];
         }
 
-        $arrTemplate["editprofilelink"] = getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile");
+        $arrTemplate["editprofilelink"] = getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile", "&pl_systemid=".$this->arrElementData["content_id"]);
         return $this->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -303,6 +314,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
                 $arrTemplate["city"] = $objUser->getObjSourceUser()->getStrCity();
                 $arrTemplate["phone"] = $objUser->getObjSourceUser()->getStrTel();
                 $arrTemplate["mobile"] = $objUser->getObjSourceUser()->getStrMobile();
+                $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
 
                 $objDate = new class_date($objUser->getObjSourceUser()->getLongDate());
 
