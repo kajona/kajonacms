@@ -24,7 +24,7 @@ class class_graph_flot implements interface_graph {
     private $objChartData = null;
     private $strChartId = null;
 
-    private $intWidth = 600;
+    private $intWidth = 700;
     private $intHeight = 350;
     
     //line and barchart
@@ -161,7 +161,7 @@ class class_graph_flot implements interface_graph {
 
     public function setStrYAxisTitle($strTitle) {
         $this->strYAxisTitle = $strTitle;
-     }
+    }
 
     public function showGraph() {
         $this->renderGraph();
@@ -175,6 +175,7 @@ class class_graph_flot implements interface_graph {
      * the type of engine - from a simple img-tag up to a full js-logic.
      *
      * @since 4.0
+     * @throws class_exception
      * @return mixed
      */
     public function renderGraph() {
@@ -194,8 +195,8 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->setChartId($this->strChartId = generateSystemid());
         
         //create chart
-        $strChartCode = $this->objChartData->showGraph($this->strChartId );
-        $toolTip = $this->objChartData->showChartToolTips($this->strChartId );
+        $strChartCode = $this->objChartData->showGraph($this->strChartId);
+        $toolTip = $this->objChartData->showChartToolTips($this->strChartId);
         
         //divs
         $strDivTitle = "";
@@ -264,7 +265,7 @@ class class_graph_flot implements interface_graph {
                 });
             });
         </script>";
-//<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
+        //<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
         //enable tooltips
         return $strReturn;
     }

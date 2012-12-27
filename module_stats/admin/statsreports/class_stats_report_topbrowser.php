@@ -129,7 +129,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
-        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats"));
 
         return $strReturn;
     }

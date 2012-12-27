@@ -21,55 +21,50 @@
 interface interface_graph {
 
     /**
-	 * Used to create a bar-chart.
+     * Used to create a bar-chart.
      * For each set of bar-values you can call this method once.
      * This means, calling this method twice creates a grouped bar chart
-	 * A sample-code could be:
-	 *
-	 *  $objGraph = new class_graph();
-	 *  $objGraph->setStrXAxisTitle("x-axis");
-	 *  $objGraph->setStrYAxisTitle("y-axis");
-	 *  $objGraph->setStrGraphTitle("Test Graph");
-	 *  $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
-	 *
-	 * @param array $arrValues see the example above for the internal array-structure
+     * A sample-code could be:
+     *  $objGraph = new class_graph();
+     *  $objGraph->setStrXAxisTitle("x-axis");
+     *  $objGraph->setStrYAxisTitle("y-axis");
+     *  $objGraph->setStrGraphTitle("Test Graph");
+     *  $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
+     *
+     * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
-	 */
-	public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false);
+     */
+    public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false);
 
     /**
-	 * Used to create a stacked bar-chart.
+     * Used to create a stacked bar-chart.
      * For each set of bar-values you can call this method once.
-	 * A sample-code could be:
-	 *
-	 *  $objGraph = new class_graph();
-	 *  $objGraph->setStrXAxisTitle("x-axis");
-	 *  $objGraph->setStrYAxisTitle("y-axis");
-	 *  $objGraph->setStrGraphTitle("Test Graph");
-	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
-	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
-	 *
-	 * @param array $arrValues see the example above for the internal array-structure
+     * A sample-code could be:
+     *  $objGraph = new class_graph();
+     *  $objGraph->setStrXAxisTitle("x-axis");
+     *  $objGraph->setStrYAxisTitle("y-axis");
+     *  $objGraph->setStrGraphTitle("Test Graph");
+     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
+     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
+     *
+     * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
-	 */
+     */
     public function addStackedBarChartSet($arrValues, $strLegend);
 
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.
      * Add a set of linePlot to a graph to get more then one line.
-     *
      * If you created a bar-chart before, it it is possible to add line-plots on top of
      * the bars. Nevertheless, the scale is calculated out of the bars, so make
      * sure to remain inside the visible range!
-     *
      * A sample-code could be:
-     *
      *  $objGraph = new class_graph();
-	 *  $objGraph->setStrXAxisTitle("x-axis");
-	 *  $objGraph->setStrYAxisTitle("y-axis");
-	 *  $objGraph->setStrGraphTitle("Test Graph");
-	 *  $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
+     *  $objGraph->setStrXAxisTitle("x-axis");
+     *  $objGraph->setStrYAxisTitle("y-axis");
+     *  $objGraph->setStrGraphTitle("Test Graph");
+     *  $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
      * @param array $arrValues e.g. array(1,3,4,5,6)
      * @param string $strLegend the name of the single plot
@@ -82,7 +77,6 @@ interface interface_graph {
      * Make sure the array have the same number of elements, ohterwise they won't
      * be uses.
      * A sample-code could be:
-     *
      *  $objChart = new class_graph();
      *  $objChart->setStrGraphTitle("Test Pie Chart");
      *  $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
@@ -93,23 +87,23 @@ interface interface_graph {
     public function createPieChart($arrValues, $arrLegends);
 
     /**
-	 * Does the magic. Creates all necessary stuff and finally
-	 * sends the graph directly (!!!) to the browser.
+     * Does the magic. Creates all necessary stuff and finally
+     * sends the graph directly (!!!) to the browser.
      * Execution should be terminated afterwards.
-	 *
      * <b>Please note that not all chart-engines support this method.</b>
+     *
      * @deprecated use interface_graph::renderGraph() instead
-	 */
-	public function showGraph();
+     */
+    public function showGraph();
 
-	/**
-	 * Does the magic. Creates all necessary stuff and finally
-	 * saves the graph to the specified filename
-	 *
+    /**
+     * Does the magic. Creates all necessary stuff and finally
+     * saves the graph to the specified filename
      * <b>Please note that not all chart-engines support this method.</b>
+     *
      * @deprecated use interface_graph::renderGraph() instead
-	 */
-	public function saveGraph($strFilename);
+     */
+    public function saveGraph($strFilename);
 
     /**
      * Common way to get a chart. The engine should save the chart
@@ -123,26 +117,26 @@ interface interface_graph {
      */
     public function renderGraph();
 
-	/**
-	 * Set the title of the x-axis
-	 *
-	 * @param string $strTitle
-	 */
-	public function setStrXAxisTitle($strTitle);
+    /**
+     * Set the title of the x-axis
+     *
+     * @param string $strTitle
+     */
+    public function setStrXAxisTitle($strTitle);
 
-	/**
-	 * Set the title of the y-axis
-	 *
-	 * @param string $strTitle
-	 */
-	public function setStrYAxisTitle($strTitle);
+    /**
+     * Set the title of the y-axis
+     *
+     * @param string $strTitle
+     */
+    public function setStrYAxisTitle($strTitle);
 
-	/**
-	 * Set the title of the graph
-	 *
-	 * @param string $strTitle
-	 */
-	public function setStrGraphTitle($strTitle);
+    /**
+     * Set the title of the graph
+     *
+     * @param string $strTitle
+     */
+    public function setStrGraphTitle($strTitle);
 
     /**
      * Set the color of the margin-areas, so the color of the area not being
@@ -204,6 +198,5 @@ interface interface_graph {
      * @param int $intXAxisAngle
      */
     public function setIntXAxisAngle($intXAxisAngle);
-
 
 }
