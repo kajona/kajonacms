@@ -82,6 +82,10 @@ class class_module_messaging_messagehandler {
      */
     private function sendMessageByMail(class_module_messaging_message $objMessage, class_module_user_user $objUser) {
 
+        $strOriginalLang = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
+
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($objUser->getStrAdminlanguage());
+
         $strSubject = class_carrier::getInstance()->getObjLang()->getLang("message_subject", "messaging");
         $strBody = class_carrier::getInstance()->getObjLang()->getLang("message_prolog", "messaging");
 
@@ -92,6 +96,8 @@ class class_module_messaging_messagehandler {
         $objMail->setSubject($strSubject);
         $objMail->setText($strBody);
         $objMail->addTo($objUser->getStrEmail());
+
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strOriginalLang);
 
         return $objMail->sendMail();
     }

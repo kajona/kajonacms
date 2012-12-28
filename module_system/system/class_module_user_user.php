@@ -46,7 +46,7 @@ class class_module_user_user extends class_model implements interface_model, int
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
@@ -81,6 +81,7 @@ class class_module_user_user extends class_model implements interface_model, int
         if($this->rightRight1()) {
             return $this->getLang("user_logins", "user")." ".$this->getIntLogins()." ".$this->getLang("user_lastlogin", "user")." ".timeToString($this->getIntLastLogin(), false);
         }
+        return "";
     }
 
     /**
@@ -92,6 +93,7 @@ class class_module_user_user extends class_model implements interface_model, int
         if(count($objUsersources->getArrUsersources()) > 1) {
             return $this->getLang("user_list_source", "user")." ".$this->getStrSubsystem();
         }
+        return "";
     }
 
 
@@ -156,19 +158,22 @@ class class_module_user_user extends class_model implements interface_model, int
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
 
-            $bitReturn = $this->objDB->_pQuery($strQuery, array(
-                $strUserid,
-                (int)$this->getIntActive(),
-                (int)$this->getIntAdmin(),
-                (int)$this->getIntPortal(),
-                $this->getStrAdminskin(),
-                $this->getStrAdminlanguage(),
-                0,
-                0,
-                $this->getStrAuthcode(),
-                $this->getStrSubsystem(),
-                $this->getStrUsername()
-            ));
+            $bitReturn = $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strUserid,
+                    (int)$this->getIntActive(),
+                    (int)$this->getIntAdmin(),
+                    (int)$this->getIntPortal(),
+                    $this->getStrAdminskin(),
+                    $this->getStrAdminlanguage(),
+                    0,
+                    0,
+                    $this->getStrAuthcode(),
+                    $this->getStrSubsystem(),
+                    $this->getStrUsername()
+                )
+            );
 
             //create the new instance on the remote-system
             $objSources = new class_module_user_sourcefactory();
@@ -222,15 +227,16 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return class_module_user_user[]
      */
     public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strUsernameFilter."%"), $intStart, $intEnd);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%" . $strUsernameFilter . "%"), $intStart, $intEnd);
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_module_user_user($arrOneId["user_id"]);
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_module_user_user($arrOneId["user_id"]);
+        }
 
-		return $arrReturn;
+        return $arrReturn;
     }
 
     /**
@@ -242,18 +248,16 @@ class class_module_user_user extends class_model implements interface_model, int
     public static function getObjectCount($strUsernameFilter = "") {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? ";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsernameFilter."%"));
-		return $arrRow["COUNT(*)"];
+        return $arrRow["COUNT(*)"];
     }
 
     /**
      * Fetches all available active users with the given username an returns them in an array
      *
      * @param string $strName
-     * @param boolean $bitOnlyActive
      * @return mixed
-     *
      */
-    public static function getAllUsersByName($strName, $bitOnlyActive = true) {
+    public static function getAllUsersByName($strName) {
         $objSubsystem = new class_module_user_sourcefactory();
         $objUser = $objSubsystem->getUserByUsername($strName);
         if($objUser != null)

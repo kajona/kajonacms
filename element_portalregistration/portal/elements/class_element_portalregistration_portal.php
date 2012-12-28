@@ -20,9 +20,9 @@ class class_element_portalregistration_portal extends class_element_portal imple
      *
      * @param class_module_pages_pageelement|mixed $objElementData
      */
-	public function __construct($objElementData) {
+    public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_preg");
+        $this->setArrModuleEntry("table", _dbprefix_ . "element_preg");
 
     }
 
@@ -31,124 +31,135 @@ class class_element_portalregistration_portal extends class_element_portal imple
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
 
-		if(!$this->objSession->isLoggedin()) {
-			if($this->getParam("action") == "portalCompleteRegistration")
-			    $strReturn .= $this->completeRegistration();
-			else    
-	            $strReturn = $this->editUserData();
-		}
-		else {
-		    $strReturn = $this->getLang("pr_errorLoggedin");
-		}
+        if(!$this->objSession->isLoggedin()) {
+            if($this->getParam("action") == "portalCompleteRegistration") {
+                $strReturn .= $this->completeRegistration();
+            }
+            else {
+                $strReturn = $this->editUserData();
+            }
+        }
+        else {
+            $strReturn = $this->getLang("pr_errorLoggedin");
+        }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
-	
-	/**
-	 * Completes the registration process of a new user by activating the account
-	 *
-	 * @return string
-	 */
-	private function completeRegistration() {
-	   $strReturn = "";
-	   
-	   if($this->getSystemid() != "") {
-	       $objUser = new class_module_user_user($this->getParam("systemid"));
-	       
-	       if($objUser->getStrEmail() != "") {
-               if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode")  && $objUser->getStrAuthcode() != "") {
-	               $objUser->setIntActive(1);
-                   $objUser->setStrAuthcode("");
-	               if($objUser->updateObjectToDb()) {
-	                   $strReturn .= $this->getLang("pr_completionSuccess");
-	                   if($this->arrElementData["portalregistration_success"] != "")
-	                       $this->portalReload(getLinkPortalHref($this->arrElementData["portalregistration_success"]));
-	               }
-	           }
-	           else
-	               $strReturn .= $this->getLang("pr_completionErrorStatus");
-	       }
-	       else
-	           $strReturn .= $this->getLang("pr_completionErrorStatus");
-	   }
 
-	   return $strReturn;
-	}
+    /**
+     * Completes the registration process of a new user by activating the account
+     *
+     * @return string
+     */
+    private function completeRegistration() {
+        $strReturn = "";
 
-	/**
-	 * Creates a form to collect a users data
-	 *
-	 * @return string
-	 */
-	private function editUserData() {
-	    
-	    $arrErrors = array();
-	    $bitForm = true;
-	    //what to do?
-	    if($this->getParam("submitUserForm") != "") {
+        if($this->getSystemid() != "") {
+            $objUser = new class_module_user_user($this->getParam("systemid"));
+
+            if($objUser->getStrEmail() != "") {
+                if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrAuthcode() != "") {
+                    $objUser->setIntActive(1);
+                    $objUser->setStrAuthcode("");
+                    if($objUser->updateObjectToDb()) {
+                        $strReturn .= $this->getLang("pr_completionSuccess");
+                        if($this->arrElementData["portalregistration_success"] != "") {
+                            $this->portalReload(getLinkPortalHref($this->arrElementData["portalregistration_success"]));
+                        }
+                    }
+                }
+                else {
+                    $strReturn .= $this->getLang("pr_completionErrorStatus");
+                }
+            }
+            else {
+                $strReturn .= $this->getLang("pr_completionErrorStatus");
+            }
+        }
+
+        return $strReturn;
+    }
+
+    /**
+     * Creates a form to collect a users data
+     *
+     * @return string
+     */
+    private function editUserData() {
+
+        $arrErrors = array();
+        $bitForm = true;
+        //what to do?
+        if($this->getParam("submitUserForm") != "") {
 
             $objTextValidator = new class_text_validator();
             $objEmailValidator = new class_email_validator();
 
-	        if($this->getParam("password") == "" || $this->getParam("password") != $this->getParam("password2"))
-	            $arrErrors[] = $this->getLang("pr_passwordsUnequal");
-	        
-	        if(!$objTextValidator->validate($this->getParam("username")))
-	            $arrErrors[] = $this->getLang("pr_noUsername");
-	        
-	        //username already existing?
-	        if($objTextValidator->validate($this->getParam("username")) && count(class_module_user_user::getAllUsersByName($this->getParam("username"), false)) > 0)
-	            $arrErrors[] = $this->getLang("pr_usernameGiven");
-	        
-	        if(!$objEmailValidator->validate($this->getParam("email")))
-               $arrErrors[] = $this->getLang("pr_invalidEmailadress");
-               
-		    //Check captachcode
-	        if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) 
-	            $arrErrors[] = $this->getLang("pr_captcha");
-                   
-	        if(count($arrErrors) == 0)
-               $bitForm = false;  
-	    }
-	    
-	    if($bitForm) {
-    	    $strTemplateID = $this->objTemplate->readTemplate("/element_portalregistration/".$this->arrElementData["portalregistration_template"], "portalregistration_userdataform");
+            if($this->getParam("password") == "" || $this->getParam("password") != $this->getParam("password2")) {
+                $arrErrors[] = $this->getLang("pr_passwordsUnequal");
+            }
+
+            if(!$objTextValidator->validate($this->getParam("username"))) {
+                $arrErrors[] = $this->getLang("pr_noUsername");
+            }
+
+            //username already existing?
+            if($objTextValidator->validate($this->getParam("username")) && count(class_module_user_user::getAllUsersByName($this->getParam("username"))) > 0) {
+                $arrErrors[] = $this->getLang("pr_usernameGiven");
+            }
+
+            if(!$objEmailValidator->validate($this->getParam("email"))) {
+                $arrErrors[] = $this->getLang("pr_invalidEmailadress");
+            }
+
+            //Check captachcode
+            if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) {
+                $arrErrors[] = $this->getLang("pr_captcha");
+            }
+
+            if(count($arrErrors) == 0) {
+                $bitForm = false;
+            }
+        }
+
+        if($bitForm) {
+            $strTemplateID = $this->objTemplate->readTemplate("/element_portalregistration/" . $this->arrElementData["portalregistration_template"], "portalregistration_userdataform");
             $arrTemplate = array();
-            
-            
+
+
             $arrTemplate["username"] = $this->getParam("username");
             $arrTemplate["email"] = $this->getParam("email");
             $arrTemplate["forename"] = $this->getParam("forename");
             $arrTemplate["name"] = $this->getParam("name");
             $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
-            
+
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {
-                foreach ($arrErrors as $strOneError) {
-                    $strErrTemplate = $this->objTemplate->readTemplate("/element_portalregistration/".$this->arrElementData["portalregistration_template"], "errorRow");
-                    $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                foreach($arrErrors as $strOneError) {
+                    $strErrTemplate = $this->objTemplate->readTemplate("/element_portalregistration/" . $this->arrElementData["portalregistration_template"], "errorRow");
+                    $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                 }
             }
-    	    
-    	    return $this->fillTemplate($arrTemplate, $strTemplateID);
-	    }
-	    else {
-	        //create new user, inactive
-	        $objUser = new class_module_user_user();
-	        $objUser->setStrUsername($this->getParam("username"));
-	        $objUser->setIntActive(0);
-	        $objUser->setIntAdmin(0);
-	        $objUser->setIntPortal(1);
+
+            return $this->fillTemplate($arrTemplate, $strTemplateID);
+        }
+        else {
+            //create new user, inactive
+            $objUser = new class_module_user_user();
+            $objUser->setStrUsername($this->getParam("username"));
+            $objUser->setIntActive(0);
+            $objUser->setIntAdmin(0);
+            $objUser->setIntPortal(1);
             $objUser->setStrSubsystem("kajona");
             $strAuthcode = generateSystemid();
             $objUser->setStrAuthcode($strAuthcode);
-	        
-	        if($objUser->updateObjectToDb()) {
-                
+
+            if($objUser->updateObjectToDb()) {
+
                 $objSourceuser = $objUser->getObjSourceUser();
                 $objSourceuser->setStrEmail($this->getParam("email"));
                 $objSourceuser->setStrForename($this->getParam("forename"));
@@ -156,17 +167,17 @@ class class_element_portalregistration_portal extends class_element_portal imple
                 $objSourceuser->setStrPass($this->getParam("password"));
                 $objSourceuser->updateObjectToDb();
 
-	        	//group assignments
+                //group assignments
                 $objGroup = new class_module_user_group($this->arrElementData["portalregistration_group"]);
                 $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 //and to the guests to avoid conflicts
                 $objGroup = new class_module_user_group(_guests_group_id_);
                 $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
-	        	//create a mail to allow the user to activate itself
-	        	
+                //create a mail to allow the user to activate itself
+
                 $strMailContent = $this->getLang("pr_email_body");
-                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "systemid=".$objUser->getSystemid()."&authcode=".$strAuthcode);
-                $strMailContent .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
+                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "systemid=" . $objUser->getSystemid() . "&authcode=" . $strAuthcode);
+                $strMailContent .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
                 $strMailContent .= $this->getLang("pr_email_footer");
 
                 $objScriptlets = new class_scriptlet_helper();
@@ -177,11 +188,10 @@ class class_element_portalregistration_portal extends class_element_portal imple
                 $objMail->setHtml($strMailContent);
                 $objMail->addTo($this->getParam("email"));
                 $objMail->sendMail();
-	        }
+            }
 
-	        return $this->getLang("pr_register_suc");
-	    }
-	}
-	
+            return $this->getLang("pr_register_suc");
+        }
+    }
 
 }
