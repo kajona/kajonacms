@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                          *
@@ -75,7 +75,7 @@ class class_installer_packagemanager extends class_installer_base implements int
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
 

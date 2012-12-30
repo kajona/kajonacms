@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                *
@@ -93,12 +93,12 @@ class class_installer_postacomment extends class_installer_base implements inter
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
 
-        $arrModul = $this->getModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }

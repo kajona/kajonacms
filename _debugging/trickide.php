@@ -31,3 +31,4 @@ define("_pages_cacheenabled_", "true");
 define("_stats_nrofrecords_", "");
 define("_packagemanager_defaulttemplate_", "");
 define("_stats_duration_online_", 10);
+define("_system_portal_disablepage_", "");

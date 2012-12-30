@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2012 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                            *
@@ -298,8 +298,7 @@ abstract class class_admin {
      * @deprecated
      */
     public function getModuleData($strName, $bitCache = true) {
-        $objSystemCommon = new class_module_system_common();
-        return $objSystemCommon->getModuleData($strName, $bitCache);
+        return class_module_system_module::getPlainModuleData($strName, $bitCache);
 
     }
 
