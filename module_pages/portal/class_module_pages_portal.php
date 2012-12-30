@@ -394,7 +394,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
                 //Add an iconbar
                 $arrPeContents["pe_iconbar"] = "";
-                //TODO: i18n
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.RTE.savePage(); return false;\" id=\"savePageLink\">"
                     .getImageAdmin("icon_acceptDisabled.png", $this->getLang("pe_rte_save", "pages"))."</a>";
                 $arrPeContents["pe_iconbar"] .= "&nbsp;";
@@ -402,13 +401,13 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $arrPeContents["pe_iconbar"] .= getLinkAdmin(
                     "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
                     $this->getLang("pe_icon_edit", "pages"),
-                    "icon_edit.png"
+                    "icon_page.png"
                 );
                 $arrPeContents["pe_iconbar"] .= "&nbsp;";
 
                 $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                    .getImageAdmin("icon_page.png", $this->getLang("pe_icon_page", "pages"))."</a>";
+                    .getImageAdmin("icon_edit.png", $this->getLang("pe_icon_page", "pages"))."</a>";
 
                 $arrPeContents["pe_iconbar"] .= "&nbsp;";
                 $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");

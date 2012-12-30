@@ -716,9 +716,23 @@ HTML;
                 $intI = 0;
 
                 if($objFile instanceof class_module_mediamanager_repo)
-                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")), $intI++);
+                    $strReturn .= $this->objToolkit->genericAdminList(
+                        generateSystemid(),
+                        "..",
+                        getImageAdmin("icon_folderOpen.png"),
+                        $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")),
+                        $intI++
+                    );
                 else
-                    $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.gif"), $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objFile->getPrevId(), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")), $intI++);
+                    $strReturn .= $this->objToolkit->genericAdminList(
+                        generateSystemid(),
+                        "..",
+                        getImageAdmin("icon_folderOpen.png"),
+                        $this->objToolkit->listButton(
+                            getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objFile->getPrevId(), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")
+                        ),
+                        $intI++
+                    );
 
                 foreach($arrSubfiles as $objOneFile) {
 
@@ -726,7 +740,9 @@ HTML;
                         $strActions = "";
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png"));
+                            $strActions .= $this->objToolkit->listButton(
+                                getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")
+                            );
 
                         $strValue = $objOneFile->getStrFilename();
 
@@ -809,13 +825,34 @@ HTML;
         $strReturn .= $this->objToolkit->listHeader();
         $bitHit = false;
         if(!in_array($strFolder, $arrFolderStart) && $bitHit == false) {
-            $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&form_element=".$strFormElement, $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png"));
+            $strAction = $this->objToolkit->listButton(
+                getLinkAdmin(
+                    $this->arrModule["modul"],
+                    "folderListFolderview",
+                    "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&form_element=".$strFormElement,
+                    $this->getLang("commons_one_level_up"),
+                    $this->getLang("commons_one_level_up"),
+                    "icon_folderActionLevelup.png"
+                )
+            );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.png"), $strAction, $intCounter++);
         }
         if($arrContent["nrFolders"] != 0) {
             foreach($arrContent["folders"] as $strFolderCur) {
-                $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".$strFolder."/".$strFolderCur."&form_element=".$strFormElement, $this->getLang("actionOpenFolder"), $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png"));
-                $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.png"));
+                $strAction  = $this->objToolkit->listButton(
+                    getLinkAdmin(
+                        $this->arrModule["modul"],
+                        "folderListFolderview",
+                        "&folder=".$strFolder."/".$strFolderCur."&form_element=".$strFormElement,
+                        $this->getLang("actionOpenFolder"),
+                        $this->getLang("actionOpenFolder"),
+                        "icon_folderActionOpen.png"
+                    )
+                );
+                $strAction .= $this->objToolkit->listButton(
+                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">"
+                    .getImageAdmin("icon_accept.png")
+                );
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, getImageAdmin("icon_folderOpen.png"), $strAction, $intCounter++);
             }
         }

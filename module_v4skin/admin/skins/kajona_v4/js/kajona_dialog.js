@@ -121,7 +121,27 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
     this.enableDragging = function() {};
 
-    this.enableResizing = function() {};
+    this.enableResizing = function() {
+        //$('#' + this.containerId).resizable();
+        $('#' + this.containerId).resizable().on("resize", function(event, ui) {
+            ui.element.css("margin-left", -ui.size.width/2);
+            ui.element.css("margin-top", -ui.size.height/2);
+            ui.element.css("top", "50%");
+            ui.element.css("left", "50%");
+            ui.element.css("height", ui.size.height + $('.modal-footer').outerHeight() );
+
+            $(ui.element).find(".modal-body").each(function() {
+                $(this).css("max-height", ui.size.height - $('.modal-header').outerHeight() - $('.modal-footer').outerHeight() );
+
+                $(ui.element).find("iframe.seamless").each(function() {
+                    //-12 = resizable handle, -15 = padding
+                    $(this).css("height", ui.size.height - $('.modal-header').outerHeight() - $('.modal-footer').outerHeight() - 12 -15 );
+                });
+            });
+
+
+        });
+    };
 };
 
 
