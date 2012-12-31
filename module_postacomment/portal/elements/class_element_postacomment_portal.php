@@ -25,7 +25,9 @@ class class_element_postacomment_portal extends class_element_portal implements 
 		$this->setArrModuleEntry("table", _dbprefix_."element_universal");
 
         //we support ratings, so add cache-busters
-        $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+        $objRatingModule = class_module_system_module::getModuleByName("rating");
+        if($objRatingModule != null)
+            $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
 	}
 
 
