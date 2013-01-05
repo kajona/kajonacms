@@ -112,15 +112,18 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
         $strTemplateInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
 
+        //check if a customized editor-config is available
+        $strConfigFile = "'config_kajona_standard.js'";
+        if(is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js"))
+            $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
+
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
         $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
-
-        //KAJONA.admin.loader.loadFile('/core/module_system/admin/scripts/ckeditor/ckeditor.js', function() {
             var ckeditorConfig = {
-                customConfig : 'config_kajona_standard.js',
+                customConfig : ".$strConfigFile.",
                 toolbar : '".$strToolbarset."',
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
@@ -128,7 +131,6 @@ class class_toolkit_admin extends class_toolkit {
                 filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace('".$strName."', ckeditorConfig);
-        //});
         ";
         $strReturn .= "</script>\n";
 
