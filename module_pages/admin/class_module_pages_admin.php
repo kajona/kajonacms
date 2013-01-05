@@ -353,6 +353,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             if(!$objPage->rightEdit($this->getSystemid()))
                 return $this->getLang("commons_error_permissions");
         }
+        else if($strMode == "new") {
+            $objPage->setSystemid($this->getSystemid());
+        }
 
         $arrToolbarEntries = array();
         if(!$bitAlias) {
