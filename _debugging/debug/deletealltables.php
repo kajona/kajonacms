@@ -21,8 +21,8 @@ echo "|loaded.                                                                  
 echo "+-------------------------------------------------------------------------------+\n\n";
 
 if(issetPost("dodelete")) {
-	$strUsername = getPost("username");
-	$strPassword = getPost("password");
+    $strUsername = getPost("username");
+    $strPassword = getPost("password");
 
     $objUsersource = new class_module_user_sourcefactory();
     $objUser = $objUsersource->getUserByUsername($strUsername);
@@ -35,8 +35,8 @@ if(issetPost("dodelete")) {
 
             $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
             foreach($arrTables as $strOneTable) {
-                $strQuery = "DROP TABLE ".$strOneTable;
-                echo " executing ".$strQuery."\n";
+                $strQuery = "DROP TABLE " . $strOneTable;
+                echo " executing " . $strQuery . "\n";
                 class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
             }
 
@@ -45,28 +45,27 @@ if(issetPost("dodelete")) {
             echo "User is not a member of the admin-group!\n";
         }
     }
-    else
+    else {
         echo "Authentication failed!\n";
-
+    }
 
 }
 else {
 
     $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
 
-	echo "ATTENTION: This script will delete all tables of you current installation.\n\n";
-	echo "To perform this action, you have to provide the credentials of a member of the admin-group.\n\n";
+    echo "ATTENTION: This script will delete all tables of you current installation.\n\n";
+    echo "To perform this action, you have to provide the credentials of a member of the admin-group.\n\n";
 
     echo "<form method=\"post\">";
-	echo "Username: <input type='text' name='username'><br />";
-	echo "Password: <input type='password' name='password'>";
-	echo "<input type=\"hidden\" name=\"dodelete\" value=\"1\" /><br /><br />";
-	echo "<input type=\"submit\" value=\"Delete tables\" />";
-	echo "</form>";
+    echo "Username: <input type='text' name='username'><br />";
+    echo "Password: <input type='password' name='password'>";
+    echo "<input type=\"hidden\" name=\"dodelete\" value=\"1\" /><br /><br />";
+    echo "<input type=\"submit\" value=\"Delete tables\" />";
+    echo "</form>";
 
-	echo "Currently, this will include the following tables:";
-    echo "\n -".implode("\n -", $arrTables);
-
+    echo "Currently, this will include the following tables:";
+    echo "\n -" . implode("\n -", $arrTables);
 
 }
 
