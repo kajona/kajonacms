@@ -23,36 +23,41 @@ interface interface_usersources_usersource {
      *
      * @param interface_usersources_user $objUser
      * @param string $strPassword
+     *
      * @return bool
      */
-	public function authenticateUser(interface_usersources_user $objUser, $strPassword);
+    public function authenticateUser(interface_usersources_user $objUser, $strPassword);
 
     /**
      * Indicates if the creation of goups is supported by this source
+     *
      * @return bool
      */
-	public function getCreationOfGroupsAllowed();
+    public function getCreationOfGroupsAllowed();
 
     /**
      * Indicates if the creation of users is supported by this source
+     *
      * @return bool
      */
-	public function getCreationOfUsersAllowed();
+    public function getCreationOfUsersAllowed();
 
 
     /**
      * Defines if the group-memberships are editable via the system or not
+     *
      * @return bool
      */
-	public function getMembersEditable();
+    public function getMembersEditable();
 
-	/**
-	 * Loads the group identified by the passed id
+    /**
+     * Loads the group identified by the passed id
      *
-	 * @param string $strId
+     * @param string $strId
+     *
      * @return interface_usersources_group or null
-	 */
-	public function getGroupById($strId);
+     */
+    public function getGroupById($strId);
 
     /**
      * Returns an empty group, e.g. to fetch the fields available and
@@ -60,7 +65,7 @@ interface interface_usersources_usersource {
      *
      * @return interface_usersources_group
      */
-	public function getNewGroup();
+    public function getNewGroup();
 
     /**
      * Returns an empty user, e.g. to fetch the fields available and
@@ -68,25 +73,27 @@ interface interface_usersources_usersource {
      *
      * @return interface_usersources_user
      */
-	public function getNewUser();
-
-	/**
-	 * Loads the user identified by the passed id
-     *
-	 * @param string $strId
-     * @return interface_usersources_user or null
-	 */
-	public function getUserById($strId);
+    public function getNewUser();
 
     /**
-	 * Loads the user identified by the passed name.
+     * Loads the user identified by the passed id
+     *
+     * @param string $strId
+     *
+     * @return interface_usersources_user or null
+     */
+    public function getUserById($strId);
+
+    /**
+     * Loads the user identified by the passed name.
      * This method may be called during the authentication of users and may be used as a hook
      * in order to create new users in the central database not yet existing.
      *
-	 * @param string $strUsername this could be the username entered by the user on the ui
+     * @param string $strUsername this could be the username entered by the user on the ui
+     *
      * @return interface_usersources_user or null
-	 */
-	public function getUserByUsername($strUsername);
+     */
+    public function getUserByUsername($strUsername);
 
     /**
      * Returns an array of group-ids provided by the current source.

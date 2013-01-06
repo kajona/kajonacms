@@ -17,33 +17,38 @@
  */
 interface interface_usersources_user {
 
-	/**
+    /**
      * Returns the list of group-ids the current user is assigned to
+     *
      * @return array
      */
-	public function getGroupIdsForUser();
+    public function getGroupIdsForUser();
 
     /**
      * Deletes the current user from the system - if possible
+     *
      * @return bool
      */
     public function deleteUser();
 
     /**
      * Indicates if the current user is editable or read-only
+     *
      * @return bool
      */
-	public function isEditable();
+    public function isEditable();
 
 
     /**
      * Returns the forename
+     *
      * @return string
      */
     public function getStrForename();
 
     /**
      * Returns the family-name
+     *
      * @return string
      */
     public function getStrName();
@@ -60,6 +65,7 @@ interface interface_usersources_user {
      * subsystem may fail.
      *
      * @param string $strId
+     *
      * @return void
      */
     public function setNewRecordId($strId);
@@ -67,5 +73,5 @@ interface interface_usersources_user {
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
      */
-    public function isPasswortResetable(); //FIXME: rename, bad bad spelling! fixed as soon as ldap-subsystem is reintegrated into head codeline
+    public function isPasswordResettable();
 }

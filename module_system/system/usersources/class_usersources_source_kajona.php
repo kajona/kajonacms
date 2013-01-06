@@ -14,7 +14,7 @@
  * @since 3.4.1
  * @package module_usersource
  */
-class class_usersources_source_kajona  implements interface_usersources_usersource {
+class class_usersources_source_kajona implements interface_usersources_usersource {
 
 
     private static $arrUserCache = array();
@@ -31,15 +31,18 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
      *
      * @param interface_usersources_user|class_usersources_user_kajona $objUser
      * @param $strPassword
+     *
      * @return bool
      */
-	public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
+    public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
         if($objUser instanceof class_usersources_user_kajona) {
             $bitMD5Encryption = false;
-            if(uniStrlen($objUser->getStrFinalPass()) == 32)
+            if(uniStrlen($objUser->getStrFinalPass()) == 32) {
                 $bitMD5Encryption = true;
-            if($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $objUser->getStrSalt(), $bitMD5Encryption) )
-                 return true;
+            }
+            if($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $objUser->getStrSalt(), $bitMD5Encryption)) {
+                return true;
+            }
         }
 
         return false;
@@ -53,24 +56,26 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
         return true;
     }
 
-	public function getMembersEditable() {
+    public function getMembersEditable() {
         return true;
     }
 
     /**
-	 * Loads the group identified by the passed id
+     * Loads the group identified by the passed id
      *
-	 * @param string $strId
+     * @param string $strId
+     *
      * @return interface_usersources_group or null
-	 */
+     */
     public function getGroupById($strId) {
-        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group_kajona WHERE group_id = ?";
+        $strQuery = "SELECT group_id FROM " . _dbprefix_ . "user_group_kajona WHERE group_id = ?";
 
         $arrIds = $this->objDB->getPRow($strQuery, array($strId));
-		if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"]))
+        if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"])) {
             return new class_usersources_group_kajona($arrIds["group_id"]);
+        }
 
-		return null;
+        return null;
     }
 
     /**
@@ -94,17 +99,19 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
     }
 
     /**
-	 * Loads the iser identified by the passed id
+     * Loads the iser identified by the passed id
      *
-	 * @param string $strId
+     * @param string $strId
+     *
      * @return interface_usersources_user or null
-	 */
+     */
     public function getUserById($strId) {
 
-        if(isset(self::$arrUserCache[$strId]))
+        if(isset(self::$arrUserCache[$strId])) {
             return self::$arrUserCache[$strId];
+        }
 
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user_kajona  WHERE user_id = ? ";
+        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user_kajona  WHERE user_id = ? ";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -112,30 +119,32 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
             return self::$arrUserCache[$strId];
         }
 
-		return null;
+        return null;
     }
 
     /**
-	 * Loads the user identified by the passed name.
+     * Loads the user identified by the passed name.
      * This method may be called during the authentication of users and may be used as a hook
      * in order to create new users in the central database not yet existing.
      *
-	 * @param string $strUsername
+     * @param string $strUsername
+     *
      * @return interface_usersources_user or null
-	 */
-	public function getUserByUsername($strUsername) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user  WHERE user_username = ? AND user_subsystem = 'kajona'";
+     */
+    public function getUserByUsername($strUsername) {
+        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user  WHERE user_username = ? AND user_subsystem = 'kajona'";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
 
-            if(!isset(self::$arrUserCache[$arrIds["user_id"]]))
+            if(!isset(self::$arrUserCache[$arrIds["user_id"]])) {
                 self::$arrUserCache[$arrIds["user_id"]] = new class_usersources_user_kajona($arrIds["user_id"]);
+            }
 
             return self::$arrUserCache[$arrIds["user_id"]];
         }
 
-		return null;
+        return null;
     }
 
 
@@ -158,20 +167,20 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
             return sha1($strPassword);
         }
         else {
-            return sha1(md5($strSalt).$strPassword);
+            return sha1(md5($strSalt) . $strPassword);
         }
     }
 
 
-
     /**
      * Returns an array of group-ids provided by the current source.
+     *
      * @return string
      */
     public function getAllGroupIds() {
         $strQuery = "SELECT gk.group_id as group_id
-                       FROM "._dbprefix_."user_group_kajona AS gk,
-                            "._dbprefix_."user_group AS g
+                       FROM " . _dbprefix_ . "user_group_kajona AS gk,
+                            " . _dbprefix_ . "user_group AS g
                       WHERE g.group_id = gk.group_id
                       ORDER BY g.group_name";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
@@ -182,7 +191,5 @@ class class_usersources_source_kajona  implements interface_usersources_usersour
 
         return $arrReturn;
     }
-
-
 
 }

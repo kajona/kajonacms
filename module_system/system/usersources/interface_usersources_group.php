@@ -16,43 +16,49 @@
  */
 interface interface_usersources_group {
 
-	/**
-	 * Adds a new member to the group - if possible
-	 * @param interface_usersources_user $objUser
-	 */
-	public function addMember(interface_usersources_user $objUser);
+    /**
+     * Adds a new member to the group - if possible
+     *
+     * @param interface_usersources_user $objUser
+     */
+    public function addMember(interface_usersources_user $objUser);
 
     /**
      * Returns an array of user-ids associated with the current group.
-     * If possible, pageing should be supported
+     * If possible, paging should be supported
      *
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      */
-	public function getUserIdsForGroup($intStart = null, $intEnd = null);
+    public function getUserIdsForGroup($intStart = null, $intEnd = null);
 
     /**
      * Returns the number of members of the current group.
+     *
      * @return int
      */
     public function getNumberOfMembers();
 
     /**
      * Defines whether the current group-properties (e.g. the name) may be edited or is read-only
+     *
      * @return bool
      */
-	public function isEditable();
+    public function isEditable();
 
 
-	/**
-	 * Removes a member from the current group - if possible.
-	 * @param interface_usersources_user $objUser
-	 */
-	public function removeMember(interface_usersources_user $objUser);
+    /**
+     * Removes a member from the current group - if possible.
+     *
+     * @param interface_usersources_user $objUser
+     */
+    public function removeMember(interface_usersources_user $objUser);
 
     /**
      * Deletes the current group
+     *
      * @return bool
      */
     public function deleteGroup();
@@ -64,6 +70,7 @@ interface interface_usersources_group {
      * subsystem may fail.
      *
      * @param string $strId
+     *
      * @return void
      */
     public function setNewRecordId($strId);

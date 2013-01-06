@@ -50,8 +50,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
 
     /**
-     * Initalises the current object, if a systemid was given
-
+     * Initialises the current object, if a systemid was given
      */
     protected function initObjectInternal() {
         $strQuery = "SELECT * FROM " . _dbprefix_ . "user_group_kajona WHERE group_id=?";

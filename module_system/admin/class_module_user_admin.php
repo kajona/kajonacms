@@ -180,7 +180,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group.png"));
         }
 
-        if($objListEntry instanceof class_module_user_user && $objListEntry->getObjSourceUser()->isEditable() && $objListEntry->getObjSourceUser()->isPasswortResetable() && $objListEntry->rightEdit() && checkEmailaddress($objListEntry->getStrEmail())) {
+        if($objListEntry instanceof class_module_user_user && $objListEntry->getObjSourceUser()->isEditable() && $objListEntry->getObjSourceUser()->isPasswordResettable() && $objListEntry->rightEdit() && checkEmailaddress($objListEntry->getStrEmail())) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mail.png"));
         }
 

@@ -60,7 +60,7 @@ class class_usersources_user_ldap extends class_model implements interface_model
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
      */
-    public function isPasswortResetable() {
+    public function isPasswordResettable() {
         return false;
     }
     

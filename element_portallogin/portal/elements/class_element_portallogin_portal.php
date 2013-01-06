@@ -116,7 +116,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
                 $objValidator = new class_text_validator();
                 if($strPass1 == $strPass2 && $objValidator->validate($strPass1)) {
 
-                    if($objUser->getObjSourceUser()->isPasswortResetable() && method_exists($objUser->getObjSourceUser(), "setStrPass")) {
+                    if($objUser->getObjSourceUser()->isPasswordResettable() && method_exists($objUser->getObjSourceUser(), "setStrPass")) {
                         $objUser->getObjSourceUser()->setStrPass($strPass1);
                         $objUser->getObjSourceUser()->updateObjectToDb();
                     }

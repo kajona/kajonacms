@@ -114,7 +114,7 @@ class class_module_login_admin extends class_admin implements interface_admin {
                 $strPass2 = trim($this->getParam("password2"));
 
                 if($strPass1 == $strPass2 && checkText($strPass1, 3, 200) && $objUser->getStrUsername() == $this->getParam("username")) {
-                    if($objUser->getObjSourceUser()->isPasswortResetable() && method_exists($objUser->getObjSourceUser(), "setStrPass")) {
+                    if($objUser->getObjSourceUser()->isPasswordResettable() && method_exists($objUser->getObjSourceUser(), "setStrPass")) {
                         $objUser->getObjSourceUser()->setStrPass($strPass1);
                         $objUser->getObjSourceUser()->updateObjectToDb();
                     }

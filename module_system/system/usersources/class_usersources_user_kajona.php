@@ -25,8 +25,8 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     private $strPass = "";
 
     /**
+     * For form-faking only!
      *
-     * For formular-fakeing only!
      * @var string
      * @fieldType password
      */
@@ -95,6 +95,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * The immutable password from the database.
      * $strPass is not published with the information from the database, otherwise it would be
      * overwritten.
+     *
      * @var string
      */
     private $strFinalPass = "";
@@ -109,12 +110,13 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $this->setArrModuleEntry("modul", "user");
         $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -126,7 +128,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * Initialises the current object, if a systemid was given
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString(_dbprefix_."user_kajona")." WHERE user_id=?";
+        $strQuery = "SELECT * FROM " . $this->objDB->dbsafeString(_dbprefix_ . "user_kajona") . " WHERE user_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
@@ -154,10 +156,11 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * subsystem may fail.
      *
      * @param string $strId
+     *
      * @return void
      */
     public function setNewRecordId($strId) {
-        $strQuery = "UPDATE "._dbprefix_."user_kajona SET user_id = ? WHERE user_id = ?";
+        $strQuery = "UPDATE " . _dbprefix_ . "user_kajona SET user_id = ? WHERE user_id = ?";
         $this->objDB->_pQuery($strQuery, array($strId, $this->getSystemid()));
         $this->setSystemid($strId);
     }
@@ -167,6 +170,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * <b>ATTENTION</b> If you don't want to update the password, set it to "" before!
      *
      * @param bool $strPrevId
+     *
      * @return bool
      */
     public function updateObjectToDb($strPrevId = false) {
@@ -174,7 +178,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         if($this->getSystemid() == "") {
             $strUserid = generateSystemid();
             $this->setSystemid($strUserid);
-            $strQuery = "INSERT INTO "._dbprefix_."user_kajona (
+            $strQuery = "INSERT INTO " . _dbprefix_ . "user_kajona (
                         user_id,
                         user_pass, user_email, user_forename,
                         user_name, 	user_street,
@@ -184,7 +188,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new kajona user: " . $this->getStrEmail(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -203,32 +207,33 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         }
         else {
 
-            $strQuery = ""; $arrParams = array();
+            $strQuery = "";
+            $arrParams = array();
 
             if($this->getStrPass() != "") {
-                $strQuery = "UPDATE "._dbprefix_."user_kajona SET
+                $strQuery = "UPDATE " . _dbprefix_ . "user_kajona SET
                         user_pass=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
                         user_date=?, user_salt=? WHERE user_id = ?";
-                   $arrParams = array(
-                        $this->getStrPass(),
-                        $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
-                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
-                   );
+                $arrParams = array(
+                    $this->getStrPass(),
+                    $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
+                    $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
+                );
 
             }
             else {
-                $strQuery = "UPDATE "._dbprefix_."user_kajona SET
+                $strQuery = "UPDATE " . _dbprefix_ . "user_kajona SET
                         user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
                         user_date=?, user_salt=? WHERE user_id = ?";
 
                 $arrParams = array(
-                        $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
-                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
-                   );
+                    $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
+                    $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
+                );
 
             }
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user " . $this->getStrEmail(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
@@ -252,9 +257,9 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      * @return bool
      */
     public function deleteUser() {
-        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id " . $this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUserMemberships();
-        $strQuery = "DELETE FROM "._dbprefix_."user_kajona WHERE user_id=?";
+        $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona WHERE user_id=?";
         //call other models that may be interested
         $bitDelete = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
@@ -263,6 +268,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     /**
      * Deletes the current object from the system
+     *
      * @return bool
      */
     public function deleteObject() {
@@ -270,50 +276,54 @@ class class_usersources_user_kajona extends class_model implements interface_mod
     }
 
     /**
-	 * Deletes all memberships of the given USER from ALL groups
-	 *
-	 * @return bool
-	 * @static
-	 */
-	private function deleteAllUserMemberships() {
-        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members WHERE group_member_user_kajona_id=?";
-		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-	}
+     * Deletes all memberships of the given USER from ALL groups
+     *
+     * @return bool
+     * @static
+     */
+    private function deleteAllUserMemberships() {
+        $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona_members WHERE group_member_user_kajona_id=?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+    }
 
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
+     *
      * @return bool
      */
-    public function isPasswortResetable() {
+    public function isPasswordResettable() {
         return true;
     }
 
-        /**
+    /**
      * Returns the list of group-ids the current user is assigned to
+     *
      * @return array
      */
-	public function getGroupIdsForUser() {
+    public function getGroupIdsForUser() {
         $strQuery = "SELECT group_id
-                       FROM "._dbprefix_."user_group,
-                            "._dbprefix_."user_kajona_members
+                       FROM " . _dbprefix_ . "user_group,
+                            " . _dbprefix_ . "user_kajona_members
                       WHERE group_member_user_kajona_id= ?
                         AND group_id = group_member_group_kajona_id
                    ORDER BY group_name ASC  ";
 
         $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = $arrOneId["group_id"];
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = $arrOneId["group_id"];
+        }
 
         return $arrReturn;
     }
 
     /**
      * Indicates if the current user is editable or read-only
+     *
      * @return bool
      */
-	public function isEditable() {
+    public function isEditable() {
         return true;
     }
 
@@ -345,6 +355,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 
     /**
      * The immutable password from the database.
+     *
      * @return string
      */
     public function getStrFinalPass() {
