@@ -663,7 +663,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
         //check if requested systemid is part of the elements tree
         $objData = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-        while(!$objData instanceof class_module_mediamanager_repo)
+        while(!$objData instanceof class_module_mediamanager_repo && $objData != null)
             $objData = class_objectfactory::getInstance()->getObject($objData->getPrevId());
 
         //if the requested systemid belong to the tree set in the pageelement, the systemids should match.

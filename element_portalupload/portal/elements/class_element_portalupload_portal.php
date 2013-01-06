@@ -22,45 +22,48 @@ class class_element_portalupload_portal extends class_element_portal implements 
      */
     public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
+        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
     }
 
 
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
 
-		if($this->getParam("submitPortaluploadForm") == "1")
-		    $strReturn .= $this->doUpload();
-		else
-		    $strReturn .= $this->uploadForm();
-
-
-		return $strReturn;
-	}
+        if($this->getParam("submitPortaluploadForm") == "1") {
+            $strReturn .= $this->doUpload();
+        }
+        else {
+            $strReturn .= $this->uploadForm();
+        }
 
 
-
-	private function uploadForm($formErrors = "") {
-	    $strReturn = "";
-	    //validate the rights
-        $objFilemanagerRepo =  new class_module_mediamanager_repo($this->arrElementData["char2"]);
+        return $strReturn;
+    }
 
 
-	    if($objFilemanagerRepo->rightRight1()) {
+    private function uploadForm($formErrors = "") {
+        $strReturn = "";
+        //validate the rights
+        $objFilemanagerRepo = new class_module_mediamanager_repo($this->arrElementData["char2"]);
 
 
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portalupload/".$this->arrElementData["char1"], "portalupload_uploadform");
+        if($objFilemanagerRepo->rightRight1()) {
+
+
+            $strTemplateID = $this->objTemplate->readTemplate("/element_portalupload/" . $this->arrElementData["char1"], "portalupload_uploadform");
 
             $strDlFolderId = "";
-            if($this->getParam("action") == "openDlFolder")
+            if($this->getParam("action") == "mediaFolder") {
                 $strDlFolderId = $this->getParam("systemid");
+            }
 
             $arrTemplate = array();
             $arrTemplate["portaluploadDlfolder"] = $strDlFolderId;
 
             // check if there was an successfull upload before
-            if($this->getParam("uploadSuccess") == "1")
+            if($this->getParam("uploadSuccess") == "1") {
                 $arrTemplate["portaluploadSuccess"] = $this->getLang("portaluploadSuccess");
+            }
 
             $arrTemplate["formErrors"] = $formErrors;
 
@@ -68,38 +71,48 @@ class class_element_portalupload_portal extends class_element_portal implements 
 
             $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
-	    }
-	    else {
-	        $strReturn .= $this->getLang("commons_error_permissions");
-	    }
+        }
+        else {
+            $strReturn .= $this->getLang("commons_error_permissions");
+        }
 
-	    return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
-	private function doUpload() {
-	    $strReturn = "";
+    private function doUpload() {
+        $strReturn = "";
 
-	    //prepare the folder to be used as a target-folder for the upload
+        //prepare the folder to be used as a target-folder for the upload
         $objFilemanagerRepo = new class_module_mediamanager_repo($this->arrElementData["char2"]);
+        $objDownloadfolder = null;
 
-	    //add a special subfolder?
-	    $strPath = $objFilemanagerRepo->getStrPath();
-	    if($this->getParam("portaluploadDlfolder") != "") {
-	        $objDownloadfolder = new class_module_mediamanager_file($this->getParam("portaluploadDlfolder"));
-	        if($objDownloadfolder->getStrFilename() != "") {
-	            $strPath = $objDownloadfolder->getStrFilename();
-	        }
+        //add a special subfolder?
+        $strPath = $objFilemanagerRepo->getStrPath();
+        if($this->getParam("portaluploadDlfolder") != "") {
+            /** @var $objDownloadfolder class_module_mediamanager_file */
+            $objDownloadfolder = class_objectfactory::getInstance()->getObject($this->getParam("portaluploadDlfolder"));
 
-	    }
+            //check if the folder is within the current repo
+            /** @var $objTemp class_module_mediamanager_file */
+            $objTemp = $objDownloadfolder;
+            while(validateSystemid($objTemp->getSystemid()) && ($objTemp instanceof class_module_mediamanager_file || $objTemp instanceof class_module_mediamanager_repo)) {
+                if($objTemp->getSystemid() == $this->arrElementData["char2"]) {
+                    $strPath = $objDownloadfolder->getStrFilename();
+                    break;
+                }
+                $objTemp = class_objectfactory::getInstance()->getObject($objTemp->getPrevId());
 
-	    //upload the file...
-	    if($objFilemanagerRepo->rightRight1()) {
+            }
+        }
 
-	        //Handle the fileupload
+        //upload the file...
+        if($objFilemanagerRepo->rightRight1()) {
+
+            //Handle the fileupload
             $arrSource = $this->getParam("portaluploadFile");
 
-            $strTarget = $strPath."/".createFilename($arrSource["name"]);
+            $strTarget = $strPath . "/" . createFilename($arrSource["name"]);
 
             $objFilesystem = new class_filesystem();
             if($objFilesystem->isWritable($strPath)) {
@@ -111,32 +124,39 @@ class class_element_portalupload_portal extends class_element_portal implements 
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 
                         //upload was successfull. try to sync the downloads-archive.
-                        if($objFilemanagerRepo->rightRight1()) {
+                        if($objDownloadfolder != null && $objDownloadfolder instanceof class_module_mediamanager_file)
+                            class_module_mediamanager_file::syncRecursive($objDownloadfolder->getSystemid(), $objDownloadfolder->getStrFilename());
+                        else
                             $objFilemanagerRepo->syncRepo();
 
-                            //reload the site to display the new file
-							$this->portalReload(getLinkPortalHref($this->getPagename(), "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
-                        }
+                        $this->flushCompletePagesCache();
+
+                        //reload the site to display the new file
+                        if(validateSystemid($this->getParam("portaluploadDlfolder")))
+                            $this->portalReload(getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
+                        else
+                            $this->portalReload(getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                     }
-                    else
+                    else {
                         $strReturn .= $this->uploadForm($this->getLang("portaluploadCopyUploadError"));
+                    }
                 }
                 else {
                     @unlink($arrSource["tmp_name"]);
 
-            		$strReturn .= $this->uploadForm($this->getLang("portaluploadFilterError"));
+                    $strReturn .= $this->uploadForm($this->getLang("portaluploadFilterError"));
                 }
             }
-            else
+            else {
                 $strReturn .= $this->uploadForm($this->getLang("portaluploadNotWritableError"));
+            }
 
-		}
-		else
-		    $strReturn .= $this->getLang("commons_error_permissions");
+        }
+        else {
+            $strReturn .= $this->getLang("commons_error_permissions");
+        }
 
-	    return $strReturn;
-	}
-
-
+        return $strReturn;
+    }
 
 }
