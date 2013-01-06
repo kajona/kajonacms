@@ -58,6 +58,11 @@ class class_installer_element_maps extends class_installer_base implements inter
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("maps")->getStrVersion() == "3.4.9") {
+            $strReturn .= $this->postUpdate_349_40();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -66,6 +71,12 @@ class class_installer_element_maps extends class_installer_base implements inter
     public function postUpdate_342_349() {
         $strReturn = "Updating element maps to 3.4.9...\n";
         $this->updateElementVersion("maps", "3.4.9");
+        return $strReturn;
+    }
+
+    public function postUpdate_349_40() {
+        $strReturn = "Updating element maps to 4.0...\n";
+        $this->updateElementVersion("maps", "4.0");
         return $strReturn;
     }
 }

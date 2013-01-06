@@ -58,6 +58,11 @@ class class_installer_element_rssfeed extends class_installer_base implements in
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("rssfeed")->getStrVersion() == "3.4.9") {
+            $strReturn .= $this->postUpdate_349_40();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -66,6 +71,12 @@ class class_installer_element_rssfeed extends class_installer_base implements in
     public function postUpdate_342_349() {
         $strReturn = "Updating element rssfeed to 3.4.9...\n";
         $this->updateElementVersion("rssfeed", "3.4.9");
+        return $strReturn;
+    }
+
+    public function postUpdate_349_40() {
+        $strReturn = "Updating element rssfeed to 4.0...\n";
+        $this->updateElementVersion("rssfeed", "4.0");
         return $strReturn;
     }
 }

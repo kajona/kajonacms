@@ -292,6 +292,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_3492_3493();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.3") {
+            $strReturn .= $this->update_3493_40();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -449,6 +454,21 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.4.9.3");
         $this->updateElementVersion("paragraph", "3.4.9.3");
         $this->updateElementVersion("image", "3.4.9.3");
+
+        return $strReturn;
+    }
+
+    private function update_3493_40() {
+        $strReturn = "Updating 3.4.9.3 to 4.0...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.0");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "4.0");
+        $this->updateElementVersion("paragraph", "4.0");
+        $this->updateElementVersion("image", "4.0");
 
         return $strReturn;
     }

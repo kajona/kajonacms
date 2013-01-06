@@ -107,6 +107,10 @@ class class_installer_eventmanager extends class_installer_base implements inter
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_40();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -141,6 +145,16 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $this->updateModuleVersion("eventmanager", "3.4.9");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("eventmanager", "3.4.9");
+        return $strReturn;
+    }
+
+    private function update_349_40() {
+        $strReturn = "Updating 3.4.9 to 4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("eventmanager", "4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("eventmanager", "4.0");
         return $strReturn;
     }
 }

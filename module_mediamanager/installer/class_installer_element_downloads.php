@@ -69,6 +69,15 @@ class class_installer_element_downloads extends class_installer_base implements 
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9"
+            || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.1"
+            || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.2"
+            || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.3"
+        ) {
+            $strReturn .= $this->update_349_40();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
 
     }
@@ -79,6 +88,14 @@ class class_installer_element_downloads extends class_installer_base implements 
 
         $this->updateElementVersion("downloads", "3.4.9");
         $this->updateElementVersion("galleryRandom", "3.4.9");
+        return $strReturn;
+    }
+
+    public function update_349_40() {
+        $strReturn = "Updating element downloads to 4.0...\n";
+
+        $this->updateElementVersion("downloads", "4.0");
+        $this->updateElementVersion("galleryRandom", "4.0");
         return $strReturn;
     }
 

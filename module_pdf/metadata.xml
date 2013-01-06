@@ -5,7 +5,7 @@
     >
     <title>pdf</title>
     <description>A wrapper to tcpdf, providing a common way to generate pdfs.</description>
-    <version>3.4.9</version>
+    <version>4.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>

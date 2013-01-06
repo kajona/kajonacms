@@ -5,7 +5,7 @@
         >
     <title>stats</title>
     <description>A module analyzing the portal in order to gather statistical data. Renderes charts and other visual reports.</description>
-    <version>3.4.9</version>
+    <version>4.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

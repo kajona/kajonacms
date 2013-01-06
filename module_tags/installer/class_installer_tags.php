@@ -125,6 +125,13 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.2") {
+            $strReturn .= $this->update_3492_40();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -243,6 +250,17 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.2");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("tags", "3.4.9.2");
+
+        return $strReturn;
+    }
+
+    private function update_3492_40() {
+        $strReturn = "Updating 3.4.9.2 to 4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "4.0");
 
         return $strReturn;
     }

@@ -5,7 +5,7 @@
         >
     <title>samplecontent</title>
     <description>The samplecontent provides a default installation of the portal.</description>
-    <version>3.4.9</version>
+    <version>4.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

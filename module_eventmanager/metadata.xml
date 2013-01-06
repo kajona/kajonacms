@@ -5,7 +5,7 @@
     >
     <title>eventmanager</title>
     <description>A module to organize events and its participants. Participants may register to events, the number of participants per event is configurable.</description>
-    <version>3.4.9</version>
+    <version>4.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

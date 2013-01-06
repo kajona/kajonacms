@@ -103,10 +103,15 @@ class class_installer_search extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
+
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
-
             $strReturn .= $this->update_342_3491();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.1") {
+            $strReturn .= $this->update_3491_40();
         }
 
         return $strReturn."\n\n";
@@ -150,7 +155,16 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.4.9.1");
-        $this->updateElementVersion("search", "3.4.9");
+        $this->updateElementVersion("search", "3.4.9.1");
+        return $strReturn;
+    }
+
+    private function update_3491_40() {
+        $strReturn = "Updating 3.4.9.1 to 4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.0");
+        $this->updateElementVersion("search", "4.0");
         return $strReturn;
     }
 }

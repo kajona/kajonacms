@@ -95,6 +95,11 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $strReturn .= $this->update_342_349();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_40();
+        }
+
         return $strReturn;
 	}
 
@@ -103,6 +108,13 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $strReturn = "Updating 3.4.2 to 3.4.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("samplecontent", "3.4.9");
+        return $strReturn;
+    }
+
+    private function update_349_40() {
+        $strReturn = "Updating 3.4.9 to 4.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("samplecontent", "4.0");
         return $strReturn;
     }
 

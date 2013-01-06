@@ -69,6 +69,12 @@ class class_installer_dashboard extends class_installer_base implements interfac
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.2") {
+            $strReturn .= $this->update_3492_40();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -189,6 +195,14 @@ class class_installer_dashboard extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("dashboard", "3.4.9.2");
+        return $strReturn;
+    }
+
+    private function update_3492_40() {
+        $strReturn = "Updating 3.4.9.2 to 4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("dashboard", "4.0");
         return $strReturn;
     }
 

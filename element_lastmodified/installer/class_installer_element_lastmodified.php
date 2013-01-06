@@ -55,6 +55,11 @@ class class_installer_element_lastmodified extends class_installer_base implemen
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("lastmodified")->getStrVersion() == "3.4.9") {
+            $strReturn .= $this->postUpdate_349_40();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -63,6 +68,12 @@ class class_installer_element_lastmodified extends class_installer_base implemen
     public function postUpdate_342_349() {
         $strReturn = "Updating element lastmodified to 3.4.9...\n";
         $this->updateElementVersion("lastmodified", "3.4.9");
+        return $strReturn;
+    }
+
+    public function postUpdate_349_40() {
+        $strReturn = "Updating element lastmodified to 4.0...\n";
+        $this->updateElementVersion("lastmodified", "4.0");
         return $strReturn;
     }
 }

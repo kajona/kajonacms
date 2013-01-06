@@ -121,6 +121,11 @@ class class_installer_navigation extends class_installer_base implements interfa
             $strReturn .= $this->update_3491_3492();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9.2") {
+            $strReturn .= $this->update_3492_40();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -195,6 +200,17 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->updateModuleVersion("navigation", "3.4.9.2");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("navigation", "3.4.9.2");
+
+        return $strReturn;
+    }
+
+    private function update_3492_40() {
+        $strReturn = "Updating 3.4.9.2 to 4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("navigation", "4.0");
 
         return $strReturn;
     }

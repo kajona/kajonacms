@@ -119,6 +119,11 @@ class class_installer_faqs extends class_installer_base implements interface_ins
             $strReturn .= $this->update_342_349();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "3.4.9") {
+            $strReturn .= $this->update_349_40();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -158,6 +163,17 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->updateModuleVersion("faqs", "3.4.9");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("faqs", "3.4.9");
+        return $strReturn;
+    }
+
+    private function update_349_40() {
+
+        $strReturn = "Updating 3.4.9 to 4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("faqs", "4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("faqs", "4.0");
         return $strReturn;
     }
 
