@@ -107,9 +107,12 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
         }
 
-        $strAddActions = $this->objToolkit->listButton(
-            getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png", $this->getLang("actionUploadPackage"))
-        );
+        $strAddActions = "";
+        if($this->getObjModule()->rightEdit()) {
+            $strAddActions = $this->objToolkit->listButton(
+                getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_new.png", $this->getLang("actionUploadPackage"))
+            );
+        }
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
 
         $strReturn .= $this->objToolkit->listFooter();
