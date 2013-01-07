@@ -182,7 +182,7 @@
                 <exclude name="element_userlist/" />
                 <exclude name="element_mediaplayer/" />
                 <exclude name="module_ldap/" />
-                <exclude name="module_packagserver/" />
+                <exclude name="module_packageserver/" />
                 <exclude name="module_pchart/" />
                 <exclude name="module_workflows/" />
                 <exclude name="module_pdf/" />
