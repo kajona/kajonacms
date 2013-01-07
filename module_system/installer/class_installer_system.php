@@ -491,7 +491,7 @@ class class_installer_system extends class_installer_base implements interface_i
             "index.php", "image.php", "xml.php", ".htaccess", "v3_v4_postupdate.php"
         );
         foreach($arrFiles as $strOneFile) {
-            if(!file_exists(_realpath_."/".$strOneFile)) {
+            if(!file_exists(_realpath_."/".$strOneFile) && is_file(_realpath_."/core/module_system/".$strOneFile.".root")) {
                 if(!copy(_realpath_."/core/module_system/".$strOneFile.".root", _realpath_."/".$strOneFile))
                     $strReturn .= "<b>Copying the ".$strOneFile.".root to top level failed!!!</b>";
             }
