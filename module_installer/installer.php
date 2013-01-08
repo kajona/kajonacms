@@ -140,7 +140,8 @@ class class_installer {
             "/files/images",
             "/files/public",
             "/files/downloads",
-            "/core"
+            "/core",
+            "/templates/default"
         );
 
         $arrModules = array(
