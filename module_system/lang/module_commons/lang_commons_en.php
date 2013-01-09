@@ -62,6 +62,7 @@ $lang["commons_select_all"]              = "Select all";
 $lang["commons_sort_totree"]             = "Set Parent-Node by dropping to the tree";
 $lang["commons_sort_vertical"]           = "Change order using drag n drop";
 $lang["commons_start"]                   = "Start";
+$lang["commons_submit"]                  = "Submit";
 $lang["commons_title"]                   = "Title:";
 $lang["commons_unlock"]                  = "Unlock record";
 $lang["commons_yes"]                     = "Yes";
