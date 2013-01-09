@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Active template-pack:";
-$lang["actionList"]                      = "Isntalled packages";
+$lang["actionList"]                      = "Installed packages";
 $lang["actionListTemplates"]             = "Installed templates";
 $lang["actionUploadPackage"]             = "Install/Update a package";
 $lang["action_download"]                 = "Download template-pack";
@@ -46,7 +46,7 @@ $lang["package_install_success"]         = "Package installed";
 $lang["package_installocally"]           = "Install package";
 $lang["package_minversion"]              = "Minimal system-version:";
 $lang["package_modules"]                 = "Required modules:";
-$lang["package_screenshots"]                 = "Screenshots:";
+$lang["package_screenshots"]             = "Screenshots:";
 $lang["package_notinstallable"]          = "Package can't be installed.";
 $lang["package_noupdate"]                = "There's no new version available. Latest version:";
 $lang["package_noversion"]               = "The system failed to find a matching remote package";
@@ -58,7 +58,7 @@ $lang["package_updatefound"]             = "Update the package to the latest ver
 $lang["package_version"]                 = "Version:";
 $lang["package_version_installed"]       = "Version installed:";
 $lang["provider_error_package"]          = "The packages is no valid archive.";
-$lang["provider_error_transfer"]         = "Error while transfering the package.";
+$lang["provider_error_transfer"]         = "Error while transferring the package.";
 $lang["provider_kajona"]                 = "Official Kajona packages";
 $lang["provider_kajonabase"]             = "Community packages from kajonabase.net";
 $lang["provider_local"]                  = "Upload to the system";

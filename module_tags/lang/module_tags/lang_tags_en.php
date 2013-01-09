@@ -11,6 +11,7 @@
 
 //editable entries
 $lang["actionAddToFavorites"]            = "Marks as favorite";
+$lang["actionListFavorites"]             = "List favorites";
 $lang["actionShowAll"]                   = "Show all tags";
 $lang["actionShowAssignedRecords"]       = "Show assigned records";
 $lang["adminskin_tooltip"]               = "Show favorites";
