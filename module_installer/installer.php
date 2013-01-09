@@ -147,7 +147,8 @@ class class_installer {
         $arrModules = array(
             "mbstring",
             "gd",
-            "xml"
+            "xml",
+            "zip"
         );
 
         $strReturn .= $this->getLang("installer_phpcheck_intro");
