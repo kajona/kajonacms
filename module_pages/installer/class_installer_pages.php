@@ -38,15 +38,14 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if(!$this->objDB->createTable("page", $arrFields, array("page_id")))
 			$strReturn .= "An error occured! ...\n";
 
-		//Pages_properties ------------------------------------------------------------------------------
-		$strReturn .= "Installing table page_folderproperties...\n";
+		//folder ----------------------------------------------------------------------------------------
+		$strReturn .= "Installing table page_folder...\n";
 
 		$arrFields = array();
-		$arrFields["folderproperties_id"]           = array("char20", false);
-		$arrFields["folderproperties_name"]         = array("char254", true);
-		$arrFields["folderproperties_language"]     = array("char20", true);
+		$arrFields["folder_id"]           = array("char20", false);
+		$arrFields["folder_name"]         = array("char254", true);
 
-		if(!$this->objDB->createTable("page_folderproperties", $arrFields, array("folderproperties_id", "folderproperties_language")))
+		if(!$this->objDB->createTable("page_folder", $arrFields, array("folder_id")))
 			$strReturn .= "An error occured! ...\n";
 
         //folder_properties
@@ -297,6 +296,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_3493_40();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= $this->update_40_401();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -469,6 +473,46 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "4.0");
         $this->updateElementVersion("paragraph", "4.0");
         $this->updateElementVersion("image", "4.0");
+
+        return $strReturn;
+    }
+
+    private function update_40_401() {
+        $strReturn = "Updating 4.0 to 4.0.1...\n";
+
+        $strReturn .= "Removing i18n support for folder-names...\n";
+
+        $strReturn .= "Installing table page_folder...\n";
+        $arrFields = array();
+        $arrFields["folder_id"]           = array("char20", false);
+        $arrFields["folder_name"]         = array("char254", true);
+
+        if(!$this->objDB->createTable("page_folder", $arrFields, array("folder_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        $arrInserted = array();
+        $strQuery = "SELECT * FROM "._dbprefix_."page_folderproperties";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrOneRow) {
+            if(!in_array($arrOneRow["folderproperties_id"], $arrInserted)) {
+                $strQuery = "INSERT INTO "._dbprefix_."page_folder (folder_id, folder_name) VALUES (?, ?)";
+                $this->objDB->_pQuery($strQuery, array($arrOneRow["folderproperties_id"], $arrOneRow["folderproperties_name"]));
+                $arrInserted[] = $arrOneRow["folderproperties_id"];
+            }
+        }
+
+        $strQuery = "DROP TABLE "._dbprefix_."page_folderproperties";
+        $this->objDB->_pQuery($strQuery, array());
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.0");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "4.0.1");
+        $this->updateElementVersion("paragraph", "4.0.1");
+        $this->updateElementVersion("image", "4.0.1");
 
         return $strReturn;
     }

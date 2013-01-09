@@ -13,6 +13,7 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ * @targetTable page_folder.folder_id
  */
 class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable {
 
@@ -23,9 +24,9 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @fieldMandatory
      * @fieldType text
      * @fieldLabel ordner_name
+     * @tableColumn folder_name
      */
     private $strName = "";
-    private $strLanguage = "";
 
     private $strOldName = "";
 
@@ -37,15 +38,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "pages");
         $this->setArrModuleEntry("moduleId", _pages_folder_id_);
-
-
-        //init the object with the language currently selected - admin or portal
-        if(defined("_admin_") && _admin_ === true) {
-            $this->setStrLanguage($this->getStrAdminLanguageToWorkOn());
-        }
-        else {
-            $this->setStrLanguage($this->getStrPortalLanguage());
-        }
 
         //base class
         parent::__construct($strSystemid);
@@ -105,72 +97,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
         return "";
     }
 
-
-    /**
-     * Initalises the current object, if a systemid was given
-
-     */
-    protected function initObjectInternal() {
-        //load content language-dependant
-        $strQuery = "SELECT *
-                    FROM " . _dbprefix_ . "page_folderproperties
-                    WHERE folderproperties_id = ?
-                      AND folderproperties_language = ?";
-        $arrPropRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
-        if(count($arrPropRow) == 0) {
-            $arrPropRow["folderproperties_name"] = "";
-            $arrPropRow["folderproperties_language"] = "";
-        }
-        else {
-
-            $this->setStrName($arrPropRow["folderproperties_name"]);
-            $this->strOldName = $arrPropRow["folderproperties_name"];
-            $this->setStrLanguage($arrPropRow["folderproperties_language"]);
-        }
-    }
-
-    /**
-     * Updates the current object to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        //create change-logs
-        $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
-
-        class_logger::getInstance()->addLogRow("updated folder " . $this->getStrName(), class_logger::$levelInfo);
-
-        //and the properties record
-        //properties for this language already existing?
-        $strCountQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "page_folderproperties
-		                 WHERE folderproperties_id=?
-		                   AND folderproperties_language=?";
-        $arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()));
-
-        $strQuery = "";
-        $arrParams = array();
-        if((int)$arrCountRow["COUNT(*)"] >= 1) {
-            //Already existing, updating properties
-            $strQuery = "UPDATE  " . _dbprefix_ . "page_folderproperties
-    					    SET folderproperties_name=?
-    				      WHERE folderproperties_id=?
-    			      	    AND folderproperties_language=?";
-
-            $arrParams = array($this->getStrName(), $this->getSystemid(), $this->getStrLanguage());
-        }
-        else {
-            //Not existing, create one
-            $strQuery = "INSERT INTO " . _dbprefix_ . "page_folderproperties
-						(folderproperties_id, folderproperties_name, folderproperties_language) VALUES
-						(?,?,?)";
-
-            $arrParams = array($this->getSystemid(), $this->getStrName(), $this->getStrLanguage());
-        }
-
-        return $this->objDB->_pQuery($strQuery, $arrParams);
-
-    }
 
     /**
      * Returns a list of folders under the given systemid
@@ -264,21 +190,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
     }
 
 
-    /**
-     * Deletes a folder from the systems,
-     * All pages and folders under the current record are deleted, too.
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        //delete the folder-properties
-        $strQuery = "DELETE FROM " . _dbprefix_ . "page_folderproperties WHERE folderproperties_id = ?";
-        $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-
-        return parent::deleteObjectInternal();
-    }
-
-
     public function getVersionActionName($strAction) {
         if($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
             return $this->getLang("pages_ordner_edit", "pages");
@@ -312,14 +223,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
     public function setStrName($strName) {
         $this->strName = $strName;
-    }
-
-    public function getStrLanguage() {
-        return $this->strLanguage;
-    }
-
-    public function setStrLanguage($strLanguage) {
-        $this->strLanguage = $strLanguage;
     }
 
 }

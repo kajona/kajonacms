@@ -221,7 +221,6 @@ class class_module_languages_language extends class_model implements interface_m
      * @return bool
      */
     public function moveContentsToCurrentLanguage($strSourceLanguage) {
-        $bitCommit = true;
         $this->objDB->transactionBegin();
 
         $strQuery1 = "UPDATE " . _dbprefix_ . "page_properties
@@ -232,14 +231,10 @@ class class_module_languages_language extends class_model implements interface_m
                         SET page_element_ph_language = ?
                         WHERE page_element_ph_language = ?";
 
-        $strQuery3 = "UPDATE " . _dbprefix_ . "page_folderproperties
-                        SET folderproperties_language = ?
-                        WHERE folderproperties_language = ?";
 
         $bitCommit = (
             $this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage))
                 && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage))
-                && $this->objDB->_pQuery($strQuery3, array($this->getStrName(), $strSourceLanguage))
         );
 
         if($bitCommit) {
@@ -255,7 +250,7 @@ class class_module_languages_language extends class_model implements interface_m
     }
 
     /**
-     * Tries to determin the language currently active
+     * Tries to determine the language currently active
      * Looks up the session for previous languages,
      * if no entry was found, the default language is being returned
      * part for the portal
