@@ -126,7 +126,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona V4!<br />
                                 Take some time and watch the pages already created and have a look at the sample-contents assigned to those page.
                                 You may return to this page any time by clicking the &quot;home&quot; link.<br/>
-                                To modify the contents of this webpage you have to <a href='_webpath_/admin'>log in</a> at the adminstration-backend.
+                                To modify the contents of this webpage you have to <a href='_webpath_/admin'>log in</a> at the administration-backend.
                                 For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a><br/>
                                 The Kajona-Team hopes you'll enjoy managing your website with Kajona!";
                 $arrParams[] = "/files/images/upload/teaser.jpg";
