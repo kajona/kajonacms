@@ -102,7 +102,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
     }
 
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
-        if($objListEntry->rightEdit()) {
+        if($objListEntry->rightView()) {
             return $this->objToolkit->listButton(
                 getLinkAdmin(
                     $objListEntry->getArrModule("modul"),
@@ -170,7 +170,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
     /**
      * @return string
-     * @permissions edit
+     * @permissions view
      */
     protected function actionEdit() {
         return $this->actionView();
