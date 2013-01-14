@@ -507,7 +507,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "4.0");
+        $this->updateModuleVersion("", "4.0.1");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "4.0.1");
