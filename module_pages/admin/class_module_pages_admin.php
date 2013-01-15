@@ -1017,9 +1017,21 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                                     "icon_treeBranchOpen.png"
                                 )
                             );
-                        if($bitPageelements)
-                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$strSystemid."&form_element=".$strElement."&pageid=".$objSinglePage->getSystemid().($this->getParam("bit_link") != "" ? "&bit_link=1" : "").($bitPages ? "&pages=1" : "").($bitPageAliases ? "&pagealiases=1" : ""), $this->getLang("seite_oeffnen"), $this->getLang("seite_oeffnen"), "icon_folderActionOpen.png"));
-                        $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>");
+                        if($bitPageelements) {
+                            $strAction .= $this->objToolkit->listButton(
+                                getLinkAdmin(
+                                    $this->arrModule["modul"],
+                                    "pagesFolderBrowser",
+                                    "&systemid=".$strSystemid."&form_element=".$strElement."&pageid=".$objSinglePage->getSystemid().($this->getParam("bit_link") != "" ? "&bit_link=1" : "").($bitPages ? "&pages=1" : "").($bitPageAliases ? "&pagealiases=1" : ""),
+                                    $this->getLang("seite_oeffnen"),
+                                    $this->getLang("seite_oeffnen"),
+                                    "icon_folderActionOpen.png"
+                                )
+                            );
+                        }
+                        $strAction .= $this->objToolkit->listButton(
+                            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+                        );
                         $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
 
                     }
@@ -1044,7 +1056,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     else
                         $arrSinglePage["name2"] = $objPage->getStrName()."#".$objOnePageelement->getSystemid();
 
-                    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>");
+                    $strAction = $this->objToolkit->listButton(
+                        "<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+                    );
                     $strReturn .= $this->objToolkit->simpleAdminList($objOnePageelement, $strAction, $intCounter++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();

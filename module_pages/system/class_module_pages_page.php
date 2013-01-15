@@ -433,6 +433,10 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return class_module_pages_page|null
      */
     public static function getPageByName($strName) {
+        //strip possible anchors
+        if(uniStrpos($strName, "#") !== false)
+            $strName = uniSubstr($strName, 0, uniStrpos($strName, "#"));
+
         $strQuery = "SELECT page_id
 						FROM " . _dbprefix_ . "page
 						WHERE page_name= ?";
