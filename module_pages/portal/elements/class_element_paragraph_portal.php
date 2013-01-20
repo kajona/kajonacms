@@ -58,7 +58,6 @@ class class_element_paragraph_portal extends class_element_portal implements int
         if($this->arrElementData["paragraph_image"] != "") {
             //remove the webpath (was added for paragraphs saved pre 3.3.0)
             $this->arrElementData["paragraph_image"] = str_replace("_webpath_", "", $this->arrElementData["paragraph_image"]);
-            $this->arrElementData["paragraph_image"] = $this->arrElementData["paragraph_image"];
         }
 
         if($this->arrElementData["paragraph_link"] != "") {
