@@ -33,7 +33,7 @@ class class_apc_cache  {
     private $strSystemKey = "";
 
     private function __construct() {
-        $this->bitAPCInstalled = function_exists("apc_store") && function_exists("apc_fetch");
+        $this->bitAPCInstalled = function_exists("apc_store") && function_exists("apc_cache_info") && @apc_cache_info() !== false;
         $this->strSystemKey = md5(__FILE__);
     }
 

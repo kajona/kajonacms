@@ -70,12 +70,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn workflows.workflows_char1
+     * @blockEscaping
      */
     private $strChar1 = "";
 
     /**
      * @var string
      * @tableColumn workflows.workflows_char2
+     * @blockEscaping
      */
     private $strChar2 = "";
 
@@ -94,6 +96,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn workflows.workflows_text
+     * @blockEscaping
      */
     private $strText = "";
 
