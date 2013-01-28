@@ -243,7 +243,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
             }
             //Print remaining files
             if(count($arrRemainingFiles) > 0) {
-                $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "piclist");
+                $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist");
                 $arrWrappingTemplate["filelist"] .= $this->objTemplate->fillTemplate($arrRemainingFiles, $strTemplateID, false);
             }
         }
