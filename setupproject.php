@@ -60,7 +60,6 @@ class class_project_setup {
         self::checkDir("/templates/default/tpl");
         self::checkDir("/templates/default/pics");
 
-        //self::createClassloaderConfig();
         self::createLangProjectEntry();
         self::createDefaultTemplateEntry();
 
@@ -110,41 +109,6 @@ class class_project_setup {
 
         self::createDenyHtaccess("/project/.htaccess");
 
-    }
-
-
-    private static function createClassloaderConfig() {
-        $strContent = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Kajona V4 class-loader configuration.
-
-   By default, the Kajona class-loader scans the core-folder for classes not yet known to the class-loader.
-   In some cases, it might get necessary to add new classes or overwrite existing classes to your projects'
-   needs. Therefore, this file may define classes explicitly.
-
-   Example: If you want to provide your own implementation for class_session, add an entry as following:
-
-    <classloader>
-        <class>
-            <name>class_session</name>
-            <path>/project/system/classes/class_session_test.php</path>
-        </class>
-    </classloader>
-
-
-   If you enabled resource-caching in the config.php make sure to delete all .cache files under /project/temp
-   when chaning this file.
-
--->
-<classloader
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/classloader.xsd"
-        >
-</classloader>
-XML;
-
-        file_put_contents(_realpath_."/project/system/classes/classloader.xml", $strContent);
     }
 
 
