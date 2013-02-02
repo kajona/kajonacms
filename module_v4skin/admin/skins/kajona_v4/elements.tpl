@@ -1671,7 +1671,7 @@ It containes a list of aspects and provides the possibility to switch the differ
             </div>
         </div>
     </div>
-</sitemap_module_wrapper>*
+</sitemap_module_wrapper>
 
 <sitemap_module_wrapper_active>
     <div class="accordion-group">

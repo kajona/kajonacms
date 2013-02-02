@@ -76,36 +76,6 @@ class class_admin_helper {
 
     }
 
-    /**
-     * Writes the main backend navigation, so collects
-     * all modules of the current aspect
-     * Creates a list of all installed modules
-     * Internal helper, collects all modules and prepares the lins
-     *
-     * @return array
-     */
-    public static function getOutputMainNaviHelper() {
-        if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
-            //Loading all Modules
-            $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
-            $intI = 0;
-            $arrModuleRows = array();
-            foreach ($arrModules as $arrModule) {
-                $objCommon = new class_module_system_common($arrModule["module_id"]);
-                if($objCommon->rightView()) {
-                    //Generate a view infos
-                    $arrModuleRows[$intI]["rawName"] = $arrModule["module_name"];
-                    $arrModuleRows[$intI]["name"] = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrModule["module_name"]);
-                    $arrModuleRows[$intI]["link"] = getLinkAdmin($arrModule["module_name"], "", "", $arrModule["module_name"], $arrModule["module_name"], "", true, "adminModuleNavi");
-                    $arrModuleRows[$intI]["href"] = getLinkAdminHref($arrModule["module_name"], "");
-                    $intI++;
-                }
-            }
-            return $arrModuleRows;
-        }
-
-        return array();
-    }
 
     /**
      * Fetches the list of actions for a single module, saved to the session for performance reasons

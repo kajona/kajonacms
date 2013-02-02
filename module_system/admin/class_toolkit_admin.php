@@ -1375,7 +1375,7 @@ class class_toolkit_admin extends class_toolkit {
                 "systemid" => $objOneInstance->getObjModule()->getSystemid(),
                 "moduleTitle" => $objOneInstance->getObjModule()->getStrName(),
                 "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName()),
-                "moduleHref" => getLinkAdminHref($objOneInstance->getObjModule()->getStrName(),"")
+                "moduleHref" => getLinkAdminHref($objOneInstance->getObjModule()->getStrName(), "")
             );
 
             if($strCurrentModule == $objOneInstance->getObjModule()->getStrName())
