@@ -68,6 +68,7 @@ $lang["stats_toptitle"]                  = "Top downloads";
 $lang["sync_add"]                        = "Added: ";
 $lang["sync_del"]                        = " Deleted: ";
 $lang["sync_end"]                        = "Synchronization finished successfully";
+$lang["upload_allowed_extensions"]       = "Erlaubte Dateiendungen:";
 $lang["upload_dropArea"]                 = "Drop files here";
 $lang["upload_erfolg"]                   = "File was uploaded successfully";
 $lang["upload_fehler"]                   = "An error occured while uploading file";

@@ -449,7 +449,8 @@ Upload-Field for multiple files with progress bar
             </div>
             <div class="alert alert-info">
                 <button type="button" class="close" data-dismiss="alert">×</button>
-                [lang,upload_dropArea,mediamanager]
+                [lang,upload_dropArea,mediamanager]<br />
+                [lang,upload_allowed_extensions,mediamanager] %%allowedExtensions%%
             </div>
             <div id="startUploadBtn" class="btn">[lang,upload_multiple_uploadFiles,mediamanager]</div>
         </div>

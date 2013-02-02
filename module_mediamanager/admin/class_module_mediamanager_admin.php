@@ -378,7 +378,6 @@ HTML;
             return "";
 
         $strReturn = "";
-
         $strPath = "";
 
         /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objCurFile */

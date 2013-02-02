@@ -69,6 +69,7 @@ $lang["sync_add"]                        = "Hinzugefügt: ";
 $lang["sync_del"]                        = " Gelöscht: ";
 $lang["sync_end"]                        = "Synchronisierung erfolgreich abgeschlossen";
 $lang["upload_dropArea"]                 = "Dateien zum Upload hier fallen lassen";
+$lang["upload_allowed_extensions"]       = "Erlaubte Dateiendungen:";
 $lang["upload_erfolg"]                   = "Datei erfolgreich hochgeladen";
 $lang["upload_fehler"]                   = "Dateiupload fehlerhaft";
 $lang["upload_fehler_filter"]            = "Der hochgeladene Dateityp ist nicht erlaubt";
