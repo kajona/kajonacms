@@ -16,7 +16,7 @@
  */
 class class_module_navigation_admin extends class_admin_simple implements interface_admin {
 
-    private $strPeAddon = "";
+    protected  $strPeAddon = "";
 
     /**
      * Constructor

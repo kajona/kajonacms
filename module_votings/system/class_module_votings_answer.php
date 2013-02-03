@@ -23,6 +23,7 @@ class class_module_votings_answer extends class_model implements interface_model
      *
      * @fieldType textarea
      * @fieldMandatory
+     * @fieldLabel form_answer_text
      */
     private $strText = "";
 

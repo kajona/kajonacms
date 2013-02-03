@@ -58,14 +58,23 @@ class class_test_generalActionTest extends class_testbase  {
         $objReflection = new ReflectionClass($objViewInstance);
         $arrMethods = $objReflection->getMethods();
 
+        $objAnnotations = new class_reflection(get_class($objViewInstance));
+
+        //collect the autotestable annotations located on class-level
+        foreach($objAnnotations->getAnnotationValuesFromClass("@autoTestable") as $strValue) {
+            foreach(explode(",", $strValue) as $strOneMethod) {
+                echo "found method ".get_class($objViewInstance)."@".$strOneMethod." marked as class-based @autoTestable, preparing call\n";
+                echo "   calling via action() method\n";
+                $objViewInstance->action($strOneMethod);
+            }
+        }
+
+
         /** @var ReflectionMethod $objOneMethod */
         foreach($arrMethods as $objOneMethod) {
 
-            $objAnnotations = new class_reflection(get_class($objViewInstance));
-
             if($objAnnotations->hasMethodAnnotation($objOneMethod->getName(), "@autoTestable")) {
                 echo "found method ".get_class($objViewInstance)."@".$objOneMethod->getName()." marked as @autoTestable, preparing call\n";
-
 
                 if(uniSubstr($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
                     echo "   calling via action() method\n";
@@ -77,8 +86,7 @@ class class_test_generalActionTest extends class_testbase  {
                 }
             }
         }
+
     }
-
-
 
 }

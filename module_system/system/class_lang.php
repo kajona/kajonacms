@@ -145,6 +145,28 @@ class class_lang {
 
         return $strReturn;
     }
+    
+    
+    public function stringToPlaceholder($strText) {
+        $strReturn = "";
+        $strLastChar = "";
+        
+        for ($i = 0; $i < uniStrlen($strText); $i++) {
+            $strChar = uniSubstr($strText, $i, 1);
+            $strCharLower = uniStrtolower($strChar);
+            
+            if ($i > 0 && $strChar != $strCharLower && $strLastChar != "_") {
+                $strReturn .= "_" . $strCharLower;
+            }
+            else {
+                $strReturn .= $strCharLower;
+            }
+            
+            $strLastChar = $strChar;
+        }
+        
+        return $strReturn;
+    }
 
 
     private function loadFallbackPlaceholder($strModule, $strText) {

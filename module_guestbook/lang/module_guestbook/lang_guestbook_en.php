@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["actionNew"]                       = "New guestbook";
@@ -16,11 +16,11 @@ $lang["delete_question"]                 = "Do you really want to delete the gue
 $lang["edit_post"]                       = "Edit";
 $lang["eintragen"]                       = "Create entry";
 $lang["eintragen_fehler"]                = "Please provide all mandatory fields";
-$lang["form_gb_guestbookmoderated"]      = "New posts are disabled:";
-$lang["form_post_guestbookpostemail"]    = "E-Mail:";
-$lang["form_post_guestbookpostname"]     = "Name:";
-$lang["form_post_guestbookpostpage"]     = "Page:";
-$lang["form_post_guestbookposttext"]     = "Message:";
+$lang["form_guestbook_guestbookmoderated"] = "New posts are disabled:";
+$lang["form_guestbook_guestbookpostemail"] = "E-Mail:";
+$lang["form_guestbook_guestbookpostname"] = "Name:";
+$lang["form_guestbook_guestbookpostpage"] = "Page:";
+$lang["form_guestbook_guestbookposttext"] = "Message:";
 $lang["gaestebuch_bearbeiten"]           = "Edit guestbook";
 $lang["gaestebuch_listeleer"]            = "No guestbooks available";
 $lang["insert_error_email"]              = "missing mail-address";
@@ -28,9 +28,10 @@ $lang["insert_error_name"]               = "missing name";
 $lang["insert_error_post"]               = "missing text";
 $lang["messageprovider_guestbook_name"]  = "Guestbooks";
 $lang["modul_titel"]                     = "Guestbooks";
+$lang["modul_titel_post"]                = "Guestbook-Posts";
 $lang["new_post_mail"]                   = "A new post was added to a guestbook.\n\n";
 $lang["post_liste_leer"]                 = "No posts available";
-$lang["post_loeschen_frage"]             = "Do you really want to delete the post &quot;<b>%%element_name%%</b>&quot;?";
+$lang["deletePost_question"]             = "Do you really want to delete the post &quot;<b>%%element_name%%</b>&quot;?";
 $lang["post_mail_text"]                  = "E-Mail";
 $lang["post_message_text"]               = "Message";
 $lang["post_name_from"]                  = "from";

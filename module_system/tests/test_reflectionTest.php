@@ -11,10 +11,11 @@ class class_test_reflection extends class_testbase  {
         $this->assertEquals(0, count($arrClassAnnotations));
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@classTest");
-        $this->assertEquals(2, count($arrClassAnnotations));
-        $this->assertEquals("val2", $arrClassAnnotations[0]);
-        $this->assertEquals("val1", $arrClassAnnotations[1]);
-
+        $this->assertEquals(3, count($arrClassAnnotations));
+        $this->assertTrue(in_array("val1", $arrClassAnnotations));
+        $this->assertTrue(in_array("val2", $arrClassAnnotations));
+        $this->assertTrue(in_array("val3", $arrClassAnnotations));
+        
         $objAnnotations = new class_reflection(new A());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@noval");
@@ -22,7 +23,20 @@ class class_test_reflection extends class_testbase  {
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@classTest");
         $this->assertEquals(1, count($arrClassAnnotations));
-        $this->assertEquals("val1", $arrClassAnnotations[0]);
+        $this->assertTrue(in_array("val1", $arrClassAnnotations));
+        
+        $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@emptyAnnotation");
+        $this->assertEquals(1, count($arrClassAnnotations));
+        $this->assertTrue(in_array("", $arrClassAnnotations));
+    }
+    
+    public function testGetAnnotationsWithValueFromClass() {
+        $objAnnotations = new class_reflection(new B());
+
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("val2");
+        $this->assertEquals(2, count($arrClassAnnotations));
+        $this->assertTrue(in_array("@classTest", $arrClassAnnotations));
+        $this->assertTrue(in_array("@classTest2", $arrClassAnnotations));
     }
 
     public function testHasMethodAnnotation() {
@@ -61,7 +75,7 @@ class class_test_reflection extends class_testbase  {
         $this->assertEquals(3, count($objAnnotations->getPropertiesWithAnnotation("@propertyTest")));
 
         $arrProps = $objAnnotations->getPropertiesWithAnnotation("@propertyTest");
-
+        
         $arrKeys = array_keys($arrProps);
         $arrValues = array_values($arrProps);
         $this->assertEquals("valB1", $arrValues[0]);
@@ -76,6 +90,7 @@ class class_test_reflection extends class_testbase  {
 
         $this->assertEquals("valB1", $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest"));
         $this->assertEquals("valA1", $objAnnotations->getAnnotationValueForProperty("propertyA1", "@propertyTest"));
+        $this->assertNull($objAnnotations->getAnnotationValueForProperty("propertyA1", "@notAPropertyTest"));
 
     }
 
@@ -104,7 +119,9 @@ class class_test_reflection extends class_testbase  {
 
 /**
  *
+ * @emptyAnnotation
  * @classTest val1
+ * @classTest2 val2
  */
 class A {
 
@@ -127,6 +144,7 @@ class A {
 /**
  *
  * @classTest val2
+ * @classTest val3
  */
 class B extends A {
 

@@ -83,17 +83,14 @@
             </div>
         </div>
 
-
-
         <!-- CONTENT CONTAINER -->
         <div class="span10" id="content">
 
             <div class="contentTopbar clearfix">
-                <h1 id="moduleTitle" class="pull-left">%%moduletitle%%</h1>%%quickhelp%%
+                <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
             </div>
 
             %%content%%
-
         </div>
     </div>
 

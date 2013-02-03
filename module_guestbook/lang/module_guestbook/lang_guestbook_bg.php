@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["actionNew"]                       = "Нова книга за гости";
@@ -16,7 +16,7 @@ $lang["delete_question"]                 = "Наистина ли искате �
 $lang["edit_post"]                       = "Редактирай";
 $lang["eintragen"]                       = "Впиши";
 $lang["eintragen_fehler"]                = "Моля попълнете всички полета";
-$lang["form_gb_guestbookmoderated"]      = "Ограничения за нови коментари:";
+$lang["form_guestbook_guestbookmoderated"] = "Ограничения за нови коментари:";
 $lang["gaestebuch_bearbeiten"]           = "Редактирай книга за гости";
 $lang["gaestebuch_listeleer"]            = "Няма налични книги за гости";
 $lang["insert_error_email"]              = "Липсва електронна поща";
@@ -24,7 +24,7 @@ $lang["insert_error_name"]               = "Липсва име";
 $lang["insert_error_post"]               = "Липсва коментар";
 $lang["modul_titel"]                     = "Книга за гости";
 $lang["post_liste_leer"]                 = "Няма налични постове";
-$lang["post_loeschen_frage"]             = "Наистина ли искате да премахнете постът &quot;<b>%%element_name%%</b>&quot;?";
+$lang["deletePost_question"]             = "Наистина ли искате да премахнете постът &quot;<b>%%element_name%%</b>&quot;?";
 $lang["post_mail_text"]                  = "Електронна поща";
 $lang["post_message_text"]               = "Съобщение";
 $lang["post_name_from"]                  = "от";

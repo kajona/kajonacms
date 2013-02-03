@@ -15,7 +15,7 @@
  */
 abstract class class_admin_simple extends class_admin {
 
-    private $strPeAddon = "";
+    protected  $strPeAddon = "";
 
     public function __construct($strSystemid = "") {
         parent::__construct($strSystemid);
@@ -87,10 +87,22 @@ abstract class class_admin_simple extends class_admin {
             if(!$objRecord->copyObject())
                 throw new class_exception("error creating a copy of object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&systemid=".$objRecord->getPrevId()));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getPrevId()));
         }
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
+    }
+    
+    
+    /**
+     * Returns the action name for a given class name.
+     * 
+     * @param string Action name
+     * @param string Class name
+     * @return string Class specific action name
+     */
+    protected function getActionNameForClass($strAction, $objInstance) {
+        return $strAction;
     }
 
 
@@ -192,7 +204,7 @@ abstract class class_admin_simple extends class_admin {
 
         $strListId = generateSystemid();
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
         $arrIterables = $arrPageViews["elements"];
 
         if(count($arrIterables) == 0)
@@ -222,13 +234,13 @@ abstract class class_admin_simple extends class_admin {
             }
         }
 
-
-        if(is_array($this->getNewEntryAction($strListIdentifier)) || $this->getNewEntryAction($strListIdentifier) != "") {
-            if(is_array($this->getNewEntryAction($strListIdentifier))) {
-                $strReturn .= $this->objToolkit->genericAdminList("", "", "", implode("", $this->getNewEntryAction($strListIdentifier)), $intI);
+        $mixedNewEntryAction = $this->getNewEntryAction($strListIdentifier);
+        if(is_array($mixedNewEntryAction) || $mixedNewEntryAction != "") {
+            if(is_array($mixedNewEntryAction)) {
+                $strReturn .= $this->objToolkit->genericAdminList("", "", "", implode("", $mixedNewEntryAction), $intI);
             }
             else
-                $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->getNewEntryAction($strListIdentifier), $intI);
+                $strReturn .= $this->objToolkit->genericAdminList("", "", "", $mixedNewEntryAction, $intI);
         }
 
         if($bitSortable)
@@ -302,7 +314,7 @@ abstract class class_admin_simple extends class_admin {
                 return $this->objToolkit->listButton(
                     getLinkAdminDialog(
                         $objListEntry->getArrModule("modul"),
-                        "edit",
+                        $this->getActionNameForClass("edit", $objListEntry),
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
@@ -313,7 +325,7 @@ abstract class class_admin_simple extends class_admin {
                 return $this->objToolkit->listButton(
                     getLinkAdmin(
                         $objListEntry->getArrModule("modul"),
-                        "edit",
+                        $this->getActionNameForClass("edit", $objListEntry),
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
@@ -336,7 +348,7 @@ abstract class class_admin_simple extends class_admin {
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    getLinkAdmin($objListEntry->getArrModule("modul"), "list", "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen.png")
+                    getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen.png")
                 );
             }
         }
@@ -359,8 +371,8 @@ abstract class class_admin_simple extends class_admin {
 
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(),
-                $this->getLang("delete_question", $objListEntry->getArrModule("modul")),
-                getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
+                $this->getLang($this->getObjLang()->stringToPlaceholder($this->getActionNameForClass("delete", $objListEntry)."_question"), $objListEntry->getArrModule("modul")),
+                getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("delete", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
             );
         }
         return "";
@@ -388,7 +400,7 @@ abstract class class_admin_simple extends class_admin {
             return $this->objToolkit->listButton(
                 getLinkAdminDialog(
                     "right",
-                    "change",
+                    $this->getActionNameForClass("change", $objListEntry),
                     "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                     "",
                     $this->getLang("commons_edit_permissions"),
@@ -433,7 +445,7 @@ abstract class class_admin_simple extends class_admin {
             return $this->objToolkit->listButton(
                 getLinkAdmin(
                     $objListEntry->getArrModule("modul"),
-                    "copyObject",
+                    $this->getActionNameForClass("copyObject", $objListEntry),
                     "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                     "",
                     $this->getLang("commons_edit_copy"),
@@ -469,11 +481,11 @@ abstract class class_admin_simple extends class_admin {
         if($this->getObjModule()->rightEdit()) {
             if($bitDialog)
                 return $this->objToolkit->listButton(
-                    getLinkAdminDialog($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.png")
+                    getLinkAdminDialog($this->getArrModule("modul"), $this->getActionNameForClass("new", null), $this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png")
                 );
             else
                 return $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "new", $this->strPeAddon, $this->getLang("module_action_new"), $this->getLang("module_action_new"), "icon_new.png")
+                    getLinkAdmin($this->getArrModule("modul"), $this->getActionNameForClass("new", null), $this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png")
                 );
         }
         return "";

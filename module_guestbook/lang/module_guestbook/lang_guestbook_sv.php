@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["actionNew"]                       = "Ny gästbok";
@@ -17,7 +17,7 @@ $lang["edit_post"]                       = "Redigera";
 $lang["eintragen"]                       = "Skriv";
 $lang["eintragen_fehler"]                = "Vänligen fyll i alla fält";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för att utföra denna handling";
-$lang["form_gb_guestbookmoderated"]      = "Frisläppning krävs:";
+$lang["form_guestbook_guestbookmoderated"] = "Frisläppning krävs:";
 $lang["gaestebuch_bearbeiten"]           = "Redigera gästboken";
 $lang["gaestebuch_listeleer"]            = "Ingen gästbok tillgänglig";
 $lang["gaestebuch_rechte"]               = "Redigera rättigheter";
@@ -27,10 +27,8 @@ $lang["insert_error_name"]               = "Saknas namn";
 $lang["insert_error_post"]               = "Saknas text";
 $lang["modul_rechte"]                    = "Modulrättigheter";
 $lang["modul_titel"]                     = "Gästböcker";
-$lang["post_captcha_reload_text"]        = "Säkerhetskod inte läsbar?";
-$lang["post_captcha_text"]               = "Säkerhetskod";
 $lang["post_liste_leer"]                 = "Inget inlägg tillgängligt";
-$lang["post_loeschen_frage"]             = "Vill du verkligen rader inlägget &quot;<b>%%element_name%%</b>&quot; ?";
+$lang["deletePost_question"]             = "Vill du verkligen rader inlägget &quot;<b>%%element_name%%</b>&quot; ?";
 $lang["post_mail_text"]                  = "e-mail";
 $lang["post_message_text"]               = "Meddelande";
 $lang["post_name_from"]                  = "från";

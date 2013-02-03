@@ -24,13 +24,15 @@ class class_reflection {
     private static $bitCacheSaveRequired = false;
 
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
-
+    
     private static $STR_METHOD_CACHE = "methods";
     private static $STR_HASMETHOD_CACHE = "hasmethods";
 
     private static $STR_PROPERTIES_CACHE = "properties";
     private static $STR_HASPROPERTY_CACHE = "hasproperty";
 
+    private static $STR_DOC_COMMENT_PROPERTIES_CACHE = "doccomment";
+    
     private $arrCurrentCache;
     private $strSourceClass;
 
@@ -76,7 +78,8 @@ class class_reflection {
                 self::$STR_METHOD_CACHE,
                 self::$STR_HASMETHOD_CACHE,
                 self::$STR_PROPERTIES_CACHE,
-                self::$STR_HASPROPERTY_CACHE
+                self::$STR_HASPROPERTY_CACHE,
+                self::$STR_DOC_COMMENT_PROPERTIES_CACHE
             );
 
         $this->arrCurrentCache = &self::$arrAnnotationsCache[$this->strSourceClass];
@@ -113,12 +116,7 @@ class class_reflection {
             return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation];
 
         $strClassDoc = $this->objReflectionClass->getDocComment();
-        $arrValues = $this->searchAllAnnotationsInDoc($strClassDoc, $strAnnotation);
-
-        $arrReturn = array();
-        foreach($arrValues as $strOneProperty) {
-            $arrReturn[] = trim(uniSubstr($strOneProperty, uniStrpos($strOneProperty, $strAnnotation)+uniStrlen($strAnnotation)));
-        }
+        $arrReturn = $this->searchAnnotationInDoc($strClassDoc, $strAnnotation);
 
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
@@ -129,6 +127,33 @@ class class_reflection {
 
         $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;
         self::$bitCacheSaveRequired = true;
+        return $arrReturn;
+    }
+    
+    /**
+     * Returns a list of all annotation names with a given value.
+     * 
+     * @param string Annotation value
+     * @return array List of annotation names
+     */
+    public function getAnnotationsWithValueFromClass($strValue) {
+        $arrReturn = array();
+        
+        $strClassDoc = $this->objReflectionClass->getDocComment();
+        $arrProperties = $this->searchAllAnnotationsInDoc($strClassDoc);
+        
+        foreach ($arrProperties as $strName => $arrValues) {
+            if (in_array($strValue, $arrValues))
+                $arrReturn[] = $strName;
+        }
+        
+        //check if there's a base-class -> inheritance
+        $objBaseClass = $this->objReflectionClass->getParentClass();
+        if($objBaseClass !== false) {
+            $objBaseAnnotations = new class_reflection($objBaseClass->getName());
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationsWithValueFromClass($strValue));
+        }
+        
         return $arrReturn;
     }
 
@@ -146,7 +171,7 @@ class class_reflection {
 
         try {
             $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
-            $bitReturn = false !== $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+            $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
         }
         catch(ReflectionException $objEx) {
             $bitReturn = false;
@@ -171,7 +196,7 @@ class class_reflection {
             return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation];
 
         $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
-        $bitReturn = false !== $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
 
         $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
         self::$bitCacheSaveRequired = true;
@@ -199,14 +224,13 @@ class class_reflection {
             return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation];
 
         $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
-        $strLine = $this->searchAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
-        if($strLine === false) {
+        $strReturn = $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        if($strReturn === false) {
             $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation] = false;
             return false;
         }
 
         //strip the annotation parts
-        $strReturn = trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
         $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation] = $strReturn;
         self::$bitCacheSaveRequired = true;
         return $strReturn;
@@ -230,10 +254,9 @@ class class_reflection {
         $arrReturn = array();
 
         foreach($arrProperties as $objOneProperty) {
-            $strLine = $this->searchAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
-            if($strLine !== false) {
-                $arrReturn[$objOneProperty->getName()] = trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
-            }
+            $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+            if ($strFirstAnnotation !== false)
+                $arrReturn[$objOneProperty->getName()] = $strFirstAnnotation;
         }
 
 
@@ -262,10 +285,9 @@ class class_reflection {
 
         foreach($arrProperties as $objOneProperty) {
             if($objOneProperty->getName() == $strProperty) {
-                $strLine = $this->searchAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
-                if($strLine !== false) {
-                    return trim(uniSubstr($strLine, uniStrpos($strLine, $strAnnotation)+uniStrlen($strAnnotation)));
-                }
+                $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+                if ($strFirstAnnotation !== false)
+                    return $strFirstAnnotation;
             }
         }
 
@@ -369,14 +391,12 @@ class class_reflection {
      * @param string $strAnnotation
      * @return bool
      */
-    private function searchAnnotationInDoc($strDoc, $strAnnotation) {
-        $arrLines = explode("\n", $strDoc);
-        foreach($arrLines as $strOneLine) {
-            if(uniStrpos($strOneLine, $strAnnotation) !== false) {
-                return $strOneLine;
-            }
-        }
-
+    private function searchFirstAnnotationInDoc($strDoc, $strAnnotation) {
+        $arrAnnotations = $this->searchAnnotationInDoc($strDoc, $strAnnotation);
+        
+        if (count($arrAnnotations) > 0)
+            return $arrAnnotations[0];
+        
         return false;
     }
 
@@ -389,15 +409,48 @@ class class_reflection {
      * @param string $strAnnotation
      * @return array
      */
-    private function searchAllAnnotationsInDoc($strDoc, $strAnnotation) {
+    private function searchAnnotationInDoc($strDoc, $strAnnotation) { 
+        $arrAllAnnotations = $this->searchAllAnnotationsInDoc($strDoc);
+        
+        if (isset($arrAllAnnotations[$strAnnotation])) {
+            return $arrAllAnnotations[$strAnnotation];
+        }
+        else {
+            return array();
+        }
+    }
+    
+    
+    /**
+     * Internal helper, does the parsing of the comment.
+     * Returns an array of all annotations.
+     *
+     * @param string $strDoc
+     * @return array
+     */
+    private function searchAllAnnotationsInDoc($strDoc) {
         $arrReturn = array();
-        $arrLines = explode("\n", $strDoc);
-        foreach($arrLines as $strOneLine) {
-            if(uniStrpos($strOneLine, $strAnnotation) !== false) {
-                $arrReturn[] = $strOneLine;
+        
+        $strCacheKey = md5($strDoc);
+        
+        if (isset($this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey]))
+            return $this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey];
+        
+        $arrMatches = array();
+        if (preg_match_all("/(@[a-zA-Z0-9]+)(\s+.*)?$/Um", $strDoc, $arrMatches, PREG_SET_ORDER) !== false) {
+            foreach ($arrMatches as $arrOneMatch) {
+                $strName = $arrOneMatch[1];
+                $strValue = isset($arrOneMatch[2]) ? $arrOneMatch[2] : "";
+                
+                if (!isset($arrReturn[$strName]))
+                    $arrReturn[$strName] = array();
+                
+                $arrReturn[$strName][] = trim($strValue);
             }
         }
-
+        
+        $this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey] = $arrReturn;
+        self::$bitCacheSaveRequired = true;
         return $arrReturn;
     }
 }

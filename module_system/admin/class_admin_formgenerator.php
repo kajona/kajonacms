@@ -17,7 +17,7 @@
  * automation.
  * 1. generateFieldsFromObject(), everything is rendered automatically
  * 2. addDynamicField(), adds a single field based on its name
- * 3. addField(), pass a field to add it explicitely
+ * 3. addField(), pass a field to add it explicitly
  *
  * @author sidler@mulchprod.de
  * @since 4.0
@@ -252,6 +252,51 @@ class class_admin_formgenerator {
         return $objField;
     }
 
+    /**
+     * Set the position of a single field in the list of fields, so
+     * the position inside the form.
+     * The position is set human-readable, so the first element uses
+     * the index 1.
+     *
+     * @param $strField
+     * @param $intPos
+     *
+     * @throws class_exception
+     */
+    public function setFieldToPosition($strField, $intPos) {
+
+        if(!isset($this->arrFields[$strField]))
+            throw new class_exception("field ".$strField." not found in list ".implode(", ", array_keys($this->arrFields)), class_exception::$level_ERROR);
+
+        $objField = $this->arrFields[$strField];
+
+        $arrNewOrder = array();
+
+        $intI = 1;
+        foreach($this->arrFields as $strKey => $objValue) {
+            //skip the same field, is inserted somewhere else
+            if($strKey == $strField)
+                continue;
+
+            if($intI == $intPos) {
+                $arrNewOrder[$strField] = $objField;
+                $objField = null;
+            }
+
+
+            $arrNewOrder[$strKey] = $objValue;
+
+            $intI++;
+        }
+
+        if($objField !== null)
+            $arrNewOrder[$strField] = $objField;
+
+
+        $this->arrFields = $arrNewOrder;
+    }
+
+
 
     /**
      * Loads the field-entry identified by the passed name.
@@ -369,6 +414,17 @@ class class_admin_formgenerator {
      */
     public function setBitHiddenElementsVisible($bitHiddenElementsVisible) {
         $this->bitHiddenElementsVisible = $bitHiddenElementsVisible;
+    }
+
+    /**
+     * @return \class_model
+     */
+    public function getObjSourceobject() {
+        return $this->objSourceobject;
+    }
+
+    public function getArrFields() {
+        return $this->arrFields;
     }
 
 

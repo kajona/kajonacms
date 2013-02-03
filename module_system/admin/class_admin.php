@@ -520,6 +520,7 @@ abstract class class_admin {
         $this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries(), $this->getArrModule("modul"));
         $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
         $this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
+        $this->arrOutput["actionTitle"] = $this->getOutputActionTitle();
         if(class_module_system_aspect::getObjectCount(true) > 1) {
             $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
         }
@@ -600,15 +601,14 @@ abstract class class_admin {
             //and finally create the object
             if($strElementClass != "") {
                 $objElement = new $strElementClass();
-                $strTextname = "quickhelp_" . $objElement->getArrModule("name");
+                $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $objElement->getArrModule("name"));
                 $strText = class_carrier::getInstance()->getObjLang()->getLang($strTextname, $objElement->getArrModule("modul"));
             }
         }
         else {
-            $strTextname = "quickhelp_" . $this->strAction;
+            $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $this->strAction);
             $strText = $this->getLang($strTextname);
         }
-
 
         if($strText != "!" . $strTextname . "!") {
             //Text found, embed the quickhelp into the current skin
@@ -661,6 +661,14 @@ abstract class class_admin {
         else {
             return $this->arrModule["modul"];
         }
+    }
+
+    /**
+     * Creates the action name to be rendered in the output, in most cases below the pathnavigation-bar
+     * @return string
+     */
+    protected function getOutputActionTitle() {
+        return $this->getOutputModuleTitle();
     }
 
     /**

@@ -19,7 +19,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
     const INT_LISTTYPE_FOLDER = "INT_LISTTYPE_FOLDER";
 
-    private $strPeAddon = "";
+    protected  $strPeAddon = "";
 
     /**
      * Constructor

@@ -94,7 +94,27 @@ class class_objectfactory {
         if(!$bitIgnoreCache && isset($this->arrObjectCache[$strSystemid]))
             return $this->arrObjectCache[$strSystemid];
 
+        $strClass = $this->getClassNameForId($strSystemid);
+        
         //load the object itself
+        if($strClass != "") {
+            $objReflection = new ReflectionClass($strClass);
+            $objObject = $objReflection->newInstance($strSystemid);
+            $this->arrObjectCache[$strSystemid] = $objObject;
+            return $objObject;
+        }
+
+        return null;
+    }
+    
+    
+    /**
+     * Get the class name for a system-id.
+     * 
+     * @param string $strSystemid
+     * @return string
+     */
+    public function getClassNameForId($strSystemid) {
         $strClass = "";
         if(isset($this->arrClassCache[$strSystemid])) {
             $strClass = $this->arrClassCache[$strSystemid];
@@ -108,15 +128,8 @@ class class_objectfactory {
                 $this->bitCacheSaveRequired = true;
             }
         }
-
-        if($strClass != "") {
-            $objReflection = new ReflectionClass($strClass);
-            $objObject = $objReflection->newInstance($strSystemid);
-            $this->arrObjectCache[$strSystemid] = $objObject;
-            return $objObject;
-        }
-
-        return null;
+        
+        return $strClass;
     }
 
 

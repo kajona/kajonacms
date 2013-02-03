@@ -639,6 +639,10 @@ abstract class class_root {
         if($strNewPrevid == "")
             $strNewPrevid = $this->strOldPrevId;
 
+        //any date-objects to copy?
+        if($this->objStartDate != null || $this->objEndDate != null || $this->objSpecialDate != null)
+            $this->bitDatesChanges = true;
+
         //prepare the current object
         $this->unsetSystemid();
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
@@ -1937,7 +1941,6 @@ abstract class class_root {
     public function setObjStartDate($objStartDate) {
         $this->bitDatesChanges = true;
         $this->objStartDate = $objStartDate;
-
     }
 
     /**
