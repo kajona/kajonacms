@@ -7,7 +7,7 @@ class class_test_adminFormsTest extends class_testbase  {
 
     public function testFormManager() {
 
-        $objFormManager = new class_admin_formgenerator("test", new B());
+        $objFormManager = new class_admin_formgenerator("test", new AdminFormB());
 
         $objFormManager->generateFieldsFromObject();
 
@@ -41,7 +41,7 @@ class class_test_adminFormsTest extends class_testbase  {
 
 //set up test-structures
 
-class A extends class_model {
+class AdminFormA extends class_model {
 
     /**
      * @var
@@ -86,7 +86,7 @@ class A extends class_model {
 
 }
 
-class B extends A {
+class AdminFormB extends AdminFormA {
 
     /**
      * @var
