@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["liste_leer"]                      = "Нет постов в наличии";
@@ -18,6 +18,6 @@ $lang["postacomment_dofilter"]           = "Фильтровать";
 $lang["postacomment_edit"]               = "Изменить комментарий";
 $lang["postacomment_filter"]             = "Фильтр страницы:";
 $lang["postacomment_title"]              = "Тема:";
-$lang["quickhelp_editPost"]              = "Здесь Вы можете изменить комментарий.";
+$lang["quickhelp_edit_post"]             = "Здесь Вы можете изменить комментарий.";
 $lang["quickhelp_list"]                  = "Все комментарии, оставленные пользователями при использовании портала, отображены здесь.<br />Ряд имеет следущую структуру:<br /><br />Имя страницы (Язык) | Дата <br />Имя пользователя | Тема <br />Сообщение <br /><br />При использовании фильтра страницы в начале списка, посты могут быть отфильтрованы по каждой странице. Длинные комментарии обрезаются так, что используйте функцию прочтения сообщения целиком.";
 $lang["required_postacomment_comment"]   = "Комментарий";

@@ -43,7 +43,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listElements", "", $this->getLang("modul_elemente"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getLang("modul_element_neu"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "updatePlaceholder", "", $this->getLang("updatePlaceholder"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "updatePlaceholder", "", $this->getLang("action_update_placeholder"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;

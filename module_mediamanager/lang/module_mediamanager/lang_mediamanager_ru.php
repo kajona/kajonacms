@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionLogbook"]                   = "Системный журнал";
-$lang["actionLogbookFlush"]              = "Очистить системный журнал";
-$lang["actionMasssync"]                  = "Все синхронезировать";
-$lang["actionOpenFolder"]                = "Показать папку";
+$lang["action_logbook"]                  = "Системный журнал";
+$lang["action_logbook_flush"]            = "Очистить системный журнал";
+$lang["action_mass_sync"]                = "Все синхронезировать";
+$lang["action_open_folder"]              = "Показать папку";
 $lang["cropImage"]                       = "Кроп изображения";
 $lang["cropImageAccept"]                 = "Сохранить кроп";
 $lang["cropWarningCrop"]                 = "Кроп";

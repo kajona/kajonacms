@@ -97,9 +97,9 @@ abstract class class_admin_simple extends class_admin {
     /**
      * Returns the action name for a given class name.
      * 
-     * @param string Action name
-     * @param string Class name
-     * @return string Class specific action name
+     * @param string $strAction
+     * @param interface_model $objInstance
+     * @return string specific action name
      */
     protected function getActionNameForClass($strAction, $objInstance) {
         return $strAction;
@@ -481,11 +481,15 @@ abstract class class_admin_simple extends class_admin {
         if($this->getObjModule()->rightEdit()) {
             if($bitDialog)
                 return $this->objToolkit->listButton(
-                    getLinkAdminDialog($this->getArrModule("modul"), $this->getActionNameForClass("new", null), $this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png")
+                    getLinkAdminDialog(
+                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png"
+                    )
                 );
             else
                 return $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), $this->getActionNameForClass("new", null), $this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png")
+                    getLinkAdmin(
+                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png"
+                    )
                 );
         }
         return "";

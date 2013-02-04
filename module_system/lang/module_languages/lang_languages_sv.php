@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["default"]                         = "Ja";
@@ -59,6 +59,6 @@ $lang["modul_rechte"]                    = "Modulrättigheter";
 $lang["modul_titel"]                     = "Språk";
 $lang["module_action_new"]               = "Skapa språk";
 $lang["nondefault"]                      = "Nej";
-$lang["quickhelp_editLanguage"]          = "För att skapa eller redigera ett existerande språk kan detta formulär användas för att ange grunddata.<br />Listan av språk kan inte utvidgas här, detta måste göras av en administratör.";
+$lang["quickhelp_edit_language"]         = "För att skapa eller redigera ett existerande språk kan detta formulär användas för att ange grunddata.<br />Listan av språk kan inte utvidgas här, detta måste göras av en administratör.";
 $lang["quickhelp_list"]                  = "Samtliga skapade språk skapade i systemet återfinns in denna lista. Föra att ändra systemets förvalda språk måste grunddata i det nya förvalda språket ändras.";
-$lang["quickhelp_newLanguage"]           = "För att skapa eller redigera ett existerande språk kan detta formulär användas för att ange grunddata.<br />Listan av språk kan inte utvidgas här, detta måste göras av en administratör.";
+$lang["quickhelp_new_language"]          = "För att skapa eller redigera ett existerande språk kan detta formulär användas för att ange grunddata.<br />Listan av språk kan inte utvidgas här, detta måste göras av en administratör.";

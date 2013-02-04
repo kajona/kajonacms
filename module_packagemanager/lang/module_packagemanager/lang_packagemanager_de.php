@@ -11,12 +11,12 @@
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack:";
-$lang["actionList"]                      = "Installierte Pakete";
-$lang["actionListTemplates"]             = "Installierte Templates";
-$lang["actionUploadPackage"]             = "Neues / Aktualisiertes Paket installieren";
+$lang["action_list"]                     = "Installierte Pakete";
+$lang["action_list_templates"]           = "Installierte Templates";
+$lang["action_upload_package"]           = "Neues / Aktualisiertes Paket installieren";
 $lang["action_download"]                 = "Template-Pack herunterladen";
-$lang["all"]                             = "Alle";
 $lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
+$lang["all"]                             = "Alle";
 $lang["delete_question"]                 = "Möchten Sie das Template-Pack &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 $lang["element"]                         = "Element";
 $lang["filter"]                          = "Filtern";
@@ -46,12 +46,13 @@ $lang["package_install_success"]         = "Paket wurde installiert";
 $lang["package_installocally"]           = "Paket installieren/aktualisieren";
 $lang["package_minversion"]              = "Minimale System-Version:";
 $lang["package_modules"]                 = "Erforderliche Module:";
-$lang["package_screenshots"]                 = "Screenshots:";
 $lang["package_notinstallable"]          = "Paket kann nicht installiert werden.";
 $lang["package_noupdate"]                = "Es liegt keine neuere Version vor. Aktuellste Version:";
 $lang["package_noversion"]               = "Das System konnte kein passendes, verfügbares Paket ermitteln";
 $lang["package_remote_errorloading"]     = "Fehler bei der Abfrage der verfügbaren Pakete.";
+$lang["package_screenshots"]             = "Screenshots:";
 $lang["package_searchupdate"]            = "Suche nach Updates läuft...";
+$lang["package_target_nonwritablelist"]  = "Folgende Dateien und Ordner sind nicht beschreibbar und könnten zum Scheitern der Installation/des Updates führen:";
 $lang["package_target_writable"]         = "Für die Installation werden Schreibrechte auf folgendem Ordner benötigt:";
 $lang["package_type"]                    = "Typ:";
 $lang["package_updatefound"]             = "Update des Pakets auf die neuste Version ";
@@ -65,17 +66,18 @@ $lang["provider_local"]                  = "Upload auf das System";
 $lang["provider_local_file"]             = "Datei:";
 $lang["provider_local_uploadhint"]       = "Upload von ZIP-Paketen auf das System. Pakete können sowohl Templates, Module als auch Elemente sein. Pakete müssen eine Datei metadata.xml beinhalten.";
 $lang["provider_select"]                 = "Provider auswählen";
+$lang["quickhelp_new"]                   = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
 $lang["systemtask_templatepackimport_name"] = "Template-Pack importieren";
 $lang["template"]                        = "Template";
 $lang["tutorial"]                        = "Tutorial";
 $lang["type"]                            = "Typ";
+$lang["type_ELEMENT"]                    = "Element-Paket";
 $lang["type_MODULE"]                     = "Modul-Paket";
-$lang["type_ELEMENT"]                     = "Element-Paket";
 $lang["type_TEMPLATE"]                   = "Template-Pack";
 $lang["update_notification_intro"]       = "Für ein installiertes Paket ist eine neue Version verfügbar.";
 $lang["update_notification_package"]     = "Betreffendes Paket:";
 $lang["update_notification_verav"]       = "Verfügbare Version:";
 $lang["update_notification_verinst"]     = "Installierte Version:";
-$lang["quickhelp_new"]                   = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
+
+//non-editable entries
 $lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
-$lang["package_target_nonwritablelist"]  = "Folgende Dateien und Ordner sind nicht beschreibbar und könnten zum Scheitern der Installation/des Updates führen:";

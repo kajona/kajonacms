@@ -10,22 +10,22 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionAddToFavorites"]            = "Als Favorit ablegen";
-$lang["actionListFavorites"]             = "Favoriten anzeigen";
-$lang["actionShowAll"]                   = "Alle Tags anzeigen";
-$lang["actionShowAssignedRecords"]       = "Zugewiesene Datensätze anzeigen";
+$lang["action_add_to_favorites"]         = "Als Favorit ablegen";
+$lang["action_list_favorites"]           = "Favoriten anzeigen";
+$lang["action_show_all"]                 = "Alle Tags anzeigen";
+$lang["action_show_assigned_records"]    = "Zugewiesene Datensätze anzeigen";
 $lang["adminskin_tooltip"]               = "Favoriten anzeigen";
 $lang["button_add"]                      = "Hinzufügen";
 $lang["delete_question"]                 = "Möchten Sie den Tag &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["delete_question_fav"]             = "Möchten Sie den Favoriten &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["form_tag_name"]                   = "Tag-Name";
+$lang["form_tag_private"]                = "Private Zuweisungen";
 $lang["modul_titel"]                     = "Tags";
 $lang["required_tag_name"]               = "Tag-Name";
 $lang["tag_assignments"]                 = "Zuweisungen";
 $lang["tag_edit"]                        = "Bearbeiten";
 $lang["tag_name_hint"]                   = "Mehrere Tags können in Form einer kommaseparierten Liste eingegeben werden";
 $lang["tagsection_header"]               = "Tags";
-$lang["form_tag_private"]                = "Private Zuweisungen";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Favoriten", 5 => "", 6 => "", 7 => "", 8 => "");

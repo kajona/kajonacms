@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Antal sekunder:";
@@ -48,7 +48,7 @@ $lang["modul_titel"]                     = "Statistik";
 $lang["modul_worker"]                    = "Arbetare";
 $lang["module_description"]              = "Denna modul använder siga av pChart för att generera grafiken";
 $lang["quickhelp_list"]                  = "Statistiken ger in inblick i olika loggfiler i systemet. Uppgifterna från dessa sammanställs och utvärderas på olika sätt.";
-$lang["quickhelp_statsCommon"]           = "Statistiken ger in inblick i olika loggfiler i systemet. Uppgifterna från dessa sammanställs och utvärderas på olika sätt.";
+$lang["quickhelp_stats_common"]          = "Statistiken ger in inblick i olika loggfiler i systemet. Uppgifterna från dessa sammanställs och utvärderas på olika sätt.";
 $lang["referer_direkt"]                  = "Direkt tillgång";
 $lang["start"]                           = "Start:";
 $lang["stats_hint_task"]                 = "Notera: För denna rapport måste den uppsamlade datan prepareras. Detta är möjligt genom en system-task i modulen system.";

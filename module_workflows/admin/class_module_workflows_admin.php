@@ -38,7 +38,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "myList", "", $this->getLang("module_mylist"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right1", getLinkAdmin($this->getArrModule("modul"), "listHandlers", "", $this->getLang("actionListHandlers"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", getLinkAdmin($this->getArrModule("modul"), "listHandlers", "", $this->getLang("action_list_handlers"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         //$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "triggerWorkflows", "", $this->getLang("module_trigger"), "", "", true, "adminnavi"));
@@ -304,7 +304,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_workflows_handler) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionEditHandler"), "icon_edit.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit.png"));
         }
         return parent::renderEditAction($objListEntry, $bitDialog);
     }
@@ -371,7 +371,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionInstantiateHandler"), "icon_workflowTrigger.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger.png"))
             );
         }
         if($objListEntry instanceof class_module_workflows_workflow) {
@@ -381,7 +381,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
             }
 
             if($objListEntry->rightEdit()) {
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionShowDetails"), "icon_lens.png"));
+                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_show_details"), "icon_lens.png"));
             }
 
             return $arrReturn;
@@ -411,7 +411,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     protected function actionListHandlers() {
         class_module_workflows_handler::synchronizeHandlerList();
 
-        $strReturn = $this->objToolkit->formHeadline($this->getLang("actionListHandlers"));
+        $strReturn = $this->objToolkit->formHeadline($this->getLang("action_list_handlers"));
 
         $objIterator = new class_array_section_iterator(class_module_workflows_handler::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));

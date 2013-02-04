@@ -19,6 +19,8 @@
  *
  * @objectListPost class_module_guestbook_post
  * @objectEditPost class_module_guestbook_post
+ *
+ * @autoTestable list,new
  */
 class class_module_guestbook_admin extends class_admin_evensimpler implements interface_admin {
 
@@ -34,7 +36,7 @@ class class_module_guestbook_admin extends class_admin_evensimpler implements in
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("actionNew"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("action_new"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
@@ -51,7 +53,7 @@ class class_module_guestbook_admin extends class_admin_evensimpler implements in
         if($objListEntry instanceof class_module_guestbook_guestbook) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->arrModule["modul"], "listPost", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("actionViewGuestbook"), "icon_bookLens.png")
+                    getLinkAdmin($this->arrModule["modul"], "listPost", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_view_guestbook"), "icon_bookLens.png")
                 )
             );
         }

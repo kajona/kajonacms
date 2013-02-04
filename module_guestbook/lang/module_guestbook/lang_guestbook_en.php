@@ -10,8 +10,9 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionNew"]                       = "New guestbook";
-$lang["actionViewGuestbook"]             = "View guestbook";
+$lang["action_new"]                      = "New guestbook";
+$lang["action_view_guestbook"]           = "View guestbook";
+$lang["deletePost_question"]             = "Do you really want to delete the post &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_question"]                 = "Do you really want to delete the guestbook &quot;<b>%%element_name%%</b>&quot; with all entries?";
 $lang["edit_post"]                       = "Edit";
 $lang["eintragen"]                       = "Create entry";
@@ -31,7 +32,6 @@ $lang["modul_titel"]                     = "Guestbooks";
 $lang["modul_titel_post"]                = "Guestbook-Posts";
 $lang["new_post_mail"]                   = "A new post was added to a guestbook.\n\n";
 $lang["post_liste_leer"]                 = "No posts available";
-$lang["deletePost_question"]             = "Do you really want to delete the post &quot;<b>%%element_name%%</b>&quot;?";
 $lang["post_mail_text"]                  = "E-Mail";
 $lang["post_message_text"]               = "Message";
 $lang["post_name_from"]                  = "from";
@@ -39,11 +39,11 @@ $lang["post_name_text"]                  = "Name";
 $lang["post_page_text"]                  = "Website";
 $lang["post_submit_text"]                = "Submit!";
 $lang["post_text"]                       = "Message";
-$lang["quickhelp_deletePost"]            = "If you want to delete the current post, confirm this action now.";
-$lang["quickhelp_editGuestbook"]         = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
+$lang["quickhelp_delete_post"]           = "If you want to delete the current post, confirm this action now.";
+$lang["quickhelp_edit_guestbook"]        = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
 $lang["quickhelp_list"]                  = "All guestbooks created can be found in this list.";
-$lang["quickhelp_newGuestbook"]          = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
-$lang["quickhelp_viewGuestbook"]         = "In this list, all posts belonging to the current guestbook are listed. Posts can be deleted, activated or inactivated.";
+$lang["quickhelp_new_guestbook"]         = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
+$lang["quickhelp_view_guestbook"]        = "In this list, all posts belonging to the current guestbook are listed. Posts can be deleted, activated or inactivated.";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sign", 5 => "", 6 => "", 7 => "", 8 => "");

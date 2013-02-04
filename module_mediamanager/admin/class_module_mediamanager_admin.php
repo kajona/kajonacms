@@ -38,10 +38,10 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("actionNew"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getLang("action_new"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getLang("actionMassSync"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "logbook", "", $this->getLang("actionLogbook"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getLang("action_mass_sync"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "logbook", "", $this->getLang("action_logbook"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
@@ -57,12 +57,12 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
 
         if($objListEntry instanceof class_module_mediamanager_repo)
             return array($this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")
+                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
             ));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
             return array($this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")
+                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
             ));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
@@ -70,7 +70,7 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             $arrMime  = $this->objToolkit->mimeType($objListEntry->getStrFilename());
             if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
                 return array($this->objToolkit->listButton(
-                    getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("actionEditImage"), "icon_crop.png", $objListEntry->getStrDisplayName())
+                    getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("action_edit_image"), "icon_crop.png", $objListEntry->getStrDisplayName())
                 ));
             }
 
@@ -692,7 +692,7 @@ HTML;
                             "folderContentFolderviewMode",
                             "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(),
                             "",
-                            $this->getLang("actionOpenFolder"),
+                            $this->getLang("action_open_folder"),
                             "icon_folderActionOpen.png"
                         )
                     );
@@ -740,7 +740,7 @@ HTML;
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
                             $strActions .= $this->objToolkit->listButton(
-                                getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("actionOpenFolder"), "icon_folderActionOpen.png")
+                                getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
                             );
 
                         $strValue = $objOneFile->getStrFilename();
@@ -843,8 +843,8 @@ HTML;
                         $this->arrModule["modul"],
                         "folderListFolderview",
                         "&folder=".$strFolder."/".$strFolderCur."&form_element=".$strFormElement,
-                        $this->getLang("actionOpenFolder"),
-                        $this->getLang("actionOpenFolder"),
+                        $this->getLang("action_open_folder"),
+                        $this->getLang("action_open_folder"),
                         "icon_folderActionOpen.png"
                     )
                 );

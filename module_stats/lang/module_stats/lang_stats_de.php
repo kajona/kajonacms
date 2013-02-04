@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Anzahl Sekunden:";
@@ -51,7 +51,8 @@ $lang["modul_titel"]                     = "Statistiken";
 $lang["modul_worker"]                    = "Worker";
 $lang["module_description"]              = "Dieses Modul verwendet pChart zur Erzeugung von Diagrammen";
 $lang["quickhelp_list"]                  = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
-$lang["quickhelp_statsCommon"]           = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
+$lang["quickhelp_stats_common"]          = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
+$lang["quickhelp_stats_top_sessions"]    = "Listet die Sessions im Zeitraum auf";
 $lang["referer_direkt"]                  = "Direktzugriff";
 $lang["start"]                           = "Start:";
 $lang["stats_hint_task"]                 = "Hinweis: Diese Auswertung benötigt eine Aufbereitung der gesammelten Daten. Dies ist über einen System-Task im Modul 'System' möglich.";

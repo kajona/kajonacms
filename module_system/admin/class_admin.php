@@ -606,7 +606,7 @@ abstract class class_admin {
             }
         }
         else {
-            $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $this->strAction);
+            $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $this->getAction());
             $strText = $this->getLang($strTextname);
         }
 
@@ -626,7 +626,7 @@ abstract class class_admin {
         );
 
         //see, if the current action may be mapped
-        $strActionName = "action" . ucfirst($this->getAction());
+        $strActionName = $this->getObjLang()->stringToPlaceholder("action_".$this->getAction());
         $strAction = $this->getLang($strActionName);
         if($strAction != "!" . $strActionName . "!") {
             $arrReturn[] = getLinkAdmin($this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid(), $strAction);

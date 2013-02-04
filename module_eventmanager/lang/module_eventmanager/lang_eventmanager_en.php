@@ -10,7 +10,10 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["module_action_new"]               = "New event";
+$lang["action_list_participant"]         = "List participants";
+$lang["action_new"]                      = "New event";
+$lang["action_new_participant"]          = "New participant";
+$lang["action_list"]                     = "List";
 $lang["cal_today"]                       = "Today";
 $lang["calendar_filter_event"]           = "Events";
 $lang["calendar_type_event"]             = "Event";
@@ -19,14 +22,13 @@ $lang["comment"]                         = "Comment:";
 $lang["currentParticipants"]             = "Current number of participants:";
 $lang["dateTimeFrom"]                    = "From:";
 $lang["dateTimeUntil"]                   = "Until:";
+$lang["delete_question"]                 = "Do you really want to delete the event &quot;<b>%%element_name%%</b>&quot; with all participants?";
 $lang["detailslink"]                     = "Show details";
 $lang["email"]                           = "Email:*";
-$lang["delete_question"]                 = "Do you really want to delete the event &quot;<b>%%element_name%%</b>&quot; with all participants?";
 $lang["event_edit"]                      = "Edit event";
 $lang["event_end"]                       = "Enddate:";
 $lang["event_limitparticipants"]         = "Limit number of participants:";
 $lang["event_limitparticipants_hint"]    = "Only relevant if registration required";
-$lang["actionListParticipants"]          = "List participants";
 $lang["event_location"]                  = "Location:";
 $lang["event_maxparticipants"]           = "Maximum number of participants:";
 $lang["event_maxparticipants_hint"]      = "Only relevant if registration required and participant limit available";
@@ -44,7 +46,7 @@ $lang["list_participants_empty"]         = "No participants available";
 $lang["location"]                        = "Location:";
 $lang["maximumParticipants"]             = "Maximum number of participants:";
 $lang["modul_titel"]                     = "Events";
-$lang["actionNewEvent"]                  = "New event";
+$lang["modul_titel_participant"]         = "Participant";
 $lang["noForename"]                      = "Missin forename";
 $lang["noLastname"]                      = "Missing lastname";
 $lang["participantErrorConfirmation"]    = "Invalid data. Your registration could not be confirmed.";
@@ -52,8 +54,7 @@ $lang["participantLimitReached"]         = "The maximum number of participants w
 $lang["participantSuccessConfirmation"]  = "Your registration was successfull. Thank you!";
 $lang["participantSuccessMail"]          = "Thank your for your registration. You'll receive an email containing a confirmation-link within the next minutes.";
 $lang["participant_comment"]             = "Comment:";
-$lang["actionNewParticipant"]            = "New participant";
-$lang["participant_delete_question"]     = "Do you really want to delete the participant &quot;<b>%%element_name%%</b>&quot;?";
+$lang["delete_participant_question"]     = "Do you really want to delete the participant &quot;<b>%%element_name%%</b>&quot;?";
 $lang["participant_edit"]                = "Edit participant";
 $lang["participant_email"]               = "Email address:";
 $lang["participant_forename"]            = "Forename:";
@@ -66,13 +67,13 @@ $lang["participants_info_limit"]         = "Maximum number of participants for t
 $lang["participants_info_nolimit"]       = "No limit of participants defined for this event.";
 $lang["phone"]                           = "Phone:";
 $lang["quickhelp_list"]                  = "All events available are shown in this list.";
-$lang["quickhelp_listParticipants"]      = "All participants for a single event are shown in the list.<br />Participants listed as 'inactive' did not yet confirm the participation.";
+$lang["quickhelp_list_participants"]     = "All participants for a single event are shown in the list.<br />Participants listed as 'inactive' did not yet confirm the participation.";
 $lang["registerMailBodyIntro"]           = "Please confirm your registration for the following event. Therefore a link is attached at the end of the mail.<br /><br />";
 $lang["registerMailSubject"]             = "Please confirm your registration";
 $lang["registerSubmit"]                  = "Register";
 $lang["registerlink"]                    = "Register";
-$lang["show_history"]                    = "Show change-history";
 $lang["rssfeed"]                         = "Show rssfeed of event";
+$lang["show_history"]                    = "Show change-history";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Participate", 5 => "", 6 => "", 7 => "", 8 => "");

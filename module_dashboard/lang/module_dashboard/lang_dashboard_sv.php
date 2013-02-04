@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionCalendar"]                  = "Kalender";
-$lang["addWidget"]                       = "Infoga widget";
+$lang["action_calendar"]                 = "Kalender";
+$lang["action_add_widget"]               = "Infoga widget";
 $lang["addWidgetNextStep"]               = "Nästa";
 $lang["addWidgetSave"]                   = "Spara";
 $lang["calendar_next"]                   = "Nästa månad  &gt;&gt;";
@@ -25,8 +25,7 @@ $lang["editWidget"]                      = "Redigera widget";
 $lang["errorSavingWidget"]               = "Fel vid sparande av widget";
 $lang["fehler_recht"]                    = "Inte tillräckliga rättigheter";
 $lang["modul_titel"]                     = "Översikt";
-$lang["moduleRights"]                    = "Rättigheter";
-$lang["quickhelp_addWidgetToDashboard"]  = "Att infoga en widget i Instrumentpanelen är en tvåstegsprocess. I första steget väljs den widget som skall läggas till samt i vilken kolumn den skall vara. I andra steget kan man konfigurera widgeten.";
+$lang["quickhelp_add_widget_to_dashboard"] = "Att infoga en widget i Instrumentpanelen är en tvåstegsprocess. I första steget väljs den widget som skall läggas till samt i vilken kolumn den skall vara. I andra steget kan man konfigurera widgeten.";
 $lang["quickhelp_list"]                  = "I instrumentpanelen kan alla sorters widgets läggas. En widget är ett litet program som presenterar någon information på skärmen. Dessa widgets kan sorteras, redigeras och tas bort direkt på instrumentpanelen. En ny widget läggs till med kommandot \"lägg till widget\".";
 $lang["setDashboardPosition"]            = "Sparande av ny position lyckades";
 $lang["widget"]                          = "Widget:";

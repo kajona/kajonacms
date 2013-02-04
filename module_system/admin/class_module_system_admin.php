@@ -30,17 +30,17 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("actionList"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getLang("actionSystemInfo"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getLang("actionSystemSettings"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getLang("actionSystemTasks"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getLang("actionSystemlog"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getLang("action_system_info"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getLang("action_system_settings"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getLang("action_system_tasks"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getLang("action_systemlog"), "", "", true, "adminnavi"));
         if(_system_changehistory_enabled_ != "false")
-            $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "&bitBlockFolderview=true", $this->getLang("actionChangelog"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getLang("actionAspects"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("actionSystemSessions"), "", "", true, "adminnavi"));
+            $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "&bitBlockFolderview=true", $this->getLang("action_changelog"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getLang("action_aspects"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("action_system_sessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getLang("actionAbout"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getLang("action_about"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0", $this->getLang("modul_rechte_root"), "", "", true, "adminnavi"));

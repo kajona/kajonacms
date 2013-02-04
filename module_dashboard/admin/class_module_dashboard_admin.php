@@ -34,12 +34,12 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("actionCalendar"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
         //$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "sitemap", "", $this->getLang("actionSitemap"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("addWidget"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("action_add_widget"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("moduleRights"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 

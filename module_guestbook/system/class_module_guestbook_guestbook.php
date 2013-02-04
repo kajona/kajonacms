@@ -45,11 +45,11 @@ class class_module_guestbook_guestbook extends class_model implements interface_
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-		$this->setArrModuleEntry("moduleId", _guestbook_module_id_);
-		$this->setArrModuleEntry("modul", "guestbook");
+        $this->setArrModuleEntry("moduleId", _guestbook_module_id_);
+        $this->setArrModuleEntry("modul", "guestbook");
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
     }
 
     /**

@@ -11,9 +11,9 @@
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Active template-pack:";
-$lang["actionList"]                      = "Installed packages";
-$lang["actionListTemplates"]             = "Installed templates";
-$lang["actionUploadPackage"]             = "Install/Update a package";
+$lang["action_list"]                     = "Installed packages";
+$lang["action_list_templates"]           = "Installed templates";
+$lang["action_upload_package"]           = "Install/Update a package";
 $lang["action_download"]                 = "Download template-pack";
 $lang["action_new_copy"]                 = "Create a new template-pack";
 $lang["all"]                             = "All";
@@ -46,12 +46,13 @@ $lang["package_install_success"]         = "Package installed";
 $lang["package_installocally"]           = "Install package";
 $lang["package_minversion"]              = "Minimal system-version:";
 $lang["package_modules"]                 = "Required modules:";
-$lang["package_screenshots"]             = "Screenshots:";
 $lang["package_notinstallable"]          = "Package can't be installed.";
 $lang["package_noupdate"]                = "There's no new version available. Latest version:";
 $lang["package_noversion"]               = "The system failed to find a matching remote package";
 $lang["package_remote_errorloading"]     = "Error loading the list of packages.";
+$lang["package_screenshots"]             = "Screenshots:";
 $lang["package_searchupdate"]            = "Searching for updates...";
+$lang["package_target_nonwritablelist"]  = "The following files and folders are not writable and may cause the installation/the update to fail:";
 $lang["package_target_writable"]         = "To install the package, write permissions are required in the following directory:";
 $lang["package_type"]                    = "Type:";
 $lang["package_updatefound"]             = "Update the package to the latest version ";
@@ -65,17 +66,18 @@ $lang["provider_local"]                  = "Upload to the system";
 $lang["provider_local_file"]             = "File:";
 $lang["provider_local_uploadhint"]       = "Upload ZIP-Packages to the system. Packages may be templates, modules or elements. Packages have to contain a file metadata.xml.";
 $lang["provider_select"]                 = "Select provider";
+$lang["quickhelp_new"]                   = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
 $lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
 $lang["template"]                        = "Template";
 $lang["tutorial"]                        = "Tutorial";
 $lang["type"]                            = "Type";
-$lang["type_MODULE"]                     = "Module-package";
 $lang["type_ELEMENT"]                    = "Element-package";
+$lang["type_MODULE"]                     = "Module-package";
 $lang["type_TEMPLATE"]                   = "Template-pack";
 $lang["update_notification_intro"]       = "A new version is available for an installed package.";
 $lang["update_notification_package"]     = "Respective package:";
 $lang["update_notification_verav"]       = "Available version:";
 $lang["update_notification_verinst"]     = "Installed version:";
-$lang["quickhelp_new"]                   = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
+
+//non-editable entries
 $lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
-$lang["package_target_nonwritablelist"]  = "The following files and folders are not writable and may cause the installation/the update to fail:";

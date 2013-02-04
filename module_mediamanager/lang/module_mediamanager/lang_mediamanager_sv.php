@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionLogbook"]                   = "Loggbok";
-$lang["actionLogbookFlush"]              = "Töm loggbok";
-$lang["actionMasssync"]                  = "Synkronisera alla";
-$lang["actionOpenFolder"]                = "Visa mapp";
+$lang["action_logbook"]                  = "Loggbok";
+$lang["action_logbook_flush"]            = "Töm loggbok";
+$lang["action_mass_sync"]                = "Synkronisera alla";
+$lang["action_open_folder"]              = "Visa mapp";
 $lang["backlink"]                        = "Föregående";
 $lang["cropImage"]                       = "Beskär bild";
 $lang["cropImageAccept"]                 = "Spara beskärning";

@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionLogbook"]                   = "Дневник";
-$lang["actionLogbookFlush"]              = "Изчисти дневника";
-$lang["actionMasssync"]                  = "Синхронизирай всички";
-$lang["actionOpenFolder"]                = "Покажи папка";
+$lang["action_logbook"]                  = "Дневник";
+$lang["action_logbook_flush"]            = "Изчисти дневника";
+$lang["action_mass_sync"]                = "Синхронизирай всички";
+$lang["action_open_folder"]              = "Покажи папка";
 $lang["cropImage"]                       = "Отрежи изображение";
 $lang["cropImageAccept"]                 = "Запази изрязването";
 $lang["cropWarningCrop"]                 = "Изрежи";

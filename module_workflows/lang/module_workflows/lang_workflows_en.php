@@ -10,8 +10,12 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["action_edit_handler"]             = "Edit default values";
+$lang["action_instantiate_handler"]      = "Create a new workflow instance";
+$lang["action_list_handlers"]            = "Workflow-Handlers";
+$lang["action_show_details"]             = "Show details";
+$lang["delete_question"]                 = "Do you really want to delete the workflow &quot;<b>%%element_name%%</b>&quot;?";
 $lang["header_list_all"]                 = "All workflows";
-$lang["actionListHandlers"]              = "Workflow-Handlers";
 $lang["header_list_my"]                  = "My workflows";
 $lang["instance_responsible"]            = "Responsible person:";
 $lang["instance_responsible_hint"]       = "If the workflow requires the interaction with a person or if the workflow should be assigned to a single user, the user may be set up here.";
@@ -24,7 +28,7 @@ $lang["module_mylist"]                   = "My workflows";
 $lang["module_trigger"]                  = "Trigger workflows";
 $lang["myList_empty"]                    = "No workflows to process available.";
 $lang["quickhelp_list"]                  = "On the page \"all workflows\" all workflows known by the system are listed, so open, scheduled or finished ones.<br /> The workflows are listed by its due-date.";
-$lang["quickhelp_myList"]                = "The list \"my workflows\" shows all workflows relevant for the user currently being logged in.";
+$lang["quickhelp_my_list"]               = "The list \"my workflows\" shows all workflows relevant for the user currently being logged in.";
 $lang["systemtask_runworkflows_name"]    = "Run workflows";
 $lang["workflow_char1"]                  = "Char 1:";
 $lang["workflow_char2"]                  = "Char 2:";
@@ -33,11 +37,7 @@ $lang["workflow_date1"]                  = "Date 1:";
 $lang["workflow_date2"]                  = "Date 2:";
 $lang["workflow_dbdump_val1"]            = "Interval in hours:";
 $lang["workflow_dbdumps_title"]          = "Periodic database backup";
-$lang["delete_question"]                 = "Do you really want to delete the workflow &quot;<b>%%element_name%%</b>&quot;?";
-$lang["actionShowDetails"]               = "Show details";
 $lang["workflow_general"]                = "Common values";
-$lang["actionEditHandler"]               = "Edit default values";
-$lang["actionInstantiateHandler"]        = "Create a new workflow instance";
 $lang["workflow_handler_val1"]           = "Value 1:";
 $lang["workflow_handler_val2"]           = "Value 2:";
 $lang["workflow_handler_val3"]           = "Value 3:";

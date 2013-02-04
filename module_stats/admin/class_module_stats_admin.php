@@ -292,4 +292,22 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         return $arrReturn;
     }
 
+    protected function getOutputActionTitle() {
+        foreach($this->getReports() as $objOneReport) {
+            if($objOneReport->getReportCommand() == $this->getParam("action")) {
+                return $objOneReport->getReportTitle();
+            }
+        }
+
+        return parent::getOutputActionTitle();
+    }
+
+    protected function getQuickHelp() {
+        $strOldAction = $this->getAction();
+        $this->setAction($this->getParam("action"));
+        $strReturn = parent::getQuickHelp();
+        $this->setAction($strOldAction);
+        return $strReturn;
+    }
+
 }

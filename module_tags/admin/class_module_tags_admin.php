@@ -30,7 +30,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listFavorites", "", $this->getLang("actionListFavorites"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listFavorites", "", $this->getLang("action_list_favorites"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
@@ -63,8 +63,8 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("actionShowAssignedRecords"), $this->getLang("actionShowAssignedRecords"), "icon_folderActionOpen.png")),
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("actionAddToFavorites"), $this->getLang("actionAddToFavorites"), "icon_favorite.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_show_assigned_records"), $this->getLang("action_show_assigned_records"), "icon_folderActionOpen.png")),
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_add_to_favorites"), $this->getLang("action_add_to_favorites"), "icon_favorite.png"))
             );
         }
         else {

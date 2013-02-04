@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["actionCalendar"]                  = "Sitemap";
-$lang["addWidget"]                       = "Add widget";
+$lang["action_calendar"]                 = "Sitemap";
+$lang["action_add_widget"]               = "Add widget";
 $lang["addWidgetNextStep"]               = "Next";
 $lang["calendar_next"]                   = "next month &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; previous month";
@@ -24,8 +24,7 @@ $lang["editWidget"]                      = "Edit widget";
 $lang["errorSavingWidget"]               = "Error saving the widget";
 $lang["globalSearchPlaceholder"]         = "Searchquery";
 $lang["modul_titel"]                     = "Overview";
-$lang["moduleRights"]                    = "Permissions";
-$lang["quickhelp_addWidgetToDashboard"]  = "To add a widget to the dashboard, you have to run a process consisting of two steps. In the first step, choose the widget to add and the column to pin it. In the second step, the widget itself can be configured.";
+$lang["quickhelp_add_widget_to_dashboard"] = "To add a widget to the dashboard, you have to run a process consisting of two steps. In the first step, choose the widget to add and the column to pin it. In the second step, the widget itself can be configured.";
 $lang["quickhelp_list"]                  = "The dashboard is the place to pin every kind of widget. A widget is a small programm presenting a piece of information. The widgets can be sorted, edited and deleted right on the dashboard. To add new widgets, use the acion \"add widget\". ";
 $lang["setDashboardPosition"]            = "New position saved successful";
 $lang["widget"]                          = "Widget:";

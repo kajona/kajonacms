@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["delete_question"]                 = "Do you really want to delete the language &quot;<b>%%element_name%%</b>&quot;?";
@@ -51,6 +51,6 @@ $lang["language_isDefault"]              = "Default language";
 $lang["liste_leer"]                      = "No languages available";
 $lang["modul_titel"]                     = "Languages";
 $lang["module_action_new"]               = "Create language";
-$lang["quickhelp_editLanguage"]          = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
+$lang["quickhelp_edit_language"]         = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
 $lang["quickhelp_list"]                  = "All languages created can be found in this list. To change the systems default-language, the basic data of the future default-language have to be changed.";
-$lang["quickhelp_newLanguage"]           = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
+$lang["quickhelp_new_language"]          = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";

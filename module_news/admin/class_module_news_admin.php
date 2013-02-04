@@ -17,12 +17,15 @@
  * @objectListNews class_module_news_news
  * @objectNewNews class_module_news_news
  * @objectEditNews class_module_news_news
+ * @objectEdit class_module_news_news
  * @objectListCategory class_module_news_category
  * @objectNewCategory class_module_news_category
  * @objectEditCategory class_module_news_category
  * @objectListFeed class_module_news_feed
  * @objectNewFeed class_module_news_feed
  * @objectEditFeed class_module_news_feed
+ *
+ * @autoTestable listNews,newNews,listCategory,newCategory,listFeed,newFeed
  */
 class class_module_news_admin extends class_admin_evensimpler implements interface_admin, interface_calendarsource_admin {
 
@@ -39,7 +42,12 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     public function __construct() {
         $this->setArrModuleEntry("moduleId", _news_module_id_);
         $this->setArrModuleEntry("modul", "news");
+
         parent::__construct();
+
+        if($this->getAction() == "list")
+            $this->setAction("listNewsAndCategories");
+
     }
 
     public function getOutputModuleNavi() {
@@ -78,8 +86,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     
     
     protected function getActionNameForClass($strAction, $objInstance) {
-        if ($strAction == "list" && ($objInstance instanceof class_module_news_news
-                || $objInstance instanceof class_module_news_category)) {
+        if ($strAction == "list" && ($objInstance instanceof class_module_news_news || $objInstance instanceof class_module_news_category)) {
             return "listNewsAndCategories";
         }
         
@@ -92,7 +99,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new.png"));
         }
         else if($strListIdentifier == class_module_news_admin::STR_NEWS_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("actionNew"), $this->getLang("actionNew"), "icon_new.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new.png"));
         }
 
         return parent::getNewEntryAction($strListIdentifier, $bitDialog);

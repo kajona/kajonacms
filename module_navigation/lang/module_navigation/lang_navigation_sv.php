@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["browser"]                         = "Öppna filhanterare";
@@ -37,12 +37,12 @@ $lang["navigation_tagetblank"]           = "_blank (Nytt filhanteriingsfönster)
 $lang["navigation_tagetself"]            = "_self (I samma filhanteringsfönster)";
 $lang["navigation_target"]               = "Mål:";
 $lang["navigationp_anzeigen"]            = "Visa undermenypunkt";
-$lang["quickhelp_deleteNavi"]            = "Med denna åtgärd raderas en meny eller menypunkt med alla underliggande menyer från systemet. Denna åtgärd är oåterkallelig.";
-$lang["quickhelp_editNavi"]              = "För en ny meny behöver bara en titel för menyträdet anges. Med valet 'redigera' kan den senare ändras.";
-$lang["quickhelp_editNaviPoint"]         = "Vid skapande eller redigeriong av en menypunkt kan dess egenskaper ändras. Till dessa hör menypunktens namn, liksom den sida till vilken den skall länkas. För externa länkar kan fältet 'extern länk' användas. Om man vill visa en bild i stället för menynamnet så kan detta anges under 'bild'. Målet kan sedan anges i Länkmålet.";
+$lang["quickhelp_delete_navi"]           = "Med denna åtgärd raderas en meny eller menypunkt med alla underliggande menyer från systemet. Denna åtgärd är oåterkallelig.";
+$lang["quickhelp_edit_navi"]             = "För en ny meny behöver bara en titel för menyträdet anges. Med valet 'redigera' kan den senare ändras.";
+$lang["quickhelp_edit_navi_point"]       = "Vid skapande eller redigeriong av en menypunkt kan dess egenskaper ändras. Till dessa hör menypunktens namn, liksom den sida till vilken den skall länkas. För externa länkar kan fältet 'extern länk' användas. Om man vill visa en bild i stället för menynamnet så kan detta anges under 'bild'. Målet kan sedan anges i Länkmålet.";
 $lang["quickhelp_list"]                  = "Alla i systemet skapade menyträd och dess undermenyer visas i denna lista. Sortering av menypunkter kan sinsemellan ändras genom att klicka på pilarna i grafiken.";
-$lang["quickhelp_newNavi"]               = "För en ny meny behöver bara en titel för menyträdet anges. Med valet 'redigera' kan den senare ändras.";
-$lang["quickhelp_newNaviPoint"]          = "Vid skapande eller redigeriong av en menypunkt kan dess egenskaper ändras. Till dessa hör menypunktens namn, liksom den sida till vilken den skall länkas. För externa länkar kan fältet 'extern länk' användas. Om man vill visa en bild i stället för menynamnet så kan detta anges under 'bild'. Målet kan sedan anges i Länkmålet.";
+$lang["quickhelp_new_navi"]              = "För en ny meny behöver bara en titel för menyträdet anges. Med valet 'redigera' kan den senare ändras.";
+$lang["quickhelp_new_navi_point"]        = "Vid skapande eller redigeriong av en menypunkt kan dess egenskaper ändras. Till dessa hör menypunktens namn, liksom den sida till vilken den skall länkas. För externa länkar kan fältet 'extern länk' användas. Om man vill visa en bild i stället för menynamnet så kan detta anges under 'bild'. Målet kan sedan anges i Länkmålet.";
 $lang["required_navigation_name"]        = "Namn";
 $lang["speichern"]                       = "Spara";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Fel, internt och externt mål satt!";

@@ -53,8 +53,10 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @return string
      */
     public function action($strAction = "") {
-        if ($strAction == "") $strActionName = $this->getAction();
-        else $strActionName = $strAction;
+        if ($strAction == "")
+            $strActionName = $this->getAction();
+        else
+            $strActionName = $strAction;
 
         $this->strOriginalAction = $strActionName;
 
@@ -155,6 +157,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @throws class_exception
      * @return string
      * @permissions edit
+     *
+     * @autoTestable
      */
     protected function actionNew() {
         $strType = $this->getCurObjectClassName();
@@ -203,6 +207,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @throws class_exception
      * @return string
      * @permissions view
+     *
+     * @autoTestable
      */
     protected function actionList() {
         /** @var $strType interface_model|class_model */
@@ -299,7 +305,12 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @see class_admin_evensimpler::getOutputNaviEntry()
      */
     protected function getArrOutputNaviEntries() {
+
+        $strOldAction = $this->getAction();
+        $this->setAction($this->strOriginalAction);
         $arrPathLinks = parent::getArrOutputNaviEntries();
+        $this->setAction($strOldAction);
+
         $arrPath = $this->getPathArray($this->getSystemid());
         
         // Render additional navigation path entries for child objects.
