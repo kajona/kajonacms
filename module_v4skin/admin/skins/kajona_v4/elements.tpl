@@ -778,7 +778,7 @@ Part to display the login status, user is logged in
             else
                 $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
         });
-        $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,actionShowAll,messaging]</a></li>");
+        $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,action_show_all,messaging]</a></li>");
     });
 
     KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
@@ -786,7 +786,7 @@ Part to display the login status, user is logged in
             $.each($.parseJSON(data), function(index, item) {
                 $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
             });
-            $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='icon-tag'></i> [lang,actionShowAll,tags]</a></li>")
+            $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='icon-tag'></i> [lang,action_show_all,tags]</a></li>")
         }
     });
 </script>
