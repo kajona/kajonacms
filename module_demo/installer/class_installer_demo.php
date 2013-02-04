@@ -13,19 +13,16 @@
  * @package module_demo
  * @author tim.kiefer@kojikui.de
  */
-class class_installer_demo extends class_installer_base implements interface_installer
-{
+class class_installer_demo extends class_installer_base implements interface_installer {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR . "installer", _realpath_), array("", ""), __DIR__));
         $this->setArrModuleEntry("moduleId", _demo_module_id_);
         parent::__construct();
     }
 
-    public function install()
-    {
+    public function install() {
         $strReturn = "";
 
         //demo obj-------------------------------------------------------------------------------------
@@ -37,8 +34,9 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $arrFields["demo_float"] = array("double", true);
         $arrFields["demo_int"] = array("int", true);
 
-        if (!$this->objDB->createTable("demo_demo", $arrFields, array("demo_id")))
+        if(!$this->objDB->createTable("demo_demo", $arrFields, array("demo_id"))) {
             $strReturn .= "An error occured! ...\n";
+        }
 
         //other demo obj-------------------------------------------------------------------------------------
         $strReturn .= "Installing table demo_other_object...\n";
@@ -49,8 +47,9 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $arrFields["other_object_date"] = array("date", true);
         $arrFields["other_object_float"] = array("double", true);
 
-        if (!$this->objDB->createTable("demo_other_object", $arrFields, array("other_object_id")))
+        if(!$this->objDB->createTable("demo_other_object", $arrFields, array("other_object_id"))) {
             $strReturn .= "An error occured! ...\n";
+        }
 
         //sub demo obj-------------------------------------------------------------------------------------
         $strReturn .= "Installing table demo_sub_object...\n";
@@ -60,9 +59,9 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $arrFields["sub_object_title"] = array("char254", true);
         $arrFields["sub_object_int"] = array("int", true);
 
-        if (!$this->objDB->createTable("demo_sub_object", $arrFields, array("sub_object_id")))
+        if(!$this->objDB->createTable("demo_sub_object", $arrFields, array("sub_object_id"))) {
             $strReturn .= "An error occured! ...\n";
-
+        }
 
 
         //register the module
@@ -80,7 +79,7 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
 
         $strReturn .= "Setting aspect assignments...\n";
-        if (class_module_system_aspect::getAspectByName("content") != null) {
+        if(class_module_system_aspect::getAspectByName("content") != null) {
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
@@ -90,8 +89,7 @@ class class_installer_demo extends class_installer_base implements interface_ins
     }
 
 
-    public function update()
-    {
+    public function update() {
         $strReturn = "";
         //check installed version and to which version we can update
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -99,6 +97,5 @@ class class_installer_demo extends class_installer_base implements interface_ins
 
         return $strReturn . "\n\n";
     }
-
 
 }

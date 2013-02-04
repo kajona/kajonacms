@@ -24,7 +24,7 @@
  * @objectNewSubObject class_module_demo_sub_object
  * @objectEditSubObject class_module_demo_sub_object
  *
- * @autoTestable list,new,newOtherObject
+ * @autoTestable list,new,listOtherObject,newOtherObject,listSubObject,newSubObject
  */
 class class_module_demo_admin extends class_admin_evensimpler implements interface_admin {
 

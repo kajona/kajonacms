@@ -21,7 +21,7 @@
  * @objectNewAnswers class_module_votings_answer
  * @objectEditAnswers class_module_votings_answer
  *
- * @autoTestable list,new,newAnswer
+ * @autoTestable list,new,listAnswers,newAnswers
  */
 class class_module_votings_admin extends class_admin_evensimpler implements interface_admin {
 

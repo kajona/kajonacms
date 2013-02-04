@@ -157,8 +157,6 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @throws class_exception
      * @return string
      * @permissions edit
-     *
-     * @autoTestable
      */
     protected function actionNew() {
         $strType = $this->getCurObjectClassName();
@@ -207,8 +205,6 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @throws class_exception
      * @return string
      * @permissions view
-     *
-     * @autoTestable
      */
     protected function actionList() {
         /** @var $strType interface_model|class_model */

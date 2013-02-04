@@ -15,13 +15,11 @@
  * @author tim.kiefer@kojikui.de
  * @targetTable demo_demo.demo_id
  */
-class class_module_demo_demo extends class_model implements interface_model, interface_admin_listable
-{
+class class_module_demo_demo extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn demo_demo.demo_title
-     *
      * @fieldType textarea
      * @fieldMandatory
      * @fieldLabel commons_title
@@ -29,12 +27,11 @@ class class_module_demo_demo extends class_model implements interface_model, int
     private $strTitle = "";
 
 
-
     /**
      * The demo float
+     *
      * @var float
      * @tableColumn demo_demo.demo_float
-     *
      * @fieldType float
      */
     private $floatFloat = 0.0;
@@ -42,7 +39,6 @@ class class_module_demo_demo extends class_model implements interface_model, int
     /**
      * @var int
      * @tableColumn demo_demo.demo_int
-     *
      * @fieldType text
      */
     private $intInt;
@@ -53,8 +49,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
      *
      * @param string $strSystemid (use "" on new objects)
      */
-    public function __construct($strSystemid = "")
-    {
+    public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("moduleId", _demo_module_id_);
         $this->setArrModuleEntry("modul", "demo");
         parent::__construct($strSystemid);
@@ -88,8 +83,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
         return $this->intInt;
     }
 
-    public function initObjectInternal()
-    {
+    public function initObjectInternal() {
         parent::initObjectInternal();
     }
 
@@ -101,8 +95,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon()
-    {
+    public function getStrIcon() {
         return "icon_news.png";
     }
 
@@ -111,8 +104,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
      *
      * @return string
      */
-    public function getStrAdditionalInfo()
-    {
+    public function getStrAdditionalInfo() {
         return "";
     }
 
@@ -121,8 +113,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
      *
      * @return string
      */
-    public function getStrLongDescription()
-    {
+    public function getStrLongDescription() {
         return "";
     }
 
@@ -131,19 +122,16 @@ class class_module_demo_demo extends class_model implements interface_model, int
      *
      * @return string
      */
-    public function getStrDisplayName()
-    {
+    public function getStrDisplayName() {
         return $this->getStrTitle();
     }
 
 
-    public function getStrTitle()
-    {
+    public function getStrTitle() {
         return $this->strTitle;
     }
 
-    public function setStrTitle($strTitle)
-    {
+    public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
     }
 }

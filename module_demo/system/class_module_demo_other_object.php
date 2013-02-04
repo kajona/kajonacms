@@ -31,7 +31,7 @@ class class_module_demo_other_object extends class_model implements interface_mo
 
     /**
      * The date of the measurement
-     * @var date
+     * @var class_date
      * @tableColumn demo_other_object.other_object_date
      *
      * @fieldType date
@@ -49,14 +49,14 @@ class class_module_demo_other_object extends class_model implements interface_mo
 
 
     /**
-     * @param \date $dateDate
+     * @param \class_date $dateDate
      */
     public function setDateDate($dateDate) {
         $this->dateDate = $dateDate;
     }
 
     /**
-     * @return \date
+     * @return \class_date
      */
     public function getDateDate() {
         return $this->dateDate;
