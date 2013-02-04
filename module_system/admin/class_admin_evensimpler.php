@@ -9,6 +9,11 @@
 
 /**
  * Class holding common methods for extended and simplified admin-guis.
+ * Compared to class_admin_simple, this implementation is based on a declarative approach,
+ * reducing the amount of code required to implement a modules' admin-views.
+ *
+ * Sublasses are able to declare actions and the matching objects with annotations.
+ * Have a look at the demo-module on how to use it.
  *
  * @module module_system
  * @since 4.1
@@ -40,6 +45,9 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
 
     /**
+     * Redfined action-handler to match the declarative action to a "real", implemented action.
+     * The permission handling and other stuff is checked by the base-class.
+     *
      * @param string $strAction
      *
      * @return string
@@ -61,6 +69,10 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     }
 
     /**
+     * Tries to get the name of an action (edit, delete, list, new, save) for a given object-type.
+     * Example: Converts list to listOtherObject for the object class_module_demo_demo if the annotation
+     *          @ objectListOtherObject class_module_demo_demo is declared
+     *
      * @param $strAction
      * @param $objInstance
      *
@@ -90,6 +102,9 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
 
     /**
+     * Helper method to resolve the declared action to a real action, so to make list out of listOtherObject.
+     * If possible, the current object-type class (based on the annotation is stored, too.
+     *
      * @param $strAutoMatchAction
      * @param $strAnnotation
      * @param $strActionName
@@ -105,13 +120,15 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
             $objReflection = new class_reflection($this);
             $arrAnnotations = $objReflection->getAnnotationValuesFromClass($strAnnotation . $this->getStrCurObjectTypeName());
-            if(count($arrAnnotations) > 0) $this->setCurObjectClassName(reset($arrAnnotations));
-            else $this->setCurObjectClassName(null);
+            if(count($arrAnnotations) > 0)
+                $this->setCurObjectClassName(reset($arrAnnotations));
+            else
+                $this->setCurObjectClassName(null);
         }
     }
 
     /**
-     * Check if method exists in concrete class not only in class_admin_simple
+     * Check if method exists in concrete class and not only in class_admin_simple
      *
      * @param $strMethod
      *
@@ -121,9 +138,9 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     protected function checkMethodExistsInConcreteClass($strMethod) {
 
         if(method_exists($this, $strMethod)) {
-            $refl = new ReflectionMethod($this, $strMethod);
+            $objRefl = new ReflectionMethod($this, $strMethod);
 
-            if($refl->class != "class_admin_evensimpler") {
+            if($objRefl->class != "class_admin_evensimpler") {
                 return true;
             }
             else return false;
@@ -134,18 +151,17 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
     /**
      * Renders the form to create a new entry
-     * $strMode = "new", class_admin_formgenerator $objForm = null
      *
      * @throws class_exception
      * @return string
      * @permissions edit
      */
     protected function actionNew() {
-        $strTyp = $this->getCurObjectClassName();
+        $strType = $this->getCurObjectClassName();
 
-        if(!is_null($strTyp)) {
+        if(!is_null($strType)) {
             /** @var $objEdit interface_model|class_model */
-            $objEdit = new $strTyp();
+            $objEdit = new $strType();
             $objEdit->setSystemid($this->getParam("systemid"));
 
             $objForm = $this->getAdminForm($objEdit);
@@ -166,11 +182,11 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @permissions edit
      */
     protected function actionEdit() {
-        $strTyp = $this->getCurObjectClassName();
+        $strType = $this->getCurObjectClassName();
 
-        if(!is_null($strTyp)) {
+        if(!is_null($strType)) {
 
-            $objEdit = new $strTyp($this->getSystemid());
+            $objEdit = new $strType($this->getSystemid());
             $objForm = $this->getAdminForm($objEdit);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
 
@@ -184,28 +200,30 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     /**
      * Renders the general list of records
      *
-     * @abstract
      * @throws class_exception
      * @return string
      * @permissions view
      */
     protected function actionList() {
-        /** @var $strTyp interface_model|class_model */
-        $strTyp = $this->getCurObjectClassName();
+        /** @var $strType interface_model|class_model */
+        $strType = $this->getCurObjectClassName();
 
-        if(!is_null($strTyp)) {
-
-            $objArraySectionIterator = new class_array_section_iterator($strTyp::getObjectCount($this->getSystemid()));
+        if(!is_null($strType)) {
+            $objArraySectionIterator = new class_array_section_iterator($strType::getObjectCount($this->getSystemid()));
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-            $objArraySectionIterator->setArraySection($strTyp::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+            $objArraySectionIterator->setArraySection($strType::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
             return $this->renderList($objArraySectionIterator);
         }
         else
-            throw new class_exception("error loading list current object typ not known ", class_exception::$level_ERROR);
+            throw new class_exception("error loading list current object type not known ", class_exception::$level_ERROR);
     }
 
     /**
+     * Creates the admin-form for a given object.
+     * You may want to override this method in case you want to inject additional fields or
+     * to modify the form.
+     *
      * @param interface_model|class_model $objInstance
      * @return class_admin_formgenerator
      */
@@ -222,27 +240,28 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     }
 
     /**
-     * Saves the passed values as a new category to the db
+     * Updates the source-object based on the passed form-params
+     * and synchronizes it with the database.
      *
      * @throws class_exception
      * @return string "" in case of success
      * @permissions edit
      */
     protected function actionSave() {
-        $strTyp = $this->getCurObjectClassName();
+        $strType = $this->getCurObjectClassName();
         $strSystemId = "";
 
-        if(!is_null($strTyp)) {
+        if(!is_null($strType)) {
 
             /** @var $objRecord interface_model|class_model */
             $objRecord = null;
 
-            if($this->getParam("mode") == "new"){
-                $objRecord = new $strTyp();
+            if($this->getParam("mode") == "new") {
+                $objRecord = new $strType();
                 $strSystemId = $this->getSystemid();
             }
             else if($this->getParam("mode") == "edit")
-                $objRecord = new $strTyp($this->getSystemid());
+                $objRecord = new $strType($this->getSystemid());
 
             if($objRecord != null) {
                 $objForm = $this->getAdminForm($objRecord);
@@ -256,13 +275,12 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 $objForm->updateSourceObject();
                 $objRecord->updateObjectToDb($strSystemId);
 
-
                 $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1" : "")));
                 return "";
             }
         }
         else
-            throw new class_exception("error on saving current object typ not known ", class_exception::$level_ERROR);
+            throw new class_exception("error on saving current object type not known ", class_exception::$level_ERROR);
 
 
         return $this->getLang("commons_error_permissions");
@@ -270,16 +288,16 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
 
     /**
-     * Returns an additional set of action-buttons rendered right after the edit-action.
+     * Builds the object-path of the currently selected record.
+     * Used to render the path-navigation in the backend.
+     * Therefore the path from the current record up to the module-record is created based on the
+     * common prev-id relation.
+     * Each node is rendered using getOutputNaviEntry, so you may overwrite getOutputNaviEntry in
+     * order to create the links based on an object.
      *
-     * @param class_model $objListEntry
      * @return array
+     * @see class_admin_evensimpler::getOutputNaviEntry()
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
-        return array();
-    }
-
-    
     protected function getArrOutputNaviEntries() {
         $arrPathLinks = parent::getArrOutputNaviEntries();
         $arrPath = $this->getPathArray($this->getSystemid());
@@ -301,6 +319,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     
     /**
      * Overwrite to generate path navigation entries for the given object.
+     * If not overwritten, the entries will be skipped and won't be included into the
+     * path navigation.
      * 
      * @param interface_model $objInstance
      * @return string Navigation link.
@@ -309,6 +329,12 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         return null;
     }
 
+    /**
+     * Internal redefinition in order to match the internal, "real" action to
+     * the action based on the passed, declarative action.
+     *
+     * @return string
+     */
     protected function getQuickHelp() {
         $strOldAction = $this->getAction();
         $this->setAction($this->strOriginalAction);
@@ -318,6 +344,12 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     }
 
 
+    /**
+     * Internal redefinition in order to match the internal, "real" action to
+     * the action based on the passed, declarative action.
+     *
+     * @return string
+     */
     protected function getOutputActionTitle() {
         if($this->getStrCurObjectTypeName() == "")
             return $this->getOutputModuleTitle();
