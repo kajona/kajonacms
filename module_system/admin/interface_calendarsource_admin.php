@@ -22,7 +22,7 @@ interface interface_calendarsource_admin {
      *
      * @param class_date $objStartDate
      * @param class_date $objEndDate
-     * @return class_calendarentry
+     * @return class_calendarentry[]
      */
     public function getArrCalendarEntries(class_date $objStartDate, class_date $objEndDate);
 
