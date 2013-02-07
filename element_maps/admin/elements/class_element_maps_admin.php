@@ -15,53 +15,53 @@
  */
 class class_element_maps_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Contructor
-	 */
-	public function __construct() {
+    /**
+     * Contructor
+     */
+    public function __construct() {
         $this->setArrModuleEntry("name", "element_maps");
         $this->setArrModuleEntry("table", _dbprefix_."element_universal");
         $this->setArrModuleEntry("tableColumns", "");
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
 
-	/**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
+    /**
+     * Returns a form to edit the element-data
+     *
+     * @param mixed $arrElementData
+     * @return string
+     */
+    public function getEditForm($arrElementData) {
 
-		$strReturn = "";
+        $strReturn = "";
 
-		$strReturn .= $this->objToolkit->formInputText("char1", $this->getLang("maps_address"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
+        $strReturn .= $this->objToolkit->formInputText("char1", $this->getLang("maps_address"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("maps_geocode_button"), "geocode", "onclick=\"lookupAddress(); return false;\"");
-		$strReturn .= $this->objToolkit->formTextRow($this->getLang("maps_geocode_hint"));
-		$strReturn .= $this->objToolkit->formInputHidden("char2", (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
-		$strReturn .= $this->objToolkit->formWysiwygEditor("text", $this->getLang("maps_infotext"), (isset($arrElementData["text"]) ? $arrElementData["text"] : ""));
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("maps_geocode_hint"));
+        $strReturn .= $this->objToolkit->formInputHidden("char2", (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
+        $strReturn .= $this->objToolkit->formWysiwygEditor("text", $this->getLang("maps_infotext"), (isset($arrElementData["text"]) ? $arrElementData["text"] : ""));
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("maps_preview"));
-        
+
         $floatLat = "47.660727";
         $floatLng = "9.181154";
         if (isset($arrElementData["char2"])) {
-	        $arrLatLng = explode(',', $arrElementData["char2"]);
-	        if (count($arrLatLng) == 2) {
-	        	$floatLat = $arrLatLng[0];
-	            $floatLng = $arrLatLng[1];
-	        }
+            $arrLatLng = explode(',', $arrElementData["char2"]);
+            if (count($arrLatLng) == 2) {
+                $floatLat = $arrLatLng[0];
+                $floatLng = $arrLatLng[1];
+            }
         }
-        
-        
-		$strReturn .= "
+
+
+        $strReturn .= "
 		<div id=\"map_canvas\" style=\"width: 640px; height: 400px;\"></div>
 		
 		<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?sensor=false\"></script> 
 	    <script type=\"text/javascript\">
 			var map;
 			var infoWindow;
-			var startPos = new google.maps.LatLng(".$floatLat.", ".$floatLng.");
+			var startPos = new google.maps.LatLng('".$floatLat."', '".$floatLng."');
 			var geocoder = new google.maps.Geocoder();
 
 			var mapOptions = {
@@ -125,23 +125,23 @@ class class_element_maps_admin extends class_element_admin implements interface_
         </script>";
 
 
-		//load templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_maps", ".tpl");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
+        //load templates
+        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_maps", ".tpl");
+        $arrTemplatesDD = array();
+        if(count($arrTemplates) > 0) {
+            foreach($arrTemplates as $strTemplate) {
+                $arrTemplatesDD[$strTemplate] = $strTemplate;
+            }
+        }
 
-		if(count($arrTemplates) == 1)
-		    $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" )));
-		else
-		    $strReturn .= $this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
+        if(count($arrTemplates) == 1)
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
-		return $strReturn;
-	}
+        $strReturn .= $this->objToolkit->setBrowserFocus("char1");
+        return $strReturn;
+    }
 
     /**
      * saves the submitted data to the database
@@ -151,13 +151,13 @@ class class_element_maps_admin extends class_element_admin implements interface_
      * @return bool
      */
     public function actionSave($strSystemid) {
-    	
-    	$strContent = processWysiwygHtmlContent($this->getParam("text"));
-    	
-    	if (trim(str_replace("&nbsp;", "", strip_tags($strContent))) == "") {
-    		$strContent = "";
-    	}
-    	
+
+        $strContent = processWysiwygHtmlContent($this->getParam("text"));
+
+        if (trim(str_replace("&nbsp;", "", strip_tags($strContent))) == "") {
+            $strContent = "";
+        }
+
         $strQuery = "UPDATE ".$this->getArrModule("table")." SET
                 char1 = ?,
                 char2 = ?,
@@ -165,27 +165,25 @@ class class_element_maps_admin extends class_element_admin implements interface_
                 text = ?
                 WHERE content_id= ?";
 
-        if(
-            $this->objDB->_pQuery(
-                $strQuery,
-                array($this->getParam("char1"), $this->getParam("char2"), $this->getParam("char3"), $strContent, $strSystemid),
-                array(true, true, true, false)
-            )
-        )
+        if($this->objDB->_pQuery(
+            $strQuery,
+            array($this->getParam("char1"), $this->getParam("char2"), $this->getParam("char3"), $strContent, $strSystemid),
+            array(true, true, true, false)
+        ))
             return true;
         else
             return false;
     }
 
-	/**
-	 * Returns an abstract of the current element
-	 *
-	 * @return string
-	 */
-	public function getContentTitle() {
-		$arrData = $this->loadElementData();
-		return uniStrTrim(htmlStripTags($arrData["char1"]), 60);
-	}
+    /**
+     * Returns an abstract of the current element
+     *
+     * @return string
+     */
+    public function getContentTitle() {
+        $arrData = $this->loadElementData();
+        return uniStrTrim(htmlStripTags($arrData["char1"]), 60);
+    }
 
 
 }

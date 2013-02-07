@@ -3,11 +3,11 @@
 
 <!-- available placeholders: address, lat, lng, infotext, systemid -->
 <map>
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
-	<script type="text/javascript">
-	    $(function () {
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+        $(function () {
             var map;
-            var startPos = new google.maps.LatLng(%%lat%%, %%lng%%);
+            var startPos = new google.maps.LatLng('%%lat%%', '%%lng%%');
 
             var mapOptions = {
                 zoom: 10,
@@ -34,7 +34,7 @@
                 });
             }
         });
-	</script> 
+    </script>
 
     <div id="map_canvas_%%systemid%%" class="element_maps" style="width: 600px; height: 480px;"></div>
 </map>
