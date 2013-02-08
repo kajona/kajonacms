@@ -14,13 +14,15 @@
 <!-- available placeholders: postacomment_post_name, postacomment_post_subject, postacomment_post_message, postacomment_post_date, postacomment_post_systemid, postacomment_post_rating (if module rating installed) -->
 <postacomment_post>
 	<div class="pacComment">
-		<div class="pacHeader">
+        <div class="pacHeader">
             <div class="pacName">%%postacomment_post_name%%</div>
             <div class="pacDate">%%postacomment_post_date%%</div>
-            <div style="clear: both;"></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="pacHeader">
             <div class="pacSubject">%%postacomment_post_subject%%</div>
             <div class="pacRating">%%postacomment_post_rating%%</div>
-            <div style="clear: both;"></div>
+            <div class="clearfix"></div>
         </div>
 		<div class="pacText">%%postacomment_post_message%%</div>
 	</div>

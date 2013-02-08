@@ -113,8 +113,9 @@ div.contentLeft {
     vertical-align: top;
 }
 div.contentRight {
-    margin-left: 24%;
     vertical-align: top;
+    float: right;
+    width: 75%;
 }
 
 
@@ -161,6 +162,10 @@ table.portalList tr.portalListRow1 {
 
 table.portalList td.title {
     text-align: left;
+}
+
+table.portalList td.image {
+    width: 40px;
 }
 
 #headerImage {

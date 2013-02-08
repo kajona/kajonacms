@@ -14,8 +14,13 @@
  *
  * @package module_tags
  * @author sidler@mulchprod.de
+ *
+ * @objectList class_module_tags_tag
+ * @objectEdit class_module_tags_tag
+ *
+ * @autoTestable list
  */
-class class_module_tags_admin extends class_admin_simple implements interface_admin {
+class class_module_tags_admin extends class_admin_evensimpler implements interface_admin {
 
     /**
      * Constructor
@@ -37,24 +42,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         return $arrReturn;
     }
 
-    protected function actionNew() {
-    }
 
-    /**
-     * Renders the list of tags available
-     *
-     * @return string
-     * @autoTestable
-     * @permissions view
-     */
-    protected function actionList() {
-
-        $objArraySectionIterator = new class_array_section_iterator(class_module_tags_tag::getObjectCount());
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_tags_tag::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-
-        return $this->renderList($objArraySectionIterator);
-    }
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         return "";
@@ -63,8 +51,26 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_show_assigned_records"), $this->getLang("action_show_assigned_records"), "icon_folderActionOpen.png")),
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "addToFavorites", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_add_to_favorites"), $this->getLang("action_add_to_favorites"), "icon_favorite.png"))
+                $this->objToolkit->listButton(
+                    getLinkAdmin(
+                        $this->getArrModule("modul"),
+                        "showAssignedRecords",
+                        "&systemid=" . $objListEntry->getSystemid(),
+                        $this->getLang("action_show_assigned_records"),
+                        $this->getLang("action_show_assigned_records"),
+                        "icon_folderActionOpen.png"
+                    )
+                ),
+                $this->objToolkit->listButton(
+                    getLinkAdmin(
+                        $this->getArrModule("modul"),
+                        "addToFavorites",
+                        "&systemid=" . $objListEntry->getSystemid(),
+                        $this->getLang("action_add_to_favorites"),
+                        $this->getLang("action_add_to_favorites"),
+                        "icon_favorite.png"
+                    )
+                )
             );
         }
         else {
@@ -72,16 +78,6 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
         }
     }
 
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
-        if($objListEntry instanceof class_module_tags_tag) {
-            return parent::renderEditAction($objListEntry);
-        }
-        else if($objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($objListEntry->getArrModule("modul"), "edit", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"));
-        }
-
-        return "";
-    }
 
     /**
      * @param interface_model|class_model $objListEntry
@@ -91,74 +87,20 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_tags_favorite) {
             if($objListEntry->rightDelete()) {
-                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid()));
+                return $this->objToolkit->listDeleteButton(
+                    $objListEntry->getStrDisplayName(),
+                    $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")),
+                    getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
+                );
             }
         }
-        else if($objListEntry instanceof class_module_tags_tag) {
+        else
             return parent::renderDeleteAction($objListEntry);
-        }
+
 
         return "";
     }
 
-
-    /**
-     * Generates the form to edit an existing tag
-     *
-     * @param \class_admin_formgenerator|null $objForm
-     *
-     * @return string
-     * @permissions edit
-     */
-    protected function actionEdit(class_admin_formgenerator $objForm = null) {
-        $objTag = new class_module_tags_tag($this->getSystemid());
-        if($objTag->rightEdit()) {
-
-            if($objForm == null) {
-                $objForm = $this->getAdminForm($objTag);
-            }
-
-            return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
-        }
-        else {
-            return $this->getLang("commons_error_permissions");
-        }
-
-    }
-
-    private function getAdminForm(class_module_tags_tag $objTag) {
-        $objForm = new class_admin_formgenerator("tag", $objTag);
-        $objForm->generateFieldsFromObject();
-
-        return $objForm;
-    }
-
-
-    /**
-     * Saves the passed tag-data back to the database.
-     *
-     * @return string "" in case of success
-     * @permissions edit
-     */
-    protected function actionSaveTag() {
-
-        $objTag = new class_module_tags_tag($this->getSystemid());
-        $objForm = $this->getAdminForm($objTag);
-
-        if(!$objForm->validateForm()) {
-            return $this->actionEdit($objForm);
-        }
-
-        if($objTag->rightEdit()) {
-            $objForm->updateSourceObject();
-            $objTag->updateObjectToDb();
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-            return "";
-        }
-        else {
-            return $this->getLang("commons_error_permissions");
-        }
-    }
 
     /**
      * @permissions edit
@@ -222,7 +164,7 @@ class class_module_tags_admin extends class_admin_simple implements interface_ad
             getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '" . $strTargetSystemid . "', '" . $strAttribute . "');return false;"
         );
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
-        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tag_name"));
+        $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tags_name"));
         $strTagContent .= $this->objToolkit->formInputSubmit($this->getLang("button_add"), $this->getLang("button_add"), "");
         $strTagContent .= $this->objToolkit->formClose();
 
