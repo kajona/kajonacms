@@ -44,7 +44,7 @@ class class_module_votings_admin extends class_admin_evensimpler implements inte
         return $arrReturn;
     } 
 
-    protected function getOutputNaviEntry($objInstance) {
+    protected function getOutputNaviEntry(interface_model $objInstance) {
         if($objInstance instanceof class_module_votings_answer) {
             return $objInstance->getStrDisplayName();
         }

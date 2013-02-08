@@ -52,7 +52,7 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
         return $arrReturn;
     }
 
-    protected function getOutputNaviEntry($objInstance) {
+    protected function getOutputNaviEntry(interface_model $objInstance) {
 
         if($objInstance instanceof class_module_eventmanager_event) {
             return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrDisplayName());

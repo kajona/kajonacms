@@ -174,11 +174,15 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
             $objFaq->setUpdateBitMemberships(true);
             $objFaq->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
             return "";
         }
 
         return $this->getLang("commons_error_permissions");
+    }
+
+    protected function getOutputNaviEntry(interface_model $objInstance) {
+        return getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
     }
 
 }

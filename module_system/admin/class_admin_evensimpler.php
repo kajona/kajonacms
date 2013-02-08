@@ -345,7 +345,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @param interface_model $objInstance
      * @return string Navigation link.
      */
-    protected function getOutputNaviEntry($objInstance) {
+    protected function getOutputNaviEntry(interface_model $objInstance) {
         return null;
     }
 

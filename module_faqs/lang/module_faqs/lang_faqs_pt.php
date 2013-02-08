@@ -10,6 +10,3 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["faqs_rating_rate1"]               = "FAQ com nível de";
-$lang["faqs_rating_rate2"]               = " ponto(s)!";
-$lang["faqs_rating_voted"]               = "Já votou nesta FAQ (questão frequente).";

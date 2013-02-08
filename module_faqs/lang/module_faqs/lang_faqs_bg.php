@@ -13,9 +13,6 @@
 $lang["_faqs_search_resultpage_"]        = "Страница с резултати:";
 $lang["_faqs_search_resultpage_hint"]    = "Страницата показва 'Често задаваните въпроси' намерени посредством 'търсене'";
 $lang["delete_question"]                 = "Наистина ли искате да изтрийте 'Често задавани въпроси' &quot;<b>%%element_name%%</b>&quot;?";
-$lang["faqs_rating_rate1"]               = "Оцени ЧЗВ с";
-$lang["faqs_rating_rate2"]               = " точки!";
-$lang["faqs_rating_voted"]               = "Вие сте гласували за тези ЧЗВ";
 $lang["form_faq_answer"]                 = "Отговор:";
 $lang["form_faq_question"]               = "Въпрос:";
 $lang["kat_anzeigen"]                    = "Покажи категория";

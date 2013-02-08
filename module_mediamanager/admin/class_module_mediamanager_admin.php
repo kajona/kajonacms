@@ -13,9 +13,16 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @objectList class_module_mediamanager_repo
+ * @objectEdit class_module_mediamanager_repo
+ * @objectNew class_module_mediamanager_repo
+ *
+ * @objectEditFile class_module_mediamanager_file
+ *
+ * @autoTestable list,new
  */
-class class_module_mediamanager_admin extends class_admin_simple implements interface_admin  {
-
+class class_module_mediamanager_admin extends class_admin_evensimpler implements interface_admin  {
 
     const INT_LISTTYPE_FOLDER = "INT_LISTTYPE_FOLDER";
 
@@ -131,11 +138,15 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             if($objListEntry->rightEdit()) {
                 if($this->strPeAddon != "")
                     return $this->objToolkit->listButton(
-                        getLinkAdmin($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png")
+                        getLinkAdmin(
+                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
+                        )
                     );
                 else
                     return $this->objToolkit->listButton(
-                        getLinkAdminDialog($objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png")
+                        getLinkAdminDialog(
+                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
+                        )
                     );
             }
 
@@ -150,24 +161,6 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
             return "";
         }
         return parent::renderCopyAction($objListEntry);
-    }
-
-
-    /**
-     * Creates a list of all available galleries
-     *
-     * @return string
-     * @permissions view
-     * @autoTestable
-     */
-    protected function actionList() {
-
-        $objIterator = new class_array_section_iterator(class_module_mediamanager_repo::getObjectCount());
-        $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_mediamanager_repo::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
-
-        return $this->renderList($objIterator);
-
     }
 
 
@@ -198,94 +191,38 @@ class class_module_mediamanager_admin extends class_admin_simple implements inte
     }
 
 
-    /**
-     * @return string
-     * @permissions edit
-     */
-    protected function actionEdit() {
+    protected function getAdminForm(interface_model $objInstance) {
+        if($objInstance instanceof class_module_mediamanager_repo) {
+            $objForm = new class_admin_formgenerator("repo", $objInstance);
+            $objForm->addDynamicField("strTitle");
+            $objField = $objForm->addDynamicField("strPath")->setStrHint($this->getLang("mediamanager_path_h"));
+            $objField->setStrOpener(
+                getLinkAdminDialog(
+                    "mediamanager",
+                    "folderListFolderview",
+                    "&form_element=".$objField->getStrEntryName(),
+                    $this->getLang("commons_open_browser"),
+                    $this->getLang("commons_open_browser"),
+                    "icon_externalBrowser.png",
+                    $this->getLang("commons_open_browser")
+                )
+            );
+            $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
+            $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
 
-        //check what method to trigger
-        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objInstance instanceof class_module_mediamanager_repo)
-            return $this->actionNew("edit");
-        else if($objInstance instanceof class_module_mediamanager_file)
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFile", "&source=".$this->getParam("source")."&systemid=".$objInstance->getSystemid()));
-
-        return "";
-    }
-
-    /**
-     * Creates a form to edit / create a gallery
-     *
-     * @param string $strMode
-     * @param \class_admin_formgenerator|null $objForm
-     *
-     * @permissions edit
-     * @autoTestable
-     * @return string
-     */
-    protected function actionNew($strMode = "new", class_admin_formgenerator $objForm = null) {
-
-        $objRepo = new class_module_mediamanager_repo();
-        if($strMode == "edit") {
-            $objRepo = new class_module_mediamanager_repo($this->getSystemid());
-
-            if(!$objRepo->rightEdit())
-                return $this->getLang("commons_error_permissions");
+            return $objForm;
         }
+        else if($objInstance instanceof class_module_mediamanager_file) {
+            if($this->strPeAddon == "" && $this->getParam("source") != "search")
+                $this->setArrModuleEntry("template", "/folderview.tpl");
 
-        if($objForm == null)
-            $objForm = $this->getAdminForm($objRepo);
-
-        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveRepo"));
-
-    }
-
-    private function getAdminForm(class_module_mediamanager_repo $objRepo) {
-        $objForm = new class_admin_formgenerator("repo", $objRepo);
-        $objForm->addDynamicField("strTitle");
-        $objField = $objForm->addDynamicField("strPath")->setStrHint($this->getLang("mediamanager_path_h"));
-        $objField->setStrOpener(getLinkAdminDialog("mediamanager", "folderListFolderview", "&form_element=".$objField->getStrEntryName(), $this->getLang("commons_open_browser"), $this->getLang("commons_open_browser"), "icon_externalBrowser.png", $this->getLang("commons_open_browser")));
-        $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
-        $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
-
-        return $objForm;
-    }
-
-
-    /**
-     * @return string
-     * @permissions edit
-     */
-    protected function actionSaveRepo() {
-        $objRepo = null;
-
-        if($this->getParam("mode") == "new")
-            $objRepo = new class_module_mediamanager_repo();
-
-        else if($this->getParam("mode") == "edit")
-            $objRepo = new class_module_mediamanager_repo($this->getSystemid());
-
-        if($objRepo != null) {
-
-            $objForm = $this->getAdminForm($objRepo);
-            if(!$objForm->validateForm())
-                return $this->actionNew($this->getParam("mode"), $objForm);
-
-            $objForm->updateSourceObject();
-            $objRepo->updateObjectToDb();
-
-            $objRepo->syncRepo();
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-            return "";
+            $objForm = parent::getAdminForm($objInstance);
+            $objForm->addField(new class_formentry_hidden("", "source"))->setStrValue($this->getParam("source"));
+            return $objForm;
         }
-
-        return $this->getLang("commons_error_permissions");
+        else
+            return parent::getAdminForm($objInstance);
     }
-
-
 
 
     /**
@@ -458,70 +395,28 @@ HTML;
     }
 
 
-    /**
-     * Creates a form to edit / create a repo
-     *
-     * @param \class_admin_formgenerator|null $objForm
-     *
-     * @permissions edit
-     * @autoTestable
-     * @return string
-     */
-    protected function actionEditFile(class_admin_formgenerator $objForm = null) {
-        if($this->strPeAddon == "" && $this->getParam("source") != "search")
-            $this->setArrModuleEntry("template", "/folderview.tpl");
-
-        $objFile = new class_module_mediamanager_file($this->getSystemid());
-
-        if(!$objFile->rightEdit())
-            return $this->getLang("commons_error_permissions");
-
-        if($objForm == null)
-            $objForm = $this->getFileAdminForm($objFile);
-
-        $objForm->addField(new class_formentry_hidden("", "source"))->setStrValue($this->getParam("source"));
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveFile"));
-
-    }
-
-    private function getFileAdminForm(class_module_mediamanager_file $objFile) {
-        $objForm = new class_admin_formgenerator("file", $objFile);
-        $objForm->generateFieldsFromObject();
-        return $objForm;
-    }
-
 
     /**
      * @return string
      * @permissions edit
      */
     protected function actionSaveFile() {
-        $objFile = null;
 
-        $objFile = new class_module_mediamanager_file($this->getSystemid());
+        $this->setStrCurObjectTypeName("file");
+        $this->setCurObjectClassName("class_module_mediamanager_file");
+        parent::actionSave();
 
-        if($objFile != null && $objFile->rightEdit()) {
+        $objFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-            $objForm = $this->getFileAdminForm($objFile);
-            if(!$objForm->validateForm())
-                return $this->actionEditFile($objForm);
-
-            $objForm->updateSourceObject();
-            $objFile->updateObjectToDb();
-
-            $this->flushCompletePagesCache();
+        $this->flushCompletePagesCache();
+        if($this->getParam("source") != "")
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&systemid=".$objFile->getPrevId()));
+        else
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&peClose=1&systemid=".$objFile->getPrevId()));
+        return "";
 
 
-            if($this->getParam("source") != "")
-                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&systemid=".$objFile->getPrevId()));
-            else
-                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&peClose=1&systemid=".$objFile->getPrevId()));
-            return "";
-        }
-
-        return $this->getLang("commons_error_permissions");
     }
-
 
 
     /**
@@ -624,32 +519,9 @@ HTML;
     }
 
 
-
-
-    /**
-     * Generates a path-navigation
-     *
-     * @return array
-     */
-    protected function getArrOutputNaviEntries() {
-        $arrEntries = parent::getArrOutputNaviEntries();
-
-        $arrPath = $this->getPathArray();
-
-        foreach($arrPath as $strOneSystemid) {
-            $objPoint = class_objectfactory::getInstance()->getObject($strOneSystemid);
-            if($objPoint != null)
-                $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
-        }
-
-        return $arrEntries;
-
+    protected function getOutputNaviEntry(interface_model $objInstance) {
+        return getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
     }
-
-
-
-
-
 
 
     /**
@@ -787,7 +659,6 @@ HTML;
     }
 
 
-
     /**
      * Generates a view to browse the filesystem directly.
      * By default, the methods takes two params into account: folder and form_element
@@ -874,7 +745,7 @@ HTML;
 
         $intNrOfRecordsPerPage = 25;
 
-        $strReturn .= $this->objToolkit->getTextRow(getLinkAdmin($this->getArrModule("modul"), "logbookFlush", "", $this->getLang("actionLogbookFlush"), "")."<br />");
+        $strReturn .= $this->objToolkit->getTextRow(getLinkAdmin($this->getArrModule("modul"), "logbookFlush", "", $this->getLang("action_logbook_flush"), "")."<br />");
 
         $objLogbook = new class_module_mediamanager_logbook();
         $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLogbookDataCount());
