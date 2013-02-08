@@ -13,8 +13,17 @@
  *
  * @package module_faqs
  * @author sidler@mulchprod.de
+ *
+ *
+ * @objectListFaq class_module_faqs_faq
+ * @objectEditFaq class_module_faqs_faq
+ * @objectNewFaq class_module_faqs_faq
+ *
+ * @objectListCat class_module_faqs_category
+ * @objectEditCat class_module_faqs_category
+ * @objectNewCat class_module_faqs_category
  */
-class class_module_faqs_admin extends class_admin_simple implements interface_admin {
+class class_module_faqs_admin extends class_admin_evensimpler implements interface_admin {
 
     const STR_CAT_LIST = "STR_CAT_LIST";
     const STR_FAQ_LIST = "STR_FAQ_LIST";
@@ -40,52 +49,13 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
         return $arrReturn;
     }
 
-    /**
-     * Renders the form to create a new entry
-     *
-     * @return string
-     * @permissions edit
-     */
-    protected function actionNew() {
-        return $this->actionNewFaq();
-    }
-
-    /**
-     * Renders the form to edit an existing entry
-     *
-     * @return string
-     * @permissions edit
-     */
-    protected function actionEdit() {
-        $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objObject instanceof class_module_faqs_category && $objObject->rightEdit()) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editCat", "&systemid=" . $objObject->getSystemid()));
-        }
-
-        if($objObject instanceof class_module_faqs_faq && $objObject->rightEdit()) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFaq", "&systemid=" . $objObject->getSystemid()));
-        }
-
-        return "";
-    }
-
-    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        if($strListIdentifier == class_module_faqs_admin::STR_CAT_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCat", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new.png"));
-        }
-
-
-        return parent::getNewEntryAction($strListIdentifier, $bitDialog);
-    }
 
     protected function renderDeleteAction(interface_model $objListEntry) {
-
         if($objListEntry instanceof class_module_faqs_category && $objListEntry->rightDelete()) {
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(), $this->getLang("commons_delete_category_question"), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
             );
         }
-
         return parent::renderDeleteAction($objListEntry);
     }
 
@@ -95,8 +65,6 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
                 $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens.png"))
             );
         }
-
-
         return array();
     }
 
@@ -111,6 +79,8 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
      */
     protected function actionList() {
 
+        $this->setStrCurObjectTypeName("cat");
+        $this->setCurObjectClassName("class_module_faqs_cat");
         $objIterator = new class_array_section_iterator(class_module_faqs_category::getObjectCount());
         $objIterator->setIntElementsPerPage(class_module_faqs_category::getObjectCount());
         $objIterator->setPageNumber(1);
@@ -118,6 +88,8 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
 
         $strReturn = $this->renderList($objIterator, false, class_module_faqs_admin::STR_CAT_LIST);
 
+        $this->setStrCurObjectTypeName("faq");
+        $this->setCurObjectClassName("class_module_faqs_faq");
         $objIterator = new class_array_section_iterator(class_module_faqs_faq::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_faqs_faq::getObjectList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
@@ -136,131 +108,32 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
     }
 
 
-    protected function actionEditCat() {
-        return $this->actionNewCat("edit");
-    }
 
-    /**
-     * Show the form to create or edit a faqs cat
-     *
-     * @param string $strMode
-     * @param class_admin_formgenerator $objForm
-     *
-     * @return string
-     * @permissions edit
-     * @autoTestable
-     */
-    protected function actionNewCat($strMode = "new", class_admin_formgenerator $objForm = null) {
+    protected function getAdminForm(interface_model $objInstance) {
+        if($objInstance instanceof class_module_faqs_faq) {
+            $objForm = new class_admin_formgenerator("faq", $objInstance);
+            $objForm->generateFieldsFromObject();
 
-        $objCategory = new class_module_faqs_category();
-        if($strMode == "edit") {
-            $objCategory = new class_module_faqs_category($this->getSystemid());
+            $arrCats = class_module_faqs_category::getObjectList();
+            if(count($arrCats) > 0)
+                $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
 
-            if(!$objCategory->rightEdit()) {
-                return $this->getLang("commons_error_permissions");
-            }
-        }
+            $arrFaqsMember = class_module_faqs_category::getFaqsMember($this->getSystemid());
 
-        if($objForm == null) {
-            $objForm = $this->getCatAdminForm($objCategory);
-        }
-
-        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveCat"));
-    }
-
-
-    private function getCatAdminForm(class_module_faqs_category $objCat) {
-        $objForm = new class_admin_formgenerator("cat", $objCat);
-        $objForm->generateFieldsFromObject();
-        return $objForm;
-    }
-
-    /**
-     * Saves the passed values as a new category to the db
-     *
-     * @return string "" in case of success
-     * @permissions edit
-     */
-    protected function actionSaveCat() {
-        $objCat = null;
-
-        if($this->getParam("mode") == "new") {
-            $objCat = new class_module_faqs_category();
-        }
-
-        else if($this->getParam("mode") == "edit") {
-            $objCat = new class_module_faqs_category($this->getSystemid());
-        }
-
-        if($objCat != null) {
-
-            $objForm = $this->getCatAdminForm($objCat);
-            if(!$objForm->validateForm()) {
-                return $this->actionNewCat($this->getParam("mode"), $objForm);
-            }
-
-            $objForm->updateSourceObject();
-            $objCat->updateObjectToDb();
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
-            return "";
-        }
-
-        return $this->getLang("commons_error_permissions");
-    }
-
-
-    protected function actionEditFaq() {
-        return $this->actionNewFaq("edit");
-    }
-
-
-    protected function actionNewFaq($strMode = "new", class_admin_formgenerator $objForm = null) {
-
-        $objFaq = new class_module_faqs_faq();
-        if($strMode == "edit") {
-            $objFaq = new class_module_faqs_faq($this->getSystemid());
-
-            if(!$objFaq->rightEdit()) {
-                return $this->getLang("commons_error_permissions");
-            }
-        }
-
-        if($objForm == null) {
-            $objForm = $this->getFaqAdminForm($objFaq);
-        }
-
-        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveFaq"));
-    }
-
-
-    private function getFaqAdminForm(class_module_faqs_faq $objFaq) {
-        $objForm = new class_admin_formgenerator("faq", $objFaq);
-        $objForm->generateFieldsFromObject();
-
-        $arrCats = class_module_faqs_category::getObjectList();
-        if(count($arrCats) > 0) {
-            $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
-        }
-
-        $arrFaqsMember = class_module_faqs_category::getFaqsMember($this->getSystemid());
-
-        foreach($arrCats as $objOneCat) {
-            $bitChecked = false;
-            foreach($arrFaqsMember as $objOneMember) {
-                if($objOneMember->getSystemid() == $objOneCat->getSystemid()) {
-                    $bitChecked = true;
+            foreach($arrCats as $objOneCat) {
+                $bitChecked = false;
+                foreach($arrFaqsMember as $objOneMember) {
+                    if($objOneMember->getSystemid() == $objOneCat->getSystemid()) {
+                        $bitChecked = true;
+                    }
                 }
+                $objForm->addField(new class_formentry_checkbox("faq", "cat[" . $objOneCat->getSystemid() . "]"))->setStrLabel($objOneCat->getStrTitle())->setStrValue($bitChecked);
             }
 
-            $objForm->addField(new class_formentry_checkbox("faq", "cat[" . $objOneCat->getSystemid() . "]"))->setStrLabel($objOneCat->getStrTitle())->setStrValue($bitChecked);
-
+            return $objForm;
         }
-
-
-        return $objForm;
+        else
+            return parent::getAdminForm($objInstance);
     }
 
     /**
@@ -272,19 +145,19 @@ class class_module_faqs_admin extends class_admin_simple implements interface_ad
     protected function actionSaveFaq() {
         $objFaq = null;
 
-        if($this->getParam("mode") == "new") {
+        if($this->getParam("mode") == "new")
             $objFaq = new class_module_faqs_faq();
-        }
-
-        else if($this->getParam("mode") == "edit") {
+        else if($this->getParam("mode") == "edit")
             $objFaq = new class_module_faqs_faq($this->getSystemid());
-        }
 
         if($objFaq != null) {
 
-            $objForm = $this->getFaqAdminForm($objFaq);
+            $objForm = $this->getAdminForm($objFaq);
             if(!$objForm->validateForm()) {
-                return $this->actionNewFaq($this->getParam("mode"), $objForm);
+                if($this->getParam("mode") == "new")
+                    return $this->actionNew($this->getParam("mode"), $objForm);
+                else
+                    return $this->actionEdit($this->getParam("mode"), $objForm);
             }
 
             $objForm->updateSourceObject();
