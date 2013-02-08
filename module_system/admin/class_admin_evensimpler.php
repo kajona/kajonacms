@@ -184,6 +184,19 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @permissions edit
      */
     protected function actionEdit() {
+
+        //try 1: get the object type and names based on the current object
+        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objInstance != null) {
+            $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
+            if($strObjectTypeName != "") {
+                $strType = get_class($objInstance);
+                $this->setCurObjectClassName($strType);
+                $this->setStrCurObjectTypeName($strObjectTypeName);
+            }
+        }
+
+        //try 2: regular, oldschool resolving based on the current action-params
         $strType = $this->getCurObjectClassName();
 
         if(!is_null($strType)) {
