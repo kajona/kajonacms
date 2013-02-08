@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["form_comment_title"]              = "Titel:";
-$lang["form_comment_username"]           = "Name:";
+$lang["form_postacomment_username"]      = "Name:";
 $lang["form_message_label"]              = "Nachricht";
 $lang["form_name_label"]                 = "Name";
 $lang["form_subject_label"]              = "Betreff";
@@ -28,6 +28,7 @@ $lang["postacomment_dofilter"]           = "Filtern";
 $lang["postacomment_edit"]               = "Kommentar bearbeiten";
 $lang["postacomment_empty"]              = "Bisher sind noch keine Kommentare vorhanden";
 $lang["postacomment_filter"]             = "Seiten-Filter:";
+$lang["postacomment_username"]           = "Name:";
 $lang["postacomment_write_new"]          = "Kommentar schreiben";
 $lang["quickhelp_edit_post"]             = "In dieser Ansicht können die Daten eines Kommentares verändert werden.";
 $lang["quickhelp_list"]                  = "Sämtliche Kommentare, die von Benutzern über das Portal abgegeben wurden, sind in dieser Liste sichtbar. <br />Eine Zeile hat dabei den Aufbau <br/><br/>Seitenname  (Sprache) | Datum <br/>Benutzername | Betreff <br />Nachricht <br/><br />Über den Filter am Kopf der Liste kann nach Posts einer einzelnen Seite gefiltert werden. Lange Nachrichten werden in der Liste abgeschnitten, um den kompletten Text zu lesen sollte einfach die Aktion Bearbeiten gewählt werden.";

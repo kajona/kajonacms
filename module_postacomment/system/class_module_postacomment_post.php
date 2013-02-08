@@ -42,6 +42,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
      *
      * @fieldMandatory
      * @fieldType text
+     * @fieldLabel postacomment_username
      */
     private $strUsername;
 
