@@ -95,6 +95,83 @@ class test_systemchangelogTest extends class_testbase {
 
 
     }
+
+    public function testChangelogIntervalChanges() {
+        $strSystemid = generateSystemid();
+
+        $objStartDate = new class_date();
+        $objEndDate = new class_date();
+        $objMiddleDate = new class_date();
+        $objStartDate->setIntYear(2012)->setIntMonth(10)->setIntDay(1)->setIntHour(10)->setIntMin(0)->setIntSec(0);
+        $objMiddleDate->setIntYear(2012)->setIntMonth(11)->setIntDay(1)->setIntHour(10)->setIntMin(0)->setIntSec(0);
+        $objEndDate->setIntYear(2012)->setIntMonth(12)->setIntDay(1)->setIntHour(10)->setIntMin(0)->setIntSec(0);
+
+        $objChanges = new class_module_system_changelog();
+        $objChanges->createLogEntry(new dummyObject($strSystemid), 1);
+
+        $strQuery = "INSERT INTO "._dbprefix_."changelog
+                     (change_id,
+                      change_date,
+                      change_systemid,
+                      change_system_previd,
+                      change_user,
+                      change_class,
+                      change_action,
+                      change_property,
+                      change_oldvalue,
+                      change_newvalue) VALUES
+                     (?,?,?,?,?,?,?,?,?,?)";
+
+        class_carrier::getInstance()->getObjDB()->_pQuery(
+            $strQuery,
+            array(
+                generateSystemid(),
+                $objStartDate->getLongTimestamp(),
+                $strSystemid,
+                "", "", "dummyObject", "edit", "test2", "", "1"
+            )
+        );
+
+        class_carrier::getInstance()->getObjDB()->_pQuery(
+            $strQuery,
+            array(
+                generateSystemid(),
+                $objMiddleDate->getLongTimestamp(),
+                $strSystemid,
+                "", "", "dummyObject", "edit", "test2", "1", "2"
+            )
+        );
+
+        class_carrier::getInstance()->getObjDB()->_pQuery(
+            $strQuery,
+            array(
+                generateSystemid(),
+                $objEndDate->getLongTimestamp(),
+                $strSystemid,
+                "", "", "dummyObject", "edit", "test2", "2", "3"
+            )
+        );
+
+        //start middle  end
+        //  1      2     3
+
+        $objStartDate->setIntDay(2);
+        $objEndDate->setIntHour(9);
+
+        class_module_system_changelog::changeValueForInterval($strSystemid, "edit", "test2", "", "dummyObject", "", "a", $objStartDate, $objEndDate);
+
+        $objStartDate->setIntDay(1);
+        $this->assertEquals("1", $objChanges->getValueForDate($strSystemid, "test2", $objStartDate));
+        $objStartDate->setIntDay(2);
+        $this->assertEquals("a", $objChanges->getValueForDate($strSystemid, "test2", $objStartDate));
+        $this->assertEquals("a", $objChanges->getValueForDate($strSystemid, "test2", $objMiddleDate));
+        $objEndDate->setIntHour(8);
+        $this->assertEquals("a", $objChanges->getValueForDate($strSystemid, "test2", $objEndDate));
+        $objEndDate->setIntHour(9);
+        $this->assertEquals("2", $objChanges->getValueForDate($strSystemid, "test2", $objEndDate));
+        $objEndDate->setIntHour(11);
+        $this->assertEquals("3", $objChanges->getValueForDate($strSystemid, "test2", $objEndDate));
+    }
 }
 
 

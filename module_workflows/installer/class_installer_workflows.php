@@ -41,6 +41,7 @@ class class_installer_workflows extends class_installer_base implements interfac
 		$arrFields["workflows_date1"]          = array("long", true);
 		$arrFields["workflows_date2"]          = array("long", true);
 		$arrFields["workflows_text"]           = array("text", true);
+		$arrFields["workflows_text2"]          = array("text", true);
 
 		if(!$this->objDB->createTable("workflows", $arrFields, array("workflows_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -91,6 +92,11 @@ class class_installer_workflows extends class_installer_base implements interfac
             $strReturn .= $this->update_349_40();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= $this->update_40_401();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -123,6 +129,21 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
+        return $strReturn;
+    }
+
+    private function update_40_401() {
+        $strReturn = "Updating 4.0 to 4.0.1...\n";
+        $strReturn .= "Altering workflows table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")."
+                          ADD ".$this->objDB->encloseColumnName("workflows_text2")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0.1");
         return $strReturn;
     }
 }

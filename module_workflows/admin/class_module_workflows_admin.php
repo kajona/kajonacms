@@ -167,6 +167,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_date1"), "", $objWorkflow->getLongDate1(), $intI++);
         $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_date2"), "", $objWorkflow->getLongDate2(), $intI++);
         $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_text"), "", $objWorkflow->getStrText(), $intI++);
+        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_text2"), "", $objWorkflow->getStrText2(), $intI++);
         $strReturn .= $this->objToolkit->listFooter();
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "list"));

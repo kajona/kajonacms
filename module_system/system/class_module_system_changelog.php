@@ -19,10 +19,10 @@
  * @author sidler@mulchprod.de
  * @see class_logger
  */
-class
-class_module_system_changelog extends class_model implements interface_model {
+class class_module_system_changelog extends class_model implements interface_model {
 
     private static $arrOldValueCache = array();
+    private static $arrCachedProviders = null;
 
 
     public static $STR_ACTION_EDIT = "actionEdit";
@@ -298,7 +298,7 @@ class_module_system_changelog extends class_model implements interface_model {
                     class_logger::$levelInfo
                 );
 
-                $strQuery = "INSERT INTO "._dbprefix_."changelog
+                $strQuery = "INSERT INTO "._dbprefix_.self::getTableForClass(get_class($objSourceModel))."
                      (change_id,
                       change_date,
                       change_systemid,
@@ -343,14 +343,29 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return class_changelog_container[]
      */
     public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT *
-                       FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? " : "")."
-                   ORDER BY change_date DESC";
 
         $arrParams = array();
-        if($strSystemidFilter != "")
+
+        if(validateSystemid($strSystemidFilter)) {
+
+            $strQuery = "SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue
+                           FROM "._dbprefix_.self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($strSystemidFilter))."
+                           WHERE change_systemid = ? ";
+
             $arrParams[] = $strSystemidFilter;
+
+        }
+        else {
+            $strQuery = "SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue
+                           FROM "._dbprefix_."changelog";
+
+            foreach(self::getAdditionalTables() as $strOneTable) {
+                $strQuery .= " UNION ALL SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue FROM "._dbprefix_.$strOneTable." ";
+            }
+
+            $strQuery .= "ORDER BY change_date DESC";
+
+        }
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -378,13 +393,32 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return int
      */
     public static function getLogEntriesCount($strSystemidFilter = "") {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? " : "")."";
 
         $arrParams = array();
-        if($strSystemidFilter != "")
+
+        if(validateSystemid($strSystemidFilter)) {
+
+            $strQuery = "SELECT COUNT(*)
+                           FROM "._dbprefix_.self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($strSystemidFilter))."
+                          WHERE change_systemid = ? ";
+
             $arrParams[] = $strSystemidFilter;
+
+        }
+        else {
+
+            $strQuery = "SELECT COUNT(*)
+                FROM (SELECT * FROM "._dbprefix_."changelog";
+
+            if($strSystemidFilter != "")
+                $arrParams[] = $strSystemidFilter;
+
+            foreach(self::getAdditionalTables() as $strOneTable) {
+                $strQuery .= " UNION ALL SELECT * FROM "._dbprefix_.$strOneTable." ";
+            }
+            $strQuery .= " ) as tem";
+
+        }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
@@ -416,8 +450,13 @@ class_module_system_changelog extends class_model implements interface_model {
         if($strNewvalueFilter !== null)
             $arrWhere[] = " change_newvalue = ? ";
 
+        $strTable = "changelog";
+        if($strSystemidFilter != null) {
+            $strTable = self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($strSystemidFilter));
+        }
+
         $strQuery = "SELECT *
-                       FROM "._dbprefix_."changelog
+                       FROM "._dbprefix_.$strTable."
                       ".(count($arrWhere) > 0 ? " WHERE ".implode("AND", $arrWhere) : "")."
                    ORDER BY change_date DESC";
 
@@ -467,13 +506,131 @@ class_module_system_changelog extends class_model implements interface_model {
      * @return bool
      */
     public static function shiftLogEntries($strSystemid, $objNewDate) {
-        $strQuery = "UPDATE "._dbprefix_."changelog
+        $strQuery = "UPDATE "._dbprefix_.self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($strSystemid))."
                         SET change_date = ?
                       WHERE change_systemid = ? ";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($objNewDate->getLongTimestamp(), $strSystemid));
 
     }
 
+
+    /**
+     * This method tries to change the value of a property for a given interval.
+     * Therefore the records at the start / end date are loaded and adjusted.
+     * All changes within the interval will be removed.
+     * Example:
+     * Time: 0  1   2   3   4   5   6
+     * Old:  x      y       y   z   u
+     * New:  x  w           w   z   u
+     * --> w was injected from 1 to 4, including.
+     *
+     * @param $strSystemid
+     * @param $strAction
+     * @param $strProperty
+     * @param null $strPrevid
+     * @param $strClass
+     * @param null $strUser
+     * @param $strNewValue
+     * @param class_date $objStartDate
+     * @param class_date $objEndDate
+     *
+     * @return void
+     */
+    public static function changeValueForInterval($strSystemid, $strAction, $strProperty, $strPrevid, $strClass, $strUser, $strNewValue, class_date $objStartDate, class_date $objEndDate) {
+
+        class_logger::getInstance()->addLogRow("changed time-based history-entry: ".$strSystemid."/".$strProperty." to ".$strNewValue." from ".$objStartDate. " until ".$objEndDate, class_logger::$levelWarning);
+
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_.self::getTableForClass($strClass)."
+                      WHERE change_systemid = ?
+                        AND change_property = ?
+                        AND change_date <= ?
+                   ORDER BY change_date DESC";
+
+        $arrStartRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid, $strProperty, $objStartDate->getLongTimestamp()));
+
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_.self::getTableForClass($strClass)."
+                      WHERE change_systemid = ?
+                        AND change_property = ?
+                        AND change_date >= ?
+                   ORDER BY change_date ASC";
+
+        $arrEndRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid, $strProperty, $objEndDate->getLongTimestamp()));
+
+        //drop all changes between the start / end date
+        $strQuery = "DELETE FROM "._dbprefix_.self::getTableForClass($strClass)."
+                           WHERE change_systemid = ?
+                             AND change_property = ?
+                             AND change_date >= ?
+                             AND change_date <= ?";
+        class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strProperty, $objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp()));
+
+
+        //adjust the start-row, see if the dates are matching (update vs insert)
+        $strQuery = "INSERT INTO "._dbprefix_.self::getTableForClass($strClass)."
+                 (change_id,
+                  change_date,
+                  change_systemid,
+                  change_system_previd,
+                  change_user,
+                  change_class,
+                  change_action,
+                  change_property,
+                  change_oldvalue,
+                  change_newvalue) VALUES
+                 (?,?,?,?,?,?,?,?,?,?)";
+
+        class_carrier::getInstance()->getObjDB()->_pQuery(
+            $strQuery,
+            array(
+                generateSystemid(),
+                $objStartDate->getLongTimestamp(),
+                $strSystemid,
+                $strPrevid,
+                $strUser,
+                $strClass,
+                $strAction,
+                $strProperty,
+                (isset($arrStartRow["change_newvalue"]) ? $arrStartRow["change_newvalue"] : ""),
+                $strNewValue
+            )
+        );
+
+        //adjust the end-row, update vs insert
+        $strQuery = "INSERT INTO "._dbprefix_.self::getTableForClass($strClass)."
+                 (change_id,
+                  change_date,
+                  change_systemid,
+                  change_system_previd,
+                  change_user,
+                  change_class,
+                  change_action,
+                  change_property,
+                  change_oldvalue,
+                  change_newvalue) VALUES
+                 (?,?,?,?,?,?,?,?,?,?)";
+
+        class_carrier::getInstance()->getObjDB()->_pQuery(
+            $strQuery,
+            array(
+                generateSystemid(),
+                $objEndDate->getLongTimestamp(),
+                $strSystemid,
+                $strPrevid,
+                $strUser,
+                $strClass,
+                $strAction,
+                $strProperty,
+                $strNewValue,
+                (isset($arrEndRow["change_oldvalue"]) ? $arrEndRow["change_oldvalue"] : "")
+            )
+        );
+
+
+
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+    }
 
     /**
      * Fetches a single value from the change-sets, if not unique the latest value for the specified date is returned.
@@ -488,7 +645,7 @@ class_module_system_changelog extends class_model implements interface_model {
      */
     public static function getValueForDate($strSystemid, $strProperty, class_date $objDate) {
         $strQuery = "SELECT change_newvalue
-                       FROM "._dbprefix_."changelog
+                       FROM "._dbprefix_.self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($strSystemid))."
                       WHERE change_systemid = ?
                         AND change_property = ?
                         AND change_date <= ?
@@ -521,6 +678,61 @@ class_module_system_changelog extends class_model implements interface_model {
      */
     protected function updateStateToDb() {
         return true;
+    }
+
+
+    /**
+     * Returns a list of objects implementing the changelog-provider-interface
+     * @return interface_changelog_provider[]
+     */
+    public static function getAdditionalProviders() {
+
+        if(self::$arrCachedProviders != null)
+            return self::$arrCachedProviders;
+
+        $arrSystemClasses = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"));
+        $arrReturn = array();
+        foreach($arrSystemClasses as $strOneFile) {
+            if(uniStrpos($strOneFile, "class_changelog_provider") !== false) {
+                $objReflection = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
+                if($objReflection->implementsInterface("interface_changelog_provider"))
+                    $arrReturn[] = $objReflection->newInstance();
+            }
+        }
+
+        self::$arrCachedProviders = $arrReturn;
+
+        return $arrReturn;
+    }
+
+    /**
+     * Retuns a list of additional objects mapped to tables
+     * @return array (class => table)
+     */
+    public static function getAdditionalTables() {
+        $arrTables = array();
+        foreach(self::getAdditionalProviders() as $objOneProvider) {
+            foreach($objOneProvider->getHandledClasses() as $strOneClass)
+                $arrTables[$strOneClass] = $objOneProvider->getTargetTable();
+        }
+        return $arrTables;
+    }
+
+    /**
+     * Returns the target-table for a single class
+     * or the default table if not found.
+     *
+     * @param $strClass
+     *
+     * @return string
+     */
+    public static function getTableForClass($strClass) {
+        $arrTables = self::getAdditionalTables();
+
+        if($strClass != null && $strClass != "" && isset($arrTables[$strClass]))
+            return $arrTables[$strClass];
+
+        else return "changelog";
     }
 }
 

@@ -100,6 +100,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
      */
     private $strText = "";
 
+    /**
+     * @var string
+     * @tableColumn workflows.workflows_text2
+     * @blockEscaping
+     */
+    private $strText2 = "";
+
 
 
     /**
@@ -313,7 +320,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
         $arrParams[] = class_date::getCurrentTimestamp();
 
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams );
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
 
@@ -555,6 +562,16 @@ class class_module_workflows_workflow extends class_model implements interface_m
     public function getBitSaved() {
         return $this->bitSaved;
     }
+
+    function setStrText2($strText2) {
+        $this->strText2 = $strText2;
+    }
+
+    public function getStrText2() {
+        return $this->strText2;
+    }
+
+
 
 
 }

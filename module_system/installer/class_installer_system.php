@@ -272,22 +272,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //changelog -------------------------------------------------------------------------------------
         $strReturn .= "Installing table changelog...\n";
-
-        $arrFields = array();
-        $arrFields["change_id"] = array("char20", false);
-        $arrFields["change_date"] = array("long", true);
-        $arrFields["change_user"] = array("char20", true);
-        $arrFields["change_systemid"] = array("char20", true);
-        $arrFields["change_system_previd"] = array("char20", true);
-        $arrFields["change_class"] = array("char254", true);
-        $arrFields["change_action"] = array("char254", true);
-        $arrFields["change_property"] = array("char254", true);
-        $arrFields["change_oldvalue"] = array("text", true);
-        $arrFields["change_newvalue"] = array("text", true);
-
-        if(!$this->objDB->createTable("changelog", $arrFields, array("change_id"), array("change_date", "change_user", "change_systemid", "change_property"), false))
-            $strReturn .= "An error occured! ...\n";
-
+        $this->installChangeTables();
 
         //messages
         $strReturn .= "Installing table messages...\n";
@@ -501,6 +486,40 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
 
+    public function installChangeTables() {
+        $strReturn = "";
+
+        $arrFields = array();
+        $arrFields["change_id"]             = array("char20", false);
+        $arrFields["change_date"]           = array("long", true);
+        $arrFields["change_user"]           = array("char20", true);
+        $arrFields["change_systemid"]       = array("char20", true);
+        $arrFields["change_system_previd"]  = array("char20", true);
+        $arrFields["change_class"]          = array("char254", true);
+        $arrFields["change_action"]         = array("char254", true);
+        $arrFields["change_property"]       = array("char254", true);
+        $arrFields["change_oldvalue"]       = array("text", true);
+        $arrFields["change_newvalue"]       = array("text", true);
+
+
+        $arrTables = array("changelog");
+        $arrProvider = class_module_system_changelog::getAdditionalProviders();
+        foreach($arrProvider as $objOneProvider) {
+            $arrTables[] = $objOneProvider->getTargetTable();
+        }
+
+        $arrDbTables = $this->objDB->getTables();
+        foreach($arrTables as $strOneTable) {
+            if(!in_array(_dbprefix_.$strOneTable, $arrDbTables)) {
+                if(!$this->objDB->createTable($strOneTable, $arrFields, array("change_id"), array("change_date", "change_user", "change_systemid", "change_property"), false))
+                    $strReturn .= "An error occured! ...\n";
+            }
+        }
+
+        return $strReturn;
+
+    }
+
     protected function updateModuleVersion($strModuleName, $strVersion) {
         parent::updateModuleVersion("system", $strVersion);
         parent::updateModuleVersion("right", $strVersion);
@@ -546,6 +565,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9.3") {
             $strReturn .= $this->update_3493_40();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= $this->update_40_401();
             $this->objDB->flushQueryCache();
         }
 
@@ -755,6 +780,30 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.0");
+        return $strReturn;
+    }
+
+    private function update_40_401() {
+
+        $strReturn = "Updating 40 to 4.0.1...\n";
+
+        $strReturn .= "updating change tables...\n";
+        $strReturn .= $this->installChangeTables();
+
+        $strReturn .= "moving changes-entries...\n";
+        $strQuery = "INSERT INTO "._dbprefix_."changelog_setting
+            (change_id, change_date, change_user, change_systemid, change_system_previd, change_class, change_action, change_property, change_oldvalue, change_newvalue)
+            SELECT change_id, change_date, change_user, change_systemid, change_system_previd, change_class, change_action, change_property, change_oldvalue, change_newvalue
+            FROM "._dbprefix_."changelog WHERE change_class = ?";
+        $this->objDB->_pQuery($strQuery, array("class_modul_system_setting"));
+
+        $strReturn .= "deleting original rows...\n";
+        $strQuery = "DELETE FROM "._dbprefix_."changelog WHERE change_class = ?";
+        $this->objDB->_pQuery($strQuery, array("class_modul_system_setting"));
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.0.1");
         return $strReturn;
     }
 }
