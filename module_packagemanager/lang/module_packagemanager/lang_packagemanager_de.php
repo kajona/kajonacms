@@ -42,6 +42,7 @@ $lang["pack_version"]                    = "Version:";
 $lang["package_author"]                  = "Ersteller:";
 $lang["package_doinstall"]               = "Im System installieren";
 $lang["package_install"]                 = "Paket herunterladen und installieren";
+$lang["package_noinstall_installed"]     = "Paket ist bereits lokal installiert";
 $lang["package_install_success"]         = "Paket wurde installiert";
 $lang["package_installocally"]           = "Paket installieren/aktualisieren";
 $lang["package_minversion"]              = "Minimale System-Version:";

@@ -70,6 +70,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $objLang = class_carrier::getInstance()->getObjLang();
+        $objManager = new class_module_packagemanager_manager();
 
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
@@ -102,16 +103,24 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         } else {
             $intI = 0;
             foreach($arrPackages as $arrOnePackage) {
-                $strAction = $objToolkit->listButton(
-                    getLinkAdmin(
-                        self::$STR_MODULE_NAME,
-                        "uploadPackage",
-                        "provider=".get_class($this)."&systemid=".$arrOnePackage["systemid"],
-                        $objLang->getLang("package_install", self::$STR_MODULE_NAME),
-                        $objLang->getLang("package_install", self::$STR_MODULE_NAME),
-                        "icon_downloads.png"
-                    )
-                );
+
+                //check if already installed locally
+                if($objManager->getPackage($arrOnePackage["title"]) !== null) {
+                    $strAction = $objToolkit->listButton(getImageAdmin("icon_installDisabled.png", $objLang->getLang("package_noinstall_installed", self::$STR_MODULE_NAME)));
+                }
+                else {
+
+                    $strAction = $objToolkit->listButton(
+                        getLinkAdmin(
+                            self::$STR_MODULE_NAME,
+                            "uploadPackage",
+                            "provider=".get_class($this)."&systemid=".$arrOnePackage["systemid"],
+                            $objLang->getLang("package_install", self::$STR_MODULE_NAME),
+                            $objLang->getLang("package_install", self::$STR_MODULE_NAME),
+                            "icon_install.png"
+                        )
+                    );
+                }
 
 
                 $strIcon = "icon_module.png";
