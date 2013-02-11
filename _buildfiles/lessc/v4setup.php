@@ -4,9 +4,6 @@
 echo "compiling skin css files...\n";
 
 //files to compile
-include __DIR__.'/lessc.inc.php';
-
-$less = new lessc;
 
 $arrFilesToCompile = array(
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/styles.css",
@@ -47,8 +44,8 @@ $arrFilesToUpdate = array(
 
 
 foreach($arrFilesToCompile as $strSourceFile => $strTargetFile) {
-    $strLessFile = $less->compileFile($strSourceFile);
-    file_put_contents($strTargetFile, $strLessFile);
+    //echo "trigger less compile: lessc ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile)."\n";
+    system("lessc --verbose ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile));
 }
 
 echo "merging into skin-files...\n";
