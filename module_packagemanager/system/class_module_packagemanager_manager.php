@@ -202,7 +202,7 @@ class class_module_packagemanager_manager {
      * Scans all packages available and tries to load the latest version available.
      * All packages found are returned in a list like
      * array(packagename => version)
-     * In addition, the update-availble messages are triggered internally.
+     * In addition, the update-available messages are triggered internally.
      *
      * @return array
      */

@@ -12,6 +12,7 @@
 //editable entries
 $lang["note_content"]                    = "Inhalt:";
 $lang["note_name"]                       = "Notizen";
+$lang["updatecheck_name"]                       = "Aktualisierungen";
 $lang["sysinfo_checkboxkajona"]          = "Kajona Informationen anzeigen";
 $lang["sysinfo_checkboxphp"]             = "PHP-Informationen anzeigen";
 $lang["sysinfo_checkboxserver"]          = "Server-Informationen anzeigen";
@@ -35,3 +36,4 @@ $lang["systemcheck_name"]                = "Systemcheck";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
 $lang["systemcheck_php_urlfopen"]        = "PHP Allow url fopen: ";
+$lang["updatecheck_versionAvail"]        = "Zu aktualisierende Pakete:";

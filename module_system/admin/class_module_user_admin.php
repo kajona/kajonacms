@@ -177,7 +177,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $arrReturn = array();
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group.png"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group.png", $objListEntry->getStrUsername()));
         }
 
         if($objListEntry instanceof class_module_user_user && $objListEntry->getObjSourceUser()->isEditable() && $objListEntry->getObjSourceUser()->isPasswordResettable() && $objListEntry->rightEdit() && checkEmailaddress($objListEntry->getStrEmail())) {
@@ -854,6 +854,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function actionEditMemberships() {
         $strReturn = "";
+        $this->setArrModuleEntry("template", "/folderview.tpl");
         //open the form
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveMembership"));
         //Create a list of checkboxes
@@ -954,7 +955,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
         }
 
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&peClose=1"));
     }
 
 

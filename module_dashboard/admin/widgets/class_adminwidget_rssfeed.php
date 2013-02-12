@@ -61,7 +61,7 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         }
 
         if($strContent != "") {
-        	$objXmlparser = new class_xml_parser();
+            $objXmlparser = new class_xml_parser();
             $objXmlparser->loadString($strContent);
 
             $arrFeed = $objXmlparser->xmlToArray();
@@ -126,7 +126,7 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
      * @return bool
      */
     public function onFistLogin($strUserid) {
-        if( class_module_system_aspect::getAspectByName("content") !== null) {
+        if(class_module_system_aspect::getAspectByName("content") !== null) {
             $objDashboard = new class_module_dashboard_widget();
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
