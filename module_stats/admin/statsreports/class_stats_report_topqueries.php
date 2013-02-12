@@ -115,7 +115,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 
         $strQuery = "SELECT stats_referer
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 						  AND stats_date <= ?
 						  AND stats_referer != ''
 						  AND stats_referer IS NOT NULL

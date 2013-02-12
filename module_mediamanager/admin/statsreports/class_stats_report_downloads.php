@@ -94,7 +94,7 @@ class class_stats_report_downloads implements interface_admin_statsreports {
     private function getLogbookData() {
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."mediamanager_dllog
-					  WHERE downloads_log_date >= ?
+					  WHERE downloads_log_date > ?
 							AND downloads_log_date <= ?
 					  ORDER BY downloads_log_date DESC";
 

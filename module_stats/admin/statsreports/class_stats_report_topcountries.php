@@ -113,7 +113,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 
         $strQuery = "SELECT stats_ip, count(*) as anzahl
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 						  AND stats_date <= ?
 						GROUP BY stats_ip";
 

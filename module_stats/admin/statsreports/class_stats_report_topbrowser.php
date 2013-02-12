@@ -145,7 +145,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
         //load Data
         $strQuery = "SELECT stats_browser, count(*) as anzahl
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 							AND stats_date <= ?
 						GROUP BY stats_browser";
         $arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));

@@ -124,7 +124,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
         $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_referer NOT LIKE ?
-							AND stats_date >= ?
+							AND stats_date > ?
 							AND stats_date <= ?
 							".$strExclude."
 						GROUP BY stats_referer

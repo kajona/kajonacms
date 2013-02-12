@@ -146,7 +146,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     private function getTopQueries($intStart = false, $intEnd = false) {
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
-					  WHERE search_log_date >= ?
+					  WHERE search_log_date > ?
 					    AND search_log_date <= ?
 				   GROUP BY search_log_query
 				   ORDER BY hits DESC";
@@ -162,7 +162,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     private function getTopQueriesCount() {
         $strQuery = "SELECT COUNT(DISTINCT(search_log_query)) as total
 					  FROM "._dbprefix_."search_log
-					  WHERE search_log_date >= ?
+					  WHERE search_log_date > ?
 					    AND search_log_date <= ?";
 
         $arrReturn = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));

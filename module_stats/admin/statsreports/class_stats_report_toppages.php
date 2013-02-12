@@ -105,7 +105,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     public function getTopPages() {
         $strQuery = "SELECT stats_page as name, count(*) as anzahl, stats_language as language
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 								AND stats_date <= ?
 						GROUP BY stats_page, stats_language
 							ORDER BY anzahl desc";

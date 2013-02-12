@@ -123,7 +123,7 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
     public function getTopVisitors() {
         $strQuery = "  SELECT stats_ip , stats_browser, stats_hostname , COUNT(*) as anzahl
 					  	 FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 						  AND stats_date <= ?
 						GROUP BY stats_ip, stats_browser, stats_hostname
 						ORDER BY anzahl desc";

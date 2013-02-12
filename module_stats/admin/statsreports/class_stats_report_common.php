@@ -108,7 +108,7 @@ class class_stats_report_common implements interface_admin_statsreports {
     public function getHits() {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 						  AND stats_date <= ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
@@ -128,7 +128,7 @@ class class_stats_report_common implements interface_admin_statsreports {
     private function getHitsForOnePeriod($intStart, $intEnd) {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 								AND stats_date <= ?";
 
         $arrTemp = $this->objDB->getPRow($strQuery, array($intStart, $intEnd));
@@ -144,7 +144,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 
         $strQuery = "SELECT stats_ip , stats_browser
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 								AND stats_date <= ?
 						GROUP BY stats_ip, stats_browser";
 
@@ -164,7 +164,7 @@ class class_stats_report_common implements interface_admin_statsreports {
     private function getVisitorsForOnePeriod($intStart, $intEnd) {
         $strQuery = "SELECT stats_ip, stats_browser
 						FROM "._dbprefix_."stats_data
-						WHERE stats_date >= ?
+						WHERE stats_date > ?
 								AND stats_date <= ?
 						GROUP BY stats_ip, stats_browser";
         $arrTemp = $this->objDB->getPArray($strQuery, array($intStart, $intEnd));
@@ -195,7 +195,7 @@ class class_stats_report_common implements interface_admin_statsreports {
     public function getNumberOfCurrentUsers() {
         $strQuery = "SELECT stats_ip, stats_browser, count(*)
 					  FROM "._dbprefix_."stats_data
-					  WHERE stats_date >= ?
+					  WHERE stats_date > ?
 					  GROUP BY stats_ip, stats_browser";
 
         $arrRow = $this->objDB->getPArray($strQuery, array(time() - _stats_duration_online_));
@@ -215,7 +215,7 @@ class class_stats_report_common implements interface_admin_statsreports {
                             stats_session
                      FROM "._dbprefix_."stats_data
                      WHERE stats_session != ''
-                       AND stats_date >= ?
+                       AND stats_date > ?
 					   AND stats_date <= ?
                      GROUP BY stats_session";
 

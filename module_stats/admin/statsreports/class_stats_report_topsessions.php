@@ -115,7 +115,7 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
 
 
                      FROM "._dbprefix_."stats_data
-                     WHERE stats_date >= ?
+                     WHERE stats_date > ?
 					   AND stats_date <= ?
                      GROUP BY  stats_session, stats_ip, stats_hostname
                       ORDER BY enddate DESC";
