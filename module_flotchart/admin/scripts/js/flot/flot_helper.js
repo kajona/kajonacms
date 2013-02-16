@@ -128,7 +128,7 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     
     //create the tick array format --> [[0,'v0'],[1,'v1'],[1,'v2']]
     tickArray = $.map(tickArray, function(tick, index){
-        return [[index, tick]]
+        return [[index, tick]];
     });
 
     //calculate which ticks should be rendered
