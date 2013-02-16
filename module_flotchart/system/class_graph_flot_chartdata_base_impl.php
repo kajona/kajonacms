@@ -47,8 +47,7 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                         clickable: true,
                         backgroundColor:'".$this->strBackgroundColor."'   
                     }";
-
-
+        
         $options = "";
         $options.=$xaxis . ",";
         $options.=$yaxis . ",";
