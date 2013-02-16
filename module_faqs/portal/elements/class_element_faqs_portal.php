@@ -27,7 +27,8 @@ class class_element_faqs_portal extends class_element_portal implements interfac
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+        if(class_module_system_module::getModuleByName("rating") != null)
+            $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
 	}
 
 

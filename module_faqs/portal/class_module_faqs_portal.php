@@ -79,7 +79,7 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
 
 
     			    //ratings available?
-			        if($objOneFaq->getFloatRating() !== null) {
+			        if($objOneFaq->getFloatRating() !== null && class_module_system_module::getModuleByName("rating") != null) {
                         /** @var $objRating class_module_rating_portal */
                         $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                         $arrOneFaq["faq_rating"] = $objRating->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getIntRatingHits(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
