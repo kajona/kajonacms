@@ -79,7 +79,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
      */
     protected function actionList() {
 
-        $this->setStrCurObjectTypeName("cat");
+        $this->setStrCurObjectTypeName("Cat");
         $this->setCurObjectClassName("class_module_faqs_cat");
         $objIterator = new class_array_section_iterator(class_module_faqs_category::getObjectCount());
         $objIterator->setIntElementsPerPage(class_module_faqs_category::getObjectCount());
@@ -88,7 +88,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
 
         $strReturn = $this->renderList($objIterator, false, class_module_faqs_admin::STR_CAT_LIST);
 
-        $this->setStrCurObjectTypeName("faq");
+        $this->setStrCurObjectTypeName("Faq");
         $this->setCurObjectClassName("class_module_faqs_faq");
         $objIterator = new class_array_section_iterator(class_module_faqs_faq::getObjectCount($this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
