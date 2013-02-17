@@ -72,7 +72,7 @@ flotHelper.doToolTip = function(event, pos, item) {
             var ticks = item.series.xaxis.ticks;
             var tickLabel = ticks[previousPoint].label;
             /*
-             * in general all labels are bieng process by flotHelper.getTickFormatter
+             * in general all labels are being processed by flotHelper.getTickFormatter
              * the first value of this regex is always the value within the div-Tag the
              * getTickFormatter produces
              */
