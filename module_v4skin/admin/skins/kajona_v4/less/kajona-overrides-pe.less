@@ -61,16 +61,13 @@
 
 
 
-
-
 .pe_inactiveElement {
     border: 1px solid #333333;
-    border-radius: 2px;
+    .border-radius(3px);
     padding: 3px;
     margin: 2px 0 2px 0px;
     background-color: #cccccc;
-    opacity: 0.5;
-    filter: alpha(opacity=50);
+    .opacity(50);
 }
 
 
@@ -98,9 +95,8 @@
             text-align: left !important;
             padding: 1px 3px 2px 3px !important;
             text-transform: none !important;
-            -webkit-border-radius: 3px 3px 0 0;
-            -moz-border-radius: 3px 3px 0 0;
-            border-radius: 3px 3px 0 0;
+            .border-top-right-radius(3px);
+            .border-top-left-radius(3px);
             line-height: 14px !important;
 
             a, a:link, a:visited, a:hover, a:active, a:focus {
@@ -149,6 +145,17 @@
         padding: 0;
         list-style: none;
         margin: 0;
+
+        a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 4px;
+
+            &:hover {
+                background-color: #cccccc !important;
+            }
+        }
     }
 }
 
