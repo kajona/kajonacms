@@ -149,6 +149,7 @@ abstract class class_graph_flot_chartdata_base {
         
         //count number of different series data types
         $barsCount = 0;
+        $barsStackedCount = 0;
         foreach($this->arrFlotSeriesData as $intKey => $seriesData) {
             $chartType = $seriesData->getStrSeriesChartType();
             switch($chartType) {
@@ -160,6 +161,7 @@ abstract class class_graph_flot_chartdata_base {
                     $barsCount++;
                     break;
                 case class_graph_flot_seriesdatatypes::STACKEDBAR: 
+                    $barsStackedCount++;
                     break;
             }
         }
@@ -168,6 +170,8 @@ abstract class class_graph_flot_chartdata_base {
         foreach($this->arrFlotSeriesData as $intKey => $seriesData) {
             $chartType = $seriesData->getStrSeriesChartType();
             $seriesDataString = $chartTypeArr[$seriesData->getStrSeriesChartType()];
+            $nrOfElements = sizeof($seriesData->getArrayData());
+            
             switch($chartType) {
                 case class_graph_flot_seriesdatatypes::PIE: 
                     $seriesData->setStrSeriesData($seriesDataString);
@@ -178,14 +182,34 @@ abstract class class_graph_flot_chartdata_base {
                 case class_graph_flot_seriesdatatypes::BAR: 
                     $alignment = $barsCount==1? "center": "left";
                     $order = $intKey+1;
-                    $barWidth = $this->intWidth/sizeof($this->arrFlotSeriesData)/sizeof($seriesData->getArrayData())/100;
-                    $barWidth = $barWidth>1? floor($barWidth) * 0.9: $barWidth * 0.9;
+
+                    $substract = 0;
+                    if($this->strYAxisTitle!="") {
+                       $substract  +=15; 
+                    }
+                    if($this->bShowLegend) {
+                       $substract  +=140; 
+                    }
+                    
+                    $barWidth = (($this->intWidth-$substract) /($barsCount*$nrOfElements)) * 0.9;
+                    $barWidth = $barWidth/100;
+                    $barWidth = $barWidth > 0.1? 0.1 *0.7: $barWidth;
                     $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment, $order));
                     break;
                 case class_graph_flot_seriesdatatypes::STACKEDBAR: 
                     $alignment = "center";
-                    $barWidth = $this->intWidth/sizeof($this->arrFlotSeriesData)/sizeof($seriesData->getArrayData())/100;
-                    $barWidth = $barWidth>1? floor($barWidth) * 0.9: $barWidth * 0.9;
+                    
+                    $substract = 0;
+                    if($this->strYAxisTitle!="") {
+                       $substract  +=15; 
+                    }
+                    if($this->bShowLegend) {
+                       $substract  +=140; 
+                    }
+                    
+                    $barWidth = (($this->intWidth-$substract) /($nrOfElements)) * 0.9;
+                    $barWidth = $barWidth/100;
+                    $barWidth = $barWidth >0.4? 0.4 *0.7: $barWidth;
                     $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment));
                     break;
             }

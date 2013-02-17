@@ -42,22 +42,46 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->addBarChartSet(array(3,3,6,2), "serie 2");
         $objGraph->addBarChartSet(array(4,4,8,6), "serie 3");
         $objGraph->addBarChartSet(array(10,7,3,3), "serie 4");
-        $objGraph->addBarChartSet(array(6,4,3,6), "serie 5");
+        $objGraph->addBarChartSet(array(6,7,3,20), "serie 5");
+        $objGraph->addBarChartSet(array(6,8,3,20), "serie 5");
+        $objGraph->addBarChartSet(array(10,9,3,12), "serie 5");
+        $objGraph->addBarChartSet(array(6,45,3,30), "serie 5");  
+        $objGraph->addBarChartSet(array(9,2,3,40), "serie 5");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
         $objGraph->setIntXAxisAngle(-20);
-        $objGraph->setIntHeight(150);
+        $objGraph->setIntHeight(350);
         $objGraph->setIntWidth(300);
         $objGraph->setBitRenderLegend(false);
+         echo $objGraph->renderGraph();
         
+        $objGraph->setIntWidth(400);
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setIntWidth(500);
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setIntWidth(600);
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setIntWidth(700);
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setIntWidth(800);
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setIntWidth(900);
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setIntWidth(100);
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Bar Chart");
-        $objGraph->addStackedBarChartSet(array(8,-5,7,8,4,12,1,1,1), "serie 1");
-        $objGraph->addStackedBarChartSet(array(3,-4,6,2,5,2,2,2,2 ), "serie 2");
-        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6","v7","v8","v9"));
+        $objGraph->addStackedBarChartSet(array(8,-5,7,8,4,12,1,1,1,3,4,5,6), "serie 1");
+        $objGraph->addStackedBarChartSet(array(3,-4,6,2,5,2,2,2,2,3,4,5,6), "serie 2");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6","v7","v8","v9","v10","v11","v12","v13"));
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
@@ -66,7 +90,10 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
+        $objGraph->addBarChartSet(array(1,2,3,4), "serie 3");
+        $objGraph->addBarChartSet(array(1,2,3,4), "serie 4");
         $objGraph->addBarChartSet(array(1,2,3,4), "serie 5");
+        $objGraph->setBitRenderLegend(true);
         echo $objGraph->renderGraph();
         
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
