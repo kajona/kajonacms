@@ -50,10 +50,10 @@ abstract class class_graph_flot_chartdata_base {
      *
      */
     public function __construct() {
-        $this->arrChartTypes["bars"] = "bars: {show:true, barWidth: %s, align: '%s', fill:true, lineWidth: 1, order: %d}";
-        $this->arrChartTypes["barsStacked"] = "stack:true, bars: {show:true, barWidth: %s, align: '%s', fill:true, lineWidth: 1}";
-        $this->arrChartTypes["lines"] = "lines: {show:true}, points:{show:true} ";
-        $this->arrChartTypes["pie"] = "pie: {show:true}";
+        $this->arrChartTypes[class_graph_flot_seriesdatatypes::BAR] = "bars: {show:true, barWidth: %s, align: '%s', fill:true, lineWidth: 1, order: %d}";
+        $this->arrChartTypes[class_graph_flot_seriesdatatypes::STACKEDBAR] = "stack:true, bars: {show:true, barWidth: %s, align: '%s', fill:true, lineWidth: 1}";
+        $this->arrChartTypes[class_graph_flot_seriesdatatypes::LINE] = "lines: {show:true}, points:{show:true} ";
+        $this->arrChartTypes[class_graph_flot_seriesdatatypes::PIE] = "pie: {show:true}";
     }
     
     public function setChartId($strChartId) {
@@ -147,27 +147,45 @@ abstract class class_graph_flot_chartdata_base {
         //set series data
         $chartTypeArr = $this->arrChartTypes;
         
+        //count number of different series data types
+        $barsCount = 0;
+        foreach($this->arrFlotSeriesData as $intKey => $seriesData) {
+            $chartType = $seriesData->getStrSeriesChartType();
+            switch($chartType) {
+                case class_graph_flot_seriesdatatypes::PIE: 
+                    break;
+                case class_graph_flot_seriesdatatypes::LINE: 
+                    break;
+                case class_graph_flot_seriesdatatypes::BAR:
+                    $barsCount++;
+                    break;
+                case class_graph_flot_seriesdatatypes::STACKEDBAR: 
+                    break;
+            }
+        }
+               
+        //now set the series data strings
         foreach($this->arrFlotSeriesData as $intKey => $seriesData) {
             $chartType = $seriesData->getStrSeriesChartType();
             $seriesDataString = $chartTypeArr[$seriesData->getStrSeriesChartType()];
             switch($chartType) {
-                case "pie": 
+                case class_graph_flot_seriesdatatypes::PIE: 
                     $seriesData->setStrSeriesData($seriesDataString);
                     break;
-                case "lines": 
+                case class_graph_flot_seriesdatatypes::LINE: 
                     $seriesData->setStrSeriesData($seriesDataString);
                     break;
-                case "bars": 
-                    $alignment = sizeof($this->arrFlotSeriesData)==1? "center": "left";
+                case class_graph_flot_seriesdatatypes::BAR: 
+                    $alignment = $barsCount==1? "center": "left";
                     $order = $intKey+1;
                     $barWidth = $this->intWidth/sizeof($this->arrFlotSeriesData)/sizeof($seriesData->getArrayData())/100;
-                    $barWidth = $barWidth>1? floor($barWidth) - 0.07: $barWidth;
+                    $barWidth = $barWidth>1? floor($barWidth) * 0.9: $barWidth * 0.9;
                     $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment, $order));
                     break;
-                case "barsStacked": 
+                case class_graph_flot_seriesdatatypes::STACKEDBAR: 
                     $alignment = "center";
                     $barWidth = $this->intWidth/sizeof($this->arrFlotSeriesData)/sizeof($seriesData->getArrayData())/100;
-                    $barWidth = $barWidth>1?floor($barWidth) - 0.07: $barWidth;
+                    $barWidth = $barWidth>1? floor($barWidth) * 0.9: $barWidth * 0.9;
                     $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment));
                     break;
             }

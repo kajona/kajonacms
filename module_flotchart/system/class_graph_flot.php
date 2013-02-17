@@ -61,7 +61,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabel($strLegend);
-            $seriesData->setStrSeriesChartType("bars");
+            $seriesData->setStrSeriesChartType(class_graph_flot_seriesdatatypes::BAR);
             $this->objChartData->addSeriesData($seriesData);
         }
     }
@@ -74,7 +74,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabel($strLegend);
-            $seriesData->setStrSeriesChartType("lines");
+            $seriesData->setStrSeriesChartType(class_graph_flot_seriesdatatypes::LINE);
             $this->objChartData->addSeriesData($seriesData);
         }
         
@@ -88,7 +88,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabel($strLegend);
-            $seriesData->setStrSeriesChartType("barsStacked");
+            $seriesData->setStrSeriesChartType(class_graph_flot_seriesdatatypes::STACKEDBAR);
             $this->objChartData->addSeriesData($seriesData);
         }
     }
@@ -101,7 +101,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata_pie();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabelArray($arrLegends);
-            $seriesData->setStrSeriesChartType("pie");
+            $seriesData->setStrSeriesChartType(class_graph_flot_seriesdatatypes::PIE);
             $this->objChartData->addSeriesData($seriesData);
         }
     }
