@@ -20,11 +20,15 @@ abstract class class_graph_flot_chartdata_base {
     /**
      * @var class_graph_flot_seriesdata[]
      */
-    protected $arrFlotSeriesData = array();
-    protected $arrChartTypes = array();
+    protected $arrFlotSeriesData = array();//contains the series data
+    protected $arrChartTypes = array(); //contains the available chart types
 
     //chart id
     protected $strChartId = null;
+    
+    //width and heigth
+    private $intWidth;
+    private $intHeight;
     
     //line and barchart
     protected $strXAxisTitle = "";
@@ -46,8 +50,8 @@ abstract class class_graph_flot_chartdata_base {
      *
      */
     public function __construct() {
-        $this->arrChartTypes["bars"] = "bars: {show:true, barWidth:0.5, align: 'center', fill:true, lineWidth: 1}";
-        $this->arrChartTypes["barsStacked"] = "stack:true, bars: {show:true, barWidth:0.5, align: 'center', fill:true, lineWidth: 1}";
+        $this->arrChartTypes["bars"] = "bars: {show:true, barWidth: %s, align: '%s', fill:true, lineWidth: 1, order: %d}";
+        $this->arrChartTypes["barsStacked"] = "stack:true, bars: {show:true, barWidth: %s, align: '%s', fill:true, lineWidth: 1}";
         $this->arrChartTypes["lines"] = "lines: {show:true}, points:{show:true} ";
         $this->arrChartTypes["pie"] = "pie: {show:true}";
     }
@@ -56,6 +60,13 @@ abstract class class_graph_flot_chartdata_base {
         $this->strChartId = $strChartId;
     }
     
+    public function setIntHeight($intHeight) {
+        $this->intHeight = $intHeight;
+    }
+
+    public function setIntWidth($intWidth) {
+        $this->intWidth = $intWidth;
+    }
     
     public function setBitRenderLegend($bitRenderLegend) {
         if($bitRenderLegend) {
@@ -99,6 +110,9 @@ abstract class class_graph_flot_chartdata_base {
         $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
     }
 
+    /**
+     * Creates a JSON string with options for the flot chart
+     */
     public abstract function optionsToJSON();
 
     public abstract function showChartToolTips($strChartId);
@@ -115,8 +129,11 @@ abstract class class_graph_flot_chartdata_base {
         $this->arrFlotSeriesData[] = $seriesData;
     }
 
-
+    /**
+     * Renders the chart.
+     */
     public function showGraph($strChartId) {
+        //convert it to JSON
         $strData = $this->dataToJSON();
         $strOptions = $this->optionsToJSON();
 
@@ -127,6 +144,36 @@ abstract class class_graph_flot_chartdata_base {
     }
 
     public function dataToJSON() {
+        //set series data
+        $chartTypeArr = $this->arrChartTypes;
+        
+        foreach($this->arrFlotSeriesData as $intKey => $seriesData) {
+            $chartType = $seriesData->getStrSeriesChartType();
+            $seriesDataString = $chartTypeArr[$seriesData->getStrSeriesChartType()];
+            switch($chartType) {
+                case "pie": 
+                    $seriesData->setStrSeriesData($seriesDataString);
+                    break;
+                case "lines": 
+                    $seriesData->setStrSeriesData($seriesDataString);
+                    break;
+                case "bars": 
+                    $alignment = sizeof($this->arrFlotSeriesData)==1? "center": "left";
+                    $order = $intKey+1;
+                    $barWidth = $this->intWidth/sizeof($this->arrFlotSeriesData)/sizeof($seriesData->getArrayData())/100;
+                    $barWidth = $barWidth>1? floor($barWidth) - 0.07: $barWidth;
+                    $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment, $order));
+                    break;
+                case "barsStacked": 
+                    $alignment = "center";
+                    $barWidth = $this->intWidth/sizeof($this->arrFlotSeriesData)/sizeof($seriesData->getArrayData())/100;
+                    $barWidth = $barWidth>1?floor($barWidth) - 0.07: $barWidth;
+                    $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment));
+                    break;
+            }
+        }
+        
+        // now create a JSON string
         $data = "";
         foreach ($this->arrFlotSeriesData as $objValue) {
             $data.= $objValue->toJSON() . ",";
@@ -136,4 +183,3 @@ abstract class class_graph_flot_chartdata_base {
     }
 
 }
-

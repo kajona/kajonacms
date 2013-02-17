@@ -19,6 +19,7 @@ class class_graph_flot_seriesdata {
     
     protected $strLabel = "";
     protected $arrayData = array();
+    protected $strSeriesData = "";
     protected $strSeriesChartType = "";
     
     /**
@@ -26,39 +27,42 @@ class class_graph_flot_seriesdata {
     *
     */
     public function __construct() {
-        
     }
     
     public function getStrLabel() {
         return $this->strLabel;
     }
+    
     public function setStrLabel($strLabel) {
         $this->strLabel = $strLabel;
     }
-    
-    
+
     public function getArrayData() {
         return $this->arrayData;
     }
+    
     public function setArrayData($arrayData) {
         $this->arrayData = $arrayData;
     }
 
-    
     public function getStrSeriesChartType() {
         return $this->strSeriesChartType;
     }
+    
     public function setStrSeriesChartType($strSeriesChartType) {
         $this->strSeriesChartType = $strSeriesChartType;
     }
     
-    
+    public function setStrSeriesData($strSeriesData) {
+        $this->strSeriesData = $strSeriesData;
+    }
+
     public function toJSON() {
         $strComma = ",";
         $str = "{";
             $str .= "label:\"".$this->strLabel."\"".$strComma;
             $str .= "data:".json_encode($this->convertToFlotArrayDataStructure($this->arrayData)).$strComma;
-            $str .=  $this->strSeriesChartType;
+            $str .=  $this->strSeriesData;
         $str .= "}";
         
         return $str;

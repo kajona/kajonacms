@@ -38,8 +38,8 @@ class class_graph_flot implements interface_graph {
     private $bShowLegend = true;
     private $strGraphTitle = "";
     private $strBackgroundColor="#FFFFFF";//white
-    private $strFont = "Verdana, Arial, Helvetica, sans-serifs";
-    private $strFontColor ="#000000";//black
+    private $strFont = "";//e.g. Verdana, Arial, Helvetica, sans-serifs
+    private $strFontColor ="";//e.g. #000000
     
     
     /**
@@ -61,9 +61,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabel($strLegend);
-            $tempArr = $this->objChartData->getArrChartTypes();
-            $seriesData->setStrSeriesChartType($tempArr["bars"]);
-
+            $seriesData->setStrSeriesChartType("bars");
             $this->objChartData->addSeriesData($seriesData);
         }
     }
@@ -76,9 +74,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabel($strLegend);
-            $tempArr = $this->objChartData->getArrChartTypes();
-            $seriesData->setStrSeriesChartType($tempArr["lines"]);
-
+            $seriesData->setStrSeriesChartType("lines");
             $this->objChartData->addSeriesData($seriesData);
         }
         
@@ -92,9 +88,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabel($strLegend);
-            $tempArr = $this->objChartData->getArrChartTypes();
-            $seriesData->setStrSeriesChartType($tempArr["barsStacked"]);
-
+            $seriesData->setStrSeriesChartType("barsStacked");
             $this->objChartData->addSeriesData($seriesData);
         }
     }
@@ -107,9 +101,7 @@ class class_graph_flot implements interface_graph {
             $seriesData = new class_graph_flot_seriesdata_pie();
             $seriesData->setArrayData($arrValues);
             $seriesData->setStrLabelArray($arrLegends);
-            $tempArr = $this->objChartData->getArrChartTypes();
-            $seriesData->setStrSeriesChartType($tempArr["pie"]);
-
+            $seriesData->setStrSeriesChartType("pie");
             $this->objChartData->addSeriesData($seriesData);
         }
     }
@@ -183,6 +175,8 @@ class class_graph_flot implements interface_graph {
              throw new class_exception("Chart not initialized yet", class_exception::$level_ERROR);
         
         //set attributes
+        $this->objChartData->setIntWidth($this->intWidth);
+        $this->objChartData->setIntHeight($this->intHeight);
         $this->objChartData->setBitRenderLegend($this->bShowLegend);
         $this->objChartData->setIntXAxisAngle($this->intXAxisAngle);
         $this->objChartData->setStrBackgroundColor($this->strBackgroundColor);
@@ -193,10 +187,10 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->setStrYAxisTitle($this->strYAxisTitle);
         $this->objChartData->setArrXAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabels);
         $this->objChartData->setChartId($this->strChartId = generateSystemid());
-        
+                
         //create chart
         $strChartCode = $this->objChartData->showGraph($this->strChartId);
-        $toolTip = $this->objChartData->showChartToolTips($this->strChartId);
+        $this->objChartData->showChartToolTips($this->strChartId);
         
         //divs
         $strDivTitle = "";
@@ -236,19 +230,20 @@ class class_graph_flot implements interface_graph {
             $legendLeft=$this->intWidth-$legendWidth-$xAxisHeight;
             $legendBottom=$legendHeight+2;
             $legendId="legend_" . $this->strChartId;
-            $legendStyles="position:relative;height:".$legendHeight."px;width:".$legendWidth."px; left:".$legendLeft."px;bottom:".$legendBottom."px;";
+            $legendStyles="position:relative;width:".$legendWidth."px;left:".$legendLeft."px;bottom:".$legendBottom."px;";
             $strDivLegend = "<div id=\"".$legendId."\"  style=\"".$legendStyles."\" > &nbsp; </div>";
         }
 
         //Create Chart Div
         $chartHeight = $chartHeight-$titleHeight-$xAxisHeight;
         $chartWidth = $chartWidth-$legendWidth-$yAxisWidth;
-        $chartStyles = "font-size:11px; font-family:".$this->strFont.";width:".$chartWidth."px; height:".$chartHeight."px;";
+        $fontStyle = "font-family:".$this->strFont.";";
+        $chartStyles = $fontStyle."width:".$chartWidth."px;height:".$chartHeight."px;";
         $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"".$chartStyles." \" > &nbsp; </div>";
         
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
+        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px; \">";
         $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend."</div>";
         $strReturn .= "<script type='text/javascript'>
 
@@ -258,6 +253,7 @@ class class_graph_flot implements interface_graph {
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
+                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.orderBars.js',
                     '/core/module_flotchart/admin/scripts/js/flot/excanvas.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
                 ], function() {
