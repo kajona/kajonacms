@@ -287,23 +287,20 @@ class class_remoteloader {
                     fwrite($objRemoteResource, "Host: " . $arrUrl['host'] . "\r\n");
                     fwrite($objRemoteResource, "Connection: close\r\n\r\n");
 
+                    $bitStripped = false;
                     while(!feof($objRemoteResource)) {
-                        $strReturn .= fgets($objRemoteResource, 1024);
+                        $strTemp = fgets($objRemoteResource, 1024);
+                        $strReturn .= $strTemp;
+                        if($strTemp == "\r\n" && !$bitStripped) {
+                            $strReturn = "";
+                            $bitStripped = true;
+                        }
                     }
                     fclose($objRemoteResource);
                 }
 
                 if($intErrorNumber != 0) {
                     return false;
-                }
-
-                if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
-                    $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
-                }
-
-                $strReturn = trim($strReturn);
-                if(uniStrpos($strReturn, "<") !== false) {
-                    $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
                 }
 
                 //and, if given, remove the last 0
