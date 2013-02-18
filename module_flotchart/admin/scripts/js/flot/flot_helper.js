@@ -111,8 +111,14 @@ flotHelper.showPieToolTip = function(event, pos, item) {
             previousSeries = item.seriesIndex;
             //create new tooltip
             var percent = parseFloat(item.series.percent);
-            var content = '<span style=\"\">'+'<u>'+item.series.label+'</u><br/>'+percent.toFixed(2)+'%</span>';
-            flotHelper.showTooltip(pos.pageX, pos.pageY, content, item.series.color);
+            seriesLabel = item.series.label;
+            if(seriesLabel && seriesLabel.length>1)
+            {
+                seriesLabel = '<u>'+seriesLabel+'</u><br/>'; 
+            }
+            
+            var content = '<span style=\"\">'+percent.toFixed(2)+'%</span>';
+            flotHelper.showTooltip(pos.pageX, pos.pageY, content, seriesLabel, item.series.color);
         } else {
             //move tooltip if still in the same series
             $('#tooltip').css( {
