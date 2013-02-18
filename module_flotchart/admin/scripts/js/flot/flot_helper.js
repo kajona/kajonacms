@@ -24,16 +24,22 @@ flotHelper.getTickFormatter = function(angle, val, axis) {
     return "<div style=\""+safari+firefox+ie+opera+"\">"+val+"</div>"
 };
 
-flotHelper.showTooltip = function(x, y, contents, color) {
-    $('<div id=\"tooltip\">' + contents + '</div>').css( {
+flotHelper.showTooltip = function(x, y, contents, seriesLabel, color) {
+    $('<div id=\"tooltip\">'
+            + '<div style=\"float:left; width:15px; height:15px; background-color:'+color+';margin:4px;\"></div>'
+            + '<div style=\"float:left;\">  ' + seriesLabel + '</div>'
+            + '<div style=\"clear:both; padding-left:23px\">  ' + contents + '</div>'
+            + '</div>').css( {
         position: 'absolute',
         display: 'none',
         top: y + flotHelper.tooltipOffsetX,
         left: x + flotHelper.tooltipOffsetY,
-        border: '1px solid '+color,
+        'box-shadow': '5px 5px 5px #444444',
         padding: '2px',
-        'background-color': '#fee',
-        opacity: 0.80
+        'border-radius': '5px',
+        'background-color': '#000000',
+        'color': '#FFFFFF',
+        opacity: 1
     }).appendTo("body").show();
 };
 
@@ -67,7 +73,7 @@ flotHelper.doToolTip = function(event, pos, item) {
             
             if(seriesLabel && seriesLabel.length>1)
             {
-                content = '<u>'+seriesLabel+'</u><br/>'; 
+                seriesLabel = '<u>'+seriesLabel+'</u><br/>'; 
             }
             var ticks = item.series.xaxis.ticks;
             var tickLabel = ticks[previousPoint].label;
@@ -87,7 +93,7 @@ flotHelper.doToolTip = function(event, pos, item) {
                 +'<br/>' 
                 +'y = ' + y;
             }
-            flotHelper.showTooltip(pos.pageX, pos.pageY, content, color);
+            flotHelper.showTooltip(pos.pageX, pos.pageY, content, seriesLabel, color);
         }
     }
     else {
