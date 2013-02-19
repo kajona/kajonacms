@@ -183,7 +183,7 @@ abstract class class_graph_flot_chartdata_base {
                     $alignment = $barsCount==1? "center": "left";
                     $order = $intKey+1;
 
-                    $substract = 0;
+                    $substract = 20; //Y-Axis
                     if($this->strYAxisTitle!="") {
                        $substract  +=15; 
                     }
@@ -191,15 +191,16 @@ abstract class class_graph_flot_chartdata_base {
                        $substract  +=140; 
                     }
                     
-                    $barWidth = (($this->intWidth-$substract) /($barsCount*$nrOfElements)) * 0.9;
+                    $calcWidth = $this->intWidth-$substract;
+                    $calcWidth = $calcWidth>300? 300:$calcWidth;
+                    $barWidth = $calcWidth / $nrOfElements / $barsCount;
                     $barWidth = $barWidth/100;
-                    $barWidth = $barWidth > 0.1? 0.1 *0.7: $barWidth;
                     $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment, $order));
                     break;
                 case class_graph_flot_seriesdatatypes::STACKEDBAR: 
                     $alignment = "center";
                     
-                    $substract = 0;
+                    $substract = 20;//Y-Axis
                     if($this->strYAxisTitle!="") {
                        $substract  +=15; 
                     }
@@ -207,9 +208,10 @@ abstract class class_graph_flot_chartdata_base {
                        $substract  +=140; 
                     }
                     
-                    $barWidth = (($this->intWidth-$substract) /($nrOfElements)) * 0.9;
+                    $calcWidth = $this->intWidth-$substract;
+                    $calcWidth = $calcWidth>300? 300:$calcWidth;
+                    $barWidth = $calcWidth / $nrOfElements;
                     $barWidth = $barWidth/100;
-                    $barWidth = $barWidth >0.4? 0.4 *0.7: $barWidth;
                     $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment));
                     break;
             }
