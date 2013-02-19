@@ -70,7 +70,7 @@ class class_graph_flot_seriesdata_pie extends class_graph_flot_seriesdata{
         
     //converts the php array to an array for flot
     protected function convertToFlotArrayDataStructure($arrayData) {
-       return $arrayData;
+        return $arrayData;
     }
 }
 

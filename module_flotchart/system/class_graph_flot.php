@@ -255,7 +255,8 @@ class class_graph_flot implements interface_graph {
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.orderBars.js',
                     '/core/module_flotchart/admin/scripts/js/flot/excanvas.min.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js'
+                    '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js',
+                    '/core/module_flotchart/admin/scripts/flot.css'
                 ], function() {
                     ".$strChartCode."    
                 });

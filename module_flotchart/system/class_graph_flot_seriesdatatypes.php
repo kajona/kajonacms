@@ -14,11 +14,10 @@
  * @since 4.0
  * @author stefan.meyer1@yahoo.de
  */
-class class_graph_flot_seriesdatatypes
-{  
-  const LINE = 'lines';  
-  const BAR = 'bars';  
-  const STACKEDBAR = 'barsStacked'; 
-  const PIE = 'pie'; 
+class class_graph_flot_seriesdatatypes {
+    const LINE = 'lines';
+    const BAR = 'bars';
+    const STACKEDBAR = 'barsStacked';
+    const PIE = 'pie';
 }  
-?>
+

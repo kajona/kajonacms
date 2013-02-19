@@ -1,6 +1,6 @@
 
 
-div.flotGraph {
-    /*float: left;*/
-    border: 1px dashed gainsboro;
+div.graphBox td.legendColorBox {
+    vertical-align: top;
+    padding-top: 4px;
 }
