@@ -442,6 +442,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 //Load portaleditor styles
                 $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
 
+                $objScriptlets = new class_scriptlet_helper();
+                $strPeToolbar = $objScriptlets->processString($strPeToolbar, interface_scriptlet::BIT_CONTEXT_ADMIN);
 
                 //The toolbar has to be added right after the body-tag - to generate correct html-code
                 $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));

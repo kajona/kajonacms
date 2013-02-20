@@ -20,10 +20,13 @@ class class_scriptlet_helper {
     /**
      * Calls the scriptlets in order to process additional tags and in order to enrich the content.
      *
-     * @param $strContent
+     * @param string $strContent the content to process
+     * @param int $intContext context-selector used to find the matching scriptlets to apply. if not given, all contexts are applied - worst case!
+     *
      * @return string
+     * @see interface_scriptlet
      */
-    public function processString($strContent) {
+    public function processString($strContent, $intContext = null) {
         $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
 
         foreach($arrScriptletFiles as $strOneScriptlet) {
@@ -31,8 +34,12 @@ class class_scriptlet_helper {
             /** @var $objScriptlet interface_scriptlet */
             $objScriptlet = new $strOneScriptlet();
 
-            if($objScriptlet instanceof interface_scriptlet)
+
+            if($objScriptlet instanceof interface_scriptlet && ($intContext != null && ($intContext & $objScriptlet->getProcessingContext()))) {
                 $strContent = $objScriptlet->processContent($strContent);
+                class_logger::getInstance("scriptlets.log")->addLogRow("processing call to ".$strOneScriptlet.", filter: ".$intContext, class_logger::$levelInfo);
+            }
+
         }
 
         return $strContent;

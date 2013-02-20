@@ -117,6 +117,10 @@ abstract class class_element_portal extends class_portal {
         //add an anchor to jump to, but exclude navigation-elements
         $strReturn = $this->getAnchorTag().$strReturn;
 
+        //apply element-based scriptlets
+        $objScriptlets = new class_scriptlet_helper();
+        $strReturn = $objScriptlets->processString($strReturn, interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT);
+
         return $strReturn;
     }
 

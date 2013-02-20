@@ -60,4 +60,17 @@ class class_scriptlet_imagehelper implements interface_scriptlet {
         return $strContent;
     }
 
+    /**
+     * Define the context the scriptlet is applied to.
+     * A combination of contexts is allowed using an or-concatenation.
+     * Examples:
+     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
+     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *
+     * @return mixed
+     */
+    public function getProcessingContext() {
+        return interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT;
+    }
+
 }

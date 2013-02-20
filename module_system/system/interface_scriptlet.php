@@ -27,4 +27,32 @@ interface interface_scriptlet {
      * @return string
      */
     public function processContent($strContent);
+
+    /**
+     * Define the context the scriptlet is applied to.
+     * A combination of contexts is allowed using an or-concatenation.
+     * Examples:
+     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
+     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     * @return mixed
+     */
+    public function getProcessingContext();
+
+
+    /**
+     * Scriptlet is applied to admin-views
+     */
+    const BIT_CONTEXT_ADMIN = 2;
+
+    /**
+     * Scriptlet is applied to portal-elements (before saving them to
+     * the cache)
+     */
+    const BIT_CONTEXT_PORTAL_ELEMENT = 4;
+
+    /**
+     * Scriptlet is applied to generated porta-pages right before passing
+     * them back to the browser - so no caching applies
+     */
+    const BIT_CONTEXT_PORTAL_PAGE = 8;
 }

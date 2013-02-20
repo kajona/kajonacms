@@ -38,7 +38,7 @@ class class_scriptlet_xconstants implements interface_scriptlet {
             0 => _indexpath_,
             1 => _webpath_,
             2 => _system_browser_cachebuster_,
-            3 => date("d.m.y H:i" , time())
+            3 => date("d.m.y H:i", time())
         );
 
         if(defined("_skinwebpath_")) {
@@ -48,6 +48,19 @@ class class_scriptlet_xconstants implements interface_scriptlet {
 
 
         return str_replace($arrConstants, $arrValues, $strContent);
+    }
+
+    /**
+     * Define the context the scriptlet is applied to.
+     * A combination of contexts is allowed using an or-concatenation.
+     * Examples:
+     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
+     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *
+     * @return mixed
+     */
+    public function getProcessingContext() {
+        return interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE | interface_scriptlet::BIT_CONTEXT_ADMIN;
     }
 
 }

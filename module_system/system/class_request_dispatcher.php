@@ -52,13 +52,14 @@ class class_request_dispatcher {
 
         if($bitAdmin) {
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
+            $strReturn = $this->callScriptlets($strReturn, interface_scriptlet::BIT_CONTEXT_ADMIN);
         }
         else {
             $strReturn = $this->processPortalRequest($strModule, $strAction, $strLanguageParam);
+            $strReturn = $this->callScriptlets($strReturn, interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE);
         }
 
 
-        $strReturn = $this->callScriptlets($strReturn);
         $strReturn = $this->cleanupOutput($strReturn);
         $strReturn = $this->getDebugInfo() . $strReturn;
         $this->sendConditionalGetHeaders($strReturn);
@@ -291,12 +292,13 @@ class class_request_dispatcher {
      * Calls the scriptlets in order to process additional tags and in order to enrich the content.
      *
      * @param $strContent
+     * @param $intContext
      *
      * @return string
      */
-    private function callScriptlets($strContent) {
+    private function callScriptlets($strContent, $intContext) {
         $objScriptlet = new class_scriptlet_helper();
-        return $objScriptlet->processString($strContent);
+        return $objScriptlet->processString($strContent, $intContext);
     }
 
 
