@@ -28,10 +28,6 @@ class class_scriptlet_imagehelper implements interface_scriptlet {
      */
     public function processContent($strContent) {
 
-        if(_admin_)
-            return $strContent;
-
-
         $arrTemp = array();
         preg_match_all("#\[img,([ \-+%A-Za-z0-9_\./\\\\(\)]+),([0-9]+),([0-9]+)(,fixed|,max|)\]#i", $strContent, $arrTemp);
 
