@@ -33,6 +33,11 @@ class class_admin_helper {
         $arrMenuEntries = array();
         $arrModules = class_module_system_module::getModulesInNaviAsArray();
         foreach($arrModules as $arrOneModule) {
+            $objModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
+
+            if(!$objModule->rightEdit())
+                continue;
+
             $arrCurMenuEntry = array(
                 "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
                 "onclick" => "location.href='".getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
@@ -40,7 +45,6 @@ class class_admin_helper {
             );
 
             //fetch the submenu entries
-            $objModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
             if($objModule != null) {
                 $arrActionMenuEntries = array();
                 $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
