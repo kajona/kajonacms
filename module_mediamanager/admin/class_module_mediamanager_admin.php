@@ -62,17 +62,17 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
      */
     protected function renderAdditionalActions(class_model $objListEntry) {
 
-        if($objListEntry instanceof class_module_mediamanager_repo)
+        if($objListEntry instanceof class_module_mediamanager_repo && $objListEntry->rightView())
             return array($this->objToolkit->listButton(
                 getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
             ));
 
-        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER && $objListEntry->rightView())
             return array($this->objToolkit->listButton(
                 getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
             ));
 
-        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE && $objListEntry->rightEdit()) {
             //add a crop icon?
             $arrMime  = $this->objToolkit->mimeType($objListEntry->getStrFilename());
             if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
@@ -113,7 +113,11 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
         if($strListIdentifier != class_module_mediamanager_admin::INT_LISTTYPE_FOLDER)
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
         else if($strListIdentifier == class_module_mediamanager_admin::INT_LISTTYPE_FOLDER) {
-            return $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", "", $this->getLang("commons_create_folder"), "icon_new.png"));
+            if(validateSystemid($this->getSystemid())) {
+                $objCur = class_objectfactory::getInstance()->getObject($this->getSystemid());
+                if($objCur->rightEdit())
+                    return $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", "", $this->getLang("commons_create_folder"), "icon_new.png"));
+            }
 
             //href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "btn"
         }
