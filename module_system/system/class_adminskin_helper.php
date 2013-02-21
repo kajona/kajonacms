@@ -16,6 +16,8 @@
  */
 class class_adminskin_helper {
 
+    private static $strSkinPath = null;
+
     /**
      * Returns the list of available admin-skins
      * @static
@@ -42,7 +44,10 @@ class class_adminskin_helper {
      * @return string
      */
     public static function getPathForSkin($strSkin) {
-        return class_resourceloader::getInstance()->getPathForFolder("/admin/skins/".$strSkin);
+        if(self::$strSkinPath == null)
+            self::$strSkinPath = class_resourceloader::getInstance()->getPathForFolder("/admin/skins/".$strSkin);
+
+        return self::$strSkinPath;
     }
 
     /**
