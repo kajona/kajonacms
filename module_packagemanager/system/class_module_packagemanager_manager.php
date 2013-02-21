@@ -25,10 +25,13 @@ class class_module_packagemanager_manager {
     /**
      * Queries the local filesystem in order to find all packages available.
      * This may include packages of all providers.
+     * Optionally you may reduce the list of packages using a simple filter-string
+     *
+     * @param string $strFilterText
      *
      * @return class_module_packagemanager_metadata[]
      */
-    public function getAvailablePackages() {
+    public function getAvailablePackages($strFilterText = "") {
         $arrReturn = array();
 
         $objModuleProvider = new class_module_packagemanager_packagemanager_module();
@@ -36,6 +39,15 @@ class class_module_packagemanager_manager {
 
         $objPackageProvider = new class_module_packagemanager_packagemanager_template();
         $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
+
+        if($strFilterText != "") {
+            $arrCopy = $arrReturn;
+            $arrReturn = array();
+            foreach($arrCopy as $objOneMetadata) {
+                if(uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false)
+                    $arrReturn[] = $objOneMetadata;
+            }
+        }
 
         return $arrReturn;
     }

@@ -79,6 +79,7 @@ $lang["update_notification_intro"]       = "A new version is available for an in
 $lang["update_notification_package"]     = "Respective package:";
 $lang["update_notification_verav"]       = "Available version:";
 $lang["update_notification_verinst"]     = "Installed version:";
+$lang["packagelist_filter"]              = "Filter-Text:";
 
 //non-editable entries
 $lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];

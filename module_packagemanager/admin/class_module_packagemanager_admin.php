@@ -17,6 +17,8 @@
  */
 class class_module_packagemanager_admin extends class_admin_simple implements interface_admin {
 
+    private $STR_FILTER_SESSION_KEY = "PACKAGELIST_FILTER_SESSION_KEY";
+
     /**
      * Constructor
      */
@@ -25,6 +27,14 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $this->setArrModuleEntry("moduleId", _packagemanager_module_id_);
         parent::__construct();
 
+
+        if($this->getParam("doFilter") != "") {
+            $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("packagelist_filter"));
+            $this->setParam("pv", 1);
+
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
+
+        }
 
     }
 
@@ -56,8 +66,16 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         class_module_packagemanager_template::syncTemplatepacks();
 
         $strReturn = "";
+
+        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"]), "list");
+        $strReturn .= $this->objToolkit->formInputText("packagelist_filter", $this->getLang("packagelist_filter"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
+        $strReturn .= $this->objToolkit->formInputSubmit();
+        $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
+        $strReturn .= $this->objToolkit->formClose();
+
+
         $objManager = new class_module_packagemanager_manager();
-        $arrPackages = $objManager->getAvailablePackages();
+        $arrPackages = $objManager->getAvailablePackages($this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $arrPackages = $objManager->sortPackages($arrPackages);
 
 
