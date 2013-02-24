@@ -203,7 +203,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
 
-        if(!isset($arrRow["page_name"]) || $arrRow["page_name"] == null) {
+        if(!isset($arrRow["page_id"]) || $arrRow["page_id"] == null) {
             $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
                                "._dbprefix_."page,
@@ -353,7 +353,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             );
         }
         
-        $bitBaseUpdate &= $this->objDB->_pQuery($strQuery2, $arrParams);
+        $bitBaseUpdate = $bitBaseUpdate && $this->objDB->_pQuery($strQuery2, $arrParams);
         
         $arrChildIds = $this->getChildNodesAsIdArray();
         
@@ -578,8 +578,15 @@ class class_module_pages_page extends class_model implements interface_model, in
                 (?, ?, ?, ?, ?, ?, ?, ?)";
             }
             else {
-                $strQuery = "UPDATE " . _dbprefix_ . "page_properties SET
-                 pageproperties_id = ?, pageproperties_browsername = ?, pageproperties_keywords = ?, pageproperties_description = ?, pageproperties_template = ?, pageproperties_seostring = ? WHERE pageproperties_language = ? AND pageproperties_alias = ?";
+                $strQuery = "UPDATE " . _dbprefix_ . "page_properties
+                        SET pageproperties_id = ?,
+                            pageproperties_browsername = ?,
+                            pageproperties_keywords = ?,
+                            pageproperties_description = ?,
+                            pageproperties_template = ?,
+                            pageproperties_seostring = ?
+                      WHERE pageproperties_language = ?
+                        AND pageproperties_alias = ?";
             }
 
             $arrValues = array(
