@@ -289,7 +289,11 @@ class class_toolkit_admin extends class_toolkit {
                                 });
                             },
                             minLength: 1,
-                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
+                            messages: {
+                                noResults: '',
+                                results: function() {}
+                            }
                         });
                     });
 	        </script>
@@ -363,7 +367,11 @@ class class_toolkit_admin extends class_toolkit {
                                 return false;
                             },
                             minLength: 1,
-                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
+                            messages: {
+                                noResults: '',
+                                results: function() {}
+                            }
                         })
                         .data( 'autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
@@ -2058,8 +2066,11 @@ class class_toolkit_admin extends class_toolkit {
                                 return false;
                             },
                             minLength: 1,
-                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
-
+                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
+                            messages: {
+                                noResults: '',
+                                results: function() {}
+                            }
                         });
                     });
 	        </script>

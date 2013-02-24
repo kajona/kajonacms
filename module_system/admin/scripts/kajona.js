@@ -272,7 +272,7 @@ KAJONA.admin.tooltip = {
                     viewport: $(window)
                 },
                 style: {
-                    classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    classes: 'qtip-youtube qtip-shadow'
                 }
             });
 
@@ -283,7 +283,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                        classes: 'qtip-youtube qtip-shadow'
                     },
                     content: {
                         text: $(this).attr("title")+"<div id='tags_"+$(this).data('systemid')+"' data-systemid='"+$(this).data('systemid')+"'></div>"
@@ -310,7 +310,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                        classes: 'qtip-youtube qtip-shadow'
                     },
                     content : {
                         text: strText
@@ -323,7 +323,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                        classes: 'qtip-youtube qtip-shadow'
                     }
                 });
             }

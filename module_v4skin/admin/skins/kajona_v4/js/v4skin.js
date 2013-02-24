@@ -15,7 +15,7 @@ $(function () {
                     ul.append('<li class="ui-autocomplete-category"><h3 class="small">' + item.module + '</h3></li>');
                     currentCategory = item.module;
                 }
-                self._renderItem(ul, item);
+                self._renderItemData(ul, item);
             });
 
             ul.append('<li class="detailedResults"><a href="#">View detailed search results</a></li>');
@@ -26,9 +26,9 @@ $(function () {
                 $('.navbar-search').submit();
             });
         },
-        _renderItem: function (ul, item) {
+        _renderItemData: function (ul, item) {
             return $('<li class="clearfix"></li>')
-                .data('item.autocomplete', item)
+                .data('ui-autocomplete-item', item)
                 .append('<a>' + '<img src="'+item.icon+'" alt="" class="pull-left">' + item.description + '</a>')
                 .appendTo(ul);
         }
@@ -54,6 +54,10 @@ $(function () {
             if(ui.item) {
                 document.location = ui.item.link;
             }
+        },
+        messages: {
+            noResults: '',
+            results: function() {}
         }
     });
 

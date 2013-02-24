@@ -283,19 +283,23 @@ footer {
         cursor: pointer;
         padding: 3px 15px;
         display: block;
+
+        &:hover {
+            text-decoration: none;
+        }
     }
 
     li img {
         padding-right: 10px;
     }
 
-    .ui-state-hover {
+    .ui-state-focus {
         color: @white;
         text-decoration: none;
         background-color: @linkColor;
     }
 
-    .ui-state-hover h4 {
+    .ui-state-focus h4 {
         color: @white;
     }
 
@@ -333,6 +337,8 @@ footer {
             padding: 3px 7px 2px 7px;
             font-size:@baseFontSize - 1;
         }
+
+
     }
 
 }
@@ -348,6 +354,7 @@ footer {
     min-width: 160px;
     padding: 4px 0;
     text-align:left;
+    z-index: @zindexFixedNavbar+1;
 
     a {
         clear: both;
@@ -1082,7 +1089,7 @@ label {
 
 
 /* TOOLTIPS */
-.ui-tooltip-content {
+.qtip-content {
     font-family: @baseFontFamily !important;
     padding: 4px !important;
     font-size: @baseFontSize - 3 !important;
