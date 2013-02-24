@@ -809,50 +809,6 @@ KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
     }
 };
 
-/**
- * Context menus
- */
-KAJONA.admin.contextMenu = {
-    menus: {},
-
-    addElements: function (strIdentifier, arrElements) {
-		this.menus[strIdentifier] = arrElements;
-	},
-
-	showElementMenu: function (strIdentifier, objAttach) {
-
-        if(typeof $(objAttach).attr('id') != 'string')
-            $(objAttach).attr('id', new Date().getTime()+strIdentifier);
-
-        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquery/jquery.contextMenu.js", "/core/module_system/admin/scripts/jquery/jquery.contextMenu.css"], function() {
-            var items = {};
-            var bitElementsFound = false;
-            $.each(KAJONA.admin.contextMenu.menus[strIdentifier], function(index, element) {
-                //element.name = element.elementName;
-                items[index] = {
-                    name : element.elementName
-                };
-                bitElementsFound = true;
-            });
-            if(bitElementsFound) {
-                $.contextMenu({
-                    selector: '#'+$(objAttach).attr('id'),
-                    build: function($trigger, e) {
-                        return {
-                            callback: function(key, options) {
-                                var objElement = KAJONA.admin.contextMenu.menus[strIdentifier][key];
-                                eval(objElement.elementAction);
-                            },
-                            items: items
-                        }
-                    }
-                });
-                $('#'+$(objAttach).attr('id')).contextMenu();
-            }
-        });
-	}
-};
-
 
 KAJONA.admin.openPrintView = function(strUrlToLoad) {
     var intWidth = $(window).width() * 0.8;

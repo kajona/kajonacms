@@ -72,7 +72,7 @@ class class_admin_helper {
 
         $strModuleMenuId = generateSystemid();
         $strModuleSwitcher = "
-                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' class=\"moduleSwitchLink\" role='button' onclick=\"KAJONA.admin.contextMenu.showElementMenu('".$strModuleMenuId."', this);\">+</a>
+                    <span class='dropdown moduleSwitch'><a href=\"#\" data-toggle='dropdown' class=\"moduleSwitchLink\" role='button' \">+</a>
                     ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>";
 
         array_unshift($arrPathEntries, $strModuleSwitcher);

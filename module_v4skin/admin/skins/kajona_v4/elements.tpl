@@ -1537,7 +1537,7 @@ place ajaxScript before the closing input_tagselector-tag.
 Part of the admin-skin, quick-access to the users favorite tags
 <adminskin_tagselector>
 %%favorites_menu%%
-    <li><a href="#" onclick="KAJONA.admin.contextMenu.showElementMenu('%%favorites_menu_id%%', this); return false;"><img src="_skinwebpath_/pics/icon_tag.png" title="%%icon_tooltip%%" rel="tooltip"/></a></li>
+    <li><a href="#"><img src="_skinwebpath_/pics/icon_tag.png" title="%%icon_tooltip%%" rel="tooltip"/></a></li>
 </adminskin_tagselector>
 
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.

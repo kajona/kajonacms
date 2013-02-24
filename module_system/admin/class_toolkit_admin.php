@@ -2281,15 +2281,11 @@ class class_toolkit_admin extends class_toolkit {
      * Each entry is an array with the keys
      *   array("name" => "xx", "link" => "xx", "submenu" => array());
      * The support of submenus depends on the current implementation, so may not be present everywhere!
-     * A menu may be shown by calling
-     * KAJONA.admin.contextMenu.showElementMenu('$strIdentifier', this)
-     * whereas this is the js-element the menu should be attached to.
      *
      * @since 3.4.1
      * @param string $strIdentifier
      * @param string[] $arrEntries
      * @return string
-     * @todo remove backend js parts
      */
     public function registerMenu($strIdentifier, array $arrEntries) {
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry");

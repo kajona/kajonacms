@@ -67,10 +67,7 @@ $(function () {
 
     // init popovers & tooltips
     $('#content a[rel=popover]').popover();
-
     KAJONA.admin.tooltip.initTooltip();
-
-    KAJONA.admin.contextMenu.showElementMenu = function() {};
 
     KAJONA.admin.statusDisplay.classOfMessageBox = "alert alert-info";
     KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-error";
