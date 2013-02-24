@@ -35,7 +35,7 @@ class class_scriptlet_helper {
             $objScriptlet = new $strOneScriptlet();
 
 
-            if($objScriptlet instanceof interface_scriptlet && ($intContext != null && ($intContext & $objScriptlet->getProcessingContext()))) {
+            if($objScriptlet instanceof interface_scriptlet && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
                 $strContent = $objScriptlet->processContent($strContent);
                 class_logger::getInstance("scriptlets.log")->addLogRow("processing call to ".$strOneScriptlet.", filter: ".$intContext, class_logger::$levelInfo);
             }
