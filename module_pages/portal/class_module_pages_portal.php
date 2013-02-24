@@ -246,8 +246,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
                     if($strElementOutput === false) {
                         $strElementOutput = $objElement->getElementOutput();
-                        //strip the data-editable values - no use case for regular page views
-                        $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
+
                         $objElement->saveElementToCache($strElementOutput);
                     }
                 }

@@ -98,11 +98,16 @@ abstract class class_element_portal extends class_portal {
 
                     $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig);
                 }
-                else
+                else {
                     $strReturn = $this->loadData();
+                    $strReturn = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strReturn);
+                }
             }
-            else
+            else {
                 $strReturn = $this->loadData();
+                //strip the data-editable values - no use case for regular page views
+                $strReturn = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strReturn);
+            }
         }
         catch(class_exception $objEx) {
             //an error occured during content generation. redirect to error page
@@ -171,6 +176,9 @@ abstract class class_element_portal extends class_portal {
         //if no content was passed, rebuild the content
         if($strElementOutput == "")
             $strElementOutput = $this->getElementOutput();
+
+        //strip the data-editable values - no use case for regular page views
+        $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
 
         //load the matching cache-entry
         $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);

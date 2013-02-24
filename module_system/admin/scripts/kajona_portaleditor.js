@@ -36,17 +36,22 @@ KAJONA.admin.portaleditor = {
 
     initPortaleditor : function() {
 
+        //console.debug("start loading dependencies");
         KAJONA.admin.loader.loadFile([
             "/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js",
             "/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css",
             "/core/module_system/admin/scripts/jquery/jquery.htmlClean.min.js",
-            "/core/module_pages/admin/scripts/rangy/rangy-core.js",
-            "/core/module_pages/admin/scripts/halloeditor/hallo-min.js",
-            "/core/module_pages/admin/scripts/halloeditor/hallo.css",
             "/core/module_pages/admin/scripts/halloeditor/fontawesome/css/font-awesome.css"
         ], function() {
-
-            KAJONA.admin.portaleditor.RTE.init();
+            //console.debug("rte loading step 2");
+            KAJONA.admin.loader.loadFile([
+                "/core/module_pages/admin/scripts/rangy/rangy-core.js",
+                "/core/module_pages/admin/scripts/halloeditor/hallo.js",
+                "/core/module_pages/admin/scripts/halloeditor/hallo.css"
+            ], function() {
+                //console.debug("loaded dependencies");
+                KAJONA.admin.portaleditor.RTE.init();
+            });
         });
 
 
@@ -187,7 +192,7 @@ KAJONA.admin.portaleditor.RTE.pasteHandler = function (event) {
 
 
 KAJONA.admin.portaleditor.RTE.init = function () {
-    //console.log("RTE editor init");
+    //console.debug("RTE editor init");
     //loop over all editables
     $('*[data-kajona-editable]').each(function () {
         var editable = $(this);
@@ -273,7 +278,7 @@ KAJONA.admin.tooltip = {
                     viewport: $(window)
                 },
                 style: {
-                    classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                    classes: 'qtip-youtube qtip-shadow'
                 }
             });
         });
@@ -288,7 +293,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                        classes: 'qtip-youtube qtip-shadow'
                     },
                     content : {
                         text: strText
@@ -301,7 +306,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'ui-tooltip-youtube ui-tooltip-shadow'
+                        classes: 'qtip-youtube qtip-shadow'
                     }
                 });
             }
