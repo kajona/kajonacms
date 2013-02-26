@@ -438,13 +438,6 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
-            //FIXME: removed due to rendering exceptions
-//            if($this->strXAxisTitle != "")
-//                $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 4;
-//
-//            if($this->strYAxisTitle != "")
-//                $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 4;
-
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
 
@@ -502,9 +495,6 @@ class class_graph_ezc implements interface_graph {
         if(strpos($strFilename, _realpath_) === false) {
             $strFilename = _realpath_ . $strFilename;
         }
-
-//        if(strtolower(substr($strFilename, -3) != "svg"))
-//            throw new class_exception("Filename must be a svg-file", class_exception::$level_ERROR);
 
         $this->objGraph->render($this->intWidth, $this->intHeight, $strFilename);
     }
@@ -601,23 +591,7 @@ class class_graph_ezc implements interface_graph {
      * @param int $intNrOfWrittenLabels the amount of x-axis labels to be printed
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        $arrMadeUpLabels = array();
 
-//            if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
-//                //not more than $intNrOfWrittenLabels labels
-//                $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
-//                $arrMadeUpLabels = array();
-//                $intKeyCount = 0;
-//                foreach($arrXAxisTickLabels as $strOneLabel) {
-//                     if(++$intKeyCount % $intCounter == 1)
-//                         $arrMadeUpLabels[] = $strOneLabel;
-//                     else
-//                         $arrMadeUpLabels[] = "";
-//                }
-//            }
-//            else
-//                $arrMadeUpLabels = $arrXAxisTickLabels;
-//         else
         $arrMadeUpLabels = $arrXAxisTickLabels;
 
 

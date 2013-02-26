@@ -113,7 +113,6 @@ class class_exception extends Exception {
 
         if($this->intErrorlevel == class_exception::$level_FATALERROR) {
             //Handle fatal errors.
-            $strErrormessage = "";
             $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelError);
 
@@ -123,7 +122,7 @@ class class_exception extends Exception {
                 $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
             }
             else {
-                $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px;  \">\n";
+                $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px;  \">\n";
                 $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
                 $strErrormessage .= "<pre>".(htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
 
@@ -138,7 +137,6 @@ class class_exception extends Exception {
         }
         elseif ($this->intErrorlevel == class_exception::$level_ERROR) {
             //handle regular errors
-            $strErrormessage = "";
             $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelWarning);
 
@@ -149,7 +147,7 @@ class class_exception extends Exception {
                     $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
                 }
                 else {
-                    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
+                    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px; \">\n";
                     $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
                     $strErrormessage .= "<pre>".(htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
                     //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();

@@ -262,12 +262,9 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @return string
  */
 function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitBlockPrintview = false) {
-    $strLink = "";
-
     //add print-view param?
     if(!$bitBlockPrintview && (getGet("printView") != "" || getPost("printView") != ""))
         $strParams .= "&printView=1";
-
 
     //systemid in params?
     $strSystemid = "";
@@ -329,12 +326,10 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
  * @return mixed|string
  */
 function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false, $bitBlockPrintview = false) {
-    $strLink = "";
 
     //add print-view param?
     if(!$bitBlockPrintview && (getGet("printView") != "" || getPost("printView") != ""))
         $strParams .= "&printView=1";
-
 
     //systemid in params?
     $strSystemid = "";
@@ -1175,9 +1170,7 @@ function checkText($strText, $intMin = 1, $intMax = 0) {
 function generateSystemid() {
     //generate md5 key
     $strKey = md5(_realpath_);
-
     $strTemp = "";
-
     //Do the magic: take out 6 characters randomly...
     for($intI = 0; $intI < 7; $intI++) {
         $intTemp = rand(0, 31);

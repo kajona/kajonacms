@@ -628,44 +628,53 @@ class class_rights {
             $strOnePermissions = trim($strOnePermissions);
 
             switch(trim($strOnePermissions)) {
-                case self::$STR_RIGHT_VIEW:
-                    if($objObject->rightView())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_EDIT:
-                    if($objObject->rightEdit())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_DELETE:
-                    if($objObject->rightDelete())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_RIGHT:
-                    if($objObject->rightRight())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_RIGHT1:
-                    if($objObject->rightRight1())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_RIGHT2:
-                    if($objObject->rightRight2())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_RIGHT3:
-                    if($objObject->rightRight3())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_RIGHT4:
-                    if($objObject->rightRight4())
-                        return true;
-                    break;
-                case self::$STR_RIGHT_RIGHT5:
-                    if($objObject->rightRight5())
-                        return true;
-                    break;
-                default:
-                    break;
+            case self::$STR_RIGHT_VIEW:
+                if($objObject->rightView()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_EDIT:
+                if($objObject->rightEdit()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_DELETE:
+                if($objObject->rightDelete()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_RIGHT:
+                if($objObject->rightRight()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_RIGHT1:
+                if($objObject->rightRight1()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_RIGHT2:
+                if($objObject->rightRight2()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_RIGHT3:
+                if($objObject->rightRight3()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_RIGHT4:
+                if($objObject->rightRight4()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_RIGHT5:
+                if($objObject->rightRight5()) {
+                    return true;
+                }
+                break;
+            default:
+                break;
             }
         }
 
