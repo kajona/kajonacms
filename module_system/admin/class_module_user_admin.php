@@ -177,10 +177,17 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $arrReturn = array();
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group.png", $objListEntry->getStrUsername()));
+            $arrReturn[] = $this->objToolkit->listButton(
+                getLinkAdminDialog("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group.png", $objListEntry->getStrUsername())
+            );
         }
 
-        if($objListEntry instanceof class_module_user_user && $objListEntry->getObjSourceUser()->isEditable() && $objListEntry->getObjSourceUser()->isPasswordResettable() && $objListEntry->rightEdit() && checkEmailaddress($objListEntry->getStrEmail())) {
+        if($objListEntry instanceof class_module_user_user
+            && $objListEntry->getObjSourceUser()->isEditable()
+            && $objListEntry->getObjSourceUser()->isPasswordResettable()
+            && $objListEntry->rightEdit()
+            && checkEmailaddress($objListEntry->getStrEmail())
+        ) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mail.png"));
         }
 
@@ -1035,11 +1042,20 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             foreach($arrUsers as $objSingleGroup) {
                 $strAction = "";
                 $strAction .= $this->objToolkit->listButton(
-                    getLinkAdmin("user", "userBrowser", "&form_element=" . $this->getParam("form_element") . "&systemid=" . $objSingleGroup->getSystemid() . "&filter=" . $this->getParam("filter"), $this->getLang("user_browser_show"), $this->getLang("user_browser_show"), "icon_folderActionOpen.png")
+                    getLinkAdmin(
+                        "user",
+                        "userBrowser",
+                        "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter"),
+                        $this->getLang("user_browser_show"),
+                        $this->getLang("user_browser_show"),
+                        "icon_folderActionOpen.png"
+                    )
                 );
 
                 if($this->getParam("allowGroup") == "1") {
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"" . $this->getLang("group_accept") . "\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['" . $strFormElement . "', '" . addslashes($objSingleGroup->getStrName()) . "'], ['" . $strFormElement . "_id', '" . $objSingleGroup->getSystemid() . "']]);\">" . getImageAdmin("icon_accept.png"));
+                    $strAction .= $this->objToolkit->listButton(
+                        "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['". strFormElement . "', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")
+                    );
                 }
 
                 $strReturn .= $this->objToolkit->simpleAdminList($objSingleGroup, $strAction, $intI++);
@@ -1077,7 +1093,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled.png"));
                 }
                 else {
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"" . $this->getLang("user_accept") . "\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['" . $strFormElement . "', '" . addslashes($objSingleUser->getStrUsername()) . "'], ['" . $strFormElement . "_id', '" . $objSingleUser->getSystemid() . "']]);\">" . getImageAdmin("icon_accept.png"));
+                    $strAction .= $this->objToolkit->listButton(
+                        "<a href=\"#\" title=\"" . $this->getLang("user_accept") . "\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['" . $strFormElement . "', '" . addslashes($objSingleUser->getStrUsername()) . "'], ['" . $strFormElement . "_id', '" . $objSingleUser->getSystemid() . "']]);\">" . getImageAdmin("icon_accept.png")
+                    );
                 }
                 $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction, $intI++);
 
