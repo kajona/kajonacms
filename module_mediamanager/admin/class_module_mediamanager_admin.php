@@ -494,7 +494,7 @@ HTML;
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
                 KAJONA.admin.loader.loadFile([
                     '/core/module_mediamanager/admin/scripts/mediamanager.js',
-                    '/core/module_mediamanager/admin/scripts/jcrop/jquery.Jcrop.min.js',
+                    '/core/module_mediamanager/admin/scripts/jcrop/jquery.Jcrop.js',
                     '/core/module_mediamanager/admin/scripts/jcrop/css/jquery.Jcrop.min.css'
                 ]);
 
