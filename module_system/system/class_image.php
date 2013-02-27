@@ -753,7 +753,7 @@ class class_image {
             }
         }
         //check, if resizing is needed
-        else if($intMaxSizeWidth > 0 || $intMaxSizeHeight > 0 && ($this->intWidth > $intMaxSizeWidth || $this->intHeight > $intMaxSizeHeight)) {
+        else if(($intMaxSizeWidth > 0 || $intMaxSizeHeight > 0) && ($this->intWidth > $intMaxSizeWidth || $this->intHeight > $intMaxSizeHeight)) {
             $bitResize = true;
             $floatRelation = $this->intWidth / $this->intHeight; //0 = width, 1 = height
 
