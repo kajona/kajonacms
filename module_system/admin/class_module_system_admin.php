@@ -47,20 +47,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
         return $arrReturn;
     }
 
-
-    public function getRequiredFields() {
-        $strAction = $this->getAction();
-        if($strAction == "sendMail") {
-            return array(
-                "mail_recipient" => "string",
-                "mail_subject"   => "string",
-                "mail_body"      => "string"
-            );
-        }
-        return parent::getRequiredFields();
-    }
-
-
     /**
      * Sets the status of a module.
      * Therefore you have to be member of the admin-group.
@@ -888,7 +874,16 @@ class class_module_system_admin extends class_admin_simple implements interface_
      * @permissions view
      */
     protected function actionSendMail() {
-        if(!$this->validateForm())
+
+        $objValidator = new class_text_validator();
+        $objMailValidator = new class_email_validator();
+
+        foreach(array("mail_recipient", "mail_subject", "mail_body") as $strOneField) {
+            if(!$objValidator->validate($this->getParam($strOneField)))
+                $this->addValidationError($strOneField, $this->getLang($strOneField));
+        }
+
+        if(count($this->getValidationErrors()) > 0)
             return $this->actionMailForm();
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
@@ -900,12 +895,12 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         $arrRecipients = explode(",", $this->getParam("mail_recipient"));
         foreach($arrRecipients as $strOneRecipient)
-            if(checkEmailaddress($strOneRecipient))
+            if($objMailValidator->validate($strOneRecipient))
                 $objEmail->addTo($strOneRecipient);
 
         $arrRecipients = explode(",", $this->getParam("mail_cc"));
         foreach($arrRecipients as $strOneRecipient)
-            if(checkEmailaddress($strOneRecipient))
+            if($objMailValidator->validate($strOneRecipient))
                 $objEmail->addCc($strOneRecipient);
 
 

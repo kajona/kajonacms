@@ -41,21 +41,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         return $arrReturn;
     }
 
-    protected final function validateForm() {
-        $arrReturn = array();
-
-        if($this->getAction() == "saveNaviPoint") {
-            if($this->getParam("navigation_folder_i_id") != "" && $this->getParam("navigation_page_i") != "")
-                $this->arrValidationErrors["navigation_folder_i_id"] = $this->getLang("error_folder_and_page");
-        }
-
-        parent::validateForm();
-
-        $this->arrValidationErrors = array_merge($this->arrValidationErrors, $arrReturn);
-        return (count($this->arrValidationErrors) == 0);
-    }
-
-
     /**
      * Returns a list of the current level
      *

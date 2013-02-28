@@ -775,101 +775,10 @@ abstract class class_admin {
     //--- FORM-Validation -----------------------------------------------------------------------------------
 
     /**
-     * Method used to validate posted form-values.
-     * NOTE: To work with this method, the derived class needs to implement
-     * a method "getRequiredFields()", returning an array of field to validate.
-     * The array returned by getRequiredFields() has to fit the format
-     *  [fieldname] = type, whereas type can be one of
-     * string, number, email, folder, systemid
-     * The array saved in $this->$arrValidationErrors return by this method is empty in case of no validation Errors,
-     * otherwise an array with the structure
-     * [nonvalidField] = text from objText
-     * is being created.
-     *
-     * @return bool
-     */
-    protected function validateForm() {
-        $arrReturn = array();
-
-        $arrFieldsToCheck = $this->getRequiredFields();
-
-        foreach($arrFieldsToCheck as $strFieldname => $strType) {
-
-            $bitAdd = false;
-
-            if($strType == "string") {
-                if(!checkText($this->getParam($strFieldname), 2)) {
-                    $bitAdd = true;
-                }
-            }
-            else if($strType == "character") {
-                if(!checkText($this->getParam($strFieldname), 1)) {
-                    $bitAdd = true;
-                }
-            }
-            elseif($strType == "number") {
-                if(!checkNumber($this->getParam($strFieldname))) {
-                    $bitAdd = true;
-                }
-            }
-            elseif($strType == "email") {
-                if(!checkEmailaddress($this->getParam($strFieldname))) {
-                    $bitAdd = true;
-                }
-            }
-            elseif($strType == "folder") {
-                if(!checkFolder($this->getParam($strFieldname))) {
-                    $bitAdd = true;
-                }
-            }
-            elseif($strType == "systemid") {
-                if(!validateSystemid($this->getParam($strFieldname))) {
-                    $bitAdd = true;
-                }
-            }
-            elseif($strType == "date") {
-                if(!checkNumber($this->getParam($strFieldname))) {
-                    $objDate = new class_date("0");
-                    $objDate->generateDateFromParams($strFieldname, $this->getAllParams());
-                    if((int)$objDate->getLongTimestamp() == 0) {
-                        $bitAdd = true;
-                    }
-                }
-            }
-            else {
-                $arrReturn[$strFieldname] = "No or unknown validation-type for " . $strFieldname . " given";
-            }
-
-            if($bitAdd) {
-                if($this->getLang("required_" . $strFieldname) != "!required_" . $strFieldname . "!") {
-                    $arrReturn[$strFieldname] = $this->getLang("required_" . $strFieldname);
-                }
-                else if($this->getLang($strFieldname) != "!" . $strFieldname . "!") {
-                    $arrReturn[$strFieldname] = $this->getLang($strFieldname);
-                }
-                else {
-                    $arrReturn[$strFieldname] = $this->getLang("required_" . $strFieldname);
-                }
-            }
-
-        }
-        $this->arrValidationErrors = array_merge($this->arrValidationErrors, $arrReturn);
-        return (count($this->arrValidationErrors) == 0);
-    }
-
-    /**
-     * Overwrite this function, if you want to validate passed form-input
-     *
-     * @return mixed
-     */
-    public function getRequiredFields() {
-        return array();
-    }
-
-    /**
      * Returns the array of validationErrors
      *
      * @return mixed
+     * @deprecated
      */
     public function getValidationErrors() {
         return $this->arrValidationErrors;
@@ -880,6 +789,7 @@ abstract class class_admin {
      *
      * @param string $strField
      * @param string $strErrormessage
+     * @deprecated
      */
     public function addValidationError($strField, $strErrormessage) {
         $this->arrValidationErrors[$strField] = $strErrormessage;
@@ -889,6 +799,7 @@ abstract class class_admin {
      * Removes a validation error from the array of errors
      *
      * @param string $strField
+     * @deprecated
      */
     public function removeValidationError($strField) {
         unset($this->arrValidationErrors[$strField]);

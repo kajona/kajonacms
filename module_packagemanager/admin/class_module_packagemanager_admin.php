@@ -48,13 +48,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         return $arrReturn;
     }
 
-    public function getRequiredFields() {
-        if($this->getAction() == "copyPack") {
-            return array("pack_name" => "string");
-        }
-
-        return parent::getRequiredFields();
-    }
 
     /**
      * Generic list of all packages available on the local filesystem

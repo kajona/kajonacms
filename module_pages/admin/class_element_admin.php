@@ -131,6 +131,91 @@ abstract class class_element_admin extends class_admin {
         return $strReturn;
     }
 
+
+
+    /**
+     * Overwrite this function, if you want to validate passed form-input
+     *
+     * @return mixed
+     */
+    public function getRequiredFields() {
+        return array();
+    }
+
+    /**
+     * Method used to validate posted form-values.
+     * NOTE: To work with this method, the derived class needs to implement
+     * a method "getRequiredFields()", returning an array of field to validate.
+     * The array returned by getRequiredFields() has to fit the format
+     *  [fieldname] = type, whereas type can be one of
+     * string, number, email, folder, systemid
+     * The array saved in $this->$arrValidationErrors return by this method is empty in case of no validation Errors,
+     * otherwise an array with the structure
+     * [nonvalidField] = text from objText
+     * is being created.
+     *
+     * @return bool
+     */
+    public function validateForm() {
+        $arrReturn = array();
+
+        $arrFieldsToCheck = $this->getRequiredFields();
+
+        foreach($arrFieldsToCheck as $strFieldname => $strType) {
+
+            //backwards compatibility
+            if($strType == "string")
+                $strType = "text";
+
+            //backwards compatibility
+            if($strType == "number")
+                $strType = "numeric";
+
+            $strValue = $this->getParam($strFieldname);
+
+            if($strType == "date") {
+                $objDate = new class_date("0");
+                $objDate->generateDateFromParams($strFieldname, $this->getAllParams());
+                $strValue = $objDate;
+            }
+
+            $objValidator = $this->getValidatorInstance($strType);
+            if(!$objValidator->validate($strValue)) {
+                if($this->getLang("required_" . $strFieldname) != "!required_" . $strFieldname . "!") {
+                    $arrReturn[$strFieldname] = $this->getLang("required_" . $strFieldname);
+                }
+                else if($this->getLang($strFieldname) != "!" . $strFieldname . "!") {
+                    $arrReturn[$strFieldname] = $this->getLang($strFieldname);
+                }
+                else {
+                    $arrReturn[$strFieldname] = $this->getLang("required_" . $strFieldname);
+                }
+
+            }
+
+        }
+        $this->arrValidationErrors = array_merge($this->arrValidationErrors, $arrReturn);
+        return (count($this->arrValidationErrors) == 0);
+    }
+
+
+    /**
+     * Loads the validator identified by the passed name.
+     *
+     * @param $strName
+     * @return interface_validator
+     * @throws class_exception
+     */
+    private function getValidatorInstance($strName) {
+        $strClassname = "class_".$strName."_validator";
+        if(class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
+            return new $strClassname();
+        }
+        else
+            throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
+    }
+
+
     /**
      * Loads the data of the current element
      *
@@ -195,8 +280,7 @@ abstract class class_element_admin extends class_admin {
                 }
 
                 $strRowUpdates = implode(", ", $arrInserts);
-                $strUpdateQuery =
-                    " UPDATE " . $this->getTable() . " SET "
+                $strUpdateQuery = " UPDATE " . $this->getTable() . " SET "
                         . $strRowUpdates .
                         " WHERE content_id= ? ";
 

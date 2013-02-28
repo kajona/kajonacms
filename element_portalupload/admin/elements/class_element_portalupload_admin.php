@@ -71,6 +71,6 @@ class class_element_portalupload_admin extends class_element_admin implements in
 
 
     public function getRequiredFields() {
-        return array("char1" => "string", "char2" => "string");
+        return array("char1" => "text", "char2" => "text");
     }
 }
