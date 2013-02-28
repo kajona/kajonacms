@@ -61,24 +61,18 @@ class class_module_postacomment_search_portal implements interface_search_plugin
         $arrParams[] = $objLanguages->getStrPortalLanguage();
 
         //Query bauen
-        $strQuery ="SELECT pacsys.system_id, page_name, page_id, ".$this->objDB->encloseColumnName("int1")."
+        $strQuery ="SELECT pacsys.system_id, page_name, page_id
                       FROM "._dbprefix_."postacomment,
                            "._dbprefix_."system AS pacsys,
                            "._dbprefix_."system AS pagesys,
-                           "._dbprefix_."system AS elementsys,
-                           "._dbprefix_."page_element,
-                           "._dbprefix_."element_universal,
                            "._dbprefix_."page
                      WHERE ".$strWhere."
                        AND pacsys.system_id = postacomment_id
-                       AND pacsys.system_status = 1
                        AND postacomment_page = page_id
                        AND pagesys.system_id = page_id
                        AND pagesys.system_status = 1
-                       AND elementsys.system_prev_id = page_id
-                       AND elementsys.system_id = content_id
-                       AND page_element_id = content_id
-                       AND postacomment_language = ? ";
+                       AND pacsys.system_status = 1
+                       AND (postacomment_language = ? OR postacomment_language IS NULL OR postacomment_language = '') ";
 
         $arrPosts = $this->objDB->getPArray($strQuery, $arrParams);
 
@@ -99,25 +93,10 @@ class class_module_postacomment_search_portal implements interface_search_plugin
                 }
                 else {
 
-                    //search pv position
-                    $intPvPos = 1;
-                    $intAmount = $arrOnePost["int1"];
-                    if($intAmount != "" && $intAmount > 0) {
-                        $arrPostsForPage = class_module_postacomment_post::loadPostList(true, $objComment->getStrAssignedPage(), $objComment->getStrAssignedSystemid(), $objComment->getStrAssignedLanguage());
-                        $intCounter = 0;
-                        foreach($arrPostsForPage as $objOnePostForPage) {
-                            $intCounter++;
-                            if($objOnePostForPage->getSystemid() == $objComment->getSystemid())
-                               break;
-                        }
-                        //calculate pv
-                        $intPvPos = ceil($intCounter/$intAmount);
-                    }
-
                     $objResult = new class_search_result();
                     $objResult->setStrResultId($objComment->getSystemid().$arrOnePost["page_id"]);
                     $objResult->setStrSystemid($objComment->getSystemid());
-                    $objResult->setStrPagelink(getLinkPortal($arrOnePost["page_name"], "", "_self", $arrOnePost["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."&pvPAC=".$intPvPos));
+                    $objResult->setStrPagelink(getLinkPortal($arrOnePost["page_name"], "", "_self", $arrOnePost["page_name"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))));
                     $objResult->setStrPagename($arrOnePost["page_name"]);
                     $objResult->setStrDescription($objComment->getStrComment());
 
