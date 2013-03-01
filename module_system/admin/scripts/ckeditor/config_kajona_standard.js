@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file customizes the CKEditor to the requirements of Kajona.
 
     $Id$
@@ -59,6 +59,20 @@ CKEDITOR.editorConfig = function(config) {
             ['Link','Unlink', 'Image'],
             ['Bold','Italic','Underline'],
             ['NumberedList','BulletedList','-','Outdent','Indent']
+        ];
+
+    config.toolbar_pe_full =
+        [
+            ['Undo','Redo','-','RemoveFormat'],
+            ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
+            ['NumberedList','BulletedList','-','Outdent','Indent'],
+            ['Link','Unlink'],
+            ['Image']
+        ];
+
+    config.toolbar_pe_lite =
+        [
+            ['Undo','Redo','-','RemoveFormat']
         ];
 
     //disable the conversion of special chars into html entities

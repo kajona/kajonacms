@@ -956,8 +956,6 @@ Please refer to the CKEditor documentation to see what's possible here
     width : 640,
     height : 250,
     resize_minWidth : 640,
-    skin : 'BootstrapCK-Skin,_skinwebpath_/plugins/BootstrapCK-Skin/',
-    uiColor : '#F5F5F5',
     filebrowserWindowWidth : 400,
     filebrowserWindowHeight : 500,
     filebrowserImageWindowWidth : 400,

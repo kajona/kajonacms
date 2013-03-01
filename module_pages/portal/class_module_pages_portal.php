@@ -415,25 +415,39 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
                     .getImageAdmin("icon_new.png", $this->getLang("pe_icon_new", "pages"))."</a>";
 
-
                 $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">"
                     .getImageAdmin("icon_enabled.png", $this->getLang("pe_disable", "pages"))."</a>";
 
 
-                //Load portaleditor javascript (even if it's maybe already loaded in portal)
+                //Load portaleditor javascript (even if it's maybe already loaded in portal and init the ckeditor)
+                $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
+                $strSkinInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
+
                 $strPeToolbar .= "<script type='text/javascript'>
                     KAJONA.admin.lang.pe_rte_unsavedChanges = '" . $this->getLang("pe_rte_unsavedChanges", "pages") . "';
 
                     if($) {
-                        KAJONA.portal.loader.loadFile(['/core/module_system/admin/scripts/kajona_portaleditor.js'], function() {
+                        KAJONA.portal.loader.loadFile(['/core/module_pages/admin/scripts/kajona_portaleditor.js'], function() {
+                            KAJONA.admin.portaleditor.RTE.config = {
+                                language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
+                                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                                ".$strSkinInit."
+                            }
                             $(KAJONA.admin.portaleditor.initPortaleditor);
                         });
                     }
                     else {
                         KAJONA.portal.loader.loadFile([
                             '/core/module_system/admin/scripts/jquery/jquery.min.js',
-                            '/core/module_system/admin/scripts/kajona_portaleditor.js'
+                            '/core/module_pages/admin/scripts/kajona_portaleditor.js'
                         ], function() {
+                            KAJONA.admin.portaleditor.RTE.config = {
+                                language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
+                                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                                ".$strSkinInit."
+                            }
                             $(KAJONA.admin.portaleditor.initPortaleditor);
                         });
                     }
@@ -456,7 +470,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0px; right: 0px;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
                     .getImageAdmin("icon_disabled.png", $this->getLang("pe_enable", "pages"))."</a></div>";
                 //Load portaleditor javascript
-                $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
+                $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
                 //The toobar has to be added right after the body-tag - to generate correct html-code
                 $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
