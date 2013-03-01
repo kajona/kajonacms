@@ -154,6 +154,10 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         };
 
         CKEDITOR.inline(editable.get(0), ckeditorConfig);
+
+        editable.bind('drop drag', function () {
+            return false;
+        });
         editable.attr("contenteditable", "true");
     });
 
