@@ -79,5 +79,5 @@ CKEDITOR.editorConfig = function(config) {
     config.entities = false;
     config.entities_greek = false;
     config.entities_latin = false;
-
+    config.autoParagraph = false;
 };
