@@ -33,7 +33,13 @@ class class_element_rssfeed_portal extends class_element_portal implements inter
         $strFeed = "";
         try {
             $objRemoteloader = new class_remoteloader();
-            $objRemoteloader->setStrHost(str_ireplace("http://", "", $this->arrElementData["char2"]));
+
+            if(uniStrtolower(uniSubstr($this->arrElementData["char2"], 0, 8)) == "https://")
+                $objRemoteloader->setStrProtocolHeader("https://");
+
+            $this->arrElementData["char2"] = uniStrReplace("&amp;", "&", $this->arrElementData["char2"]);
+
+            $objRemoteloader->setStrHost(uniStrReplace(array("http://", "https://"), "", $this->arrElementData["char2"]));
             $objRemoteloader->setIntPort(0);
             $strFeed = $objRemoteloader->getRemoteContent();
         }

@@ -398,7 +398,7 @@ class class_remoteloader {
     }
 
     /**
-     * Sets the protocol to use. Default is https://.
+     * Sets the protocol to use. Default is http://.
      *
      * @param string $strHeader
      */
