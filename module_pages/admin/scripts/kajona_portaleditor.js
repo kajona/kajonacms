@@ -138,10 +138,12 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         var editable = $(this);
         var keySplitted = editable.attr('data-kajona-editable').split('#');
         var isPlaintext = (keySplitted[2] && keySplitted[2] == 'plain') ? true : false;
+
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
         ckeditorConfig.customConfig = 'config_kajona_standard.js';
         ckeditorConfig.toolbar = isPlaintext ? 'pe_lite' : 'pe_full';
         ckeditorConfig.forcePasteAsPlainText = true;
+        ckeditorConfig.kajona_isPlaintext = isPlaintext;
         ckeditorConfig.on = {
             blur: function( event ) {
                 var data = event.editor.getData();
@@ -150,22 +152,29 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace("Disabled", ""));
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
                 console.log('modified field', attr, data);
+            },
+            key : function( event ) {
+                //prevent enter in plaintext
+                if ( event.data.keyCode == 13 && event.editor.config.kajona_isPlaintext ) {
+                    event.cancel();
+                }
             }
         };
 
-        CKEDITOR.inline(editable.get(0), ckeditorConfig);
-
+        //disable drag n drop
         editable.bind('drop drag', function () {
             return false;
         });
+
         editable.attr("contenteditable", "true");
+        CKEDITOR.inline(editable.get(0), ckeditorConfig);
     });
 
     // warn user if there are unsaved changes when leaving the page
     $(window).on('beforeunload', function () {
         // check if there are unsaved changes
         var unsavedChanges = false;
-        $.each(KAJONA.admin.portaleditor.RTE.modifiedFields, function () {
+        $.each(KAJONA.admin.portaleditor.RTE.modifiedFields, function() {
             unsavedChanges = true;
             return false;
         });
