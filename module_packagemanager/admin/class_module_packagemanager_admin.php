@@ -252,7 +252,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $arrNotWritable = array();
                 if($objHandler->getVersionInstalled() != null) {
                     $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_target_writable")." ".$objHandler->getStrTargetPath());
-
                     $this->checkWritableRecursive($objHandler->getStrTargetPath(), $arrNotWritable);
                 }
                 else {
@@ -278,7 +277,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             }
             else {
-                $strReturn .= $this->objToolkit->warningBox($this->getLang("package_notinstallable"));
+                $strWarningText = $this->getLang("package_notinstallable");
+                if($objHandler->getVersionInstalled() != null) {
+                    if($objHandler->getVersionInstalled() == $objHandler->getObjMetadata()->getStrVersion())
+                        $strWarningText .= "<br />".$this->getLang("package_noinstall_installed");
+                }
+
+                $strReturn .= $this->objToolkit->warningBox($strWarningText);
             }
 
 
