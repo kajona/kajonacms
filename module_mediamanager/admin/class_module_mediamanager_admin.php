@@ -283,7 +283,7 @@ HTML;
      */
     private function generateNewFolderDialogCode() {
 
-        if(!$this->getObjModule()->rightRight1())
+        if(!class_objectfactory::getInstance()->getObject($this->getSystemid())->rightRight1())
             return "";
 
         $strReturn = "";
@@ -315,7 +315,7 @@ HTML;
      */
     private function actionUploadFileInternal() {
 
-        if(!$this->getObjModule()->rightRight1())
+        if(!class_objectfactory::getInstance()->getObject($this->getSystemid())->rightRight1())
             return "";
 
         $strReturn = "";
