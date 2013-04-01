@@ -148,6 +148,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
      * @permissions view
      */
     protected function actionGetFavoriteTags() {
+        class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
         $arrReturn = array();
 
         $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);

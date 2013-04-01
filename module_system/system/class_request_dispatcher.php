@@ -65,6 +65,7 @@ class class_request_dispatcher {
         $this->sendConditionalGetHeaders($strReturn);
 
         $this->objResponse->setStrContent($strReturn);
+        $this->objSession->sessionClose();
     }
 
     /**

@@ -26,6 +26,8 @@ final class class_session {
     private static $objSession = null;
     private $bitLazyLoaded = false;
 
+    private $bitBlockDbUpdate = false;
+
     /**
      * Instance of internal kajona-session
      *
@@ -88,7 +90,7 @@ final class class_session {
      * Finalizes the current threads session-access.
      * This means that afterwards, all values saved to the session will
      * be lost of throw an error.
-     * Make sure you know explicitely what you do before calling
+     * Make sure you know explicitly what you do before calling
      * this method.
      *
      * @return void
@@ -96,6 +98,8 @@ final class class_session {
     public function sessionClose() {
         $this->bitClosed = true;
         session_write_close();
+        if($this->objInternalSession != null && !$this->bitBlockDbUpdate)
+            $this->objInternalSession->updateObjectToDb();
     }
 
 
@@ -606,7 +610,6 @@ final class class_session {
             if($this->objInternalSession != null && $this->objInternalSession->isSessionValid()) {
                 $this->objInternalSession->setIntReleasetime(time() + _system_release_time_);
                 $this->objInternalSession->setStrLasturl(getServer("QUERY_STRING"));
-                $this->objInternalSession->updateObjectToDb();
             }
             else
                 $this->objInternalSession = null;
@@ -652,6 +655,11 @@ final class class_session {
     public function getBitClosed() {
         return $this->bitClosed;
     }
+
+    public function setBitBlockDbUpdate($bitBlockDbUpdate) {
+        $this->bitBlockDbUpdate = $bitBlockDbUpdate;
+    }
+
 
 }
 

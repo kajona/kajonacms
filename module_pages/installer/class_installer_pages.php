@@ -516,4 +516,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         return $strReturn;
     }
+
+    //TODO: Add delete sequence to remove hallo-editor and rangy js
 }

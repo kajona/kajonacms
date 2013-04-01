@@ -158,7 +158,7 @@ class class_module_system_session extends class_model implements interface_model
     }
 
     /**
-     * Called whenever a update-request was fired.
+     * Called whenever an update-request was fired.
      * Use this method to synchronize yourselves with the database.
      * Use only updates, inserts are not required to be implemented.
      *
