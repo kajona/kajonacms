@@ -42,6 +42,10 @@ class class_adminwidget_updatecheck extends class_adminwidget implements interfa
      */
     public function getWidgetOutput() {
         $strReturn = "";
+
+        if(!class_module_system_module::getModuleByName("packagemanager")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $objManager = new class_module_packagemanager_manager();
         $arrRemotePackages = $objManager->scanForUpdates();
 

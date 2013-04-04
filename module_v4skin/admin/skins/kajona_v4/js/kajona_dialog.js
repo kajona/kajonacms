@@ -106,7 +106,6 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
         //finally show the modal
         $('#' + this.containerId).modal('show');
-
         if (bitDragging) {
             this.enableDragging();
         }

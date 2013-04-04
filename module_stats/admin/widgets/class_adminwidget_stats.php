@@ -49,6 +49,11 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
      */
     public function getWidgetOutput() {
         $strReturn = "";
+
+        if(!class_module_system_module::getModuleByName("stats")->rightView())
+            return $this->getLang("commons_error_permissions");
+
+
         $objStatsCommon = new class_stats_report_common(class_carrier::getInstance()->getObjDB(), class_carrier::getInstance()->getObjToolkit("admin"), class_carrier::getInstance()->getObjLang());
         //check wich infos to produce
         if($this->getFieldValue("current") == "checked") {

@@ -45,6 +45,10 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
      */
     public function getWidgetOutput() {
         $strReturn = "";
+
+        if(!class_module_system_module::getModuleByName("system")->rightRight3())
+            return $this->getLang("commons_error_permissions");
+
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/log", array(".log"));
 

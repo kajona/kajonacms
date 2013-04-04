@@ -45,6 +45,10 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
      * @return string
      */
     public function getWidgetOutput() {
+
+        if(!class_module_system_module::getModuleByName("system")->rightView())
+            return $this->getLang("commons_error_permissions");
+
         $strReturn = "<style type=\"text/css\">
             .adminwidget_systemcheck .ok {
                 color: green;

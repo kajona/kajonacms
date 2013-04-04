@@ -46,9 +46,9 @@ abstract class class_adminwidget {
 
     public function __construct() {
 
-    	$this->objDb = class_carrier::getInstance()->getObjDB();
-    	$this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-    	$this->objLang = class_carrier::getInstance()->getObjLang();
+        $this->objDb = class_carrier::getInstance()->getObjDB();
+        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $this->objLang = class_carrier::getInstance()->getObjLang();
 
     }
 
@@ -123,7 +123,7 @@ abstract class class_adminwidget {
                 $this->setFieldValue($strOneKey, $arrFields[$strOneKey]);
             }
             else {
-            	$this->setFieldValue($strOneKey, "");
+                $this->setFieldValue($strOneKey, "");
             }
         }
     }
@@ -132,6 +132,7 @@ abstract class class_adminwidget {
      * Loads a text-fragement from the textfiles
      *
      * @param string $strKey
+     *
      * @return string
      */
     public final function getLang($strKey) {
@@ -142,13 +143,16 @@ abstract class class_adminwidget {
      * Looks up a value in the fields-array
      *
      * @param string $strFieldName
+     *
      * @return mixed
      */
     protected final function getFieldValue($strFieldName) {
-        if(isset($this->arrFields[$strFieldName]))
+        if(isset($this->arrFields[$strFieldName])) {
             return $this->arrFields[$strFieldName];
-        else
+        }
+        else {
             return "";
+        }
     }
 
     /**
@@ -197,6 +201,7 @@ abstract class class_adminwidget {
      * Use this method to place a formatted text in the widget
      *
      * @param string $strText
+     *
      * @return string
      */
     protected final function widgetText($strText) {

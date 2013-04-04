@@ -47,6 +47,10 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      */
     public function getWidgetOutput() {
         $strReturn = "";
+
+        if(!class_module_system_module::getModuleByName("system")->rightView())
+            return $this->getLang("commons_error_permissions");
+
         //check wich infos to produce
         if($this->getFieldValue("php") == "checked") {
             $strReturn .= $this->widgetText($this->getLang("sysinfo_php_version").PHP_VERSION);

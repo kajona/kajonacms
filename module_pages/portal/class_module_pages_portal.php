@@ -427,7 +427,11 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     KAJONA.admin.lang.pe_rte_unsavedChanges = '" . $this->getLang("pe_rte_unsavedChanges", "pages") . "';
 
                     if($) {
-                        KAJONA.portal.loader.loadFile(['/core/module_pages/admin/scripts/kajona_portaleditor.js'], function() {
+                        KAJONA.portal.loader.loadFile([
+                            '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                            '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+                            '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+                        ], function() {
                             KAJONA.admin.portaleditor.RTE.config = {
                                 language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
                                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
@@ -440,7 +444,9 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     else {
                         KAJONA.portal.loader.loadFile([
                             '/core/module_system/admin/scripts/jquery/jquery.min.js',
-                            '/core/module_pages/admin/scripts/kajona_portaleditor.js'
+                            '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+                            '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                            '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
                         ], function() {
                             KAJONA.admin.portaleditor.RTE.config = {
                                 language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',

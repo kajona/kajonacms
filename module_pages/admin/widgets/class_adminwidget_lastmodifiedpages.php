@@ -47,6 +47,9 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
     public function getWidgetOutput() {
         $strReturn = "";
 
+        if(!class_module_system_module::getModuleByName("pages")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $intMax = $this->getFieldValue("nrofrows");
         if($intMax < 0)
             $intMax = 1;
@@ -55,7 +58,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
 
         foreach($arrRecords as $objSingleRecord) {
             $objPage = new class_module_pages_page($objSingleRecord->getSystemid());
-            $strReturn .= $this->widgetText(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrName()) );
+            $strReturn .= $this->widgetText(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrName()));
             $strReturn .= $this->widgetText("&nbsp; &nbsp; ".timeToString($objPage->getIntLmTime())."");
         }
 
