@@ -63,7 +63,7 @@ if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
         (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
         $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
     );
-    define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/")));
+    define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/"))));
 }
 else {
     //Determine the current path on the web
