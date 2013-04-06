@@ -12,7 +12,7 @@
 //editable entries
 $lang["_faqs_search_resultpage_"]        = "Träffsida:";
 $lang["_faqs_search_resultpage_hint"]    = "På denna sida vias de FAQ som har hittats vid sökningen.";
-$lang["delete_question"]                 = "Vill du verkligen radera denna FAQ:<b>%%element_name%%</b>&quot;?";
+$lang["delete_faq_question"]                 = "Vill du verkligen radera denna FAQ:<b>%%element_name%%</b>&quot;?";
 $lang["faq_rechte"]                      = "Redigera rättigheter";
 $lang["faqs_categories"]                 = "Kategorier";
 $lang["faqs_rating_permissions"]         = "Icke tillräckliga rättigheter";

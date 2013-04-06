@@ -68,7 +68,11 @@ abstract class class_admin_simple extends class_admin {
             if(!$objRecord->deleteObject())
                 throw new class_exception("error deleting object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
 
-            $this->adminReload(_indexpath_."?".$this->getHistory(1).($this->getParam("pe") != "" ? "&peClose=1" : ""));
+            $strTargetUrl = $this->getHistory(1);
+            if(uniStrpos($strTargetUrl, "admin=1") === false)
+                $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
+
+            $this->adminReload(_indexpath_."?".$strTargetUrl.($this->getParam("pe") != "" ? "&peClose=1" : ""));
         }
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);

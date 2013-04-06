@@ -221,9 +221,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
             }
 
             //Build the class-name for the object
-            $strClassname = uniSubstr($objOneElementOnPage->getStrClassPortal(), 0, -4);
             /** @var  class_element_portal $objElement  */
-            $objElement = new $strClassname($objOneElementOnPage);
+            $objElement = $objOneElementOnPage->getConcretePortalInstance();
             //let the element do the work and earn the output
             if(!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()]))
                 $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] = "";

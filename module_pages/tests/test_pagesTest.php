@@ -106,11 +106,9 @@ class class_test_pages extends class_testbase {
         $objPagelement->updateObjectToDb($objPage->getSystemid());
         $objPagelement = new class_module_pages_pageelement($objPagelement->getSystemid());
 
-        $strElementClass = str_replace(".php", "", $objPagelement->getStrClassAdmin());
         //and finally create the object
         /** @var $objElement class_element_admin */
-        $objElement = new $strElementClass();
-        $objElement->setSystemid($objPagelement->getSystemid());
+        $objElement = $objPagelement->getConcreteAdminInstance();
         $arrElementData = $objElement->loadElementData();
         $arrElementData["paragraph_title"] = "autotest";
         $objElement->setArrParamData($arrElementData);
@@ -149,14 +147,10 @@ class class_test_pages extends class_testbase {
         $this->assertEquals($objOldElement->getStrLanguage(), $objNewElement->getStrLanguage());
         $this->assertEquals($objOldElement->getStrElement(), $objNewElement->getStrElement());
 
-        $strElementClass = str_replace(".php", "", $objOldElement->getStrClassAdmin());
-        $objElement = new $strElementClass();
-        $objElement->setSystemid($objOldElement->getSystemid());
+        $objElement = $objOldElement->getConcreteAdminInstance();
         $arrOldElementData = $objElement->loadElementData();
 
-        $strElementClass = str_replace(".php", "", $objNewElement->getStrClassAdmin());
-        $objElement = new $strElementClass();
-        $objElement->setSystemid($objNewElement->getSystemid());
+        $objElement = $objNewElement->getConcreteAdminInstance();
         $arrNewElementData = $objElement->loadElementData();
 
         $this->assertNotEquals($arrOldElementData["content_id"], $arrNewElementData["content_id"]);

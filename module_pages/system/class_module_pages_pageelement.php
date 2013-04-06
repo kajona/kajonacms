@@ -209,6 +209,44 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         return true;
     }
 
+    /**
+     * Creates an instance of the concrete admin-element instance, e.g. the concrete row-element
+     * Please note, that due to performance issues the foreign content is not loaded in the step, use
+     * $objElement->loadElementData() in order to fully initialize.
+     *
+     * @return class_element_admin
+     */
+    public function getConcreteAdminInstance() {
+        if($this->getStrClassAdmin() == "")
+            return null;
+
+        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
+        //and finally create the object
+        /** @var $objElement class_element_admin */
+        $objElement = new $strElementClass();
+        $objElement->setSystemid($this->getSystemid());
+        return $objElement;
+    }
+
+    /**
+     * Creates an instance of the concrete admin-element instance, e.g. the concrete row-element
+     * Please note, that due to performance issues the foreign content is not loaded in the step!
+     *
+     * @return class_element_portal
+     */
+    public function getConcretePortalInstance() {
+
+        if($this->getStrClassPortal() == "")
+            return null;
+
+        $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
+        //and finally create the object
+        /** @var $objElement class_element_portal */
+        $objElement = new $strElementClass($this);
+        $objElement->setSystemid($this->getSystemid());
+        return $objElement;
+    }
+
 
     /**
      * Makes a copy of the current element and saves it attached to the given page.
@@ -221,23 +259,16 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     public function copyObject($strNewPage = "") {
 
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
-
         $this->objDB->transactionBegin();
 
         //fetch all values to insert after the general copy process - mainly the foreign table
-        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
-        //and finally create the object
-        /** @var $objElement class_element_admin */
-        $objElement = new $strElementClass();
-        $objElement->setSystemid($this->getSystemid());
+        $objElement = $this->getConcreteAdminInstance();
         $arrElementData = $objElement->loadElementData();
-
 
         //duplicate the current elements - afterwards $this is the new element
         parent::copyObject($strNewPage);
 
-        $objElement = new $strElementClass();
-        $objElement->setSystemid($this->getSystemid());
+        $objElement = $this->getConcreteAdminInstance();
         $arrNewElementData = $objElement->loadElementData();
         $arrElementData["content_id"] = $arrNewElementData["content_id"];
         $arrElementData["page_element_id"] = $arrNewElementData["page_element_id"];
@@ -465,12 +496,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 
         //Load the Element-Data
-        //Build the class-name
-        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
-
-        if($strElementClass != "") {
-            //and finally create the object
-            $objElement = new $strElementClass();
+        $objElement = $this->getConcreteAdminInstance();
+        if($objElement != null) {
             //Fetch the table
             $strElementTable = $objElement->getTable();
             //Delete the entry in the Element-Table
@@ -602,9 +629,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         if($this->strTitle != "" || !$bitClever || $this->getStrClassAdmin() == "")
             return $this->strTitle;
         //Create an instance of the object and let it serve the comment...
-        $strClassname = str_replace(".php", "", $this->getStrClassAdmin());
-        $objElement = new $strClassname();
-        $objElement->setSystemid($this->getSystemid());
+        $objElement = $this->getConcreteAdminInstance();
         return $objElement->getContentTitle();
     }
 

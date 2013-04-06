@@ -30,6 +30,7 @@ $lang["commons_create_folder"]           = "Neuer Ordner";
 $lang["commons_date"]                    = "Datum";
 $lang["commons_delete"]                  = "Löschen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["commons_delete_record_question"]  = "Möchten Sie den Datensatz &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["commons_delete_error"]            = "Fehler beim Löschen des Datensatzes";
 $lang["commons_delete_ok"]               = "Datensatz erfolgreich gelöscht";
 $lang["commons_description"]             = "Beschreibung:";

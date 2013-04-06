@@ -323,10 +323,14 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         $arrPath = $this->getPathArray($this->getSystemid());
         
         // Render additional navigation path entries for child objects.
-        foreach($arrPath as $strOneVoting) {
+        foreach($arrPath as $strOneSystemid) {
 
-            $objInstance = class_objectfactory::getInstance()->getObject($strOneVoting);
-            $strLink = $this->getOutputNaviEntry($objInstance);
+            if(!validateSystemid($strOneSystemid))
+                continue;
+
+            $objInstance = class_objectfactory::getInstance()->getObject($strOneSystemid);
+            if($objInstance != null)
+                $strLink = $this->getOutputNaviEntry($objInstance);
             
             if ($strLink) {
                 $arrPathLinks[] = $strLink;

@@ -63,7 +63,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
             $objSystem = class_module_system_module::getModuleByName("system");
 
             $objXmlWriter = new XMLWriter();
-            //$objXmlWriter->openMemory();
+
 
             $strExportFolder = $this->getParam("exportFolder");
             $strExportPrefix = $this->getParam("exportPrefix");
@@ -78,7 +78,10 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
 
             if(is_dir($strExportFolder)) {
 
-                $objXmlWriter->openUri($strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml");
+                if(!$objXmlWriter->openUri($strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml"))
+                    throw new class_exception("failed to open export file ", class_exception::$level_ERROR);
+
+                //$objXmlWriter->openMemory();
 
                 $objXmlWriter->setIndent(true);
 
@@ -148,7 +151,6 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
 
                 $objXmlWriter->flush();
                 //return $objXmlWriter->outputMemory(true);
-
                 return $this->getLang("systemtask_pageexport_success").$strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml"."";
             }
             else
@@ -165,11 +167,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @return string
      */
     public function getAdminForm() {
-    	$strReturn = "";
-
-        $strReturn .= $this->objToolkit->formInputPageSelector("pageexport_page", $this->getLang("systemtask_pageexport_page"));
-
-        return $strReturn;
+        return $this->objToolkit->formInputPageSelector("pageexport_page", $this->getLang("systemtask_pageexport_page"));
     }
 
     /**
@@ -223,21 +221,19 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
 
 
             //the elements-content itself
-
-            $strElementClass = str_replace(".php", "", $objOneElement->getStrClassAdmin());
-            $objElement = new $strElementClass();
+            $objElement = $objOneElement->getConcreteAdminInstance();
             //Fetch the table
             $strElementTable = $objElement->getTable();
 
 
             $objWriter->startElement("foreignTable");
             $objWriter->startAttribute("table");
-            $objWriter->text(uniStrReplace(_dbprefix_, "",$strElementTable));
+            $objWriter->text(uniStrReplace(_dbprefix_, "", $strElementTable));
             $objWriter->endAttribute();
 
 
             //content-row
-            $arrContentRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM ".$strElementTable." WHERE content_id = ? ", array($objOneElement->getSystemid()) );
+            $arrContentRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM ".$strElementTable." WHERE content_id = ? ", array($objOneElement->getSystemid()));
             $arrColumns = class_carrier::getInstance()->getObjDB()->getColumnsOfTable($strElementTable);
 
             foreach($arrColumns as $arrOneCol) {

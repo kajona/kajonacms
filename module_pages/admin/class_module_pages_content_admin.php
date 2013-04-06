@@ -98,7 +98,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         else
             $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 0);
 
-        $arrElementsOnPage = array();
         //Language-dependant loading of elements, if installed
         $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
         //save a copy of the array to be able to check against all values later on
@@ -128,10 +127,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                     if($bitSamePlaceholder) {
                         $bitHit = true;
-
-
                         $strActions = $this->getActionIcons($objOneElementOnPage);
-
                         //Put all Output together
                         $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, $intI++);
 
@@ -243,11 +239,11 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $objLockmanager->unlockRecord();
 
                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit.png"));
-                $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
 
             //The Icons to sort the list and to copy the element
-            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.png"));
+            $strActions .= $this->objToolkit->listButton(getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.png"));
 
             //The status-icons
             $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
@@ -405,11 +401,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             //Load the data of the current element
             $objElementData = new class_module_pages_pageelement($this->getSystemid());
             /** @var $objElement class_element_admin */
-            $strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
-            //and finally create the object
-            /** @var $objElement class_element_admin */
-            $objElement = new $strElementClass();
-            $objElement->setSystemid($this->getSystemid());
+            $objElement = $objElementData->getConcreteAdminInstance();
 
             //really continue? try to validate the passed data.
             if(!$objElement->validateForm()) {
@@ -477,27 +469,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
     }
 
     /**
-     * Shows the warning box before deleteing a element
-     *
-     * @return string
-     */
-    protected function actionDeleteElement() {
-        $strReturn = "";
-        $objElement = new class_module_pages_pageelement($this->getSystemid());
-        if($objElement->rightDelete()) {
-            $strQuestion = uniStrReplace("%%element_name%%", htmlToString($objElement->getStrName().($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : ""), true), $this->getLang("element_loeschen_frage"));
-
-            $strReturn .= $this->objToolkit->warningBox($strQuestion
-                ." <br /><a href=\"".getLinkAdminHref("pages_content", "deleteElementFinal", "systemid=".$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")))."\">"
-                .$this->getLang("commons_delete"));
-        }
-        else
-            $strReturn .= $this->getLang("commons_error_permissions");
-
-        return $strReturn;
-    }
-
-    /**
      * Deletes an Element
      *
      * @throws class_exception
@@ -539,6 +510,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      */
     protected function actionCopyElement() {
         $strReturn = "";
+
+        $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $objSourceElement = new class_module_pages_pageelement($this->getSystemid());
         if($objSourceElement->rightEdit($this->getSystemid())) {
@@ -669,7 +642,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
 
-                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&peClose=1"));
                 }
                 else
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);

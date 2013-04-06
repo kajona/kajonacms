@@ -1048,15 +1048,31 @@ pe_iconbar, pe_disable
         </div>
     </div>
 
+    <div class="modal hide fade" id="delDialog">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3 id="delDialog_title"><!-- filled by js --></h3>
+        </div>
+        <div class="modal-body" id="delDialog_content">
+            <!-- filled by js -->
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
+            <a href="#" class="btn btn-primary" id="delDialog_confirmButton">confirm</a>
+        </div>
+    </div>
+
 	<script type="text/javascript">
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
         KAJONA.portal.loader.loadFile([
-            "_skinwebpath_/js/kajona_dialog.js",
             "_skinwebpath_/js/bootstrap-modal.js",
-            "_skinwebpath_/js/bootstrap-dropdown.js"
+            "_skinwebpath_/js/bootstrap-dropdown.js",
+            "_skinwebpath_/js/bootstrap-button.js",
+            "_skinwebpath_/js/kajona_dialog.js"
         ], function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
+		    delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
 		}, true);
 	</script>
 

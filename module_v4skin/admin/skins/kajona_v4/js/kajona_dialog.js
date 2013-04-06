@@ -29,10 +29,16 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
             var $confirmButton = $('#' + this.containerId + '_confirmButton');
             $confirmButton.html(strConfirmButton);
-            $confirmButton.click(function() {
-                window.location = strLinkHref;
-                return false;
-            });
+
+            if(jQuery.isFunction(strLinkHref)) {
+                $confirmButton.click(strLinkHref);
+            }
+            else {
+                $confirmButton.click(function() {
+                    window.location = strLinkHref;
+                    return false;
+                });
+            }
         }
     };
 
