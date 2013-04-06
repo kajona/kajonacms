@@ -22,7 +22,7 @@ function rawIncludeError($strFileMissed) {
     die($strErrorMessage);
 }
 
-//---The Path on the filesystem------------------------------------------------------------------------------
+//---The Path on the filesystem--------------------------------------------------------------------------
 //Determine the current path on the filesystem. Use the dir-name of the current file
 define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -5)));
 define("_corepath_", str_replace(" ", "\040", __DIR__));
@@ -63,8 +63,7 @@ if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
         (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
         $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
     );
-    $strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));
-    define("_webpath_", saveUrlEncode($strWeb));
+    define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/")));
 }
 else {
     //Determine the current path on the web
@@ -72,14 +71,13 @@ else {
         (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
         (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']
     );
-    $strWeb = saveUrlEncode($strWeb);
-    define("_webpath_", $strWeb);
+    define("_webpath_", saveUrlEncode($strWeb));
 }
 
 //---Include Section 2-----------------------------------------------------------------------------------
 //Module-Constants
 foreach(scandir(_corepath_."/") as $strDirEntry ) {
-    if(is_dir(_corepath_."/".$strDirEntry) && is_dir(_corepath_."/".$strDirEntry."/system/")&& is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
+    if(is_dir(_corepath_."/".$strDirEntry) && is_dir(_corepath_."/".$strDirEntry."/system/") && is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
         foreach(scandir(_corepath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
             if(preg_match("/module\_([a-z])+\_id\.php/", $strModuleEntry))
                 @include_once _corepath_."/".$strDirEntry."/system/config/".$strModuleEntry;
@@ -88,9 +86,9 @@ foreach(scandir(_corepath_."/") as $strDirEntry ) {
 }
 
 
-//---Auto-Loader for classes--------------------------------------------------------------------------
+//---Auto-Loader for classes-----------------------------------------------------------------------------
 require_once _corepath_."/module_system/system/class_classloader.php";
-spl_autoload_register(array (class_classloader::getInstance(), "loadClass"));
+spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
 //The Carrier-Class
 if(!@include_once _corepath_."/module_system/system/class_carrier.php")
