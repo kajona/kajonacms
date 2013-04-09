@@ -128,7 +128,7 @@ KAJONA.util.Loader = function () {
     }
 
     function loadJs(strPath, strOriginalPath) {
-        //console.log("loading js: "+strPath);
+        //console.log("start loading js: "+strPath);
 
         //enable caching, cache flushing is done by the cachebuster
         var options =  {
@@ -141,12 +141,13 @@ KAJONA.util.Loader = function () {
         // Return the jqXHR object so we can chain callbacks
         $.ajax(options)
             .done(function(script, textStatus) {
+                //console.warn('finished loading '+strOriginalPath)
                 arrFilesLoaded.push(strOriginalPath);
                 checkCallbacks();
 
             })
             .fail(function(jqxhr, settings, exception) {
-                //console.warn('loading file '+strPath+' failed: '+exception);
+                console.error('loading file '+strPath+' failed: '+exception);
             });
     }
 

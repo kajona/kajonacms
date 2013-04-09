@@ -8,27 +8,29 @@
         KAJONA.portal.loader.loadFile('/templates/default/js/fancybox/jquery.fancybox.css');
         KAJONA.portal.loader.loadFile('/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.css');
 
-        KAJONA.portal.loader.loadFile(['/templates/default/js/fancybox/jquery.fancybox.pack.js', '/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.js'], function() {
-
-            $(document).ready(function() {
-                $(".fancybox-thumb").fancybox({
-                    prevEffect	: 'none',
-                    nextEffect	: 'none',
-                    helpers	: {
-                        title	: {
-                            type: 'outside'
+        KAJONA.portal.loader.loadFile(['/templates/default/js/fancybox/jquery.fancybox.pack.js'], function() {
+            KAJONA.portal.loader.loadFile(['/templates/default/js/fancybox/helpers/jquery.fancybox-thumbs.js'], function() {
+                $(document).ready(function() {
+                    $(".fancybox-thumb").fancybox({
+                        prevEffect	: 'none',
+                        nextEffect	: 'none',
+                        helpers	: {
+                            title	: {
+                                type: 'outside'
+                            },
+                            overlay	: {
+                                opacity : 0.8
+                            },
+                            thumbs	: {
+                                width	: 50,
+                                height	: 50
+                            }
                         },
-                        overlay	: {
-                            opacity : 0.8
-                        },
-                        thumbs	: {
-                            width	: 50,
-                            height	: 50
-                        }
-                    },
-                    type : 'image'
+                        type : 'image'
+                    });
                 });
             });
+
         });
 
 
