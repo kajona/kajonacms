@@ -224,6 +224,7 @@ class class_image {
             }
 
             if($bitCache) {
+
                 $this->generateCachename();
                 $strTarget = $this->strCachepath . $this->strCachename;
             }
@@ -724,8 +725,6 @@ class class_image {
         $bitResize = false;
         $bitCropToFixedSize = false;
 
-        $this->strCacheAdd .= $intCropWidth . $intCropHeight;
-
         //check, if cropping is needed
         if($intCropWidth > 0 && $intCropHeight > 0 && ($this->intWidth != $intCropWidth || $this->intHeight != $intCropHeight)) {
             $bitResize = true;
@@ -741,9 +740,9 @@ class class_image {
                 $intWidthNew = (int)($intCropHeight * $floatRelation);
             }
             else if($floatRelation == $floatNewRelation) {
-                //original image has similar relation, no cropping needed
+                //original image has same relation, no cropping needed
                 $intWidthNew = $intCropWidth;
-                $intWidthNew = $intCropHeight;
+                $intHeightNew = $intCropHeight;
             }
             else {
                 //original image is taller
@@ -801,6 +800,32 @@ class class_image {
         class_logger::getInstance()->addLogRow(
             "resize to(" . $bitResize . "): width: " . $intWidthNew . " height: " . $intHeightNew . " crop to(" . $bitCropToFixedSize . "): width: " . $intCropWidth . " height: " . $intCropHeight . " ", class_logger::$levelInfo
         );
+
+
+        //set up the cache name for later operations
+        $this->strCacheAdd .= $intCropWidth . $intCropHeight;
+
+        //look up the image in the cache
+        if($bitCropToFixedSize) {
+            $this->strCachename = $this->generateCachename($intCropHeight, $intCropWidth);
+            if(is_file(_realpath_ . $this->strCachepath . $this->strCachename)) {
+                $this->bitNeedToSave = false;
+                $this->intWidth = $intCropWidth;
+                $this->intHeight = $intCropHeight;
+                return true;
+            }
+
+        }
+        else {
+            $this->strCachename = $this->generateCachename($intHeightNew, $intWidthNew);
+            if(is_file(_realpath_ . $this->strCachepath . $this->strCachename)) {
+                $this->bitNeedToSave = false;
+                $this->intWidth = $intWidthNew;
+                $this->intHeight = $intHeightNew;
+                return true;
+            }
+        }
+
 
         if($bitResize) {
             $this->resizeImage($intWidthNew, $intHeightNew, 0, true);
