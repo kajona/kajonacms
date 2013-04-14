@@ -222,14 +222,6 @@ class class_request_dispatcher {
             $objLanguage->setStrPortalLanguage($strLanguageParam);
         }
 
-        //process stats request
-        /** @var $objStats class_module_stats_portal */
-        $objStats = class_module_system_module::getModuleByName("stats");
-        if($objStats != null) {
-            $objStats = $objStats->getPortalInstanceOfConcreteModule();
-            $objStats->insertStat();
-        }
-
 
         //Load the portal parts
         $objModule = class_module_system_module::getModuleByName($strModule);

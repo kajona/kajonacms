@@ -114,6 +114,11 @@ class class_installer_stats extends class_installer_base implements interface_in
             $strReturn .= $this->update_349_40();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= $this->update_40_41();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -139,6 +144,25 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "4.0");
+        return $strReturn;
+    }
+
+    private function update_40_41() {
+        $strReturn = "Updating 4.0 to 4.1...\n";
+
+        $strReturn .= "Updating module-definitions...\n";
+        $objModule = class_module_system_module::getModuleByName("stats", true);
+        $objModule->setStrNamePortal("");
+        $objModule->updateObjectToDb();
+
+        $strReturn .= "Deleting unused files...\n";
+        $objFS = new class_filesystem();
+        $objFS->fileDelete("/core/module_stats/portal/class_module_stats_portal.php");
+        $objFS->folderDelete("/core/module_stats/portal");
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "4.1");
         return $strReturn;
     }
 
