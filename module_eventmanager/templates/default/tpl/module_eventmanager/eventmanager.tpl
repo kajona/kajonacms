@@ -9,8 +9,12 @@
             function() {
                  //files are loaded, initialize the calendar...
                  $('#eventmanagerCalendar').fullCalendar({
+                     dayNames: [ [lang,toolsetCalendarWeekday,system] ],
+                     dayNamesShort: [ [lang,toolsetCalendarWeekday,system] ],
+                     monthNames: [ [lang,toolsetCalendarMonth,system] ],
+                     monthNamesShort: [ [lang,toolsetCalendarMonth,system] ],
                      buttonText: {
-                         today: '[lang,cal_today,eventmanager]'
+                        today: '[lang,cal_today,eventmanager]'
                      },
                      events: "%%cal_eventsource%%",
                      firstDay: 1
