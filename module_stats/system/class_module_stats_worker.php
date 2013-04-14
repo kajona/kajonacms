@@ -37,7 +37,7 @@ class class_module_stats_worker extends class_model implements interface_model {
         return "";
     }
 
-    protected function updateStateToDb() {
+    public function updateObjectToDb($strPrevId = false) {
         return true;
     }
 
