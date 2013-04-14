@@ -580,7 +580,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
 
     public function getIntFileSize() {
-        return filesize(_realpath_ . $this->getStrFilename());
+        return @filesize(_realpath_ . $this->getStrFilename());
     }
 
     public function setStrName($strName) {
