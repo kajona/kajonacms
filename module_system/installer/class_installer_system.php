@@ -574,6 +574,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0.1") {
+            $strReturn .= $this->update_401_41();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -804,6 +810,23 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.0.1");
+        return $strReturn;
+    }
+
+    private function update_401_41() {
+
+        $strReturn = "Updating 4.0.1 to 4.1...\n";
+
+        $strReturn .= "Please note: the .htaccess file changed!\n";
+        $strReturn .= "You have to merge changes manually!\n";
+        $strReturn .= "Change line ~57 from:\n";
+        $strReturn .= "#RewriteRule ^(([a-z]{2})/)(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]{2})\.html  index.php?page=$4&action=$6&systemid=$7&language=$2 [QSA,L]\n";
+        $strReturn .= "to\n";
+        $strReturn .= "#RewriteRule ^(([a-z]{2})/)(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$4&action=$6&systemid=$7&language=$2 [QSA,L]\n\n";
+        $strReturn .= "See http://www.kajona.de/update_40_to_41.html for more information.\n\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.1");
         return $strReturn;
     }
 }
