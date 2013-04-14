@@ -13,7 +13,7 @@
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class class_module_stats_worker extends class_model implements interface_model  {
+class class_module_stats_worker extends class_model implements interface_model {
 
     /**
      * Constructor to create a valid object
@@ -37,6 +37,10 @@ class class_module_stats_worker extends class_model implements interface_model  
         return "";
     }
 
+    protected function updateStateToDb() {
+        return true;
+    }
+
 
     /**
      * Loads all ips to update hostnames for the worker "hostnameLookup"
@@ -45,7 +49,7 @@ class class_module_stats_worker extends class_model implements interface_model  
      */
     public function hostnameLookupIpsToLookup() {
         $strQuery = "SELECT stats_ip
-                       FROM "._dbprefix_."stats_data
+                       FROM " . _dbprefix_ . "stats_data
                       WHERE stats_hostname IS NULL
                             OR stats_hostname = ''
                         AND stats_hostname != 'na'
@@ -59,10 +63,11 @@ class class_module_stats_worker extends class_model implements interface_model  
      *
      * @param string $strHostname
      * @param string $strIP
+     *
      * @return bool
      */
     public function hostnameLookupSaveHostname($strHostname, $strIP) {
-        $strQuery = "UPDATE "._dbprefix_."stats_data
+        $strQuery = "UPDATE " . _dbprefix_ . "stats_data
                                     SET stats_hostname = ?
                                   WHERE stats_ip = ? ";
         return $this->objDB->_pQuery($strQuery, array($strHostname, $strIP));
@@ -75,7 +80,7 @@ class class_module_stats_worker extends class_model implements interface_model  
      */
     public function hostnameLookupResetHostnames() {
         //Reset all na hostnames
-        $strQuery = "UPDATE "._dbprefix_."stats_data
+        $strQuery = "UPDATE " . _dbprefix_ . "stats_data
                         SET stats_hostname = ''
                       WHERE stats_hostname = 'na'";
         return $this->objDB->_pQuery($strQuery, array());
@@ -95,15 +100,17 @@ class class_module_stats_worker extends class_model implements interface_model  
      * @return bool
      */
     public function createStatsEntry($strIp, $intDate, $strPage, $strReferer, $strBrowser, $strLanguage = "", $strSession = "") {
-        if($strSession == "")
+        if($strSession == "") {
             $strSession = $this->objSession->getSessionId();
-        $strQuery =
-        "INSERT INTO "._dbprefix_."stats_data
-		(stats_id, stats_ip, stats_date, stats_page, stats_referer, stats_browser, stats_session, stats_language) VALUES
-		(?, ?, ?, ?, ?, ?, ?, ?)";
+        }
+        $strQuery = "INSERT INTO " . _dbprefix_ . "stats_data
+		            (stats_id, stats_ip, stats_date, stats_page, stats_referer, stats_browser, stats_session, stats_language) VALUES
+		            (?, ?, ?, ?, ?, ?, ?, ?)";
 
-		return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $strIp, $intDate,
-                                    $strPage, $strReferer, $strBrowser, $strSession, $strLanguage));
+        return $this->objDB->_pQuery(
+            $strQuery,
+            array(generateSystemid(), $strIp, $intDate, $strPage, $strReferer, $strBrowser, $strSession, $strLanguage)
+        );
     }
 
 
@@ -114,7 +121,7 @@ class class_module_stats_worker extends class_model implements interface_model  
      */
     public function getNumberOfIpsToLookup() {
         $strQuery = "SELECT count(distinct stats_ip) as anzahl
-                       FROM "._dbprefix_."stats_data
+                       FROM " . _dbprefix_ . "stats_data
                       WHERE stats_hostname IS NULL
                             OR stats_hostname = ''
                         AND stats_hostname != 'na'";
@@ -122,24 +129,24 @@ class class_module_stats_worker extends class_model implements interface_model  
         $arrTemp = $this->objDB->getPRow($strQuery, array());
         return $arrTemp["anzahl"];
     }
-    
+
     /**
      * Looks up the number of ip not yet resolved to a country
      *
      * @return array
      */
     public function getArrayOfIp2cLookups() {
-    	$strQuery = "SELECT distinct stats_ip 
-                       FROM "._dbprefix_."stats_data 
-                            LEFT JOIN "._dbprefix_."stats_ip2country  
+        $strQuery = "SELECT distinct stats_ip
+                       FROM " . _dbprefix_ . "stats_data
+                            LEFT JOIN " . _dbprefix_ . "stats_ip2country
                                    ON (stats_ip = ip2c_ip)  
                       WHERE ip2c_name IS NULL
                        /*   OR ip2c_name = '' 
                         AND ip2c_name != 'na' */
                    GROUP BY stats_ip";
-    	
-    	return $this->objDB->getPArray($strQuery, array(), 0, 11);
-        
+
+        return $this->objDB->getPArray($strQuery, array(), 0, 11);
+
     }
 
     /**
@@ -148,33 +155,34 @@ class class_module_stats_worker extends class_model implements interface_model  
      * @return array
      */
     public function getNumberOfIp2cLookups() {
-    	$strQuery = "SELECT COUNT(*) as number FROM (SELECT distinct stats_ip
-                       FROM "._dbprefix_."stats_data
-                            LEFT JOIN "._dbprefix_."stats_ip2country
+        $strQuery = "SELECT COUNT(*) as number FROM (SELECT distinct stats_ip
+                       FROM " . _dbprefix_ . "stats_data
+                            LEFT JOIN " . _dbprefix_ . "stats_ip2country
                                    ON (stats_ip = ip2c_ip)
                       WHERE ip2c_name IS NULL
                        /*   OR ip2c_name = ''
                         AND ip2c_name != 'na' */
                    GROUP BY stats_ip) as derived";
 
-    	$arrTemp = $this->objDB->getPRow($strQuery, array());
+        $arrTemp = $this->objDB->getPRow($strQuery, array());
         return $arrTemp["number"];
 
     }
-    
+
     /**
      * Saves a tuple of an ip and country to the cache-table
      *
      * @param string $strIp
      * @param string $strCountry
+     *
      * @return bool
      */
     public function saveIp2CountryRecord($strIp, $strCountry) {
-    	$strQuery = "INSERT INTO "._dbprefix_."stats_ip2country
+        $strQuery = "INSERT INTO " . _dbprefix_ . "stats_ip2country
     	               (ip2c_ip, ip2c_name) VALUES 
     	               (?, ?)";
-    	
-    	return $this->objDB->_pQuery($strQuery, array($strIp, $strCountry));
+
+        return $this->objDB->_pQuery($strQuery, array($strIp, $strCountry));
     }
 
 }
