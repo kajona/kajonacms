@@ -123,7 +123,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                                 SET navigation_id= ?,
                                     navigation_template = ?
                                 WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "breadcrumbnavi.tpl", $strElementId)))
+                if($this->objDB->_pQuery($strQuery, array($strTreeId, "breadcrumbnavi.tpl", $strElementId)))
                     $strReturn .= "Navigation element created.\n";
                 else
                     $strReturn .= "Error creating navigation element.\n";
