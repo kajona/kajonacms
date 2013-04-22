@@ -19,7 +19,17 @@ class class_test_charts_flotTest extends class_testbase  {
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona.js\"></script>";
         
 
+        //create bar charts
+        for ($i = 1; $i < 6; $i++) {
+            class_test_charts_flotTest::createBarChart($i,$i, class_graph_flot_seriesdatatypes::BAR);
+        }
+        
+        //create stacked bar charts
+        for ($i = 1; $i < 6; $i++) {
+            class_test_charts_flotTest::createBarChart($i,$i, class_graph_flot_seriesdatatypes::STACKEDBAR);
+        }
 
+        
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->addLinePlot(array(8.112,1,2,4), "serie 1");
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
@@ -102,7 +112,44 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setBitRenderLegend(true);
         echo $objGraph->renderGraph();
         
+        
+        
+       
+        
         echo"<br/>";
+    }
+    
+    
+    public static function createBarChart($noOfSets = 1, $nrOfBarsPerSet = 1, $barChartType) {
+        $width = 140;
+        $height = 100;
+        for ($i = 0; $i < 10; $i++) {
+             $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+             $objGraph->setStrGraphTitle("A Bar Chart");
+             
+             for ($j = 0; $j < $noOfSets; $j++) {
+                $arr = [];
+                for ($k = 0; $k < $nrOfBarsPerSet; $k++) {
+                   $randVal = rand(1,15);
+                   array_push($arr, $randVal);
+                   
+               }
+               
+               if($barChartType == class_graph_flot_seriesdatatypes::BAR) {
+                    $objGraph->addBarChartSet($arr, "serie "+$j);
+               }
+               else if($barChartType == class_graph_flot_seriesdatatypes::STACKEDBAR) {
+                   $objGraph->addStackedBarChartSet($arr, "serie "+$j);
+               }
+               
+             }
+             
+             $objGraph->setIntHeight($width);
+             $objGraph->setIntWidth($height);
+             echo $objGraph->renderGraph();
+             $width += 50;
+             $height += 50;
+        }
     }
 }
 

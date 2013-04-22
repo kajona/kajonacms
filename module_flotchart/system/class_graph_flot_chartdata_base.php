@@ -170,7 +170,7 @@ abstract class class_graph_flot_chartdata_base {
         foreach($this->arrFlotSeriesData as $intKey => $seriesData) {
             $chartType = $seriesData->getStrSeriesChartType();
             $seriesDataString = $chartTypeArr[$seriesData->getStrSeriesChartType()];
-            $nrOfElements = sizeof($seriesData->getArrayData());
+            $nrOfElementsPerSeriesData = sizeof($seriesData->getArrayData());
             
             switch($chartType) {
             case class_graph_flot_seriesdatatypes::PIE:
@@ -191,10 +191,20 @@ abstract class class_graph_flot_chartdata_base {
                     $substract  +=140;
                 }
 
+                
+                //calulate bar width
                 $calcWidth = $this->intWidth-$substract;
-                $calcWidth = $calcWidth>300? 300:$calcWidth;
-                $barWidth = $calcWidth / $nrOfElements / $barsCount;
+                $barWidth = 0;
+                if($nrOfElementsPerSeriesData <= 3) {
+                    $calcWidth = $calcWidth>150? 150:$calcWidth;
+                 }
+                else {
+                   $calcWidth = $calcWidth>300? 300:$calcWidth;
+                }
+                
+                $barWidth = $calcWidth / $nrOfElementsPerSeriesData / $barsCount;
                 $barWidth = $barWidth/100;
+                
                 $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment, $order));
                 break;
             case class_graph_flot_seriesdatatypes::STACKEDBAR:
@@ -208,9 +218,19 @@ abstract class class_graph_flot_chartdata_base {
                     $substract  +=140;
                 }
 
+                
+                //calulate bar width
+                
                 $calcWidth = $this->intWidth-$substract;
-                $calcWidth = $calcWidth>300? 300:$calcWidth;
-                $barWidth = $calcWidth / $nrOfElements;
+                $barWidth = 0;
+                if($barsStackedCount <= 3) {
+                    $calcWidth = $calcWidth>150? 150:$calcWidth;
+                 }
+                else {
+                   $calcWidth = $calcWidth>300? 300:$calcWidth;
+                }
+
+                $barWidth = $calcWidth / $nrOfElementsPerSeriesData;
                 $barWidth = $barWidth/100;
                 $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment));
                 break;
