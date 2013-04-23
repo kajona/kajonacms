@@ -242,7 +242,8 @@ class class_module_system_module extends class_model implements interface_model,
     }
 
     /**
-     * Tries to look up a module using the given name
+     * Tries to look up a module using the given name. If the module
+     * is not active / not installed, null is returned instead
      *
      * @param string $strName
      * @param bool $bitIgnoreStatus
@@ -255,14 +256,12 @@ class class_module_system_module extends class_model implements interface_model,
             return null;
         }
 
-
         //check if the module is already cached
         foreach(self::$arrModules as $objOneModule) {
             if(!$bitIgnoreStatus && $objOneModule->getStrName() == $strName) {
                 return $objOneModule;
             }
         }
-
 
         $arrModules = self::loadModuleData();
         $arrRow = array();

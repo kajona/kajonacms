@@ -42,9 +42,11 @@ class class_flyimage {
     private $objImage;
     private $intQuality;
 
+    private $strElementId;
+    private $strSystemid;
+
     /**
      * constructor, init the parent-class
-
      */
     public function __construct() {
         //Loading all configs...
@@ -55,29 +57,28 @@ class class_flyimage {
         $this->strFilename = str_replace("../", "", $this->strFilename);
 
         $this->intMaxHeight = (int)getGet("maxHeight");
-        if($this->intMaxHeight < 0) {
+        if($this->intMaxHeight < 0)
             $this->intMaxHeight = 0;
-        }
 
         $this->intMaxWidth = (int)getGet("maxWidth");
-        if($this->intMaxWidth < 0) {
+        if($this->intMaxWidth < 0)
             $this->intMaxWidth = 0;
-        }
 
         $this->intFixedHeight = (int)getGet("fixedHeight");
-        if($this->intFixedHeight < 0 || $this->intFixedHeight > 2000) {
+        if($this->intFixedHeight < 0 || $this->intFixedHeight > 2000)
             $this->intFixedHeight = 0;
-        }
 
         $this->intFixedWidth = (int)getGet("fixedWidth");
-        if($this->intFixedWidth < 0 || $this->intFixedWidth > 2000) {
+        if($this->intFixedWidth < 0 || $this->intFixedWidth > 2000)
             $this->intFixedWidth = 0;
-        }
 
         $this->intQuality = (int)getGet("quality");
-        if($this->intQuality <= 0 || $this->intQuality > 100) {
+        if($this->intQuality <= 0 || $this->intQuality > 100)
             $this->intQuality = 90;
-        }
+
+
+        $this->strSystemid = getGet("systemid");
+        $this->strElementId = getGet("elementid");
 
         //ok, all needed constants are set up...
         $this->objImage = new class_image($this->intQuality);
@@ -88,6 +89,71 @@ class class_flyimage {
      * Here happens the magic: creating the image and sending it to the browser
      */
     public function generateImage() {
+
+        //switch the different modes - may be want to generate a detailed image-view
+        if(validateSystemid($this->strSystemid) && validateSystemid($this->strElementId)) {
+            class_carrier::getInstance()->getObjConfig()->loadConfigsDatabase(class_carrier::getInstance()->getObjDB());
+            $this->generateMediamanagerImage();
+        }
+        else {
+            class_carrier::getInstance()->getObjSession()->sessionClose();
+            $this->resizeImage();
+        }
+    }
+
+    /**
+     * Wrapper to load a single element and generate the image
+     */
+    private function generateMediamanagerImage() {
+        if(class_module_system_module::getModuleByName("mediamanager") !== null) {
+            $objElement = new class_module_pages_pageelement($this->strElementId);
+            $objPortalElement = $objElement->getConcretePortalInstance();
+
+            $objFile = new class_module_mediamanager_file($this->strSystemid);
+
+            class_session::getInstance()->sessionClose();
+
+            if($objFile->rightView()) {
+
+                $arrElementData = $objPortalElement->getElementContent($objElement->getSystemid());
+
+                if(is_file(_realpath_.$objFile->getStrFilename())) {
+
+                    $this->objImage = new class_image($arrElementData["gallery_text"].$arrElementData["gallery_overlay"]);
+                    //Edit Picture
+                    if($this->objImage->preLoadImage($objFile->getStrFilename())) {
+                        //resize the image
+                        $this->objImage->resizeImage($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"], 0, true);
+                        //Inlay text
+                        if($arrElementData["gallery_text"] != "")
+                            $this->objImage->imageText($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "255,255,255", "dejavusans.ttf", true);
+                        //overlay image
+                        if($arrElementData["gallery_overlay"] != "")
+                            $this->objImage->overlayImage($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], true);
+
+                        $this->objImage->sendImageToBrowser((int)$this->intQuality);
+                        $this->objImage->releaseResources();
+                        return;
+                    }
+
+                }
+
+            }
+            else {
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+                class_response_object::getInstance()->sendHeaders();
+                return;
+            }
+        }
+
+        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+        class_response_object::getInstance()->sendHeaders();
+    }
+
+    /**
+     * Wrapper to the real, fast resizing
+     */
+    private function resizeImage() {
         //Load the image-dimensions
         if(is_file(_realpath_ . $this->strFilename) && uniStrpos($this->strFilename, "/files") !== false) {
 
@@ -122,6 +188,7 @@ class class_flyimage {
         }
     }
 
+
     /**
      * Generates a captcha image to defend bots.
      * To generate a captcha image, use "kajonaCaptcha" as image-param
@@ -131,19 +198,16 @@ class class_flyimage {
 
      */
     public function generateCaptchaImage() {
-        if($this->intMaxWidth == 0 || $this->intMaxWidth > 500) {
+        if($this->intMaxWidth == 0 || $this->intMaxWidth > 500)
             $intWidth = 200;
-        }
-        else {
+        else
             $intWidth = $this->intMaxWidth;
-        }
 
-        if($this->intMaxHeight == 0 || $this->intMaxHeight > 500) {
+        if($this->intMaxHeight == 0 || $this->intMaxHeight > 500)
             $intHeight = 50;
-        }
-        else {
+        else
             $intHeight = $this->intMaxHeight;
-        }
+
 
         $intMinfontSize = 15;
         $intMaxFontSize = 22;
@@ -265,7 +329,6 @@ if($objImage->getImageFilename() == "kajonaCaptcha") {
     $objImage->generateCaptchaImage();
 }
 else {
-    class_carrier::getInstance()->getObjSession()->sessionClose();
     $objImage->generateImage();
 }
 
