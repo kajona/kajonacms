@@ -12,16 +12,14 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
- *
  * @targetTable navigation.navigation_id
  */
-class class_module_navigation_tree extends class_model implements interface_model, interface_admin_listable  {
+class class_module_navigation_tree extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
      * @tableColumn navigation_name
      * @listOrder
-     *
      * @fieldMandatory
      * @fieldLabel commons_title
      */
@@ -43,13 +41,14 @@ class class_module_navigation_tree extends class_model implements interface_mode
         $this->setArrModuleEntry("modul", "navigation");
         $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
 
-		//base class
-		parent::__construct($strSystemid);
+        //base class
+        parent::__construct($strSystemid);
 
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -69,6 +68,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
     public function getStrAdditionalInfo() {
@@ -77,6 +77,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
     public function getStrLongDescription() {
@@ -102,22 +103,25 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * Looks up a navigation by its name
      *
      * @param string $strName
+     *
      * @return class_module_navigation_tree
      * @static
      */
     public static function getNavigationByName($strName) {
         $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."navigation, "._dbprefix_."system
+                     FROM " . _dbprefix_ . "navigation, " . _dbprefix_ . "system
                      WHERE system_id = navigation_id
                      AND system_prev_id = ?
                      AND navigation_name = ?
                      AND system_module_nr = ?
                      ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), $strName, _navigation_modul_id_));
-        if(isset($arrRow["system_id"]))
+        if(isset($arrRow["system_id"])) {
             return new class_module_navigation_tree($arrRow["system_id"]);
-        else
+        }
+        else {
             return null;
+        }
 
     }
 
@@ -128,12 +132,9 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * @return array
      */
     public function getCompleteNaviStructure() {
-
         $arrReturn = array();
-
         $arrReturn["node"] = null;
         $arrReturn["subnodes"] = $this->loadSingleLevel($this->getSystemid());
-
         return $arrReturn;
     }
 
@@ -141,6 +142,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * Loads a singe level of nodes, internal recursion helper
      *
      * @param string $strParentNode
+     *
      * @return array
      */
     private function loadSingleLevel($strParentNode) {
@@ -192,7 +194,5 @@ class class_module_navigation_tree extends class_model implements interface_mode
     public function setStrFolderId($strFolderId) {
         $this->strFolderId = $strFolderId;
     }
-
-
 
 }

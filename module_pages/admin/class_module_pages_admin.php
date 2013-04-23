@@ -463,6 +463,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else {
             $objForm->addDynamicField("strAlias")->setStrHint($this->getLang("page_alias_hint"))->setBitMandatory(true)->setStrLabel($this->getLang("page_alias"));
+
+            $arrTargetDD = array(
+                "_self" => $this->getLang("page_targetself"),
+                "_blank" => $this->getLang("page_targetblank")
+            );
+
+            $objForm->addDynamicField("strTarget")->setArrKeyValues($arrTargetDD)->setStrLabel($this->getLang("page_target"));
         }
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
@@ -492,10 +499,8 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objForm = $this->getPageForm($bitAlias, $objPage, $this->getParam("mode"));
 
 
-        if(!$objForm->validateForm()) {
+        if(!$objForm->validateForm())
             return $this->actionNewPage($this->getParam("mode"), $bitAlias, $objForm);
-        }
-
 
         $objForm->updateSourceObject();
 
@@ -509,7 +514,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&peRefreshPage=".urlencode(getLinkPortalHref($objPage->getStrName()))));
         else
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list", "systemid=".$objPage->getPrevId()));
-
 
         return "";
     }

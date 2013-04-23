@@ -86,12 +86,20 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @fieldType page
      */
     private $strAlias = "";
-    
+
     /**
      * @var string
      * @versionable
      */
     private $strPath = "";
+
+    /**
+     * @var string
+     * @versionable
+     *
+     * @fieldType dropdown
+     */
+    private $strTarget = "";
 
     private $strOldName;
     private $intOldType;
@@ -102,6 +110,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     private $strOldSeostring;
     private $strOldLanguage;
     private $strOldAlias;
+    private $strOldTarget;
 
     /**
      * Constructor to create a valid object
@@ -135,10 +144,10 @@ class class_module_pages_page extends class_model implements interface_model, in
      */
     public function getStrDisplayName() {
         $strName = $this->getStrBrowsername();
-        
+
         if($strName == "")
             $strName = $this->getStrName();
-        
+
         return $strName;
     }
 
@@ -222,6 +231,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             $arrRow["pageproperties_seostring"] = "";
             $arrRow["pageproperties_alias"] = "";
             $arrRow["pageproperties_path"] = "";
+            $arrRow["pageproperties_target"] = "";
             $arrRow["pageproperties_language"] = $this->getStrLanguage();
         }
 
@@ -238,8 +248,8 @@ class class_module_pages_page extends class_model implements interface_model, in
             $this->setStrSeostring($arrRow["pageproperties_seostring"]);
             $this->setStrAlias($arrRow["pageproperties_alias"]);
             $this->setStrPath($arrRow["pageproperties_path"]);
+            $this->setStrTarget($arrRow["pageproperties_target"]);
             $this->setStrLanguage($this->getStrLanguage());
-
 
             $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
             $this->strOldDescription = $arrRow["pageproperties_description"];
@@ -250,6 +260,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             $this->strOldSeostring = $arrRow["pageproperties_seostring"];
             $this->strOldLanguage = $arrRow["pageproperties_language"];
             $this->strOldAlias = $arrRow["pageproperties_alias"];
+            $this->strOldTarget = $arrRow["pageproperties_target"];
         }
     }
 
@@ -264,7 +275,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         if(_pages_newdisabled_ == "true") {
             $this->setIntRecordStatus(0);
         }
-        
+
         $this->updatePath();
 
         //fix the initial sort-id
@@ -275,7 +286,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getPrevId(), _pages_modul_id_, _pages_folder_id_));
 
         $this->setIntSort($arrRow["COUNT(*)"]);
-        
+
         return true;
     }
 
@@ -317,6 +328,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     						pageproperties_browsername=?,
     						pageproperties_seostring=?,
     						pageproperties_alias=?,
+    						pageproperties_target=?,
                             pageproperties_path=?
     				  WHERE pageproperties_id=?
     				    AND pageproperties_language=?";
@@ -328,6 +340,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $this->getStrBrowsername(),
                 $this->getStrSeostring(),
                 $this->getStrAlias(),
+                $this->getStrTarget(),
                 $this->getStrPath(),
                 $this->getSystemid(),
                 $this->getStrLanguage()
@@ -337,7 +350,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             //Not existing, create one
             $strQuery2 = "INSERT INTO " . _dbprefix_ . "page_properties
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
-						 pageproperties_seostring, pageproperties_alias, pageproperties_language, pageproperties_path) VALUES
+						 pageproperties_seostring, pageproperties_alias, pageproperties_target, pageproperties_language, pageproperties_path) VALUES
 						(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $arrParams = array(
@@ -348,15 +361,16 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $this->getStrBrowsername(),
                 $this->getStrSeostring(),
                 $this->getStrAlias(),
+                $this->getStrTarget(),
                 $this->getStrLanguage(),
                 $this->getStrPath()
             );
         }
-        
+
         $bitBaseUpdate = $bitBaseUpdate && $this->objDB->_pQuery($strQuery2, $arrParams);
-        
+
         $arrChildIds = $this->getChildNodesAsIdArray();
-        
+
         foreach ($arrChildIds as $strChildId) {
             $objInstance = class_objectfactory::getInstance()->getObject($strChildId);
             $objInstance->updateObjectToDb();
@@ -364,7 +378,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         return $bitBaseUpdate;
     }
-    
+
     /**
      * Updates the navigation path of this page based on the parent's name.
      */
@@ -372,10 +386,10 @@ class class_module_pages_page extends class_model implements interface_model, in
         $arrPathIds = $this->getPathArray("", _pages_modul_id_);
         $arrPathIds = array_slice($arrPathIds, 0, count($arrPathIds) - 1);
         $arrPathNames = array();
-        
+
         foreach ($arrPathIds as $strParentId) {
             $objInstance = class_objectfactory::getInstance()->getObject($strParentId);
-            
+
             if($objInstance instanceof class_module_pages_page) {
                 $arrPathNames[] = urlSafeString($objInstance->getStrBrowsername());
             }
@@ -383,9 +397,9 @@ class class_module_pages_page extends class_model implements interface_model, in
             //    $arrPathNames[] = urlSafeString($objInstance->getStrName());
             //}
         }
-        
+
         $arrPathNames[] = urlSafeString($this->getStrBrowsername());
-        
+
         $this->strPath = implode("/", $arrPathNames);
     }
 
@@ -734,7 +748,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
-    
+
     public function setStrPath($strPath) {
         $this->strPath = $strPath;
     }
@@ -775,5 +789,21 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function getStrPath() {
         return $this->strPath;
     }
+
+    /**
+     * @param string $strTarget
+     */
+    public function setStrTarget($strTarget) {
+        $this->strTarget = $strTarget;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTarget() {
+        return $this->strTarget;
+    }
+
+
 
 }

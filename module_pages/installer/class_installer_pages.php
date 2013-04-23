@@ -59,8 +59,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["pageproperties_template"] 	= array("char254", true);
 		$arrFields["pageproperties_seostring"] 	= array("char254", true);
 		$arrFields["pageproperties_language"] 	= array("char20", true);
-		$arrFields["pageproperties_alias"] 	= array("char254", true);
-                $arrFields["pageproperties_path"] 	= array("char254", true);
+		$arrFields["pageproperties_alias"] 	    = array("char254", true);
+        $arrFields["pageproperties_path"] 	    = array("char254", true);
+        $arrFields["pageproperties_target"] 	= array("char254", true);
 
 		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language"), array("pageproperties_language")))
 			$strReturn .= "An error occured! ...\n";
@@ -301,6 +302,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_40_401();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0.1") {
+            $strReturn .= $this->update_401_41();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -517,5 +523,29 @@ class class_installer_pages extends class_installer_base implements interface_in
         return $strReturn;
     }
 
-    //TODO: Add delete sequence to remove hallo-editor and rangy js
+    private function update_401_41() {
+        $strReturn = "Updating 4.0.1 to 4.1...\n";
+
+        $strReturn .= "Altering page_properties-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_properties")."
+                             ADD ".$this->objDB->encloseColumnName("pageproperties_target")." ".$this->objDB->getDatatype("char254")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Deleting legacy js-scripts...\n";
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->folderDeleteRecursive("/core/module_pages/admin/scripts/halloeditor");
+        $objFilesystem->folderDeleteRecursive("/core/module_pages/admin/scripts/rangy");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.1");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "4.1");
+        $this->updateElementVersion("paragraph", "4.1");
+        $this->updateElementVersion("image", "4.1");
+
+        return $strReturn;
+    }
+
 }

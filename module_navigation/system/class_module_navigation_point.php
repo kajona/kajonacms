@@ -283,6 +283,8 @@ class class_module_navigation_point extends class_model implements interface_mod
                         else {
                             $objPoint->setStrPageI($objOneEntry->getStrAlias());
                         }
+
+                        $objPoint->setStrTarget($objOneEntry->getStrTarget());
                     }
                     else {
                         $objPoint->setStrPageI($objOneEntry->getStrName());
