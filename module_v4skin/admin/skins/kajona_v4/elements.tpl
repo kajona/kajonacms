@@ -1654,6 +1654,10 @@ It containes a list of aspects and provides the possibility to switch the differ
     <li ><a href="%%elementLink%%">%%elementName%%</a></li>
 </contextmenu_entry>
 
+<contextmenu_entry_full>
+<li >%%elementFullEntry%%</li>
+</contextmenu_entry_full>
+
 <contextmenu_divider_entry>
     <li class="divider"></li>
 </contextmenu_divider_entry>
@@ -1666,6 +1670,15 @@ It containes a list of aspects and provides the possibility to switch the differ
         </ul>
     </li>
 </contextmenu_submenucontainer_entry>
+
+<contextmenu_submenucontainer_entry_full>
+<li class="dropdown-submenu" >
+    %%elementFullEntry%%
+    <ul class="dropdown-menu">
+        %%entries%%
+    </ul>
+</li>
+</contextmenu_submenucontainer_entry_full>
 
 
 ---------------------------------------------------------------------------------------------------------

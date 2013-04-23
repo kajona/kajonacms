@@ -139,13 +139,7 @@ abstract class class_admin_simple extends class_admin {
             $strListActions .= $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier));
         }
 
-        if(is_array($this->getNewEntryAction($strListIdentifier)) || $this->getNewEntryAction($strListIdentifier) != "") {
-            if(is_array($this->getNewEntryAction($strListIdentifier))) {
-                $strListActions .= implode("", $this->getNewEntryAction($strListIdentifier));
-            }
-            else
-                $strListActions .= $this->getNewEntryAction($strListIdentifier);
-        }
+        $strListActions .= $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier));
 
         if($strListActions != "") {
             $strReturn .= $this->objToolkit->listHeader();
@@ -238,14 +232,7 @@ abstract class class_admin_simple extends class_admin {
             }
         }
 
-        $mixedNewEntryAction = $this->getNewEntryAction($strListIdentifier);
-        if(is_array($mixedNewEntryAction) || $mixedNewEntryAction != "") {
-            if(is_array($mixedNewEntryAction)) {
-                $strReturn .= $this->objToolkit->genericAdminList("", "", "", implode("", $mixedNewEntryAction), $intI);
-            }
-            else
-                $strReturn .= $this->objToolkit->genericAdminList("", "", "", $mixedNewEntryAction, $intI);
-        }
+        $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier)), $intI);
 
         if($bitSortable)
             $strReturn .= $this->objToolkit->dragableListFooter($strListId);
@@ -497,6 +484,41 @@ abstract class class_admin_simple extends class_admin {
                 );
         }
         return "";
+    }
+
+    /**
+     * If multiple new actions are given, all buttons are merged into a new, single button.
+     * The button itself is rendering the different buttons using a new dropdown-menu.
+     * @param $arrActions
+     * @return string
+     */
+    private function mergeNewEntryActions($arrActions) {
+        if(!is_array($arrActions))
+            return $arrActions;
+
+        if(is_array($arrActions) && count($arrActions) == 1)
+            return $arrActions[0];
+
+        //create a menu and merge all buttons
+        $arrActionMenuEntries = array();
+        foreach($arrActions as $strOneAction) {
+            $strOneAction = trim($strOneAction);
+            //search for a title attribute
+            $arrMatches = array();
+            if(preg_match('/title=\"([a-zA-Z0-9\ \-\_]+)\"/i', $strOneAction, $arrMatches)) {
+                if(uniSubstr($strOneAction, -11) == "</a></span>")
+                    $strOneAction = uniSubstr($strOneAction, 0, -11).$arrMatches[1]."</a></span>";
+                else
+                    $strOneAction .= $arrMatches[1];
+            }
+
+            $arrActionMenuEntries[] = array("fullentry" => $strOneAction);
+        }
+
+        return $this->objToolkit->listButton(
+            "<span class='dropdown pull-right'><a href=\"#\" data-toggle='dropdown' role='button' \">".getImageAdmin("icon_new_multi.png")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
+        );
+
     }
 
     /**

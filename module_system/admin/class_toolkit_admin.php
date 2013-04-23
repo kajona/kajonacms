@@ -2289,29 +2289,42 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function registerMenu($strIdentifier, array $arrEntries) {
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry");
+        $strTemplateFullEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry_full");
         $strDividerTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_divider_entry");
         $strSubmenuTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_submenucontainer_entry");
+        $strSubmenuTemplateFullEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_submenucontainer_entry_full");
         $strEntries = "";
         foreach($arrEntries as $arrOneEntry) {
-            $strCurTemplate = $strTemplateEntryID;
 
-            if(!isset($arrOneEntry["link"]))
-                $arrOneEntry["link"] = "";
+
+            if(!isset($arrOneEntry["link"])) $arrOneEntry["link"] = "";
+            if(!isset($arrOneEntry["name"])) $arrOneEntry["name"] = "";
+            if(!isset($arrOneEntry["onclick"])) $arrOneEntry["onclick"] = "";
+            if(!isset($arrOneEntry["fullentry"])) $arrOneEntry["fullentry"] = "";
 
             $arrTemplate = array(
                 "elementName" => $arrOneEntry["name"],
                 "elementAction" => $arrOneEntry["onclick"],
                 "elementLink" => $arrOneEntry["link"],
-                "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"])
+                "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"]),
+                "elementFullEntry" => $arrOneEntry["fullentry"]
             );
+
+            if($arrTemplate["elementFullEntry"] != "")
+                $strCurTemplate = $strTemplateFullEntryID;
+            else
+                $strCurTemplate = $strTemplateEntryID;
+
 
             if(isset($arrOneEntry["submenu"]) && count($arrOneEntry["submenu"]) > 0) {
                 $strSubmenu = "";
                 foreach($arrOneEntry["submenu"] as $arrOneSubmenu) {
                     $strCurSubTemplate = $strTemplateEntryID;
 
-                    if(!isset($arrOneSubmenu["link"]))
-                        $arrOneSubmenu["link"] = "";
+                    if(!isset($arrOneEntry["link"])) $arrOneEntry["link"] = "";
+                    if(!isset($arrOneEntry["name"])) $arrOneEntry["name"] = "";
+                    if(!isset($arrOneEntry["onclick"])) $arrOneEntry["onclick"] = "";
+                    if(!isset($arrOneEntry["fullentry"])) $arrOneEntry["fullentry"] = "";
 
                     if($arrOneSubmenu["name"] == "") {
                         $arrSubTemplate = array();
@@ -2322,15 +2335,24 @@ class class_toolkit_admin extends class_toolkit {
                             "elementName" => $arrOneSubmenu["name"],
                             "elementAction" => $arrOneSubmenu["onclick"],
                             "elementLink" => $arrOneSubmenu["link"],
-                            "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneSubmenu["onclick"])
+                            "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneSubmenu["onclick"]),
+                            "elementFullEntry" => $arrOneEntry["fullentry"]
                         );
+
+                        if($arrSubTemplate["elementFullEntry"] != "")
+                            $strCurSubTemplate = $strTemplateFullEntryID;
+
                     }
 
-                    $strSubmenu .= $this->objTemplate->fillTemplate($arrSubTemplate, $strCurSubTemplate);
+                    $strSubmenu .= $this->objTemplate->fillTemplate($arrSubTemplate,  $strCurSubTemplate);
                 }
                 $arrTemplate["entries"] = $strSubmenu;
 
-                $strCurTemplate = $strSubmenuTemplateEntryID;
+
+                if($arrTemplate["elementFullEntry"] != "")
+                    $strCurTemplate = $strSubmenuTemplateFullEntryID;
+                else
+                    $strCurTemplate = $strSubmenuTemplateEntryID;
             }
 
 

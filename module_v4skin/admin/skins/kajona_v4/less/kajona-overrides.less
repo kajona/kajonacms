@@ -244,10 +244,16 @@ footer {
         display: block;
         padding: 0px;
         text-shadow: none;
+        text-align: left;
+    }
+
+    span {
+        padding: 0;
     }
 
     a {
         color: @linkColor !important;
+
         text-transform: none;
         padding: 3px 15px;
         display: block;
@@ -256,6 +262,8 @@ footer {
 
     a:hover, .dropdown-submenu:hover > a  {
         color: @white !important;
+        background-color: @dropdownLinkBackgroundHover;
+        text-decoration: none;
     }
 
     a.dropdown-toggle {
@@ -267,6 +275,10 @@ footer {
     }
 
 
+}
+
+.listButton .generalContextMenu {
+    min-width: 180px;
 }
 
 
