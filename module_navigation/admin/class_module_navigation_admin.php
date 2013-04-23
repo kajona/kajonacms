@@ -281,6 +281,8 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             //Load Point data
             $objPoint = new class_module_navigation_point($this->getSystemid());
         }
+        else
+            $objPoint->setSystemid($this->getSystemid());
 
         if($objForm == null)
             $objForm = $this->getPointAdminForm($objPoint, $strMode);
@@ -294,41 +296,10 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $arrTargets = array("_self" => $this->getLang("navigation_tagetself"), "_blank" => $this->getLang("navigation_tagetblank"));
 
-        if(validateSystemid($this->getParam("point_parent_id")))
-            $objParent = class_objectfactory::getInstance()->getObject($this->getParam("point_parent_id"));
-        else
-            $objParent = class_objectfactory::getInstance()->getObject($this->getSystemid());
-
-
-        $objParentPoint = null;
-        if(validateSystemid($this->getParam("point_parent_id"))) {
-            $objParentPoint = new class_module_navigation_point($this->getParam("point_parent_id"));
-        }
-        else if($strMode == "new" ) {
-            $objParentPoint = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        }
-        else if($strMode == "edit") {
-            $objParentPoint = new class_module_navigation_point($objParent->getPrevId());
-        }
-
-        $strNodeBrowser = getLinkAdminDialog(
-            $this->arrModule["modul"],
-            "navigationPointBrowser",
-            "&form_element=point_parent&systemid=".$objParent->getPrevId(),
-            $this->getLang("commons_open_browser"),
-            $this->getLang("commons_open_browser"),
-            "icon_externalBrowser.png",
-            $this->getLang("commons_open_browser")
-        );
 
         $objForm = new class_admin_formgenerator("point", $objPoint);
 
         $objForm->generateFieldsFromObject();
-
-        $objForm->addField(
-            new class_formentry_text("point", "parent"))->setStrOpener($strNodeBrowser)->setBitReadonly(true)->setStrValue($objParentPoint->getStrName())->setStrLabel($this->getLang("navigation_parent")
-        );
-        $objForm->addField(new class_formentry_hidden("point", "parent_id"))->setStrValue($objParentPoint->getSystemid());
 
         $objForm->getField("target")->setArrKeyValues($arrTargets);
 
@@ -359,7 +330,11 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         $strExternalLink = uniStrReplace(_webpath_, "_webpath_", $strExternalLink);
         $objPoint->setStrPageE($strExternalLink);
 
-        $objPoint->updateObjectToDb($this->getParam("point_parent_id"));
+        if($this->getParam("mode") == "new")
+            $objPoint->updateObjectToDb($this->getSystemid());
+        else
+            $objPoint->updateObjectToDb();
+
 
         //Flush pages cache
         $this->flushCompletePagesCache();
