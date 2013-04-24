@@ -21,12 +21,12 @@ class class_test_charts_flotTest extends class_testbase  {
 
         //create bar charts
         for ($i = 1; $i < 6; $i++) {
-            class_test_charts_flotTest::createBarChart($i,$i, class_graph_flot_seriesdatatypes::BAR);
+            class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::BAR, $i,$i);
         }
         
         //create stacked bar charts
         for ($i = 1; $i < 6; $i++) {
-            class_test_charts_flotTest::createBarChart($i,$i, class_graph_flot_seriesdatatypes::STACKEDBAR);
+            class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::STACKEDBAR, $i,$i);
         }
 
         
@@ -111,16 +111,12 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->setBitRenderLegend(true);
         echo $objGraph->renderGraph();
-        
-        
-        
-       
-        
+
         echo"<br/>";
     }
     
     
-    public static function createBarChart($noOfSets = 1, $nrOfBarsPerSet = 1, $barChartType) {
+    public static function createBarChart($barChartType, $noOfSets = 1, $nrOfBarsPerSet = 1) {
         $width = 140;
         $height = 100;
         for ($i = 0; $i < 10; $i++) {
@@ -128,7 +124,7 @@ class class_test_charts_flotTest extends class_testbase  {
              $objGraph->setStrGraphTitle("A Bar Chart");
              
              for ($j = 0; $j < $noOfSets; $j++) {
-                $arr = [];
+                $arr = array();
                 for ($k = 0; $k < $nrOfBarsPerSet; $k++) {
                    $randVal = rand(1,15);
                    array_push($arr, $randVal);
@@ -136,10 +132,10 @@ class class_test_charts_flotTest extends class_testbase  {
                }
                
                if($barChartType == class_graph_flot_seriesdatatypes::BAR) {
-                    $objGraph->addBarChartSet($arr, "serie "+$j);
+                    $objGraph->addBarChartSet($arr, "serie ".$j);
                }
                else if($barChartType == class_graph_flot_seriesdatatypes::STACKEDBAR) {
-                   $objGraph->addStackedBarChartSet($arr, "serie "+$j);
+                   $objGraph->addStackedBarChartSet($arr, "serie ".$j);
                }
                
              }
