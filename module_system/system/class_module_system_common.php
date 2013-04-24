@@ -278,7 +278,8 @@ class class_module_system_common extends class_model implements interface_model 
         $arrReturn["postmaxsize"] = bytesToString(ini_get("post_max_size"), true);
         $arrReturn["uploadmaxsize"] = bytesToString(ini_get("upload_max_filesize"), true);
         $arrReturn["uploads"] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-
+        $arrReturn["timezone"] = date_default_timezone_get();
+        $arrReturn["datekajona"] = dateToString(new class_date());
         return $arrReturn;
     }
 

@@ -237,6 +237,11 @@ class class_config {
                 }
             }
         }
+
+        //set the relevant values to the php env
+        if(defined("_system_timezone_") && _system_timezone_ != "") {
+            date_default_timezone_set(_system_timezone_);
+        }
     }
 
 }

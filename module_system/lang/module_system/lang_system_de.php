@@ -10,6 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["_system_timezone_"]              = "System Zeitzone:";
+$lang["_system_timezone_hint"]              = "Die Zeitzone wird zur Berechnung der korrekten Zeit- und Datumswerte verwendet. Eine Liste möglicher Werte ist unter <a href='http://www.php.net/manual/en/timezones.php' target='_blank'>http://www.php.net/manual/en/timezones.php</a> zu finden.";
 $lang["_admin_nr_of_rows_"]              = "Anzahl Datensätze pro Seite:";
 $lang["_admin_nr_of_rows_hint"]          = "Anzahl an Datensätzen in den Admin-Listen, sofern das Modul dies unterstützt. Kann von einem Modul überschrieben werden!";
 $lang["_admin_only_https_"]              = "Admin nur per HTTPS:";
@@ -241,6 +243,8 @@ $lang["update_nourlfopen"]               = "Für diese Funktion muss der Wert &a
 $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
+$lang["timezone"]                         = "Zeitzone";
+$lang["datekajona"]                         = "System-Datum";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
 
 //non-editable entries
