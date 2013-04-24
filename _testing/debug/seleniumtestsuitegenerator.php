@@ -20,7 +20,6 @@ class class_seleniumsuite {
         class_carrier::getInstance();
         $this->strProjectFolder  = "/project";
         $this->strSeleniumFolder = $this->strProjectFolder."/seleniumtesting";
-        $this->strSelTempFolder  = $this->strSeleniumFolder."/temp";
     }
 
     public function getSystemParameter() {
