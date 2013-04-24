@@ -827,7 +827,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "#RewriteRule ^(([a-z]{2})/)(.*/)?([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$4&action=$6&systemid=$7&language=$2 [QSA,L]\n\n";
         $strReturn .= "See http://www.kajona.de/update_40_to_41.html for more information.\n\n";
 
-        $strReturn .= "Adding the timeszone cofnig...\n";
+        $strReturn .= "Adding the timezone config...\n";
         if(!defined("_system_timezone_"))
             $this->registerConstant("_system_timezone_", "", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
 

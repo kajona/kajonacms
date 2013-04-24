@@ -1,0 +1,98 @@
+
+Changelog Kajona 4.1, "simplicity", Revision #5432 to Revision #5602
+
+Element Rssfeed
+BUG: the rssfeed element is able to handle https-feeds
+
+
+Module Eventmanager
+NEW: added i18n to the eventmanager calendar, updated the fullcalendar to 1.6 #772
+
+Module Flotchart
+NEW: added new class which contains constants for the sereis data types
+BUG: bars are now displayed centered (even if only one bar series data for bars is set)
+BUG: no default values for font-fimily or font-color set anymore
+BUG: if several data series for a bar chart is added to the chart, the bars will be displayed next to each other
+BUG: fix for pie chart tooltip
+BUG: fixed layouting of barcharts
+
+Module Installer
+NEW: Updated Bootstrap to 2.3.1
+
+Module Mediamanager
+NEW: the detail image is generated within a separate thread using the image.php, no longer inline in the mediamanager portal class. this speeds up the gallery-page generation drastically. #783
+NEW: the list of allowed file extensions is rendered in the mediamanager upload form
+BUG / TEMPLATECHANGE: in some cases the loading-order of js-files confused the gallery-lightbox
+BUG: the upload / createNewFolder permissions in module mediamanager evaluated the module instead of the current repo / file. fixes the bug as discussed in http://board.kajona.de/viewtopic.php?f=44&t=1314. thx to iceman-pw / jaky.
+BUG: for mediamanager templates with a given number of items per row, the last row was skipped if not filled completely. (see http://board.kajona.de/viewtopic.php?f=44&t=1298)
+BUG: fixed various permission-handlings in module mediamanager: icons to create a new folder and to edit an image are only rendered if edit-permissions are given
+
+Module Navigation
+NEW: removed the parent-field from the navigation point form, the parent-id may be set by drag n drop (#758)
+
+Module Packagemanager
+NEW: the packagemanager includes a more detailed error message if the package is already installed
+NEW: the list of installed packages is filterable (#750)
+NEW: added a simple updatecheck widget for the contents-dashboard
+NEW: Added a report to analyze the number of requests to a package-server (#733)
+NEW: when fetching a list of remote-packages, the packages already installed locally are marked (#741)
+BUG: using an "old" offset and a new filter-criteria for a package-query resets the paging-offset
+BUG: Fixed some parsing-rules for socket-based, binary remoteloader responses
+
+Module Pages
+NEW: add target attribute for redirect/alias pages (#773)
+NEW: pages found by the backend-search link to the pages' content instead of the basic-data of the page
+NEW: the page-nodes of the treeview in module-pages link to the elements of the page rather than to the subnodes #774
+NEW: the contentTitle of an element is shown in the delete-dialog #778 NEW: the portal-editor uses a real dialog to confirm element-deletions NEW: simplified the addPortalEditor method in class_element_portal
+NEW: added the methods getConcreteAdminInstance and getConcretePortalInstance to class:module_pages_pageeelement in order to reduce the copy n paste code for creating an elements' concrete instance
+NEW: hallo.js inline editor is replaced by ckeditor 4 reducing the number of external libraries and introducing new features to the inline-portal-editor such as image and link creation. Credits go to smeyer. (#749, merge from https://svn.kajona.de/svn/kajona/kajona/module_head/branches/ckeditor4/)
+BUG: Deleting an element should delete the instances, too #771
+BUG: IE rendered the portaleditor-toolbar icons with a border #776
+BUG: Fixed the rendering / activation of portal-editor fields for non-editable fields (#760)
+BUG: loading the properties of a link-page could lead to empty properties (#767)
+BUG: Fix rewrite rule for language/page.seo.action.systemid (fixes #763)
+BUG: images with braces in the filename missed to be replaced by the image-scriptlet
+BUG: class_module_pages_page::getPageByName missed to strip possible anchors when searching for a page
+BUG: data-editable attributes are only rendered if the portaleditor is enabled, too
+
+Module Samplecontent
+NEW: Updated jQuery to 1.9
+BUG: the samplecontent breadcrumb used the wrong navigation-tree
+
+Module Stats
+NEW: moved stats-data collection to scriptlet, removing the explicit coupling #752
+BUG: fixed various stats-reports to avoid the multiple inclusion of records due to wrong query-borders
+
+Module System
+NEW: added an initial support to set up a system wide timezone (used when creating timestamps) #789
+NEW: the session-data is updated after the request was processed, allowing some special modules to skip session updates (such as the XHR messaging and tag-list loading).
+NEW: updated the ckeditor to ckeditor 4
+NEW: added a character validator NEW: the form-validation currently located at class_admin is moved to class_element_admin, all classes extending class_admin should switch to the new form-validation based on class_admin_formgenerator
+NEW: changed the behaviour of scriptlets. each scriplet may define a list of execution contexts using the method getProcessingContext(). the system processes scriplets at different page-generation milestones, e.g. during the processing of every single page-element. in consequence this means that some processing-results are chached automatically and are no longer required to be executed with each request. #751
+NEW: the change-table may be split in different tables to push the execution speed. therefore a single changelog-provider may map a given class or a list of classes to a table
+NEW: Harmonization of action-lang-keys, by default all in lower-case, parts are separated with an underscore, e.g. action_show_folder instead of actionShowFolder
+NEW: Merged the simpleadminlists branch back into the trunk (credits to pwolfer, tkiefer). Simpleadminlists introduce the class_admin_evensimpler, providing a way to generate backend-views based on declarations only.
+BUG: a simple actionEdit-call to the evensimpler-class is resolved by the concrete object class in first place. required e.g. by the search: search-results are rendered with action=edit, what could have lead rendering the wrong forms (edit is mapped to news, object is a category -> wrong form was opened).
+BUG: the new-button rendered by class_admin_simple missed to add a parents' system-id
+BUG: a null-previd for new records is handled, too
+BUG: if an image is smaller then the defined maxWidth and maxHeight params, class_image resized it in some cases
+BUG: fixed the caching for images being cropped and resized at the same time
+
+Module Usermanagement
+NEW: user-memberships are edited using a dialog
+
+Module V4Skin
+NEW: if a class extending class_admin_simple provides more than one new-action for a given list, the actions are merged into a submenu. this results in only a single new-icon per list, harmonizing the list of possible new-actions (#711)
+NEW: the number of new messages is refreshed every 20 seconds from the server
+NEW: removed external jquery.contextMenu plugin, no longer required since implemented by bootstrap inline and declarative
+NEW: Updated Bootstrap to 2.3.1
+NEW: Updated jQuery to 1.9.1
+NEW: Updated jQueryUI to 1.10.1
+NEW: Updated chosen to 0.9.11
+NEW: Updated qTip2 to 2.0.1-26
+NEW: performance-improvement: the generation of the backend-navigation is skipped for folderview-requests
+BUG: the quick-access menu on the breadcrumbs' home-icon list modules with edit-permissions, only
+BUG: the "select all" checkbox for batch actions failed in some cases
+
+Module Workflows
+NEW: added text2 to basic data
