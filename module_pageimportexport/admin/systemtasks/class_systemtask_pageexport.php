@@ -304,6 +304,14 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
             $objWriter->text($objPage->getStrAlias());
             $objWriter->endElement();
 
+            $objWriter->startElement("path");
+            $objWriter->text($objPage->getStrPath());
+            $objWriter->endElement();
+
+            $objWriter->startElement("target");
+            $objWriter->text($objPage->getStrTarget());
+            $objWriter->endElement();
+
             //propertyset
             $objWriter->endElement();
         }

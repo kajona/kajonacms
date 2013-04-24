@@ -17,7 +17,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
 
     /**
-     * contructor to call the base constructor
+     * constructor to call the base constructor
      */
     public function __construct() {
         parent::__construct();
@@ -68,26 +68,27 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         if($strError != "suffix") {
             if($strError != "upload") {
 
-                    //parse using the kajona xml parser
-                    $objXML = new class_xml_parser();
-                    $objXML->loadFile($strTarget);
+                //parse using the kajona xml parser
+                $objXML = new class_xml_parser();
+                $objXML->loadFile($strTarget);
 
-                    $arrXML = $objXML->xmlToArray();
+                $arrXML = $objXML->xmlToArray();
 
-                    foreach($arrXML as $arrOneXml) {
-                        foreach($arrOneXml as $arrNode) {
-                            foreach($arrNode as $strName => $arrSubnode) {
-                                if($strName == "page") {
-                                    $strReturn .= $this->processSinglePage($arrSubnode[0], $bitReplaceExisting,$strTopFolderId);
-                                }
+                foreach($arrXML as $arrOneXml) {
+                    foreach($arrOneXml as $arrNode) {
+                        foreach($arrNode as $strName => $arrSubnode) {
+                            if($strName == "page") {
+                                $strReturn .= $this->processSinglePage($arrSubnode[0], $bitReplaceExisting, $strTopFolderId);
                             }
                         }
                     }
-                    $strReturn = $this->getLang("systemtask_pageimport_success").$strReturn;
+                }
+                $strReturn = $this->getLang("systemtask_pageimport_success") . $strReturn;
 
             }
-            else
+            else {
                 $strReturn .= $this->getLang("systemtask_pageimport_errorupload");
+            }
         }
         else {
             $strReturn .= $this->getLang("systemtask_pageimport_errortype");
@@ -103,9 +104,9 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @return string
      */
     public function getAdminForm() {
-    	$strReturn = "";
+        $strReturn = "";
         $strReturn .= $this->objToolkit->formInputUpload("pageimport_file", $this->getLang("systemtask_pageimport_file"));
-        $strReturn .= $this->objToolkit->formInputCheckbox("pageimport_replace",  $this->getLang("systemtask_pageimport_replace"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("pageimport_replace", $this->getLang("systemtask_pageimport_replace"));
         return $strReturn;
     }
 
@@ -118,21 +119,23 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         $strError = "";
 
         $objFilesystem = new class_filesystem();
-        $strTarget = "/import_".generateSystemid().".xml";
+        $strTarget = "/import_" . generateSystemid() . ".xml";
 
-        $strSuffix = uniStrtolower( uniSubstr($arrFile["name"], uniStrrpos($arrFile["name"], ".") ) );
+        $strSuffix = uniStrtolower(uniSubstr($arrFile["name"], uniStrrpos($arrFile["name"], ".")));
         if($strSuffix == ".xml") {
             if($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
-                class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
+                class_logger::getInstance()->addLogRow("uploaded file " . $strTarget, class_logger::$levelInfo);
             }
-            else
+            else {
                 $strError = "upload";
+            }
         }
-        else
+        else {
             $strError = "suffix";
+        }
 
 
-        return "&pageimport_file=".$strTarget."&pageimport_error=".$strError."&pageimport_replace=".$this->getParam("pageimport_replace");
+        return "&pageimport_file=" . $strTarget . "&pageimport_error=" . $strError . "&pageimport_replace=" . $this->getParam("pageimport_replace");
     }
 
     //--- helpers ---------------------------------------------------------------------------------------
@@ -167,8 +170,9 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
         }
 
-        if($strPrevId == "")
+        if($strPrevId == "") {
             $strPrevId = $strTopFolderId;
+        }
 
         //check if an existing page should be replaced
         if($bitReplaceExisting) {
@@ -181,14 +185,13 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         }
 
 
-
         $objPage = new class_module_pages_page();
         $objPage->setStrName($strPagename);
 
         $objPage->updateObjectToDb($strPrevId);
         $strPageId = $objPage->getSystemid();
 
-        $strReturn .= "created page ".$objPage->getStrName()."\n";
+        $strReturn .= "created page " . $objPage->getStrName() . "\n";
 
         //save propertysets
         $objLanguages = new class_module_languages_language();
@@ -212,12 +215,13 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
             $objPage->setStrSeostring($arrOnePropSet["seostring"][0]["value"]);
             $objPage->setStrLanguage($arrOnePropSet["language"][0]["value"]);
             $objPage->setStrAlias($arrOnePropSet["alias"][0]["value"]);
+            $objPage->setStrTarget($arrOnePropSet["target"][0]["value"]);
+            $objPage->setStrPath($arrOnePropSet["path"][0]["value"]);
 
             $objPage->updateObjectToDb();
 
-            $strReturn .= "saved propertyset for language ".$objPage->getStrLanguage()."\n";
+            $strReturn .= "saved propertyset for language " . $objPage->getStrLanguage() . "\n";
         }
-
 
 
         $objLanguages->setStrAdminLanguageToWorkOn($strCurrentLanguage);
@@ -250,33 +254,33 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
                 unset($arrValues["content_id"]);
 
                 //and build the query itself
-                $strQuery = "UPDATE ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$strTable)." SET ";
+                $strQuery = "UPDATE " . class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_ . $strTable) . " SET ";
 
                 $arrInsertValues = array();
                 $arrEscapes = array();
 
                 foreach($arrValues as $strColumn => $strValue) {
-                    $strQuery .= class_carrier::getInstance()->getObjDB()->encloseColumnName($strColumn)." = ? ,";
-                }
+                    $strQuery .= class_carrier::getInstance()->getObjDB()->encloseColumnName($strColumn) . " = ? ,";
 
-                foreach($arrValues as $strColumn => $strValue) {
                     $arrInsertValues[] = $strValue;
                     $arrEscapes[] = false;
                 }
+
                 $strQuery = uniSubstr($strQuery, 0, -1);
                 $strQuery .= " WHERE content_id = ?";
                 $arrInsertValues[] = $objElement->getSystemid();
 
                 class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrInsertValues, $arrEscapes);
-                $strReturn .= "created element ".$objElement->getStrName()."\n";
+                $strReturn .= "created element " . $objElement->getStrName() . "\n";
 
             }
-            else
-                $strReturn .= "error: element ".$strElementName." not existing";
+            else {
+                $strReturn .= "error: element " . $strElementName . " not existing";
+            }
 
         }
 
 
-        return $this->objToolkit->getPreformatted(array( $strReturn));
+        return $this->objToolkit->getPreformatted(array($strReturn));
     }
 }

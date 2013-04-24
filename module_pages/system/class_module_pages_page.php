@@ -351,7 +351,7 @@ class class_module_pages_page extends class_model implements interface_model, in
             $strQuery2 = "INSERT INTO " . _dbprefix_ . "page_properties
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
 						 pageproperties_seostring, pageproperties_alias, pageproperties_target, pageproperties_language, pageproperties_path) VALUES
-						(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+						(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $arrParams = array(
                 $this->getSystemid(),
@@ -587,20 +587,35 @@ class class_module_pages_page extends class_model implements interface_model, in
             $arrCount = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ? AND pageproperties_language = ? ", array($this->getSystemid(), $arrOneProperty["pageproperties_language"]));
 
             if($arrCount["COUNT(*)"] == 0) {
+
                 $strQuery = "INSERT INTO " . _dbprefix_ . "page_properties
-                (pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_alias, pageproperties_language, pageproperties_id) VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?)";
+                (pageproperties_browsername,
+                 pageproperties_keywords,
+                 pageproperties_description,
+                 pageproperties_template,
+                 pageproperties_seostring,
+                 pageproperties_alias,
+                 pageproperties_path,
+                 pageproperties_target,
+                 pageproperties_language,
+                 pageproperties_id
+                ) VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             }
             else {
                 $strQuery = "UPDATE " . _dbprefix_ . "page_properties
-                        SET pageproperties_id = ?,
-                            pageproperties_browsername = ?,
+                        SET pageproperties_browsername = ?,
                             pageproperties_keywords = ?,
                             pageproperties_description = ?,
                             pageproperties_template = ?,
-                            pageproperties_seostring = ?
+                            pageproperties_seostring = ?,
+                            pageproperties_alias = ?,
+                            pageproperties_path = ?,
+                            pageproperties_target = ?
                       WHERE pageproperties_language = ?
-                        AND pageproperties_alias = ?";
+                        AND pageproperties_id = ?";
+
             }
 
             $arrValues = array(
@@ -610,6 +625,8 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $arrOneProperty["pageproperties_template"],
                 $arrOneProperty["pageproperties_seostring"],
                 $arrOneProperty["pageproperties_alias"],
+                $arrOneProperty["pageproperties_path"],
+                $arrOneProperty["pageproperties_target"],
                 $arrOneProperty["pageproperties_language"],
                 $this->getSystemid()
             );
