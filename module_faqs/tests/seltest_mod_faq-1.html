@@ -73,17 +73,37 @@
 </tr>
 <tr>
 	<td>open</td>
+	<td>${sysAddress}/${sysPathname}/index.php?admin=1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=//div[@class=&quot;accordion-group&quot;]//a[contains(.,'FAQs')]/../../div[2]//a[contains(.,'Liste')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>FAQtest</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//table//tr[@class=&quot;generalListSet1&quot;]//td[contains(., 'FAQtest')]/../td[@class='actions']/span/a[contains(@href,'editFaq')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>FAQtest</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
 	<td>${sysAddress}/${sysPathname}</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=FAQs</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>FAQtest</td>
 	<td></td>
 </tr>
 <tr>
@@ -94,6 +114,11 @@
 <tr>
 	<td>assertTextPresent</td>
 	<td>FAQ Antwort</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>${sysAddress}/${sysPathname}/index.php?admin=1&amp;module=login&amp;action=adminLogout</td>
 	<td></td>
 </tr>
 </tbody></table>
