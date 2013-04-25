@@ -10,9 +10,6 @@
 
 /**
  * Search plugin of the pages-module. Searches the configured page-elements and the pages-data.
- * To add page-elements written on your own, create the appropriate array-entries.
- * In detail: Create a row for each table-row, you want to search
- * e.g: $arrSearch["pages_elements"]["table_to_search"][] = "row_to_search"
  *
  * @package module_pages
  * @author sidler@mulchprod.de
