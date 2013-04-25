@@ -33,6 +33,8 @@ class class_seleniumsuite {
         $strRequestUri = $_SERVER['REQUEST_URI'];
         $path_parts = pathinfo($strRequestUri);
         $arrSystemParameter["URLPATHNAME"] = $path_parts['dirname'];
+        if($arrSystemParameter["URLPATHNAME"][0] == "/")
+            $arrSystemParameter["URLPATHNAME"] = uniSubstr ($arrSystemParameter["URLPATHNAME"], 1);
 
         return $arrSystemParameter;   
     }
