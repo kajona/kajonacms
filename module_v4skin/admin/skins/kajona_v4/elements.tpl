@@ -781,8 +781,9 @@ Part to display the login status, user is logged in
                     $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
             });
             $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,action_show_all,messaging]</a></li>");
+
+            window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
         });
-        window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
     };
     $(function() { KAJONA.admin.messaging.pollMessages() });
 

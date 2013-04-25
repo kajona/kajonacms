@@ -837,6 +837,7 @@ KAJONA.admin.messaging = {
      * Expects a callback-function whereas the number is passed as a param.
      *
      * @param objCallback
+     * @deprecated replaced by getRecentMessages
      */
     getUnreadCount : function(objCallback) {
 
