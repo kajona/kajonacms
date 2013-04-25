@@ -1,5 +1,5 @@
 
-Changelog Kajona 4.1, "simplicity", Revision #5432 to Revision #5602
+Changelog Kajona 4.1, "simplicity", Revision #5432 to Revision #5610
 
 Element Rssfeed
 BUG: the rssfeed element is able to handle https-feeds
