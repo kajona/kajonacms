@@ -48,7 +48,7 @@ class class_testing_helper {
         echo "\n\n\nI will delete the tables with the prefix 'selenium_' now...";
         $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
         foreach($arrTables as $strOneTable) {
-            if(substr($strSeleniumDbPrefix, 0,9) == "selenium_") {
+            if(substr($strOneTable, 0,9) == "selenium_") {
                 $strQuery = "DROP TABLE ".$strOneTable;         
                 echo "\n   Found table ".$strOneTable.": executing ".$strQuery;
                 class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
