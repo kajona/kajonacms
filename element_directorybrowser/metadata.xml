@@ -10,7 +10,7 @@
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="3.4.9.3" />
-        <module name="pages" version="3.4.9.1" />
+        <module name="system" version="4.1" />
+        <module name="pages" version="4.1" />
     </requiredModules>
 </package>

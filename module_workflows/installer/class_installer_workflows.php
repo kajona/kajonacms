@@ -97,6 +97,11 @@ class class_installer_workflows extends class_installer_base implements interfac
             $strReturn .= $this->update_40_401();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0.1") {
+            $strReturn .= $this->update_401_41();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -144,6 +149,13 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0.1");
+        return $strReturn;
+    }
+
+    private function update_401_41() {
+        $strReturn = "Updating 4.0.1 to 4.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
         return $strReturn;
     }
 }

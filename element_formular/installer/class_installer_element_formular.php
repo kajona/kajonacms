@@ -72,7 +72,14 @@ class class_installer_element_formular extends class_installer_base implements i
         }
 
         if(class_module_pages_element::getElement("form")->getStrVersion() == "3.4.9") {
-            $strReturn .= $this->postUpdate_349_40();
+            $strReturn .= "Updating element form to 4.0...\n";
+            $this->updateElementVersion("form", "4.0");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("form")->getStrVersion() == "4.0") {
+            $strReturn .= "Updating element form to 4.1...\n";
+            $this->updateElementVersion("form", "4.1");
             $this->objDB->flushQueryCache();
         }
 
@@ -92,10 +99,4 @@ class class_installer_element_formular extends class_installer_base implements i
     }
 
 
-    public function postUpdate_349_40() {
-        $strReturn = "Updating element form to 4.0...\n";
-
-        $this->updateElementVersion("form", "4.0");
-        return $strReturn;
-    }
 }

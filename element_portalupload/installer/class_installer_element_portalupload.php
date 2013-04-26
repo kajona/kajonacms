@@ -55,12 +55,20 @@ class class_installer_element_portalupload extends class_installer_base implemen
         $strReturn = "";
 
         if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.4.2") {
-            $strReturn .= $this->postUpdate_342_349();
+            $strReturn .= "Updating element portalupload to 3.4.9...\n";
+            $this->updateElementVersion("portalupload", "3.4.9");
             $this->objDB->flushQueryCache();
         }
 
         if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "3.4.9") {
-            $strReturn .= $this->postUpdate_349_40();
+            $strReturn .= "Updating element portalupload to 4.0...\n";
+            $this->updateElementVersion("portalupload", "4.0");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "4.0") {
+            $strReturn .= "Updating element portalupload to 4.1...\n";
+            $this->updateElementVersion("portalupload", "4.1");
             $this->objDB->flushQueryCache();
         }
 
@@ -68,16 +76,4 @@ class class_installer_element_portalupload extends class_installer_base implemen
     }
 
 
-    public function postUpdate_342_349() {
-        $strReturn = "Updating element portalupload to 3.4.9...\n";
-        $this->updateElementVersion("portalupload", "3.4.9");
-        return $strReturn;
-    }
-
-
-    public function postUpdate_349_40() {
-        $strReturn = "Updating element portalupload to 4.0...\n";
-        $this->updateElementVersion("portalupload", "4.0");
-        return $strReturn;
-    }
 }

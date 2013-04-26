@@ -17,7 +17,8 @@ class class_installer_element_gallery extends class_installer_base implements in
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
 
-        $this->objMetadata->setStrTitle("element_gallery");
+        $this->objMetadata->setStrTitle("gallery");
+        $this->objMetadata->setStrType(class_module_packagemanager_manager::STR_TYPE_ELEMENT);
 
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 
@@ -107,14 +108,23 @@ class class_installer_element_gallery extends class_installer_base implements in
             || class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.9.2"
             || class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.9.3"
         ) {
-            $strReturn .= $this->update_349_40();
+            $strReturn .= "Updating element gallery to 4.0...\n";
+            $this->updateElementVersion("gallery", "4.0");
+            $this->updateElementVersion("galleryRandom", "4.0");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.0") {
+            $strReturn .= "Updating element gallery to 4.1...\n";
+            $this->updateElementVersion("gallery", "4.1");
+            $this->updateElementVersion("galleryRandom", "4.1");
             $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
     }
 
-    public function update_342_349() {
+    private function update_342_349() {
         $strReturn = "Updating element gallery to 3.4.9...\n";
 
         $strReturn .= "Migrating old gallery-element table...\n";
@@ -132,13 +142,6 @@ class class_installer_element_gallery extends class_installer_base implements in
         return $strReturn;
     }
 
-    public function update_349_40() {
-        $strReturn = "Updating element gallery to 40...\n";
-
-        $this->updateElementVersion("gallery", "4.0");
-        $this->updateElementVersion("galleryRandom", "4.0");
-        return $strReturn;
-    }
 
 
 }

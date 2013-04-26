@@ -125,6 +125,11 @@ class class_installer_mediamanager extends class_installer_base implements inter
             $strReturn .= $this->update_3493_40();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= $this->update_40_41();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -179,9 +184,16 @@ class class_installer_mediamanager extends class_installer_base implements inter
     }
 
     private function update_3493_40() {
-        $strReturn = "Updating 3.4.9.3 to 40...\n";
+        $strReturn = "Updating 3.4.9.3 to 4.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
+        return $strReturn;
+    }
+
+    private function update_40_41() {
+        $strReturn = "Updating 4.0 to 4.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
         return $strReturn;
     }
 

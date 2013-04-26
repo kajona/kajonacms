@@ -20,6 +20,8 @@ class class_installer_element_downloads extends class_installer_base implements 
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
 
         $this->objMetadata->setStrTitle("element_downloads");
+        $this->objMetadata->setStrTitle("downloads");
+        $this->objMetadata->setStrType(class_module_packagemanager_manager::STR_TYPE_ELEMENT);
 
 		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 		parent::__construct();
@@ -65,7 +67,8 @@ class class_installer_element_downloads extends class_installer_base implements 
 
         $strReturn = "";
         if(class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.2") {
-            $strReturn .= $this->update_342_349();
+            $strReturn .= "Updating element downloads to 3.4.9...\n";
+            $this->updateElementVersion("downloads", "3.4.9");
             $this->objDB->flushQueryCache();
         }
 
@@ -74,29 +77,20 @@ class class_installer_element_downloads extends class_installer_base implements 
             || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.2"
             || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.3"
         ) {
-            $strReturn .= $this->update_349_40();
+            $strReturn .= "Updating element downloads to 4.0...\n";
+            $this->updateElementVersion("downloads", "4.0");
+            $this->objDB->flushQueryCache();
+        }
+
+
+        if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.0") {
+            $strReturn .= "Updating element downloads to 4.1...\n";
+            $this->updateElementVersion("downloads", "4.1");
             $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
 
-    }
-
-
-    public function update_342_349() {
-        $strReturn = "Updating element downloads to 3.4.9...\n";
-
-        $this->updateElementVersion("downloads", "3.4.9");
-        $this->updateElementVersion("galleryRandom", "3.4.9");
-        return $strReturn;
-    }
-
-    public function update_349_40() {
-        $strReturn = "Updating element downloads to 4.0...\n";
-
-        $this->updateElementVersion("downloads", "4.0");
-        $this->updateElementVersion("galleryRandom", "4.0");
-        return $strReturn;
     }
 
 }

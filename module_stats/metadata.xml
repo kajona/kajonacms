@@ -11,6 +11,6 @@
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="4.1" />
-        <module name="flotchart" version="3.4.9" />
+        <module name="flotchart" version="4.0" />
     </requiredModules>
 </package>

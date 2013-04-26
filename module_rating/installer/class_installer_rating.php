@@ -92,7 +92,16 @@ class class_installer_rating extends class_installer_base implements interface_i
 
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
+            $strReturn .= "Updating 3.4.9 to 4.0...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("rating", "4.0");
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= "Updating 4.0 to 4.1...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("rating", "4.1");
         }
 
         return $strReturn."\n\n";
@@ -129,11 +138,5 @@ class class_installer_rating extends class_installer_base implements interface_i
     }
 
 
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("rating", "4.0");
-        return $strReturn;
-    }
 
 }

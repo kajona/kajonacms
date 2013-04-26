@@ -5,12 +5,12 @@
     >
     <title>news</title>
     <description>Fully fledged news-management. Rss-Feed, categories, and time-based publishing allow flexible and dynamic news-lists.</description>
-    <version>4.0</version>
+    <version>4.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="3.4.9.3" />
-        <module name="pages" version="3.4.9.1" />
+        <module name="system" version="4.1" />
+        <module name="pages" version="4.1" />
     </requiredModules>
 </package>

@@ -99,6 +99,12 @@ class class_installer_votings extends class_installer_base implements interface_
             $strReturn .= $this->update_10_11();
             $this->objDB->flushQueryCache();
         }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "1.1") {
+            $strReturn .= $this->update_11_12();
+            $this->objDB->flushQueryCache();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -134,6 +140,15 @@ class class_installer_votings extends class_installer_base implements interface_
         $this->updateModuleVersion("votings", "1.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("votings", "1.1");
+        return $strReturn;
+    }
+
+    private function update_11_12() {
+        $strReturn = "Updating 1.1 to 1.2...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("votings", "1.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("votings", "1.2");
         return $strReturn;
     }
 

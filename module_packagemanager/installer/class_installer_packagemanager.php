@@ -78,21 +78,23 @@ class class_installer_packagemanager extends class_installer_base implements int
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
+            $strReturn .= "Updating 3.4.9 to 4.0...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.0") {
+            $strReturn .= "Updating 4.0 to 4.1...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
         }
 
         return $strReturn."\n\n";
     }
 
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
-
-        return $strReturn;
-    }
 
 }
