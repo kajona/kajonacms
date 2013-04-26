@@ -123,7 +123,7 @@ class class_flyimage {
                     //Edit Picture
                     if($this->objImage->preLoadImage($objFile->getStrFilename())) {
                         //resize the image
-                        $this->objImage->resizeImage($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"], 0, true);
+                        $this->objImage->resizeAndCropImage($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"], 0, 0);
                         //Inlay text
                         if($arrElementData["gallery_text"] != "")
                             $this->objImage->imageText($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "255,255,255", "dejavusans.ttf", true);
