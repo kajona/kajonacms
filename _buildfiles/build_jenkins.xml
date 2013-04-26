@@ -187,6 +187,7 @@
                 <exclude name="module_workflows/" />
                 <exclude name="module_pdf/" />
                 <exclude name="module_pageimportexport/" />
+                <exclude name="module_demo/" />
 
                 <include name="element_*/**"/>
                 <include name="module_*/**"/>
