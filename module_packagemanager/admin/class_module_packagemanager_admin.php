@@ -32,7 +32,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("packagelist_filter"));
             $this->setParam("pv", 1);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
 
         }
 
