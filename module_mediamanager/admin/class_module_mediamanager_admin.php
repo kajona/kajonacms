@@ -26,8 +26,6 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
 
     const INT_LISTTYPE_FOLDER = "INT_LISTTYPE_FOLDER";
 
-    protected  $strPeAddon = "";
-
     /**
      * Constructor
      *
@@ -37,8 +35,6 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
         $this->setArrModuleEntry("modul", "mediamanager");
         parent::__construct();
 
-        if($this->getParam("pe") == "1")
-            $this->strPeAddon = "&pe=1";
     }
 
 
@@ -98,7 +94,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
                 return $this->objToolkit->listDeleteButton(
                     $objListEntry->getStrDisplayName(),
                     $this->getLang("delete_question_repo", $objListEntry->getArrModule("modul")),
-                    getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
+                    getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon())
                 );
             }
             else
@@ -140,16 +136,16 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_mediamanager_file) {
             if($objListEntry->rightEdit()) {
-                if($this->strPeAddon != "")
+                if($this->getStrPeAddon() != "")
                     return $this->objToolkit->listButton(
                         getLinkAdmin(
-                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
+                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
                         )
                     );
                 else
                     return $this->objToolkit->listButton(
                         getLinkAdminDialog(
-                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
+                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
                         )
                     );
             }
@@ -217,7 +213,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             return $objForm;
         }
         else if($objInstance instanceof class_module_mediamanager_file) {
-            if($this->strPeAddon == "" && $this->getParam("source") != "search")
+            if($this->getStrPeAddon() == "" && $this->getParam("source") != "search")
                 $this->setArrModuleEntry("template", "/folderview.tpl");
 
             $objForm = parent::getAdminForm($objInstance);

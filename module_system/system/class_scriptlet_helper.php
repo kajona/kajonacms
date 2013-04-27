@@ -29,8 +29,15 @@ class class_scriptlet_helper {
     public function processString($strContent, $intContext = null) {
         $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
 
-        foreach($arrScriptletFiles as $strOneScriptlet) {
+        foreach($arrScriptletFiles as $strPath => $strOneScriptlet) {
             $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
+
+            //analyze the scriptlet regarding the functionality - hardcoded string analysis
+            if(uniStrpos(file_get_contents(_realpath_.$strPath), "getProcessingContext(") === false)
+                continue;
+
+
+
             /** @var $objScriptlet interface_scriptlet */
             $objScriptlet = new $strOneScriptlet();
 

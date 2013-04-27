@@ -15,7 +15,7 @@
  */
 abstract class class_admin_simple extends class_admin {
 
-    protected  $strPeAddon = "";
+    private  $strPeAddon = "";
 
     public function __construct($strSystemid = "") {
         parent::__construct($strSystemid);
@@ -567,6 +567,15 @@ abstract class class_admin_simple extends class_admin {
         }
         return "";
     }
+
+    public function setStrPeAddon($strPeAddon) {
+        $this->strPeAddon = $strPeAddon;
+    }
+
+    public function getStrPeAddon() {
+        return $this->strPeAddon;
+    }
+
 
 
 }
