@@ -16,15 +16,16 @@ class class_testing_helper {
 
     function __construct() {
         class_carrier::getInstance();
+		$this->strTimestamp = date('Ymd-His');
     }
 
     public function resetConfig() {
         $strProjectConfigPath =  "project/system/config/";
         echo "\nLooking in ".$strProjectConfigPath;
         if(file_exists(_realpath_."/".$strProjectConfigPath."config.php")) {
-            echo "\n\nconfig.php found. I will rename your config.php to config.php.bck-selenium...";
+            echo "\n\nconfig.php found. I will rename your current config.php to config.php.selbck-".$this->strTimestamp;
             $objFilesystem = new class_filesystem();
-            $objFilesystem->fileRename($strProjectConfigPath."config.php", $strProjectConfigPath."config.php.bck-selenium", $bitForce = true);
+            $objFilesystem->fileRename($strProjectConfigPath."config.php", $strProjectConfigPath."config.php.selbck-".$this->strTimestamp, $bitForce = true);
         }
         else
             echo "\n\nNo config.php in project folder found.";
@@ -34,9 +35,9 @@ class class_testing_helper {
         $strProjectSQLitePath =  "project/dbdumps/";
         echo "\n\n\nLooking for Selenium SQLite file in ".$strProjectSQLitePath;
         if(file_exists(_realpath_."/".$strProjectSQLitePath."seleniumtest.db3")) {
-            echo "\n\nseleniumtest.db3 found. I will rename it to selold.bck-selenium...";
+            echo "\n\nseleniumtest.db3 found. I will rename it to seleniumtest.selbck-".$this->strTimestamp;
             $objFilesystem = new class_filesystem();
-            $objFilesystem->fileRename($strProjectSQLitePath."seleniumtest.db3", $strProjectSQLitePath."selold.bck-selenium", $bitForce = true);
+            $objFilesystem->fileRename($strProjectSQLitePath."seleniumtest.db3", $strProjectSQLitePath."seleniumtest.selbck-".$this->strTimestamp, $bitForce = true);
         }
         else
             echo "\n\nNo seleniumtest.db3 in project folder found.";
