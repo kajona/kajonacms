@@ -27,7 +27,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
 
     /**
      * Checks what to do and invokes the proper method
-     * Notice: In case of success, a location-header is sent, too. Needed, caus otherwise the rights would not
+     * Notice: In case of success, a location-header is sent, too. Needed, cause otherwise the rights would not
      * be checked during the login/-logout-loading against the new user-id!
      *
      * @return string the prepared html-output
@@ -237,6 +237,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
 
         $strPwdPage = $this->arrElementData["portallogin_pwdforgot"] != "" ? $this->arrElementData["portallogin_pwdforgot"] : $this->getPagename();
         $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($strPwdPage, "", "", $this->getLang("pwdForgotLink"), "portalLoginReset", "&pl_systemid=".$this->arrElementData["content_id"]);
+        $arrTemplate["portallogin_forgotpwdlinksimple"] = getLinkPortal($strPwdPage, "", "", $this->getLang("pwdForgotLink"), "portalLoginReset");
 
         $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
         return $this->fillTemplate($arrTemplate, $strTemplateID);
@@ -253,6 +254,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
         $arrTemplate["loggedin_label"] = $this->getLang("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
         $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getLang("logoutlink"), "portalLogout", "&pl_systemid=".$this->arrElementData["content_id"]);
+        $arrTemplate["logoutlinksimple"] = getLinkPortal($this->getPagename(), "", "", $this->getLang("logoutlink"), "portalLogout");
 
         $strProfileeditpage = $this->getPagename();
         if($this->arrElementData["portallogin_profile"] != "") {
@@ -260,6 +262,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
         }
 
         $arrTemplate["editprofilelink"] = getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile", "&pl_systemid=".$this->arrElementData["content_id"]);
+        $arrTemplate["editprofilelinksimple"] = getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile");
         return $this->fillTemplate($arrTemplate, $strTemplateID);
     }
 

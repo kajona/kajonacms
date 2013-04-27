@@ -136,6 +136,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
         $strReturn .= "Updating default template pack...\n";
         $this->updateDefaultTemplate();
+        class_cache::flushCache();
 
 
         return $strReturn;
