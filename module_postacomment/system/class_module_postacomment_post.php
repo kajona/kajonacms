@@ -139,7 +139,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
             $arrParams[] = $strPagefilter;
         }
 
-        if($strSystemidfilter !== false) {
+        if($strSystemidfilter != "") {
             $strFilter .= " AND postacomment_systemid = ? ";
             $arrParams[] = $strSystemidfilter;
         }
@@ -182,7 +182,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
      *
      * @return int
      */
-    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = false, $strLanguagefilter = "") {
+    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = "", $strLanguagefilter = "") {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."postacomment, "._dbprefix_."system WHERE system_id = postacomment_id ";
         $arrParams = array();
 
@@ -195,7 +195,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
             $strQuery .= " AND system_status = 1 ";
         }
 
-        if($strSystemidfilter !== false) {
+        if($strSystemidfilter != "") {
             $strQuery .= " AND postacomment_systemid = ? ";
             $arrParams[] = $strSystemidfilter;
         }
