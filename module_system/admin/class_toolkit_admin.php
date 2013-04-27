@@ -440,10 +440,10 @@ class class_toolkit_admin extends class_toolkit {
             "mediamanager",
             "imageDetails",
             "file='+document.getElementById('".$strName."').value+'",
-            class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
-            class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
+            class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+            class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
             "icon_crop.png",
-            class_carrier::getInstance()->getObjLang()->getLang("actionEditImage", "mediamanager"),
+            class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
             true,
             false,
             " (function() {
