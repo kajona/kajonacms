@@ -111,12 +111,12 @@ class class_flyimage {
 
             $objFile = new class_module_mediamanager_file($this->strSystemid);
 
-            class_session::getInstance()->sessionClose();
 
             if($objFile->rightView()) {
 
                 $arrElementData = $objPortalElement->getElementContent($objElement->getSystemid());
 
+                class_session::getInstance()->sessionClose();
                 if(is_file(_realpath_.$objFile->getStrFilename())) {
 
                     $this->objImage = new class_image($arrElementData["gallery_text"].$arrElementData["gallery_overlay"]);
