@@ -235,7 +235,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
     protected function actionOpenFolder() {
 
         $strJsCode = "";
-        if($this->getParam("sync") == "true") {
+        if($this->getParam("sync") == "true" && class_objectfactory::getInstance()->getObject($this->getSystemid())->rightRight1()) {
             $strJsCode = <<<HTML
             <script type="text/javascript">
                 KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
