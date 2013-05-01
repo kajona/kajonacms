@@ -228,9 +228,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen.png")
                 );
             }
-            else if($objListEntry->rightEdit()) {
+            else if($objListEntry->rightView()) {
 
-                if(!$bitPeMode) {
+                if(!$bitPeMode && $objListEntry->rightEdit()) {
                     $arrReturn[] = $this->objToolkit->listButton(
                         getLinkAdmin("pages_content", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte"), "icon_page.png")
                     );
@@ -1118,6 +1118,11 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                     /** @var class_module_pages_folder $objSingleEntry */
                     if($objSingleEntry instanceof class_module_pages_folder) {
+
+                        $strLink = "";
+                        if($objSingleEntry->rightEdit())
+                            $strLink = getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false);
+
                         $arrReturn[] = array(
                             "data"  => array(
                                 "title" => $objSingleEntry->getStrDisplayName(),
@@ -1127,7 +1132,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                             "attr"  => array(
                                 "id"       => $objSingleEntry->getSystemid(),
                                 "systemid" => $objSingleEntry->getSystemid(),
-                                "link"     => getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false),
+                                "link"     => $strLink,
                                 "isleaf"   => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
                             )
                         );
@@ -1141,6 +1146,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS && class_module_pages_page::getPageByName($objSingleEntry->getStrAlias()) != null)
                             $strTargetId = class_module_pages_page::getPageByName($objSingleEntry->getStrAlias())->getSystemid();
 
+                        $strLink = "";
+                        if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS && class_objectfactory::getInstance()->getObject($strTargetId)->rightEdit())
+                            $strLink = getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false);
+                        else if($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_PAGE && $objSingleEntry->rightEdit())
+                            $strLink = getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false);
+
+
                         $arrReturn[] = array(
                             "data"  => array(
                                 "title" => $objSingleEntry->getStrDisplayName(),
@@ -1150,7 +1162,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                             "attr"  => array(
                                 "id"       => $objSingleEntry->getSystemid(),
                                 "systemid" => $objSingleEntry->getSystemid(),
-                                "link"     => ($objSingleEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS ? getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false) : getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false)),
+                                "link"     => $strLink,
                                 //"link"     => getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false),
                                 "type"     => $objSingleEntry->getIntType(),
                                 "isleaf"   => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
