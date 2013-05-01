@@ -40,9 +40,9 @@ abstract class class_graph_flot_chartdata_base {
     //line char, bar chart, pie chart
     protected $bShowLegend = "true";
     protected $strGraphTitle = "";
-    protected $strBackgroundColor="";
-    protected $strFont = "";
-    protected $strFontColor ="";
+    protected $strBackgroundColor= null;
+    protected $strFont = null;
+    protected $strFontColor = null;
     
     
     /**

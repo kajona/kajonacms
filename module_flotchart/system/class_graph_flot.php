@@ -37,9 +37,9 @@ class class_graph_flot implements interface_graph {
     //line char, bar chart, pie chart
     private $bShowLegend = true;
     private $strGraphTitle = "";
-    private $strBackgroundColor="#FFFFFF";//white
-    private $strFont = "";//e.g. Verdana, Arial, Helvetica, sans-serifs
-    private $strFontColor ="";//e.g. #000000
+    private $strBackgroundColor= null;//white
+    private $strFont = null;//e.g. Verdana, Arial, Helvetica, sans-serifs
+    private $strFontColor = null;//e.g. #000000
     
     
     /**
@@ -197,7 +197,7 @@ class class_graph_flot implements interface_graph {
         $strDivChart = "";
         $strDivLegend = "";
         
-        //withd and heights of the divs
+        //widths and heights of the divs
         $titleHeight=0;
         $titleWidth=0;
         $legendHeight=0;
@@ -207,47 +207,50 @@ class class_graph_flot implements interface_graph {
         $chartHeight = $this->intHeight;
         $chartWidth = $this->intWidth;
 
-        //Calculate X-Axis Height
+        //Calculate X-Axis label height
         if($this->strXAxisTitle!="") {
             $xAxisHeight=15;
         }
-        //Calculate Y-Axis Width
+        //Calculate Y-Axis label width
         if($this->strYAxisTitle!="") {
             $yAxisWidth=15;
         }
-        //Create Title Div
-        if($strDivTitle!="") {
+        //Calculate title
+        if($this->strGraphTitle!="") {
             $titleHeight = 15;
-            $titleWidth=$this->intWidth;
-            $titleId = "title_" . $this->strChartId;
-            $titleStyles = "text-align:center;width:".$titleWidth."px; height:".$titleHeight."px;";
-            $strDivTitle =  "<div id=\"".$titleId."\"   style=\"".$titleStyles."\"> ".$this->strGraphTitle."</div>";
         }
         //Create Legend Div
         if($this->bShowLegend) {
-            $legendHeight=$chartHeight-$titleHeight-$xAxisHeight;
             $legendWidth=140;
-            $legendLeft=$this->intWidth-$legendWidth-$xAxisHeight;
-            $legendBottom=$legendHeight+2;
+            $legendHeight=$chartHeight-$titleHeight+$xAxisHeight;
+            $legendLeft=$this->intWidth-$legendWidth+$yAxisWidth;
+            $legendBottom=$legendHeight-7;
             $legendId="legend_" . $this->strChartId;
             $legendStyles="position:relative;width:".$legendWidth."px;left:".$legendLeft."px;bottom:".$legendBottom."px;";
             $strDivLegend = "<div id=\"".$legendId."\"  style=\"".$legendStyles."\" > &nbsp; </div>";
         }
-
+        //Create Title Div
+        if($this->strGraphTitle!="") {
+            $titleWidth=$this->intWidth - $legendWidth;
+            $titleId = "title_" . $this->strChartId;
+            $titleStyles = "text-align:center;width:".$titleWidth."px; height:".$titleHeight."px;";
+            $strDivTitle =  "<div id=\"".$titleId."\"   style=\"".$titleStyles."\"> ".$this->strGraphTitle."</div>";
+        }
+        
         //Create Chart Div
-        $chartHeight = $chartHeight-$titleHeight-$xAxisHeight;
-        $chartWidth = $chartWidth-$legendWidth-$yAxisWidth;
+        $chartHeight -= $titleHeight-$xAxisHeight;
+        $chartWidth -= $legendWidth-$yAxisWidth;
         $fontStyle = "font-family:".$this->strFont.";";
         $chartStyles = $fontStyle."width:".$chartWidth."px;height:".$chartHeight."px;";
         $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"".$chartStyles." \" > &nbsp; </div>";
         
-        
         //generate the wrapping js-code and all requirements
         $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px; \">";
         $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend."</div>";
+        
         $strReturn .= "<script type='text/javascript'>
 
-            KAJONA.admin.loader.loadFile(['/core/module_flotchart/admin/scripts/js/flot/jquery.flot.js'], function() {
+            KAJONA.admin.loader.loadFile(['/core/module_flotchart/admin/scripts/js/flot/jquery.flot.min.js'], function() {
                 KAJONA.admin.loader.loadFile([
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',

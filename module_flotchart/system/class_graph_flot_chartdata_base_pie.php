@@ -27,6 +27,8 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
     
     
     public function optionsToJSON() {
+        $backGroundColor = $this->strBackgroundColor==null?"null":"'".$this->strBackgroundColor."'";
+        
         //disaply pie chart
         $series = "
         series: {
@@ -55,7 +57,7 @@ class class_graph_flot_chartdata_base_pie extends class_graph_flot_chartdata_bas
             grid: { 
                 hoverable: true, 
                 clickable: true,
-                backgroundColor:'".$this->strBackgroundColor."'
+                backgroundColor:".$backGroundColor."
             }";
         
         $options = "";

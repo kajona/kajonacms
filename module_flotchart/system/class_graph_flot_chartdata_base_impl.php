@@ -18,6 +18,10 @@
 class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_base{
 
     public function optionsToJSON() {
+        $font = $this->strFont==null?"null":"'".$this->strFont."'";
+        $fontColor = $this->strFontColor==null?"null":"'".$this->strFontColor."'";
+        $backGroundColor = $this->strBackgroundColor==null?"null":"'".$this->strBackgroundColor."'";
+        
         $xaxis = "xaxis: { tickFormatter:function(val, axis) {
                                 return flotHelper.getTickFormatter(".$this->intXAxisAngle.", val, axis);
                             }, 
@@ -25,8 +29,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                            axisLabelUseHtml: false,
                            axisLabelUseCanvas: false, 
                            axisLabelPadding:15,
-                           axisLabelFontFamily:'".$this->strFont."',
-                           color:'".$this->strFontColor."',
+                           axisLabelFontFamily:".$font.",
+                           color:".$fontColor.",
                            ticks:".$this->ticksToJSON()."   
                         }";
         
@@ -34,8 +38,8 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                             axisLabelUseHtml: false,
                             axisLabelUseCanvas: false, 
                             axisLabelPadding:15,
-                            axisLabelFontFamily:'".$this->strFont."',
-                            color:'".$this->strFontColor."'
+                            axisLabelFontFamily:".$font.",
+                            color:".$fontColor."
                         }";
 
         $legend = "legend: {show:".$this->bShowLegend.",
@@ -45,7 +49,7 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         $grid = "grid: {borderWidth: 1,
                         hoverable: true, 
                         clickable: true,
-                        backgroundColor:'".$this->strBackgroundColor."'   
+                        backgroundColor:".$backGroundColor."   
                     }";
         
         $options = "";

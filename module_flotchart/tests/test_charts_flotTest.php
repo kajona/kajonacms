@@ -17,7 +17,8 @@ class class_test_charts_flotTest extends class_testbase  {
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/system/scripts/loader.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/kajona.js\"></script>";
-        
+        //echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/flot_helper.js\"></script>";
+        //echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_flotchart/admin/scripts/js/flot/jquery.flot.js\"></script>";
 
         //create bar charts
         for ($i = 1; $i < 6; $i++) {
@@ -29,7 +30,7 @@ class class_test_charts_flotTest extends class_testbase  {
             class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::STACKEDBAR, $i,$i);
         }
 
-        
+        //create line chart
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->addLinePlot(array(8.112,1,2,4), "serie 1");
         $objGraph->addLinePlot(array(1,2,3,4), "serie 2");
@@ -46,6 +47,7 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setIntWidth(700);
         echo $objGraph->renderGraph();
         
+        //create a bar chart with different widths
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->addBarChartSet(array(1,4,3,6), "serie 1");
@@ -62,29 +64,14 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setIntHeight(350);
         $objGraph->setIntWidth(300);
         $objGraph->setBitRenderLegend(false);
-         echo $objGraph->renderGraph();
-        
-        $objGraph->setIntWidth(400);
         echo $objGraph->renderGraph();
         
-        $objGraph->setIntWidth(500);
-        echo $objGraph->renderGraph();
+        for ($i = 400; $i < 1000; $i+=100) {
+            $objGraph->setIntWidth($i);
+            echo $objGraph->renderGraph();
+        }
         
-        $objGraph->setIntWidth(600);
-        echo $objGraph->renderGraph();
-        
-        $objGraph->setIntWidth(700);
-        echo $objGraph->renderGraph();
-        
-        $objGraph->setIntWidth(800);
-        echo $objGraph->renderGraph();
-        
-        $objGraph->setIntWidth(900);
-        echo $objGraph->renderGraph();
-        
-        $objGraph->setIntWidth(100);
-        echo $objGraph->renderGraph();
-        
+        //create a stacked bar chart
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -94,6 +81,7 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6","v7","v8","v9","v10","v11","v12","v13"));
         echo $objGraph->renderGraph();
         
+        //create a mixed chart with lines and bars
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
         $objGraph->setStrGraphTitle("A Mixed Chart");
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
@@ -106,12 +94,27 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setBitRenderLegend(true);
         echo $objGraph->renderGraph();
         
+        
+        //create pie chart
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->setStrGraphTitle("A Pie Chart");
         $objGraph->createPieChart(array(1,20,30,40), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->setBitRenderLegend(true);
         echo $objGraph->renderGraph();
 
+        
+        //create a bar chart with different widths
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph->setStrGraphTitle("Searchqueries");
+        $objGraph->addBarChartSet(array(12,11,10,9,8,7,6,5), "serie 1");
+        $objGraph->setArrXAxisTickLabels(array("Tags", "https", "cache", "portallogin", "suche", "dokumentation", "template", "toolkit"));
+        $objGraph->setIntXAxisAngle(10);
+        $objGraph->setIntHeight(350);
+        $objGraph->setIntWidth(700);
+        $objGraph->setBitRenderLegend(false);
+        echo $objGraph->renderGraph();
+        
+        
         echo"<br/>";
     }
     
