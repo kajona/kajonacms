@@ -89,13 +89,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     };
 
     CanvasAxisLabel.prototype.draw = function(box) {
-        //cusotm code in case font color is set
+        var ctx = this.plot.getCanvas().getContext('2d');
+        
+        //custom code in case font color is set
         if(this.opts.font) {
           ctx.fillStyle = this.opts.font.color;  
         }
         //cusotm code in case font color is set
         
-        var ctx = this.plot.getCanvas().getContext('2d');
         ctx.save();
         ctx.font = this.opts.axisLabelFontSizePixels + 'px ' +
             this.opts.axisLabelFontFamily;
