@@ -37,7 +37,7 @@ class class_graph_flot implements interface_graph {
     //line char, bar chart, pie chart
     private $bShowLegend = true;
     private $strGraphTitle = "";
-    private $strBackgroundColor= null;//white
+    private $strBackgroundColor = null;//white
     private $strFont = null;//e.g. Verdana, Arial, Helvetica, sans-serifs
     private $strFontColor = null;//e.g. #000000
     
@@ -198,22 +198,22 @@ class class_graph_flot implements interface_graph {
         $strDivLegend = "";
         
         //widths and heights of the divs
-        $titleHeight=0;
-        $titleWidth=0;
-        $legendHeight=0;
-        $legendWidth=0;
-        $xAxisHeight=0;
-        $yAxisWidth=0;
+        $titleHeight = 0;
+        $titleWidth = 0;
+        $legendHeight = 0;
+        $legendWidth = 0;
+        $xAxisHeight = 0;
+        $yAxisWidth = 0;
         $chartHeight = $this->intHeight;
         $chartWidth = $this->intWidth;
 
         //Calculate X-Axis label height
         if($this->strXAxisTitle!="") {
-            $xAxisHeight=15;
+            $xAxisHeight = 15;
         }
         //Calculate Y-Axis label width
         if($this->strYAxisTitle!="") {
-            $yAxisWidth=15;
+            $yAxisWidth = 15;
         }
         //Calculate title
         if($this->strGraphTitle!="") {
@@ -238,14 +238,14 @@ class class_graph_flot implements interface_graph {
         }
         
         //Create Chart Div
-        $chartHeight -= $titleHeight-$xAxisHeight;
-        $chartWidth -= $legendWidth-$yAxisWidth;
+        $chartHeight -= $titleHeight+$xAxisHeight;
+        $chartWidth -= $legendWidth+$yAxisWidth;
         $fontStyle = "font-family:".$this->strFont.";";
         $chartStyles = $fontStyle."width:".$chartWidth."px;height:".$chartHeight."px;";
         $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"".$chartStyles." \" > &nbsp; </div>";
         
         //generate the wrapping js-code and all requirements
-        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px; \">";
+        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
         $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend."</div>";
         
         $strReturn .= "<script type='text/javascript'>

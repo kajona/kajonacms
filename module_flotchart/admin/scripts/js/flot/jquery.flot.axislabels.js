@@ -89,6 +89,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     };
 
     CanvasAxisLabel.prototype.draw = function(box) {
+        //cusotm code in case font color is set
+        if(this.opts.font) {
+          ctx.fillStyle = this.opts.font.color;  
+        }
+        //cusotm code in case font color is set
+        
         var ctx = this.plot.getCanvas().getContext('2d');
         ctx.save();
         ctx.font = this.opts.axisLabelFontSizePixels + 'px ' +
@@ -235,11 +241,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     };
 
     CssTransformAxisLabel.prototype.draw = function(box) {
+        //custom code--------
+        //Added these lines of to get the correct color
+        //if no color was set vai the chart interface then automically the styles defined for the page will be used
+        var color ='';
+        if(this.opts.font && this.opts.font.color) {
+            color = 'color: ' + this.opts.font.color + '; ';
+        }
+        //custom code-------
+        
         this.plot.getPlaceholder().find("." + this.axisName + "Label").remove();
         var offsets = this.calculateOffsets(box);
         var elem = $('<div class="axisLabels ' + this.axisName +
                      'Label" style="position:absolute; ' +
-                     'color: ' + this.opts.color + '; ' +
+                     color + //customized
                      this.transforms(offsets.degrees, offsets.x, offsets.y) +
                      '">' + this.opts.axisLabel + '</div>');
         this.plot.getPlaceholder().append(elem);

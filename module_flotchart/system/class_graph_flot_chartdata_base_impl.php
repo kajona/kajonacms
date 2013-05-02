@@ -18,28 +18,37 @@
 class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_base{
 
     public function optionsToJSON() {
-        $font = $this->strFont==null?"null":"'".$this->strFont."'";
+        $fontFamily = $this->strFont==null?"null":"'".$this->strFont."'";
         $fontColor = $this->strFontColor==null?"null":"'".$this->strFontColor."'";
         $backGroundColor = $this->strBackgroundColor==null?"null":"'".$this->strBackgroundColor."'";
+        
+        $fontObj = "";
+        if($fontFamily!="null" || $fontColor!= "null") {
+            $fontObj = ",font: {";
+            $fontObj .= "family:".$fontFamily.",";
+            $fontObj .= "color:".$fontColor;
+            $fontObj .= "}";
+        }
+        
         
         $xaxis = "xaxis: { tickFormatter:function(val, axis) {
                                 return flotHelper.getTickFormatter(".$this->intXAxisAngle.", val, axis);
                             }, 
                            axisLabel: '" . $this->strXAxisTitle . "',
                            axisLabelUseHtml: false,
-                           axisLabelUseCanvas: false, 
+                           axisLabelUseCanvas: true, 
                            axisLabelPadding:15,
-                           axisLabelFontFamily:".$font.",
-                           color:".$fontColor.",
-                           ticks:".$this->ticksToJSON()."   
+                           axisLabelFontFamily:".$fontFamily.",
+                           ticks:".$this->ticksToJSON()."  
+                           ".$fontObj."
                         }";
         
         $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
                             axisLabelUseHtml: false,
-                            axisLabelUseCanvas: false, 
+                            axisLabelUseCanvas: true, 
                             axisLabelPadding:15,
-                            axisLabelFontFamily:".$font.",
-                            color:".$fontColor."
+                            axisLabelFontFamily:".$fontFamily."
+                            ".$fontObj."
                         }";
 
         $legend = "legend: {show:".$this->bShowLegend.",
