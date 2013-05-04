@@ -22,37 +22,28 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         $fontColor = $this->strFontColor==null?"null":"'".$this->strFontColor."'";
         $backGroundColor = $this->strBackgroundColor==null?"null":"'".$this->strBackgroundColor."'";
         
-        $fontObj = "";
+        $fontObj = "null";
         if($fontFamily!="null" || $fontColor!= "null") {
-            $fontObj = ",font: {";
+            $fontObj = "{";
             $fontObj .= "family:".$fontFamily.",";
             $fontObj .= "color:".$fontColor;
             $fontObj .= "}";
         }
         
-        
         $xaxis = "xaxis: { tickFormatter:function(val, axis) {
                                 return flotHelper.getTickFormatter(".$this->intXAxisAngle.", val, axis);
-                            }, 
-                           axisLabel: '" . $this->strXAxisTitle . "',
-                           axisLabelUseHtml: false,
-                           axisLabelUseCanvas: true, 
-                           axisLabelPadding:15,
-                           axisLabelFontFamily:".$fontFamily.",
-                           ticks:".$this->ticksToJSON()."  
-                           ".$fontObj."
+                            },
+                            font:".$fontObj.",
+                            ticks:".$this->ticksToJSON()."  
                         }";
         
-        $yaxis = "yaxis: {axisLabel: '" . $this->strYAxisTitle . "',
-                            axisLabelUseHtml: false,
-                            axisLabelUseCanvas: true, 
-                            axisLabelPadding:15,
-                            axisLabelFontFamily:".$fontFamily."
-                            ".$fontObj."
-                        }";
+        $yaxis = "yaxis: {font:".$fontObj."}";
 
         $legend = "legend: {show:".$this->bShowLegend.",
-                            container:$('#legend_".$this->strChartId."')
+                            container:$('#legend_".$this->strChartId."'),
+                            labelFormatter:function(label, series) {
+                                    return flotHelper.formatLegendLabels(label, series, ".$fontFamily.",".$fontColor.");
+                                }
                             }";
         
         $grid = "grid: {borderWidth: 1,

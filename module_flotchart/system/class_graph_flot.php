@@ -196,65 +196,111 @@ class class_graph_flot implements interface_graph {
         $strDivTitle = "";
         $strDivChart = "";
         $strDivLegend = "";
+        $strDivLabelXAxis = "";
+        $strDivLabelYAxis = "";
+        $showBorder = "";//border:1px solid;";
         
         //widths and heights of the divs
         $titleHeight = 0;
         $titleWidth = 0;
         $legendHeight = 0;
         $legendWidth = 0;
-        $xAxisHeight = 0;
-        $yAxisWidth = 0;
+        $xAxisLabelHeight = 0;
+        $yAxisLabelWidth = 0;
         $chartHeight = $this->intHeight;
         $chartWidth = $this->intWidth;
 
-        //Calculate X-Axis label height
+        //global styles
+        $fontFamily = "font-family:".$this->strFont.";";
+        $fontColor = "color:".$this->strFontColor.";";
+        
+        //Set X-Axis label height
         if($this->strXAxisTitle!="") {
-            $xAxisHeight = 15;
+            $xAxisLabelHeight = 25;
         }
-        //Calculate Y-Axis label width
+        //Set Y-Axis label width
         if($this->strYAxisTitle!="") {
-            $yAxisWidth = 15;
+            $yAxisLabelWidth = 15;
         }
-        //Calculate title
+        //Set title height
         if($this->strGraphTitle!="") {
             $titleHeight = 15;
         }
         //Create Legend Div
         if($this->bShowLegend) {
-            $legendWidth=140;
-            $legendHeight=$chartHeight-$titleHeight+$xAxisHeight;
-            $legendLeft=$this->intWidth-$legendWidth+$yAxisWidth;
-            $legendBottom=$legendHeight-7;
+            //calculation of width, height and position
+            $legendWidth = 140;
+            $legendHeight=$chartHeight-$titleHeight-$xAxisLabelHeight;
+            $legendLeft=$this->intWidth - $legendWidth;
+            $legendTop=$titleHeight;
+            
+            //create the div
             $legendId="legend_" . $this->strChartId;
-            $legendStyles="position:relative;width:".$legendWidth."px;left:".$legendLeft."px;bottom:".$legendBottom."px;";
+            $legendPosition = "left:".$legendLeft."px;"."top:".$legendTop."px;";
+            $legendDimension= "width:".$legendWidth."px;";
+            $legendStyles = "position:absolute;".$legendPosition.$legendDimension.$fontFamily.$fontColor;
             $strDivLegend = "<div id=\"".$legendId."\"  style=\"".$legendStyles."\" > &nbsp; </div>";
         }
         //Create Title Div
         if($this->strGraphTitle!="") {
-            $titleWidth=$this->intWidth - $legendWidth;
+            //calculation of width
+            $titleWidth=$this->intWidth - $legendWidth - $yAxisLabelWidth;
+            $titleLeft = $yAxisLabelWidth;
+            //create the div
             $titleId = "title_" . $this->strChartId;
-            $titleStyles = "text-align:center;width:".$titleWidth."px; height:".$titleHeight."px;";
+            $titlePosition = "left:".$titleLeft."px;";
+            $titleDimension = "width:".$titleWidth."px; height:".$titleHeight."px;";
+            $titleStyles = "position:absolute;text-align:center;".$titlePosition.$titleDimension.$fontFamily.$fontColor;
             $strDivTitle =  "<div id=\"".$titleId."\"   style=\"".$titleStyles."\"> ".$this->strGraphTitle."</div>";
         }
         
-        //Create Chart Div
-        $chartHeight -= $titleHeight+$xAxisHeight;
-        $chartWidth -= $legendWidth+$yAxisWidth;
-        $fontStyle = "font-family:".$this->strFont.";";
-        $chartStyles = $fontStyle."width:".$chartWidth."px;height:".$chartHeight."px;";
+        //Create x-Axis label div
+        if($this->strXAxisTitle!="") {
+            //calculation
+            $xAxisLabelWidth=$this->intWidth - $legendWidth - $yAxisLabelWidth;
+            $xAxisLabelLeft = $yAxisLabelWidth;
+            $xAxisLabelTop = $this->intHeight - $titleHeight;
+            //create the div
+            $xAxisLabelId="xAxisLabel_" . $this->strChartId;
+            $xAxisLabelPosition = "top:".$xAxisLabelTop."px;"."left:".$xAxisLabelLeft."px;";
+            $xAxisLabelDimension= "width:".$xAxisLabelWidth."px; height:".$xAxisLabelHeight."px;";
+            $xAxisLabelStyles = "position:absolute;text-align:center;".$xAxisLabelPosition.$xAxisLabelDimension.$fontFamily.$fontColor;
+            $strDivLabelXAxis = "<div id=\"".$xAxisLabelId."\"  style=\"".$xAxisLabelStyles."\" > ".$this->strXAxisTitle." </div>";
+        }
+        
+        //Create y-Axis label div
+        if($this->strXAxisTitle!="") {
+            //calculation
+            $yAxisLabelHeight=$this->intHeight - $titleHeight - $xAxisLabelHeight;
+            $yAxisLabelTop = $yAxisLabelHeight/1.7;
+            //create the div
+            $yAxisLabelId="yAxisLabel_" . $this->strChartId;
+            $yAxisLabelPosition = "top:".$yAxisLabelTop."px;";
+            $yAxisLabelRotation = "-webkit-transform: rotate(-90deg);"."-moz-transform: rotate(-90deg);"."-ms-transform: rotate(-90deg);"."-o-transform: rotate(-90deg);"."";
+            $yAxisLabelDimension = "width:".$yAxisLabelWidth."px;";
+            $yAxisLabelStyles = "position:absolute;text-align:center;".$yAxisLabelPosition.$yAxisLabelRotation.$yAxisLabelDimension.$fontFamily.$fontColor;
+            $strDivLabelYAxis = "<div id=\"".$yAxisLabelId."\"  style=\"".$yAxisLabelStyles."\" > ".$this->strYAxisTitle." </div>";
+        }
+        
+        //Calculate actual chart height
+        $chartHeight -= $titleHeight+$xAxisLabelHeight;
+        $chartWidth -= $legendWidth+$yAxisLabelWidth;
+        
+        //Create the div for the chart
+        $chartPosition = "left:".$yAxisLabelWidth."px;top:".$titleHeight."px;";
+        $chartStyles = $chartPosition."position:absolute;width:".$chartWidth."px;height:".$chartHeight."px;".$showBorder;
         $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"".$chartStyles." \" > &nbsp; </div>";
         
-        //generate the wrapping js-code and all requirements
-        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
-        $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLegend."</div>";
+        //now connect the created divs 
+        $strReturn = "<div id=\"chart_" . $this->strChartId . "\" style=\"position:relative;width:".$this->intWidth."px; height:".$this->intHeight."px;".$showBorder."\">";
+        $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLabelXAxis.$strDivLabelYAxis.$strDivLegend."</div>";
         
+        //generate the wrapping js-code and all requirements
         $strReturn .= "<script type='text/javascript'>
-
             KAJONA.admin.loader.loadFile(['/core/module_flotchart/admin/scripts/js/flot/jquery.flot.min.js'], function() {
                 KAJONA.admin.loader.loadFile([
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.axislabels.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
                     '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.orderBars.js',
                     '/core/module_flotchart/admin/scripts/js/flot/excanvas.min.js',

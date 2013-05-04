@@ -40,15 +40,25 @@ class class_test_charts_flotTest extends class_testbase  {
         $objGraph->setIntXAxisAngle(-20);
         $objGraph->setStrXAxisTitle("XXX");
         $objGraph->setStrYAxisTitle("YYY");
-        $objGraph->setStrFontColor("red");
         $objGraph->setStrBackgroundColor("#F0F0F0");
         $objGraph->setStrGraphTitle("My First Line Chart");
         $objGraph->setIntHeight(500);
         $objGraph->setIntWidth(700);
         echo $objGraph->renderGraph();
         
+        $objGraph->setStrFontColor("#FF0000");
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setStrFontColor(null);
+        $objGraph->setStrFont("Arial");
+        echo $objGraph->renderGraph();
+        
+        $objGraph->setStrFontColor("#FF0000");
+        $objGraph->setStrFont("Verdana");
+        echo $objGraph->renderGraph();
+        
         //create a bar chart with different widths
-        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->addBarChartSet(array(1,4,3,6), "serie 1");
         $objGraph->addBarChartSet(array(3,3,6,2), "serie 2");
@@ -72,7 +82,7 @@ class class_test_charts_flotTest extends class_testbase  {
         }
         
         //create a stacked bar chart
-        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Bar Chart");
@@ -82,7 +92,7 @@ class class_test_charts_flotTest extends class_testbase  {
         echo $objGraph->renderGraph();
         
         //create a mixed chart with lines and bars
-        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->setStrGraphTitle("A Mixed Chart");
         $objGraph->addLinePlot(array(8,1,2,4), "serie 1");
         $objGraph->setStrXAxisTitle("My new X-Axis");
@@ -103,15 +113,24 @@ class class_test_charts_flotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         
+        //create pie chart
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
+        $objGraph->setStrGraphTitle("A Pie Chart 2");
+        $objGraph->createPieChart(array(1), array("val 1"));
+        $objGraph->setBitRenderLegend(true);
+        echo $objGraph->renderGraph();
+        
         //create a bar chart with different widths
-        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);;
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
         $objGraph->setStrGraphTitle("Searchqueries");
         $objGraph->addBarChartSet(array(12,11,10,9,8,7,6,5), "serie 1");
         $objGraph->setArrXAxisTickLabels(array("Tags", "https", "cache", "portallogin", "suche", "dokumentation", "template", "toolkit"));
         $objGraph->setIntXAxisAngle(10);
         $objGraph->setIntHeight(350);
         $objGraph->setIntWidth(700);
-        $objGraph->setBitRenderLegend(false);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
         echo $objGraph->renderGraph();
         
         

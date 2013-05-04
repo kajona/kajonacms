@@ -8,20 +8,25 @@ var flotHelper = {};
 flotHelper.tooltipOffsetX = 5;
 flotHelper.tooltipOffsetY = -60;
 
+
+/**
+ * Rotates the ticks on the x-Axis.
+ * 
+ * @param {int} angle
+ * @param {string} val
+ * @param {object} axis
+ * @returns {String}
+ */
 flotHelper.getTickFormatter = function(angle, val, axis) {
-    /* Safari */
-    var safari = "-webkit-transform: rotate("+angle+"deg); ";
-
-    /* Firefox */
-    var firefox = "-moz-transform: rotate("+angle+"deg); ";
-
-    /* IE */
-    var ie = "-ms-transform: rotate("+angle+"deg); ";
-
-    /* Opera */
-    var opera = "-o-transform: rotate("+angle+"deg);";
-    
-    return "<div style=\""+safari+firefox+ie+opera+"\">"+val+"</div>"
+    var rotation_angle = "rotate("+angle+"deg)";
+    var rotation_css = [
+        '-webkit-transform:' + rotation_angle,
+        '-moz-transform:' + rotation_angle,
+        '-o-transform:' + rotation_angle,
+        '-ms-transform:' + rotation_angle,
+        'transform:' + rotation_angle
+    ];
+    return "<div style=\""+rotation_css.join(";")+"\">"+val+"</div>";
 };
 
 flotHelper.showTooltip = function(x, y, contents, seriesLabel, color) {
@@ -43,22 +48,31 @@ flotHelper.showTooltip = function(x, y, contents, seriesLabel, color) {
     }).appendTo("body").show();
 };
 
+/**
+ * Method for displaying a tooltip for bar and line charts when mouse over 
+ * over a series.
+ * 
+ * @param {type} event
+ * @param {object} pos
+ * @param {object} item
+ * @returns {undefined}
+ */
 flotHelper.doToolTip = function(event, pos, item) {
     $('#x').text(pos.x);
     $('#y').text(pos.y);
 
     if (item) {
         //if series and datapoint are the same do nothings
-        if(previousPoint == item.dataIndex && previousSeries == item.seriesIndex) {
+        if(previousPoint === item.dataIndex && previousSeries === item.seriesIndex) {
             //move tooltip if still in the same series
             $('#tooltip').css( {
                 top: pos.pageY + flotHelper.tooltipOffsetX,
                 left: pos.pageX + flotHelper.tooltipOffsetY
-            })
+            });
         }
         
         //create new tooltip if series or datapoint changes
-        if (previousPoint != item.dataIndex || previousSeries != item.seriesIndex) {
+        if (previousPoint !== item.dataIndex || previousSeries !== item.seriesIndex) {
             previousPoint = item.dataIndex;
             previousSeries = item.seriesIndex;
 
@@ -103,10 +117,19 @@ flotHelper.doToolTip = function(event, pos, item) {
     }
 };
 
+
+/**
+ * Method for displaying a tooltip in a pie chart when mouse over over a series.
+ * 
+ * @param {type} event
+ * @param {object} pos
+ * @param {object} item
+ * @returns {undefined}
+ */
 flotHelper.showPieToolTip = function(event, pos, item) {
     if(item) {
         //changed tooltip if series changes
-        if (previousSeries != item.seriesIndex) {
+        if (previousSeries !== item.seriesIndex) {
             $('#tooltip').remove();
             previousSeries = item.seriesIndex;
             //create new tooltip
@@ -124,7 +147,7 @@ flotHelper.showPieToolTip = function(event, pos, item) {
             $('#tooltip').css( {
                 top: pos.pageY + flotHelper.tooltipOffsetX,
                 left: pos.pageX + flotHelper.tooltipOffsetY
-            })
+            });
         }
     }
     else {
@@ -133,6 +156,17 @@ flotHelper.showPieToolTip = function(event, pos, item) {
     }
 };
 
+/**
+ * Calculates the ticks on the x-Axis.
+ * If the amount of ticks is to large for the width of the chart the number 
+ * of ticks will be reduced.
+ * 
+ * @param {int} angle
+ * @param {object} axis
+ * @param {arrays} tickArray
+ * @param {int} noOfWrittenLabels
+ * @returns {unresolved}
+ */
 flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     var nrLableTicks = tickArray.length;
     var noTicks = null;
@@ -144,7 +178,7 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     });
 
     //calculate which ticks should be rendered
-    if(noOfWrittenLabels != null) {
+    if(noOfWrittenLabels !== null) {
         if(noOfWrittenLabels > 0) {
             noTicks = Math.ceil(nrLableTicks / noOfWrittenLabels);
         }
@@ -157,24 +191,38 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
     $.each(tickArray, function(index, tick) {
         //calculate if tick should be included in the chart
         var moduloResult = null;
-        if(noTicks != null) {
+        if(noTicks !== null) {
             if(noTicks > 0) {
                 moduloResult = index % noTicks;
             }
-            else if(noTicks == 0) {
+            else if(noTicks === 0) {
                 moduloResult = 0;  
             }
         }
             
         //set tick value to axis.min -1 so that is will not be diaplayed in the chart
-        if(!moduloResult == 0 || !moduloResult == null ) {
+        if(!moduloResult === 0 || !moduloResult === null ) {
             tick[0] =  axis.min -1;
         }
         //hack for executing the tickFormatter even if the value of a tick is being set
         if(tick[1]) {
-            tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis)
+            tick[1] = flotHelper.getTickFormatter(angle, tick[1], axis);
         }
     });
     
     return tickArray;
+};
+
+/**
+ * Formats the text of the legend by setting the font family and color.
+ * 
+ * @param {string} label
+ * @param {object} series
+ * @param {string} fontFamily
+ * @param {string} fontColor
+ * @returns {undefined}
+ */
+flotHelper.formatLegendLabels = function(label, series, fontFamily, fontColor) {
+    return '<div style="color:'+fontColor+';font-family:'+fontFamily+';">' + label + '</a>';
+
 };
