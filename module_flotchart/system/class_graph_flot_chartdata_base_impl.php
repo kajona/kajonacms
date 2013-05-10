@@ -34,7 +34,7 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
                                 return flotHelper.getTickFormatter(".$this->intXAxisAngle.", val, axis);
                             },
                             font:".$fontObj.",
-                            ticks:".$this->ticksToJSON()."  
+                            ticks:".$this->ticksToJSON()."
                         }";
         
         $yaxis = "yaxis: {font:".$fontObj."}";
@@ -69,9 +69,9 @@ class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_b
         //return the tick generator function
         return "function(axis) {
                 var angle = eval(".$this->intXAxisAngle.");
-                var tickArray = eval(".json_encode($this->arrXAxisTickLabels).");
+                var tickLabelsArray = eval(".json_encode($this->arrXAxisTickLabels).");
                 var noOfWrittenLabels = eval(".$this->intNrOfWrittenLabels.");
-                return flotHelper.getTickArray.call(this, angle, axis, tickArray, noOfWrittenLabels);
+                return flotHelper.getTickArray.call(this, angle, axis, tickLabelsArray, noOfWrittenLabels);
             }";
     }
     

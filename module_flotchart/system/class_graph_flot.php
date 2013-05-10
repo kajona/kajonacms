@@ -110,7 +110,7 @@ class class_graph_flot implements interface_graph {
         $this->objChartData->saveGraph($strFilename);
     }
 
-    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = null) {
+    public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
         $this->arrXAxisTickLabels = $arrXAxisTickLabels;
         $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
     }
@@ -216,7 +216,7 @@ class class_graph_flot implements interface_graph {
         
         //Set X-Axis label height
         if($this->strXAxisTitle!="") {
-            $xAxisLabelHeight = 25;
+            $xAxisLabelHeight = 15;
         }
         //Set Y-Axis label width
         if($this->strYAxisTitle!="") {
@@ -272,13 +272,19 @@ class class_graph_flot implements interface_graph {
         if($this->strXAxisTitle!="") {
             //calculation
             $yAxisLabelHeight=$this->intHeight - $titleHeight - $xAxisLabelHeight;
-            $yAxisLabelTop = $yAxisLabelHeight/1.7;
+            $yAxisLabelTop = $titleHeight;
             //create the div
             $yAxisLabelId="yAxisLabel_" . $this->strChartId;
-            $yAxisLabelPosition = "top:".$yAxisLabelTop."px;";
-            $yAxisLabelRotation = "-webkit-transform: rotate(-90deg);"."-moz-transform: rotate(-90deg);"."-ms-transform: rotate(-90deg);"."-o-transform: rotate(-90deg);"."";
-            $yAxisLabelDimension = "width:".$yAxisLabelWidth."px;";
-            $yAxisLabelStyles = "position:absolute;text-align:center;".$yAxisLabelPosition.$yAxisLabelRotation.$yAxisLabelDimension.$fontFamily.$fontColor;
+            //$yAxisLabelPosition = "top:".($this->intHeight/1.5)."px;";
+            $yAxisLabelPosition = "top:60%;";
+            //rotation
+            $yAxisLabelRotationWebKit = "-webkit-transform: rotate(-90deg);"."-webkit-transform-origin:0% 5%;";
+            $yAxisLabelRotationMoz = "-moz-transform: rotate(-90deg);"."-moz-transform-origin:0% 5%;";
+            $yAxisLabelRotationIE8 = "filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);";
+            $yAxisLabelRotationIE = "-ms-transform: rotate(-90deg);"."-ms-transform-origin:0% 5%;";
+            $yAxisLabelRotationO = "-o-transform: rotate(-90deg);"."-o-transform-origin:0% 5%;";
+            $yAxisLabelRotation = $yAxisLabelRotationWebKit.$yAxisLabelRotationMoz.$yAxisLabelRotationIE8.$yAxisLabelRotationIE.$yAxisLabelRotationO;
+            $yAxisLabelStyles = "position:absolute;".$yAxisLabelPosition.$yAxisLabelRotation.$fontFamily.$fontColor;
             $strDivLabelYAxis = "<div id=\"".$yAxisLabelId."\"  style=\"".$yAxisLabelStyles."\" > ".$this->strYAxisTitle." </div>";
         }
         

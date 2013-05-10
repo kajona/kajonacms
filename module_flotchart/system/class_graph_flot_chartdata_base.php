@@ -222,7 +222,6 @@ abstract class class_graph_flot_chartdata_base {
                 //calulate bar width
                 
                 $calcWidth = $this->intWidth-$substract;
-                $barWidth = 0;
                 if($barsStackedCount <= 3) {
                     $calcWidth = $calcWidth>150? 150:$calcWidth;
                  }
@@ -231,7 +230,7 @@ abstract class class_graph_flot_chartdata_base {
                 }
 
                 $barWidth = $calcWidth / $nrOfElementsPerSeriesData;
-                $barWidth = $barWidth/100;
+                $barWidth /= 100;
                 $seriesData->setStrSeriesData(sprintf($seriesDataString, $barWidth, $alignment));
                 break;
             }

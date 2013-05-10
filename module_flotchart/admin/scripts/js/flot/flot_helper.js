@@ -84,19 +84,29 @@ flotHelper.doToolTip = function(event, pos, item) {
             seriesLabel = item.series.label,
             content = '';
             
-            
+            //get name of the selected series
             if(seriesLabel && seriesLabel.length>1)
             {
                 seriesLabel = '<u>'+seriesLabel+'</u><br/>'; 
             }
+            
+            //check if for x-Axis labels were set
             var ticks = item.series.xaxis.ticks;
-            var tickLabel = ticks[previousPoint].label;
-            /*
-             * in general all labels are being processed by flotHelper.getTickFormatter
-             * the first value of this regex is always the value within the div-Tag the
-             * getTickFormatter produces
-             */
-            var tickLabelValue = tickLabel.match(/^<div.+>(.*?)<\/div>/)[1];
+            var tickLabelValue = null;
+            if(ticks[previousPoint] && ticks[previousPoint].label) {
+                var tickLabel = ticks[previousPoint].label;
+                /*
+                * in general all labels are being processed by flotHelper.getTickFormatter
+                * the first value of this regex is always the value within the div-Tag which the
+                * getTickFormatter function produces
+                */
+               tickLabelValue = tickLabel.match(/^<div.+>(.*?)<\/div>/)[1];
+            }
+            else {
+                //take the normal x-Value
+                tickLabelValue = item.datapoint[0];
+            }
+            
             
             if(isNaN(tickLabelValue)) {
                 x = tickLabelValue;
@@ -163,17 +173,17 @@ flotHelper.showPieToolTip = function(event, pos, item) {
  * 
  * @param {int} angle
  * @param {object} axis
- * @param {arrays} tickArray
+ * @param {arrays} tickLabelsArray
  * @param {int} noOfWrittenLabels
  * @returns {unresolved}
  */
-flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
-    var nrLableTicks = tickArray.length;
+flotHelper.getTickArray = function(angle, axis, tickLabelsArray, noOfWrittenLabels) {
+    var nrLableTicks = tickLabelsArray.length;
     var noTicks = null;
     
     
     //create the tick array format --> [[0,'v0'],[1,'v1'],[1,'v2']]
-    tickArray = $.map(tickArray, function(tick, index){
+    var tickArray = $.map(tickLabelsArray, function(tick, index){
         return [[index, tick]];
     });
 
@@ -201,7 +211,7 @@ flotHelper.getTickArray = function(angle, axis, tickArray, noOfWrittenLabels) {
         }
             
         //set tick value to axis.min -1 so that is will not be diaplayed in the chart
-        if(!moduloResult === 0 || !moduloResult === null ) {
+        if(moduloResult !== 0 || moduloResult === null ) {
             tick[0] =  axis.min -1;
         }
         //hack for executing the tickFormatter even if the value of a tick is being set

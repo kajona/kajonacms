@@ -134,6 +134,33 @@ class class_test_charts_flotTest extends class_testbase  {
         echo $objGraph->renderGraph();
         
         
+        
+        
+        //create line chart
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
+        $objGraph->addLinePlot(array(8.112,1,2,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), "serie 1");
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrXAxisTitle("XXX");
+        $objGraph->setStrYAxisTitle("YYY");
+        $objGraph->setStrGraphTitle("My First Line Chart");
+        $objGraph->setIntHeight(500);
+        $objGraph->setIntWidth(700);
+        echo $objGraph->renderGraph();
+        
+        
+        //create line chart
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_FLOT);
+        $objGraph->addLinePlot(array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), "serie 1");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6","v7","v8","v9","v10","v11","v12","v13","v14","v15","v16","v17","v18","v19","v20","v21","v22","v23","v24","v25","v26","v27","v28","v29","v30"));
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrXAxisTitle("XXX");
+        $objGraph->setStrYAxisTitle("YYY");
+        $objGraph->setStrGraphTitle("My First Line Chart");
+        $objGraph->setIntHeight(500);
+        $objGraph->setIntWidth(700);
+        echo $objGraph->renderGraph();
+        //class_carrier::getInstance()->getObjTestmanager()->generateRequiredTestdata();
+        
         echo"<br/>";
     }
     
