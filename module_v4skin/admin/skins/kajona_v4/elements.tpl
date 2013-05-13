@@ -736,29 +736,23 @@ Part to display the login status, user is logged in
         <ul class="dropdown-menu" role="menu">
             <li class="dropdown-submenu">
                 <a tabindex="-1" href="#"><i class='icon-envelope'></i> [lang,modul_titel,messaging]</a>
-                <ul class="dropdown-menu sub-menu" id="messagingShortlist">
-                </ul>
+                <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
             </li>
 
             <!-- messages will be inserted here -->
             <li class="divider"></li>
             <li class="dropdown-submenu">
                 <a tabindex="-1" href="#"><i class='icon-tag'></i> [lang,modul_titel,tags]</a>
-                <ul class="dropdown-menu sub-menu" id="tagsSubemenu">
-                </ul>
+                <ul class="dropdown-menu sub-menu" id="tagsSubemenu"></ul>
             </li>
             <li class="divider"></li>
             <li><a href="%%dashboard%%"><i class='icon-home'></i> %%dashboardTitle%%</a></li>
-            <!--<li><a href="%%sitemap%%">%%sitemapTitle%%</a></li>-->
             <li class="divider"></li>
             <li><a href="#" onclick="document.print();"><i class='icon-print'></i> %%printTitle%%</a></li>
             <li class="divider"></li>
             <li><a href="%%profile%%"><i class='icon-user'></i> %%profileTitle%%</a></li>
             <li class="divider"></li>
             <li><a href="%%logout%%"><i class="icon-off"></i> %%logoutTitle%%</a></li>
-
-
-
         </ul>
     </div>
 <script type="text/javascript">

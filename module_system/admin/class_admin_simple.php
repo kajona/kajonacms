@@ -516,7 +516,7 @@ abstract class class_admin_simple extends class_admin {
         }
 
         return $this->objToolkit->listButton(
-            "<span class='dropdown pull-right'><a href=\"#\" data-toggle='dropdown' role='button' \">".getImageAdmin("icon_new_multi.png")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
+            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".getImageAdmin("icon_new_multi.png")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
         );
 
     }
