@@ -207,12 +207,10 @@ class class_graph_flot implements interface_graph {
         $legendWidth = 0;
         $xAxisLabelHeight = 0;
         $yAxisLabelWidth = 0;
-        $chartHeight = $this->intHeight;
-        $chartWidth = $this->intWidth;
 
         //global styles
-        $fontFamily = "font-family:".$this->strFont.";";
-        $fontColor = "color:".$this->strFontColor.";";
+        $fontFamily = ($this->strFont!=null)?"font-family:".$this->strFont.";":"";
+        $fontColor = ($this->strFontColor!=null)?"color:".$this->strFontColor.";":"";
         
         //Set X-Axis label height
         if($this->strXAxisTitle!="") {
@@ -229,10 +227,10 @@ class class_graph_flot implements interface_graph {
         //Create Legend Div
         if($this->bShowLegend) {
             //calculation of width, height and position
-            $legendWidth = 140;
-            $legendHeight=$chartHeight-$titleHeight-$xAxisLabelHeight;
-            $legendLeft=$this->intWidth - $legendWidth;
-            $legendTop=$titleHeight;
+            $legendWidth  = 140;
+            $legendHeight = $this->intHeight - $titleHeight - $xAxisLabelHeight;
+            $legendLeft   = $this->intWidth - $legendWidth;
+            $legendTop    = $titleHeight;
             
             //create the div
             $legendId="legend_" . $this->strChartId;
@@ -259,7 +257,7 @@ class class_graph_flot implements interface_graph {
             //calculation
             $xAxisLabelWidth=$this->intWidth - $legendWidth - $yAxisLabelWidth;
             $xAxisLabelLeft = $yAxisLabelWidth;
-            $xAxisLabelTop = $this->intHeight - $titleHeight;
+            $xAxisLabelTop = $this->intHeight - $xAxisLabelHeight;
             //create the div
             $xAxisLabelId="xAxisLabel_" . $this->strChartId;
             $xAxisLabelPosition = "top:".$xAxisLabelTop."px;"."left:".$xAxisLabelLeft."px;";
@@ -269,10 +267,7 @@ class class_graph_flot implements interface_graph {
         }
         
         //Create y-Axis label div
-        if($this->strXAxisTitle!="") {
-            //calculation
-            $yAxisLabelHeight=$this->intHeight - $titleHeight - $xAxisLabelHeight;
-            $yAxisLabelTop = $titleHeight;
+        if($this->strYAxisTitle!="") {
             //create the div
             $yAxisLabelId="yAxisLabel_" . $this->strChartId;
             //$yAxisLabelPosition = "top:".($this->intHeight/1.5)."px;";
@@ -289,12 +284,13 @@ class class_graph_flot implements interface_graph {
         }
         
         //Calculate actual chart height
-        $chartHeight -= $titleHeight+$xAxisLabelHeight;
-        $chartWidth -= $legendWidth+$yAxisLabelWidth;
+        $flotChartHeight = $this->intHeight - $titleHeight - $xAxisLabelHeight;
+        $flotChartWidth =  $this->intWidth  - $legendWidth - $yAxisLabelWidth;
         
         //Create the div for the chart
         $chartPosition = "left:".$yAxisLabelWidth."px;top:".$titleHeight."px;";
-        $chartStyles = $chartPosition."position:absolute;width:".$chartWidth."px;height:".$chartHeight."px;".$showBorder;
+        $charDimension = "width:".$flotChartWidth."px;height:".$flotChartHeight."px;";
+        $chartStyles = $chartPosition.$charDimension."position:absolute;".$showBorder;
         $strDivChart =  "<div id=\"" . $this->strChartId . "\" style=\"".$chartStyles." \" > &nbsp; </div>";
         
         //now connect the created divs 

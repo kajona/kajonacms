@@ -233,6 +233,8 @@ flotHelper.getTickArray = function(angle, axis, tickLabelsArray, noOfWrittenLabe
  * @returns {undefined}
  */
 flotHelper.formatLegendLabels = function(label, series, fontFamily, fontColor) {
-    return '<div style="color:'+fontColor+';font-family:'+fontFamily+';">' + label + '</a>';
+    var font = fontFamily!==null?'font-family:'+fontFamily+';':"";
+    var color = fontColor!==null?'color:'+fontColor+';':"";
+    return '<div style="'+font+color+'">' + label + '</a>';
 
 };
