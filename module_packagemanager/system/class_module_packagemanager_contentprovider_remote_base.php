@@ -253,7 +253,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&title=".$strTitle."&domain=".urlencode(_webpath_));
+        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&title=".urlencode($strTitle)."&domain=".urlencode(_webpath_));
 
         try {
             $strPackages = $objRemoteloader->getRemoteContent();

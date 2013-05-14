@@ -136,7 +136,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
     public function getStrTargetPath() {
         $strTarget = $this->objMetadata->getStrTarget();
         if($strTarget == "")
-            $strTarget = uniStrtolower($this->objMetadata->getStrTitle());
+            $strTarget = uniStrtolower(createFilename($this->objMetadata->getStrTitle(), true));
 
         return "/templates/".$strTarget;
     }

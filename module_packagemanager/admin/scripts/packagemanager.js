@@ -9,19 +9,22 @@ if (!KAJONA) {
 
 KAJONA.admin.packagemanager = {
     arrPackageNames : [],
+    objWrapperNames : {},
 
-    addPackageToTest : function(strName) {
+    addPackageToTest : function(strName, strWrapperName) {
         this.arrPackageNames.push(strName);
+        KAJONA.admin.packagemanager.objWrapperNames[strName] = strWrapperName ;
     },
 
     triggerUpdateCheck : function() {
         KAJONA.admin.ajax.genericAjaxCall('packagemanager', 'getUpdateIcons', '&packages='+this.arrPackageNames.join(","), function(data, status, jqXHR) {
             if(status == 'success') {
                 $.each(jQuery.parseJSON(data), function (packageName, content) {
-                    $('#updateWrapper'+packageName).html(content);
+                    console.log("parsing "+packageName+" target: "+KAJONA.admin.packagemanager.objWrapperNames.packageName);
+                    $('#updateWrapper'+KAJONA.admin.packagemanager.objWrapperNames[packageName]).html(content);
                     KAJONA.util.evalScript(content);
-                    KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+packageName+' img'));
-                    KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+packageName+' a'));
+                    KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+KAJONA.admin.packagemanager.objWrapperNames[packageName]+' img'));
+                    KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+KAJONA.admin.packagemanager.objWrapperNames[packageName]+' a'));
                 });
             }
             else {

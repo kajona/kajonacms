@@ -257,8 +257,9 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     public function getStrTargetPath() {
 
         $strTarget = $this->objMetadata->getStrTarget();
-        if($strTarget == "")
-            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".$this->objMetadata->getStrTitle());
+        if($strTarget == "") {
+            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true));
+        }
 
         return "/core/".$strTarget;
     }

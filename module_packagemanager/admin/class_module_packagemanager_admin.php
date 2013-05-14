@@ -107,11 +107,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
 
 
-            $strActions .= $this->objToolkit->listButton("<span id=\"updateWrapper".$objOneMetadata->getStrTitle()."\">".getImageAdmin("loadingSmall.gif", $this->getLang("package_searchupdate"))."</span>");
+            $strActions .= $this->objToolkit->listButton("<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".getImageAdmin("loadingSmall.gif", $this->getLang("package_searchupdate"))."</span>");
             $strActions .= "<script type='text/javascript'>
             $(function() {
                 KAJONA.admin.loader.loadFile('/core/module_packagemanager/admin/scripts/packagemanager.js', function() {
-                    KAJONA.admin.packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."');
+                    KAJONA.admin.packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."', '".createFilename($objOneMetadata->getStrTitle(), true)."');
                 }); });
             </script>";
 
