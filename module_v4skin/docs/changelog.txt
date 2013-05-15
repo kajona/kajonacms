@@ -1,0 +1,5 @@
+
+Module V4 Skin
+
+V 4.1.1 -------------------------------------------------------------------------------------------------
+- BUG: fixed various syntax errors in the generated dom tree, causing problems in IE 8

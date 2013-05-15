@@ -1,0 +1,6 @@
+
+Module Packagemanager
+
+V 4.1.1 -------------------------------------------------------------------------------------------------
+- BUG: fixed the handling of "non standard" package-names (e.g. containing whitespaces)
+- BUG: when installing a package, the cache is flushed , too
