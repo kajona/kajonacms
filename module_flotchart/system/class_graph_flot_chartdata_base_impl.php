@@ -15,7 +15,7 @@
  * @since 4.0
  * @author stefan.meyer1@yahoo.de
  */
-class class_graph_flot_chartdata_base_impl extends  class_graph_flot_chartdata_base{
+class class_graph_flot_chartdata_base_impl extends class_graph_flot_chartdata_base {
 
     public function optionsToJSON() {
         $fontFamily = $this->strFont==null?"null":"'".$this->strFont."'";

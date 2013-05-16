@@ -107,7 +107,7 @@ class class_graph_flot implements interface_graph {
     }
 
     public function saveGraph($strFilename) {
-        $this->objChartData->saveGraph($strFilename);
+        //does nothing
     }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {

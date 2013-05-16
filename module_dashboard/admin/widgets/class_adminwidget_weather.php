@@ -77,8 +77,8 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
                 if(isset($arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:condition"][0]["attributes"]["temp"])) {
                     $strReturn .= $this->widgetText(
                         $this->getLang("weather_temp_string")
-                            . $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:condition"][0]["attributes"]["temp"] . " °"
-                            . $arrWeather["rss"][0]["channel"][0]["yweather:units"][0]["attributes"]["temperature"]
+                        . $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:condition"][0]["attributes"]["temp"] . " °"
+                        . $arrWeather["rss"][0]["channel"][0]["yweather:units"][0]["attributes"]["temperature"]
                     );
                 }
 
@@ -87,14 +87,14 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
 
                 $strReturn .= $this->widgetText(
                     $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:forecast"][0]["attributes"]["date"] . ": "
-                        . $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:forecast"][0]["attributes"]["high"]
-                        . " °" . $arrWeather["rss"][0]["channel"][0]["yweather:units"][0]["attributes"]["temperature"]
+                    . $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:forecast"][0]["attributes"]["high"]
+                    . " °" . $arrWeather["rss"][0]["channel"][0]["yweather:units"][0]["attributes"]["temperature"]
                 );
 
                 $strReturn .= $this->widgetText(
                     $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:forecast"][1]["attributes"]["date"] . ": "
-                        . $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:forecast"][1]["attributes"]["high"]
-                        . " °" . $arrWeather["rss"][0]["channel"][0]["yweather:units"][0]["attributes"]["temperature"]
+                    . $arrWeather["rss"][0]["channel"][0]["item"][0]["yweather:forecast"][1]["attributes"]["high"]
+                    . " °" . $arrWeather["rss"][0]["channel"][0]["yweather:units"][0]["attributes"]["temperature"]
                 );
             }
             else {

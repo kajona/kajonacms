@@ -213,11 +213,8 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $arrIdsOfTask = explode(",", $objWorkflow->getStrResponsible());
 
         //ui given? current user responsible?
-        if($objWorkflow->getObjWorkflowHandler()->providesUserInterface() && ($objWorkflow->getStrResponsible() == "" ||
-            //magic: the difference of the tasks' ids and the users' ids should be less than the count of the task-ids - then at least one id matches
-            count(array_diff($arrIdsOfTask, $arrIdsToCheck)) < count($arrIdsOfTask))
-        ) {
-
+        //magic: the difference of the tasks' ids and the users' ids should be less than the count of the task-ids - then at least one id matches
+        if($objWorkflow->getObjWorkflowHandler()->providesUserInterface() && ($objWorkflow->getStrResponsible() == "" || count(array_diff($arrIdsOfTask, $arrIdsToCheck)) < count($arrIdsOfTask))) {
 
             $strCreator = "";
             if(validateSystemid($objWorkflow->getStrOwner())) {
@@ -277,11 +274,8 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $arrIdsOfTask = explode(",", $objWorkflow->getStrResponsible());
 
         //ui given? current user responsible?
-        if(
-            $objWorkflow->getObjWorkflowHandler()->providesUserInterface() && ($objWorkflow->getStrResponsible() == "" ||
-                //magic: the difference of the tasks' ids and the users' ids should be less than the count of the task-ids - then at least one id matches
-                count(array_diff($arrIdsOfTask, $arrIdsToCheck)) < count($arrIdsOfTask))
-        ) {
+        //magic: the difference of the tasks' ids and the users' ids should be less than the count of the task-ids - then at least one id matches
+        if($objWorkflow->getObjWorkflowHandler()->providesUserInterface() && ($objWorkflow->getStrResponsible() == "" || count(array_diff($arrIdsOfTask, $arrIdsToCheck)) < count($arrIdsOfTask))) {
             $objHandler = $objWorkflow->getObjWorkflowHandler();
             $objHandler->processUserInput($this->getAllParams());
 

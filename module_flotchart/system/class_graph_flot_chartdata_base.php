@@ -121,10 +121,6 @@ abstract class class_graph_flot_chartdata_base {
         return $this->arrChartTypes;
     }
 
-    public function saveGraph($strFilename) {
-        //does nothing;
-    }
-
     public function addSeriesData($seriesData) {
         $this->arrFlotSeriesData[] = $seriesData;
     }
@@ -197,9 +193,9 @@ abstract class class_graph_flot_chartdata_base {
                 $barWidth = 0;
                 if($nrOfElementsPerSeriesData <= 3) {
                     $calcWidth = $calcWidth>150? 150:$calcWidth;
-                 }
+                }
                 else {
-                   $calcWidth = $calcWidth>300? 300:$calcWidth;
+                    $calcWidth = $calcWidth>300? 300:$calcWidth;
                 }
                 
                 $barWidth = $calcWidth / $nrOfElementsPerSeriesData / $barsCount;
@@ -224,9 +220,9 @@ abstract class class_graph_flot_chartdata_base {
                 $calcWidth = $this->intWidth-$substract;
                 if($barsStackedCount <= 3) {
                     $calcWidth = $calcWidth>150? 150:$calcWidth;
-                 }
+                }
                 else {
-                   $calcWidth = $calcWidth>300? 300:$calcWidth;
+                    $calcWidth = $calcWidth>300? 300:$calcWidth;
                 }
 
                 $barWidth = $calcWidth / $nrOfElementsPerSeriesData;
