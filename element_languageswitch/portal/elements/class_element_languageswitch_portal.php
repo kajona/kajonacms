@@ -38,8 +38,6 @@ class class_element_languageswitch_portal extends class_element_portal implement
         if(!isset($this->arrElementData["char1"]) || $this->arrElementData["char1"] == "")
             $this->arrElementData["char1"] = "languageswitch.tpl";
 
-        $strReturn = "";
-
         $arrObjLanguages = class_module_languages_language::getObjectList(true);
 
         //load the languageset in order to generate more specific switches
@@ -51,54 +49,47 @@ class class_element_languageswitch_portal extends class_element_portal implement
             //Check, if the current page has elements
             $objPage = class_module_pages_page::getPageByName($this->getPagename());
             $objPage->setStrLanguage($objOneLanguage->getStrName());
-            if($objPage != null) {
+            if($objPage === null)
+                continue;
 
-                if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {
+            if((int)$objPage->getNumberOfElementsOnPage(true) == 0)
+                continue;
 
-                    $strTargetSystemid = null;
-                    if($objLanguageset != null) {
-                        $strTargetSystemid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
-                    }
 
-                    //the languaswitch is content aware. check if the target id is a news-entry
-                    $strSeoAddon = "";
-                    if($strTargetSystemid != null && defined("_news_modul_id_")) {
-                        $objCommon = new class_module_system_common($strTargetSystemid);
-                        if($objCommon->getIntModuleNr() == _news_module_id_) {
-                            $objNews = new class_module_news_news($strTargetSystemid);
-                            $strSeoAddon = $objNews->getStrTitle();
-                        }
-                    }
-
-                    //and the link
-                    $arrTemplate = array();
-                    if($strTargetSystemid == null) {
-                        $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName(), $strSeoAddon);
-                    }
-                    else {
-                        $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", $this->getAction(), "", $strTargetSystemid, $objOneLanguage->getStrName(), $strSeoAddon);
-                    }
-
-                    $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
-                    $arrTemplate["langname_long"] = $this->getLang("lang_".$objOneLanguage->getStrName());
-
-                    $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
-                    $strTemplateActiveRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
-
-                    if($objOneLanguage->getStrName() == $this->getStrPortalLanguage())
-                        $strRows .= $this->fillTemplate($arrTemplate, $strTemplateActiveRowID);
-                    else
-                        $strRows .= $this->fillTemplate($arrTemplate, $strTemplateRowID);
-
-                }
+            $strTargetSystemid = null;
+            if($objLanguageset != null) {
+                $strTargetSystemid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
             }
+
+            //the languageswitch is content aware. check if the target id is a news-entry
+            $strSeoAddon = "";
+            if(validateSystemid($strTargetSystemid)) {
+                $objRecord = class_objectfactory::getInstance()->getObject($strTargetSystemid);
+                $strSeoAddon = $objRecord->getStrDisplayName();
+            }
+
+            //and the link
+            $arrTemplate = array();
+            if($strTargetSystemid === null)
+                $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName(), $strSeoAddon);
+            else
+                $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", $this->getAction(), "", $strTargetSystemid, $objOneLanguage->getStrName(), $strSeoAddon);
+
+            $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
+            $arrTemplate["langname_long"] = $this->getLang("lang_".$objOneLanguage->getStrName());
+
+            $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
+            $strTemplateActiveRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
+
+            if($objOneLanguage->getStrName() == $this->getStrPortalLanguage())
+                $strRows .= $this->fillTemplate($arrTemplate, $strTemplateActiveRowID);
+            else
+                $strRows .= $this->fillTemplate($arrTemplate, $strTemplateRowID);
 
         }
 
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
-        $strReturn = $this->fillTemplate(array("languageswitch_entries" => $strRows), $strTemplateWrapperID);
-
-        return $strReturn;
+        return $this->fillTemplate(array("languageswitch_entries" => $strRows), $strTemplateWrapperID);
     }
 
 }
