@@ -46,88 +46,13 @@ class class_module_pages_portal extends class_portal implements interface_portal
     protected function actionGeneratePage() {
 
         //Determin the pagename
-        $strPagename = $this->getPagename();
-
-        //Load the data of the page
-        $objPageData = class_module_pages_page::getPageByName($strPagename);
 
 
-        //check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
-        $bitErrorpage = false;
-        if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView()))
-            $bitErrorpage = true;
+
+        $objPageData = $this->getPageData();
 
 
-        //but: if count != 0 && preview && rights:
-        if($bitErrorpage && $objPageData != null && $this->getParam("preview") == "1" && $objPageData->rightEdit())
-            $bitErrorpage = false;
 
-
-        //check, if the template could be loaded
-        try {
-            if(!$bitErrorpage)
-                $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
-        }
-        catch(class_exception $objException) {
-            $bitErrorpage = true;
-        }
-
-        if($bitErrorpage) {
-            //Unfortunately, we have to load the errorpage
-
-            //try to send the correct header
-            //page not found
-            if($objPageData == null || $objPageData->getStatus() != 1)
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
-
-            //user is not allowed to view the page
-            if($objPageData != null && !$objPageData->rightView())
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
-
-
-            //check, if the page may be loaded using the default-language
-            $strPreviousLang = $this->getStrPortalLanguage();
-            $objDefaultLang = class_module_languages_language::getDefaultLanguage();
-            if($this->getStrPortalLanguage() != $objDefaultLang->getStrName()) {
-                class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getStrPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
-                $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
-                $objPageData = class_module_pages_page::getPageByName($strPagename);
-
-                $bitErrorpage = false;
-
-
-                try {
-                    if($objPageData != null)
-                        $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
-                    else
-                        $bitErrorpage = true;
-                }
-                catch(class_exception $objException) {
-                    $bitErrorpage = true;
-                }
-
-                if($bitErrorpage) {
-                    $strPagename = _pages_errorpage_;
-                    $this->setParam("page", _pages_errorpage_);
-                    //revert to the old language - fallback didn't work
-                    $objDefaultLang->setStrPortalLanguage($strPreviousLang);
-                }
-            }
-            else {
-                $strPagename = _pages_errorpage_;
-                $this->setParam("page", _pages_errorpage_);
-            }
-
-
-            $objPageData = class_module_pages_page::getPageByName($strPagename);
-
-            //check, if the page is enabled and if the rights are given, too
-            if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView())) {
-                //Whoops. Nothing to output here
-                throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
-            }
-
-        }
 
         //react on portaleditor commands
         //pe to display, or pe to disable?
@@ -147,21 +72,20 @@ class class_module_pages_portal extends class_portal implements interface_portal
         }
 
         //If we reached up till here, we can begin loading the elements to fill
-        $arrElementsOnPage = array();
-
         if($bitPeRequested)
             $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
         else
             $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage());
+
         //If there's a master-page, load elements on that, too
         $objMasterData = class_module_pages_page::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
         if($objMasterData != null) {
-            $arrElementsOnMaster = array();
             if($bitPeRequested)
                 $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
             else
                 $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getStrPortalLanguage());
+
             //and merge them
             $arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
             if($objMasterData->rightEdit())
@@ -230,7 +154,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage) {
+            if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$objPageData->getStrName() == _pages_errorpage_) {
                 $strElementOutput = "";
                 //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
                 if($bitPeRequested) {
@@ -280,6 +204,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
             foreach($arrPlaceholdersFilled as $arrOnePlaceholder) {
 
                 foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
+
                     if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
 
                         foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
@@ -294,7 +219,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
                             }
 
                         }
-
                     }
                 }
             }
@@ -305,33 +229,35 @@ class class_module_pages_portal extends class_portal implements interface_portal
             foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
                 $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];
                 foreach($arrOneRawPlaceholderForPe["elementlist"] as $arrOnePeNewElement) {
-                    if($arrOnePeNewElement != null) {
 
-                        //check if the linked element exists
-                        $objPeNewElement = class_module_pages_element::getElement($arrOnePeNewElement["element"]);
-                        if($objPeNewElement != null) {
-                            //placeholder processed before?
-                            $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
+                    if($arrOnePeNewElement == null)
+                        continue;
 
-                            if(in_array($strArrayKey, $arrPePlaceholdersDone))
-                                continue;
-                            else
-                                $arrPePlaceholdersDone[] = $strArrayKey;
+                    //check if the linked element exists
+                    $objPeNewElement = class_module_pages_element::getElement($arrOnePeNewElement["element"]);
+                    if($objPeNewElement == null)
+                        continue;
 
-                            //create and register the button to add a new element
-                            if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
-                                $arrPeNewButtons[$strPeNewPlaceholder] = "";
+                    //placeholder processed before?
+                    $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
 
-                            $strElementReadableName = $objPeNewElement->getStrDisplayName() != $objPeNewElement->getStrName() ? ($objPeNewElement->getStrDisplayName()." (".$objPeNewElement->getStrName().")") : $objPeNewElement->getStrName();
-                            if(uniStripos($strArrayKey, "master") !== false)
-                                $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
-                            else
-                                $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+                    if(in_array($strArrayKey, $arrPePlaceholdersDone))
+                        continue;
+                    else
+                        $arrPePlaceholdersDone[] = $strArrayKey;
 
-                            $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
+                    //create and register the button to add a new element
+                    if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
+                        $arrPeNewButtons[$strPeNewPlaceholder] = "";
 
-                        }
-                    }
+                    $strElementReadableName = $objPeNewElement->getStrDisplayName() != $objPeNewElement->getStrName() ? ($objPeNewElement->getStrDisplayName()." (".$objPeNewElement->getStrName().")") : $objPeNewElement->getStrName();
+                    if(uniStripos($strArrayKey, "master") !== false)
+                        $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+                    else
+                        $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+
+                    $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
+
                 }
             }
 
@@ -343,6 +269,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
                 if($strNewButtons != "")
                     $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);
+
                 $arrTemplate[$strPlaceholderName] .= $strNewButtons;
             }
         }
@@ -374,120 +301,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
         //fill the template. the template was read before
         $strPageContent = $this->fillTemplate($arrTemplate, $strTemplateID);
 
-        //add the portaleditor toolbar
-        if(_pages_portaleditor_ == "true" && ($objPageData->rightEdit() || $bitEditPermissionOnMasterPage) && $this->objSession->isAdmin()) {
-
-            class_adminskin_helper::defineSkinWebpath();
-
-            //save back the current portal text language and set the admin-one
-            $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-            class_carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
-
-            if($this->objSession->getSession("pe_disable") != "true") {
-                $strPeToolbar = "";
-                $arrPeContents = array();
-                $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
-                $arrPeContents["pe_status_status_val"] = ($objPageData->getStatus() == 1 ? "active" : "inactive");
-                $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
-                $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getIntLmTime(), false);
-                $arrPeContents["pe_dialog_close_warning"] = $this->getLang("pe_dialog_close_warning", "pages");
-
-                //Add an iconbar
-                $arrPeContents["pe_iconbar"] = "";
-                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.RTE.savePage(); return false;\" id=\"savePageLink\">"
-                    .getImageAdmin("icon_acceptDisabled.png", $this->getLang("pe_rte_save", "pages"))."</a>";
-                $arrPeContents["pe_iconbar"] .= "&nbsp;";
-
-                $arrPeContents["pe_iconbar"] .= getLinkAdmin(
-                    "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
-                    $this->getLang("pe_icon_edit", "pages"),
-                    "icon_page.png"
-                );
-                $arrPeContents["pe_iconbar"] .= "&nbsp;";
-
-                $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                    .getImageAdmin("icon_edit.png", $this->getLang("pe_icon_page", "pages"))."</a>";
-
-                $arrPeContents["pe_iconbar"] .= "&nbsp;";
-                $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-                $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                    .getImageAdmin("icon_new.png", $this->getLang("pe_icon_new", "pages"))."</a>";
-
-                $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">"
-                    .getImageAdmin("icon_enabled.png", $this->getLang("pe_disable", "pages"))."</a>";
-
-
-                //Load portaleditor javascript (even if it's maybe already loaded in portal and init the ckeditor)
-                $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
-                $strSkinInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
-
-                $strPeToolbar .= "<script type='text/javascript'>
-                    KAJONA.admin.lang.pe_rte_unsavedChanges = '" . $this->getLang("pe_rte_unsavedChanges", "pages") . "';
-
-                    if($) {
-                        KAJONA.portal.loader.loadFile([
-                            '/core/module_pages/admin/scripts/kajona_portaleditor.js',
-                            '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
-                            '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
-                        ], function() {
-                            KAJONA.admin.portaleditor.RTE.config = {
-                                language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
-                                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
-                                ".$strSkinInit."
-                            }
-                            $(KAJONA.admin.portaleditor.initPortaleditor);
-                        });
-                    }
-                    else {
-                        KAJONA.portal.loader.loadFile([
-                            '/core/module_system/admin/scripts/jquery/jquery.min.js',
-                            '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
-                            '/core/module_pages/admin/scripts/kajona_portaleditor.js',
-                            '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
-                        ], function() {
-                            KAJONA.admin.portaleditor.RTE.config = {
-                                language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
-                                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
-                                ".$strSkinInit."
-                            }
-                            $(KAJONA.admin.portaleditor.initPortaleditor);
-                        });
-                    }
-                </script>";
-                //Load portaleditor styles
-                $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
-
-                $objScriptlets = new class_scriptlet_helper();
-                $strPeToolbar = $objScriptlets->processString($strPeToolbar, interface_scriptlet::BIT_CONTEXT_ADMIN);
-
-                //The toolbar has to be added right after the body-tag - to generate correct html-code
-                $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
-                //find closing bracket
-                $intTemp = uniStrpos($strTemp, ">") + 1;
-                //and insert the code
-                $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body") + $intTemp).$strPeToolbar.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body") + $intTemp);
-            }
-            else {
-                //Button to enable the toolbar & pe
-                $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0px; right: 0px;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
-                    .getImageAdmin("icon_disabled.png", $this->getLang("pe_enable", "pages"))."</a></div>";
-                //Load portaleditor javascript
-                $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
-                //Load portaleditor styles
-                //The toobar has to be added right after the body-tag - to generate correct html-code
-                $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
-                //find closing bracket
-                $intTemp = uniStripos($strTemp, ">") + 1;
-                //and insert the code
-                $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body") + $intTemp).$strEnableButton.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body") + $intTemp);
-            }
-
-            //reset the portal texts language
-            class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-        }
+        $strPageContent = $this->renderPortalEditorCode($objPageData, $bitEditPermissionOnMasterPage, $strPageContent);
 
         //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.
         $strHeader = "<!--\n";
@@ -512,6 +326,233 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
         return $strPageContent;
     }
+
+    /**
+     * Determines the page-data to load.
+     * This includes the evaluation of the current page-data and the fallback to another language or even the error-page
+     *
+     * @throws class_exception
+     * @return class_module_pages_page
+     */
+    private function getPageData() {
+        $strPagename = $this->getPagename();
+
+        //Load the data of the page
+        $objPageData = class_module_pages_page::getPageByName($strPagename);
+
+        //check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
+        $bitErrorpage = false;
+        if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView()))
+            $bitErrorpage = true;
+
+        //but: if count != 0 && preview && rights:
+        if($bitErrorpage && $objPageData != null && $this->getParam("preview") == "1" && $objPageData->rightEdit())
+            $bitErrorpage = false;
+
+        //check, if the template could be loaded
+        try {
+            if(!$bitErrorpage)
+                $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
+        }
+        catch(class_exception $objException) {
+            $bitErrorpage = true;
+        }
+
+        if($bitErrorpage) {
+            //Unfortunately, we have to load the errorpage
+
+            //try to send the correct header
+            //page not found
+            if($objPageData == null || $objPageData->getStatus() != 1)
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+
+            //user is not allowed to view the page
+            if($objPageData != null && !$objPageData->rightView())
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+
+            //check, if the page may be loaded using the default-language
+            $strPreviousLang = $this->getStrPortalLanguage();
+            $objDefaultLang = class_module_languages_language::getDefaultLanguage();
+            if($this->getStrPortalLanguage() != $objDefaultLang->getStrName()) {
+                class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getStrPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
+                $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
+                $objPageData = class_module_pages_page::getPageByName($strPagename);
+
+                $bitErrorpage = false;
+
+                try {
+                    if($objPageData != null)
+                        $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
+                    else
+                        $bitErrorpage = true;
+                }
+                catch(class_exception $objException) {
+                    $bitErrorpage = true;
+                }
+
+                if($bitErrorpage) {
+                    $strPagename = _pages_errorpage_;
+                    $this->setParam("page", _pages_errorpage_);
+                    //revert to the old language - fallback didn't work
+                    $objDefaultLang->setStrPortalLanguage($strPreviousLang);
+                }
+            }
+            else {
+                $strPagename = _pages_errorpage_;
+                $this->setParam("page", _pages_errorpage_);
+            }
+
+            $objPageData = class_module_pages_page::getPageByName($strPagename);
+
+            //check, if the page is enabled and if the rights are given, too
+            if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView())) {
+                //Whoops. Nothing to output here
+                throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
+            }
+
+        }
+
+        return $objPageData;
+    }
+
+
+    /**
+     * Adds the portal-editor code to the current page-output - if all requirements are given
+     *
+     * @param class_module_pages_page $objPageData
+     * @param $bitEditPermissionOnMasterPage
+     * @param $strPageContent
+     *
+     * @return string
+     */
+    private function renderPortalEditorCode(class_module_pages_page $objPageData, $bitEditPermissionOnMasterPage, $strPageContent) {
+        //add the portaleditor toolbar
+        if(_pages_portaleditor_ == "false")
+            return $strPageContent;
+
+        if(!$this->objSession->isAdmin())
+            return $strPageContent;
+
+        if(!$objPageData->rightEdit() && !$bitEditPermissionOnMasterPage)
+            return $strPageContent;
+
+        class_adminskin_helper::defineSkinWebpath();
+
+        //save back the current portal text language and set the admin-one
+        $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
+
+        if($this->objSession->getSession("pe_disable") != "true") {
+            $strPeToolbar = "";
+            $arrPeContents = array();
+            $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
+            $arrPeContents["pe_status_status_val"] = ($objPageData->getStatus() == 1 ? "active" : "inactive");
+            $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
+            $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getIntLmTime(), false);
+            $arrPeContents["pe_dialog_close_warning"] = $this->getLang("pe_dialog_close_warning", "pages");
+
+            //Add an iconbar
+            $arrPeContents["pe_iconbar"] = "";
+            $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.RTE.savePage(); return false;\" id=\"savePageLink\">"
+                .getImageAdmin("icon_acceptDisabled.png", $this->getLang("pe_rte_save", "pages"))."</a>";
+            $arrPeContents["pe_iconbar"] .= "&nbsp;";
+
+            $arrPeContents["pe_iconbar"] .= getLinkAdmin(
+                "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
+                $this->getLang("pe_icon_edit", "pages"),
+                "icon_page.png"
+            );
+            $arrPeContents["pe_iconbar"] .= "&nbsp;";
+
+            $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
+            $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
+                .getImageAdmin("icon_edit.png", $this->getLang("pe_icon_page", "pages"))."</a>";
+
+            $arrPeContents["pe_iconbar"] .= "&nbsp;";
+            $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
+            $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
+                .getImageAdmin("icon_new.png", $this->getLang("pe_icon_new", "pages"))."</a>";
+
+            $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">"
+                .getImageAdmin("icon_enabled.png", $this->getLang("pe_disable", "pages"))."</a>";
+
+
+            //Load portaleditor javascript (even if it's maybe already loaded in portal and init the ckeditor)
+            $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
+            $strSkinInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
+
+            $strPeToolbar .= "<script type='text/javascript'>
+                KAJONA.admin.lang.pe_rte_unsavedChanges = '" . $this->getLang("pe_rte_unsavedChanges", "pages") . "';
+
+                if($) {
+                    KAJONA.portal.loader.loadFile([
+                        '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                        '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+                        '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+                    ], function() {
+                        KAJONA.admin.portaleditor.RTE.config = {
+                            language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
+                            filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            ".$strSkinInit."
+                        }
+                        $(KAJONA.admin.portaleditor.initPortaleditor);
+                    });
+                }
+                else {
+                    KAJONA.portal.loader.loadFile([
+                        '/core/module_system/admin/scripts/jquery/jquery.min.js',
+                        '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+                        '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                        '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+                    ], function() {
+                        KAJONA.admin.portaleditor.RTE.config = {
+                            language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
+                            filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            ".$strSkinInit."
+                        }
+                        $(KAJONA.admin.portaleditor.initPortaleditor);
+                    });
+                }
+            </script>";
+            //Load portaleditor styles
+            $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
+
+            $objScriptlets = new class_scriptlet_helper();
+            $strPeToolbar = $objScriptlets->processString($strPeToolbar, interface_scriptlet::BIT_CONTEXT_ADMIN);
+
+            //The toolbar has to be added right after the body-tag - to generate correct html-code
+            $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
+            //find closing bracket
+            $intTemp = uniStrpos($strTemp, ">") + 1;
+            //and insert the code
+            $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body") + $intTemp).$strPeToolbar.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body") + $intTemp);
+        }
+        else {
+            //Button to enable the toolbar & pe
+            $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0px; right: 0px;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
+                .getImageAdmin("icon_disabled.png", $this->getLang("pe_enable", "pages"))."</a></div>";
+            //Load portaleditor javascript
+            $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
+            //Load portaleditor styles
+            //The toobar has to be added right after the body-tag - to generate correct html-code
+            $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
+            //find closing bracket
+            $intTemp = uniStripos($strTemp, ">") + 1;
+            //and insert the code
+            $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body") + $intTemp).$strEnableButton.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body") + $intTemp);
+        }
+
+        //reset the portal texts language
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
+
+
+        return $strPageContent;
+    }
+
+
+
 
     /**
      * Sets the passed text as an additional title information.
