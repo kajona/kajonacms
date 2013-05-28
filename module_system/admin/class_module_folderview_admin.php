@@ -63,17 +63,46 @@ class class_module_folderview_admin extends class_admin implements interface_adm
         );
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
 
+        if(validateSystemid(_mediamanager_default_filesrepoid_)) {
+            $strAction = $this->objToolkit->listButton(
+                getLinkAdmin(
+                    "mediamanager",
+                    "folderContentFolderviewMode",
+                    "&systemid=" . _mediamanager_default_filesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                    $this->getLang("wysiwygFilesBrowser"),
+                    $this->getLang("wysiwygFilesBrowser"),
+                    "icon_folderActionOpen.png"
+                )
+            );
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
+        }
+
+        if(validateSystemid(_mediamanager_default_imagesrepoid_)) {
+            $strAction = $this->objToolkit->listButton(
+                getLinkAdmin(
+                    "mediamanager",
+                    "folderContentFolderviewMode",
+                    "&systemid=" . _mediamanager_default_imagesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                    $this->getLang("wysiwygImagesBrowser"),
+                    $this->getLang("wysiwygImagesBrowser"),
+                    "icon_folderActionOpen.png"
+                )
+            );
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygImagesBrowser"), "", $strAction, $intCounter++);
+        }
+
+
         $strAction = $this->objToolkit->listButton(
             getLinkAdmin(
                 "mediamanager",
                 "folderContentFolderviewMode",
-                "&systemid=" . _mediamanager_default_filesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
-                $this->getLang("wysiwygFilesBrowser"),
-                $this->getLang("wysiwygFilesBrowser"),
+                "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                $this->getLang("wysiwygRepoBrowser"),
+                $this->getLang("wysiwygRepoBrowser"),
                 "icon_folderActionOpen.png"
             )
         );
-        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
+        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygRepoBrowser"), "", $strAction, $intCounter++);
 
         $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;

@@ -8,6 +8,7 @@ die("calling this script is not allowed");
  * This should avoid undefined messages in your local IDE.
  */
 define("_mediamanager_default_imagesrepoid_", "");
+define("_mediamanager_default_filesrepoid_", "");
 define("_system_changehistory_enabled_", "");
 define("_pages_portaleditor_", "");
 define("_pages_templatechange_", "");
