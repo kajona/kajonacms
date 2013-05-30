@@ -12,7 +12,7 @@
  * Compared to class_admin_simple, this implementation is based on a declarative approach,
  * reducing the amount of code required to implement a modules' admin-views.
  *
- * Sublasses are able to declare actions and the matching objects with annotations.
+ * Subclasses are able to declare actions and the matching objects with annotations.
  * Have a look at the demo-module on how to use it.
  *
  * @module module_system
@@ -45,7 +45,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
 
     /**
-     * Redfined action-handler to match the declarative action to a "real", implemented action.
+     * Redefined action-handler to match the declarative action to a "real", implemented action.
      * The permission handling and other stuff is checked by the base-class.
      *
      * @param string $strAction
@@ -60,7 +60,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
         $this->strOriginalAction = $strActionName;
 
-        if(!$this->checkMethodExistsInConcreteClass("action" . ucfirst($strActionName))) {
+        if(!$this->checkMethodExistsInConcreteClass("action".ucfirst($strActionName))) {
 
             foreach(self::$arrActionNameMapping as $strAutoMatchAction => $strAnnotation) {
                 $this->autoMatchAction($strAutoMatchAction, $strAnnotation, $strActionName);
@@ -205,7 +205,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             $objForm = $this->getAdminForm($objEdit);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
 
-            return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
+            return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
         }
         else
             throw new class_exception("error editing current object type not known ", class_exception::$level_ERROR);
@@ -228,7 +228,12 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection($strType::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-            return $this->renderList($objArraySectionIterator);
+            //pass the internal action in order to get a proper paging
+            $strOriginalAction = $this->getAction();
+            $this->setAction($this->strOriginalAction);
+            $strList = $this->renderList($objArraySectionIterator);
+            $this->setAction($strOriginalAction);
+            return $strList;
         }
         else
             throw new class_exception("error loading list current object type not known ", class_exception::$level_ERROR);
@@ -330,11 +335,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
             $objInstance = class_objectfactory::getInstance()->getObject($strOneSystemid);
             if($objInstance != null)
-                $strLink = $this->getOutputNaviEntry($objInstance);
+                $arrPathLinks[] = $this->getOutputNaviEntry($objInstance);
             
-            if ($strLink) {
-                $arrPathLinks[] = $strLink;
-            }
         }
 
         return $arrPathLinks;

@@ -24,7 +24,8 @@ abstract class class_admin {
     protected $objConfig = null; //Object containing config-data
     /**
      * Instance of class_db
-     *
+     * @todo remove direct link, afaik only required in element subclass -> may be moved to class_element_admin
+     * @deprecated
      * @var class_db
      */
     protected $objDB = null; //Object to the database
@@ -531,7 +532,7 @@ abstract class class_admin {
         $this->arrOutput["languageswitch"] = (class_module_system_module::getModuleByName("languages") != null ? class_module_system_module::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $this->arrOutput["module_id"] = $this->arrModule["moduleId"];
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
-        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = " . $this->objConfig->getDebug("debuglevel") . "; KAJONA_WEBPATH = '" . _webpath_ . "'; KAJONA_BROWSER_CACHEBUSTER = " . _system_browser_cachebuster_ . ";</script>";
+        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = "._system_browser_cachebuster_.";</script>";
         //Loading the desired Template
         //if requested the pe, load different template
         $strTemplateID = "";
@@ -602,6 +603,7 @@ abstract class class_admin {
             $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
             //and finally create the object
             if($strElementClass != "") {
+                /** @var class_element_admin $objElement */
                 $objElement = new $strElementClass();
                 $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $objElement->getArrModule("name"));
                 $strText = class_carrier::getInstance()->getObjLang()->getLang($strTextname, $objElement->getArrModule("modul"));
