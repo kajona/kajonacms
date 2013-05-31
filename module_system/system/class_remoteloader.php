@@ -92,23 +92,26 @@ class class_remoteloader {
         //second try: file_get_content
         if($strReturn === false) {
             $strReturn = $this->connectByFileGetContents();
+            class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via filegetcontents: ".$strReturn, class_logger::$levelInfo);
         }
 
         //fourth: curl
         if($strReturn === false) {
             $strReturn = $this->connectViaCurl();
+            class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via curl: ".$strReturn, class_logger::$levelInfo);
         }
 
         //third: fsockopen
         if($strReturn === false) {
             $strReturn = $this->connectFSockOpen();
+            class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via fsockopen: ".$strReturn, class_logger::$levelInfo);
         }
-
 
 
         //fifth try: sockets
         if($strReturn === false) {
             $strReturn = $this->connectViaSocket();
+            class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via socket: ".$strReturn, class_logger::$levelInfo);
         }
 
 
