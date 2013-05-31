@@ -240,6 +240,7 @@ class class_remoteloader {
 
             }
             catch(class_exception $objException) {
+                class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("exception in socket: ".$objException->getMessage(), class_logger::$levelInfo);
                 //$objException->processException();
                 $strReturn = false;
             }
@@ -313,6 +314,7 @@ class class_remoteloader {
 
             }
             catch(class_exception $objException) {
+                class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("exception in fsock: ".$objException->getMessage(), class_logger::$levelInfo);
                 $strReturn = false;
             }
 
