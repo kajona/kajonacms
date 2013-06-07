@@ -6,7 +6,7 @@
      Called by the buildserver, so change with care :)
      This file is created for Jenkins but may be called from the CLI, too.
 
-     This buid-file may be migrated to phing, feel free to start the migration
+     This build-file may be migrated to phing, feel free to start the migration
 
 
      Author: sidler
