@@ -129,7 +129,18 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
 
-
+/**
+ * To init the portaleditor, use a syntax like
+ *
+ * systemid#property#mode
+ *
+ * whereas systemid is the id of the target record, property the property of the target-object to update.
+ * The mode controls the different editor-modes:
+ *
+ * wysiwyg: full CKEditor
+ * plain: limited CKEditor, no linebreaks and only undo/redo buttons
+ * textarea: limited CKEditor, linebreaks are allows, undo/redo buttons
+ */
 KAJONA.admin.portaleditor.RTE.init = function () {
 
     $('*[data-kajona-editable]').each(function () {
@@ -137,13 +148,19 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
         var editable = $(this);
         var keySplitted = editable.attr('data-kajona-editable').split('#');
-        var isPlaintext = (keySplitted[2] && keySplitted[2] == 'plain') ? true : false;
+
+//        var isPlaintext = (keySplitted[2] && keySplitted[2] == 'plain') ? true : false;
+
+
+        var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
+
+        console.log("pe mode: "+strMode);
 
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
         ckeditorConfig.customConfig = 'config_kajona_standard.js';
-        ckeditorConfig.toolbar = isPlaintext ? 'pe_lite' : 'pe_full';
+        ckeditorConfig.toolbar = strMode == 'wysiwyg' ? 'pe_full' : 'pe_lite';
         ckeditorConfig.forcePasteAsPlainText = true;
-        ckeditorConfig.kajona_isPlaintext = isPlaintext;
+        ckeditorConfig.kajona_strMode = strMode;
         ckeditorConfig.on = {
             blur: function( event ) {
                 var data = event.editor.getData();
@@ -155,7 +172,7 @@ KAJONA.admin.portaleditor.RTE.init = function () {
             },
             key : function( event ) {
                 //prevent enter in plaintext
-                if ( event.data.keyCode == 13 && event.editor.config.kajona_isPlaintext ) {
+                if ( event.data.keyCode == 13 && event.editor.config.kajona_strMode == 'plain' ) {
                     event.cancel();
                 }
             }
