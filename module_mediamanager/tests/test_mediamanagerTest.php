@@ -8,6 +8,9 @@ class class_mediamanagerTest extends class_testbase  {
 
         echo "test mediamanager...\n";
 
+        if(class_module_system_module::getModuleByName("samplecontent") == null)
+            return;
+
         $objFilesystem = new class_filesystem();
         $objFilesystem->folderCreate(_filespath_."/images/autotest");
 

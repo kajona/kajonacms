@@ -8,6 +8,10 @@ class class_test_tags extends class_testbase  {
 
         $strName = generateSystemid();
         $arrPages = class_module_pages_page::getAllPages();
+
+        if(count($arrPages) == 0)
+            return;
+
         $objTag = new class_module_tags_tag();
         $objTag->setStrName($strName);
         $objTag->updateObjectToDb();

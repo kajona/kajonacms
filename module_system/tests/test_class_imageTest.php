@@ -10,10 +10,24 @@ class class_test_class_image extends class_testbase  {
 
         echo "\ttesting class_image...\n";
 
+        $objImage = new class_image();
+        $objImage->setIntHeight(10);
+        $objImage->setIntWidth(10);
+        $objImage->createBlankImage();
+        $objColor = $objImage->registerColor(0,0,0);
+        $objImage->drawFilledRectangle(0, 0, 10, 10, $objColor);
+
+        if(!is_dir(_realpath_."/files/images/samples/")) {
+            $objFS = new class_filesystem();
+            $objFS->folderCreate("/files/images/samples/", true);
+        }
+
+        $objImage->saveImage("/files/images/samples/testimage.JPG");
+
 
         echo "\tloading an image from the samplecontent\n";
 
-        $strImage = "/files/images/samples/IMG_3000.JPG";
+        $strImage = "/files/images/samples/testimage.JPG";
 
         //$strImage = "<img src=\""._webpath_."/portal/pics/upload/samples/IMG_3000.JPG\"/>";
 
