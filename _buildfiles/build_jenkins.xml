@@ -4,7 +4,7 @@
      Kajona Head Build
      Buildfile to perform additional actions such as phpunit-tests, phpdoc generation, ...
      Called by the buildserver, so change with care :)
-     Note: the svn update is triggered by cruisecontrol directly.
+     This file is created for Jenkins but may be called from the CLI, too.
 
      This buid-file may be migrated to phing, feel free to start the migration
 
@@ -50,11 +50,11 @@
     <property name="path.phpcpd"    value="phpcpd" />
     <!-- path to pdepend -->
     <property name="path.pdepend"   value="pdepend" />
-
+    <!-- path to php -->
     <property name="path.php"       value="php" />
-
+    <!-- path to phploc -->
     <property name="path.phploc"    value="phploc" />
-
+    <!-- path to phpcb -->
     <property name="path.phpcb"     value="phpcb" />
 
 

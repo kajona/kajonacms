@@ -12,15 +12,15 @@ class Testmanager {
     public function main() {
 
         //trigger the setup script
-        require(dirname(__FILE__)."/".$this->strProjectPath."/core/setupproject.php");
+        require(__DIR__."/".$this->strProjectPath."/core/setupproject.php");
 
         if($this->bitOnlyProjectsetup) {
             return;
         }
 
         //include config
-        echo "include config.php -> ".dirname(__FILE__)."/config.php\n";
-        require(dirname(__FILE__)."/".$this->strConfigFile);
+        echo "include config.php -> ".__DIR__."/config.php\n";
+        require(__DIR__."/".$this->strConfigFile);
 
 
         echo "creating modified config.php...\n";
@@ -72,6 +72,7 @@ class Testmanager {
         $intMaxLoops = 0;
         echo "starting installations...\n";
         while(count($arrPackagesToInstall) > 0 && ++$intMaxLoops < 100) {
+            /** @var class_module_packagemanager_metadata $objOneMetadata */
             foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
 
                 echo "---------------------------------------------------------------\n";
@@ -101,8 +102,14 @@ class Testmanager {
 
 
         echo "Installing samplecontent...\n\n";
-        $objHandler = $objManager->getPackageManagerForPath("/core/module_samplecontent");
-        echo $objHandler->installOrUpdate();
+        try {
+            $objHandler = $objManager->getPackageManagerForPath("/core/module_samplecontent");
+        }
+        catch (class_exception $objEx) {
+            $objHandler = null;
+        }
+        if($objHandler !== null)
+            echo $objHandler->installOrUpdate();
 
     }
 }
