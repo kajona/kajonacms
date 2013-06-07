@@ -149,12 +149,7 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         var editable = $(this);
         var keySplitted = editable.attr('data-kajona-editable').split('#');
 
-//        var isPlaintext = (keySplitted[2] && keySplitted[2] == 'plain') ? true : false;
-
-
         var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
-
-        console.log("pe mode: "+strMode);
 
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
         ckeditorConfig.customConfig = 'config_kajona_standard.js';
@@ -168,7 +163,7 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
                 $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace("Disabled", ""));
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
-                console.log('modified field', attr, data);
+                //console.log('modified field', attr, data);
             },
             key : function( event ) {
                 //prevent enter in plaintext
