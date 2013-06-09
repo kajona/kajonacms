@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================================
+
+     Kajona Head Build
+     Buildfile to perform additional actions such as phpunit-tests, phpdoc generation, ...
+     Called by the buildserver, so change with care :)
+     This file is created for Jenkins but may be called from the CLI, too.
+
+     This build-file may be migrated to phing, feel free to start the migration
+
+
+     Author: sidler
+     $Id$
+
+     ====================================================================== -->
+<project name="AGP Head Build" default="buildSqliteFast" basedir=".">
+
+    <import file="build_jenkins.xml" as="kajonav4"/>
+
+
+
+
+    <!-- redefined, only buildFullZip, no light or all in one -->
+    <target name="buildSqliteFast" depends="
+		    								cleanFilesystem, init,
+					    					buildProject, installProjectSqlite,
+					    					lint,phploc,phpunitFast,
+					    					buildFullZip" />
+
+    <!-- redefined, only buildFullZip, no light or all in one -->
+    <target name="buildSqliteFull" depends="
+		    								cleanFilesystem, init,
+					    					buildProject, installProjectSqlite,
+					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpcb,
+					    					buildFullZip" />
+
+
+
+
+
+    <!-- creates the full-zip including all modules and elements -->
+    <!-- redefined for adopted filenames and include / exclusion lists -->
+    <target name="buildFullZip" depends="init" >
+        <antcall target="setupPackageFolders" />
+        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+                <exclude name=".svn"/>
+
+
+                <include name="element_*/**"/>
+                <include name="module_*/*/**"/>
+                <include name="template_*/*/**"/>
+                <!--<include name="_debugging/*/**"/>-->
+                <include name="*.php"/>
+                <include name="*.htaccess"/>
+            </fileset>
+        </copy>
+
+        <antcall target="buildPackageHelper" />
+
+        <zip destfile="${basedir}${packagesPath}/agp_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+            <fileset dir="${basedir}${tempPath}/../" />
+        </zip>
+    </target>
+
+
+
+
+</project>
