@@ -79,7 +79,7 @@ else {
 foreach(scandir(_corepath_."/") as $strDirEntry ) {
     if(is_dir(_corepath_."/".$strDirEntry) && is_dir(_corepath_."/".$strDirEntry."/system/") && is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
         foreach(scandir(_corepath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
-            if(preg_match("/module\_([a-z])+\_id\.php/", $strModuleEntry))
+            if(preg_match("/module\_([a-z\_])+\_id\.php/", $strModuleEntry))
                 @include_once _corepath_."/".$strDirEntry."/system/config/".$strModuleEntry;
         }
     }
