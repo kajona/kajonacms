@@ -395,6 +395,7 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
  */
 function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = "", $strTarget = "_self") {
     //Wenn Parameter gegeben sind, diese aufbereiten)
+    $strLink = "";
     $strParams = str_replace("&", "&amp;", $strParams);
 
     if($strImage != "") {
