@@ -363,9 +363,8 @@ class class_module_system_changelog extends class_model implements interface_mod
                 $strQuery .= " UNION ALL SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue FROM "._dbprefix_.$strOneTable." ";
             }
 
-            $strQuery .= "ORDER BY change_date DESC";
-
         }
+        $strQuery .= "ORDER BY change_date DESC";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
