@@ -381,7 +381,7 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
 
 
 /**
- * Generats a raw link in admin-area.
+ * Generates a raw link in admin-area.
  * Can be used to create links to external resources. no admin=1 and so on is added.
  *
  * @param $strParams
@@ -394,20 +394,17 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
  * @return string
  */
 function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = "", $strTarget = "_self") {
-    $strLink = "";
     //Wenn Parameter gegeben sind, diese aufbereiten)
     $strParams = str_replace("&", "&amp;", $strParams);
 
-    //Admin?
-    if(_admin_) {
-        if($strImage != "") {
-            $strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
-        }
-
-        if($strImage == "" && $strText != "") {
-            $strLink = "<a href=\""._indexpath_."?".$strParams."\" title=\"".$strAlt."\">".$strText."</a>";
-        }
+    if($strImage != "") {
+        $strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
     }
+
+    if($strImage == "" && $strText != "") {
+        $strLink = "<a href=\""._indexpath_."?".$strParams."\" title=\"".$strAlt."\">".$strText."</a>";
+    }
+
     return $strLink;
 }
 
