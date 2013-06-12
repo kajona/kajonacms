@@ -133,7 +133,7 @@ class class_reflection {
     /**
      * Returns a list of all annotation names with a given value.
      * 
-     * @param string Annotation value
+     * @param string $strValue Annotation value
      * @return array List of annotation names
      */
     public function getAnnotationsWithValueFromClass($strValue) {
