@@ -496,7 +496,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strReturn = "";
         if($this->getObjModule()->rightEdit()) {
             $strReturn .= $this->objToolkit->listButton(
-                getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("actionUploadPackage"), $this->getLang("actionUploadPackage"), "icon_upload.png", $this->getLang("actionUploadPackage"))
+                getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_upload.png", $this->getLang("action_upload_package"))
             );
             $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new.png"));
         }
