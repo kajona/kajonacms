@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
-$lang["rssfeed_numberofposts"]           = "Antal meddelanden att visa:";
-$lang["rssfeed_url"]                     = "RSS-feed-URL:";
+$lang["rssfeed_numberofposts"]           = "Antal meddelanden att visa";
+$lang["rssfeed_url"]                     = "RSS-feed-URL";
 $lang["rssfeed_errorloading"]            = "Fel vid laddning av feed.";
 $lang["rssfeed_errorparsing"]            = "Fel vid parsning av feed.";
 $lang["rssfeed_noentry"]                 = "Inga inlägg tillgängliga";

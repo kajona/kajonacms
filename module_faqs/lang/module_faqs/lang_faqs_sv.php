@@ -10,14 +10,14 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_faqs_search_resultpage_"]        = "Träffsida:";
+$lang["_faqs_search_resultpage_"]        = "Träffsida";
 $lang["_faqs_search_resultpage_hint"]    = "På denna sida vias de FAQ som har hittats vid sökningen.";
 $lang["delete_faq_question"]                 = "Vill du verkligen radera denna FAQ:<b>%%element_name%%</b>&quot;?";
 $lang["faq_rechte"]                      = "Redigera rättigheter";
 $lang["faqs_categories"]                 = "Kategorier";
 $lang["faqs_rating_permissions"]         = "Icke tillräckliga rättigheter";
-$lang["form_faq_answer"]                 = "Svar:";
-$lang["form_faq_question"]               = "Fråga:";
+$lang["form_faq_answer"]                 = "Svar";
+$lang["form_faq_question"]               = "Fråga";
 $lang["kat_anzeigen"]                    = "Visa kategori";
 $lang["kat_ausblenden"]                  = "Visa/dölj kategori";
 $lang["kat_loeschen_frage"]              = "Vill du verkligen radera kategori:<b>%%element_name%%</b>&quot;?";

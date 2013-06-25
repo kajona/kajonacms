@@ -11,5 +11,5 @@
 
 //editable entries
 $lang["element_guestbook_name"]          = "Gästebuch";
-$lang["guestbook_amount"]                = "Anzahl Einträge pro Seite:";
-$lang["guestbook_id"]                    = "Gästebuch:";
+$lang["guestbook_amount"]                = "Anzahl Einträge pro Seite";
+$lang["guestbook_id"]                    = "Gästebuch";

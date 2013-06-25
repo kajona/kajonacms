@@ -10,4 +10,4 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["template"]                        = "Шаблон:";
+$lang["template"]                        = "Шаблон";

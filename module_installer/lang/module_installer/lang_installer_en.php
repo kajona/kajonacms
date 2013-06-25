@@ -11,17 +11,17 @@
 
 //editable entries
 
-$lang["installer_config_dbdriver"]       = "Database driver:";
-$lang["installer_config_dbhostname"]     = "Database server:";
-$lang["installer_config_dbname"]         = "Database name:";
-$lang["installer_config_dbpassword"]     = "Database password:";
-$lang["installer_config_dbport"]         = "Database port:";
+$lang["installer_config_dbdriver"]       = "Database driver";
+$lang["installer_config_dbhostname"]     = "Database server";
+$lang["installer_config_dbname"]         = "Database name";
+$lang["installer_config_dbpassword"]     = "Database password";
+$lang["installer_config_dbport"]         = "Database port";
 $lang["installer_config_dbportinfo"]     = "To use a standard-port, leave empty.";
-$lang["installer_config_dbprefix"]       = "Table prefix:";
-$lang["installer_config_dbusername"]     = "Database user:";
+$lang["installer_config_dbprefix"]       = "Table prefix";
+$lang["installer_config_dbusername"]     = "Database user";
 $lang["installer_config_intro"]          = "<b>Set up database-access</b><br /><br />Note: The webserver needs write-permissions on /system/config/config.php.<br />In the case you want to use emtpy values, edit the config-file /system/config/config.php manually using a text-editor. For further informations, refer to the manual.<br />";
 $lang["installer_config_write"]          = "Save to config.php";
-$lang["installer_dbdriver_na"]           = "We are sorry, but the selected database-driver is not available on the system. Please install the following PHP-extension in order to use the driver:";
+$lang["installer_dbdriver_na"]           = "We are sorry, but the selected database-driver is not available on the system. Please install the following PHP-extension in order to use the driver";
 $lang["installer_dbdriver_oci8"]         = "Attention: The Oracle-driver is still under development.";
 $lang["installer_dbdriver_sqlite3"]      = "The SQLite-driver creates a database stored at /project/dbdumps. Therefore the database name is used as the filename, all other values are not taken into account.";
 $lang["installer_elements_found"]        = "<b>Installation of the page elements</b><br /><br />Select which of the found page elements you want to install:<br /><br />";
@@ -34,12 +34,12 @@ $lang["installer_given"]                 = "given";
 $lang["installer_install"]               = "Install";
 $lang["installer_installpe"]             = "Install page elements";
 $lang["installer_loaded"]                = "loaded";
-$lang["installer_login_email"]           = "Email:";
+$lang["installer_login_email"]           = "Email";
 $lang["installer_login_installed"]       = "<br />The system is already installed and an admin-account already exists.<br />";
 $lang["installer_login_intro"]           = "<b>Set up admin-user</b><br /><br />Please provide a username and a password.<br />Those will be used later to log in to the administration.<br />Because of security reasons, usernames like \"admin\" or \"administrator\" should be avoided.<br /><br />";
-$lang["installer_login_password"]        = "Password:";
+$lang["installer_login_password"]        = "Password";
 $lang["installer_login_save"]            = "Create account";
-$lang["installer_login_username"]        = "Username:";
+$lang["installer_login_username"]        = "Username";
 $lang["installer_missing"]               = "missing";
 $lang["installer_mode_auto"]             = "Automatic installation";
 $lang["installer_mode_auto_hint"]        = "All modules available and their samplecontents are installed.";

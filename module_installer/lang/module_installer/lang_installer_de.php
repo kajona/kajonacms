@@ -10,17 +10,17 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["installer_config_dbdriver"]       = "Datenbanktreiber:";
-$lang["installer_config_dbhostname"]     = "Datenbankserver:";
-$lang["installer_config_dbname"]         = "Datenbankname:";
-$lang["installer_config_dbpassword"]     = "Datenbankpasswort:";
-$lang["installer_config_dbport"]         = "Datenbankport:";
+$lang["installer_config_dbdriver"]       = "Datenbanktreiber";
+$lang["installer_config_dbhostname"]     = "Datenbankserver";
+$lang["installer_config_dbname"]         = "Datenbankname";
+$lang["installer_config_dbpassword"]     = "Datenbankpasswort";
+$lang["installer_config_dbport"]         = "Datenbankport";
 $lang["installer_config_dbportinfo"]     = "Für den Standardport bitte leer lassen";
-$lang["installer_config_dbprefix"]       = "Tabellenpräfix:";
-$lang["installer_config_dbusername"]     = "Datenbankbenutzer:";
+$lang["installer_config_dbprefix"]       = "Tabellenpräfix";
+$lang["installer_config_dbusername"]     = "Datenbankbenutzer";
 $lang["installer_config_intro"]          = "<b>Datenbankeinstellungen erfassen</b><br /><br />Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br />";
 $lang["installer_config_write"]          = "In config.php speichern";
-$lang["installer_dbdriver_na"]           = "Es tut uns leid, aber der gewählte Datenbanktreiber ist auf dem System nicht verfügbar. Bitte installieren Sie die nachstehende PHP-Erweiterung um den Treiber zu verwenden:";
+$lang["installer_dbdriver_na"]           = "Es tut uns leid, aber der gewählte Datenbanktreiber ist auf dem System nicht verfügbar. Bitte installieren Sie die nachstehende PHP-Erweiterung um den Treiber zu verwenden";
 $lang["installer_dbdriver_oci8"]         = "Achtung: Der Oracle-Treiber befindet sich noch im Teststadium.";
 $lang["installer_dbdriver_sqlite3"]      = "Der SQLite-Treiber legt die Datenbank im Verzeichnis /project/dbdumps ab. Hierbei gilt der Datenbankname als Dateiname, alle anderen Werte sind nicht weiter von Belang.";
 $lang["installer_elements_found"]        = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
@@ -33,12 +33,12 @@ $lang["installer_given"]                 = "vorhanden";
 $lang["installer_install"]               = "Installieren";
 $lang["installer_installpe"]             = "Seitenelemente installieren";
 $lang["installer_loaded"]                = "geladen";
-$lang["installer_login_email"]           = "E-Mail:";
+$lang["installer_login_email"]           = "E-Mail";
 $lang["installer_login_installed"]       = "<br />Das System wurde bereits mit einem Admin-Benutzer installiert.<br />";
 $lang["installer_login_intro"]           = "<b>Admin-Benutzer einrichten</b><br /><br />Bitte geben Sie hier einen Benutzernamen und ein Passwort an.<br />Diese Daten werden später als Zugang zur Administration verwendet.<br />Aus Sicherheitsgründen sollten Sie Benutzernamen wie \"admin\" oder \"administrator\" vermeiden.<br /><br />";
-$lang["installer_login_password"]        = "Passwort:";
+$lang["installer_login_password"]        = "Passwort";
 $lang["installer_login_save"]            = "Benutzer anlegen";
-$lang["installer_login_username"]        = "Benutzername:";
+$lang["installer_login_username"]        = "Benutzername";
 $lang["installer_missing"]               = "fehlen";
 $lang["installer_mode_auto"]             = "Automatische Installation";
 $lang["installer_mode_auto_hint"]        = "Alle verfügbaren Module und Beispielinhalte werden installiert.";

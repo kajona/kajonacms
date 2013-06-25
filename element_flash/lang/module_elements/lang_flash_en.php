@@ -10,6 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["flash_file"]                      = "Flash movie (*.swf):";
-$lang["flash_height"]                    = "Height:";
-$lang["flash_width"]                     = "Width:";
+$lang["flash_file"]                      = "Flash movie (*.swf)";
+$lang["flash_height"]                    = "Height";
+$lang["flash_width"]                     = "Width";

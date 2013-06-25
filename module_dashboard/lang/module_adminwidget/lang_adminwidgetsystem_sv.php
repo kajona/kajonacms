@@ -10,19 +10,19 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["note_content"]                    = "Innehåll:";
+$lang["note_content"]                    = "Innehåll";
 $lang["note_name"]                       = "Anteckningar";
 $lang["sysinfo_checkboxkajona"]          = "Visa information från Kajona";
 $lang["sysinfo_checkboxphp"]             = "Visa PHP information";
 $lang["sysinfo_checkboxserver"]          = "Visa server information";
-$lang["sysinfo_kajona_nrOfModules"]      = "Antal Kajona moduler:";
-$lang["sysinfo_kajona_version"]          = "Kajona version:";
-$lang["sysinfo_kajona_versionAvail"]     = "Senaste version:";
+$lang["sysinfo_kajona_nrOfModules"]      = "Antal Kajona moduler";
+$lang["sysinfo_kajona_version"]          = "Kajona version";
+$lang["sysinfo_kajona_versionAvail"]     = "Senaste version";
 $lang["sysinfo_name"]                    = "Systeminformation";
-$lang["sysinfo_php_memlimit"]            = "PHP minnesbegränsning:";
+$lang["sysinfo_php_memlimit"]            = "PHP minnesbegränsning";
 $lang["sysinfo_php_version"]             = "PHP Version: ";
-$lang["sysinfo_server_diskspace"]        = "Totalt hårdiskutrymme:";
-$lang["sysinfo_server_diskspacef"]       = "Ledigt hårddiskutrymme:";
+$lang["sysinfo_server_diskspace"]        = "Totalt hårdiskutrymme";
+$lang["sysinfo_server_diskspacef"]       = "Ledigt hårddiskutrymme";
 $lang["sysinfo_server_system"]           = "System: ";
 $lang["syslog_name"]                     = "Systemlogg";
 $lang["syslog_nrofrows"]                 = "Antal poster";

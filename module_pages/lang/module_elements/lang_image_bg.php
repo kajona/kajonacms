@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["image_link"]                      = "Линк:";
-$lang["image_x"]                         = "Максимална ширина:";
+$lang["image_link"]                      = "Линк";
+$lang["image_x"]                         = "Максимална ширина";
 $lang["image_xy_hint"]                   = "Ползвайки 0, изображението ще е в оригиналния си размер.";
-$lang["image_y"]                         = "Максимална дължина:";
+$lang["image_y"]                         = "Максимална дължина";

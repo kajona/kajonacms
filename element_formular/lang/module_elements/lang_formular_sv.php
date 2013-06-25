@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
-$lang["formular_class"]                  = "Portalklass:";
-$lang["formular_email"]                  = "Mål e-mail adress:";
-$lang["formular_error"]                  = "Felmeddelande:";
-$lang["formular_success"]                = "Meddelande vid lyckat genomförande:";
+$lang["formular_class"]                  = "Portalklass";
+$lang["formular_email"]                  = "Mål e-mail adress";
+$lang["formular_error"]                  = "Felmeddelande";
+$lang["formular_success"]                = "Meddelande vid lyckat genomförande";
 $lang["required_formular_email"]         = "e-mail adress";
 $lang["fehler_captcha"]                  = "Vänligen ange korrekt säkerhetskod";
 $lang["fehler_email"]                    = "Vänligen ange en giltig e-mail adress";

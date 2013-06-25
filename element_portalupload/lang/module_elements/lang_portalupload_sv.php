@@ -10,11 +10,11 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portalupload_download"]           = "Nedladdningsarkiv:";
-$lang["portalupload_filemanager"]        = "Filhanterare-arkiv:";
+$lang["portalupload_download"]           = "Nedladdningsarkiv";
+$lang["portalupload_filemanager"]        = "Filhanterare-arkiv";
 $lang["portalupload_matchwarning"]       = "Det finns inga nedladdningsarkiv och filhanterarearkiv hittade som har samma sökväg i filsystemet.";
 $lang["portaluploadCopyUploadError"]     = "Fel uppstod vid kopiering av fil.";
-$lang["portaluploadFileTitle"]           = "Fil:";
+$lang["portaluploadFileTitle"]           = "Fil";
 $lang["portaluploadFilterError"]         = "Filtyp ej tillåten av filter.";
 $lang["portaluploadNotWritableError"]    = "Inga skrivrättigheter till mappen.";
 $lang["portaluploadPathError"]           = "Sökvägar stämmer ej överens.";

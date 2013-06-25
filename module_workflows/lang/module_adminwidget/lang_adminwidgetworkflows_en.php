@@ -10,6 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["workflows_intro"]                 = "Number of open workflows:";
+$lang["workflows_intro"]                 = "Number of open workflows";
 $lang["workflows_name"]                  = "Workflows";
 $lang["workflows_show"]                  = "Show";

@@ -10,4 +10,4 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["search_amount"]                   = "Количество хитов на странице:";
+$lang["search_amount"]                   = "Количество хитов на странице";

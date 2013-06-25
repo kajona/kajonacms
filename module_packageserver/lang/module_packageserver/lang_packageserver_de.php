@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_packageserver_repo_id_"]         = "Paket-Repository:";
+$lang["_packageserver_repo_id_"]         = "Paket-Repository";
 $lang["_packageserver_repo_id_hint"]     = "Per Standard (leeres Feld) durchsucht der Package-Server alle Repositories des Medienmanagers (bessere Performance), wenn gewünscht kann die Suche aber auf ein Repository beschränkt werden. Hierfür bitte die System-ID des Repositories angeben.";
 $lang["action_list"]                     = "Pakete";
 $lang["action_logs"]                     = "Protokoll";
@@ -20,13 +20,13 @@ $lang["header_hostname"]                 = "Remote-Host";
 $lang["header_ip"]                       = "IP";
 $lang["header_query"]                    = "Anfrage";
 $lang["modul_titel"]                     = "Paket-Server";
-$lang["pack_name"]                       = "Name des Packs:";
-$lang["package_author"]                  = "Ersteller:";
+$lang["pack_name"]                       = "Name des Packs";
+$lang["package_author"]                  = "Ersteller";
 $lang["package_info"]                    = "Details anzeigen";
-$lang["package_minversion"]              = "Minimale System-Version:";
-$lang["package_modules"]                 = "Erforderliche Module:";
-$lang["package_type"]                    = "Typ:";
-$lang["package_version"]                 = "Version:";
+$lang["package_minversion"]              = "Minimale System-Version";
+$lang["package_modules"]                 = "Erforderliche Module";
+$lang["package_type"]                    = "Typ";
+$lang["package_version"]                 = "Version";
 $lang["packageservertopqueries"]         = "Package-Server Anfragen";
 $lang["packageservertopqueries_total"]   = "Anzahl Anfragen";
 $lang["packageservertopqueries_unique"]  = "Anzahl unterschiedlicher Systeme";

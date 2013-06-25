@@ -10,6 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["directory"]                       = "Mapp:";
+$lang["directory"]                       = "Mapp";
 $lang["image_edit"]                      = "Redigera bild";
-$lang["template"]                        = "Mall:";
+$lang["template"]                        = "Mall";

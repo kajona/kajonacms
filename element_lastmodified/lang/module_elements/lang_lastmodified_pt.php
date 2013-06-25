@@ -10,4 +10,4 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["lastmodified"]                    = "Última modificação:";
+$lang["lastmodified"]                    = "Última modificação";

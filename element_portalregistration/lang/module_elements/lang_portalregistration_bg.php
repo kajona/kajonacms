@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portalregistration_group"]        = "Зададена група:";
+$lang["portalregistration_group"]        = "Зададена група";
 $lang["portalregistration_hint"]         = "Потребители създадени със този елемент са пасивни.<br /> Потребителите могат да преминат към активен режим посредством автоматично изпратено писмо на съответната електронна поща.<br />Пример за това е нужен на страницата.";
 $lang["pr_captcha"]                      = "Невалиден код.";
 $lang["pr_completionErrorStatus"]        = "Акаунта не може да бъде активиран.";

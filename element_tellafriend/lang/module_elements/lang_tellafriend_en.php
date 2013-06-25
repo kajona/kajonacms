@@ -10,14 +10,14 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["tellafriend_error"]               = "Page in case of an error:";
-$lang["tellafriend_success"]             = "Page in case of success:";
+$lang["tellafriend_error"]               = "Page in case of an error";
+$lang["tellafriend_success"]             = "Page in case of success";
 $lang["fehler_captcha"]                  = "Please enter the correct verification code";
-$lang["message"]                         = "Message:";
-$lang["receiver"]                        = "Recipients email address:";
-$lang["receiver_name"]                   = "Recipients name:";
-$lang["sender"]                          = "Your email address:";
-$lang["sender_name"]                     = "Your name:";
+$lang["message"]                         = "Message";
+$lang["receiver"]                        = "Recipients email address";
+$lang["receiver_name"]                   = "Recipients name";
+$lang["sender"]                          = "Your email address";
+$lang["sender_name"]                     = "Your name";
 $lang["tellafriend_receiver"]            = "Please enter the recipients email address";
 $lang["tellafriend_receiver_name"]       = "Please enter the recipients name";
 $lang["tellafriend_sender"]              = "Please enter your email address";

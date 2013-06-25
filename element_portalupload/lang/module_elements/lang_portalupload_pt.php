@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["portaluploadCopyUploadError"]     = "Erro a copiar o ficheiro.";
-$lang["portaluploadFileTitle"]           = "Ficheiro:";
+$lang["portaluploadFileTitle"]           = "Ficheiro";
 $lang["portaluploadFilterError"]         = "O filtro não permite este tipo de ficheiros.";
 $lang["portaluploadNotWritableError"]    = "A pasta não permite a escrita.";
 $lang["portaluploadPathError"]           = "Os caminhos configurados não coincidem.";

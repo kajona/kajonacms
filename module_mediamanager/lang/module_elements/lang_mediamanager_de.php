@@ -10,19 +10,19 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["download_amount"]                 = "Datensätze pro Seite:";
-$lang["download_id"]                     = "Archiv:";
-$lang["gallery_id"]                      = "Bildergalerie:";
-$lang["gallery_imagesperpage"]           = "Bilder pro Seite:";
+$lang["download_amount"]                 = "Datensätze pro Seite";
+$lang["download_id"]                     = "Archiv";
+$lang["gallery_id"]                      = "Bildergalerie";
+$lang["gallery_imagesperpage"]           = "Bilder pro Seite";
 $lang["gallery_imagesperpage_hint"]      = "Anzahl an Bildern pro Seite in der Listenansicht (0 = unbeschränkt)";
-$lang["gallery_maxh_d"]                  = "Maximale Höhe:";
-$lang["gallery_maxw_d"]                  = "Maximale Breite:";
+$lang["gallery_maxh_d"]                  = "Maximale Höhe";
+$lang["gallery_maxw_d"]                  = "Maximale Breite";
 $lang["gallery_mode"]                    = "Element-Modus";
 $lang["gallery_mode_hint"]               = "Definiert den Modus des Elements: Normaler Listen-/Detailmodus, oder ein Zufallsbild aus der gewählten Galerie. Es gelten die in der Detail-Ansicht definierten Werte.";
-$lang["gallery_overlay"]                 = "Overlay-Bild:";
-$lang["gallery_text"]                    = "Inschrift:";
-$lang["gallery_text_x"]                  = "X-Achse:";
-$lang["gallery_text_y"]                  = "Y-Achse:";
+$lang["gallery_overlay"]                 = "Overlay-Bild";
+$lang["gallery_text"]                    = "Inschrift";
+$lang["gallery_text_x"]                  = "X-Achse";
+$lang["gallery_text_y"]                  = "Y-Achse";
 $lang["headline_detail"]                 = "Detailansicht";
 $lang["headline_list"]                   = "Listenansicht";
 $lang["headline_overlay"]                = "Bildinschrift (Overlay text)";

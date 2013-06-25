@@ -11,8 +11,8 @@
 
 //editable entries
 $lang["userlist_all"]                    = "Alle";
-$lang["userlist_group"]                  = "Gruppe:";
-$lang["userlist_status"]                 = "Benutzer-Status:";
+$lang["userlist_group"]                  = "Gruppe";
+$lang["userlist_status"]                 = "Benutzer-Status";
 $lang["userlist_status_active"]          = "Nur Aktive";
 $lang["userlist_status_all"]             = "Alle";
 $lang["userlist_status_inactive"]        = "Nur Inaktive";

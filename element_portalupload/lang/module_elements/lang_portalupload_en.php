@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portalupload_download"]           = "Downloads-Archive:";
+$lang["portalupload_download"]           = "Downloads-Archive";
 $lang["portaluploadCopyUploadError"]     = "Error copying the file.";
-$lang["portaluploadFileTitle"]           = "File:";
+$lang["portaluploadFileTitle"]           = "File";
 $lang["portaluploadFilterError"]         = "Filetype not allowed by filter.";
 $lang["portaluploadNotWritableError"]    = "Folder not writeable.";
 $lang["portaluploadPathError"]           = "Paths configured do not match!";

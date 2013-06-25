@@ -10,12 +10,12 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_faqs_search_resultpage_"]        = "Treffer-Seite:";
+$lang["_faqs_search_resultpage_"]        = "Treffer-Seite";
 $lang["_faqs_search_resultpage_hint"]    = "Auf dieser Seite erfolgt die Ansicht der Faqs, die in der Suche gefunden wurden.";
 $lang["delete_faq_question"]                 = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["faq_titel_faq"]                   = "FAQ";
-$lang["form_faq_answer"]                 = "Antwort:";
-$lang["form_faq_question"]               = "Frage:";
+$lang["form_faq_answer"]                 = "Antwort";
+$lang["form_faq_question"]               = "Frage";
 $lang["kat_anzeigen"]                    = "Kategorie anzeigen";
 $lang["kat_ausblenden"]                  = "Kategorien ein-/ausblenden";
 $lang["modul_titel"]                     = "FAQs";

@@ -12,6 +12,6 @@
 //editable entries
 $lang["rssfeed_errorloading"]            = "Грешка При Зареждане на Feeds";
 $lang["rssfeed_errorparsing"]            = "Грешка При Анализ на Feeds";
-$lang["rssfeed_feedurl"]                 = "Feed-URL:";
+$lang["rssfeed_feedurl"]                 = "Feed-URL";
 $lang["rssfeed_name"]                    = "Newsfeed";
 $lang["rssfeed_posts"]                   = "Номер на постове";

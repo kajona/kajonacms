@@ -11,5 +11,5 @@
 
 //editable entries
 $lang["element_guestbook_name"]          = "Книга за гости";
-$lang["guestbook_amount"]                = "Брой на постове за страница:";
-$lang["guestbook_id"]                    = "Книга за гости:";
+$lang["guestbook_amount"]                = "Брой на постове за страница";
+$lang["guestbook_id"]                    = "Книга за гости";

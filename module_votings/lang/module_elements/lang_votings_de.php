@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["votings_mode"]                    = "Anzeigemodus:";
+$lang["votings_mode"]                    = "Anzeigemodus";
 $lang["votings_mode_result"]             = "Ergebnis";
 $lang["votings_mode_voting"]             = "Abstimmung";
-$lang["votings_voting"]                  = "Voting:";
+$lang["votings_voting"]                  = "Voting";

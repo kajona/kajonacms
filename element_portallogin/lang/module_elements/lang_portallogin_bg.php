@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portallogin_error"]               = "Страница в случай на грешка (не е задължително):";
+$lang["portallogin_error"]               = "Страница в случай на грешка (не е задължително)";
 $lang["portallogin_logout_success"]      = "Страница след излизане от системата  (не е задължително)";
-$lang["portallogin_profile"]             = "Страница за редактиране на профил (не е задължително):";
+$lang["portallogin_profile"]             = "Страница за редактиране на профил (не е задължително)";
 $lang["portallogin_profile_hint"]        = "За да редактирате профилът е нужно да съществува друг portallogin-елемент за съответната страница.";
 $lang["editprofilelink"]                 = "Редактирай профил";
 $lang["emailTitle"]                      = "Електронна поща*: ";

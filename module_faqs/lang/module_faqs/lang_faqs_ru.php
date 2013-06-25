@@ -10,11 +10,11 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_faqs_search_resultpage_"]        = "Страница результатов:";
+$lang["_faqs_search_resultpage_"]        = "Страница результатов";
 $lang["_faqs_search_resultpage_hint"]    = "Эта страница отображает самые частозадаваемые вопросы, которые могут быть найдены при поиске.";
 $lang["delete_faq_question"]                 = "Вы действительно хотите удалить часто задаваемый вопрос &quot;<b>%%element_name%%</b>&quot;?";
-$lang["form_faq_answer"]                 = "Ответ:";
-$lang["form_faq_question"]               = "Вопрос:";
+$lang["form_faq_answer"]                 = "Ответ";
+$lang["form_faq_question"]               = "Вопрос";
 $lang["kat_anzeigen"]                    = "Показать категорию";
 $lang["kat_ausblenden"]                  = "Показать / спрятать категории";
 $lang["modul_titel"]                     = "ЧАВО";

@@ -11,13 +11,13 @@
 
 //editable entries
 $lang["stats_chart"]                     = "Grafik: ";
-$lang["stats_current"]                   = "Aktuelles:";
-$lang["stats_day"]                       = "Tagesanalyse:";
-$lang["stats_hits"]                      = "Zugriffe:";
+$lang["stats_current"]                   = "Aktuelles";
+$lang["stats_day"]                       = "Tagesanalyse";
+$lang["stats_hits"]                      = "Zugriffe";
 $lang["stats_ip"]                        = "IP";
-$lang["stats_last"]                      = "Letzte Zugriffe:";
+$lang["stats_last"]                      = "Letzte Zugriffe";
 $lang["stats_name"]                      = "Statistiken";
-$lang["stats_nrLast"]                    = "Anzahl letzer Zugriffe:";
+$lang["stats_nrLast"]                    = "Anzahl letzer Zugriffe";
 $lang["stats_online"]                    = "User online: ";
 $lang["stats_page"]                      = "Seite";
 $lang["stats_visitors"]                  = "Besucher: ";

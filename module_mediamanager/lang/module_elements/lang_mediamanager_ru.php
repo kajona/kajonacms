@@ -10,17 +10,17 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["download_id"]                     = "Архив:";
-$lang["gallery_id"]                      = "Галерея:";
-$lang["gallery_imagesperpage"]           = "Изображений на странице:";
+$lang["download_id"]                     = "Архив";
+$lang["gallery_id"]                      = "Галерея";
+$lang["gallery_imagesperpage"]           = "Изображений на странице";
 $lang["gallery_imagesperpage_hint"]      = "Количетсво изображений на странице в списке (0 = неограниченное)";
-$lang["gallery_maxh_d"]                  = "Максимальная ширина:";
-$lang["gallery_maxw_d"]                  = "Максимальная ширина:";
+$lang["gallery_maxh_d"]                  = "Максимальная ширина";
+$lang["gallery_maxw_d"]                  = "Максимальная ширина";
 $lang["gallery_mode"]                    = "Элемент-режим";
 $lang["gallery_mode_hint"]               = "Устанавливает режим элемента: Обычный режим списка / деталей или случайное изображение из текущей галереи. Применяются параметры, установленные в секции детального режима.";
-$lang["gallery_text"]                    = "Надпись:";
-$lang["gallery_text_x"]                  = "Ось X:";
-$lang["gallery_text_y"]                  = "Ось Y:";
+$lang["gallery_text"]                    = "Надпись";
+$lang["gallery_text_x"]                  = "Ось X";
+$lang["gallery_text_y"]                  = "Ось Y";
 $lang["headline_detail"]                 = "Детальный просмотр";
 $lang["headline_list"]                   = "Просмотр списком";
 $lang["headline_overlay"]                = "Текст сверху";

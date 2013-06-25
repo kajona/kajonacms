@@ -10,4 +10,4 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["link_more_title"]                 = "Para mais informações:";
+$lang["link_more_title"]                 = "Para mais informações";

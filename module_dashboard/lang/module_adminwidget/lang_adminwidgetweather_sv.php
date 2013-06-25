@@ -13,10 +13,10 @@
 $lang["weather_celsius"]                 = "Celsius";
 $lang["weather_errorloading"]            = "Fel vid uppladdning av väderdata.";
 $lang["weather_fahrenheit"]              = "Fahrenheit";
-$lang["weather_forecast"]                = "Prognos:";
-$lang["weather_location"]                = "Orts-Id:";
+$lang["weather_forecast"]                = "Prognos";
+$lang["weather_location"]                = "Orts-Id";
 $lang["weather_location_finder"]         = "ID för en ort från <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a> (t.ex. i URL:en från en visad väderprognos)";
 $lang["weather_location_string"]         = "Ort: ";
 $lang["weather_name"]                    = "Väder";
 $lang["weather_temp_string"]             = "Temperatur: ";
-$lang["weather_unit"]                    = "Enhet:";
+$lang["weather_unit"]                    = "Enhet";

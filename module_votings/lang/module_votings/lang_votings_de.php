@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["form_answer_text"]                = "Antwort:";
+$lang["form_answer_text"]                = "Antwort";
 $lang["error_dates"]                     = "Die Abstimmung ist zum aktuellen Zeitpunkt nicht freigeschaltet.";
 $lang["error_voted"]                     = "Für diese Umfrage wurde bereits abgestimmt.";
 $lang["list_answer_empty"]               = "Keine Antworten angelegt";
@@ -24,10 +24,10 @@ $lang["required_answer_title"]           = "Antwort-Text";
 $lang["voting_delete_answer"]            = "Möchten Sie die Antwort &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["delete_question"]                 = "Möchten Sie das Voting &quot;<b>%%element_name%%</b>&quot; mit allen Antworten wirklich löschen?";
 $lang["voting_edit"]                     = "Voting bearbeiten";
-$lang["form_voting_dateend"]             = "Ende-Datum:";
-$lang["voting_hits"]                     = "Stimmen gesamt:";
+$lang["form_voting_dateend"]             = "Ende-Datum";
+$lang["voting_hits"]                     = "Stimmen gesamt";
 $lang["action_list_answers"]               = "Antworten anzeigen";
-$lang["form_voting_datestart"]           = "Start-Datum:";
+$lang["form_voting_datestart"]           = "Start-Datum";
 $lang["voting_submit"]                   = "Abstimmen!";
 
 //non-editable entries

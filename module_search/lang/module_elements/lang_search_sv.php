@@ -11,5 +11,5 @@
 
 //editable entries
 $lang["browser"]                         = "Öppna filhanterare";
-$lang["search_amount"]                   = "Antal träffar per sida:";
-$lang["search_page"]                     = "Resultatsida:";
+$lang["search_amount"]                   = "Antal träffar per sida";
+$lang["search_page"]                     = "Resultatsida";

@@ -11,16 +11,16 @@
 
 //editable entries
 $lang["download_id"]                     = "Архив";
-$lang["gallery_id"]                      = "Галерия:";
-$lang["gallery_imagesperpage"]           = "Изображения за страница:";
+$lang["gallery_id"]                      = "Галерия";
+$lang["gallery_imagesperpage"]           = "Изображения за страница";
 $lang["gallery_imagesperpage_hint"]      = "Брой на изображенията за страница във вид на списък. 0 = неограничен.";
-$lang["gallery_maxh_d"]                  = "Максимална широчина:";
-$lang["gallery_maxw_d"]                  = "Максимална широчина:";
+$lang["gallery_maxh_d"]                  = "Максимална широчина";
+$lang["gallery_maxw_d"]                  = "Максимална широчина";
 $lang["gallery_mode"]                    = "Element-режим";
 $lang["gallery_mode_hint"]               = "Определя режима на елемента: Списък/детайлен режим, или случайна снимка в текущата галерия. Стойностите определени в раздел детайлен-преглед са приложени.";
-$lang["gallery_text"]                    = "Надпис:";
-$lang["gallery_text_x"]                  = "X-axis:";
-$lang["gallery_text_y"]                  = "Y-axis:";
+$lang["gallery_text"]                    = "Надпис";
+$lang["gallery_text_x"]                  = "X-axis";
+$lang["gallery_text_y"]                  = "Y-axis";
 $lang["headline_detail"]                 = "Преглед: Детайлен";
 $lang["headline_list"]                   = "Преглед: списък";
 $lang["headline_overlay"]                = "Текст върху снимката";

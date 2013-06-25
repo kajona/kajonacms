@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["formular_class"]                  = "Portal-class:";
-$lang["formular_email"]                  = "Към електорнна поща:";
-$lang["formular_error"]                  = "Съобщение за грешка:";
-$lang["formular_success"]                = "Съобщение за успех:";
+$lang["formular_class"]                  = "Portal-class";
+$lang["formular_email"]                  = "Към електорнна поща";
+$lang["formular_error"]                  = "Съобщение за грешка";
+$lang["formular_success"]                = "Съобщение за успех";

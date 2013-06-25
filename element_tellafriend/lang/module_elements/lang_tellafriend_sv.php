@@ -10,16 +10,16 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
-$lang["tellafriend_error"]               = "Felsida:";
-$lang["tellafriend_success"]             = "Sida i fall av att processen lyckats:";
-$lang["captcha"]                         = "Säkerhetskod:";
+$lang["tellafriend_error"]               = "Felsida";
+$lang["tellafriend_success"]             = "Sida i fall av att processen lyckats";
+$lang["captcha"]                         = "Säkerhetskod";
 $lang["fehler_captcha"]                  = "Vänligen ange korrekt säkerhetskod";
-$lang["message"]                         = "Meddelande:";
-$lang["receiver"]                        = "Mottagares e-mail adress:";
-$lang["receiver_name"]                   = "Mottagares namn:";
+$lang["message"]                         = "Meddelande";
+$lang["receiver"]                        = "Mottagares e-mail adress";
+$lang["receiver_name"]                   = "Mottagares namn";
 $lang["reload_captcha"]                  = "Säkerhetskod icke läsbar?";
-$lang["sender"]                          = "Din e-mail adress:";
-$lang["sender_name"]                     = "Ditt namn:";
+$lang["sender"]                          = "Din e-mail adress";
+$lang["sender_name"]                     = "Ditt namn";
 $lang["submit"]                          = "Skicka";
 $lang["tellafriend_receiver"]            = "Vänligen ange mottagares e-mail adress";
 $lang["tellafriend_receiver_name"]       = "Vänligen ange mottagares namn";

@@ -10,5 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portalregistration_group"]        = "Заданная группа:";
+$lang["portalregistration_group"]        = "Заданная группа";
 $lang["portalregistration_hint"]         = "Пользователи, созданные через этот элемент, неактивны по умолчанию.<br />Пользователи могут себя активировать, используя автоматически посланное электронное письмо.<br />Сообщение об этом следует поместить на странице.";

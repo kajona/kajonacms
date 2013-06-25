@@ -10,19 +10,19 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["download_amount"]                 = "Poster per sida:";
-$lang["download_id"]                     = "Arkiv:";
-$lang["gallery_id"]                      = "Bildgalleri:";
-$lang["gallery_imagesperpage"]           = "Bilder per sida:";
+$lang["download_amount"]                 = "Poster per sida";
+$lang["download_id"]                     = "Arkiv";
+$lang["gallery_id"]                      = "Bildgalleri";
+$lang["gallery_imagesperpage"]           = "Bilder per sida";
 $lang["gallery_imagesperpage_hint"]      = "Bilder per sida i listvy (0=obegränsat)";
 $lang["gallery_maxh_d"]                  = "Maximal höjd:	";
-$lang["gallery_maxw_d"]                  = "Maximal bredd:";
+$lang["gallery_maxw_d"]                  = "Maximal bredd";
 $lang["gallery_mode"]                    = "Element-läge";
 $lang["gallery_mode_hint"]               = "Definierar elementetläge: Normal list-/detaljläge, eller slumpmässig bild från valt galleri. Värden definierade i detaljvyn bestämmer.";
-$lang["gallery_overlay"]                 = "Överlagrad bild:";
-$lang["gallery_text"]                    = "Inskription:";
-$lang["gallery_text_x"]                  = "x-axel:";
-$lang["gallery_text_y"]                  = "y-axel:";
+$lang["gallery_overlay"]                 = "Överlagrad bild";
+$lang["gallery_text"]                    = "Inskription";
+$lang["gallery_text_x"]                  = "x-axel";
+$lang["gallery_text_y"]                  = "y-axel";
 $lang["headline_detail"]                 = "Detaljvy";
 $lang["headline_list"]                   = "LIstvy";
 $lang["headline_overlay"]                = "Överlagrad text i bild";

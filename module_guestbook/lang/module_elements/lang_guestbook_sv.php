@@ -11,5 +11,5 @@
 
 //editable entries
 $lang["element_guestbook_name"]          = "Gästbok";
-$lang["guestbook_amount"]                = "Antal poster per sida:";
-$lang["guestbook_id"]                    = "Gästbok:";
+$lang["guestbook_amount"]                = "Antal poster per sida";
+$lang["guestbook_id"]                    = "Gästbok";

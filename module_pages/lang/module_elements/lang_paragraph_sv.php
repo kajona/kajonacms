@@ -13,11 +13,11 @@
 $lang["browser"]                         = "Öppna filhanterare";
 $lang["element_paragraph_name"]          = "Paragraf";
 $lang["link_more_title"]                 = "Ytterligare information";
-$lang["page_element_placeholder_title"]  = "Intern titel:";
-$lang["paragraph_content"]               = "Text:";
-$lang["paragraph_image"]                 = "Bild:";
-$lang["paragraph_link"]                  = "Länk:";
-$lang["paragraph_title"]                 = "Titel:";
+$lang["page_element_placeholder_title"]  = "Intern titel";
+$lang["paragraph_content"]               = "Text";
+$lang["paragraph_image"]                 = "Bild";
+$lang["paragraph_link"]                  = "Länk";
+$lang["paragraph_title"]                 = "Titel";
 $lang["quickhelp_element_paragraph"]     = "Här kan du skriva in innehållet i ett textstycke. För detta finns en omfångsrik textredigerare till buds.";
 $lang["required_paragraph_title"]        = "Titel";
 $lang["submit"]                          = "Spara";

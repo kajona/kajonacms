@@ -11,13 +11,13 @@
 
 //editable entries
 $lang["stats_chart"]                     = " ";
-$lang["stats_current"]                   = "Aktuella:";
+$lang["stats_current"]                   = "Aktuella";
 $lang["stats_day"]                       = "Dagsbaserad analys";
-$lang["stats_hits"]                      = "Träffar:";
+$lang["stats_hits"]                      = "Träffar";
 $lang["stats_ip"]                        = "IP";
-$lang["stats_last"]                      = "Senaste besök:";
+$lang["stats_last"]                      = "Senaste besök";
 $lang["stats_name"]                      = "Statistik";
-$lang["stats_nrLast"]                    = "Antal senaste besök:";
-$lang["stats_online"]                    = "Anslutna användare:";
+$lang["stats_nrLast"]                    = "Antal senaste besök";
+$lang["stats_online"]                    = "Anslutna användare";
 $lang["stats_page"]                      = "Sida";
-$lang["stats_visitors"]                  = "Besökare:";
+$lang["stats_visitors"]                  = "Besökare";

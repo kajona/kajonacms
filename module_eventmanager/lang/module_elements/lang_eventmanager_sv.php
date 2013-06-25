@@ -10,6 +10,6 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
-$lang["eventmanager_order"]              = "Ordningsföljd:";
+$lang["eventmanager_order"]              = "Ordningsföljd";
 $lang["eventmanager_order_asc"]          = "Stigande";
 $lang["eventmanager_order_desc"]         = "Fallande";

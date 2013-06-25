@@ -10,19 +10,19 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
-$lang["download_amount"]                 = "Downloads per page:";
-$lang["download_id"]                     = "Archive:";
-$lang["gallery_id"]                      = "Gallery:";
-$lang["gallery_imagesperpage"]           = "Images per page:";
+$lang["download_amount"]                 = "Downloads per page";
+$lang["download_id"]                     = "Archive";
+$lang["gallery_id"]                      = "Gallery";
+$lang["gallery_imagesperpage"]           = "Images per page";
 $lang["gallery_imagesperpage_hint"]      = "Number of images per page in the listview (0 = unlimited)";
-$lang["gallery_maxh_d"]                  = "Maximal height:";
-$lang["gallery_maxw_d"]                  = "Maximal width:";
+$lang["gallery_maxh_d"]                  = "Maximal height";
+$lang["gallery_maxw_d"]                  = "Maximal width";
 $lang["gallery_mode"]                    = "Element-mode";
 $lang["gallery_mode_hint"]               = "Sets up the mode of the element: Regular list-/detailmode, or a random picture out of the current gallery. The values defined in the detail-view section are applied.";
-$lang["gallery_overlay"]                 = "Overlay-image:";
-$lang["gallery_text"]                    = "Inscription:";
-$lang["gallery_text_x"]                  = "X-axis:";
-$lang["gallery_text_y"]                  = "Y-axis:";
+$lang["gallery_overlay"]                 = "Overlay-image";
+$lang["gallery_text"]                    = "Inscription";
+$lang["gallery_text_x"]                  = "X-axis";
+$lang["gallery_text_y"]                  = "Y-axis";
 $lang["headline_detail"]                 = "Detail view";
 $lang["headline_list"]                   = "List view";
 $lang["headline_overlay"]                = "Overlay text";

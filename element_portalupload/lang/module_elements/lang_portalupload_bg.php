@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portalupload_download"]           = "Download-Архиви:";
+$lang["portalupload_download"]           = "Download-Архиви";
 $lang["portaluploadCopyUploadError"]     = "Грешка при копирането на файла.";
 $lang["portaluploadFileTitle"]           = "Файл: ";
 $lang["portaluploadFilterError"]         = "Не разрешен тип на файла.";

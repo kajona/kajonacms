@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["form_answer_text"]                = "Answer:";
+$lang["form_answer_text"]                = "Answer";
 $lang["error_dates"]                     = "The voting is not available at the current date.";
 $lang["error_voted"]                     = "You already voted before.";
 $lang["list_answer_empty"]               = "No answers available";
@@ -24,10 +24,10 @@ $lang["required_answer_title"]           = "Answer-text";
 $lang["voting_delete_answer"]            = "Do you really want to delete the answer &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_question"]                 = "Do you really want to delete the voting &quot;<b>%%element_name%%</b>&quot; including all answers?";
 $lang["voting_edit"]                     = "Edit voting";
-$lang["form_voting_dateend"]             = "End-date:";
-$lang["voting_hits"]                     = "Total votes:";
+$lang["form_voting_dateend"]             = "End-date";
+$lang["voting_hits"]                     = "Total votes";
 $lang["action_list_answers"]               = "Show answers";
-$lang["form_voting_datestart"]           = "Start-Date:";
+$lang["form_voting_datestart"]           = "Start-Date";
 $lang["voting_submit"]                   = "Vote!";
 
 //non-editable entries

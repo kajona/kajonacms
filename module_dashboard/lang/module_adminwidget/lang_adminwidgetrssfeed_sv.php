@@ -12,6 +12,6 @@
 //editable entries
 $lang["rssfeed_errorloading"]            = "Fel vid uppladdning av feeds";
 $lang["rssfeed_errorparsing"]            = "Fel vid parsnings av feed";
-$lang["rssfeed_feedurl"]                 = "Feed-URL:";
+$lang["rssfeed_feedurl"]                 = "Feed-URL";
 $lang["rssfeed_name"]                    = "Newsfeed";
-$lang["rssfeed_posts"]                   = "Antal poster:";
+$lang["rssfeed_posts"]                   = "Antal poster";

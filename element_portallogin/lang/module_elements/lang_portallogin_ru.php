@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portallogin_error"]               = "Страница в случае ошибки (факультативно):";
-$lang["portallogin_logout_success"]      = "Страница после выхода (факультативно):";
-$lang["portallogin_profile"]             = "Страница для изменения профиля (факультативно):";
+$lang["portallogin_error"]               = "Страница в случае ошибки (факультативно)";
+$lang["portallogin_logout_success"]      = "Страница после выхода (факультативно)";
+$lang["portallogin_profile"]             = "Страница для изменения профиля (факультативно)";
 $lang["portallogin_profile_hint"]        = "Для изменения профиля на заданной странице должен быть расположен элемент для входа на портал.";

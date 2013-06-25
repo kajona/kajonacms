@@ -10,5 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["rssfeed_numberofposts"]           = "Количество сообщений для отображения:";
-$lang["rssfeed_url"]                     = "RSS-Лента-URL:";
+$lang["rssfeed_numberofposts"]           = "Количество сообщений для отображения";
+$lang["rssfeed_url"]                     = "RSS-Лента-URL";

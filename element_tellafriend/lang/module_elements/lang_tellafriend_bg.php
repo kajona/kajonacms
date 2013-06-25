@@ -10,13 +10,13 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["tellafriend_error"]               = "Страница в случай на грешка:";
-$lang["tellafriend_success"]             = "Страница в случай на успех:";
+$lang["tellafriend_error"]               = "Страница в случай на грешка";
+$lang["tellafriend_success"]             = "Страница в случай на успех";
 $lang["fehler_captcha"]                  = "Моля попълнете правилно верификационния код";
 $lang["message"]                         = "Съобщение: ";
-$lang["receiver"]                        = "Електронна поща на получателя:";
-$lang["receiver_name"]                   = "Име на получателя:";
-$lang["sender"]                          = "Вашата електронна поща:";
+$lang["receiver"]                        = "Електронна поща на получателя";
+$lang["receiver_name"]                   = "Име на получателя";
+$lang["sender"]                          = "Вашата електронна поща";
 $lang["sender_name"]                     = "Вашето име: ";
 $lang["tellafriend_receiver"]            = "Моля попълнете електронната поща на получателя";
 $lang["tellafriend_receiver_name"]       = "Моля попълнете името на получателя";

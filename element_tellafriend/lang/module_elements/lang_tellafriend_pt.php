@@ -11,11 +11,11 @@
 
 //editable entries
 $lang["fehler_captcha"]                  = "Por favor introduza o código de verificação correcto";
-$lang["message"]                         = "Mensagem:";
-$lang["receiver"]                        = "Correio electrónico dos destinatários:";
-$lang["receiver_name"]                   = "Nome destinatários:";
-$lang["sender"]                          = "O seu correio electrónico:";
-$lang["sender_name"]                     = "O seu nome:";
+$lang["message"]                         = "Mensagem";
+$lang["receiver"]                        = "Correio electrónico dos destinatários";
+$lang["receiver_name"]                   = "Nome destinatários";
+$lang["sender"]                          = "O seu correio electrónico";
+$lang["sender_name"]                     = "O seu nome";
 $lang["tellafriend_receiver"]            = "Por favor introduza os correios electrónicos dos destinatários";
 $lang["tellafriend_receiver_name"]       = "Por favor introduza os nomes dos destinatários";
 $lang["tellafriend_sender"]              = "Por favor introduza o seu correio electrónico";

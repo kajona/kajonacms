@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_news_search_resultpage_"]        = "Страница результатов:";
+$lang["_news_search_resultpage_"]        = "Страница результатов";
 $lang["_news_search_resultpage_hint"]    = "Эта страница отображает детали о новостях, которые были найдены при поиске.";
 $lang["action_new_news"]                 = "Создать новость";
 $lang["action_new_feed"]                 = "Новая RSS-лента";
@@ -18,17 +18,17 @@ $lang["delete_category_question"]        = "Вы действительно хо
 $lang["delete_feed_question"]            = "Вы действительно хотите удалить ленту &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_news_question"]            = "Вы действительно хотите удалить новости &quot;<b>%%element_name%%</b>&quot;?";
 $lang["feed_liste_leer"]                 = "Нет доступных feeds";
-$lang["form_feed_cat"]                   = "Категория ленты:";
-$lang["form_feed_desc"]                  = "Описание ленты:";
-$lang["form_feed_link"]                  = "Ссылка на дальнейшую информацию:";
-$lang["form_feed_page"]                  = "Страница для детального просмотра:";
-$lang["form_feed_title"]                 = "Имя ленты:";
-$lang["form_feed_urltitle"]              = "Имя ленты URL:";
-$lang["form_news_dateend"]               = "Конечная дата:";
-$lang["form_news_datespecial"]           = "Дата архивации:";
-$lang["form_news_datestart"]             = "Начальная дата:";
-$lang["form_news_intro"]                 = "Пробник:";
-$lang["form_news_text"]                  = "Длинный текст:";
+$lang["form_feed_cat"]                   = "Категория ленты";
+$lang["form_feed_desc"]                  = "Описание ленты";
+$lang["form_feed_link"]                  = "Ссылка на дальнейшую информацию";
+$lang["form_feed_page"]                  = "Страница для детального просмотра";
+$lang["form_feed_title"]                 = "Имя ленты";
+$lang["form_feed_urltitle"]              = "Имя ленты URL";
+$lang["form_news_dateend"]               = "Конечная дата";
+$lang["form_news_datespecial"]           = "Дата архивации";
+$lang["form_news_datestart"]             = "Начальная дата";
+$lang["form_news_intro"]                 = "Пробник";
+$lang["form_news_text"]                  = "Длинный текст";
 $lang["kat_anzeigen"]                    = "Показать категорию";
 $lang["kat_ausblenden"]                  = "Показать / Скрыть категории";
 $lang["kat_bearbeiten"]                  = "Изменить категорию";

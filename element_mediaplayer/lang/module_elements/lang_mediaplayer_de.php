@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["element_mediaplayer_description"] = "Dieses Element basiert auf dem JW Player von Longtail. Bitte deren Lizenz beachten.";
-$lang["mediaplayer_file"]                = "Mediendatei:";
-$lang["mediaplayer_height"]              = "Höhe:";
-$lang["mediaplayer_preview"]             = "Vorschaubild:";
-$lang["mediaplayer_width"]               = "Breite:";
+$lang["mediaplayer_file"]                = "Mediendatei";
+$lang["mediaplayer_height"]              = "Höhe";
+$lang["mediaplayer_preview"]             = "Vorschaubild";
+$lang["mediaplayer_width"]               = "Breite";

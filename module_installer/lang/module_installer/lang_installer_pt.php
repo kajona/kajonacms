@@ -10,14 +10,14 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["installer_config_dbdriver"]       = "Controlador Base de Dados:";
-$lang["installer_config_dbhostname"]     = "Servidor Base de dados:";
-$lang["installer_config_dbname"]         = "Nome Base de Dados:";
-$lang["installer_config_dbpassword"]     = "Palavra-passe Base de Dados:";
-$lang["installer_config_dbport"]         = "Porta Base de Dados:";
+$lang["installer_config_dbdriver"]       = "Controlador Base de Dados";
+$lang["installer_config_dbhostname"]     = "Servidor Base de dados";
+$lang["installer_config_dbname"]         = "Nome Base de Dados";
+$lang["installer_config_dbpassword"]     = "Palavra-passe Base de Dados";
+$lang["installer_config_dbport"]         = "Porta Base de Dados";
 $lang["installer_config_dbportinfo"]     = "Para usar a porta por defeito, deixe em branco.";
-$lang["installer_config_dbprefix"]       = "Prefixo Tabela:";
-$lang["installer_config_dbusername"]     = "Utilizador Base de Dados:";
+$lang["installer_config_dbprefix"]       = "Prefixo Tabela";
+$lang["installer_config_dbusername"]     = "Utilizador Base de Dados";
 $lang["installer_config_intro"]          = "<b>Configure o acesso à base de dados</b><br /><br />Nota: O servidor de internet precisa de permissões de escrita em /system/config/config.php.<br />No caso de pretender deixar os campos em branco, terá de editar o ficheiro config  /system/config/config.php manualmente utilizando um editor de texto. Para mais informações, consulte o manual.<br />";
 $lang["installer_config_write"]          = "Guardar em config.php";
 $lang["installer_elements_found"]        = "<b>instalação dos elementos da página</b><br /><br />Seleccione qual dos elementos encontrados pretende instalar:<br /><br />";
@@ -30,13 +30,13 @@ $lang["installer_installpe"]             = "Instalar elementos da página";
 $lang["installer_loaded"]                = "carregado";
 $lang["installer_login_installed"]       = "<br />O sistema já se encontra instalado e a conta de administrador já existe.<br />";
 $lang["installer_login_intro"]           = "<b>Configurar administrador</b><br /><br />Por favor forneça nome de utilizador e palavra-passe.<br />Esses dados serão utilizados mais tarde para aceder à área administrativa.<br />Por razões de segurança, nomes de utilizador, tais como \"admin\" ou \"administrador\" deveram ser evitados.<br /><br />";
-$lang["installer_login_password"]        = "Palavra-passe:";
+$lang["installer_login_password"]        = "Palavra-passe";
 $lang["installer_login_save"]            = "Criar conta";
-$lang["installer_login_username"]        = "Nome de Utilizador:";
+$lang["installer_login_username"]        = "Nome de Utilizador";
 $lang["installer_missing"]               = "a faltar";
 $lang["installer_module_notinstalled"]   = "Módulo não instalado";
 $lang["installer_modules_found"]         = "<b>Instalar/Actualizar os módulos</b><br /><br />Seleccione dos módulos encontrados os que pretende instalar:<br /><br />";
-$lang["installer_modules_needed"]        = "Necessita instalar os segguintes módulos:";
+$lang["installer_modules_needed"]        = "Necessita instalar os segguintes módulos";
 $lang["installer_next"]                  = "Próximo passo >";
 $lang["installer_nloaded"]               = "a faltar";
 $lang["installer_phpcheck_folder"]       = "Permissões de escrita em";

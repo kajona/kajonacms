@@ -10,5 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["portalupload_download"]           = "Архив скачиваний:";
+$lang["portalupload_download"]           = "Архив скачиваний";
 ?>

@@ -11,14 +11,14 @@
 
 //editable entries
 
-$lang["installer_config_dbdriver"]       = "Вид база данни:";
+$lang["installer_config_dbdriver"]       = "Вид база данни";
 $lang["installer_config_dbhostname"]     = "Сървър база данни: ";
-$lang["installer_config_dbname"]         = "Име база данни:";
-$lang["installer_config_dbpassword"]     = "Парола база данни:";
-$lang["installer_config_dbport"]         = "Порт база данни:";
+$lang["installer_config_dbname"]         = "Име база данни";
+$lang["installer_config_dbpassword"]     = "Парола база данни";
+$lang["installer_config_dbport"]         = "Порт база данни";
 $lang["installer_config_dbportinfo"]     = "Оставете празно ако ползвате стандартен порт.";
-$lang["installer_config_dbprefix"]       = "Префикс таблици:";
-$lang["installer_config_dbusername"]     = "Потребител база данни:";
+$lang["installer_config_dbprefix"]       = "Префикс таблици";
+$lang["installer_config_dbusername"]     = "Потребител база данни";
 $lang["installer_config_intro"]          = "<b>Създаване на достъп за база данни</b><br /><br />Забележка: Уеб сървърът трябва да има права върху /system/config/config.php.<br />В случай, че искате да оставите празни стойности, редактирайте  /system/config/config.php ръчно, ползвайки текстов редактор. За повече информация, погледнете в документацията.<br />";
 $lang["installer_config_write"]          = "Запази в config.php";
 $lang["installer_elements_found"]        = "<b>Инсталация на елементи към страниците</b><br /><br />Изберете кои от намерените елементи искате да инсталирате :<br /><br />";
@@ -29,12 +29,12 @@ $lang["installer_given"]                 = "дадени";
 $lang["installer_install"]               = "Инсталирай";
 $lang["installer_installpe"]             = "Инсталирай елементи към страниците";
 $lang["installer_loaded"]                = "Заредени";
-$lang["installer_login_email"]           = "Електорнна поща:";
+$lang["installer_login_email"]           = "Електорнна поща";
 $lang["installer_login_installed"]       = "<br />Системата вече е инсталирана и админ акаунт съществува .<br />";
 $lang["installer_login_intro"]           = "<b>Създай админ-потребителя</b><br /><br />Моля посочете потребителско име и парола.<br />Избраните потребителско име и парола ще бъдат ползвани за вписване в системата.<br />От съображение за сигурност, потребителски имена като \"admin\" или \"administrator\" трябва да бъдат избягвани.<br /><br />";
-$lang["installer_login_password"]        = "Парола:";
+$lang["installer_login_password"]        = "Парола";
 $lang["installer_login_save"]            = "Създай акаунт";
-$lang["installer_login_username"]        = "Потребителско име:";
+$lang["installer_login_username"]        = "Потребителско име";
 $lang["installer_missing"]               = "Липсва";
 $lang["installer_module_notinstalled"]   = "Модула не е инсталиран";
 $lang["installer_modules_found"]         = "<b>Инсталирай/обнови модулите</b><br /><br />Изберете кои от модулите искате да бъдат инсталирани:<br /><br />";
@@ -55,6 +55,6 @@ $lang["installer_step_modules"]          = "Модули";
 $lang["installer_step_phpsettings"]      = "PHP конфигурация";
 $lang["installer_step_samplecontent"]    = "Пробно съдържание";
 $lang["installer_systemlog"]             = "Системен дневник";
-$lang["installer_systemversion_needed"]  = "Минимална версия на нужната система:";
+$lang["installer_systemversion_needed"]  = "Минимална версия на нужната система";
 $lang["installer_update"]                = "Обнови към";
 $lang["installer_versioninstalled"]      = "Инсталирана версия: ";

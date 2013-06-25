@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["eventmanager_mode"]               = "Ausgabe-Modus:";
+$lang["eventmanager_mode"]               = "Ausgabe-Modus";
 $lang["eventmanager_mode_calendar"]      = "Kalendarische Ansicht";
 $lang["eventmanager_mode_list"]          = "Liste an Verantstaltungen";
-$lang["eventmanager_order"]              = "Reihenfolge:";
+$lang["eventmanager_order"]              = "Reihenfolge";
 $lang["eventmanager_order_asc"]          = "Aufsteigend";
 $lang["eventmanager_order_desc"]         = "Absteigend";
 $lang["eventmanager_order_hint"]         = "Nur relevant im Modus Liste";

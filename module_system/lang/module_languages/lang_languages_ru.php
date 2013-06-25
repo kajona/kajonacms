@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["delete_question"]                 = "Вы действительно хотите удалить язык &quot;<b>%%element_name%%</b>&quot;?";
-$lang["form_language_default"]           = "Язык по умолчанию:";
+$lang["form_language_default"]           = "Язык по умолчанию";
 $lang["lang_ar"]                         = "Арабский";
 $lang["lang_bg"]                         = "Болгарский";
 $lang["lang_cs"]                         = "Чешский";
