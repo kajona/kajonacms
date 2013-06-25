@@ -286,7 +286,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $arrItem["module"] = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneResult->getObjObject()->getArrModule("modul"));
             $arrItem["systemid"] = $objOneResult->getStrSystemid();
-            $arrItem["icon"] = _skinwebpath_ . "/pics/" . $strIcon;
+            $arrItem["icon"] = _skinwebpath_ . "/pics/" . $strIcon.".png";
             $arrItem["score"] = $objOneResult->getStrSystemid();
             $arrItem["description"] = uniStrTrim($objOneResult->getObjObject()->getStrDisplayName(), 200);
             $arrItem["link"] = html_entity_decode($strLink);

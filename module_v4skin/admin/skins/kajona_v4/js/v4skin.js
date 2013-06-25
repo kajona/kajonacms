@@ -58,6 +58,13 @@ $(function () {
         messages: {
             noResults: '',
             results: function() {}
+        },
+        search: function(event, ui) {
+            $(this).css("background-image", "url("+KAJONA_WEBPATH+"/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)").css("background-repeat", "no-repeat").
+            css("background-position", "right center");
+        },
+        response: function(event, ui) {
+            $(this).css("background-image", "none");
         }
     });
 
