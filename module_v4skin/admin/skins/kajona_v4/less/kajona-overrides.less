@@ -233,8 +233,14 @@ footer {
 .generalContextMenu {
     background:none @white !important;
     border: 1px solid @menuBorder !important;
+    .border-radius(0px);
     left: auto !important;
     top: auto !important;
+
+    .dropdown-menu {
+        .border-radius(0px);
+    }
+
 
     li::before {
         background: none !important;
@@ -327,7 +333,7 @@ footer {
 .navbar-inner {
     background-repeat: none;
     background:url(../img/navbar-inner-background.png) 300px 0px no-repeat @kajonaLightGray;
-    .border-radius(4px);
+    .border-radius(0px);
     .box-shadow(none);
     min-height: 50px;
     padding-left: 20px;
@@ -1074,6 +1080,7 @@ label {
 
 .modal {
     text-align: left;
+    .border-radius(0px);
 
     iframe {
         border: none;
