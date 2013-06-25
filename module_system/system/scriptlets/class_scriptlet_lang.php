@@ -51,7 +51,7 @@ class class_scriptlet_lang implements interface_scriptlet {
      * @return mixed
      */
     public function getProcessingContext() {
-        return interface_scriptlet::BIT_CONTEXT_ADMIN | interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT;
+        return interface_scriptlet::BIT_CONTEXT_ADMIN | interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT | interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE;
     }
 
 }
