@@ -27,8 +27,18 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
      * @return string
      */
     public function getImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "") {
+
+        //TODO: temporary replacement
         $strName = uniStrReplace(".png", "", $strName);
-        return "<img src=\""._skinwebpath_."/pics/".$strName.".png\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )."  />";
+
+        if($strName == "loadingSmall")
+            $strName .= ".gif";
+        else
+            $strName .= ".png";
+
+
+
+        return "<img src=\""._skinwebpath_."/pics/".$strName."\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )."  />";
     }
 
 

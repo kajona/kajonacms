@@ -107,7 +107,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
 
 
-            $strActions .= $this->objToolkit->listButton("<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".getImageAdmin("loadingSmall.gif", $this->getLang("package_searchupdate"))."</span>");
+            $strActions .= $this->objToolkit->listButton(
+                "<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".class_adminskin_helper::getAdminImage("loadingSmall", $this->getLang("package_searchupdate"))."</span>"
+            );
             $strActions .= "<script type='text/javascript'>
             $(function() {
                 KAJONA.admin.loader.loadFile('/core/module_packagemanager/admin/scripts/packagemanager.js', function() {
@@ -168,7 +170,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $objMetadata = $objManager->getPackage($strOnePackage);
 
             if($objMetadata == null || !isset($arrLatestVersion[$strOnePackage])) {
-                $arrReturn[$strOnePackage] = getImageAdmin("icon_updateError", $this->getLang("package_noversion"));
+                $arrReturn[$strOnePackage] = class_adminskin_helper::getAdminImage("icon_updateError", $this->getLang("package_noversion"));
                 continue;
             }
 
@@ -177,7 +179,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $bitUpdateAvailable = $objManager->updateAvailable($objHandler, $arrLatestVersion[$strOnePackage]);
 
             if($bitUpdateAvailable === null) {
-                $arrReturn[$strOnePackage] = getImageAdmin("icon_updateError", $this->getLang("package_noversion"));
+                $arrReturn[$strOnePackage] = class_adminskin_helper::getAdminImage("icon_updateError", $this->getLang("package_noversion"));
             }
             else {
                 //compare the version to trigger additional actions
@@ -194,7 +196,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     );
                 }
                 else {
-                    $arrReturn[$strOnePackage] = getImageAdmin("icon_updateDisabled", $this->getLang("package_noupdate")." ".$strLatestVersion);
+                    $arrReturn[$strOnePackage] = class_adminskin_helper::getAdminImage("icon_updateDisabled", $this->getLang("package_noupdate")." ".$strLatestVersion);
                 }
             }
         }
@@ -516,7 +518,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_enabled", $this->getLang("pack_active_no_status")));
+                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_enabled", $this->getLang("pack_active_no_status")));
             }
             else
                 return $this->objToolkit->listStatusButton($objListEntry, true);
@@ -529,7 +531,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
+                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
             }
             else
                 return $this->objToolkit->listDeleteButton(

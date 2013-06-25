@@ -29,7 +29,7 @@ $(function () {
         _renderItemData: function (ul, item) {
             return $('<li class="clearfix"></li>')
                 .data('ui-autocomplete-item', item)
-                .append('<a>' + '<img src="'+item.icon+'" alt="" class="pull-left">' + item.description + '</a>')
+                .append('<a>' + item.icon + item.description + '</a>')
                 .appendTo(ul);
         }
     });
