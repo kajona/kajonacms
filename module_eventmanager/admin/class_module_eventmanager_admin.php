@@ -68,7 +68,7 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $objListEntry instanceof class_module_eventmanager_event) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_participant"), "icon_folderActionOpen.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_participant"), "icon_folderActionOpen"))
             );
         }
 
@@ -86,7 +86,7 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
                         $this->getLang("event_start") . " " . dateToString($objEvent->getObjStartDate())
                     );
                     return array(
-                        $this->objToolkit->listButton(getLinkAdminDialog("system", "mailForm", $strPreset, "", $this->getLang("participant_mail"), "icon_mail.png"))
+                        $this->objToolkit->listButton(getLinkAdminDialog("system", "mailForm", $strPreset, "", $this->getLang("participant_mail"), "icon_mail"))
                     );
                 }
             }

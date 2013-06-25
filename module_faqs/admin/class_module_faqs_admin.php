@@ -62,7 +62,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_faqs_category) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
             );
         }
         return array();

@@ -61,7 +61,7 @@ class class_element_directorybrowser_admin extends class_element_admin implement
                 "&form_element=char2",
                 $this->getLang("commons_open_browser"),
                 $this->getLang("commons_open_browser"),
-                "icon_externalBrowser.png",
+                "icon_externalBrowser",
                 $this->getLang("commons_open_browser")
             )
         );

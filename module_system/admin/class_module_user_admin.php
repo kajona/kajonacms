@@ -117,10 +117,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
             if($objListEntry->getIntActive() == 1) {
-                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_active"), "icon_enabled.png"));
+                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_active"), "icon_enabled"));
             }
             else {
-                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_inactive"), "icon_disabled.png"));
+                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_inactive"), "icon_disabled"));
             }
         }
         return "";
@@ -140,7 +140,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
             }
             else {
-                return $this->objToolkit->listButton(getImageAdmin("icon_deleteDisabled.png", $this->getLang("gruppe_loeschen_x")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_deleteDisabled", $this->getLang("gruppe_loeschen_x")));
             }
         }
         return "";
@@ -148,11 +148,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == "userList" && $this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getLang("user_anlegen"), $this->getLang("user_anlegen"), "icon_new.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getLang("user_anlegen"), $this->getLang("user_anlegen"), "icon_new"));
         }
 
         if($strListIdentifier == "groupList" && $this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getLang("gruppen_anlegen"), $this->getLang("gruppen_anlegen"), "icon_new.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getLang("gruppen_anlegen"), $this->getLang("gruppen_anlegen"), "icon_new"));
         }
 
         return "";
@@ -178,7 +178,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrReturn = array();
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdminDialog("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group.png", $objListEntry->getStrUsername())
+                getLinkAdminDialog("user", "editMemberships", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
 
@@ -188,15 +188,15 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             && $objListEntry->rightEdit()
             && checkEmailaddress($objListEntry->getStrEmail())
         ) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mail.png"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mail"));
         }
 
         if($objListEntry instanceof class_module_user_user && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "switchToUser", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_switch_to"), "icon_userswitch.png"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "switchToUser", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_switch_to"), "icon_userswitch"));
         }
 
         if($objListEntry instanceof class_module_user_group && $objListEntry->rightEdit()) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("gruppe_mitglieder"), "icon_group.png"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("gruppe_mitglieder"), "icon_group"));
         }
 
         return $arrReturn;
@@ -206,11 +206,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($objListEntry instanceof class_module_user_group) {
             if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_) {
                 if($objListEntry->rightEdit()) {
-                    return $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("gruppe_bearbeiten"), "icon_edit.png"));
+                    return $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("gruppe_bearbeiten"), "icon_edit"));
                 }
             }
             else {
-                return $this->objToolkit->listButton(getImageAdmin("icon_editDisabled.png", $this->getLang("gruppe_bearbeiten_x")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_editDisabled", $this->getLang("gruppe_bearbeiten_x")));
             }
         }
         return parent::renderEditAction($objListEntry);
@@ -804,7 +804,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                         getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=" . $objGroup->getSystemid() . "&userid=" . $objSingleMember->getSystemid())
                     );
                 }
-                $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user.png"), $strAction, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction, $intI++);
             }
             $strReturn .= $this->objToolkit->listFooter() . $arrPageViews["pageview"];
         }
@@ -998,11 +998,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/" . $arrLogs[$intI]["user_log_ip"];
             $strUtraceLinkText = "http://www.utrace.de/whois/" . $arrLogs[$intI]["user_log_ip"];
             if($arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1") {
-                $arrRows[$intI][] = getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth.png", "_blank")
-                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text.png", "_blank");
+                $arrRows[$intI][] = getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth", "_blank")
+                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text", "_blank");
             }
             else {
-                $arrRows[$intI][] = getImageAdmin("icon_earthDisabled.png", $this->getLang("login_utrace_noinfo")) . " " . getImageAdmin("icon_textDisabled.png", $this->getLang("login_utrace_noinfo"));
+                $arrRows[$intI][] = getImageAdmin("icon_earthDisabled", $this->getLang("login_utrace_noinfo")) . " " . getImageAdmin("icon_textDisabled", $this->getLang("login_utrace_noinfo"));
             }
         }
 
@@ -1048,13 +1048,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                         "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter"),
                         $this->getLang("user_browser_show"),
                         $this->getLang("user_browser_show"),
-                        "icon_folderActionOpen.png"
+                        "icon_folderActionOpen"
                     )
                 );
 
                 if($this->getParam("allowGroup") == "1") {
                     $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['". strFormElement . "', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept.png")
+                        "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['". strFormElement . "', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept")
                     );
                 }
 
@@ -1080,7 +1080,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                         "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup"),
                         $this->getLang("user_list_parent"),
                         $this->getLang("user_list_parent"),
-                        "icon_folderActionLevelup.png"
+                        "icon_folderActionLevelup"
                     )
                 ),
                 $intI++
@@ -1090,11 +1090,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
                 $strAction = "";
                 if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID()) {
-                    $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled.png"));
+                    $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
                 }
                 else {
                     $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"" . $this->getLang("user_accept") . "\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['" . $strFormElement . "', '" . addslashes($objSingleUser->getStrUsername()) . "'], ['" . $strFormElement . "_id', '" . $objSingleUser->getSystemid() . "']]);\">" . getImageAdmin("icon_accept.png")
+                        "<a href=\"#\" title=\"" . $this->getLang("user_accept") . "\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['" . $strFormElement . "', '" . addslashes($objSingleUser->getStrUsername()) . "'], ['" . $strFormElement . "_id', '" . $objSingleUser->getSystemid() . "']]);\">" . getImageAdmin("icon_accept")
                     );
                 }
                 $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction, $intI++);

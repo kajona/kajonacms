@@ -131,7 +131,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_workflow.png";
+        return "icon_workflow";
     }
 
     /**

@@ -106,7 +106,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
                 //check if already installed locally
                 if($objManager->getPackage($arrOnePackage["title"]) !== null) {
-                    $strAction = $objToolkit->listButton(getImageAdmin("icon_installDisabled.png", $objLang->getLang("package_noinstall_installed", self::$STR_MODULE_NAME)));
+                    $strAction = $objToolkit->listButton(getImageAdmin("icon_installDisabled", $objLang->getLang("package_noinstall_installed", self::$STR_MODULE_NAME)));
                 }
                 else {
 
@@ -117,15 +117,15 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
                             "provider=".get_class($this)."&systemid=".$arrOnePackage["systemid"],
                             $objLang->getLang("package_install", self::$STR_MODULE_NAME),
                             $objLang->getLang("package_install", self::$STR_MODULE_NAME),
-                            "icon_install.png"
+                            "icon_install"
                         )
                     );
                 }
 
 
-                $strIcon = "icon_module.png";
+                $strIcon = "icon_module";
                 if($arrOnePackage["type"] == "TEMPLATE")
-                    $strIcon = "icon_dot.png";
+                    $strIcon = "icon_dot";
 
 
                 $arrOnePackage["version"] = $objLang->getLang("type_".$arrOnePackage["type"], self::$STR_MODULE_NAME).", V ".$arrOnePackage["version"];

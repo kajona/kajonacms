@@ -53,7 +53,7 @@ class class_module_guestbook_admin extends class_admin_evensimpler implements in
         if($objListEntry instanceof class_module_guestbook_guestbook) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->arrModule["modul"], "listPost", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_view_guestbook"), "icon_bookLens.png")
+                    getLinkAdmin($this->arrModule["modul"], "listPost", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_view_guestbook"), "icon_bookLens")
                 )
             );
         }

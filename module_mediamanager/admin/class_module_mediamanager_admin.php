@@ -60,12 +60,12 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
 
         if($objListEntry instanceof class_module_mediamanager_repo && $objListEntry->rightView())
             return array($this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
+                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
             ));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER && $objListEntry->rightView())
             return array($this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
+                getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
             ));
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE && $objListEntry->rightEdit()) {
@@ -73,7 +73,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             $arrMime  = $this->objToolkit->mimeType($objListEntry->getStrFilename());
             if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
                 return array($this->objToolkit->listButton(
-                    getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("action_edit_image"), "icon_crop.png", $objListEntry->getStrDisplayName())
+                    getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("action_edit_image"), "icon_crop", $objListEntry->getStrDisplayName())
                 ));
             }
 
@@ -88,7 +88,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
 
                 $objLockmanager = $objListEntry->getLockManager();
                 if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                    return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("commons_locked")));
+                    return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked", $this->getLang("commons_locked")));
                 }
 
                 return $this->objToolkit->listDeleteButton(
@@ -112,7 +112,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             if(validateSystemid($this->getSystemid())) {
                 $objCur = class_objectfactory::getInstance()->getObject($this->getSystemid());
                 if($objCur->rightEdit())
-                    return $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", "", $this->getLang("commons_create_folder"), "icon_new.png"));
+                    return $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", "", $this->getLang("commons_create_folder"), "icon_new"));
             }
 
             //href=\"javascript:init_fm_newfolder_dialog();\"", $this->getLang("commons_create_folder"), "", "", "", "", "", "btn"
@@ -126,9 +126,9 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             $objCur = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
             if($objCur instanceof class_module_mediamanager_file)
-                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objCur->getPrevId(), "..", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png"));
+                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objCur->getPrevId(), "..", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup"));
             else if($objCur instanceof class_module_mediamanager_repo)
-                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "list", "", "..", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png"));
+                return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "list", "", "..", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup"));
         }
         return parent::renderLevelUpAction($strListIdentifier);
     }
@@ -139,13 +139,13 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
                 if($this->getStrPeAddon() != "")
                     return $this->objToolkit->listButton(
                         getLinkAdmin(
-                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
+                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit"
                         )
                     );
                 else
                     return $this->objToolkit->listButton(
                         getLinkAdminDialog(
-                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit.png"
+                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit"
                         )
                     );
             }
@@ -203,7 +203,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
                     "&form_element=".$objField->getStrEntryName(),
                     $this->getLang("commons_open_browser"),
                     $this->getLang("commons_open_browser"),
-                    "icon_externalBrowser.png",
+                    "icon_externalBrowser",
                     $this->getLang("commons_open_browser")
                 )
             );
@@ -469,22 +469,22 @@ HTML;
 
             $arrTemplate["file_actions"] = "";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in.png")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
             );
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"", "", $this->getLang("showPreview"), "icon_zoom_out.png")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"", "", $this->getLang("showPreview"), "icon_zoom_out")
             )." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left.png")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
             );
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right.png")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
             )." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop.png")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
             );
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_accept.png", "accept_icon")
+                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_accept", "accept_icon")
             )." ";
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
@@ -565,7 +565,7 @@ HTML;
                             "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(),
                             "",
                             $this->getLang("action_open_folder"),
-                            "icon_folderActionOpen.png"
+                            "icon_folderActionOpen"
                         )
                     );
 
@@ -590,17 +590,17 @@ HTML;
                     $strReturn .= $this->objToolkit->genericAdminList(
                         generateSystemid(),
                         "..",
-                        getImageAdmin("icon_folderOpen.png"),
-                        $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")),
+                        getImageAdmin("icon_folderOpen"),
+                        $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup")),
                         $intI++
                     );
                 else
                     $strReturn .= $this->objToolkit->genericAdminList(
                         generateSystemid(),
                         "..",
-                        getImageAdmin("icon_folderOpen.png"),
+                        getImageAdmin("icon_folderOpen"),
                         $this->objToolkit->listButton(
-                            getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objFile->getPrevId(), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png")
+                            getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objFile->getPrevId(), "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup")
                         ),
                         $intI++
                     );
@@ -612,7 +612,7 @@ HTML;
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
                             $strActions .= $this->objToolkit->listButton(
-                                getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen.png")
+                                getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneFile->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
                             );
 
                         $strValue = $objOneFile->getStrFilename();
@@ -631,7 +631,7 @@ HTML;
                         }
 
                         if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE)
-                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.png"));
+                            $strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept"));
 
                         $strReturn .= $this->objToolkit->simpleAdminList($objOneFile, $strActions, $intI++);
                     }
@@ -702,10 +702,10 @@ HTML;
                     "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&form_element=".$strFormElement,
                     $this->getLang("commons_one_level_up"),
                     $this->getLang("commons_one_level_up"),
-                    "icon_folderActionLevelup.png"
+                    "icon_folderActionLevelup"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.png"), $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen"), $strAction, $intCounter++);
         }
         if($arrContent["nrFolders"] != 0) {
             foreach($arrContent["folders"] as $strFolderCur) {
@@ -716,14 +716,14 @@ HTML;
                         "&folder=".$strFolder."/".$strFolderCur."&form_element=".$strFormElement,
                         $this->getLang("action_open_folder"),
                         $this->getLang("action_open_folder"),
-                        "icon_folderActionOpen.png"
+                        "icon_folderActionOpen"
                     )
                 );
                 $strAction .= $this->objToolkit->listButton(
                     "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">"
-                    .getImageAdmin("icon_accept.png")
+                    .getImageAdmin("icon_accept")
                 );
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, getImageAdmin("icon_folderOpen.png"), $strAction, $intCounter++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, getImageAdmin("icon_folderOpen"), $strAction, $intCounter++);
             }
         }
         if($bitHit)
@@ -767,12 +767,12 @@ HTML;
             $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrOneLog["downloads_log_ip"];
             $strUtraceLinkText = "http://www.utrace.de/whois/".$arrOneLog["downloads_log_ip"];
             if($arrOneLog["downloads_log_ip"] != "127.0.0.1" && $arrOneLog["downloads_log_ip"] != "::1") {
-                $arrLogs[$intKey][5]	= getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap", "user"), "icon_earth.png", "_blank")
-                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext", "user"), "icon_text.png", "_blank");
+                $arrLogs[$intKey][5]	= getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap", "user"), "icon_earth", "_blank")
+                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext", "user"), "icon_text", "_blank");
             }
             else 
-                $arrLogs[$intKey][5] = getImageAdmin("icon_earthDisabled.png", $this->getLang("login_utrace_noinfo", "user")) ." "
-                    .getImageAdmin("icon_textDisabled.png", $this->getLang("login_utrace_noinfo", "user"));            
+                $arrLogs[$intKey][5] = getImageAdmin("icon_earthDisabled", $this->getLang("login_utrace_noinfo", "user")) ." "
+                    .getImageAdmin("icon_textDisabled", $this->getLang("login_utrace_noinfo", "user"));
         }
         //Create a data-table
         $arrHeader = array();

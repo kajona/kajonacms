@@ -160,10 +160,10 @@ class class_module_pages_page extends class_model implements interface_model, in
      */
     public function getStrIcon() {
         if($this->getIntType() == self::$INT_TYPE_ALIAS) {
-            return "icon_page_alias.png";
+            return "icon_page_alias";
         }
         else {
-            return "icon_page.png";
+            return "icon_page";
         }
     }
 

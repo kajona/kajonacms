@@ -59,7 +59,7 @@ class class_module_votings_admin extends class_admin_evensimpler implements inte
 
         if($objListEntry->rightEdit() && $objListEntry instanceof class_module_votings_voting) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_answers"), "icon_folderActionOpen.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_answers"), "icon_folderActionOpen"))
             );
         }
 

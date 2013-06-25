@@ -42,9 +42,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
      */
     public function getStrIcon() {
         if($this->getStrType() == "TEMPLATE")
-            return "icon_dot.png";
+            return "icon_dot";
         else
-            return "icon_module.png";
+            return "icon_module";
 
     }
 

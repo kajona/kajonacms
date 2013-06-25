@@ -94,7 +94,7 @@ class class_module_eventmanager_participant extends class_model implements inter
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_user.png";
+        return "icon_user";
     }
 
     /**

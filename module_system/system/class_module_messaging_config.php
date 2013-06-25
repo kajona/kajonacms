@@ -71,7 +71,7 @@ class class_module_messaging_config extends class_model implements interface_mod
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_mail.png";
+        return "icon_mail";
     }
 
     /**

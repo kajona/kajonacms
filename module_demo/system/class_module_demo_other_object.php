@@ -100,7 +100,7 @@ class class_module_demo_other_object extends class_model implements interface_mo
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_excel.png";
+        return "icon_excel";
     }
 
     /**

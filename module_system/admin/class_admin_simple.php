@@ -298,7 +298,7 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_editLocked.png", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_editLocked", $this->getLang("commons_locked")));
             }
 
             if($bitDialog)
@@ -309,7 +309,7 @@ abstract class class_admin_simple extends class_admin {
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
-                        "icon_edit.png"
+                        "icon_edit"
                     )
                 );
             else
@@ -320,7 +320,7 @@ abstract class class_admin_simple extends class_admin {
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
-                        "icon_edit.png"
+                        "icon_edit"
                     )
                 );
         }
@@ -339,7 +339,7 @@ abstract class class_admin_simple extends class_admin {
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen.png")
+                    getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
                 );
             }
         }
@@ -357,7 +357,7 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked", $this->getLang("commons_locked")));
             }
 
             return $this->objToolkit->listDeleteButton(
@@ -417,7 +417,7 @@ abstract class class_admin_simple extends class_admin {
 
             // @codingStandardsIgnoreStart
             $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".$objListEntry->getStrDisplayName()."'); KAJONA.admin.folderview.dialog.init(); return false;";
-            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\"><img src=\""._skinwebpath_."/pics/icon_tag.png\" alt=\"".$this->getLang("commons_edit_tags")."\" align=\"absbottom\" /></a>";
+            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".class_adminskin_helper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);
 
@@ -440,7 +440,7 @@ abstract class class_admin_simple extends class_admin {
                     "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                     "",
                     $this->getLang("commons_edit_copy"),
-                    "icon_copy.png"
+                    "icon_copy"
                 )
             );
         }
@@ -473,13 +473,13 @@ abstract class class_admin_simple extends class_admin {
             if($bitDialog)
                 return $this->objToolkit->listButton(
                     getLinkAdminDialog(
-                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png"
+                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
             else
                 return $this->objToolkit->listButton(
                     getLinkAdmin(
-                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new.png"
+                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
         }
@@ -516,7 +516,7 @@ abstract class class_admin_simple extends class_admin {
         }
 
         return $this->objToolkit->listButton(
-            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".getImageAdmin("icon_new_multi.png")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
+            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".getImageAdmin("icon_new_multi")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
         );
 
     }
@@ -537,9 +537,9 @@ abstract class class_admin_simple extends class_admin {
 
     protected function getDefaultActionHandlers() {
         return array(
-            new class_admin_batchaction(getImageAdmin("icon_delete.png"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
-            new class_admin_batchaction(getImageAdmin("icon_enabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable")),
-            new class_admin_batchaction(getImageAdmin("icon_disabled.png"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable")),
+            new class_admin_batchaction(getImageAdmin("icon_delete"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
+            new class_admin_batchaction(getImageAdmin("icon_enabled"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable")),
+            new class_admin_batchaction(getImageAdmin("icon_disabled"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable")),
         );
     }
 
@@ -560,7 +560,7 @@ abstract class class_admin_simple extends class_admin {
                     "&systemid=".$objListEntry->getSystemid(),
                     $this->getLang("commons_edit_history"),
                     $this->getLang("commons_edit_history"),
-                    "icon_history.png",
+                    "icon_history",
                     $objListEntry->getStrDisplayName()
                 )
             );

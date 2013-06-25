@@ -76,7 +76,7 @@ class class_module_demo_sub_object extends class_model implements interface_mode
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_excel.png";
+        return "icon_excel";
     }
 
     /**

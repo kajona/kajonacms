@@ -267,7 +267,7 @@ class class_toolkit_admin extends class_toolkit {
             "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
             class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
             class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-            "icon_externalBrowser.png",
+            "icon_externalBrowser",
             class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
         );
 
@@ -329,7 +329,7 @@ class class_toolkit_admin extends class_toolkit {
             "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
-            "icon_externalBrowser.png",
+            "icon_externalBrowser",
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
         );
 
@@ -405,7 +405,7 @@ class class_toolkit_admin extends class_toolkit {
             "&form_element=".$strName."&systemid=".$strRepositoryId,
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-            "icon_externalBrowser.png",
+            "icon_externalBrowser",
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
         );
 
@@ -432,7 +432,7 @@ class class_toolkit_admin extends class_toolkit {
             "&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-            "icon_externalBrowser.png",
+            "icon_externalBrowser",
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
         );
 
@@ -442,7 +442,7 @@ class class_toolkit_admin extends class_toolkit {
             "file='+document.getElementById('".$strName."').value+'",
             class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
             class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
-            "icon_crop.png",
+            "icon_crop",
             class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
             true,
             false,
@@ -1073,7 +1073,7 @@ class class_toolkit_admin extends class_toolkit {
         $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
                                          "",
                                          class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
-                                         "icon_delete.png" );
+                                         "icon_delete" );
 
         return $this->listButton($strButton).$strDialog;
     }
@@ -1100,11 +1100,11 @@ class class_toolkit_admin extends class_toolkit {
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
         if($objRecord->getIntRecordStatus() == 1) {
-            $strImage = "icon_enabled.png";
+            $strImage = "icon_enabled";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
         }
         else {
-            $strImage = "icon_disabled.png";
+            $strImage = "icon_disabled";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
         }
 
@@ -1122,7 +1122,14 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
         }
 
-        $strButton = getLinkAdminManual("href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"", "", $strText, $strImage, "statusImage_".$objRecord->getSystemid(), "statusLink_".$objRecord->getSystemid());
+        $strButton = getLinkAdminManual(
+            "href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"",
+            "",
+            $strText,
+            $strImage,
+            "statusImage_".$objRecord->getSystemid(),
+            "statusLink_".$objRecord->getSystemid()
+        );
 
         return $this->listButton($strButton).$strJavascript;
     }

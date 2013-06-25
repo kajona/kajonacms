@@ -296,7 +296,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_workflows_handler) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit"));
         }
         return parent::renderEditAction($objListEntry, $bitDialog);
     }
@@ -323,13 +323,13 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         if($objListEntry instanceof class_module_workflows_workflow) {
             $strStatusIcon = "";
             if($objListEntry->getIntState() == class_module_workflows_workflow::$INT_STATE_NEW) {
-                $strStatusIcon = getImageAdmin("icon_workflowNew.png", $this->getLang("workflow_status_" . $objListEntry->getIntState()));
+                $strStatusIcon = getImageAdmin("icon_workflowNew", $this->getLang("workflow_status_" . $objListEntry->getIntState()));
             }
             if($objListEntry->getIntState() == class_module_workflows_workflow::$INT_STATE_SCHEDULED) {
-                $strStatusIcon = getImageAdmin("icon_workflowScheduled.png", $this->getLang("workflow_status_" . $objListEntry->getIntState()));
+                $strStatusIcon = getImageAdmin("icon_workflowScheduled", $this->getLang("workflow_status_" . $objListEntry->getIntState()));
             }
             if($objListEntry->getIntState() == class_module_workflows_workflow::$INT_STATE_EXECUTED) {
-                $strStatusIcon = getImageAdmin("icon_workflowExecuted.png", $this->getLang("workflow_status_" . $objListEntry->getIntState()));
+                $strStatusIcon = getImageAdmin("icon_workflowExecuted", $this->getLang("workflow_status_" . $objListEntry->getIntState()));
             }
 
             if($strStatusIcon != "") {
@@ -363,17 +363,17 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger"))
             );
         }
         if($objListEntry instanceof class_module_workflows_workflow) {
             $arrReturn = array();
             if($objListEntry->getIntState() == class_module_workflows_workflow::$INT_STATE_SCHEDULED && $objListEntry->getObjWorkflowHandler()->providesUserInterface()) {
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showUI", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("workflow_ui"), "icon_workflow_ui.png"));
+                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showUI", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("workflow_ui"), "icon_workflow_ui"));
             }
 
             if($objListEntry->rightEdit()) {
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_show_details"), "icon_lens.png"));
+                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_show_details"), "icon_lens"));
             }
 
             return $arrReturn;

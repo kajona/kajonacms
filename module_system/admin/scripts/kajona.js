@@ -328,6 +328,10 @@ KAJONA.admin.tooltip = {
                 });
             }
         });
+    },
+
+    removeTooltip : function(objElement) {
+        $(objElement).qtip('hide');
     }
 
 };
@@ -620,9 +624,11 @@ KAJONA.admin.ajax = {
                 if(bitReload !== null && bitReload === true)
                     location.reload();
 
-				if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
-					var image = $('#statusImage_' + strSystemIdToSet);
-					var link = $('#statusLink_' + strSystemIdToSet);
+
+                if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
+                    var image = $('#statusImage_' + strSystemIdToSet);
+                    var link = $('#statusLink_' + strSystemIdToSet);
+//                    KAJONA.admin.tooltip.removeTooltip(link);
 
 					if (image.attr('src').indexOf('icon_enabled.png') != -1) {
 						image.attr('src', strInActiveImageSrc);
@@ -642,6 +648,8 @@ KAJONA.admin.ajax = {
         	}
         };
 
+        var link = $('#statusLink_' + strSystemIdToSet);
+        KAJONA.admin.tooltip.removeTooltip(link);
         KAJONA.admin.ajax.genericAjaxCall("system", "setStatus", strSystemIdToSet, objCallback);
 	}
 

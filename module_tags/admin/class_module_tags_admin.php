@@ -58,7 +58,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
                     "&systemid=" . $objListEntry->getSystemid(),
                     $this->getLang("action_show_assigned_records"),
                     $this->getLang("action_show_assigned_records"),
-                    "icon_folderActionOpen.png"
+                    "icon_folderActionOpen"
                 )
             );
 
@@ -70,7 +70,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
                         "&systemid=" . $objListEntry->getSystemid(),
                         $this->getLang("action_add_to_favorites"),
                         $this->getLang("action_add_to_favorites"),
-                        "icon_favorite.png"
+                        "icon_favorite"
                     )
                 );
             }

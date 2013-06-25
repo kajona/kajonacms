@@ -49,7 +49,7 @@ class class_module_news_category extends class_model implements interface_model,
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_dot.png";
+        return "icon_dot";
     }
 
     /**

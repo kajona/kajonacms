@@ -199,12 +199,11 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
     $strLink = "";
     if($strImage != "") {
         if(!$bitTooltip)
-            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".class_adminskin_helper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
         else
-            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" rel=\"tooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" rel=\"tooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".class_adminskin_helper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
     }
-
-    if($strImage == "" && $strText != "")   {
+    else if($strText != "") {
         if($strAlt == "")
             $strAlt = $strText;
         $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
@@ -232,15 +231,14 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
         if($strAlt == "")
             $strAlt = $strAction;
         if(!$bitTooltip)
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
         else
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" /></a>";
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
     }
 
-    if($strImage == "" && $strText != "") {
+    else if($strText != "") {
         if($strAlt == "")
             $strAlt = $strText;
-
 
         if($strAlt != $strText)
             $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "")." rel=\"tooltip\">".$strText."</a>";
@@ -399,7 +397,7 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = ""
     $strParams = str_replace("&", "&amp;", $strParams);
 
     if($strImage != "") {
-        $strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+        $strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
     }
 
     if($strImage == "" && $strText != "") {
@@ -448,10 +446,10 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 
         if(!$bitTooltip)
             $strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
-                "title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+                "title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
         else
             $strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
-                "title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+                "title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
     }
 
     if($strImage == "" && $strText != "") {
@@ -493,11 +491,11 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
 
     if($strOnClick == "") {
         if($intWidth !== null && $intHeight !== null)
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); ".
-                "KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
+                "KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
         else
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); ".
-                "KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
+                "KAJONA.admin.folderview.dialog.init(); return false;";
     }
 
 
@@ -507,9 +505,9 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
             $strAlt = $strAction;
 
         if(!$bitTooltip)
-            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
         else
-            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\" rel=\"tooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
     }
 
     if($strImage == "" && $strText != "") {
@@ -528,10 +526,11 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @param bool $bitNoAlt
  *
  * @return string
- * @todo move to toolkit
+ * @deprecated replaced by class_adminskin_helper::getAdminImage()
+ * @see class_adminskin_helper::getAdminImage()
  */
 function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false) {
-    return "<img src=\""._skinwebpath_."/pics/".$strImage."\" ".($bitNoAlt ? " title=\"\" " : " alt=\"".$strAlt."\" title=\"".$strAlt."\" rel=\"tooltip\"  ")."  />";
+    return class_adminskin_helper::getAdminImage($strImage, $strAlt, $bitNoAlt);
 }
 
 /**
@@ -544,9 +543,9 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false) {
  */
 function getRightsImageAdminName($strSystemid) {
     if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
-        return "icon_key_inherited.png";
+        return "icon_key_inherited";
     else
-        return "icon_key.png";
+        return "icon_key";
 }
 
 

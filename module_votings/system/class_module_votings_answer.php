@@ -42,7 +42,7 @@ class class_module_votings_answer extends class_model implements interface_model
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_question.png";
+        return "icon_question";
     }
 
     /**

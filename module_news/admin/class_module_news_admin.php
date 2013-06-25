@@ -67,7 +67,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_news_category) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "listNewsAndCategories", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "listNewsAndCategories", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
             );
         }
 
@@ -75,7 +75,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             if(class_module_languages_language::getNumberOfLanguagesAvailable() > 1) {
                 return array(
                     $this->objToolkit->listButton(
-                        getLinkAdminDialog($this->arrModule["modul"], "editLanguageset", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("news_languageset"), "icon_language.png")
+                        getLinkAdminDialog($this->arrModule["modul"], "editLanguageset", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("news_languageset"), "icon_language")
                     )
                 );
             }
@@ -96,10 +96,10 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == class_module_news_admin::STR_CAT_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new"));
         }
         else if($strListIdentifier == class_module_news_admin::STR_NEWS_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new"));
         }
 
         return parent::getNewEntryAction($strListIdentifier, $bitDialog);
@@ -183,15 +183,15 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                         $arrMaintainedLanguages[] = $objOneLanguage->getSystemid();
                         $objNews = new class_module_news_news($strNewsid);
                         $strNewsName = $objNews->getStrTitle();
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=" . $objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete.png"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=" . $objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete"));
                         $strReturn .= $this->objToolkit->genericAdminList(
-                            $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $strNewsName, getImageAdmin("icon_language.png"), $strActions, $intI++
+                            $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $strNewsName, getImageAdmin("icon_language"), $strActions, $intI++
                         );
                     }
                     else {
                         $intNrOfUnassigned++;
                         $strReturn .= $this->objToolkit->genericAdminList(
-                            $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $this->getLang("languageset_news_na"), getImageAdmin("icon_language.png"), $strActions, $intI++
+                            $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $this->getLang("languageset_news_na"), getImageAdmin("icon_language"), $strActions, $intI++
                         );
                     }
 

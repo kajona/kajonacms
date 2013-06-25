@@ -144,7 +144,7 @@ class class_module_search_search extends class_model implements interface_model,
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_lens.png";
+        return "icon_lens";
     }
 
 

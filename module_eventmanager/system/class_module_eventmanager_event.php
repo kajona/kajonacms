@@ -122,7 +122,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_event.png";
+        return "icon_event";
     }
 
     /**

@@ -108,15 +108,15 @@ class class_module_system_admin extends class_admin_simple implements interface_
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_system_module) {
             $arrReturn = array();
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect.png"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect"));
 
             if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
                 if($objListEntry->getStrName() == "system")
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled.png"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled"));
                 else if($objListEntry->getStatus() == 0)
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled.png"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled"));
                 else
-                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled.png"));
+                    $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled"));
             }
 
             return $arrReturn;
@@ -155,7 +155,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             return "";
 
         if($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit())
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new.png"));
+            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new"));
 
         return parent::getNewEntryAction($strListIdentifier);
     }
@@ -437,7 +437,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                         "&task=".$objOneTask->getStrInternalTaskName(),
                         $objOneTask->getStrTaskname(),
                         $this->getLang("systemtask_run"),
-                        "icon_accept.png"
+                        "icon_accept"
                     );
                 }
                 else {
@@ -445,14 +445,14 @@ class class_module_system_admin extends class_admin_simple implements interface_
                         "href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
                         "",
                         $this->getLang("systemtask_run"),
-                        "icon_accept.png"
+                        "icon_accept"
                     );
                 }
 
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneTask->getStrTaskname(),
-                    getImageAdmin("icon_systemtask.png"),
+                    getImageAdmin("icon_systemtask"),
                     $this->objToolkit->listButton($strLink),
                     $intI++
                 );
@@ -520,7 +520,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $objUser = new class_module_user_user($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
-            $arrRowData[0] = getImageAdmin("icon_user.png");
+            $arrRowData[0] = getImageAdmin("icon_user");
             $arrRowData[1] = $strUsername;
             $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
@@ -561,9 +561,9 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
             $arrRowData[4] = $strActivity;
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
-                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_delete.png");
+                $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_delete");
             else
-                $arrRowData[5] = getImageAdmin("icon_deleteDisabled.png");
+                $arrRowData[5] = getImageAdmin("icon_deleteDisabled");
             $arrData[] = $arrRowData;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);

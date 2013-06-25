@@ -144,7 +144,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                             $objElement = $objOneElementInSystem;
                             if($objElement->getIntRepeat() == 1 || $bitHit === false) {
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.png"));
+                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"]." (".$objOneElementInSystem->getStrDisplayName().")", "", $strActions, $intI++);
                             }
                             else {
@@ -157,7 +157,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 }
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new.png"));
+                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
                                     $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"]." (".$arrSingleElementOnTemplateplaceholder["element"].")", "", $strActions, $intI++);
                                 }
                             }
@@ -230,15 +230,15 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.png"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked.png", $this->getLang("ds_gesperrt")));
-                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked.png", $this->getLang("ds_gesperrt")));
+                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked", $this->getLang("ds_gesperrt")));
+                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked", $this->getLang("ds_gesperrt")));
             }
             else {
                 //if it's the user who locked the record, unlock it now
                 if($objLockmanager->isLockedByCurrentUser())
                     $objLockmanager->unlockRecord();
 
-                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit.png"));
+                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
                 $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
 

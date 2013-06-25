@@ -87,14 +87,14 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
 
         if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder", "mediamanager"), "icon_folderActionOpen.png"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder", "mediamanager"), "icon_folderActionOpen"))
             );
 
 
         else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens.png")
+                    getLinkAdmin($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens")
                 )
             );
         }
@@ -230,7 +230,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
 
     protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = array();
-        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_text.png"), getLinkAdminXml("packageserver", "updateDataFromMetadata", "&systemid=%systemid%"), $this->getLang("batchaction_metadata"));
+        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_text"), getLinkAdminXml("packageserver", "updateDataFromMetadata", "&systemid=%systemid%"), $this->getLang("batchaction_metadata"));
         return $arrDefault;
     }
 

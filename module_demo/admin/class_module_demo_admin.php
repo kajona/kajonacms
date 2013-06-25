@@ -63,7 +63,7 @@ class class_module_demo_admin extends class_admin_evensimpler implements interfa
         $bitPeMode = $this->getParam("pe") != "";
         if($objListEntry instanceof class_module_demo_demo) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin("demo", "listSubObject", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("liste_subtyp"), "icon_excel.png")
+                getLinkAdmin("demo", "listSubObject", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("liste_subtyp"), "icon_excel")
             );
             return $arrReturn;
         }

@@ -58,7 +58,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
                 "&pages=1&form_element=" . $this->getParam("form_element") . "&bit_link=1",
                 $this->getLang("wysiwygPagesBrowser"),
                 $this->getLang("wysiwygPagesBrowser"),
-                "icon_folderActionOpen.png"
+                "icon_folderActionOpen"
             )
         );
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
@@ -71,7 +71,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
                     "&systemid=" . _mediamanager_default_filesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
                     $this->getLang("wysiwygFilesBrowser"),
                     $this->getLang("wysiwygFilesBrowser"),
-                    "icon_folderActionOpen.png"
+                    "icon_folderActionOpen"
                 )
             );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
@@ -85,7 +85,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
                     "&systemid=" . _mediamanager_default_imagesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
                     $this->getLang("wysiwygImagesBrowser"),
                     $this->getLang("wysiwygImagesBrowser"),
-                    "icon_folderActionOpen.png"
+                    "icon_folderActionOpen"
                 )
             );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygImagesBrowser"), "", $strAction, $intCounter++);
@@ -99,7 +99,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
                 "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
                 $this->getLang("wysiwygRepoBrowser"),
                 $this->getLang("wysiwygRepoBrowser"),
-                "icon_folderActionOpen.png"
+                "icon_folderActionOpen"
             )
         );
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygRepoBrowser"), "", $strAction, $intCounter++);

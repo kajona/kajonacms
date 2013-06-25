@@ -74,7 +74,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
     public function getStrIcon() {
-        return "icon_folderClosed.png";
+        return "icon_folderClosed";
     }
 
     /**

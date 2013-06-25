@@ -108,7 +108,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      *         [the image name, the alt-title]
      */
     public function getStrIcon() {
-        return "icon_question.png";
+        return "icon_question";
     }
 
     /**

@@ -390,7 +390,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_search_search) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "search", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_execute_search"), $this->getLang("action_execute_search"), "icon_lens.png")),
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "search", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_execute_search"), $this->getLang("action_execute_search"), "icon_lens")),
             );
         }
         else {

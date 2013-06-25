@@ -110,7 +110,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
                     "&systemid=".$objListEntry->getSystemid(),
                     $this->getLang("action_edit"),
                     $this->getLang("action_edit"),
-                    "icon_lens.png"
+                    "icon_lens"
                 )
             );
         }
@@ -143,7 +143,7 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
     protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = $this->getDefaultActionHandlers();
-        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mail.png"), getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
+        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mail"), getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
         return $arrDefault;
     }
 

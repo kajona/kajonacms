@@ -45,14 +45,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
      */
     protected function actionGeneratePage() {
 
-        //Determin the pagename
-
-
-
+        //Determine the pagename
         $objPageData = $this->getPageData();
-
-
-
 
         //react on portaleditor commands
         //pe to display, or pe to disable?
@@ -454,27 +448,27 @@ class class_module_pages_portal extends class_portal implements interface_portal
             //Add an iconbar
             $arrPeContents["pe_iconbar"] = "";
             $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.RTE.savePage(); return false;\" id=\"savePageLink\">"
-                .getImageAdmin("icon_acceptDisabled.png", $this->getLang("pe_rte_save", "pages"))."</a>";
+                .class_adminskin_helper::getAdminImage("icon_acceptDisabled", $this->getLang("pe_rte_save", "pages"))."</a>";
             $arrPeContents["pe_iconbar"] .= "&nbsp;";
 
             $arrPeContents["pe_iconbar"] .= getLinkAdmin(
                 "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
                 $this->getLang("pe_icon_edit", "pages"),
-                "icon_page.png"
+                "icon_page"
             );
             $arrPeContents["pe_iconbar"] .= "&nbsp;";
 
             $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
             $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                .getImageAdmin("icon_edit.png", $this->getLang("pe_icon_page", "pages"))."</a>";
+                .class_adminskin_helper::getAdminImage("icon_edit", $this->getLang("pe_icon_page", "pages"))."</a>";
 
             $arrPeContents["pe_iconbar"] .= "&nbsp;";
             $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
             $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                .getImageAdmin("icon_new.png", $this->getLang("pe_icon_new", "pages"))."</a>";
+                .class_adminskin_helper::getAdminImage("icon_new", $this->getLang("pe_icon_new", "pages"))."</a>";
 
             $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">"
-                .getImageAdmin("icon_enabled.png", $this->getLang("pe_disable", "pages"))."</a>";
+                .class_adminskin_helper::getAdminImage("icon_enabled", $this->getLang("pe_disable", "pages"))."</a>";
 
 
             //Load portaleditor javascript (even if it's maybe already loaded in portal and init the ckeditor)
@@ -532,7 +526,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
         else {
             //Button to enable the toolbar & pe
             $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0px; right: 0px;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
-                .getImageAdmin("icon_disabled.png", $this->getLang("pe_enable", "pages"))."</a></div>";
+                .getImageAdmin("icon_disabled", $this->getLang("pe_enable", "pages"))."</a></div>";
             //Load portaleditor javascript
             $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
             //Load portaleditor styles

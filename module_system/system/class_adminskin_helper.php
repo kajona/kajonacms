@@ -19,6 +19,11 @@ class class_adminskin_helper {
     private static $strSkinPath = null;
 
     /**
+     * @var interface_adminskin_imageresolver
+     */
+    private static $objAdminImageResolver = null;
+
+    /**
      * Returns the list of available admin-skins
      * @static
      * @return array
@@ -53,11 +58,30 @@ class class_adminskin_helper {
     /**
      * Internal helper, sets the current skinwebpath to be used by skins
      * @static
-     *
      */
     public static function defineSkinWebpath() {
         if(!defined("_skinwebpath_"))
             define("_skinwebpath_", _webpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin()));
+    }
+
+    /**
+     * Makes use of the admin-skin image-mapper to resolve an image-name into a
+     * real image-tag / script / whatever
+     *
+     * @param $strName
+     * @param string $strAlt
+     * @param bool $bitBlockTooltip
+     * @param string $strEntryId
+     *
+     * @return string
+     */
+    public static function getAdminImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "") {
+        if(self::$objAdminImageResolver == null) {
+            include_once _realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php";
+            self::$objAdminImageResolver = new class_adminskin_imageresolver();
+        }
+
+        return self::$objAdminImageResolver->getImage($strName, $strAlt, $bitBlockTooltip, $strEntryId);
     }
 }
 

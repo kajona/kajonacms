@@ -137,7 +137,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         "&systemid=".$objPrevFolder->getPrevId()."&pe=".$this->getParam("pe"),
                         $this->getLang("commons_one_level_up"),
                         $this->getLang("commons_one_level_up"),
-                        "icon_folderActionLevelup.png"
+                        "icon_folderActionLevelup"
                     )
                 );
             }
@@ -155,7 +155,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         "&systemid=".$objListEntry->getSystemid(),
                         $this->getLang("element_bearbeiten"),
                         $this->getLang("element_bearbeiten"),
-                        "icon_edit.png"
+                        "icon_edit"
                     )
                 );
         }
@@ -221,23 +221,23 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $objTargetPage = class_module_pages_page::getPageByName($objListEntry->getStrAlias());
                 if(!$bitPeMode && $objTargetPage != null && $objTargetPage->rightEdit())
                     $arrReturn[] = $this->objToolkit->listButton(
-                        getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte_alias"), "icon_page_alias.png")
+                        getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte_alias"), "icon_page_alias")
                     );
 
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen.png")
+                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen")
                 );
             }
             else if($objListEntry->rightView()) {
 
                 if(!$bitPeMode && $objListEntry->rightEdit()) {
                     $arrReturn[] = $this->objToolkit->listButton(
-                        getLinkAdmin("pages_content", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte"), "icon_page.png")
+                        getLinkAdmin("pages_content", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("seite_inhalte"), "icon_page")
                     );
                 }
 
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen.png")
+                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), "", $this->getLang("page_sublist"), "icon_folderActionOpen")
                 );
             }
 
@@ -245,7 +245,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         }
         else if($objListEntry instanceof class_module_pages_folder) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin("pages", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen.png")
+                getLinkAdmin("pages", "list", "&systemid=".$objListEntry->getSystemid()."&pe=".$this->getParam("pe"), $this->getLang("pages_ordner_oeffnen"), $this->getLang("pages_ordner_oeffnen"), "icon_folderActionOpen")
             );
             return $arrReturn;
         }
@@ -281,23 +281,23 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "newPage", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu"), $this->getLang("modul_neu"), "icon_new.png")
+                getLinkAdmin($this->getArrModule("modul"), "newPage", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu"), $this->getLang("modul_neu"), "icon_new")
             );
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "newAlias", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu_alias"), $this->getLang("modul_neu_alias"), "icon_new_alias.png")
+                getLinkAdmin($this->getArrModule("modul"), "newAlias", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu_alias"), $this->getLang("modul_neu_alias"), "icon_new_alias")
             );
 
         }
         if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightRight2()) {
             if((!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getObjModule()->getSystemid()))
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new.png")
+                    getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new")
                 );
 
         }
         if($strListIdentifier == class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightRight1()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin($this->getArrModule("modul"), "newElement", "", $this->getLang("modul_element_neu"), $this->getLang("modul_element_neu"), "icon_new.png")
+                getLinkAdmin($this->getArrModule("modul"), "newElement", "", $this->getLang("modul_element_neu"), $this->getLang("modul_element_neu"), "icon_new")
             );
         }
 
@@ -409,7 +409,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             "&form_element=page_folder_name&pages=1&elements=false&folder=1&pagealiases=1",
             $this->getLang("commons_open_browser"),
             $this->getLang("commons_open_browser"),
-            "icon_externalBrowser.png",
+            "icon_externalBrowser",
             $this->getLang("commons_open_browser")
         );
 
@@ -929,14 +929,14 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         //Folder to jump one level up
         if(!$bitPages || $strLevelUp != "" || $bitFolder) {
             $strAction = $this->objToolkit->listButton(
-                ($strSystemid != "0" && $strLevelUp != "") || $strPageid != "0" ? getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$strLevelUp.$strLinkAddon."&form_element=".$strElement.($this->getParam("bit_link") != "" ? "&bit_link=1" : ""), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup.png") : " "
+                ($strSystemid != "0" && $strLevelUp != "") || $strPageid != "0" ? getLinkAdmin($this->arrModule["modul"], "pagesFolderBrowser", "&systemid=".$strLevelUp.$strLinkAddon."&form_element=".$strElement.($this->getParam("bit_link") != "" ? "&bit_link=1" : ""), $this->getLang("commons_one_level_up"), $this->getLang("commons_one_level_up"), "icon_folderActionLevelup") : " "
             );
             if($strSystemid == $this->getObjModule()->getSystemid() && (!$bitPages || $bitFolder))
                 $strAction .= $this->objToolkit->listButton(
                     "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getObjModule()->getSystemid()."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.png")
                 );
 
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen.png"), $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen"), $strAction, $intCounter++);
         }
 
         if(count($arrFolder) > 0 && $strPageid == "0") {
@@ -949,7 +949,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                             "&systemid=".$objSingleFolder->getSystemid()."&form_element=".$strElement.$strLinkAddon,
                             $this->getLang("pages_ordner_oeffnen"),
                             $this->getLang("pages_ordner_oeffnen"),
-                            "icon_folderActionOpen.png"
+                            "icon_folderActionOpen"
                         )
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction, $intCounter++);
@@ -962,7 +962,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                             "&systemid=".$objSingleFolder->getSystemid()."&form_element=".$strElement.$strLinkAddon,
                             $this->getLang("pages_ordner_oeffnen"),
                             $this->getLang("pages_ordner_oeffnen"),
-                            "icon_folderActionOpen.png"
+                            "icon_folderActionOpen"
                         )
                     );
                     $strAction .= $this->objToolkit->listButton(
@@ -993,7 +993,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                     if($objSinglePage->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
                         if(count(class_module_pages_folder::getPagesInFolder($objSinglePage->getSystemid())) == 0)
-                            $strAction = getImageAdmin("icon_treeBranchOpenDisabled.png");
+                            $strAction = getImageAdmin("icon_treeBranchOpenDisabled");
                         else
                             $strAction = $this->objToolkit->listButton(
                                 getLinkAdmin(
@@ -1002,7 +1002,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                                     "&systemid=".$objSinglePage->getSystemid()."&form_element=".$strElement.$strLinkAddon,
                                     $this->getLang("page_sublist"),
                                     $this->getLang("page_sublist"),
-                                    "icon_treeBranchOpen.png"
+                                    "icon_treeBranchOpen"
                                 )
                             );
                         if($bitPageAliases)
@@ -1014,7 +1014,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     }
                     else {
                         if(count(class_module_pages_folder::getPagesInFolder($objSinglePage->getSystemid())) == 0)
-                            $strAction = getImageAdmin("icon_treeBranchOpenDisabled.png");
+                            $strAction = getImageAdmin("icon_treeBranchOpenDisabled");
                         else
                             $strAction = $this->objToolkit->listButton(
                                 getLinkAdmin(
@@ -1023,7 +1023,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                                     "&systemid=".$objSinglePage->getSystemid()."&form_element=".$strElement.$strLinkAddon,
                                     $this->getLang("page_sublist"),
                                     $this->getLang("page_sublist"),
-                                    "icon_treeBranchOpen.png"
+                                    "icon_treeBranchOpen"
                                 )
                             );
                         if($bitPageelements) {
@@ -1034,7 +1034,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                                     "&systemid=".$strSystemid."&form_element=".$strElement."&pageid=".$objSinglePage->getSystemid().($this->getParam("bit_link") != "" ? "&bit_link=1" : "").($bitPages ? "&pages=1" : "").($bitPageAliases ? "&pagealiases=1" : ""),
                                     $this->getLang("seite_oeffnen"),
                                     $this->getLang("seite_oeffnen"),
-                                    "icon_folderActionOpen.png"
+                                    "icon_folderActionOpen"
                                 )
                             );
                         }
@@ -1126,7 +1126,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         $arrReturn[] = array(
                             "data"  => array(
                                 "title" => $objSingleEntry->getStrDisplayName(),
-                                "icon"  => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon()
+                                "icon"  => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon().".png"
                             ),
                             "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
                             "attr"  => array(
@@ -1156,7 +1156,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         $arrReturn[] = array(
                             "data"  => array(
                                 "title" => $objSingleEntry->getStrDisplayName(),
-                                "icon"  => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon()
+                                "icon"  => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon().".png"
                             ),
                             "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
                             "attr"  => array(
