@@ -51,7 +51,7 @@ class class_formentry_date extends class_formentry_base implements interface_for
         if((isset($arrParams[$this->getStrEntryName()."_day"]) && $arrParams[$this->getStrEntryName()."_day"] != "") || isset($arrParams[$this->getStrEntryName()])) {
 
             if(isset($arrParams[$this->getStrEntryName()]) && $arrParams[$this->getStrEntryName()] == "") {
-                $this->setStrValue("");
+                $this->setStrValue(null);
             }
             else {
                 $objDate = new class_date();

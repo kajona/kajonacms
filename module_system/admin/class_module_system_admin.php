@@ -592,7 +592,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         foreach($arrFiles as $strName) {
             $objFilesystem->openFilePointer(_projectpath_."/log/".$strName, "r");
-            $strLogContent = $objFilesystem->readLastLinesFromFile();
+            $strLogContent = $objFilesystem->readLastLinesFromFile(20);
             $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
             $arrLogEntries = explode("\r", $strLogContent);
             $objFilesystem->closeFilePointer();

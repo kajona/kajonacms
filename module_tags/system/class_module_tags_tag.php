@@ -20,7 +20,7 @@
  *
  * @targetTable tags_tag.tags_tag_id
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_sortable_rating, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener {
+class class_module_tags_tag extends class_model implements interface_model, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener {
 
     /**
      * @var string
@@ -77,7 +77,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     public function getStrAdditionalInfo() {
         $strReturn = $this->getIntAssignments()." ".$this->getLang("tag_assignments", "tags");
         if($this->getIntPrivate() == 1)
-            $strReturn .= ", ".$this->getLang("form_tag_private", "tags");
+            $strReturn .= ", ".$this->getLang("form_tags_private", "tags");
 
         return $strReturn;
     }

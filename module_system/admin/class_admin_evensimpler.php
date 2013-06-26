@@ -334,8 +334,11 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 continue;
 
             $objInstance = class_objectfactory::getInstance()->getObject($strOneSystemid);
-            if($objInstance != null)
-                $arrPathLinks[] = $this->getOutputNaviEntry($objInstance);
+            if($objInstance != null) {
+                $objEntry = $this->getOutputNaviEntry($objInstance);
+                if($objEntry != null)
+                    $arrPathLinks[] = $objEntry;
+            }
             
         }
 

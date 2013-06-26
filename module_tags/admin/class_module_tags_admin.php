@@ -178,15 +178,11 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         return $strTagContent;
     }
 
-    protected function getArrOutputNaviEntries() {
-        $arrEntries = parent::getArrOutputNaviEntries();
+    protected function getOutputNaviEntry(interface_model $objInstance) {
+        if($objInstance instanceof class_module_tags_tag)
+            return getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrName());
 
-        if($this->getAction() == "showAssignedRecords") {
-            $objListEntry = new class_module_tags_tag($this->getSystemid());
-            $arrEntries[] = getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objListEntry->getSystemid(), $objListEntry->getStrName());
-        }
-
-        return $arrEntries;
+        return null;
     }
 
 

@@ -16,19 +16,18 @@
 interface interface_sortable_rating {
 
 
-	/**
-	 * Returns the rating for the current object
-	 *
-	 * @return float
-	 */
-	public function getFloatRating();
+    /**
+     * Returns the rating for the current object
+     *
+     * @return float
+     */
+    public function getFloatRating();
 
-	/**
-	 * Returns the number of ratings the current file received
-	 *
-	 * @return int
-	 */
-	public function getIntRatingHits();
-
+    /**
+     * Returns the number of ratings the current file received
+     *
+     * @return int
+     */
+    public function getIntRatingHits();
 
 }

@@ -2061,9 +2061,9 @@ class class_toolkit_admin extends class_toolkit {
                                     success: response
                                 });
                             },
-                            focus: function() {
-                                return false;
-                            },
+//                            focus: function() {
+//                                return false;
+//                            },
                             select: function( event, ui ) {
                                 var terms = split( this.value );
                                 terms.pop();
