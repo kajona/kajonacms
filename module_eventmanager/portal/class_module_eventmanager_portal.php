@@ -322,7 +322,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
             $arrParticipants = class_module_eventmanager_participant::getObjectList($objEvent->getSystemid());
             foreach($arrParticipants as $objOneParticipant) {
                 if($objOneParticipant->getSystemid() == $this->getParam("participantId")) {
-                    $objOneParticipant->setStatus("", "1");
+                    $objOneParticipant->setIntRecordStatus(1);
                     $strMessage = $this->getLang("participantSuccessConfirmation");
                     break;
                 }

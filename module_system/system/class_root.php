@@ -69,6 +69,7 @@ abstract class class_root {
     /**
      * The records internal parent-id
      * @var string
+     * @versionable
      */
     private $strPrevId = -1;
     /**
@@ -89,6 +90,7 @@ abstract class class_root {
     /**
      * The id of the user who created the record initially
      * @var string
+     * @versionable
      */
     private $strOwner;
     /**
@@ -118,6 +120,7 @@ abstract class class_root {
     /**
      * The records status
      * @var int
+     * @versionable
      */
     private $intRecordStatus;
     /**
@@ -139,18 +142,21 @@ abstract class class_root {
     /**
      * The start-date of the date-table
      * @var class_date
+     * @versionable
      */
     private $objStartDate = null;
 
     /**
      * The end date of the date-table
      * @var class_date
+     * @versionable
      */
     private $objEndDate = null;
 
     /**
      * The special-date of the date-table
      * @var class_date
+     * @versionable
      */
     private $objSpecialDate = null;
 
@@ -1682,7 +1688,7 @@ abstract class class_root {
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         $this->setStrOwner($strOwner);
-        return $this->updateSystemrecord();
+        return $this->updateObjectToDb();
     }
 
     public function getIntRecordStatus() {
@@ -1696,6 +1702,8 @@ abstract class class_root {
      *
      * @throws class_exception
      * @return int
+     * @deprecated use class_root::getIntRecordStatus() instead
+     * @see class_root::getIntRecordStatus()
      */
     public function getStatus($strSystemid = "") {
         if($strSystemid != "")
@@ -1713,6 +1721,7 @@ abstract class class_root {
      *
      * @throws class_exception
      * @deprecated user setIntRecordStatus() instead
+     * @see class_root::setIntRecordStatus()
      * @return bool
      * @todo: systemid param handling
      */
@@ -1731,7 +1740,7 @@ abstract class class_root {
         }
 
         $bitReturn = $this->setIntRecordStatus($intNewStatus);
-        $this->updateSystemrecord();
+        //$this->updateSystemrecord();
 
         return $bitReturn;
     }
@@ -1750,7 +1759,7 @@ abstract class class_root {
         $bitReturn = true;
 
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            $this->updateSystemrecord();
+            $this->updateObjectToDb();
             if($bitFireStatusChangeEvent) {
                 $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
             }
@@ -1784,7 +1793,7 @@ abstract class class_root {
      */
     public function setRecordComment($strNewComment) {
         $this->setStrRecordComment($strNewComment);
-        return $this->updateSystemrecord();
+        return $this->updateObjectToDb();
     }
 
     public function getStrRecordComment() {

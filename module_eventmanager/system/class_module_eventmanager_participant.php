@@ -171,6 +171,29 @@ class class_module_eventmanager_participant extends class_model implements inter
         return $strValue;
     }
 
+    protected function onInsertToDb() {
+
+        //send a message to all registered editors
+        $objEvent = new class_module_eventmanager_event($this->getStrPrevId());
+
+        $strMailtext = $this->getLang("new_participant_mail");
+        $strMailtext .= $this->getLang("new_participant_participant")." ".$this->getStrDisplayName()."\n";
+        $strMailtext .= $this->getLang("new_participant_event")." ".$objEvent->getStrDisplayName()."\n";
+        $strMailtext .= $this->getLang("new_participant_details")." ".getLinkAdminHref("eventmanager", "listParticipant", "&systemid=".$this->getStrPrevId(), false);
+        $objMessageHandler = new class_module_messaging_messagehandler();
+
+        $arrGroups = array();
+        $allGroups = class_module_user_group::getObjectList();
+        foreach($allGroups as $objOneGroup) {
+            if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getSystemid()))
+                $arrGroups[] = $objOneGroup;
+        }
+
+        $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_eventmanager());
+
+        return true;
+    }
+
 
     public function getStrForename() {
         return $this->strForename;

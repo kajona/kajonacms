@@ -74,6 +74,11 @@ $lang["registerSubmit"]                  = "Anmelden";
 $lang["registerlink"]                    = "Anmelden";
 $lang["rssfeed"]                         = "Rssfeed der Veranstaltungen anzeigen";
 $lang["show_history"]                    = "Änderungshistorie anzeigen";
+$lang["messageprovider_eventmanager_name"] = "Neue Veranstaltungsteilnehmer";
+$lang["new_participant_mail"]            = "Für eine Veranstaltung hat sich ein neuer Teilnehmer angemeldet.";
+$lang["new_participant_event"]           = "Veranstaltung:";
+$lang["new_participant_participant"]     = "Teilnehmer:";
+$lang["new_participant_details"]         = "Details:";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Teilnehmen", 5 => "", 6 => "", 7 => "", 8 => "");

@@ -74,6 +74,11 @@ $lang["registerSubmit"]                  = "Register";
 $lang["registerlink"]                    = "Register";
 $lang["rssfeed"]                         = "Show rssfeed of event";
 $lang["show_history"]                    = "Show change-history";
+$lang["messageprovider_eventmanager_name"] = "New event participants";
+$lang["new_participant_mail"]            = "A new participant registered for an event.";
+$lang["new_participant_event"]           = "Event:";
+$lang["new_participant_participant"]     = "Participant:";
+$lang["new_participant_details"]         = "Details:";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Participate", 5 => "", 6 => "", 7 => "", 8 => "");
