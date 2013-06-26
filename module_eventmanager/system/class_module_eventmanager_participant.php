@@ -176,7 +176,7 @@ class class_module_eventmanager_participant extends class_model implements inter
         //send a message to all registered editors
         $objEvent = new class_module_eventmanager_event($this->getStrPrevId());
 
-        $strMailtext = $this->getLang("new_participant_mail");
+        $strMailtext = $this->getLang("new_participant_mail")."\n\n";
         $strMailtext .= $this->getLang("new_participant_participant")." ".$this->getStrDisplayName()."\n";
         $strMailtext .= $this->getLang("new_participant_event")." ".$objEvent->getStrDisplayName()."\n";
         $strMailtext .= $this->getLang("new_participant_details")." ".getLinkAdminHref("eventmanager", "listParticipant", "&systemid=".$this->getStrPrevId(), false);
