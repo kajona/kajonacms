@@ -5,15 +5,16 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>%%additionalTitle%%%%title%% | Kajona</title>
-    <meta name="description" content="%%description%%">
-    <meta name="viewport" content="width=device-width">
-    <meta name="robots" content="index, follow">
+    <meta name="description" content="%%description%%" />
+    <meta name="keywords" content="%%keywords%%" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="index, follow" />
 
     <link rel="canonical" href="%%canonicalUrl%%" />
-    <link rel="stylesheet" href="_webpath_/templates/default/css/normalize.css?_system_browser_cachebuster_">
-    <link rel="stylesheet" href="_webpath_/templates/default/css/main.css?_system_browser_cachebuster_">
+    <link rel="stylesheet" href="_webpath_/templates/default/css/normalize.css?_system_browser_cachebuster_" />
+    <link rel="stylesheet" href="_webpath_/templates/default/css/main.css?_system_browser_cachebuster_" />
 
     <link href="_webpath_/templates/default/css/styles.css?_system_browser_cachebuster_" rel="stylesheet" type="text/css" />
 
