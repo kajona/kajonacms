@@ -184,12 +184,12 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $objListEntry->getStrDisplayName(), $this->getLang("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objListEntry->getSystemid())
             );
         }
-        else if($objListEntry instanceof class_module_pages_folder) {
+        else if($objListEntry instanceof class_module_pages_folder && $objListEntry->rightDelete()) {
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(), $this->getLang("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objListEntry->getSystemid())
             );
         }
-        else if($objListEntry instanceof class_module_pages_element) {
+        else if($objListEntry instanceof class_module_pages_element && $objListEntry->rightDelete()) {
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(), $this->getLang("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objListEntry->getSystemid())
             );
