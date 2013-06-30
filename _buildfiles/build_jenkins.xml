@@ -99,6 +99,11 @@
 					    					buildProject, installProjectOracle,
 					    					phpunitFast" />
 
+    <target name="buildPostgres" depends="
+		    								cleanFilesystem, init,
+					    					buildProject, installProjectPostgres,
+					    					phpunitFast" />
+
     <target name="buildFullZipOnly" depends="
                                             cleanFilesystem, init,
                                             buildProject, buildFullZip" />
@@ -297,6 +302,14 @@
         <echo>Creating full Kajona installation</echo>
         <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f buildProject.php ${projectPath} false config_oracle.php"/>
+        </exec>
+    </target>
+
+    <!-- postgres config file -->
+    <target name="installProjectPostgres">
+        <echo>Creating full Kajona installation</echo>
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${projectPath} false config_postgres.php"/>
         </exec>
     </target>
 
