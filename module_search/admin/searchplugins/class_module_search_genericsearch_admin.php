@@ -82,7 +82,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                 //is it a string-based field?
                 $strTypeAnnotation = $objReflection->getAnnotationValueForProperty($strProperty, "@var");
 
-                if($strTypeAnnotation == "int" || $strTypeAnnotation == "long" || $strTypeAnnotation == "bool")
+                if($strTypeAnnotation == "int" || $strTypeAnnotation == "long" || $strTypeAnnotation == "bool" || $strTypeAnnotation == "float")
                     continue;
 
                 $arrColumn = explode(".", $strColumn);
