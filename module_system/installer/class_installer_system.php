@@ -582,6 +582,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.1") {
+            $strReturn .= $this->update_41_411();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -834,6 +840,25 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.1");
+        return $strReturn;
+    }
+
+    private function update_41_411() {
+
+        $strReturn = "Updating 4.1 to 4.1.1...\n";
+
+        $strReturn .= "Patching current bootstrap.php\n";
+        $objFileystem = new class_filesystem();
+        if(!$objFileystem->isWritable("/core/bootstrap.php")) {
+            $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
+            return $strReturn;
+        }
+
+        $objFileystem->fileCopy("/core/module_system/installer/bootstrap.php_411", "/core/bootstrap.php", true);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.1.1");
         return $strReturn;
     }
 }
