@@ -324,6 +324,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 class_resourceloader::getInstance()->flushCache();
                 class_classloader::getInstance()->flushCache();
                 class_reflection::flushCache();
+
+                //reload the module-ids
+                bootstrapIncludeModuleIds();
             }
             else
                 $objHandler = $objManager->getPackageManagerForPath($strFile);

@@ -23,6 +23,19 @@ if(!defined("_mbstringloaded_")) {
     }
 }
 
+
+function bootstrapIncludeModuleIds() {
+    //Module-Constants
+    foreach(scandir(_corepath_."/") as $strDirEntry ) {
+        if(is_dir(_corepath_."/".$strDirEntry) && is_dir(_corepath_."/".$strDirEntry."/system/") && is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
+            foreach(scandir(_corepath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
+                if(preg_match("/module\_([a-z\_])+\_id\.php/", $strModuleEntry))
+                    @include_once _corepath_."/".$strDirEntry."/system/config/".$strModuleEntry;
+            }
+        }
+    }
+}
+
 /**
  * Returns a value from the GET-array
  *
@@ -973,7 +986,7 @@ function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
  * @param string $strAllowTags
  * @return string
  */
-function htmlStripTags ($strHtml, $strAllowTags = "") {
+function htmlStripTags($strHtml, $strAllowTags = "") {
     $strReturn = strip_tags($strHtml, $strAllowTags);
     return $strReturn;
 }
@@ -1083,8 +1096,8 @@ function createFilename($strName, $bitFolder = false) {
         $strReturn = $strName;
 
     //Filter non allowed chars
-    $arrSearch =         array( " ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
-    $arrReplace =         array( "_", "_", "_","ae","oe","ue", "_","ss", "_");
+    $arrSearch =  array( " ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
+    $arrReplace = array( "_", "_", "_","ae","oe","ue", "_","ss", "_");
 
     $strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
 
@@ -1205,6 +1218,7 @@ function validateSystemid($strID) {
  * @param string $strString
  * @param bool|string $bitHtmlEntities escape html-entities?
  *
+ * @deprecated use class_db::dbSafeString() instead
  * @see class_db::dbSafeString($strString, $bitHtmlEntities = true)
  * @return string
  */

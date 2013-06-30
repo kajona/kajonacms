@@ -33,7 +33,7 @@ if(!defined("_xmlLoader_"))
 
 //---Include Section 1-----------------------------------------------------------------------------------
 
-//Setting up the default timezone, determined by the server / environment
+//Setting up the default timezone, determined by the server / environment. may be redefined by _system_timezone_
 @date_default_timezone_set(date_default_timezone_get());
 
 //Functions to have fun & check for mb-string
@@ -75,15 +75,8 @@ else {
 }
 
 //---Include Section 2-----------------------------------------------------------------------------------
-//Module-Constants
-foreach(scandir(_corepath_."/") as $strDirEntry ) {
-    if(is_dir(_corepath_."/".$strDirEntry) && is_dir(_corepath_."/".$strDirEntry."/system/") && is_dir(_corepath_."/".$strDirEntry."/system/config/")) {
-        foreach(scandir(_corepath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
-            if(preg_match("/module\_([a-z\_])+\_id\.php/", $strModuleEntry))
-                @include_once _corepath_."/".$strDirEntry."/system/config/".$strModuleEntry;
-        }
-    }
-}
+//load module-ids
+bootstrapIncludeModuleIds();
 
 
 //---Auto-Loader for classes-----------------------------------------------------------------------------
