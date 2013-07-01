@@ -51,7 +51,7 @@ class class_module_messaging_config extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $this->setArrModuleEntry("modul", "messaging");
         $this->setArrModuleEntry("moduleId", _messaging_module_id_);
-		parent::__construct($strSystemid);
+        parent::__construct($strSystemid);
 
     }
 

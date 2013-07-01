@@ -743,7 +743,7 @@ abstract class class_root {
 
                         //if the column doesn't declare a target table whereas the class defines more then one - skip it.
                         if(count($arrColumnDef) == 1 && count($arrTargetTables) > 1 )
-                            throw new class_exception("property ".$strPropertyName." declares no target table, class ".get_class($this)." declare more than one target table.", class_exception::$level_FATALERROR);
+                            throw new class_exception("property ".$strPropertyName." declares no target table, class ".get_class($this)." declares more than one target table.", class_exception::$level_FATALERROR);
 
 
                         //skip if property targets another table
@@ -756,7 +756,11 @@ abstract class class_root {
                         //all prerequisites match, start creating query
                         $strGetter = $objReflection->getGetter($strPropertyName);
                         if($strGetter !== null) {
-                            $arrColValues[$strColumn] = call_user_func(array($this, $strGetter));
+                            //explicit casts required? could be relevant, depending on the target column type / database system
+                            $mixedValue = call_user_func(array($this, $strGetter));
+                            if(uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit")
+                                $mixedValue = (int)$mixedValue;
+                            $arrColValues[$strColumn] = $mixedValue;
                             $arrEscapes[] = !$objReflection->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
                         }
                     }
