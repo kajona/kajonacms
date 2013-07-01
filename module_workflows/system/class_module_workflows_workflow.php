@@ -417,7 +417,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
     }
 
     /**
-     * Transforms the passd list of user-/group ids into an sql-where restriction
+     * Transforms the passed list of user-/group ids into an sql-where restriction
      *
      * @param array $arrUsers
      * @return array ($strQuery, $arrParams)
@@ -437,7 +437,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
                 $strWhere .= " OR ";
 
             $strWhere .= "workflows_responsible LIKE ? ";
-            $arrParams[] = "%".dbsafeString($strOneUser)."%";
+            $arrParams[] = "%".$strOneUser."%";
         }
 
         if($strWhere != "")
