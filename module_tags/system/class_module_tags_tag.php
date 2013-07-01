@@ -51,6 +51,10 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         $this->setArrModuleEntry("modul", "tags");
         $this->setArrModuleEntry("moduleId", _tags_modul_id_);
 
+
+        if(_tags_defaultprivate_ == "true")
+            $this->intPrivate = 1;
+
         parent::__construct($strSystemid);
 
     }

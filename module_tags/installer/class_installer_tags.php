@@ -75,6 +75,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         );
 
 		$strReturn .= "Registering system-constants...\n";
+        $this->registerConstant("_tags_defaultprivate_", "false", class_module_system_setting::$int_TYPE_BOOL, _tags_modul_id_);
 
         //Register the element
         $strReturn .= "Registering tags-element...\n";
@@ -134,6 +135,12 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.1") {
+            $strReturn .= $this->update_41_42();
             $this->objDB->flushQueryCache();
         }
 
@@ -274,6 +281,19 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("tags", "4.1");
+        return $strReturn;
+    }
+
+    private function update_41_42() {
+        $strReturn = "Updating 4.1 to 4.2...\n";
+
+        $strReturn .= "Registering tags private mode setting\n";
+        $this->registerConstant("_tags_defaultprivate_", "false", class_module_system_setting::$int_TYPE_BOOL, _tags_modul_id_);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "4.2");
         return $strReturn;
     }
 

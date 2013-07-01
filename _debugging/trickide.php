@@ -41,4 +41,6 @@ define("_system_release_time_", "");
 define("_stats_duration_online_", 10);
 define("_stats_nrofrecords_", "");
 
+define("_tags_defaultprivate_", "");
+
 define("_packagemanager_defaulttemplate_", "");
