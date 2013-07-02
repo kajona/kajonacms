@@ -148,7 +148,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$objPageData->getStrName() == _pages_errorpage_) {
+            if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && $objPageData->getStrName() != _pages_errorpage_) {
                 $strElementOutput = "";
                 //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
                 if($bitPeRequested) {
