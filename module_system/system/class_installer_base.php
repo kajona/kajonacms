@@ -125,15 +125,17 @@ abstract class class_installer_base extends class_root implements interface_inst
      * @param string $strVersion
      */
     protected function updateElementVersion($strElementName, $strVersion) {
-        $this->objDB->flushQueryCache();
-        $objElement = class_module_pages_element::getElement($strElementName);
-        if($objElement != null) {
-            $objElement->setStrVersion($strVersion);
-            $objElement->updateObjectToDb();
+        if(class_module_system_module::getModuleByName("pages") !== null) {
+            $this->objDB->flushQueryCache();
+            $objElement = class_module_pages_element::getElement($strElementName);
+            if($objElement != null) {
+                $objElement->setStrVersion($strVersion);
+                $objElement->updateObjectToDb();
 
-            class_logger::getInstance()->addLogRow("element ".$strElementName." updated to ".$strVersion, class_logger::$levelInfo);
+                class_logger::getInstance()->addLogRow("element ".$strElementName." updated to ".$strVersion, class_logger::$levelInfo);
+            }
+            $this->objDB->flushQueryCache();
         }
-        $this->objDB->flushQueryCache();
     }
 
 	/**

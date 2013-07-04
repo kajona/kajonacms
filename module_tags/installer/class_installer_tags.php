@@ -81,8 +81,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $strReturn .= "Registering tags-element...\n";
 
         //check, if not already existing
-        $objElement = class_module_pages_element::getElement("tags");
-        if($objElement == null) {
+        if(class_module_pages_element::getElement("tags") == null) {
             $objElement = new class_module_pages_element();
             $objElement->setStrName("tags");
             $objElement->setStrClassAdmin("class_element_tags_admin.php");
