@@ -241,7 +241,7 @@ class class_lang {
                 $strTemp = str_replace(".php", "", $strFilename);
                 $arrName = explode("_", $strTemp);
 
-                if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
+                if($arrName[0] == "lang" && $arrName[count($arrName)-1] == $this->strLanguage && $this->strLanguage != "") {
                     $bitFileMatched = true;
                     $this->loadAndMergeTextfile($strModule, $strPath, $this->strLanguage, $this->arrTexts);
 
@@ -256,7 +256,7 @@ class class_lang {
                 $strTemp = str_replace(".php", "", $strFilename);
                 $arrName = explode("_", $strTemp);
 
-                if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
+                if($arrName[0] == "lang" && $arrName[count($arrName)-1] == $this->strFallbackLanguage) {
                     $this->loadAndMergeTextfile($strModule, $strPath, $this->strFallbackLanguage, $this->arrTexts);
                 }
             }
