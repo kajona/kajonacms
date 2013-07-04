@@ -304,7 +304,12 @@ class class_toolkit_admin extends class_toolkit {
 
 
     /**
-     * Returns a regular text-input field
+     * Returns a regular text-input field.
+     * The param $strValue expects a system-id.
+     *
+     * The element creates two fields:
+     * a text-field, and a hidden field for the selected systemid.
+     * The hidden field is names as $strName, appended by "_id".
      *
      * @param string $strName
      * @param string $strTitle
@@ -318,9 +323,22 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
+
+        $strUserName = "";
+        $strUserId = "";
+
+        //value is a systemid
+        if(validateSystemid($strValue)) {
+            $objUser = new class_module_user_user($strValue);
+            $strUserName = $objUser->getStrDisplayName();
+            $strUserId = $strValue;
+        }
+
+
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
-        $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
+        $arrTemplate["value"] = htmlspecialchars($strUserName, ENT_QUOTES, "UTF-8", false);
+        $arrTemplate["value_id"] = htmlspecialchars($strUserId, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = getLinkAdminDialog(
@@ -355,9 +373,7 @@ class class_toolkit_admin extends class_toolkit {
                                     success: response
                                 });
                             },
-                            focus: function(event, ui) {
-                                return false;
-                            },
+
                             select: function( event, ui ) {
                                 if(ui.item) {
                                     $( '#".$strName."' ).val( ui.item.title );
@@ -370,13 +386,13 @@ class class_toolkit_admin extends class_toolkit {
                             delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
                             messages: {
                                 noResults: '',
-                                results: function() {}
+                                results: function() {return ''}
                             }
                         })
-                        .data( 'autocomplete' )._renderItem = function( ul, item ) {
+                        .data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
-                                .data( 'item.autocomplete', item )
-                                .append( '<a class=\'ui-menu-item userSelectorAC\' style=\'background-image: url('+item.icon+'); background-repeat: no-repeat;\' >'+item.title+'</a>' )
+                                .data('ui-autocomplete-item', item)
+                                .append( '<a class=\'ui-autocomplete-item userSelectorAC\' style=\'background-image: url('+item.icon+'); background-repeat: no-repeat;\' >'+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });

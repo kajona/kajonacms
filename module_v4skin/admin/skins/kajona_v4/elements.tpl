@@ -615,12 +615,14 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 
 <input_userselector>
 <div class="control-group">
-<label for="%%name%%" class="control-label">%%title%%</label>
+    <label for="%%name%%" class="control-label">%%title%%</label>
 
-<div class="controls">
-    <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
-    %%opener%%
-    %%ajaxScript%%
+    <div class="controls">
+        <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%% >
+        <input type="hidden" id="%%name%%_id" name="%%name%%_id" value="%%value_id%%" />
+        %%opener%%
+        %%ajaxScript%%
+    </div>
 </div>
 </input_userselector>
 

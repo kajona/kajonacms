@@ -19,7 +19,7 @@ class class_formentry_page extends class_formentry_base implements interface_for
 
         //set the default validator
         $this->setObjValidator(new class_text_validator());
-   }
+    }
 
     /**
      * Renders the field itself.
