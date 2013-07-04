@@ -298,7 +298,7 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_editLocked", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("commons_locked")));
             }
 
             if($bitDialog)
@@ -357,11 +357,11 @@ abstract class class_admin_simple extends class_admin {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("commons_locked")));
             }
 
             return $this->objToolkit->listDeleteButton(
-                $objListEntry->getStrDisplayName(),
+                strip_tags($objListEntry->getStrDisplayName()),
                 $this->getLang($this->getObjLang()->stringToPlaceholder($this->getActionNameForClass("delete", $objListEntry)."_question"), $objListEntry->getArrModule("modul")),
                 getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("delete", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
             );
@@ -396,7 +396,7 @@ abstract class class_admin_simple extends class_admin {
                     "",
                     $this->getLang("commons_edit_permissions"),
                     getRightsImageAdminName($objListEntry->getSystemid()),
-                    $objListEntry->getStrDisplayName(),
+                    strip_tags($objListEntry->getStrDisplayName()),
                     true,
                     true
                 )
@@ -416,7 +416,7 @@ abstract class class_admin_simple extends class_admin {
             //the tag list is more complex sind wrapped by a js-logic to load the tags by ajax afterwards
 
             // @codingStandardsIgnoreStart
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".$objListEntry->getStrDisplayName()."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".strip_tags($objListEntry->getStrDisplayName())."'); KAJONA.admin.folderview.dialog.init(); return false;";
             $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".class_adminskin_helper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);

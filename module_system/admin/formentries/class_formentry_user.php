@@ -40,7 +40,23 @@ class class_formentry_user extends class_formentry_base implements interface_for
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser);
+
+        if($this->getBitReadonly()) {
+            $strUsername = "";
+            $strUserid = "";
+            if(validateSystemid($this->getStrValue())) {
+                $objUser = new class_module_user_user($this->getStrValue());
+                $strUsername = $objUser->getStrDisplayName();
+                $strUserid = $this->getStrValue();
+            }
+
+            $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strUsername, "", "", true);
+            $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName()."_id", $strUserid);
+
+        }
+        else {
+            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser);
+        }
 
         return $strReturn;
     }

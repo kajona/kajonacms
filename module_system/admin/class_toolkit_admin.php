@@ -491,7 +491,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["readonly"] = ($bitReadonly ? "readonly=\"readonly\"" : "");
+        $arrTemplate["readonly"] = ($bitReadonly ? " readonly=\"readonly\" " : "");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

@@ -37,5 +37,9 @@ class class_formentry_divider extends class_formentry_base implements interface_
         return "";
     }
 
+    public function setValueToObject() {
+        return true;
+    }
+
 
 }
