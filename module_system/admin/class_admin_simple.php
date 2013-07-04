@@ -516,7 +516,7 @@ abstract class class_admin_simple extends class_admin {
         }
 
         return $this->objToolkit->listButton(
-            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".getImageAdmin("icon_new_multi")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
+            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".class_adminskin_helper::getAdminImage("icon_new_multi")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
         );
 
     }
@@ -537,9 +537,9 @@ abstract class class_admin_simple extends class_admin {
 
     protected function getDefaultActionHandlers() {
         return array(
-            new class_admin_batchaction(getImageAdmin("icon_delete"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
-            new class_admin_batchaction(getImageAdmin("icon_enabled"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable")),
-            new class_admin_batchaction(getImageAdmin("icon_disabled"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable")),
+            new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
+            new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_enabled"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable")),
+            new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_disabled"), getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable")),
         );
     }
 
