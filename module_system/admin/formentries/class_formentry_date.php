@@ -11,7 +11,7 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_date extends class_formentry_base implements interface_formentry {
+class class_formentry_date extends class_formentry_base implements interface_formentry_printable {
 
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
@@ -81,5 +81,24 @@ class class_formentry_date extends class_formentry_base implements interface_for
     }
 
 
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        $objDate = null;
+        if($this->getStrValue() instanceof class_date)
+            $objDate = $this->getStrValue();
+        else if($this->getStrValue() != "")
+            $objDate = new class_date($this->getStrValue());
+
+        if($objDate != null)
+            return dateToString($objDate, false);
+
+        return "";
+    }
 
 }

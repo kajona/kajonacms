@@ -20,7 +20,7 @@ class class_formentry_checkbox extends class_formentry_base implements interface
 
         //set the default validator
         $this->setObjValidator(new class_dummy_validator());
-   }
+    }
 
     /**
      * Renders the field itself.

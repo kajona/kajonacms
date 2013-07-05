@@ -11,7 +11,7 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_textarea extends class_formentry_base implements interface_formentry {
+class class_formentry_textarea extends class_formentry_base implements interface_formentry_printable {
 
     private $strOpener = "";
 
@@ -20,7 +20,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
 
         //set the default validator
         $this->setObjValidator(new class_text_validator());
-   }
+    }
 
     /**
      * Renders the field itself.
@@ -37,6 +37,16 @@ class class_formentry_textarea extends class_formentry_base implements interface
         $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->getBitReadonly());
 
         return $strReturn;
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        return $this->getStrValue();
     }
 
     /**

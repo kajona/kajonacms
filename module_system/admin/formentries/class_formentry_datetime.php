@@ -37,4 +37,23 @@ class class_formentry_datetime extends class_formentry_date {
         return $strReturn;
     }
 
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        $objDate = null;
+        if($this->getStrValue() instanceof class_date)
+            $objDate = $this->getStrValue();
+        else if($this->getStrValue() != "")
+            $objDate = new class_date($this->getStrValue());
+
+        if($objDate != null)
+            return dateToString($objDate, true);
+
+        return "";
+    }
+
 }

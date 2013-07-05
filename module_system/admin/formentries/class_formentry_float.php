@@ -13,7 +13,7 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_float extends class_formentry_base implements interface_formentry {
+class class_formentry_float extends class_formentry_base implements interface_formentry_printable {
 
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
@@ -39,6 +39,16 @@ class class_formentry_float extends class_formentry_base implements interface_fo
         $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strValue, "inputText", "", $this->getBitReadonly());
 
         return $strReturn;
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        return $this->getStrValue();
     }
 
     public function setValueToObject() {

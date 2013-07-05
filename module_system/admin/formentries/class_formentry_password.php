@@ -20,7 +20,7 @@ class class_formentry_password extends class_formentry_base implements interface
 
         //set the default validator
         $this->setObjValidator(new class_text_validator());
-   }
+    }
 
     /**
      * Renders the field itself.

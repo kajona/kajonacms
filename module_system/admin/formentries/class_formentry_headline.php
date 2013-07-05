@@ -13,14 +13,14 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_headline extends class_formentry_base implements interface_formentry {
+class class_formentry_headline extends class_formentry_base implements interface_formentry_printable {
 
     public function __construct() {
         parent::__construct("", generateSystemid());
 
         //set the default validator
         $this->setObjValidator(new class_dummy_validator());
-   }
+    }
 
     /**
      * Renders the field itself.
@@ -35,6 +35,16 @@ class class_formentry_headline extends class_formentry_base implements interface
 
     public function updateLabel($strKey = "") {
         return "";
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        return class_carrier::getInstance()->getObjToolkit("admin")->formHeadline($this->getStrValue());
     }
 
 

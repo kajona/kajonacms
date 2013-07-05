@@ -15,7 +15,7 @@
  * @since 4.2
  * @package module_formgenerator
  */
-class class_formentry_user extends class_formentry_base implements interface_formentry {
+class class_formentry_user extends class_formentry_base implements interface_formentry_printable {
 
     private $bitUser = true;
     private $bitGroups = false;
@@ -71,6 +71,21 @@ class class_formentry_user extends class_formentry_base implements interface_for
             $this->setStrValue($arrParams[$this->getStrEntryName()."_id"]);
         else
             $this->setStrValue($this->getValueFromObject());
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        if(validateSystemid($this->getStrValue())) {
+            $objUser = new class_module_user_user($this->getStrValue());
+            return $objUser->getStrDisplayName();
+        }
+
+        return "";
     }
 
 

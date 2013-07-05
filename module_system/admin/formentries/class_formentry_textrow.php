@@ -13,7 +13,7 @@
  * @since 4.1
  * @package module_formgenerator
  */
-class class_formentry_textrow extends class_formentry_base implements interface_formentry {
+class class_formentry_textrow extends class_formentry_base implements interface_formentry_printable {
 
 
     public function __construct() {
@@ -36,6 +36,16 @@ class class_formentry_textrow extends class_formentry_base implements interface_
 
     public function updateLabel($strKey = "") {
         return "";
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        return $this->getStrValue();
     }
 
 }

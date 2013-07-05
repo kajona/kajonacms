@@ -14,7 +14,7 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_yesno extends class_formentry_base implements interface_formentry {
+class class_formentry_yesno extends class_formentry_base implements interface_formentry_printable {
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -41,4 +41,18 @@ class class_formentry_yesno extends class_formentry_base implements interface_fo
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $arrYesNo, $this->getStrLabel(), $this->getStrValue());
         return $strReturn;
     }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        if($this->getStrValue())
+            return class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "system");
+        else
+            return class_carrier::getInstance()->getObjLang()->getLang("commons_no", "system");
+    }
+
 }
