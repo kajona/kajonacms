@@ -562,7 +562,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns a input-file element for uploading multiple files with progress bar
+     * Returns a input-file element for uploading multiple files with progress bar.
+     * Expects a hidden form-element "mutliuploadSystemid" to be available on the page, referencing the current mediamanagers' file-id
      *
      * @param string $strName
      * @param string $strTitle
@@ -912,9 +913,9 @@ class class_toolkit_admin extends class_toolkit {
     public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount, $bitCheckbox = false) {
         $strImage = $objEntry->getStrIcon();
         if(is_array($strImage))
-            $strImage = getImageAdmin($strImage[0], $strImage[1]);
+            $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
         else
-            $strImage = getImageAdmin($strImage);
+            $strImage = class_adminskin_helper::getAdminImage($strImage);
         return $this->genericAdminList(
             $objEntry->getSystemid(),
             $objEntry->getStrDisplayName(),
