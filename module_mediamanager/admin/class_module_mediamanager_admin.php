@@ -68,15 +68,24 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
                 getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
             ));
 
-        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE && $objListEntry->rightEdit()) {
+        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+
+            $arrReturn = array();
             //add a crop icon?
             $arrMime  = $this->objToolkit->mimeType($objListEntry->getStrFilename());
-            if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
-                return array($this->objToolkit->listButton(
+            if(($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") && $objListEntry->rightEdit()) {
+                $arrReturn[] = $this->objToolkit->listButton(
                     getLinkAdminDialog($this->getArrModule("modul"), "imageDetails", "&file=".$objListEntry->getStrFilename(), "", $this->getLang("action_edit_image"), "icon_crop", $objListEntry->getStrDisplayName())
-                ));
+                );
             }
 
+            if($objListEntry->rightRight2()) {
+                $arrReturn[] = $this->objToolkit->listButton(
+                    getLinkAdminManual("href='"._webpath_."/download.php?systemid=".$objListEntry->getSystemid()."'", $this->getLang("action_download"), $this->getLang("action_download"), "icon_downloads")
+                );
+            }
+
+            return $arrReturn;
         }
 
         return array();

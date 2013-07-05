@@ -409,7 +409,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     }
 
     /**
-     * Counts the number of files returnd by the corresponding query
+     * Counts the number of files returned by the corresponding query
      *
      * @param string $strPrevID
      * @param bool|int $intTypeFilter
