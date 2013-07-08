@@ -184,7 +184,8 @@ class class_carrier {
                     $strAdminToolkitClass = "class_toolkit_admin";
                 }
 
-                include_once _corepath_ . "/module_system/admin/" . $strAdminToolkitClass . ".php";
+                $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
+                include_once _realpath_.$strPath;
                 $this->objToolkitAdmin = new $strAdminToolkitClass();
             }
             return $this->objToolkitAdmin;
