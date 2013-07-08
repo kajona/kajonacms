@@ -338,18 +338,20 @@ class class_resourceloader {
      * @param string $strFile the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      * @return string|bool the absolute path
+     *
+     * @todo may be cached?
      */
     public function getPathForFile($strFile, $bitCheckProject = true) {
 
         //check if the same is available in the projects-folder
         if($bitCheckProject && is_file(_realpath_._projectpath_."/".$strFile)) {
-            return _projectpath_."/".$strFile;
+            return str_replace("//", "/", _projectpath_."/".$strFile);
         }
 
         //loop all given modules
         foreach($this->arrModules as $strSingleModule) {
             if(is_file(_corepath_."/".$strSingleModule."/".$strFile)) {
-                return "/core/".$strSingleModule."/".$strFile;
+                return str_replace("//", "/", "/core/".$strSingleModule."/".$strFile);
             }
         }
 
@@ -364,18 +366,20 @@ class class_resourceloader {
      * @param string $strFolder the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      * @return string|bool the absolute path
+     *
+     * @todo may be cached?
      */
     public function getPathForFolder($strFolder, $bitCheckProject = true) {
 
         //check if the same is available in the projects-folder
         if($bitCheckProject && is_dir(_realpath_._projectpath_."/".$strFolder)) {
-            return _projectpath_."/".$strFolder;
+            return str_replace("//", "/", _projectpath_."/".$strFolder);
         }
 
         //loop all given modules
         foreach($this->arrModules as $strSingleModule) {
             if(is_dir(_corepath_."/".$strSingleModule."/".$strFolder)) {
-                return "/core/".$strSingleModule."/".$strFolder;
+                return str_replace("//", "/", "/core/".$strSingleModule."/".$strFolder);
 
             }
         }
