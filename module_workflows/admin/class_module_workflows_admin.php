@@ -45,6 +45,16 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return $arrReturn;
     }
 
+    public function getArrOutputNaviEntries($strSystemid = "", $strStopSystemid = "") {
+        $arrPath = parent::getArrOutputNaviEntries($strSystemid, $strStopSystemid);
+
+        if(validateSystemid($this->getSystemid()))
+            $arrPath[] = getLinkAdmin("workflows", $this->getAction(), "&systemid=".$this->getSystemid(), class_objectfactory::getInstance()->getObject($this->getSystemid())->getStrDisplayName());
+
+        return $arrPath;
+    }
+
+
     /**
      * Renders the form to create a new entry
      *
@@ -244,11 +254,22 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
             $strReturn .= $this->objToolkit->getFieldset($this->getLang("workflow_general"), $strInfo);
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUI"));
-            $strReturn .= $objWorkflow->getObjWorkflowHandler()->getUserInterface();
-            $strReturn .= $this->objToolkit->formInputHidden("systemid", $objWorkflow->getSystemid());
+            $strForm = $objWorkflow->getObjWorkflowHandler()->getUserInterface();
 
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
+            if($strForm instanceof class_admin_formgenerator) {
+                $strForm->addField(new class_formentry_hidden(null, null), "workflowid")->setStrValue($objWorkflow->getSystemid());
+                $strReturn .= $strForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveUI"));
+            }
+            else {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUI"));
+                $strReturn .= $strForm;
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $objWorkflow->getSystemid());
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
+                $strReturn .= $this->objToolkit->formClose();
+            }
+
+
+
 
         }
         else {

@@ -81,10 +81,12 @@ interface interface_workflows_handler {
      * If your handler provides ui-actions like forms,
      * create and return them using this method.
      *
+     * Return either a string-based form or a form-object.
+     *
      * It may get called by the workflow-engine at certain places.
      * The form-wrapper itself is created by the engine :)
      *
-     * @return string
+     * @return string|class_admin_formgenerator
      */
     public function getUserInterface();
 
