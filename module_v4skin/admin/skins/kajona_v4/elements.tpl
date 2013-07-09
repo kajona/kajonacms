@@ -313,7 +313,7 @@ Dropdown
     </div>
 
     <script type="text/javascript">
-    KAJONA.admin.loader.loadFile(["_skinwebpath_/js/chosen/chosen.jquery.min.js", "_skinwebpath_/js/chosen/chosen.css"], function() {
+    KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/chosen/chosen.jquery.min.js", "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/chosen/chosen.css"], function() {
         var id = '#%%name%%'.replace("[", "\\[");
         var id = id.replace("]", "\\]");
         $(id).chosen();
@@ -549,8 +549,8 @@ function is called after selecting a date, e.g. to hide the calendar
         <div class="controls">
             <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge %%class%%" size="16" type="text" value="%%valuePlain%%">
             <script>
-                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js"], function() {
-                    var arrSecondFiles = ["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
+                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                    var arrSecondFiles = ["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
                     if('%%calendarLang%%' == 'en')
                         arrSecondFiles = [];
                     KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
@@ -579,8 +579,8 @@ function is called after selecting a date, e.g. to hide the calendar
             <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="input-mini %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
             <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="input-mini %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
             <script>
-                KAJONA.admin.loader.loadFile(["_skinwebpath_/js/bootstrap-datepicker.js"], function() {
-                    KAJONA.admin.loader.loadFile(["_skinwebpath_/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                    KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
                         var format = '%%dateFormat%%';
                         format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                         $('#%%calendarId%%').datepicker({
