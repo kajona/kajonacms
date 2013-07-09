@@ -347,7 +347,7 @@
             <globmapper from="*.css" to="*-full.css"/>
         </copy>
 
-        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true">
+        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
             <arg line="-jar"/>
             <arg path="yuicompressor-2.4.6.jar"/>
@@ -375,7 +375,7 @@
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
 
-        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true">
+        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
             <arg line="-jar"/>
             <arg path="yuicompressor-2.4.6.jar"/>
