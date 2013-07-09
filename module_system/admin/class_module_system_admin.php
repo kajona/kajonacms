@@ -108,7 +108,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_system_module) {
             $arrReturn = array();
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect", $this->getLang("modul_aspectedit")));
 
             if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
                 if($objListEntry->getStrName() == "system")
@@ -172,6 +172,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
      * @permissions right5
      */
     protected function actionModuleAspect() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
         $strReturn = "";
         $objModule = class_module_system_module::getModuleBySystemid($this->getSystemid());
         $strReturn .= $this->objToolkit->formHeadline($objModule->getStrName());
@@ -202,7 +203,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objModule->setStrAspect(implode(",", $arrParams));
 
         $objModule->updateObjectToDb();
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "peClose=1"));
     }
 
 

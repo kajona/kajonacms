@@ -82,13 +82,11 @@ class class_template {
                 $strName = class_resourceloader::getInstance()->getTemplate($strName);
             }
             catch(class_exception $objEx) {
-                if($strName == "/elements.tpl" || (defined("_admin_") && _admin_)) {
                     //try to resolve the file in the current skin
                     if(is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strName))
                         $strName = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strName;
-                }
-                else
-                    throw $objEx;
+                    else
+                        throw $objEx;
             }
 
         }
