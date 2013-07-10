@@ -182,6 +182,13 @@ abstract class class_portal {
 
                 if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
                     $this->strOutput = $this->getLang("commons_error_permissions");
+
+                    //redirect to the error page
+                    if($this->getPagename() != _pages_errorpage_) {
+                        $this->portalReload(getLinkPortalHref(_pages_errorpage_, ""));
+                        return "";
+                    }
+
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
                 }
             }

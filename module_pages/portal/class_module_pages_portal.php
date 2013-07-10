@@ -357,7 +357,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //try to send the correct header
             //page not found
-            if($objPageData == null || $objPageData->getStatus() != 1)
+            if($objPageData == null || $objPageData->getIntRecordStatus() != 1)
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
 
             //user is not allowed to view the page
@@ -399,7 +399,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
             $objPageData = class_module_pages_page::getPageByName($strPagename);
 
             //check, if the page is enabled and if the rights are given, too
-            if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView())) {
+            if($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView())) {
                 //Whoops. Nothing to output here
                 throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
             }
