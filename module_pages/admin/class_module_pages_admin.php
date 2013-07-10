@@ -365,9 +365,11 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $arrToolbarEntries = array();
         if(!$bitAlias) {
             if($strMode == "edit") {
-                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_edit.png);\">".$this->getLang("contentToolbar_pageproperties")."</a>";
-                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.png);\">".$this->getLang("contentToolbar_content")."</a>";
-                $arrToolbarEntries[] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.png);\">".$this->getLang("contentToolbar_preview")."</a>";
+                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_edit").$this->getLang("contentToolbar_pageproperties")."</a>";
+                $arrToolbarEntries[] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" >".class_adminskin_helper::getAdminImage("icon_page").$this->getLang("contentToolbar_content")."</a>";
+                $arrToolbarEntries[] = "<a href=\"".getLinkPortalHref(
+                    $objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\">".class_adminskin_helper::getAdminImage("icon_lens").$this->getLang("contentToolbar_preview"
+                )."</a>";
             }
             class_module_languages_admin::enableLanguageSwitch();
             if($this->getParam("pe") != 1)
@@ -933,7 +935,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             );
             if($strSystemid == $this->getObjModule()->getSystemid() && (!$bitPages || $bitFolder))
                 $strAction .= $this->objToolkit->listButton(
-                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getObjModule()->getSystemid()."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.png")
+                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getObjModule()->getSystemid()."'], ['".$strElement."', '']]);\">".class_adminskin_helper::getAdminImage("icon_accept")
                 );
 
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen"), $strAction, $intCounter++);
@@ -966,7 +968,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         )
                     );
                     $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".getImageAdmin("icon_accept.png")
+                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".class_adminskin_helper::getAdminImage("icon_accept")
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction, $intCounter++);
                 }
@@ -1007,7 +1009,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                             );
                         if($bitPageAliases)
                             $strAction .= $this->objToolkit->listButton(
-                                "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+                                "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".class_adminskin_helper::getAdminImage("icon_accept")."</a>"
                             );
 
                         $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
@@ -1039,7 +1041,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                             );
                         }
                         $strAction .= $this->objToolkit->listButton(
-                            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+                            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".class_adminskin_helper::getAdminImage("icon_accept")."</a>"
                         );
                         $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
 
@@ -1066,7 +1068,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                         $arrSinglePage["name2"] = $objPage->getStrName()."#".$objOnePageelement->getSystemid();
 
                     $strAction = $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.png")."</a>"
+                        "<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".class_adminskin_helper::getAdminImage("icon_accept")."</a>"
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objOnePageelement, $strAction, $intCounter++);
                 }
@@ -1125,8 +1127,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                         $arrReturn[] = array(
                             "data"  => array(
-                                "title" => $objSingleEntry->getStrDisplayName(),
-                                "icon"  => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon().".png"
+                                "title" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName()
                             ),
                             "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
                             "attr"  => array(
@@ -1155,8 +1156,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
                         $arrReturn[] = array(
                             "data"  => array(
-                                "title" => $objSingleEntry->getStrDisplayName(),
-                                "icon"  => _skinwebpath_."/pics/".$objSingleEntry->getStrIcon().".png"
+                                "title" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName()
                             ),
                             "state" => (count(class_module_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
                             "attr"  => array(

@@ -2,9 +2,9 @@
 
 echo "<pre>\n";
 echo "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_fontawesome/admin/scripts/fontawesome/css/font-awesome.min.css\">";
-echo "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_fontawesome/admin/scripts/fontawesome/css/font-awesome-corp.css\">";
+//echo "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_fontawesome/admin/scripts/fontawesome/css/font-awesome-corp.css\">";
 echo "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_fontawesome/admin/scripts/fontawesome/css/font-awesome-ext.css\">";
-echo "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_fontawesome/admin/scripts/fontawesome/css/font-awesome-social.css\">";
+//echo "<link rel=\"stylesheet\" href=\""._webpath_."/core/module_fontawesome/admin/scripts/fontawesome/css/font-awesome-social.css\">";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";

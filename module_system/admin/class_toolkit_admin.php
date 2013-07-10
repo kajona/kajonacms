@@ -334,7 +334,6 @@ class class_toolkit_admin extends class_toolkit {
             $strUserId = $strValue;
         }
 
-
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["value"] = htmlspecialchars($strUserName, ENT_QUOTES, "UTF-8", false);
@@ -392,7 +391,7 @@ class class_toolkit_admin extends class_toolkit {
                         .data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data('ui-autocomplete-item', item)
-                                .append( '<a class=\'ui-autocomplete-item userSelectorAC\' style=\'background-image: url('+item.icon+'); background-repeat: no-repeat;\' >'+item.title+'</a>' )
+                                .append( '<a class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });

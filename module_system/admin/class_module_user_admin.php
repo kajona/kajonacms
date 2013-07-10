@@ -1261,14 +1261,14 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $arrEntry["label"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
                 $arrEntry["value"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
                 $arrEntry["systemid"] = $objOneElement->getSystemid();
-                $arrEntry["icon"] = _skinwebpath_ . "/pics/icon_user.png";
+                $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
             }
             else if($objOneElement instanceof class_module_user_group) {
                 $arrEntry["title"] = $objOneElement->getStrName();
                 $arrEntry["value"] = $objOneElement->getStrName();
                 $arrEntry["label"] = $objOneElement->getStrName();
                 $arrEntry["systemid"] = $objOneElement->getSystemid();
-                $arrEntry["icon"] = _skinwebpath_ . "/pics/icon_group.png";
+                $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_group");
             }
 
             $arrReturn[] = $arrEntry;

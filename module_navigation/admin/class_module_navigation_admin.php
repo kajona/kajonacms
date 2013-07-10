@@ -489,8 +489,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
                     $arrReturn[] = array(
                         "data" => array(
-                            "title" => $objSinglePoint->getStrDisplayName(),
-                            "icon" => _skinwebpath_."/pics/".$objSinglePoint->getStrIcon().".png"
+                            "title" => class_adminskin_helper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName()
                         ),
                         "state" => (count(class_module_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "" : "closed"),
                         "attr" => array(

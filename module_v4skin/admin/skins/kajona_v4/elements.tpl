@@ -1457,7 +1457,7 @@ The language switch surrounds the buttons
                 },*/
                 "themes" : {
                     "url" : "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
-                    "icons" : true
+                    "icons" : false
                 },
                 "core" : {
                     "initially_open" : [ %%treeviewExpanders%% ],
