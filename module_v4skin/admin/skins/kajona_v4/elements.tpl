@@ -1299,8 +1299,7 @@ The language switch surrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
-<dialogContainer>
-    <div class="modal hide fade fullsize" id="%%dialog_id%%">
+<dialogContainer><div class="modal hide fade fullsize" id="%%dialog_id%%">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">×</button>
             <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
@@ -1308,11 +1307,9 @@ The language switch surrounds the buttons
         <div class="modal-body" id="%%dialog_id%%_content">
             <!-- filled by js -->
         </div>
-    </div>
-</dialogContainer>
+</div></dialogContainer>
 
-<dialogConfirmationContainer>
-    <div class="modal hide fade" id="%%dialog_id%%">
+<dialogConfirmationContainer><div class="modal hide fade" id="%%dialog_id%%">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">×</button>
             <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
@@ -1324,11 +1321,9 @@ The language switch surrounds the buttons
             <a href="#" class="btn" data-dismiss="modal" id="%%dialog_id%%_cancelButton">%%dialog_cancelButton%%</a>
             <a href="#" class="btn btn-primary" id="%%dialog_id%%_confirmButton">confirm</a>
         </div>
-    </div>
-</dialogConfirmationContainer>
+</div></dialogConfirmationContainer>
 
-<dialogLoadingContainer>
-    <div class="modal hide fade" id="%%dialog_id%%" style="width: 100px;">
+<dialogLoadingContainer><div class="modal hide fade" id="%%dialog_id%%" style="width: 100px;">
         <div class="modal-header">
             <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
         </div>
@@ -1336,16 +1331,13 @@ The language switch surrounds the buttons
             <div id="dialogLoadingDiv" class="loadingContainer"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
-    </div>
-</dialogLoadingContainer>
+</div></dialogLoadingContainer>
 
-<dialogRawContainer>
-    <div class="modal hide" id="%%dialog_id%%">
+<dialogRawContainer><div class="modal hide" id="%%dialog_id%%">
         <div class="modal-body">
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
-    </div>
-</dialogRawContainer>
+</div></dialogRawContainer>
 
 
 
