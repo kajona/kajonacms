@@ -1086,12 +1086,14 @@ class class_toolkit_admin extends class_toolkit {
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
         //create the list-button and the js code to show the dialog
-        $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
-                                         "",
-                                         class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
-                                         "icon_delete" );
+        $strButton = getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
+            "",
+            class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
+            "icon_delete"
+        );
 
-        return $this->listButton($strButton).$strDialog;
+        return $this->listButton($strButton).trim($strDialog);
     }
 
     /**
