@@ -998,11 +998,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/" . $arrLogs[$intI]["user_log_ip"];
             $strUtraceLinkText = "http://www.utrace.de/whois/" . $arrLogs[$intI]["user_log_ip"];
             if($arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1") {
-                $arrRows[$intI][] = getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth", "_blank")
-                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text", "_blank");
+                $arrRows[$intI][] = $this->objToolkit->listButton(getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth", "_blank"))
+                    ." ".$this->objToolkit->listButton(getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text", "_blank"));
             }
             else {
-                $arrRows[$intI][] = getImageAdmin("icon_earthDisabled", $this->getLang("login_utrace_noinfo")) . " " . getImageAdmin("icon_textDisabled", $this->getLang("login_utrace_noinfo"));
+                $arrRows[$intI][] = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_earthDisabled", $this->getLang("login_utrace_noinfo")))." ".
+                    $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_textDisabled", $this->getLang("login_utrace_noinfo")));
             }
         }
 
