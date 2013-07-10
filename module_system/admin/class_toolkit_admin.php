@@ -741,7 +741,7 @@ class class_toolkit_admin extends class_toolkit {
         $strId = generateSystemid();
         $strCallbackVisible = "function() { $('#".$strId."').addClass('optionalElementsWrapperVisible'); }";
         $strCallbackInvisible = "function() { $('#".$strId."').removeClass('optionalElementsWrapperVisible'); }";
-        $arrFolder = $this->getLayoutFolder($strContent, "<img src=\""._skinwebpath_."/pics/icon_folderClosed.png\" alt=\"\" /> ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
+        $arrFolder = $this->getLayoutFolder($strContent, class_adminskin_helper::getAdminImage("icon_folderClosed")." ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
         return "<br /><div id=\"".$strId."\" class=\"optionalElementsWrapper".($bitVisible ? " optionalElementsWrapperVisible" : "")."\">".$this->getFieldset($arrFolder[1], $arrFolder[0])."</div>";
     }
 
@@ -1108,20 +1108,20 @@ class class_toolkit_admin extends class_toolkit {
 
         if(is_object($objInstance) && $objInstance instanceof class_model )
             $objRecord = $objInstance;
-
         else if(validateSystemid($objInstance) && class_objectfactory::getInstance()->getObject($objInstance) !== null)
             $objRecord = class_objectfactory::getInstance()->getObject($objInstance);
-
         else
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
         if($objRecord->getIntRecordStatus() == 1) {
             $strImage = "icon_enabled";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
+            $strLinkContent = class_adminskin_helper::getAdminImage("icon_enabled", class_carrier::getInstance()->getObjLang()->getLang("status_active", "system"));
         }
         else {
             $strImage = "icon_disabled";
             $strText = class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
+            $strLinkContent = class_adminskin_helper::getAdminImage("icon_disabled", class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system"));
         }
 
         $strJavascript = "";
@@ -1129,10 +1129,13 @@ class class_toolkit_admin extends class_toolkit {
         //output texts and image paths only once
         if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
-                var strActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")."';
-                var strInActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")."';
-                var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.png';
-                var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.png';
+//                var strActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")."';
+//                var strInActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")."';
+//                var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.png';
+//                var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.png';
+
+                KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_enabled", class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")))."';
+                KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_disabled", class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")))."';
 
             </script>";
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
@@ -1140,10 +1143,10 @@ class class_toolkit_admin extends class_toolkit {
 
         $strButton = getLinkAdminManual(
             "href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"",
+            $strLinkContent,
+            " ",
             "",
-            $strText,
-            $strImage,
-            "statusImage_".$objRecord->getSystemid(),
+            "",
             "statusLink_".$objRecord->getSystemid()
         );
 
@@ -1218,8 +1221,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strImageInvisible clickable
      * @param bool $bitVisible
      * @return string
+     *
+     * @deprecated use getLayoutFolder() instead
      */
-    public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen.gif", $strImageInvisible = "icon_folderClosed.png", $bitVisible = true) {
+    public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen", $strImageInvisible = "icon_folderClosed", $bitVisible = true) {
         $strID = str_replace(array(" ", "."), array("", ""), microtime());
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder_pic");
         $arrTemplate = array();

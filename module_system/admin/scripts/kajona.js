@@ -624,34 +624,31 @@ KAJONA.admin.ajax = {
                 if(bitReload !== null && bitReload === true)
                     location.reload();
 
-
                 if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
-                    var image = $('#statusImage_' + strSystemIdToSet);
+                    var newStatus = $($.parseXML(data)).find("newstatus").text();
                     var link = $('#statusLink_' + strSystemIdToSet);
-//                    KAJONA.admin.tooltip.removeTooltip(link);
 
-					if (image.attr('src').indexOf('icon_enabled.png') != -1) {
-						image.attr('src', strInActiveImageSrc);
-						image.attr('alt', strInActiveText);
-						link.attr('title', strInActiveText);
-					} else {
-						image.attr('src', strActiveImageSrc);
-						image.attr('alt', strActiveText);
-						link.attr('title', strActiveText);
-					}
+                    if (newStatus == 0)
+                        link.html(KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon);
+					else
+                        link.html(KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon);
 
-                    KAJONA.admin.tooltip.addTooltip(link);
+                    KAJONA.admin.tooltip.addTooltip(link.find("img"));
 				}
         	}
-            else{
+            else
         		KAJONA.admin.statusDisplay.messageError(data);
-        	}
         };
 
         var link = $('#statusLink_' + strSystemIdToSet);
-        KAJONA.admin.tooltip.removeTooltip(link);
+        KAJONA.admin.tooltip.removeTooltip(link.find("img"));
         KAJONA.admin.ajax.genericAjaxCall("system", "setStatus", strSystemIdToSet, objCallback);
-	}
+	},
+
+    setSystemStatusMessages : {
+        strInActiveIcon : '',
+        strActiveIcon : ''
+    }
 
 };
 

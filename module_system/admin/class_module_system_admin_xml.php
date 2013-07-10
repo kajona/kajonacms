@@ -81,11 +81,11 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                 $intNewStatus = $objCommon->getIntRecordStatus() == 0 ? 1 : 0;
 
             if($objCommon->setIntRecordStatus($intNewStatus)) {
-                $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."</message>";
+                $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."<newstatus>".$intNewStatus."</newstatus></message>";
                 $this->flushCompletePagesCache();
             }
             else
-                $strReturn .= "<error>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusError")."</error>";
+                $strReturn .= "<message><error>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusError")."</error></message>";
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);

@@ -229,7 +229,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
                 //So, return a button, if we have an admin in front of us
                 if($objLockmanager->isUnlockableForCurrentUser()) {
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen.png"));
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
                 $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked", $this->getLang("ds_gesperrt")));
@@ -245,7 +245,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             }
 
             //The Icons to sort the list and to copy the element
-            $strActions .= $this->objToolkit->listButton(getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy.png"));
+            $strActions .= $this->objToolkit->listButton(getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
 
             //The status-icons
             $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
