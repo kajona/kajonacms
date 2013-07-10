@@ -42,7 +42,7 @@ class class_graph_flot_seriesdata {
     }
     
     public function setArrayData($arrayData) {
-        $this->arrayData = $arrayData;
+        $this->arrayData = array_values($arrayData);
     }
 
     public function getStrSeriesChartType() {

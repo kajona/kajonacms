@@ -111,7 +111,7 @@ class class_graph_flot implements interface_graph {
     }
 
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        $this->arrXAxisTickLabels = $arrXAxisTickLabels;
+        $this->arrXAxisTickLabels = array_values($arrXAxisTickLabels);
         $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
     }
 
