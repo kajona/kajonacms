@@ -428,15 +428,9 @@ footer {
     height:23px;
     float:right;
     margin-left:1px;
-//    padding-top: 2px;
     background-color: @white;
     font-size: @baseFontSize+2;
-//    background:url(../img/icon-lupe.png) left top no-repeat;
-        padding-top: 2px;
-    padding-right: 2px;
-
-    i {
-    }
+    padding: 2px 2px 0 0;
 }
 
 #languageChooser, #aspectChooser {
@@ -796,6 +790,37 @@ footer {
     fieldset legend {
         font-size: @baseFontSize+2;
     }
+
+
+
+
+    //Fontawesome configuration start
+    .icon-stack {
+        width: 20px;
+        height: 1em;
+        line-height: @baseLineHeight;
+        vertical-align: 0;
+
+        .icon-stack-base {
+            font-size: @baseFontSize -1;
+            left: 6px; top: -3px;
+            text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+        }
+
+        .icon-stack-base-full {
+            left: auto;
+            top: auto;
+        }
+    }
+
+    [class^='icon-']:before, [class*=' icon-']:before {
+        font-size: @baseFontSize+4;
+    }
+
+    [class^='icon-stack']:before, [class*=' icon-stack-base']:before {
+        font-size: @baseFontSize - 2;
+    }
+    //Fontawesome configuration end
 
 }
 

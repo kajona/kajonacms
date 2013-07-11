@@ -82,7 +82,10 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             }
         }
         else if($objEntry instanceof class_module_pages_folder) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFolder", "&systemid=".$objEntry->getSystemid()));
+            if($this->getParam("source") == "search")
+                $this->adminReload(getLinkAdminHref("pages", "list", "&systemid=".$objEntry->getSystemid()));
+            else
+                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editFolder", "&systemid=".$objEntry->getSystemid()));
         }
         else if($objEntry instanceof class_module_pages_element) {
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editElement", "&systemid=".$objEntry->getSystemid()));
