@@ -25,6 +25,7 @@ KAJONA.admin.packagemanager = {
                     KAJONA.util.evalScript(content);
                     KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+KAJONA.admin.packagemanager.objWrapperNames[packageName]+' img'));
                     KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+KAJONA.admin.packagemanager.objWrapperNames[packageName]+' a'));
+                    KAJONA.admin.tooltip.addTooltip($('#updateWrapper'+KAJONA.admin.packagemanager.objWrapperNames[packageName]+' span'));
                 });
             }
             else {
