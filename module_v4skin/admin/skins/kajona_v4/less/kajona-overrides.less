@@ -297,19 +297,24 @@ footer {
     border: 1px solid @menuBorder !important;
     .box-shadow(0 5px 10px rgba(0,0,0,.2));
 
-    li a {
-        cursor: pointer;
-        padding: 3px 15px;
-        display: block;
+    li {
+        a {
+            cursor: pointer;
+            padding: 3px;
+            display: block;
 
-        &:hover {
-            text-decoration: none;
+            &:hover {
+                text-decoration: none;
+            }
+
         }
+
+        img, i {
+            margin: 0 5px 0 0;
+        }
+
     }
 
-    li img {
-        padding-right: 10px;
-    }
 
     .ui-state-focus {
         color: @white;
