@@ -1,4 +1,8 @@
 
+
+@FontAwesomePath:    "../fonts/fontawesome/font";
+
+
 @font-face {
     font-family: 'Dosis';
     font-style: normal;
@@ -145,11 +149,6 @@ footer {
             i {
                 vertical-align: baseline;
             }
-            &:hover {
-                i[class^="icon-"] {
-                    background-image: url("@{iconWhiteSpritePath}");
-                }
-            }
         }
 
         .sub-menu {
@@ -201,12 +200,6 @@ footer {
         }
     }
 
-    .dropdown-submenu:hover > a {
-        i[class^="icon-"] {
-            background-image: url("@{iconWhiteSpritePath}");
-        }
-    }
-
     .badge {
         position: absolute;
         top: -6px;
@@ -227,6 +220,7 @@ footer {
         height: 18px;
         background: url(../img/icon-user.png) left top no-repeat;
         margin-right: 3px;
+        padding: 1px 1px 1px  18px;
     }
 }
 
@@ -417,36 +411,39 @@ footer {
     height: 24px;
     .box-shadow(none);
 
+    background:url(../img/portaleditor-arrow.png) right 3px no-repeat;
+    padding-right: 30px;
+
     &:hover {
         color:darken(#888, 10%);
     }
 
-    .icon-share {
-        height:21px;
-        width:23px;
-        position:relative;
-        top:3px;
-        margin-left:7px;
-        background:url(../img/portaleditor-arrow.png) left top no-repeat;
-    }
 }
 
 
 
 
 #icon-lupe {
-  width:23px;
-		height:25px;
-		float:right;
-		margin-left:1px;
-		background:url(../img/icon-lupe.png) left top no-repeat;
+    width:21px;
+    height:23px;
+    float:right;
+    margin-left:1px;
+//    padding-top: 2px;
+    background-color: @white;
+    font-size: @baseFontSize+2;
+//    background:url(../img/icon-lupe.png) left top no-repeat;
+        padding-top: 2px;
+    padding-right: 2px;
+
+    i {
+    }
 }
 
 #languageChooser, #aspectChooser {
-  border:none;
-		margin-top:12px;
-		background:@white;
-		height:25px;
+    border:none;
+    margin-top:12px;
+    background:@white;
+    height:25px;
 }
 
 .breadcrumb {
@@ -468,17 +465,6 @@ footer {
     li.pathentry a,
     li.pathentry:active a {
         color:@white;
-    }
-
-    li.pathentry a.moduleSwitchLink {
-        background: url(../img/icon-home.png) 0px 0px no-repeat;
-        padding-left: 18px;
-        padding-top: 16px;
-        .hide-text();
-
-        i {
-            display: none;
-        }
     }
 
     li.pathentry:before {

@@ -47,7 +47,7 @@
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
                         <input type="hidden" name="action" value="search">
-                        <i id="icon-lupe"></i>
+                        <i id="icon-lupe" class="icon-search"></i>
                         <input type="text" name="search_query" class="search-query" placeholder="[lang,globalSearchPlaceholder,dashboard]" id="globalSearchInput">
                     </form>
                     %%languageswitch%%
@@ -55,7 +55,6 @@
                     %%aspectChooser%%
                     <a id="portaleditor" class="btn" href="_webpath_">
                         Portal
-                        <i class="icon-share"></i>
                     </a>
                 </div>
             </div>
