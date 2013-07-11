@@ -55,7 +55,7 @@ $p2f["icon_earthDisabled.png"]              = "<span class='icon-stack'><i class
 $p2f["icon_edit.png"]                       = "<i class='icon-pencil'></i>";
 $p2f["icon_editDisabled.png"]               = "<span class='icon-stack'><i class='icon-pencil'></i><i class='icon-ban-circle icon-stack-base' style='color: red;  '></i></span>";
 $p2f["icon_editLocked.png"]                 = "<span class='icon-stack'><i class='icon-pencil'></i><i class='icon-lock icon-stack-base' style='color: red;'></i></span>";
-$p2f["icon_enabled.png"]                    = "<i class='icon-flag' style='color: green'></i>";
+$p2f["icon_enabled.png"]                    = "<span class='icon-stack'><i class='icon-check-empty icon-stack-base icon-stack-base-full'></i><i class='icon-flag' style='color: green; font-size: 60%'></i></span>";
 $p2f["icon_event.png"]                      = "<i class='icon-calendar-empty'></i>";
 $p2f["icon_excel.png"]                      = "<i class='icon-ms-excel'></i>";
 $p2f["icon_externalBrowser.png"]            = "<i class='icon-search'></i>";
@@ -144,6 +144,12 @@ vertical-align: -35%;
     font-size: 70%;left: 5px; top: 4px;
 //    text-shadow: -1px -1px 2px white;
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.icon-stack .icon-stack-base-full {
+    font-size: 120%;
+    left: auto;
+    top: auto;
 }
 
 </style>";
