@@ -734,7 +734,7 @@ Part to display the login status, user is logged in
 <logout_form>
     <div class="dropdown userNotificationsDropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-user icon-white" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> %%name%%
+            <i class="icon-blank-kajona" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> %%name%%
         </a>
         <ul class="dropdown-menu" role="menu">
             <li class="dropdown-submenu">
