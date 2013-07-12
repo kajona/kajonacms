@@ -180,14 +180,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $objElement->getSystemid(), array());
             }
 
-
-            //any string to highlight?
-            if($this->getParam("highlight") != "") {
-                $strHighlight = uniStrtolower($this->getParam("highlight"));
-                //search for matches, but exclude tags
-                $strElementOutput = preg_replace("#(?!<.*)(?<!\w)(".$strHighlight.")(?!\w|[^<>]*>)#i", "<span class=\"searchHighlight\">$1</span>", $strElementOutput);
-            }
-
             $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
         }
 
