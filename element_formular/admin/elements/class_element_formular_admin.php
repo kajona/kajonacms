@@ -37,34 +37,31 @@ class class_element_formular_admin extends class_element_admin implements interf
 
         //Build the form
         $strReturn .= $this->objToolkit->formInputText("formular_email", $this->getLang("formular_email"), (isset($arrElementData["formular_email"]) ? $arrElementData["formular_email"] : ""));
+
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("formular_success_hint"));
         $strReturn .= $this->objToolkit->formInputText("formular_success", $this->getLang("formular_success"), (isset($arrElementData["formular_success"]) ? $arrElementData["formular_success"] : ""));
+
+        $strReturn .= $this->objToolkit->formTextRow($this->getLang("formular_error_hint"));
         $strReturn .= $this->objToolkit->formInputText("formular_error", $this->getLang("formular_error"), (isset($arrElementData["formular_error"]) ? $arrElementData["formular_error"] : ""));
         //Load the available classes
-        $arrClasses = class_resourceloader::getInstance()->getFolderContent("/portal/forms", array(".php"));
         $arrClassesDD = array();
-        if(count($arrClasses) > 0) {
-            foreach($arrClasses as $strClass) {
-                $arrClassesDD[$strClass] = $strClass;
-            }
+        foreach(class_resourceloader::getInstance()->getFolderContent("/portal/forms", array(".php")) as $strClass) {
+            $arrClassesDD[$strClass] = $strClass;
         }
+
         $strReturn .= $this->objToolkit->formInputDropdown("formular_class", $arrClassesDD, $this->getLang("formular_class"), (isset($arrElementData["formular_class"]) ? $arrElementData["formular_class"] : ""));
 
 
         //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_form", ".tpl");
         $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
+        foreach(class_resourceloader::getInstance()->getTemplatesInFolder("/element_form", ".tpl") as $strTemplate) {
+            $arrTemplatesDD[$strTemplate] = $strTemplate;
         }
 
-        if(count($arrTemplatesDD) == 1) {
+        if(count($arrTemplatesDD) == 1)
             $this->addOptionalFormElement($this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "")));
-        }
-        else {
+        else
             $strReturn .= $this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : ""));
-        }
 
 
         $strReturn .= $this->objToolkit->setBrowserFocus("formular_email");

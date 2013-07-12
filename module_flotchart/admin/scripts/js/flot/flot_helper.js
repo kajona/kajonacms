@@ -39,12 +39,11 @@ flotHelper.showTooltip = function(x, y, contents, seriesLabel, color) {
         display: 'none',
         top: y + flotHelper.tooltipOffsetX,
         left: x + flotHelper.tooltipOffsetY,
-        'box-shadow': '5px 5px 5px #444444',
+        'box-shadow': '2px 2px 3px #444444',
         padding: '2px',
-        'border-radius': '5px',
         'background-color': '#000000',
         'color': '#FFFFFF',
-        opacity: 1
+        opacity: 0.8
     }).appendTo("body").show();
 };
 

@@ -1692,7 +1692,10 @@ abstract class class_root {
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         $this->setStrOwner($strOwner);
-        return $this->updateObjectToDb();
+        if(validateSystemid($this->getSystemid()))
+            return $this->updateObjectToDb();
+        else
+            return true;
     }
 
     public function getIntRecordStatus() {
@@ -1763,7 +1766,8 @@ abstract class class_root {
         $bitReturn = true;
 
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            $this->updateObjectToDb();
+            if(validateSystemid($this->getSystemid()))
+                $this->updateObjectToDb();
             if($bitFireStatusChangeEvent) {
                 $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
             }
@@ -1797,7 +1801,10 @@ abstract class class_root {
      */
     public function setRecordComment($strNewComment) {
         $this->setStrRecordComment($strNewComment);
-        return $this->updateObjectToDb();
+        if(validateSystemid($this->getSystemid()))
+            return $this->updateObjectToDb();
+        else
+            return true;
     }
 
     public function getStrRecordComment() {

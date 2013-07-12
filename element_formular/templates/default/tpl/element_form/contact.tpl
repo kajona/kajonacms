@@ -29,3 +29,12 @@ Folgende Anfrage wurde ueber das Kontaktformular erstellt:
 <errorrow>
 <li>%%error%%</li>
 </errorrow>
+
+
+<message_success>
+<div class="success">[lang,formContact_message_success,elements]</div>
+</message_success>
+
+<message_error>
+<div class="error">[lang,formContact_message_error,elements]</div>
+</message_error>

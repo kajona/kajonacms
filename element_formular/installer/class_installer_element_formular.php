@@ -83,6 +83,12 @@ class class_installer_element_formular extends class_installer_base implements i
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("form")->getStrVersion() == "4.1") {
+            $strReturn .= "Updating element form to 4.2...\n";
+            $this->updateElementVersion("form", "4.2");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

@@ -258,7 +258,7 @@ class class_module_navigation_point extends class_model implements interface_mod
         //transform the sublevel
         foreach($arrPages as $objOneEntry) {
             //validate status
-            if($objOneEntry->getStatus() == 0)
+            if($objOneEntry->getIntRecordStatus() == 0)
                 continue;
 
             $objLanguage = new class_module_languages_language();

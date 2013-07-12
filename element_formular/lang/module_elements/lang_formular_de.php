@@ -15,6 +15,8 @@ $lang["formular_email"]                  = "Ziel-E-Mail-Adresse";
 $lang["formular_error"]                  = "Fehlermeldung";
 $lang["formular_success"]                = "Erfolgsmeldung";
 $lang["required_formular_email"]         = "E-Mail Adresse";
+$lang["formular_error_hint"]             = "Wird das Feld leer gelassen wird der Text aus dem Template verwendet";
+$lang["formular_success_hint"]           = "Wird das Feld leer gelassen wird der Text aus dem Template verwendet";
 $lang["fehler_captcha"]                  = "Vänligen ange korrekt säkerhetskod";
 $lang["fehler_email"]                    = "Vänligen ange en giltig e-mail adress";
 $lang["fehler_nachricht"]                = "Vänligen skriv in ett meddelande";
@@ -29,3 +31,7 @@ $lang["formContact_mail_subject"]        = "Nachricht per Kontaktformular";
 $lang["formContact_message"]             = "Nachricht:*";
 $lang["formContact_name"]                = "Name:*";
 $lang["formContact_send"]                = "Absenden";
+
+
+$lang["formContact_message_success"]                 = "Vielen Dank für die Nachricht. Wir werden diese schnellstmöglich bearbeiten.";
+$lang["formContact_message_error"]                   = "Leider ist ein Fehler aufgetreten, bitte versuchen Sie die letzte Aktion erneut.";

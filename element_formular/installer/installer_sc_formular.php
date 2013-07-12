@@ -60,25 +60,19 @@ class class_installer_sc_formular implements interface_sc_installer  {
                 $arrParams[] = "class_formular_contact.php";
                 $arrParams[] = _system_admin_email_;
                 $arrParams[] = "contact.tpl";
-                $arrParams[] = "Es ist ein Fehler aufgetreten.";
-                $arrParams[] = "Vielen Dank für die Nachricht!";
                 $arrParams[] = $strElementId;
             }
             else {
                 $arrParams[] = "class_formular_contact.php";
                 $arrParams[] = _system_admin_email_;
                 $arrParams[] = "contact.tpl";
-                $arrParams[] = "An error occured.";
-                $arrParams[] = "Thank you for your message.";
                 $arrParams[] = $strElementId;
             }
 
             $strQuery = "UPDATE "._dbprefix_."element_formular
                         SET formular_class = ?,
                             formular_email = ?,
-                            formular_template = ?,
-                            formular_error = ?,
-                            formular_success = ?
+                            formular_template = ?
                         WHERE content_id = ?";
 
             if($this->objDB->_pQuery($strQuery, $arrParams))
