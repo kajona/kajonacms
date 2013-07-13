@@ -129,6 +129,15 @@ class class_installer_faqs extends class_installer_base implements interface_ins
             $strReturn .= $this->update_40_41();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.1") {
+            $strReturn .= "Updating 4.1 to 4.2...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("faqs", "4.2");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("faqs", "4.2");
+        }
+
         return $strReturn."\n\n";
 	}
 

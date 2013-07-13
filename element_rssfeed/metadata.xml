@@ -5,7 +5,7 @@
         >
     <title>rssfeed</title>
     <description>Include external rss-/atom feeds into your website.</description>
-    <version>4.1</version>
+    <version>4.2</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>

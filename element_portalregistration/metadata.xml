@@ -5,7 +5,7 @@
         >
     <title>portalregistration</title>
     <description>Allows users to sign up and create an account using the portal.</description>
-    <version>4.1</version>
+    <version>4.2</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>

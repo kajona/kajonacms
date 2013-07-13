@@ -5,7 +5,7 @@
         >
     <title>rating</title>
     <description>Provides a graphical way to your visitors in order to rate content. Therefore the classical stars-approach is used.</description>
-    <version>4.1</version>
+    <version>4.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

@@ -588,6 +588,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.1.1") {
+            $strReturn .= $this->update_411_42();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -859,6 +865,13 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.1.1");
+        return $strReturn;
+    }
+
+    private function update_411_42() {
+        $strReturn = "Updating 4.1.1 to 4.2...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.2");
         return $strReturn;
     }
 }

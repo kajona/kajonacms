@@ -72,6 +72,12 @@ class class_installer_element_portalupload extends class_installer_base implemen
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "4.1") {
+            $strReturn .= "Updating element portalupload to 4.2...\n";
+            $this->updateElementVersion("portalupload", "4.2");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

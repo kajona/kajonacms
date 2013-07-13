@@ -5,7 +5,7 @@
         >
     <title>lastmodified</title>
     <description>Renders the date of the pages' last modification.</description>
-    <version>4.1</version>
+    <version>4.2</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>

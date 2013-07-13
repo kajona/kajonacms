@@ -86,6 +86,12 @@ class class_installer_element_portalregistration extends class_installer_base im
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("portalregistration")->getStrVersion() == "4.1") {
+            $strReturn .= "Updating element portalregistration to 4.2...\n";
+            $this->updateElementVersion("portalregistration", "4.2");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

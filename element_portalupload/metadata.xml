@@ -5,7 +5,7 @@
         >
     <title>portalupload</title>
     <description>Provides a way to allow users to upload their own files into the mediamanager via the portal, so without accessing the backend.</description>
-    <version>4.1</version>
+    <version>4.2</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
