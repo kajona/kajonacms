@@ -1,5 +1,7 @@
 
 
+@FontAwesomePath:    "../fonts/fontawesome/font";
+
 /* P O R T A L E D I T O R   T O O L B A R */
 #peToolbar {
 
@@ -35,6 +37,10 @@
 			padding: 0;
 			background-color: transparent;
 			border: none;
+
+            a {
+                color: #575757;
+            }
         }
     }
 
@@ -56,6 +62,34 @@
     img {
         border: none;
     }
+
+
+    //Fontawesome configuration start
+    .icon-stack {
+//        width: 1em;
+//        height: 1em;
+//        line-height: 2em;
+        vertical-align: -20%;
+
+        .icon-stack-base {
+//            left: 2px; top: -3px;
+            text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+        }
+
+        .icon-stack-base-full {
+//            left: auto;
+//            top: auto;
+        }
+    }
+
+    [class^='icon-']:before, [class*=' icon-']:before, [class^='icon-stack']:before, [class*=' icon-stack']:before  {
+        font-size: @baseFontSize+4;
+    }
+
+    [class*=' icon-stack-base']:before {
+        font-size: @baseFontSize - 2;
+    }
+    //Fontawesome configuration end
 }
 
 #peToolbarSpacer {

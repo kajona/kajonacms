@@ -796,14 +796,13 @@ footer {
 
     //Fontawesome configuration start
     .icon-stack {
-        width: 20px;
+        width: 1em;
         height: 1em;
-        line-height: @baseLineHeight;
+        line-height: 1em;
         vertical-align: 0;
 
         .icon-stack-base {
-            font-size: @baseFontSize -1;
-            left: 6px; top: -3px;
+            left: 4px; top: -3px;
             text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
         }
 
@@ -817,7 +816,7 @@ footer {
         font-size: @baseFontSize+4;
     }
 
-    [class^='icon-stack']:before, [class*=' icon-stack-base']:before {
+    [class*=' icon-stack-base']:before {
         font-size: @baseFontSize - 2;
     }
     //Fontawesome configuration end
@@ -879,7 +878,17 @@ label {
 }
 
 .listButton {
-    padding: 0px 2px;
+    width: 27px;
+    display: inline-block;
+    text-align: center;
+
+    a {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 
