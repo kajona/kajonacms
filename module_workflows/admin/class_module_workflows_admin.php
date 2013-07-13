@@ -48,7 +48,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     public function getArrOutputNaviEntries($strSystemid = "", $strStopSystemid = "") {
         $arrPath = parent::getArrOutputNaviEntries($strSystemid, $strStopSystemid);
 
-        if(validateSystemid($this->getSystemid()))
+        if(validateSystemid($this->getSystemid()) && class_objectfactory::getInstance()->getObject($this->getSystemid()) != null)
             $arrPath[] = getLinkAdmin("workflows", $this->getAction(), "&systemid=".$this->getSystemid(), class_objectfactory::getInstance()->getObject($this->getSystemid())->getStrDisplayName());
 
         return $arrPath;
