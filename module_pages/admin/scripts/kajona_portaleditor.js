@@ -105,6 +105,10 @@ KAJONA.admin.portaleditor = {
 
 KAJONA.admin.portaleditor.RTE = {};
 KAJONA.admin.portaleditor.RTE.config = {};
+KAJONA.admin.portaleditor.RTE.buttons = {
+    enabled : '',
+    disabled : ''
+};
 KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 
 KAJONA.admin.portaleditor.RTE.savePage = function () {
@@ -125,7 +129,7 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         });
     });
     //console.groupEnd('savePage');
-    $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace(".png", "Disabled.png"));
+    $('#savePageLink').html(KAJONA.admin.portaleditor.RTE.buttons.disabled);
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
 
@@ -161,7 +165,8 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 var data = event.editor.getData();
                 var attr = $(event.editor.element).attr('data-kajona-editable');
 
-                $('#savePageLink > img').attr('src', $('#savePageLink > img').attr('src').replace("Disabled", ""));
+
+                $('#savePageLink').html(KAJONA.admin.portaleditor.RTE.buttons.enabled);
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
                 //console.log('modified field', attr, data);
             },

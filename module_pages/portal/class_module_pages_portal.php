@@ -482,6 +482,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                             filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
+                        KAJONA.admin.portaleditor.RTE.buttons.enabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_accept", $this->getLang("pe_rte_save", "pages")))."';
+                        KAJONA.admin.portaleditor.RTE.buttons.disabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_acceptDisabled", $this->getLang("pe_rte_save", "pages")))."';
                         $(KAJONA.admin.portaleditor.initPortaleditor);
                     });
                 }
@@ -498,6 +500,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                             filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
+                        KAJONA.admin.portaleditor.RTE.buttons.enabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_accept", $this->getLang("pe_rte_save", "pages")))."';
+                        KAJONA.admin.portaleditor.RTE.buttons.disabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_acceptDisabled", $this->getLang("pe_rte_save", "pages")))."';
                         $(KAJONA.admin.portaleditor.initPortaleditor);
                     });
                 }
