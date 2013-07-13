@@ -37,8 +37,12 @@ class class_module_packagemanager_packagemanager_element extends class_module_pa
         $objFilesystem = new class_filesystem();
         $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
 
-        if($arrInstaller === false)
-            return "";
+        if($arrInstaller === false) {
+            $strReturn .= "Updating default template pack...\n";
+            $this->updateDefaultTemplate();
+            class_cache::flushCache();
+            return $strReturn;
+        }
 
         //proceed with elements
         foreach($arrInstaller as $strOneInstaller) {

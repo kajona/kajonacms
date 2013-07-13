@@ -133,17 +133,13 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             }
         }
 
-
-        $strReturn .= "Updating default template pack...\n";
-        $this->updateDefaultTemplate();
         class_cache::flushCache();
-
 
         return $strReturn;
     }
 
 
-    protected function updateDefaultTemplate() {
+    public function updateDefaultTemplate() {
         $objFilesystem = new class_filesystem();
         class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /core/".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
         if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js"))
@@ -155,6 +151,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"))
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
 
+        return true;
     }
 
     public function setObjMetadata($objMetadata) {

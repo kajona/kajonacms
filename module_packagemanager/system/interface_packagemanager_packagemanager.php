@@ -78,4 +78,12 @@ interface interface_packagemanager_packagemanager {
      */
     public function getStrTargetPath();
 
+
+    /**
+     * This method is called during the installation of a package.
+     * Depending on the current manager, the default-template may be updated.
+     * @return bool
+     */
+    public function updateDefaultTemplate();
+
 }

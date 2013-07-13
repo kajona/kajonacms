@@ -334,6 +334,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             if($objHandler->getObjMetadata()->getBitProvidesInstaller())
                 $strLog .= $objHandler->installOrUpdate();
 
+            $strLog .= "Updating default template pack...\n";
+            $objHandler->updateDefaultTemplate();
+
+
             $strOnSubmit = 'window.parent.parent.location.reload();';
             if($strLog !== "") {
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("package_install_success"));
