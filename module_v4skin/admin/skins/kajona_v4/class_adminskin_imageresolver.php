@@ -71,7 +71,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_acceptDisabled"              => "<span class='icon-stack'><i class='icon-ok'></i><i class='icon-ban-circle icon-stack-base' style='color: red'></i></span>",
         "icon_arrowDown"                   => "<i class='icon-circle-arrow-down'></i>",
         "icon_arrowUp"                     => "<i class='icon-circle-arrow-up'></i>",
-        "icon_aspect"                      => "<i class='icon-th-large'></i>",
+        "icon_aspect"                      => "<i class='icon-columns'></i>",
         "icon_binary"                      => "<i class='icon-file'></i>",
         "icon_blank"                       => "<i class='icon-file-alt'></i>",
         "icon_book"                        => "<i class='icon-book'></i>",
