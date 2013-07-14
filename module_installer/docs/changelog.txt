@@ -1,0 +1,5 @@
+Module Installer
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: updated the installer, removed rounded borders
+BUG: the installer crashed in case module samplecontent is not available

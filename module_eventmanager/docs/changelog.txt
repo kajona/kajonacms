@@ -1,0 +1,4 @@
+Module Eventmanager
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: added a messageprovider to module eventmanager, sending a notification in case of new participants #788

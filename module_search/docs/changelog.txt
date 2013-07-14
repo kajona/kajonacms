@@ -1,0 +1,5 @@
+Module Search
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: refactored the highlighting of search-phrases. now js-based an no longer generated on the server-side. #794
+BUG: fixed search queries for float-values on postgres (aka ignoring them)

@@ -1,0 +1,4 @@
+Module Workflows
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: a workflow-handler may return an instance of class_admin_formgenerator or string containing the generated form NEW: the workflow-backend-view adds the current id to the path-navigation

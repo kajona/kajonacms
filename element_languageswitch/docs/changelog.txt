@@ -1,0 +1,4 @@
+Element Languageswitch
+
+V4.2 ----------------------------------------------------------------------------------------------------
+BUG: the languageswitch missed to include an additional seo-title for some links #798

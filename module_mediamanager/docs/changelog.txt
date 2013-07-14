@@ -1,0 +1,6 @@
+Module Mediamanager
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: mediamanger-files are renderd with an addition download-icon (to download the file in the backend, too)
+NEW: the mediamanager / folderview selector contains a link to the image-repository and a link to a list of all repositories when selecting a link-target #800
+BUG: when opening a mediamanager repo, the sync is triggered only if the user has upload permissions

@@ -1,0 +1,22 @@
+Module System
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: added a new form-entry "user", used to select a user from the user-management, includes autocomplete. Therefore the old toolkit-user selector was updated to the latest jqueryUI changes.
+NEW: added a new interface "interface_formentry_printable", extending the interface_formentry. By adding a method "getValueAsText", form-entries may be used to generate a "read only" or a summary view of a single object / form
+NEW: before sending a generated update-query to the database, int/bit property values are casted explicitly. Required by some RDBMS.
+NEW: added an image-mapper for the backend-skins. The mapper is expected for each skin, named class_adminskin_imageresolver (implementing interface_adminskin_imageresolver). The imageresolver transforms names like "icon_edit" into a matching img-tag or an i-tag, as used by the current skin. #804
+NEW: added formentry textrow, usable to render a hint without a matching form-element
+NEW: more typesafety on date getters / setters in class_root
+NEW: the backend navigation entries are cached per aspect, this allows a module to render different actions depending on the current aspect
+NEW: module-id files may use an additional underscore
+NEW: added class_admin_formgenerator::removeField() to remove an already added entry from a form
+BUG: system-changelog missed the ORDER BY criteria for a merged resultset
+BUG: when rendering a list via class_admin_evensimpler, the original action is restored temporarily. Otherwise the page rendered below the list of records would use "list" for every object-type, resulting in a broken paging-link/erroneous link.
+BUG: the new, decoupled image generation missed to keep the image ratio
+BUG: fixed session close error during image generation
+BUG: some special chars could create broken dialog-links in the backend. #805
+BUG: the lang-scriptlet missed to register for the context 'portal-page'. this could lead to scriptlet-placeholder not being replaced in case of xml requests.
+BUG: admin-formgenerator passes null for empty dates instead of an empty string
+BUG: language-files may contain additional underscores for the module-part
+BUG: reenabled the system-config "admintoolkit". The specified class-name is evaluated and resolved correctly.
+BUG: double-slashes are removed from paths resolved by class_resourceloader

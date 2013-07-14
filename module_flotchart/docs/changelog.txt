@@ -1,0 +1,7 @@
+Module Flotchart
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: migrated to flot 0.8
+NEW: removed plugin jquery.flot.axislabels. axislables are now rendered as simple divs.
+BUG: fixed width and height of charts (no overlapping anymore of two charts which are next or below each other)
+BUG: using now method array_values on xAxisLabel and values array in order to "reindex" the array

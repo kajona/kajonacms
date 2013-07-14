@@ -1,5 +1,12 @@
 
 Module V4 Skin
 
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: removed the border-radius of some backend-skin elements, now way more consistent
+NEW: harmonized non-rounded corners, autocomplete search indicates search by a small animation
+NEW: the hidden home-pathnavi-entry is no rendered by an i-tag instead of a + char
+NEW: the default skin ships fontawesome. Currently only used for a few icons, a broader usage should be discussed.
+BUG: fixed "jumping" action icons in first row (vertical alignment)
+
 V 4.1.1 -------------------------------------------------------------------------------------------------
-- BUG: fixed various syntax errors in the generated dom tree, causing problems in IE 8
+BUG: fixed various syntax errors in the generated dom tree, causing problems in IE 8

@@ -1,0 +1,4 @@
+Element Formular
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: form-messages (error, success) are now configurable and stylable using the form-template #796

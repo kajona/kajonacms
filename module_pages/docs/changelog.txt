@@ -1,0 +1,10 @@
+Module Pages
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: the portaleditor is now capable of three modes: #wysiwyg, full editor, #textarea: limited editor with linebreaks and #plain, limited editor without linebreaks. Use this options to control an elements portal-editor appereance in the element-template. #801
+NEW: Refactored some parts of the page-generation, split into separate methods
+BUG: fixed some permission issues with edit / view permissions of a single page
+BUG: the check whether the portaleditor should be rendered is now more error aware, could crash the site on some rare occasions. credits go to alex.
+BUG: folder-delete button missed to check some permissions
+BUG: Regression: The page-cache was omitted in some special scenarios
+BUG: Error displayed when accessing a site without authentication, e.g. if a linked object on the page is hidden. Solved by redirecting to the error-page instead. #809

@@ -1,0 +1,6 @@
+Module Tags
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: added a config-entry for private tag assignments by default (yes / no)
+BUG: fixed the right1 permission handling (save tag as favorite)
+BUG: fixed the path navigation in module tags
