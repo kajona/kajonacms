@@ -39,7 +39,7 @@ $lang["_system_release_time_"]           = "Dauer einer Session";
 $lang["_system_release_time_hint"]       = "Nach dieser Dauer in Sekunden wird eine Session automatisch ungültig.";
 $lang["_system_use_dbcache_"]            = "Datenbankcache aktiv";
 $lang["_system_use_dbcache_hint"]        = "Aktiviert/deaktiviert den systeminternen Cache für Datenbankabfragen.";
-$lang["about_part1"]                     = "<h2>Kajona V4 - Open Source Content Management System</h2>Kajona V 4.1, Codename \"simplicity\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V4 - Open Source Content Management System</h2>Kajona V 4.2, Codename \"90 degrees\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
 $lang["about_part2_header"]              = "<h2>Entwicklungsleitung</h2>";
 $lang["about_part2a_header"]             = "<h2>Contributors / Entwickler</h2>";
 $lang["about_part2b_header"]             = "<h2>Übersetzungen</h2>";
