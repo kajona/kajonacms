@@ -77,7 +77,12 @@ class class_adminskin_helper {
      */
     public static function getAdminImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "") {
         if(self::$objAdminImageResolver == null) {
-            include_once _realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php";
+
+            if(!is_file(_realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php")) {
+                return "<img src=\""._skinwebpath_."/pics/".$strName."\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )."  />";
+            }
+            else
+                include_once _realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php";
             self::$objAdminImageResolver = new class_adminskin_imageresolver();
         }
 
