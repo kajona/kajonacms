@@ -83,7 +83,7 @@ class class_module_search_portal_xml extends class_portal implements interface_x
                 break;
 
             //create a correct link
-            if($objOneResult->getStrPagelink() != "")
+            if($objOneResult->getStrPagelink() == "")
                 $objOneResult->setStrPagelink(getLinkPortal($objOneResult->getStrPagename(), "", "_self", $objOneResult->getStrPagename(), "", "&highlight=".$strSearchterm."#".$strSearchterm));
 
             $strReturn .=
