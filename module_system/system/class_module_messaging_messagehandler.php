@@ -42,10 +42,11 @@ class class_module_messaging_messagehandler {
      * @param class_module_user_group[]|class_module_user_user[]|class_module_user_group|class_module_user_user $arrRecipients
      * @param interface_messageprovider $objProvider
      * @param string $strInternalIdentifier
+     * @param string $strSubject
      *
      * @return bool
      */
-    public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider, $strInternalIdentifier = "") {
+    public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider, $strInternalIdentifier = "", $strSubject = "") {
         $objValidator = new class_email_validator();
 
         if($arrRecipients instanceof class_module_user_group || $arrRecipients instanceof class_module_user_user)
@@ -59,6 +60,7 @@ class class_module_messaging_messagehandler {
 
             if($objConfig->getBitEnabled()) {
                 $objMessage = new class_module_messaging_message();
+                $objMessage->setStrTitle($strSubject);
                 $objMessage->setStrBody($strContent);
                 $objMessage->setStrUser($objOneUser->getSystemid());
                 $objMessage->setStrInternalIdentifier($strInternalIdentifier);
@@ -87,6 +89,10 @@ class class_module_messaging_messagehandler {
         class_carrier::getInstance()->getObjLang()->setStrTextLanguage($objUser->getStrAdminlanguage());
 
         $strSubject = class_carrier::getInstance()->getObjLang()->getLang("message_subject", "messaging");
+
+        if($objMessage->getStrTitle() != "")
+            $strSubject .= ": ".$objMessage->getStrTitle();
+
         $strBody = class_carrier::getInstance()->getObjLang()->getLang("message_prolog", "messaging");
 
         $strBody .= "\n\n".getLinkAdminHref("messaging", "view", "&systemid=".$objMessage->getSystemid(), false)."\n\n";

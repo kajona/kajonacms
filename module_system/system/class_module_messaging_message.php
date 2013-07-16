@@ -25,6 +25,12 @@ class class_module_messaging_message extends class_model implements interface_mo
     private $strBody = "";
 
     /**
+     * @var string
+     * @tableColumn message_title
+     */
+    private $strTitle = "";
+
+    /**
      * @var bool
      * @tableColumn message_read
      */
@@ -94,7 +100,10 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @return string
      */
     public function getStrDisplayName() {
-        return uniStrTrim($this->getStrBody(), 50);
+        if($this->getStrTitle() != "")
+            return uniStrTrim($this->getStrTitle(), 70);
+
+        return uniStrTrim($this->getStrBody(), 70);
     }
 
     /**
@@ -292,5 +301,20 @@ class class_module_messaging_message extends class_model implements interface_mo
     public function getStrMessageProvider() {
         return $this->strMessageProvider;
     }
+
+    /**
+     * @param string $strTitle
+     */
+    public function setStrTitle($strTitle) {
+        $this->strTitle = $strTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTitle() {
+        return $this->strTitle;
+    }
+
 
 }

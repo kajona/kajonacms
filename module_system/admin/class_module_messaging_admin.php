@@ -38,6 +38,16 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         return $arrReturn;
     }
 
+    protected function getArrOutputNaviEntries() {
+        $arrEntries = parent::getArrOutputNaviEntries();
+        $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objObject instanceof class_module_messaging_message)
+            $arrEntries[] = getLinkAdmin("messaging", "edit", "&systemid=".$objObject->getSystemid(), $objObject->getStrDisplayName());
+
+        return $arrEntries;
+    }
+
+
     /**
      * Renders the form to configure each messageprovider
      *
