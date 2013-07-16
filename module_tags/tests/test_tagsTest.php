@@ -6,6 +6,9 @@ class class_test_tags extends class_testbase  {
 
     public function testTagAssignment() {
 
+        if(class_module_system_module::getModuleByName("pages") === null)
+            return true;
+
         $strName = generateSystemid();
         $arrPages = class_module_pages_page::getAllPages();
 
