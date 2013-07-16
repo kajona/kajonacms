@@ -71,7 +71,7 @@ class class_installer_search extends class_installer_base implements interface_i
 		//register the module
 		$this->registerModule("search", _search_module_id_, "class_module_search_portal.php", "class_module_search_admin.php", $this->objMetadata->getStrVersion() , true, "class_module_search_portal_xml.php");
 
-        if(class_module_pages_element::getElement("search") == null) {
+        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("search") == null) {
             $objElement = new class_module_pages_element();
             $objElement->setStrName("search");
             $objElement->setStrClassAdmin("class_element_search_admin.php");

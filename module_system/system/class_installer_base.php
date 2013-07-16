@@ -30,8 +30,10 @@ abstract class class_installer_base extends class_root implements interface_inst
 
         $strReturn = "";
 
+        $objModule = null;
         if($this->objMetadata->getStrType() == class_module_packagemanager_manager::STR_TYPE_ELEMENT) {
-            $objModule = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
+            if(class_module_system_module::getModuleByName("pages") !== null)
+                $objModule = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
         }
         else
             $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());

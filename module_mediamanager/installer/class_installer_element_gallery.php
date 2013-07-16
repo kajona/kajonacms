@@ -59,7 +59,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 		//Register the element
 		$strReturn .= "Registering gallery-element...\n";
         $objElement = null;
-		if(class_module_pages_element::getElement("gallery") == null) {
+		if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("gallery") == null) {
 		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("gallery");
 		    $objElement->setStrClassAdmin("class_element_gallery_admin.php");
@@ -76,7 +76,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 
 
 		$strReturn .= "Registering galleryRandom-element...\n";
-		if(class_module_pages_element::getElement("galleryRandom") == null) {
+		if( class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("galleryRandom") == null) {
 		    $objElement = new class_module_pages_element();
 		    $objElement->setStrName("galleryRandom");
 		    $objElement->setStrClassAdmin("class_element_galleryRandom_admin.php");

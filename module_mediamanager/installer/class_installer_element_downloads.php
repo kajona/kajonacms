@@ -44,7 +44,7 @@ class class_installer_element_downloads extends class_installer_base implements 
 
 		//Register the element
 		$strReturn .= "Registering downloads-element...\n";
-        if(class_module_pages_element::getElement("downloads") == null) {
+        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("downloads") == null) {
             $objElement = new class_module_pages_element();
             $objElement->setStrName("downloads");
             $objElement->setStrClassAdmin("class_element_downloads_admin.php");
