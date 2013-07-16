@@ -551,8 +551,6 @@ abstract class class_portal {
      * @return string
      */
     public function getPagename() {
-        $strReturn = "";
-
         //check, if the portal is disabled
         if(_system_portal_disable_ == "true") {
             $strReturn = _system_portal_disablepage_;
@@ -564,7 +562,7 @@ abstract class class_portal {
             }
             //Use the page set in the configs
             else {
-                $strReturn = _pages_indexpage_;
+                $strReturn = defined("_pages_indexpage_") ? _pages_indexpage_ : "index";
             }
 
             //disallow rendering of master-page

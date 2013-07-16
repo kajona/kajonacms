@@ -284,6 +284,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $arrTabs = array();
 
             $arrSettings = class_module_system_setting::getAllConfigValues();
+            /** @var class_module_system_module $objCurrentModule */
             $objCurrentModule = null;
             $strRows = "";
             foreach($arrSettings as $objOneSetting) {
@@ -369,7 +370,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         //react on special task-commands?
         if($this->getParam("task") != "") {
             //search for the matching task
-            foreach($arrFiles as $strPath => $strOneFile) {
+            foreach($arrFiles as $strOneFile) {
                 if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
 
                     //instantiate the current task
@@ -521,7 +522,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 $objUser = new class_module_user_user($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
-            $arrRowData[0] = getImageAdmin("icon_user");
+            $arrRowData[0] = class_adminskin_helper::getAdminImage("icon_user");
             $arrRowData[1] = $strUsername;
             $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
             if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
@@ -546,7 +547,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             else {
                 $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
-                    $strActivity .= _pages_indexpage_;
+                    $strActivity .= defined("_pages_indexpage_") ? _pages_indexpage_ : "";
                 else {
                     foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);
