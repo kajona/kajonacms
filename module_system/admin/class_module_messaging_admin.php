@@ -212,9 +212,14 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
                 $objMessage->updateObjectToDb();
             }
 
-            $strReturn .= $this->objToolkit->formHeadline(dateToString($objMessage->getObjDate()));
+            $strReturn .= $this->objToolkit->formHeadline(dateToString($objMessage->getObjDate()). " ".$objMessage->getStrTitle());
 
-            $strReturn .= $this->objToolkit->getTextRow(nl2br($objMessage->getStrBody()));
+            $strBody = nl2br($objMessage->getStrBody());
+            $strBody = replaceTextLinks($strBody);
+
+
+
+            $strReturn .= $this->objToolkit->getTextRow(nl2br($strBody));
 
             return $strReturn;
         }

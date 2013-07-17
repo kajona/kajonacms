@@ -936,6 +936,16 @@ function splitUpLink($strLink) {
     return $arrReturn;
 }
 
+/**
+ * Tries to find all links in a given string and creates a-tags around them.
+ * @param $strText
+ *
+ * @return string
+ * @since 4.3
+ */
+function replaceTextLinks($strText) {
+    return preg_replace('/((www|http|https:\/\/)[^ |^<]+)/', '<a href="\1">\1</a>', $strText);
+}
 
 /**
  * Changes HTML to simple printable strings
