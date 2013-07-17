@@ -47,7 +47,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
     private function getFASomeImage($strImage, $strTooltip) {
 
         //remove the following line in order to get fontawesome images
-        return null;
+//        return null;
 
         $strName = uniStrReplace(array(".png", ".gif"), "", $strImage);
         if(isset(self::$arrFAImages[$strName] )) {
