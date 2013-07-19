@@ -59,8 +59,8 @@ class class_formentry_base {
 
         if($objSourceObject != null) {
             $this->updateLabel();
-            $this->updateValue();
         }
+        $this->updateValue();
     }
 
     /**
@@ -115,7 +115,7 @@ class class_formentry_base {
     protected function getValueFromObject() {
 
         if($this->objSourceObject == null)
-            return;
+            return "";
 
         //try to get the matching getter
         $objReflection = new class_reflection($this->objSourceObject);
@@ -137,7 +137,7 @@ class class_formentry_base {
     public function setValueToObject() {
 
         if($this->objSourceObject == null)
-            return;
+            return "";
 
         $objReflection = new class_reflection($this->objSourceObject);
         $strSetter = $objReflection->getSetter($this->strSourceProperty);

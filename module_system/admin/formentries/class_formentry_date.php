@@ -75,7 +75,7 @@ class class_formentry_date extends class_formentry_base implements interface_for
 
     public function setValueToObject() {
 
-        if(uniSubstr($this->getStrSourceProperty(), 0, 3) == "obj" && !$this->getStrValue() instanceof class_date&& $this->getStrValue() > 0)
+        if(uniSubstr($this->getStrSourceProperty(), 0, 3) == "obj" && !$this->getStrValue() instanceof class_date && $this->getStrValue() > 0)
             $this->setStrValue(new class_date($this->getStrValue()));
         return parent::setValueToObject();
     }

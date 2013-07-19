@@ -404,5 +404,21 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     public function getCurObjectClassName() {
         return $this->strCurObjectClassName;
     }
+
+    /**
+     * @param \class_admin_formgenerator $objCurAdminForm
+     */
+    public function setObjCurAdminForm($objCurAdminForm) {
+        $this->objCurAdminForm = $objCurAdminForm;
+    }
+
+    /**
+     * @return \class_admin_formgenerator
+     */
+    public function getObjCurAdminForm() {
+        return $this->objCurAdminForm;
+    }
+
+
 }
 
