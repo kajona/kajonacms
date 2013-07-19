@@ -53,14 +53,14 @@ class class_config {
         }
         else {
             if(!@include _corepath_ . "/module_system/system/config/" . $strConfigFile) {
-                die("Error reading config-file!");
+                die("Error reading config-file from core folder: ".$strConfigFile);
             }
         }
 
         //overwrite with settings from project
         if(is_file(_realpath_ . "/project/system/config/" . $strConfigFile)) {
             if(!@include _realpath_ . "/project/system/config/" . $strConfigFile) {
-                die("Error reading config-file: " . $strConfigFile);
+                die("Error reading config-file from project folder: " . $strConfigFile);
             }
         }
 
