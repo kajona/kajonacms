@@ -164,9 +164,10 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         if(!is_null($strType)) {
             /** @var $objEdit interface_model|class_model */
             $objEdit = new $strType();
-            $objEdit->setSystemid($this->getParam("systemid"));
+
 
             $objForm = $this->getAdminForm($objEdit);
+            $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
 
             return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
@@ -278,7 +279,6 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
             if($this->getParam("mode") == "new") {
                 $objRecord = new $strType();
-                $objRecord->setSystemid($this->getSystemid());
                 $strSystemId = $this->getSystemid();
             }
             else if($this->getParam("mode") == "edit")
