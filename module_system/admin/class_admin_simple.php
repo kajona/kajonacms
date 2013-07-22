@@ -66,7 +66,7 @@ abstract class class_admin_simple extends class_admin {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objRecord != null && $objRecord->rightDelete()) {
             if(!$objRecord->deleteObject())
-                throw new class_exception("error deleting object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
+                throw new class_exception("error deleting object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
 
             $strTargetUrl = $this->getHistory(1);
             if(uniStrpos($strTargetUrl, "admin=1") === false)
@@ -89,7 +89,7 @@ abstract class class_admin_simple extends class_admin {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objRecord != null && $objRecord->rightEdit()) {
             if(!$objRecord->copyObject())
-                throw new class_exception("error creating a copy of object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
+                throw new class_exception("error creating a copy of object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
 
             $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getPrevId()));
         }
