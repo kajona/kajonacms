@@ -278,6 +278,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
             if($this->getParam("mode") == "new") {
                 $objRecord = new $strType();
+                $objRecord->setSystemid($this->getSystemid());
                 $strSystemId = $this->getSystemid();
             }
             else if($this->getParam("mode") == "edit")
