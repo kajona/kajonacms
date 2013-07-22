@@ -76,6 +76,12 @@ class class_adminskin_helper {
      * @return string
      */
     public static function getAdminImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "") {
+
+        if(is_array($strName) && count($strName) == 2) {
+            $strAlt = $strName[1];
+            $strName = $strName[0];
+        }
+
         if(self::$objAdminImageResolver == null) {
 
             if(!is_file(_realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php")) {
