@@ -151,6 +151,7 @@ $lang["user_username"]                   = "Benutzername";
 $lang["user_usersource"]                 = "Benutzerquelle";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["userlist_filter"]                 = "Filter anwenden";
+$lang["user_browser_reset"]              = "Benutzer entfernen";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");

@@ -150,6 +150,7 @@ $lang["user_username"]                   = "Username";
 $lang["user_usersource"]                 = "User-Source";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["userlist_filter"]                 = "Apply filter";
+$lang["user_browser_reset"]              = "Remove user";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");

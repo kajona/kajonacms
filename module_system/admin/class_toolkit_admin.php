@@ -350,6 +350,15 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
         );
 
+        $strResetIcon = getLinkAdminManual(
+            "href=\"javascript:document.getElementById('".$strName."').value='';javascript:document.getElementById('".$strName."_id').value='';\"",
+            "",
+            class_carrier::getInstance()->getObjLang()->getLang("user_browser_reset", "user"),
+            "icon_delete"
+        );
+
+        $arrTemplate["opener"] .= " ".$strResetIcon;
+
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
         $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
