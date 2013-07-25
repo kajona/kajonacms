@@ -195,8 +195,18 @@ class class_reflection {
         if(isset($this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation]))
             return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation];
 
-        $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
-        $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        try {
+            $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
+            $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
+        }
+        catch(ReflectionException $objEx) {
+            //not found in current class, maybe a base-class is existing?
+            $objBaseClass = $this->objReflectionClass->getParentClass();
+            if($objBaseClass !== false) {
+                $objBaseAnnotations = new class_reflection($objBaseClass->getName());
+                $bitReturn = $objBaseAnnotations->hasPropertyAnnotation($strPropertyName, $strAnnotation);
+            }
+        }
 
         $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
         self::$bitCacheSaveRequired = true;
