@@ -94,3 +94,14 @@ $(function () {
 
     });
 });
+
+if (typeof KAJONA == "undefined") {
+    alert('load kajona.js before!');
+}
+
+KAJONA.v4skin = {
+    appendLinkToPathNavigation : function(strLinkContent) {
+        var link = $("<li class='pathentry'></li>").append(strLinkContent);
+        $("div.pathNaviContainer  ul.breadcrumb").append(link);
+    }
+};
