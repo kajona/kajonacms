@@ -222,7 +222,7 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head_header>
 
 <datalist_column_head>
-    <th>%%value%%</th>
+    <th class="%%class%%">%%value%%</th>
 </datalist_column_head>
 
 <datalist_column_head_footer>
@@ -235,7 +235,7 @@ One Column in a row (data record) - the header, the content, the footer, providi
 </datalist_column_header>
 
 <datalist_column>
-    <td>%%value%%</td>
+    <td class="%%class%%">%%value%%</td>
 </datalist_column>
 
 <datalist_column_footer>

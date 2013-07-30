@@ -1027,7 +1027,7 @@ class class_toolkit_admin extends class_toolkit {
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
 
             foreach ($arrHeader as $strCssClass => $strHeader)
-                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader, "css" => $strCssClass), $strTemplateHeaderContentID);
+                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader, "class" => $strCssClass), $strTemplateHeaderContentID);
 
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderFooterID);
         }
@@ -1037,7 +1037,7 @@ class class_toolkit_admin extends class_toolkit {
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentHeaderID);
 
             foreach($arrValueRow as $strCssClass => $strValue)
-                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue, "css" => $strCssClass), $strTemplateContentContentID);
+                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue, "class" => $strCssClass), $strTemplateContentContentID);
 
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentFooterID);
         }
