@@ -143,9 +143,9 @@ Currently, there are two modes: with and without a description.
     <input type="checkbox" name="kj_cb_%%systemid%%" id="kj_cb_%%systemid%%" onchange="KAJONA.admin.lists.updateToolbar();">
 </generallist_checkbox>
 
-<generallist_1>
+<generallist>
     <tbody>
-        <tr data-systemid="%%listitemid%%" class="generalListSet1">
+        <tr data-systemid="%%listitemid%%">
             <td class="treedrag"></td>
             <td class="listsorthandle"></td>
             <td class="checkbox">%%checkbox%%</td>
@@ -155,24 +155,11 @@ Currently, there are two modes: with and without a description.
             <td class="actions">%%actions%%</td>
         </tr>
     </tbody>
-</generallist_1>
+</generallist>
 
-<generallist_2>
-    <tbody>
-        <tr data-systemid="%%listitemid%%" class="generalListSet2">
-            <td class="treedrag"></td>
-            <td class="listsorthandle"></td>
-            <td class="checkbox">%%checkbox%%</td>
-            <td class="image">%%image%%</td>
-            <td class="title">%%title%%</td>
-            <td class="center">%%center%%</td>
-            <td class="actions">%%actions%%</td>
-        </tr>
-    </tbody>
-</generallist_2>
 
-<generallist_desc_1>
-    <tbody class="generalListSet1">
+<generallist_desc>
+    <tbody class="generalListSet">
         <tr data-systemid="%%listitemid%%">
             <td rowspan="2" class="treedrag"></td>
             <td rowspan="2" class="listsorthandle"></td>
@@ -186,24 +173,8 @@ Currently, there are two modes: with and without a description.
             <td colspan="3" class="description">%%description%%</td>
         </tr>
     </tbody>
-</generallist_desc_1>
+</generallist_desc>
 
-<generallist_desc_2>
-    <tbody class="generalListSet2">
-        <tr data-systemid="%%listitemid%%">
-            <td rowspan="2" class="treedrag"></td>
-            <td rowspan="2" class="listsorthandle"></td>
-            <td rowspan="2" class="checkbox">%%checkbox%%</td>
-            <td rowspan="2" class="image">%%image%%</td>
-            <td class="title">%%title%%</td>
-            <td class="center">%%center%%</td>
-            <td class="actions">%%actions%%</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="description">%%description%%</td>
-        </tr>
-    </tbody>
-</generallist_desc_2>
 
 
 <batchactions_wrapper>
@@ -247,7 +218,7 @@ data list footer. at the bottom of the datatable
 
 One Column in a row (header record) - the header, the content, the footer
 <datalist_column_head_header>
-	<tr class="adminListRow1">
+	<tr>
 </datalist_column_head_header>
 
 <datalist_column_head>
@@ -259,29 +230,18 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head_footer>
 
 One Column in a row (data record) - the header, the content, the footer, providing the option of two styles
-<datalist_column_header_1>
-	<tr class="adminListRow1">
-</datalist_column_header_1>
+<datalist_column_header>
+	<tr>
+</datalist_column_header>
 
-<datalist_column_1>
+<datalist_column>
     <td>%%value%%</td>
-</datalist_column_1>
+</datalist_column>
 
-<datalist_column_footer_1>
+<datalist_column_footer>
 	</tr>
-</datalist_column_footer_1>
+</datalist_column_footer>
 
-<datalist_column_header_2>
-	<tr class="adminListRow2">
-</datalist_column_header_2>
-
-<datalist_column_2>
-    <td>%%value%%</td>
-</datalist_column_2>
-
-<datalist_column_footer_2>
-	</tr>
-</datalist_column_footer_2>
 
 
 
@@ -862,8 +822,8 @@ The following sections specify the layout of the rights-mgmt
 %%inherit%%
 </rights_form_form>
 
-<rights_form_row_1>
-	<tr class="">
+<rights_form_row>
+	<tr>
 		<td>%%group%%</td>
 		<td>%%box0%%</td>
 		<td>%%box1%%</td>
@@ -875,21 +835,8 @@ The following sections specify the layout of the rights-mgmt
 		<td>%%box7%%</td>
 		<td>%%box8%%</td>
 	</tr>
-</rights_form_row_1>
-<rights_form_row_2>
-	<tr class="">
-		<td>%%group%%</td>
-		<td>%%box0%%</td>
-		<td>%%box1%%</td>
-		<td>%%box2%%</td>
-		<td>%%box3%%</td>
-		<td>%%box4%%</td>
-		<td>%%box5%%</td>
-		<td>%%box6%%</td>
-		<td>%%box7%%</td>
-		<td>%%box8%%</td>
-	</tr>
-</rights_form_row_2>
+</rights_form_row>
+
 
 <rights_form_inherit>
 <div class="control-group">

@@ -72,37 +72,29 @@ class class_module_right_admin extends class_admin implements interface_admin {
             $arrGroups = class_module_user_group::getObjectList();
 
             //Determine name of the record
-            if($objTargetRecord->getStrRecordComment() == "") {
+            if($objTargetRecord->getStrRecordComment() == "")
                 $strTitle = $this->getLang("titel_leer");
-            }
-            else {
+            else
                 $strTitle = $objTargetRecord->getStrDisplayName() . " ";
-            }
 
             //Load the rights header-row
-            if($objTargetRecord->getIntModuleNr() == 0) {
+            if($objTargetRecord->getIntModuleNr() == 0)
                 $strModule = "system";
-            }
-            else if($objTargetRecord instanceof class_module_system_module) {
+            else if($objTargetRecord instanceof class_module_system_module)
                 $strModule = $objTargetRecord->getStrName();
-            }
-            else if(defined("_pages_folder_id_") && $objTargetRecord->getIntModuleNr() == _pages_folder_id_) {
+            else if(defined("_pages_folder_id_") && $objTargetRecord->getIntModuleNr() == _pages_folder_id_)
                 $strModule = "pages";
-            }
-            else {
+            else
                 $strModule = $objTargetRecord->getArrModule("modul");
-            }
 
 
             $arrHeaderRow = $this->getLang("permissions_header", $strModule);
 
-            if($arrHeaderRow == "!permissions_header!") {
+            if($arrHeaderRow == "!permissions_header!")
                 $arrHeaderRow = $this->getLang("permissions_default_header", "system");
-            }
 
-            if($strSystemID == "0") {
+            if($strSystemID == "0")
                 $arrHeaderRow = $this->getLang("permissions_root_header", "system");
-            }
 
             $arrTitles = $arrHeaderRow;
             $arrTemplateTotal = array();
@@ -117,11 +109,9 @@ class class_module_right_admin extends class_admin implements interface_admin {
             $arrTemplateTotal["title8"] = $arrTitles[8];
 
             //Read the template
-            $strTemplateRow1ID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_row_1");
-            $strTemplateRow2ID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_row_2");
+            $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_row");
             $arrTemplateTotal["rows"] = "";
             //Inserting Rows
-            $intCounter = 1;
             foreach($arrGroups as $objSingleGroup) {
                 $arrTemplateRow = array();
                 $arrSingleGroup = array();
@@ -232,12 +222,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
 
 
                 //And Print it to template
-                if($intCounter++ % 2 == 0) {
-                    $arrTemplateTotal["rows"] .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRow1ID);
-                }
-                else {
-                    $arrTemplateTotal["rows"] .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRow2ID);
-                }
+                $arrTemplateTotal["rows"] .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID);
             }
 
             //Build the inherit-box

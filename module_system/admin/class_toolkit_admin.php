@@ -965,9 +965,9 @@ class class_toolkit_admin extends class_toolkit {
         }
 
         if($strDescription != "")
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc_".(($intCount % 2)+1));
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc");
         else
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_".(($intCount % 2)+1));
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist");
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -1000,7 +1000,9 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns a table filled with infos
+     * Returns a table filled with infos.
+     * The header may be build using cssclass -> value or index -> value arrays
+     * Values may be build using cssclass -> value or index -> value arrays, too (per row)
      *
      * @param mixed $arrHeader the first row to name the columns
      * @param mixed $arrValues every entry is one row
@@ -1008,7 +1010,6 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function dataTable(array $arrHeader, array $arrValues) {
         $strReturn = "";
-        $intCounter = "";
         //The Table header & the templates
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header");
         $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateID);
@@ -1016,40 +1017,29 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateHeaderHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_header");
         $strTemplateHeaderContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head");
         $strTemplateHeaderFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_footer");
-        $strTemplateContentHeaderID1 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header_1");
-        $strTemplateContentHeaderID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header_2");
-        $strTemplateContentContentID1 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_1");
-        $strTemplateContentContentID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_1");
-        $strTemplateContentFooterID1 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer_2");
-        $strTemplateContentFooterID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer_2");
+        $strTemplateContentHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header");
+        $strTemplateContentContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column");
+        $strTemplateContentFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer");
         //Iterating over the rows
 
         //Starting with the header, column by column
         if(is_array($arrHeader)) {
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
 
-            foreach ($arrHeader as $strHeader)
-                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader), $strTemplateHeaderContentID);
+            foreach ($arrHeader as $strCssClass => $strHeader)
+                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader, "css" => $strCssClass), $strTemplateHeaderContentID);
 
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderFooterID);
         }
 
         //And the content, row by row, column by column
         foreach ($arrValues as $arrValueRow) {
-            if(++$intCounter % 2 == 0)
-                $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentHeaderID1);
-            else
-                $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentHeaderID2);
-            foreach($arrValueRow as $strValue) {
-                if($intCounter % 2 == 0)
-                    $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue), $strTemplateContentContentID1);
-                else
-                    $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue), $strTemplateContentContentID2);
-            }
-            if($intCounter % 2 == 0)
-                $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentFooterID1);
-            else
-                $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentFooterID2);
+            $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentHeaderID);
+
+            foreach($arrValueRow as $strCssClass => $strValue)
+                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue, "css" => $strCssClass), $strTemplateContentContentID);
+
+            $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentFooterID);
         }
 
         //And the footer
