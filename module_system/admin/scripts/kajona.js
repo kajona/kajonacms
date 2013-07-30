@@ -267,7 +267,7 @@ KAJONA.admin.tooltip = {
 
             //common tooltips
 
-            $('*[rel=tooltip]').qtip({
+            $('*[rel=tooltip][title!=""]').qtip({
                 position: {
                     viewport: $(window)
                 },
@@ -277,7 +277,7 @@ KAJONA.admin.tooltip = {
             });
 
             //tag tooltips
-            $('*[rel=tagtooltip]').each( function() {
+            $('*[rel=tagtooltip][title!=""]').each( function() {
                 $(this).qtip({
                     position: {
                         viewport: $(window)
