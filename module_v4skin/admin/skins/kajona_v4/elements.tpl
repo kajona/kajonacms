@@ -491,7 +491,7 @@ Upload-Field for multiple files with progress bar
 Regular Submit-Button
 <input_submit>
     <div class="control-group">
-        <button type="submit" class="btn savechanges %%class%%" %%disabled%% %%eventhandler%%>
+        <button type="submit" class="btn savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
             <span class="btn-text">%%value%%</span>
             <span class="statusicon"></span>
         </button>
