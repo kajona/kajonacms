@@ -156,7 +156,7 @@ class class_request_dispatcher {
                         $strReturn = $objConcreteModule->getModuleOutput();
 
                         //React, if admin was opened by the portaleditor
-                        if(getPost("peClose") == "1" || getGet("peClose") == "1") {
+                        if(class_carrier::getInstance()->getParam("peClose") == "1") {
                             if(getGet("peRefreshPage") != "") {
                                 $strReturn = "<html><head></head><body onload=\"parent.location = '" . urldecode(getGet("peRefreshPage")) . "';\"></body></html>";
                             }

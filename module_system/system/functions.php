@@ -41,6 +41,7 @@ function bootstrapIncludeModuleIds() {
  *
  * @param string $strKey
  * @return string
+ * @deprecated use @link{class_carrier::getInstance()->getParam("")} instead
  */
 function getGet($strKey) {
     if(issetGet($strKey))
@@ -86,6 +87,7 @@ function issetGet($strKey) {
  *
  * @param string $strKey
  * @return string
+ * @deprecated use @link{class_carrier::getInstance()->getParam("")} instead
  */
 function getPost($strKey) {
     if(issetPost($strKey))

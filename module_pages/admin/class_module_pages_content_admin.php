@@ -369,6 +369,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
             //really continue? try to validate the passed data.
             if(!$objElement->validateForm()) {
+                class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
             }
@@ -407,6 +408,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
             //really continue? try to validate the passed data.
             if(!$objElement->validateForm()) {
+                class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
             }
