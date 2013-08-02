@@ -103,7 +103,7 @@ abstract class class_admin {
         $this->objTemplate = $objCarrier->getObjTemplate();
 
         //Writing to the history
-        if(!_xmlLoader_) {
+        if(!_xmlLoader_ && $this->getParam("folderview") == "") {
             $this->setHistory();
         }
 
