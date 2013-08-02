@@ -17,6 +17,12 @@ class class_test_generalActionTest extends class_testbase  {
             if(preg_match("/class_module_(.*)_admin.php/i", $strOneFile)) {
                 $strClassname = uniSubstr($strOneFile, 0, -4);
 
+                $objReflection = new ReflectionClass($strClassname);
+                if($objReflection->isAbstract()) {
+                    echo "skipping ".$strClassname.", is abstract...\n";
+                    continue;
+                }
+
                 $objAdminInstance = new $strClassname();
                 $this->runSingleFile($objAdminInstance);
             }
@@ -39,6 +45,12 @@ class class_test_generalActionTest extends class_testbase  {
         foreach($arrFiles as $strOneFile) {
             if(preg_match("/class_module_(.*)_portal.php/i", $strOneFile)) {
                 $strClassname = uniSubstr($strOneFile, 0, -4);
+
+                $objReflection = new ReflectionClass($strClassname);
+                if($objReflection->isAbstract()) {
+                    echo "skipping ".$strClassname.", is abstract...\n";
+                    continue;
+                }
 
                 $objPortalInstance = new $strClassname(array());
                 $this->runSingleFile($objPortalInstance);
