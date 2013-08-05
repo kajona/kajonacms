@@ -32,11 +32,13 @@ class class_formentry_base {
 
 
     private $strLabel = null;
+    private $strValidationErrorMsg = "";
     private $strEntryName = null;
     private $bitMandatory = false;
     private $strValue = null;
     private $strHint = null;
     private $bitReadonly = false;
+
 
 
 
@@ -254,6 +256,17 @@ class class_formentry_base {
         return $this->strSourceProperty;
     }
 
+    public function setStrValidationErrorMsg($strValidationErrorMsg) {
+        $this->strValidationErrorMsg = $strValidationErrorMsg;
+        return $this;
+    }
+
+    public function getStrValidationErrorMsg() {
+        if($this->strValidationErrorMsg != "")
+            return $this->strValidationErrorMsg;
+        else
+            return $this->getStrLabel();
+    }
 
 
 }

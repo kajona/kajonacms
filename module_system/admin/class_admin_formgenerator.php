@@ -101,7 +101,7 @@ class class_admin_formgenerator {
     public function validateForm() {
         foreach($this->arrFields as $objOneField)
             if($objOneField->getBitMandatory() && !$objOneField->validateValue())
-                $this->arrValidationErrors[$objOneField->getStrEntryName()] = $objOneField->getStrLabel();
+                $this->arrValidationErrors[$objOneField->getStrEntryName()] = $objOneField->getStrValidationErrorMsg();
 
         return count($this->arrValidationErrors) == 0;
     }
