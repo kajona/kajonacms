@@ -432,7 +432,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
             $strPeToolbar = "";
             $arrPeContents = array();
             $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
-            $arrPeContents["pe_status_status_val"] = ($objPageData->getStatus() == 1 ? "active" : "inactive");
+            $arrPeContents["pe_status_status_val"] = ($objPageData->getIntRecordStatus() == 1 ? "active" : "inactive");
             $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
             $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getIntLmTime(), false);
             $arrPeContents["pe_dialog_close_warning"] = $this->getLang("pe_dialog_close_warning", "pages");
@@ -507,6 +507,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 }
             </script>";
             //Load portaleditor styles
+            $strPeToolbar .= $this->objToolkit->getPeBasicData();
             $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
 
             $objScriptlets = new class_scriptlet_helper();
@@ -525,6 +526,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
                 .getImageAdmin("icon_disabled", $this->getLang("pe_enable", "pages"))."</a></div>";
             //Load portaleditor javascript
             $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
+            $strEnableButton .= $this->objToolkit->getPeBasicData();
             //Load portaleditor styles
             //The toobar has to be added right after the body-tag - to generate correct html-code
             $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));

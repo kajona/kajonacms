@@ -971,6 +971,14 @@ Used to print pre-formatted text, e.g. log-file contents
 ---------------------------------------------------------------------------------------------------------
 -- PORTALEDITOR -----------------------------------------------------------------------------------------
 
+<pe_basic_data>
+    <!-- KAJONA_BUILD_LESS_START -->
+    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="_skinwebpath_/less/less.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
+</pe_basic_data>
+
 The following section is the toolbar of the portaleditor, displayed at top of the page.
 The following placeholders are provided by the system:
 pe_status_page, pe_status_status, pe_status_autor, pe_status_time
@@ -978,11 +986,7 @@ pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_va
 pe_iconbar, pe_disable
 <pe_toolbar>
 
-    <!-- KAJONA_BUILD_LESS_START -->
-    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.js"></script>
-    <!-- KAJONA_BUILD_LESS_END -->
+
 
     <div class="modal hide fade fullsize" id="peDialog">
         <div class="modal-header">

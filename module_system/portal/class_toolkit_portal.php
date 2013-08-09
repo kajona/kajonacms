@@ -208,6 +208,17 @@ class class_toolkit_portal extends class_toolkit {
     }
 
     /**
+     * Initializes the PE styles & co to load them into the portal page
+     * @return string
+     */
+    public function getPeBasicData() {
+        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_basic_data", true);
+        $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return $strReturn;
+    }
+
+    /**
      * Creates the portaleditor action-toolbar layout
      *
      * @param string $strSystemid
