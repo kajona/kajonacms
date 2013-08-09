@@ -773,11 +773,11 @@ HTML;
             $arrLogs[$intKey][3] = $arrOneLog["downloads_log_user"];
             $arrLogs[$intKey][4] = $arrOneLog["downloads_log_ip"];
             
-            $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrOneLog["downloads_log_ip"];
-            $strUtraceLinkText = "http://www.utrace.de/whois/".$arrOneLog["downloads_log_ip"];
+            $strUtraceLinkMap = "href=\"http://www.utrace.de/ip-adresse/".$arrOneLog["downloads_log_ip"]."\" target=\"_blank\"";
+            $strUtraceLinkText = "href=\"http://www.utrace.de/whois/".$arrOneLog["downloads_log_ip"]."\" target=\"_blank\"";
             if($arrOneLog["downloads_log_ip"] != "127.0.0.1" && $arrOneLog["downloads_log_ip"] != "::1") {
-                $arrLogs[$intKey][5]	= getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap", "user"), "icon_earth", "_blank")
-                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext", "user"), "icon_text", "_blank");
+                $arrLogs[$intKey][5]	= class_link::getLinkAdminManual($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap", "user"), "icon_earth")
+                    . " " . class_link::getLinkAdminManual($strUtraceLinkText, "", $this->getLang("login_utrace_showtext", "user"), "icon_text");
             }
             else 
                 $arrLogs[$intKey][5] = getImageAdmin("icon_earthDisabled", $this->getLang("login_utrace_noinfo", "user")) ." "

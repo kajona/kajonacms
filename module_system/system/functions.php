@@ -202,7 +202,7 @@ function getCookie($strKey) {
  * The param $strLinkContent should contain all contents of the a-tag.
  * The system renders <a $strLinkContent title... class...>($strText|$strImage)</a>
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strLinkContent
  * @param string $strText
@@ -215,26 +215,13 @@ function getCookie($strKey) {
  * @return string
  */
 function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "") {
-    $strLink = "";
-    if($strImage != "") {
-        if(!$bitTooltip)
-            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".class_adminskin_helper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
-        else
-            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" rel=\"tooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".class_adminskin_helper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
-    }
-    else if($strText != "") {
-        if($strAlt == "")
-            $strAlt = $strText;
-        $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
-    }
-
-    return $strLink;
+    return class_link::getLinkAdminManual($strLinkContent, $strText, $strAlt, $strImage, $strImageId, $strLinkId, $bitTooltip, $strCss);
 }
 
 /**
  * Generates a link for the admin-area
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strModule
  * @param string $strAction
@@ -247,33 +234,13 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
  * @return string
  */
 function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
-    $strLink = "";
-    if($strImage != "") {
-        if($strAlt == "")
-            $strAlt = $strAction;
-        if(!$bitTooltip)
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-        else
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-    }
-
-    else if($strText != "") {
-        if($strAlt == "")
-            $strAlt = $strText;
-
-        if($strAlt != $strText)
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "")." rel=\"tooltip\">".$strText."</a>";
-        else
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
-    }
-
-    return $strLink;
+    return class_link::getLinkAdmin($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $bitTooltip, $strCss);
 }
 
 /**
  * Generates a link for the admin-area
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strModule
  * @param string $strAction
@@ -283,62 +250,13 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @return string
  */
 function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitBlockPrintview = false) {
-    //add print-view param?
-    if(!$bitBlockPrintview && (getGet("printView") != "" || getPost("printView") != ""))
-        $strParams .= "&printView=1";
-
-    //systemid in params?
-    $strSystemid = "";
-    $arrParams = explode("&", $strParams);
-
-    foreach($arrParams as $strKey => $strValue) {
-        $arrEntry = explode("=", $strValue);
-        if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
-            $strSystemid = $arrEntry[1];
-            unset($arrParams[$strKey]);
-        }
-        else if($strValue == "")
-            unset($arrParams[$strKey]);
-    }
-
-    //urlencoding
-    $strModule = urlencode($strModule);
-    $strAction = urlencode($strAction);
-
-    //rewriting enabled?
-    if(_system_mod_rewrite_ == "true") {
-
-        //scheme: /admin/module.action.systemid
-        if($strModule != "" && $strAction == "" && $strSystemid == "")
-            $strLink = _webpath_."/admin/".$strModule.".html";
-        else if($strModule != "" && $strAction != "" && $strSystemid == "")
-            $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";
-        else
-            $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
-
-        if(count($arrParams) > 0)
-            $strLink .= "?".implode("&amp;", $arrParams);
-
-    }
-    else {
-        $strLink = ""._indexpath_."?admin=1&amp;module=".$strModule.
-            ($strAction != "" ? "&amp;action=".$strAction : "").
-            ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "");
-
-        if(count($arrParams) > 0)
-            $strLink .= "&amp;".(implode("&amp;", $arrParams));
-    }
-
-    if(!$bitEncodedAmpersand)
-        $strLink = uniStrReplace("&amp;", "&", $strLink);
-
-    return $strLink;
+    return class_link::getLinkAdminHref($strModule, $strAction, $strParams, $bitEncodedAmpersand, $bitBlockPrintview);
 }
 
 /**
  * Generates an admin-url to trigger xml-requests. Takes care of url-rewriting
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param $strModule
  * @param string $strAction
@@ -349,95 +267,14 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
  * @return mixed|string
  */
 function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false, $bitBlockPrintview = false) {
-
-    //add print-view param?
-    if(!$bitBlockPrintview && (getGet("printView") != "" || getPost("printView") != ""))
-        $strParams .= "&printView=1";
-
-    //systemid in params?
-    $strSystemid = "";
-    $arrParams = explode("&", $strParams);
-
-    foreach($arrParams as $strKey => $strValue) {
-        $arrEntry = explode("=", $strValue);
-        if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
-            $strSystemid = $arrEntry[1];
-            unset($arrParams[$strKey]);
-        }
-        else if($strValue == "")
-            unset($arrParams[$strKey]);
-    }
-
-    //urlencoding
-    $strModule = urlencode($strModule);
-    $strAction = urlencode($strAction);
-
-    //rewriting enabled?
-    if(_system_mod_rewrite_ == "true") {
-
-        //scheme: /admin/module.action.systemid
-        if($strModule != "" && $strAction == "" && $strSystemid == "")
-            $strLink = _webpath_."/xml/admin/".$strModule;
-        else if($strModule != "" && $strAction != "" && $strSystemid == "")
-            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction;
-        else
-            $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction."/".$strSystemid;
-
-        if(count($arrParams) > 0)
-            $strLink .= "?".implode("&amp;", $arrParams);
-
-    }
-    else {
-        $strLink = ""._webpath_."/xml.php?admin=1&amp;module=".$strModule.
-            ($strAction != "" ? "&amp;action=".$strAction : "" ).
-            ($strSystemid != "" ?  "&amp;systemid=".$strSystemid : "");
-
-        if(count($arrParams) > 0)
-            $strLink .= "&amp;".(implode("&amp;", $arrParams));
-    }
-
-    if(!$bitEncodedAmpersand)
-        $strLink = uniStrReplace("&amp;", "&", $strLink);
-
-    return $strLink;
+    return class_link::getLinkAdminXml($strModule, $strAction, $strParams, $bitEncodedAmpersand, $bitBlockPrintview);
 }
 
-
-/**
- * Generates a raw link in admin-area.
- * Can be used to create links to external resources. no admin=1 and so on is added.
- *
- * @todo move to link class
- *
- * @param $strParams
- * @param string $strText
- * @param string $strAlt
- * @param string $strImage
- * @param string $strTarget
- *
- * @internal param string $strParames
- * @return string
- */
-function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = "", $strTarget = "_self") {
-    //Wenn Parameter gegeben sind, diese aufbereiten)
-    $strLink = "";
-    $strParams = str_replace("&", "&amp;", $strParams);
-
-    if($strImage != "") {
-        $strLink = "<a href=\"".$strParams."\" target=\"".$strTarget."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-    }
-
-    if($strImage == "" && $strText != "") {
-        $strLink = "<a href=\""._indexpath_."?".$strParams."\" title=\"".$strAlt."\">".$strText."</a>";
-    }
-
-    return $strLink;
-}
 
 /**
  * Generates a link opening in a popup in admin-area
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strModule
  * @param string $strAction
@@ -454,46 +291,13 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = ""
  * @return string
  */
 function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
-    $strLink = "";
-    //if($strParams != "")
-    //    $strParams = str_replace("&", "&amp;", $strParams);
-    $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
-
-    if($bitPortalEditor && $intHeight == "500")
-        $intHeight = 690;
-
-    //urlencoding
-    $strModule = urlencode($strModule);
-    $strAction = urlencode($strAction);
-
-    if($bitPortalEditor)
-        $strParams .= "&pe=1";
-
-    if($strImage != "") {
-        if($strAlt == "")
-            $strAlt = $strAction;
-
-        if(!$bitTooltip)
-            $strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
-                "title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-        else
-            $strLink = "<a href=\"#\" onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
-                "title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-    }
-
-    if($strImage == "" && $strText != "") {
-        if($strAlt == "")
-            $strAlt = $strText;
-        $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "")." ".
-            "onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
-    }
-    return $strLink;
+    return class_link::getLinkAdminPopup($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $intWidth, $intHeight, $strTitle, $bitTooltip, $bitPortalEditor);
 }
 
 /**
  * Generates a link opening in a dialog in admin-area
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strModule
  * @param string $strAction
@@ -510,43 +314,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  * @return string
  */
 function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null) {
-    $strLink = "";
-    $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
-
-    if($bitPortalEditor)
-        $strParams .= "&pe=1";
-
-    //urlencoding
-    $strModule = urlencode($strModule);
-    $strAction = urlencode($strAction);
-
-    if($strOnClick == "") {
-        if($intWidth !== null && $intHeight !== null)
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
-                "KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
-        else
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
-                "KAJONA.admin.folderview.dialog.init(); return false;";
-    }
-
-
-
-    if($strImage != "") {
-        if($strAlt == "")
-            $strAlt = $strAction;
-
-        if(!$bitTooltip)
-            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-        else
-            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-    }
-
-    if($strImage == "" && $strText != "") {
-        if($strAlt == "")
-            $strAlt = $strText;
-        $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "" )." onclick=\"".$strOnClick."\">".$strText."</a>";
-    }
-    return $strLink;
+    return class_link::getLinkAdminDialog($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $strTitle, $bitTooltip, $bitPortalEditor, $strOnClick, $intWidth, $intHeight);
 }
 
 /**
@@ -749,7 +517,7 @@ function rgb2hex($arrRGB) {
 /**
  * Creates a Link for the portal
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strPageI
  * @param string $strPageE
@@ -764,22 +532,13 @@ function rgb2hex($arrRGB) {
  * @return string
  */
 function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "") {
-    $strReturn = "";
-
-    $strHref = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
-
-    if($strTarget == "")
-        $strTarget = "_self";
-
-    $strReturn .="<a href=\"".$strHref."\" target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" ": "").">".$strText."</a>";
-
-    return $strReturn;
+    return class_link::getLinkPortal($strPageI, $strPageE, $strTarget, $strText, $strAction, $strParams, $strSystemid, $strCssClass, $strLanguage, $strSeoAddon);
 }
 
 /**
  * Creates a raw Link for the portal (just the href)
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strPageI
  * @param string $strPageE
@@ -791,136 +550,13 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  * @return string
  */
 function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
-    $strReturn = "";
-    $bitInternal = true;
-
-    //return "#" if neither an internal nor an external page is set
-    if($strPageI == "" && $strPageE == "")
-        return "#";
-
-    //Internal links are more important than external links!
-    if($strPageI == "" && $strPageE != "")
-        $bitInternal = false;
-
-    //if given, remove first & from params
-    if(substr($strParams, 0, 1) == "&")
-        $strParams = substr($strParams, 1);
-
-    $strParams = str_replace("&", "&amp;", $strParams);
-    //create an array out of the params
-
-    // any anchors set to the page?
-    $strAnchor = "";
-    if(uniStrpos($strPageI, "#") !== false) {
-        //get anchor, remove anchor from link
-        $strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#")+1));
-        $strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));
-    }
-
-    //urlencoding
-    $strPageI = urlencode($strPageI);
-    $strAction = urlencode($strAction);
-    //$strParams = urlencode($strParams);
-
-    //more than one language installed?
-    $intNumberOfLanguages = class_module_languages_language::getNumberOfLanguagesAvailable(true);
-
-    if($strLanguage == "" && $intNumberOfLanguages > 1) {
-        $objCommon = new class_module_system_common();
-        $strLanguage = $objCommon->getStrPortalLanguage();
-    }
-    else if($strLanguage != "" && $intNumberOfLanguages <=1)
-        $strLanguage = "";
-
-    $strHref = "";
-    if($bitInternal) {
-        //check, if we could use mod_rewrite
-        $bitRegularLink = true;
-        if(_system_mod_rewrite_ == "true") {
-
-            $strAddKeys = "";
-
-            //used later to add seo-relevant keywords
-            $objPage = class_module_pages_page::getPageByName($strPageI);
-            if($objPage !== null) {
-                if($strLanguage != "") {
-                    $objPage->setStrLanguage($strLanguage);
-                    $objPage->initObject();
-                }
-
-                $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
-                if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
-                    $strAddKeys .= "__";
-
-                //trim string
-                $strAddKeys = uniStrTrim($strAddKeys, 100, "");
-
-                if($strLanguage != "")
-                    $strHref .= $strLanguage."/";
-
-                $strPath = $objPage->getStrPath();
-                if($strPath == "") {
-                    $objPage->updatePath();
-                    $strPath = $objPage->getStrPath();
-                    $objPage->updateObjectToDb();
-                }
-                if($strPath != "") {
-                    $strHref .= $strPath."/";
-                }
-
-            }
-            
-
-
-            //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
-            //but: special case: just pagename & language
-            if($strAction == "" && $strSystemid == "" && $strAddKeys == "")
-                $strHref .= $strPageI.".html";
-            elseif($strAction == "" && $strSystemid == "")
-                $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
-            elseif($strAction != "" && $strSystemid == "")
-                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
-            else
-                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
-
-            //params?
-            if($strParams != "")
-                $strHref .= "?".$strParams;
-
-            // add anchor if given
-            if($strAnchor != "")
-                $strHref .= "#".$strAnchor;
-
-            //plus the domain as a prefix
-            $strHref = "_webpath_"."/".$strHref;
-
-
-            $bitRegularLink = false;
-
-        }
-
-        if($bitRegularLink)
-            $strHref = "_indexpath_"."?".
-                ($strPageI != "" ? "page=".$strPageI : "" )."".
-                ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
-                ($strAction != "" ? "&amp;action=".$strAction : "").
-                ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-                ($strParams != "" ? "&amp;".$strParams : "" ).
-                ($strAnchor != "" ? "#".$strAnchor : "")."";
-    }
-    else {
-        $strHref = $strPageE;
-    }
-
-    $strReturn .= $strHref;
-
-    return $strReturn;
+    return class_link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 }
 
 /**
  * Generates a link opening in a popup in portal-area
  *
- * @todo move to link class
+ * @deprecated
  *
  * @param string $strPageI
  * @param string $strPageE
@@ -934,12 +570,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
  * @return string
  */
 function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500") {
-
-    $strLink = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
-
-    $strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
-
-    return $strLink;
+    return class_link::getLinkPortalPopup($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strTitle, $intWidth, $intHeight);
 }
 
 /**

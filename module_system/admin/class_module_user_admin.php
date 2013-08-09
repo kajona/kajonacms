@@ -188,7 +188,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             && $objListEntry->rightEdit()
             && checkEmailaddress($objListEntry->getStrEmail())
         ) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mail"));
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mailNew"));
         }
 
         if($objListEntry instanceof class_module_user_user && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
@@ -995,11 +995,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrRows[$intI][] = $arrLogs[$intI]["user_log_enddate"] != "" ? dateToString(new class_date($arrLogs[$intI]["user_log_enddate"])) : "";
             $arrRows[$intI][] = ($arrLogs[$intI]["user_log_status"] == 0 ? $this->getLang("login_status_0") : $this->getLang("login_status_1"));
             $arrRows[$intI][] = $arrLogs[$intI]["user_log_ip"];
-            $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/" . $arrLogs[$intI]["user_log_ip"];
-            $strUtraceLinkText = "http://www.utrace.de/whois/" . $arrLogs[$intI]["user_log_ip"];
-            if($arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1") {
-                $arrRows[$intI][] = $this->objToolkit->listButton(getLinkAdminRaw($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth", "_blank"))
-                    ." ".$this->objToolkit->listButton(getLinkAdminRaw($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text", "_blank"));
+
+            $strUtraceLinkMap = "href=\"http://www.utrace.de/ip-adresse/".$arrLogs[$intI]["user_log_ip"]."\" target=\"_blank\"";
+            $strUtraceLinkText = "href=\"http://www.utrace.de/whois/".$arrLogs[$intI]["user_log_ip"]."\" target=\"_blank\"";
+
+            if(true || $arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1") {
+                $arrRows[$intI][] = $this->objToolkit->listButton(class_link::getLinkAdminManual($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth"))
+                    ." ".$this->objToolkit->listButton(class_link::getLinkAdminManual($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text"));
             }
             else {
                 $arrRows[$intI][] = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_earthDisabled", $this->getLang("login_utrace_noinfo")))." ".

@@ -292,7 +292,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         }
         else {
             $strError = $this->getLang("provider_error_package");
-            $strError .= getLinkAdminRaw('javascript:history.back();', $this->getLang('back'));
+            $strError .= class_link::getLinkAdminManual('href=\'javascript:history.back();\'', $this->getLang('back'));
             $strReturn .= $this->objToolkit->warningBox($strError);
         }
 
@@ -477,9 +477,9 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $arrHistory = explode("&", $this->getHistory(0));
 
         if($this->getArrModule("template") == "/folderview.tpl")
-            $strError .= ' ' . getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
+            $strError .= ' ' . class_link::getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
         else
-            $strError .= ' ' . getLinkAdminRaw("" . $arrHistory[0] . "&" . $arrHistory[1], $this->getLang("commons_back"));
+            $strError .= ' ' . class_link::getLinkAdminManual("href=\"" . $arrHistory[0] . "&" . $arrHistory[1]."\"", $this->getLang("commons_back"));
         return $this->objToolkit->warningBox($strError);
     }
 

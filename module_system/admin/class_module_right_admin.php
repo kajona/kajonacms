@@ -248,7 +248,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
             //Buliding the right-matrix
             $arrHistory = explode("&", $strUrlHistory);
             if(isset($arrHistory[0]) && isset($arrHistory[1]))
-                $arrTemplate["backlink"] = getLinkAdminRaw("" . $arrHistory[0] . "&" . $arrHistory[1], $this->getLang("commons_back"));
+                $arrTemplate["backlink"] = class_link::getLinkAdminManual("href=\"" . $arrHistory[0] . "&" . $arrHistory[1]."\"", $this->getLang("commons_back"));
 
             $arrTemplate["desc"] = $this->getLang("desc");
             $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);

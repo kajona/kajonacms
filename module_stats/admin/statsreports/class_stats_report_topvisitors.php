@@ -89,11 +89,11 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
             $arrValues[$intI][] = $arrOneStat["anzahl"];
             $arrValues[$intI][] = $this->objToolkit->percentBeam($arrOneStat["anzahl"] / $intSum * 100);
 
-            $strUtraceLinkMap = "http://www.utrace.de/ip-adresse/".$arrOneStat["stats_ip"];
-            $strUtraceLinkText = "http://www.utrace.de/whois/".$arrOneStat["stats_ip"];
+            $strUtraceLinkMap = "href=\"http://www.utrace.de/ip-adresse/".$arrOneStat["stats_ip"]."\" target=\"_blank\"";
+            $strUtraceLinkText = "href=\"http://www.utrace.de/whois/".$arrOneStat["stats_ip"]."\" target=\"_blank\"";
             if($arrOneStat["stats_ip"] != "127.0.0.1" && $arrOneStat["stats_ip"] != "::1") {
-                $arrValues[$intI][]	= getLinkAdminRaw($strUtraceLinkMap, "", $this->objLang->getLang("login_utrace_showmap", "user"), "icon_earth", "_blank")
-                    . " " . getLinkAdminRaw($strUtraceLinkText, "", $this->objLang->getLang("login_utrace_showtext", "user"), "icon_text", "_blank");
+                $arrValues[$intI][]	= class_link::getLinkAdminManual($strUtraceLinkMap, "", $this->objLang->getLang("login_utrace_showmap", "user"), "icon_earth")
+                    . " " . class_link::getLinkAdminManual($strUtraceLinkText, "", $this->objLang->getLang("login_utrace_showtext", "user"), "icon_text");
             }
             else 
                 $arrValues[$intI][] = getImageAdmin("icon_earthDisabled", $this->objLang->getLang("login_utrace_noinfo", "user")) ." "
