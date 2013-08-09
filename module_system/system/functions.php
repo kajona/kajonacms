@@ -176,6 +176,7 @@ function issetServer($strKey) {
  *
  * @param string $strKey
  * @return bool
+ * @deprecated
  */
 function issetCookie($strKey) {
     return isset($_COOKIE[$strKey]);
@@ -187,6 +188,7 @@ function issetCookie($strKey) {
  *
  * @param string $strKey
  * @return mixed
+ * @deprecated
  */
 function getCookie($strKey) {
     if(issetCookie($strKey))
@@ -199,6 +201,8 @@ function getCookie($strKey) {
  * Generates a link using the content passed.
  * The param $strLinkContent should contain all contents of the a-tag.
  * The system renders <a $strLinkContent title... class...>($strText|$strImage)</a>
+ *
+ * @todo move to link class
  *
  * @param string $strLinkContent
  * @param string $strText
@@ -229,6 +233,8 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
 
 /**
  * Generates a link for the admin-area
+ *
+ * @todo move to link class
  *
  * @param string $strModule
  * @param string $strAction
@@ -266,6 +272,8 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
 
 /**
  * Generates a link for the admin-area
+ *
+ * @todo move to link class
  *
  * @param string $strModule
  * @param string $strAction
@@ -329,6 +337,8 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
 
 /**
  * Generates an admin-url to trigger xml-requests. Takes care of url-rewriting
+ *
+ * @todo move to link class
  *
  * @param $strModule
  * @param string $strAction
@@ -397,6 +407,8 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
  * Generates a raw link in admin-area.
  * Can be used to create links to external resources. no admin=1 and so on is added.
  *
+ * @todo move to link class
+ *
  * @param $strParams
  * @param string $strText
  * @param string $strAlt
@@ -424,6 +436,8 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt = "", $strImage = ""
 
 /**
  * Generates a link opening in a popup in admin-area
+ *
+ * @todo move to link class
  *
  * @param string $strModule
  * @param string $strAction
@@ -478,6 +492,8 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 
 /**
  * Generates a link opening in a dialog in admin-area
+ *
+ * @todo move to link class
  *
  * @param string $strModule
  * @param string $strAction
@@ -733,6 +749,8 @@ function rgb2hex($arrRGB) {
 /**
  * Creates a Link for the portal
  *
+ * @todo move to link class
+ *
  * @param string $strPageI
  * @param string $strPageE
  * @param string $strTarget
@@ -760,6 +778,8 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
 
 /**
  * Creates a raw Link for the portal (just the href)
+ *
+ * @todo move to link class
  *
  * @param string $strPageI
  * @param string $strPageE
@@ -899,6 +919,8 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 
 /**
  * Generates a link opening in a popup in portal-area
+ *
+ * @todo move to link class
  *
  * @param string $strPageI
  * @param string $strPageE
