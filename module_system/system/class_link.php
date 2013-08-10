@@ -471,7 +471,7 @@ class class_link {
                     ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
                     ($strAction != "" ? "&amp;action=".$strAction : "").
                     ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-                    (count($arrParams) > 0 ? "&amp;".implode("&amp;".$arrParams) : "" ).
+                    (count($arrParams) > 0 ? "&amp;".implode("&amp;", $arrParams) : "" ).
                     ($strAnchor != "" ? "#".$strAnchor : "")."";
         }
         else {
