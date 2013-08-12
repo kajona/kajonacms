@@ -40,21 +40,18 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         else
             $strName .= ".png";
 
-        return "<img src=\""._skinwebpath_."/pics/".$strName."\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )."  />";
+        return "<img src=\""._skinwebpath_."/pics/".$strName."\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )." data-kajona-icon='".$strName."' />";
     }
 
 
     private function getFASomeImage($strImage, $strTooltip) {
-
-        //remove the following line in order to get fontawesome images
-//        return null;
 
         $strName = uniStrReplace(array(".png", ".gif"), "", $strImage);
         if(isset(self::$arrFAImages[$strName] )) {
             if($strTooltip == "")
                 return self::$arrFAImages[$strName];
             else
-                return "<span rel=\"tooltip\" title=\"".$strTooltip."\">".self::$arrFAImages[$strName]."</span>";
+                return "<span rel=\"tooltip\" title=\"".$strTooltip."\" data-kajona-icon='".$strName."' >".self::$arrFAImages[$strName]."</span>";
         }
         return null;
     }
