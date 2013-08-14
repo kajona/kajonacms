@@ -1599,9 +1599,14 @@ It containes a list of aspects and provides the possibility to switch the differ
 
 <contextmenu_submenucontainer_entry>
     <li class="dropdown-submenu" >
-        <a href="%%elementLink%%">%%elementName%%</a>
+        <a href="%%elementLink%%" tabindex="-1">%%elementName%%</a>
         <ul class="dropdown-menu">
             %%entries%%
+            <script type="text/javascript">
+                $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+                    e.stopPropagation();
+                });
+            </script>
         </ul>
     </li>
 </contextmenu_submenucontainer_entry>
