@@ -208,7 +208,7 @@ Divider to split up a page in logical sections
 
 data list header. Used to open a table to print data
 <datalist_header>
-<table class="table table-striped table-condensed">
+<table class="table table-striped table-condensed kajona-data-table">
 </datalist_header>
 
 data list footer. at the bottom of the datatable
