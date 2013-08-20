@@ -4,9 +4,6 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class class_test_lang extends class_testbase  {
 
-    protected function setUp() {
-    }
-
 
     public function testStringToPlaceholder() {
 

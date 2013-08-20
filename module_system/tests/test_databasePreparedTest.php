@@ -11,6 +11,8 @@ class class_test_databasePrepared extends class_testbase {
             $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
             class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
         }
+
+        parent::tearDown();
     }
 
     public function test() {

@@ -18,7 +18,7 @@ require_once __DIR__."../../../bootstrap.php";
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class class_testbase extends PHPUnit_Framework_TestCase {
+abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
 
@@ -42,12 +42,21 @@ class class_testbase extends PHPUnit_Framework_TestCase {
         class_apc_cache::getInstance()->flushCache();
 
         class_config::getInstance()->loadConfigsDatabase(class_db::getInstance());
+
+        //flush garbage collection, should avoid some segfaults on php 5.3.
+        gc_collect_cycles();
+        gc_disable();
+
+        parent::setUp();
     }
 
-    /**
-     * For the sake of phpunit
-     */
-    public function testTest() {
+
+    protected function tearDown() {
+
+        //reenable garbage collection
+        gc_enable();
+
+        parent::tearDown();
     }
 
     protected function flushDBCache() {
