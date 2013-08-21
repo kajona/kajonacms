@@ -62,6 +62,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
                     $arrTemplate["title"] = $objOneEvent->getStrTitle();
                     $arrTemplate["description"] = $objOneEvent->getStrDescription();
                     $arrTemplate["location"] = $objOneEvent->getStrLocation();
+                    $arrTemplate["eventStatus"] = $objOneEvent->getIntEventStatus();
                     $arrTemplate["systemid"] = $objOneEvent->getSystemid();
                     $arrTemplate["detailsLinkHref"] = getLinkPortalHref($this->getPagename(), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle());
 
@@ -162,6 +163,7 @@ class class_module_eventmanager_portal extends class_portal implements interface
             $arrTemplate["dateTimeUntil"] = dateToString($objEvent->getObjEndDate(), true);
             $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
             $arrTemplate["systemid"] = $objEvent->getSystemid();
+            $arrTemplate["eventStatus"] = $objEvent->getIntEventStatus();
 
             $arrTemplate["maximumParticipants"] = $objEvent->getIntParticipantsLimit();
             $arrTemplate["currentParticipants"] = count(class_module_eventmanager_participant::getObjectList($this->getSystemid()));

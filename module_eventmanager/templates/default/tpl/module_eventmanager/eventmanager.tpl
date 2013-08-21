@@ -36,7 +36,7 @@
     </div>
 </event_list>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, detailsLinkHref, registerLinkHref, systemid -->
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, detailsLinkHref, registerLinkHref, systemid, eventStatus -->
 <event_list_entry>
     <tr>
         <td>%%dateFrom%%</td>
@@ -46,7 +46,7 @@
     </tr>
 </event_list_entry>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants, systemid -->
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants, systemid, eventStatus -->
 <event_details>
     <div class="eventmanagerDetails">
         <h2 data-kajona-editable="%%systemid%%#strTitle#plain">%%title%%</h2>
@@ -57,6 +57,7 @@
             <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
             <tr><td>[lang,maximumParticipants,eventmanager]</td><td data-kajona-editable="%%systemid%%#intParticipantsLimit#plain">%%maximumParticipants%%</td></tr>
             <tr><td>[lang,currentParticipants,eventmanager]</td><td>%%currentParticipants%%</td></tr>
+            <tr><td>[lang,form_eventmanager_eventstatus,eventmanager]</td><td>[lang,event_status_%%eventStatus%%,eventmanager]</td></tr>
         </table>
         %%registerLink%%
     </div>

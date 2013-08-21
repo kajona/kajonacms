@@ -52,6 +52,15 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     /**
      * @var int
+     * @tableColumn em_event.em_ev_eventstatus
+     * @versionable
+     *
+     * @fieldType dropdown
+     */
+    private $intEventStatus;
+
+    /**
+     * @var int
      * @tableColumn em_event.em_ev_participant_registration
      * @versionable
      *
@@ -100,6 +109,8 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @fieldLabel event_end
      */
     private $objEndDate;
+
+
 
 
     /**
@@ -304,6 +315,14 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     public function setIntParticipantsLimit($intParticipantsLimit) {
         $this->intParticipantsLimit = (int)$intParticipantsLimit;
+    }
+
+    public function setIntEventStatus($intEventStatus) {
+        $this->intEventStatus = $intEventStatus;
+    }
+
+    public function getIntEventStatus() {
+        return $this->intEventStatus;
     }
 
 

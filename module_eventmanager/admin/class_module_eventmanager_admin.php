@@ -64,6 +64,24 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
         return "";
     }
 
+    protected function getAdminForm(interface_model $objInstance) {
+        $objForm = parent::getAdminForm($objInstance);
+
+        if($objInstance instanceof class_module_eventmanager_event) {
+            $objForm->getField("eventstatus")->setArrKeyValues(
+                array(
+                    "" => " ",
+                    "1" => $this->getLang("event_status_1"),
+                    "2" => $this->getLang("event_status_2"),
+                    "3" => $this->getLang("event_status_3"),
+                    "4" => $this->getLang("event_status_4")
+                )
+            );
+        }
+
+        return $objForm;
+    }
+
 
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $objListEntry instanceof class_module_eventmanager_event) {

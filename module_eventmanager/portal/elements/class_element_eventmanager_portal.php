@@ -21,9 +21,9 @@ class class_element_eventmanager_portal extends class_element_portal implements 
      *
      * @param class_module_pages_pageelement|mixed $objElementData
      */
-	public function __construct($objElementData) {
+    public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
+        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
     }
 
 
@@ -32,15 +32,15 @@ class class_element_eventmanager_portal extends class_element_portal implements 
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
-		//Load the data
-		$objEventmanagerModule = class_module_system_module::getModuleByName("eventmanager");
-		if($objEventmanagerModule != null) {
-    		$objEventmanager = $objEventmanagerModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+    public function loadData() {
+        $strReturn = "";
+        //Load the data
+        $objEventmanagerModule = class_module_system_module::getModuleByName("eventmanager");
+        if($objEventmanagerModule != null) {
+            $objEventmanager = $objEventmanagerModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objEventmanager->action();
-		}
-		return $strReturn;
-	}
+        }
+        return $strReturn;
+    }
 
 }

@@ -37,6 +37,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
 		$arrFields["em_ev_participant_registration"]  = array("int", true);
 		$arrFields["em_ev_participant_limit"]         = array("int", true);
 		$arrFields["em_ev_participant_max"]           = array("int", true);
+		$arrFields["em_ev_eventstatus"]               = array("int", true);
 
 		if(!$this->objDB->createTable("em_event", $arrFields, array("em_ev_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -127,6 +128,11 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $this->updateElementVersion("eventmanager", "4.2");
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.2") {
+            $strReturn .= $this->update_42_421();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -178,6 +184,23 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $this->updateModuleVersion("eventmanager", "4.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("eventmanager", "4.1");
+        return $strReturn;
+    }
+
+
+    private function update_42_421() {
+        $strReturn = "Updating 4.2 to 4.2.1...\n";
+
+        $strReturn .= "Adding new status column...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_event")."
+                            ADD ".$this->objDB->encloseColumnName("em_ev_eventstatus")." ".$this->objDB->getDatatype("int")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("eventmanager", "4.2.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("eventmanager", "4.2.1");
         return $strReturn;
     }
 }
