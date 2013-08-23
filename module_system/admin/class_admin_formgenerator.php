@@ -426,7 +426,7 @@ class class_admin_formgenerator {
     }
 
     /**
-     * @return \class_model
+     * @return \class_model|interface_model
      */
     public function getObjSourceobject() {
         return $this->objSourceobject;
