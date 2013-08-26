@@ -855,10 +855,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendMail"));
         $strReturn .= $this->objToolkit->getValidationErrors($this, "sendMail");
-        $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getLang("mail_recipient"), $this->getParam("mail_recipient"));
-        $strReturn .= $this->objToolkit->formInputText("mail_cc", $this->getLang("mail_cc"), $this->getParam("mail_cc"));
-        $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getLang("mail_subject"), $this->getParam("mail_subject"));
-        $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getLang("mail_body"), $this->getParam("mail_body"), "inputTextareaLarge");
+        $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getLang("mail_recipient"), urldecode($this->getParam("mail_recipient")));
+        $strReturn .= $this->objToolkit->formInputText("mail_cc", $this->getLang("mail_cc"), urldecode($this->getParam("mail_cc")));
+        $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getLang("mail_subject"), urldecode($this->getParam("mail_subject")));
+        $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getLang("mail_body"), urldecode($this->getParam("mail_body")), "inputTextareaLarge");
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("send"));
         $strReturn .= $this->objToolkit->formClose();
 
