@@ -47,10 +47,12 @@ class class_link {
                 $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" rel=\"tooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".class_adminskin_helper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
         }
         else if($strText != "") {
-            if($strAlt == "")
+            if($strAlt == "") {
+                $bitTooltip = false;
                 $strAlt = $strText;
+            }
 
-            $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
+            $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." ".($bitTooltip!= "" ? " rel=\"tooltip\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
         }
 
         return $strLink;
