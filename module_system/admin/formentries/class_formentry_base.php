@@ -22,6 +22,11 @@ class class_formentry_base {
      * @var class_model
      */
     private $objSourceObject = null;
+
+    /**
+     * The name of the property as used in the forms, leading type-prefix is removed
+     * @var null
+     */
     private $strSourceProperty = null;
     private $strFormName = "";
 
@@ -254,6 +259,10 @@ class class_formentry_base {
 
     public function getStrSourceProperty() {
         return $this->strSourceProperty;
+    }
+
+    public function getObjSourceObject() {
+        return $this->objSourceObject;
     }
 
     public function setStrValidationErrorMsg($strValidationErrorMsg) {

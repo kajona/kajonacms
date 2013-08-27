@@ -16,6 +16,12 @@
  */
 class class_formentry_dropdown extends class_formentry_base implements interface_formentry_printable {
 
+    /**
+     * a list of [key=>value],[key=>value] pairs, resolved from the language-files
+     */
+    const STR_DDVALUES_ANNOTATION = "@fieldDDValues";
+
+
     private $arrKeyValues = array();
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
@@ -39,6 +45,41 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly());
         return $strReturn;
     }
+
+    /**
+     * Overwritten in order to load key-value pairs declared by annotations
+     */
+    protected function updateValue() {
+        parent::updateValue();
+
+        if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
+            $objReflection = new class_reflection($this->getObjSourceObject());
+
+            //try to find the matching source property
+            $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_DDVALUES_ANNOTATION);
+            $strSourceProperty = null;
+            foreach($arrProperties as $strPropertyName => $strValue) {
+                if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
+                    $strSourceProperty = $strPropertyName;
+            }
+
+            if($strSourceProperty == null)
+                return;
+
+            $strDDValues = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DDVALUES_ANNOTATION);
+            if($strDDValues !== null && $strDDValues != "") {
+                $arrDDValues = array();
+                foreach(explode(",", $strDDValues) as $strOneKeyVal) {
+                    $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
+                    $arrOneKeyValue = explode("=>", $strOneKeyVal);
+                    if(count($arrOneKeyValue) == 2)
+                        $arrDDValues[trim($arrOneKeyValue[0])] = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
+                }
+                $this->setArrKeyValues($arrDDValues);
+            }
+        }
+    }
+
 
     /**
      * Returns a textual representation of the formentries' value.

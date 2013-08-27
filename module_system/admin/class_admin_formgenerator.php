@@ -243,9 +243,8 @@ class class_admin_formgenerator {
 
         $objField->setBitMandatory($bitMandatory);
 
-        if($strValidator !== null) {
+        if($strValidator !== null)
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
-        }
 
         $this->addField($objField, $strPropertyName);
 
