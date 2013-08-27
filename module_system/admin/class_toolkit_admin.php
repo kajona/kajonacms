@@ -472,7 +472,7 @@ class class_toolkit_admin extends class_toolkit {
             false,
             " (function() {
              if(document.getElementById('".$strName."').value != '') {
-                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'")."');
+                 KAJONA.admin.folderview.dialog.setContentIFrame('".urldecode(getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'"))."');
                  KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
                  KAJONA.admin.folderview.dialog.init();
              }
