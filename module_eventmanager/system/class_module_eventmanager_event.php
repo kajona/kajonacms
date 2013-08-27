@@ -56,6 +56,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @versionable
      *
      * @fieldType dropdown
+     * @fieldDDValues [1 => event_status_1],[2 => event_status_2],[3 => event_status_3],[4 => event_status_4]
      */
     private $intEventStatus;
 

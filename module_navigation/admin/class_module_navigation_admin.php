@@ -292,16 +292,12 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     }
 
 
-    private function getPointAdminForm(class_module_navigation_point $objPoint, $strMode) {
-
-        $arrTargets = array("_self" => $this->getLang("navigation_tagetself"), "_blank" => $this->getLang("navigation_tagetblank"));
-
+    private function getPointAdminForm(class_module_navigation_point $objPoint) {
 
         $objForm = new class_admin_formgenerator("point", $objPoint);
 
         $objForm->generateFieldsFromObject();
 
-        $objForm->getField("target")->setArrKeyValues($arrTargets);
 
         return $objForm;
     }
@@ -319,7 +315,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $objPoint = new class_module_navigation_point($this->getSystemid());
         }
 
-        $objForm = $this->getPointAdminForm($objPoint, $this->getParam("mode"));
+        $objForm = $this->getPointAdminForm($objPoint);
         if(!$objForm->validateForm())
             return $this->actionNewNaviPoint($this->getParam("mode"), $objForm);
 

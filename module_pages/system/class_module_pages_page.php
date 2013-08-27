@@ -98,6 +98,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @versionable
      *
      * @fieldType dropdown
+     * @fieldDDValues [_self => page_targetself],[_blank => page_targetblank]
      */
     private $strTarget = "";
 

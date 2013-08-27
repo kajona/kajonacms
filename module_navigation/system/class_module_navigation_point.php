@@ -51,6 +51,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @var string
      * @tableColumn navigation_target
      * @fieldType dropdown
+     * @fieldDDValues [_self => navigation_tagetself],[_blank => navigation_tagetblank]
      * @fieldLabel navigation_target
      */
     private $strTarget = "";
