@@ -179,7 +179,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
                     $objTask = new $strClassname();
                     if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
-                        class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
+                        class_logger::getInstance(class_logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelWarning);
 
                         //let the work begin...
                         $strTempOutput = trim($objTask->executeTask());

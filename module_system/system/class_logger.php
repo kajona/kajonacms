@@ -24,6 +24,7 @@ final class class_logger {
     const PACKAGEMANAGEMENT = "packagemanagement.log";
     const LANG = "lang.log";
     const REMOTELOADER = "remoteloader.log";
+    const ADMINTASKS = "admintasks.log";
 
     /**
      * Level to be used for real errors
