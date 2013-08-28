@@ -658,7 +658,7 @@ class class_installer {
 
 
     /**
-     * Generates the sourrounding layout and embedds the installer-output
+     * Generates the surrounding layout and embeds the installer-output
      *
      * @return string
      */

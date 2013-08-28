@@ -30,6 +30,9 @@ class class_installer_element_downloads extends class_installer_base implements 
 	public function install() {
 		$strReturn = "";
 
+        if(class_module_system_module::getModuleByName("mediamanager") == null)
+            return "Mediamanger not installed, skipping element\n";
+
 		//Table for page-element
 		$strReturn .= "Installing downloads-element table...\n";
 
@@ -56,7 +59,7 @@ class class_installer_element_downloads extends class_installer_base implements 
             $strReturn .= "Element registered...\n";
         }
         else {
-            $strReturn .= "Element already installed!...\n";
+            $strReturn .= "Element already installed or pages module not installed!...\n";
         }
 		return $strReturn;
 	}

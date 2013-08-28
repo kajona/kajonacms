@@ -97,7 +97,7 @@ class class_module_news_search_portal implements interface_search_plugin {
                         $objResult = new class_search_result();
                         $objResult->setStrResultId($objNews->getSystemid().$objDetails->getSystemid());
                         $objResult->setStrSystemid($objNews->getSystemid());
-                        $objResult->setStrPagelink(getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $arrOnePage["news_detailspage"], "newsDetail", "&systemid=".$objNews->getSystemid()."&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))));
+                        $objResult->setStrPagelink(getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $arrOnePage["news_detailspage"], "newsDetail", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")), $objNews->getSystemid()));
                         $objResult->setStrPagename($arrOnePage["news_detailspage"]);
                         $objResult->setStrDescription($objNews->getStrTitle());
 

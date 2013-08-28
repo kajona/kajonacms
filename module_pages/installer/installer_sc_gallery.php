@@ -27,6 +27,9 @@ class class_installer_sc_gallery implements interface_sc_installer  {
      */
     public function install() {
 
+        if(class_module_system_module::getModuleByName("mediamanager") == null)
+            return "Mediamanger not installed, skipping element\n";
+
 
         $strReturn = "";
 

@@ -54,6 +54,9 @@ class class_module_pages_elementsearch_portal implements interface_search_plugin
                 $arrParams[] = "%".$this->strSearchterm."%";
             }
 
+            if(count($arrWhere) == 0)
+                continue;
+
             $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
             //Build the query

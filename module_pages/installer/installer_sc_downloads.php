@@ -28,6 +28,9 @@ class class_installer_sc_downloads implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
 
+        if(class_module_system_module::getModuleByName("mediamanager") == null)
+            return "Mediamanger not installed, skipping element\n";
+
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = class_module_pages_folder::getFolderList();

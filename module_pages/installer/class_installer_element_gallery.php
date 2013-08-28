@@ -25,17 +25,11 @@ class class_installer_element_gallery extends class_installer_base implements in
 		parent::__construct();
 	}
 
-	public function getNeededModules() {
-	    return array("system", "pages", "mediamanager");
-	}
-
-
-    public function getMinSystemVersion() {
-	    return "3.4.9";
-	}
-
 	public function install() {
 		$strReturn = "";
+
+        if(class_module_system_module::getModuleByName("mediamanager") == null)
+            return "Mediamanger not installed, skipping element\n";
 
 		//Table for page-element
 		$strReturn .= "Installing gallery-element table...\n";
@@ -71,7 +65,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 			$strReturn .= "Element registered...\n";
 		}
 		else {
-			$strReturn .= "Element already installed!...\n";
+			$strReturn .= "Element already installed or pages module not installed!...\n";
 		}
 
 
@@ -88,7 +82,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 			$strReturn .= "Element registered...\n";
 		}
 		else {
-			$strReturn .= "Element already installed!...\n";
+			$strReturn .= "Element already installed or pages module not installed!...\n";
 		}
 
 		return $strReturn;
