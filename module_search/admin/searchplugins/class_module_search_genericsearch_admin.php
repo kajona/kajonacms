@@ -82,7 +82,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                 //is it a string-based field?
                 $strTypeAnnotation = $objReflection->getAnnotationValueForProperty($strProperty, "@var");
 
-                if($strTypeAnnotation == "int" || $strTypeAnnotation == "long" || $strTypeAnnotation == "bool" || $strTypeAnnotation == "float")
+                if(uniSubstr($strProperty, 0, 3) !== "str"  &&  $strTypeAnnotation == "int" || $strTypeAnnotation == "long" || $strTypeAnnotation == "bool" || $strTypeAnnotation == "float")
                     continue;
 
                 $arrColumn = explode(".", $strColumn);
@@ -102,6 +102,9 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
                 $arrParams[] = $this->objSearch->getObjChangeStartdate()->getTimeInOldStyle();
                 $strWhere .= "AND system_lm_time >= ? ";
             }
+
+            if(count($arrWhere) == 0)
+                return;
 
             $strQuery = "SELECT system_id
                           FROM ".implode(", ", $arrTables)." ,
