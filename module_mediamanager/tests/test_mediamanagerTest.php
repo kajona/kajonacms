@@ -8,7 +8,7 @@ class class_mediamanagerTest extends class_testbase  {
 
         echo "test mediamanager...\n";
 
-        if(class_module_system_module::getModuleByName("samplecontent") == null)
+        if(class_module_system_module::getModuleByName("samplecontent") == null || !is_file(_realpath_."/files/images/samples/IMG_3000.JPG"))
             return;
 
         $objFilesystem = new class_filesystem();
