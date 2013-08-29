@@ -138,6 +138,8 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public function updateObjectToDb($strPrevId = false) {
 
+        self::$arrInstanceCache = null;
+
         if(!class_module_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant " . $this->getStrName() . " with value " . $this->getStrValue(), class_logger::$levelInfo);
 
@@ -189,7 +191,7 @@ class class_module_system_setting extends class_model implements interface_model
     public static function getAllConfigValues() {
         if(self::$arrInstanceCache == null) {
             $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
             foreach($arrIds as $arrOneId) {
                 self::$arrInstanceCache[$arrOneId["system_config_id"]] = new class_module_system_setting($arrOneId["system_config_id"]);
             }
