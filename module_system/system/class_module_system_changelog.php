@@ -13,13 +13,22 @@
  * But: entries added to the changelog are copied to the systemlog leveled as information, too.
  * Changes are stored as a flat list in the database only and have no representation within the
  * system-table. This means there are no common system-id relations.
- * Have a look at the memento pattern by Gamma et al. to get a glance at the conecptional behaviour.
+ * Have a look at the memento pattern by Gamma et al. to get a glance at the conceptional behaviour.
  *
  * @package module_system
  * @author sidler@mulchprod.de
  * @see class_logger
  */
 class class_module_system_changelog extends class_model implements interface_model {
+
+    /**
+     * A flag to disable the reading of old values for the current execution.
+     * If set to true, the current value of an objects' property are not loaded into the cache.
+     * In consequence, the changelog-generation is disabled, too.
+     *
+     * @var bool
+     */
+    public static $bitDisableChangelog = false;
 
     private static $arrOldValueCache = array();
     private static $arrCachedProviders = null;
@@ -96,7 +105,6 @@ class class_module_system_changelog extends class_model implements interface_mod
             $arrOldValues = array();
 
             $objReflection = new class_reflection($objCurrentObject);
-
             $arrProperties = $objReflection->getPropertiesWithAnnotation("@versionable");
 
 
@@ -216,6 +224,10 @@ class class_module_system_changelog extends class_model implements interface_mod
      * @throws class_exception
      */
     private function isVersioningAvailable(interface_versionable $objSourceModel) {
+
+        if(self::$bitDisableChangelog)
+            return false;
+
         if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
             return false;
 
@@ -225,7 +237,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
         //changes require at least kajona 3.4.9
-        $arrModul = class_module_system_module::getPlainModuleData("system", false);
+        $arrModul = class_module_system_module::getPlainModuleData("system");
         if(version_compare($arrModul["module_version"], "3.4.9") < 0)
             return false;
 

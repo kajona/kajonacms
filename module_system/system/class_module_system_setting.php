@@ -17,6 +17,9 @@
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
 
+    private static $arrInstanceCache = null;
+
+
     //0 = bool, 1 = int, 2 = string, 3 = page
     //use ONLY the following static vars to assign a type to your constant.
     //integer values may change without warnings!
@@ -48,6 +51,10 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public static $int_TYPE_PAGE = 3;
 
+    /**
+     * @var string
+     * @versionable
+     */
     private $strName = "";
 
     /**
@@ -165,7 +172,6 @@ class class_module_system_setting extends class_model implements interface_model
     public function renameConstant($strNewName) {
         class_logger::getInstance()->addLogRow("renamed constant " . $this->getStrName() . " to " . $strNewName, class_logger::$levelInfo);
 
-
         $strQuery = "UPDATE " . _dbprefix_ . "system_config
                     SET system_config_name = ? WHERE system_config_name = ?";
 
@@ -181,14 +187,15 @@ class class_module_system_setting extends class_model implements interface_model
      * @static
      */
     public static function getAllConfigValues() {
-        $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_system_setting($arrOneId["system_config_id"]);
+        if(self::$arrInstanceCache == null) {
+            $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+            foreach($arrIds as $arrOneId) {
+                self::$arrInstanceCache[$arrOneId["system_config_id"]] = new class_module_system_setting($arrOneId["system_config_id"]);
+            }
         }
 
-        return $arrReturn;
+        return self::$arrInstanceCache;
     }
 
     /**
@@ -200,14 +207,14 @@ class class_module_system_setting extends class_model implements interface_model
      * @static
      */
     public static function getConfigByName($strName) {
-        $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config WHERE system_config_name = ?";
-        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-        if(isset($arrId["system_config_id"])) {
-            return new class_module_system_setting($arrId["system_config_id"]);
-        }
-        else {
-            return null;
-        }
+
+        $arrConfigs = self::getAllConfigValues();
+        foreach($arrConfigs as $objOneConfig)
+            if($objOneConfig->getStrName() == $strName)
+                return $objOneConfig;
+
+        return null;
+
     }
 
     /**
