@@ -204,6 +204,96 @@ class class_date {
     }
 
     /**
+     * Shifts the current month into the future by one.
+     * If the current month has 31 days, the next one only 30, the
+     * logic will remain at 30.
+     *
+     * @return \class_date
+     */
+    public function setNextMonth() {
+        $objSourceDate = clone $this;
+
+        $this->setNextDay();
+        $intDaysAdded = 1;
+        while($this->getIntDay() != $objSourceDate->getIntDay()) {
+            $this->setNextDay();
+            $intDaysAdded++;
+
+            //if we skip a month border, roll back until the previous months last day
+            if($intDaysAdded > 31) {
+                $this->setIntDay(1);
+                $this->setPreviousDay();
+                //and jump out
+                break;
+            }
+        }
+
+        $this->setIntHour($objSourceDate->getIntHour());
+        $this->setIntMin($objSourceDate->getIntMin());
+        $this->setIntSec($objSourceDate->getIntSec());
+
+        return $this;
+    }
+
+
+    /**
+     * Shifts the current month into the past by one.
+     * If the current month has 31 days, the previous one only 30, the
+     * logic will remain at 30.
+     *
+     * @return \class_date
+     */
+    public function setPreviousMonth() {
+        $objSourceDate = clone $this;
+
+        $this->setPreviousDay();
+        $intDaysSubtracted = 1;
+        while($this->getIntDay() != $objSourceDate->getIntDay()) {
+            $this->setPreviousDay();
+            $intDaysSubtracted++;
+
+            //if we skip a month border, roll back until the next months last day
+            if($intDaysSubtracted > 31) {
+                $this->setNextMonth();
+                $this->setIntDay(1);
+                $this->setPreviousDay();
+                //and jump out
+                break;
+            }
+        }
+
+        $this->setIntHour($objSourceDate->getIntHour());
+        $this->setIntMin($objSourceDate->getIntMin());
+        $this->setIntSec($objSourceDate->getIntSec());
+
+        return $this;
+    }
+
+    /**
+     * Shifts the current date one week into the future, so seven days
+     *
+     * @return \class_date
+     */
+    public function setNextWeek() {
+        for($intI = 1; $intI <= 7; $intI++)
+            $this->setNextDay();
+
+        return $this;
+    }
+
+    /**
+     * Shifts the current date one week into the future, so seven days
+     *
+     * @return \class_date
+     */
+    public function setPreviousWeek() {
+        for($intI = 1; $intI <= 7; $intI++)
+            $this->setPreviousDay();
+
+        return $this;
+    }
+
+    /**
      * Swap the year part
      *
      * @param int $intYear
