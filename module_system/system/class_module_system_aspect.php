@@ -197,18 +197,20 @@ class class_module_system_aspect extends class_model implements interface_model,
      * Returns the default aspect, defined in the admin.
      * This takes permissions into account!
      *
+     * @param bool $bitIgnorePermissions
+     *
      * @return class_module_system_aspect null if no aspect is set up
      */
-    public static function getDefaultAspect() {
+    public static function getDefaultAspect($bitIgnorePermissions = false) {
         //try to load the default language
         $strQuery = "SELECT system_id
-                 FROM "._dbprefix_."aspects, "._dbprefix_."system
+                 FROM "._dbprefix_."aspects,
+                      "._dbprefix_."system
 	             WHERE system_id = aspect_id
 	             AND aspect_default = 1
-	             AND system_status = 1
-	             ORDER BY system_sort ASC, system_comment ASC";
+	             AND system_status = 1";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        if(count($arrRow) > 0 && class_carrier::getInstance()->getObjRights()->rightView($arrRow["system_id"])) {
+        if(count($arrRow) > 0  && ($bitIgnorePermissions || class_carrier::getInstance()->getObjRights()->rightView($arrRow["system_id"]))) {
             return new class_module_system_aspect($arrRow["system_id"]);
         }
         else {

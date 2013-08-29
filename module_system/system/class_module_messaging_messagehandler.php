@@ -123,11 +123,13 @@ class class_module_messaging_messagehandler {
             }
             else if($objOneRecipient instanceof class_module_user_group) {
                 $objUsersources = new class_module_user_sourcefactory();
-                $arrMembers = $objUsersources->getSourceGroup($objOneRecipient)->getUserIdsForGroup();
+                if($objUsersources->getSourceGroup($objOneRecipient) != null) {
+                    $arrMembers = $objUsersources->getSourceGroup($objOneRecipient)->getUserIdsForGroup();
 
-                foreach($arrMembers as $strOneId) {
-                    if(!isset($arrReturn[$strOneId]))
-                        $arrReturn[$strOneId] = new class_module_user_user($strOneId);
+                    foreach($arrMembers as $strOneId) {
+                        if(!isset($arrReturn[$strOneId]))
+                            $arrReturn[$strOneId] = new class_module_user_user($strOneId);
+                    }
                 }
             }
         }

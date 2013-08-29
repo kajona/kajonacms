@@ -869,7 +869,7 @@ abstract class class_root {
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    $this->getStrRecordComment(),
+                    uniStrTrim($this->getStrRecordComment(), 245),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
@@ -932,7 +932,7 @@ abstract class class_root {
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
 
-        $strComment = uniStrTrim($strComment, 253);
+        $strComment = uniStrTrim(strip_tags($strComment), 240);
 
         //So, lets generate the record
         $strQuery = "INSERT INTO "._dbprefix_."system
