@@ -711,7 +711,7 @@ Part to display the login status, user is logged in
             <li class="divider"></li>
             <li><a href="%%dashboard%%"><i class='icon-home'></i> %%dashboardTitle%%</a></li>
             <li class="divider"></li>
-            <li><a href="#" onclick="document.print();"><i class='icon-print'></i> %%printTitle%%</a></li>
+            <li><a href="#" onclick="window.print();"><i class='icon-print'></i> %%printTitle%%</a></li>
             <li class="divider"></li>
             <li><a href="%%profile%%"><i class='icon-user'></i> %%profileTitle%%</a></li>
             <li class="divider"></li>
