@@ -1008,7 +1008,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param mixed $arrValues every entry is one row
      * @return string
      */
-    public function dataTable(array $arrHeader, array $arrValues) {
+    public function dataTable(array $arrHeader = null, array $arrValues) {
         $strReturn = "";
         //The Table header & the templates
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header");
