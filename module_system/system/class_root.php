@@ -389,16 +389,16 @@ abstract class class_root {
                 foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
                     if(isset($arrPropertiesORM[$strProperty])) {
 
-                        $strColumn = "";
                         $arrColumn = explode(".", $arrPropertiesORM[$strProperty]);
                         if(count($arrColumn) == 2)
                             $strColumn = $arrColumn[1];
-
+                        else
+                            $strColumn = $arrColumn[0];
 
                         //get order
                         $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
-                        //get column
 
+                        //get column
                         if($strColumn != "") {
                             $strOrderBy = " ORDER BY ".$strColumn." ".$strOrder;
                             break;
