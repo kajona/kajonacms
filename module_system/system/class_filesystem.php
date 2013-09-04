@@ -241,6 +241,7 @@ class class_filesystem {
      * @return bool
      */
     public function fileDelete($strFile) {
+        $strFile = uniStrReplace(_realpath_, "", $strFile);
         $bitReturn = false;
         if(is_file(_realpath_.$strFile)) {
             $bitReturn = unlink(_realpath_.$strFile);
@@ -257,6 +258,7 @@ class class_filesystem {
      */
     public function folderDelete($strFolder) {
         $bitReturn = false;
+        $strFolder = uniStrReplace(_realpath_, "", $strFolder);
 
         if(is_dir(_realpath_.$strFolder)) {
             $bitReturn = rmdir(_realpath_.$strFolder);
@@ -274,6 +276,7 @@ class class_filesystem {
      */
     public function folderDeleteRecursive($strFolder) {
         $bitReturn = true;
+        $strFolder = uniStrReplace(_realpath_, "", $strFolder);
 
         $arrContents = $this->getCompleteList($strFolder, array(), array(), array(".", ".."));
 
@@ -301,6 +304,9 @@ class class_filesystem {
      * @since 4.0
      */
     public function folderCopyRecursive($strSourceDir, $strTargetDir, $bitOverwrite = false) {
+
+        $strSourceDir = uniStrReplace(_realpath_, "", $strSourceDir);
+        $strTargetDir = uniStrReplace(_realpath_, "", $strTargetDir);
 
         $arrEntries = scandir(_realpath_.$strSourceDir);
         foreach($arrEntries as $strOneEntry) {
@@ -335,6 +341,7 @@ class class_filesystem {
      * @return bool
      */
     public function folderCreate($strFolder, $bitRecursive = false) {
+        $strFolder = uniStrReplace(_realpath_, "", $strFolder);
         $bitReturn = true;
 
         if($bitRecursive) {
