@@ -232,7 +232,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             //pass the internal action in order to get a proper paging
             $strOriginalAction = $this->getAction();
             $this->setAction($this->strOriginalAction);
-            $strList = $this->renderList($objArraySectionIterator);
+            $strList = $this->renderList($objArraySectionIterator, false, "list".$this->getStrCurObjectTypeName());
             $this->setAction($strOriginalAction);
             return $strList;
         }
