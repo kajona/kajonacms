@@ -7,7 +7,7 @@
 ********************************************************************************************************/
 
 /**
- * A simple validator to validate a integer.
+ * A simple validator to validate a positive integer.
  * By default, the string must contain a single char, the max length is unlimited.
  *
  * @author sidler@mulchprod.de
