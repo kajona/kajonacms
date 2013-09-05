@@ -633,7 +633,7 @@ KAJONA.admin.ajax = {
 					else
                         link.html(KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon);
 
-                    KAJONA.admin.tooltip.addTooltip(link.find("img"));
+//                    KAJONA.admin.tooltip.addTooltip(link.find("img"));
                     KAJONA.admin.tooltip.addTooltip(link.find("span"));
 				}
         	}
@@ -642,7 +642,7 @@ KAJONA.admin.ajax = {
         };
 
         var link = $('#statusLink_' + strSystemIdToSet);
-        KAJONA.admin.tooltip.removeTooltip(link.find("img"));
+//        KAJONA.admin.tooltip.removeTooltip(link.find("img"));
         KAJONA.admin.tooltip.removeTooltip(link.find("span"));
         KAJONA.admin.ajax.genericAjaxCall("system", "setStatus", strSystemIdToSet, objCallback);
 	},

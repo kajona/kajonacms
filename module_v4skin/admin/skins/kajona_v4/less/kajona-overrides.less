@@ -1294,11 +1294,20 @@ body.login {
 /* print redefinitions */
 @media print {
 
+    html body div.container-fluid div.row-fluid div.span2 {
+        display: none;
+    }
+
     a[href]:after {
         content: none !important;
     }
 
-    div.navbar {
+    div.navbar, div.sidebar-nav, footer, html body div.container-fluid div.row-fluid div.span2 {
         display: none;
     }
+
+    div.content-topbar {
+        padding-top: 0px;
+    }
+
 }
