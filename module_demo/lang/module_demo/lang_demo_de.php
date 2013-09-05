@@ -19,7 +19,3 @@ $lang["quickhelp_edit"] = "Demo Titel. Edit";
 $lang["delete_question"] = "Möchten Sie das Demo &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 $lang["list_other_object"] = "Zweiter Objecttyp";
-
-
-//non-editable entries
-$lang["permissions_header"] = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Abstimmen", 5 => "", 6 => "", 7 => "", 8 => "");

@@ -1289,3 +1289,16 @@ body.login {
         }
     }
 }
+
+
+/* print redefinitions */
+@media print {
+
+    a[href]:after {
+        content: none !important;
+    }
+
+    div.navbar {
+        display: none;
+    }
+}

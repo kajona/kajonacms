@@ -1130,11 +1130,6 @@ class class_toolkit_admin extends class_toolkit {
         //output texts and image paths only once
         if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
-//                var strActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")."';
-//                var strInActiveText = '".class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")."';
-//                var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.png';
-//                var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.png';
-
                 KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_enabled", class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")))."';
                 KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_disabled", class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")))."';
 
@@ -1145,10 +1140,11 @@ class class_toolkit_admin extends class_toolkit {
         $strButton = getLinkAdminManual(
             "href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"",
             $strLinkContent,
-            " ",
             "",
             "",
-            "statusLink_".$objRecord->getSystemid()
+            "",
+            "statusLink_".$objRecord->getSystemid(),
+            false
         );
 
         return $this->listButton($strButton).$strJavascript;
