@@ -130,16 +130,14 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $strReturn = "";
         $objWorkflow = new class_module_workflows_workflow($this->getSystemid());
 
-
-        $intI = 0;
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("workflow_general"));
 
-        $strReturn .= $this->objToolkit->listHeader();
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_class"), "", $objWorkflow->getStrClass(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_systemid"), "", $objWorkflow->getStrAffectedSystemid(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_trigger"), "", dateToString($objWorkflow->getObjTriggerdate()), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_runs"), "", $objWorkflow->getIntRuns(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_status"), "", $this->getLang("workflow_status_" . $objWorkflow->getIntState()), $intI++);
+        $arrRows = array();
+        $arrRows[] = array($this->getLang("workflow_class"), $objWorkflow->getStrClass());
+        $arrRows[] = array($this->getLang("workflow_systemid"), $objWorkflow->getStrAffectedSystemid());
+        $arrRows[] = array($this->getLang("workflow_trigger"), dateToString($objWorkflow->getObjTriggerdate()));
+        $arrRows[] = array($this->getLang("workflow_runs"), $objWorkflow->getIntRuns());
+        $arrRows[] = array($this->getLang("workflow_status"), $this->getLang("workflow_status_" . $objWorkflow->getIntState()));
 
         $strResponsible = "";
         foreach(explode(",", $objWorkflow->getStrResponsible()) as $strOneId) {
@@ -158,27 +156,28 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
                 }
             }
         }
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_responsible"), "", $strResponsible, $intI++);
+        $arrRows[] = array($this->getLang("workflow_responsible"), $strResponsible);
 
         $strCreator = "";
         if(validateSystemid($objWorkflow->getStrOwner())) {
             $objUser = new class_module_user_user($objWorkflow->getStrOwner(), false);
             $strCreator .= $objUser->getStrUsername();
         }
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_owner"), "", $strCreator, $intI++);
-        $strReturn .= $this->objToolkit->listFooter();
+        $arrRows[] = array($this->getLang("workflow_owner"), $strCreator);
+        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+
 
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("workflow_params"));
-        $strReturn .= $this->objToolkit->listHeader();
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_int1"), "", $objWorkflow->getIntInt1(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_int2"), "", $objWorkflow->getIntInt2(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_char1"), "", $objWorkflow->getStrChar1(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_char2"), "", $objWorkflow->getStrChar2(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_date1"), "", $objWorkflow->getLongDate1(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_date2"), "", $objWorkflow->getLongDate2(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_text"), "", $objWorkflow->getStrText(), $intI++);
-        $strReturn .= $this->objToolkit->genericAdminList("", $this->getLang("workflow_text2"), "", $objWorkflow->getStrText2(), $intI++);
-        $strReturn .= $this->objToolkit->listFooter();
+        $arrRows = array();
+        $arrRows[] = array($this->getLang("workflow_int1"), $objWorkflow->getIntInt1());
+        $arrRows[] = array($this->getLang("workflow_int2"), $objWorkflow->getIntInt2());
+        $arrRows[] = array($this->getLang("workflow_char1"), $objWorkflow->getStrChar1());
+        $arrRows[] = array($this->getLang("workflow_char2"), $objWorkflow->getStrChar2());
+        $arrRows[] = array($this->getLang("workflow_date1"), $objWorkflow->getLongDate1());
+        $arrRows[] = array($this->getLang("workflow_date2"), $objWorkflow->getLongDate2());
+        $arrRows[] = array($this->getLang("workflow_text"), $objWorkflow->getStrText());
+        $arrRows[] = array($this->getLang("workflow_text2"), $objWorkflow->getStrText2());
+        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "list"));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_back"));
