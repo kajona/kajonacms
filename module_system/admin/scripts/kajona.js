@@ -815,24 +815,6 @@ KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
 };
 
 
-KAJONA.admin.openPrintView = function(strUrlToLoad) {
-    var intWidth = $(window).width() * 0.8;
-    var intHeight = $(window).height() * 0.8;
-
-    if(strUrlToLoad == null)
-        strUrlToLoad = location.href;
-
-    strUrlToLoad = strUrlToLoad.replace(/#/g, '')+"&printView=1";
-
-    if(strUrlToLoad.indexOf('html&')) {
-        strUrlToLoad = strUrlToLoad.replace(/html&/g, 'html?');
-    }
-
-    KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad);
-
-    KAJONA.admin.folderview.dialog.init(intWidth+"px"); return false;
-};
-
 /**
  * Subsystem for all messaging related tasks. Queries the backend for the number of unread messages, ...
  * @type {Object}

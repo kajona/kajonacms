@@ -112,13 +112,9 @@ class class_link {
      * @param string $strAction
      * @param string $strParams
      * @param bool $bitEncodedAmpersand
-     * @param bool $bitBlockPrintview
      * @return string
      */
-    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitBlockPrintview = false) {
-        //add print-view param?
-        if(!$bitBlockPrintview && class_carrier::getInstance()->getParam("printView") != "")
-            $strParams .= "&printView=1";
+    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
 
         //systemid in params?
         $strSystemid = "";
@@ -165,15 +161,10 @@ class class_link {
      * @param string $strAction
      * @param string $strParams
      * @param bool $bitEncodedAmpersand
-     * @param bool $bitBlockPrintview
      *
      * @return mixed|string
      */
-    public static function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false, $bitBlockPrintview = false) {
-
-        //add print-view param?
-        if(!$bitBlockPrintview && class_carrier::getInstance()->getParam("printView") != "")
-            $strParams .= "&printView=1";
+    public static function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false) {
 
         //systemid in params?
         $strSystemid = "";

@@ -246,11 +246,10 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @param string $strAction
  * @param string $strParams
  * @param bool $bitEncodedAmpersand
- * @param bool $bitBlockPrintview
  * @return string
  */
-function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitBlockPrintview = false) {
-    return class_link::getLinkAdminHref($strModule, $strAction, $strParams, $bitEncodedAmpersand, $bitBlockPrintview);
+function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
+    return class_link::getLinkAdminHref($strModule, $strAction, $strParams, $bitEncodedAmpersand);
 }
 
 /**
@@ -262,12 +261,11 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
  * @param string $strAction
  * @param string $strParams
  * @param bool $bitEncodedAmpersand
- * @param bool $bitBlockPrintview
  *
  * @return mixed|string
  */
-function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false, $bitBlockPrintview = false) {
-    return class_link::getLinkAdminXml($strModule, $strAction, $strParams, $bitEncodedAmpersand, $bitBlockPrintview);
+function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false) {
+    return class_link::getLinkAdminXml($strModule, $strAction, $strParams, $bitEncodedAmpersand);
 }
 
 

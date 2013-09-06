@@ -119,10 +119,6 @@ abstract class class_admin {
 
         $this->strLangBase = $this->arrModule["modul"];
 
-        //define the print-view, if requested
-        if($this->getParam("printView") != "") {
-            $this->arrModule["template"] = "/print.tpl";
-        }
 
         if($this->getParam("folderview") != "") {
             $this->arrModule["template"] = "/folderview.tpl";
