@@ -48,6 +48,8 @@ class class_installer_eventmanager extends class_installer_base implements inter
 		$arrFields["em_pt_id"]           = array("char20", false);
 		$arrFields["em_pt_forename"]     = array("char254", true);
 		$arrFields["em_pt_lastname"]     = array("char254", true);
+		$arrFields["em_pt_userid"]       = array("char20", true);
+		$arrFields["em_pt_status"]       = array("int", true);
 		$arrFields["em_pt_email"]        = array("char254", true);
 		$arrFields["em_pt_phone"]        = array("char254", true);
 		$arrFields["em_pt_comment"]      = array("text", true);
@@ -133,6 +135,11 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $strReturn .= $this->update_42_421();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.2.1") {
+            $strReturn .= $this->update_421_422();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -203,4 +210,22 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $this->updateElementVersion("eventmanager", "4.2.1");
         return $strReturn;
     }
+
+    private function update_421_422() {
+        $strReturn = "Updating 4.2.1 to 4.2.2...\n";
+
+        $strReturn .= "Adding new user column...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
+                            ADD ".$this->objDB->encloseColumnName("em_pt_userid")." ".$this->objDB->getDatatype("char20")." NULL,
+                            ADD ".$this->objDB->encloseColumnName("em_pt_status")." ".$this->objDB->getDatatype("int")." NULL,";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("eventmanager", "4.2.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("eventmanager", "4.2.2");
+        return $strReturn;
+    }
+
 }

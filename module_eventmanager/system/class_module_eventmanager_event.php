@@ -173,6 +173,10 @@ class class_module_eventmanager_event extends class_model implements interface_m
         return $this->getStrTitle();
     }
 
+    public function isParticipant($strUserid) {
+        return class_module_eventmanager_participant::getParticipantByUserid($strUserid, $this->getSystemid()) !== null;
+    }
+
 
     /**
      * Returns a list of events available

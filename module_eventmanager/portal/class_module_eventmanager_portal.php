@@ -148,178 +148,239 @@ class class_module_eventmanager_portal extends class_portal implements interface
      * Creates a view of all event-details
      *
      * @return string
+     * @permissions view
      */
     protected function actionEventDetails() {
         $strReturn = "";
         $objEvent = new class_module_eventmanager_event($this->getSystemid());
-        if($objEvent->rightView()) {
 
-            $arrTemplate = array();
-            $arrTemplate["title"] = $objEvent->getStrTitle();
-            $arrTemplate["description"] = $objEvent->getStrDescription();
-            $arrTemplate["location"] = $objEvent->getStrLocation();
-            $arrTemplate["dateTimeFrom"] = dateToString($objEvent->getObjStartDate(), true);
-            $arrTemplate["dateFrom"] = dateToString($objEvent->getObjStartDate(), false);
-            $arrTemplate["dateTimeUntil"] = dateToString($objEvent->getObjEndDate(), true);
-            $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
-            $arrTemplate["systemid"] = $objEvent->getSystemid();
-            $arrTemplate["eventStatus"] = $objEvent->getIntEventStatus();
+        $arrTemplate = array();
+        $arrTemplate["title"] = $objEvent->getStrTitle();
+        $arrTemplate["description"] = $objEvent->getStrDescription();
+        $arrTemplate["location"] = $objEvent->getStrLocation();
+        $arrTemplate["dateTimeFrom"] = dateToString($objEvent->getObjStartDate(), true);
+        $arrTemplate["dateFrom"] = dateToString($objEvent->getObjStartDate(), false);
+        $arrTemplate["dateTimeUntil"] = dateToString($objEvent->getObjEndDate(), true);
+        $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
+        $arrTemplate["systemid"] = $objEvent->getSystemid();
+        $arrTemplate["eventStatus"] = $objEvent->getIntEventStatus();
 
-            $arrTemplate["maximumParticipants"] = $objEvent->getIntParticipantsLimit();
-            $arrTemplate["currentParticipants"] = count(class_module_eventmanager_participant::getObjectList($this->getSystemid()));
+        $arrTemplate["maximumParticipants"] = $objEvent->getIntParticipantsLimit();
+        $arrTemplate["currentParticipants"] = class_module_eventmanager_participant::getActiveParticipantsCount($this->getSystemid());
 
-            if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->rightRight1()) {
+        if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->rightRight1()) {
+            if($this->objSession->isLoggedin()
+                && $this->objTemplate->containsSection($this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"]), "event_register_loggedin")
+                && $objEvent->isParticipant($this->objSession->getUserID())
+            ) {
+                $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle());
+                $strRegisterLinkID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_updatelink");
+                $arrTemplate["registerLink"] = $this->fillTemplate($arrTemplate, $strRegisterLinkID);
+            }
+            else {
+
                 $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle());
                 $strRegisterLinkID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_registerlink");
                 $arrTemplate["registerLink"] = $this->fillTemplate($arrTemplate, $strRegisterLinkID);
             }
-            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details");
-            $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
+        }
+        $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details");
+        $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
 
-            class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
-        }
-        else {
-            $strReturn = $this->getLang("commons_error_permissions");
-        }
+        class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
 
         return $strReturn;
     }
 
-    protected function actionRegisterForEvent() {
+    /**
+     * @param array $arrErrors
+     *
+     * @return string
+     * @permissions view,right1
+     */
+    protected function actionRegisterForEvent($arrErrors = array()) {
         $strReturn = "";
         $objEvent = new class_module_eventmanager_event($this->getSystemid());
-        if($objEvent->rightView() && $objEvent->rightRight1()) {
 
-            if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getObjectCount($this->getSystemid())) {
-
-                $strMessage = $this->getLang("participantLimitReached");
-                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
-                $strReturn = $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
-                return $strReturn;
-            }
-
-
-            $arrErrors = array();
-            $bitForm = true;
-            //what to do?
-            if($this->getParam("submitUserRegistration") != "") {
-                $objTextValidator = new class_text_validator();
-                $objMailValidator = new class_email_validator();
-
-                if(!$objTextValidator->validate($this->getParam("forename"), 3)) {
-                    $arrErrors[] = $this->getLang("noForename");
-                }
-
-                if(!$objTextValidator->validate($this->getParam("lastname"), 3)) {
-                    $arrErrors[] = $this->getLang("noLastname");
-                }
-
-                if(!$objMailValidator->validate($this->getParam("email"))) {
-                    $arrErrors[] = $this->getLang("invalidEmailadress");
-                }
-
-                //Check captachcode
-                if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) {
-                    $arrErrors[] = $this->getLang("commons_captcha");
-                }
-
-                if(count($arrErrors) == 0) {
-                    $bitForm = false;
-                }
-            }
-
-            if($bitForm) {
-
-                $arrTemplate = array();
-
-                $arrTemplate["forename"] = $this->getParam("forename");
-                $arrTemplate["lastname"] = $this->getParam("lastname");
-                $arrTemplate["phone"] = $this->getParam("phone");
-                $arrTemplate["comment"] = $this->getParam("comment");
-                $arrTemplate["email"] = $this->getParam("email");
-
-                $arrTemplate["title"] = $objEvent->getStrTitle();
-                $arrTemplate["dateTimeFrom"] = dateToString($objEvent->getObjStartDate(), true);
-                $arrTemplate["dateFrom"] = dateToString($objEvent->getObjStartDate(), false);
-                $arrTemplate["dateTimeUntil"] = dateToString($objEvent->getObjEndDate(), true);
-                $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
-
-                $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $this->getSystemid(), "", $objEvent->getStrTitle());
-
-                $arrTemplate["formErrors"] = "";
-                if(count($arrErrors) > 0) {
-                    $strErrTemplate = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "error_row");
-                    foreach($arrErrors as $strOneError) {
-                        $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
-                    }
-                }
-
-                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register");
-                $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
-
-            }
-            else {
-
-                $strMessage = "";
-                if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getObjectCount($this->getSystemid())) {
-
-                    $strMessage = $this->getLang("participantLimitReached");
-                }
-                else {
-
-                    //here we go, create the complete event registration
-                    $objParticipant = new class_module_eventmanager_participant();
-                    $objParticipant->setStrForename($this->getParam("forename"));
-                    $objParticipant->setStrLastname($this->getParam("lastname"));
-                    $objParticipant->setStrPhone($this->getParam("phone"));
-                    $objParticipant->setStrEmail($this->getParam("email"));
-                    $objParticipant->setStrComment($this->getParam("comment"));
-
-                    $objParticipant->updateObjectToDb($this->getSystemid());
-
-                    $objParticipant->setStatus("", "0");
-
-                    $objMail = new class_mail();
-
-                    $objMail->setSubject($this->getLang("registerMailSubject"));
-
-                    $strBody = $this->getLang("registerMailBodyIntro");
-                    $strBody .= $objEvent->getStrTitle() . "<br />";
-                    $strBody .= dateToString($objEvent->getObjStartDate(), true) . "<br />";
-                    $strBody .= $objEvent->getStrLocation() . "<br />";
-                    $strBody .= "\n";
-                    $strTemp = getLinkPortalHref($this->getPagename(), "", "participantConfirmation", "&participantId=" . $objParticipant->getSystemid(), $this->getSystemid(), "", $objEvent->getStrTitle());
-                    $strBody .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
-
-                    $objScriptlet = new class_scriptlet_helper();
-                    $strBody = $objScriptlet->processString($strBody);
-
-                    $objMail->setHtml($strBody);
-                    $objMail->addTo($objParticipant->getStrEmail());
-                    $objMail->sendMail();
-
-                    $strMessage = $this->getLang("participantSuccessMail");
-
-                }
-
-
-                $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
-                $strReturn .= $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
-            }
-
-            class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
+        if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getActiveParticipantsCount($this->getSystemid())) {
+            $strMessage = $this->getLang("participantLimitReached");
+            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
+            $strReturn = $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
+            return $strReturn;
         }
-        else {
-            $strReturn = $this->getLang("commons_error_permissions");
+
+        $bitIsLoggedin = false;
+        if($this->objSession->isLoggedin() && $this->objTemplate->containsSection($this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"]), "event_register_loggedin")) {
+            $bitIsLoggedin = true;
+
+            if($objEvent->isParticipant($this->objSession->getUserID())) {
+                $objParticpant = class_module_eventmanager_participant::getParticipantByUserid($this->objSession->getUserID(), $objEvent->getSystemid());
+                $this->setParam("comment", $objParticpant->getStrComment());
+                $this->setParam("participant_status", $objParticpant->getIntParticipationStatus());
+            }
         }
+
+
+        $arrTemplate = array();
+
+        $arrTemplate["forename"] = $this->getParam("forename");
+        $arrTemplate["lastname"] = $this->getParam("lastname");
+        $arrTemplate["phone"] = $this->getParam("phone");
+        $arrTemplate["comment"] = $this->getParam("comment");
+        $arrTemplate["email"] = $this->getParam("email");
+        $arrTemplate["participant_status"] = $this->getParam("participant_status");
+
+        $arrTemplate["title"] = $objEvent->getStrTitle();
+        $arrTemplate["dateTimeFrom"] = dateToString($objEvent->getObjStartDate(), true);
+        $arrTemplate["dateFrom"] = dateToString($objEvent->getObjStartDate(), false);
+        $arrTemplate["dateTimeUntil"] = dateToString($objEvent->getObjEndDate(), true);
+        $arrTemplate["dateUntil"] = dateToString($objEvent->getObjEndDate(), false);
+
+        $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "saveRegisterForEvent", "", $this->getSystemid(), "", $objEvent->getStrTitle());
+
+        if($bitIsLoggedin) {
+            $objUser = new class_module_user_user($this->objSession->getUserID());
+            $arrTemplate["username"] = $objUser->getStrUsername();
+        }
+
+        $arrTemplate["formErrors"] = "";
+        if(count($arrErrors) > 0) {
+            $strErrTemplate = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "error_row");
+            foreach($arrErrors as $strOneError) {
+                $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+            }
+        }
+
+        $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register".($bitIsLoggedin ? "_loggedin" : ""));
+        $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
+
+        class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
 
         return $strReturn;
     }
 
+
+
+
+    /**
+     * @return string
+     * @permissions view,right1
+     */
+    protected function actionSaveRegisterForEvent() {
+        $strReturn = "";
+        $objEvent = new class_module_eventmanager_event($this->getSystemid());
+        class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
+
+
+        $bitIsLoggedin = false;
+        $bitIsParticipant = false;
+        if($this->objSession->isLoggedin() && $this->objTemplate->containsSection($this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"]), "event_register_loggedin")) {
+            $bitIsLoggedin = true;
+
+            if($objEvent->isParticipant($this->objSession->getUserID()))
+                $bitIsParticipant = true;
+        }
+
+        $arrErrors = array();
+        //what to do?
+        $objTextValidator = new class_text_validator();
+        $objMailValidator = new class_email_validator();
+
+        if(!$bitIsLoggedin && !$objTextValidator->validate($this->getParam("forename"), 3))
+            $arrErrors[] = $this->getLang("noForename");
+
+        if(!$bitIsLoggedin && !$objTextValidator->validate($this->getParam("lastname"), 3))
+            $arrErrors[] = $this->getLang("noLastname");
+
+
+        if(!$bitIsLoggedin && !$objMailValidator->validate($this->getParam("email")))
+            $arrErrors[] = $this->getLang("invalidEmailadress");
+
+
+        //Check captachcode
+        if(!$bitIsLoggedin && ($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()))
+            $arrErrors[] = $this->getLang("commons_captcha");
+
+
+        if(count($arrErrors) != 0)
+            return $this->actionRegisterForEvent($arrErrors);
+
+
+        if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getActiveParticipantsCount($this->getSystemid())) {
+            $strMessage = $this->getLang("participantLimitReached");
+            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
+            $strReturn = $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
+            return $strReturn;
+        }
+
+        if($bitIsParticipant)
+            $objParticipant = class_module_eventmanager_participant::getParticipantByUserid($this->objSession->getUserID(), $objEvent->getSystemid());
+        else
+            $objParticipant = new class_module_eventmanager_participant();
+
+        //here we go, create the complete event registration
+        $objParticipant->setStrComment($this->getParam("comment"));
+
+
+        if($bitIsLoggedin) {
+            $objParticipant->setStrUserId($this->objSession->getUserID());
+            $objParticipant->setIntParticipationStatus($this->getParam("participant_status"));
+        } else {
+            $objParticipant->setStrForename($this->getParam("forename"));
+            $objParticipant->setStrLastname($this->getParam("lastname"));
+            $objParticipant->setStrPhone($this->getParam("phone"));
+            $objParticipant->setStrEmail($this->getParam("email"));
+        }
+
+        $objParticipant->updateObjectToDb($this->getSystemid());
+
+        if($bitIsParticipant) {
+            $strMessage = $this->getLang("participantUpdateMessage");
+
+            $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
+            return $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
+        }
+
+
+        $objParticipant->setIntRecordStatus(0);
+
+        $objMail = new class_mail();
+        $objMail->setSubject($this->getLang("registerMailSubject"));
+
+        $strBody = $this->getLang("registerMailBodyIntro");
+        $strBody .= $objEvent->getStrTitle() . "<br />";
+        $strBody .= dateToString($objEvent->getObjStartDate(), true) . "<br />";
+        $strBody .= $objEvent->getStrLocation() . "<br />";
+        $strBody .= "\n";
+        $strTemp = getLinkPortalHref($this->getPagename(), "", "participantConfirmation", "&participantId=" . $objParticipant->getSystemid(), $this->getSystemid(), "", $objEvent->getStrTitle());
+        $strBody .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
+
+        $objScriptlet = new class_scriptlet_helper();
+        $strBody = $objScriptlet->processString($strBody);
+
+        $objMail->setHtml($strBody);
+        $objMail->addTo($objParticipant->getStrEmail());
+        $objMail->sendMail();
+
+        $strMessage = $this->getLang("participantSuccessMail");
+
+        $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
+        $strReturn .= $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
+
+
+
+
+        return $strReturn;
+    }
+
+    /**
+     * @return string
+     * @permissions view,right
+     */
     protected function actionParticipantConfirmation() {
         $strMessage = "";
         $objEvent = new class_module_eventmanager_event($this->getSystemid());
-        if($objEvent->rightView() && $objEvent->rightRight1() && validateSystemid($this->getParam("participantId"))) {
+        if(validateSystemid($this->getParam("participantId"))) {
 
             $arrParticipants = class_module_eventmanager_participant::getObjectList($objEvent->getSystemid());
             foreach($arrParticipants as $objOneParticipant) {

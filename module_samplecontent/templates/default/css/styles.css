@@ -464,7 +464,7 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
 
 
 
-.contentRight form input, .contentRight form textarea {
+.contentRight form input, .contentRight form textarea, .contentRight form select {
     border: 1px solid #dadada;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;

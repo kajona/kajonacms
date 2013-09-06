@@ -68,6 +68,11 @@
     <a href="%%registerLinkHref%%">[lang,registerlink,eventmanager]</a>
 </event_details_registerlink>
 
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, maximumParticipants -->
+<event_details_updatelink>
+<a href="%%registerLinkHref%%">[lang,updatelink,eventmanager]</a>
+</event_details_updatelink>
+
 <!-- available placeholders: title, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction -->
 <!-- expected form-fields: forename, lastname, email, phone, comment, form_captcha -->
 <event_register>
@@ -89,11 +94,42 @@
             <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">[lang,commons_captcha_reload,eventmanager]</a>)</div>
             <div><label for="form_captcha">[lang,commons_captcha,eventmanager]</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div>
             <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
-            <input type="hidden" name="submitUserRegistration" value="1" />
         </form>
 
     </div>
 </event_register>
+
+
+<!-- the current user is logged in, so known to the system, a slightly different form may be shown instead -->
+<!-- available placeholders: title, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction, username -->
+<!-- expected form-fields: comment, participant_status (please note, that 1 (accepted) and 2 (declined) are reserved -->
+<event_register_loggedin>
+<div>
+    <h2>%%title%%</h2>
+    <table>
+        <tr><td>[lang,dateTimeFrom,eventmanager]</td><td>%%dateTimeFrom%%</td></tr>
+        <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
+    </table>
+    <hr />
+
+    <form name="formEventRegistration" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
+        %%formErrors%%
+        <div><label for="">[lang,username,eventmanager]</label>%%username%%</div>
+        <div><label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div>
+        <div>
+            <label for="participant_status">[lang,participant_status,eventmanager]</label>
+            <select name="participant_status" id="participant_status">
+                <option value="1">[lang,participant_status_1,eventmanager]</option>
+                <option value="2">[lang,participant_status_2,eventmanager]</option>
+                <option value="3">[lang,participant_status_3,eventmanager]</option>
+            </select>
+            <script type="text/javascript">$('#participant_status').val('%%participant_status%%')</script>
+        </div>
+        <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
+    </form>
+
+</div>
+</event_register_loggedin>
 
 <event_register_message>
     <div>

@@ -65,6 +65,29 @@ class class_module_eventmanager_participant extends class_model implements inter
 
     /**
      * @var string
+     * @tableColumn em_participant.em_pt_userid
+     * @versionable
+     *
+     * @fieldType user
+     * @fieldLabel participant_userid
+     */
+    private $strUserId = "";
+
+    /**
+     * @var int
+     *
+     * @tableColumn em_pt_status
+     * @versionable
+     *
+     * @fieldType dropdown
+     * @fieldLabel participant_status
+     * @fieldDDValues [1 => participant_status_1],[2 => participant_status_2],[3 => participant_status_3]
+     */
+    private $intParticipationStatus = 1;
+
+
+    /**
+     * @var string
      * @tableColumn em_participant.em_pt_comment
      * @versionable
      *
@@ -121,7 +144,19 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrEmail() .( $this->getStrLastname() != "" || $this->getStrForename() != "" ? $this->getStrLastname().", ".$this->getStrForename() : "");
+        if(validateSystemid($this->getStrUserId())) {
+            $objUser = new class_module_user_user($this->getStrUserId());
+            $strName = $objUser->getStrDisplayName();
+        }
+        else
+            $strName = $this->getStrEmail() .( $this->getStrLastname() != "" || $this->getStrForename() != "" ? $this->getStrLastname().", ".$this->getStrForename() : "");
+
+        if($this->getIntParticipationStatus() == 2)
+            $strName = "<span style='text-decoration: line-through'>{$strName}</span>";
+        if($this->getIntParticipationStatus() == 3)
+            $strName = "<span style='font-style: italic'>{$strName}</span>";
+
+        return $strName;
     }
 
     /**
@@ -171,6 +206,46 @@ class class_module_eventmanager_participant extends class_model implements inter
         return $strValue;
     }
 
+    /**
+     * @param $strUserid
+     * @param $strEventId
+     *
+     * @return class_module_eventmanager_participant
+     */
+    public static function getParticipantByUserid($strUserid, $strEventId) {
+        $strQuery = "SELECT system_id
+                       FROM "._dbprefix_."system,
+                            "._dbprefix_."em_participant
+                      WHERE system_id = em_pt_id
+                        AND system_prev_id = ?
+                        AND em_pt_userid = ?";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId, $strUserid));
+        if(isset($arrRow["system_id"]))
+            return new class_module_eventmanager_participant($arrRow["system_id"]);
+        else
+            return null;
+    }
+
+
+    /**
+     * @param $strEventId
+     *
+     * @return int
+     */
+    public static function getActiveParticipantsCount($strEventId) {
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."system,
+                            "._dbprefix_."em_participant
+                      WHERE system_id = em_pt_id
+                        AND system_prev_id = ?
+                        AND em_pt_status != 2";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId));
+        return $arrRow["COUNT(*)"];
+    }
+
+
     protected function onInsertToDb() {
 
         //send a message to all registered editors
@@ -212,6 +287,10 @@ class class_module_eventmanager_participant extends class_model implements inter
     }
 
     public function getStrEmail() {
+        if(validateSystemid($this->getStrUserId())) {
+            $objUser = new class_module_user_user($this->getStrUserId());
+            return $objUser->getStrEmail();
+        }
         return $this->strEmail;
     }
 
@@ -234,6 +313,23 @@ class class_module_eventmanager_participant extends class_model implements inter
     public function setStrComment($strComment) {
         $this->strComment = $strComment;
     }
+
+    public function setStrUserId($strUserId) {
+        $this->strUserId = $strUserId;
+    }
+
+    public function getStrUserId() {
+        return $this->strUserId;
+    }
+
+    public function setIntParticipationStatus($intParticipationStatus) {
+        $this->intParticipationStatus = $intParticipationStatus;
+    }
+
+    public function getIntParticipationStatus() {
+        return $this->intParticipationStatus;
+    }
+
 
 
 
