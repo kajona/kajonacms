@@ -91,7 +91,6 @@ class class_template {
 
         }
 
-        $strTemplate = "Template not found";
         $bitKnownTemplate = false;
         //Is this template already in the cache?
         $strCacheTemplate = md5($strName);
@@ -269,6 +268,20 @@ class class_template {
                 return true;
 
         return false;
+    }
+
+    /**
+     * Checks if the template referenced by the given identifier provides the section passed.
+     * @param $strIdentifier
+     * @param $strSection
+     *
+     * @return bool
+     */
+    public function containsSection($strIdentifier, $strSection) {
+        return (isset($this->arrCacheTemplates[$strIdentifier])
+            && uniStrpos($this->arrCacheTemplates[$strIdentifier], "<".$strSection.">") !== false
+            && uniStrpos($this->arrCacheTemplates[$strIdentifier], "</".$strSection.">") !== false
+        );
     }
 
     /**
