@@ -726,6 +726,11 @@ Part to display the login status, user is logged in
             $userNotificationsCount.text(objResponse.messageCount);
             if (objResponse.messageCount > 0) {
                 $userNotificationsCount.show();
+                if(oldCount != objResponse.messageCount) {
+                    var strTitle = document.title.replace("("+oldCount+")", "");
+                    document.title = "("+objResponse.messageCount+") "+strTitle;
+                }
+
             } else {
                 $userNotificationsCount.hide();
             }
@@ -1216,6 +1221,7 @@ The language switch surrounds the buttons
                     content.html( $.parseJSON(data) );
                     //TODO use jquerys eval?
                     KAJONA.util.evalScript(data);
+                    KAJONA.admin.tooltip.initTooltip();
                 } else {
                     KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
                 }
