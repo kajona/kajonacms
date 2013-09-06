@@ -159,31 +159,31 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
         $strContainerId = generateSystemid();
 
-        $strContent = "<script type=\"text/javascript\">
-                        $(document).ready(function() {
-                              KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", function(data, status, jqXHR) {
-                                if(status == 'success') {
-                                    var intStart = data.indexOf(\"[CDATA[\")+7;
-                                    var objNode = document.getElementById(\"".$strContainerId."\");
-                                    document.getElementById(\"".$strContainerId."\").innerHTML=data.substr(
-                                      intStart, data.indexOf(\"]]\")-intStart
-                                    );
-                                    if(data.indexOf(\"[CDATA[\") < 0) {
-                                        var intStart = data.indexOf(\"<error>\")+7;
-                                        var objNode = document.getElementById(\"".$strContainerId."\");
-                                        objNode.innerHTML=o.responseText.substr(
-                                          intStart, data.indexOf(\"</error>\")-intStart
-                                        );
-                                    }
-                                    KAJONA.util.evalScript(data);
-                                    KAJONA.admin.tooltip.initTooltip();
-                                }
-                                else {
-                                    KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
-                                }
-                              })
-                        });
-                      </script>";
+        $strContent = "<script type=\"text/javascript\">";
+        $strContent .= <<<JS
+            $(document).ready(function() {
+                  KAJONA.admin.ajax.genericAjaxCall("dashboard", "renderCalendar", "{$strContainerId}", function(data, status, jqXHR) {
+                    if(status == 'success') {
+                        var intStart = data.indexOf("[CDATA[")+7;
+                        $("#{$strContainerId}").html(data.substr(
+                          intStart, data.indexOf("]]")-intStart
+                        ));
+                        if(data.indexOf("[CDATA[") < 0) {
+                            var intStart = data.indexOf("<error>")+7;
+                            $("#{$strContainerId}").html(o.responseText.substr(
+                              intStart, data.indexOf("</error>")-intStart
+                            ));
+                        }
+                        KAJONA.util.evalScript(data);
+                        KAJONA.admin.tooltip.initTooltip();
+                    }
+                    else {
+                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+                    }
+                  })
+            });
+JS;
+        $strContent .= "</script>";
 
         //fetch modules relevant for processing
         $arrLegendEntries = array();
@@ -192,7 +192,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         foreach($arrModules as $objSingleModule) {
             /** @var $objAdminInstance interface_calendarsource_admin|class_module_system_module */
             $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
-            if($objSingleModule->getStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) {
+            if($objSingleModule->getIntRecordStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) { //TODO: switch to plugin manager
                 $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
                 $arrFilterEntries = array_merge($arrFilterEntries, $objAdminInstance->getArrFilterEntries());
             }
@@ -218,12 +218,10 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         if($this->objSession->getSession($this->strStartYearKey) != "")
             $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
 
-        $intCurMonth = $objDate->getIntMonth();
 
         //pager-setup
         $objEndDate = clone $objDate;
-        while($objEndDate->getIntMonth() == $intCurMonth)
-            $objEndDate->setNextDay();
+        $objEndDate->setNextMonth();
         $objEndDate->setPreviousDay();
 
         $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
@@ -274,7 +272,6 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
             $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getLang("widget"));
             $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getLang("column"));
-
             $strReturn .= $this->objToolkit->formInputHidden("step", "2");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("addWidgetNextStep"));
             $strReturn .= $this->objToolkit->formClose();
@@ -286,14 +283,19 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             $strWidgetClass = $this->getParam("widget");
             $objWidget = new $strWidgetClass();
 
-            //ask the widget to generate its form-parts and wrap our elements around
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
-            $strReturn .= $objWidget->getEditForm();
-            $strReturn .= $this->objToolkit->formInputHidden("step", "3");
-            $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
-            $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
+            if($objWidget->getEditForm() == "") {
+                $this->adminReload(getLinkAdminHref("dashboard", "addWidgetToDashboard", "&step=3&widget=".$strWidgetClass."&column=".$this->getParam("column")));
+            }
+            else {
+                //ask the widget to generate its form-parts and wrap our elements around
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
+                $strReturn .= $objWidget->getEditForm();
+                $strReturn .= $this->objToolkit->formInputHidden("step", "3");
+                $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
+                $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
+                $strReturn .= $this->objToolkit->formClose();
+            }
         }
         //step 3: save all to the database
         else if($this->getParam("step") == "3") {

@@ -155,13 +155,9 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
             if($objDate->getIntMonth() == $intCurMonth) {
                 //Query modules for dates
                 $objStartDate = clone $objDate;
-                $objStartDate->setIntHour(0);
-                $objStartDate->setIntMin(0);
-                $objStartDate->setIntSec(0);
+                $objStartDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
                 $objEndDate = clone $objDate;
-                $objEndDate->setIntHour(23);
-                $objEndDate->setIntMin(59);
-                $objEndDate->setIntSec(59);
+                $objEndDate->setIntHour(23)->setIntMin(59)->setIntSec(59);
                 foreach($arrRelevantModules as $objOneModule) {
                     $arrEvents = array_merge($objOneModule->getArrCalendarEntries($objStartDate, $objEndDate), $arrEvents);
                 }
