@@ -743,7 +743,7 @@ abstract class class_admin {
                     throw new class_exception("called method " . $strMethodName . " not allowed for xml-requests", class_exception::$level_FATALERROR);
                 }
 
-                if($this->arrModule["modul"] != $this->getParam("module")) {
+                if($this->arrModule["modul"] != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
                 }

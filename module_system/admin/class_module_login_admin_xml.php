@@ -30,6 +30,21 @@ class class_module_login_admin_xml extends class_admin implements interface_xml_
 
 
     /**
+     * This method is just a placeholder to avoid error-flooding of the admins.
+     * If the session expires, the browser tries one last time to
+     * fetch the number of messages for the user. Since the user is "logged out" by the server,
+     * an "not authorized" exception is called - what is correct, but not really required right here.
+     *
+     * @return string
+     *
+     */
+    protected function actionGetRecentMessages() {
+        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+        return "<error>".$this->getLang("commons_error_permissions")."</error>";
+    }
+
+
+    /**
      * Logs the current user into the system
      *
      * @return string
