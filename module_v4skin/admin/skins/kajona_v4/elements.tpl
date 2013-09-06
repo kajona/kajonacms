@@ -723,6 +723,7 @@ Part to display the login status, user is logged in
     KAJONA.admin.messaging.pollMessages = function() {
         KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
             var $userNotificationsCount = $('#userNotificationsCount');
+            var oldCount = $userNotificationsCount.text();
             $userNotificationsCount.text(objResponse.messageCount);
             if (objResponse.messageCount > 0) {
                 $userNotificationsCount.show();
