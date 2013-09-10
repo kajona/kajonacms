@@ -351,7 +351,7 @@ class class_toolkit_admin extends class_toolkit {
         );
 
         $strResetIcon = getLinkAdminManual(
-            "href=\"javascript:document.getElementById('".$strName."').value='';javascript:document.getElementById('".$strName."_id').value='';\"",
+            "href=\"javascript:document.getElementById('".$strName."').value='';javascript:document.getElementById('".$strName."_id').value='';return false;\"",
             "",
             class_carrier::getInstance()->getObjLang()->getLang("user_browser_reset", "user"),
             "icon_delete"
