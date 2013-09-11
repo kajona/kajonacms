@@ -549,7 +549,12 @@ abstract class class_root {
 
             if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
-                if(isset($this->arrModule["modul"])) {
+                if(isset($this->arrModule["moduleId"])) {
+                    $strPrevId = class_module_system_module::getModuleIdByNr($this->arrModule["moduleId"]);
+                    if(!validateSystemid($strPrevId))
+                        throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
+                }
+                else if(isset($this->arrModule["modul"])) {
                     $strPrevId = class_module_system_module::getModuleByName($this->arrModule["modul"], true)->getSystemid();
                     if(!validateSystemid($strPrevId))
                         throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
