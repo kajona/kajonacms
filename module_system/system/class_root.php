@@ -1928,7 +1928,10 @@ abstract class class_root {
     /**
      * @param \class_date $objEndDate
      */
-    public function setObjEndDate(class_date $objEndDate = null) {
+    public function setObjEndDate($objEndDate = null) {
+        if(!$objEndDate instanceof class_date && $objEndDate != "" && $objEndDate != null)
+            $objEndDate = new class_date($objEndDate);
+
         $this->objEndDate = $objEndDate;
         $this->bitDatesChanges = true;
     }
@@ -1943,7 +1946,10 @@ abstract class class_root {
     /**
      * @param \class_date $objSpecialDate
      */
-    public function setObjSpecialDate(class_date $objSpecialDate = null) {
+    public function setObjSpecialDate($objSpecialDate = null) {
+        if(!$objSpecialDate instanceof class_date && $objSpecialDate != "" && $objSpecialDate != null)
+            $objSpecialDate = new class_date($objSpecialDate);
+
         $this->objSpecialDate = $objSpecialDate;
         $this->bitDatesChanges = true;
     }
@@ -1958,7 +1964,10 @@ abstract class class_root {
     /**
      * @param class_date $objStartDate
      */
-    public function setObjStartDate(class_date $objStartDate = null) {
+    public function setObjStartDate($objStartDate = null) {
+        if(!$objStartDate instanceof class_date && $objStartDate != "" && $objStartDate != null)
+            $objStartDate = new class_date($objStartDate);
+
         $this->bitDatesChanges = true;
         $this->objStartDate = $objStartDate;
     }

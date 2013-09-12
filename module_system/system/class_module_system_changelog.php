@@ -21,6 +21,8 @@
  */
 class class_module_system_changelog extends class_model implements interface_model {
 
+    const ANNOTATION_PROPERTY_VERSIONABLE = "@versionable";
+
     /**
      * A flag to disable the reading of old values for the current execution.
      * If set to true, the current value of an objects' property are not loaded into the cache.
@@ -105,7 +107,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             $arrOldValues = array();
 
             $objReflection = new class_reflection($objCurrentObject);
-            $arrProperties = $objReflection->getPropertiesWithAnnotation("@versionable");
+            $arrProperties = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_PROPERTY_VERSIONABLE);
 
 
             foreach($arrProperties as $strProperty => $strAnnotation) {
@@ -118,8 +120,9 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }
 
-                $strNamedEntry = trim(uniSubstr($strAnnotation, uniStrpos($strAnnotation, "@versionable")));
+                $strNamedEntry = trim(uniSubstr($strAnnotation, uniStrpos($strAnnotation, self::ANNOTATION_PROPERTY_VERSIONABLE)));
                 //try to read the old value and see, if it should be mapped to a new name
+                //this is deprecated and an undocumented feature
                 if($strNamedEntry != "")
                     $strProperty = $strNamedEntry;
 
@@ -652,7 +655,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      * @param $strProperty
      * @param class_date $objDate
      *
-     * @return bool
+     * @return string
      */
     public static function getValueForDate($strSystemid, $strProperty, class_date $objDate) {
         $strQuery = "SELECT change_newvalue
