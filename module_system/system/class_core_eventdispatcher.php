@@ -38,6 +38,11 @@ class class_core_eventdispatcher {
     private static $arrRecordCopiedListener = null;
 
     /**
+     * @var interface_userfirstlogin_listener
+     */
+    private static $arrFirstLoginListener = null;
+
+    /**
      * Triggers all model-classes implementing the interface interface_statuschanged_listener and notifies
      * about a new status set.
      *
@@ -166,11 +171,11 @@ class class_core_eventdispatcher {
      * @return interface_userfirstlogin_listener[]
      */
     private static function getUserFirstLoginListeners() {
-        if(self::$arrRecordDeletedListener == null) {
-            self::$arrRecordDeletedListener = self::loadInterfaceImplementers("interface_userfirstlogin_listener");
+        if(self::$arrFirstLoginListener == null) {
+            self::$arrFirstLoginListener = self::loadInterfaceImplementers("interface_userfirstlogin_listener");
         }
 
-        return self::$arrRecordDeletedListener;
+        return self::$arrFirstLoginListener;
     }
 
     /**
