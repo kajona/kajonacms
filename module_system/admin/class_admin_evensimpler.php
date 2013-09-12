@@ -251,7 +251,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     protected function getAdminForm(interface_model $objInstance) {
 
         //already generated?
-        if($this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance))
+        if($this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance) && $objInstance->getSystemid() == $this->objCurAdminForm->getObjSourceobject()->getSystemid())
             return $this->objCurAdminForm;
 
         $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
