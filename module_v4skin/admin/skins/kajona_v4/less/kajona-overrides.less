@@ -76,11 +76,16 @@ footer {
             list-style: none;
 
             li {
+                text-align: left;
+                padding: 2px 15px 2px 12px;
+                color: @textColor;
+                font-style: italic;
 
                 a {
-                    color:#626262;
+                    font-style: normal;
+                    color:@linkColor;
                     display: block;
-                    padding: 2px 15px 2px 2px;
+                    text-align:right;
                 }
 
                 &.divider {
@@ -89,6 +94,7 @@ footer {
                     height: 1px;
                     margin: 3px 1px;
                     overflow: hidden;
+                    padding: 0;
                 }
             }
         }

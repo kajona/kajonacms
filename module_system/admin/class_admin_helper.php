@@ -52,13 +52,16 @@ class class_admin_helper {
                     if($strOneAction != "") {
                         $arrLink = splitUpLink($strOneAction);
 
-                        $arrActionMenuEntries[] = array(
-                            "name" => $arrLink["name"],
-                            "onclick" => "location.href='".$arrLink["href"]."'",
-                            "link" => $arrLink["href"]
-                        );
+                        if($arrLink["name"] != "" && $arrLink["href"] != "")
+                            $arrActionMenuEntries[] = array(
+                                "name" => $arrLink["name"],
+                                "onclick" => "location.href='".$arrLink["href"]."'",
+                                "link" => $arrLink["href"]
+                            );
+
+
                     }
-                    else {
+                    else if($strOneAction == "") {
                         $arrActionMenuEntries[] = array(
                             "name" => ""
                         );
