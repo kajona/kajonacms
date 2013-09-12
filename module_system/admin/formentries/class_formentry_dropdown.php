@@ -88,7 +88,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
      * @return string
      */
     public function getValueAsText() {
-        return $this->arrKeyValues[$this->getStrValue()];
+        return isset($this->arrKeyValues[$this->getStrValue()]) ? $this->arrKeyValues[$this->getStrValue()] : "";
     }
 
     /**
