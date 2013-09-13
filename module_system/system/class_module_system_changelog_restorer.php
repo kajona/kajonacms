@@ -41,10 +41,10 @@ class class_module_system_changelog_restorer extends class_module_system_changel
                    ORDER BY change_date ASC ";
 
             $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objObject->getSystemid(), $strProperty), 0, 1);
-            if(isset($arrRow[0]["change_oldvalue"]) && $arrRow[0]["change_oldvalue"] != "")
-                $strValue = $arrRow[0]["change_oldvalue"];
-            else if(isset($arrRow[0]["change_newvalue"]) && $arrRow[0]["change_newvalue"] != "")
+            if(isset($arrRow[0]["change_newvalue"]) && $arrRow[0]["change_newvalue"] != "")
                 $strValue = $arrRow[0]["change_newvalue"];
+            else if(isset($arrRow[0]["change_oldvalue"]) && $arrRow[0]["change_oldvalue"] != "")
+                $strValue = $arrRow[0]["change_oldvalue"];
         }
 
 
