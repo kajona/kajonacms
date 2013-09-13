@@ -33,9 +33,23 @@ class class_module_system_changelog_restorer extends class_module_system_changel
 
         //try to find a matching setter
         if($strValue === false) {
+            //try to load the first known value from the changelog
+            $strQuery = "SELECT change_newvalue, change_oldvalue
+                       FROM "._dbprefix_.self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($objObject->getSystemid()))."
+                      WHERE change_systemid = ?
+                        AND change_property = ?
+                   ORDER BY change_date ASC ";
 
-            return;
+            $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objObject->getSystemid(), $strProperty), 0, 1);
+            if(isset($arrRow[0]["change_oldvalue"]) && $arrRow[0]["change_oldvalue"] != "")
+                $strValue = $arrRow[0]["change_oldvalue"];
+            else if(isset($arrRow[0]["change_newvalue"]) && $arrRow[0]["change_newvalue"] != "")
+                $strValue = $arrRow[0]["change_newvalue"];
         }
+
+
+        if($strValue === false)
+            return;
 
         //all prerequisites match, start creating query
         $objReflection = new class_reflection($objObject);
