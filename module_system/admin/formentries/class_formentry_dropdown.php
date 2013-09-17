@@ -23,6 +23,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
 
 
     private $arrKeyValues = array();
+    private $strAddons = "";
 
     public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -42,7 +43,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly());
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
         return $strReturn;
     }
 
@@ -103,6 +104,23 @@ class class_formentry_dropdown extends class_formentry_base implements interface
     public function getArrKeyValues() {
         return $this->arrKeyValues;
     }
+
+    /**
+     * @param string $strAddons
+     * @return $this
+     */
+    public function setStrAddons($strAddons) {
+        $this->strAddons = $strAddons;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrAddons() {
+        return $this->strAddons;
+    }
+
 
 
 }

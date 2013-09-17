@@ -16,8 +16,10 @@
 class class_formentry_textrow extends class_formentry_base implements interface_formentry_printable {
 
 
-    public function __construct() {
-        parent::__construct("", generateSystemid());
+    public function __construct($strName = "") {
+        if($strName == "")
+            $strName = generateSystemid();
+        parent::__construct("", $strName);
 
         //set the default validator
         $this->setObjValidator(new class_dummy_validator());

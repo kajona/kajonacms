@@ -306,7 +306,7 @@ abstract class class_admin_simple extends class_admin {
                     getLinkAdminDialog(
                         $objListEntry->getArrModule("modul"),
                         $this->getActionNameForClass("edit", $objListEntry),
-                        "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
+                        "folderview=1&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
                         "icon_edit"
