@@ -361,6 +361,15 @@ class class_admin_formgenerator {
     }
 
     /**
+     * Removes a single validation error
+     * @param $strEntry
+     */
+    public function removeValidationError($strEntry) {
+        if(isset($this->arrValidationErrors[$strEntry]))
+            unset($this->arrValidationErrors[$strEntry]);
+    }
+
+    /**
      * Adds a single field to the current form, the hard, manual way.
      * Use this method if you want to add custom fields to the current form.
      *
