@@ -391,11 +391,14 @@ class class_admin_formgenerator {
 
     /**
      * Removes a single entry form the fields, identified by its form-entry-name.
+     *
      * @param $strName
-     * @return void
+     *
+     * @return $this
      */
     public function removeField($strName) {
         unset($this->arrFields[$strName]);
+        return $this;
     }
 
     /**

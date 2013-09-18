@@ -73,8 +73,10 @@ class class_formentry_dropdown extends class_formentry_base implements interface
                 foreach(explode(",", $strDDValues) as $strOneKeyVal) {
                     $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
                     $arrOneKeyValue = explode("=>", $strOneKeyVal);
+
+                    $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);
                     if(count($arrOneKeyValue) == 2)
-                        $arrDDValues[trim($arrOneKeyValue[0])] = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
+                        $arrDDValues[$strKey] = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
                 }
                 $this->setArrKeyValues($arrDDValues);
             }
