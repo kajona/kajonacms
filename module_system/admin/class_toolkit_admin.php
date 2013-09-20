@@ -1985,7 +1985,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
         $arrTemplate = array();
         $arrTemplate["title"] = class_carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
-        $arrTemplate["text"] = addslashes($strText);
+        $arrTemplate["text"] = uniStrReplace(array("\r", "\n"), "", addslashes($strText));
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         //and the button
