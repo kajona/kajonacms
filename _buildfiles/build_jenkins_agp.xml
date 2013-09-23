@@ -15,6 +15,11 @@
      ====================================================================== -->
 <project name="AGP Head Build" default="buildSqliteFast" basedir=".">
 
+    <description>
+        This buildfile is meant to be run on a SVN development snapshot, so NOT on a real project.
+        The buildfile expects all modules to be checked out located at /core.
+    </description>
+
     <import file="build_jenkins.xml" as="kajonav4"/>
 
 

@@ -17,6 +17,8 @@
 
     <description>
         Buildfile to run common tasks.
+        This buildfile is meant to be run on a SVN development snapshot, so NOT on a real project.
+        The buildfile expects all modules to be checked out located at /core.
     </description>
 
     <!--
@@ -27,7 +29,7 @@
     <!-- target dir for the sources from the svn repo -->
     <property name="sourcesPath"  value="/../" />
     <!-- target dir to install the system to -->
-    <property name="projectPath"  value="/project" />
+    <property name="projectPath"  value="/buildproject" />
     <!-- artifacts such as logs and reports will be stored here -->
     <property name="buildPath"    value="/build" />
     <!-- generated zips will be placed here (full, light) -->
