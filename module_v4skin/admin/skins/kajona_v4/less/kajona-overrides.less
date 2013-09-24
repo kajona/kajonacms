@@ -1326,8 +1326,36 @@ body.login {
 /* print redefinitions */
 @media print {
 
-    html body div.container-fluid div.row-fluid div.span2 {
-        display: none;
+    body {
+        padding-top: 0px;
+
+        font-size: @baseFontSize - 2;
+        line-height: @baseLineHeight - 2;
+
+        #content {
+            .contentTopbar {
+                padding-top: 0px;
+            }
+
+            h2 {
+                font-size: @baseFontSize - 1;
+                line-height: @baseFontSize + 1 ;
+                padding: 2px 18px;
+                margin: 2px;
+
+            }
+
+            h3 {
+                font-size: @baseFontSize - 2;
+                line-height: @baseFontSize - 1;
+                padding: 2px 18px;
+            }
+
+        }
+
+        div.container-fluid div.row-fluid div.span2 {
+            display: none;
+        }
     }
 
     a[href]:after {
