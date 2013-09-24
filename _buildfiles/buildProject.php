@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-class Testmanager {
+class BuildHelper {
 
     public $strProjectPath = "";
 
@@ -114,7 +114,7 @@ class Testmanager {
     }
 }
 
-$objTestmanager = new Testmanager();
+$objTestmanager = new BuildHelper();
 $objTestmanager->strProjectPath = $argv[1];
 $objTestmanager->bitOnlyProjectsetup = $argv[2] == "onlySetup";
 if(isset($argv[3]))

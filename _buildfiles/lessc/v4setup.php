@@ -45,7 +45,10 @@ $arrFilesToUpdate = array(
 
 foreach($arrFilesToCompile as $strSourceFile => $strTargetFile) {
     //echo "trigger less compile: lessc ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile)."\n";
-    system("lessc --verbose ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile));
+    if(is_file($strSourceFile))
+        system("lessc --verbose ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile));
+    else
+        echo "Skipping ".$strSourceFile.", not existing\n";
 }
 
 echo "merging into skin-files...\n";
@@ -53,6 +56,12 @@ $strStartPlaceholder = "<!-- KAJONA_BUILD_LESS_START -->";
 $strEndPlaceholder = "<!-- KAJONA_BUILD_LESS_END -->";
 
 foreach($arrFilesToUpdate as $strOneFile => $strReplacement) {
+
+    if(!is_file($strOneFile)) {
+        echo "Skipping ".$strOneFile.", not existing\n";
+        continue;
+    }
+
     $strContent = file_get_contents($strOneFile);
     $strPrologue = substr($strContent, 0, strpos($strContent, $strStartPlaceholder));
     $strEnd = substr($strContent, strpos($strContent, $strEndPlaceholder)+strlen($strEndPlaceholder));

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================================
+
+     Kajona Head Build
+     Buildfile to perform additional actions such as phpunit-tests, phpdoc generation, ...
+     Called by the buildserver, so change with care :)
+     This file is created for Jenkins but may be called from the CLI, too.
+
+     This build-file may be migrated to phing, feel free to start the migration
+
+
+     Author: sidler
+     $Id$
+
+     ====================================================================== -->
+<project name="Kajona Project Build" default="buildSqliteFast" basedir=".">
+
+    <import file="build_jenkins.xml" as="kajonav4"/>
+
+    <description>
+        This file is a template to build a project based on Kajona.
+        By default, the build uses SQLite to create a fresh install and to run all phpunit-tests available.
+        During the build the default less skin-files fill we compiled and compressed (if available), in addition
+        all other css and js files will be compressed, too.
+
+        The project may either be based on the current svn sources (modules under /core are external, pointing to
+        the kajona svn server), or packages based on a given release (downloaded from kajona.de).
+    </description>
+
+
+
+    <!-- CONFIG VALUES BELOW -->
+
+
+    <!-- Give the current project a name. This name will be used as part of the generated zips' filename -->
+    <property name="projectName"     value="project" />
+
+
+
+    <!-- No need to change anything below! -->
+
+    <target name="buildSqliteFast" depends="
+                                            cleanFilesystem, init,
+					    					buildProject, installProjectSqlite,
+					    					lint,phploc,phpunitFast,
+					    					buildFullZip" />
+
+
+
+
+
+
+    <target name="buildProject">
+        <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}/../">
+                <exclude name="*/**/.idea"/>
+                <exclude name="*/**/.svn"/>
+                <exclude name="*/**/_buildfiles"/>
+                <include name="*/**"/>
+                <include name="*/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+
+
+
+    <!-- creates the full-zip including all modules and elements -->
+    <target name="buildFullZip" depends="init" >
+        <delete dir="${basedir}${projectPath}"/>
+
+        <antcall target="setupPackageFolders" />
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}/../">
+                <exclude name="*/**/.svn"/>
+            </fileset>
+        </copy>
+
+        <delete dir="${basedir}${tempPath}/core/_debugging"/>
+        <delete dir="${basedir}${tempPath}/core/_testing"/>
+        <delete dir="${basedir}${tempPath}/core/_buildfiles"/>
+        <delete dir="${basedir}${tempPath}/.idea"/>
+
+        <antcall target="buildPackageHelper" />
+
+        <zip destfile="${basedir}${packagesPath}/${projectName}_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+            <fileset dir="${basedir}${tempPath}/../" />
+        </zip>
+    </target>
+
+
+
+    <target name="buildPackageHelper" description="triggers the project setup and the compilation / compression of css / js files">
+        <!--<exec executable="php" dir="${basedir}"  failonerror="on" >-->
+            <!--<arg line="-f buildProject.php ${tempPath} onlySetup"/>-->
+        <!--</exec>-->
+        <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
+        <antcall target="cleanZipContent" />
+    </target>
+
+</project>
