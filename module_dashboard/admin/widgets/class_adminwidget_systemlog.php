@@ -40,7 +40,6 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
      * This method is called, when the widget should generate it's content.
      * Return the complete content using the methods provided by the base class.
      * Do NOT use the toolkit right here!
-     * TODO: refactor file-access, read only the last lines. see system-admin class
      * @return string
      */
     public function getWidgetOutput() {

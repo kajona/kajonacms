@@ -93,9 +93,6 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         $strWidgetContent = "";
         $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
 
-        //TODO remove this?
-        $strGeneratedContent = "";
-
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();
 
@@ -108,7 +105,6 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
             $this->objToolkit->getAdminwidget(
                 $strWidgetId,
                 $strWidgetName,
-                $strGeneratedContent,
                 ($objDashboardWidget->rightEdit() ? getLinkAdminDialog("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_edit", $objDashboardWidget->getConcreteAdminwidget()->getWidgetName()) : ""),
                 ($objDashboardWidget->rightDelete() ? $this->objToolkit->listDeleteButton(
                     $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),

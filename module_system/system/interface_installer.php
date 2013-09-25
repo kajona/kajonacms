@@ -10,8 +10,6 @@
 /**
  * Interface for all module installers.
  *
- * @todo may be moved to module packagemanager
- *
  * @package module_system
  */
 interface interface_installer {

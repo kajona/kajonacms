@@ -152,6 +152,7 @@ function getServer($strKey) {
  *
  * @return array
  * @deprecated use class_carrier::getAllParams() instead
+ * @see class_carrier::getAllParams()
  * @todo remove
  */
 function getAllPassedParams() {

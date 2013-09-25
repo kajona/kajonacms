@@ -137,7 +137,7 @@ class class_request_dispatcher {
                     }
 
 
-                    if(_xmlLoader_) { //FIXME: will be removed
+                    if(_xmlLoader_) {
                         if($objModuleRequested->getStrXmlNameAdmin() != "") {
                             $strClassname = str_replace(".php", "", $objModuleRequested->getStrXmlNameAdmin());
                             $objConcreteModule = new $strClassname();
@@ -152,7 +152,7 @@ class class_request_dispatcher {
                     else {
                         $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
                         //$objConcreteModule->action($strAction);
-                        $objConcreteModule->action(); //FIXME: action always set via the internal handler?
+                        $objConcreteModule->action();
                         $strReturn = $objConcreteModule->getModuleOutput();
 
                         //React, if admin was opened by the portaleditor
@@ -185,7 +185,6 @@ class class_request_dispatcher {
         }
 
         if($bitLogin) {
-            //FIXME: xml-annotations
             if(_xmlLoader_) {
                 $objLogin = new class_module_login_admin_xml();
                 $strReturn = $objLogin->action($strAction);
@@ -227,7 +226,7 @@ class class_request_dispatcher {
         $objModule = class_module_system_module::getModuleByName($strModule);
         if($objModule != null) {
 
-            if(_xmlLoader_) { //FIXME: will be removed
+            if(_xmlLoader_) {
                 if($objModule->getStrXmlNamePortal() != "") {
                     $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
                     $objModuleRequested = new $strClassname();
@@ -241,7 +240,7 @@ class class_request_dispatcher {
             else {
                 if($strModule == "pages") {
                     $strAction = "";
-                } //FIXME: action always set via the internal handler?
+                }
                 $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
                 $strReturn = $objModuleRequested->action($strAction);
             }
