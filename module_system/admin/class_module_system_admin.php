@@ -841,30 +841,43 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
 
     /**
+     * Creates a form to send mails to specific users.
+     * @return class_admin_formgenerator
+     */
+    private function getMailForm() {
+        $objFormgenerator = new class_admin_formgenerator("mail", new class_module_system_common());
+        if($this->getParam("mail_recipient") != "")
+            $objFormgenerator->addField(new class_formentry_text("mail", "recipient"))->setStrLabel($this->getLang("mail_recipient"))->setBitMandatory(true)->setObjValidator(new class_email_validator());
+        else
+            $objFormgenerator->addField(new class_formentry_user("mail", "to"))->setStrLabel($this->getLang("mail_recipient"))->setBitMandatory(true);
+        $objFormgenerator->addField(new class_formentry_user("mail", "cc"))->setStrLabel($this->getLang("mail_cc"));
+        $objFormgenerator->addField(new class_formentry_text("mail", "subject"))->setStrLabel($this->getLang("mail_subject"))->setBitMandatory(true);
+        $objFormgenerator->addField(new class_formentry_textarea("mail", "body"))->setStrLabel($this->getLang("mail_body"))->setBitMandatory(true);
+        return $objFormgenerator;
+    }
+
+
+    /**
      * Generates a form in order to send an email.
      * This form is generic, so it may be called from several places.
+     * If a mail-address was passed by param "mail_recipient", the form tries to send the message by mail,
+     * otherwise (default) the message is delivered using the messaging. Therefore the param mail_to_id is expected when being
+     * triggered externally.
+     *
+     * @param class_admin_formgenerator $objForm
      *
      * @return string
      * @since 3.4
      * @autoTestable
      * @permissions view
      */
-    protected function actionMailForm() {
-        $strReturn = "";
+    protected function actionMailForm(class_admin_formgenerator $objForm = null) {
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendMail"));
-        $strReturn .= $this->objToolkit->getValidationErrors($this, "sendMail");
-        $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getLang("mail_recipient"), urldecode($this->getParam("mail_recipient")));
-        $strReturn .= $this->objToolkit->formInputText("mail_cc", $this->getLang("mail_cc"), urldecode($this->getParam("mail_cc")));
-        $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getLang("mail_subject"), urldecode($this->getParam("mail_subject")));
-        $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getLang("mail_body"), urldecode($this->getParam("mail_body")), "inputTextareaLarge");
-        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("send"));
-        $strReturn .= $this->objToolkit->formClose();
+        if($objForm == null)
+            $objForm = $this->getMailForm();
 
-        $strReturn .= $this->objToolkit->setBrowserFocus("mail_body");
-
-        return $strReturn;
+        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "sendMail"));
     }
 
     /**
@@ -877,42 +890,51 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionSendMail() {
 
-        $objValidator = new class_text_validator();
-        $objMailValidator = new class_email_validator();
+        $objForm = $this->getMailForm();
 
-        foreach(array("mail_recipient", "mail_subject", "mail_body") as $strOneField) {
-            if(!$objValidator->validate($this->getParam($strOneField)))
-                $this->addValidationError($strOneField, $this->getLang($strOneField));
-        }
-
-        if(count($this->getValidationErrors()) > 0)
-            return $this->actionMailForm();
+        if(!$objForm->validateForm())
+            return $this->actionMailForm($objForm);
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
         $objUser = new class_module_user_user($this->objSession->getUserID());
 
-        $objEmail = new class_mail();
+        //mail or internal message?
+        if($this->getParam("mail_recipient") != "") {
+            $objMailValidator = new class_email_validator();
+            $objEmail = new class_mail();
 
-        $objEmail->setSender($objUser->getStrEmail());
+            $objEmail->setSender($objUser->getStrEmail());
+            $arrRecipients = explode(",", $this->getParam("mail_recipient"));
+            foreach($arrRecipients as $strOneRecipient)
+                if($objMailValidator->validate($strOneRecipient))
+                    $objEmail->addTo($strOneRecipient);
 
-        $arrRecipients = explode(",", $this->getParam("mail_recipient"));
-        foreach($arrRecipients as $strOneRecipient)
-            if($objMailValidator->validate($strOneRecipient))
-                $objEmail->addTo($strOneRecipient);
+            if($objForm->getField("mail_cc")->getStrValue() != "") {
+                $objUser = new class_module_user_user($objForm->getField("mail_cc")->getStrValue());
+                $objEmail->addCc($objUser->getStrEmail());
+            }
 
-        $arrRecipients = explode(",", $this->getParam("mail_cc"));
-        foreach($arrRecipients as $strOneRecipient)
-            if($objMailValidator->validate($strOneRecipient))
-                $objEmail->addCc($strOneRecipient);
+            $objEmail->setSubject($objForm->getField("mail_subject")->getStrValue());
+            $objEmail->setText($objForm->getField("mail_body")->getStrValue());
 
+            if($objEmail->sendMail())
+                return $this->getLang("mail_send_success");
+            else
+                return $this->getLang("mail_send_error");
 
-        $objEmail->setSubject($this->getParam("mail_subject"));
-        $objEmail->setText($this->getParam("mail_body"));
+        }
+        else {
+            $arrRecipients = array();
+            $arrRecipients[] = new class_module_user_user($objForm->getField("mail_to")->getStrValue());
+            if($objForm->getField("mail_cc")->getStrValue() != "")
+                $arrRecipients[] = new class_module_user_user($objForm->getField("mail_cc")->getStrValue());
 
-        if($objEmail->sendMail())
-            return $this->getLang("mail_send_success");
-        else
-            return $this->getLang("mail_send_success");
+            $objMessaging = new class_module_messaging_messagehandler();
+            //TODO integrate sender into messaging
+            $objMessaging->sendMessage($objForm->getField("mail_body")->getStrValue(), $arrRecipients, new class_messageprovider_personalmessage(), "", $objForm->getField("mail_subject")->getStrValue());
+        }
+
+        return $this->getLang("mail_send_success");
     }
 
 

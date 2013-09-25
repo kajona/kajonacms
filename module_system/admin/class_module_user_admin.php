@@ -38,13 +38,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $this->setAction("editUser");
         }
 
-        if($this->getParam("doFilter") != "") {
-            $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("userlist_filter"));
-            $this->setParam("pv", 1);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
-
-        }
     }
 
 
@@ -91,10 +85,18 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * @permissions view
      */
     protected function actionList() {
+
+        if($this->getParam("doFilter") != "") {
+            $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("userlist_filter"));
+            $this->setParam("pv", 1);
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
+            return "";
+        }
+
         $strReturn = "";
 
         //add a filter-form
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"]), "list");
+        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "list"));
         $strReturn .= $this->objToolkit->formInputText("userlist_filter", $this->getLang("user_username"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("userlist_filter"));
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
@@ -117,10 +119,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
             if($objListEntry->getIntActive() == 1) {
-                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_active"), "icon_enabled"));
+                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_active"), "icon_enabled"));
             }
             else {
-                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_inactive"), "icon_disabled"));
+                return $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_inactive"), "icon_disabled"));
             }
         }
         return "";
@@ -189,6 +191,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             && checkEmailaddress($objListEntry->getStrEmail())
         ) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mailNew"));
+        }
+
+        if($objListEntry instanceof class_module_user_user && checkEmailaddress($objListEntry->getStrEmail())) {
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("system", "mailForm", "&mail_to_id=" . $objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $objListEntry->getStrDisplayName()));
         }
 
         if($objListEntry instanceof class_module_user_user && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
@@ -282,7 +288,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         if($objUser->updateObjectToDb()) {
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&pv=".$this->getParam("pv")));
         }
         else {
             throw new class_exception("Error updating user " . $this->getSystemid(), class_exception::$level_ERROR);

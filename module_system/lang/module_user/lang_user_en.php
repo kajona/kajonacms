@@ -144,6 +144,7 @@ $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_portal"]                     = "Portal login";
 $lang["user_resend_password_hint"]       = "By sending the user a new password, an email is sent to the adress saved with the users profile containing a new password and a link to change the password.<br />The user must be aware of his username in order to finish the process.<br />";
 $lang["user_skin"]                       = "Admin skin";
+$lang["user_send_message"]               = "Send message to user";
 $lang["user_switch_to"]                  = "Switch current session to user. You have to logout/login again to proceed with your current user.";
 $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_username"]                   = "Username";

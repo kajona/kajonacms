@@ -119,6 +119,7 @@ $lang["mail_send_success"]               = "Email sent successfully.";
 $lang["mail_subject"]                    = "Subject";
 $lang["memorylimit"]                     = "Memory limit";
 $lang["messageprovider_exceptions_name"] = "System-Exceptions";
+$lang["messageprovider_personalmessage_name"] = "Personal Messages";
 $lang["modul_aspectedit"]                = "Edit aspects";
 $lang["modul_rechte_root"]               = "Rights root-record";
 $lang["modul_sortdown"]                  = "Shift down";

@@ -144,6 +144,7 @@ $lang["user_password_resend_subj"]       = "Bestätigung der Account-Aktivierung
 $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_portal"]                     = "Portal-Login";
 $lang["user_resend_password_hint"]       = "Mit dem Zusenden eines neuen Passwortes erhält der Benutzer an die hinterlegte E-Mailadresse eine E-Mail mit einem neuen Passwort sowie einem Link zum Ändern des Passwortes. <br />Hierfür muss der Benutzer seinen Benutzernamen kennen.<br />";
+$lang["user_send_message"]               = "Nachricht an den Benutzer schicken";
 $lang["user_skin"]                       = "Admin-Skin";
 $lang["user_switch_to"]                  = "Session mit dem gewählten User starten. Zum Beenden ist ein erneuter Logout/Login notwendig.";
 $lang["user_system"]                     = "Systemeinstellungen";

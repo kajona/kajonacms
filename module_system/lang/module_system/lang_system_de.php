@@ -114,6 +114,7 @@ $lang["mail_send_success"]               = "E-Mail erfolgreich verschickt.";
 $lang["mail_subject"]                    = "Betreff";
 $lang["memorylimit"]                     = "Memory Limit";
 $lang["messageprovider_exceptions_name"] = "System-Fehlermeldungen";
+$lang["messageprovider_personalmessage_name"] = "Persönliche Nachrichten";
 $lang["modul_aspectedit"]                = "Aspekte bearbeiten";
 $lang["modul_rechte_root"]               = "Root-Rechte";
 $lang["modul_sortdown"]                  = "Nach unten verschieben";
