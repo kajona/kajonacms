@@ -14,10 +14,6 @@ echo "| System Sort Fix                                                         
 echo "|                                                                               |\n";
 echo "| Analyzes the sort-values of the system-table and tries to fix them.           |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-$objCarrier = class_carrier::getInstance();
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 $objDb = class_carrier::getInstance()->getObjDB();
 

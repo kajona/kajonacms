@@ -15,10 +15,6 @@ echo "|                                                                         
 echo "| Use this script to format all language files.                                 |\n";
 echo "| The formatter is based on the Kajona language editor, so you need Java >= 1.6.|\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-        $objCarrier = class_carrier::getInstance();
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n";
 
 
 

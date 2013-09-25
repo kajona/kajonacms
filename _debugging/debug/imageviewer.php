@@ -6,12 +6,6 @@ echo "|                                                                         
 echo "| Image Viewer for Admin Skin                                                   |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-$objCarrier = class_carrier::getInstance();
-
-echo "| loaded.                                                                   |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 $strIconPath = "/module_v4skin/admin/skins/kajona_v4/pics/";
 echo "\nIcon-Path = ". $strIconPath."\n";

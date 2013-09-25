@@ -15,12 +15,6 @@ echo "|                                                                         
 echo "| Searching for files containing whitespace characters outside the php-tag.     |\n";
 echo "| This may cause errors when using gzip-compression.                            |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-$objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 //loop over files and folders in order to find erroneous script-files
 

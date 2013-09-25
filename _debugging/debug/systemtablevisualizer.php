@@ -14,12 +14,6 @@ echo "| System Table Visualizer                                                 
 echo "|                                                                               |\n";
 echo "| Providing a tree-like view on your system-table.                              |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-$objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 
 

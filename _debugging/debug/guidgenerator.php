@@ -13,12 +13,6 @@ echo "|                                                                         
 echo "| GUID-Generator                                                                |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-        $objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 echo "Generating 10 guids...\n\n";
 echo "\t".generateSystemid()."\n";

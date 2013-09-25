@@ -13,12 +13,6 @@ echo "|                                                                         
 echo "| DB Query Panel                                                                |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-$objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 if(issetPost("doquery")) {
 	$strQuery = getPost("dbquery");
