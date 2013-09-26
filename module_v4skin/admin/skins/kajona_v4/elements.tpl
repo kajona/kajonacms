@@ -1147,15 +1147,15 @@ The language switch surrounds the buttons
 </pageview_body>
 
 <pageview_link_forward>
-    <li>
-        <a href="%%href%%">%%linkText%%&gt;&gt;</a>
-    </li>
+<li>
+    <a href="%%href%%">%%linkText%% &raquo;</a>
+</li>
 </pageview_link_forward>
 
 <pageview_link_backward>
-    <li>
-        <a href="%%href%%">&lt;&lt;%%linkText%%</a>
-    </li>
+<li>
+    <a href="%%href%%">&laquo; %%linkText%%</a>
+</li>
 </pageview_link_backward>
 
 <pageview_page_list>
