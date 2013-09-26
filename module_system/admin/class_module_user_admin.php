@@ -302,7 +302,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     }
 
     /**
-     * Creates a new user or edits a already existing one
+     * Creates a new user or edits an already existing one
      *
      * @param string $strAction
      * @param class_admin_formgenerator|null $objForm
@@ -407,14 +407,20 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $objForm->getField("user_username")->setBitReadonly(true);
             }
 
-            if($objUser->getStrAdminskin() != "")
+            if($objUser->getStrAdminskin() != "" && $objForm->getField("user_skin") != null)
                 $objForm->getField("user_skin")->setStrValue($objUser->getStrAdminskin());
+
             $objForm->getField("user_language")->setStrValue($objUser->getStrAdminlanguage());
 
             if(!$bitSelfedit) {
-                $objForm->getField("user_adminlogin")->setStrValue($objUser->getIntAdmin());
-                $objForm->getField("user_portal")->setStrValue($objUser->getIntPortal());
-                $objForm->getField("user_active")->setStrValue($objUser->getIntActive());
+                if($objForm->getField("user_adminlogin") != null)
+                    $objForm->getField("user_adminlogin")->setStrValue($objUser->getIntAdmin());
+
+                if($objForm->getField("user_portal") != null)
+                    $objForm->getField("user_portal")->setStrValue($objUser->getIntPortal());
+
+                if($objForm->getField("user_active") != null)
+                    $objForm->getField("user_active")->setStrValue($objUser->getIntActive());
             }
 
             $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
@@ -434,7 +440,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      *
      * @return class_admin_formgenerator|class_model
      */
-    private function getUserForm(interface_usersources_user $objUser, $bitSelfedit, $strMode) {
+    protected function getUserForm(interface_usersources_user $objUser, $bitSelfedit, $strMode) {
 
         //load a few default values
         //languages

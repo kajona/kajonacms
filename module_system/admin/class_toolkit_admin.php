@@ -1662,11 +1662,13 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if($intCurrentpage < $intNrOfPages)
-            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                                                                                 "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID);
+            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
+                array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"), "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID
+            );
         if($intCurrentpage > 1)
-            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                                                                                  "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID);
+            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
+                array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"), "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID
+            );
 
 
         $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
