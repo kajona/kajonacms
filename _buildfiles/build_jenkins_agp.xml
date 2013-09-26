@@ -41,6 +41,14 @@
 
 
 
+    <!-- mysql config file -->
+    <target name="installProjectMysql">
+        <echo>Creating full Kajona installation</echo>
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${projectPath} false config_mysql_agp.php"/>
+        </exec>
+    </target>
+
 
 
     <!-- creates the full-zip including all modules and elements -->

@@ -2,9 +2,9 @@
 
 //database-settings
 define("DB_HOST",				                "localhost");
-define("DB_USER",                               "kajona");
-define("DB_PASS",                               "kajona");
-define("DB_DB",                                 "kajona");
+define("DB_USER",                               "kajona_agp");
+define("DB_PASS",                               "kajona_agp");
+define("DB_DB",                                 "kajona_agp");
 define("DB_DRIVER",                             "mysqli");
 
 ini_set("session.save_path", "/tmp");
