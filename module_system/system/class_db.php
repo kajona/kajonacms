@@ -945,6 +945,9 @@ class class_db {
      */
     public function dbsafeString($strString, $bitHtmlSpecialChars = true, $bitAddSlashes = true) {
 
+        if($strString === null)
+            return null;
+
         //escape special chars
         if($bitHtmlSpecialChars) {
             $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");

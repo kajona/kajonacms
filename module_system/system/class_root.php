@@ -758,7 +758,7 @@ abstract class class_root {
                         if($strGetter !== null) {
                             //explicit casts required? could be relevant, depending on the target column type / database system
                             $mixedValue = call_user_func(array($this, $strGetter));
-                            if(uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit")
+                            if($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit"))
                                 $mixedValue = (int)$mixedValue;
                             $arrColValues[$strColumn] = $mixedValue;
                             $arrEscapes[] = !$objReflection->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
