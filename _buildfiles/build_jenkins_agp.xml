@@ -59,6 +59,15 @@
     </target>
 
 
+    <!-- oracle config file -->
+    <target name="installProjectOracle">
+        <echo>Creating full Kajona installation</echo>
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${projectPath} false config_oracle_agp.php"/>
+        </exec>
+    </target>
+
+
     <!-- creates the full-zip including all modules and elements -->
     <!-- redefined for adopted filenames and include / exclusion lists -->
     <target name="buildFullZip" depends="init" >
