@@ -62,7 +62,7 @@
     </div>
     <div class="container-fluid pathNaviContainer">
         <div class="row-fluid">
-            <div class="span2" style="z-index: 0 !important;">&nbsp;</div>
+            <div class="span2 hidden-phone hidden-tablet" style="z-index: 0 !important;">&nbsp;</div>
             <div class="span10">
                 %%path%%
             </div>
