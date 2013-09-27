@@ -65,7 +65,7 @@ class class_module_search_commons extends class_model implements interface_model
 
     /**
      * Calls the single search-functions, sorts the results and creates the output.
-     * Method for portal-searches.
+     * Method for backend-searches.
      *
      * @param $objSearch class_module_search_search
      *
