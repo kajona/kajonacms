@@ -25,7 +25,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function install() {
 
 		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
-		//Tabellen anlegen
 
 		//Pages -----------------------------------------------------------------------------------------
 		$strReturn .= "Installing table pages...\n";
@@ -90,7 +89,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		$arrFields = array();
 		$arrFields["page_element_id"] 					= array("char20", false);
-		$arrFields["page_element_ph_placeholder"]       = array("char254", true);
+		$arrFields["page_element_ph_placeholder"]       = array("char500", true);
 		$arrFields["page_element_ph_name"]              = array("char254", true);
 		$arrFields["page_element_ph_element"]           = array("char254", true);
 		$arrFields["page_element_ph_title"]             = array("char254", true);
@@ -269,47 +268,52 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
         }
         
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.1") {
             $strReturn .= $this->update_3491_3492();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.2") {
             $strReturn .= $this->update_3492_3493();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.3") {
             $strReturn .= $this->update_3493_40();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_401();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0.1") {
             $strReturn .= $this->update_401_41();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= $this->update_41_42();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
+            $strReturn .= $this->update_42_43();
         }
 
         return $strReturn."\n\n";
@@ -562,6 +566,29 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "4.2");
         $this->updateElementVersion("paragraph", "4.2");
         $this->updateElementVersion("image", "4.2");
+
+        return $strReturn;
+    }
+
+
+    private function update_42_43() {
+        $strReturn = "Updating 4.2 to 4.3...\n";
+
+        $strReturn .= "Changing placeholder column data-type...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
+                          CHANGE ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->getDatatype("char500")." NULL";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.3");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "4.3");
+        $this->updateElementVersion("paragraph", "4.3");
+        $this->updateElementVersion("image", "4.3");
 
         return $strReturn;
     }
