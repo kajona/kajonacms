@@ -24,7 +24,7 @@ class class_test_statsReportsTest extends class_testbase {
                 );
 
                 if($objReport instanceof interface_admin_statsreports) {
-                    $arrReports[$objReport->getReportTitle()] = $objReport;
+                    $arrReports[$objReport->getTitle()] = $objReport;
                 }
 
                 $objStartDate = new class_date();
@@ -42,7 +42,7 @@ class class_test_statsReportsTest extends class_testbase {
         /** @var interface_admin_statsreports $objReport */
         foreach($arrReports as $objReport) {
             ob_start();
-            echo "processing report ".$objReport->getReportTitle()."\n";
+            echo "processing report ".$objReport->getTitle()."\n";
 
             $objReport->getReport();
             $objReport->getReportGraph();
