@@ -89,13 +89,13 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		$arrFields = array();
 		$arrFields["page_element_id"] 					= array("char20", false);
-		$arrFields["page_element_ph_placeholder"]       = array("char500", true);
+		$arrFields["page_element_ph_placeholder"]       = array("text", true);
 		$arrFields["page_element_ph_name"]              = array("char254", true);
 		$arrFields["page_element_ph_element"]           = array("char254", true);
 		$arrFields["page_element_ph_title"]             = array("char254", true);
 		$arrFields["page_element_ph_language"]          = array("char20", true);
 
-		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id"), array("page_element_ph_placeholder", "page_element_ph_language", "page_element_ph_element")))
+		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id"), array("page_element_ph_language", "page_element_ph_element")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -577,7 +577,31 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn .= "Changing placeholder column data-type...\n";
 
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
-                          CHANGE ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->getDatatype("char500")." NULL";
+                             ADD ".$this->objDB->encloseColumnName("page_element_ph_placeholder_2")." ".$this->objDB->getDatatype("text")." NULL";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+
+        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
+                        SET page_element_ph_placeholder_2 = page_element_ph_placeholder";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
+                            DROP ".$this->objDB->encloseColumnName("page_element_ph_placeholder")."";
+
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
+                          CHANGE ".$this->objDB->encloseColumnName("page_element_ph_placeholder_2")." ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->getDatatype("text")." NULL ";
 
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
