@@ -690,28 +690,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         return $arrPathLinks;
     }
 
-
-    /**
-     * Sorts the current element upwards
-     */
-    protected function actionElementSortUp() {
-        //Create the object
-        $objElement = new class_module_pages_pageelement($this->getSystemid());
-        $objElement->setPosition("up");
-        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-
-    }
-
-    /**
-     * Sorts the current element downwards
-     */
-    protected function actionElementSortDown() {
-        //Create the object
-        $objElement = new class_module_pages_pageelement($this->getSystemid());
-        $objElement->setPosition("down");
-        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-    }
-
     /**
      * Sorts the current element upwards
      */
@@ -720,6 +698,61 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $objElement = new class_module_pages_pageelement($this->getSystemid());
         $objElement->setStatus();
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+    }
+
+
+    /**
+     * Method to move an element from one placeholder to another
+     * Expects the params
+     * - systemid
+     * - placeholder
+     *
+     * @permissions edit
+     * @xml
+     */
+    protected function actionMoveElement() {
+        $strReturn = "";
+        //get the object to update
+        /** @var $objObject class_module_pages_pageelement */
+        $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objObject instanceof class_module_pages_pageelement && $objObject->rightEdit()) {
+
+            $strPageSystemid = $objObject->getPrevId();
+            $objLockmanager = new class_lockmanager($objObject->getSystemid());
+
+            if(!$objLockmanager->isLocked())
+                $objLockmanager->lockRecord();
+
+            if($objLockmanager->isLockedByCurrentUser()) {
+
+                $strPlaceholder = $this->getParam("placeholder");
+                $arrParts = explode("_", $strPlaceholder);
+
+                //ph_placeholder
+                $objObject->setStrPlaceholder($strPlaceholder);
+
+                //ph_name
+                $objObject->setStrName($arrParts[0]);
+
+                $objObject->updateObjectToDb();
+
+                //Edit Date of page & unlock
+                $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
+                $objPage->updateObjectToDb();
+                $objLockmanager->unlockRecord();
+
+                //Loading the data of the corresp site
+                $this->flushCompletePagesCache();
+
+                $strReturn = "<message><success>element update succeeded</success></message>";
+            }
+
+        }
+        else {
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            $strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
+        }
+        return $strReturn;
     }
 
 
