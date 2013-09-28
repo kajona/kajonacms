@@ -34,6 +34,11 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         $this->objDB = $objDB;
     }
 
+    public function registerPlugin($objPluginamanger)
+    {
+        $objPluginamanger->registerPlugin($this);
+    }
+
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
@@ -42,11 +47,11 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         $this->intDateStart = $intStartDate;
     }
 
-    public function getReportTitle() {
+    public function getTitle() {
         return $this->objLang->getLang("packageservertopqueries", "packageserver");
     }
 
-    public function getReportCommand() {
+    public function getPluginCommand() {
         return "packageserverTopQueries";
     }
 

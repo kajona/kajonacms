@@ -64,11 +64,14 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
         $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
 
         foreach($arrPlugins as $strOnePlugin) {
-            $strClassName = str_replace(".php", "", $strOnePlugin);
-            /** @var $objPlugin interface_admin_statsreports */
-            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
 
-            if($objPlugin->getReportCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
+            $objPluginManager = new class_pluginmanager();
+            $objPluginManager->loadPluginsFiltered("/admin/statsreports/", class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT);
+
+            /** @var $objPlugin interface_admin_statsreports|interface_admin_plugin */
+            $objPlugin = $objPluginManager->getPluginObject(class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT, $strPlugin);
+
+            if($objPlugin->getPluginCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
                 //get date-params as ints
                 $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth() , $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
                 $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth() , $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());

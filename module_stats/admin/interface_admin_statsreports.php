@@ -12,36 +12,12 @@
  *
  * @package module_stats
  */
-interface interface_admin_statsreports {
+interface interface_admin_statsreports extends interface_admin_plugin {
 
     /**
-     * Contructor, used to init the plugin
-     *
-     * @param \class_db $objDB
-     * @param \class_toolkit_admin $objToolkit
-     * @param \class_lang $objTexts
-     */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts);
-
-    /**
-     * Method used to fetch the title of the report.
-     * This title will be used for the admin-navigation
-
-     */
-    public function getReportTitle();
-
-    /**
-     * This method is being called, if the report should be displayed.
-     * Use the passed $objToolkit to generate HTML-Output
-
+     * Method used to fetch the report.
      */
     public function getReport();
-
-    /**
-     * This one returns the command that should be used to load THIS plugin.
-     * Make sure NOT to conflict with other plugins!
-     */
-    public function getReportCommand();
 
     /**
      * Setter for the startdate of the interval

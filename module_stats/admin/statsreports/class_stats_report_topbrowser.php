@@ -37,10 +37,11 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
+    }
 
-
-
-
+    public function registerPlugin($objPluginamanger)
+    {
+        $objPluginamanger->registerPlugin($this);
     }
 
     private function setUpBrowserData() {
@@ -76,11 +77,11 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
         $this->intDateStart = $intStartDate;
     }
 
-    public function getReportTitle() {
+    public function getTitle() {
         return $this->objTexts->getLang("topbrowser", "stats");
     }
 
-    public function getReportCommand() {
+    public function getPluginCommand() {
         return "statsTopBrowser";
     }
 
@@ -303,6 +304,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 
         return $arrReturn;
     }
+
 
 }
 

@@ -47,11 +47,16 @@ class class_stats_report_common implements interface_admin_statsreports {
         $this->intDateStart = $intStartDate;
     }
 
-    public function getReportTitle() {
+    public function getTitle() {
         return $this->objTexts->getLang("allgemein", "stats");
     }
 
-    public function getReportCommand() {
+    public function registerPlugin($objPluginamanger)
+    {
+        $objPluginamanger->registerPlugin($this);
+    }
+
+    public function getPluginCommand() {
         return "statsCommon";
     }
 

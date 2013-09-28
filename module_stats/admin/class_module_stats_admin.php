@@ -19,7 +19,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     public static $STR_SESSION_KEY_DATE_START = "STR_SESSION_KEY_DATE_START";
     public static $STR_SESSION_KEY_DATE_END = "STR_SESSION_KEY_DATE_END";
     public static $STR_SESSION_KEY_INTERVAL = "STR_SESSION_KEY_INTERVAL";
-
+    public static $STR_PLUGIN_EXTENSION_POINT = "interface_admin_statsreports";
 
     /**
      * @var class_date
@@ -31,6 +31,10 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private $objDateEnd;
     private $intInterval = 2;
 
+    /**
+     * @var class_pluginmanager
+     */
+    private $objPluginManager;
 
     /**
      * Constructor
@@ -79,6 +83,9 @@ class class_module_stats_admin extends class_admin implements interface_admin {
             @ini_set("memory_limit", "60M");
         }
 
+        $this->objPluginManager = new class_pluginmanager();
+        $this->objPluginManager->loadPluginsFiltered("/admin/statsreports/", self::$STR_PLUGIN_EXTENSION_POINT);
+
         $this->setAction("list");
     }
 
@@ -86,10 +93,10 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     public function getOutputModuleNavi() {
         $arrReturn = array();
         //Load all plugins available and create the navigation
-        $arrPlugins = $this->getReports();
+        $arrPlugins = $this->objPluginManager->getMatchingPluginObjects();
 
         foreach($arrPlugins as $objPlugin) {
-            $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi"));
+            $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getPluginCommand(), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
         }
 
         $arrReturn[] = array("", "");
@@ -125,9 +132,9 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     protected function getArrOutputNaviEntries() {
         $arrPathLinks = parent::getArrOutputNaviEntries();
 
-        foreach($this->getReports() as $objOneReport) {
-            if($objOneReport->getReportCommand() == $this->getParam("action")) {
-                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $objOneReport->getReportCommand(), "", $objOneReport->getReportTitle());
+        foreach($this->objPluginManager->getMatchingPluginObjects() as $objOneReport) {
+            if($objOneReport->getPluginCommand() == $this->getParam("action")) {
+                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $objOneReport->getPluginCommand(), "", $objOneReport->getTitle());
             }
         }
 
@@ -146,14 +153,13 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private function loadRequestedPlugin($strPlugin) {
         $strReturn = "";
 
-        $arrPlugins = $this->getReports();
-        if(isset($arrPlugins[$strPlugin])) {
+        $objPlugin = $this->objPluginManager->getPluginObject(self::$STR_PLUGIN_EXTENSION_POINT, $strPlugin);
 
-            $strReturn .= $this->getInlineLoadingCode($strPlugin);
+        if($objPlugin) {
+            $strReturn .= $this->getInlineLoadingCode($objPlugin);
             //place date-selector before
-            $strReturn = $this->createDateSelector($arrPlugins[$strPlugin]) . $strReturn;
+            $strReturn = $this->createDateSelector($objPlugin) . $strReturn;
         }
-
         return $strReturn;
     }
 
@@ -231,15 +237,15 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     /**
      * Creates the code required to load the report via an ajax request
      *
-     * @param string $strPlugin
+     * @param interface_admin_plugin $objPlugin
      * @param string $strPv
      *
      * @return string
      */
-    private function getInlineLoadingCode($strPlugin, $strPv = "") {
+    private function getInlineLoadingCode($objPlugin, $strPv = "") {
         $strReturn = "<script type=\"text/javascript\">
                             $(document).ready(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=" . $strPlugin . "&pv=" . $strPv . "\", function(data, status, jqXHR) {
+                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=" . $objPlugin->getPluginCommand() . "&pv=" . $strPv . "\", function(data, status, jqXHR) {
 
                                     if(status == 'success')  {
                                         var intStart = data.indexOf(\"[CDATA[\")+7;
@@ -266,36 +272,10 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-    /**
-     * Creates a list of reports available, sorted by the human-readable title.
-     * The key report-command is used as a key.
-     *
-     * @return interface_admin_statsreports[]
-     */
-    private function getReports() {
-        $arrReturn = array();
-        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
-
-        foreach($arrPlugins as $strOnePlugin) {
-            $strClassName = str_replace(".php", "", $strOnePlugin);
-            /** @var $objPlugin interface_admin_statsreports */
-            $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjLang());
-
-            if($objPlugin instanceof interface_admin_statsreports) {
-                $arrReturn[$objPlugin->getReportCommand()] = $objPlugin;
-            }
-        }
-
-        uasort($arrReturn, function (interface_admin_statsreports $objA, interface_admin_statsreports $objB) {
-            return strcmp($objA->getReportTitle(), $objB->getReportTitle());
-        });
-        return $arrReturn;
-    }
-
     protected function getOutputActionTitle() {
-        foreach($this->getReports() as $objOneReport) {
-            if($objOneReport->getReportCommand() == $this->getParam("action")) {
-                return $objOneReport->getReportTitle();
+        foreach($this->objPluginManager->getMatchingPluginObjects() as $objOneReport) {
+            if($objOneReport->getPluginCommand() == $this->getParam("action")) {
+                return $objOneReport->getTitle();
             }
         }
 

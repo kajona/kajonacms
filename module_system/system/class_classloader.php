@@ -215,4 +215,12 @@ class class_classloader {
         return $this->arrModules;
     }
 
+    /**
+     * Adds a new folder to the autoload locations
+     * @param $strPath
+     */
+    public function addClassFolder($strPath){
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder($strPath));
+    }
+
 }

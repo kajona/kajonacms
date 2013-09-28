@@ -33,6 +33,11 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
+    public function registerPlugin($objPluginamanger)
+    {
+        $objPluginamanger->registerPlugin($this);
+    }
+
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
@@ -41,11 +46,11 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         $this->intDateStart = $intStartDate;
     }
 
-    public function getReportTitle() {
+    public function getTitle() {
         return $this->objTexts->getLang("stats_toptitle", "mediamanager");
     }
 
-    public function getReportCommand() {
+    public function getPluginCommand() {
         return "statsTopDownloads";
     }
 
