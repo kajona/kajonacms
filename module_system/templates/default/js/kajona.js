@@ -61,6 +61,10 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
     }
 };
 
+KAJONA.util.isTouchDevice = function() {
+    return !!('ontouchstart' in window) ? 1 : 0;
+};
+
 
 /*
  * -------------------------------------------------------------------------

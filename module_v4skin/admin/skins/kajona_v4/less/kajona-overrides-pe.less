@@ -113,60 +113,79 @@
 
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
-.peContainerOut {
-    display: inline !important;
-    border: none !important;
-}
+.peElementWrapper {
+    & > .peElementActions {
+        display: none !important;
+    }
 
-.peContainerHover {
-    display: block !important;
-    outline: 1px solid @peColorHover !important;
-
-    .menuHover {
-        position: absolute !important;
-        border: none !important;
+    &:hover {
         display: block !important;
-        margin: -17px 0 0 -1px !important;
+        outline: 1px solid @peColorHover !important;
 
-        .actions {
+        .peElementActions {
+            position: absolute !important;
+            border: none !important;
             display: block !important;
-            background-color: @peColorHover !important;
-            font-family: Verdana, Arial, Helvetica, sans-serif !important;
-            font-size: 11px !important;
-            text-align: left !important;
-            padding: 1px 3px 2px 3px !important;
-            text-transform: none !important;
-            line-height: 14px !important;
+            margin: -17px 0 0 -1px !important;
+            z-index: 1;
 
-            a, a:link, a:visited, a:hover, a:active, a:focus {
+            .actions {
+                display: block !important;
+                background-color: @peColorHover !important;
                 font-family: Verdana, Arial, Helvetica, sans-serif !important;
                 font-size: 11px !important;
-                color: #ffffff !important;
-                text-decoration: none !important;
-                font-weight: normal !important;
-                background: none !important;
-                padding: 0 2px 0 2px !important;
-                margin: 0 !important;
+                text-align: left !important;
+                padding: 1px 3px 2px 3px !important;
                 text-transform: none !important;
-                letter-spacing: normal !important;
                 line-height: 14px !important;
-                border: none !important;
-                outline: none !important;
-                display: inline !important;
-                width: auto !important;
-                height: auto !important;
-                text-shadow: none !important;
-            }
 
-            a:hover, a:active, a:focus {
-                text-decoration: underline !important;
+                a, a:link, a:visited, a:hover, a:active, a:focus {
+                    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+                    font-size: 11px !important;
+                    color: #ffffff !important;
+                    text-decoration: none !important;
+                    font-weight: normal !important;
+                    background: none !important;
+                    padding: 0 2px 0 2px !important;
+                    margin: 0 !important;
+                    text-transform: none !important;
+                    letter-spacing: normal !important;
+                    line-height: 14px !important;
+                    border: none !important;
+                    outline: none !important;
+                    display: inline !important;
+                    width: auto !important;
+                    height: auto !important;
+                    text-shadow: none !important;
+                }
+
+                a:hover, a:active, a:focus {
+                    text-decoration: underline !important;
+                }
+
+                .moveHandle {
+                    cursor: move;
+                    position: absolute;
+                    margin-left: -20px;
+                    margin-top: -1px;
+                    display: inline-block;
+                    padding: 3px;
+                    background-color: rgba(150, 150, 150, .5);
+                }
             }
         }
-    }
 
-    .peContainerHover .menuHover {
-        margin: -1px 0 0 -1px !important;
+        // nested pe actions shouldn't overlap
+        .peElementWrapper > .peElementActions {
+            margin: -1px 0 0 -1px !important;
+        }
     }
+}
+
+.peElementMovePlaceholder {
+    border: 3px dotted @wysiwygOutlineColor;
+    .box-sizing(border-box);
+
 }
 
 .peNewButton {

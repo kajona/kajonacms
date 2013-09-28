@@ -1057,8 +1057,8 @@ pe_iconbar, pe_disable
 </pe_toolbar>
 
 <pe_actionToolbar>
-<div id="container_%%systemid%%" class="peContainerOut" onmouseover="KAJONA.admin.portaleditor.showActions('%%systemid%%')" onmouseout="KAJONA.admin.portaleditor.hideActions('%%systemid%%')">
-    <div id="menu_%%systemid%%" class="menuOut" style="display: none;">
+<div class="peElementWrapper" data-systemid="%%systemid%%">
+    <div class="peElementActions" style="display: none;">
         <div class="actions">
             %%actionlinks%%
         </div>

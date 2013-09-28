@@ -257,6 +257,11 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
                 $arrTemplate[$strPlaceholderName] .= $strNewButtons;
             }
+
+            // add placeholder wrapping
+            foreach($arrTemplate as $strPlaceholder => $strContent) {
+                $arrTemplate[$strPlaceholder] = "<div class='placeholderWrapper' data-placeholder='{$strPlaceholder}'>{$strContent}</div>";
+            }
         }
 
 

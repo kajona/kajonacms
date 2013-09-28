@@ -246,7 +246,7 @@ class class_toolkit_portal extends class_toolkit {
             }
         }
 
-        $arrTemplate["systemid"] = $strSystemid."_".generateSystemid();
+        $arrTemplate["systemid"] = $strSystemid;
         $arrTemplate["content"] = $strContent;
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         return $strReturn;

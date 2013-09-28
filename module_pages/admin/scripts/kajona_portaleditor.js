@@ -51,16 +51,6 @@ KAJONA.admin.portaleditor = {
 
     },
 
-	showActions: function (elementSysId) {
-	    $('#container_'+elementSysId).attr('class', 'peContainerHover');
-	    $('#menu_'+elementSysId).attr('class', 'menuHover');
-	},
-
-	hideActions: function (elementSysId) {
-		$('#container_'+elementSysId).attr('class', 'peContainerOut');
-		$('#menu_'+elementSysId).attr('class', 'menuOut');
-	},
-
 	switchEnabled: function (bitStatus) {
 	    var strStatus = bitStatus == true ? 'true' : 'false';
 		var url = window.location.href;
@@ -200,6 +190,32 @@ KAJONA.admin.portaleditor.RTE.init = function () {
             return KAJONA.admin.lang.pe_rte_unsavedChanges;
         }
     });
+
+    // init drag&drop sorting of page elements
+    var oldPos;
+    $('.placeholderWrapper').sortable({
+        items: 'div.peElementWrapper',
+        handle: '.moveHandle',
+        cursor: 'move',
+        forcePlaceholderSize: true,
+        placeholder: 'peElementMovePlaceholder',
+        start: function(event, ui) {
+            oldPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
+        },
+        stop: function(event, ui) {
+            var newPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
+
+            if (oldPos !== newPos) {
+                $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition', {
+                    systemid: ui.item.data('systemid'),
+                    listPos: newPos + 1
+                });
+            }
+            oldPos = null;
+        },
+        delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+    });
+
 };
 
 

@@ -325,33 +325,11 @@ abstract class class_element_portal extends class_portal {
         }
 
         //---------------------------------------------------
+        //link to drag n drop element
         //TODO: check if there are more than one elements in current placeholder before showing shift buttons
-
-        //link to shift element up
-        $strShiftUpLink = "";
-        //standard: pages_content.
+        $strMoveHandle = "";
         if($strModule == "pages_content") {
-            $arrConfig["pe_action_shiftUp"] = "elementSortUp";
-            $arrConfig["pe_action_shiftUp_params"] = "&systemid=".$strSystemid;
-        }
-        //Use Module-config to generate link
-        if(isset($arrConfig["pe_action_shiftUp"]) && $arrConfig["pe_action_shiftUp"] != "") {
-            $strShiftUpUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_shiftUp"], $arrConfig["pe_action_shiftUp_params"].$strAdminLangParam."&pe=1");
-            $strShiftUpLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftUpUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_shiftUp", "pages")."</a>";
-        }
-
-        //---------------------------------------------------
-        //link to shift element down
-        $strShiftDownLink = "";
-        //standard: pages_content.
-        if($strModule == "pages_content") {
-            $arrConfig["pe_action_shiftDown"] = "elementSortDown";
-            $arrConfig["pe_action_shiftDown_params"] = "&systemid=".$strSystemid;
-        }
-        //Use Module-config to generate link
-        if(isset($arrConfig["pe_action_shiftDown"]) && $arrConfig["pe_action_shiftDown"] != "") {
-            $strShiftDownUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_shiftDown"], $arrConfig["pe_action_shiftDown_params"].$strAdminLangParam."&pe=1");
-            $strShiftDownLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftDownUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_shiftDown", "pages")."</a>";
+            $strMoveHandle = "<i href=\"#\" class=\"moveHandle icon-move\" title=\"".class_carrier::getInstance()->getObjLang()->getLang("pe_move", "pages")."\"></i>";
         }
 
         //---------------------------------------------------
@@ -372,7 +350,7 @@ abstract class class_element_portal extends class_portal {
         // layout generation
 
         $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar(
-            $strSystemid, array($strNewLink, $strEditLink, $strCopyLink, $strDeleteLink, $strShiftUpLink, $strShiftDownLink, $strSetInactiveLink), $strContent
+            $strSystemid, array($strMoveHandle, $strNewLink, $strEditLink, $strCopyLink, $strDeleteLink, $strSetInactiveLink), $strContent
         );
 
         //reset the portal texts language
