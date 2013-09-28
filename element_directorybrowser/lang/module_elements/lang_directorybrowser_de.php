@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_directorybrowser_name"]   = "Dateiliste";
 $lang["directorybrowser_date"]           = "Änderungsdatum";
 $lang["directorybrowser_name"]           = "Dateiname";
 $lang["directorybrowser_size"]           = "Dateigröße";

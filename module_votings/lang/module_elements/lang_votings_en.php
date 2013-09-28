@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_votings_name"]            = "Voting";
 $lang["votings_mode"]                    = "Presentationmode";
 $lang["votings_mode_result"]             = "Result";
 $lang["votings_mode_voting"]             = "Voting";

@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
+$lang["element_search_name"]             = "Sök";
 $lang["browser"]                         = "Öppna filhanterare";
 $lang["search_amount"]                   = "Antal träffar per sida";
 $lang["search_page"]                     = "Resultatsida";

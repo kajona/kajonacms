@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_postacomment_name"]       = "Comments";
 $lang["postacomment_actionfilter"]       = "Action-filter";
 $lang["postacomment_actionfilter_hint"]  = "If set, the comment-field and comment-list is only shown having a matching action-command. Should be left empty in most cases.";
 $lang["postacomment_numberofposts"]      = "Number of posts (0=unlimited)";

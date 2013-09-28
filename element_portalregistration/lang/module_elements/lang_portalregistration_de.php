@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_portalregistration_name"] = "Portal-Registrierung";
 $lang["portalregistration_group"]        = "Zugehörige Gruppe";
 $lang["portalregistration_hint"]         = "Über das Element angelegte Benutzer sind deaktivert,<br />die Aktivierung erfolgt mittels einer automatisch verschickten Mail an den User.<br /> Ein entsprechender Hinweis hierzu sollte auf der Seite gegeben werden.";
 $lang["pr_captcha"]                      = "Kein gültiger Sicherheits-Code.";

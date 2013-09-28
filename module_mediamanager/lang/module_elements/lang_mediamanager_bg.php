@@ -10,6 +10,9 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["element_gallery_name"]            = "Галерия със снимки";
+$lang["element_galleryRandom_name"]      = "Случайна снимка";
+$lang["element_downloads_name"]          = "Downloads";
 $lang["download_id"]                     = "Архив";
 $lang["gallery_id"]                      = "Галерия";
 $lang["gallery_imagesperpage"]           = "Изображения за страница";

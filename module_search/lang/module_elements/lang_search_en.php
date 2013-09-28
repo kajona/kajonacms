@@ -10,4 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_search_name"]             = "Search";
 $lang["search_amount"]                   = "Number of hits per page";

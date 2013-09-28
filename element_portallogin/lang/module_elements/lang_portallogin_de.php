@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_portallogin_name"]        = "Portal-Login";
 $lang["portallogin_editmode"]            = "Editier-Modus";
 $lang["portallogin_editmode_0"]          = "Minimales Profil";
 $lang["portallogin_editmode_1"]          = "Vollständiges Profil";

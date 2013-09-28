@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_tellafriend_name"]        = "Weiterempfehlen";
 $lang["tellafriend_error"]               = "Fehlerseite";
 $lang["tellafriend_success"]             = "Erfolgsseite";
 $lang["fehler_captcha"]                  = "Bitte geben Sie den korrekten Sicherheits-Code ein";

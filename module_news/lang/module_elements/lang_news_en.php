@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_news_name"]               = "News";
 $lang["aktuell"]                         = "Latest news";
 $lang["archiv"]                          = "News archive";
 $lang["detail"]                          = "Details";

@@ -10,4 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_search_name"]             = "Заявки";
 $lang["search_amount"]                   = "Брой посещения за страница";

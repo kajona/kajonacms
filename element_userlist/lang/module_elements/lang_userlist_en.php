@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_userlist_name"]           = "User list";
 $lang["userlist_all"]                    = "All";
 $lang["userlist_group"]                  = "Group";
 $lang["userlist_status"]                 = "User-status";

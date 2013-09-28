@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_rssfeed_name"]            = "RSS-Feed";
 $lang["rssfeed_numberofposts"]           = "Anzahl anzuzeigender Meldungen";
 $lang["rssfeed_url"]                     = "RSS-Feed-URL";
 $lang["rssfeed_errorloading"]            = "Fehler beim Laden des Feeds.";

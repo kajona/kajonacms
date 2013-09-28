@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_portallogin_name"]        = "Portal login";
 $lang["portallogin_editmode"]            = "Edit-mode";
 $lang["portallogin_editmode_0"]          = "Minimal profile";
 $lang["portallogin_editmode_1"]          = "Complete profile";
@@ -24,7 +25,7 @@ $lang["dateTitle"]                       = "Birthday";
 $lang["editprofilelink"]                 = "Edit profile";
 $lang["emailTitle"]                      = "Email*";
 $lang["forenameTitle"]                   = "Forename";
-$lang["invalidEmailadress"]              = "No valid mailadress.";
+$lang["invalidEmailadress"]              = "No valid email address.";
 $lang["loggedin_label"]                  = "Logged in as";
 $lang["login"]                           = "Login";
 $lang["logoutlink"]                      = "Logout";
@@ -37,10 +38,10 @@ $lang["passwordTitle"]                   = "Password";
 $lang["passwordTitle2"]                  = "Password";
 $lang["passwordsUnequal"]                = "Passwords not equal.";
 $lang["phoneTitle"]                      = "Telephone";
-$lang["postalTitle"]                     = "Postalcode";
+$lang["postalTitle"]                     = "Postal code";
 $lang["pwdForgotLink"]                   = "Forgot password";
-$lang["pwdHint"]                         = "Please provide a new passowrd.";
-$lang["resetError"]                      = "An error occured. Please restart the procedure.";
+$lang["pwdHint"]                         = "Please provide a new password.";
+$lang["resetError"]                      = "An error occurred. Please restart the procedure.";
 $lang["resetHint"]                       = "Please provide your username. Afterwards, an email containing a link to change the password will be sent to the mailadress saved with the profile.";
 $lang["resetMailSuccess"]                = "An email containing a link to change your password was sent to the adress provided with your profile.";
 $lang["resetPwd"]                        = "Reset";

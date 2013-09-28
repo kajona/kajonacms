@@ -10,4 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_search_name"]             = "Suche";
 $lang["search_amount"]                   = "Anzahl Treffer pro Seite";

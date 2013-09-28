@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_eventmanager_name"]       = "Eventmanager";
 $lang["eventmanager_mode"]               = "View mode";
 $lang["eventmanager_mode_calendar"]      = "Calendar based view";
 $lang["eventmanager_mode_list"]          = "List of events";

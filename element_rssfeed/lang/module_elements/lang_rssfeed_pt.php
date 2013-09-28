@@ -10,5 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_rssfeed_name"]            = "RSS feed";
 $lang["rssfeed_errorloading"]            = "Erro a carregar o Feed.";
 $lang["rssfeed_errorparsing"]            = "Erro no emparelhamento dos Feed's.";

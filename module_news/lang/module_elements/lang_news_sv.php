@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
+$lang["element_news_name"]               = "Nyheter";
 $lang["aktuell"]                         = "Aktulla nyheter";
 $lang["archiv"]                          = "Nyhetsarkiv";
 $lang["browser"]                         = "Öppna filhanterare";

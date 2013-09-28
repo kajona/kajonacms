@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_portalupload_name"]       = "Portal-Datei-Upload";
 $lang["portalupload_download"]           = "Download-Archiv";
 $lang["portaluploadCopyUploadError"]     = "Fehler beim Kopieren der Datei.";
 $lang["portaluploadFileTitle"]           = "Datei";

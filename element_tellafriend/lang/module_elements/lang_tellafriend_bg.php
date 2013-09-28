@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_tellafriend_name"]        = "казвам";
 $lang["tellafriend_error"]               = "Страница в случай на грешка";
 $lang["tellafriend_success"]             = "Страница в случай на успех";
 $lang["fehler_captcha"]                  = "Моля попълнете правилно верификационния код";

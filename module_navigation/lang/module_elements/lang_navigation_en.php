@@ -10,5 +10,6 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["element_navigation_name"]         = "Navigation";
 $lang["navigation_foreign"]              = "Include foreign modules";
 $lang["navigation_foreign_hint"]         = "If enabled, other modules such as the mediamanager may add additional entries to the navigation";

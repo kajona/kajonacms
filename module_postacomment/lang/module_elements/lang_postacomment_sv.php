@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 293
 
 //editable entries
+$lang["element_postacomment_name"]       = "Kommentarer";
 $lang["postacomment_actionfilter"]       = "Handlingsfilter";
 $lang["postacomment_actionfilter_hint"]  = "Om satt, visas kommentarfält och kommentarlistan endast då de har samma handlingskommando. Skall i de flesta fall lämnas tom.";
 $lang["postacomment_numberofposts"]      = "Antal poster (0=obegränsat)";

@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_mediaplayer_name"]        = "Media player";
 $lang["element_mediaplayer_description"] = "This element is based on the JW Player from Longtail. Please read their license.";
 $lang["mediaplayer_file"]                = "Media file";
 $lang["mediaplayer_height"]              = "Height";

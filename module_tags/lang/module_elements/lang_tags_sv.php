@@ -10,4 +10,5 @@
 //Kajona Language Editor Core Build 370
 
 //editable entries
+$lang["element_tags_name"]               = "Tags";
 $lang["tags_hint"]                       = "För närvarande stöder den fullständiga portalutgåvan av modulen bara sidor och nyheter.";

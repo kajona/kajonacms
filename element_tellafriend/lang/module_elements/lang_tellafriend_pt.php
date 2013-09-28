@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_tellafriend_name"]        = "Dizer";
 $lang["fehler_captcha"]                  = "Por favor introduza o código de verificação correcto";
 $lang["message"]                         = "Mensagem";
 $lang["receiver"]                        = "Correio electrónico dos destinatários";

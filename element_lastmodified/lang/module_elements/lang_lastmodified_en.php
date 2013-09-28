@@ -10,4 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["element_lastmodified_name"]       = "Date of last modification";
 $lang["lastmodified"]                    = "Last modified: ";
