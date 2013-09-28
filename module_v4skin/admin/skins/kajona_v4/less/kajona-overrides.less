@@ -657,12 +657,8 @@ footer {
     }
 
     li.pathentry:before {
-        content: '.';
-        color: transparent;
-        background: url(../img/icon-arrow-right.png) center center no-repeat @grayDarker;
-        width: 8px;
-        display: inline-block;
-        padding: 0 5px;
+        content: @angle-right;
+        font-family: fontawesome;
     }
 
     li.pathentry:first-child:before {
@@ -974,9 +970,11 @@ footer {
                 background-repeat: no-repeat;
                 background-position: left center;
 
-                img {
+                img, i {
                     padding: 0px 2px;
+                    margin: 0 4px 0 0;
                 }
+
 
             }
         }
@@ -1064,8 +1062,8 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
   font-size: @baseFontSize;
   height: 20px;
   line-height: 20px;
-  margin-bottom: 9px;
-  padding: 4px;
+  margin-bottom: 7px;
+  padding: 3px;
   .border-radius(0px);
 }
 
@@ -1077,6 +1075,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 
 textarea {
     height: auto;
+    margin-bottom: 7px !important;
 }
 
 select {
@@ -1246,6 +1245,7 @@ label {
 
     td, th {
         padding: 6px;
+        vertical-align: middle;
     }
 
     .progress {
@@ -1259,17 +1259,19 @@ label {
 
         td.checkbox {
             padding: 0;
+            vertical-align: middle;
 
 			input {
-				vertical-align: middle;
+				vertical-align: baseline;
 				float: none;
-				margin-left: 0;
+				margin: 0;
 			}
         }
 
         td.image {
 
             width: 22px;
+            vertical-align: middle;
 
             img {
               width: 22px;
@@ -1439,6 +1441,7 @@ label {
 }
 
 .chzn-container-single {
+    margin-bottom: 6px;
 	.chzn-single {
 		color: @gray !important;
 		font-size: @baseFontSize !important;
