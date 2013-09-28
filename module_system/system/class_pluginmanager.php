@@ -152,8 +152,9 @@ class class_pluginmanager {
      * @return \interface_admin_plugin|null
      */
     public function getPluginObject($strExtensionPoint, $strName) {
-        if(isset ($this->getPluginObjects($strExtensionPoint)[$strName]))
-            return $this->getPluginObjects($strExtensionPoint)[$strName];
+        $arr_objs = $this->getPluginObjects($strExtensionPoint);
+        if(isset ($arr_objs[$strName]))
+            return $arr_objs[$strName];
         else
             return null;
     }
