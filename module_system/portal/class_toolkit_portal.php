@@ -256,16 +256,15 @@ class class_toolkit_portal extends class_toolkit {
      * Loads the link-content to be used when generating a new-icon-link
      *
      * @param $strPlaceholder
-     * @param $strElement
      * @param $strElementName
      * @param $strElementHref
      *
      * @return string
      */
-    public function getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref) {
+    public function getPeNewButton($strPlaceholder, $strElementName, $strElementHref) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionNew", true);
-        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "element" => $strElement, "elementName" => $strElementName, "elementHref" => $strElementHref), $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "elementName" => $strElementName, "elementHref" => $strElementHref), $strTemplateID);
         return $strReturn;
     }
 
