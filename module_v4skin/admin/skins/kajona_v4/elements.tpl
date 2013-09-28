@@ -179,7 +179,6 @@ Currently, there are two modes: with and without a description.
 
 <batchactions_wrapper>
 <div class="batchActionsWrapper">
-    <input type="checkbox" id="batchActionSwitch" rel="tooltip" title="[lang,commons_select_all,system]" onclick="KAJONA.admin.lists.toggleAllFields();" >
     %%entries%%
     <div class="batchActionsProgress" style="display: none;">
         <h5 class="progresstitle"></h5>
@@ -190,6 +189,7 @@ Currently, there are two modes: with and without a description.
     </div>
 </div>
 <script type="text/javascript">
+    $("#kj_cb_batchActionSwitch").on('click', function() { KAJONA.admin.lists.toggleAllFields(); KAJONA.admin.lists.updateToolbar(); });
     KAJONA.admin.lists.strConfirm = '[lang,commons_batchaction_confirm,pages]';
     KAJONA.admin.lists.strDialogTitle = '[lang,commons_batchaction_title,pages]';
     KAJONA.admin.lists.strDialogStart = '[lang,commons_start,pages]';

@@ -232,15 +232,22 @@ abstract class class_admin_simple extends class_admin {
             }
         }
 
-        $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier)), $intI);
+
+        $strNewActions = $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier));
+        $strBatchActions = "";
+
+        if(count($arrMassActions) > 0)
+            $strBatchActions .= $this->objToolkit->renderBatchActionHandlers($arrMassActions);
+
+        if($strNewActions != "" || $strBatchActions != "")
+            $strReturn .= $this->objToolkit->genericAdminList("batchActionSwitch", $strBatchActions, "", $strNewActions, $intI, "", "", $strBatchActions != "");
 
         if($bitSortable)
             $strReturn .= $this->objToolkit->dragableListFooter($strListId);
         else
             $strReturn .= $this->objToolkit->listFooter();
 
-        if(count($arrMassActions) > 0)
-            $strReturn .= $this->objToolkit->renderBatchActionHandlers($arrMassActions);
+
 
 
         $strReturn .= $arrPageViews["pageview"];

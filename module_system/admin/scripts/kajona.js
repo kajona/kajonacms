@@ -697,8 +697,8 @@ KAJONA.admin.lists = {
     toggleAllFields : function() {
         //batchActionSwitch
         $("table.admintable input[type='checkbox']").each(function() {
-            if($(this).attr('id').substr(0, 6) == "kj_cb_") {
-                $(this)[0].checked = $('#batchActionSwitch')[0].checked;
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                $(this)[0].checked = $('#kj_cb_batchActionSwitch')[0].checked;
             }
         });
     },
