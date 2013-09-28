@@ -191,96 +191,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
             return KAJONA.admin.lang.pe_rte_unsavedChanges;
         }
     });
-
-
-    // init drag&drop sorting of page elements
-    (function () {
-        // checks if the page element is allowed in the given placeholder or not
-        var isElementAllowedInPlaceholder = function (ui, $placeholderWrapper) {
-            var elementName = '#' + ui.item.data('element') + '#';
-            var allowedElements = $placeholderWrapper.data('allowedelements');
-
-            return allowedElements.indexOf(elementName) !== -1;
-        };
-
-        // checks if the page element is allowed in the given placeholder or not
-        var saveElementPosition = function (systemId, newPos) {
-            $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition', {
-                systemid: systemId,
-                listPos: newPos + 1
-            });
-        };
-
-        var oldPos;
-        var suspendStop = false;
-
-        $('.placeholderWrapper').sortable({
-            items: 'div.peElementWrapper',
-            handle: '.moveHandle',
-            connectWith: '.placeholderWrapper',
-            cursor: 'move',
-            forcePlaceholderSize: true,
-            placeholder: 'peElementMovePlaceholder',
-            start: function(event, ui) {
-                oldPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
-            },
-            activate: function(event, ui) {
-                var $placeholderWrapper = $(this);
-                if (isElementAllowedInPlaceholder(ui, $placeholderWrapper)) {
-                    $placeholderWrapper.addClass('pePlaceholderWrapperDropTarget');
-                }
-            },
-            over: function(event, ui) {
-                var $placeholderWrapper = $(this);
-
-                // hide placeholder if element is not allowed
-                if (isElementAllowedInPlaceholder(ui, $placeholderWrapper)) {
-                    $(ui.placeholder).show();
-                } else {
-                    $(ui.placeholder).hide();
-                }
-            },
-            receive: function(event, ui) {
-                var $placeholderWrapper = $(this);
-                var $oldPlaceholderWrapper = ui.sender;
-
-                if (isElementAllowedInPlaceholder(ui, $placeholderWrapper)) {
-                    var newPlaceholder = $placeholderWrapper.data('placeholder');
-                    var systemId = ui.item.data('systemid');
-                    var newPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
-
-                    suspendStop = true;
-                    $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=moveElement', {
-                        systemid: systemId,
-                        placeholder: newPlaceholder
-                    }, function () {
-                        saveElementPosition(systemId, newPos);
-                        suspendStop = false;
-                    });
-                } else {
-                    $oldPlaceholderWrapper.sortable("cancel");
-                }
-            },
-            stop: function(event, ui) {
-                if (!suspendStop) { // to prevent double requests
-                    var newPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
-
-                    if (oldPos !== newPos) {
-                        var systemId = ui.item.data('systemid');
-                        saveElementPosition(systemId, newPos);
-                    }
-                }
-
-                oldPos = null;
-            },
-            deactivate: function(event, ui) {
-                var $placeholderWrapper = $(this);
-                $placeholderWrapper.removeClass('pePlaceholderWrapperDropTarget');
-            },
-            delay: KAJONA.util.isTouchDevice() ? 2000 : 0
-        });
-    })();
-
 };
 
 
@@ -292,8 +202,9 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 
     // checks if the page element is allowed in the given placeholder or not
     var isElementAllowedInPlaceholder = function (ui, $placeholderWrapper) {
-        var elementName = '#' + ui.item.data('element') + '#';
-        var allowedElements = $placeholderWrapper.data('allowedelements');
+        var elementName = ui.item.data('element');
+        var placeholder = $placeholderWrapper.data('placeholder');
+        var allowedElements = placeholder.split('_')[1].split('|');
 
         return allowedElements.indexOf(elementName) !== -1;
     };
@@ -309,10 +220,10 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
     var oldPos;
     var suspendStop = false;
 
-    $('.placeholderWrapper').sortable({
+    $('.pePlaceholderWrapper').sortable({
         items: 'div.peElementWrapper',
         handle: '.moveHandle',
-        connectWith: '.placeholderWrapper',
+        connectWith: '.pePlaceholderWrapper',
         cursor: 'move',
         forcePlaceholderSize: true,
         placeholder: 'peElementMovePlaceholder',

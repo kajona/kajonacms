@@ -288,6 +288,20 @@ class class_toolkit_portal extends class_toolkit {
         return $strReturn;
     }
 
+    /**
+     * Wraps the content of a placeholder when using the portaleditor
+     *
+     * @param $strPlaceholder
+     * @param $strContent
+     *
+     * @return string
+     */
+    public function getPePlaceholderWrapper($strPlaceholder, $strContent) {
+        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateWrapperID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_placeholderWrapper", true);
+        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "content" => $strContent), $strTemplateWrapperID);
+        return $strReturn;
+    }
 
     /**
      * Creates the portaleditor toolbar at top of the page

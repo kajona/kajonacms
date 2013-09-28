@@ -1089,9 +1089,14 @@ Displays the new element button
     </div>
 </pe_actionNewWrapper>
 
+Displays the new element button
+<pe_placeholderWrapper>
+    <div class="pePlaceholderWrapper" data-placeholder="%%placeholder%%">%%content%%</div>
+</pe_placeholderWrapper>
+
 
 <pe_inactiveElement>
-    <div class="pe_inactiveElement">%%title%%</div>
+    <div class="peInactiveElement">%%title%%</div>
 </pe_inactiveElement>
 
 ---------------------------------------------------------------------------------------------------------

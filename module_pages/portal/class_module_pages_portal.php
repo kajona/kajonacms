@@ -260,10 +260,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             // add placeholder wrapping
             foreach($arrTemplate as $strPlaceholder => $strContent) {
-                $allowedElements = explode("_", $strPlaceholder);
-                $allowedElements = explode("|", $allowedElements[1]);
-                $allowedElements = "#" . join($allowedElements, "##") . "#";
-                $arrTemplate[$strPlaceholder] = "<div class='placeholderWrapper' data-placeholder='{$strPlaceholder}' data-allowedelements='{$allowedElements}'>{$strContent}</div>";
+                $arrTemplate[$strPlaceholder] = class_carrier::getInstance()->getObjToolkit("portal")->getPePlaceholderWrapper($strPlaceholder, $strContent);
             }
         }
 
