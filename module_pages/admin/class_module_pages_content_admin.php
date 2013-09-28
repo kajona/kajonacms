@@ -720,31 +720,39 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strPageSystemid = $objObject->getPrevId();
             $objLockmanager = new class_lockmanager($objObject->getSystemid());
 
-            if(!$objLockmanager->isLocked())
-                $objLockmanager->lockRecord();
+            $strPlaceholder = $this->getParam("placeholder");
+            $arrParts = explode("_", $strPlaceholder);
 
-            if($objLockmanager->isLockedByCurrentUser()) {
+            if(uniStrpos($arrParts[1], $objObject->getStrElement()) !== false) {
 
-                $strPlaceholder = $this->getParam("placeholder");
-                $arrParts = explode("_", $strPlaceholder);
+                if(!$objLockmanager->isLocked())
+                    $objLockmanager->lockRecord();
 
-                //ph_placeholder
-                $objObject->setStrPlaceholder($strPlaceholder);
+                if($objLockmanager->isLockedByCurrentUser()) {
 
-                //ph_name
-                $objObject->setStrName($arrParts[0]);
+                    //ph_placeholder
+                    $objObject->setStrPlaceholder($strPlaceholder);
 
-                $objObject->updateObjectToDb();
+                    //ph_name
+                    $objObject->setStrName($arrParts[0]);
 
-                //Edit Date of page & unlock
-                $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
-                $objPage->updateObjectToDb();
-                $objLockmanager->unlockRecord();
+                    $objObject->updateObjectToDb();
 
-                //Loading the data of the corresp site
-                $this->flushCompletePagesCache();
+                    //Edit Date of page & unlock
+                    $objPage = class_objectfactory::getInstance()->getObject($strPageSystemid);
+                    $objPage->updateObjectToDb();
+                    $objLockmanager->unlockRecord();
 
-                $strReturn = "<message><success>element update succeeded</success></message>";
+                    //Loading the data of the corresp site
+                    $this->flushCompletePagesCache();
+
+                    $strReturn = "<message><success>element update succeeded</success></message>";
+                }
+                else {
+                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+                    $strReturn = "<message><error>element not allowed for target placeholder</error></message>";
+
+                }
             }
 
         }
