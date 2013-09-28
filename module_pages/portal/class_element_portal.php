@@ -82,7 +82,7 @@ abstract class class_element_portal extends class_portal {
         //wrap all in a try catch block
         try {
 
-            if(_pages_portaleditor_ == "true" && $this->objSession->isAdmin()) {
+            if(_pages_portaleditor_ == "true" && $this->objSession->isAdmin() && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
                 //Check needed rights
 
                 $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
