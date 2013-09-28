@@ -1080,7 +1080,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 Displays the new element button
 <pe_actionNewWrapper>
     <div id="menuContainer_%%placeholder%%" class="dropdown">
-        <img src="_skinwebpath_/pics/icon_new.png" role="button" data-toggle="dropdown" title="%%label%% %%placeholderName%%" rel="tooltip" class="peNewButton" />
+        <img src="_skinwebpath_/pics/icon_new.png" role="button" data-toggle="dropdown" title="%%label%% &quot;%%placeholderName%%&quot;" rel="tooltip" class="peNewButton" />
         <div class="dropdown-menu peContextMenu" role="menu">
             <ul >
                 %%contentElements%%

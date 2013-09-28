@@ -1,6 +1,10 @@
 
 
-@FontAwesomePath:    "../fonts/fontawesome/font";
+@FontAwesomePath: "../fonts/fontawesome/font";
+@peColorHover: #9a9a9a;
+@wysiwygOutlineColor: #ccc;
+@wysiwygOutlineColorHover: #9a9a9a;
+
 
 /* P O R T A L E D I T O R   T O O L B A R */
 #peToolbar {
@@ -100,11 +104,10 @@
 
 
 .pe_inactiveElement {
-    border: 1px solid #333333;
-    .border-radius(3px);
+    border: 1px solid #333;
     padding: 3px;
     margin: 2px 0 2px 0px;
-    background-color: #cccccc;
+    background-color: #ccc;
     .opacity(50);
 }
 
@@ -117,7 +120,7 @@
 
 .peContainerHover {
     display: block !important;
-    outline: 1px solid #333333 !important;
+    outline: 1px solid @peColorHover !important;
 
     .menuHover {
         position: absolute !important;
@@ -127,14 +130,12 @@
 
         .actions {
             display: block !important;
-            background-color: #333333 !important;
+            background-color: @peColorHover !important;
             font-family: Verdana, Arial, Helvetica, sans-serif !important;
             font-size: 11px !important;
             text-align: left !important;
             padding: 1px 3px 2px 3px !important;
             text-transform: none !important;
-            .border-top-right-radius(3px);
-            .border-top-left-radius(3px);
             line-height: 14px !important;
 
             a, a:link, a:visited, a:hover, a:active, a:focus {
@@ -199,26 +200,16 @@
 }
 
 
-/* Hallo Inline Editor */
+/* WYSIWYG Inline Editor */
 body *[data-kajona-editable] {
-    outline: 1px dotted #cccccc;
+    outline: 1px dotted @wysiwygOutlineColor;
 }
 
-body *[data-kajona-editable] {
-   .transition(e('all .2s ease-in-out'));
+body *[data-kajona-editable]:hover,
+body *[data-kajona-editable]:focus {
+    outline: 1px dotted @wysiwygOutlineColorHover;
 }
 
-body *[data-kajona-editable]:hover, body *[data-kajona-editable]:focus {
-    outline: 1px dotted #333333;
-    .box-shadow( 0px 0px 5px 2px #333333);
-}
-
-.hallotoolbar {
-    .ui-button .ui-button-text {
-    /*line-height: auto !important;*/
-        font-size: 0.7em !important;
-    }
-}
 
 .peLoadingContainer {
 	background: url(../img/loading.gif) center no-repeat;
