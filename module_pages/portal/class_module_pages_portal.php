@@ -236,11 +236,10 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
                         $arrPeNewButtons[$strPeNewPlaceholder] = "";
 
-                    $strElementReadableName = $objPeNewElement->getStrDisplayName() != $objPeNewElement->getStrName() ? ($objPeNewElement->getStrDisplayName()." (".$objPeNewElement->getStrName().")") : $objPeNewElement->getStrName();
                     if(uniStripos($strArrayKey, "master") !== false)
-                        $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+                        $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
                     else
-                        $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
+                        $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
 
                     $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
 

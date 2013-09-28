@@ -1074,7 +1074,7 @@ Possible placeholders: %%link_complete%%, %%name%%, %%href%%
 
 Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
 <pe_actionNew>
-    <li ><a href="#" onclick="KAJONA.admin.portaleditor.openDialog('%%elementHref%%')">%%elementName%% (%%element%%)</a></li>
+    <li ><a href="#" onclick="KAJONA.admin.portaleditor.openDialog('%%elementHref%%')">%%elementName%%</a></li>
 </pe_actionNew>
 
 Displays the new element button

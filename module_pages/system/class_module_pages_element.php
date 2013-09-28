@@ -126,7 +126,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * @return string
      */
     public function getStrDisplayName() {
-        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elemente");
+        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elements");
         if($strName == "!element_".$this->getStrName()."_name!")
             $strName = $this->getStrName();
         else

@@ -610,7 +610,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return string
      */
     public function getStrReadableName() {
-        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrElement()."_name", "elemente");
+        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrElement()."_name", "elements");
         if($strName == "!element_".$this->getStrElement()."_name!")
             $strName = $this->getStrElement();
         return $strName;

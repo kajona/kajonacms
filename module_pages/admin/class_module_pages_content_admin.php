@@ -143,11 +143,10 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 foreach($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
                     foreach($arrElementsInSystem as $objOneElementInSystem) {
                         if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
-                            $objElement = $objOneElementInSystem;
-                            if($objElement->getIntRepeat() == 1 || $bitHit === false) {
+                            if($objOneElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
                                 //So, the Row for a new element: element is repeatable or not yet created
                                 $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"]." (".$objOneElementInSystem->getStrDisplayName().")", "", $strActions, $intI++);
+                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
                             }
                             else {
                                 //element not repeatable.
@@ -160,7 +159,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
                                     $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $arrSingleElementOnTemplateplaceholder["name"]." (".$arrSingleElementOnTemplateplaceholder["element"].")", "", $strActions, $intI++);
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName().")", "", $strActions, $intI++);
                                 }
                             }
                         }
@@ -198,10 +197,10 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             //minimized actions now, plz. this ain't being a real element anymore!
             foreach($arrElementsOnPage as $objOneElement) {
                 $strActions = "";
-                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName().($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
-                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrName()." (".$objOneElement->getStrElement().") - ".$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
