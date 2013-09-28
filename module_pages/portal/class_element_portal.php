@@ -96,7 +96,7 @@ abstract class class_element_portal extends class_portal {
                     if(isset($this->arrModule["pe_action"]))
                         $arrConfig["pe_action"] = $this->arrModule["pe_action"];
 
-                    $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig);
+                    $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig, $this->arrElementData["page_element_ph_element"]);
                 }
                 else {
                     $strReturn = $this->loadData();
@@ -222,11 +222,12 @@ abstract class class_element_portal extends class_portal {
      * @param string $strContent elements' output
      * @param string $strSystemid elements' systemid
      * @param array $arrConfig : pe_module, pe_action, [pe_action_new, pe_action_new_params]
+     * @param string $strElement
      *
      * @return string
      * @static
      */
-    public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig) {
+    public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig, $strElement = "") {
         $strReturn = "";
 
         if(!validateSystemid($strSystemid))
@@ -350,7 +351,7 @@ abstract class class_element_portal extends class_portal {
         // layout generation
 
         $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar(
-            $strSystemid, array($strMoveHandle, $strNewLink, $strEditLink, $strCopyLink, $strDeleteLink, $strSetInactiveLink), $strContent
+            $strSystemid, array($strMoveHandle, $strNewLink, $strEditLink, $strCopyLink, $strDeleteLink, $strSetInactiveLink), $strContent, $strElement
         );
 
         //reset the portal texts language
@@ -404,7 +405,7 @@ abstract class class_element_portal extends class_portal {
                 //---------------------------------------------------
                 // layout generation
 
-                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strSetActiveLink), $strContent);
+                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strSetActiveLink), $strContent, $strElementName);
 
                 //reset the portal texts language
                 class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);

@@ -260,7 +260,9 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             // add placeholder wrapping
             foreach($arrTemplate as $strPlaceholder => $strContent) {
-                $arrTemplate[$strPlaceholder] = "<div class='placeholderWrapper' data-placeholder='{$strPlaceholder}'>{$strContent}</div>";
+                $allowedElements = explode("|", explode("_", $strPlaceholder)[1]);
+                $allowedElements = "#" . join($allowedElements, "##") . "#";
+                $arrTemplate[$strPlaceholder] = "<div class='placeholderWrapper' data-placeholder='{$strPlaceholder}' data-allowedelements='{$allowedElements}'>{$strContent}</div>";
             }
         }
 

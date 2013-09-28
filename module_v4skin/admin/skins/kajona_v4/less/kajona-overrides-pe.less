@@ -2,8 +2,8 @@
 
 @FontAwesomePath: "../fonts/fontawesome/font";
 @peColorHover: #9a9a9a;
-@wysiwygOutlineColor: #ccc;
-@wysiwygOutlineColorHover: #9a9a9a;
+@wysiwygOutlineColor: #afafaf;
+@wysiwygOutlineColorHover: #7b7b7b;
 
 
 /* P O R T A L E D I T O R   T O O L B A R */
@@ -122,6 +122,10 @@
         display: block !important;
         outline: 1px solid @peColorHover !important;
 
+        *[data-kajona-editable] {
+          outline: 1px dotted @wysiwygOutlineColor;
+        }
+
         .peElementActions {
             position: absolute !important;
             border: none !important;
@@ -165,12 +169,7 @@
 
                 .moveHandle {
                     cursor: move;
-                    position: absolute;
-                    margin-left: -20px;
-                    margin-top: -1px;
-                    display: inline-block;
-                    padding: 3px;
-                    background-color: rgba(150, 150, 150, .5);
+                    color: white;
                 }
             }
         }
@@ -185,7 +184,11 @@
 .peElementMovePlaceholder {
     border: 3px dotted @wysiwygOutlineColor;
     .box-sizing(border-box);
+}
 
+.pePlaceholderWrapperDropTarget {
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
+    min-height: 20px;
 }
 
 .peNewButton {
@@ -221,10 +224,6 @@
 
 
 /* WYSIWYG Inline Editor */
-body *[data-kajona-editable] {
-    outline: 1px dotted @wysiwygOutlineColor;
-}
-
 body *[data-kajona-editable]:hover,
 body *[data-kajona-editable]:focus {
     outline: 1px dotted @wysiwygOutlineColorHover;

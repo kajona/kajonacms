@@ -224,10 +224,12 @@ class class_toolkit_portal extends class_toolkit {
      * @param string $strSystemid
      * @param array $arrLinks
      * @param string $strContent
+     * @param $strElementName
+     * @internal param \class_module_pages_element $objElement
      *
      * @return string
      */
-    public function getPeActionToolbar($strSystemid, $arrLinks, $strContent) {
+    public function getPeActionToolbar($strSystemid, $arrLinks, $strContent, $strElementName) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionToolbar", true);
         $strTemplateRowID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionToolbar_link", true);
@@ -247,6 +249,7 @@ class class_toolkit_portal extends class_toolkit {
         }
 
         $arrTemplate["systemid"] = $strSystemid;
+        $arrTemplate["elementname"] = $strElementName;
         $arrTemplate["content"] = $strContent;
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         return $strReturn;

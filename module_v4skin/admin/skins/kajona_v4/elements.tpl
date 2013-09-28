@@ -1057,7 +1057,7 @@ pe_iconbar, pe_disable
 </pe_toolbar>
 
 <pe_actionToolbar>
-<div class="peElementWrapper" data-systemid="%%systemid%%">
+<div class="peElementWrapper" data-systemid="%%systemid%%" data-element="%%elementname%%">
     <div class="peElementActions" style="display: none;">
         <div class="actions">
             %%actionlinks%%
