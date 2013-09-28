@@ -24,7 +24,7 @@ class class_pluginmanager {
     private $objLang;
 
     /**
-     * @var interfacePlugin[]
+     * @var interface_admin_plugin[]
      */
     private $arrPlugins = array();
 
@@ -123,7 +123,7 @@ class class_pluginmanager {
     /**
      * Returns all loaded Plugins filtered.
      *
-     * @return arr interfacePlugin
+     * @return  interface_admin_plugin[]
      */
     public function getMatchingPluginObjects() {
         return $this->getPluginObjects($this->getFilterExtensionPoints());
@@ -133,7 +133,7 @@ class class_pluginmanager {
      * Returns all loaded Plugins of an ExtensionPoint
      *
      * @param $strExtensionPoint
-     * @return interfacePlugin
+     * @return interface_admin_plugin
      */
     public function getPluginObjects($strExtensionPoint) {
         $arrReturn = $this->arrPlugins[$strExtensionPoint];
