@@ -510,6 +510,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      *
      * @throws class_exception
      * @return string , "" in case of success
+     * @permissions edit
      */
     protected function actionCopyElement() {
         $strReturn = "";

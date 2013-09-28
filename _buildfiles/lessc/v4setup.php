@@ -35,7 +35,6 @@ TXT;
 
 $arrFilesToUpdate = array(
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/main.tpl" => $strSkinReplacement,
-    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/main_portaleditor.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/folderview.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/login.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/elements.tpl" => $strPeReplacement,

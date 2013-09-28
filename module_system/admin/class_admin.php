@@ -535,11 +535,11 @@ abstract class class_admin {
         if($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
             //add suffix
             try {
-                $strTemplate = str_replace(".tpl", "", $this->arrModule["template"]) . "_portaleditor.tpl";
+                $strTemplate = "/folderview.tpl";
                 $strTemplateID = $this->objTemplate->readTemplate($strTemplate, "", false, true);
             }
             catch(class_exception $objException) {
-                //An error occured. In most cases, this is because the user ist not logged in, so the login-template was requested.
+                //An error occurred. In most cases, this is because the user ist not logged in, so the login-template was requested.
                 if($this->arrModule["template"] == "/login.tpl") {
                     throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
                 }

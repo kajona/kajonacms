@@ -25,7 +25,6 @@ TXT;
 
 $arrFilesToUpdate = array(
     __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/main.tpl" => $strSkinReplacement,
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/main_portaleditor.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/folderview.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/login.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/elements.tpl" => $strPeReplacement
