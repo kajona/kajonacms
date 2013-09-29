@@ -20,8 +20,7 @@ class class_image_rotate extends class_image_abstract_operation {
 
         imagealphablending($objResource, true);
         $objResource = imagerotate($objResource, $this->floatAngle, $intColor);
-        imagealphablending($objResource, false);
-        imagesavealpha($objResource, true);
+        return true;
     }
 
     public function getCacheIdValues() {

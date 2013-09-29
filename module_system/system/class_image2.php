@@ -201,6 +201,8 @@ class class_image2 {
 
             if ($oldResource != $this->objResource) {
                 imagedestroy($oldResource);
+                imagealphablending($this->objResource, false);
+                imagesavealpha($this->objResource, true);
                 $this->intWidth = imagesx($this->objResource);
                 $this->intHeight = imagesy($this->objResource);
             }

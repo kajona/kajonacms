@@ -2,6 +2,10 @@
 
 abstract class class_image_abstract_operation implements interface_image_operation {
 
+    protected static function createImageResource($intWidth, $intHeight) {
+        return imagecreatetruecolor($intWidth, $intHeight);
+    }
+
     /**
      * @param $objResource
      * @param $arrColor
