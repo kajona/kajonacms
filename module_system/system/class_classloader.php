@@ -145,6 +145,7 @@ class class_classloader {
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/db/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/usersources/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/imageplugins/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/validators/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/workflows/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/messageproviders/"));

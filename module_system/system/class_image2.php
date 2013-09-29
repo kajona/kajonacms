@@ -9,6 +9,7 @@ class class_image2 {
     private $originalPath;
     private $intWidth;
     private $intHeight;
+    private $arrOperations = array();
 
     public function __construct() {
     }
@@ -19,10 +20,42 @@ class class_image2 {
         }
     }
 
+    /**
+     * Parses a color string into an RGB array.
+     *
+     * Allowed strings:
+     * * Hexadecimal RGB string: #rrggbb
+     * * Hexadecimal RGBA string: #rrggbbaa
+     *
+     * @param $strColor
+     * @return array
+     */
+    public static function parseColorRgb($strColor) {
+
+        if (preg_match("/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?/i", $strColor, $arrMatches)) {
+            $intRed = hexdec($arrMatches[1]);
+            $intGreen = hexdec($arrMatches[2]);
+            $intBlue = hexdec($arrMatches[3]);
+            $arrColor = array($intRed, $intGreen, $intBlue);
+
+            if (isset($arrMatches[4]))
+            {
+                // alpha is a value between 0 and 127
+                $intAlpha = (int)(hexdec($arrMatches[4]) / 2);
+                $arrColor[] = $intAlpha;
+            }
+
+            return $arrColor;
+        }
+
+        return false;
+    }
+
     public function create($intWidth, $intHeight) {
         $this->originalPath = null;
         $this->intWidth = $intWidth;
         $this->intHeight = $intHeight;
+        $this->arrOperations = array();
     }
 
     public function load($strPath) {
@@ -33,6 +66,7 @@ class class_image2 {
             $this->originalPath = $strPath;
             $this->intWidth = $intWidth;
             $this->intHeight = $intHeight;
+            $this->arrOperations = array();
             $bitReturn = true;
         }
 
@@ -75,8 +109,8 @@ class class_image2 {
         return $this->outputImage(null, $strFormat);
     }
 
-    public function addOperation(class_image_operation $operation) {
-        //TODO
+    public function addOperation(interface_image_operation $objOperation) {
+        $this->arrOperations[] = $objOperation;
     }
 
     public function getWidth() {
@@ -88,34 +122,54 @@ class class_image2 {
     }
 
     private function finalLoadOrCreate() {
+        $bitReturn = false;
+
+        // Load existing file
         if ($this->originalPath != null) {
             $strFormat = self::getFormatFromFilename($this->originalPath);
             switch ($strFormat) {
                 case self::FORMAT_PNG:
                     $this->objResource = imagecreatefrompng(_realpath_ . $this->originalPath);
-                    return true;
+                    $bitReturn = true;
+                    break;
 
                 case self::FORMAT_JPG:
                     $this->objResource = imagecreatefromjpeg(_realpath_ . $this->originalPath);
-                    return true;
+                    $bitReturn = true;
+                    break;
 
                 case self::FORMAT_GIF:
                     $this->objResource = imagecreatefromgif(_realpath_ . $this->originalPath);
-                    return true;
-
-                default:
-                    return false;
+                    $bitReturn = true;
+                    break;
             }
         }
+        // Create new file in memory
         else {
             $this->objResource = imagecreatetruecolor($this->intWidth, $this->intHeight);
+            $bitReturn = true;
+        }
+
+        if ($bitReturn) {
             imagealphablending($this->objResource, false);
             imagesavealpha($this->objResource, true);
         }
     }
 
     private function applyOperations() {
-        //TODO
+        $bitReturn = true;
+
+        foreach ($this->arrOperations as $objOperation) {
+            $oldResource = $this->objResource;
+            $bitReturn &= $objOperation->render($this->objResource);
+
+            if ($oldResource != $this->objResource) {
+                imagedestroy($oldResource);
+                $this->intWidth = imagesx($this->objResource);
+                $this->intHeight = imagesy($this->objResource);
+            }
+        }
+
         return true;
     }
 
