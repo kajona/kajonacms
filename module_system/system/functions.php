@@ -785,6 +785,16 @@ function createFilename($strName, $bitFolder = false) {
 }
 
 /**
+ * Returns the file extension for a file (including the dot).
+ *
+ * @param string $strPath
+ * @return string
+ */
+function getFileExtension($strPath) {
+    return uniStrtolower(uniSubstr($strPath, uniStrrpos($strPath, ".")));
+}
+
+/**
  * Validates if the passed string is a valid mail-address
  *
  * @param string $strAddress
