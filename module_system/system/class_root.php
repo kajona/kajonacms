@@ -220,56 +220,8 @@ abstract class class_root {
      * The row loaded from the database is available by calling $this->getArrInitRow().
      */
     protected function initObjectInternal() {
-        //try to do a default init
-        $objReflection = new class_reflection($this);
-        $arrTargetTables = $objReflection->getAnnotationValuesFromClass("@targetTable");
-
-        if(validateSystemid($this->getSystemid()) && count($arrTargetTables) > 0 ) {
-            $strWhere = "";
-            $arrTables = array();
-            foreach($arrTargetTables as $strOneTable) {
-                $arrOneTable = explode(".", $strOneTable);
-                $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-                $arrTables[] = _dbprefix_.$arrOneTable[0];
-            }
-
-
-            $strQuery = "SELECT *
-                          FROM "._dbprefix_."system_right,
-                               ".implode(", ", $arrTables)." ,
-                               ".$this->objDB->encloseTableName(_dbprefix_."system")."
-                     LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-                         WHERE system_id = right_id
-                            ".$strWhere."
-                           AND system_id = ? ";
-
-            $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
-            $this->setArrInitRow($arrRow);
-
-            //get the mapped properties
-            $objReflection = new class_reflection($this);
-            $arrProperties = $objReflection->getPropertiesWithAnnotation("@tableColumn");
-
-            foreach($arrProperties as $strPropertyName => $strColumn) {
-
-                $arrColumn = explode(".", $strColumn);
-
-                if(count($arrColumn) == 2)
-                    $strColumn = $arrColumn[1];
-
-                if(!isset($arrRow[$strColumn])) {
-                    //class_logger::getInstance(class_logger::DBLOG)->addLogRow("erroneous column mapping for class ".get_class($this).", column ".$strColumn." (mapped at property ".$strPropertyName." not found", class_logger::$levelWarning);
-                    continue;
-                }
-
-                $strSetter = $objReflection->getSetter($strPropertyName);
-                if($strSetter !== null)
-                    call_user_func(array($this, $strSetter), $arrRow[$strColumn]);
-            }
-
-        }
+        $objORM = new class_orm_mapper($this);
+        $objORM->initObjectFromDb();
     }
 
     /**
@@ -337,27 +289,8 @@ abstract class class_root {
      * @return int
      */
     public static function getObjectCount($strPrevid = "") {
-        $objAnnotations = new class_reflection(get_called_class());
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
-
-        if(count($arrTargetTables) == 1) {
-            $arrSingleTable = explode(".", $arrTargetTables[0]);
-            //build the query
-            $arrParams = array();
-            $strQuery = "SELECT COUNT(*)
-                           FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrSingleTable[0]).",
-                                "._dbprefix_."system
-                          WHERE system_id = ".class_carrier::getInstance()->getObjDB()->encloseColumnName($arrSingleTable[1])."
-                           ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."";
-
-            if($strPrevid != "")
-                $arrParams[] = $strPrevid;
-
-            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-            return $arrRow["COUNT(*)"];
-        }
-
-        return 0;
+        $objORM = new class_orm_mapper();
+        return $objORM->getObjectCount(get_called_class(), $strPrevid);
     }
 
     /**
@@ -373,62 +306,8 @@ abstract class class_root {
      * @return self[]
      */
     public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
-        $objAnnotations = new class_reflection(get_called_class());
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
-
-        $arrReturn = array();
-
-        if(count($arrTargetTables) == 1) {
-            //try to load the sort criteria
-            $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation("@listOrder");
-
-            $strOrderBy = " ORDER BY system_sort ASC ";
-            if(count($arrPropertiesOrder) > 0) {
-                $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation("@tableColumn");
-
-                foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
-                    if(isset($arrPropertiesORM[$strProperty])) {
-
-                        $arrColumn = explode(".", $arrPropertiesORM[$strProperty]);
-                        if(count($arrColumn) == 2)
-                            $strColumn = $arrColumn[1];
-                        else
-                            $strColumn = $arrColumn[0];
-
-                        //get order
-                        $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
-
-                        //get column
-                        if($strColumn != "") {
-                            $strOrderBy = " ORDER BY ".$strColumn." ".$strOrder;
-                            break;
-                        }
-                    }
-                }
-            }
-
-
-            $arrSingleTable = explode(".", $arrTargetTables[0]);
-            //build the query
-            $arrParams = array();
-            $strQuery = "SELECT system_id
-                           FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrSingleTable[0]).",
-                                "._dbprefix_."system
-                          WHERE system_id = ".class_carrier::getInstance()->getObjDB()->encloseColumnName($arrSingleTable[1])."
-                           ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."
-                           ".$strOrderBy;
-
-            if($strPrevid != "")
-                $arrParams[] = $strPrevid;
-
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
-            foreach($arrRows as $arrOneRow) {
-                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
-            }
-        }
-
-        return $arrReturn;
+        $objORM = new class_orm_mapper();
+        return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
     }
 
 
@@ -712,109 +591,8 @@ abstract class class_root {
      * @return bool
      */
     protected function updateStateToDb() {
-
-        if(validateSystemid($this->getSystemid())) {
-
-            if($this instanceof interface_versionable) {
-                $objChanges = new class_module_system_changelog();
-                $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
-            }
-
-            //fetch properties with annotations
-            $objReflection = new class_reflection($this);
-            $arrTargetTables = $objReflection->getAnnotationValuesFromClass("@targetTable");
-            if(count($arrTargetTables) > 0) {
-                $bitReturn = true;
-
-                foreach($arrTargetTables as $strOneTable) {
-                    $arrTableDef = explode(".", $strOneTable);
-
-                    //scan all properties
-                    $arrColValues = array();
-                    $arrEscapes = array();
-
-                    //get the mapped properties
-                    $arrProperties = $objReflection->getPropertiesWithAnnotation("@tableColumn");
-
-                    foreach($arrProperties as $strPropertyName => $strColumn) {
-
-                        //check if there are table annotation available
-                        $arrColumnDef = explode(".", $strColumn);
-
-                        //if the column doesn't declare a target table whereas the class defines more then one - skip it.
-                        if(count($arrColumnDef) == 1 && count($arrTargetTables) > 1 )
-                            throw new class_exception("property ".$strPropertyName." declares no target table, class ".get_class($this)." declares more than one target table.", class_exception::$level_FATALERROR);
-
-
-                        //skip if property targets another table
-                        if(count($arrColumnDef) == 2 && $arrColumnDef[0] != $arrTableDef[0])
-                            continue;
-
-                        if(count($arrColumnDef) == 2)
-                            $strColumn = $arrColumnDef[1];
-
-                        //all prerequisites match, start creating query
-                        $strGetter = $objReflection->getGetter($strPropertyName);
-                        if($strGetter !== null) {
-                            //explicit casts required? could be relevant, depending on the target column type / database system
-                            $mixedValue = call_user_func(array($this, $strGetter));
-                            if($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit"))
-                                $mixedValue = (int)$mixedValue;
-                            $arrColValues[$strColumn] = $mixedValue;
-                            $arrEscapes[] = !$objReflection->hasPropertyAnnotation($strPropertyName, "@blockEscaping");
-                        }
-                    }
-
-                    //update table
-                    if(count($arrColValues) > 0)
-                        $bitReturn = $bitReturn && $this->updateSingleTable($arrColValues, $arrEscapes, $arrTableDef[0], $arrTableDef[1]);
-
-
-                }
-
-                return $bitReturn;
-            }
-
-            //no table mapping found - skip
-            return true;
-
-        }
-
-        //no update required - skip
-        return true;
-
-    }
-
-    /**
-     * Called internally to update a single target-table
-     *
-     * @param $arrColValues
-     * @param $arrEscapes
-     * @param $strTargetTable
-     * @param $strPrimaryCol
-     *
-     * @return bool
-     */
-    private function updateSingleTable($arrColValues, $arrEscapes, $strTargetTable, $strPrimaryCol) {
-
-        $arrValues = array();
-
-        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_.$strTargetTable)." SET ";
-
-        $intI = 0;
-        foreach($arrColValues as $strColumn => $objValue) {
-            $strQuery .= $this->objDB->encloseColumnName($strColumn)." = ? ";
-            $arrValues[] = $objValue;
-
-            if(++$intI < count($arrColValues))
-                $strQuery .= ", ";
-        }
-
-        $strQuery .= " WHERE ".$this->objDB->encloseColumnName($strPrimaryCol)." = ? ";
-        $arrValues[] = $this->getSystemid();
-
-        return $this->objDB->_pQuery($strQuery, $arrValues, $arrEscapes);
-
+        $objORMMapper = new class_orm_mapper($this);
+        return $objORMMapper->updateStateToDb();
     }
 
     /**

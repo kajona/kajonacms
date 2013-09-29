@@ -18,7 +18,7 @@ class class_formentry_multiselect extends class_formentry_base implements interf
 
     private $arrKeyValues = array();
 
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator

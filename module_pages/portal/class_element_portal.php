@@ -47,6 +47,24 @@ abstract class class_element_portal extends class_portal {
 
 
     /**
+     * returns the table used by the element
+     *
+     * @return string
+     */
+    public function getTable() {
+        $objAnnotations = new class_reflection($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+        if(count($arrTargetTables) != 0) {
+            $arrTable = explode(".", $arrTargetTables[0]);
+            return _dbprefix_.$arrTable[0];
+        }
+
+        //legacy code
+        return $this->getArrModule("table");
+    }
+
+
+    /**
      * Loads the content out of the elements-table
      *
      * @param string $strSystemid
@@ -55,9 +73,9 @@ abstract class class_element_portal extends class_portal {
      */
     public function getElementContent($strSystemid) {
         //table given?
-        if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "") {
+        if($this->getTable() != "") {
             $strQuery = "SELECT *
-    						FROM ".$this->arrModule["table"]."
+    						FROM ".$this->getTable()."
     						WHERE content_id = ? ";
             return $this->objDB->getPRow($strQuery, array($strSystemid));
         }
@@ -405,7 +423,7 @@ abstract class class_element_portal extends class_portal {
                 //---------------------------------------------------
                 // layout generation
 
-                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strSetActiveLink), $strContent, $strElementName);
+                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strSetActiveLink), $strContent);
 
                 //reset the portal texts language
                 class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);

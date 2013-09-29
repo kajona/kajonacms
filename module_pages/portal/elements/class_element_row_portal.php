@@ -12,41 +12,32 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ * @targetTable element_paragraph.content_id
  */
-class class_element_row_portal extends class_element_portal implements  interface_portal_element {
+class class_element_row_portal extends class_element_portal implements interface_portal_element {
+
 
     /**
-     * Constructor
+     * Does a little "make-up" to the contents
      *
-     * @param $objElementData
+     * @return string
      */
-	public function __construct($objElementData) {
-		parent::__construct($objElementData);
+    public function loadData() {
 
-        $this->setArrModuleEntry("table", _dbprefix_."element_paragraph");
-	}
-
-
-	/**
-	 * Does a little "make-up" to the contents
-	 *
-	 * @return string
-	 */
-	public function loadData() {
-
-		$strReturn = "";
+        $strReturn = "";
 
         $strTemplate = $this->arrElementData["paragraph_template"];
 
         //fallback
-        if($strTemplate == "")
+        if($strTemplate == "") {
             $strTemplate = "row.tpl";
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/element_row/".$strTemplate, "row");
 
         $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }

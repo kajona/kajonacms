@@ -16,7 +16,7 @@
  */
 class class_formentry_yesno extends class_formentry_base implements interface_formentry_printable {
 
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator

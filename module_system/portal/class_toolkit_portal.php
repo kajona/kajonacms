@@ -229,7 +229,7 @@ class class_toolkit_portal extends class_toolkit {
      *
      * @return string
      */
-    public function getPeActionToolbar($strSystemid, $arrLinks, $strContent, $strElementName) {
+    public function getPeActionToolbar($strSystemid, $arrLinks, $strContent, $strElementName = "") {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionToolbar", true);
         $strTemplateRowID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_actionToolbar_link", true);

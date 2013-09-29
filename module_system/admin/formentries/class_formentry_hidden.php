@@ -15,7 +15,7 @@
  */
 class class_formentry_hidden extends class_formentry_base implements interface_formentry {
 
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator

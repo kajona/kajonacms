@@ -67,7 +67,7 @@ class class_admin_formgenerator {
      * @param $strFormname
      * @param class_model $objSourceobject
      */
-    public function __construct($strFormname, class_model $objSourceobject) {
+    public function __construct($strFormname,  $objSourceobject) {
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
     }
@@ -160,10 +160,12 @@ class class_admin_formgenerator {
         }
 
         //lock the record to avoid multiple edit-sessions
-        if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
-            $this->objSourceobject->getLockManager()->lockRecord();
-        else
-            throw new class_exception("current record is already locked, cannot be locked for the current user", class_exception::$level_ERROR);
+        if(method_exists($this->objSourceobject, "getLockManager")) {
+            if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
+                $this->objSourceobject->getLockManager()->lockRecord();
+            else
+                throw new class_exception("current record is already locked, cannot be locked for the current user", class_exception::$level_ERROR);
+        }
 
 
         return $strReturn;
@@ -414,18 +416,24 @@ class class_admin_formgenerator {
      * Sets the name of the group of hidden elements
      *
      * @param $strHiddenGroupTitle
+     * @return $this
      */
     public function setStrHiddenGroupTitle($strHiddenGroupTitle) {
         $this->strHiddenGroupTitle = $strHiddenGroupTitle;
+        return $this;
     }
 
     /**
      * Moves a single field to the list of hidden elements
      *
      * @param class_formentry_base $objField
+     * @return class_formentry_base
      */
     public function addFieldToHiddenGroup(class_formentry_base $objField) {
         $this->arrHiddenElements[] = $objField->getStrEntryName();
+        if(!isset($this->arrFields[$objField->getStrEntryName()]))
+            $this->arrFields[$objField->getStrEntryName()] = $objField;
+        return $objField;
     }
 
     /**

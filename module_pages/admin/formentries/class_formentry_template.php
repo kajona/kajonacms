@@ -11,15 +11,15 @@
  * Make sure to pass the list of possible entries before rendering the form.
  *
  * @author sidler@mulchprod.de
- * @since 4.0
- * @package module_formgenerator
+ * @since 4.3
+ * @package module_pages
  */
-class class_formentry_dropdown extends class_formentry_base implements interface_formentry_printable {
+class class_formentry_template extends class_formentry_base implements interface_formentry {
 
     /**
-     * a list of [key=>value],[key=>value] pairs, resolved from the language-files
+     * the path to the folder of matching templates
      */
-    const STR_DDVALUES_ANNOTATION = "@fieldDDValues";
+    const STR_TEMPLATEDIR_ANNOTATION = "@fieldTemplateDir";
 
 
     private $arrKeyValues = array();
@@ -43,6 +43,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
         return $strReturn;
     }
@@ -57,8 +58,9 @@ class class_formentry_dropdown extends class_formentry_base implements interface
             $objReflection = new class_reflection($this->getObjSourceObject());
 
             //try to find the matching source property
-            $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_DDVALUES_ANNOTATION);
+            $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_TEMPLATEDIR_ANNOTATION);
             $strSourceProperty = null;
+
             foreach($arrProperties as $strPropertyName => $strValue) {
                 if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
                     $strSourceProperty = $strPropertyName;
@@ -67,32 +69,21 @@ class class_formentry_dropdown extends class_formentry_base implements interface
             if($strSourceProperty == null)
                 return;
 
-            $strDDValues = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DDVALUES_ANNOTATION);
-            if($strDDValues !== null && $strDDValues != "") {
-                $arrDDValues = array();
-                foreach(explode(",", $strDDValues) as $strOneKeyVal) {
-                    $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
-                    $arrOneKeyValue = explode("=>", $strOneKeyVal);
+            $strTemplateDir = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_TEMPLATEDIR_ANNOTATION);
 
-                    $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);
-                    if(count($arrOneKeyValue) == 2)
-                        $arrDDValues[$strKey] = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
+            //load templates
+            $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir);
+            $arrTemplatesDD = array();
+            if(count($arrTemplates) > 0) {
+                foreach($arrTemplates as $strTemplate) {
+                    $arrTemplatesDD[$strTemplate] = $strTemplate;
                 }
-                $this->setArrKeyValues($arrDDValues);
             }
+            $this->setArrKeyValues($arrTemplatesDD);
+
         }
     }
 
-
-    /**
-     * Returns a textual representation of the formentries' value.
-     * May contain html, but should be stripped down to text-only.
-     *
-     * @return string
-     */
-    public function getValueAsText() {
-        return isset($this->arrKeyValues[$this->getStrValue()]) ? $this->arrKeyValues[$this->getStrValue()] : "";
-    }
 
     /**
      * @param $arrKeyValues

@@ -364,10 +364,16 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             //Load the class to create an object
             $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
             //and finally create the object
+            /** @var class_element_admin $objElement */
             $objElement = new $strElementClass();
 
             //really continue? try to validate the passed data.
-            if(!$objElement->validateForm()) {
+            if($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
+                class_carrier::getInstance()->setParam("peClose", "");
+                $strReturn .= $this->actionNew(true);
+                return $strReturn;
+            }
+            else if(!$objElement->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
@@ -406,7 +412,12 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objElement = $objElementData->getConcreteAdminInstance();
 
             //really continue? try to validate the passed data.
-            if(!$objElement->validateForm()) {
+            if($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
+                class_carrier::getInstance()->setParam("peClose", "");
+                $strReturn .= $this->actionEdit(true);
+                return $strReturn;
+            }
+            else if(!$objElement->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
@@ -414,6 +425,10 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
             //pass the data to the element, maybe the element wants to update some data
             $objElement->setArrParamData($this->getAllParams());
+
+            if($objElement->getAdminForm() !== null)
+                $objElement->getAdminForm()->updateSourceObject();
+
             $objElement->doBeforeSaveToDb();
 
             //check, if we could save the data, so the element needn't to

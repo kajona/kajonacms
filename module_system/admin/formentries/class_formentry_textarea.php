@@ -15,7 +15,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
 
     private $strOpener = "";
 
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator

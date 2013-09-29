@@ -54,7 +54,7 @@ class class_formentry_base {
      * @param $strSourceProperty
      * @param class_model $objSourceObject
      */
-    public function __construct($strFormName, $strSourceProperty, class_model $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         $this->strSourceProperty = $strSourceProperty;
         $this->objSourceObject = $objSourceObject;
         $this->strFormName = $strFormName;

@@ -13,70 +13,63 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_paragraph.content_id
  */
 class class_element_row_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_paragraph.paragraph_title
+     *
+     * @fieldType text
+     * @fieldMandatory
+     * @fieldLabel commons_title
+     *
+     * @elementContentTitle
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_row");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_paragraph");
-        $this->setArrModuleEntry("tableColumns", "paragraph_title,paragraph_template,paragraph_content");
-        parent::__construct();
-    }
+    private $strTitle = "";
+
+    /**
+     * @var string
+     * @tableColumn element_paragraph.paragraph_template
+     *
+     * @fieldType template
+     * @fieldTemplateDir /element_row
+     * @fieldMandatory
+     * @fieldLabel template
+     */
+    private $strTemplate = "";
 
 
     /**
-     * Returns a form to edit the element-data
-     *
-     * @param mixed $arrElementData
-     *
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
      * @return string
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getLang("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
-
-        //load templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_row");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : ""));
-        }
-
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");
-
-        return $strReturn;
+    public function getStrTemplate() {
+        return $this->strTemplate;
     }
 
     /**
-     * Returns an abstract of the current element
-     *
+     * @param string $strTitle
+     */
+    public function setStrTitle($strTitle) {
+        $this->strTitle = $strTitle;
+    }
+
+    /**
      * @return string
      */
-    public function getContentTitle() {
-        $arrData = $this->loadElementData();
-        return uniStrTrim(htmlStripTags(isset($arrData["paragraph_title"]) ? $arrData["paragraph_title"] : ""), 60);
+    public function getStrTitle() {
+        return $this->strTitle;
     }
 
-    /**
-     * Overwrite this function, if you want to validate passed form-input
-     *
-     * @return mixed
-     */
-    public function getRequiredFields() {
-        return array("paragraph_title" => "text");
-    }
+
 
 }
