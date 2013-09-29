@@ -1,4 +1,37 @@
 <?php
+/*"******************************************************************************************************
+*   (c) 2013 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id:$	                                            *
+********************************************************************************************************/
+
+/**
+ * Class to manipulate and output images.
+ *
+ * This class can be used to load or create an image, apply multiple operations, such as scaling and rotation,
+ * and save the resulting image. By default the processed image will be cached and no processing will be
+ * performed when a cached version is available.
+ *
+ * Example:
+ * $objImage = new class_image2();
+ * $objImage->load("/files/images/samples/PA252134.JPG");
+ *
+ * // Scale and crop the image so it is exactly 800 * 600 pixels large.
+ * $objImage->addOperation(new class_image_scale_and_crop(800, 600));
+ *
+ * // Render a text with 80% opacity.
+ * $objImage->addOperation(new class_image_text("Kajona", 300, 300, 40, "rgb(0,0,0,0.8)")
+ *
+ * // Apply the operations and send the image to the browser.
+ * if (!$objImage->sendToBrowser()) {
+ *     echo "Error processing image.";
+ * }
+ *
+ * Custom operations can be added by implementing interface_image_operation. Most operations
+ * should inherit from class_image_abstract_operation, which implements interface_image_operation
+ * and provides common functionality.
+ */
 class class_image2 {
 
     const FORMAT_PNG = "png";
@@ -27,16 +60,16 @@ class class_image2 {
     }
 
     /**
-     * Parses a color string into an RGB array.
+     * Parses a color string into an RGB or RGBA array.
      *
-     * Allowed strings:
+     * Allowed color strings:
      * * Hexadecimal RGB string: #rrggbb
      * * Hexadecimal RGBA string: #rrggbbaa
      * * Decimal RGB color (color values between 0 and 255): rgb(255, 0, 16)
      * * Decimal RGBA color (as above with alpha between 0.0 and 1.0): rgba(255,0,16,0.9)
      *
-     * @param $strColor
-     * @return array
+     * @param string $strColor Color string.
+     * @return array RGB or RGBA values.
      */
     public static function parseColorRgb($strColor) {
 
@@ -83,16 +116,30 @@ class class_image2 {
     /**
      * Set whether caching is enabled (default) or disabled.
      *
-     * @param $bitUseCache
+     * @param bool $bitUseCache
      */
     public function setUseCache($bitUseCache) {
         $this->bitUseCache = $bitUseCache;
     }
 
+    /**
+     * Set the quality for JPEG pictures.
+     *
+     * This parameter applies only when saving JPEG images
+     * and does not affect all other image processing.
+     *
+     * @param int $intJpegQuality
+     */
     public function setJpegQuality($intJpegQuality) {
         $this->intJpegQuality = $intJpegQuality;
     }
 
+    /**
+     * Create a new image with the given width and height.
+     *
+     * @param $intWidth
+     * @param $intHeight
+     */
     public function create($intWidth, $intHeight) {
         $this->strOriginalPath = null;
         $this->bitImageIsUpToDate = false;
@@ -101,15 +148,20 @@ class class_image2 {
         $this->arrOperations = array();
     }
 
+    /**
+     * Use an existing image file.
+     *
+     * Returns false if the file does not exist.
+     *
+     * @param $strPath
+     * @return bool
+     */
     public function load($strPath) {
         $bitReturn = false;
         $strPath = removeDirectoryTraversals($strPath);
         if (is_file(_realpath_ . $strPath)) {
-            list($intWidth, $intHeight) = getimagesize(_realpath_ . $strPath);
             $this->bitImageIsUpToDate = false;
             $this->strOriginalPath = $strPath;
-            $this->intWidth = $intWidth;
-            $this->intHeight = $intHeight;
             $this->arrOperations = array();
             $bitReturn = true;
         }
@@ -117,6 +169,28 @@ class class_image2 {
         return $bitReturn;
     }
 
+    /**
+     * Add an image operation.
+     *
+     * Image operations must implement interface_image_operation.
+     *
+     * @param interface_image_operation $objOperation
+     */
+    public function addOperation(interface_image_operation $objOperation) {
+        $this->arrOperations[] = $objOperation;
+        $this->bitImageIsUpToDate = false;
+    }
+
+    /**
+     * Save the image to a file.
+     *
+     * Calling this method will actually start the image processing,
+     * if no cached image is available.
+     *
+     * @param $strPath
+     * @param null $strFormat
+     * @return bool
+     */
     public function save($strPath, $strFormat = null) {
         $strPath = removeDirectoryTraversals($strPath);
 
@@ -143,6 +217,15 @@ class class_image2 {
         }
     }
 
+    /**
+     * Create the image and send it directly to the browser.
+     *
+     * Calling this method will actually start the image processing,
+     * if no cached image is available.
+     *
+     * @param null $strFormat
+     * @return bool
+     */
     public function sendToBrowser($strFormat = null) {
         if ($strFormat == null && $this->strOriginalPath != null) {
             $strFormat = self::getFormatFromFilename($this->strOriginalPath);
@@ -181,6 +264,17 @@ class class_image2 {
         }
     }
 
+    /**
+     * Create the image and return the GD image resource.
+     *
+     * This method is mainly meant to be used internally by image operations
+     * working on multiple images.
+     *
+     * Calling this method will actually start the image processing,
+     * if no cached image is available.
+     *
+     * @return resource
+     */
     public function createGdResource() {
         $bitSuccess = false;
 
@@ -197,19 +291,13 @@ class class_image2 {
         return $this->objResource;
     }
 
-    public function addOperation(interface_image_operation $objOperation) {
-        $this->arrOperations[] = $objOperation;
-        $this->bitImageIsUpToDate = false;
-    }
-
-    public function getWidth() {
-        return $this->intWidth;
-    }
-
-    public function getHeight() {
-        return $this->intHeight;
-    }
-
+    /**
+     * Return the image cache ID.
+     *
+     * The cache ID is not set until one of the image output method is called.
+     *
+     * @return mixed
+     */
     public function getCacheId() {
         if (!$this->bitImageIsUpToDate) {
             $this->createGdResource();
@@ -234,6 +322,10 @@ class class_image2 {
 
     private function finalLoadOrCreate() {
         $bitReturn = false;
+
+        if ($this->objResource != null) {
+            imagedestroy($this->objResource);
+        }
 
         // Load existing file
         if ($this->strOriginalPath != null) {
@@ -264,8 +356,7 @@ class class_image2 {
         }
 
         if ($bitReturn) {
-            imagealphablending($this->objResource, false);
-            imagesavealpha($this->objResource, true);
+            $this->updateImageResource();
         }
 
         return $bitReturn;
@@ -280,10 +371,7 @@ class class_image2 {
 
             if ($oldResource != $this->objResource) {
                 imagedestroy($oldResource);
-                imagealphablending($this->objResource, false);
-                imagesavealpha($this->objResource, true);
-                $this->intWidth = imagesx($this->objResource);
-                $this->intHeight = imagesy($this->objResource);
+                $this->updateImageResource();
             }
         }
 
@@ -358,6 +446,14 @@ class class_image2 {
 
         //echo "DEBUG: Cache Id: " . $strCacheId . "\n";
         $this->strCacheId = md5($strCacheId);
+    }
+
+    private function updateImageResource()
+    {
+        $this->intWidth = imagesx($this->objResource);
+        $this->intHeight = imagesy($this->objResource);
+        imagealphablending($this->objResource, false);
+        imagesavealpha($this->objResource, true);
     }
 
     private static function buildCacheId($strName, $arrValues) {

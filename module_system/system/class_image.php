@@ -38,6 +38,7 @@
  * A hint regarding overlays: Right now, only PNGs are supported for transparent overlays. GIFs are no longer supported.
  *
  * @package module_system
+ * @deprecated Use class_image2 instead.
  * @author sidler@mulchprod.de
  */
 class class_image {

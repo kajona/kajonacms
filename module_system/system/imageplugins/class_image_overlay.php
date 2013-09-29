@@ -1,4 +1,11 @@
 <?php
+/*"******************************************************************************************************
+*   (c) 2013 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id:$	                                            *
+********************************************************************************************************/
+
 /**
  */
 class class_image_overlay extends class_image_abstract_operation {
@@ -19,8 +26,8 @@ class class_image_overlay extends class_image_abstract_operation {
 
     public function render(&$objResource) {
         $objOverlayResource = $this->objImage->createGdResource();
-        $intOverlayWidth = $this->objImage->getWidth();
-        $intOverlayHeight = $this->objImage->getHeight();
+        $intOverlayWidth = imagesx($objOverlayResource);
+        $intOverlayHeight = imagesy($objOverlayResource);
 
         imagealphablending($objResource, $this->bitAlphaBlending);
         imagealphablending($objOverlayResource, $this->bitAlphaBlending);

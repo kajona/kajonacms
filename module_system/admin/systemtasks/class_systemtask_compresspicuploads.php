@@ -90,57 +90,13 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         foreach ($arrFilesFolders["files"] as $arrOneFile) {
             $strImagePath = $strPath."/".$arrOneFile["filename"];
 
-            $objImage = new class_image();
-            $objImage->preLoadImage($strImagePath);
-
-            if ($objImage->getIntWidth() > $this->intMaxWidth || $objImage->getIntHeight() > $this->intMaxHeight) {
-                $bitResize = true;
-                $intWidthNew = 0;
-                $intHeightNew = 0;
-
-                $floatRelation = $objImage->getIntWidth() / $objImage->getIntHeight();
-
-                //chose more restricitve values
-                $intHeightNew = $this->intMaxHeight;
-                $intWidthNew = $this->intMaxHeight * $floatRelation;
-
-                if($this->intMaxHeight == 0) {
-                    if($this->intMaxWidth < $objImage->getIntWidth()) {
-                        $intWidthNew = $this->intMaxWidth;
-                        $intHeightNew = $intWidthNew / $floatRelation;
-                    }
-                    else
-                        $bitResize = false;
-                }
-                elseif ($this->intMaxWidth == 0) {
-                    if($this->intMaxHeight < $objImage->getIntHeight()) {
-                        $intHeightNew = $this->intMaxHeight;
-                        $intWidthNew = $intHeightNew * $floatRelation;
-                    }
-                    else
-                        $bitResize = false;
-                }
-                elseif ($intHeightNew && $intHeightNew > $this->intMaxHeight || $intWidthNew > $this->intMaxWidth) {
-                    $intHeightNew = $this->intMaxWidth / $floatRelation;
-                    $intWidthNew = $this->intMaxWidth;
-                }
-                //round to integers
-                $intHeightNew = (int)$intHeightNew;
-                $intWidthNew = (int)$intWidthNew;
-                //avoid 0-sizes
-                if($intHeightNew < 1)
-                    $intHeightNew = 1;
-                if($intWidthNew < 1)
-                    $intWidthNew = 1;
-
-                if($bitResize) {
-	                $objImage->resizeImage($intWidthNew, $intHeightNew);
-	                $objImage->saveImage($strImagePath);
-	                $objImage->releaseResources();
-
-	                $this->intFilesProcessed++;
-                }
-            }
+            $objImage = new class_image2();
+            $objImage->setUseCache(false);
+            $objImage->load($strImagePath);
+            $objImage->addOperation(new class_image_scale($this->intMaxWidth, $this->intMaxHeight));
+            if ($objImage->saveImage($strImagePath)) {
+                $this->intFilesProcessed++;
+            };
         }
     }
 
