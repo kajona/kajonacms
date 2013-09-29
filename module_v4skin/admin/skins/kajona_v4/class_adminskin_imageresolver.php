@@ -90,7 +90,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_edit"                        => "<i class='icon-pencil'></i>",
         "icon_editDisabled"                => "<span class='icon-stack'><i class='icon-pencil'></i><i class='icon-ban-circle icon-stack-base' style='color: red'></i></span>",
         "icon_editLocked"                  => "<span class='icon-stack'><i class='icon-pencil'></i><i class='icon-lock icon-stack-base' style='color: red'></i></span>",
-        "icon_enabled"                     => "<i class='icon-eye-open' style='colodr: green;'></i>",
+        "icon_enabled"                     => "<i class='icon-eye-open'></i>",
         "icon_event"                       => "<i class='icon-calendar-empty'></i>",
         "icon_excel"                       => "<i class='icon-ms-excel'></i>",
         "icon_externalBrowser"             => "<i class='icon-search'></i>",
