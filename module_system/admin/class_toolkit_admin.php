@@ -831,7 +831,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
         $arrTemplate = array(
             "title" => $objEntry->getStrDisplayName(),
-            "image" => $objEntry->getStgrGridIcon(),
+            "image" => $objEntry->getStrGridIcon(),
             "actions" => $strActions,
             "systemid" => $objEntry->getSystemid(),
             "subtitle" => $objEntry->getStrLongDescription(),
