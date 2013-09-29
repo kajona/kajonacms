@@ -24,8 +24,9 @@ class class_image_rotate extends class_image_abstract_operation {
         imagesavealpha($objResource, true);
     }
 
-    public function getCacheId() {
-        // TODO
-        return "";
+    public function getCacheIdValues() {
+        $arrValues = array($this->floatAngle);
+        $arrValues = array_merge($arrValues, $this->arrColor);
+        return $arrValues;
     }
 }

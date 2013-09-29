@@ -1,6 +1,6 @@
 <?php
 
-$floatAngle = -45.0;
+$floatAngle = 90.0;
 
 $objImage = new class_image2();
 if (!$objImage->load("/files/images/samples/PA252134.JPG")) {
