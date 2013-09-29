@@ -535,3 +535,10 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
     width: auto;
     text-align: left;
 }
+
+/* 2 column layout */
+.twoColumns > div {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+}

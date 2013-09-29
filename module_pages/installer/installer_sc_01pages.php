@@ -102,7 +102,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($this->strIndexID);
@@ -202,7 +202,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($strErrorPageId);
@@ -275,7 +275,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($strImprintPageId);
@@ -363,7 +363,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($strSamplePageId);
@@ -446,7 +446,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($strSampleSubPageId);
