@@ -48,8 +48,10 @@ abstract class class_element_admin extends class_admin {
 
         parent::__construct();
 
-        $this->loadElementData();
+        if(validateSystemid($this->getSystemid()))
+            $this->loadElementData();
     }
+
 
 
     /**

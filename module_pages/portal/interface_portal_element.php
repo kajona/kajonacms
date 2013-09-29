@@ -14,29 +14,15 @@
  */
 interface interface_portal_element {
 
-	/**
-	 * Contructor, passing the element-data to the base-classes
-	 *
-	 * @param mixed $objElementData Infos for the current element, e.g. the systemid
-	 */
-	public function __construct($objElementData);
+    /**
+     * Sucessor of getElementOutput()
+     * loadData() is responsible to create the html-output of the current object.
+     * loadData() is being invoked from external.
+     * All data belonging to this element and the content is accessible by using
+     * $this->arrElementData[]
+     *
+     * @return string
+     */
+    public function loadData();
 
-
-	/**
-	 * Sucessor of getElementOutput()
-	 * loadData() is responsible to create the html-output of the current object.
-	 * loadData() is being invoked from external.
-	 * All data belonging to this element and the content is accessible by using
-	 * $this->arrElementData[]
-	 *
-	 * @return string
-	 */
-	public function loadData();
-
-	/**
-	 * Method to pass control to the element.
-	 * Returns the output of the element
-	 * @deprecated method moved to class_elemente_portal
-	 */
-	//public function getElementOutput();
 }

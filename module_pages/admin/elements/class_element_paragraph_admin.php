@@ -4,7 +4,7 @@
 *   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                     *
+*   $Id$                           *
 ********************************************************************************************************/
 
 /**
@@ -12,105 +12,68 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_paragraph.content_id
  */
 class class_element_paragraph_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
-
+     * @var string
+     * @tableColumn element_paragraph.paragraph_title
+     *
+     * @fieldType text
+     * @fieldLabel commons_title
+     *
+     * @elementContentTitle
      */
-    public function __construct() {
-
-        $this->setArrModuleEntry("name", "element_paragraph");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_paragraph");
-        parent::__construct();
-    }
-
+    private $strTitle = "";
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_paragraph.paragraph_content
+     * @blockEscaping
      *
-     * @param mixed $arrElementData
+     * @fieldType wysiwyg
+     * @fieldLabel paragraph_content
      *
-     * @return string
+     * @elementContentTitle
      */
-    public function getEditForm($arrElementData) {
-
-        //$arrElementData["paragraph_content"] = uniStrReplace("%%", "\%\%", $arrElementData["paragraph_content"]);
-
-        $strReturn = "";
-
-        $strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getLang("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
-        $strReturn .= $this->objToolkit->formWysiwygEditor("paragraph_content", $this->getLang("paragraph_content"), (isset($arrElementData["paragraph_content"]) ? $arrElementData["paragraph_content"] : ""));
-        $strReturn .= $this->objToolkit->formInputImageSelector("paragraph_image", $this->getLang("commons_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""));
-        $strReturn .= $this->objToolkit->formInputPageSelector("paragraph_link", $this->getLang("paragraph_link"), (isset($arrElementData["paragraph_link"]) ? $arrElementData["paragraph_link"] : ""));
-
-        //load templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_paragraph");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : ""));
-        }
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");
-        return $strReturn;
-    }
-
+    private $strTextContent = "";
 
     /**
-     * saves the submitted data to the database
-     * It IS wanted to not let the system save the element here!
+     * @var string
+     * @tableColumn element_paragraph.paragraph_link
      *
-     * @param string $strSystemid
+     * @fieldType page
+     * @fieldLabel paragraph_link
      *
-     * @return bool
+     * @elementContentTitle
      */
-    public function actionSave($strSystemid) {
+    private $strLink = "";
 
-        //do some cleanups
-        $strContent = processWysiwygHtmlContent($this->arrParamData["paragraph_content"]);
-        $strImage = str_replace(_webpath_, "", $this->arrParamData["paragraph_image"]);
+    /**
+     * @var string
+     * @tableColumn element_paragraph.paragraph_image
+     *
+     * @fieldType image
+     * @fieldLabel commons_image
+     *
+     * @elementContentTitle
+     */
+    private $strImage = "";
 
-        //and save to database
-        $strQuery = "UPDATE " . $this->arrModule["table"] . " SET
-				paragraph_title = ?,
-				paragraph_content = ?,
-				paragraph_link = ?,
-				paragraph_image = ?,
-				paragraph_template = ?
-				WHERE content_id= ? ";
+    /**
+     * @var string
+     * @tableColumn element_paragraph.paragraph_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     * @fieldTemplateDir /element_paragraph
+     *
+     * @elementContentTitle
+     */
+    private $strTemplate = "";
 
-        if($this->objDB->_pQuery(
-            $strQuery,
-            array(
-                $this->arrParamData["paragraph_title"],
-                $strContent,
-                $this->arrParamData["paragraph_link"],
-                $strImage,
-                $this->arrParamData["paragraph_template"],
-                $strSystemid
-            ),
-            array(
-                true,
-                false
-            )
-        )
-        ) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
     /**
      * Returns an abstract of the current element
@@ -118,19 +81,89 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @return string
      */
     public function getContentTitle() {
+        $this->loadElementData();
 
-        $arrData = $this->loadElementData();
-        if(isset($arrData["paragraph_title"])) {
-            if($arrData["paragraph_title"] != "") {
-                return uniStrTrim(htmlStripTags($arrData["paragraph_title"]), 60);
-            }
-            else {
-                return uniStrTrim(htmlStripTags($arrData["paragraph_content"]), 60);
-            }
+        if($this->getStrTitle() != "") {
+            return htmlStripTags($this->getStrTitle());
         }
-        else {
+        else if($this->getStrTextContent() != "") {
+            return uniStrTrim(htmlStripTags($this->getStrTextContent()), 120);
+        }
+        else
             return parent::getContentTitle();
-        }
     }
+
+
+
+    /**
+     * @param string $strContent
+     */
+    public function setStrTextContent($strContent) {
+        $this->strTextContent = $strContent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTextContent() {
+        return $this->strTextContent;
+    }
+
+    /**
+     * @param string $strImage
+     */
+    public function setStrImage($strImage) {
+        $this->strImage = $strImage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrImage() {
+        return $this->strImage;
+    }
+
+    /**
+     * @param string $strLink
+     */
+    public function setStrLink($strLink) {
+        $this->strLink = $strLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrLink() {
+        return $this->strLink;
+    }
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strTitle
+     */
+    public function setStrTitle($strTitle) {
+        $this->strTitle = $strTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTitle() {
+        return $this->strTitle;
+    }
+
 
 }

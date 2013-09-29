@@ -8,10 +8,10 @@
 
 /**
  * @author sidler@mulchprod.de
- * @since 4.0
+ * @since 4.3
  * @package module_formgenerator
  */
-class class_formentry_wysiwygsmall extends class_formentry_base implements interface_formentry_printable {
+class class_formentry_wysiwyg extends class_formentry_base implements interface_formentry_printable {
 
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
@@ -33,7 +33,7 @@ class class_formentry_wysiwygsmall extends class_formentry_base implements inter
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formWysiwygEditor($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "minimal");
+        $strReturn .= $objToolkit->formWysiwygEditor($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue());
 
         return $strReturn;
     }
@@ -42,6 +42,8 @@ class class_formentry_wysiwygsmall extends class_formentry_base implements inter
         $this->setStrValue(processWysiwygHtmlContent($this->getStrValue()));
         return parent::setValueToObject();
     }
+
+
 
 
 
