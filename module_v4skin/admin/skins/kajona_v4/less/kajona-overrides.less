@@ -1224,7 +1224,15 @@ label {
 
     &.admintable {
 
-        empty-cells:hide;
+        empty-cells: hide;
+
+        tbody.disabled {
+            opacity: .5;
+
+            &:hover {
+                opacity: .7;
+            }
+        }
 
         td.checkbox {
             padding: 0;

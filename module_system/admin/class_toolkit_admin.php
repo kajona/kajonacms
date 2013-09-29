@@ -831,7 +831,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
         $arrTemplate = array(
             "title" => $objEntry->getStrDisplayName(),
-            "image" => $objEntry->getStrGridIcon(),
+            "image" => $objEntry->getStgrGridIcon(),
             "actions" => $strActions,
             "systemid" => $objEntry->getSystemid(),
             "subtitle" => $objEntry->getStrLongDescription(),
@@ -932,7 +932,8 @@ class class_toolkit_admin extends class_toolkit {
             $intCount,
             $objEntry->getStrAdditionalInfo(),
             $objEntry->getStrLongDescription(),
-            $bitCheckbox
+            $bitCheckbox,
+            $objEntry->getIntRecordStatus() == 0 ? "disabled" : ""
         );
     }
 
@@ -947,10 +948,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strAdditionalInfo
      * @param string $strDescription
      * @param bool $bitCheckbox
+     * @param string $strCssAddon
      *
      * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false) {
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "") {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
         $arrTemplate["image"] = $strIcon;
@@ -958,6 +960,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["center"] = $strAdditionalInfo;
         $arrTemplate["actions"] = $strActions;
         $arrTemplate["description"] = $strDescription;
+        $arrTemplate["cssaddon"] = $strCssAddon;
 
         if($bitCheckbox) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_checkbox");

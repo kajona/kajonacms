@@ -140,7 +140,7 @@ Currently, there are two modes: with and without a description.
 </generallist_checkbox>
 
 <generallist>
-    <tbody>
+    <tbody class="%%cssaddon%%">
         <tr data-systemid="%%listitemid%%">
             <td class="treedrag"></td>
             <td class="listsorthandle"></td>
@@ -155,7 +155,7 @@ Currently, there are two modes: with and without a description.
 
 
 <generallist_desc>
-    <tbody class="generalListSet">
+    <tbody class="generalListSet %%cssaddon%%">
         <tr data-systemid="%%listitemid%%">
             <td rowspan="2" class="treedrag"></td>
             <td rowspan="2" class="listsorthandle"></td>
