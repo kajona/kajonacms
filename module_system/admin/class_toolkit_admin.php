@@ -829,13 +829,19 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function gridEntry(interface_admin_gridable $objEntry, $strActions) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
+
+        $strCSSAddon = "";
+        if(method_exists($objEntry, "getIntRecordStatus"))
+            $strCSSAddon = $objEntry->getIntRecordStatus() == 0 ? "disabled" : "";
+
         $arrTemplate = array(
             "title" => $objEntry->getStrDisplayName(),
             "image" => $objEntry->getStrGridIcon(),
             "actions" => $strActions,
             "systemid" => $objEntry->getSystemid(),
             "subtitle" => $objEntry->getStrLongDescription(),
-            "info" => $objEntry->getStrAdditionalInfo()
+            "info" => $objEntry->getStrAdditionalInfo(),
+            "cssaddon" => $strCSSAddon
         );
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -924,6 +930,11 @@ class class_toolkit_admin extends class_toolkit {
             $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
         else
             $strImage = class_adminskin_helper::getAdminImage($strImage);
+
+        $strCSSAddon = "";
+        if(method_exists($objEntry, "getIntRecordStatus"))
+            $strCSSAddon = $objEntry->getIntRecordStatus() == 0 ? "disabled" : "";
+
         return $this->genericAdminList(
             $objEntry->getSystemid(),
             $objEntry->getStrDisplayName(),
@@ -933,7 +944,7 @@ class class_toolkit_admin extends class_toolkit {
             $objEntry->getStrAdditionalInfo(),
             $objEntry->getStrLongDescription(),
             $bitCheckbox,
-            $objEntry->getIntRecordStatus() == 0 ? "disabled" : ""
+            $strCSSAddon
         );
     }
 
