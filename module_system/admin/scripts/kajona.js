@@ -627,7 +627,11 @@ KAJONA.admin.ajax = {
                 if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
                     var newStatus = $($.parseXML(data)).find("newstatus").text();
                     var link = $('#statusLink_' + strSystemIdToSet);
+
                     var adminListRow = link.parents('.admintable > tbody').first();
+                    if (!adminListRow.length) {
+                        adminListRow = link.parents('.grid > ul > li').first();
+                    }
 
                     if (newStatus == 0) {
                         link.html(KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon);

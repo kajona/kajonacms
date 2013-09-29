@@ -44,7 +44,7 @@ $(function() {
 </grid_footer>
 
 <grid_entry>
-<li class="span3" data-systemid="%%systemid%%" >
+<li class="span3 %%cssaddon%%" data-systemid="%%systemid%%" >
     <div class="thumbnail" >
         <h5 >%%title%%</h5>
         <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: cover;">
