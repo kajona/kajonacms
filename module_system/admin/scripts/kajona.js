@@ -719,7 +719,7 @@ KAJONA.admin.lists = {
 
         //get the selected elements
         $("table.admintable  input:checked").each(function() {
-            if($(this).attr('id').substr(0, 6) == "kj_cb_") {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
                 var sysid = $(this).closest("tr").data('systemid');
                 if(sysid != "")
                     KAJONA.admin.lists.arrSystemids.push(sysid);
