@@ -6,6 +6,7 @@ class class_image2 {
     const FORMAT_GIF = "gif";
 
     private $strCachePath = _images_cachepath_;
+    private $bitUseCache = true;
 
     private $objResource;
     private $strOriginalPath;
@@ -52,6 +53,15 @@ class class_image2 {
         }
 
         return false;
+    }
+
+    /**
+     * Set whether caching is enabled (default) or disabled.
+     *
+     * @param $bitUseCache
+     */
+    public function setUseCache($bitUseCache) {
+        $this->bitUseCache = $bitUseCache;
     }
 
     public function create($intWidth, $intHeight) {
@@ -232,6 +242,10 @@ class class_image2 {
     }
 
     private function isCached($strFormat) {
+        if (!$this->bitUseCache) {
+            return false;
+        }
+
         $this->initCacheId($strFormat);
         $strCachePath = $this->getCachePath($strFormat);
 
@@ -245,9 +259,11 @@ class class_image2 {
     }
 
     private function saveCache($strFormat) {
-        $strCachePath = $this->getCachePath($strFormat);
-        //echo "DEBUG: Saving cache file: " . $strCachePath . "\n";
-        $this->outputImage($strCachePath, $strFormat);
+        if ($this->bitUseCache) {
+            $strCachePath = $this->getCachePath($strFormat);
+            //echo "DEBUG: Saving cache file: " . $strCachePath . "\n";
+            $this->outputImage($strCachePath, $strFormat);
+        }
     }
 
     private function getCachePath($strFormat) {

@@ -3,6 +3,7 @@
 $floatAngle = 90.0;
 
 $objImage = new class_image2();
+$objImage->setUseCache(false);
 if (!$objImage->load("/files/images/samples/P9066809.JPG")) {
     echo "Could not load file.\n";
 }
