@@ -32,12 +32,15 @@ class class_image2 {
      * Allowed strings:
      * * Hexadecimal RGB string: #rrggbb
      * * Hexadecimal RGBA string: #rrggbbaa
+     * * Decimal RGB color (color values between 0 and 255): rgb(255, 0, 16)
+     * * Decimal RGBA color (as above with alpha between 0.0 and 1.0): rgba(255,0,16,0.9)
      *
      * @param $strColor
      * @return array
      */
     public static function parseColorRgb($strColor) {
 
+        // Hex RGB(A) value, e.g. #FF0000 or #FF000022
         if (preg_match("/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?/i", $strColor, $arrMatches)) {
             $intRed = hexdec($arrMatches[1]);
             $intGreen = hexdec($arrMatches[2]);
@@ -51,6 +54,26 @@ class class_image2 {
                 $arrColor[] = $intAlpha;
             }
 
+            return $arrColor;
+        }
+        // Decimal RGB, e.g. rgb(255, 0, 16)
+        else if (preg_match("/rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)/i", $strColor, $arrMatches)) {
+            $intRed = min((int)$arrMatches[1], 255);
+            $intGreen = min((int)$arrMatches[2], 255);
+            $intBlue = min((int)$arrMatches[3], 255);
+            $arrColor = array($intRed, $intGreen, $intBlue);
+            return $arrColor;
+        }
+        // Decimal RGBA, e.g. rgba(255, 0, 16, 0.8)
+        else if (preg_match("/rgba\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d+(\\.\\d+)?)\\s*\\)/i", $strColor, $arrMatches)) {
+            $intRed = min((int)$arrMatches[1], 255);
+            $intGreen = min((int)$arrMatches[2], 255);
+            $intBlue = min((int)$arrMatches[3], 255);
+
+            // alpha is a value between 0 and 127
+            $intAlpha = (int)(min((float)$arrMatches[4], 1.0) * 127.0);
+
+            $arrColor = array($intRed, $intGreen, $intBlue, $intAlpha);
             return $arrColor;
         }
 
