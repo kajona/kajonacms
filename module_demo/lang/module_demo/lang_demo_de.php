@@ -17,5 +17,10 @@ $lang["quickhelp_list"] = "Demo Titel.";
 $lang["quickhelp_list_other_object"] = "Demo Titel Sub.";
 $lang["quickhelp_edit"] = "Demo Titel. Edit";
 $lang["delete_question"] = "Möchten Sie das Demo &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-
 $lang["list_other_object"] = "Zweiter Objecttyp";
+$lang["form_demo_float"] = "Dezimalzahl";
+$lang["form_demo_int"] = "Ganzzahl";
+$lang["modul_titel_other_object"] = "Weiteres Objekt";
+$lang["form_demo_dateDate"] = "Datum";
+
+

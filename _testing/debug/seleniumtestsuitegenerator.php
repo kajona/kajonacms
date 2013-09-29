@@ -116,7 +116,7 @@ HTML;
                             continue;                        
                     }
                     echo "\n  Processing file: ".$strPathToFile;
-                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../..".$strPathToFile."\">".$strOneFile."</a></td></tr>";
+                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../..".$strPathToFile."\">".$strOneFile."</a></td></tr>";                    
                 }
                 $strContentTestsuiteFile .= <<<HTML
 </tbody></table>

@@ -10,11 +10,15 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["list_empty"] = "Kein Demo angelegt";
 $lang["modul_titel"] = "Demo Module";
 $lang["module_action_new"] = "Create demo";
 $lang["quickhelp_list"] = "Demo title.";
 $lang["quickhelp_list_other_object"] = "Demo title sub.";
 $lang["quickhelp_edit"] = "Demo title. Edit";
 $lang["delete_question"] = "Do you really want to delete the demo element &quot;<b>%%element_name%%</b>&quot; ?";
-
 $lang["list_other_object"] = "Second Objecttype";
+$lang["form_demo_float"] = "decimal number";
+$lang["form_demo_int"] = "integer";
+$lang["modul_titel_other_object"] = "Second Objecttype";
+$lang["form_demo_dateDate"] = "Date";
