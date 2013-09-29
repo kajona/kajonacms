@@ -163,8 +163,8 @@ abstract class class_element_admin extends class_admin {
         $objForm->addField(new class_formentry_hidden("", "element"))->setStrValue($this->getParam("element"));
 
         //An finally the submit Button
-        if($this->getParam("pe") == 1) {
-            $objForm->addField(new class_formentry_hidden("", "peClose"))->setStrValue("1");
+        if($this->getParam("pe") != "") {
+            $objForm->addField(new class_formentry_hidden("", "peClose"))->setStrValue("1")->setStrEntryName("peClose");
         }
 
         $strReturn = $objForm->renderForm(getLinkAdminHref("pages_content", "saveElement"));
@@ -363,8 +363,6 @@ abstract class class_element_admin extends class_admin {
         }
         else if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "")
             $strTargetTable =  $this->arrModule["table"];
-
-
 
         //Element-Table given?
         if($strTargetTable != "") {
