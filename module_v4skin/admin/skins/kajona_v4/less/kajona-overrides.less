@@ -641,6 +641,38 @@ footer {
 			margin-left: 10px !important;
 		}
 
+        & > .span3 {
+            @media (min-width: 768px) and (max-width: 979px) {
+                display: inline-block;
+                float: left;
+                width: inherit;
+            }
+
+            @media (min-width: 320px) and (max-width: 768px) {
+                display: inline-block;
+                float: left;
+                width: inherit;
+
+                .thumbnail .contentWrapper {
+                    height: 100px !important;
+                }
+            }
+
+
+            @media (min-width: 400px) and (max-width: 700px) {
+                width: 30%;
+            }
+
+            @media (min-width: 320px) and (max-width: 400px) {
+                width: 45%;
+            }
+
+            @media (min-width: 0px) and (max-width: 320px) {
+                width: 100%;
+            }
+        }
+
+
 		.thumbnail {
 			.border-radius(0px);
 			display: block;
@@ -660,7 +692,7 @@ footer {
 
 				.metainfo {
 					.transition(opacity linear .2s);
-					.opacity(10);
+					.opacity(0);
 					background-color: @white;
 					padding: 5px;
 					font-size: @baseFontSize - 4;
@@ -670,11 +702,10 @@ footer {
 			.actions {
 				.opacity(0);
 				.transition(opacity linear .2s);
-
+                padding-top: 3px;
 			}
 
 			&:hover {
-
 				.contentWrapper .metainfo {
 					.opacity(90);
 				}

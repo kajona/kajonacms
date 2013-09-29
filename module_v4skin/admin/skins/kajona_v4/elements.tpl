@@ -47,19 +47,15 @@ $(function() {
 <li class="span3" data-systemid="%%systemid%%" >
     <div class="thumbnail" >
         <h5 >%%title%%</h5>
-        <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: 100% 100%;">
+        <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: cover;">
             <div class="metainfo">
                 <div>%%info%%</div>
                 <div>%%subtitle%%</div>
             </div>
         </div>
-            <!--<img src="%%image%%" alt="">-->
-
-
         <div class="actions">
             %%actions%%
         </div>
-
     </div>
 </li>
 </grid_entry>
