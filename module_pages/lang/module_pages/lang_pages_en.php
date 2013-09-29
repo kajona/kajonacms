@@ -112,7 +112,6 @@ $lang["pe_icon_page"]                    = "Edit page details";
 $lang["pe_inactiveElement"]              = "Inactive element";
 $lang["pe_new"]                          = "New element at placeholder";
 $lang["pe_new_old"]                      = "Create";
-$lang["pe_rte_save"]                     = "Save changes";
 $lang["pe_rte_unsavedChanges"]           = "Do you want to discard all unsaved changes?";
 $lang["pe_setactive"]                    = "Set active";
 $lang["pe_setinactive"]                  = "Set inactive";

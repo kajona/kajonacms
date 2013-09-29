@@ -443,10 +443,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //Add an iconbar
             $arrPeContents["pe_iconbar"] = "";
-            $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.RTE.savePage(); return false;\" id=\"savePageLink\">"
-                .class_adminskin_helper::getAdminImage("icon_acceptDisabled", $this->getLang("pe_rte_save", "pages"))."</a>";
-            $arrPeContents["pe_iconbar"] .= "&nbsp;";
-
             $arrPeContents["pe_iconbar"] .= getLinkAdmin(
                 "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
                 $this->getLang("pe_icon_edit", "pages"),
@@ -486,8 +482,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
                             filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
-                        KAJONA.admin.portaleditor.RTE.buttons.enabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_accept", $this->getLang("pe_rte_save", "pages")))."';
-                        KAJONA.admin.portaleditor.RTE.buttons.disabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_acceptDisabled", $this->getLang("pe_rte_save", "pages")))."';
                         $(KAJONA.admin.portaleditor.initPortaleditor);
                     });
                 }
@@ -504,8 +498,6 @@ class class_module_pages_portal extends class_portal implements interface_portal
                             filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
-                        KAJONA.admin.portaleditor.RTE.buttons.enabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_accept", $this->getLang("pe_rte_save", "pages")))."';
-                        KAJONA.admin.portaleditor.RTE.buttons.disabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_acceptDisabled", $this->getLang("pe_rte_save", "pages")))."';
                         $(KAJONA.admin.portaleditor.initPortaleditor);
                     });
                 }

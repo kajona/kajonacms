@@ -96,10 +96,6 @@ KAJONA.admin.portaleditor = {
 
 KAJONA.admin.portaleditor.RTE = {};
 KAJONA.admin.portaleditor.RTE.config = {};
-KAJONA.admin.portaleditor.RTE.buttons = {
-    enabled : '',
-    disabled : ''
-};
 KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 
 KAJONA.admin.portaleditor.RTE.savePage = function () {
@@ -120,7 +116,7 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         });
     });
     //console.groupEnd('savePage');
-    $('#savePageLink').html(KAJONA.admin.portaleditor.RTE.buttons.disabled);
+
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
 
@@ -156,14 +152,15 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 var data = event.editor.getData();
                 var attr = $(event.editor.element).attr('data-kajona-editable');
 
-
-                $('#savePageLink').html(KAJONA.admin.portaleditor.RTE.buttons.enabled);
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
                 //console.log('modified field', attr, data);
+
+                // save field on blur
+                KAJONA.admin.portaleditor.RTE.savePage();
             },
-            key : function( event ) {
+            key: function( event ) {
                 //prevent enter in plaintext
-                if ( event.data.keyCode == 13 && event.editor.config.kajona_strMode == 'plain' ) {
+                if (event.data.keyCode == 13 && event.editor.config.kajona_strMode == 'plain') {
                     event.cancel();
                 }
             }
