@@ -7,6 +7,7 @@ class class_image2 {
 
     private $strCachePath = _images_cachepath_;
     private $bitUseCache = true;
+    private $bitImageIsUpToDate = false;
 
     private $objResource;
     private $strOriginalPath;
@@ -66,6 +67,7 @@ class class_image2 {
 
     public function create($intWidth, $intHeight) {
         $this->strOriginalPath = null;
+        $this->bitImageIsUpToDate = false;
         $this->intWidth = $intWidth;
         $this->intHeight = $intHeight;
         $this->arrOperations = array();
@@ -76,6 +78,7 @@ class class_image2 {
         $strPath = removeDirectoryTraversals($strPath);
         if (is_file(_realpath_ . $strPath)) {
             list($intWidth, $intHeight) = getimagesize(_realpath_ . $strPath);
+            $this->bitImageIsUpToDate = false;
             $this->strOriginalPath = $strPath;
             $this->intWidth = $intWidth;
             $this->intHeight = $intHeight;
@@ -94,7 +97,12 @@ class class_image2 {
         }
 
         if (!$this->isCached($strFormat)) {
-            return $this->processImage($strPath, $strFormat);
+            if ($this->processImage($strFormat)) {
+                return $this->outputImage($strFormat, $strPath);
+            }
+            else {
+                return false;
+            }
         }
         else {
             $strCacheFile = $this->getCachePath($strFormat);
@@ -130,18 +138,40 @@ class class_image2 {
         class_response_object::getInstance()->setStResponseType($strResponseType);
 
         if (!$this->isCached($strFormat)) {
-            return $this->processImage(null, $strFormat);
+            if ($this->processImage($strFormat)) {
+                return $this->outputImage($strFormat);
+            }
+            else {
+                return false;
+            }
         }
         else {
             $strCacheFile = $this->getCachePath($strFormat);
-            $ptrFile = @fopen(_realpath_ . $strCacheFile, 'rb');
+            $ptrFile = fopen(_realpath_ . $strCacheFile, 'rb');
             fpassthru($ptrFile);
             return fclose($ptrFile);
         }
     }
 
+    public function createGdResource() {
+        $bitSuccess = false;
+
+        if (!$this->isCached(self::FORMAT_PNG)) {
+            $bitSuccess = $this->processImage(self::FORMAT_PNG);
+        }
+        else {
+            $strCacheFile = $this->getCachePath(self::FORMAT_PNG);
+            $this->objResource = imagecreatefrompng(_realpath_ . $strCacheFile);
+            imagealphablending($this->objResource, false);
+            imagesavealpha($this->objResource, true);
+        }
+
+        return $this->objResource;
+    }
+
     public function addOperation(interface_image_operation $objOperation) {
         $this->arrOperations[] = $objOperation;
+        $this->bitImageIsUpToDate = false;
     }
 
     public function getWidth() {
@@ -152,15 +182,26 @@ class class_image2 {
         return $this->intHeight;
     }
 
-    private function processImage($strPath, $strFormat) {
-        $bitResult = $this->finalLoadOrCreate();
-
-        if (!$bitResult || !$this->applyOperations()) {
-            return false;
+    public function getCacheId() {
+        if (!$this->bitImageIsUpToDate) {
+            $this->createGdResource();
         }
 
-        $this->saveCache($strFormat);
-        return $this->outputImage($strPath, $strFormat);
+        return $this->strCacheId;
+    }
+
+    private function processImage($strFormat) {
+        if (!$this->bitImageIsUpToDate) {
+            $bitSuccess = $this->finalLoadOrCreate();
+
+            if (!$bitSuccess || !$this->applyOperations()) {
+                return false;
+            }
+
+            $this->saveCache($strFormat);
+        }
+        
+        return true;
     }
 
     private function finalLoadOrCreate() {
@@ -218,10 +259,10 @@ class class_image2 {
             }
         }
 
-        return true;
+        return $bitReturn;
     }
 
-    private function outputImage($strPath, $strFormat) {
+    private function outputImage($strFormat, $strPath = null) {
         if ($strPath != null) {
             $strPath = _realpath_ . $strPath;
         }
@@ -242,7 +283,7 @@ class class_image2 {
     }
 
     private function isCached($strFormat) {
-        if (!$this->bitUseCache) {
+        if (!$this->bitUseCache || $this->bitImageIsUpToDate) {
             return false;
         }
 
@@ -262,7 +303,8 @@ class class_image2 {
         if ($this->bitUseCache) {
             $strCachePath = $this->getCachePath($strFormat);
             //echo "DEBUG: Saving cache file: " . $strCachePath . "\n";
-            $this->outputImage($strCachePath, $strFormat);
+            $this->outputImage($strFormat, $strCachePath);
+            $this->bitImageIsUpToDate = true;
         }
     }
 
@@ -286,7 +328,7 @@ class class_image2 {
             $strCacheId .= self::buildCacheId($strOpCacheName, $strOpCacheValues);
         }
 
-        echo "DEBUG: Cache Id: " . $strCacheId . "\n";
+        //echo "DEBUG: Cache Id: " . $strCacheId . "\n";
         $this->strCacheId = md5($strCacheId);
     }
 

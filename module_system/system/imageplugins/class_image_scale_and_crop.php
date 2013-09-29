@@ -17,6 +17,19 @@ class class_image_scale_and_crop extends class_image_abstract_operation {
         $intCurrentWidth = imagesx($objResource);
         $intCurrentHeight = imagesy($objResource);
 
+        if ($this->intFixedWidth == null) {
+            $this->intFixedWidth = $intCurrentWidth;
+        }
+
+        if ($this->intFixedHeight == null) {
+            $this->intFixedHeight = $intCurrentHeight;
+        }
+
+        if ($this->intFixedWidth == $intCurrentWidth
+            && $this->intFixedHeight == $intCurrentHeight) {
+            return true;
+        }
+
         $floatCurrentAspectRatio = (float)$intCurrentWidth / (float)$intCurrentHeight;
         $floatExpectedAspectRatio = (float)$this->intFixedWidth / (float)$this->intFixedHeight;
 
