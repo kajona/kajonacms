@@ -401,10 +401,8 @@ Upload-Field for multiple files with progress bar
     <div id="kajonaUploadDialog" style="display: none;">
 
         <div id="uploadContainerWrapper" class="well well-small">
-            <div id="uploadContainer" >
-            </div>
+            <div id="uploadContainer"></div>
             <div class="alert alert-info">
-                <button type="button" class="close" data-dismiss="alert">×</button>
                 [lang,upload_dropArea,mediamanager]<br />
                 [lang,upload_allowed_extensions,mediamanager] %%allowedExtensions%%
             </div>
