@@ -298,17 +298,13 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
 
         $strFile = $this->getParam("file");
 
-        //pass to the image-class
-        $objImage = new class_image();
-        if($objImage->preLoadImage($strFile)) {
-            if($objImage->rotateImage($this->getParam("angle"))) {
-                if($objImage->saveImage($strFile, false, 100)) {
-                    class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo);
-                    $strReturn .= "<message>".xmlSafeString($this->getLang("xml_rotate_success"))."</message>";
-                }
-                else
-                    class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
-            }
+        $objImage = new class_image2();
+        $objImage->setUseCache(false);
+        $objImage->load($strFile);
+        $objImage->addOperation(new class_image_rotate($this->getParam("angle")));
+        if ($objImage->save($strFile)) {
+            class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo);
+            $strReturn .= "<message>".xmlSafeString($this->getLang("xml_rotate_success"))."</message>";
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
@@ -337,17 +333,13 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
 
         $strFile = $this->getParam("file");
 
-        //pass to the image-class
-        $objImage = new class_image();
-        if($objImage->preLoadImage($strFile)) {
-            if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
-                if($objImage->saveImage($strFile, false, 100)) {
-                    class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);
-                    $strReturn .= "<message>".xmlSafeString($this->getLang("xml_cropping_success"))."</message>";
-                }
-                else
-                    class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
-            }
+        $objImage = new class_image2();
+        $objImage->setUseCache(false);
+        $objImage->load($strFile);
+        $objImage->addOperation(new class_image_crop($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight")));
+        if ($objImage->save($strFile)) {
+            class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);
+            $strReturn .= "<message>".xmlSafeString($this->getLang("xml_cropping_success"))."</message>";
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);

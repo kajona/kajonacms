@@ -13,6 +13,7 @@ class class_image2 {
     private $strOriginalPath;
     private $intWidth;
     private $intHeight;
+    private $intJpegQuality = 100;
     private $arrOperations = array();
     private $strCacheId;
 
@@ -63,6 +64,10 @@ class class_image2 {
      */
     public function setUseCache($bitUseCache) {
         $this->bitUseCache = $bitUseCache;
+    }
+
+    public function setJpegQuality($intJpegQuality) {
+        $this->intJpegQuality = $intJpegQuality;
     }
 
     public function create($intWidth, $intHeight) {
@@ -272,7 +277,7 @@ class class_image2 {
                 return imagepng($this->objResource, $strPath);
 
             case self::FORMAT_JPG:
-                return imagejpeg($this->objResource, $strPath);
+                return imagejpeg($this->objResource, $strPath, $this->intJpegQuality);
 
             case self::FORMAT_GIF:
                 return imagegif($this->objResource, $strPath);
@@ -309,7 +314,7 @@ class class_image2 {
     }
 
     private function getCachePath($strFormat) {
-        return $this->strCachePath . $this->strCacheId . "." . $strFormat;;
+        return $this->strCachePath . "c" . $this->strCacheId . "." . $strFormat;;
     }
 
     private function initCacheId($strFormat) {

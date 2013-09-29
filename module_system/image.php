@@ -34,12 +34,6 @@ class class_flyimage {
     private $intFixedWidth = 0;
     private $intFixedHeight = 0;
 
-    /**
-     * Object of class_image
-     *
-     * @var class_image
-     */
-    private $objImage;
     private $intQuality;
 
     private $strElementId;
@@ -80,9 +74,6 @@ class class_flyimage {
         $this->strSystemid = getGet("systemid");
         $this->strElementId = getGet("elementid");
 
-        //ok, all needed constants are set up...
-        $this->objImage = new class_image($this->intQuality);
-
     }
 
     /**
@@ -117,25 +108,19 @@ class class_flyimage {
                 $arrElementData = $objPortalElement->getElementContent($objElement->getSystemid());
 
                 class_session::getInstance()->sessionClose();
-                if(is_file(_realpath_.$objFile->getStrFilename())) {
+                if (is_file(_realpath_.$objFile->getStrFilename())) {
 
-                    $this->objImage = new class_image($arrElementData["gallery_text"].$arrElementData["gallery_overlay"]);
-                    //Edit Picture
-                    if($this->objImage->preLoadImage($objFile->getStrFilename())) {
-                        //resize the image
-                        $this->objImage->resizeAndCropImage($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"], 0, 0);
-                        //Inlay text
-                        if($arrElementData["gallery_text"] != "")
-                            $this->objImage->imageText($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "255,255,255", "dejavusans.ttf", true);
-                        //overlay image
-                        if($arrElementData["gallery_overlay"] != "")
-                            $this->objImage->overlayImage($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], true);
+                    $objImage = new class_image2();
+                    $objImage->load($objFile->getStrFilename());
+                    $objImage->addOperation(new class_image_scale($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"]));
+                    $objImage->addOperation(new class_image_text($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "#ffffff"));
 
-                        $this->objImage->sendImageToBrowser((int)$this->intQuality);
-                        $this->objImage->releaseResources();
-                        return;
-                    }
+                    $objImageOverlay = new class_image2();
+                    $objImageOverlay->load($arrElementData["gallery_overlay"]);
+                    $objImage->addOperation(new class_image_overlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
 
+                    $objImage->setJpegQuality((int)$this->intQuality);
+                    $objImage->sendToBrowser();
                 }
 
             }
@@ -163,8 +148,10 @@ class class_flyimage {
                 return;
             }
 
-            $this->objImage->preLoadImage($this->strFilename);
-            $this->objImage->resizeAndCropImage($this->intMaxWidth, $this->intMaxHeight, $this->intFixedWidth, $this->intFixedHeight);
+            $objImage = new class_image2();
+            $objImage->load($this->strFilename);
+            $objImage->addOperation(new class_image_scale_and_crop($this->intFixedWidth, $this->intFixedHeight));
+            $objImage->addOperation(new class_image_scale($this->intMaxWidth, $this->intMaxHeight));
 
             //send the headers for conditional gets
             setConditionalGetHeaders(md5(md5_file(_realpath_ . $this->strFilename) . $this->intMaxWidth . $this->intMaxHeight . $this->intFixedWidth . $this->intFixedHeight));
@@ -178,9 +165,8 @@ class class_flyimage {
             */
 
             //and send it to the browser
-            $this->objImage->sendImageToBrowser((int)$this->intQuality);
-            //release memory
-            $this->objImage->releaseResources();
+            $objImage->setJpegQuality((int)$this->intQuality);
+            $objImage->sendToBrowser();
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
@@ -224,24 +210,25 @@ class class_flyimage {
 
 
         //create a blank image
-        $this->objImage->setIntHeight($intHeight);
-        $this->objImage->setIntWidth($intWidth);
-        $this->objImage->createBlankImage();
+        $objImage = new class_image();
+        $objImage->setIntHeight($intHeight);
+        $objImage->setIntWidth($intWidth);
+        $objImage->createBlankImage();
         //create a white background
-        $intWhite = $this->objImage->registerColor(255, 255, 255);
-        $intBlack = $this->objImage->registerColor(0, 0, 0);
-        $this->objImage->drawFilledRectangle(0, 0, $intWidth, $intHeight, $intWhite);
+        $intWhite = $objImage->registerColor(255, 255, 255);
+        $intBlack = $objImage->registerColor(0, 0, 0);
+        $objImage->drawFilledRectangle(0, 0, $intWidth, $intHeight, $intWhite);
 
         //draw vertical lines
         $intStart = 5;
         while($intStart < $intWidth - 5) {
-            $this->objImage->drawLine($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor());
+            $objImage->drawLine($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor($objImage));
             $intStart += rand(10, 17);
         }
         //draw horizontal lines
         $intStart = 5;
         while($intStart < $intHeight - 5) {
-            $this->objImage->drawLine(0, $intStart, $intWhite, $intStart, $this->generateGreyLikeColor());
+            $objImage->drawLine(0, $intStart, $intWhite, $intStart, $this->generateGreyLikeColor($objImage));
             $intStart += rand(10, 17);
         }
 
@@ -252,7 +239,7 @@ class class_flyimage {
             while($intXPrev <= $intWidth) {
                 $intNewX = rand($intXPrev, $intXPrev + 50);
                 $intNewY = rand(0, $intHeight);
-                $this->objImage->drawLine($intXPrev, $intYPrev, $intNewX, $intNewY, $this->generateGreyLikeColor());
+                $objImage->drawLine($intXPrev, $intYPrev, $intNewX, $intNewY, $this->generateGreyLikeColor($objImage));
                 $intXPrev = $intNewX;
                 $intYPrev = $intNewY;
             }
@@ -280,26 +267,26 @@ class class_flyimage {
             //the angle
             $intAngle = rand(-30, 30);
             //place the background character
-            $this->objImage->imageText($strCurrentChar, $intX, $intY, $intSize, $strColor, "dejavusans.ttf", false, $intAngle);
+            $objImage->imageText($strCurrentChar, $intX, $intY, $intSize, $strColor, "dejavusans.ttf", false, $intAngle);
             //place the foreground charater
-            $this->objImage->imageText($strCurrentChar, $intX + $intForegroundOffset, $intY + $intForegroundOffset, $intSize, $strColorForeground, "dejavusans.ttf", false, $intAngle);
+            $objImage->imageText($strCurrentChar, $intX + $intForegroundOffset, $intY + $intForegroundOffset, $intSize, $strColorForeground, "dejavusans.ttf", false, $intAngle);
         }
 
         //register placed string to session
         class_carrier::getInstance()->getObjSession()->setCaptchaCode($strCharactersPlaced);
 
         //and send it to the browser
-        //$this->objImage->saveImage("/test.jpg");
+        //$objImage->saveImage("/test.jpg");
         //echo "<img src=\""._webpath_."/test.jpg\" />";
-        $this->objImage->setBitNeedToSave(false);
+        $objImage->setBitNeedToSave(false);
 
         //force no-cache headers
         class_response_object::getInstance()->addHeader("Expires: Thu, 19 Nov 1981 08:52:00 GMT", true);
         class_response_object::getInstance()->addHeader("Cache-Control: no-store, no-cache, must-revalidate, private", true);
         class_response_object::getInstance()->addHeader("Pragma: no-cache", true);
 
-        $this->objImage->sendImageToBrowser(70);
-        $this->objImage->releaseResources();
+        $objImage->sendImageToBrowser(70);
+        $objImage->releaseResources();
     }
 
     /**
@@ -307,8 +294,8 @@ class class_flyimage {
      *
      * @return int color-id in image
      */
-    private function generateGreyLikeColor() {
-        return $this->objImage->registerColor(rand(150, 230), rand(150, 230), rand(150, 230));
+    private function generateGreyLikeColor($objImage) {
+        return $objImage->registerColor(rand(150, 230), rand(150, 230), rand(150, 230));
     }
 
     /**

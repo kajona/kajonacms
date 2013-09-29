@@ -10,7 +10,7 @@ class class_image_overlay extends class_image_abstract_operation {
     private $intY;
     private $bitAlphaBlending;
 
-    public function __construct(class_image2 $objImage, $intX, $intY, $bitAlphaBlending) {
+    public function __construct(class_image2 $objImage, $intX, $intY, $bitAlphaBlending = true) {
         $this->objImage = $objImage;
         $this->intX = $intX;
         $this->intY = $intY;
