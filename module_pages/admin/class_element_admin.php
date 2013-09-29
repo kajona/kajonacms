@@ -353,17 +353,23 @@ abstract class class_element_admin extends class_admin {
 
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+        $strTargetTable = "";
         if(count($arrTargetTables) != 0) {
             $objORM = new class_orm_mapper($this);
             $objORM->initObjectFromDb();
+            $arrTables = explode(".", $arrTargetTables[0]);
+            $strTargetTable = _dbprefix_.$arrTables[0];
+
         }
+        else if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "")
+            $strTargetTable =  $this->arrModule["table"];
 
 
 
         //Element-Table given?
-        if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "") {
+        if($strTargetTable != "") {
             $strQuery = "SELECT *
-    					 FROM " . $this->arrModule["table"] . ",
+    					 FROM " . $strTargetTable . ",
     					 	  " . _dbprefix_ . "element,
     					 	  " . _dbprefix_ . "page_element,
     					 	  " . _dbprefix_ . "system
