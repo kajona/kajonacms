@@ -12,25 +12,17 @@
  *
  * @package element_mediaplayer
  * @author sidler@mulchprod.de
+ * @targetTable element_universal.content_id
  */
 class class_element_mediaplayer_portal extends class_element_portal implements interface_portal_element {
 
-    /**
-     * Constructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     */
-	public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-	}
 
     /**
      * Loads the settings and generates the player object
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
+    public function loadData() {
 
         $arrTemplate = array();
         $arrTemplate["systemid"] = $this->getSystemid();
@@ -39,10 +31,10 @@ class class_element_mediaplayer_portal extends class_element_portal implements i
         $arrTemplate["width"] = $this->arrElementData["int1"];
         $arrTemplate["height"] = $this->arrElementData["int2"];
 
-		$strTemplateID = $this->objTemplate->readTemplate("/element_mediaplayer/".$this->arrElementData["char3"], "mediaplayer");
+        $strTemplateID = $this->objTemplate->readTemplate("/element_mediaplayer/".$this->arrElementData["char3"], "mediaplayer");
         $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID);
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }

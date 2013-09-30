@@ -12,25 +12,17 @@
  *
  * @package element_flash
  * @author jschroeter@kajona.de
+ * @targetTable element_universal.content_id
  */
 class class_element_flash_portal extends class_element_portal implements interface_portal_element {
 
-    /**
-     * Constructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     */
-	public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-	}
 
     /**
      * Loads the settings and generates the player object
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
+    public function loadData() {
 
         $arrTemplate = array();
         $arrTemplate["systemid"] = $this->getSystemid();
@@ -38,10 +30,10 @@ class class_element_flash_portal extends class_element_portal implements interfa
         $arrTemplate["width"] = $this->arrElementData["int1"];
         $arrTemplate["height"] = $this->arrElementData["int2"];
 
-		$strTemplateID = $this->objTemplate->readTemplate("/element_flash/".$this->arrElementData["char2"], "flash");
+        $strTemplateID = $this->objTemplate->readTemplate("/element_flash/".$this->arrElementData["char2"], "flash");
         $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID);
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }

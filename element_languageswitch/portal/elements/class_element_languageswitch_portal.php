@@ -12,20 +12,10 @@
  *
  * @package element_languageswitch
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_languageswitch_portal extends class_element_portal implements interface_portal_element {
-
-    /**
-     * Constructor
-     *
-     * @param $objElementData
-     */
-    public function __construct($objElementData) {
-        parent::__construct($objElementData);
-
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-    }
-
 
     /**
      * Returns the ready switch-htmlcode

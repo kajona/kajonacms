@@ -406,7 +406,7 @@ abstract class class_element_admin extends class_admin {
             $objORM->updateStateToDb();
         }
 
-
+        //legacy code
         $strElementTableColumns = $this->getArrModule("tableColumns");
         if($strElementTableColumns != "") {
 
@@ -521,6 +521,7 @@ abstract class class_element_admin extends class_admin {
         $objAnnotations = new class_reflection($this);
         $arrProperties = $objAnnotations->getPropertiesWithAnnotation(class_element_admin::STR_ANNOTATION_ELEMENTCONTENTTITLE);
         if(count($arrProperties) > 0) {
+            $this->loadElementData();
             $arrKeys = array_keys($arrProperties);
             $strGetter = $objAnnotations->getGetter($arrKeys[0]);
             if($strGetter != null) {
@@ -540,8 +541,9 @@ abstract class class_element_admin extends class_admin {
      * @since 3.2.1
      */
     public function getElementDescription() {
-        $strDesc = $this->getLang($this->arrModule["name"] . "_description");
-        if($strDesc == "!" . $this->arrModule["name"] . "_description!") {
+        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);
+        $strDesc = $this->getLang($strName . "_description");
+        if($strDesc == "!" . $strName . "_description!") {
             $strDesc = "";
         }
         return $strDesc;

@@ -12,6 +12,8 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_search.content_id
  */
 class class_element_search_portal extends class_element_portal implements interface_portal_element {
 
@@ -21,7 +23,6 @@ class class_element_search_portal extends class_element_portal implements interf
      */
     public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_search");
         $this->setStrCacheAddon(getPost("searchterm").getGet("searchterm"));
     }
 

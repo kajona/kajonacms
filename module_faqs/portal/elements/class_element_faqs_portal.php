@@ -12,24 +12,24 @@
  *
  * @package module_faqs
  * @author sidler@mulchprod.de
+ * @targetTable element_faqs.content_id
  */
 class class_element_faqs_portal extends class_element_portal implements interface_portal_element {
 
 
-	 /**
+    /**
      * Contructor
      *
      * @param mixed $objElementData
      */
-	public function __construct($objElementData) {
-        $this->setArrModuleEntry("name", "element_faqs");
-        $this->setArrModuleEntry("table", _dbprefix_."element_faqs");
+    public function __construct($objElementData) {
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        if(class_module_system_module::getModuleByName("rating") != null)
+        if(class_module_system_module::getModuleByName("rating") != null) {
             $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
-	}
+        }
+    }
 
 
     /**
@@ -37,15 +37,15 @@ class class_element_faqs_portal extends class_element_portal implements interfac
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
-		//Load the data
-		$objFaqsModule = class_module_system_module::getModuleByName("faqs");
-		if($objFaqsModule != null) {
-    		$objFaqs = $objFaqsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+    public function loadData() {
+        $strReturn = "";
+        //Load the data
+        $objFaqsModule = class_module_system_module::getModuleByName("faqs");
+        if($objFaqsModule != null) {
+            $objFaqs = $objFaqsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objFaqs->action();
-		}
-		return $strReturn;
-	}
+        }
+        return $strReturn;
+    }
 
 }

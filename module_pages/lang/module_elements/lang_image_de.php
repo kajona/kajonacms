@@ -13,5 +13,6 @@
 $lang["element_image_name"]              = "Bild";
 $lang["image_link"]                      = "Link";
 $lang["image_x"]                         = "Maximale Breite";
-$lang["image_xy_hint"]                   = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
+$lang["image_x_hint"]                   = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
+$lang["image_y_hint"]                   = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
 $lang["image_y"]                         = "Maximale Höhe";

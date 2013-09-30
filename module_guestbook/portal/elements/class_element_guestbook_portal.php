@@ -12,6 +12,7 @@
  *
  * @package module_guestbook
  * @author sidler@mulchprod.de
+ * @targetTable element_guestbook.content_id
  */
 class class_element_guestbook_portal extends class_element_portal implements interface_portal_element {
 
@@ -20,30 +21,29 @@ class class_element_guestbook_portal extends class_element_portal implements int
      *
      * @param $objElementData
      */
-	public function __construct($objElementData) {
-		$this->setArrModuleEntry("name", "element_guestbook");
-		$this->setArrModuleEntry("table", _dbprefix_."element_guestbook");
-		parent::__construct($objElementData);
+    public function __construct($objElementData) {
+        parent::__construct($objElementData);
 
-        if($this->getParam("action") == "saveGuestbook")
+        if($this->getParam("action") == "saveGuestbook") {
             $this->setStrCacheAddon(generateSystemid());
-	}
+        }
+    }
 
     /**
      * Loads the guestbook-class and passes control
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
 
         $objGBModule = class_module_system_module::getModuleByName("guestbook");
-		if($objGBModule != null) {
-    		$objGuestbook= $objGBModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+        if($objGBModule != null) {
+            $objGuestbook = $objGBModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objGuestbook->action();
-		}
+        }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }

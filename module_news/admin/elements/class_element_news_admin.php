@@ -12,35 +12,85 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_news.content_id
  */
 class class_element_news_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_news.news_category
+     *
+     * @fieldType dropdown
+     * @fieldLabel commons_category
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_news");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_news");
-        $this->setArrModuleEntry("tableColumns", "news_category,news_view,news_mode,news_order,news_detailspage,news_template,news_amount");
-        parent::__construct();
-    }
-
-    public function getRequiredFields() {
-        return array(
-            "news_amount" => "numeric"
-        );
-    }
+    private $strCategory;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_news.news_detailspage
      *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @fieldType page
+     * @fieldLabel news_detailspage
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-        //Load all newscats available
+    private $strDetailspage;
+
+    /**
+     * @var string
+     * @tableColumn element_news.news_view
+     *
+     * @fieldType dropdown
+     * @fieldLabel news_view
+     * @fieldDDValues [0 => news_view_list],[1 => news_view_detail]
+     */
+    private $intView;
+
+    /**
+     * @var string
+     * @tableColumn element_news.news_mode
+     *
+     * @fieldType dropdown
+     * @fieldLabel news_mode
+     * @fieldDDValues [0 => news_mode_normal],[1 => news_mode_archive]
+     */
+    private $intMode;
+
+    /**
+     * @var string
+     * @tableColumn element_news.news_order
+     *
+     * @fieldType dropdown
+     * @fieldLabel news_order
+     * @fieldDDValues [0 => news_order_desc],[1 => news_order_asc]
+     */
+    private $intOrder;
+
+
+    /**
+     * @var string
+     * @tableColumn element_news.news_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /module_news
+     */
+    private $strTemplate;
+
+    /**
+     * @var string
+     * @tableColumn element_news.news_amount
+     *
+     * @fieldType text
+     * @fieldLabel news_amount
+     * @fieldMandatory
+     */
+    private $intAmount;
+
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
+
         $arrRawCats = class_module_news_category::getObjectList();
         $arrCats = array();
         $arrCats[0] = $this->getLang("commons_all_categories");
@@ -48,43 +98,115 @@ class class_element_news_admin extends class_element_admin implements interface_
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
         }
 
-        //Build the form
-        $strReturn .= $this->objToolkit->formInputDropdown("news_category", $arrCats, $this->getLang("commons_category"), (isset($arrElementData["news_category"]) ? $arrElementData["news_category"] : ""));
-        $strReturn .= $this->objToolkit->formInputPageSelector("news_detailspage", $this->getLang("news_detailspage"), (isset($arrElementData["news_detailspage"]) ? $arrElementData["news_detailspage"] : ""));
+        $objForm->getField("category")->setArrKeyValues($arrCats);
 
-        $arrView = array(0 => $this->getLang("news_view_list"),
-                         1 => $this->getLang("news_view_detail"));
-        $strReturn .= $this->objToolkit->formInputDropdown("news_view", $arrView, $this->getLang("news_view"), (isset($arrElementData["news_view"]) ? $arrElementData["news_view"] : ""));
-
-        $arrMode = array(0 => $this->getLang("news_mode_normal"),
-                         1 => $this->getLang("news_mode_archive"));
-        $strReturn .= $this->objToolkit->formInputDropdown("news_mode", $arrMode, $this->getLang("news_mode"), (isset($arrElementData["news_mode"]) ? $arrElementData["news_mode"] : ""));
-
-        $arrOrder = array(0 => $this->getLang("news_order_desc"),
-                          1 => $this->getLang("news_order_asc"));
-        $strReturn .= $this->objToolkit->formInputDropdown("news_order", $arrOrder, $this->getLang("news_order"), (isset($arrElementData["news_order"]) ? $arrElementData["news_order"] : ""));
-
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_news", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : ""));
-        }
-
-        $strReturn .= $this->objToolkit->formInputText("news_amount", $this->getLang("news_amount"), (isset($arrElementData["news_amount"]) ? $arrElementData["news_amount"] : ""));
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("news_category");
-
-        return $strReturn;
+        return $objForm;
     }
+
+
+
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strDetailspage
+     */
+    public function setStrDetailspage($strDetailspage) {
+        $this->strDetailspage = $strDetailspage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrDetailspage() {
+        return $this->strDetailspage;
+    }
+
+    /**
+     * @param string $strCategory
+     */
+    public function setStrCategory($strCategory) {
+        $this->strCategory = $strCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrCategory() {
+        return $this->strCategory;
+    }
+
+    /**
+     * @param string $intView
+     */
+    public function setIntView($intView) {
+        $this->intView = $intView;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntView() {
+        return $this->intView;
+    }
+
+    /**
+     * @param string $intOrder
+     */
+    public function setIntOrder($intOrder) {
+        $this->intOrder = $intOrder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntOrder() {
+        return $this->intOrder;
+    }
+
+    /**
+     * @param string $intMode
+     */
+    public function setIntMode($intMode) {
+        $this->intMode = $intMode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntMode() {
+        return $this->intMode;
+    }
+
+    /**
+     * @param string $intAmount
+     */
+    public function setIntAmount($intAmount) {
+        $this->intAmount = $intAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntAmount() {
+        return $this->intAmount;
+    }
+
+
+
+
+
 
 }

@@ -12,54 +12,46 @@
  *
  * @package element_maps
  * @author jschroeter@kajona.de
+ * @targetTable element_universal.content_id
  */
 class class_element_maps_portal extends class_element_portal implements interface_portal_element {
 
+
     /**
-     * Constructor
+     * Does a little "make-up" to the contents
      *
-     * @param class_module_pages_pageelement|mixed $objElementData
+     * @return string
      */
-	public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-	}
+    public function loadData() {
 
-
-	/**
-	 * Does a little "make-up" to the contents
-	 *
-	 * @return string
-	 */
-	public function loadData() {
-
-		$strReturn = "";
+        $strReturn = "";
 
         $strTemplate = $this->arrElementData["char3"];
         //fallback
-        if($strTemplate == "")
+        if($strTemplate == "") {
             $strTemplate = "maps.tpl";
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/element_maps/".$strTemplate, "map");
 
-	    $floatLat = "0.0";
+        $floatLat = "0.0";
         $floatLng = "0.0";
-        
-            $arrLatLng = explode(',', $this->arrElementData["char2"]);
-            if (count($arrLatLng) == 2) {
-                $floatLat = $arrLatLng[0];
-                $floatLng = $arrLatLng[1];
-            }
-        
+
+        $arrLatLng = explode(',', $this->arrElementData["char2"]);
+        if(count($arrLatLng) == 2) {
+            $floatLat = $arrLatLng[0];
+            $floatLng = $arrLatLng[1];
+        }
+
         $this->arrElementData["address"] = $this->arrElementData["char1"];
         $this->arrElementData["lat"] = $floatLat;
         $this->arrElementData["lng"] = $floatLng;
         $this->arrElementData["infotext"] = str_replace(array("\r", "\r\n", "\n"), '', $this->arrElementData["text"]);
         $this->arrElementData["systemid"] = $this->getSystemid();
-        
+
         $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
 
         return $strReturn;
-	}
+    }
 
 }

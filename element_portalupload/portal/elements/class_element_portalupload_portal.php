@@ -12,19 +12,10 @@
  *
  * @package element_portalupload
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_portalupload_portal extends class_element_portal implements interface_portal_element {
-
-    /**
-     * Constructor
-     *
-     * @param class_module_pages_pageelement $objElementData
-     */
-    public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
-    }
-
 
     public function loadData() {
         $strReturn = "";

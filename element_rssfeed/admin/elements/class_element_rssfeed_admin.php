@@ -13,51 +13,88 @@
  *
  * @package element_rssfeed
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_rssfeed_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_rssfeed");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,char2,int1");
-
-		parent::__construct();
-	}
+    /**
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_rssfeed
+     */
+    private $strChar1;
 
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
-		$strReturn = "";
+     * @var string
+     * @tableColumn element_universal.char2
+     *
+     * @fieldType text
+     * @fieldLabel rssfeed_url
+     * @fieldMandatory
+     *
+     * @elementContentTitle
+     */
+    private $strChar2;
 
-		//Build the form
-		//Load the available templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_rssfeed", ".tpl");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
 
-		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
-        
-		$strReturn .= $this->objToolkit->formInputText("char2", $this->getLang("rssfeed_url"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("int1", $this->getLang("rssfeed_numberofposts"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : ""));
+    /**
+     * @var string
+     * @tableColumn element_universal.int1
+     *
+     * @fieldType text
+     * @fieldLabel rssfeed_numberofposts
+     */
+    private $intInt1;
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
-		return $strReturn;
-	}
+
+    /**
+     * @param string $strChar2
+     */
+    public function setStrChar2($strChar2) {
+        $this->strChar2 = $strChar2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar2() {
+        return $this->strChar2;
+    }
+
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
+    }
+
+    /**
+     * @param string $intInt1
+     */
+    public function setIntInt1($intInt1) {
+        $this->intInt1 = $intInt1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntInt1() {
+        return $this->intInt1;
+    }
+
 
 
 }

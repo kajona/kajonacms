@@ -13,67 +13,95 @@
  *
  * @package module_guestbook
  * @author sidler@mulchprod.de
+ * @targetTable element_guestbook.content_id
  */
 class class_element_guestbook_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct(){
-		$this->setArrModuleEntry("name", "element_guestbook");
-		$this->setArrModuleEntry("table", _dbprefix_."element_guestbook");
-		$this->setArrModuleEntry("tableColumns", "guestbook_id,guestbook_template,guestbook_amount");
-
-		parent::__construct();
-	}
-
+    /**
+     * @var string
+     * @tableColumn element_guestbook.guestbook_id
+     *
+     * @fieldType dropdown
+     * @fieldLabel guestbook_id
+     */
+    private $strGuestbook;
 
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData)	{
-		$strReturn = "";
-		//Load all guestbooks available
+     * @var string
+     * @tableColumn element_guestbook.guestbook_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /module_guestbook
+     */
+    private $strTemplate;
+
+    /**
+     * @var int
+     * @tableColumn element_guestbook.guestbook_amount
+     *
+     * @fieldType text
+     * @fieldLabel guestbook_amount
+     */
+    private $intAmount;
+
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
 
         $objGuestbooks = class_module_guestbook_guestbook::getObjectList();
         $arrGuestbooks = array();
         foreach ($objGuestbooks as $objOneGuestbook)
-            $arrGuestbooks[$objOneGuestbook->getSystemid()] = $objOneGuestbook->getStrGuestbookTitle();
+            $arrGuestbooks[$objOneGuestbook->getSystemid()] = $objOneGuestbook->getStrDisplayName();
 
-		//Build the form
-		$strReturn .= $this->objToolkit->formInputDropdown(
-            "guestbook_id", $arrGuestbooks, $this->getLang("guestbook_id"), (isset($arrElementData["guestbook_id"]) ? $arrElementData["guestbook_id"] : "" )
-        );
-		$strReturn .= $this->objToolkit->formInputText(
-            "guestbook_amount", $this->getLang("guestbook_amount"), (isset($arrElementData["guestbook_amount"]) ? $arrElementData["guestbook_amount"] : "")
-        );
-		//Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_guestbook");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
-		
-        if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement(
-                $this->objToolkit->formInputDropdown(
-                    "guestbook_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )
-                )
-            );
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown(
-                "guestbook_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )
-            );
+        $objForm->getField("guestbook")->setArrKeyValues($arrGuestbooks);
+        return $objForm;
+    }
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_id");
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
 
-		return $strReturn;
-	}
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strGuestbook
+     */
+    public function setStrGuestbook($strGuestbook) {
+        $this->strGuestbook = $strGuestbook;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrGuestbook() {
+        return $this->strGuestbook;
+    }
+
+    /**
+     * @param int $intAmount
+     */
+    public function setIntAmount($intAmount) {
+        $this->intAmount = $intAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntAmount() {
+        return $this->intAmount;
+    }
+
+
+
 
 }

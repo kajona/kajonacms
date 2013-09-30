@@ -12,16 +12,10 @@
  *
  * @package element_rssfeed
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_rssfeed_portal extends class_element_portal implements interface_portal_element {
-
-    /**
-     * Constructor
-     */
-    public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
-    }
 
     /**
      * Loads the feed and displays it

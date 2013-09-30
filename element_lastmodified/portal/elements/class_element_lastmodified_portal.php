@@ -12,17 +12,9 @@
  *
  * @package element_lastmodified
  * @author sidler@mulchprod.de
+ *
  */
 class class_element_lastmodified_portal extends class_element_portal implements interface_portal_element {
-
-    /**
-     * Constructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     */
-    public function __construct($objElementData) {
-        parent::__construct($objElementData);
-    }
 
     /**
      * Looks up the last modified-date of the current page

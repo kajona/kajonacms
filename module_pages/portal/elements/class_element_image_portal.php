@@ -12,20 +12,10 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_image.content_id
  */
 class class_element_image_portal extends class_element_portal implements interface_portal_element {
-
-    /**
-     * Constructor
-     *
-     * @param $objElementData
-     */
-    public function __construct($objElementData) {
-        parent::__construct($objElementData);
-
-        $this->setArrModuleEntry("table", _dbprefix_."element_image");
-    }
-
 
     /**
      * Returns the ready image-htmlcode

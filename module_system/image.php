@@ -115,10 +115,11 @@ class class_flyimage {
                     $objImage->addOperation(new class_image_scale($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"]));
                     $objImage->addOperation(new class_image_text($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "#ffffff"));
 
-                    $objImageOverlay = new class_image2();
-                    $objImageOverlay->load($arrElementData["gallery_overlay"]);
-                    $objImage->addOperation(new class_image_overlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
-
+                    if(is_file(_realpath_.$arrElementData["gallery_overlay"])) {
+                        $objImageOverlay = new class_image2();
+                        $objImageOverlay->load($arrElementData["gallery_overlay"]);
+                        $objImage->addOperation(new class_image_overlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
+                    }
                     $objImage->setJpegQuality((int)$this->intQuality);
                     $objImage->sendToBrowser();
                 }

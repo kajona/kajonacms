@@ -12,51 +12,35 @@
  *
  * @package element_languageswitch
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_languageswitch_admin extends class_element_admin implements interface_admin_element {
 
+    /**
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_languageswitch
+     */
+    private $strChar1;
 
-	public function __construct() {
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
 
-        $this->setArrModuleEntry("name", "element_languageswitch");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1");
-		parent::__construct();
-	}
-
-
-	/**
-	 * Returns the element-part of the admin-form
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
-		$strReturn = "";
-
-        //Load the available templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_languageswitch");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
-		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("char1");
-
-		return $strReturn;
-	}
-
-	/**
-	 * Returns an abstract of the current element
-	 *
-	 * @return string
-	 */
-	public function getContentTitle() {
-	    return "";
-	}
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
+    }
 
 
 }

@@ -12,20 +12,9 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
+ * @targetTable element_news.content_id
  */
 class class_element_news_portal extends class_element_portal implements interface_portal_element {
-
-
-    /**
-     * Contructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     */
-	public function __construct($objElementData) {
-        $this->setArrModuleEntry("name", "element_news");
-        $this->setArrModuleEntry("table", _dbprefix_."element_news");
-        parent::__construct($objElementData);
-	}
 
 
     /**
@@ -33,17 +22,16 @@ class class_element_news_portal extends class_element_portal implements interfac
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
-		//Load the data
-		$objNewsModule = class_module_system_module::getModuleByName("news");
-		if($objNewsModule != null) {
-    		$objNews = $objNewsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+    public function loadData() {
+        $strReturn = "";
+        //Load the data
+        $objNewsModule = class_module_system_module::getModuleByName("news");
+        if($objNewsModule != null) {
+            $objNews = $objNewsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objNews->action();
-		}
-		return $strReturn;
-	}
-
+        }
+        return $strReturn;
+    }
 
 
     /**

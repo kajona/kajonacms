@@ -13,6 +13,7 @@
  */
 class class_formentry_button extends class_formentry_base implements interface_formentry {
 
+    private $strEventhandler = "";
 
     public function __construct($strFormName, $strSourceProperty = "", $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -33,10 +34,26 @@ class class_formentry_button extends class_formentry_base implements interface_f
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputSubmit($this->getStrLabel(), $this->getStrValue(), "", $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputSubmit($this->getStrLabel(), $this->getStrValue(), $this->getStrEventhandler(), $this->getBitReadonly());
 
         return $strReturn;
     }
+
+    /**
+     * @param string $strEventhandler
+     */
+    public function setStrEventhandler($strEventhandler) {
+        $this->strEventhandler = $strEventhandler;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrEventhandler() {
+        return $this->strEventhandler;
+    }
+
+
 
 
 }

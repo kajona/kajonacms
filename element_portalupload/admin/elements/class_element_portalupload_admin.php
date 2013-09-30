@@ -12,44 +12,35 @@
  *
  * @package element_portalupload
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_portalupload_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_portalupload
      */
-    public function __construct() {
-
-        $this->setArrModuleEntry("name", "element_portalupload");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,char2");
-
-        parent::__construct();
-    }
+    private $strChar1;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_universal.char2
      *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @fieldType dropdown
+     * @fieldLabel portalupload_download
+     * @fieldMandatory
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
+    private $strChar2;
+
+    public function getAdminForm() {
 
         $arrDlArchives = class_module_mediamanager_repo::getObjectList();
-
-        //Build the form
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_portalupload", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-
         $arrDlDD = array();
         if(count($arrDlArchives) > 0) {
             foreach($arrDlArchives as $objOneArchive) {
@@ -57,20 +48,40 @@ class class_element_portalupload_admin extends class_element_admin implements in
             }
         }
 
+        $objForm = parent::getAdminForm();
+        $objForm->getField("char2")->setArrKeyValues($arrDlDD);
+        return $objForm;
+    }
 
-        if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "")));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
+    /**
+     * @param string $strChar2
+     */
+    public function setStrChar2($strChar2) {
+        $this->strChar2 = $strChar2;
+    }
 
-        $strReturn .= $this->objToolkit->formInputDropdown("char2", $arrDlDD, $this->getLang("portalupload_download"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
-        $strReturn .= $this->objToolkit->setBrowserFocus("char2");
+    /**
+     * @return string
+     */
+    public function getStrChar2() {
+        return $this->strChar2;
+    }
 
-        return $strReturn;
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
     }
 
 
-    public function getRequiredFields() {
-        return array("char1" => "text", "char2" => "text");
-    }
+
+
 }

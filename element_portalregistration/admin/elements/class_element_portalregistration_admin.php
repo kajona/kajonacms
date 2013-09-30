@@ -12,56 +12,43 @@
  *
  * @package element_portalregistration
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_preg.content_id
  */
 class class_element_portalregistration_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_preg.portalregistration_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_portalregistration
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_portalregistration");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_preg");
-        $this->setArrModuleEntry("tableColumns", "portalregistration_template,portalregistration_group,portalregistration_success");
-        parent::__construct();
-    }
+    private $strTemplate;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_preg.portalregistration_group
      *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @fieldType dropdown
+     * @fieldLabel portalregistration_group
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
+    private $strGroup;
 
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("portalregistration_hint"));
+    /**
+     * @var string
+     * @tableColumn element_preg.portalregistration_success
+     *
+     * @fieldType page
+     * @fieldLabel commons_page_success
+     */
+    private $strSuccess;
 
-        //Build the form
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_portalregistration", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
 
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement(
-                $this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : ""))
-            );
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown(
-                "portalregistration_template",
-                $arrTemplatesDD,
-                $this->getLang("template"),
-                (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "")
-            );
-        }
-
-        //Load groups available
         $arrGroups = class_module_user_group::getObjectList();
         $arrGroupsDD = array();
         foreach($arrGroups as $objOneGroup) {
@@ -69,22 +56,56 @@ class class_element_portalregistration_admin extends class_element_admin impleme
                 $arrGroupsDD[$objOneGroup->getSystemid()] = $objOneGroup->getStrName();
             }
         }
+        $objForm->getField("group")->setArrKeyValues($arrGroupsDD);
 
-        $strReturn .= $this->objToolkit->formInputDropdown(
-            "portalregistration_group",
-            $arrGroupsDD,
-            $this->getLang("portalregistration_group"),
-            (isset($arrElementData["portalregistration_group"]) ? $arrElementData["portalregistration_group"] : "")
-        );
-        $strReturn .= $this->objToolkit->formInputPageSelector(
-            "portalregistration_success",
-            $this->getLang("commons_page_success"),
-            (isset($arrElementData["portalregistration_success"]) ? $arrElementData["portalregistration_success"] : "")
-        );
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("portalregistration_template");
-
-        return $strReturn;
+        $objForm->addField(new class_formentry_textrow("hint"))->setStrValue($this->getLang("portalregistration_hint"));
+        $objForm->setFieldToPosition("hint", 1);
+        return $objForm;
     }
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strSuccess
+     */
+    public function setStrSuccess($strSuccess) {
+        $this->strSuccess = $strSuccess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrSuccess() {
+        return $this->strSuccess;
+    }
+
+    /**
+     * @param string $strGroup
+     */
+    public function setStrGroup($strGroup) {
+        $this->strGroup = $strGroup;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrGroup() {
+        return $this->strGroup;
+    }
+
+
+
 
 }

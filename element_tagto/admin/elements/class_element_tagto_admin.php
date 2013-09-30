@@ -13,44 +13,38 @@
  *
  * @package element_tagto
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_tagto_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_tagto");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1");
-		parent::__construct();
-	}
+    /**
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_tagto
+     */
+    private $strChar1;
 
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
-		$strReturn = "";
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
 
-		//Load the available templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_tagto/", ".tpl");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
+    }
 
-		
-        $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
-		return $strReturn;
-	}
 
 
 }

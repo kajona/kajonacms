@@ -12,25 +12,17 @@
  *
  * @package element_tagto
  * @author sidler@mulchprod.de
+ * @targetTable element_universal.content_id
  */
 class class_element_tagto_portal extends class_element_portal implements interface_portal_element {
 
-    /**
-     * Constructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     */
-	public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-	}
 
     /**
      * Looks up the last modified-date of the current page
      *
      * @return string the prepared html-output
      */
-	public function loadData() {
+    public function loadData() {
         //actions or systemids passed? pagename?
         $strSystemid = $this->getParam("systemid");
         $strActions = $this->getParam("action");
@@ -41,7 +33,7 @@ class class_element_tagto_portal extends class_element_portal implements interfa
         $strLink = getLinkPortalHref($strPagenme, "", $strActions, "", $strSystemid);
         $strReturn = $this->fillTemplate(array("pageurl" => $strLink), $strTemplateID);
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 }

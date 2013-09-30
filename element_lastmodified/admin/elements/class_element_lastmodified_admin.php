@@ -15,23 +15,6 @@
  */
 class class_element_lastmodified_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_lastmodified");
-		parent::__construct();
-	}
-
-   /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
-		return "";
-	}
 
 
 }

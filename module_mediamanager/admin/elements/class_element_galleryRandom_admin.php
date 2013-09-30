@@ -12,75 +12,239 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_gallery.content_id
  */
 class class_element_galleryRandom_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_gallery.gallery_id
+     * @fieldType dropdown
+     * @fieldLabel gallery_id
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_galleryRandom");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_gallery");
-        $this->setArrModuleEntry("tableColumns", "gallery_id,gallery_mode,gallery_template,gallery_maxh_d,gallery_maxw_d,gallery_text,gallery_text_x,gallery_text_y,gallery_overlay");
-        parent::__construct();
-    }
+    private $strRepo;
 
 
     /**
-     * Returns a form to edit the element-data
-     *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @var string
+     * @tableColumn element_gallery.gallery_template
+     * @fieldType template
+     * @fieldLabel template
+     * @fieldTemplateDir /module_mediamanager
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-        //Load all galleries
+    private $strTemplate;
+
+
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_maxh_d
+     * @fieldType text
+     * @fieldLabel gallery_maxh_d
+     */
+    private $intMaxHD;
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_maxw_d
+     * @fieldType text
+     * @fieldLabel gallery_maxw_d
+     */
+    private $intMaxWD;
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_text
+     * @fieldType text
+     * @fieldLabel gallery_text
+     */
+    private $strText;
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_text_x
+     * @fieldType text
+     * @fieldLabel gallery_text_x
+     */
+    private $intTextX;
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_text_y
+     * @fieldType text
+     * @fieldLabel gallery_text_y
+     */
+    private $intTextY;
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_mode
+     * @fieldType hidden
+     */
+    private $intGalleryMode = 1;
+
+
+    /**
+     * @var int
+     * @tableColumn element_gallery.gallery_overlay
+     * @fieldType image
+     * @fieldLabel gallery_overlay
+     */
+    private $strGalleryOverlay;
+
+
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
+
         $arrRawGals = class_module_mediamanager_repo::getObjectList();
         $arrGalleries = array();
         foreach($arrRawGals as $objOneGal) {
-            $arrGalleries[$objOneGal->getSystemid()] = $objOneGal->getStrTitle();
+            $arrGalleries[$objOneGal->getSystemid()] = $objOneGal->getStrDisplayName();
         }
+        $objForm->getField("repo")->setArrKeyValues($arrGalleries);
 
-        //Build the form
-        $strReturn .= $this->objToolkit->formInputDropdown("gallery_id", $arrGalleries, $this->getLang("gallery_id"), (isset($arrElementData["gallery_id"]) ? $arrElementData["gallery_id"] : ""));
+        $objForm->addField(new class_formentry_headline("h2"))->setStrValue($this->getLang("headline_detail"));
+        $objForm->addField(new class_formentry_textrow("t2"))->setStrValue($this->getLang("hint_detail"));
+        $objForm->setFieldToPosition("h2", 3);
+        $objForm->setFieldToPosition("t2", 4);
 
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_mediamanager");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
+        $objForm->addField(new class_formentry_headline("h3"))->setStrValue($this->getLang("headline_overlay"));
+        $objForm->addField(new class_formentry_textrow("t3"))->setStrValue($this->getLang("hint_text"));
+        $objForm->setFieldToPosition("h3", 7);
+        $objForm->setFieldToPosition("t3", 8);
 
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("gallery_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["gallery_template"]) ? $arrElementData["gallery_template"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("gallery_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["gallery_template"]) ? $arrElementData["gallery_template"] : ""));
-        }
-        //And a lot of inputs
-
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_detail"));
-        $strReturn .= $this->objToolkit->formInputText("gallery_maxw_d", $this->getLang("gallery_maxw_d"), (isset($arrElementData["gallery_maxw_d"]) ? $arrElementData["gallery_maxw_d"] : ""));
-        $strReturn .= $this->objToolkit->formInputText("gallery_maxh_d", $this->getLang("gallery_maxh_d"), (isset($arrElementData["gallery_maxh_d"]) ? $arrElementData["gallery_maxh_d"] : ""));
-
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_text"));
-        $strReturn .= $this->objToolkit->formInputText("gallery_text", $this->getLang("gallery_text"), (isset($arrElementData["gallery_text"]) ? $arrElementData["gallery_text"] : ""));
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("hint_overlay"));
-        $strReturn .= $this->objToolkit->formInputFileSelector("gallery_overlay", $this->getLang("gallery_overlay"), (isset($arrElementData["gallery_overlay"]) ? $arrElementData["gallery_overlay"] : ""));
-        $strReturn .= $this->objToolkit->formInputText("gallery_text_x", $this->getLang("gallery_text_x"), (isset($arrElementData["gallery_text_x"]) ? $arrElementData["gallery_text_x"] : ""));
-        $strReturn .= $this->objToolkit->formInputText("gallery_text_y", $this->getLang("gallery_text_y"), (isset($arrElementData["gallery_text_y"]) ? $arrElementData["gallery_text_y"] : ""));
-        $strReturn .= $this->objToolkit->formInputHidden("gallery_mode", "1");
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("gallery_id");
-
-        return $strReturn . "";
+        return $objForm;
     }
 
-    public function doBeforeSaveToDb() {
-        $this->arrParamData["gallery_overlay"] = str_replace(_webpath_, "", $this->arrParamData["gallery_overlay"]);
+    /**
+     * @param int $intMaxHD
+     */
+    public function setIntMaxHD($intMaxHD) {
+        $this->intMaxHD = $intMaxHD;
     }
+
+    /**
+     * @return int
+     */
+    public function getIntMaxHD() {
+        return $this->intMaxHD;
+    }
+
+    /**
+     * @param int $intMaxWD
+     */
+    public function setIntMaxWD($intMaxWD) {
+        $this->intMaxWD = $intMaxWD;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntMaxWD() {
+        return $this->intMaxWD;
+    }
+
+    /**
+     * @param int $intMode
+     */
+    public function setIntGalleryMode($intMode) {
+        $this->intGalleryMode = $intMode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntGalleryMode() {
+        return 1;
+    }
+
+    /**
+     * @param int $intTextX
+     */
+    public function setIntTextX($intTextX) {
+        $this->intTextX = $intTextX;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntTextX() {
+        return $this->intTextX;
+    }
+
+    /**
+     * @param int $intTextY
+     */
+    public function setIntTextY($intTextY) {
+        $this->intTextY = $intTextY;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntTextY() {
+        return $this->intTextY;
+    }
+
+    /**
+     * @param int $strGalleryOverlay
+     */
+    public function setStrGalleryOverlay($strGalleryOverlay) {
+        $this->strGalleryOverlay = $strGalleryOverlay;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStrGalleryOverlay() {
+        return $this->strGalleryOverlay;
+    }
+
+    /**
+     * @param string $strRepo
+     */
+    public function setStrRepo($strRepo) {
+        $this->strRepo = $strRepo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrRepo() {
+        return $this->strRepo;
+    }
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param int $strText
+     */
+    public function setStrText($strText) {
+        $this->strText = $strText;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStrText() {
+        return $this->strText;
+    }
+
+
+
 
 }

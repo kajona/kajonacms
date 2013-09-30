@@ -13,71 +13,83 @@
  *
  * @package element_directorybrowser
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_directorybrowser_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_directorybrowser
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_directorybrowser");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,char2");
-        parent::__construct();
-    }
+    private $strChar1;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_universal.char2
      *
-     * @param mixed $arrElementData
+     * @fieldType text
+     * @fieldLabel directory
+     * @fieldMandatory
      *
-     * @return string
+     * @elementContentTitle
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
+    private $strChar2;
 
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_directorybrowser");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
 
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
-        }
 
-        $strReturn .= $this->objToolkit->formInputText(
-            "char2",
-            $this->getLang("directory"),
-            isset($arrElementData["char2"]) ? $arrElementData["char2"] : "", "inputText",
-            getLinkAdminDialog(
-                "mediamanager",
-                "folderListFolderview",
-                "&form_element=char2",
-                $this->getLang("commons_open_browser"),
-                $this->getLang("commons_open_browser"),
-                "icon_externalBrowser",
-                $this->getLang("commons_open_browser")
-            )
+        $strOpener = getLinkAdminDialog(
+            "mediamanager",
+            "folderListFolderview",
+            "&form_element=char2",
+            $this->getLang("commons_open_browser"),
+            $this->getLang("commons_open_browser"),
+            "icon_externalBrowser",
+            $this->getLang("commons_open_browser")
         );
 
-        $strReturn .= $this->objToolkit->setBrowserFocus("char2");
+        $objForm->getField("char2")->setStrOpener($strOpener);
 
-        return $strReturn;
+        return $objForm;
+    }
+
+
+
+
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
     }
 
     /**
-     * Required is: the path
-     *
-     * @return array
+     * @return string
      */
-    public function getRequiredFields() {
-        return array("char2" => "string");
+    public function getStrChar1() {
+        return $this->strChar1;
     }
+
+    /**
+     * @param string $strChar2
+     */
+    public function setStrChar2($strChar2) {
+        $this->strChar2 = $strChar2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar2() {
+        return $this->strChar2;
+    }
+
 
 }

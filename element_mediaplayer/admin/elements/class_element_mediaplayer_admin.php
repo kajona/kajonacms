@@ -12,65 +12,134 @@
  *
  * @package element_mediaplayer
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_mediaplayer_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_mediaplayer");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,char2,char3,int1,int2");
-
-        parent::__construct();
-	}
-
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
-		$strReturn = "";
-
-		//Build the form
-		$strReturn .= $this->objToolkit->formInputFileSelector("char1", $this->getLang("mediaplayer_file"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
-		$strReturn .= $this->objToolkit->formInputFileSelector("char2", $this->getLang("mediaplayer_preview"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
-
-		//Load the available templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_mediaplayer", ".tpl");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
-
-		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" )));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
-
-		$strReturn .= $this->objToolkit->formInputText("int1", $this->getLang("mediaplayer_width"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("int2", $this->getLang("mediaplayer_height"), (isset($arrElementData["int2"]) ? $arrElementData["int2"] : ""));
-
-		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
-
-		return $strReturn;
-	}
-
-    /**
-     * Modifies the passed params in order to have a proper data record in the database.
-     * Called right before saving the element to the database.
+     * @var string
+     * @tableColumn element_universal.char1
      *
-     * @return void
+     * @fieldType file
+     * @fieldLabel mediaplayer_file
+     * @fieldMandatory
+     *
+     * @elementContentTitle
      */
-    public function doBeforeSaveToDb() {
-        $this->arrParamData["char1"] = str_replace(_webpath_, "_webpath_", $this->arrParamData["char1"]);
-        $this->arrParamData["char2"] = str_replace(_webpath_, "_webpath_", $this->arrParamData["char2"]);
+    private $strChar1;
+
+    /**
+     * @var string
+     * @tableColumn element_universal.char2
+     *
+     * @fieldType file
+     * @fieldLabel mediaplayer_preview
+     */
+    private $strChar2;
+
+    /**
+     * @var string
+     * @tableColumn element_universal.char3
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_mediaplayer
+     */
+    private $strChar3;
+
+    /**
+     * @var string
+     * @tableColumn element_universal.int1
+     *
+     * @fieldType text
+     * @fieldLabel mediaplayer_width
+     */
+    private $intInt1;
+
+    /**
+     * @var string
+     * @tableColumn element_universal.int2
+     *
+     * @fieldType text
+     * @fieldLabel mediaplayer_height
+     */
+    private $intInt2;
+
+
+    /**
+     * @param string $strChar3
+     */
+    public function setStrChar3($strChar3) {
+        $this->strChar3 = $strChar3;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrChar3() {
+        return $this->strChar3;
+    }
+
+    /**
+     * @param string $strChar2
+     */
+    public function setStrChar2($strChar2) {
+        $strChar2 = str_replace(_webpath_, "_webpath_", $strChar2);
+        $this->strChar2 = $strChar2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar2() {
+        return $this->strChar2;
+    }
+
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $strChar1 = str_replace(_webpath_, "_webpath_", $strChar1);
+        $this->strChar1 = $strChar1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
+    }
+
+    /**
+     * @param string $intInt2
+     */
+    public function setIntInt2($intInt2) {
+        $this->intInt2 = $intInt2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntInt2() {
+        return $this->intInt2;
+    }
+
+    /**
+     * @param string $intInt1
+     */
+    public function setIntInt1($intInt1) {
+        $this->intInt1 = $intInt1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntInt1() {
+        return $this->intInt1;
+    }
+
+
 
 }

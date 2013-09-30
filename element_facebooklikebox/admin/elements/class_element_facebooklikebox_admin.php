@@ -14,46 +14,39 @@
  * @package element_facebooklikebox
  * @author jschroeter@kajona.de
  *
+ * @targetTable element_universal.content_id
+ *
  */
 class class_element_facebooklikebox_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_facebooklikebox");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-		$this->setArrModuleEntry("tableColumns", "char1");
-		parent::__construct();
-	}
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_universal.char1
      *
-     * @param mixed $arrElementData
+     * @fieldType template
+     * @fieldLabel template
      *
+     * @fieldTemplateDir /element_facebooklikebox
+     */
+    private $strChar1;
+
+
+
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
+
+    /**
      * @return string
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_facebooklikebox/", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-
-        $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("char1");
-
-        return $strReturn;
+    public function getStrChar1() {
+        return $this->strChar1;
     }
+
 
 
 }

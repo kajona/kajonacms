@@ -12,65 +12,147 @@
  *
  * @package element_formular
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_formular.content_id
  */
 class class_element_formular_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_formular.formular_class
+     *
+     * @fieldType dropdown
+     * @fieldLabel formular_class
+     * @fieldMandatory
+     *
+     * @elementContentTitle
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_formular");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_formular");
-        $this->setArrModuleEntry("tableColumns", "formular_class,formular_email,formular_success,formular_error,formular_template");
-        parent::__construct();
-    }
+    private $strClass;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_formular.formular_email
      *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @fieldType text
+     * @fieldLabel formular_email
+     * @fieldValidator email
+     * @fieldMandatory
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
+    private $strEmail;
 
-        //Build the form
-        $strReturn .= $this->objToolkit->formInputText("formular_email", $this->getLang("formular_email"), (isset($arrElementData["formular_email"]) ? $arrElementData["formular_email"] : ""));
+    /**
+     * @var string
+     * @tableColumn element_formular.formular_success
+     *
+     * @fieldType text
+     * @fieldLabel formular_success
+     */
+    private $strSuccess;
 
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("formular_success_hint"));
-        $strReturn .= $this->objToolkit->formInputText("formular_success", $this->getLang("formular_success"), (isset($arrElementData["formular_success"]) ? $arrElementData["formular_success"] : ""));
+    /**
+     * @var string
+     * @tableColumn element_formular.formular_error
+     *
+     * @fieldType text
+     * @fieldLabel formular_error
+     */
+    private $strError;
 
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("formular_error_hint"));
-        $strReturn .= $this->objToolkit->formInputText("formular_error", $this->getLang("formular_error"), (isset($arrElementData["formular_error"]) ? $arrElementData["formular_error"] : ""));
-        //Load the available classes
+    /**
+     * @var string
+     * @tableColumn element_formular.formular_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_form
+     */
+    private $strTemplate;
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
+
         $arrClassesDD = array();
         foreach(class_resourceloader::getInstance()->getFolderContent("/portal/forms", array(".php")) as $strClass) {
             $arrClassesDD[$strClass] = $strClass;
         }
 
-        $strReturn .= $this->objToolkit->formInputDropdown("formular_class", $arrClassesDD, $this->getLang("formular_class"), (isset($arrElementData["formular_class"]) ? $arrElementData["formular_class"] : ""));
-
-
-        //Load the available templates
-        $arrTemplatesDD = array();
-        foreach(class_resourceloader::getInstance()->getTemplatesInFolder("/element_form", ".tpl") as $strTemplate) {
-            $arrTemplatesDD[$strTemplate] = $strTemplate;
-        }
-
-        if(count($arrTemplatesDD) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "")));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : ""));
-
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("formular_email");
-
-        return $strReturn;
+        $objForm->getField("class")->setArrKeyValues($arrClassesDD);
+        return $objForm;
     }
 
-    public function getRequiredFields() {
-        return array("formular_email" => "email", "formular_template" => "text");
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strSuccess
+     */
+    public function setStrSuccess($strSuccess) {
+        $this->strSuccess = $strSuccess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrSuccess() {
+        return $this->strSuccess;
+    }
+
+    /**
+     * @param string $strError
+     */
+    public function setStrError($strError) {
+        $this->strError = $strError;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrError() {
+        return $this->strError;
+    }
+
+    /**
+     * @param string $strEmail
+     */
+    public function setStrEmail($strEmail) {
+        $this->strEmail = $strEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrEmail() {
+        return $this->strEmail;
+    }
+
+    /**
+     * @param string $strClass
+     */
+    public function setStrClass($strClass) {
+        $this->strClass = $strClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrClass() {
+        return $this->strClass;
+    }
+
+
+
+
 
 }

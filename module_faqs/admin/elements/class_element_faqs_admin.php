@@ -12,63 +12,78 @@
  *
  * @package module_faqs
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_faqs.content_id
  */
 class class_element_faqs_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_faqs.faqs_category
+     *
+     * @fieldType dropdown
+     * @fieldLabel commons_category
      */
-    public function __construct() {
-
-        $this->setArrModuleEntry("name", "element_faqs");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_faqs");
-        $this->setArrModuleEntry("tableColumns", "faqs_category,faqs_template");
-
-        parent::__construct();
-    }
+    private $strCategory;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_faqs.faqs_template
      *
-     * @param mixed $arrElementData
+     * @fieldType template
+     * @fieldLabel template
      *
-     * @return string
+     * @fieldTemplateDir /module_faqs
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-        //Load all faqcats available
+    private $strTemplate;
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
+
         $arrRawCats = class_module_faqs_category::getObjectList();
         $arrCats = array();
         //addd an "i want all" cat ;)
         $arrCats["0"] = $this->getLang("commons_all_categories");
 
         foreach($arrRawCats as $objOneCat) {
-            $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
+            $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
         }
 
-        //Build the form
-        $strReturn .= $this->objToolkit->formInputDropdown("faqs_category", $arrCats, $this->getLang("commons_category"), (isset($arrElementData["faqs_category"]) ? $arrElementData["faqs_category"] : ""));
-
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_faqs");
-
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : ""));
-        }
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("faqs_category");
-
-        return $strReturn;
+        $objForm->getField("category")->setArrKeyValues($arrCats);
+        return $objForm;
     }
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strCategory
+     */
+    public function setStrCategory($strCategory) {
+        $this->strCategory = $strCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrCategory() {
+        return $this->strCategory;
+    }
+
+
+
+
+
 
 }

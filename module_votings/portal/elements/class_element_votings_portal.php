@@ -12,20 +12,9 @@
  *
  * @package module_votings
  * @author sidler@mulchprod.de
+ * @targetTable element_universal.content_id
  */
 class class_element_votings_portal extends class_element_portal implements interface_portal_element {
-
-
-    /**
-     * Contructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     * @internal param mixed $arrElementData
-     */
-	public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-    }
 
 
     /**
@@ -33,15 +22,15 @@ class class_element_votings_portal extends class_element_portal implements inter
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
-		//Load the data
-		$objvotingsModule = class_module_system_module::getModuleByName("votings");
-		if($objvotingsModule != null) {
-    		$objVotings = $objvotingsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
+    public function loadData() {
+        $strReturn = "";
+        //Load the data
+        $objvotingsModule = class_module_system_module::getModuleByName("votings");
+        if($objvotingsModule != null) {
+            $objVotings = $objvotingsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objVotings->action();
-		}
-		return $strReturn;
-	}
+        }
+        return $strReturn;
+    }
 
 }

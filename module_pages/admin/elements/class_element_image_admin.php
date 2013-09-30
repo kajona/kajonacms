@@ -4,7 +4,7 @@
 *   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                       *
+*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -12,86 +12,159 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_image.content_id
  */
 class class_element_image_admin extends class_element_admin implements interface_admin_element {
 
+    /**
+     * @var string
+     * @tableColumn element_image.image_title
+     *
+     * @fieldType text
+     * @fieldLabel commons_title
+     */
+    private $strTitle = "";
 
-    public function __construct() {
+    /**
+     * @var string
+     * @tableColumn element_image.image_link
+     *
+     * @fieldType page
+     * @fieldLabel image_link
+     */
+    private $strLink = "";
 
-        $this->setArrModuleEntry("name", "element_image");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_image");
-        $this->setArrModuleEntry("tableColumns", "image_title,image_link,image_image,image_x,image_y,image_template");
-        parent::__construct();
-    }
+    /**
+     * @var string
+     * @tableColumn element_image.image_image
+     *
+     * @fieldType image
+     * @fieldLabel commons_image
+     *
+     * @elementContentTitle
+     */
+    private $strImage = "";
+
+    /**
+     * @var string
+     * @tableColumn element_image.image_x
+     *
+     * @fieldType text
+     * @fieldLabel image_x
+     * @fieldHidden
+     */
+    private $strImageX = "";
+
+    /**
+     * @var string
+     * @tableColumn element_image.image_y
+     *
+     * @fieldType text
+     * @fieldLabel image_y
+     * @fieldHidden
+     */
+    private $strImageY = "";
+
+    /**
+     * @var string
+     * @tableColumn element_image.image_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_image
+     */
+    private $strTemplate = "";
+
 
 
     /**
-     * Returns the element-part of the admin-form
-     *
-     * @param mixed $arrElementData
-     *
+     * @param string $strImage
+     */
+    public function setStrImage($strImage) {
+        $this->strImage = $strImage;
+    }
+
+    /**
      * @return string
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-        $strReturn .= $this->objToolkit->formInputText("image_title", $this->getLang("commons_title"), (isset($arrElementData["image_title"]) ? $arrElementData["image_title"] : ""));
-        $strReturn .= $this->objToolkit->formInputPageSelector("image_link", $this->getLang("image_link"), (isset($arrElementData["image_link"]) ? $arrElementData["image_link"] : ""));
-        $strReturn .= $this->objToolkit->formInputImageSelector("image_image", $this->getLang("commons_image"), (isset($arrElementData["image_image"]) ? $arrElementData["image_image"] : ""));
-
-        $strXY = $this->objToolkit->formTextRow($this->getLang("image_xy_hint"));
-        $strXY .= $this->objToolkit->formInputText("image_x", $this->getLang("image_x"), (isset($arrElementData["image_x"]) ? $arrElementData["image_x"] : ""));
-        $strXY .= $this->objToolkit->formTextRow($this->getLang("image_xy_hint"));
-        $strXY .= $this->objToolkit->formInputText("image_y", $this->getLang("image_y"), (isset($arrElementData["image_y"]) ? $arrElementData["image_y"] : ""));
-
-        if((isset($arrElementData["image_x"]) && $arrElementData["image_x"] > 0) || (isset($arrElementData["image_y"]) && $arrElementData["image_y"] > 0)) {
-            $strReturn .= $strXY;
-        }
-        else {
-            $this->addOptionalFormElement($strXY);
-        }
-
-        //load templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_image");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : ""));
-        }
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("image_title");
-
-        return $strReturn;
+    public function getStrImage() {
+        return $this->strImage;
     }
 
     /**
-     * Returns an abstract of the current element
-     *
+     * @param string $strImageX
+     */
+    public function setStrImageX($strImageX) {
+        $this->strImageX = $strImageX;
+    }
+
+    /**
      * @return string
      */
-    public function getContentTitle() {
-        $arrData = $this->loadElementData();
-        if(!isset($arrData["image_image"]))
-            $arrData["image_image"] = "";
-        return uniStrTrim(htmlStripTags($arrData["image_image"]), 60);
+    public function getStrImageX() {
+        return $this->strImageX;
     }
-
 
     /**
-     * Modifies the passed params in order to have a proper data record in the database.
-     * Called right before saving the element to the database.
-     *
-     * @return void
+     * @param string $strImageY
      */
-    public function doBeforeSaveToDb() {
-        $this->arrParamData["image_image"] = str_replace(_webpath_, "", $this->arrParamData["image_image"]);
+    public function setStrImageY($strImageY) {
+        $this->strImageY = $strImageY;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrImageY() {
+        return $this->strImageY;
+    }
+
+    /**
+     * @param string $strLink
+     */
+    public function setStrLink($strLink) {
+        $this->strLink = $strLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrLink() {
+        return $this->strLink;
+    }
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strTitle
+     */
+    public function setStrTitle($strTitle) {
+        $this->strTitle = $strTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTitle() {
+        return $this->strTitle;
+    }
+
+
+
+
 
 }

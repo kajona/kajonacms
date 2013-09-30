@@ -12,49 +12,83 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ * @targetTable element_search.content_id
+ *
  */
 class class_element_search_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_search");
-        $this->setArrModuleEntry("table", _dbprefix_."element_search");
-        $this->setArrModuleEntry("tableColumns", "search_template,search_amount,search_page");
-        parent::__construct();
-	}
-
+    /**
+     * @var string
+     * @tableColumn element_search.search_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /module_search
+     */
+    private $strTemplate;
 
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData)	{
-		$strReturn = "";
+     * @var int
+     * @tableColumn element_search.search_amount
+     *
+     * @fieldType text
+     * @fieldLabel search_amount
+     */
+    private $intAmount;
 
-		//Build the form
-		$strReturn .= $this->objToolkit->formInputText("search_amount", $this->getLang("search_amount"), (isset($arrElementData["search_amount"]) ? $arrElementData["search_amount"] : ""));
-		$strReturn .= $this->objToolkit->formInputPageSelector("search_page", $this->getLang("commons_result_page"), (isset($arrElementData["search_page"]) ? $arrElementData["search_page"] : "" ));
-		//Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_search");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
+    /**
+     * @var string
+     * @tableColumn element_search.search_page
+     *
+     * @fieldType page
+     * @fieldLabel commons_result_page
+     */
+    private $strPage;
 
-		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("search_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["search_template"]) ? $arrElementData["search_template"] : "" )));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("search_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["search_template"]) ? $arrElementData["search_template"] : "" ));
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("search_amount");
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
 
-		return $strReturn;
-	}
+    /**
+     * @param string $strPage
+     */
+    public function setStrPage($strPage) {
+        $this->strPage = $strPage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrPage() {
+        return $this->strPage;
+    }
+
+    /**
+     * @param int $intAmount
+     */
+    public function setIntAmount($intAmount) {
+        $this->intAmount = $intAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntAmount() {
+        return $this->intAmount;
+    }
+
+
+
 
 }

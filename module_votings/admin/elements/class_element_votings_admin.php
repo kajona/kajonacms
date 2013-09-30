@@ -12,63 +12,102 @@
  *
  * @package module_votings
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_votings_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_votings");
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,char2,int1");
-        parent::__construct();
-	}
+    /**
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType dropdown
+     * @fieldLabel votings_voting
+     *
+     */
+    private $strChar1;
 
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData)	{
-		$strReturn = "";
-		//Load all votings available
+     * @var string
+     * @tableColumn element_universal.char2
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /module_votings
+     */
+    private $strChar2;
+
+    /**
+     * @var string
+     * @tableColumn element_universal.int1
+     *
+     * @fieldType dropdown
+     * @fieldLabel votings_mode
+     * @fieldDDValues [0 => votings_mode_voting],[1 => votings_mode_result]
+     */
+    private $intInt1;
+
+
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
+
         $arrRawVotings = class_module_votings_voting::getObjectList(true);
         $arrVotings = array();
 
         foreach ($arrRawVotings as $objOneVoting)
             $arrVotings[$objOneVoting->getSystemid()] = $objOneVoting->getStrTitle();
 
-		//Build the form
-		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrVotings, $this->getLang("votings_voting"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+        $objForm->getField("char1")->setArrKeyValues($arrVotings);
 
-		//Load the available templates
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_votings", ".tpl");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
+        return $objForm;
+    }
 
-		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char2", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" )));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("char2", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
+    /**
+     * @param string $strChar2
+     */
+    public function setStrChar2($strChar2) {
+        $this->strChar2 = $strChar2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar2() {
+        return $this->strChar2;
+    }
+
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
+    }
+
+    /**
+     * @param string $intInt1
+     */
+    public function setIntInt1($intInt1) {
+        $this->intInt1 = $intInt1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntInt1() {
+        return $this->intInt1;
+    }
 
 
-        //the mode itself
-        $arrModeDD = array(
-            "0" => $this->getLang("votings_mode_voting"),
-            "1" => $this->getLang("votings_mode_result")
-        );
-        $strReturn .= $this->objToolkit->formInputDropdown("int1", $arrModeDD, $this->getLang("votings_mode"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : "" ));
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
-
-		return $strReturn;
-	}
 
 
 }

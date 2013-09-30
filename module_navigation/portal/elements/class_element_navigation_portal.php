@@ -12,42 +12,33 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_navigation.content_id
  */
 class class_element_navigation_portal extends class_element_portal implements interface_portal_element {
-
-    /**
-     * Constructor
-     *
-     * @param $objElementData
-     */
-	public function __construct($objElementData) {
-		parent::__construct($objElementData);
-
-        $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
-	}
 
     /**
      * Loads the navigation-class and passes control
      *
      * @return string
      */
-	public function loadData() {
-		$strReturn = "";
+    public function loadData() {
+        $strReturn = "";
 
         $objNaviModule = class_module_system_module::getModuleByName("navigation");
-		if($objNaviModule != null) {
+        if($objNaviModule != null) {
             $objNavigation = $objNaviModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objNavigation->action();
-		}
+        }
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
-	/**
-	 * no anchor here, plz
-	 *
-	 * @return string
-	 */
+    /**
+     * no anchor here, plz
+     *
+     * @return string
+     */
     protected function getAnchorTag() {
         return "";
     }

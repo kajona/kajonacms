@@ -13,48 +13,83 @@
  *
  * @package element_tellafriend
  * @author sidler@mulchprod.de
+ * @targetTable element_tellafriend.content_id
  */
 class class_element_tellafriend_admin extends class_element_admin implements interface_admin_element {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("name", "element_tellafriend");
-        $this->setArrModuleEntry("table", _dbprefix_."element_tellafriend");
-        $this->setArrModuleEntry("tableColumns", "tellafriend_template,tellafriend_error,tellafriend_success");
-        parent::__construct();
-	}
+    /**
+     * @var string
+     * @tableColumn element_tellafriend.tellafriend_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_tellafriend
+     */
+    private $strTemplate;
 
     /**
-	 * Returns a form to edit the element-data
-	 *
-	 * @param mixed $arrElementData
-	 * @return string
-	 */
-	public function getEditForm($arrElementData) {
-		$strReturn = "";
+     * @var string
+     * @tableColumn element_tellafriend.tellafriend_error
+     *
+     * @fieldType page
+     * @fieldLabel tellafriend_error
+     */
+    private $strError;
 
-		$arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_tellafriend", ".tpl");
-		$arrTemplatesDD = array();
-		if(count($arrTemplates) > 0) {
-			foreach($arrTemplates as $strTemplate) {
-				$arrTemplatesDD[$strTemplate] = $strTemplate;
-			}
-		}
+    /**
+     * @var string
+     * @tableColumn element_tellafriend.tellafriend_success
+     *
+     * @fieldType page
+     * @fieldLabel tellafriend_success
+     */
+    private $strSuccess;
 
-		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("tellafriend_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["tellafriend_template"]) ? $arrElementData["tellafriend_template"] : "" )));
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("tellafriend_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["tellafriend_template"]) ? $arrElementData["tellafriend_template"] : "" ));
-        
-		$strReturn .= $this->objToolkit->formInputPageSelector("tellafriend_error", $this->getLang("tellafriend_error"), (isset($arrElementData["tellafriend_error"]) ? $arrElementData["tellafriend_error"] : ""));
-		$strReturn .= $this->objToolkit->formInputPageSelector("tellafriend_success", $this->getLang("tellafriend_success"), (isset($arrElementData["tellafriend_success"]) ? $arrElementData["tellafriend_success"] : ""));
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("tellafriend_template");
 
-		return $strReturn;
-	}
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strSuccess
+     */
+    public function setStrSuccess($strSuccess) {
+        $this->strSuccess = $strSuccess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrSuccess() {
+        return $this->strSuccess;
+    }
+
+    /**
+     * @param string $strError
+     */
+    public function setStrError($strError) {
+        $this->strError = $strError;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrError() {
+        return $this->strError;
+    }
 
 
 }

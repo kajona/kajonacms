@@ -31,7 +31,7 @@ $lang["headline_list"]                   = "Listenansicht";
 $lang["headline_overlay"]                = "Bildinschrift (Overlay text)";
 $lang["hint_detail"]                     = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
 $lang["hint_movie"]                      = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
-$lang["hint_overlay"]                    = "Aktuell werden lediglich PNG Bilder unterstützt";
+$lang["gallery_overlay_hint"]                    = "Aktuell werden lediglich PNG Bilder unterstützt";
 $lang["hint_preview"]                    = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
 $lang["hint_text"]                       = "Legt in das Bild der Detailansicht an Stelle (X, Y) einen Text";
 $lang["mode_random"]                     = "Zufalls-Modus";

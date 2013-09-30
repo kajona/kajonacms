@@ -11,6 +11,8 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_gallery.content_id
  */
 class class_element_gallery_portal extends class_element_portal implements interface_portal_element {
 
@@ -22,7 +24,6 @@ class class_element_gallery_portal extends class_element_portal implements inter
      */
     public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_gallery");
 
         //we support ratings, so add cache-busters
         if(class_module_system_module::getModuleByName("rating") !== null)

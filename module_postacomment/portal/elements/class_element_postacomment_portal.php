@@ -12,6 +12,8 @@
  *
  * @package module_postacomment
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_postacomment_portal extends class_element_portal implements interface_portal_element {
 
@@ -21,7 +23,6 @@ class class_element_postacomment_portal extends class_element_portal implements 
      */
     public function __construct($objElementData) {
         parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
 
         //we support ratings, so add cache-busters
         $objRatingModule = class_module_system_module::getModuleByName("rating");

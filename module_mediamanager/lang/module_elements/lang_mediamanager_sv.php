@@ -31,7 +31,7 @@ $lang["headline_list"]                   = "LIstvy";
 $lang["headline_overlay"]                = "Överlagrad text i bild";
 $lang["hint_detail"]                     = "Om bildens mått överskrider något av värdena kommer bilden att skalas (0=ingen skalning)";
 $lang["hint_movie"]                      = "Om bildens mått överskrider något av värdena kommer bilden att skalas (0=ingen skalning)";
-$lang["hint_overlay"]                    = "Endast PNG-filer kan användas";
+$lang["gallery_overlay_hint"]                    = "Endast PNG-filer kan användas";
 $lang["hint_preview"]                    = "Om bildens mått överskrider något av värdena kommer bilden att skalas (0=ingen skalning)";
 $lang["hint_text"]                       = "Placerar en text i postion (X,Y)  när bilden visas i detaljläge";
 $lang["mode_random"]                     = "Slumpmässigt läge";

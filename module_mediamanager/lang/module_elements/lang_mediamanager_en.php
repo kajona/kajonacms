@@ -31,7 +31,7 @@ $lang["headline_list"]                   = "List view";
 $lang["headline_overlay"]                = "Overlay text";
 $lang["hint_detail"]                     = "If the picture exceeds one of the values, it will be scaled (0 = no scaling)";
 $lang["hint_movie"]                      = "If the picture exceeds one of the values, it will be scaled (0 = no scaling)";
-$lang["hint_overlay"]                    = "Only PNG-files are supported";
+$lang["gallery_overlay_hint"]                    = "Only PNG-files are supported";
 $lang["hint_preview"]                    = "If the picture exceeds one of the values, it will be scaled (0 = no scaling)";
 $lang["hint_text"]                       = "Places a text at the position (X, Y) into the image when in detail-mode";
 $lang["mode_random"]                     = "Random-mode";

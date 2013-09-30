@@ -25,9 +25,9 @@
 		} else if (portalLanguage == "it") {
 		    languageToLoad = "it_IT";
 		}
-		
-		KAJONA.portal.loader.load(null, [document.location.protocol + "//connect.facebook.net/"+languageToLoad+"/all.js"], function() {
+
+        KAJONA.portal.loader.loadFile([document.location.protocol + "//connect.facebook.net/"+languageToLoad+"/all.js"], function() {
 		    document.getElementById('fblikebox').innerHTML = '<fb:fan profile_id="156841314360532" height="556" width="292" connections="10" stream="true" header="false" colorscheme="light" css="_webpath_/templates/default/css/element_facebooklikebox.css?_system_browser_cachebuster_"></fb:fan>';
-		});
+		}, true);
     </script>
 </facebooklikebox>

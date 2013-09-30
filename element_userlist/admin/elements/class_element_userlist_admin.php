@@ -12,40 +12,45 @@
  *
  * @package element_userlist
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_userlist_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_userlist
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_userlist");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,char2,char3,int1");
-        parent::__construct();
-    }
+    private $strChar1;
 
     /**
-     * Returns a form to edit the element-data
+     * @var string
+     * @tableColumn element_universal.char2
      *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @fieldType dropdown
+     * @fieldLabel userlist_group
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
+    private $strChar2;
 
-        //Build the form
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_userlist", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
 
-        //load the available groups
+    /**
+     * @var string
+     * @tableColumn element_universal.int1
+     *
+     * @fieldType dropdown
+     * @fieldLabel userlist_status
+     * @fieldDDValues [0 =>  userlist_status_all],[1 => userlist_status_active],[2 => userlist_status_inactive]
+     */
+    private $intInt1;
+
+
+    public function getAdminForm() {
+
         $arrGroups = class_module_user_group::getObjectList();
         $arrGroupsDD = array();
         $arrGroupsDD[0] = $this->getLang("userlist_all");
@@ -55,29 +60,53 @@ class class_element_userlist_admin extends class_element_admin implements interf
             }
         }
 
-        $arrGroupsActive = array(
-            0 => $this->getLang("userlist_status_all"),
-            1 => $this->getLang("userlist_status_active"),
-            2 => $this->getLang("userlist_status_inactive")
-        );
+        $objForm = parent::getAdminForm();
+        $objForm->getField("char2")->setArrKeyValues($arrGroupsDD);
+        return $objForm;
+    }
 
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("userlist_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("userlist_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
-        }
+    /**
+     * @param string $strChar2
+     */
+    public function setStrChar2($strChar2) {
+        $this->strChar2 = $strChar2;
+    }
 
-        $strReturn .= $this->objToolkit->formInputDropdown("char2", $arrGroupsDD, $this->getLang("userlist_group"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
-        $strReturn .= $this->objToolkit->formInputDropdown("int1", $arrGroupsActive, $this->getLang("userlist_status"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : ""));
+    /**
+     * @return string
+     */
+    public function getStrChar2() {
+        return $this->strChar2;
+    }
 
-        $strReturn .= $this->objToolkit->setBrowserFocus("char1");
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
+    }
 
-        return $strReturn;
+    /**
+     * @return string
+     */
+    public function getStrChar1() {
+        return $this->strChar1;
+    }
+
+    /**
+     * @param string $intInt1
+     */
+    public function setIntInt1($intInt1) {
+        $this->intInt1 = $intInt1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntInt1() {
+        return $this->intInt1;
     }
 
 
-    public function getRequiredFields() {
-        return array("char1" => "text");
-    }
+
 }

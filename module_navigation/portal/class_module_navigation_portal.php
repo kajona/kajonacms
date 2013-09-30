@@ -417,6 +417,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
                                     //load the real-pageelement
                                     $objRealElement = new class_element_navigation_portal($objElement);
                                     $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
+                                    if(count($arrContent) == 0)
+                                        continue;
 
                                     //navigation found. trigger loading of nodes if not yet happend
                                     if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {

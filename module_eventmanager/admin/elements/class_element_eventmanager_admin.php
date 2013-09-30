@@ -13,64 +13,87 @@
  * @package module_eventmanager
  * @author sidler@mulchprod.de
  * @since 3.4
+ *
+ * @targetTable element_universal.content_id
  */
 class class_element_eventmanager_admin extends class_element_admin implements interface_admin_element {
 
-    /**
-     * Constructor
 
+    /**
+     * @var string
+     * @tableColumn element_universal.char1
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /module_eventmanager
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_eventmanager");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_universal");
-        $this->setArrModuleEntry("tableColumns", "char1,int1,int2");
-        parent::__construct();
+    private $strChar1;
+
+    /**
+     * @var int
+     * @tableColumn element_universal.int1
+     *
+     * @fieldType dropdown
+     * @fieldLabel eventmanager_order
+     * @fieldDDValues [0 => eventmanager_order_desc],[1 => eventmanager_order_asc]
+     */
+    private $intInt1;
+
+    /**
+     * @var int
+     * @tableColumn element_universal.int2
+     *
+     * @fieldType dropdown
+     * @fieldLabel eventmanager_mode
+     * @fieldDDValues [0 => eventmanager_mode_calendar],[1 => $this->getLang("eventmanager_mode_list]
+     */
+    private $intInt2;
+
+    /**
+     * @param string $strChar1
+     */
+    public function setStrChar1($strChar1) {
+        $this->strChar1 = $strChar1;
     }
 
     /**
-     * Returns a form to edit the element-data
-     *
-     * @param mixed $arrElementData
-     *
      * @return string
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_eventmanager", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "")));
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""));
-        }
-
-        $arrModeDD = array(
-            "0" => $this->getLang("eventmanager_mode_calendar"),
-            "1" => $this->getLang("eventmanager_mode_list")
-        );
-        $strReturn .= $this->objToolkit->formInputDropdown("int2", $arrModeDD, $this->getLang("eventmanager_mode"), (isset($arrElementData["int2"]) ? $arrElementData["int2"] : ""));
-
-        $arrOrderDD = array(
-            "0" => $this->getLang("eventmanager_order_desc"),
-            "1" => $this->getLang("eventmanager_order_asc")
-        );
-
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("eventmanager_order_hint"));
-        $strReturn .= $this->objToolkit->formInputDropdown("int1", $arrOrderDD, $this->getLang("eventmanager_order"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : ""));
-
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("int1");
-
-        return $strReturn;
+    public function getStrChar1() {
+        return $this->strChar1;
     }
+
+    /**
+     * @param int $intInt2
+     */
+    public function setIntInt2($intInt2) {
+        $this->intInt2 = $intInt2;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntInt2() {
+        return $this->intInt2;
+    }
+
+    /**
+     * @param int $intInt1
+     */
+    public function setIntInt1($intInt1) {
+        $this->intInt1 = $intInt1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntInt1() {
+        return $this->intInt1;
+    }
+
+
+
+
 
 }

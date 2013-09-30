@@ -12,75 +12,182 @@
  *
  * @package element_portallogin
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_plogin.content_id
  */
 class class_element_portallogin_admin extends class_element_admin implements interface_admin_element {
 
     /**
-     * Constructor
-
+     * @var string
+     * @tableColumn element_plogin.portallogin_template
+     *
+     * @fieldType template
+     * @fieldLabel template
+     *
+     * @fieldTemplateDir /element_portallogin
      */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_portallogin");
-        $this->setArrModuleEntry("table", _dbprefix_ . "element_plogin");
-        $this->setArrModuleEntry("tableColumns", "portallogin_template,portallogin_error,portallogin_success,portallogin_logout_success,portallogin_profile,portallogin_pwdforgot,portallogin_editmode");
-        parent::__construct();
+    private $strTemplate;
+
+    /**
+     * @var string
+     * @tableColumn element_plogin.portallogin_error
+     *
+     * @fieldType page
+     * @fieldLabel portallogin_error
+     */
+    private $strError;
+
+    /**
+     * @var string
+     * @tableColumn element_plogin.portallogin_success
+     *
+     * @fieldType page
+     * @fieldLabel commons_page_success
+     */
+    private $strSuccess;
+
+    /**
+     * @var string
+     * @tableColumn element_plogin.portallogin_logout_success
+     *
+     * @fieldType page
+     * @fieldLabel portallogin_logout_success
+     */
+    private $strLogout;
+
+    /**
+     * @var string
+     * @tableColumn element_plogin.portallogin_profile
+     *
+     * @fieldType page
+     * @fieldLabel portallogin_profile
+     */
+    private $strProfile;
+
+    /**
+     * @var string
+     * @tableColumn element_plogin.portallogin_pwdforgot
+     *
+     * @fieldType page
+     * @fieldLabel portallogin_pwdforgot
+     * @fieldDDValues [0=>portallogin_editmode_0],[1=>portallogin_editmode_1]
+     */
+    private $strPwdForgot;
+
+    /**
+     * @var string
+     * @tableColumn element_plogin.portallogin_editmode
+     *
+     * @fieldType dropdown
+     * @fieldLabel portallogin_editmode
+     * @fieldDDValues [0=>portallogin_editmode_0],[1=>portallogin_editmode_1]
+     */
+    private $strEditmode;
+
+
+
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
     }
 
     /**
-     * Returns a form to edit the element-data
-     *
-     * @param mixed $arrElementData
-     *
      * @return string
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
-
-        //Build the form
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/element_portallogin", ".tpl");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1) {
-            $this->addOptionalFormElement(
-                $this->objToolkit->formInputDropdown(
-                    "portallogin_template",
-                    $arrTemplatesDD,
-                    $this->getLang("template"),
-                    (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : "")
-                )
-            );
-        }
-        else {
-            $strReturn .= $this->objToolkit->formInputDropdown("portallogin_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : ""));
-        }
-
-        $strReturn .= $this->objToolkit->formInputPageSelector("portallogin_error", $this->getLang("portallogin_error"), (isset($arrElementData["portallogin_error"]) ? $arrElementData["portallogin_error"] : ""));
-        $strReturn .= $this->objToolkit->formInputPageSelector("portallogin_success", $this->getLang("commons_page_success"), (isset($arrElementData["portallogin_success"]) ? $arrElementData["portallogin_success"] : ""));
-        $strReturn .= $this->objToolkit->formInputPageSelector(
-            "portallogin_logout_success",
-            $this->getLang("portallogin_logout_success"),
-            (isset($arrElementData["portallogin_logout_success"]) ? $arrElementData["portallogin_logout_success"] : "")
-        );
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("portallogin_profile_hint"));
-        $strReturn .= $this->objToolkit->formInputPageSelector("portallogin_profile", $this->getLang("portallogin_profile"), (isset($arrElementData["portallogin_profile"]) ? $arrElementData["portallogin_profile"] : ""));
-        $strReturn .= $this->objToolkit->formInputPageSelector("portallogin_pwdforgot", $this->getLang("portallogin_pwdforgot"), (isset($arrElementData["portallogin_pwdforgot"]) ? $arrElementData["portallogin_pwdforgot"] : ""));
-
-        $arrKeyValues = array(
-            0 => $this->getLang("portallogin_editmode_0"),
-            1 => $this->getLang("portallogin_editmode_1")
-        );
-        $strReturn .= $this->objToolkit->formInputDropdown("portallogin_editmode", $arrKeyValues, $this->getLang("portallogin_editmode"), (isset($arrElementData["portallogin_editmode"]) ? $arrElementData["portallogin_editmode"] : ""));
-
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("portallogin_template");
-
-        return $strReturn;
+    public function getStrTemplate() {
+        return $this->strTemplate;
     }
+
+    /**
+     * @param string $strSuccess
+     */
+    public function setStrSuccess($strSuccess) {
+        $this->strSuccess = $strSuccess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrSuccess() {
+        return $this->strSuccess;
+    }
+
+    /**
+     * @param string $strPwdForgot
+     */
+    public function setStrPwdForgot($strPwdForgot) {
+        $this->strPwdForgot = $strPwdForgot;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrPwdForgot() {
+        return $this->strPwdForgot;
+    }
+
+    /**
+     * @param string $strProfile
+     */
+    public function setStrProfile($strProfile) {
+        $this->strProfile = $strProfile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrProfile() {
+        return $this->strProfile;
+    }
+
+    /**
+     * @param string $strLogout
+     */
+    public function setStrLogout($strLogout) {
+        $this->strLogout = $strLogout;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrLogout() {
+        return $this->strLogout;
+    }
+
+    /**
+     * @param string $strError
+     */
+    public function setStrError($strError) {
+        $this->strError = $strError;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrError() {
+        return $this->strError;
+    }
+
+    /**
+     * @param string $strEditmode
+     */
+    public function setStrEditmode($strEditmode) {
+        $this->strEditmode = $strEditmode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrEditmode() {
+        return $this->strEditmode;
+    }
+
+
+
+
+
 
 }

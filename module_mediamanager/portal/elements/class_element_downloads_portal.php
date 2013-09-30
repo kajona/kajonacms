@@ -12,6 +12,8 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_downloads.content_id
  */
 class class_element_downloads_portal extends class_element_portal implements interface_portal_element {
 
@@ -21,8 +23,6 @@ class class_element_downloads_portal extends class_element_portal implements int
      * @param $objElementData
      */
     public function __construct($objElementData) {
-        $this->setArrModuleEntry("name", "element_downloads");
-        $this->setArrModuleEntry("table", _dbprefix_."element_downloads");
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters

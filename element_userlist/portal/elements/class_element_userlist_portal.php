@@ -12,49 +12,43 @@
  *
  * @package element_userlist
  * @author sidler@mulchprod.de
+ * @targetTable element_universal.content_id
  */
 class class_element_userlist_portal extends class_element_portal implements interface_portal_element {
 
-    /**
-     * Constructor
-     *
-     * @param class_module_pages_pageelement|mixed $objElementData
-     */
-	public function __construct($objElementData) {
-        parent::__construct($objElementData);
-        $this->setArrModuleEntry("table", _dbprefix_."element_universal");
 
-    }
+    public function loadData() {
+        $strReturn = "";
 
-
-	public function loadData() {
-		$strReturn = "";
-
-		if($this->getAction() == "exportToCsv")
+        if($this->getAction() == "exportToCsv") {
             $strReturn .= $this->export2csv();
-        else
+        }
+        else {
             $strReturn .= $this->getUserlist();
+        }
 
 
-		return $strReturn;
-	}
+        return $strReturn;
+    }
 
 
     private function export2csv() {
         $arrUser = $this->loadUserlist();
 
         $objCsv = new class_csv(";");
-        $objCsv->setArrMapping(array(
-            $this->getLang("userlistName"),
-            $this->getLang("userlistForename"),
-            $this->getLang("userlistEmail"),
-            $this->getLang("userlistStreet"),
-            $this->getLang("userlistPostal"),
-            $this->getLang("userlistCity"),
-            $this->getLang("userlistPhone"),
-            $this->getLang("userlistMobile"),
-            $this->getLang("userlistBirthday")
-        ));
+        $objCsv->setArrMapping(
+            array(
+                $this->getLang("userlistName"),
+                $this->getLang("userlistForename"),
+                $this->getLang("userlistEmail"),
+                $this->getLang("userlistStreet"),
+                $this->getLang("userlistPostal"),
+                $this->getLang("userlistCity"),
+                $this->getLang("userlistPhone"),
+                $this->getLang("userlistMobile"),
+                $this->getLang("userlistBirthday")
+            )
+        );
 
         $arrCsvValues = array();
         foreach($arrUser as $objOneUser) {
@@ -86,7 +80,7 @@ class class_element_userlist_portal extends class_element_portal implements inte
      * @return string
      */
     private function getUserlist() {
-	    $strReturn = "";
+        $strReturn = "";
 
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_userlist/".$this->arrElementData["char1"], "userlist_wrapper");
         $strTemplateRowID = $this->objTemplate->readTemplate("/element_userlist/".$this->arrElementData["char1"], "userlist_row");
@@ -117,8 +111,8 @@ class class_element_userlist_portal extends class_element_portal implements inte
 
         $strReturn .= $this->fillTemplate(array("userlist_rows" => $strRows, "csvHref" => $strLink), $strTemplateWrapperID);
 
-	    return $strReturn;
-	}
+        return $strReturn;
+    }
 
     /**
      * @return class_module_user_user[]
@@ -140,21 +134,24 @@ class class_element_userlist_portal extends class_element_portal implements inte
         //filter against inactive?
         $arrUserFinal = array();
         if($this->arrElementData["int1"] == "1") {
-            foreach ($arrUser as /** @var class_module_user_user */$objOneUser) {
+            foreach($arrUser as /** @var class_module_user_user */
+                    $objOneUser) {
                 if($objOneUser->getIntActive() == "1") {
                     $arrUserFinal[] = $objOneUser;
                 }
             }
         }
         else if($this->arrElementData["int1"] == "2") {
-            foreach ($arrUser as /** @var class_module_user_user */$objOneUser) {
+            foreach($arrUser as /** @var class_module_user_user */
+                    $objOneUser) {
                 if($objOneUser->getIntActive() == "0") {
                     $arrUserFinal[] = $objOneUser;
                 }
             }
         }
-        else
+        else {
             $arrUserFinal = $arrUser;
+        }
 
         return $arrUserFinal;
     }

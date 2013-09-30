@@ -12,65 +12,93 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
+ *
+ * @targetTable element_navigation.content_id
  */
 class class_element_navigation_admin extends class_element_admin implements interface_admin_element {
 
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("name", "element_navigation");
-        $this->setArrModuleEntry("table", _dbprefix_."element_navigation");
-        $this->setArrModuleEntry("tableColumns", "navigation_id,navigation_template,navigation_foreign");
-        parent::__construct();
-    }
-
 
     /**
-     * Returns a form to edit the element-data
-     *
-     * @param mixed $arrElementData
-     *
-     * @return string
+     * @var string
+     * @tableColumn element_navigation.navigation_id
+     * @fieldType dropdown
+     * @fieldLabel commons_name
      */
-    public function getEditForm($arrElementData) {
-        $strReturn = "";
+    private $strRepo;
+
+    /**
+     * @var string
+     * @tableColumn element_navigation.navigation_template
+     * @fieldType template
+     * @fieldLabel template
+     * @fieldTemplateDir /module_navigation
+     */
+    private $strTemplate;
+
+    /**
+     * @var int
+     * @tableColumn element_navigation.navigation_foreign
+     * @fieldType yesno
+     * @fieldLabel navigation_foreign
+     */
+    private $intForeign;
+
+
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
 
         $arrNavigationsDropdown = array();
         foreach(class_module_navigation_tree::getObjectList() as $objOneNavigation)
             $arrNavigationsDropdown[$objOneNavigation->getSystemid()] = $objOneNavigation->getStrDisplayName();
+        $objForm->getField("repo")->setArrKeyValues($arrNavigationsDropdown);
 
-        //Build the form
-        $strReturn .= $this->objToolkit->formInputDropdown("navigation_id", $arrNavigationsDropdown, $this->getLang("commons_name"), (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
-        //Load the available templates
-        $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_navigation");
-        $arrTemplatesDD = array();
-        if(count($arrTemplates) > 0) {
-            foreach($arrTemplates as $strTemplate) {
-                $arrTemplatesDD[$strTemplate] = $strTemplate;
-            }
-        }
-
-        if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement(
-                $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : ""))
-            );
-        else
-            $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getLang("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : ""));
-
-
-        $arrYesNo = array(
-            1 => $this->getLang("commons_yes"),
-            0 => $this->getLang("commons_no")
-        );
-
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("navigation_foreign_hint"));
-        $strReturn .= $this->objToolkit->formInputDropdown("navigation_foreign", $arrYesNo, $this->getLang("navigation_foreign"), (isset($arrElementData["navigation_foreign"]) ? $arrElementData["navigation_foreign"] : ""));
-
-        $strReturn .= $this->objToolkit->setBrowserFocus("navigation_template");
-
-        return $strReturn;
+        return $objForm;
     }
+
+    /**
+     * @param string $strTemplate
+     */
+    public function setStrTemplate($strTemplate) {
+        $this->strTemplate = $strTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTemplate() {
+        return $this->strTemplate;
+    }
+
+    /**
+     * @param string $strRepo
+     */
+    public function setStrRepo($strRepo) {
+        $this->strRepo = $strRepo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrRepo() {
+        return $this->strRepo;
+    }
+
+    /**
+     * @param int $intForeign
+     */
+    public function setIntForeign($intForeign) {
+        $this->intForeign = $intForeign;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntForeign() {
+        return $this->intForeign;
+    }
+
+
+
+
 
 }
