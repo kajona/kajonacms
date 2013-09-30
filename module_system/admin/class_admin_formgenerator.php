@@ -29,6 +29,7 @@ class class_admin_formgenerator {
     const  STR_VALIDATOR_ANNOTATION = "@fieldValidator";
     const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
     const  STR_LABEL_ANNOTATION     = "@fieldLabel";
+    const  STR_HIDDEN_ANNOTATION    = "@fieldHidden";
 
     const  BIT_BUTTON_SAVE = 2;
     const  BIT_BUTTON_CLOSE  = 4;
@@ -218,6 +219,7 @@ class class_admin_formgenerator {
         $strValidator = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_VALIDATOR_ANNOTATION);
         $strMandatory = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_MANDATORY_ANNOTATION);
         $strLabel     = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_LABEL_ANNOTATION);
+        $strHidden    = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_HIDDEN_ANNOTATION);
 
         if($strType === null)
             $strType = "text";
@@ -249,6 +251,9 @@ class class_admin_formgenerator {
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
 
         $this->addField($objField, $strPropertyName);
+
+        if($strHidden !== null)
+            $this->addFieldToHiddenGroup($objField);
 
         return $objField;
     }
