@@ -1236,6 +1236,7 @@ The language switch surrounds the buttons
                 forcePlaceholderSize: true,
                 cursor: 'move',
                 connectWith: '.adminwidgetColumn',
+                placeholder: 'dashboardPlaceholder',
                 stop: function(event, ui) {
                     //search list for new pos
                     var intPos = 0;
