@@ -143,8 +143,8 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
 
         if(class_module_pages_element::getElement("navigation") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("sitemap_navigation");
-            $objPagelement->setStrName("sitemap");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("navigation");
             $objPagelement->updateObjectToDb($strSitemapId);
             $strElementId = $objPagelement->getSystemid();

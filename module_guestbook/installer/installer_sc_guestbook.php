@@ -59,8 +59,8 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         
         if(class_module_pages_element::getElement("guestbook") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("gb1_guestbook");
-            $objPagelement->setStrName("gb1");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("guestbook");
             $objPagelement->updateObjectToDb($strGuestbookpageID);
             $strElementId = $objPagelement->getSystemid();

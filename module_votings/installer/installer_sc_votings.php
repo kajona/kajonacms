@@ -75,8 +75,8 @@ class class_installer_sc_votings implements interface_sc_installer  {
         $strReturn .= "Adding votings-element 1 to new page\n";
         if(class_module_pages_element::getElement("faqs") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("votings_votings");
-            $objPagelement->setStrName("votings");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("votings");
             $objPagelement->updateObjectToDb($strFaqsPageId);
             $strElementId = $objPagelement->getSystemid();
@@ -94,8 +94,8 @@ class class_installer_sc_votings implements interface_sc_installer  {
         $strReturn .= "Adding votings-element 2 to new page\n";
         if(class_module_pages_element::getElement("faqs") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("votings_votings");
-            $objPagelement->setStrName("votings");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("votings");
             $objPagelement->updateObjectToDb($strFaqsPageId);
             $strElementId = $objPagelement->getSystemid();

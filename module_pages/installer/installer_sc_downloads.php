@@ -68,8 +68,8 @@ class class_installer_sc_downloads implements interface_sc_installer  {
 
         $objPagelement = new class_module_pages_pageelement();
         if(class_module_pages_element::getElement("downloads") != null) {
-            $objPagelement->setStrPlaceholder("dl1_downloads");
-            $objPagelement->setStrName("dl1");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("downloads");
             $objPagelement->updateObjectToDb($strDownloadsPageId);
             $strElementId = $objPagelement->getSystemid();

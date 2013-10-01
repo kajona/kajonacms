@@ -76,8 +76,8 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $strReturn .= "Adding faqs-element to new page\n";
         if(class_module_pages_element::getElement("faqs") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("faqs_faqs");
-            $objPagelement->setStrName("faqs");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("faqs");
             $objPagelement->updateObjectToDb($strFaqsPageId);
             $strElementId = $objPagelement->getSystemid();

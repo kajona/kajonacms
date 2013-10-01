@@ -65,8 +65,8 @@ class class_installer_sc_eventmanager implements interface_sc_installer  {
         $strReturn .= "Adding eventmanager-element to new page\n";
         if(class_module_pages_element::getElement("eventmanager") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("mixed3");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("eventmanager");
             $objPagelement->updateObjectToDb($strEventsPageId);
             $strElementId = $objPagelement->getSystemid();

@@ -69,8 +69,8 @@ class class_installer_sc_gallery implements interface_sc_installer  {
 
         if(class_module_pages_element::getElement("gallery") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("bilder_gallery");
-            $objPagelement->setStrName("bilder");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("gallery");
             $objPagelement->updateObjectToDb($strGalleryPageId);
             $strElementId = $objPagelement->getSystemid();

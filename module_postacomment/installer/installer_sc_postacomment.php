@@ -51,8 +51,8 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         
         if(class_module_pages_element::getElement("postacomment") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("comments_postacomment");
-            $objPagelement->setStrName("comments");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("postacomment");
             $objPagelement->updateObjectToDb($strPostacommentPageID);
             $strElementId = $objPagelement->getSystemid();

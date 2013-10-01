@@ -120,8 +120,8 @@ class class_installer_sc_news implements interface_sc_installer  {
         
         if(class_module_pages_element::getElement("news") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("news_news");
-            $objPagelement->setStrName("news");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("news");
             $objPagelement->updateObjectToDb($strNewsdetailsId);
             $strElementId = $objPagelement->getSystemid();

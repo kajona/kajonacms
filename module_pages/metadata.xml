@@ -11,5 +11,6 @@
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="4.1" />
+        <module name="mediamanager" version="4.2" />
     </requiredModules>
 </package>

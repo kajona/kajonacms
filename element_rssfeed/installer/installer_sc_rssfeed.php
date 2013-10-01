@@ -49,8 +49,8 @@ class class_installer_sc_rssfeed implements interface_sc_installer  {
 
         if(class_module_pages_element::getElement("rssfeed") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker");
-            $objPagelement->setStrName("mixed");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("rssfeed");
             $objPagelement->updateObjectToDb($strPageId);
             $strElementId = $objPagelement->getSystemid();

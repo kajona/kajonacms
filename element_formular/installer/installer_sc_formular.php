@@ -49,8 +49,8 @@ class class_installer_sc_formular implements interface_sc_installer  {
 
         $objPagelement = new class_module_pages_pageelement();
         if(class_module_pages_element::getElement("form") != null) {
-            $objPagelement->setStrPlaceholder("formular_form|tellafriend");
-            $objPagelement->setStrName("formular");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("form");
             $objPagelement->updateObjectToDb($strPageId);
             $strElementId = $objPagelement->getSystemid();
@@ -104,8 +104,8 @@ class class_installer_sc_formular implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
-            $objPagelement->setStrName("text");
+            $objPagelement->setStrPlaceholder("content_paragraph");
+            $objPagelement->setStrName("content");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($strPageId);
             $strElementId = $objPagelement->getSystemid();
