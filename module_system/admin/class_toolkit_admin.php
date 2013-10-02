@@ -812,11 +812,14 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Creates the code to start a sortable grid.
      * By default, a grid is sortable.
+     *
+     * @param bool $bitSortable
+     *
      * @return string
      */
-    public function gridHeader() {
+    public function gridHeader($bitSortable = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_header");
-        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array("sortable" => ($bitSortable ? "sortable" : "")), $strTemplateID);
     }
 
     /**
@@ -824,10 +827,11 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param interface_admin_gridable|class_model|interface_model $objEntry
      * @param $strActions
+     * @param string $strClickAction
      *
      * @return string
      */
-    public function gridEntry(interface_admin_gridable $objEntry, $strActions) {
+    public function gridEntry(interface_admin_gridable $objEntry, $strActions, $strClickAction = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
 
         $strCSSAddon = "";
@@ -841,7 +845,8 @@ class class_toolkit_admin extends class_toolkit {
             "systemid" => $objEntry->getSystemid(),
             "subtitle" => $objEntry->getStrLongDescription(),
             "info" => $objEntry->getStrAdditionalInfo(),
-            "cssaddon" => $strCSSAddon
+            "cssaddon" => $strCSSAddon,
+            "clickaction" => $strClickAction
         );
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);

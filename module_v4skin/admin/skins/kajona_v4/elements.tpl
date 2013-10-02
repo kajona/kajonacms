@@ -16,7 +16,7 @@ templates!
 
 <grid_header>
 <div class="grid">
-    <ul class="thumbnails gallery sortable">
+    <ul class="thumbnails gallery %%sortable%%">
 </grid_header>
 
 <grid_footer>
@@ -39,13 +39,14 @@ $(function() {
         },
         delay: KAJONA.util.isTouchDevice() ? 2000 : 0
     });
+    $('.grid > ul.sortable > li[data-systemid!=""] > div.thumbnail ').css("cursor", "move");
 });
 </script>
 </grid_footer>
 
 <grid_entry>
 <li class="span3 %%cssaddon%%" data-systemid="%%systemid%%" >
-    <div class="thumbnail" >
+    <div class="thumbnail" %%clickaction%% >
         <h5 >%%title%%</h5>
         <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: cover;">
             <div class="metainfo">

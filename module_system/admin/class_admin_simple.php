@@ -118,11 +118,12 @@ abstract class class_admin_simple extends class_admin {
      * @param class_array_section_iterator $objArraySectionIterator
      * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param string $strPagerAddon
+     * @param bool $bitSortable
      *
      * @throws class_exception
      * @return string
      */
-    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "") {
+    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
         $strReturn = "";
 
         if($objArraySectionIterator->getNrOfPages() > 1) {
@@ -154,7 +155,7 @@ abstract class class_admin_simple extends class_admin {
 
         if(count($arrIterables) > 0) {
 
-            $strReturn .= $this->objToolkit->gridHeader();
+            $strReturn .= $this->objToolkit->gridHeader($bitSortable);
 
             /** @var $objOneIterable class_model|interface_model|interface_admin_gridable */
             foreach($arrIterables as $objOneIterable) {
@@ -163,14 +164,11 @@ abstract class class_admin_simple extends class_admin {
                     continue;
 
                 $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
-                $strReturn .= $this->objToolkit->gridEntry($objOneIterable, $strActions);
+                $strReturn .= $this->objToolkit->gridEntry($objOneIterable, $strActions, $this->renderGridEntryClickAction($objOneIterable, $strListIdentifier));
             }
 
             $strReturn .= $this->objToolkit->gridFooter();
         }
-
-
-
 
         $strReturn .= $arrPageViews["pageview"];
 
@@ -291,6 +289,22 @@ abstract class class_admin_simple extends class_admin {
     protected function renderLevelUpAction($strListIdentifier) {
         return "";
     }
+
+    /**
+     * For grid elements, an additional action may be defined when clicking the whole object.
+     * This action is "in addition" to the action-toolbar at the bottom of the grid entry.
+     * Make sure to pass a full eventhandler, e.g. onclick="document.location=''"
+     * Overwrite this method if you want to provide such an action.
+     *
+     * @param $objOneIterable
+     * @param $strListIdentifier
+     *
+     * @return string
+     */
+    protected function renderGridEntryClickAction($objOneIterable, $strListIdentifier) {
+        return "";
+    }
+
 
     /**
      * Renders the edit action button for the current record.
