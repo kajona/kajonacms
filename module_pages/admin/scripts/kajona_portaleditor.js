@@ -41,9 +41,11 @@ KAJONA.admin.portaleditor = {
             "/core/module_system/admin/scripts/ckeditor/ckeditor.js"
         ], function() {
             //console.debug('ckeditor js loaded');
-            //span and a tags are officially not support, nevertheless working...
+            //span and other tags are officially not support, nevertheless working...
             CKEDITOR.dtd.$editable.span = 1;
             CKEDITOR.dtd.$editable.a = 1;
+            CKEDITOR.dtd.$editable.label = 1;
+            CKEDITOR.dtd.$editable.td = 1;
             CKEDITOR.disableAutoInline = true;
             KAJONA.admin.portaleditor.RTE.init();
         });
