@@ -457,7 +457,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
             $bitReadonly = false;
             if(_pages_templatechange_ == "false") {
-                if($objPage->getNumberOfElementsOnPage() != 0)
+                if($this->getAction() == "newPage" || $this->getParam("mode") == "new")
+                    $bitReadonly = false;
+                else if($objPage->getNumberOfElementsOnPage() != 0)
                     $bitReadonly = true;
             }
             $objField->setBitReadonly($bitReadonly);
