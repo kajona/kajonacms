@@ -420,8 +420,8 @@ class class_module_user_user extends class_model implements interface_model, int
         $this->objSourceUser = $objSourceUser;
     }
 
-
-
-
+    public function getIntRecordStatus() {
+        return $this->intActive;
+    }
 
 }

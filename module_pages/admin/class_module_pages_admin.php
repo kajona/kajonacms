@@ -282,7 +282,13 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         $arrReturn = array();
 
-        if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightEdit()) {
+        $objCurInstance = null;
+        if(validateSystemid($this->getSystemid()))
+            $objCurInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        else
+            $objCurInstance = $this->getObjModule();
+
+        if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $objCurInstance->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(
                 getLinkAdmin($this->getArrModule("modul"), "newPage", "&systemid=".$this->getSystemid(), $this->getLang("modul_neu"), $this->getLang("modul_neu"), "icon_new")
             );
@@ -291,7 +297,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             );
 
         }
-        if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $this->getObjModule()->rightRight2()) {
+        if($strListIdentifier != class_module_pages_admin::STR_LIST_ELEMENTS && $objCurInstance->rightRight2()) {
             if((!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getObjModule()->getSystemid()))
                 $arrReturn[] = $this->objToolkit->listButton(
                     getLinkAdminDialog($this->getArrModule("modul"), "newFolder", "&systemid=".$this->getSystemid(), $this->getLang("commons_create_folder"), $this->getLang("commons_create_folder"), "icon_new")

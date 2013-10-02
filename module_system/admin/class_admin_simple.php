@@ -517,6 +517,9 @@ abstract class class_admin_simple extends class_admin {
         if(!is_array($arrActions))
             return $arrActions;
 
+        if(is_array($arrActions) && count($arrActions) == 0)
+            return "";
+
         if(is_array($arrActions) && count($arrActions) == 1)
             return $arrActions[0];
 

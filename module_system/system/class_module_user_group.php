@@ -273,4 +273,8 @@ class class_module_user_group extends class_model implements interface_model, in
         $this->strName = $strName;
     }
 
+    public function getIntRecordStatus() {
+        return 1;
+    }
+
 }
