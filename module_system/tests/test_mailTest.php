@@ -17,9 +17,9 @@ class class_test_mail extends class_testbase  {
         $objMail->addTo($strTo);
         $objMail->setSubject("Kajona test mail ä ö ü Kajona test mail ä ö ü Kajona test mail ä ö ü Kajona test mail ä ö ü Kajona test mail ä ö ü ");
         $objMail->setText("This is the plain text ä ö ü");
-        $objMail->setHtml("This is<br />the <b>html-content ä ö ü</b><br /><img src=\"cid:kajona_poweredby.png\" />");
-        $objMail->addAttachement("/portal/pics/kajona/login_logo.gif");
-        $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
+        $objMail->setHtml("This is<br />the <b>html-content ä ö ü</b><br /><img src=\"cid:IMG_3000.jpg\" />");
+        $objMail->addAttachement("/files/images/samples/IMG_3000.jpg");
+        $objMail->addAttachement("/files/images/samples/P3197800.jpg", "", true);
 
         if ($objMail->sendMail() === true) {
             $intSentMails++;
