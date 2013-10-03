@@ -606,6 +606,31 @@ class class_installer_pages extends class_installer_base implements interface_in
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
 
+
+        $strReturn .= "Copying default-template, if in use. Placeholders changed in 4.3\n";
+        if(_packagemanager_defaulttemplate_ == "default") {
+
+            $objFS = new class_filesystem();
+            $objFS->folderCreate("/templates/kajona42/tpl/module_pages", true);
+            $objFS->fileCopy("/core/module_pages/installer/standard.tpl.42", "/templates/kajona42/tpl/module_pages/standard.tpl");
+
+            class_module_packagemanager_template::syncTemplatepacks();
+
+            /** @var $objOnePack class_module_packagemanager_template */
+            foreach(class_module_packagemanager_template::getObjectList() as $objOnePack) {
+                if($objOnePack->getStrName() == "kajona42")
+                    $objOnePack->setIntRecordStatus(1);
+            }
+
+            $objSetting = class_module_system_setting::getConfigByName("_packagemanager_defaulttemplate_");
+            $objSetting->setStrValue("kajona42");
+            $objSetting->updateObjectToDb();
+
+        }
+
+
+
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.3");
 

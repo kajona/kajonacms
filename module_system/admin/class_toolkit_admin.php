@@ -871,7 +871,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function listHeader() {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
-        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return trim($strDialog = $this->jsDialog(1)).$this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
 
     /**
