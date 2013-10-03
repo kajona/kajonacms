@@ -203,8 +203,12 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
     var isElementAllowedInPlaceholder = function (ui, $placeholderWrapper) {
         var elementName = ui.item.data('element');
         var placeholder = $placeholderWrapper.data('placeholder');
-        var allowedElements = placeholder.split('_')[1].split('|');
 
+        //if either the source or target element is from the master-page, only placeholders on the master-page are allowes
+        if(placeholder.substring(0, "master".length) == "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) != "master")
+            return false;
+
+        var allowedElements = placeholder.split('_')[1].split('|');
         return allowedElements.indexOf(elementName) !== -1;
     };
 

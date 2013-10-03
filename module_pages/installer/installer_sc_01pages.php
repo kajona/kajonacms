@@ -99,7 +99,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $strReturn .= "Error creating headline element.\n";
         }
 
-        $strReturn .= "Adding paragraph-element to new page\n";
+        $strReturn .= "Adding paragraph-elements to new page\n";
         if(class_module_pages_element::getElement("paragraph") != null) {
             $objPagelement = new class_module_pages_pageelement();
             $objPagelement->setStrPlaceholder("content_paragraph|image");
@@ -137,6 +137,78 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                                 SET paragraph_title = ?,
                                     paragraph_content =  ?,
                                     paragraph_image = ?
+                                WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
+
+
+
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("column1_paragraph|image");
+            $objPagelement->setStrName("column1");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($this->strIndexID);
+            $strElementId = $objPagelement->getSystemid();
+
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Linke Spalte";
+                $arrParams[] = "Dieser Text-Absatz befindet sich am Platzhalter column1_paragraph|image, der im Standard-Template link ausgerichtet ist. Sobald Sie sich am
+                                System <a href='_webpath_/admin'>angemeldet</a> haben und das Portal erneut aufrufen, wird der Portal-Editor angezeigt. Nutzen Sie Drag n Drop
+                                um diesen Text-Absatz an einen anderen Platzhalter in diesem Template zu verschieben. Einzige Voraussetzung hierfür ist, dass der Platzhalter
+                                Elemente des Typs paragraph zulässt.";
+                $arrParams[] = $strElementId;
+
+            }
+            else {
+                $arrParams[] = "Left column";
+                $arrParams[] = "This paragraph is located at the placeholder column1_paragraph|image. The default-template aligns this placeholder to the left.
+                                As soon as you <a href='_webpath_/admin'>log in</a> at the administration-backend and reload the portal, the portal-editor is being shown.
+                                Use drag n drop to rearrange this placeholder and move it to another placeholder.
+                                The only limitation when dropping the element is, that the target-placeholder allows elements of the type paragraph.";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?,
+                                    paragraph_content =  ?
+                                WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
+
+
+
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("column2_paragraph|image");
+            $objPagelement->setStrName("column2");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($this->strIndexID);
+            $strElementId = $objPagelement->getSystemid();
+
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Rechte Spalte";
+                $arrParams[] = "Der Platzhalter dieses Elementes lautet column2_paragraph|image. Daher ist er für alle anderen Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
+                                sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.";
+                $arrParams[] = $strElementId;
+
+            }
+            else {
+                $arrParams[] = "Right column";
+                $arrParams[] = "The placeholder of this paragraph is defined as column2_paragraph|image. Therefore it is a valid target-placeholder for other paragraphs on the current
+                                page. Try to move paragraph on this site in order so see how the possible drop-areas are being highlighted.";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?,
+                                    paragraph_content =  ?
                                 WHERE content_id = ?";
 
             if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
