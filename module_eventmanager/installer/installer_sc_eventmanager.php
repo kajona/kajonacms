@@ -38,6 +38,7 @@ class class_installer_sc_eventmanager implements interface_sc_installer  {
         $objEvent->setObjStartDate(new class_date());
         $objEvent->setObjEndDate(new class_date(time()+3600));
         $objEvent->setIntRegistrationRequired(1);
+        $objEvent->setIntEventStatus(2);
 
         if($this->strContentLanguage == "de") {
         	$objEvent->setStrTitle("Start der neuen Webseite mit Kajona");

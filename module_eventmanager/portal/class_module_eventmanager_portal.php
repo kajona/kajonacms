@@ -50,7 +50,25 @@ class class_module_eventmanager_portal extends class_portal implements interface
         }
         else {
             //list based mode
-            $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, null, null, true, $this->arrElementData["int1"]);
+
+            $objFilterStartDate = null;
+            $objFilterEndDate = null;
+            $intFilterStatus = $this->getParam("event_filter_status") != "" ? htmlspecialchars($this->getParam("event_filter_status"), ENT_QUOTES, "UTF-8", false) : null;
+
+            if($this->getParam("event_filter_date_from") != "") {
+                $objDateTime = DateTime::createFromFormat("Y-m-d", $this->getParam("event_filter_date_from"));
+                $objFilterStartDate = new class_date();
+                $objFilterStartDate->setTimeInOldStyle($objDateTime->getTimestamp());
+            }
+            if($this->getParam("event_filter_date_to") != "") {
+                $objDateTime = DateTime::createFromFormat("Y-m-d", $this->getParam("event_filter_date_to"));
+                $objFilterEndDate = new class_date();
+                $objFilterEndDate->setTimeInOldStyle($objDateTime->getTimestamp());
+            }
+
+
+
+            $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, $objFilterStartDate, $objFilterEndDate, true, $this->arrElementData["int1"], $intFilterStatus);
             $strEventTemplateID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_list_entry");
             foreach($arrEvents as $objOneEvent) {
                 if($objOneEvent->rightView()) {
@@ -76,8 +94,19 @@ class class_module_eventmanager_portal extends class_portal implements interface
             }
 
             $strRssUrl = _xmlpath_ . "?module=eventmanager&action=eventRssFeed&page=" . $this->getPagename();
+
+
+            $arrListTemplate = array(
+                "events" => $strEvents,
+                "rssurl" => $strRssUrl,
+                "formaction" => getLinkPortalHref($this->getPagename()),
+                "event_filter_status" => $intFilterStatus != null ? $intFilterStatus : "",
+                "event_filter_date_from" => $objFilterStartDate != null ? htmlspecialchars($this->getParam("event_filter_date_from"), ENT_QUOTES, "UTF-8", false) : "",
+                "event_filter_date_to" => $objFilterEndDate != null ? htmlspecialchars($this->getParam("event_filter_date_to"), ENT_QUOTES, "UTF-8", false) : ""
+            );
+
             $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_list");
-            $strReturn .= $this->fillTemplate(array("events" => $strEvents, "rssurl" => $strRssUrl), $strWrapperID);
+            $strReturn .= $this->fillTemplate($arrListTemplate, $strWrapperID);
         }
 
         return $strReturn;

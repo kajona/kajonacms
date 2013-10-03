@@ -26,9 +26,48 @@
 </event_calendar>
 
 
-<!-- available placeholders: events, rssurl -->
+<!-- available placeholders: events, rssurl, formaction, event_filter_status, event_filter_date_from, event_filter_date_to -->
 <event_list>
     <div class="eventmanagerList">
+        <div class="eventmanagerFilter">
+            <form name="eventmanagerFilter" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
+                <div><label for="event_filter_status">[lang,filter_status,eventmanager]</label>
+                    <select name="event_filter_status" id="event_filter_status"  class="inputText">
+                        <option value="">[lang,event_status_all,eventmanager]</option>
+                        <option value="0">[lang,event_status_0,eventmanager]</option>
+                        <option value="1">[lang,event_status_1,eventmanager]</option>
+                        <option value="2">[lang,event_status_2,eventmanager]</option>
+                        <option value="3">[lang,event_status_3,eventmanager]</option>
+                        <option value="4">[lang,event_status_4,eventmanager]</option>
+                    </select>
+                </div>
+                <div><label for="event_filter_date_from">[lang,filter_date_from,eventmanager]</label>
+                    <input type="text" id="event_filter_date_from" name="event_filter_date_from" value="%%event_filter_date_from%%" />
+                </div>
+                <div><label for="event_filter_date_to">[lang,filter_date_to,eventmanager]</label>
+                    <input type="text" id="event_filter_date_to" name="event_filter_date_to" value="%%event_filter_date_to%%" />
+                </div>
+
+                <div><label for="Submit"></label><input type="submit" name="Submit" id="Submit" value="[lang,filter_button,eventmanager]" class="button" /></div>
+
+
+                <script type="text/javascript">
+                    $('#event_filter_status').val('%%event_filter_status%%');
+                    KAJONA.portal.loader.loadFile([
+                        '/templates/default/js/zebradatepicker/css/bootstrap.css',
+                        '/templates/default/js/zebradatepicker/javascript/zebra_datepicker.js'
+                    ], function() {
+                        $('#event_filter_date_from').Zebra_DatePicker({
+                            format: 'Y-m-d'
+                        });
+                        $('#event_filter_date_to').Zebra_DatePicker({
+                            format: 'Y-m-d'
+                        });
+                    } );
+                </script>
+
+            </form>
+        </div>
         <table width="90%">
             %%events%%
         </table>
@@ -93,7 +132,7 @@
             <div><label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div>
             <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">[lang,commons_captcha_reload,eventmanager]</a>)</div>
             <div><label for="form_captcha">[lang,commons_captcha,eventmanager]</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div>
-            <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
+            <div><label for="Submit"></label><input type="submit" name="Submit" id="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
         </form>
 
     </div>

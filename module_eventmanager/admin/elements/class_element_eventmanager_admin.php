@@ -46,7 +46,7 @@ class class_element_eventmanager_admin extends class_element_admin implements in
      *
      * @fieldType dropdown
      * @fieldLabel eventmanager_mode
-     * @fieldDDValues [0 => eventmanager_mode_calendar],[1 => $this->getLang("eventmanager_mode_list]
+     * @fieldDDValues [0 => eventmanager_mode_calendar],[1 => eventmanager_mode_list]
      */
     private $intInt2;
 

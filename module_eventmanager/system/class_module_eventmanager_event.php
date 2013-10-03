@@ -187,17 +187,23 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @param class_Date $objEndDate
      * @param bool $bitOnlyActive
      * @param int $intOrder
+     * @param null $intStatusFilter
      *
      * @return class_module_eventmanager_event[]
      */
-    public static function getAllEvents($intStart = false, $intEnd = false, class_date $objStartDate = null, class_date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0) {
+    public static function getAllEvents($intStart = false, $intEnd = false, class_date $objStartDate = null, class_date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null) {
 
         $strAddon = "";
         $arrParams = array();
         if($objStartDate != null && $objEndDate != null) {
-            $strAddon = "AND (system_date_start > ? AND system_date_start <= ?) ";
+            $strAddon .= "AND (system_date_start > ? AND system_date_start <= ?) ";
             $arrParams[] = $objStartDate->getLongTimestamp();
             $arrParams[] = $objEndDate->getLongTimestamp();
+        }
+
+        if($intStatusFilter != null) {
+            $strAddon .= "AND em_ev_eventstatus = ? ";
+            $arrParams[] = $intStatusFilter;
         }
 
         $strQuery = "SELECT system_id
