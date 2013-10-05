@@ -10,6 +10,7 @@
  * Installer to install the mediamanager-module
  *
  * @package module_mediamanager
+ * @moduleId _mediamanager_module_id_
  */
 class class_installer_element_gallery extends class_installer_base implements interface_installer {
 
@@ -19,9 +20,6 @@ class class_installer_element_gallery extends class_installer_base implements in
 
         $this->objMetadata->setStrTitle("gallery");
         $this->objMetadata->setStrType(class_module_packagemanager_manager::STR_TYPE_ELEMENT);
-
-		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-
 		parent::__construct();
 	}
 

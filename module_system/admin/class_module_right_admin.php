@@ -13,6 +13,9 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module right
+ * @moduleId _system_modul_id_
  */
 class class_module_right_admin extends class_admin implements interface_admin {
 
@@ -20,11 +23,8 @@ class class_module_right_admin extends class_admin implements interface_admin {
      * Constructor
      */
     public function __construct() {
-        $this->setArrModuleEntry("modul", "right");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
         parent::__construct();
         $this->setStrLangBase("system");
-
 
         if($this->getAction() == "list") {
             $this->setAction("change");

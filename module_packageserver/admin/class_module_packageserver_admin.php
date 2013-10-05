@@ -13,19 +13,12 @@
  * @package module_packageserver
  * @author sidler@mulchprod.de
  * @since 4.0
+ *
+ * @module packageserver
+ * @moduleId _packageserver_module_id_
  */
 class class_module_packageserver_admin extends class_module_mediamanager_admin implements interface_admin {
 
-    /**
-     * Constructor
-     */
-    public function __construct() {
-
-        parent::__construct();
-        $this->setStrLangBase("packageserver");
-        $this->setArrModuleEntry("modul", "packageserver");
-        $this->setArrModuleEntry("moduleId", _packageserver_module_id_);
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

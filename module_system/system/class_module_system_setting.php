@@ -13,6 +13,9 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
@@ -67,19 +70,6 @@ class class_module_system_setting extends class_model implements interface_model
 
     private $strOldValue = "";
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "system");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
-
-        //base class
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Initalises the current object, if a systemid was given

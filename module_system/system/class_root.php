@@ -16,6 +16,11 @@
  * @author sidler@mulchprod.de
  */
 abstract class class_root {
+
+    const STR_MODULE_ANNOTATION = "@module";
+    const STR_MODULEID_ANNOTATION = "@moduleId";
+
+
     /**
      * Instance of class_config
      *
@@ -187,6 +192,20 @@ abstract class class_root {
         $this->strAction = $this->getParam("action");
 
         $this->strSystemid = $strSystemid;
+
+        //try to load the current module-name and the moduleId by reflection
+        $objReflection = new class_reflection($this);
+        if(!isset($this->arrModule["modul"])) {
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
+            if(count($arrAnnotationValues) > 0)
+                $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+        }
+
+        if(!isset($this->arrModule["moduleId"])) {
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
+            if(count($arrAnnotationValues) > 0)
+                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+        }
 
         if($strSystemid != "") {
             $this->initObject();

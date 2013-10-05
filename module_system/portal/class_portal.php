@@ -15,6 +15,9 @@
  */
 abstract class class_portal {
 
+    const STR_MODULE_ANNOTATION = "@module";
+    const STR_MODULEID_ANNOTATION = "@moduleId";
+
     /**
      * Instance of class_config
      *
@@ -116,6 +119,20 @@ abstract class class_portal {
         //in most cases, the list is the default action if no other action was passed
         if($this->strAction == "") {
             $this->strAction = "list";
+        }
+
+        //try to load the current module-name and the moduleId by reflection
+        $objReflection = new class_reflection($this);
+        if(!isset($this->arrModule["modul"])) {
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
+            if(count($arrAnnotationValues) > 0)
+                $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+        }
+
+        if(!isset($this->arrModule["moduleId"])) {
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
+            if(count($arrAnnotationValues) > 0)
+                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
         }
 
         //set the pagename

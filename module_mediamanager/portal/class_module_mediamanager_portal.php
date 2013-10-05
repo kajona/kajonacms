@@ -11,6 +11,9 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @module mediamanager
+ * @moduleId _mediamanager_module_id_
  */
 class class_module_mediamanager_portal extends class_portal implements interface_portal {
 
@@ -26,9 +29,6 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * @param mixed $arrElementData
      */
     public function __construct($arrElementData) {
-        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-        $this->setArrModuleEntry("modul", "mediamanager");
-
         parent::__construct($arrElementData);
 
         if($this->getAction() == "mediaFolder" || $this->getAction() == "imageFolder" || $this->getAction() == "openDlFolder")

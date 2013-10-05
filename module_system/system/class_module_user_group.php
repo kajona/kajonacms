@@ -13,6 +13,9 @@
  *
  * @package module_user
  * @author sidler@mulchprod.de
+ *
+ * @module user
+ * @moduleId _user_modul_id_
  */
 class class_module_user_group extends class_model implements interface_model, interface_admin_listable {
 
@@ -24,19 +27,6 @@ class class_module_user_group extends class_model implements interface_model, in
      */
     private $objSourceGroup;
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "user");
-        $this->setArrModuleEntry("moduleId", _user_modul_id_);
-
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

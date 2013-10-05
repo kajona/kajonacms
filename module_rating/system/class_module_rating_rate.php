@@ -13,6 +13,9 @@
  * @package module_rating
  * @author sidler@mulchprod.de
  * @targetTable rating.rating_id
+ *
+ * @module rating
+ * @moduleId _rating_modul_id_
  */
 class class_module_rating_rate extends class_model implements interface_model, interface_recorddeleted_listener {
 
@@ -49,19 +52,6 @@ class class_module_rating_rate extends class_model implements interface_model, i
      * @var int
      */
     public static $intMaxRatingValue = 5;
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "rating");
-        $this->setArrModuleEntry("moduleId", _rating_modul_id_);
-
-        parent::__construct($strSystemid);
-    }
 
 
     /**

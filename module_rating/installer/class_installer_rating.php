@@ -11,14 +11,13 @@
  * Class providing an installer for the rating module
  *
  * @package module_rating
+ * @moduleId _rating_modul_id_
  */
 class class_installer_rating extends class_installer_base implements interface_installer {
 
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        $this->setArrModuleEntry("moduleId", _rating_modul_id_);
-
 		parent::__construct();
 	}
 

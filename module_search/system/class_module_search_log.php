@@ -12,23 +12,14 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ * @module search
+ * @moduleId _search_module_id_
  */
-class class_module_search_log extends class_model implements interface_model  {
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "search");
-        $this->setArrModuleEntry("moduleId", _search_module_id_);
-
-        parent::__construct($strSystemid);
-    }
+class class_module_search_log extends class_model implements interface_model {
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
     public function getStrDisplayName() {
@@ -40,21 +31,22 @@ class class_module_search_log extends class_model implements interface_model  {
      * Generates a new entry in the log-table
      *
      * @param string $strSeachterm
+     *
      * @return bool
-     * @static 
+     * @static
      */
     public static function generateLogEntry($strSeachterm) {
-    	
+
         $objLanguage = new class_module_languages_language();
         $strLanguage = $objLanguage->getStrPortalLanguage();
-    	
+
         $strQuery = "INSERT INTO "._dbprefix_."search_log 
                     (search_log_id, search_log_date, search_log_query, search_log_language) VALUES
                     (?, ?, ?, ? )";
-        
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(generateSystemid(), (int)time(), $strSeachterm, $strLanguage ));
+
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(generateSystemid(), (int)time(), $strSeachterm, $strLanguage));
     }
-    
+
     /**
      * Loads a list of logbook-entries
      *

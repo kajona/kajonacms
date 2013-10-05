@@ -12,6 +12,9 @@
  *
  * @package module_stats
  * @author sidler@mulchprod.de
+ *
+ * @module stats
+ * @moduleId _stats_modul_id_
  */
 class class_module_stats_admin extends class_admin implements interface_admin {
 
@@ -41,8 +44,6 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
      */
     public function __construct() {
-        $this->setArrModuleEntry("modul", "stats");
-        $this->setArrModuleEntry("moduleId", _stats_modul_id_);
         parent::__construct();
 
 

@@ -13,6 +13,9 @@
  * @author sidler@mulchprod.de
  * @since 4.0
  * @targetTable templatepacks.templatepack_id
+ *
+ * @module packagemanager
+ * @moduleId _packagemanager_module_id_
  */
 class class_module_packagemanager_template extends class_model implements interface_model, interface_admin_listable {
 
@@ -27,20 +30,6 @@ class class_module_packagemanager_template extends class_model implements interf
      * @var class_module_packagemanager_metadata
      */
     private $objMetadata = null;
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "packagemanager");
-        $this->setArrModuleEntry("moduleId", _packagemanager_module_id_);
-
-        parent::__construct($strSystemid);
-
-    }
 
     public function getStrDisplayName() {
         return $this->getStrName();

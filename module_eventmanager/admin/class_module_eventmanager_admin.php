@@ -27,20 +27,13 @@
  *
  * @autoTestable list,new,newParticipant
  *
+ * @module eventmanager
+ * @moduleId _eventmanager_module_id_
+ *
  */
 class class_module_eventmanager_admin extends class_admin_evensimpler implements interface_admin, interface_calendarsource_admin {
 
     const STR_CALENDAR_FILTER_EVENT = "STR_CALENDAR_FILTER_EVENT";
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "eventmanager");
-        $this->setArrModuleEntry("moduleId", _eventmanager_module_id_);
-        parent::__construct();
-
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

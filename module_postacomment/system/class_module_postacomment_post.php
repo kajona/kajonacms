@@ -14,6 +14,9 @@
  * @author sidler@mulchprod.de
  *
  * @targetTable postacomment.postacomment_id
+ *
+ * @module postacomment
+ * @moduleId _postacomment_modul_id_
  */
 class class_module_postacomment_post extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_recorddeleted_listener {
 
@@ -70,18 +73,6 @@ class class_module_postacomment_post extends class_model implements interface_mo
      */
     private $strAssignedLanguage;
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "postacomment");
-        $this->setArrModuleEntry("moduleId", _postacomment_modul_id_);
-
-        parent::__construct($strSystemid);
-    }
 
     public function getStrDisplayName() {
         return $this->getStrTitle();

@@ -10,51 +10,51 @@
 
 /**
  * Admin class of the stats-module - xml based.
- * Triggers the report-generation 
+ * Triggers the report-generation
  *
  * @package module_stats
  * @author sidler@mulchprod.de
+ * @module stats
+ * @moduleId _stats_modul_id_
  */
 class class_module_stats_admin_xml extends class_admin implements interface_xml_admin {
 
     /**
      * @var class_date
      */
-	private $objDateStart;
+    private $objDateStart;
     /**
      * @var class_date
      */
-	private $objDateEnd;
-	private $intInterval;
-    
+    private $objDateEnd;
+    private $intInterval;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-        $this->setArrModuleEntry("modul", "stats");
-        $this->setArrModuleEntry("moduleId", _stats_modul_id_);
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
         parent::__construct();
 
-        
+
         $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_START);
-		//Start: first day of current month
+        //Start: first day of current month
         $this->objDateStart = new class_date();
         $this->objDateStart->setTimeInOldStyle($intDateStart);
-        
-		//End: Current Day of month
+
+        //End: Current Day of month
         $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_END);
         $this->objDateEnd = new class_date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
-        
-        $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_INTERVAL);
-	}
 
-    
+        $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_INTERVAL);
+    }
+
+
     /**
      * Triggers the "real" creation of the report and wraps the code inline into a xml-structure
-     * 
+     *
      * @return string
      * @permissions view
      */
@@ -73,32 +73,32 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
 
             if($objPlugin->getPluginCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
                 //get date-params as ints
-                $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth() , $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
-                $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth() , $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
+                $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth(), $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
+                $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth(), $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
                 $objPlugin->setEndDate($intEndDate);
                 $objPlugin->setStartDate($intStartDate);
                 $objPlugin->setInterval($this->intInterval);
 
                 $arrImage = $objPlugin->getReportGraph();
 
-                if(!is_array($arrImage))
+                if(!is_array($arrImage)) {
                     $arrImage = array($arrImage);
+                }
 
                 foreach($arrImage as $strImage) {
                     if($strImage != "") {
-                       $strReturn .= $this->objToolkit->getGraphContainer($strImage);
+                        $strReturn .= $this->objToolkit->getGraphContainer($strImage);
                     }
                 }
 
 
-                $strReturn .=  $objPlugin->getReport();
-                $strReturn =  "<content><![CDATA[" .$strReturn. "]]></content>";
+                $strReturn .= $objPlugin->getReport();
+                $strReturn = "<content><![CDATA[".$strReturn."]]></content>";
             }
         }
 
         return $strReturn;
     }
-	
 
 }
 

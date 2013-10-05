@@ -10,7 +10,7 @@
 /**
  * Class holding common methods for extended and simplified admin-guis.
  *
- * @module module_system
+ * @package module_system
  * @since 4.0
  */
 abstract class class_admin_simple extends class_admin {

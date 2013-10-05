@@ -13,6 +13,7 @@
  * for other modules and installes a few sample-templates
  *
  * @package module_samplecontent
+ * @moduleId _samplecontent_modul_id_
  */
 class class_installer_samplecontent extends class_installer_base implements interface_installer {
 
@@ -23,9 +24,6 @@ class class_installer_samplecontent extends class_installer_base implements inte
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
-        $this->setArrModuleEntry("moduleId", _samplecontent_modul_id_);
-
 		parent::__construct();
 
 		//set the correct language

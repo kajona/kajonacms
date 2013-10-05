@@ -17,6 +17,9 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
+ *
+ * @module navigation
+ * @moduleId _navigation_modul_id_
  */
 class class_module_navigation_portal extends class_portal implements interface_portal {
 
@@ -47,9 +50,6 @@ class class_module_navigation_portal extends class_portal implements interface_p
      */
     public function __construct($arrElementData) {
         parent::__construct($arrElementData);
-
-        $this->setArrModuleEntry("modul", "navigation");
-        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
 
         //Determine the current site to load
         $this->strCurrentSite = $this->getPagename();

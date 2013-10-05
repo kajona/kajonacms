@@ -14,6 +14,9 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @module pages
+ * @moduleId _pages_content_modul_id_
  */
 class class_module_pages_content_admin extends class_admin_simple implements interface_admin {
 
@@ -21,14 +24,11 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      * Constructor
      */
     public function __construct() {
-
-        $this->setArrModuleEntry("modul", "pages");
-        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
+        parent::__construct();
 
         if(_xmlLoader_)
             $this->setArrModuleEntry("modul", "pages_content");
 
-        parent::__construct();
         //If there's anything to unlock, do it now
         if($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
@@ -810,8 +810,39 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                     //see if we could set the param to the element
                     if($this->getParam("property") != "") {
-                        $arrElementData[$this->getParam("property")] = $this->getParam("value");
-                        $objElement->setArrParamData($arrElementData);
+
+                        $strProperty = null;
+
+                        //try to fetch the matching setter
+                        $objReflection = new class_reflection($objElement);
+
+                        //try to fetch the property based on the orm annotations
+                        $strTargetTable = $objReflection->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+                        if(count($strTargetTable) > 0)
+                            $strTargetTable = $strTargetTable[0];
+
+                        $arrTable = explode(".", $strTargetTable);
+                        if(count($arrTable) == 2)
+                            $strTargetTable = $arrTable[0];
+
+                        $arrOrmProperty = $objReflection->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+                        foreach($arrOrmProperty as $strCurProperty => $strValue) {
+                            if($strValue == $strTargetTable.".".$this->getParam("property"))
+                                $strProperty = $strCurProperty;
+                        }
+
+                        if($strProperty == null) {
+                            $strProperty = $this->getParam("property");
+                        }
+
+                        $strSetter = $objReflection->getSetter($strProperty);
+                        if($strSetter != null) {
+                            call_user_func(array($objElement, $strSetter), $this->getParam("value"));
+                        }
+                        else {
+                            $arrElementData[$this->getParam("property")] = $this->getParam("value");
+                            $objElement->setArrParamData($arrElementData);
+                        }
                     }
 
                     //pass the data to the element, maybe the element wants to update some data

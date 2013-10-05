@@ -13,22 +13,12 @@
  *
  * @package module_rating
  * @author sidler@mulchprod.de
+ * @module rating
+ * @moduleId _rating_modul_id_
  */
 class class_module_rating_portal_xml extends class_portal implements interface_xml_portal {
 
 
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _rating_modul_id_);
-        $this->setArrModuleEntry("modul", "rating");
-        parent::__construct();
-
-    }
-
-
-   
     /**
      * Saves a rating to a passed rating-file
      *
@@ -48,10 +38,10 @@ class class_module_rating_portal_xml extends class_portal implements interface_x
         $strReturn = "<rating>";
         $objRating->saveRating($this->getParam("rating"));
         $objRating->updateObjectToDb();
-  		$strReturn .= round($objRating->getFloatRating(), 2);
+        $strReturn .= round($objRating->getFloatRating(), 2);
 
-    	$strReturn .= "</rating>";
-    	return $strReturn;
+        $strReturn .= "</rating>";
+        return $strReturn;
     }
 
 }

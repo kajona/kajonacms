@@ -13,6 +13,9 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ *
+ * @module pages
+ * @moduleId _pages_modul_id_
  */
 class class_module_pages_portal extends class_portal implements interface_portal {
 
@@ -26,14 +29,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
     private static $strAdditionalTitle = "";
 
     public function __construct($arrElementData) {
-
         parent::__construct($arrElementData);
-
-        $this->setArrModuleEntry("modul", "pages");
-        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-
         $this->setAction("generatePage");
-
     }
 
     /**

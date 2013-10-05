@@ -12,6 +12,9 @@
  *
  * @package module_votings
  * @author sidler@mulchprod.de
+ *
+ * @module votings
+ * @moduleId _votings_module_id_
  */
 class class_module_votings_portal extends class_portal implements interface_portal {
 
@@ -24,8 +27,6 @@ class class_module_votings_portal extends class_portal implements interface_port
      * @param mixed $arrElementData
      */
     public function __construct($arrElementData) {
-        $this->setArrModuleEntry("moduleId", _votings_module_id_);
-        $this->setArrModuleEntry("modul", "votings");
         parent::__construct($arrElementData);
 
         // save a cookie to store the voting

@@ -19,6 +19,8 @@
  * @since 3.4
  *
  * @targetTable tags_tag.tags_tag_id
+ * @module tags
+ * @moduleId _tags_modul_id_
  */
 class class_module_tags_tag extends class_model implements interface_model, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener {
 
@@ -47,10 +49,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "tags");
-        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-
 
         if(_tags_defaultprivate_ == "true")
             $this->intPrivate = 1;

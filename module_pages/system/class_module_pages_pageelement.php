@@ -13,6 +13,9 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_element.page_element_id
+ *
+ * @module pages_content
+ * @moduleId _pages_content_modul_id_
  */
 class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable {
 
@@ -69,9 +72,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "pages_content");
-        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
-
         parent::__construct($strSystemid);
 
         $this->objSortManager = new class_pageelement_sortmanager($this);

@@ -12,6 +12,9 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ *
+ * @module search
+ * @moduleId _search_module_id_
  */
 class class_module_search_portal extends class_portal implements interface_portal {
     private $strSearchterm = "";
@@ -23,9 +26,6 @@ class class_module_search_portal extends class_portal implements interface_porta
      */
     public function __construct($arrElementData) {
         parent::__construct($arrElementData);
-
-        $this->setArrModuleEntry("modul", "search");
-        $this->setArrModuleEntry("moduleId", _search_module_id_);
 
         if($this->getParam("searchterm") != "") {
             $this->strSearchterm = htmlToString(urldecode($this->getParam("searchterm")), true);

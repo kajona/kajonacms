@@ -14,6 +14,9 @@
  * @package module_demo
  * @author tim.kiefer@kojikui.de
  * @targetTable demo_demo.demo_id
+ *
+ * @module demo
+ * @moduleId _demo_module_id_
  */
 class class_module_demo_demo extends class_model implements interface_model, interface_admin_listable {
 
@@ -43,17 +46,6 @@ class class_module_demo_demo extends class_model implements interface_model, int
      */
     private $intInt;
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _demo_module_id_);
-        $this->setArrModuleEntry("modul", "demo");
-        parent::__construct($strSystemid);
-    }
 
     /**
      * @param float $floatFloat

@@ -13,6 +13,9 @@
  *
  * @package module_workflows
  * @author sidler@mulchprod.de
+ *
+ * @module workflows
+ * @moduleId _workflows_module_id_
  */
 class class_module_workflows_admin extends class_admin_simple implements interface_admin {
 
@@ -22,8 +25,6 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
      * Constructor
      */
     public function __construct() {
-        $this->setArrModuleEntry("moduleId", _workflows_module_id_);
-        $this->setArrModuleEntry("modul", "workflows");
         parent::__construct();
 
         //set default action

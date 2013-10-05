@@ -14,19 +14,11 @@
  * @package module_messaging
  * @author sidler@mulchprod.de
  * @since 4.0
+ *
+ * @module messaging
+ * @moduleId _messaging_module_id_
  */
 class class_module_messaging_admin extends class_admin_simple implements interface_admin {
-
-    /**
-     * Constructor
-     *
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "messaging");
-        $this->setArrModuleEntry("moduleId", _messaging_module_id_);
-        parent::__construct();
-
-    }
 
 
     public function getOutputModuleNavi() {

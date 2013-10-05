@@ -13,6 +13,9 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @abstract
+ *
+ * @module elements
+ * @moduleId _pages_elemente_modul_id_
  */
 abstract class class_element_portal extends class_portal {
 
@@ -30,10 +33,6 @@ abstract class class_element_portal extends class_portal {
      */
     public function __construct($objElementData) {
         parent::__construct();
-
-        $this->setArrModuleEntry("modul", "elements");
-        $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
-
 
         $this->setSystemid($objElementData->getSystemid());
         //merge the attributes of $objElementData to the array

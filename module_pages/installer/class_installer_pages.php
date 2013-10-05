@@ -11,14 +11,13 @@
  * Installer of the pages-module
  *
  * @package module_pages
+ * @moduleId _pages_modul_id_
  */
 class class_installer_pages extends class_installer_base implements interface_installer {
 
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
-        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
 		parent::__construct();
 	}
 

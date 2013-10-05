@@ -17,18 +17,11 @@
  * @package module_tags
  * @since 3.3.1.1
  * @author sidler@mulchprod.de
+ *
+ * @module tags
+ * @moduleId _tags_modul_id_
  */
 class class_module_tags_admin_xml extends class_admin implements interface_xml_admin {
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-
-        $this->setArrModuleEntry("modul", "tags");
-        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-        parent::__construct();
-    }
 
     /**
      * Creates a new tag (if not already existing) and assigns the tag to the passed system-record

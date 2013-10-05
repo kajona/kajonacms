@@ -13,6 +13,9 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page.page_id
+ *
+ * @module pages
+ * @moduleId _pages_modul_id_
  */
 class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable {
 
@@ -119,9 +122,6 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "pages");
-        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-
 
         //init the object with the language currently selected - admin or portal
         if(defined("_admin_") && _admin_ === true) {

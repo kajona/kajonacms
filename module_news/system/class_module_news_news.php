@@ -13,6 +13,9 @@
  * @package module_news
  * @author sidler@mulchprod.de
  * @targetTable news.news_id
+ *
+ * @module news
+ * @moduleId _news_module_id_
  */
 class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable {
 
@@ -103,19 +106,6 @@ class class_module_news_news extends class_model implements interface_model, int
     private $bitTitleChanged = false;
 
     private $bitUpdateMemberships = false;
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _news_module_id_);
-        $this->setArrModuleEntry("modul", "news");
-
-        //base class
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the icon the be used in lists.

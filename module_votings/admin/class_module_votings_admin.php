@@ -22,17 +22,12 @@
  * @objectEditAnswers class_module_votings_answer
  *
  * @autoTestable list,new,listAnswers,newAnswers
+ *
+ * @module votings
+ * @moduleId _votings_module_id_
  */
 class class_module_votings_admin extends class_admin_evensimpler implements interface_admin {
 
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "votings");
-        $this->setArrModuleEntry("moduleId", _votings_module_id_);
-        parent::__construct();
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

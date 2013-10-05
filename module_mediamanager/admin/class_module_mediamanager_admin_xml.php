@@ -13,18 +13,11 @@
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
+ *
+ * @module mediamanager
+ * @moduleId _mediamanager_module_id_
  */
 class class_module_mediamanager_admin_xml extends class_admin implements interface_xml_admin {
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-        $this->setArrModuleEntry("modul", "mediamanager");
-        parent::__construct();
-    }
-
 
     /**
      * Create a new folder using the combination of passed folder & systemid

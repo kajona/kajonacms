@@ -13,6 +13,9 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  * @targetTable navigation.navigation_id
+ *
+ * @module navigation
+ * @moduleId _navigation_modul_id_
  */
 class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable {
 
@@ -88,19 +91,6 @@ class class_module_navigation_point extends class_model implements interface_mod
     private $bitIsPagealias = false;
 
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "navigation");
-        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
-
-        //base class
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

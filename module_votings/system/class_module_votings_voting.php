@@ -14,6 +14,9 @@
  * @package module_votings
  * @author sidler@mulchprod.de
  * @targetTable votings_voting.votings_voting_id
+ *
+ * @module votings
+ * @moduleId _votings_module_id_
  */
 class class_module_votings_voting extends class_model implements interface_model, interface_admin_listable {
 
@@ -42,16 +45,6 @@ class class_module_votings_voting extends class_model implements interface_model
     private $objEndDate = null;
 
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _votings_module_id_);
-        $this->setArrModuleEntry("modul", "votings");
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the icon the be used in lists.

@@ -15,6 +15,9 @@
  * @author sidler@mulchprod.de
  * @since 3.4.1
  * @package module_ldap
+ *
+ * @module ldap
+ * @moduleId _ldap_module_id_
  */
 class class_usersources_group_ldap extends class_model implements interface_model, interface_usersources_group {
 
@@ -25,17 +28,6 @@ class class_usersources_group_ldap extends class_model implements interface_mode
      */
     private $strDn = "";
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "ldap");
-        $this->setArrModuleEntry("moduleId", _ldap_module_id_);
-
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

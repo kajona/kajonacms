@@ -16,6 +16,9 @@
  * @package module_messaging
  *
  * @targetTable messages_cfg.config_id
+ *
+ * @module messaging
+ * @moduleId _messaging_module_id_
  */
 class class_module_messaging_config extends class_model implements interface_model  {
 
@@ -43,17 +46,6 @@ class class_module_messaging_config extends class_model implements interface_mod
      */
     private $bitBymail = false;
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "messaging");
-        $this->setArrModuleEntry("moduleId", _messaging_module_id_);
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

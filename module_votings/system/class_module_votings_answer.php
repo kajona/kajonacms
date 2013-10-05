@@ -14,6 +14,9 @@
  * @author sidler@mulchprod.de
  *
  * @targetTable votings_answer.votings_answer_id
+ *
+ * @module votings
+ * @moduleId _votings_module_id_
  */
 class class_module_votings_answer extends class_model implements interface_model, interface_admin_listable  {
 
@@ -72,17 +75,6 @@ class class_module_votings_answer extends class_model implements interface_model
         return $this->getStrText();
     }
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "votings");
-        $this->setArrModuleEntry("moduleId", _votings_module_id_);
-        parent::__construct($strSystemid);
-    }
 
     public function getStrText() {
         return $this->strText;

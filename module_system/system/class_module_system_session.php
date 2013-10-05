@@ -14,6 +14,9 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  */
 class class_module_system_session extends class_model implements interface_model {
 
@@ -38,9 +41,6 @@ class class_module_system_session extends class_model implements interface_model
      */
     public function __construct($strSystemid = "") {
         $this->strLoginstatus = self::$LOGINSTATUS_LOGGEDOUT;
-
-        $this->setArrModuleEntry("modul", "system");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
         //base class
         parent::__construct($strSystemid);

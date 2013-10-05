@@ -12,6 +12,9 @@
  *
  * @package element_formular
  * @author sidler@mulchprod.de
+ *
+ * @module elements
+ * @moduleId _pages_elemente_modul_id_
  */
 class class_formular_contact extends class_portal implements interface_portal {
     private $arrError = array();
@@ -27,9 +30,6 @@ class class_formular_contact extends class_portal implements interface_portal {
         if(!isset($arrElementData["formular_template"]) || $arrElementData["formular_template"] == "") {
             $arrElementData["formular_template"] = "/contact.tpl";
         }
-
-        $this->setArrModuleEntry("modul", "elements");
-        $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
 
         parent::__construct($arrElementData);
     }

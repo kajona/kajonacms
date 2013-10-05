@@ -14,24 +14,14 @@
  *
  * @package module_pages
  * @author sidler@mulchprod.de
+ * @module pages
+ * @moduleId _pages_modul_id_
  */
 class class_module_pages_admin extends class_admin_simple implements interface_admin {
 
     const STR_LIST_ALLPAGES = "STR_LIST_ALLPAGES";
     const STR_LIST_PAGES = "STR_LIST_PAGES";
     const STR_LIST_ELEMENTS = "STR_LIST_ELEMENTS";
-
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-
-        $this->setArrModuleEntry("modul", "pages");
-        $this->setArrModuleEntry("moduleId", _pages_modul_id_);
-        parent::__construct();
-    }
-
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

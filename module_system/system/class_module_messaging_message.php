@@ -15,6 +15,9 @@
  * @since 4.0
  * @package module_messaging
  * @targetTable messages.message_id
+ *
+ * @module messaging
+ * @moduleId _messaging_module_id_
  */
 class class_module_messaging_message extends class_model implements interface_model, interface_admin_listable {
 
@@ -57,18 +60,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     private $bitOnReadTrigger = false;
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "messaging");
-        $this->setArrModuleEntry("moduleId", _messaging_module_id_);
 
-        parent::__construct($strSystemid);
-
-    }
 
     public function rightView() {
         return parent::rightView() && $this->getStrUser() == $this->objSession->getUserID();

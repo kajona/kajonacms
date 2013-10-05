@@ -14,6 +14,9 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @abstract
+ *
+ * @module elements
+ * @moduleId _pages_elemente_modul_id_
  */
 abstract class class_element_admin extends class_admin {
 
@@ -42,9 +45,6 @@ abstract class class_element_admin extends class_admin {
      * Constructor
      */
     public function __construct() {
-
-        $this->setArrModuleEntry("moduleId", _pages_elemente_modul_id_);
-        $this->setArrModuleEntry("modul", "elements");
 
         parent::__construct();
 

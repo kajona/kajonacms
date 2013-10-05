@@ -13,6 +13,9 @@
  * @package module_faqs
  * @author sidler@mulchprod.de
  * @targetTable faqs.faqs_id
+ *
+ * @module faqs
+ * @moduleId _faqs_module_id_
  */
 class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable {
 
@@ -83,20 +86,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public function renderVersionValue($strProperty, $strValue) {
         return $strValue;
-    }
-
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _faqs_module_id_);
-        $this->setArrModuleEntry("modul", "faqs");
-
-        //base class
-        parent::__construct($strSystemid);
     }
 
     /**

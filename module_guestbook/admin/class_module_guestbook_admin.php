@@ -21,17 +21,12 @@
  * @objectEditPost class_module_guestbook_post
  *
  * @autoTestable list,new
+ *
+ * @module guestbook
+ * @moduleId _guestbook_module_id_
  */
 class class_module_guestbook_admin extends class_admin_evensimpler implements interface_admin {
 
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _guestbook_module_id_);
-        $this->setArrModuleEntry("modul", "guestbook");
-        parent::__construct();
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

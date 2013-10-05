@@ -13,6 +13,9 @@
  * @package module_languages
  * @author sidler@mulchprod.de
  * @targetTable languages.language_id
+ *
+ * @module languages
+ * @moduleId _languages_modul_id_
  */
 class class_module_languages_language extends class_model implements interface_model, interface_admin_listable {
 
@@ -36,21 +39,6 @@ class class_module_languages_language extends class_model implements interface_m
     private $bitDefault = false;
 
     private $strLanguagesAvailable = "ar,bg,cs,da,de,el,en,es,fi,fr,ga,he,hr,hu,hy,id,it,ja,ko,nl,no,pl,pt,ro,ru,sk,sl,sv,th,tr,uk,zh";
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "languages");
-        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-
-        //base class
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the icon the be used in lists.

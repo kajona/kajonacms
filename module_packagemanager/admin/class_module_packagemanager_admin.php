@@ -14,23 +14,13 @@
  * @package module_packagemanager
  * @author sidler@mulchprod.de
  * @since 4.0
+ *
+ * @module packagemanager
+ * @moduleId _packagemanager_module_id_
  */
 class class_module_packagemanager_admin extends class_admin_simple implements interface_admin {
 
     private $STR_FILTER_SESSION_KEY = "PACKAGELIST_FILTER_SESSION_KEY";
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "packagemanager");
-        $this->setArrModuleEntry("moduleId", _packagemanager_module_id_);
-        parent::__construct();
-
-
-
-
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

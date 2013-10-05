@@ -25,18 +25,11 @@
  * @objectEditSubObject class_module_demo_sub_object
  *
  * @autoTestable list,new,listOtherObject,newOtherObject,listSubObject,newSubObject
+ *
+ * @module demo
+ * @moduleId _demo_module_id_
  */
 class class_module_demo_admin extends class_admin_evensimpler implements interface_admin {
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "demo");
-        $this->setArrModuleEntry("moduleId", _demo_module_id_);
-        parent::__construct();
-    }
-
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

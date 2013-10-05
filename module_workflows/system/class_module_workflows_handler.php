@@ -18,6 +18,9 @@
  * @since 3.4
  *
  * @targetTable workflows_handler.workflows_handler_id
+ *
+ * @module workflows
+ * @moduleId _workflows_module_id_
  */
 class class_module_workflows_handler extends class_model implements interface_model, interface_admin_listable  {
 
@@ -52,19 +55,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
      */
     private $strConfigVal3 = "";
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _workflows_module_id_);
-        $this->setArrModuleEntry("modul", "workflows");
-
-        //base class
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the icon the be used in lists.

@@ -13,6 +13,7 @@
  *
  * @package element_languageswitch
  * @author sidler@mulchprod.de
+ * @moduleId _pages_content_modul_id_
  */
 class class_installer_element_languageswitch extends class_installer_base implements interface_installer {
 
@@ -21,7 +22,6 @@ class class_installer_element_languageswitch extends class_installer_base implem
 
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
         parent::__construct();
 
     }

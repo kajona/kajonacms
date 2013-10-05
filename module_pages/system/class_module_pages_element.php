@@ -13,6 +13,9 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable element.element_id
+ *
+ * @module pages_content
+ * @moduleId _pages_content_modul_id_
  */
 class class_module_pages_element extends class_model implements interface_model, interface_admin_listable {
 
@@ -84,20 +87,6 @@ class class_module_pages_element extends class_model implements interface_model,
      * @tableColumn element_config3
      */
     private $strConfigVal3 = "";
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "pages_content");
-        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
-
-        //base class
-        parent::__construct($strSystemid);
-
-    }
 
     protected function deleteObjectInternal() {
 

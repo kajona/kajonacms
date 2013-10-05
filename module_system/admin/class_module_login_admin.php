@@ -12,6 +12,9 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module login
+ * @moduleId _user_modul_id_
  */
 class class_module_login_admin extends class_admin implements interface_admin {
 
@@ -21,8 +24,6 @@ class class_module_login_admin extends class_admin implements interface_admin {
 
     public function __construct() {
 
-        $this->setArrModuleEntry("modul", "login");
-        $this->setArrModuleEntry("moduleId", _user_modul_id_);
         $this->setArrModuleEntry("template", "/login.tpl");
 
         parent::__construct();

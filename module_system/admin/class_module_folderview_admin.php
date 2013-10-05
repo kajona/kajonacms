@@ -16,6 +16,9 @@
  * @package module_system
  * @author sidler@mulchprod.de
  * @deprecated
+ *
+ * @module folderview
+ * @moduleId _system_modul_id_
  */
 class class_module_folderview_admin extends class_admin implements interface_admin {
 
@@ -24,8 +27,6 @@ class class_module_folderview_admin extends class_admin implements interface_adm
 
      */
     public function __construct() {
-        $this->setArrModuleEntry("modul", "folderview");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
         $this->setArrModuleEntry("template", "/folderview.tpl");
         parent::__construct();
         $this->setStrLangBase("mediamanager");

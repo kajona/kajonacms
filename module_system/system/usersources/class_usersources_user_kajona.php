@@ -15,6 +15,9 @@
  * @author sidler@mulchprod.de
  * @since 3.4.1
  * @package module_usersource
+ *
+ * @module user
+ * @moduleId _user_modul_id_
  */
 class class_usersources_user_kajona extends class_model implements interface_model, interface_usersources_user {
 
@@ -100,19 +103,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      */
     private $strFinalPass = "";
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "user");
-        $this->setArrModuleEntry("moduleId", _user_modul_id_);
-
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

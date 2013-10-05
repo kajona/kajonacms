@@ -11,6 +11,7 @@
  * Installer to install a tagto-element to use in the portal
  *
  * @package element_tagto
+ * @moduleId _pages_content_modul_id_
  */
 class class_installer_element_tagto extends class_installer_base implements interface_installer {
 
@@ -20,7 +21,6 @@ class class_installer_element_tagto extends class_installer_base implements inte
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        $this->setArrModuleEntry("moduleId", _pages_content_modul_id_);
         parent::__construct();
 	}
 

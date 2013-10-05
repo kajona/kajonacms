@@ -12,6 +12,9 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
+ *
+ * @module news
+ * @moduleId _news_module_id_
  */
 class class_module_news_portal extends class_portal implements interface_portal {
 
@@ -21,8 +24,6 @@ class class_module_news_portal extends class_portal implements interface_portal 
      * @param mixed $arrElementData
      */
     public function __construct($arrElementData) {
-        $this->setArrModuleEntry("moduleId", _news_module_id_);
-        $this->setArrModuleEntry("modul", "news");
         parent::__construct($arrElementData);
 
         $strAction = $this->getParam("action");

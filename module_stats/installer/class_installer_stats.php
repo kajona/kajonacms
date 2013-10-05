@@ -12,6 +12,7 @@
  * Installer handling the installation of the stats module
  *
  * @package module_stats
+ * @moduleId _stats_modul_id_
  */
 class class_installer_stats extends class_installer_base implements interface_installer {
 
@@ -22,8 +23,6 @@ class class_installer_stats extends class_installer_base implements interface_in
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        $this->setArrModuleEntry("moduleId", _stats_modul_id_);
-
         parent::__construct();
 
 	}

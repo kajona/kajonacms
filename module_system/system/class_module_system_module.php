@@ -12,6 +12,9 @@
  *
  * @package module_system
  * @targetTable system_module.module_id
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  */
 class class_module_system_module extends class_model implements interface_model, interface_admin_listable {
 
@@ -89,9 +92,6 @@ class class_module_system_module extends class_model implements interface_model,
      * @param string $strSystemid
      */
     public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "system");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
-
         //base class
         parent::__construct($strSystemid);
 

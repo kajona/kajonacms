@@ -11,15 +11,13 @@
  * Installer of the navigation
  *
  * @package module_navigation
+ * @moduleId _navigation_modul_id_
  */
 class class_installer_navigation extends class_installer_base implements interface_installer {
 
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
-        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
-
 		parent::__construct();
 	}
 

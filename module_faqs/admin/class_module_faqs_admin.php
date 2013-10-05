@@ -22,21 +22,14 @@
  * @objectListCat class_module_faqs_category
  * @objectEditCat class_module_faqs_category
  * @objectNewCat class_module_faqs_category
+ *
+ * @module faqs
+ * @moduleId _faqs_module_id_
  */
 class class_module_faqs_admin extends class_admin_evensimpler implements interface_admin {
 
     const STR_CAT_LIST = "STR_CAT_LIST";
     const STR_FAQ_LIST = "STR_FAQ_LIST";
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _faqs_module_id_);
-        $this->setArrModuleEntry("modul", "faqs");
-        parent::__construct();
-    }
-
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

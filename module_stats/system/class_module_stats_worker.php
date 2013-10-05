@@ -12,21 +12,11 @@
  *
  * @package module_stats
  * @author sidler@mulchprod.de
+ *
+ * @module stats
+ * @moduleId _stats_modul_id_
  */
 class class_module_stats_worker extends class_model implements interface_model {
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "stats");
-        $this->setArrModuleEntry("moduleId", _stats_modul_id_);
-
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

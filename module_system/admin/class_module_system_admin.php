@@ -13,20 +13,11 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  */
 class class_module_system_admin extends class_admin_simple implements interface_admin {
-
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "system");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        parent::__construct();
-
-    }
-
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

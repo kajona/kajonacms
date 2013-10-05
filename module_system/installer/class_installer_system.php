@@ -12,6 +12,7 @@
  * Installer for the system-module
  *
  * @package module_system
+ * @moduleId _system_modul_id_
  */
 class class_installer_system extends class_installer_base implements interface_installer {
 
@@ -21,9 +22,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
-
         parent::__construct();
 
         //set the correct language

@@ -21,23 +21,14 @@
  * @objectEditFile class_module_mediamanager_file
  *
  * @autoTestable list,new
+ *
+ * @module mediamanager
+ * @moduleId _mediamanager_module_id_
  */
 class class_module_mediamanager_admin extends class_admin_evensimpler implements interface_admin  {
 
     const INT_LISTTYPE_FOLDER = "INT_LISTTYPE_FOLDER";
     const INT_LISTTYPE_FOLDERVIEW = "INT_LISTTYPE_FOLDERVIEW";
-
-    /**
-     * Constructor
-     *
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-        $this->setArrModuleEntry("modul", "mediamanager");
-        parent::__construct();
-
-    }
-
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

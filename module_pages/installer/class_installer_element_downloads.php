@@ -11,6 +11,7 @@
  * Installer to install the downloads-module
  *
  * @package module_mediamanager
+ * @moduleId _pages_content_modul_id_
  */
 class class_installer_element_downloads extends class_installer_base implements interface_installer {
 
@@ -22,8 +23,6 @@ class class_installer_element_downloads extends class_installer_base implements 
         $this->objMetadata->setStrTitle("element_downloads");
         $this->objMetadata->setStrTitle("downloads");
         $this->objMetadata->setStrType(class_module_packagemanager_manager::STR_TYPE_ELEMENT);
-
-		$this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
 		parent::__construct();
 	}
 

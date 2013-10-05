@@ -26,6 +26,9 @@
  * @objectEditFeed class_module_news_feed
  *
  * @autoTestable listNews,newNews,listCategory,newCategory,listFeed,newFeed
+ *
+ * @module news
+ * @moduleId _news_module_id_
  */
 class class_module_news_admin extends class_admin_evensimpler implements interface_admin, interface_calendarsource_admin {
 
@@ -40,9 +43,6 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
      */
     public function __construct() {
-        $this->setArrModuleEntry("moduleId", _news_module_id_);
-        $this->setArrModuleEntry("modul", "news");
-
         parent::__construct();
 
         if($this->getAction() == "list")

@@ -13,20 +13,13 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ *
+ * @module search
+ * @moduleId _search_module_id_
  */
 class class_module_search_portal_xml extends class_portal implements interface_xml_portal {
 
     private static $INT_MAX_NR_OF_RESULTS = 30;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _search_module_id_);
-        $this->setArrModuleEntry("modul", "search");
-        parent::__construct();
-    }
-
 
     /**
      * Searches for a passed string

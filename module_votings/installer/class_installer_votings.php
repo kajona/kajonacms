@@ -12,13 +12,13 @@
  *
  * @package module_votings
  * @author sidler@mulchprod.de
+ * @moduleId _votings_module_id_
  */
 class class_installer_votings extends class_installer_base implements interface_installer {
 
 	public function __construct() {
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        $this->setArrModuleEntry("moduleId", _votings_module_id_);
         parent::__construct();
 	}
 

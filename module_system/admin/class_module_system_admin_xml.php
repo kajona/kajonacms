@@ -14,18 +14,11 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  */
 class class_module_system_admin_xml extends class_admin implements interface_xml_admin {
-
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "system");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
-        parent::__construct();
-    }
 
 
     /**

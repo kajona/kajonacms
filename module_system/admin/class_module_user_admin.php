@@ -13,6 +13,9 @@
  *
  * @package module_user
  * @author sidler@mulchprod.de
+ *
+ * @module user
+ * @moduleId _user_modul_id_
  */
 class class_module_user_admin extends class_admin_simple implements interface_admin {
 
@@ -26,9 +29,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
      */
     public function __construct() {
-
-        $this->setArrModuleEntry("modul", "user");
-        $this->setArrModuleEntry("moduleId", _user_modul_id_);
 
         parent::__construct();
         $this->arrLanguages = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));

@@ -13,20 +13,13 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ *
+ * @module search
+ * @moduleId _search_module_id_
  */
 class class_module_search_admin extends class_admin_simple implements interface_admin {
 
     const INT_MAX_NR_OF_RESULTS = 30;
-
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "search");
-        $this->setArrModuleEntry("moduleId", _search_module_id_);
-        parent::__construct();
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

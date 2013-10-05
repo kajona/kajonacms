@@ -13,6 +13,9 @@
  *
  * @package module_navigation
  * @author sidler@mulchprod.de
+ *
+ * @module navigation
+ * @moduleId _navigation_modul_id_
  */
 class class_module_navigation_admin extends class_admin_simple implements interface_admin {
 
@@ -23,9 +26,6 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      *
      */
     public function __construct() {
-        $this->setArrModuleEntry("modul", "navigation");
-        $this->setArrModuleEntry("moduleId", _navigation_modul_id_);
-
         parent::__construct();
 
         if($this->getParam("pe") == "1")

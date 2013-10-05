@@ -12,24 +12,15 @@
  *
  * @package module_languages
  * @author sidler@mulchprod.de
+ *
+ * @module languages
+ * @moduleId _languages_modul_id_
  */
 class class_module_languages_admin extends class_admin_simple implements interface_admin {
 
     private static $arrLanguageSwitchEntries = null;
     private static $strOnChangeHandler = "KAJONA.admin.switchLanguage(this.value);";
     private static $strActiveKey = "";
-
-
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "languages");
-        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-        parent::__construct();
-
-    }
 
 
     public function getOutputModuleNavi() {

@@ -11,23 +11,13 @@
  * @package module_packageserver
  * @author sidler@mulchprod.de
  * @since 4.0
+ *
+ * @module packageserver
+ * @moduleId _packageserver_module_id_
  */
 class class_module_packageserver_portal extends class_portal implements interface_portal {
 
     const PROTOCOL_VERSION = 4;
-
-    /**
-     * Constructor
-     *
-     * @param array $arrElementData
-     */
-    public function __construct($arrElementData) {
-        $this->setArrModuleEntry("moduleId", _packageserver_module_id_);
-        $this->setArrModuleEntry("modul", "packageserver");
-
-        parent::__construct($arrElementData);
-    }
-
 
     /**
      * Returns a list of all packages available.

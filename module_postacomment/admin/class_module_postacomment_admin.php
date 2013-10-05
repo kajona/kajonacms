@@ -16,17 +16,11 @@
  *
  * @objectList class_module_postacomment_post
  * @objectEdit class_module_postacomment_post
+ *
+ * @module postacomment
+ * @moduleId _postacomment_modul_id_
  */
 class class_module_postacomment_admin extends class_admin_evensimpler implements interface_admin {
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "postacomment");
-        $this->setArrModuleEntry("moduleId", _postacomment_modul_id_);
-        parent::__construct();
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

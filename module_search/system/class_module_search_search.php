@@ -14,6 +14,9 @@
  * @author tim.kiefer@kojikui.de
  * @since 3.4
  * @targetTable search_search.search_search_id
+ *
+ * @module search
+ * @moduleId _search_module_id_
  */
 class class_module_search_search extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable {
 
@@ -55,20 +58,6 @@ class class_module_search_search extends class_model implements interface_model,
      */
     private $objChangeEnddate= null;
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "search");
-        $this->setArrModuleEntry("moduleId", _search_module_id_);
-
-        parent::__construct($strSystemid);
-
-    }
 
     public function getStrDisplayName() {
         return $this->getStrQuery();

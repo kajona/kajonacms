@@ -19,18 +19,11 @@
  * @objectEdit class_module_tags_tag
  *
  * @autoTestable list
+ *
+ * @module tags
+ * @moduleId _tags_modul_id_
  */
 class class_module_tags_admin extends class_admin_evensimpler implements interface_admin {
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("modul", "tags");
-        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-        parent::__construct();
-
-    }
 
     public function getOutputModuleNavi() {
         $arrReturn = array();

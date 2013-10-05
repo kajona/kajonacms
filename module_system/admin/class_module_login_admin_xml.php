@@ -14,14 +14,14 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @module login
+ * @moduleId _user_modul_id_
  */
 class class_module_login_admin_xml extends class_admin implements interface_xml_admin {
 
     public function __construct() {
-        $this->setArrModuleEntry("modul", "login");
-        $this->setArrModuleEntry("moduleId", _user_modul_id_);
         parent::__construct();
-
 
         if($this->getAction() == "list") {
             $this->setAction("login");

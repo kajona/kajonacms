@@ -12,23 +12,14 @@
  *
  * @package module_postacomment
  * @author sidler@mulchprod.de
+ *
+ * @module postacomment
+ * @moduleId _postacomment_modul_id_
  */
 class class_module_postacomment_portal extends class_portal implements interface_portal {
 
     private $strErrors = "";
     private $strPagefilter = null;
-
-    /**
-     * Constructor
-     *
-     * @param mixed $arrElementData
-     */
-    public function __construct($arrElementData) {
-        $this->setArrModuleEntry("moduleId", _postacomment_modul_id_);
-        $this->setArrModuleEntry("modul", "postacomment");
-        parent::__construct($arrElementData);
-    }
-
 
     /**
      * Returns a list of comments.

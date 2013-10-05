@@ -18,6 +18,9 @@
  * @since 3.4
  * @author sidler@mulchprod.de
  * @targetTable aspects.aspect_id
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  */
 class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable {
 
@@ -40,18 +43,7 @@ class class_module_system_aspect extends class_model implements interface_model,
     private static $STR_SESSION_ASPECT_KEY = "STR_SESSION_ASPECT_KEY";
     private static $STR_SESSION_ASPECT_OBJECT = "STR_SESSION_ASPECT_OBJECT";
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "system");
-        $this->setArrModuleEntry("moduleId", _system_modul_id_);
 
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

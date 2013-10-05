@@ -15,14 +15,6 @@
 interface interface_model {
 
     /**
-     * Commonly used constructor, given a systemid. use "" as systemid for new records
-     *
-     * @param string $strSystemid
-     */
-    public function __construct($strSystemid = "");
-
-
-    /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @abstract
      * @return string

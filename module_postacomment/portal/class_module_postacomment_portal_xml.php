@@ -13,20 +13,13 @@
  *
  * @package module_postacomment
  * @author sidler@mulchprod.de
+ *
+ * @module postacomment
+ * @moduleId _postacomment_modul_id_
  */
 class class_module_postacomment_portal_xml extends class_portal implements interface_xml_portal {
 
     private $strErrors;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _postacomment_modul_id_);
-        $this->setArrModuleEntry("modul", "postacomment");
-        parent::__construct();
-    }
-
 
     /**
      * saves a post in the database and returns the post as html.

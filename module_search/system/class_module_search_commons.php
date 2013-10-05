@@ -12,21 +12,12 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ *
+ * @module search
+ * @moduleId _search_module_id_
  */
 class class_module_search_commons extends class_model implements interface_model {
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("modul", "search");
-        $this->setArrModuleEntry("moduleId", _search_module_id_);
-
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

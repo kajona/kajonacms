@@ -14,6 +14,8 @@
  * @author sidler@mulchprod.de
  *
  * @targetTable dashboard.dashboard_id
+ * @module dashboard
+ * @moduleId _dashboard_module_id_
  */
 class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener, interface_userfirstlogin_listener {
 
@@ -48,20 +50,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     private $strContent = "";
 
-
-	/**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "dashboard");
-        $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
-
-		parent::__construct($strSystemid);
-
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

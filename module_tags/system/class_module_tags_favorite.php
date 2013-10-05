@@ -15,6 +15,9 @@
  * @since 4.0
  *
  * @targetTable tags_favorite.tags_fav_id
+ *
+ * @module tags
+ * @moduleId _tags_modul_id_
  */
 class class_module_tags_favorite extends class_model implements interface_model, interface_admin_listable  {
 
@@ -38,12 +41,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "tags");
-        $this->setArrModuleEntry("moduleId", _tags_modul_id_);
-
-		parent::__construct($strSystemid);
-
+        parent::__construct($strSystemid);
         $this->objTag = new class_module_tags_tag($this->getStrTagId());
     }
 

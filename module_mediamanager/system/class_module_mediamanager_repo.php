@@ -12,6 +12,9 @@
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  * @targetTable mediamanager_repo.repo_id
+ *
+ * @module mediamanager
+ * @moduleId _mediamanager_module_id_
  */
 class class_module_mediamanager_repo extends class_model implements interface_model, interface_admin_listable {
 
@@ -47,18 +50,6 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      */
     private $strViewFilter = "";
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _mediamanager_module_id_);
-        $this->setArrModuleEntry("modul", "mediamanager");
-
-        //base class
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the icon the be used in lists.

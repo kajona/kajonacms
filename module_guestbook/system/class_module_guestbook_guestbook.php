@@ -15,6 +15,9 @@
  * @author sidler@mulchprod.de
  *
  * @targetTable guestbook_book.guestbook_id
+ *
+ * @module guestbook
+ * @moduleId _guestbook_module_id_
  */
 class class_module_guestbook_guestbook extends class_model implements interface_model, interface_admin_listable  {
 
@@ -38,19 +41,6 @@ class class_module_guestbook_guestbook extends class_model implements interface_
      */
     private $intGuestbookModerated = 0;
 
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        $this->setArrModuleEntry("moduleId", _guestbook_module_id_);
-        $this->setArrModuleEntry("modul", "guestbook");
-
-        //base class
-        parent::__construct($strSystemid);
-    }
 
     /**
      * Returns the icon the be used in lists.

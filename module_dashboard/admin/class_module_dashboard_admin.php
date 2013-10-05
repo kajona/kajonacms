@@ -11,6 +11,9 @@
 /**
  * @package module_dashboard
  * @author sidler@mulchprod.de
+ *
+ * @module dashboard
+ * @moduleId _dashboard_module_id_
  */
 class class_module_dashboard_admin extends class_admin implements interface_admin {
 
@@ -18,17 +21,6 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
     private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-
-        $this->setArrModuleEntry("modul", "dashboard");
-        $this->setArrModuleEntry("moduleId", _dashboard_module_id_);
-        parent::__construct();
-
-    }
 
 
     public function getOutputModuleNavi() {

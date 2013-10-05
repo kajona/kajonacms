@@ -13,18 +13,11 @@
  *
  * @package module_news
  * @author sidler@mulchprod.de
+ *
+ * @module news
+ * @moduleId _news_module_id_
  */
 class class_module_news_portal_xml extends class_portal implements interface_xml_portal {
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->setArrModuleEntry("moduleId", _news_module_id_);
-        $this->setArrModuleEntry("modul", "news");
-        parent::__construct();
-
-    }
-
 
     /**
      * This method loads all data to needed for a newsfeed

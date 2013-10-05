@@ -13,21 +13,11 @@
  * @package module_eventmanager
  * @author sidler@mulchprod.de
  * @since 3.4
+ *
+ * @module eventmanager
+ * @moduleId _eventmanager_module_id_
  */
 class class_module_eventmanager_portal extends class_portal implements interface_portal {
-
-    /**
-     * Constructor
-     *
-     * @param mixed $arrElementData
-     */
-    public function __construct($arrElementData) {
-        $this->setArrModuleEntry("moduleId", _eventmanager_module_id_);
-        $this->setArrModuleEntry("modul", "eventmanager");
-        parent::__construct($arrElementData);
-
-    }
-
 
     /**
      * Creates the list of events available

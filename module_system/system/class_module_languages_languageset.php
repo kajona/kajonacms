@@ -20,26 +20,13 @@
  *
  * @package module_languages
  * @author sidler@mulchprod.de
+ *
+ * @module languages
+ * @moduleId _languages_modul_id_
  */
 class class_module_languages_languageset extends class_model implements interface_model, interface_recorddeleted_listener {
 
     private $arrLanguageSet = array();
-
-
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-
-        $this->setArrModuleEntry("modul", "languages");
-        $this->setArrModuleEntry("moduleId", _languages_modul_id_);
-
-        //base class
-        parent::__construct($strSystemid);
-
-    }
 
     /**
      * Inits the current object and loads the language-mappings
