@@ -19,8 +19,20 @@ abstract class class_installer_base extends class_root implements interface_inst
     /**
      * @var class_module_packagemanager_metadata
      */
-    protected $objMetadata;
+    protected $objMetadata = null;
 
+    /**
+     * Constructor
+     *
+     */
+    public function __construct() {
+        //try to fetch the current dir
+        $strDir = class_resourceloader::getInstance()->getPathForFile("/installer/".get_class($this).".php");
+        $strDir = dirname(_realpath_.$strDir);
+        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), $strDir));
+        parent::__construct();
+    }
 
     /**
      * Generic implementation, triggers the update or the install method, depending on the parts already installed.

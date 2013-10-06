@@ -15,14 +15,6 @@
  */
 class class_installer_guestbook extends class_installer_base  {
 
-	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-		parent::__construct();
-	}
-
-
-
     public function install() {
 
 		$strReturn = "";
@@ -130,6 +122,15 @@ class class_installer_guestbook extends class_installer_base  {
             $this->updateModuleVersion("guestbook", "4.2");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("guestbook", "4.2");
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.2") {
+            $strReturn = "Updating 4.2 to 4.3...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("guestbook", "4.3");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("guestbook", "4.3");
         }
 
         return $strReturn."\n\n";

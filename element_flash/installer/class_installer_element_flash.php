@@ -16,15 +16,6 @@
  */
 class class_installer_element_flash extends class_installer_base implements interface_installer {
 
-    /**
-     * Constructor
-     */
-	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        parent::__construct();
-	}
-
 	public function install() {
 
 		$strReturn = "";
@@ -68,10 +59,15 @@ class class_installer_element_flash extends class_installer_base implements inte
             $this->objDB->flushQueryCache();
         }
 
-
         if(class_module_pages_element::getElement("flash")->getStrVersion() == "4.1") {
             $strReturn .= "Updating element flash to 4.2...\n";
             $this->updateElementVersion("flash", "4.2");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("flash")->getStrVersion() == "4.2") {
+            $strReturn .= "Updating element flash to 4.3...\n";
+            $this->updateElementVersion("flash", "4.3");
             $this->objDB->flushQueryCache();
         }
 

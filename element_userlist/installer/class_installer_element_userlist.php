@@ -16,17 +16,6 @@
  */
 class class_installer_element_userlist extends class_installer_base implements interface_installer {
 
-    /**
-     * Constructor
-     *
-     */
-	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        parent::__construct();
-	}
-
-
 	public function install() {
 		$strReturn = "";
 
@@ -54,18 +43,19 @@ class class_installer_element_userlist extends class_installer_base implements i
 	public function update() {
         $strReturn = "";
         if(class_module_pages_element::getElement("userlist")->getStrVersion() == "0.2") {
-            $strReturn .= $this->postUpdate_02_03();
+            $strReturn = "Updating element userlist to 0.3...\n";
+            $this->updateElementVersion("userlist", "0.3");
+            $this->objDB->flushQueryCache();
+        }
+        if(class_module_pages_element::getElement("userlist")->getStrVersion() == "0.3") {
+            $strReturn = "Updating element userlist to 0.4...\n";
+            $this->updateElementVersion("userlist", "0.4");
             $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
     }
     
-    public function postUpdate_02_03() {
-        $strReturn = "Updating element userlist to 0.3...\n";
-        $this->updateElementVersion("userlist", "0.3");
-        return $strReturn;
-    }
 
     
 }

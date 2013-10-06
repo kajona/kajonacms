@@ -5,12 +5,12 @@
         >
     <title>stats</title>
     <description>A module analyzing the portal in order to gather statistical data. Renderes charts and other visual reports.</description>
-    <version>4.2</version>
+    <version>4.3</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.1" />
+        <module name="system" version="4.3" />
         <module name="flotchart" version="4.0" />
     </requiredModules>
 </package>

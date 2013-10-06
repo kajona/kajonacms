@@ -16,14 +16,10 @@
 class class_installer_element_downloads extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
+		parent::__construct();
         $this->objMetadata->setStrTitle("element_downloads");
         $this->objMetadata->setStrTitle("downloads");
         $this->objMetadata->setStrType(class_module_packagemanager_manager::STR_TYPE_ELEMENT);
-		parent::__construct();
 	}
 
 	public function install() {
@@ -94,6 +90,12 @@ class class_installer_element_downloads extends class_installer_base implements 
         if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.1") {
             $strReturn .= "Updating element downloads to 4.2...\n";
             $this->updateElementVersion("downloads", "4.2");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.2") {
+            $strReturn .= "Updating element downloads to 4.3...\n";
+            $this->updateElementVersion("downloads", "4.3");
             $this->objDB->flushQueryCache();
         }
 

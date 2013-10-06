@@ -16,12 +16,6 @@
  */
 class class_installer_tags extends class_installer_base implements interface_installer {
 
-	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        parent::__construct();
-	}
-
     public function install() {
 		$strReturn = "";
 
@@ -140,6 +134,16 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "4.1") {
             $strReturn .= $this->update_41_42();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.2") {
+            $strReturn .= "Updating 4.2 to 4.3...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("tags", "4.3");
             $this->objDB->flushQueryCache();
         }
 

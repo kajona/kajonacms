@@ -15,12 +15,6 @@
  */
 class class_installer_rating extends class_installer_base implements interface_installer {
 
-	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-		parent::__construct();
-	}
-
     public function install() {
 		$strReturn = "";
 		//Tabellen anlegen
@@ -108,6 +102,13 @@ class class_installer_rating extends class_installer_base implements interface_i
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("rating", "4.2");
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.2") {
+            $strReturn .= "Updating 4.2 to 4.3...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("rating", "4.3");
         }
 
         return $strReturn."\n\n";

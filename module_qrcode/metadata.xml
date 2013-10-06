@@ -5,11 +5,11 @@
         >
     <title>qrcode</title>
     <description>QR Codes may be used to generate images containing text-information such as links.</description>
-    <version>4.2</version>
+    <version>4.3</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.0" />
+        <module name="system" version="4.3" />
     </requiredModules>
 </package>

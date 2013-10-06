@@ -15,12 +15,9 @@
 class class_installer_element_gallery extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-
+		parent::__construct();
         $this->objMetadata->setStrTitle("gallery");
         $this->objMetadata->setStrType(class_module_packagemanager_manager::STR_TYPE_ELEMENT);
-		parent::__construct();
 	}
 
 	public function install() {
@@ -117,6 +114,13 @@ class class_installer_element_gallery extends class_installer_base implements in
             $strReturn .= "Updating element gallery to 4.2...\n";
             $this->updateElementVersion("gallery", "4.2");
             $this->updateElementVersion("galleryRandom", "4.2");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.2") {
+            $strReturn .= "Updating element gallery to 4.3...\n";
+            $this->updateElementVersion("gallery", "4.3");
+            $this->updateElementVersion("galleryRandom", "4.3");
             $this->objDB->flushQueryCache();
         }
 

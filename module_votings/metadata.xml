@@ -5,12 +5,12 @@
         >
     <title>votings</title>
     <description>Let your users vote on different polls.</description>
-    <version>1.2</version>
+    <version>1.3</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.1" />
-        <module name="pages" version="4.1" />
+        <module name="system" version="4.3" />
+        <module name="pages" version="4.3" />
     </requiredModules>
 </package>

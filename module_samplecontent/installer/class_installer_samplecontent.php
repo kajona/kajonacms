@@ -22,8 +22,6 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 
 	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
 		parent::__construct();
 
 		//set the correct language
@@ -114,6 +112,13 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("samplecontent", "4.2");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
+            $strReturn .= "Updating 4.2 to 4.3...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("samplecontent", "4.3");
         }
 
         return $strReturn;

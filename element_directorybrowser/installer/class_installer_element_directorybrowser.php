@@ -15,17 +15,6 @@
  */
 class class_installer_element_directorybrowser extends class_installer_base implements interface_installer {
 
-    /**
-     * Constructor
-     *
-     */
-	public function __construct() {
-        $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), __DIR__));
-        parent::__construct();
-	}
-
-
 	public function install() {
         $strReturn = "";
 
@@ -56,7 +45,13 @@ class class_installer_element_directorybrowser extends class_installer_base impl
         $strReturn = "";
 
         if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "1.0") {
-            $strReturn .= $this->update_10_11();
+            $strReturn = "Updating 1.0 to 1.1...\n";
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.1");
+            $this->objDB->flushQueryCache();
+        }
+        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "1.1") {
+            $strReturn = "Updating 1.1 to 1.2...\n";
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.2");
             $this->objDB->flushQueryCache();
         }
 
@@ -64,10 +59,5 @@ class class_installer_element_directorybrowser extends class_installer_base impl
 	}
 
 
-    private function update_10_11() {
-        $strReturn = "Updating 1.0 to 1.1...\n";
-        $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.1");
-        return $strReturn;
-    }
 
 }
