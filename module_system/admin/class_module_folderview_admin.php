@@ -24,7 +24,6 @@ class class_module_folderview_admin extends class_admin implements interface_adm
 
     /**
      * Constructor, doing nothing but a few inits
-
      */
     public function __construct() {
         $this->setArrModuleEntry("template", "/folderview.tpl");
@@ -41,7 +40,6 @@ class class_module_folderview_admin extends class_admin implements interface_adm
     /**
      * @return string
      * @permissions view
-     * @autoTestable
      */
     protected function actionBrowserChooser() {
         $strReturn = "";
