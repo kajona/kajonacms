@@ -37,6 +37,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      * Returns a list of the languages
      *
      * @return string
+     * @autoTestable
      * @permissions view
      */
     protected function actionList() {
@@ -69,6 +70,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
      *
      * @return string
      * @permissions edit
+     * @autoTestable
      */
     protected function actionNew($strMode = "new") {
 

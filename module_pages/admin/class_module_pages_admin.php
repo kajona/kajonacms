@@ -329,6 +329,10 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         return $this->actionNewPage("edit");
     }
 
+    /**
+     * @return string
+     * @autoTestable
+     */
     protected function actionNewAlias() {
         return $this->actionNewPage("new", true);
     }
@@ -853,9 +857,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
             $strReturn .= $this->objToolkit->divider();
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "updatePlaceholder"));
-            //fetch available templates
             //Load the available templates
-            $objFilesystem = new class_filesystem();
             $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_pages");
             $arrTemplatesDD = array();
             $arrTemplatesDD[-1] = $this->getLang("plUpdateAll");
@@ -888,6 +890,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      *
      * @return String
      * @permissions view
+     * @autoTestable
      */
     protected function actionPagesFolderBrowser() {
         $strReturn = "";

@@ -206,7 +206,6 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
 
             $strReturn .= $this->objToolkit->formHeadline(dateToString($objMessage->getObjDate()). " ".$objMessage->getStrTitle());
 
-            //$strBody = nl2br($objMessage->getStrBody());
             $strBody = nl2br($objMessage->getStrBody());
             $strBody = replaceTextLinks($strBody);
             $strReturn .= $this->objToolkit->getTextRow($strBody);

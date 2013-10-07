@@ -23,6 +23,8 @@
  * @objectEditCat class_module_faqs_category
  * @objectNewCat class_module_faqs_category
  *
+ * @autoTestable listFaq,newFaq,listCat,newCat
+ *
  * @module faqs
  * @moduleId _faqs_module_id_
  */

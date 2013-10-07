@@ -41,6 +41,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
     /**
      * @return string
      * @permissions view
+     * @autoTestable
      */
     protected function actionBrowserChooser() {
         $strReturn = "";

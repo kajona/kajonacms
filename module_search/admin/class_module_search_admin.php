@@ -41,6 +41,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
      *
      * @return string
      * @permissions edit
+     * @autoTestable
      */
     protected function actionNew($strMode = "new", class_admin_formgenerator $objForm = null) {
         $objSearch = new class_module_search_search();
@@ -114,6 +115,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
      *
      * @return string
      * @permissions view
+     * @autoTestable
      */
     protected function actionList() {
         $objArraySectionIterator = new class_array_section_iterator(class_module_search_search::getObjectCount());
@@ -128,6 +130,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
      *
      * @permissions view
      * @return string
+     * @autoTestable
      */
     protected function actionSearch() {
 

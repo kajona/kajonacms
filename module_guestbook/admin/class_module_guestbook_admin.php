@@ -42,6 +42,7 @@ class class_module_guestbook_admin extends class_admin_evensimpler implements in
         if($this->getObjModule()->rightEdit() && $this->getStrCurObjectTypeName() != "Post") {
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
         }
+        return "";
     }
 
     protected function renderAdditionalActions(class_model $objListEntry) {
