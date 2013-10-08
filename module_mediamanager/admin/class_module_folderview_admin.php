@@ -13,12 +13,12 @@
  * Since Kajona 3.4.1 this class is deprecated. All methods have been moved to the appropriate source-modules.
  * It only remains as a switch between different browsers.
  *
- * @package module_system
+ * @package module_mediamanager
  * @author sidler@mulchprod.de
  * @deprecated
  *
- * @module folderview
- * @moduleId _system_modul_id_
+ * @module mediamanager
+ * @moduleId _mediamanager_module_id_
  */
 class class_module_folderview_admin extends class_admin implements interface_admin {
 
@@ -39,6 +39,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
 
     /**
      * @return string
+     * @autoTestable
      * @permissions view
      */
     protected function actionBrowserChooser() {
@@ -51,19 +52,21 @@ class class_module_folderview_admin extends class_admin implements interface_adm
         $intCounter = 1;
         $strReturn .= $this->objToolkit->listHeader();
 
-        $strAction = $this->objToolkit->listButton(
-            getLinkAdmin(
-                "pages",
-                "pagesFolderBrowser",
-                "&pages=1&form_element=" . $this->getParam("form_element") . "&bit_link=1",
-                $this->getLang("wysiwygPagesBrowser"),
-                $this->getLang("wysiwygPagesBrowser"),
-                "icon_folderActionOpen"
-            )
-        );
-        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
+        if(class_module_system_module::getModuleByName("pages") !== null) {
+            $strAction = $this->objToolkit->listButton(
+                getLinkAdmin(
+                    "pages",
+                    "pagesFolderBrowser",
+                    "&pages=1&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                    $this->getLang("wysiwygPagesBrowser"),
+                    $this->getLang("wysiwygPagesBrowser"),
+                    "icon_folderActionOpen"
+                )
+            );
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
+        }
 
-        if(validateSystemid(_mediamanager_default_filesrepoid_)) {
+        if(validateSystemid(_mediamanager_default_filesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null) {
             $strAction = $this->objToolkit->listButton(
                 getLinkAdmin(
                     "mediamanager",
@@ -77,7 +80,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
         }
 
-        if(validateSystemid(_mediamanager_default_imagesrepoid_)) {
+        if(validateSystemid(_mediamanager_default_imagesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null) {
             $strAction = $this->objToolkit->listButton(
                 getLinkAdmin(
                     "mediamanager",
@@ -91,18 +94,19 @@ class class_module_folderview_admin extends class_admin implements interface_adm
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygImagesBrowser"), "", $strAction, $intCounter++);
         }
 
-
-        $strAction = $this->objToolkit->listButton(
-            getLinkAdmin(
-                "mediamanager",
-                "folderContentFolderviewMode",
-                "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
-                $this->getLang("wysiwygRepoBrowser"),
-                $this->getLang("wysiwygRepoBrowser"),
-                "icon_folderActionOpen"
-            )
-        );
-        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygRepoBrowser"), "", $strAction, $intCounter++);
+        if(class_module_system_module::getModuleByName("mediamanager") !== null) {
+            $strAction = $this->objToolkit->listButton(
+                getLinkAdmin(
+                    "mediamanager",
+                    "folderContentFolderviewMode",
+                    "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                    $this->getLang("wysiwygRepoBrowser"),
+                    $this->getLang("wysiwygRepoBrowser"),
+                    "icon_folderActionOpen"
+                )
+            );
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygRepoBrowser"), "", $strAction, $intCounter++);
+        }
 
         $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;

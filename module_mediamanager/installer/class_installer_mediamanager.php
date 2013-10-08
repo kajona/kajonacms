@@ -74,6 +74,9 @@ class class_installer_mediamanager extends class_installer_base implements inter
             true, "",
             "class_module_mediamanager_admin_xml.php");
 
+        //The folderview
+        $this->registerModule("folderview", _mediamanager_folderview_modul_id_, "", "class_module_folderview_admin.php", $this->objMetadata->getStrVersion() , false);
+
         $this->registerConstant("_mediamanager_default_imagesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
         $this->registerConstant("_mediamanager_default_filesrepoid_", "", class_module_system_setting::$int_TYPE_STRING, _mediamanager_module_id_);
 

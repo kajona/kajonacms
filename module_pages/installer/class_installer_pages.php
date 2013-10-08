@@ -98,8 +98,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.php", "class_module_pages_admin.php", $this->objMetadata->getStrVersion(), true);
 		//The pages_content
 		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_admin.php", $this->objMetadata->getStrVersion(), false);
-		//The folderview
-		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_module_folderview_admin.php", $this->objMetadata->getStrVersion() , false);
+
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_pages_templatechange_", "false", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
