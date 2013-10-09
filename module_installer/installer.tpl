@@ -204,7 +204,7 @@ function switchDriver() {
                 <option value="oci8">Oracle (oci8)</option>
             </select>
         </div>
-        <script type="text/javascript">$('#driver').val('%%postDbdriver%%');</script>
+        <script type="text/javascript">if('%%postDbdriver%%' != '') $('#driver').val('%%postDbdriver%%');</script>
     </div>
 
     <div class="controls">
