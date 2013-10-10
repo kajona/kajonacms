@@ -49,6 +49,19 @@
 
 
 
+    <!-- internal initialization -->
+    <target name="init" depends="cleanFilesystem">
+        <tstamp />
+        <exec executable="svn" output="${basedir}${buildPath}/svn.properties">
+            <arg line="info '${basedir}/../../'" />
+        </exec>
+        <property prefix="svn" file="${basedir}${buildPath}/svn.properties"/>
+        <echo>Revision found: ${svn.Revision}</echo>
+
+    </target>
+
+
+
 
     <target name="buildProject">
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
