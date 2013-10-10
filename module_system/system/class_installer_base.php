@@ -30,7 +30,7 @@ abstract class class_installer_base extends class_root implements interface_inst
         $strDir = class_resourceloader::getInstance()->getPathForFile("/installer/".get_class($this).".php");
         $strDir = dirname(_realpath_.$strDir);
         $this->objMetadata = new class_module_packagemanager_metadata();
-        $this->objMetadata->autoInit(uniStrReplace(array(DIRECTORY_SEPARATOR."installer", _realpath_), array("", ""), $strDir));
+        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), $strDir));
         parent::__construct();
     }
 
