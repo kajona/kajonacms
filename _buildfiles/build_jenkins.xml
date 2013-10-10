@@ -28,7 +28,7 @@
 
     <!-- target dir for the sources from the svn repo -->
     <property name="sourcesPath"  value="/../" />
-    <!-- target dir to install the system to -->
+    <!-- target dir to install the system to. this folder is also referenced in the phpunit config file! -->
     <property name="projectPath"  value="/buildproject" />
     <!-- artifacts such as logs and reports will be stored here -->
     <property name="buildPath"    value="/build" />
@@ -475,14 +475,14 @@
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="${path.phpunit}" failonerror="true">
             <arg line="--configuration ${basedir}/phpunit.xml " />
-            <arg path="${basedir}${projectPath}" />
+            <!--<arg path="${basedir}${projectPath}" />-->
         </exec>
     </target>
 
     <target name="phpunitFast" description="Run unit tests with PHPUnit">
         <exec executable="${path.phpunit}" failonerror="true">
-            <arg line="--configuration ${basedir}/phpunit_fast.xml " />
-            <arg path="${basedir}${projectPath}" />
+            <arg line="--configuration '${basedir}/phpunit_fast.xml' " />
+            <!--<arg path="${basedir}${projectPath}" />-->
         </exec>
     </target>
 
