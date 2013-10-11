@@ -21,6 +21,7 @@ class class_graph_factory {
     public static $STR_TYPE_EZC = "CHART_TYPE_EZC";
     public static $STR_TYPE_PCHART = "CHART_TYPE_PCHART";
     public static $STR_TYPE_FLOT = "CHART_TYPE_FLOT";
+    public static $STR_TYPE_JQPLOT = "CHART_TYPE_JQPLOT";
 
 
     /**
@@ -35,7 +36,8 @@ class class_graph_factory {
         $arrTypes = array(
             self::$STR_TYPE_EZC,
             self::$STR_TYPE_FLOT,
-            self::$STR_TYPE_PCHART
+            self::$STR_TYPE_PCHART,
+            self::$STR_TYPE_JQPLOT
         );
 
         if(!in_array($strType, $arrTypes)) {
@@ -46,6 +48,8 @@ class class_graph_factory {
                     $strType = self::$STR_TYPE_EZC;
                 else if(_system_graph_type_ == "pchart")
                     $strType = self::$STR_TYPE_PCHART;
+                else if(_system_graph_type_ == "jqplot")
+                    $strType = self::$STR_TYPE_JQPLOT;
                 else
                     $strType = _system_graph_type_;
             }
@@ -61,6 +65,9 @@ class class_graph_factory {
         }
         else if($strType == self::$STR_TYPE_FLOT) {
             return new class_graph_flot();
+        }
+        else if($strType == self::$STR_TYPE_JQPLOT) {
+            return new class_graph_jqplot();
         }
 
         return new class_graph_flot();
