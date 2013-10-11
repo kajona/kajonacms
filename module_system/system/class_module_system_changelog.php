@@ -294,6 +294,11 @@ class class_module_system_changelog extends class_model implements interface_mod
                 if($bitDeleteAction || ($bitDeleteAction === null && $strAction == self::$STR_ACTION_DELETE))
                     $strNewvalue = "";
 
+                if(is_numeric($strOldvalue) || is_numeric($strNewvalue)) {
+                    $strOldvalue .= "";
+                    $strNewvalue .= "";
+                }
+
                 if(!$bitForceEntry && ($strOldvalue === $strNewvalue))
                     continue;
 
