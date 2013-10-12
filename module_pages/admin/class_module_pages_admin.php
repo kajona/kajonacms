@@ -374,10 +374,10 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                     $objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\">".class_adminskin_helper::getAdminImage("icon_lens").$this->getLang("contentToolbar_preview"
                 )."</a>";
             }
-            class_module_languages_admin::enableLanguageSwitch();
             if($this->getParam("pe") != 1)
                 $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
         }
+        class_module_languages_admin::enableLanguageSwitch();
 
         if($objForm == null)
             $objForm = $this->getPageForm($bitAlias, $objPage, $strMode);
