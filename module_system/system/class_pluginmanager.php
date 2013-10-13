@@ -65,8 +65,8 @@ class class_pluginmanager {
         $this->objLang = $objCarrier->getObjLang();
     }
 
-    private function addPlugin($objPlugin, $type, $name) {
-        $this->arrPlugins[$type][$name] = $objPlugin;
+    private function addPlugin($objPlugin, $strType, $strName) {
+        $this->arrPlugins[$strType][$strName] = $objPlugin;
     }
 
     /**
@@ -75,12 +75,11 @@ class class_pluginmanager {
      * @param interface_admin_plugin $objPlugin
      */
     public function registerPlugin(interface_admin_plugin $objPlugin) {
-        $rf = new ReflectionClass($objPlugin);
-        $arrInterface = $rf->getInterfaceNames();
+        $objRf = new ReflectionClass($objPlugin);
+        $arrInterface = $objRf->getInterfaceNames();
         $arrInterface = array_filter($arrInterface, function ($objFilter) {
                 return strcmp($objFilter, "interface_admin_plugin");
-            }
-        );
+        });
         $this->addPlugin($objPlugin, implode($arrInterface, ","), $objPlugin->getPluginCommand());
     }
 
@@ -97,16 +96,16 @@ class class_pluginmanager {
      * Load Plugins from a given folder filtered by an interface
      *
      * @param $strPath
-     * @param $interfaceExtensionPoint
+     * @param $strInterfaceExtensionPoint
      */
-    public function loadPluginsFiltered($strPath, $interfaceExtensionPoint) {
+    public function loadPluginsFiltered($strPath, $strInterfaceExtensionPoint) {
         $arrPlugins = class_resourceloader::getInstance()->getFolderContent($strPath, array(".php"));
 
         // Register new Folder to Classloader
         class_classloader::getInstance()->addClassFolder($strPath);
 
-        if($interfaceExtensionPoint != null) {
-            $this->setFilterExtensionPoints($interfaceExtensionPoint);
+        if($strInterfaceExtensionPoint != null) {
+            $this->setFilterExtensionPoints($strInterfaceExtensionPoint);
         }
 
         foreach($arrPlugins as $strOnePlugin) {
@@ -152,9 +151,9 @@ class class_pluginmanager {
      * @return \interface_admin_plugin|null
      */
     public function getPluginObject($strExtensionPoint, $strName) {
-        $arr_objs = $this->getPluginObjects($strExtensionPoint);
-        if(isset ($arr_objs[$strName]))
-            return $arr_objs[$strName];
+        $arrObjs = $this->getPluginObjects($strExtensionPoint);
+        if(isset ($arrObjs[$strName]))
+            return $arrObjs[$strName];
         else
             return null;
     }
@@ -164,8 +163,8 @@ class class_pluginmanager {
         if($this->getFilterExtensionPoints() == "")
             return true;
         else {
-            $rf = new ReflectionClass($objPlugin);
-            $arrInterface = $rf->getInterfaceNames();
+            $objRf = new ReflectionClass($objPlugin);
+            $arrInterface = $objRf->getInterfaceNames();
             return in_array($this->getFilterExtensionPoints(), $arrInterface);
         }
     }

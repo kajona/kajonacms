@@ -34,8 +34,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin($objPluginamanger)
-    {
+    public function registerPlugin($objPluginamanger) {
         $objPluginamanger->registerPlugin($this);
     }
 
@@ -73,14 +72,16 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 
         //calc a few values
         $intSum = 0;
-        foreach($arrStats as $intHits)
+        foreach($arrStats as $intHits) {
             $intSum += $intHits;
+        }
 
         $intI = 0;
         foreach($arrStats as $strKey => $intHits) {
             //Escape?
-            if($intI >= _stats_nrofrecords_)
+            if($intI >= _stats_nrofrecords_) {
                 break;
+            }
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
             $arrValues[$intI][] = $strKey;
@@ -138,10 +139,12 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
                     $strQueryterm = uniSubstr($strQueryterm, 0, uniStrpos($strQueryterm, "&"));
                     $strQueryterm = uniStrtolower(trim(urldecode($strQueryterm)));
                     if($strQueryterm != "") {
-                        if(isset($arrHits[$strQueryterm]))
+                        if(isset($arrHits[$strQueryterm])) {
                             $arrHits[$strQueryterm]++;
-                        else
+                        }
+                        else {
                             $arrHits[$strQueryterm] = 1;
+                        }
                     }
                     break;
                 }
@@ -161,8 +164,9 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         foreach($arrPages as $intHits) {
             $arrGraphData[$intCount] = $intHits;
             $arrLabels[] = $intCount;
-            if($intCount++ >= 8)
+            if($intCount++ >= 8) {
                 break;
+            }
         }
 
 
@@ -177,8 +181,9 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
             $objGraph->setStrYAxisTitle($this->objTexts->getLang("top_query_gewicht", "stats"));
             return $objGraph->renderGraph();
         }
-        else
+        else {
             return "";
+        }
     }
 
 }
