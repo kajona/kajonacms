@@ -16,7 +16,7 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable {
+class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable, interface_search_resultobject {
 
 
     public static $INT_TYPE_FILE = 0;
@@ -97,6 +97,16 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     private $strScreen3 = "";
 
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return getLinkAdminHref("mediamanager", "edit", "&systemid=".$this->getSystemid()."&source=search");
+    }
 
 
     /**

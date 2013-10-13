@@ -277,7 +277,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $strLink = $objOneResult->getStrPagelink();
             if($strLink == "") {
-                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid() . "&source=search");
+                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
             }
 
             $arrItem["module"] = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneResult->getObjObject()->getArrModule("modul"));
@@ -335,7 +335,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $strLink = $objOneResult->getStrPagelink();
             if($strLink == "") {
-                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid() . "&source=search");
+                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
             }
 
             $strReturn .=

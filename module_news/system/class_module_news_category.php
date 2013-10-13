@@ -17,7 +17,7 @@
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_category extends class_model implements interface_model, interface_admin_listable {
+class class_module_news_category extends class_model implements interface_model, interface_admin_listable, interface_search_resultobject {
 
     /**
      * @var string
@@ -28,6 +28,17 @@ class class_module_news_category extends class_model implements interface_model,
      * @fieldLabel commons_title
      */
     private $strTitle = "";
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return getLinkAdminHref("news", "listNewsAndCategories", "&filterid=".$this->getSystemid());
+    }
 
 
     /**

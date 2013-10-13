@@ -84,7 +84,15 @@ class class_module_search_commons extends class_model implements interface_model
         };
 
 
-        return $this->doSearch($objSearch, $arrSearchPlugins, $objSearchFunc);
+        $arrHits = $this->doSearch($objSearch, $arrSearchPlugins, $objSearchFunc);
+
+        //if the object is an instace of interface_search_resultobject, the target-link may be updated
+        foreach($arrHits as $objOneResult) {
+            if($objOneResult->getObjObject() instanceof interface_search_resultobject)
+                $objOneResult->setStrPagelink($objOneResult->getObjObject()->getSearchAdminLinkForObject());
+        }
+
+        return $arrHits;
 
     }
 

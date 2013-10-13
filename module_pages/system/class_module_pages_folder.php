@@ -18,7 +18,7 @@
  * @module pages
  * @moduleId _pages_folder_id_
  */
-class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable {
+class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject {
 
     /**
      * @var string
@@ -41,6 +41,17 @@ class class_module_pages_folder extends class_model implements interface_model, 
         parent::__construct($strSystemid);
 
         $this->objSortManager = new class_pages_sortmanager($this);
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return getLinkAdminHref("pages", "list", "&systemid=".$this->getSystemid());
     }
 
 

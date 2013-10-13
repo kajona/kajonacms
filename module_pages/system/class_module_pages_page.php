@@ -17,7 +17,7 @@
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable {
+class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject {
 
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
@@ -135,6 +135,17 @@ class class_module_pages_page extends class_model implements interface_model, in
         parent::__construct($strSystemid);
 
         $this->objSortManager = new class_pages_sortmanager($this);
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
     }
 
 

@@ -18,7 +18,7 @@
  * @module votings
  * @moduleId _votings_module_id_
  */
-class class_module_votings_voting extends class_model implements interface_model, interface_admin_listable {
+class class_module_votings_voting extends class_model implements interface_model, interface_admin_listable, interface_search_resultobject {
 
     /**
      * @var string
@@ -44,6 +44,16 @@ class class_module_votings_voting extends class_model implements interface_model
      */
     private $objEndDate = null;
 
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return getLinkAdminHref("votings", "listAnswers", "&systemid=".$this->getSystemid());
+    }
 
 
     /**
