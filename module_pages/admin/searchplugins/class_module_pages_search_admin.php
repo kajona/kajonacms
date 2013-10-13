@@ -93,9 +93,9 @@ class class_module_pages_search_admin implements interface_search_plugin {
 
         $arrElements = $this->objDB->getPArray($strQuery, $arrParams);
         foreach($arrElements as $arrOneEntry) {
-            $objPost = class_objectfactory::getInstance()->getObject($arrOneEntry["page_id"]);
+            $objPage = class_objectfactory::getInstance()->getObject($arrOneEntry["page_id"]);
             $objResult = new class_search_result();
-            $objResult->setObjObject($objPost);
+            $objResult->setObjObject($objPage);
             $this->arrHits[] = $objResult;
         }
     }

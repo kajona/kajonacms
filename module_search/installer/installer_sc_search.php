@@ -81,8 +81,8 @@ class class_installer_sc_search implements interface_sc_installer {
 
         if(class_module_pages_element::getElement("search") != null) {
             $objPagelement = new class_module_pages_pageelement();
-            $objPagelement->setStrPlaceholder("results_search");
-            $objPagelement->setStrName("results");
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
             $objPagelement->setStrElement("search");
             $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();

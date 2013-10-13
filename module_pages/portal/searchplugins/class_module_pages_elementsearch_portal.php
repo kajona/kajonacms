@@ -115,11 +115,43 @@ class class_module_pages_elementsearch_portal implements interface_search_plugin
                 /** @var $objInstance class_element_admin */
                 $objInstance = new $strClassname();
 
-                $strTable = $objInstance->getArrModule("table");
-                $strColumns = $objInstance->getArrModule("tableColumns");
+                //new version: annotation based elements
+                $objReflection = new class_reflection($objInstance);
+                //try to fetch the property based on the orm annotations
+                $strTable = $objReflection->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+                if(count($strTable) > 0)
+                    $strTable = $strTable[0];
+                else if(count($strTable) == 0)
+                    $strTable = "";
 
-                if($strTable != "" && $strColumns != "") {
-                    $arrColumns = explode(",", $strColumns);
+                $arrTable = explode(".", $strTable);
+                if(count($arrTable) == 2)
+                    $strTable = $arrTable[0];
+
+                $arrColumns = array();
+                $arrOrmProperty = $objReflection->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+                foreach($arrOrmProperty as $strValue) {
+                    $arrTable = explode(".", $strValue);
+                    if(count($arrTable) == 2 && $arrTable[0] == $strTable)
+                        $arrColumns[] = $arrTable[1];
+                    else
+                        $arrColumns[] = $strValue;
+                }
+
+                if($strTable != "")
+                    $strTable = _dbprefix_.$strTable;
+
+
+
+                //legacy code
+                if($strTable == "" && count($arrColumns) == 0) {
+                    $strTable = $objInstance->getArrModule("table");
+                    $arrColumns = explode(",", $objInstance->getArrModule("tableColumns"));
+                }
+
+
+
+                if($strTable != "" && count($arrColumns) > 0) {
 
                     if(!isset($this->arrTables[$strTable]))
                         $this->arrTables[$strTable] = array();
