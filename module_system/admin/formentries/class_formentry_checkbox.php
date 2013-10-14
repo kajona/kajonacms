@@ -11,7 +11,7 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_checkbox extends class_formentry_base implements interface_formentry {
+class class_formentry_checkbox extends class_formentry_base implements interface_formentry_printable {
 
     private $strOpener = "";
 
@@ -50,6 +50,16 @@ class class_formentry_checkbox extends class_formentry_base implements interface
 
     public function getStrOpener() {
         return $this->strOpener;
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        return $this->getStrValue() == true ? class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "commons") : class_carrier::getInstance()->getObjLang()->getLang("commons_no", "commons");
     }
 
 }
