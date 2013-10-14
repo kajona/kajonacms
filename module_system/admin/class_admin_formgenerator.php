@@ -35,6 +35,7 @@ class class_admin_formgenerator {
     const  BIT_BUTTON_CLOSE  = 4;
     const  BIT_BUTTON_CANCEL = 8;
     const  BIT_BUTTON_SUBMIT = 16;
+    const  BIT_BUTTON_DELETE = 32;
 
 
     /**
@@ -149,6 +150,9 @@ class class_admin_formgenerator {
 
         if($intButtonConfig & self::BIT_BUTTON_CLOSE)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submit");
+
+        if($intButtonConfig & self::BIT_BUTTON_DELETE)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "submit");
 
 
 

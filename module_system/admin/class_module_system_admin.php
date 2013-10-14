@@ -369,26 +369,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
                     /** @var $objTask interface_admin_systemtask */
                     $objTask = new $strClassname();
                     if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
-
-                        //execute the task or show the form?
-                        if($this->getParam("execute") == "true") {
-                            $strTaskOutput = "
-                                <script type=\"text/javascript\">
-                                $(function() {
-                                   setTimeout(function() {
-                                   KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-                                   KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
-                                   }, 500);
-                                 });
-                                </script>";
-                        }
-                        else {
-                            $strForm = $objTask->generateAdminForm();
-                            if($strForm != "") {
-                                $strTaskOutput .= $strForm;
-                            }
-                        }
-
+                        $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks");
                         break;
                     }
                 }
@@ -456,17 +437,50 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn .= $this->objToolkit->jsDialog(0);
 
         //include js-code & stuff to handle executions
-        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$this->getLang("systemtask_cancel_execution")."\" class=\"btn inputSubmit\" /><br />";
-        $strReturn .= "<script type=\"text/javascript\">
-            var KAJONA_SYSTEMTASK_TITLE = '".$this->getLang("systemtask_dialog_title")."';
-            var KAJONA_SYSTEMTASK_TITLE_DONE = '".$this->getLang("systemtask_dialog_title_done")."';
-            var KAJONA_SYSTEMTASK_CLOSE = '".$this->getLang("systemtask_close_dialog")."';
-            var kajonaSystemtaskDialogContent = '".$strDialogContent."';
-            </script>";
+        $strReturn .= self::getTaskDialogCode();
         $strReturn = $strTaskOutput.$strReturn;
 
         return $strReturn;
     }
+
+
+    public static function getTaskDialogExecuteCode($bitExecute, class_systemtask_base $objTask, $strModule = "", $strAction = "") {
+        $objLang = class_carrier::getInstance()->getObjLang();
+        $strTaskOutput = "";
+        //execute the task or show the form?
+        if($bitExecute) {
+            $strTaskOutput .= "
+            <script type=\"text/javascript\">
+            $(function() {
+               setTimeout(function() {
+               KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+               KAJONA.admin.systemtask.setName('".$objLang->getLang("systemtask_runningtask", "system")." ".$objTask->getStrTaskName()."');
+               }, 500);
+             });
+            </script>";
+        }
+        else {
+            $strForm = $objTask->generateAdminForm($strModule, $strAction);
+            if($strForm != "") {
+                $strTaskOutput .= $strForm;
+            }
+        }
+
+        return $strTaskOutput;
+    }
+
+
+    public static function getTaskDialogCode() {
+        $objLang = class_carrier::getInstance()->getObjLang();
+        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$objLang->getLang("systemtask_cancel_execution", "system")."\" class=\"btn inputSubmit\" /><br />";
+        return "<script type=\"text/javascript\">
+            var KAJONA_SYSTEMTASK_TITLE = '".$objLang->getLang("systemtask_dialog_title", "system")."';
+            var KAJONA_SYSTEMTASK_TITLE_DONE = '".$objLang->getLang("systemtask_dialog_title_done", "system")."';
+            var KAJONA_SYSTEMTASK_CLOSE = '".$objLang->getLang("systemtask_close_dialog", "system")."';
+            var kajonaSystemtaskDialogContent = '".$strDialogContent."';
+            </script>";
+    }
+
 
 
     /**
