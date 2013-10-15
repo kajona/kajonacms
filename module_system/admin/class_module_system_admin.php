@@ -354,6 +354,8 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn = "";
         $strTaskOutput = "";
 
+        $strReturn .= $this->objToolkit->jsDialog(0);
+
         //include the list of possible tasks
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
         asort($arrFiles);
@@ -403,25 +405,14 @@ class class_module_system_admin extends class_admin_simple implements interface_
             foreach($arrTasks as $objOneTask) {
 
                 //generate the link to execute the task
-                $strLink = "";
-                if($objOneTask->generateAdminForm() != "") {
-                    $strLink = getLinkAdmin(
-                        "system",
-                        "systemTasks",
-                        "&task=".$objOneTask->getStrInternalTaskName(),
-                        $objOneTask->getStrTaskname(),
-                        $this->getLang("systemtask_run"),
-                        "icon_accept"
-                    );
-                }
-                else {
-                    $strLink = getLinkAdminManual(
-                        "href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getLang("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
-                        "",
-                        $this->getLang("systemtask_run"),
-                        "icon_accept"
-                    );
-                }
+                $strLink = getLinkAdmin(
+                    "system",
+                    "systemTasks",
+                    "&task=".$objOneTask->getStrInternalTaskName(),
+                    $objOneTask->getStrTaskname(),
+                    $this->getLang("systemtask_run"),
+                    "icon_accept"
+                );
 
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
@@ -433,8 +424,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
-
-        $strReturn .= $this->objToolkit->jsDialog(0);
 
         //include js-code & stuff to handle executions
         $strReturn .= self::getTaskDialogCode();
@@ -453,8 +442,8 @@ class class_module_system_admin extends class_admin_simple implements interface_
             <script type=\"text/javascript\">
             $(function() {
                setTimeout(function() {
-               KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-               KAJONA.admin.systemtask.setName('".$objLang->getLang("systemtask_runningtask", "system")." ".$objTask->getStrTaskName()."');
+                    KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+                    KAJONA.admin.systemtask.setName('".$objLang->getLang("systemtask_runningtask", "system")." ".$objTask->getStrTaskName()."');
                }, 500);
              });
             </script>";
@@ -463,6 +452,18 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $strForm = $objTask->generateAdminForm($strModule, $strAction);
             if($strForm != "") {
                 $strTaskOutput .= $strForm;
+            }
+            else {
+                $strLang = class_carrier::getInstance()->getObjLang()->getLang("systemtask_runningtask", "system");
+                $strTaskJS = <<<JS
+                $(function (){
+                    setTimeout(function() {
+                        KAJONA.admin.systemtask.executeTask('{$objTask->getStrInternalTaskName()}', '');
+                        KAJONA.admin.systemtask.setName('{$strLang} {$objTask->getStrTaskName()}');
+                    }, 500);
+                });
+JS;
+                $strTaskOutput .= "<script type='text/javascript'>".$strTaskJS."</script>";
             }
         }
 
