@@ -354,7 +354,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn = "";
         $strTaskOutput = "";
 
-        $strReturn .= $this->objToolkit->jsDialog(0);
+
 
         //include the list of possible tasks
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
@@ -467,7 +467,7 @@ JS;
             }
         }
 
-        return $strTaskOutput;
+        return $strTaskOutput.class_carrier::getInstance()->getObjToolkit("admin")->jsDialog(0);
     }
 
 
