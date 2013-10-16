@@ -533,7 +533,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2") {
+        if($arrModul["module_version"] == "3.4.2" || $arrModul["module_version"] == "3.4.2.2") {
             $strReturn .= $this->update_342_349();
             $this->objDB->flushQueryCache();
             $this->objDB->flushPreparedStatementsCache();
@@ -819,10 +819,12 @@ class class_installer_system extends class_installer_base implements interface_i
             SELECT change_id, change_date, change_user, change_systemid, change_system_previd, change_class, change_action, change_property, change_oldvalue, change_newvalue
             FROM "._dbprefix_."changelog WHERE change_class = ?";
         $this->objDB->_pQuery($strQuery, array("class_modul_system_setting"));
+        $this->objDB->_pQuery($strQuery, array("class_module_system_setting"));
 
         $strReturn .= "deleting original rows...\n";
         $strQuery = "DELETE FROM "._dbprefix_."changelog WHERE change_class = ?";
         $this->objDB->_pQuery($strQuery, array("class_modul_system_setting"));
+        $this->objDB->_pQuery($strQuery, array("class_module_system_setting"));
 
 
         $strReturn .= "Updating module-versions...\n";
