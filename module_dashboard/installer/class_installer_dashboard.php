@@ -49,7 +49,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2") {
+        if($arrModul["module_version"] == "3.4.2" || $arrModul["module_version"] == "3.4.2.2") {
             $strReturn .= $this->update_342_3491();
             $this->objDB->flushQueryCache();
         }
