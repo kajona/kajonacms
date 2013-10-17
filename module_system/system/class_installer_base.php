@@ -173,10 +173,13 @@ abstract class class_installer_base extends class_root implements interface_inst
     	    $objConstant->setStrValue($strValue);
     	    $objConstant->setIntType($intType);
     	    $objConstant->setIntModule($intModule);
-    	    return $objConstant->updateObjectToDb();
+    	    $bitReturn = $objConstant->updateObjectToDb();
+            $this->objDB->flushQueryCache();
+            return $bitReturn;
 	    }
 	    else
 	       return false;
+
 	}
 
 }
