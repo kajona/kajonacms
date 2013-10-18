@@ -30,6 +30,14 @@ class class_installer_sc_news implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
 
+
+        //fetch navifolder-id
+        $strNaviFolderId = "";
+        $arrFolder = class_module_pages_folder::getFolderList();
+        foreach($arrFolder as $objOneFolder)
+            if($objOneFolder->getStrName() == "mainnavigation")
+                $strNaviFolderId = $objOneFolder->getSystemid();
+
         //search the index page
         $objIndex = class_module_pages_page::getPageByName("index");
         $objMaster = class_module_pages_page::getPageByName("master");
@@ -159,6 +167,67 @@ class class_installer_sc_news implements interface_sc_installer  {
                 $strReturn .= "Error creating headline element.\n";
 
         }
+
+
+
+
+
+        $strReturn .= "Creating news-list-pge\n";
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("news");
+        $objPage->setStrBrowsername("News");
+        $objPage->setStrTemplate("standard.tpl");
+        $objPage->updateObjectToDb($strNaviFolderId);
+        $strNewslistId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
+        $strReturn .= "Adding newsdetails to new page\n";
+
+        if(class_module_pages_element::getElement("news") != null) {
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
+            $objPagelement->setStrName("special");
+            $objPagelement->setStrElement("news");
+            $objPagelement->updateObjectToDb($strNewslistId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_news
+                            SET news_category=?,
+                                news_view = ?,
+                                news_mode = ?,
+                                news_order = ?,
+                                news_amount = ?,
+                                news_detailspage = ?,
+                                news_template = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array($strCategoryID, 0, 0, 0, 20, "newsdetails", "demo.tpl", $strElementId)))
+                $strReturn .= "Newselement created.\n";
+            else
+                $strReturn .= "Error creating newselement.\n";
+
+        }
+
+        $strReturn .= "Adding headline-element to new page\n";
+
+        if(class_module_pages_element::getElement("row") != null) {
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strNewslistId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("Newslist", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+
+        }
+
+
+
+
+
 
         $strReturn .= "Creating news-feed\n";
         $objNewsFeed = new class_module_news_feed();
