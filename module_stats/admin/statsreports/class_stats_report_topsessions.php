@@ -38,9 +38,8 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin($objPluginamanger)
-    {
-        $objPluginamanger->registerPlugin($this);
+    public function registerPlugin(class_pluginmanager $objPluginmanager) {
+        $objPluginmanager->registerPlugin($this);
     }
 
     public function setEndDate($intEndDate) {
@@ -80,6 +79,7 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
             //Escape?
             if($intI >= _stats_nrofrecords_)
                 break;
+
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
             $arrValues[$intI][] = $arrOneSession["stats_session"];

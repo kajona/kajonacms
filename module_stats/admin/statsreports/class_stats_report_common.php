@@ -51,8 +51,7 @@ class class_stats_report_common implements interface_admin_statsreports {
         return $this->objTexts->getLang("allgemein", "stats");
     }
 
-    public function registerPlugin($objPluginamanger)
-    {
+    public function registerPlugin(class_pluginmanager $objPluginamanger) {
         $objPluginamanger->registerPlugin($this);
     }
 

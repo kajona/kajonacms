@@ -34,9 +34,8 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin($objPluginamanger)
-    {
-        $objPluginamanger->registerPlugin($this);
+    public function registerPlugin(class_pluginmanager $objPluginmanager) {
+        $objPluginmanager->registerPlugin($this);
     }
 
     public function setEndDate($intEndDate) {

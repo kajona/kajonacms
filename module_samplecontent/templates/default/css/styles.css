@@ -542,3 +542,8 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
     width: 45%;
     vertical-align: top;
 }
+
+/* F A Q s */
+.faqFaq .rating {
+    text-align: right;
+}

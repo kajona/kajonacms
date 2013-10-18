@@ -36,7 +36,6 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
     public function __construct() {
         parent::__construct();
 
-
         $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_START);
         //Start: first day of current month
         $this->objDateStart = new class_date();
@@ -46,7 +45,6 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
         $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_END);
         $this->objDateEnd = new class_date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
-
 
         $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_INTERVAL);
     }
@@ -61,40 +59,36 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
     protected function actionGetReport() {
         $strPlugin = $this->getParam("plugin");
         $strReturn = "";
-        $arrPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"));
 
-        foreach($arrPlugins as $strOnePlugin) {
+        $objPluginManager = new class_pluginmanager();
+        $objPluginManager->loadPluginsFiltered("/admin/statsreports/", class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT);
 
-            $objPluginManager = new class_pluginmanager();
-            $objPluginManager->loadPluginsFiltered("/admin/statsreports/", class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT);
+        /** @var $objPlugin interface_admin_statsreports|interface_admin_plugin */
+        $objPlugin = $objPluginManager->getPluginObject(class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT, $strPlugin);
 
-            /** @var $objPlugin interface_admin_statsreports|interface_admin_plugin */
-            $objPlugin = $objPluginManager->getPluginObject(class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT, $strPlugin);
+        if($objPlugin->getPluginCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
+            //get date-params as ints
+            $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth(), $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
+            $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth(), $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
+            $objPlugin->setEndDate($intEndDate);
+            $objPlugin->setStartDate($intStartDate);
+            $objPlugin->setInterval($this->intInterval);
 
-            if($objPlugin->getPluginCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
-                //get date-params as ints
-                $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth(), $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
-                $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth(), $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
-                $objPlugin->setEndDate($intEndDate);
-                $objPlugin->setStartDate($intStartDate);
-                $objPlugin->setInterval($this->intInterval);
+            $arrImage = $objPlugin->getReportGraph();
 
-                $arrImage = $objPlugin->getReportGraph();
-
-                if(!is_array($arrImage)) {
-                    $arrImage = array($arrImage);
-                }
-
-                foreach($arrImage as $strImage) {
-                    if($strImage != "") {
-                        $strReturn .= $this->objToolkit->getGraphContainer($strImage);
-                    }
-                }
-
-
-                $strReturn .= $objPlugin->getReport();
-                $strReturn = "<content><![CDATA[".$strReturn."]]></content>";
+            if(!is_array($arrImage)) {
+                $arrImage = array($arrImage);
             }
+
+            foreach($arrImage as $strImage) {
+                if($strImage != "") {
+                    $strReturn .= $this->objToolkit->getGraphContainer($strImage);
+                }
+            }
+
+
+            $strReturn .= $objPlugin->getReport();
+            $strReturn = "<content><![CDATA[".$strReturn."]]></content>";
         }
 
         return $strReturn;

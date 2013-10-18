@@ -32,7 +32,7 @@ interface interface_admin_plugin {
     /**
      * @param \class_pluginmanager
      */
-    public function registerPlugin($objPluginmanager);
+    public function registerPlugin(class_pluginmanager $objPluginmanager);
 
     public function getPluginCommand();
 

@@ -34,8 +34,7 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin($objPluginamanger)
-    {
+    public function registerPlugin(class_pluginmanager $objPluginamanger) {
         $objPluginamanger->registerPlugin($this);
     }
 
