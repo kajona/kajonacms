@@ -104,17 +104,16 @@ class class_copydown extends class_seleniumsuite {
 <tr><td><a href="setEnv.htm">setEnv</a></td></tr>
 HTML;
                 
+                
+                if($_POST["databasehelper"] == "mysql") 
+                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerMYSQL.html\">selhelper_MySQL-Installer</a></td></tr>";                    
+                elseif ($_POST["databasehelper"] == "sqlite") 
+                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerSQLITE.html\">selhelper_SQLITE-Installer</a></td></tr>"; 
+                
+                
                 foreach ($arrFiles as $strPathToFile=>$strOneFile) {
-                    if(substr($strOneFile, 0,33) == "selhelper_kaj4x_allInOneInstaller") {
-                        if($_POST["databasehelper"] == "mysql" && substr($strOneFile, 33,5) == "MYSQL") {
-                            echo "\n  -> mysql installer is added to testing suite";
-                        }
-                        else if($_POST["databasehelper"] == "sqlite" && substr($strOneFile, 33,6) == "SQLITE") {
-                            echo "\n  -> sqlite installer is added to testing suite";
-                        }
-                        else
-                            continue;                        
-                    }
+                    if(substr($strOneFile, 0,33) == "selhelper_kaj4x_allInOneInstaller")
+                        continue;
                     echo "\n  Processing file: ".$strPathToFile;
                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../..".$strPathToFile."\">".$strOneFile."</a></td></tr>";                    
                 }
