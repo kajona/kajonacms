@@ -83,7 +83,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return string
      */
     public function getStrDisplayName() {
-        return $this->getStrName()." (".$this->getStrReadableName().")"." - ".$this->getStrTitle(true);
+        return $this->getStrReadableName()." (".$this->getStrName().")"." - ".$this->getStrTitle(true);
     }
 
     /**

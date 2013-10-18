@@ -479,6 +479,12 @@ class class_installer_system extends class_installer_base implements interface_i
             }
         }
 
+
+
+        $strReturn .= "Setting messaging to pos 1 in navigation.../n";
+        $objModule = class_module_system_module::getModuleByName("messaging");
+        $objModule->setAbsolutePosition(1);
+
         return $strReturn;
     }
 

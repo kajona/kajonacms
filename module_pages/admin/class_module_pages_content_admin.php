@@ -141,6 +141,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                 //Check, if one of the elements in the placeholder is allowed to be used multiple times
                 foreach($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
+
+                    /** @var class_module_pages_element $objOneElementInSystem  */
                     foreach($arrElementsInSystem as $objOneElementInSystem) {
                         if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
                             if($objOneElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
@@ -159,7 +161,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
                                     $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName().")", "", $strActions, $intI++);
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
                                 }
                             }
                         }
@@ -167,20 +169,16 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 }
 
                 if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
+                    $arrSinglePlaceholder = explode("_", $arrOneElementOnTemplate["placeholder"]);
+                    if(count($arrSinglePlaceholder == 2))
+                        $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);
+
                     $strListId = generateSystemid();
                     $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
                     $strReturn .= $strOutputAtPlaceholder;
                     $strReturn .= $this->objToolkit->dragableListFooter($strListId);
                 }
 
-                //Done with this placeholder, so its time to draw a divider or offer the possibility to add a new element
-                //but just, if the next placeholder isn't the same as the current, but a different element
-                if(isset($arrElementsOnTemplate[$intKeyElementOnTemplate + 1])) {
-                    if($arrElementsOnTemplate[$intKeyElementOnTemplate]["placeholder"] != $arrElementsOnTemplate[$intKeyElementOnTemplate + 1]["placeholder"]) {
-                        if((int)uniStrlen($strOutputAtPlaceholder) > 0)
-                            $strReturn .= $this->objToolkit->divider();
-                    }
-                }
             }
 
         }

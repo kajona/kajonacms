@@ -112,12 +112,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//portaleditor
         $this->registerConstant("_pages_portaleditor_", "true", class_module_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
 
-        $strReturn .= "Shifting pages to first position...\n";
+        $strReturn .= "Shifting pages to third position...\n";
         $objModule = class_module_system_module::getModuleByName("pages");
-        $objModule->setAbsolutePosition(1);
-
-
-
+        $objModule->setAbsolutePosition(3);
 
 
 
