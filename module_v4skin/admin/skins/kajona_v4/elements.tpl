@@ -893,7 +893,7 @@ NOTE: This section not just defines the layout, it also inits the WYSIWYG editor
 
 The textarea field to replace by the editor. If the editor can't be loaded, a plain textfield is shown instead
 <wysiwyg_ckeditor>
-<div><label for="%%name%%">%%title%%</label><br /><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg">%%content%%</textarea></div><br />
+<div><label for="%%name%%">%%title%%</label><br /><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
 </wysiwyg_ckeditor>
 
 A few settings to customize the editor. They are added right into the CKEditor configuration.

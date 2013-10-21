@@ -98,6 +98,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
+        $arrTemplate["editorid"] = generateSystemid();
         $arrTemplate["content"] = htmlentities($strContent, ENT_COMPAT, "UTF-8");
         $strReturn .=  $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         //for the popups, we need the skinwebpath
@@ -130,7 +131,7 @@ class class_toolkit_admin extends class_toolkit {
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
                 filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
 	        };
-            CKEDITOR.replace('".$strName."', ckeditorConfig);
+            CKEDITOR.replace($(\"textarea[name='".$strName."'][data-kajona-editorid='".$arrTemplate["editorid"]."']\")[0], ckeditorConfig);
         ";
         $strReturn .= "</script>\n";
 
