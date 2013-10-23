@@ -11,32 +11,32 @@ class class_test_statsReportsTest extends class_testbase {
 
         echo "processing reports...\n";
 
-        $arrReportsInFs = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports");
+        $arrReportsInFs = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"), false, function($strOneFile) {
+            return uniStripos($strOneFile, "class_stats_report") !== false;
+        });
 
         $arrReports = array();
         foreach($arrReportsInFs as $strOneFile) {
-            if(uniStripos($strOneFile, "class_stats_report") !== false) {
-                $strClassname = uniSubstr($strOneFile, 0, -4);
-                $objReport = new $strClassname(
-                    class_carrier::getInstance()->getObjDB(),
-                    class_carrier::getInstance()->getObjToolkit("admin"),
-                    class_carrier::getInstance()->getObjLang()
-                );
+            $strClassname = uniSubstr($strOneFile, 0, -4);
+            $objReport = new $strClassname(
+                class_carrier::getInstance()->getObjDB(),
+                class_carrier::getInstance()->getObjToolkit("admin"),
+                class_carrier::getInstance()->getObjLang()
+            );
 
-                if($objReport instanceof interface_admin_statsreports) {
-                    $arrReports[$objReport->getTitle()] = $objReport;
-                }
-
-                $objStartDate = new class_date();
-                $objStartDate->setPreviousDay();
-                $objEndDate = new class_date();
-                $objEndDate->setNextDay();
-                $intStartDate = mktime(0, 0, 0, $objStartDate->getIntMonth() , $objStartDate->getIntDay(), $objStartDate->getIntYear());
-                $intEndDate = mktime(0, 0, 0, $objEndDate->getIntMonth(), $objEndDate->getIntDay(), $objEndDate->getIntYear());
-                $objReport->setEndDate($intEndDate);
-                $objReport->setStartDate($intStartDate);
-                $objReport->setInterval(2);
+            if($objReport instanceof interface_admin_statsreports) {
+                $arrReports[$objReport->getTitle()] = $objReport;
             }
+
+            $objStartDate = new class_date();
+            $objStartDate->setPreviousDay();
+            $objEndDate = new class_date();
+            $objEndDate->setNextDay();
+            $intStartDate = mktime(0, 0, 0, $objStartDate->getIntMonth(), $objStartDate->getIntDay(), $objStartDate->getIntYear());
+            $intEndDate = mktime(0, 0, 0, $objEndDate->getIntMonth(), $objEndDate->getIntDay(), $objEndDate->getIntYear());
+            $objReport->setEndDate($intEndDate);
+            $objReport->setStartDate($intStartDate);
+            $objReport->setInterval(2);
         }
 
         /** @var interface_admin_statsreports $objReport */

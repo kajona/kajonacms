@@ -111,8 +111,8 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
             $objDate->setNextDay();
             $objStatsCommon->setEndDate($objDate->getTimeInOldStyle());
             
-            $strReturn .= $this->widgetText($this->getLang("stats_hits").$objStatsCommon->getHits());
-            $strReturn .= $this->widgetText($this->getLang("stats_visitors").$objStatsCommon->getVisitors());
+            $strReturn .= $this->widgetText($this->getLang("stats_hits")." ".$objStatsCommon->getHits());
+            $strReturn .= $this->widgetText($this->getLang("stats_visitors")." ".$objStatsCommon->getVisitors());
             
             $strReturn .= $this->widgetSeparator();
         }

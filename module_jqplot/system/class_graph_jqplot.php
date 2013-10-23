@@ -14,7 +14,7 @@
  * @since 4.3
  * @author stefan.meyer1@yahoo.de
  */
-class class_graph_jqplot implements interface_graph{
+class class_graph_jqplot implements interface_graph {
 
     private $intWidth = 700;
     private $intHeight = 350;

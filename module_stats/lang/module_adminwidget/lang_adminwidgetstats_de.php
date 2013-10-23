@@ -20,4 +20,4 @@ $lang["stats_name"]                      = "Statistiken";
 $lang["stats_nrLast"]                    = "Anzahl letzer Zugriffe";
 $lang["stats_online"]                    = "User online: ";
 $lang["stats_page"]                      = "Seite";
-$lang["stats_visitors"]                  = "Besucher: ";
+$lang["stats_visitors"]                  = "Besucher";

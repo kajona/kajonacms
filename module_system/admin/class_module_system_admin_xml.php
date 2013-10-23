@@ -161,42 +161,42 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
         if($this->getParam("task") != "") {
             //include the list of possible tasks
             $objFilesystem = new class_filesystem();
-            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
+            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
+                return $strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php";
+            });
             asort($arrFiles);
             //search for the matching task
             foreach($arrFiles as $strOneFile) {
-                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
 
-                    //instantiate the current task
-                    $strClassname = uniStrReplace(".php", "", $strOneFile);
-                    $objTask = new $strClassname();
-                    if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+                //instantiate the current task
+                $strClassname = uniStrReplace(".php", "", $strOneFile);
+                $objTask = new $strClassname();
+                if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
-                        class_logger::getInstance(class_logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelWarning);
+                    class_logger::getInstance(class_logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelWarning);
 
-                        //let the work begin...
-                        $strTempOutput = trim($objTask->executeTask());
+                    //let the work begin...
+                    $strTempOutput = trim($objTask->executeTask());
 
-                        //progress information?
-                        if($objTask->getStrProgressInformation() != "")
-                            $strTaskOutput .= $objTask->getStrProgressInformation();
+                    //progress information?
+                    if($objTask->getStrProgressInformation() != "")
+                        $strTaskOutput .= $objTask->getStrProgressInformation();
 
-                        if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100)) {
-                            $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
-                        }
-                        else {
-                            $strTaskOutput .= $strTempOutput;
-                        }
-
-                        //create response-content
-                        $strReturn .= "<statusinfo>".$strTaskOutput."</statusinfo>\n";
-
-                        //reload requested by worker?
-                        if($objTask->getStrReloadUrl() != "")
-                            $strReturn .= "<reloadurl>".("&task=".$this->getParam("task").$objTask->getStrReloadParam())."</reloadurl>";
-
-                        break;
+                    if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100)) {
+                        $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
                     }
+                    else {
+                        $strTaskOutput .= $strTempOutput;
+                    }
+
+                    //create response-content
+                    $strReturn .= "<statusinfo>".$strTaskOutput."</statusinfo>\n";
+
+                    //reload requested by worker?
+                    if($objTask->getStrReloadUrl() != "")
+                        $strReturn .= "<reloadurl>".("&task=".$this->getParam("task").$objTask->getStrReloadParam())."</reloadurl>";
+
+                    break;
                 }
             }
         }

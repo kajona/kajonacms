@@ -13,11 +13,11 @@
 $lang["stats_chart"]                     = "Chart: ";
 $lang["stats_current"]                   = "Live-Infos";
 $lang["stats_day"]                       = "Day-based values";
-$lang["stats_hits"]                      = "Hits: ";
+$lang["stats_hits"]                      = "Hits";
 $lang["stats_ip"]                        = "IP";
 $lang["stats_last"]                      = "Latest visits";
 $lang["stats_name"]                      = "Statistics";
 $lang["stats_nrLast"]                    = "Number of lastest visits";
 $lang["stats_online"]                    = "User online: ";
 $lang["stats_page"]                      = "Page";
-$lang["stats_visitors"]                  = "Visitors: ";
+$lang["stats_visitors"]                  = "Visitors";

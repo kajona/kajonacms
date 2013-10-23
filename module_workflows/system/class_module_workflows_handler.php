@@ -127,7 +127,6 @@ class class_module_workflows_handler extends class_model implements interface_mo
      */
     public static function synchronizeHandlerList() {
         //load the list of handlers in the filesystem
-        $objFilesystem = new class_filesystem();
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/workflows", array(".php"));
         foreach($arrFiles as $strOneFile) {
             $strClassname = uniStrReplace(".php", "", $strOneFile);

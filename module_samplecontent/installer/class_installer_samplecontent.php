@@ -36,11 +36,9 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
 
 		//search for installers available
-        $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
-
-        foreach($arrInstaller as $strPath => $strFile)
-            if(strpos($strFile, "installer_sc_") === false)
-                unset($arrInstaller[$strPath]);
+        $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
+            return strpos($strFile, "installer_sc_") !== false;
+        });
 
         asort($arrInstaller);
 

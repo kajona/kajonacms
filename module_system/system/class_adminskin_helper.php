@@ -30,11 +30,13 @@ class class_adminskin_helper {
      */
     public static function getListOfAdminskinsAvailable() {
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/skins", array(), true);
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/skins", array(), true, function($strName) {
+            return $strName != ".";
+        });
 
         $arrReturn = array();
         foreach($arrFiles as $strPath => $strName) {
-            if(is_dir(_realpath_.$strPath) && $strName[0] != ".")
+            if(is_dir(_realpath_.$strPath))
                 $arrReturn[$strPath] = $strName;
         }
 

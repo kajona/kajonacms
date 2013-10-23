@@ -36,11 +36,8 @@ class class_scriptlet_helper {
             if(uniStrpos(file_get_contents(_realpath_.$strPath), "getProcessingContext(") === false)
                 continue;
 
-
-
             /** @var $objScriptlet interface_scriptlet */
             $objScriptlet = new $strOneScriptlet();
-
 
             if($objScriptlet instanceof interface_scriptlet && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
                 $strContent = $objScriptlet->processContent($strContent);

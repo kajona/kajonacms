@@ -357,23 +357,23 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
 
         //include the list of possible tasks
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
+            return $strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php";
+        });
         asort($arrFiles);
 
         //react on special task-commands?
         if($this->getParam("task") != "") {
             //search for the matching task
             foreach($arrFiles as $strOneFile) {
-                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
 
-                    //instantiate the current task
-                    $strClassname = uniStrReplace(".php", "", $strOneFile);
-                    /** @var $objTask interface_admin_systemtask */
-                    $objTask = new $strClassname();
-                    if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
-                        $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks");
-                        break;
-                    }
+                //instantiate the current task
+                $strClassname = uniStrReplace(".php", "", $strOneFile);
+                /** @var $objTask interface_admin_systemtask */
+                $objTask = new $strClassname();
+                if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+                    $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks");
+                    break;
                 }
             }
         }

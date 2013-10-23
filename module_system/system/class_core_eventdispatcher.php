@@ -239,16 +239,17 @@ class class_core_eventdispatcher {
      * @return array
      */
     private static function loadInterfaceImplementers($strTargetInterface) {
-        $arrReturn = array();
         //load classes in system-folders
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
+            return uniStripos($strOneFile, "class_module_") !== false;
+        });
 
+
+        $arrReturn = array();
         foreach($arrFiles as $strOneFile) {
-            if(uniStripos($strOneFile, "class_module_") !== false) {
-                $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
-                if(!$objClass->isAbstract() && $objClass->implementsInterface($strTargetInterface)) {
-                    $arrReturn[] = $objClass->newInstance();
-                }
+            $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
+            if(!$objClass->isAbstract() && $objClass->implementsInterface($strTargetInterface)) {
+                $arrReturn[] = $objClass->newInstance();
             }
         }
         return $arrReturn;

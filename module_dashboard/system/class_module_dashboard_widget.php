@@ -69,12 +69,16 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     public function getListOfWidgetsAvailable() {
         $arrReturn = array();
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function($strFilename) {
+            if($strFilename != "interface_adminwidget.php" && $strFilename != "class_adminwidget.php") {
+                return true;
+            }
+            else
+                return false;
+        });
 
         foreach($arrFiles as $strOneFile) {
-            if($strOneFile != "interface_adminwidget.php" && $strOneFile != "class_adminwidget.php") {
-                $arrReturn[] = uniStrReplace(".php", "", $strOneFile);
-            }
+            $arrReturn[] = uniStrReplace(".php", "", $strOneFile);
         }
 
         return $arrReturn;

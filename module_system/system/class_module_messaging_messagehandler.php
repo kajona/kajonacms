@@ -19,16 +19,15 @@ class class_module_messaging_messagehandler {
      * @return interface_messageprovider[]
      */
     public function getMessageproviders() {
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/messageproviders", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/messageproviders", array(".php"), false, function($strOneFile) {
+            return uniStrpos($strOneFile, "interface") === false;
+        });
         $arrReturn = array();
 
         foreach($arrFiles as $strOneFile) {
-            if(uniStrpos($strOneFile, "interface") === false) {
-                $strName = uniSubstr($strOneFile, 0, -4);
-                $arrReturn[] = new $strName();
-            }
+            $strName = uniSubstr($strOneFile, 0, -4);
+            $arrReturn[] = new $strName();
         }
-
 
         return $arrReturn;
     }

@@ -54,7 +54,7 @@ class class_graph_factory {
                     $strType = _system_graph_type_;
             }
             else
-                $strType = self::$STR_TYPE_FLOT;
+                $strType = self::$STR_TYPE_JQPLOT;
         }
 
         if($strType == self::$STR_TYPE_EZC) {

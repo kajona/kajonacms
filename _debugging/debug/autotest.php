@@ -31,6 +31,7 @@ echo "searching tests available...\n";
 
 $objFilesystem = new class_filesystem();
 $arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
+asort($arrFiles);
 echo "found ".count($arrFiles)." test(s)\n\n";
 
 echo "<form method=\"post\">";
@@ -52,6 +53,7 @@ if(issetPost("dotest")) {
     $strFilename = getPost("testname");
 
     $arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
+
 
     $strSearched = array_search($strFilename, $arrFiles);
 

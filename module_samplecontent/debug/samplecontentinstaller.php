@@ -30,11 +30,9 @@ for ($i = 0; $i < ob_get_level(); $i++) {
 ob_implicit_flush(1);
 
 //search for installers available
-$arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
-
-foreach($arrInstaller as $strPath => $strFile)
-    if(strpos($strFile, "installer_sc_") === false)
-        unset($arrInstaller[$strPath]);
+$arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
+   return strpos($strFile, "installer_sc_") !== false;
+});
 
 asort($arrInstaller);
 
@@ -54,12 +52,14 @@ echo "</form>";
 if(issetPost("doinstall")) {
     $intStart = time();
 
-    $arrFiles = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
+    $arrFiles = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
+        return strpos($strFile, "installer_sc_") !== false && substr($strFile, -4) == ".php";
+    });
 
     foreach(getPost("installer") as $strFilename => $strValue) {
         $strSearched = array_search($strFilename, $arrFiles);
 
-        if($strSearched !== false && strpos($strSearched, "installer_sc_") !== false && substr($strFilename, -4) == ".php") {
+        if($strSearched !== false) {
             echo " \n\nfound installer ".$strFilename." \n";
             include_once _realpath_.$strSearched;
 

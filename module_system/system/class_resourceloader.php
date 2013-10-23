@@ -254,17 +254,31 @@ class class_resourceloader {
      * Loads all files in a passed folder, as usual relative to the core whereas the single module-folders may be skipped.
      * The array returned is based on [path_to_file] = [filename] where the key is relative to the project-root.
      *
+     * If you want to filter the list of files being returned, pass a callback/closure as the 4th argument. The callback is used
+     * as defined in array_filter
+     *
      * @param $strFolder
      * @param array $arrExtensionFilter
      * @param bool $bitWithSubfolders
+     * @param callable $objFilterFunction
+     *
      * @return array (path => filename)
+     *
+     * @see array_filter
      */
-    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false) {
+    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, callable $objFilterFunction = null) {
         $arrReturn = array();
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
-        if(isset($this->arrFoldercontent[$strCachename]))
-            return $this->arrFoldercontent[$strCachename];
+        if(isset($this->arrFoldercontent[$strCachename])) {
+            $arrEntries = $this->arrFoldercontent[$strCachename];
+
+            if($objFilterFunction != null && is_callable($objFilterFunction)) {
+                $arrEntries = array_filter($arrEntries, $objFilterFunction);
+            }
+
+            return $arrEntries;
+        }
 
         $this->bitCacheSaveRequired = true;
 
@@ -327,6 +341,10 @@ class class_resourceloader {
 
         $this->arrFoldercontent[$strCachename] = $arrReturn;
 
+        if($objFilterFunction != null && is_callable($objFilterFunction)) {
+            $arrReturn = array_filter($arrReturn, $objFilterFunction);
+        }
+
         return $arrReturn;
     }
 
@@ -338,8 +356,6 @@ class class_resourceloader {
      * @param string $strFile the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      * @return string|bool the absolute path
-     *
-     * @todo may be cached?
      */
     public function getPathForFile($strFile, $bitCheckProject = true) {
 

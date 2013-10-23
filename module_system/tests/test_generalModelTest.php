@@ -12,7 +12,9 @@ class class_test_generalModelTest extends class_testbase {
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"));
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
+            return uniStripos($strOneFile, "class_module_") !== false;
+        });
 
         /**
          * @var class_model[]
@@ -22,28 +24,26 @@ class class_test_generalModelTest extends class_testbase {
 
 
         foreach($arrFiles as $strOneFile) {
-            if(uniStripos($strOneFile, "class_module_") !== false) {
-                $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
-                if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
+            $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
+            if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
 
-                    if(!in_array(
-                        $objClass->getName(),
-                        array(
-                            "class_module_pages_element",
-                            "class_module_languages_languageset",
-                            "class_module_system_session",
-                            "class_module_system_setting",
-                            "class_module_user_group",
-                            "class_module_user_user",
-                            "class_module_workflows_workflow",
-                            "class_module_pages_pageelement",
-                            "class_module_stats_worker"
-                        )
+                if(!in_array(
+                    $objClass->getName(),
+                    array(
+                        "class_module_pages_element",
+                        "class_module_languages_languageset",
+                        "class_module_system_session",
+                        "class_module_system_setting",
+                        "class_module_user_group",
+                        "class_module_user_user",
+                        "class_module_workflows_workflow",
+                        "class_module_pages_pageelement",
+                        "class_module_stats_worker"
                     )
-                    ) {
+                )
+                ) {
 
-                        $arrClassInstances[] = $objClass->newInstance();
-                    }
+                    $arrClassInstances[] = $objClass->newInstance();
                 }
             }
         }
