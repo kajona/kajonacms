@@ -11,6 +11,6 @@
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="4.3" />
-        <module name="flotchart" version="4.0" />
+        <module name="jqplot" version="4.3" />
     </requiredModules>
 </package>
