@@ -11,7 +11,7 @@ class class_test_generalActionTest extends class_testbase  {
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), function($strOneFile) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), false, function($strOneFile) {
             return preg_match("/class_module_(.*)_admin.php/i", $strOneFile);
         });
 
@@ -40,23 +40,21 @@ class class_test_generalActionTest extends class_testbase  {
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/portal", array(".php"), function($strOneFile) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/portal", array(".php"), false, function($strOneFile) {
             return preg_match("/class_module_(.*)_portal.php/i", $strOneFile);
         });
 
         foreach($arrFiles as $strOneFile) {
-            if(preg_match("/class_module_(.*)_portal.php/i", $strOneFile)) {
-                $strClassname = uniSubstr($strOneFile, 0, -4);
+            $strClassname = uniSubstr($strOneFile, 0, -4);
 
-                $objReflection = new ReflectionClass($strClassname);
-                if($objReflection->isAbstract()) {
-                    echo "skipping ".$strClassname.", is abstract...\n";
-                    continue;
-                }
-
-                $objPortalInstance = new $strClassname(array());
-                $this->runSingleFile($objPortalInstance);
+            $objReflection = new ReflectionClass($strClassname);
+            if($objReflection->isAbstract()) {
+                echo "skipping ".$strClassname.", is abstract...\n";
+                continue;
             }
+
+            $objPortalInstance = new $strClassname(array());
+            $this->runSingleFile($objPortalInstance);
         }
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(false);
