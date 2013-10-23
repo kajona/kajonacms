@@ -95,14 +95,17 @@ class class_module_pages_elementssearch_admin implements interface_search_plugin
 
 
     public function scanElements() {
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"), false, function($strOneFile) {
-            return uniStripos($strOneFile, "class_element_") !== false;
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/elements", array(".php"), false, function(&$strOneFile) {
+            if(uniStripos($strOneFile, "class_element_") === false)
+                return false;
+
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile();
+            return true;
         });
 
-        foreach($arrFiles as $strOneFile) {
-            $strClassname = uniSubstr($strOneFile, 0, -4);
-            /** @var $objInstance class_element_admin */
-            $objInstance = new $strClassname();
+        /** @var $objInstance class_element_admin */
+        foreach($arrFiles as $objInstance) {
 
             //new version: annotation based elements
             $objReflection = new class_reflection($objInstance);

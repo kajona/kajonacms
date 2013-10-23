@@ -699,15 +699,19 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$arrCachedProviders != null)
             return self::$arrCachedProviders;
 
-        $arrSystemClasses = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
-            return uniStrpos($strOneFile, "class_changelog_provider") !== false;
-        });
-        $arrReturn = array();
-        foreach($arrSystemClasses as $strOneFile) {
+        $arrReturn = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) {
+            if(uniStrpos($strOneFile, "class_changelog_provider") === false)
+                return false;
+
             $objReflection = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
-            if($objReflection->implementsInterface("interface_changelog_provider"))
-                $arrReturn[] = $objReflection->newInstance();
-        }
+            if($objReflection->implementsInterface("interface_changelog_provider")) {
+                $strOneFile = $objReflection->newInstance();
+                return true;
+            }
+
+            return false;
+
+        });
 
         self::$arrCachedProviders = $arrReturn;
 

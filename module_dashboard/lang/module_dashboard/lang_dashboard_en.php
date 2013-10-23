@@ -12,7 +12,7 @@
 //editable entries
 $lang["action_calendar"]                 = "Calendar";
 $lang["action_sitemap"]                 = "Sitemap";
-$lang["action_add_widget"]               = "Add widget";
+$lang["action_add_widget_to_dashboard"]               = "Add widget";
 $lang["addWidgetNextStep"]               = "Next";
 $lang["calendar_next"]                   = "next month &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; previous month";

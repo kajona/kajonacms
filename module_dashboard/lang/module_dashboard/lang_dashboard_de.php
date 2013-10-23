@@ -12,7 +12,7 @@
 //editable entries
 $lang["action_calendar"]                 = "Kalender";
 $lang["action_sitemap"]                  = "Sitemap";
-$lang["action_add_widget"]               = "Widget hinzufügen";
+$lang["action_add_widget_to_dashboard"]               = "Widget hinzufügen";
 $lang["calendar_next"]                   = "nächster Monat &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; vorheriger Monat";
 $lang["calendar_weekday"]                = "Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag";

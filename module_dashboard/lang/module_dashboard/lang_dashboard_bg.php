@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["action_add_widget"]               = "Добави приложение";
+$lang["action_add_widget_to_dashboard"]               = "Добави приложение";
 $lang["addWidgetNextStep"]               = "Напред";
 $lang["column"]                          = "Колона";
 $lang["column1"]                         = "В Колона 1";

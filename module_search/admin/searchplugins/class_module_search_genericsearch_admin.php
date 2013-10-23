@@ -132,21 +132,17 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
      * @return string[]
      */
     private function getModelReflectionClasses() {
-        $arrReturn = array();
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
+        return class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) {
             if(uniStripos($strOneFile, "class_module_") !== false) {
                 $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
                 if(!$objClass->isAbstract() && $objClass->implementsInterface("interface_admin_listable") && $objClass->isSubclassOf("class_root")) {
+                    $strOneFile = uniSubstr($strOneFile, 0, -4);
                     return true;
                 }
             }
             return false;
         });
 
-        foreach($arrFiles as $strOneFile) {
-            $arrReturn[] = uniSubstr($strOneFile, 0, -4);
-        }
-        return $arrReturn;
     }
 
 }

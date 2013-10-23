@@ -11,7 +11,7 @@
 
 //editable entries
 $lang["action_calendar"]                 = "Kalender";
-$lang["action_add_widget"]               = "Infoga widget";
+$lang["action_add_widget_to_dashboard"]               = "Infoga widget";
 $lang["addWidgetNextStep"]               = "Nästa";
 $lang["addWidgetSave"]                   = "Spara";
 $lang["calendar_next"]                   = "Nästa månad  &gt;&gt;";

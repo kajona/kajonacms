@@ -160,18 +160,25 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
 
         if($this->getParam("task") != "") {
             //include the list of possible tasks
-            $objFilesystem = new class_filesystem();
-            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
-                return $strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php";
+
+            //TODO: move to common helper, see class_module_system_admin
+            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function(&$strOneFile) {
+                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
+                    $strOneFile = uniSubstr($strOneFile, 0, -4);
+                    $strOneFile = new $strOneFile();
+
+                    if($strOneFile instanceof interface_admin_systemtask)
+                        return true;
+                }
+
+                return false;
             });
-            asort($arrFiles);
+
             //search for the matching task
-            foreach($arrFiles as $strOneFile) {
+            foreach($arrFiles as $objTask) {
 
                 //instantiate the current task
-                $strClassname = uniStrReplace(".php", "", $strOneFile);
-                $objTask = new $strClassname();
-                if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+                if($objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
                     class_logger::getInstance(class_logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelWarning);
 

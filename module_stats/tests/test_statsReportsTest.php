@@ -11,18 +11,18 @@ class class_test_statsReportsTest extends class_testbase {
 
         echo "processing reports...\n";
 
-        $arrReportsInFs = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"), false, function($strOneFile) {
-            return uniStripos($strOneFile, "class_stats_report") !== false;
+        $arrReportsInFs = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"), false, function(&$strOneFile) {
+            if(uniStripos($strOneFile, "class_stats_report") === false)
+                return false;
+
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile(class_carrier::getInstance()->getObjDB(), class_carrier::getInstance()->getObjToolkit("admin"), class_carrier::getInstance()->getObjLang());
+
+            return true;
         });
 
         $arrReports = array();
-        foreach($arrReportsInFs as $strOneFile) {
-            $strClassname = uniSubstr($strOneFile, 0, -4);
-            $objReport = new $strClassname(
-                class_carrier::getInstance()->getObjDB(),
-                class_carrier::getInstance()->getObjToolkit("admin"),
-                class_carrier::getInstance()->getObjLang()
-            );
+        foreach($arrReportsInFs as $objReport) {
 
             if($objReport instanceof interface_admin_statsreports) {
                 $arrReports[$objReport->getTitle()] = $objReport;

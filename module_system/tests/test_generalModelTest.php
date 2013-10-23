@@ -9,48 +9,38 @@ class class_test_generalModelTest extends class_testbase {
 
         echo "preparing object saves...\n";
 
+        $arrBlockedClasses = array(
+            "class_module_pages_element",
+            "class_module_languages_languageset",
+            "class_module_system_session",
+            "class_module_system_setting",
+            "class_module_user_group",
+            "class_module_user_user",
+            "class_module_workflows_workflow",
+            "class_module_pages_pageelement",
+            "class_module_stats_worker"
+        );
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
-            return uniStripos($strOneFile, "class_module_") !== false;
-        });
-
-        /**
-         * @var class_model[]
-         */
-        $arrClassInstances = array();
-        $arrSystemids = array();
-
-
-        foreach($arrFiles as $strOneFile) {
-            $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
-            if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
-
-                if(!in_array(
-                    $objClass->getName(),
-                    array(
-                        "class_module_pages_element",
-                        "class_module_languages_languageset",
-                        "class_module_system_session",
-                        "class_module_system_setting",
-                        "class_module_user_group",
-                        "class_module_user_user",
-                        "class_module_workflows_workflow",
-                        "class_module_pages_pageelement",
-                        "class_module_stats_worker"
-                    )
-                )
-                ) {
-
-                    $arrClassInstances[] = $objClass->newInstance();
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) use ($arrBlockedClasses) {
+            if(uniStripos($strOneFile, "class_module_") !== false) {
+                $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
+                if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
+                    if(!in_array($objClass->getName(), $arrBlockedClasses)) {
+                        $strOneFile = $objClass->newInstance();
+                        return true;
+                    }
                 }
             }
-        }
 
+            return false;
+        });
+
+        $arrSystemids = array();
 
         /** @var $objOneInstance class_model */
-        foreach($arrClassInstances as $objOneInstance) {
+        foreach($arrFiles as $objOneInstance) {
             echo "testing object of type ".get_class($objOneInstance)."@".$objOneInstance->getSystemid()."\n";
             $this->assertTrue($objOneInstance->updateObjectToDb(), "saving object ".get_class($objOneInstance));
             $arrSystemids[$objOneInstance->getSystemid()] = get_class($objOneInstance);

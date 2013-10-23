@@ -271,13 +271,7 @@ class class_resourceloader {
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
         if(isset($this->arrFoldercontent[$strCachename])) {
-            $arrEntries = $this->arrFoldercontent[$strCachename];
-
-            if($objFilterFunction != null && is_callable($objFilterFunction)) {
-                $arrEntries = array_filter($arrEntries, $objFilterFunction);
-            }
-
-            return $arrEntries;
+            return $this->applyCallback($this->arrFoldercontent[$strCachename], $objFilterFunction);
         }
 
         $this->bitCacheSaveRequired = true;
@@ -340,14 +334,26 @@ class class_resourceloader {
 
 
         $this->arrFoldercontent[$strCachename] = $arrReturn;
-
-        if($objFilterFunction != null && is_callable($objFilterFunction)) {
-            $arrReturn = array_filter($arrReturn, $objFilterFunction);
-        }
-
-        return $arrReturn;
+        return $this->applyCallback($arrReturn, $objFilterFunction);
     }
 
+    /**
+     * Internal helper to apply the passed callback as an array_walk callback to the list of matching files
+     * @param $arrEntries
+     * @param callable $objCallback
+     *
+     * @return array
+     */
+    private function applyCallback($arrEntries, callable $objCallback = null) {
+        if($objCallback == null)
+            return $arrEntries;
+
+        $arrTemp = array();
+        foreach($arrEntries as $strKey => $strValue)
+            $arrTemp[$strKey] = $strValue;
+
+        return array_filter($arrTemp, $objCallback);
+    }
 
     /**
      * Converts a relative path to a real path on the filesystem.

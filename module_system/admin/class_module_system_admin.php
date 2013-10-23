@@ -357,21 +357,26 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
 
         //include the list of possible tasks
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
-            return $strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php";
+        //TODO: move to common helper, see class_module_system_admin_xml
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function(&$strOneFile) {
+            if($strOneFile == "class_systemtask_base.php" || $strOneFile == "interface_admin_systemtask.php")
+                return false;
+
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile();
+
+            if($strOneFile instanceof interface_admin_systemtask)
+                return true;
+            else
+                return false;
         });
-        asort($arrFiles);
 
         //react on special task-commands?
         if($this->getParam("task") != "") {
             //search for the matching task
-            foreach($arrFiles as $strOneFile) {
-
-                //instantiate the current task
-                $strClassname = uniStrReplace(".php", "", $strOneFile);
-                /** @var $objTask interface_admin_systemtask */
-                $objTask = new $strClassname();
-                if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+            /** @var $objTask interface_admin_systemtask */
+            foreach($arrFiles as $objTask) {
+                if($objTask->getStrInternalTaskname() == $this->getParam("task")) {
                     $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks");
                     break;
                 }
@@ -381,18 +386,14 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         //loop over the found files and group them
         $arrTaskGroups = array();
-        foreach($arrFiles as $strOneFile) {
-            if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
+        foreach($arrFiles as $objTask) {
+            if(!isset($arrTaskGroups[$objTask->getGroupIdentifier()]))
+                $arrTaskGroups[$objTask->getGroupIdentifier()] = array();
 
-                //instantiate the current task
-                $strClassname = uniStrReplace(".php", "", $strOneFile);
-                $objTask = new $strClassname();
-                if(!isset($arrTaskGroups[$objTask->getGroupIdentifier()]))
-                    $arrTaskGroups[$objTask->getGroupIdentifier()] = array();
-
-                $arrTaskGroups[$objTask->getGroupIdentifier()][] = $objTask;
-            }
+            $arrTaskGroups[$objTask->getGroupIdentifier()][] = $objTask;
         }
+
+        ksort($arrTaskGroups);
 
         foreach($arrTaskGroups as $strGroupName => $arrTasks) {
             if($strGroupName == "")

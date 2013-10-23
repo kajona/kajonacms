@@ -51,9 +51,7 @@ if(issetPost("dotest")) {
     $intStart = time();
 
     $strFilename = getPost("testname");
-
     $arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
-
 
     $strSearched = array_search($strFilename, $arrFiles);
 
