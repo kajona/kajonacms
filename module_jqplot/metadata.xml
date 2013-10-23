@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
     >
-    <title>jqplotchart</title>
+    <title>jqplot</title>
     <description>jqPlot charting engine. Used to render charts on the client-side, based on the common jqPlot library.</description>
     <version>4.3</version>
     <author>Kajona Team</author>
