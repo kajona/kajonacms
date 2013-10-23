@@ -11,7 +11,7 @@ KAJONA.admin.jqplotHelper = {
 
     previousNeighbor : null,
     /**
-     * Sets the created canvasLabels invisible depending on the numberOfWrittenLabels
+     * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels
      *
      * @param strChartId
      * @param intNoOfWrittenLabels
