@@ -45,9 +45,9 @@ class class_graph_jqplot implements interface_graph{
         ),
 
         "legend" => array(
-            "renderer" => null,
-            "rowSpacing" => null,
-            "show"=> null,
+            "renderer" => "$.jqplot.EnhancedLegendRenderer",
+            "rowSpacing" => "0px",
+            "show"=> true,
             "rendererOptions" => array(
                 "textColor" => null,
                 "fontFamily" => null
@@ -510,6 +510,11 @@ class class_graph_jqplot implements interface_graph{
             $this->arrOptions["legend"]["show"] = $bitRenderLegend;
             $this->arrOptions["legend"]["renderer"] = "$.jqplot.EnhancedLegendRenderer";
             $this->arrOptions["legend"]["rowSpacing"] = "0px";
+        }
+        else {
+            $this->arrOptions["legend"]["show"] = null;
+            $this->arrOptions["legend"]["renderer"] = null;
+            $this->arrOptions["legend"]["rowSpacing"] = null;
         }
     }
 

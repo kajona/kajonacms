@@ -346,7 +346,7 @@ class class_installer_system extends class_installer_base implements interface_i
         //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
         $this->registerConstant("_system_browser_cachebuster_", 0, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.4: Adding constant _system_graph_type_ indicating the chart-engine to use
-        $this->registerConstant("_system_graph_type_", "flot", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_graph_type_", "jqplot", class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
         //3.4: Enabling or disabling the internal changehistory
         $this->registerConstant("_system_changehistory_enabled_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 

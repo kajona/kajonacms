@@ -26,7 +26,7 @@ $lang["_system_changehistory_enabled_"]  = "Änderungshistorie aktiv";
 $lang["_system_dbdump_amount_"]          = "Anzahl DB-Dumps";
 $lang["_system_dbdump_amount_hint"]      = "Definiert, wie viele Datenbank-Sicherungen vorgehalten werden sollen.";
 $lang["_system_graph_type_"]             = "Verwendete Chart-Bibliothek: ";
-$lang["_system_graph_type_hint"]         = "Gültige Werte: pchart, ezc, flot. pChart muss gesondern heruntergeladen und installiert werden, ezc benötigt im Optimalfall das PHP-Modul 'cairo'.<br />Siehe hierzu auch <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
+$lang["_system_graph_type_hint"]         = "Gültige Werte: pchart, ezc, jqplot. pChart muss gesondern heruntergeladen und installiert werden, ezc benötigt im Optimalfall das PHP-Modul 'cairo'.<br />Siehe hierzu auch <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
 $lang["_system_lock_maxtime_"]           = "Maximale Sperrdauer";
 $lang["_system_lock_maxtime_hint"]       = "Nach der angegebenen Dauer in Sekunden werden gesperrte Datensätze automatisch wieder freigegeben.";
 $lang["_system_mod_rewrite_"]            = "URL-Rewriting";
