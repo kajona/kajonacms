@@ -70,7 +70,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
             
             $arrHits = array();
             $arrLabels = array();
-            for($intI = 0; $intI<3; $intI++) {
+            for($intI = 0; $intI<7; $intI++) {
                 $objEndDate = clone $objDate;
                 $objEndDate->setNextDay();
                 $objStatsCommon->setStartDate($objDate->getTimeInOldStyle());
@@ -92,8 +92,8 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
             $objChart->setArrXAxisTickLabels($arrLabels);
             $objChart->addLinePlot($arrHits, "");
             $objChart->setBitRenderLegend(false);
-            $objChart->setIntHeight(120);
-            $objChart->setIntWidth(200);
+            $objChart->setIntHeight(220);
+            $objChart->setIntWidth(300);
             $objChart->setStrXAxisTitle("");
             $objChart->setStrYAxisTitle("");
             $strReturn .= $objChart->renderGraph();
