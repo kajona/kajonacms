@@ -18,10 +18,10 @@
 class class_graph_factory {
     //put your code here
 
-    public static $STR_TYPE_EZC = "CHART_TYPE_EZC";
-    public static $STR_TYPE_PCHART = "CHART_TYPE_PCHART";
-    public static $STR_TYPE_FLOT = "CHART_TYPE_FLOT";
-    public static $STR_TYPE_JQPLOT = "CHART_TYPE_JQPLOT";
+    public static $STR_TYPE_EZC = "ezc";
+    public static $STR_TYPE_PCHART = "pchart";
+    public static $STR_TYPE_FLOT = "flot";
+    public static $STR_TYPE_JQPLOT = "jqplot";
 
 
     /**
@@ -29,47 +29,27 @@ class class_graph_factory {
      * based on the passed param
      *
      * @param string $strType
+     *
+     * @throws class_exception
      * @return interface_graph
      */
     public static function getGraphInstance($strType = "") {
 
-        $arrTypes = array(
-            self::$STR_TYPE_EZC,
-            self::$STR_TYPE_FLOT,
-            self::$STR_TYPE_PCHART,
-            self::$STR_TYPE_JQPLOT
-        );
-
-        if(!in_array($strType, $arrTypes)) {
-            if(defined("_system_graph_type_")) {
-                if(_system_graph_type_ == "flot")
-                    $strType = self::$STR_TYPE_FLOT;
-                else if(_system_graph_type_ == "ezc")
-                    $strType = self::$STR_TYPE_EZC;
-                else if(_system_graph_type_ == "pchart")
-                    $strType = self::$STR_TYPE_PCHART;
-                else if(_system_graph_type_ == "jqplot")
-                    $strType = self::$STR_TYPE_JQPLOT;
-                else
-                    $strType = _system_graph_type_;
-            }
+        if($strType == "") {
+            if(defined("_system_graph_type_"))
+                $strType = _system_graph_type_;
             else
-                $strType = self::$STR_TYPE_JQPLOT;
+                $strType = "jqplot";
         }
 
-        if($strType == self::$STR_TYPE_EZC) {
-            return new class_graph_ezc();
-        }
-        else if($strType == self::$STR_TYPE_PCHART) {
-            return new class_graph_pchart();
-        }
-        else if($strType == self::$STR_TYPE_FLOT) {
-            return new class_graph_flot();
-        }
-        else if($strType == self::$STR_TYPE_JQPLOT) {
-            return new class_graph_jqplot();
+        $strClassname = "class_graph_".$strType;
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
+        if($strPath !== false) {
+            $objReflection = new ReflectionClass($strClassname);
+            if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_graph"))
+                return $objReflection->newInstance();
         }
 
-        return new class_graph_flot();
+        throw new class_exception("Requested charts-plugin ".$strType." not existing", class_exception::$level_FATALERROR);
     }
 }
