@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+    >
+    <title>jqplotchart</title>
+    <description>jqPlot charting engine. Used to render charts on the client-side, based on the common jqPlot library.</description>
+    <version>4.3</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>FALSE</providesInstaller>
+    <requiredModules>
+        <module name="system" version="4.3" />
+    </requiredModules>
+</package>

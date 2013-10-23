@@ -1,0 +1,55 @@
+/*"******************************************************************************************************
+*   (c) 2013 by Kajona, www.kajona.de                                                                   *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: jquery.jqplot.custom.css 5715 2013-07-10 16:07:21Z smeyer $                           *
+********************************************************************************************************/
+
+
+/*------------------------- Changed standard jqplot styles ----------------------------------------*/
+.jqplot-target {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.jqplot-axis,
+.jqplot-xaxis-label,
+.jqplot-x2axis-label,
+.jqplot-yaxis-label,
+.jqplot-yMidAxis-label,
+.jqplot-y2axis-label, .jqplot-y3axis-label, .jqplot-y4axis-label, .jqplot-y5axis-label, .jqplot-y6axis-label, .jqplot-y7axis-label, .jqplot-y8axis-label, .jqplot-y9axis-label,
+table.jqplot-table-legend, table.jqplot-cursor-legend,
+.jqplot-title
+{
+    font-size: inherit;
+}
+
+
+/* -------------------------------------------  CSS styles for the tooltip ------------------------------------------*/
+div.jqplot-chart-tooltip {
+    position: absolute;
+    display: none;
+    box-shadow: 2px 2px 3px #444444;
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 2px;
+    background-color: #FFFFFF;
+    color: #000000;
+    opacity: 0.8;
+    z-index: 1000;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+div.jqplot-chart-tooltip-series {
+    font-size: 12px;
+    float:left;
+}
+
+div.jqplot-chart-tooltip-content {
+    clear:both;
+}
+
+canvas.jqplot-series-canvas {
+    opacity: 0.8;
+}
