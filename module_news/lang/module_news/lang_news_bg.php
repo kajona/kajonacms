@@ -12,8 +12,8 @@
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страницата с резултати";
 $lang["_news_search_resultpage_hint"]    = "Тази страница показва детайли около новините, които бяха намерене чрез 'търсене'.";
-$lang["action_new_news"]                 = "Създай новини";
 $lang["action_new_feed"]                 = "Нова RSS-Feed";
+$lang["action_new_news"]                 = "Създай новини";
 $lang["backward"]                        = "Назад";
 $lang["delete_category_question"]        = "Наистина ли искате да изтрийте категорията &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_feed_question"]            = "Наистина ли искате да премахнете този feed &quot;<b>%%element_name%%</b>&quot;?";

@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-
 $lang["installer_config_dbdriver"]       = "Drivruting till databas";
 $lang["installer_config_dbdriverinfo"]   = "Moduler tillgängliga i systemet";
 $lang["installer_config_dbhostname"]     = "Databasserver";

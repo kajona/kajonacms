@@ -7,14 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["captcha_label"]                   = "Säkerhetskod:*";
+$lang["captcha_reload"]                  = "Säkerhetskod icke läsbar?";
 $lang["portalregistration_group"]        = "Tillhörd grupp";
 $lang["portalregistration_hint"]         = "Användare som skapats med detta element är inaktiverade.<br />Aktiveriingen sker medelst ett automatiskt skickat e-mail till användaren.<br />En hänvisning till detta bör anges på sidan.";
 $lang["portalregistration_success"]      = "Sida om processen lyckas (valfri)";
-$lang["captcha_label"]                   = "Säkerhetskod:*";
-$lang["captcha_reload"]                  = "Säkerhetskod icke läsbar?";
 $lang["pr_captcha"]                      = "Ogiltig säkerhetskod.";
 $lang["pr_completionErrorStatus"]        = "Detta konto kan inte aktiveras.";
 $lang["pr_completionSuccess"]            = "Aktiveringen lyckades. Du kan nu logga in på portalen.,";

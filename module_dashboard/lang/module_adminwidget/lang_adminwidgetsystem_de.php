@@ -12,7 +12,6 @@
 //editable entries
 $lang["note_content"]                    = "Inhalt";
 $lang["note_name"]                       = "Notizen";
-$lang["updatecheck_name"]                       = "Aktualisierungen";
 $lang["sysinfo_checkboxkajona"]          = "Kajona Informationen anzeigen";
 $lang["sysinfo_checkboxphp"]             = "PHP-Informationen anzeigen";
 $lang["sysinfo_checkboxserver"]          = "Server-Informationen anzeigen";
@@ -30,10 +29,11 @@ $lang["syslog_name"]                     = "Systemlog";
 $lang["syslog_nrofrows"]                 = "Anzahl Einträge";
 $lang["systemcheck_checkboxkajona"]      = "Kajona Check";
 $lang["systemcheck_checkboxphp"]         = "PHP Check";
-$lang["systemcheck_kajona_filepresent"]        = "vorhanden: ";
+$lang["systemcheck_kajona_filepresent"]  = "vorhanden: ";
 $lang["systemcheck_kajona_writeper"]     = "Schreibrechte auf";
 $lang["systemcheck_name"]                = "Systemcheck";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
 $lang["systemcheck_php_urlfopen"]        = "PHP Allow url fopen: ";
+$lang["updatecheck_name"]                = "Aktualisierungen";
 $lang["updatecheck_versionAvail"]        = "Zu aktualisierende Pakete";

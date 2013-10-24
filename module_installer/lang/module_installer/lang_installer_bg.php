@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-
 $lang["installer_config_dbdriver"]       = "Вид база данни";
 $lang["installer_config_dbhostname"]     = "Сървър база данни: ";
 $lang["installer_config_dbname"]         = "Име база данни";

@@ -7,12 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["element_image_name"]              = "Bild";
 $lang["image_link"]                      = "Link";
 $lang["image_x"]                         = "Maximale Breite";
-$lang["image_x_hint"]                   = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
-$lang["image_y_hint"]                   = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
+$lang["image_x_hint"]                    = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
 $lang["image_y"]                         = "Maximale Höhe";
+$lang["image_y_hint"]                    = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";

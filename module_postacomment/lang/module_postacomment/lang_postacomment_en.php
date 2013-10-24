@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["form_postacomment_username"]      = "Name";
 $lang["form_message_label"]              = "Message";
 $lang["form_name_label"]                 = "Name";
+$lang["form_postacomment_username"]      = "Name";
 $lang["form_subject_label"]              = "Subject";
 $lang["form_submit_label"]               = "Submit";
 $lang["liste_leer"]                      = "No posts available";

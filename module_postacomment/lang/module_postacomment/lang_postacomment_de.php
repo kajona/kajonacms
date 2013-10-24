@@ -11,9 +11,9 @@
 
 //editable entries
 $lang["form_comment_title"]              = "Titel";
-$lang["form_postacomment_username"]      = "Name";
 $lang["form_message_label"]              = "Nachricht";
 $lang["form_name_label"]                 = "Name";
+$lang["form_postacomment_username"]      = "Name";
 $lang["form_subject_label"]              = "Betreff";
 $lang["form_submit_label"]               = "Absenden";
 $lang["liste_leer"]                      = "Keine Posts vorhanden";

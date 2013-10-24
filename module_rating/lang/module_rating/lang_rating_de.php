@@ -7,9 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
-$lang["rating_rate1"]            = "Eintrag mit ";
-$lang["rating_rate2"]            = " Punkt(en) bewerten!";
-$lang["rating_voted"]            = "Dieser Eintrag wurde bereits bewertet.";
-
+//editable entries
+$lang["rating_rate1"]                    = "Eintrag mit ";
+$lang["rating_rate2"]                    = " Punkt(en) bewerten!";
+$lang["rating_voted"]                    = "Dieser Eintrag wurde bereits bewertet.";

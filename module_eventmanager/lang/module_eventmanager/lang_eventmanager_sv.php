@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["action_list"]                     = "Lista";
 $lang["action_list_participant"]         = "Visa deltagere";
 $lang["action_new"]                      = "Skapa evenemang";
 $lang["action_new_participant"]          = "Skapa nya deltagare";
@@ -23,6 +24,7 @@ $lang["comment"]                         = "Kommentar";
 $lang["currentParticipants"]             = "Aktuellt antal deltagare";
 $lang["dateTimeFrom"]                    = "Från";
 $lang["dateTimeUntil"]                   = "Till";
+$lang["delete_participant_question"]     = "Vil du verkligen radera deltagare &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_question"]                 = "Vill du verkligen radera evenemanget  &quot;<b>%%element_name%%</b>&quot;med alla deltagare?";
 $lang["detailslink"]                     = "Visa detaljer";
 $lang["email"]                           = "e-mail:*";
@@ -50,7 +52,6 @@ $lang["list_participants_empty"]         = "Inga deltagare skapade";
 $lang["location"]                        = "Ort";
 $lang["maximumParticipants"]             = "Maximala antalet deltagare";
 $lang["modul_titel"]                     = "Evenemang";
-$lang["action_list"]                     = "Lista";
 $lang["module_permissions"]              = "Modulrättigheter";
 $lang["noForename"]                      = "Förnamn saknas";
 $lang["noLastname"]                      = "Efternamn saknas";
@@ -59,7 +60,6 @@ $lang["participantLimitReached"]         = "Maximala antalet deltagare uppnådde
 $lang["participantSuccessConfirmation"]  = "Din anmälan lyckades. Tack!";
 $lang["participantSuccessMail"]          = "Tack för din anmälan. Du kommer inom några minuter att få ett e-mail med länk för att bekräfta anmälan.";
 $lang["participant_comment"]             = "Kommentar";
-$lang["delete_participant_question"]     = "Vil du verkligen radera deltagare &quot;<b>%%element_name%%</b>&quot;?";
 $lang["participant_edit"]                = "Redigera deltagare";
 $lang["participant_email"]               = "E-mail adress";
 $lang["participant_forename"]            = "Förnamn";

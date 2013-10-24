@@ -7,12 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["element_rssfeed_name"]            = "RSS-Feed";
-$lang["rssfeed_numberofposts"]           = "Anzahl anzuzeigender Meldungen";
-$lang["rssfeed_url"]                     = "RSS-Feed-URL";
 $lang["rssfeed_errorloading"]            = "Fehler beim Laden des Feeds.";
 $lang["rssfeed_errorparsing"]            = "Fehler beim Parsen des Feeds.";
 $lang["rssfeed_noentry"]                 = "Keine Einträge vorhanden";
+$lang["rssfeed_numberofposts"]           = "Anzahl anzuzeigender Meldungen";
+$lang["rssfeed_url"]                     = "RSS-Feed-URL";

@@ -7,10 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["portalupload_download"]           = "Download-Архиви";
 $lang["portaluploadCopyUploadError"]     = "Грешка при копирането на файла.";
 $lang["portaluploadFileTitle"]           = "Файл: ";
 $lang["portaluploadFilterError"]         = "Не разрешен тип на файла.";
@@ -18,3 +17,4 @@ $lang["portaluploadNotWritableError"]    = "Папките не са запис�
 $lang["portaluploadPathError"]           = "Оказаните пътища не съвпадат!";
 $lang["portaluploadSubmitTitle"]         = "Качи";
 $lang["portaluploadSuccess"]             = "Файлът успешно качен.";
+$lang["portalupload_download"]           = "Download-Архиви";

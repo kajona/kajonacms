@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_system_timezone_"]              = "System Zeitzone";
-$lang["_system_timezone_hint"]              = "Die Zeitzone wird zur Berechnung der korrekten Zeit- und Datumswerte verwendet. Eine Liste möglicher Werte ist unter <a href='http://www.php.net/manual/en/timezones.php' target='_blank'>http://www.php.net/manual/en/timezones.php</a> zu finden.";
 $lang["_admin_nr_of_rows_"]              = "Anzahl Datensätze pro Seite";
 $lang["_admin_nr_of_rows_hint"]          = "Anzahl an Datensätzen in den Admin-Listen, sofern das Modul dies unterstützt. Kann von einem Modul überschrieben werden!";
 $lang["_admin_only_https_"]              = "Admin nur per HTTPS";
@@ -37,6 +35,8 @@ $lang["_system_portal_disablepage_"]     = "Zwischenseite";
 $lang["_system_portal_disablepage_hint"] = "Diese Seite wird angezeigt, wenn das Portal deaktiviert wurde.";
 $lang["_system_release_time_"]           = "Dauer einer Session";
 $lang["_system_release_time_hint"]       = "Nach dieser Dauer in Sekunden wird eine Session automatisch ungültig.";
+$lang["_system_timezone_"]               = "System Zeitzone";
+$lang["_system_timezone_hint"]           = "Die Zeitzone wird zur Berechnung der korrekten Zeit- und Datumswerte verwendet. Eine Liste möglicher Werte ist unter <a href='http://www.php.net/manual/en/timezones.php' target='_blank'>http://www.php.net/manual/en/timezones.php</a> zu finden.";
 $lang["_system_use_dbcache_"]            = "Datenbankcache aktiv";
 $lang["_system_use_dbcache_hint"]        = "Aktiviert/deaktiviert den systeminternen Cache für Datenbankabfragen.";
 $lang["about_part1"]                     = "<h2>Kajona V4 - Open Source Content Management System</h2>Kajona V 4.2, Codename \"90 degrees\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
@@ -74,6 +74,7 @@ $lang["change_type_setting"]             = "Einstellung";
 $lang["change_user"]                     = "Benutzer";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";
+$lang["datekajona"]                      = "System-Datum";
 $lang["datenbankclient"]                 = "Datenbankclient";
 $lang["datenbankserver"]                 = "Datenbankserver";
 $lang["datenbanktreiber"]                = "Datenbanktreiber";
@@ -229,16 +230,17 @@ $lang["systemtask_systemstatus_inactive"] = "Inaktiv";
 $lang["systemtask_systemstatus_name"]    = "Status eines Datensatzes setzen";
 $lang["systemtask_systemstatus_status"]  = "Status";
 $lang["systemtask_systemstatus_systemid"] = "Systemid";
+$lang["time_localsystemtime"]            = "Lokale System-Zeit";
+$lang["time_phptimestamp"]               = "php-Zeit gem. time()";
+$lang["time_systemtime_UTC"]             = "Zeit nach UTC";
+$lang["time_systemtimezone"]             = "Zeitzone des Systems";
+$lang["time_systemzone_manual_setting"]  = "Manuell eingestellte Zeitzone";
+$lang["timeinfo"]                        = "Systemzeit";
+$lang["timezone"]                        = "Zeitzone";
 $lang["titel_erben"]                     = "Rechte erben";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";
 $lang["titel_root"]                      = "Rechte-Root-Satz";
 $lang["titleTime"]                       = "Uhr";
-$lang["timeinfo"]                        = "Systemzeit";
-$lang["time_phptimestamp"]               = "php-Zeit gem. time()";
-$lang["time_localsystemtime"]            = "Lokale System-Zeit";
-$lang["time_systemtime_UTC"]             = "Zeit nach UTC";
-$lang["time_systemzone_manual_setting"]  = "Manuell eingestellte Zeitzone";
-$lang["time_systemtimezone"]             = "Zeitzone des Systems";
 $lang["toolsetCalendarMonth"]            = "\"Januar\", \"Februar\", \"M\\u00E4rz\", \"April\", \"Mai\", \"Juni\", \"Juli\", \"August\", \"September\", \"Oktober\", \"November\", \"Dezember\"";
 $lang["toolsetCalendarWeekday"]          = "\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"";
 $lang["update_available"]                = "Bitte updaten!";
@@ -252,8 +254,6 @@ $lang["update_nourlfopen"]               = "Für diese Funktion muss der Wert &a
 $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
-$lang["timezone"]                         = "Zeitzone";
-$lang["datekajona"]                         = "System-Datum";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
 
 //non-editable entries

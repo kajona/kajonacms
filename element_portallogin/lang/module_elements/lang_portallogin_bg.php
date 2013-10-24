@@ -7,13 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["portallogin_error"]               = "Страница в случай на грешка (не е задължително)";
-$lang["portallogin_logout_success"]      = "Страница след излизане от системата  (не е задължително)";
-$lang["portallogin_profile"]             = "Страница за редактиране на профил (не е задължително)";
-$lang["portallogin_profile_hint"]        = "За да редактирате профилът е нужно да съществува друг portallogin-елемент за съответната страница.";
 $lang["editprofilelink"]                 = "Редактирай профил";
 $lang["emailTitle"]                      = "Електронна поща*: ";
 $lang["forenameTitle"]                   = "Собствено име";
@@ -26,6 +22,10 @@ $lang["password"]                        = "Парола: ";
 $lang["passwordTitle"]                   = "Парола: ";
 $lang["passwordTitle2"]                  = "Парола: ";
 $lang["passwordsUnequal"]                = "Паролите не съвпадат.";
+$lang["portallogin_error"]               = "Страница в случай на грешка (не е задължително)";
+$lang["portallogin_logout_success"]      = "Страница след излизане от системата  (не е задължително)";
+$lang["portallogin_profile"]             = "Страница за редактиране на профил (не е задължително)";
+$lang["portallogin_profile_hint"]        = "За да редактирате профилът е нужно да съществува друг portallogin-елемент за съответната страница.";
 $lang["userDataSubmit"]                  = "Запази";
 $lang["username"]                        = "Потребителско име: ";
 $lang["usernameTitle"]                   = "Потребителско име: ";

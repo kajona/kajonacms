@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["action_add_widget_to_dashboard"]  = "Add widget";
 $lang["action_calendar"]                 = "Calendar";
-$lang["action_sitemap"]                 = "Sitemap";
-$lang["action_add_widget_to_dashboard"]               = "Add widget";
+$lang["action_sitemap"]                  = "Sitemap";
 $lang["addWidgetNextStep"]               = "Next";
 $lang["calendar_next"]                   = "next month &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; previous month";

@@ -12,7 +12,7 @@
 //editable entries
 $lang["_faqs_search_resultpage_"]        = "Result page";
 $lang["_faqs_search_resultpage_hint"]    = "This page shows the FAQs which where found by the search.";
-$lang["delete_faq_question"]                 = "Do you really want to delete the FAQ &quot;<b>%%element_name%%</b>&quot;?";
+$lang["delete_faq_question"]             = "Do you really want to delete the FAQ &quot;<b>%%element_name%%</b>&quot;?";
 $lang["faq_titel_faq"]                   = "FAQ";
 $lang["form_faq_answer"]                 = "Answer";
 $lang["form_faq_question"]               = "Question";

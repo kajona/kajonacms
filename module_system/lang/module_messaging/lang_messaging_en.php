@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["action_config"]                   = "Settings";
 $lang["action_edit"]                     = "Detailed view";
 $lang["action_show_all"]                 = "Show all messages";
-$lang["action_config"]                   = "Settings";
 $lang["batchaction_read"]                = "Mark as read";
 $lang["delete_question"]                 = "Do you really want to delete the message &quot;<b>%%element_name%%</b>&quot;?";
 $lang["message_prolog"]                  = "You got a new message. To open the message, use the link below. A copy of the message is attached.";

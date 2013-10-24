@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-
 $lang["installer_config_dbdriver"]       = "Database driver";
 $lang["installer_config_dbhostname"]     = "Database server";
 $lang["installer_config_dbname"]         = "Database name";
@@ -21,6 +20,7 @@ $lang["installer_config_dbprefix"]       = "Table prefix";
 $lang["installer_config_dbusername"]     = "Database user";
 $lang["installer_config_intro"]          = "<b>Set up database-access</b><br /><br />Note: The webserver needs write-permissions on /system/config/config.php.<br />In the case you want to use emtpy values, edit the config-file /system/config/config.php manually using a text-editor. For further informations, refer to the manual.<br />";
 $lang["installer_config_write"]          = "Save to config.php";
+$lang["installer_dbcx_error"]            = "Connection to the database could not be established. Please verify the connection credentials.";
 $lang["installer_dbdriver_na"]           = "We are sorry, but the selected database-driver is not available on the system. Please install the following PHP-extension in order to use the driver";
 $lang["installer_dbdriver_oci8"]         = "Attention: The Oracle-driver is still under development.";
 $lang["installer_dbdriver_sqlite3"]      = "The SQLite-driver creates a database stored at /project/dbdumps. Therefore the database name is used as the filename, all other values are not taken into account.";
@@ -29,7 +29,6 @@ $lang["installer_finish_closer"]         = "<br />Have fun using Kajona!";
 $lang["installer_finish_hints"]          = "You should set back the write permission on /project/system/config/config.php to read-only permission.<br />Additionally, you should remove the file /installer.php completely out of security reasons.<br /><br /><br />The administation in now available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />The portal is available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
 $lang["installer_finish_hints_update"]   = "<b>Attention: If you updated from a v3 system, please make sure to run the post-update scripts as soon as all modules have been upgraded.</b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Run post-update</a><br />Refer to the <a href=\"http://www.kajona.de/update_342_to_40.html\" target=\"_blank\">update instructions for 3.4.2 to 4.0</a> for more details.<br/><br />";
 $lang["installer_finish_intro"]          = "<b>Installation finshed</b><br /><br />";
-$lang["installer_dbcx_error"]            = "Connection to the database could not be established. Please verify the connection credentials.";
 $lang["installer_given"]                 = "given";
 $lang["installer_install"]               = "Install";
 $lang["installer_installpe"]             = "Install page elements";

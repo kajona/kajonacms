@@ -12,7 +12,7 @@
 //editable entries
 $lang["_faqs_search_resultpage_"]        = "Страница с резултати";
 $lang["_faqs_search_resultpage_hint"]    = "Страницата показва 'Често задаваните въпроси' намерени посредством 'търсене'";
-$lang["delete_faq_question"]                 = "Наистина ли искате да изтрийте 'Често задавани въпроси' &quot;<b>%%element_name%%</b>&quot;?";
+$lang["delete_faq_question"]             = "Наистина ли искате да изтрийте 'Често задавани въпроси' &quot;<b>%%element_name%%</b>&quot;?";
 $lang["form_faq_answer"]                 = "Отговор";
 $lang["form_faq_question"]               = "Въпрос";
 $lang["kat_anzeigen"]                    = "Покажи категория";

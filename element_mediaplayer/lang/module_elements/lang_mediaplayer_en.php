@@ -7,11 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["element_mediaplayer_name"]        = "Media player";
 $lang["element_mediaplayer_description"] = "This element is based on the JW Player from Longtail. Please read their license.";
+$lang["element_mediaplayer_name"]        = "Media player";
 $lang["mediaplayer_file"]                = "Media file";
 $lang["mediaplayer_height"]              = "Height";
 $lang["mediaplayer_preview"]             = "Preview image";

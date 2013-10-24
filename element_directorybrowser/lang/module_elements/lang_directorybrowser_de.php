@@ -7,10 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["element_directorybrowser_name"]   = "Dateiliste";
 $lang["directorybrowser_date"]           = "Änderungsdatum";
 $lang["directorybrowser_name"]           = "Dateiname";
 $lang["directorybrowser_size"]           = "Dateigröße";
+$lang["element_directorybrowser_name"]   = "Dateiliste";

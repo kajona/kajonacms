@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-
 $lang["installer_config_dbdriver"]       = "Драйвер датабазы";
 $lang["installer_config_dbhostname"]     = "Сервер датабазы";
 $lang["installer_config_dbname"]         = "Название датабазы";
@@ -57,4 +56,3 @@ $lang["installer_systemlog"]             = "Системный лог";
 $lang["installer_systemversion_needed"]  = "Минимально необходимая версия системы: ";
 $lang["installer_update"]                = "Обновить до";
 $lang["installer_versioninstalled"]      = "Установленная версия: ";
-

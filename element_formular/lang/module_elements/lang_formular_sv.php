@@ -7,15 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["element_form_name"]               = "Kontakt formulär";
-$lang["formular_class"]                  = "Portalklass";
-$lang["formular_email"]                  = "Mål e-mail adress";
-$lang["formular_error"]                  = "Felmeddelande";
-$lang["formular_success"]                = "Meddelande vid lyckat genomförande";
-$lang["required_formular_email"]         = "e-mail adress";
 $lang["fehler_captcha"]                  = "Vänligen ange korrekt säkerhetskod";
 $lang["fehler_email"]                    = "Vänligen ange en giltig e-mail adress";
 $lang["fehler_nachricht"]                = "Vänligen skriv in ett meddelande";
@@ -28,3 +23,8 @@ $lang["formContact_message"]             = "Meddelande:*";
 $lang["formContact_name"]                = "Namn:*";
 $lang["formContact_newCode"]             = "Säkerhetskod icke läsbar?";
 $lang["formContact_send"]                = "Skicka";
+$lang["formular_class"]                  = "Portalklass";
+$lang["formular_email"]                  = "Mål e-mail adress";
+$lang["formular_error"]                  = "Felmeddelande";
+$lang["formular_success"]                = "Meddelande vid lyckat genomförande";
+$lang["required_formular_email"]         = "e-mail adress";

@@ -10,25 +10,25 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["form_answer_text"]                = "Antwort";
+$lang["action_edit"]                     = "Voting bearbeiten";
+$lang["action_list_answers"]             = "Antworten anzeigen";
+$lang["action_new"]                      = "Neues Voting";
+$lang["delete_question"]                 = "Möchten Sie das Voting &quot;<b>%%element_name%%</b>&quot; mit allen Antworten wirklich löschen?";
 $lang["error_dates"]                     = "Die Abstimmung ist zum aktuellen Zeitpunkt nicht freigeschaltet.";
 $lang["error_voted"]                     = "Für diese Umfrage wurde bereits abgestimmt.";
+$lang["form_answer_text"]                = "Antwort";
+$lang["form_voting_dateend"]             = "Ende-Datum";
+$lang["form_voting_datestart"]           = "Start-Datum";
 $lang["list_answer_empty"]               = "Keine Antworten angelegt";
 $lang["list_empty"]                      = "Keine Votings angelegt";
 $lang["modul_titel"]                     = "Votings";
-$lang["modul_titel_answers"]                     = "Voting-Antworten";
+$lang["modul_titel_answers"]             = "Voting-Antworten";
 $lang["quickhelp_list"]                  = "Alle im System angelegten Votings werden hier dargestellt.";
-$lang["quickhelp_list_answers"]           = "Alle zur einer Umfrage zugehörigen Antworten werden hier verwaltet.";
-$lang["quickhelp_new"]             = "Hier kann ein Voting neu anglegt oder editiert werden. Das Start- und End-Datum ist optional.";
+$lang["quickhelp_list_answers"]          = "Alle zur einer Umfrage zugehörigen Antworten werden hier verwaltet.";
+$lang["quickhelp_new"]                   = "Hier kann ein Voting neu anglegt oder editiert werden. Das Start- und End-Datum ist optional.";
 $lang["required_answer_title"]           = "Antwort-Text";
 $lang["voting_delete_answer"]            = "Möchten Sie die Antwort &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$lang["delete_question"]                 = "Möchten Sie das Voting &quot;<b>%%element_name%%</b>&quot; mit allen Antworten wirklich löschen?";
-$lang["action_edit"]                     = "Voting bearbeiten";
-$lang["action_new"]                     = "Neues Voting";
-$lang["form_voting_dateend"]             = "Ende-Datum";
 $lang["voting_hits"]                     = "Stimmen gesamt";
-$lang["action_list_answers"]               = "Antworten anzeigen";
-$lang["form_voting_datestart"]           = "Start-Datum";
 $lang["voting_submit"]                   = "Abstimmen!";
 
 //non-editable entries

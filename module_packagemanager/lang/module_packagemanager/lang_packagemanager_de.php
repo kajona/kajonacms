@@ -11,11 +11,11 @@
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack";
+$lang["action_download"]                 = "Template-Pack herunterladen";
 $lang["action_list"]                     = "Installierte Pakete";
 $lang["action_list_templates"]           = "Installierte Templates";
-$lang["action_upload_package"]           = "Neues / Aktualisiertes Paket installieren";
-$lang["action_download"]                 = "Template-Pack herunterladen";
 $lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
+$lang["action_upload_package"]           = "Neues / Aktualisiertes Paket installieren";
 $lang["all"]                             = "Alle";
 $lang["delete_question"]                 = "Möchten Sie das Template-Pack &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 $lang["element"]                         = "Element";
@@ -42,11 +42,11 @@ $lang["pack_version"]                    = "Version";
 $lang["package_author"]                  = "Ersteller";
 $lang["package_doinstall"]               = "Im System installieren";
 $lang["package_install"]                 = "Paket herunterladen und installieren";
-$lang["package_noinstall_installed"]     = "Paket ist bereits lokal installiert";
 $lang["package_install_success"]         = "Paket wurde installiert";
 $lang["package_installocally"]           = "Paket installieren/aktualisieren";
 $lang["package_minversion"]              = "Minimale System-Version";
 $lang["package_modules"]                 = "Erforderliche Module";
+$lang["package_noinstall_installed"]     = "Paket ist bereits lokal installiert";
 $lang["package_notinstallable"]          = "Paket kann nicht installiert werden.";
 $lang["package_noupdate"]                = "Es liegt keine neuere Version vor. Aktuellste Version";
 $lang["package_noversion"]               = "Das System konnte kein passendes, verfügbares Paket ermitteln";
@@ -59,6 +59,7 @@ $lang["package_type"]                    = "Typ";
 $lang["package_updatefound"]             = "Update des Pakets auf die neuste Version ";
 $lang["package_version"]                 = "Version";
 $lang["package_version_installed"]       = "Installierte Version";
+$lang["packagelist_filter"]              = "Filter-Text";
 $lang["provider_error_package"]          = "Das geladene Paket stellt kein gültiges Archiv dar.";
 $lang["provider_error_transfer"]         = "Fehler beim Transfer des Paketes.";
 $lang["provider_kajona"]                 = "Offizielle Kajona Pakete";
@@ -79,7 +80,6 @@ $lang["update_notification_intro"]       = "Für ein installiertes Paket ist ein
 $lang["update_notification_package"]     = "Betreffendes Paket";
 $lang["update_notification_verav"]       = "Verfügbare Version";
 $lang["update_notification_verinst"]     = "Installierte Version";
-$lang["packagelist_filter"]              = "Filter-Text";
 
 //non-editable entries
 $lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];

@@ -7,12 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["portalupload_download"]           = "Nedladdningsarkiv";
-$lang["portalupload_filemanager"]        = "Filhanterare-arkiv";
-$lang["portalupload_matchwarning"]       = "Det finns inga nedladdningsarkiv och filhanterarearkiv hittade som har samma sökväg i filsystemet.";
 $lang["portaluploadCopyUploadError"]     = "Fel uppstod vid kopiering av fil.";
 $lang["portaluploadFileTitle"]           = "Fil";
 $lang["portaluploadFilterError"]         = "Filtyp ej tillåten av filter.";
@@ -21,3 +18,6 @@ $lang["portaluploadPathError"]           = "Sökvägar stämmer ej överens.";
 $lang["portaluploadPermissionsError"]    = "Icke tillräckliga rättigheter.";
 $lang["portaluploadSubmitTitle"]         = "Ladda up";
 $lang["portaluploadSuccess"]             = "Uppladdning av fil har lyckats.";
+$lang["portalupload_download"]           = "Nedladdningsarkiv";
+$lang["portalupload_filemanager"]        = "Filhanterare-arkiv";
+$lang["portalupload_matchwarning"]       = "Det finns inga nedladdningsarkiv och filhanterarearkiv hittade som har samma sökväg i filsystemet.";

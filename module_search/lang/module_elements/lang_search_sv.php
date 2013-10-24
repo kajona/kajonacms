@@ -7,10 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["element_search_name"]             = "Sök";
 $lang["browser"]                         = "Öppna filhanterare";
+$lang["element_search_name"]             = "Sök";
 $lang["search_amount"]                   = "Antal träffar per sida";
 $lang["search_page"]                     = "Resultatsida";

@@ -7,22 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["element_portallogin_name"]        = "Portal-Login";
-$lang["portallogin_editmode"]            = "Editier-Modus";
-$lang["portallogin_editmode_0"]          = "Minimales Profil";
-$lang["portallogin_editmode_1"]          = "Vollständiges Profil";
-$lang["portallogin_error"]               = "Seite im Fehlerfall (optional)";
-$lang["portallogin_logout_success"]      = "Seite nach dem Logout (optional)";
-$lang["portallogin_profile"]             = "Seite zum Editieren des Profils (optional)";
-$lang["portallogin_profile_hint"]        = "Zum Editieren des Profiles muss auf der Zielseite ebenfalls ein Portallogin-Element angelegt sein.";
-$lang["portallogin_pwdforgot"]           = "Seite für das Passwort-Vergessen Formular (optional)";
 $lang["changePwd"]                       = "Passwort ändern";
 $lang["cityTitle"]                       = "Ort";
 $lang["dateTitle"]                       = "Geburtsdatum";
 $lang["editprofilelink"]                 = "Profil bearbeiten";
+$lang["element_portallogin_name"]        = "Portal-Login";
 $lang["emailTitle"]                      = "E-Mail*";
 $lang["forenameTitle"]                   = "Vorname";
 $lang["invalidEmailadress"]              = "Keine gültige E-Mailadresse.";
@@ -38,6 +30,14 @@ $lang["passwordTitle"]                   = "Passwort";
 $lang["passwordTitle2"]                  = "Passwort";
 $lang["passwordsUnequal"]                = "Passwörter unterschiedlich.";
 $lang["phoneTitle"]                      = "Telefon";
+$lang["portallogin_editmode"]            = "Editier-Modus";
+$lang["portallogin_editmode_0"]          = "Minimales Profil";
+$lang["portallogin_editmode_1"]          = "Vollständiges Profil";
+$lang["portallogin_error"]               = "Seite im Fehlerfall (optional)";
+$lang["portallogin_logout_success"]      = "Seite nach dem Logout (optional)";
+$lang["portallogin_profile"]             = "Seite zum Editieren des Profils (optional)";
+$lang["portallogin_profile_hint"]        = "Zum Editieren des Profiles muss auf der Zielseite ebenfalls ein Portallogin-Element angelegt sein.";
+$lang["portallogin_pwdforgot"]           = "Seite für das Passwort-Vergessen Formular (optional)";
 $lang["postalTitle"]                     = "PLZ";
 $lang["pwdForgotLink"]                   = "Passwort vergessen";
 $lang["pwdHint"]                         = "Bitte geben Sie hier ein neues Passwort an.";

@@ -7,13 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 337
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["header_query"]                    = "Ключова дума";
-$lang["stats_title"]                     = "Заявки";
 $lang["hitlist_text1"]                   = "Търсене на";
 $lang["hitlist_text2"]                   = "намерени";
 $lang["hitlist_text3"]                   = "резултати";
 $lang["searchterm_label"]                = "Търси";
+$lang["stats_title"]                     = "Заявки";
 $lang["submit_label"]                    = "Търсене";

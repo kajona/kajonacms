@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["_tags_defaultprivate_"]           = "Private assignments by default";
 $lang["action_add_to_favorites"]         = "Marks as favorite";
 $lang["action_list_favorites"]           = "List favorites";
 $lang["action_show_all"]                 = "Show all tags";
@@ -26,7 +27,6 @@ $lang["tag_assignments"]                 = "Assignments";
 $lang["tag_edit"]                        = "Edit";
 $lang["tag_name_hint"]                   = "A set of tags may be submitted as a comma-separated list";
 $lang["tagsection_header"]               = "Tags";
-$lang["_tags_defaultprivate_"]           = "Private assignments by default";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Favorites",  5 => "",	6 => "", 7 => "", 8 => "" );

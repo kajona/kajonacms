@@ -12,8 +12,8 @@
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страница результатов";
 $lang["_news_search_resultpage_hint"]    = "Эта страница отображает детали о новостях, которые были найдены при поиске.";
-$lang["action_new_news"]                 = "Создать новость";
 $lang["action_new_feed"]                 = "Новая RSS-лента";
+$lang["action_new_news"]                 = "Создать новость";
 $lang["delete_category_question"]        = "Вы действительно хотите ударить категорию &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_feed_question"]            = "Вы действительно хотите удалить ленту &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_news_question"]            = "Вы действительно хотите удалить новости &quot;<b>%%element_name%%</b>&quot;?";

@@ -7,18 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["portallogin_editmode"]            = "Redigeringsläge";
-$lang["portallogin_editmode_0"]          = "Minimal profil";
-$lang["portallogin_editmode_1"]          = "Fullständig profil";
-$lang["portallogin_error"]               = "Sida i fall av fel (valfri)";
-$lang["portallogin_logout_success"]      = "Sida efter utloggning (valfri)";
-$lang["portallogin_profile"]             = "Sida för att redigera profil (valfri)";
-$lang["portallogin_profile_hint"]        = "För att redigera en profil måste ett portalloggin-element vara installerat på målsidan.";
-$lang["portallogin_pwdforgot"]           = "Sida för glömt-lösenord formulär (valfri)";
-$lang["portallogin_success"]             = "Om det lyckas sida (valfri)";
 $lang["changePwd"]                       = "Byt lösenord";
 $lang["cityTitle"]                       = "Ort";
 $lang["dateTitle"]                       = "Födelsdag";
@@ -38,6 +29,15 @@ $lang["passwordTitle"]                   = "Lösenord";
 $lang["passwordTitle2"]                  = "Lösenord";
 $lang["passwordsUnequal"]                = "Lösenord ej lika.";
 $lang["phoneTitle"]                      = "Telefon";
+$lang["portallogin_editmode"]            = "Redigeringsläge";
+$lang["portallogin_editmode_0"]          = "Minimal profil";
+$lang["portallogin_editmode_1"]          = "Fullständig profil";
+$lang["portallogin_error"]               = "Sida i fall av fel (valfri)";
+$lang["portallogin_logout_success"]      = "Sida efter utloggning (valfri)";
+$lang["portallogin_profile"]             = "Sida för att redigera profil (valfri)";
+$lang["portallogin_profile_hint"]        = "För att redigera en profil måste ett portalloggin-element vara installerat på målsidan.";
+$lang["portallogin_pwdforgot"]           = "Sida för glömt-lösenord formulär (valfri)";
+$lang["portallogin_success"]             = "Om det lyckas sida (valfri)";
 $lang["postalTitle"]                     = "Postnummer";
 $lang["pwdForgotLink"]                   = "Glömt lösenord";
 $lang["pwdHint"]                         = "Vänligen ange här ett nytt lösenord.";

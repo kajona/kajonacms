@@ -7,13 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 370
+//Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["element_gallery_name"]            = "Галерия със снимки";
-$lang["element_galleryRandom_name"]      = "Случайна снимка";
-$lang["element_downloads_name"]          = "Downloads";
 $lang["download_id"]                     = "Архив";
+$lang["element_downloads_name"]          = "Downloads";
+$lang["element_galleryRandom_name"]      = "Случайна снимка";
+$lang["element_gallery_name"]            = "Галерия със снимки";
 $lang["gallery_id"]                      = "Галерия";
 $lang["gallery_imagesperpage"]           = "Изображения за страница";
 $lang["gallery_imagesperpage_hint"]      = "Брой на изображенията за страница във вид на списък. 0 = неограничен.";

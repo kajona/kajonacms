@@ -53,7 +53,7 @@ $lang["workflow_status_2"]               = "Geplant";
 $lang["workflow_status_3"]               = "Beendet";
 $lang["workflow_systemid"]               = "Verwandte Systemid";
 $lang["workflow_text"]                   = "Text";
-$lang["workflow_text2"]                   = "Text 2";
+$lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Nächste Ausführung";
 $lang["workflow_ui"]                     = "Bearbeitungsmaske für den aktuellen Schritt anzeigen";
 

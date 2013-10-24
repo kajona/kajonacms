@@ -12,8 +12,8 @@
 //editable entries
 $lang["_news_search_resultpage_"]        = "Result page";
 $lang["_news_search_resultpage_hint"]    = "This page shows the details of the news which where found by the search.";
-$lang["action_new_news"]                 = "Create news";
 $lang["action_new_feed"]                 = "New RSS-feed";
+$lang["action_new_news"]                 = "Create news";
 $lang["backward"]                        = "Backward";
 $lang["calendar_filter_news"]            = "News Beiträge";
 $lang["calendar_type_news"]              = "News";

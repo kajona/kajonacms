@@ -7,18 +7,18 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 385
 
 //editable entries
 $lang["header_amount"]                   = "Antal";
 $lang["header_date"]                     = "Datum";
 $lang["header_language"]                 = "Språk";
 $lang["header_query"]                    = "Sökterm";
-$lang["stats_title"]                     = "Sökfrågor";
 $lang["hitlist_text1"]                   = "Sökningen efter";
 $lang["hitlist_text2"]                   = "hittad";
 $lang["hitlist_text3"]                   = "resultat";
 $lang["searchterm_label"]                = "Sökord";
+$lang["stats_title"]                     = "Sökfrågor";
 $lang["submit_label"]                    = "Sök";
 $lang["weiter"]                          = "nästa";
 $lang["zurueck"]                         = "föregående";

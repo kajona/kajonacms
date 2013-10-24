@@ -12,8 +12,8 @@
 //editable entries
 $lang["_news_search_resultpage_"]        = "Treffer-Seite";
 $lang["_news_search_resultpage_hint"]    = "Auf dieser Seite erfolgt die Detailansicht der News, die in der Suche gefunden wurden.";
-$lang["action_new_news"]                 = "News anlegen";
 $lang["action_new_feed"]                 = "Neuer RSS-Feed";
+$lang["action_new_news"]                 = "News anlegen";
 $lang["backward"]                        = "Zurück";
 $lang["calendar_filter_news"]            = "News Beiträge";
 $lang["calendar_type_news"]              = "News";

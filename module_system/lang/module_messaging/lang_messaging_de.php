@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["action_config"]                   = "Einstellungen";
 $lang["action_edit"]                     = "Detail-Ansicht";
 $lang["action_show_all"]                 = "Alle Nachrichten anzeigen";
-$lang["action_config"]                   = "Einstellungen";
 $lang["batchaction_read"]                = "Als gelesen markieren";
 $lang["delete_question"]                 = "Möchten Sie die Nachricht &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["message_prolog"]                  = "Eine neue Nachricht ist eingetroffen. Zum Lesen der Nachricht können Sie den nachstehenden Link verwenden. Eine Kopie der Nachricht folgt.";

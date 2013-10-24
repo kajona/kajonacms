@@ -11,11 +11,11 @@
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Active template-pack";
+$lang["action_download"]                 = "Download template-pack";
 $lang["action_list"]                     = "Installed packages";
 $lang["action_list_templates"]           = "Installed templates";
-$lang["action_upload_package"]           = "Install/Update a package";
-$lang["action_download"]                 = "Download template-pack";
 $lang["action_new_copy"]                 = "Create a new template-pack";
+$lang["action_upload_package"]           = "Install/Update a package";
 $lang["all"]                             = "All";
 $lang["delete_question"]                 = "Do you really want to remove the template-pack &quot;<b>%%element_name%%</b>&quot;?";
 $lang["element"]                         = "Element";
@@ -42,11 +42,11 @@ $lang["pack_version"]                    = "Version";
 $lang["package_author"]                  = "Author";
 $lang["package_doinstall"]               = "Install/Update package";
 $lang["package_install"]                 = "Download and install package";
-$lang["package_noinstall_installed"]     = "Package is already installed locally";
 $lang["package_install_success"]         = "Package installed";
 $lang["package_installocally"]           = "Install package";
 $lang["package_minversion"]              = "Minimal system-version";
 $lang["package_modules"]                 = "Required modules";
+$lang["package_noinstall_installed"]     = "Package is already installed locally";
 $lang["package_notinstallable"]          = "Package can't be installed.";
 $lang["package_noupdate"]                = "There's no new version available. Latest version";
 $lang["package_noversion"]               = "The system failed to find a matching remote package";
@@ -59,6 +59,7 @@ $lang["package_type"]                    = "Type";
 $lang["package_updatefound"]             = "Update the package to the latest version ";
 $lang["package_version"]                 = "Version";
 $lang["package_version_installed"]       = "Version installed";
+$lang["packagelist_filter"]              = "Filter-Text";
 $lang["provider_error_package"]          = "The packages is no valid archive.";
 $lang["provider_error_transfer"]         = "Error while transferring the package.";
 $lang["provider_kajona"]                 = "Official Kajona packages";
@@ -79,7 +80,6 @@ $lang["update_notification_intro"]       = "A new version is available for an in
 $lang["update_notification_package"]     = "Respective package";
 $lang["update_notification_verav"]       = "Available version";
 $lang["update_notification_verinst"]     = "Installed version";
-$lang["packagelist_filter"]              = "Filter-Text";
 
 //non-editable entries
 $lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
