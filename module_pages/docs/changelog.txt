@@ -1,5 +1,23 @@
 Module Pages
 
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: updated elements to make use of new annotation based element-form generation
+NEW: elements may use annotations to declare mapped db-columns, introduced the formgenerator to elements. migration of elements to follow.
+NEW: save changes in portaleditors RTE right on blur; removed save button
+NEW: added a new xml-api method to move an element to a new placeholder
+NEW: implementation of drag&drop sorting of page elements in portal editor, even between different placeholders. Refactored code to show/hide portaleditor action toolbar. #797
+NEW: added translations for all page elements
+NEW: more decoupling of modules, pages no longer a fixed requirement for mediamanager, search and tags
+BUG: the portaleditor reloaded the page even if saving an element resulted in validation errors. fixed, so the errors will be shown and the portaleditor overlay remaines open
+BUG: fixed the rendering of element-names, the localized names are loaded again
+BUG: changed placeholder-column of elements to text instead of 254, avoiding problems with long placeholder-titles
+BUG: the pe-outline was rendered in case the PE was enabled, but deactivated for the session
+BUG: when creating a new page, the template-dropdown was disabled in some scenarios
+BUG: the create-page button was rendered even if the parent-node missed edit-permissions. this caused an permission-exception on the following page when creating the page-form
+
+
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: the portaleditor is now capable of three modes: #wysiwyg, full editor, #textarea: limited editor with linebreaks and #plain, limited editor without linebreaks. Use this options to control an elements portal-editor appereance in the element-template. #801
 NEW: Refactored some parts of the page-generation, split into separate methods

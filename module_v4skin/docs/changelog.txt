@@ -1,6 +1,29 @@
 
 Module V4 Skin
 
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: fixed styling of file upload, improved layout for small screens
+NEW: better icon for enabling/disabling records; styling of disabled records in admintable
+NEW: the batchactions-checkbox is visible by default  #813
+NEW: Changed portaleditor styling
+NEW: the adminskin uses opensans instead of dosis as the default font, decreased the font-size a little bit
+NEW: added styles for backend navigation-groups, so entries with no a-href. those will be skipped in the path-navigation dropdown but rendered in the accordion.
+NEW: the number of unread messages is added to the backend page-title. #818
+NEW: added full support of print-styles
+NEW: removed all print.tpl and printView references. Print views are styled using css media selectors and no longer by a different template
+NEW: the name of the original action-icon is added as a data-kajona-icon attribute
+NEW: enabled fontawesome by default, tweaking is still required
+NEW: cleaned up some admin skin elements, the row-striping is generated using css, the alternating classes are no longer required
+NEW: the data-table may be styled explicitly using css-classes for cells
+NEW: added a marker-class to the matrix-header, used to identify the table
+NEW / SKINCHANGE: removed main_portaleditor.tpl from skins, now handled completely by folderview.tpl
+BUG: tooltips are only initialized if the title-tag is not empty
+BUG: button-tags include the name, so clicking different button in a single form may trigger separate events on the server-side
+BUG: event propagation is prevented for dropdown submenu clicks, otherwise the menu is not usable on mobile devices
+BUG: fixed the top-bar for tablets / phones
+
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: removed the border-radius of some backend-skin elements, now way more consistent
 NEW: harmonized non-rounded corners, autocomplete search indicates search by a small animation

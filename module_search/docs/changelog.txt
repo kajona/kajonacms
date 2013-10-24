@@ -1,5 +1,11 @@
 Module Search
 
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: introduced a new interface "interface_search_resultobject". Currently used to grant objects the possibility to generate the on-click urls for search-results themselves. If not implemented, the entry is added with a generic edit-action. If this isn't sufficient, implement the interface and decide on your own which url you want to return. #832
+BUG: for objects with no string-based properties, the generic backend search could fail due to an erroneous sql query
+BUG: fixed the admin / portal element search plugins to build the queries against the new annotation based elements
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: refactored the highlighting of search-phrases. now js-based an no longer generated on the server-side. #794
 BUG: fixed search queries for float-values on postgres (aka ignoring them)

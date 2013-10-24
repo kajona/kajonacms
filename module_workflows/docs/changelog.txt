@@ -1,4 +1,7 @@
 Module Workflows
 
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: workflow details are now rendered using the dataTable instead of a plain list
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: a workflow-handler may return an instance of class_admin_formgenerator or string containing the generated form NEW: the workflow-backend-view adds the current id to the path-navigation

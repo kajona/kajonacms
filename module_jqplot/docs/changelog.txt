@@ -1,0 +1,5 @@
+Module JQPlot
+
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: new charting-library, replacing flot completely

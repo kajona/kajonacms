@@ -1,0 +1,6 @@
+Module Stats
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: Updated browscap.ini to latest release
+NEW: enhanced the dimensions of the stats-widget chart
+NEW: updated stats to new plugin manager

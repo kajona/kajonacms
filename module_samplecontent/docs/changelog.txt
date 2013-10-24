@@ -1,0 +1,6 @@
+Module Samplecontent
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: cleaned up placeholders in default template; adjusted sample content installer
+NEW: updated the samplecontent to demonstrate element-moving by drag n drop
+BUG: fixed the alignment of the faqs' rating-icons (samplecontent)

@@ -1,6 +1,10 @@
 
 Module Packagemanager
 
+V4.3 ----------------------------------------------------------------------------------------------------
+BUG: the packagemanager / user list filter could trigger reloads to each other instead of reloading the matching list
+
+
 V4.2 ----------------------------------------------------------------------------------------------------
 BUG: for packages with providesInstaller = false, the default template was not updated.
 BUG: installing a module-package could corrupt the database due to a missing module-id. therefore the module-ids are reloaded between package extraction and package installation. #807

@@ -1,0 +1,7 @@
+Module User
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: added a remove-icon to the user-selector in order to remove a selected user from the form-field
+NEW: changed the icon for "send new password to user" from icon_mail to icon_mailNew
+NEW: added a possibility to define a list of blocked groups, for those groups user-assignments are only allowed for members of the super-admin group. may be used in special scenarios to avoid privilege escalations
+BUG: the packagemanager / user list filter could trigger reloads to each other instead of reloading the matching list

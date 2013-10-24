@@ -1,0 +1,10 @@
+Module Messaging
+
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: the admin-action "mailForm" sends messages rather using the messaging subsystem instead of sending direct mails
+NEW: added a subject to messages. if given used as the displayname, otherwise the first part of the body is used. #811
+NEW: the messaging details view uses replaceTextLinks() to make textual links cklickable #812
+BUG: added some more type-safety for postgres-databases
+BUG: if the session expired on the server but the client still tries to fetch the list of unread messages, an exception was thrown. since this is a rather common scenario, the logs could have been flooded with unuseful messages.
+BUG: when viewing a message, some line-breaks in text-links resulted in broken link-targets

@@ -1,0 +1,7 @@
+Module Dashboard
+
+
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: the additional step 2, so the configuration of an admin-widget is skipped if the widget doesn't provide a config-form
+NEW: on widget-moves, the dashboard shows an empty placeholder for the current drop-target

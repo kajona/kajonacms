@@ -1,0 +1,63 @@
+Module System
+
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: Added annotations @module, @moduleId for module and moduleId declarations. makes constructors obsolete in many cases. #830
+NEW: the wysiwygsmall formentry allows images and links to be placed in the content
+NEW: added a new annotation @fieldHidden for formentries. if set, the entry is rendered in the optional-elements section of the form.
+NEW: chart-engines are instantiated dynamically, no longer hardcoded calls #836
+NEW: class_resourceloader::getFolderContent is able to filter the list of files being returned using a callback-method. the callback is passed to array_filter, so the same syntax and behaviour is applied
+NEW: added a new formentry "plaintext" to inject code like js-fragments into forms
+NEW: updated jQuery to 1.10.2
+NEW: moved the admintask-js logic to own, static methods. may be used by other classes to reduce the amount of copy n paste code.
+NEW: optimized the systemtask-list rendering, a tasks' admin-form is only generated in case the task is really executed.
+NEW: added task / batch processing based class_image2. will replace class_image.
+NEW: Pluginmanager for admin plugins implementing interface_admin_plugin.
+NEW: added the class class_module_system_changelog_restorer, used to restore single values from the changelog back to the linked object
+NEW: added a method containsSection to class_template in order to validate the presence of a section within a template
+NEW: the generic actionList @ class_admin_evensimpler creates a list-identifier (listTypename)  by default
+NEW: the changelog may be temporary disabled to speed up script execution
+NEW: settings are cached internally, reducing the amount of queries per request
+NEW: class_date supports setNext/PreviousMonth/Week
+NEW: systemtask-executions are logged with level WARNING to their own logfile
+NEW: introduced a new annotation "@fieldDDValues", relevant for dropdown admin-form entries. The value is a list of [key=>value],[key=>value] pairs, resolved from the language-files. This makes it obsolete to pass the language-file based options programmatically
+NEW: class_link, replacing all link-functions in functions.php. getLinkAdminRaw is replaces by (nearly identical) getLinkAdminManual
+NEW: added system time info to systemInfo view
+NEW: A custom error-message in case of validation-errors may be provided to formentries. If not given, the label is still being used instead.
+NEW: added an integer-validator
+NEW: added javascript function KAJONA.v4skin.appendLinkToPathNavigation. adds a simple link to the currents page path-navigation.
+NEW: when including a config file fails, the name of the file is printed in every case
+NEW: the adminform-handler tries to load the values from the params even if there is no passed source-object
+NEW: folderview-based actions (so dialogs) are not added to the history-stack
+BUG: when the validation of an evensimpler form failed, the systemid could get lost. the resulted in records with a wrong prev-id
+BUG: tags are stripped from an objects display-name when throwing exceptionsBUG: the mail action of module system missed to url-decode params before rendering the values
+BUG: fixed the urlencoding of the image-cropper cross links
+BUG: The sort-criteria for generic select-statements was skipped in case the @listOrder annotation used only the column name (without the table name)
+BUG: some filesystem operation replace a possible _realpath_ part of the passed filename. otherwise some cache-flushing methods fail and could lead to a corrupt cache on package installs / updates.
+BUG: the core event-dispatcher cached some instances using the wrong static variable
+BUG: null-values could have been replaced with empty strings before passing them to the db-driver. this caused problems on some dbms like postgres
+BUG: changed the way the wysiwyg is initialized. this avoids problems with div-tags named the same as some backend-skin css classes / ids.
+BUG: the automatic aspect-changer is only triggered, if the target aspect is visible
+
+
+
+V4.2 ----------------------------------------------------------------------------------------------------
+NEW: added a new form-entry "user", used to select a user from the user-management, includes autocomplete. Therefore the old toolkit-user selector was updated to the latest jqueryUI changes.
+NEW: added a new interface "interface_formentry_printable", extending the interface_formentry. By adding a method "getValueAsText", form-entries may be used to generate a "read only" or a summary view of a single object / form
+NEW: before sending a generated update-query to the database, int/bit property values are casted explicitly. Required by some RDBMS.
+NEW: added an image-mapper for the backend-skins. The mapper is expected for each skin, named class_adminskin_imageresolver (implementing interface_adminskin_imageresolver). The imageresolver transforms names like "icon_edit" into a matching img-tag or an i-tag, as used by the current skin. #804
+NEW: added formentry textrow, usable to render a hint without a matching form-element
+NEW: more typesafety on date getters / setters in class_root
+NEW: the backend navigation entries are cached per aspect, this allows a module to render different actions depending on the current aspect
+NEW: module-id files may use an additional underscore
+NEW: added class_admin_formgenerator::removeField() to remove an already added entry from a form
+BUG: system-changelog missed the ORDER BY criteria for a merged resultset
+BUG: when rendering a list via class_admin_evensimpler, the original action is restored temporarily. Otherwise the page rendered below the list of records would use "list" for every object-type, resulting in a broken paging-link/erroneous link.
+BUG: the new, decoupled image generation missed to keep the image ratio
+BUG: fixed session close error during image generation
+BUG: some special chars could create broken dialog-links in the backend. #805
+BUG: the lang-scriptlet missed to register for the context 'portal-page'. this could lead to scriptlet-placeholder not being replaced in case of xml requests.
+BUG: admin-formgenerator passes null for empty dates instead of an empty string
+BUG: language-files may contain additional underscores for the module-part
+BUG: reenabled the system-config "admintoolkit". The specified class-name is evaluated and resolved correctly.
+BUG: double-slashes are removed from paths resolved by class_resourceloader

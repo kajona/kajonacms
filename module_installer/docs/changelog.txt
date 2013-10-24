@@ -1,5 +1,12 @@
 Module Installer
 
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: the installer base-class initializes the metadata.xml automatically, the init-call in the installers' constructor is no longer required.
+BUG: changed directory seperator so that always "/" is being used (else it causes problems under windows)
+
+
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: updated the installer, removed rounded borders
 BUG: the installer crashed in case module samplecontent is not available

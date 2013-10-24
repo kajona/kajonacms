@@ -1,5 +1,14 @@
 Module Mediamanager
 
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: moved the gallery / download element / samplecontent installers from module mediamanager to module pages. the mediamanger no longer requires the pages module, therefore it may be installed in advance of the pages module causing the elements to be skipped due to unresolved requirements.
+NEW: class_image2: Migrated media manager and image resizing with image.php to new class.
+NEW: fixed scaling of thumbnails; better responsive layout
+NEW: the folder-view (image/file selector for links) works in shown using the grid-mode instead of the list-based view. Clicking elements is supported.
+NEW: moved the folderview-admin class (deprecated) to module mediamanager and added some more "module existing" checks
+BUG: Updated a SQL statement for searching a package within the database
+
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: mediamanger-files are renderd with an addition download-icon (to download the file in the backend, too)
 NEW: the mediamanager / folderview selector contains a link to the image-repository and a link to a list of all repositories when selecting a link-target #800
