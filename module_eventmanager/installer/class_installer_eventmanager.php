@@ -217,10 +217,14 @@ class class_installer_eventmanager extends class_installer_base implements inter
     private function update_421_422() {
         $strReturn = "Updating 4.2.1 to 4.2.2...\n";
 
-        $strReturn .= "Adding new user column...\n";
+        $strReturn .= "Adding new user columns...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
-                            ADD ".$this->objDB->encloseColumnName("em_pt_userid")." ".$this->objDB->getDatatype("char20")." NULL,
-                            ADD ".$this->objDB->encloseColumnName("em_pt_status")." ".$this->objDB->getDatatype("int")." NULL,";
+                            ADD ".$this->objDB->encloseColumnName("em_pt_userid")." ".$this->objDB->getDatatype("char20")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
+                            ADD ".$this->objDB->encloseColumnName("em_pt_status")." ".$this->objDB->getDatatype("int")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
             $strReturn .= "An error occured! ...\n";
 

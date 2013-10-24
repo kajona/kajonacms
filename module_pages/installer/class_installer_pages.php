@@ -565,35 +565,42 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Changing placeholder column data-type...\n";
 
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
-                             ADD ".$this->objDB->encloseColumnName("page_element_ph_placeholder_2")." ".$this->objDB->getDatatype("text")." NULL";
+        $strReturn .= "Creating temp-table...\n";
+        $strReturn .= "Installing table page_element...\n";
+
+        $arrFields = array();
+        $arrFields["page_element_id"] 					= array("char20", false);
+        $arrFields["page_element_ph_placeholder"]       = array("text", true);
+        $arrFields["page_element_ph_name"]              = array("char254", true);
+        $arrFields["page_element_ph_element"]           = array("char254", true);
+        $arrFields["page_element_ph_title"]             = array("char254", true);
+        $arrFields["page_element_ph_language"]          = array("char20", true);
+
+        if(!$this->objDB->createTable("page_element_temp", $arrFields, array("page_element_id"), array("page_element_ph_language", "page_element_ph_element")))
+            $strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Copying table content...\n";
+        $strQuery = "INSERT INTO "._dbprefix_."page_element_temp
+                        (page_element_id, page_element_ph_placeholder, page_element_ph_name, page_element_ph_element, page_element_ph_title, page_element_ph_language)
+                       SELECT page_element_id, page_element_ph_placeholder, page_element_ph_name, page_element_ph_element, page_element_ph_title, page_element_ph_language FROM "._dbprefix_."page_element";
 
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
 
 
-
-        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
-                        SET page_element_ph_placeholder_2 = page_element_ph_placeholder";
-
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
-
-
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
-                            DROP ".$this->objDB->encloseColumnName("page_element_ph_placeholder")."";
+        $strReturn .= "Dropping old table...\n";
+        $strQuery = "DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."";
 
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
 
-
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
-                          CHANGE ".$this->objDB->encloseColumnName("page_element_ph_placeholder_2")." ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->getDatatype("text")." NULL ";
-
+        $strReturn .= "Renaming new table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element_temp")." RENAME TO ".$this->objDB->encloseTableName(_dbprefix_."page_element")."";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
+
+
 
 
         $strReturn .= "Copying default-template, if in use. Placeholders changed in 4.3\n";
