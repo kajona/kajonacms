@@ -939,7 +939,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Removing module flotchart if exists...\n";
         $objFlotPackage = $objManager->getPackage("flotchart");
         if($objFlotPackage !== null) {
-            //unsintall flot
+            //uninstall flot
             $class_filesystem = new class_filesystem();
             $class_filesystem->folderDeleteRecursive($objFlotPackage->getStrPath());
         }
