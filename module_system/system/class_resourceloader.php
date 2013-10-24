@@ -266,7 +266,7 @@ class class_resourceloader {
      *
      * @see array_filter
      */
-    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, callable $objFilterFunction = null) {
+    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, $objFilterFunction = null) {
         $arrReturn = array();
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
@@ -344,8 +344,8 @@ class class_resourceloader {
      *
      * @return array
      */
-    private function applyCallback($arrEntries, callable $objCallback = null) {
-        if($objCallback == null)
+    private function applyCallback($arrEntries, $objCallback = null) {
+        if($objCallback == null || !is_callable($objCallback))
             return $arrEntries;
 
         $arrTemp = array();
