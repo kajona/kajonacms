@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 385
+//Kajona Language Editor Core Build 389
 
 //editable entries
 $lang["delete_question"]                 = "Наистина ли искате да премахнете езика &quot;<b>%%element_name%%</b>&quot;?";

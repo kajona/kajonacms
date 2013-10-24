@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 385
+//Kajona Language Editor Core Build 389
 
 //editable entries
 $lang["installer_config_dbdriver"]       = "Драйвер датабазы";
