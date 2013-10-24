@@ -603,6 +603,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3") {
+            $strReturn .= $this->update_43_431();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -883,6 +889,80 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 4.1.1 to 4.2...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.2");
+        return $strReturn;
+    }
+
+    private function update_43_431() {
+        $strReturn = "Updating 4.3 to 4.3.1...\n";
+        $strReturn .= "This update removes the flot chart module and replaces it with the jqplot chart module...\n\n";
+
+    //1. install module jqplot
+        $strReturn .= "Installing module jqplot if not exist...\n";
+        $objManager = new class_module_packagemanager_manager();
+        $objExistingJqPlotPackage = $objManager->getPackage("jqplot");
+
+        //if jqplot is not installed, install it
+        if($objExistingJqPlotPackage === null) {
+            $objContentProvider = new class_module_packagemanager_contentprovider_kajona();
+            $arrPackageMetaData = $objContentProvider->searchPackage("jqplot");
+
+            //if a package was found
+            if($arrPackageMetaData !== null && count($arrPackageMetaData) == 1) {
+                //upload the package to projects/temp
+                class_carrier::getInstance()->setParam("systemid", $arrPackageMetaData[0]["systemid"]);
+                $strFile = $objContentProvider->processPackageUpload();
+
+                if($objManager->validatePackage($strFile)) {
+                    if(uniSubstr($strFile, -4) == ".zip") {
+                        //now extract the zip file and......
+                        $objHandler = $objManager->extractPackage($strFile);
+                        $objFilesystem = new class_filesystem();
+                        $objFilesystem->fileDelete($strFile);
+                        //move the created folder to /core
+                        $objHandler->move2Filesystem();
+                    }
+                }
+                else {
+                    $strReturn .= "Package file is not valid...\n";
+                    $strReturn .= "Update to version 4.3.1 cancelled...\n";
+                    return $strReturn;
+                }
+            }
+            else {
+                $strReturn = "Module jqplot was not found via the packagemanager...\n";
+                $strReturn .= "Update to version 4.3.1 cancelled...\n";
+                return $strReturn;
+            }
+        }
+
+    //2. uninstall module flot
+        $strReturn .= "Removing module flotchart if exists...\n";
+        $objFlotPackage = $objManager->getPackage("flotchart");
+        if($objFlotPackage !== null) {
+            //unsintall flot
+            $class_filesystem = new class_filesystem();
+            $class_filesystem->folderDeleteRecursive($objFlotPackage->getStrPath());
+        }
+
+
+    //3. set jqplot as standard chart library
+        $strReturn .= "Set jqplot as standard chart library if flot was selected standard chart library...\n";
+        $objSetting = class_module_system_setting::getConfigByName("_system_graph_type_");
+        if($objSetting->getStrValue() == "flot") {
+            $objSetting->setStrValue("jqplot");
+            $objSetting->updateObjectToDb();
+        }
+
+    //4. update version to 4.3.1
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.3.1");
+
+
+    //5. relaod classloader etc.
+        class_resourceloader::getInstance()->flushCache();
+        class_classloader::getInstance()->flushCache();
+        class_reflection::flushCache();
+
         return $strReturn;
     }
 }
