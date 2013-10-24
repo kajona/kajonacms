@@ -230,6 +230,17 @@ class class_module_system_admin extends class_admin_simple implements interface_
         //And put it into a fieldset
         $strServer = $this->objToolkit->getFieldset($this->getLang("server"), $strServer);
 
+        //Time info
+        $arrTimeinfo = $objCommon->getTimeInfo();
+        $intI = 0;
+        $strTimeinfo = $this->objToolkit->listHeader();
+        foreach($arrTimeinfo as $strKey => $strValue) {
+            $strTimeinfo .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
+        }
+        $strTimeinfo .= $this->objToolkit->listFooter();
+        //And put it into a fieldset
+        $strTimeinfo = $this->objToolkit->getFieldset($this->getLang("timeinfo"), $strTimeinfo);
+
         //database
         $arrDatabase = $objCommon->getDatabaseInfos();
         $intI = 0;
@@ -252,7 +263,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         //And put it into a fieldset
         $strGD = $this->objToolkit->getFieldset($this->getLang("gd"), $strGD);
 
-        $strReturn .= $strPHP.$strServer.$strDB.$strGD;
+        $strReturn .= $strPHP.$strServer.$strTimeinfo.$strDB.$strGD;
         return $strReturn;
     }
 

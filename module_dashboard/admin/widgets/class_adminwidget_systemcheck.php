@@ -46,7 +46,7 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
      */
     public function getWidgetOutput() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightView())
+        if(!class_module_system_module::getModuleByName("system")->rightView() || !in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()))
             return $this->getLang("commons_error_permissions");
 
         $strReturn = "<style type=\"text/css\">

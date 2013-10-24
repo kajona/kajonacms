@@ -272,6 +272,23 @@ class class_module_system_common extends class_model implements interface_model 
     }
 
     /**
+     * Creates time info
+     *
+     * @return mixed
+     */
+    public function getTimeInfo() {
+        $arrReturn = array();
+        $arrReturn["time_phptimestamp"] = time();
+        $arrReturn["time_systemtimezone"] = date_default_timezone_get();
+        $arrReturn["time_localsystemtime"] = timeToString(time());
+        date_default_timezone_set("UTC");
+        $arrReturn["time_systemtime_UTC"] = date('Y-m-d H:i:s');
+        $arrReturn["time_systemzone_manual_setting"] = _system_timezone_;
+        return $arrReturn;
+
+    }
+
+    /**
      * Creates information about the webserver
      *
      * @return mixed
@@ -286,6 +303,8 @@ class class_module_system_common extends class_model implements interface_model 
         if(@disk_total_space(_realpath_)) {
             $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) . "/" . bytesToString(@disk_total_space(_realpath_)) . $this->getLang("diskspace_free", "system");
         }
+        $arrReturn["system_realpath"] = _realpath_;
+        $arrReturn["system_webpath"] = _webpath_;
         return $arrReturn;
     }
 

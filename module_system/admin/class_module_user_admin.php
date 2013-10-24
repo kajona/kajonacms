@@ -895,12 +895,17 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $bitShowAdmin = true;
         }
 
+        $objConfig = class_config::getInstance("blockedgroups.php");
+        $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
+
         foreach($arrGroups as $strSingleGroup) {
 
             if($strSingleGroup == _admins_group_id_ && !$bitShowAdmin) {
                 continue;
             }
 
+            if(in_array($strSingleGroup, $arrBlockedGroups) && !$bitShowAdmin )
+                continue;
 
             $objSingleGroup = new class_module_user_group($strSingleGroup);
             if(in_array($strSingleGroup, $arrUserGroups)) {
@@ -935,8 +940,23 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrGroups = $objSourcesytem->getAllGroupIds();
         $arrUserGroups = $objUser->getArrGroupIds();
 
+        //validate possible blocked groups
+        $arrBlockedGroups = array();
+        if(file_exists(_realpath_."/system/config/blockedgroups.php")) {
+            $objConfig = class_config::getInstance("blockedgroups.php");
+            $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
+        }
+
+        $bitIsSuperAdmin = in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray());
+
         //Searching for groups to enter
         foreach($arrGroups as $strSingleGroup) {
+
+            //skipped for blocked groups, those won't be updated
+            if(!$bitIsSuperAdmin && in_array($strSingleGroup, $arrBlockedGroups))
+                continue;
+
+
             if($this->getParam($strSingleGroup) != "") {
 
                 //add the user to this group
@@ -958,10 +978,17 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //check, if the current user is member of the admin-group.
         //if not, remain the admin-group as-is
-        if(!in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+        if(!$bitIsSuperAdmin) {
             $intKey = array_search(_admins_group_id_, $arrUserGroups);
             if($intKey !== false) {
                 $arrUserGroups[$intKey] = null;
+            }
+
+            foreach($arrBlockedGroups as $strOneGroup) {
+                $intKey = array_search($strOneGroup, $arrUserGroups);
+                if($intKey !== false) {
+                    $arrUserGroups[$intKey] = null;
+                }
             }
         }
 

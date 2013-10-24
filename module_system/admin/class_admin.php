@@ -583,7 +583,9 @@ abstract class class_admin {
         if($objModule != null && $objModule->getStrAspect() != "") {
             $arrAspects = explode(",", $objModule->getStrAspect());
             if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
-                class_module_system_aspect::setCurrentAspectId($arrAspects[0]);
+                $objAspect = new class_module_system_aspect($arrAspects[0]);
+                if($objAspect->rightView())
+                    class_module_system_aspect::setCurrentAspectId($arrAspects[0]);
             }
 
         }
