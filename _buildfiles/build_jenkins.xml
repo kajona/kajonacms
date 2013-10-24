@@ -161,7 +161,7 @@
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
                 <exclude name="module_pchart/" />
-                <exclude name="module_flot/" />
+                <exclude name="module_flotchart/" />
 
                 <include name="element_*/**"/>
                 <include name="module_*/*/**"/>
@@ -192,7 +192,7 @@
                 <exclude name="module_ldap/" />
                 <exclude name="module_packageserver/" />
                 <exclude name="module_pchart/" />
-                <exclude name="module_flot/" />
+                <exclude name="module_flotchart/" />
                 <exclude name="module_workflows/" />
                 <exclude name="module_pdf/" />
                 <exclude name="module_pageimportexport/" />
