@@ -110,6 +110,7 @@ class class_resourceloader {
         $objFilesystem->fileDelete($this->strTemplatesCacheFile);
         $objFilesystem->fileDelete($this->strFoldercontentCacheFile);
         $objFilesystem->fileDelete($this->strFoldercontentLangFile);
+        $this->arrModules = class_classloader::getInstance()->getArrModules();
     }
 
     /**
