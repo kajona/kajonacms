@@ -984,10 +984,22 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["checkbox"] = $this->objTemplate->fillTemplate(array("systemid" => $strId), $strTemplateID);
         }
 
-        if($strDescription != "")
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc");
-        else
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist");
+
+        //fallback-awareness for update-scenarios (update to 4.3)
+        $strGlobalTemplateId = $this->objTemplate->readTemplate("/elements.tpl");
+
+        if($strDescription != "") {
+            if($this->objTemplate->containsSection($strGlobalTemplateId, "generallist_desc"))
+                $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc");
+            else
+                $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc_1");
+        }
+        else {
+            if($this->objTemplate->containsSection($strGlobalTemplateId, "generallist"))
+                $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist");
+            else
+                $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_1");
+        }
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
