@@ -72,33 +72,8 @@ class class_link {
      * @return string
      */
     public static function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
-
         $strHref = "href=\"".class_link::getLinkAdminHref($strModule, $strAction, $strParams)."\"";
         return self::getLinkAdminManual($strHref, $strText, $strAlt, $strImage, "", "", $bitTooltip, $strCss);
-//
-//
-//        $strLink = "";
-//        if($strImage != "") {
-//            if($strAlt == "")
-//                $strAlt = $strAction;
-//
-//            if(!$bitTooltip)
-//                $strLink = "<a href=\"".class_link::getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-//            else
-//                $strLink = "<a href=\"".class_link::getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" rel=\"tooltip\">".class_adminskin_helper::getAdminImage($strImage, $strAlt, true)."</a>";
-//        }
-//
-//        else if($strText != "") {
-//            if($strAlt == "")
-//                $strAlt = $strText;
-//
-//            if($strAlt != $strText)
-//                $strLink = "<a href=\"".class_link::getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "")." rel=\"tooltip\">".$strText."</a>";
-//            else
-//                $strLink = "<a href=\"".class_link::getLinkAdminHref($strModule, $strAction, $strParams)."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
-//        }
-//
-//        return $strLink;
     }
 
 
