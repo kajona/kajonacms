@@ -84,8 +84,25 @@ class class_module_stats_admin extends class_admin implements interface_admin {
             @ini_set("memory_limit", "60M");
         }
 
-        $this->objPluginManager = new class_pluginmanager();
-        $this->objPluginManager->loadPluginsFiltered("/admin/statsreports/", self::$STR_PLUGIN_EXTENSION_POINT);
+
+        $bitScanPlugins = true;
+        //check on how to update - try to avoid problems with 4.2 -> 4.3 updates
+        $objMediamanager = class_module_system_module::getModuleByName("mediamanager");
+        if($objMediamanager != null && version_compare($objMediamanager->getStrVersion(), "4.3", "<"))
+            $bitScanPlugins = false;
+
+        $objSearch = class_module_system_module::getModuleByName("search");
+        if($objSearch != null && version_compare($objSearch->getStrVersion(), "4.3", "<"))
+            $bitScanPlugins = false;
+
+        $objPackageserver = class_module_system_module::getModuleByName("packageserver");
+        if($objPackageserver != null && version_compare($objPackageserver->getStrVersion(), "4.3", "<"))
+            $bitScanPlugins = false;
+
+        if($bitScanPlugins) {
+            $this->objPluginManager = new class_pluginmanager();
+            $this->objPluginManager->loadPluginsFiltered("/admin/statsreports/", self::$STR_PLUGIN_EXTENSION_POINT);
+        }
 
         $this->setAction("list");
     }
@@ -94,10 +111,12 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     public function getOutputModuleNavi() {
         $arrReturn = array();
         //Load all plugins available and create the navigation
-        $arrPlugins = $this->objPluginManager->getMatchingPluginObjects();
+        if($this->objPluginManager != null) {
+            $arrPlugins = $this->objPluginManager->getMatchingPluginObjects();
 
-        foreach($arrPlugins as $objPlugin) {
-            $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getPluginCommand(), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
+            foreach($arrPlugins as $objPlugin) {
+                $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getPluginCommand(), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
+            }
         }
 
         $arrReturn[] = array("", "");
