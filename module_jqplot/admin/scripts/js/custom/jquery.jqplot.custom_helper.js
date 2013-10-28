@@ -39,27 +39,34 @@ KAJONA.admin.jqplotHelper = {
         this.previousNeighbor = null;
     },
     mouseMove : function(ev, gridpos, datapos, neighbor, plot, tooltipId) {
-//        console.debug(neighbor);
-//        console.debug(plot);
-        //no datapoint
+        //Check if a datapoint(neighbor) is selected
         if(neighbor==null) {
+            //no datapoint selected
             $('#jqplot_tooltip').remove();
             this.previousNeighbor = null;
         }
         else {
+            var series = plot.series[neighbor.seriesIndex];
             var arrXAxisTicks = plot.axes.xaxis.ticks;
+
             var objTooltip = {
-                seriesLabel:plot.series[neighbor.seriesIndex].label,
+                seriesLabel: series.label,
 
-                seriesColor:plot.series[neighbor.seriesIndex].highlightColorGenerator ?
-                        plot.series[neighbor.seriesIndex].highlightColorGenerator.get(neighbor.pointIndex) : //pieChart
-                        plot.series[neighbor.seriesIndex].color, //all other charts
+                //get the series colors
+                seriesColor :series.highlightColorGenerator ?
+                             series.highlightColorGenerator.get(neighbor.pointIndex) : //for pieChart
+                             series.color, //all other charts
 
-                xValue:arrXAxisTicks.length>0?arrXAxisTicks[neighbor.pointIndex]:neighbor.data[0],
-                yValue:neighbor.data[1],
-                seriesIndex :neighbor.seriesIndex,
+                //Either set label value for this datapoint or value (if no x-axis labels were set)
+                xValue: arrXAxisTicks.length > 0 ?
+                        arrXAxisTicks[neighbor.pointIndex] :
+                        neighbor.data[0],
+
+                yValue: isNaN(neighbor.data[1]) ? neighbor.data[1] : neighbor.data[1].toFixed(3),
+                seriesIndex: neighbor.seriesIndex,
                 plot: plot
             };
+
 
             //new data point
             if( this.previousNeighbor == null //new data point --> create new point
