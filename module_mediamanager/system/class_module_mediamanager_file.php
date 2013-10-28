@@ -314,8 +314,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                 $strWhere = "AND ( ".implode(" OR ", $arrWhere)." )";
             }
             else {
-                $arrParams[] = "".$strNameFilter."";
-                $strWhere = "AND file_name = ?";
+                $arrParams[] = $strNameFilter."%";
+                $strWhere = "AND file_name LIKE ?";
             }
         }
 
@@ -366,7 +366,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                 $strWhere = "AND ( ".implode(" OR ", $arrWhere)." )";
             }
             else {
-                $arrParams[] = "%".$strNameFilter.".zip";
+                $arrParams[] = $strNameFilter."%";
                 $strWhere = "AND file_name LIKE ?";
             }
         }
