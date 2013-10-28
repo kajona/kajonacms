@@ -105,16 +105,20 @@ class class_copydown extends class_seleniumsuite {
 HTML;
                 
                 
-                if($_POST["databasehelper"] == "mysql") 
-                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerMYSQL.html\">selhelper_MySQL-Installer</a></td></tr>";                    
-                elseif ($_POST["databasehelper"] == "sqlite") 
-                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerSQLITE.html\">selhelper_SQLITE-Installer</a></td></tr>"; 
+                if($_POST["databasehelper"] == "mysql") {
+                    echo "\n\n  Adding database helper for MYSQL.\n";
+                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerMYSQL.html\">selhelper_MySQL-Installer.html</a></td></tr>";                    
+                }
+                elseif ($_POST["databasehelper"] == "sqlite") {
+                    echo "\n\n  Adding database helper for SQLITE.\n";
+                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerSQLITE.html\">selhelper_SQLITE-Installer.html</a></td></tr>"; 
+                }
                 
                 
                 foreach ($arrFiles as $strPathToFile=>$strOneFile) {
                     if(substr($strOneFile, 0,33) == "selhelper_kaj4x_allInOneInstaller")
                         continue;
-                    echo "\n  Processing file: ".$strPathToFile;
+                    echo "\n  Adding test file: ".$strPathToFile;
                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../..".$strPathToFile."\">".$strOneFile."</a></td></tr>";                    
                 }
                 $strContentTestsuiteFile .= <<<HTML
@@ -122,9 +126,9 @@ HTML;
 </body>
 </html>
 HTML;
-                echo "\n\n  Write master file for testsuite";
+                echo "\n\n  Writing master file for testsuite (Testsuite_YOURHOSTNAME.htm: this contains a link to all the tests)";
                 file_put_contents(_realpath_.$this->strSeleniumFolder."/Testsuite_".$_POST["HOSTNAME"].".htm", $strContentTestsuiteFile);
-                echo "\n\n\n<b>You will find your new files in "._realpath_.$this->strSeleniumFolder."</b>\nOpen the file 'Testsuite_HOSTNAME' in your Selenium IDE. All available test cases will be included.";
+                echo "\n\n\n<b>You will find your new files in "._realpath_.$this->strSeleniumFolder."</b>\nOpen the file 'Testsuite_".$_POST["HOSTNAME"].".htm' in your Selenium IDE. All available test cases will be included.";
             }
         }
     }    
@@ -165,6 +169,42 @@ HTML;
 	<td>sysPathname</td>
 </tr>
 <tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= "sir";
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>user1</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= "agp";
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>passwd1</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= "stb";
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>user2</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= "kajo10";
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>passwd2</td>
+</tr>
+<tr>
 	<td>open</td>
 	<td>\${sysAddress}/\${sysPathname}</td>
 	<td></td>
@@ -173,7 +213,7 @@ HTML;
 </body>
 </html>
 HTML;
-        echo "\n\n  Write environment file for your system...";
+        echo "\n\n  Writing environment file for your system (setEnv.htm)";
         file_put_contents(_realpath_.$this->strSeleniumFolder."/setEnv.htm", $strContentEnvFile);
     }
 
