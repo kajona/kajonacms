@@ -252,7 +252,7 @@ class class_orm_mapper {
                             $mixedValue = call_user_func(array($this->objObject, $strGetter));
                             if($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit")) {
                                 //different casts on 32bit / 64bit
-                                if(uniStrlen($mixedValue) > uniStrlen(PHP_INT_MAX))
+                                if($mixedValue > PHP_INT_MAX)
                                     $mixedValue = (float)$mixedValue;
                                 else
                                     $mixedValue = (int)$mixedValue;
