@@ -259,7 +259,7 @@ $lang["update_nourlfopen"]               = "To make this function work, the valu
 $lang["uploadmaxsize"]                   = "Upload max size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
-$lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
+$lang["warnung_settings"]                = "ATTENTION!!!<br />Using wrong values for the following settings could make the system become unusable!";
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
