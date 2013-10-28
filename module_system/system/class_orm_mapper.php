@@ -250,8 +250,13 @@ class class_orm_mapper {
                         if($strGetter !== null) {
                             //explicit casts required? could be relevant, depending on the target column type / database system
                             $mixedValue = call_user_func(array($this->objObject, $strGetter));
-                            if($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit"))
-                                $mixedValue = (int)$mixedValue;
+                            if($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit")) {
+                                //different casts on 32bit / 64bit
+                                if(uniStrlen($mixedValue) > uniStrlen(PHP_INT_MAX))
+                                    $mixedValue = (float)$mixedValue;
+                                else
+                                    $mixedValue = (int)$mixedValue;
+                            }
                             $arrColValues[$strColumn] = $mixedValue;
                             $arrEscapes[] = !$objReflection->hasPropertyAnnotation($strPropertyName, class_orm_mapper::STR_ANNOTATION_BLOCKESCAPING);
                         }
