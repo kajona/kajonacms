@@ -87,13 +87,13 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
                 $objEvent = new class_module_eventmanager_event($objListEntry->getPrevId());
                 if($objValidator->validate($objListEntry->getStrEmail())) {
                     $strPreset = "&mail_recipient=" . $objListEntry->getStrEmail();
-                    $strPreset .= "&mail_subject=" . urlencode($this->getLang("participant_mail_subject"));
-                    $strPreset .= "&mail_body=" . urlencode(
+                    $strPreset .= "&mail_subject=" . ($this->getLang("participant_mail_subject"));
+                    $strPreset .= "&mail_body=" .
                         $this->getLang("participant_mail_intro") . "\n" .
                         $this->getLang("event_title") . " " . $objEvent->getStrTitle() . "\n" .
                         $this->getLang("event_location") . " " . $objEvent->getStrLocation() . "\n" .
-                        $this->getLang("event_start") . " " . dateToString($objEvent->getObjStartDate())
-                    );
+                        $this->getLang("event_start") . " " . dateToString($objEvent->getObjStartDate());
+
                     return array(
                         $this->objToolkit->listButton(getLinkAdminDialog("system", "mailForm", $strPreset, "", $this->getLang("participant_mail"), "icon_mail"))
                     );
