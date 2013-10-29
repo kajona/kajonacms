@@ -124,6 +124,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_page_alias"                  => "<span class='icon-stack'><i class='icon-file-alt'></i><i class='icon-chevron-right icon-stack-base'></i></span>",
         "icon_progressbar"                 => "<i class='icon-spinner icon-spin'></i>",
         "icon_question"                    => "<i class='icon-question-sign'></i>",
+        "icon_reply"                       => "<i class='icon-reply'></i>",
         "icon_rotate_left"                 => "<i class='icon-undo'></i>",
         "icon_rotate_right"                => "<i class='icon-repeat'></i>",
         "icon_rss"                         => "<i class='icon-rss'></i>",
