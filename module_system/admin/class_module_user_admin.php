@@ -193,8 +193,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mailNew"));
         }
 
-        if($objListEntry instanceof class_module_user_user && checkEmailaddress($objListEntry->getStrEmail())) {
-            $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("system", "mailForm", "&mail_to_id=" . $objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $objListEntry->getStrDisplayName()));
+        if($objListEntry instanceof class_module_user_user) {
+            $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("messaging", "new", "&messaging_user_id=" . $objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $this->getLang("user_send_message")));
         }
 
         if($objListEntry instanceof class_module_user_user && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {

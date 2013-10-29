@@ -8,9 +8,11 @@ class class_test_messaging extends class_testbase  {
     public function testSendMessage() {
 
         $strText = generateSystemid()." autotest";
+        $strTitle = generateSystemid()." title";
+        $strIdentifier = generateSystemid()." identifier";
 
         $objMessageHandler = new class_module_messaging_messagehandler();
-        $objMessageHandler->sendMessage($strText, new class_module_user_group(_admins_group_id_), new class_messageprovider_exceptions());
+        $objMessageHandler->sendMessage($strText, new class_module_user_group(_admins_group_id_), new class_messageprovider_exceptions(), $strIdentifier, $strTitle);
 
         $bitFound = false;
 
@@ -22,7 +24,9 @@ class class_test_messaging extends class_testbase  {
         foreach($arrMessages as $objOneMessage) {
             if($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "class_messageprovider_exceptions") {
                 $bitFound = true;
-                $objOneMessage->deleteObject();
+                $this->assertEquals($objOneMessage->getStrTitle(), $strTitle);
+                $this->assertEquals($objOneMessage->getStrInternalIdentifier(), $strIdentifier);
+                $this->assertTrue($objOneMessage->deleteObject());
             }
         }
 
@@ -30,6 +34,54 @@ class class_test_messaging extends class_testbase  {
         $this->assertTrue($bitFound);
         $this->flushDBCache();
     }
+
+
+
+    public function testSendMessageObject() {
+
+        $strText = generateSystemid()." autotest";
+        $strTitle = generateSystemid()." title";
+        $strIdentifier = generateSystemid()." identifier";
+        $strSender = generateSystemid();
+        $strReference = generateSystemid();
+
+        $objMessage = new class_module_messaging_message();
+        $objMessage->setStrTitle($strTitle);
+        $objMessage->setStrBody($strText);
+        $objMessage->setStrInternalIdentifier($strIdentifier);
+        $objMessage->setObjMessageProvider(new class_messageprovider_exceptions());
+        $objMessage->setStrSenderId($strSender);
+        $objMessage->setStrMessageRefId($strReference);
+
+        $objMessageHandler = new class_module_messaging_messagehandler();
+        $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
+
+
+        $objGroup = new class_module_user_group(_admins_group_id_);
+        $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
+
+        foreach($arrUsers as $objOneUser) {
+            $bitFound = false;
+            $arrMessages = class_module_messaging_message::getObjectList($objOneUser);
+
+            foreach($arrMessages as $objOneMessage) {
+                if($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "class_messageprovider_exceptions") {
+                    $bitFound = true;
+                    $this->assertEquals($objOneMessage->getStrTitle(), $strTitle);
+                    $this->assertEquals($objOneMessage->getStrInternalIdentifier(), $strIdentifier);
+                    $this->assertEquals($objOneMessage->getStrSenderId(), $strSender);
+                    $this->assertEquals($objOneMessage->getStrMessageRefId(), $strReference);
+                    $this->assertTrue($objOneMessage->deleteObject());
+                }
+            }
+
+
+            $this->assertTrue($bitFound);
+        }
+
+        $this->flushDBCache();
+    }
+
 
     public function testUnreadCount() {
         $strText = generateSystemid()." autotest";

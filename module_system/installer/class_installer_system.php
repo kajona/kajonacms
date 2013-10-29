@@ -280,6 +280,8 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["message_user"] = array("char20", true);
         $arrFields["message_provider"] = array("char254", true);
         $arrFields["message_internalidentifier"] = array("char254", true);
+        $arrFields["message_sender"] = array("char20", true);
+        $arrFields["message_messageref"] = array("char20", true);
 
         if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
             $strReturn .= "An error occured! ...\n";
@@ -606,6 +608,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "4.3") {
             $strReturn .= $this->update_43_431();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3.1") {
+            $strReturn .= $this->update_431_432();
             $this->objDB->flushQueryCache();
         }
 
@@ -958,11 +966,38 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "4.3.1");
 
 
-    //5. relaod classloader etc.
+    //5. reload classloader etc.
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
         class_reflection::flushCache();
 
         return $strReturn;
     }
+
+
+
+    private function update_431_432() {
+        $strReturn = "Updating 4.3.1 to 4.3.2...\n";
+
+        //messages
+        $strReturn .= "Updating table messaging...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."messages")."
+                            ADD ".$this->objDB->encloseColumnName("message_sender")." ".$this->objDB->getDatatype("char20")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."messages")."
+                            ADD ".$this->objDB->encloseColumnName("message_messageref")." ".$this->objDB->getDatatype("char20")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.3.2");
+        return $strReturn;
+    }
+
+
+
 }

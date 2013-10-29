@@ -108,7 +108,10 @@ class class_exception extends Exception {
 
 
             $objMessageHandler = new class_module_messaging_messagehandler();
-            $objMessageHandler->sendMessage($strMailtext, new class_module_user_group(_admins_group_id_), new class_messageprovider_exceptions());
+            $objMessage = new class_module_messaging_message();
+            $objMessage->setStrBody($strMailtext);
+            $objMessage->setObjMessageProvider(new class_messageprovider_exceptions());
+            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
         }
 
         if($this->intErrorlevel == class_exception::$level_FATALERROR) {

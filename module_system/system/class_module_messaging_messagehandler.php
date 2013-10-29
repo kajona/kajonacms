@@ -40,9 +40,33 @@ class class_module_messaging_messagehandler {
      * @param string $strInternalIdentifier
      * @param string $strSubject
      *
+     * @deprecated use @link{class_module:messaging_messagehandler::sendMessageObject()} instead
+     *
      * @return bool
      */
     public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider, $strInternalIdentifier = "", $strSubject = "") {
+
+        //build a default message and pass it to sendMessageObject
+        $objMessage = new class_module_messaging_message();
+        $objMessage->setStrTitle($strSubject);
+        $objMessage->setStrBody($strContent);
+        $objMessage->setStrInternalIdentifier($strInternalIdentifier);
+        $objMessage->setStrMessageProvider(get_class($objProvider));
+        return $this->sendMessageObject($objMessage, $arrRecipients);
+    }
+
+
+    /**
+     * Sends a message.
+     * If the list of recipients contains a group, the message is duplicated for each member.
+     *
+     *
+     * @param class_module_messaging_message $objMessage
+     * @param class_module_user_group[]|class_module_user_user[]|class_module_user_group|class_module_user_user $arrRecipients
+     *
+     * @return bool
+     */
+    public function sendMessageObject(class_module_messaging_message $objMessage, $arrRecipients) {
         $objValidator = new class_email_validator();
 
         if($arrRecipients instanceof class_module_user_group || $arrRecipients instanceof class_module_user_user)
@@ -52,24 +76,30 @@ class class_module_messaging_messagehandler {
 
         foreach($arrRecipients as $objOneUser) {
 
-            $objConfig = class_module_messaging_config::getConfigForUserAndProvider($objOneUser->getSystemid(), $objProvider);
+            $objConfig = class_module_messaging_config::getConfigForUserAndProvider($objOneUser->getSystemid(), $objMessage->getObjMessageProvider());
 
             if($objConfig->getBitEnabled()) {
-                $objMessage = new class_module_messaging_message();
-                $objMessage->setStrTitle($strSubject);
-                $objMessage->setStrBody($strContent);
-                $objMessage->setStrUser($objOneUser->getSystemid());
-                $objMessage->setStrInternalIdentifier($strInternalIdentifier);
-                $objMessage->setStrMessageProvider(get_class($objProvider));
 
-                $objMessage->updateObjectToDb();
+                //clone the message
+                $objCurrentMessage = new class_module_messaging_message();
+                $objCurrentMessage->setStrTitle($objMessage->getStrTitle());
+                $objCurrentMessage->setStrBody($objMessage->getStrBody());
+                $objCurrentMessage->setStrUser($objOneUser->getSystemid());
+                $objCurrentMessage->setStrInternalIdentifier($objMessage->getStrInternalIdentifier());
+                $objCurrentMessage->setStrMessageProvider($objMessage->getStrMessageProvider());
+                $objCurrentMessage->setStrMessageRefId($objMessage->getStrMessageRefId());
+                $objCurrentMessage->setStrSenderId(validateSystemid($objMessage->getStrSenderId()) ? $objMessage->getStrSenderId() : class_carrier::getInstance()->getObjSession()->getUserID());
+
+                $objCurrentMessage->updateObjectToDb();
 
                 if($objConfig->getBitBymail() && $objValidator->validate($objOneUser->getStrEmail()))
-                    $this->sendMessageByMail($objMessage, $objOneUser);
+                    $this->sendMessageByMail($objCurrentMessage, $objOneUser);
             }
         }
 
     }
+
+
 
     /**
      * Sends a copy of the message to the user by mail

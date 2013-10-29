@@ -1147,13 +1147,9 @@ class class_toolkit_admin extends class_toolkit {
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
         if($objRecord->getIntRecordStatus() == 1) {
-            $strImage = "icon_enabled";
-            $strText = class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
             $strLinkContent = class_adminskin_helper::getAdminImage("icon_enabled", class_carrier::getInstance()->getObjLang()->getLang("status_active", "system"));
         }
         else {
-            $strImage = "icon_disabled";
-            $strText = class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
             $strLinkContent = class_adminskin_helper::getAdminImage("icon_disabled", class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system"));
         }
 

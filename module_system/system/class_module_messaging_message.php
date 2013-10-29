@@ -23,15 +23,31 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn message_body
+     * @tableColumn message_user
+     * @fieldType user
+     * @fieldLabel message_to
+     * @fieldMandatory
      */
-    private $strBody = "";
+    private $strUser = "";
 
     /**
      * @var string
      * @tableColumn message_title
+     * @fieldType text
+     * @fieldLabel message_subject
+     * @fieldMandatory
      */
     private $strTitle = "";
+
+    /**
+     * @var string
+     * @tableColumn message_body
+     * @fieldType textarea
+     * @fieldLabel message_body
+     * @fieldMandatory
+     */
+    private $strBody = "";
+
 
     /**
      * @var bool
@@ -39,11 +55,7 @@ class class_module_messaging_message extends class_model implements interface_mo
      */
     private $bitRead = 0;
 
-    /**
-     * @var string
-     * @tableColumn message_user
-     */
-    private $strUser = "";
+
 
     /**
      * @var string
@@ -56,6 +68,19 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @tableColumn message_provider
      */
     private $strMessageProvider = "";
+
+    /**
+     * @var string
+     * @tableColumn message_sender
+     */
+    private $strSenderId = "";
+
+    /**
+     * @var string
+     * @tableColumn message_messageref
+     * @fieldType hidden
+     */
+    private $strMessageRefId = "";
 
 
     private $bitOnReadTrigger = false;
@@ -287,11 +312,25 @@ class class_module_messaging_message extends class_model implements interface_mo
         $this->strMessageProvider = $strMessageProvider;
     }
 
+    public function setObjMessageProvider(interface_messageprovider $objMessageProvider) {
+        $this->strMessageProvider = get_class($objMessageProvider);
+    }
+
     /**
      * @return string
      */
     public function getStrMessageProvider() {
         return $this->strMessageProvider;
+    }
+
+    /**
+     * @return interface_messageprovider
+     */
+    public function getObjMessageProvider() {
+        if($this->strMessageProvider != "")
+            return new $this->strMessageProvider();
+        else
+            return null;
     }
 
     /**
@@ -306,6 +345,34 @@ class class_module_messaging_message extends class_model implements interface_mo
      */
     public function getStrTitle() {
         return $this->strTitle;
+    }
+
+    /**
+     * @param string $strSenderId
+     */
+    public function setStrSenderId($strSenderId) {
+        $this->strSenderId = $strSenderId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrSenderId() {
+        return $this->strSenderId;
+    }
+
+    /**
+     * @param string $strMessageRefId
+     */
+    public function setStrMessageRefId($strMessageRefId) {
+        $this->strMessageRefId = $strMessageRefId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrMessageRefId() {
+        return $this->strMessageRefId;
     }
 
 

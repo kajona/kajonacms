@@ -17,8 +17,12 @@
  *
  * @module messaging
  * @moduleId _messaging_module_id_
+ *
+ * @objectList class_module_messaging_message
+ * @objectNew class_module_messaging_message
+ * @objectEdit class_module_messaging_message
  */
-class class_module_messaging_admin extends class_admin_simple implements interface_admin {
+class class_module_messaging_admin extends class_admin_evensimpler implements interface_admin {
 
 
     public function getOutputModuleNavi() {
@@ -71,8 +75,18 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         return $strReturn;
     }
 
+    protected function renderAdditionalActions(class_model $objListEntry) {
+        if($objListEntry instanceof class_module_messaging_message)
+            return array(
+                getLinkAdminDialog($this->getArrModule("modul"), "new", "&messaging_user_id=".$objListEntry->getStrSenderId()."&messaging_messagerefid=".$objListEntry->getSystemid()."&messaging_title=RE: ".$objListEntry->getStrTitle(), $this->getLang("message_reply"), $this->getLang("message_reply"), "icon_reply")
+            );
+
+        return array();
+    }
+
+
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        return "";
+        return parent::getNewEntryAction($strListIdentifier, true);
     }
 
     protected function renderCopyAction(class_model $objListEntry) {
@@ -178,14 +192,41 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
         return $this->actionView();
     }
 
-    /**
-     * Renders the form to create a new entry
-     * @return string
-     * @permissions edit
-     */
     protected function actionNew() {
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
+        $this->setStrCurObjectTypeName("");
+        $this->setCurObjectClassName("class_module_messaging_message");
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        return parent::actionNew();
     }
+
+
+    protected  function actionSave() {
+
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+
+        /** @var $objMessage class_module_messaging_message */
+        $objMessage = null;
+
+        $objMessage = new class_module_messaging_message();
+
+            $objForm = $this->getAdminForm($objMessage);
+            if(!$objForm->validateForm())
+                if($this->getParam("mode") === "new")
+                    return $this->actionNew();
+
+            $objForm->updateSourceObject();
+
+            $objMessageHandler = new class_module_messaging_messagehandler();
+            $objMessage->setObjMessageProvider(new class_messageprovider_personalmessage());
+            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_user($objMessage->getStrUser()));
+
+
+            return $this->objToolkit->warningBox($this->getLang("message_sent_success")).
+                $this->objToolkit->formHeader("").
+                $this->objToolkit->formInputSubmit($this->getLang("commons_ok"), "", "onclick=parent.KAJONA.admin.folderview.dialog.hide();").
+                $this->objToolkit->formClose();
+    }
+
 
     /**
      * Creates a summary of the message
@@ -204,11 +245,29 @@ class class_module_messaging_admin extends class_admin_simple implements interfa
                 $objMessage->updateObjectToDb();
             }
 
-            $strReturn .= $this->objToolkit->formHeadline(dateToString($objMessage->getObjDate()). " ".$objMessage->getStrTitle());
+            $objUser = new class_module_user_user($objMessage->getStrUser());
+
+            $strReference = "";
+            if(validateSystemid($objMessage->getStrMessageRefId())) {
+                $objRefMessage = new class_module_messaging_message($objMessage->getStrMessageRefId());
+                $strReference = $objRefMessage->getStrDisplayName();
+                if($objMessage->rightView())
+                    $strReference = getLinkAdmin($this->getArrModule("modul"), "view", "&systemid=".$objRefMessage->getSystemid(), $strReference, "", "", false);
+            }
+
+            $arrMetaData = array(
+                array($this->getLang("message_subject"), $objMessage->getStrTitle()),
+                array($this->getLang("message_date"), dateToString($objMessage->getObjDate())),
+                array($this->getLang("message_type"), $objMessage->getObjMessageProvider()->getStrName()),
+                array($this->getLang("message_sender"), $objUser->getStrDisplayName()),
+                array($this->getLang("message_reference"), $strReference)
+            );
+
+            $strReturn .= $this->objToolkit->dataTable(null, $arrMetaData);
 
             $strBody = nl2br($objMessage->getStrBody());
             $strBody = replaceTextLinks($strBody);
-            $strReturn .= $this->objToolkit->getTextRow($strBody);
+            $strReturn .= $this->objToolkit->getFieldset($objMessage->getStrTitle(), $this->objToolkit->getTextRow($strBody));
 
             return $strReturn;
         }

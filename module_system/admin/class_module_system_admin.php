@@ -864,10 +864,7 @@ JS;
      */
     private function getMailForm() {
         $objFormgenerator = new class_admin_formgenerator("mail", new class_module_system_common());
-        if($this->getParam("mail_recipient") != "")
-            $objFormgenerator->addField(new class_formentry_text("mail", "recipient"))->setStrLabel($this->getLang("mail_recipient"))->setBitMandatory(true)->setObjValidator(new class_email_validator());
-        else
-            $objFormgenerator->addField(new class_formentry_user("mail", "to"))->setStrLabel($this->getLang("mail_recipient"))->setBitMandatory(true);
+        $objFormgenerator->addField(new class_formentry_text("mail", "recipient"))->setStrLabel($this->getLang("mail_recipient"))->setBitMandatory(true)->setObjValidator(new class_email_validator());
         $objFormgenerator->addField(new class_formentry_user("mail", "cc"))->setStrLabel($this->getLang("mail_cc"));
         $objFormgenerator->addField(new class_formentry_text("mail", "subject"))->setStrLabel($this->getLang("mail_subject"))->setBitMandatory(true);
         $objFormgenerator->addField(new class_formentry_textarea("mail", "body"))->setStrLabel($this->getLang("mail_body"))->setBitMandatory(true);
@@ -917,42 +914,27 @@ JS;
         $objUser = new class_module_user_user($this->objSession->getUserID());
 
         //mail or internal message?
-        if($this->getParam("mail_recipient") != "") {
-            $objMailValidator = new class_email_validator();
-            $objEmail = new class_mail();
+        $objMailValidator = new class_email_validator();
+        $objEmail = new class_mail();
 
-            $objEmail->setSender($objUser->getStrEmail());
-            $arrRecipients = explode(",", $this->getParam("mail_recipient"));
-            foreach($arrRecipients as $strOneRecipient)
-                if($objMailValidator->validate($strOneRecipient))
-                    $objEmail->addTo($strOneRecipient);
+        $objEmail->setSender($objUser->getStrEmail());
+        $arrRecipients = explode(",", $this->getParam("mail_recipient"));
+        foreach($arrRecipients as $strOneRecipient)
+            if($objMailValidator->validate($strOneRecipient))
+                $objEmail->addTo($strOneRecipient);
 
-            if($objForm->getField("mail_cc")->getStrValue() != "") {
-                $objUser = new class_module_user_user($objForm->getField("mail_cc")->getStrValue());
-                $objEmail->addCc($objUser->getStrEmail());
-            }
-
-            $objEmail->setSubject($objForm->getField("mail_subject")->getStrValue());
-            $objEmail->setText($objForm->getField("mail_body")->getStrValue());
-
-            if($objEmail->sendMail())
-                return $this->getLang("mail_send_success");
-            else
-                return $this->getLang("mail_send_error");
-
-        }
-        else {
-            $arrRecipients = array();
-            $arrRecipients[] = new class_module_user_user($objForm->getField("mail_to")->getStrValue());
-            if($objForm->getField("mail_cc")->getStrValue() != "")
-                $arrRecipients[] = new class_module_user_user($objForm->getField("mail_cc")->getStrValue());
-
-            $objMessaging = new class_module_messaging_messagehandler();
-            //TODO integrate sender into messaging
-            $objMessaging->sendMessage($objForm->getField("mail_body")->getStrValue(), $arrRecipients, new class_messageprovider_personalmessage(), "", $objForm->getField("mail_subject")->getStrValue());
+        if($objForm->getField("mail_cc")->getStrValue() != "") {
+            $objUser = new class_module_user_user($objForm->getField("mail_cc")->getStrValue());
+            $objEmail->addCc($objUser->getStrEmail());
         }
 
-        return $this->getLang("mail_send_success");
+        $objEmail->setSubject($objForm->getField("mail_subject")->getStrValue());
+        $objEmail->setText($objForm->getField("mail_body")->getStrValue());
+
+        if($objEmail->sendMail())
+            return $this->getLang("mail_send_success");
+        else
+            return $this->getLang("mail_send_error");
     }
 
 
