@@ -317,7 +317,11 @@ class class_module_packagemanager_manager {
             $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verav", "packagemanager")." ".$strLatestVersion."\n";
 
             $objMessageHandler = new class_module_messaging_messagehandler();
-            $objMessageHandler->sendMessage($strMailtext, new class_module_user_group(_admins_group_id_), new class_messageprovider_packageupdate(), $strIdentifier);
+            $objMessage = new class_module_messaging_message();
+            $objMessage->setStrTitle($strMailtext);
+            $objMessage->setObjMessageProvider(new class_messageprovider_packageupdate());
+            $objMessage->setStrInternalIdentifier($strIdentifier);
+            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
         }
     }
 
