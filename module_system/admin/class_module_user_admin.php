@@ -186,6 +186,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         if($objListEntry instanceof class_module_user_user
             && $objListEntry->getObjSourceUser()->isEditable()
+            && $objListEntry->getIntActive() == 1
             && $objListEntry->getObjSourceUser()->isPasswordResettable()
             && $objListEntry->rightEdit()
             && checkEmailaddress($objListEntry->getStrEmail())
@@ -193,11 +194,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mailNew"));
         }
 
-        if($objListEntry instanceof class_module_user_user) {
+        if($objListEntry instanceof class_module_user_user && $objListEntry->getIntActive() == 1) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdminDialog("messaging", "new", "&messaging_user_id=" . $objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $this->getLang("user_send_message")));
         }
 
-        if($objListEntry instanceof class_module_user_user && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+        if($objListEntry instanceof class_module_user_user && $objListEntry->getIntActive() == 1 && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
             $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin("user", "switchToUser", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_switch_to"), "icon_userswitch"));
         }
 
@@ -1131,7 +1132,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $objSingleUser = new class_module_user_user($strSingleUser);
 
                 $strAction = "";
-                if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID()) {
+                if($objSingleUser->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())) {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
                 }
                 else {
