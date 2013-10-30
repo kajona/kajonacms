@@ -40,7 +40,7 @@
 
 
 
-    <!-- path to phpdoc -->
+    <!-- path to phpdoc, phpdocumentor 2 is required -->
     <property name="path.phpdoc"    value="phpdoc" />
     <!-- path to phpunit -->
     <property name="path.phpunit"   value="phpunit" />
