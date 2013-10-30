@@ -76,10 +76,11 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
     }
 
     protected function renderAdditionalActions(class_model $objListEntry) {
-        if($objListEntry instanceof class_module_messaging_message)
+        if($objListEntry instanceof class_module_messaging_message) {
             return array(
                 getLinkAdminDialog($this->getArrModule("modul"), "new", "&messaging_user_id=".$objListEntry->getStrSenderId()."&messaging_messagerefid=".$objListEntry->getSystemid()."&messaging_title=RE: ".$objListEntry->getStrTitle(), $this->getLang("message_reply"), $this->getLang("message_reply"), "icon_reply")
             );
+        }
 
         return array();
     }
@@ -251,7 +252,7 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
             if(validateSystemid($objMessage->getStrMessageRefId())) {
                 $objRefMessage = new class_module_messaging_message($objMessage->getStrMessageRefId());
                 $strReference = $objRefMessage->getStrDisplayName();
-                if($objMessage->rightView())
+                if($objRefMessage->rightView())
                     $strReference = getLinkAdmin($this->getArrModule("modul"), "view", "&systemid=".$objRefMessage->getSystemid(), $strReference, "", "", false);
             }
 

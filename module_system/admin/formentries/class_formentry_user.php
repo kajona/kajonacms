@@ -46,8 +46,10 @@ class class_formentry_user extends class_formentry_base implements interface_for
             $strUserid = "";
             if(validateSystemid($this->getStrValue())) {
                 $objUser = new class_module_user_user($this->getStrValue());
-                $strUsername = $objUser->getStrDisplayName();
-                $strUserid = $this->getStrValue();
+                if($objUser->getIntActive() == 1) {
+                    $strUsername = $objUser->getStrDisplayName();
+                    $strUserid = $this->getStrValue();
+                }
             }
 
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strUsername, "", "", true);
