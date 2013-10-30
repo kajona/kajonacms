@@ -87,6 +87,7 @@
 
             <div class="contentTopbar clearfix">
                 <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
+                %%actiontoolbar%%
             </div>
 
             %%content%%

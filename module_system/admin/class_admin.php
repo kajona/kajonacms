@@ -232,75 +232,6 @@ abstract class class_admin {
     }
 
     /**
-     * Negates the status of a systemRecord
-     *
-     * @param string $strSystemid
-     *
-     * @return bool
-     * @deprecated call setStatus on a model-object directly
-     * @todo remove before 4.0 release
-     */
-    public function setStatus($strSystemid = "") {
-        if($strSystemid == "") {
-            $strSystemid = $this->getSystemid();
-        }
-        $objCommon = new class_module_system_common($strSystemid);
-        return $objCommon->setStatus();
-    }
-
-    /**
-     * Gets the status of a systemRecord
-     *
-     * @param string $strSystemid
-     *
-     * @return int
-     * @deprecated call getStatus on a model-object directly
-     * @todo remove before 4.0 release
-     */
-    public function getStatus($strSystemid = "") {
-        if($strSystemid == "0" || $strSystemid == "") {
-            $strSystemid = $this->getSystemid();
-        }
-        $objCommon = new class_module_system_common($strSystemid);
-        return $objCommon->getStatus();
-    }
-
-    /**
-     * Returns the name of the user who last edited the record
-     *
-     * @param string $strSystemid
-     *
-     * @return string
-     * @deprecated
-     * @todo remove before 4.0 release
-     */
-    public function getLastEditUser($strSystemid = "") {
-        if($strSystemid == 0 || $strSystemid == "") {
-            $strSystemid = $this->getSystemid();
-        }
-        $objCommon = new class_module_system_common($strSystemid);
-        return $objCommon->getLastEditUser();
-    }
-
-    /**
-     * Gets the Prev-ID of a record
-     *
-     * @param string $strSystemid
-     *
-     * @return string
-     * @deprecated
-     * @todo remove before 4.0 release
-     */
-    public function getPrevId($strSystemid = "") {
-        if($strSystemid == "") {
-            $strSystemid = $this->getSystemid();
-        }
-        $objCommon = new class_module_system_common($strSystemid);
-        return $objCommon->getPrevId();
-
-    }
-
-    /**
      * Returns the data for a registered module
      * FIXME: validate if still required
      *
@@ -528,7 +459,7 @@ abstract class class_admin {
 
         $this->validateAndUpdateCurrentAspect();
 
-        //Calling the contentsetter
+        //Calling the content-setter, including a default dialog
         $this->arrOutput["content"] = $this->strOutput;
         if($this->getArrModule("template") != "/folderview.tpl") {
             $this->arrOutput["path"] = class_admin_helper::getAdminPathNavi($this->getArrOutputNaviEntries(), $this->getArrModule("modul"));
@@ -545,6 +476,10 @@ abstract class class_admin {
         $this->arrOutput["module_id"] = $this->arrModule["moduleId"];
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = "._system_browser_cachebuster_.";</script>";
+
+        //see if there are any hooks to be called
+        $this->onRenderOutput($this->arrOutput);
+
         //Loading the desired Template
         //if requested the pe, load different template
         $strTemplateID = "";
@@ -565,6 +500,17 @@ abstract class class_admin {
             $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($this->objSession->getAdminSkin()) . $this->arrModule["template"], "", true);
         }
         return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
+    }
+
+    /**
+     * Hook-method to modify some parts of the rendered content right before rendered into the template.
+     * May also be used to add additional elements to the array rendered into
+     * the admin-template.
+     *
+     * @see class_admin::getModuleOutput
+     */
+    protected function onRenderOutput(&$arrContent) {
+
     }
 
     /**

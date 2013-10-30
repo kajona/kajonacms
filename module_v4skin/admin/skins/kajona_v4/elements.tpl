@@ -926,23 +926,30 @@ The following sections are used to display the path-navigations, e.g. used by th
 </path_entry>
 
 ---------------------------------------------------------------------------------------------------------
--- CONTENT TOOLBAR --------------------------------------------------------------------------------------
+-- CONTENT TOOLBARS -------------------------------------------------------------------------------------
 
+Toolbar, prominent in the layout. Rendered to switch between action.
 <contentToolbar_wrapper>
-    <div class="navbar contentToolbar">
-        <div class="navbar-inner ">
-            <ul class="nav">%%entries%%</ul>
-        </div>
+<div class="navbar contentToolbar">
+    <div class="navbar-inner ">
+        <ul class="nav">%%entries%%</ul>
     </div>
+</div>
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-    <li>%%entry%%</li>
+<li>%%entry%%</li>
 </contentToolbar_entry>
 
 <contentToolbar_entry_active>
-    <li class="active">%%entry%%</li>
+<li class="active">%%entry%%</li>
 </contentToolbar_entry_active>
+
+
+Toolbar for the current record, rendered to quick-access the actions of the current record.
+<contentActionToolbar_wrapper>
+<div class="actionToolbar pull-right">%%content%%</div>
+</contentActionToolbar_wrapper>
 
 ---------------------------------------------------------------------------------------------------------
 -- ERROR HANDLING ---------------------------------------------------------------------------------------

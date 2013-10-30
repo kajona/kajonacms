@@ -41,14 +41,16 @@ class class_module_system_admin extends class_admin_simple implements interface_
     /**
      * Sets the status of a module.
      * Therefore you have to be member of the admin-group.
+     *
+     * permissions edit
      */
     protected function actionModuleStatus() {
         //status: for setting the status of modules, you have to be member of the admin-group
         $objUser = new class_module_user_user($this->objSession->getUserID());
         $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
-        $objCommon = new class_module_system_common($this->getSystemid());
-        if($objCommon->rightEdit() && in_array(_admins_group_id_, $arrGroups)) {
-            $this->setStatus();
+        $objModule = new class_module_system_module($this->getSystemid());
+        if($objModule->rightEdit() && in_array(_admins_group_id_, $arrGroups)) {
+            $objModule->setIntRecordStatus($objModule->getIntRecordStatus() == 0 ? 1 : 0);
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
     }

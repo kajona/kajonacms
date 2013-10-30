@@ -872,7 +872,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function listHeader() {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
-        return trim($strDialog = $this->jsDialog(1)).$this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return trim($this->jsDialog(1)).$this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
 
     /**
@@ -1492,6 +1492,17 @@ class class_toolkit_admin extends class_toolkit {
         }
         return $this->objTemplate->fillTemplate(array("entries" => $strRows), $strTemplateWrapperID);
 
+    }
+
+    /**
+     * A list of action icons for the current record. In most cases the same icons as when rendering the list.
+     *
+     * @param $strContent
+     *
+     * @return string
+     */
+    public function getContentActionToolbar($strContent) {
+        return $this->objTemplate->fillTemplate(array("content" => $strContent), $this->objTemplate->readTemplate("/elements.tpl", "contentActionToolbar_wrapper"));
     }
 
     /*"*****************************************************************************************************/

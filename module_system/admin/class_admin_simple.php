@@ -29,6 +29,32 @@ abstract class class_admin_simple extends class_admin {
         }
     }
 
+    /**
+     * Overwritten in order to inject a toolbar per record. may be useful for certain actions
+     * @param $arrContent
+     */
+    protected function onRenderOutput(&$arrContent) {
+
+        $strReturn = $this->objToolkit->jsDialog(1);
+
+        $arrContent["actiontoolbar"] = $strReturn.$this->objToolkit->getContentActionToolbar($this->getContentActionToolbar());
+    }
+
+
+    protected function getContentActionToolbar() {
+        if(uniStrpos($this->getAction(), "list") !== false || uniStrpos($this->getAction(), "new") !== false)
+            return "";
+
+        if(validateSystemid($this->getSystemid())) {
+            $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+            if($objRecord instanceof interface_admin_listable)
+                return $this->getActionIcons($objRecord);
+        }
+
+        return "";
+    }
+
 
     /**
      * Renders the form to create a new entry
