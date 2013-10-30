@@ -464,11 +464,11 @@
     <target name="generatePhpDocs">
         <echo>Generating PHP API Docs</echo>
         <exec executable="${path.phpdoc}" dir="${basedir}${projectPath}/core">
-            <arg line=" -ue on -t '${basedir}${buildPath}/api'
-			           -i *tcpdf*,*pchart*,*yui*,*ezcomponents*,*phpexcel*,*phpqrcode*
-			          -ti 'Kajona API Docs'
-			           -dn module_system
-			           -d ."/>
+            <arg line="--target '${basedir}${buildPath}/api'
+			           --ignore *tcpdf*,*pchart*,*yui*,*ezcomponents*,*phpexcel*,*phpqrcode*
+			           --title 'Kajona API Docs'
+			           --defaultpackagename module_system
+			           --directory . "/>
         </exec>
     </target>
 
