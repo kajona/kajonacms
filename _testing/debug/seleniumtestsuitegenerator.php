@@ -172,7 +172,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "sir";
+        $strContentEnvFile .= "";
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>user1</td>
@@ -181,7 +181,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "agp";
+        $strContentEnvFile .= "";
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>passwd1</td>
@@ -190,7 +190,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "stb";
+        $strContentEnvFile .= "";
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>user2</td>
@@ -199,7 +199,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "kajo10";
+        $strContentEnvFile .= "";
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>passwd2</td>
