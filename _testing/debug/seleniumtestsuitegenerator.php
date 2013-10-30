@@ -68,7 +68,7 @@ class class_seleniumsuite {
 } // class_seleniumsuite end
 
 
-class class_copydown extends class_seleniumsuite {
+class class_createFiles extends class_seleniumsuite {
     public function generator() {
         if(issetPost("doGenerate") && issetPost("SCHEME") && issetPost("HOSTNAME") && issetPost("URLPATHNAME")   ) {            
             $this->checkExistingDir($this->strProjectFolder);            
@@ -88,7 +88,7 @@ class class_copydown extends class_seleniumsuite {
                 echo "\n\n :-(   No Files found.";
             else {
                 
-                $this->createEnvFile($_POST["SCHEME"],$_POST["HOSTNAME"],$_POST["URLPATHNAME"]);
+                $this->createEnvFile($_POST["SCHEME"],$_POST["HOSTNAME"],$_POST["URLPATHNAME"],$_POST["ADMINNAME"],$_POST["ADMINPASSWORD"],$_POST["USERNAME"],$_POST["USERPASSWORD"],$_POST["DBHOST"], $_POST["DBNAME"] ,$_POST["DBUSER"] ,$_POST["DBPASSWORD"] ,$_POST["DBPREFIX"]);
                 
                 $strContentTestsuiteFile = <<<HTML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -134,7 +134,7 @@ HTML;
     }    
     
    
-    private function createEnvFile($strScheme,$strHostname,$strPathname) {
+    private function createEnvFile($strScheme,$strHostname,$strPathname,$strAdminname,$strAdminpassword,$strUsername,$strUserpassword,$strDbhost,$strDbname,$strDbuser,$Dbpassword,$strDbprefix) {
        
         $strContentEnvFile = <<<HTML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -172,7 +172,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "";
+        $strContentEnvFile .= $strAdminname;
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>user1</td>
@@ -181,7 +181,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "";
+        $strContentEnvFile .= $strAdminpassword;
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>passwd1</td>
@@ -190,7 +190,7 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "";
+        $strContentEnvFile .= $strUsername;
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>user2</td>
@@ -199,11 +199,56 @@ HTML;
 	<td>store</td>
 	<td>
 HTML;
-        $strContentEnvFile .= "";
+        $strContentEnvFile .= $strUserpassword;
         $strContentEnvFile .= <<<HTML
 </td>
 	<td>passwd2</td>
-</tr>
+</tr>           
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= $strDbhost;
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>databasehost</td>
+</tr> 
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= $strDbname;
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>databasename</td>
+</tr> 
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= $strDbuser;
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>databaseuser</td>
+</tr> 
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= $Dbpassword;
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>databasepassword</td>
+</tr> 
+<tr>
+	<td>store</td>
+	<td>
+HTML;
+        $strContentEnvFile .= $strDbprefix;
+        $strContentEnvFile .= <<<HTML
+</td>
+	<td>databaseprefix</td>
+</tr> 
 <tr>
 	<td>open</td>
 	<td>\${sysAddress}/\${sysPathname}</td>
@@ -219,23 +264,54 @@ HTML;
 
     
     public function selectorform () {                
-        echo "\n\nThis will generate your Selenium Testingsuite";
+        echo "\n\n<b>Provide the settings for your Selenium Testingsuite</b>";
         echo "<form method=\"post\">";
-        echo "\nThe following parameter will be used. Please change if necessary. E.g. you can change the hostname to test on another machine.\n";
+        
+        echo "\n\n<b>System Parameter</b>\nThe following parameter will be used for your environment. Please change if necessary, e.g. the hostname to test on another machine.\n";
+        echo "<table>";
         $arrSystemParameter = $this->getSystemParameter();
         foreach($arrSystemParameter as $key => $strOneParameter) 
-            echo "\n ".$key.": <input size=\"45\" type=\"text\" name=\"".$key."\" value=\"".$strOneParameter."\" /> \n";
-        echo "\nYou can optional add a 'helper' test case to set up your database. Please choose MySQL or SQLite.";
+            echo $this->drawParameterTable($key, $strOneParameter);
+        echo "</table>";
+        
+        
+        echo "\n\n<b>Testing User</b>\nThese user will be created within the testing:";
+        echo "<table>";
+        echo $this->drawParameterTable("ADMINNAME", "admin");
+        echo $this->drawParameterTable("ADMINPASSWORD", "kajona");
+        echo $this->drawParameterTable("USERNAME", "scott");
+        echo $this->drawParameterTable("USERPASSWORD", "tiger");
+        echo "</table>";
+
+        echo "\n\n-------------------------------------------------------------------------";
+        echo "\n\n<b>Database Installer</b>\nYou can <u>optional</u> add a 'helper test case' to set up your database. Please choose MySQL or SQLite.";
+
         echo "\n<input type=\"radio\" name=\"databasehelper\" value=\"no\" checked /> No database installer";        
         echo "\n<input type=\"radio\" name=\"databasehelper\" value=\"mysql\" /> MySQL installer";        
         echo "\n<input type=\"radio\" name=\"databasehelper\" value=\"sqlite\" /> SQLite installer";        
+        
+        echo "\n\n<b>Database Parameter</b>\nThis parameter will be used within the testings (the user will be created):";
+        echo "<table>";
+        echo $this->drawParameterTable("DBHOST", "localhost");
+        echo $this->drawParameterTable("DBNAME", "kajona4");
+        echo $this->drawParameterTable("DBUSER", "kajona4");
+        echo $this->drawParameterTable("DBPASSWORD", "kajona4");
+        echo $this->drawParameterTable("DBPREFIX", "selenium_");
+        echo "</table>";
+        
+        
         echo "\n\n\n";
         echo "<input type=\"hidden\" name=\"doStart\" value=\"1\" />";
         echo "<input type=\"hidden\" name=\"copydirection\" value=\"down\" />";
         echo "<input type=\"hidden\" name=\"doGenerate\" value=\"1\" />";
         echo "<input type=\"submit\" value=\"Cool! Create testing suite now!\" />";
         echo "</form>";
-    }    
+    }   
+    
+    private function drawParameterTable($strParameterName,$strParameterValue) {
+        $strTableRow = "<tr><td>".$strParameterName.":</td><td><input size=\"45\" type=\"text\" name=\"".$strParameterName."\" value=\"".$strParameterValue."\" /></td></tr>";
+        return $strTableRow;
+    }
 
 } // class_copydown zu
 
@@ -243,7 +319,7 @@ HTML;
 // ####################################################################################### //
 
 if(issetPost("doStart")) {
-    $objSeleniumGenerator = new class_copydown();        
+    $objSeleniumGenerator = new class_createFiles();        
     if(getPost("doGenerate") == "")
         $objSeleniumGenerator->selectorform();
     else 
