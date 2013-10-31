@@ -334,8 +334,7 @@ abstract class class_admin {
 
     /**
      * Holds the last 5 URLs the user called in the Session
-     * Admin and Portal are seperated arrays, but don't worry anyway...
-
+     * Admin and Portal are separated arrays, but don't worry anyway...
      */
     protected function setHistory() {
         //Loading the current history from session
@@ -380,7 +379,7 @@ abstract class class_admin {
             return $this->arrHistory[$intPosition];
         }
         else {
-            return "History error!";
+            return null;
         }
     }
 
