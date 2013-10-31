@@ -60,18 +60,18 @@ interface interface_workflows_handler {
      * Holds all params relevant for the current object
      * and stores object-defined params and values.
      *
-     * @param class_modul_workflows_workflow
+     * @param class_module_workflows_workflow
      */
     public function setObjWorkflow($objWorkflow);
     
     /**
      * This method should schedule the workflow.
-     * Do this by setting the trigger-date in class class_modul_workflows_workflow
+     * Do this by setting the trigger-date in class class_module_workflows_workflow
      * 
      * This method is called by the controller. The workflows' state is set to scheduled afterwards.
      * The workflow-object itself is updated automatically, so no need to be done right here.
      * 
-     * @see class_modul_workflows_workflow::setObjTriggerDate
+     * @see class_module_workflows_workflow::setObjTriggerDate
      * 
      */
     public function schedule();
