@@ -60,14 +60,29 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
 
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "saveConfig"));
 
+        $arrRows = array();
         foreach($arrMessageproviders as $objOneProvider) {
 
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
-            $strReturn .= $this->objToolkit->formHeadline($objOneProvider->getStrName());
-            $strReturn .= $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1);
-            $strReturn .= $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1);
+            $arrRows[] = array(
+                $objOneProvider->getStrName(),
+                "inlineFormEntry 1" => $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1),
+                "inlineFormEntry 2" => $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1)
+            );
+
+//            $strReturn .= $this->objToolkit->formHeadline($objOneProvider->getStrName());
+//            $strReturn .= $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1);
+//            $strReturn .= $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1);
         }
+
+        $arrHeader = array(
+            $this->getLang("provider_title"),
+            $this->getLang("provider_enabled"),
+            $this->getLang("provider_bymail"),
+        );
+
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
 
         $strReturn .= $this->objToolkit->formInputSubmit();
         $strReturn .= $this->objToolkit->formClose();

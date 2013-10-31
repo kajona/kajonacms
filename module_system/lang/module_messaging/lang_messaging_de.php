@@ -21,6 +21,7 @@ $lang["messageprovider_packageupdate_name"] = "Update-Meldungen";
 $lang["modul_titel"]                     = "Nachrichten";
 $lang["provider_bymail"]                 = "E-Mail Benachrichtigung";
 $lang["provider_enabled"]                = "Aktiv";
+$lang["provider_title"]                = "Nachrichten-Typ";
 $lang["message_sender"]                     = "Absender";
 $lang["message_date"]                       = "Datum";
 $lang["message_type"]                       = "Typ";
