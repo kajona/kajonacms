@@ -62,29 +62,26 @@ Released   : 20120719
 				</div>
 				<div id="content">
 
+                    <!-- Please note that the following list is only for demo-purposes.
+                When using the template for "real" installations, the list of
+                placeholders should be stripped down to a minimum. -->
+
                     %%headline_row%%
-                    %%text_paragraph%%
-                    %%picture1_image%%
-                    %%news_news%%
-                    %%gb1_guestbook%%
-                    %%dl1_downloads%%
-                    %%bilder_gallery%%
-                    %%bilder2_galleryRandom%%
-                    %%formular_form|tellafriend%%
-                    %%results_search%%
-                    %%sitemap_navigation%%
-                    %%faqs_faqs%%
-                    %%comments_postacomment%%
-                    %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
-                    %%mixed2_portalupload|directorybrowser%%
-                    %%mixed3_flash|mediaplayer|tags|eventmanager%%
-                    %%list_userlist%%
-                    %%votings_votings%%
-                    %%maps_maps%%
+                    %%content_paragraph|image%%
+                    %%special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager%%
+
+                    <div class="twoColumns">
+                        <div>
+                            %%column1_paragraph|image%%
+                        </div>
+                        <div>
+                            %%column2_paragraph|image%%
+                        </div>
+                    </div>
 
 
 
-					<br class="clearfix" />
+					<!--<br class="clearfix" />-->
 				</div>
 				<br class="clearfix" />
 			</div>
