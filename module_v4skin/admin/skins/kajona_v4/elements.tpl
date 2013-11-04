@@ -334,16 +334,38 @@ Radiogroup
 
 Checkbox
 <input_checkbox>
+<div class="control-group">
+    <label for="%%name%%" class="control-label"></label>
+    <div class="controls">
+        <label class="checkbox">
+            <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
+            %%title%%
+        </label>
+    </div>
+</div>
+</input_checkbox>
+
+Toggle_On_Off (using bootstrap-switch.org)
+<input_on_off_switch>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile("_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.js", function() {
+            var divId = 'div_%%name%%';
+            divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
+            $(divId).on('switch-change', function (e, data) {
+                %%onSwitchJSCallback%%
+            });
+        }, true);
+    </script>
+
     <div class="control-group">
-        <label for="%%name%%" class="control-label"></label>
+        <label class="control-label" for="%%name%%">%%title%%</label>
         <div class="controls">
-            <label class="checkbox">
-                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%%>
-                %%title%%
-            </label>
+            <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='icon-ok icon-white' ></i>" data-off-label="<i class='icon-remove'></i>">
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
+            </div>
         </div>
     </div>
-</input_checkbox>
+</input_on_off_switch>
 
 Regular Hidden-Field
 <input_hidden>

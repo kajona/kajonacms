@@ -194,15 +194,43 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param bool $bitChecked
      * @param string $strClass
+     * @param bool $bitReadOnly
+     *
      * @return string
      */
-    public function formInputCheckbox($strName, $strTitle, $bitChecked = false, $strClass = "") {
+    public function formInputCheckbox($strName, $strTitle, $bitChecked = false, $strClass = "", $bitReadOnly = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkbox");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["checked"] = ($bitChecked ? "checked=\"checked\"" : "");
+        $arrTemplate["readonly"] = ($bitReadOnly ? "disabled=\"disabled\"" : "");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * Returns a On-Off toggle button
+
+     *
+*@param string $strName
+     * @param string $strTitle
+     * @param bool $bitChecked
+     * @param bool $bitReadOnly
+     * @param string $strOnSwitchJSCallback
+     * @param string $strClass
+     *
+*@return string
+     */
+    public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "switch-small") {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_on_off_switch");
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["class"] = $strClass;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["checked"] = ($bitChecked ? "checked=\"checked\"" : "");
+        $arrTemplate["readonly"] = ($bitReadOnly ? "disabled=\"disabled\"" : "");
+        $arrTemplate["onSwitchJSCallback"] = $strOnSwitchJSCallback;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

@@ -7,19 +7,16 @@
 ********************************************************************************************************/
 
 /**
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author stefan.meyer1@yahoo.de
+ * @since 4.3
  * @package module_formgenerator
  */
-class class_formentry_checkbox extends class_formentry_base implements interface_formentry_printable {
+class class_formentry_toggleOnOff extends class_formentry_checkbox {
 
-    private $strOpener = "";
+    private $strOnSwitchJSCallback = null;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
-
-        //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
     }
 
     /**
@@ -31,35 +28,28 @@ class class_formentry_checkbox extends class_formentry_base implements interface
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+        if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        }
 
-        $strReturn .= $objToolkit->formInputCheckbox($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue() == true, "", $this->getBitReadonly());
+        //enable, disable, style
+        $strReturn .= $objToolkit->formInputOnOff($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue() == true, $this->getBitReadonly(), $this->getStrOnSwitchJSCallback());
 
         return $strReturn;
     }
 
     /**
-     * @param $strOpener
-     * @return class_formentry_text
+     * @param mixed $strOnSwithJSCallback
      */
-    public function setStrOpener($strOpener) {
-        $this->strOpener = $strOpener;
-        return $this;
-    }
-
-    public function getStrOpener() {
-        return $this->strOpener;
+    public function setStrOnSwitchJSCallback($strOnSwithJSCallback) {
+        $this->strOnSwitchJSCallback = $strOnSwithJSCallback;
     }
 
     /**
-     * Returns a textual representation of the formentries' value.
-     * May contain html, but should be stripped down to text-only.
-     *
-     * @return string
+     * @return mixed
      */
-    public function getValueAsText() {
-        return $this->getStrValue() == true ? class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "commons") : class_carrier::getInstance()->getObjLang()->getLang("commons_no", "commons");
+    public function getStrOnSwitchJSCallback() {
+        return $this->strOnSwitchJSCallback;
     }
 
 }
