@@ -20,16 +20,16 @@ class class_array_section_iterator extends class_array_iterator {
     private $intPageNumber = 1;
     private $arrSection;
 
-	/**
-	 * Constructor
-	 *
-	 * @param int $intNrOfElements The total number of elements
-	 */
-	public function __construct($intNrOfElements) {
-		$this->intTotalElements = $intNrOfElements;
+    /**
+     * Constructor
+     *
+     * @param int $intNrOfElements The total number of elements
+     */
+    public function __construct($intNrOfElements) {
+        $this->intTotalElements = $intNrOfElements;
 
-		parent::__construct(array());
-	}
+        parent::__construct(array());
+    }
 
 
     /**
@@ -48,8 +48,9 @@ class class_array_section_iterator extends class_array_iterator {
      * @param int $intPageNumber
      */
     public function setPageNumber($intPageNumber) {
-        if((int)$intPageNumber > 0)
+        if((int)$intPageNumber > 0) {
             $this->intPageNumber = $intPageNumber;
+        }
     }
 
     public function getPageNumber() {
@@ -71,7 +72,7 @@ class class_array_section_iterator extends class_array_iterator {
      * @return int
      */
     public function calculateEndPos() {
-        return ($this->intElementsPerPage + ($this->calculateStartPos()-1));
+        return ($this->intElementsPerPage + ($this->calculateStartPos() - 1));
     }
 
     /**
@@ -88,6 +89,7 @@ class class_array_section_iterator extends class_array_iterator {
      *
      * @param bool $bitCompressed if set to true, the array will be reduced to elements containing a value.
      *             otherwise, the array is left as described, so filled with null values.
+     *
      * @return array
      */
     public function getArrayExtended($bitCompressed = false) {
@@ -99,9 +101,11 @@ class class_array_section_iterator extends class_array_iterator {
             }
         }
         //load data
-        for($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++)
-            if(isset($this->arrSection[($intI-$this->calculateStartPos())]))
-                $arrReturn[$intI] = $this->arrSection[($intI-$this->calculateStartPos())];
+        for($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++) {
+            if(isset($this->arrSection[($intI - $this->calculateStartPos())])) {
+                $arrReturn[$intI] = $this->arrSection[($intI - $this->calculateStartPos())];
+            }
+        }
 
         return $arrReturn;
     }
@@ -110,23 +114,25 @@ class class_array_section_iterator extends class_array_iterator {
      * Returns the elements placed on the given page
      *
      * @param int $intPageNumber
+     *
      * @return array
      */
     public function getElementsOnPage($intPageNumber) {
         $arrReturn = array();
         //calc elements to return
-        $intStart = ($this->intPageNumber * $this->intElementsPerPage)-$this->intElementsPerPage;
-        $intEnd = $this->intElementsPerPage + $intStart -1;
-        if($intEnd > $this->getNumberOfElements())
-            $intEnd = $this->getNumberOfElements()-1;
+        $intStart = ($this->intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage;
+        $intEnd = $this->intElementsPerPage + $intStart - 1;
+        if($intEnd > $this->getNumberOfElements()) {
+            $intEnd = $this->getNumberOfElements() - 1;
+        }
 
-        for($intI = $intStart; $intI <= $intEnd; $intI++)  {
-            if(!$this->setCursorPosition($intI))
+        for($intI = $intStart; $intI <= $intEnd; $intI++) {
+            if(!$this->setCursorPosition($intI)) {
                 break;
+            }
             $arrReturn[] = $this->arrElements[$this->intArrCursor];
         }
         return $arrReturn;
     }
-
 
 }
