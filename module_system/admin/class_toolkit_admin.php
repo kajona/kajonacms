@@ -211,16 +211,15 @@ class class_toolkit_admin extends class_toolkit {
 
     /**
      * Returns a On-Off toggle button
-
      *
-*@param string $strName
+     * @param string $strName
      * @param string $strTitle
      * @param bool $bitChecked
      * @param bool $bitReadOnly
      * @param string $strOnSwitchJSCallback
      * @param string $strClass
      *
-*@return string
+     * @return string
      */
     public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "switch-small") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_on_off_switch");
