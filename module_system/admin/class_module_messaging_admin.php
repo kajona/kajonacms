@@ -58,9 +58,6 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
 
         $strReturn = "";
 
-//        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "saveConfig"));
-
-
         //create callback for the on-off toogle which is passed to formInputOnOff
         $strCallback = <<<JS
                 //data contains the clicked element
@@ -68,7 +65,7 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
                 var messageProviderType = inputId.slice(0, inputId.lastIndexOf("_"));
 
                 var param1 =inputId+'='+data.value; //value for clicked toggle element
-                var param2 = 'messageprovidertype='+data.el[0].id.split("_")[0]; //messageprovide type
+                var param2 = 'messageprovidertype='+messageProviderType; //messageprovide type
                 var postBody = param1+'&'+param2;
 
                 KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
@@ -84,9 +81,6 @@ JS;
                 "inlineFormEntry 2" => $this->objToolkit->formInputOnOff($objOneProvider->getStrIdentifier()."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, false, $strCallback)
             );
 
-//            $strReturn .= $this->objToolkit->formHeadline($objOneProvider->getStrName());
-//            $strReturn .= $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1);
-//            $strReturn .= $this->objToolkit->formInputCheckbox($objOneProvider->getStrIdentifier()."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1);
         }
 
         $arrHeader = array(
@@ -96,10 +90,6 @@ JS;
         );
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
-
-//        $strReturn .= $this->objToolkit->formInputSubmit();
-//        $strReturn .= $this->objToolkit->formClose();
-
         return $strReturn;
     }
 
@@ -164,7 +154,7 @@ JS;
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
             //only update the message provider which is set in the param "messageprovidertype"
-            if($this->getParam("messageprovidertype")==$objOneProvider->getStrIdentifier()) {
+            if($this->getParam("messageprovidertype") == $objOneProvider->getStrIdentifier()) {
                 if($this->getParam($objOneProvider->getStrIdentifier()."_bymail") != "") {
                     $bitA = $this->getParam($objOneProvider->getStrIdentifier()."_bymail") == "true";
                     $objConfig->setBitBymail($bitA);

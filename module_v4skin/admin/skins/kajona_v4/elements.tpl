@@ -348,13 +348,16 @@ Checkbox
 Toggle_On_Off (using bootstrap-switch.org)
 <input_on_off_switch>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.js", function() {
-            var divId = 'div_%%name%%';
-            divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
-            $(divId).on('switch-change', function (e, data) {
-                %%onSwitchJSCallback%%
-            });
-        }, true);
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.js", function() {
+            window.setTimeout(function() {
+                var divId = 'div_%%name%%';
+                divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
+                $(divId).on('switch-change', function (e, data) {
+                    %%onSwitchJSCallback%%
+                });
+
+            }, 200);
+        });
     </script>
 
     <div class="control-group">
