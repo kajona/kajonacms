@@ -58,14 +58,14 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
 
         $strReturn = "";
 
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "saveConfig"));
+//        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "saveConfig"));
 
 
         //create callback for the on-off toogle which is passed to formInputOnOff
         $strCallback = <<<JS
                 //data contains the clicked element
                 var inputId = data.el[0].id;
-                var messageProviderType = inputId.split("_")[0];
+                var messageProviderType = inputId.slice(0, inputId.lastIndexOf("_"));
 
                 var param1 =inputId+'='+data.value; //value for clicked toggle element
                 var param2 = 'messageprovidertype='+data.el[0].id.split("_")[0]; //messageprovide type
@@ -98,7 +98,7 @@ JS;
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
 
 //        $strReturn .= $this->objToolkit->formInputSubmit();
-        $strReturn .= $this->objToolkit->formClose();
+//        $strReturn .= $this->objToolkit->formClose();
 
         return $strReturn;
     }
