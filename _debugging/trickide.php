@@ -44,3 +44,5 @@ define("_stats_nrofrecords_", "");
 define("_tags_defaultprivate_", "");
 
 define("_packagemanager_defaulttemplate_", "");
+
+define("_workflows_trigger_authkey_", "");

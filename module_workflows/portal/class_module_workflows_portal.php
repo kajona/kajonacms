@@ -1,0 +1,47 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id$									*
+********************************************************************************************************/
+
+/**
+ * Portal-class of the workflows module. Used to provide an access point to trigger the workflow-engine.
+ *
+ * @package module_workflows
+ * @author sidler@mulchprod.de
+ *
+ * @module workflows
+ * @moduleId _workflows_module_id_
+ */
+class class_module_workflows_portal extends class_portal implements interface_portal {
+
+    /**
+     * Default implementation to avoid mail-spamming.
+     */
+    protected function actionList() {
+
+    }
+
+
+
+    /**
+     * @permissions view
+     * @xml
+     */
+    protected function actionTrigger() {
+        if($this->getParam("authkey") == _workflows_trigger_authkey_) {
+            $objSystemtask = new class_systemtask_workflows();
+            $objSystemtask->executeTask();
+
+            return "<message>Execution successful</message>";
+        }
+
+        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+        return "<message><error>Not authorized</error></message>";
+    }
+
+
+}

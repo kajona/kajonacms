@@ -58,7 +58,7 @@ class class_installer_workflows extends class_installer_base implements interfac
 		$this->registerModule(
             "workflows",
             _workflows_module_id_,
-            "",
+            "class_module_workflows_portal.php",
             "class_module_workflows_admin.php",
             $this->objMetadata->getStrVersion(),
             true
@@ -67,6 +67,8 @@ class class_installer_workflows extends class_installer_base implements interfac
         $strReturn .= "synchronizing list...\n";
         class_module_workflows_handler::synchronizeHandlerList();
 
+        $strReturn .= "Generating and adding trigger-authkey...\n";
+        $this->registerConstant("_workflows_trigger_authkey_", generateSystemid(), class_module_system_setting::$int_TYPE_STRING, _workflows_module_id_);
 
 		return $strReturn;
 
@@ -119,6 +121,11 @@ class class_installer_workflows extends class_installer_base implements interfac
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3");
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3") {
+            $strReturn .= $this->update_43_431();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -168,6 +175,22 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0.1");
+        return $strReturn;
+    }
+
+    private function update_43_431() {
+        $strReturn = "Updating 4.3 to 4.3.1...\n";
+
+        $strReturn .= "Adding trigger-authkey...\n";
+        $this->registerConstant("_workflows_trigger_authkey_", generateSystemid(), class_module_system_setting::$int_TYPE_STRING, _workflows_module_id_);
+
+        $strReturn .= "Updating workflows module definition...\n";
+        $objModule = class_module_system_module::getModuleByName("workflows");
+        $objModule->setStrNamePortal("class_module_workflows_portal.php");
+        $objModule->updateObjectToDb();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3.1");
         return $strReturn;
     }
 

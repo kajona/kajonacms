@@ -56,6 +56,9 @@ $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Nächste Ausführung";
 $lang["workflow_ui"]                     = "Bearbeitungsmaske für den aktuellen Schritt anzeigen";
+$lang["_workflows_trigger_authkey_hint"] = "Der Auth-Key wird als Geheimnis beim Aufruf der Workflow-Engine verwendet. Nur wenn der übergebene Auth-Key dem gespeicherten entspricht werden die ausstehenden Workflows ausgeführt. Dies verhindert, dass Dritte durch einfache Aufrufe die Workflows starten können (DOS-Attacke).<br />Nachstehende URL kann zum Aufruf der Workflows-Egine, z.B. in einem Cron-Job, verwendet werden: <br />"._xmlpath_."?module=workflows&action=trigger&authkey="._workflows_trigger_authkey_;
+$lang["_workflows_trigger_authkey_"]     = "Auth-Key";
+
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Handler", 5 => "", 6 => "", 7 => "", 8 => "");
