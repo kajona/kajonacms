@@ -56,7 +56,7 @@ $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Next execution";
 $lang["workflow_ui"]                     = "Show edit-form for the current step";
-$lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined(_workflows_trigger_authkey_) ? _workflows_trigger_authkey_ : "");
+$lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "");
 $lang["_workflows_trigger_authkey_"]     = "Auth-Key";
 
 //non-editable entries
