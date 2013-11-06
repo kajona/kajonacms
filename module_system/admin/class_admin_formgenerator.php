@@ -440,8 +440,8 @@ class class_admin_formgenerator {
      */
     public function addFieldToHiddenGroup(class_formentry_base $objField) {
         $this->arrHiddenElements[] = $objField->getStrEntryName();
-        if(!isset($this->arrFields[$objField->getStrEntryName()]))
-            $this->arrFields[$objField->getStrEntryName()] = $objField;
+        if(!isset($this->arrFields[$objField->getStrEntryName()]) && !isset($this->arrFields[$objField->getStrSourceProperty()]))
+            $this->addField($objField);
         return $objField;
     }
 
