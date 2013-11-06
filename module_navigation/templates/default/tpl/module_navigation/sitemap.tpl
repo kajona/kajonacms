@@ -10,13 +10,11 @@
 <level_1_wrapper><div id="sitemapNavi"><ul class="sitemap-1">%%level1%%</ul></div></level_1_wrapper>
 
 <level_1_inactive>
-<li>%%link%%</li>
-%%level2%%
+<li>%%link%% %%level2%%</li>
 </level_1_inactive>
 
 <level_1_active>
-<li>%%link%%</li>
-%%level2%%
+<li>%%link%% %%level2%%</li>
 </level_1_active>
 
 
@@ -24,26 +22,24 @@
 <level_2_wrapper><ul class="sitemap-2">%%level2%%</ul></level_2_wrapper>
 
 <level_2_inactive>
-<li>%%link%%</li>
-%%level3%%
+<li>%%link%% %%level3%%</li>
+
 </level_2_inactive>
 
 <level_2_active>
-<li>%%link%%</li>
-%%level3%%
+<li>%%link%% %%level3%%</li>
 </level_2_active>
 
 
 <level_3_wrapper><ul class="sitemap-3">%%level3%%</ul></level_3_wrapper>
 
 <level_3_inactive>
-<li>%%link%%</li>
-%%level4%%
+<li>%%link%% %%level4%%</li>
+
 </level_3_inactive>
 
 <level_3_active>
-<li>%%link%%</li>
-%%level4%%
+<li>%%link%% %%level4%%</li>
 </level_3_active>
 
 
