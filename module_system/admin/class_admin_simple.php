@@ -40,7 +40,11 @@ abstract class class_admin_simple extends class_admin {
         $arrContent["actiontoolbar"] = $strReturn.$this->objToolkit->getContentActionToolbar($this->getContentActionToolbar());
     }
 
-
+    /**
+     * Default-implementation to render an action toolbar
+     *
+     * @return string
+     */
     protected function getContentActionToolbar() {
         if(uniStrpos($this->getAction(), "list") !== false || uniStrpos($this->getAction(), "new") !== false)
             return "";

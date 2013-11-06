@@ -1344,6 +1344,35 @@ label {
     background: url(../img/loading.gif) center no-repeat;
     min-height: 50px;
     min-width: 50px;
+
+    /*
+     Following is a possible implementation based on fontawesome, rendering a simple spinner.
+     Nevertheless, the folderview-popups / iframe-dialogs need to be tweaked, otherwise the iframe will
+     be spinned, too.
+    */
+
+
+//    padding: 20px;
+//    text-align: center;
+//
+//    line-height: normal;
+//    vertical-align: baseline;
+//    background-image: none;
+//    background-position: 0% 0%;
+//    background-repeat: repeat;
+//    margin-top: 0;
+//
+//    -moz-animation: spin 2s infinite linear;
+//    -o-animation: spin 2s infinite linear;
+//    -webkit-animation: spin 2s infinite linear;
+//    animation: spin 2s infinite linear;
+//
+//    &:before {
+//        font-size: @baseFontSize + 10;
+//        content: @spinner;
+//        color: @green;
+//        font-family: fontawesome;
+//    }
 }
 
 /* DIALOGS / MODALS / BACKDROPS */

@@ -129,6 +129,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                     if($bitSamePlaceholder) {
                         $bitHit = true;
+                        //try to unlock the record
+                        $objOneElementOnPage->getLockManager()->unlockRecord();
                         $strActions = $this->getActionIcons($objOneElementOnPage);
                         //Put all Output together
                         $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, $intI++);
@@ -233,9 +235,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked", $this->getLang("ds_gesperrt")));
             }
             else {
-                //if it's the user who locked the record, unlock it now
-                if($objLockmanager->isLockedByCurrentUser())
-                    $objLockmanager->unlockRecord();
 
                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
                 $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
