@@ -127,7 +127,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         $strAlt = $arrMime[0];
 
         if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif") {
-            $strAlt = "<div class='loadingContainer'><img src='" . _webpath_ . "/image.php?image=" . urlencode($this->getStrFilename()) . "&amp;maxWidth=100&amp;maxHeight=100' /></div>";
+            $strAlt = "<img src='"._webpath_."/image.php?image=" . urlencode($this->getStrFilename()) . "&amp;maxWidth=100&amp;maxHeight=100' />";
         }
         return array($strImage, $strAlt);
     }

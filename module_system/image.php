@@ -293,6 +293,8 @@ class class_flyimage {
     /**
      * Generates a greyish color and registers the color to the image
      *
+     * @param $objImage
+     *
      * @return int color-id in image
      */
     private function generateGreyLikeColor($objImage) {

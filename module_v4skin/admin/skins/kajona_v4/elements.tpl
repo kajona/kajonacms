@@ -637,7 +637,8 @@ A fieldset to structure logical sections
 
 
 <iframe_container>
-    <iframe src="%%iframesrc%%" id="%%iframeid%%" class="loadingContainer seamless" width="100%" height="100%" frameborder="0" seamless ></iframe>
+    <div id="%%iframeid%%_loading" class="loadingContainer loadingContainerBackground"></div>
+    <iframe src="%%iframesrc%%" id="%%iframeid%%" class="seamless" width="100%" height="100%" frameborder="0" seamless ></iframe>
 
     <script type='text/javascript'>
         $(document).ready(function(){
@@ -1025,7 +1026,8 @@ pe_iconbar, pe_disable
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">×</button>
         </div>
-        <div class="modal-body peLoadingContainer" id="peDialog_content">
+        <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
+        <div class="modal-body" id="peDialog_content">
             <!-- filled by js -->
         </div>
     </div>
@@ -1319,7 +1321,7 @@ The language switch surrounds the buttons
             <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
         </div>
         <div class="modal-body">
-            <div id="dialogLoadingDiv" class="loadingContainer"></div>
+            <div id="dialogLoadingDiv" class="loadingContainer loadingContainerBackground"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
 </div></dialogLoadingContainer>
@@ -1493,8 +1495,8 @@ The tag-wrapper is the section used to surround the list of tag.
 Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,
 otherwise the JavaScript will fail!
 <tags_wrapper>
-    <div id="tagsWrapper_%%targetSystemid%%" class="loadingContainer">
-    </div>
+    <div id="tagsLoading_%%targetSystemid%%" class="loadingContainer"></div>
+    <div id="tagsWrapper_%%targetSystemid%%"></div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
             KAJONA.admin.tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');

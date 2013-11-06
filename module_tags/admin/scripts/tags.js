@@ -28,19 +28,19 @@ KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
 
 KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
 
-    $("#tagsWrapper_"+strSystemid).addClass("loadingContainer");
+    $("#tagsLoading_"+strSystemid).addClass("loadingContainer");
 
     KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, function(data, status, jqXHR) {
         if(status == 'success') {
             var intStart = data.indexOf("<tags>")+6;
             var strContent = data.substr(intStart, data.indexOf("</tags>")-intStart);
-            $("#tagsWrapper_"+strSystemid).removeClass("loadingContainer");
+            $("#tagsLoading_"+strSystemid).removeClass("loadingContainer");
             $("#tagsWrapper_"+strSystemid).html(strContent);
             KAJONA.util.evalScript(strContent);
         }
         else {
             KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-            $("#tagsWrapper_"+strSystemid).removeClass("loadingContainer");
+            $("#tagsLoading_"+strSystemid).removeClass("loadingContainer");
         }
     });
 };
