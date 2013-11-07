@@ -46,7 +46,7 @@ abstract class class_admin_simple extends class_admin {
      * @return string
      */
     protected function getContentActionToolbar() {
-        if(uniStrpos($this->getAction(), "list") !== false || uniStrpos($this->getAction(), "new") !== false)
+        if(uniStrpos($this->getAction(), "list") !== false || uniStrpos($this->getAction(), "new") !== false || uniStrpos($this->getAction(), "save") !== false)
             return "";
 
         if(validateSystemid($this->getSystemid())) {
@@ -475,7 +475,7 @@ abstract class class_admin_simple extends class_admin {
     protected function renderTagAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
 
-            //the tag list is more complex sind wrapped by a js-logic to load the tags by ajax afterwards
+            //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
 
             // @codingStandardsIgnoreStart
             $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".strip_tags($objListEntry->getStrDisplayName())."'); KAJONA.admin.folderview.dialog.init(); return false;";
