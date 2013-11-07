@@ -247,6 +247,7 @@ class class_image2 {
         }
 
         class_response_object::getInstance()->setStResponseType($strResponseType);
+        class_response_object::getInstance()->sendHeaders();
 
         if (!$this->isCached($strFormat)) {
             if ($this->processImage($strFormat)) {
