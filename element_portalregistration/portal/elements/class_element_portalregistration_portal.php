@@ -167,7 +167,7 @@ class class_element_portalregistration_portal extends class_element_portal imple
                 //create a mail to allow the user to activate itself
 
                 $strMailContent = $this->getLang("pr_email_body");
-                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "systemid=" . $objUser->getSystemid() . "&authcode=" . $strAuthcode);
+                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "&authcode=" . $strAuthcode, $objUser->getSystemid());
                 $strMailContent .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
                 $strMailContent .= $this->getLang("pr_email_footer");
 

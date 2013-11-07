@@ -181,7 +181,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
                     $objUser->updateObjectToDb();
 
                     $strMailContent = $this->getLang("resetemailBody");
-                    $strTemp = getLinkPortalHref($this->getPagename(), "", "portalResetPwd", "systemid=" . $objUser->getSystemid() . "&authcode=" . $strAuthcode);
+                    $strTemp = getLinkPortalHref($this->getPagename(), "", "portalResetPwd", "&authcode=" . $strAuthcode, $objUser->getSystemid());
                     $strMailContent .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
 
                     $objScriptlets = new class_scriptlet_helper();

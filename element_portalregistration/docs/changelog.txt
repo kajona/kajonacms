@@ -1,0 +1,4 @@
+Element Portalregistration
+
+V4.3.1 --------------------------------------------------------------------------------------------------
+BUG: The confirm-account link missed to include the users' systemid
