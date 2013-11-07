@@ -214,7 +214,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["session_loginprovider"] = array("char20", true);
         $arrFields["session_lasturl"] = array("char500", true);
 
-        if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
+        if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime", "session_userid")))
             $strReturn .= "An error occured! ...\n";
 
         // caching --------------------------------------------------------------------------------------
@@ -673,24 +673,73 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->_pQuery($strQuery, array('class_module_system_aspect', $arrOneRow["system_id"]));
         }
 
+        //TODO: add existance check
+
 
         $strReturn .= "Adding index to table system\n";
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_sort")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_owner")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_create_date")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_status")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_lm_time")." ) ", array());
+
+        $arrColumns = null;
+        if(class_config::getInstance()->getConfig("dbdriver") == "mysqli") {
+            $arrIndex = $this->objDB->getPArray("SHOW INDEX FROM "._dbprefix_."system", array());
+            $arrColumns = array();
+            foreach($arrIndex as $arrOneRow)
+                $arrColumns[] = $arrOneRow["Column_name"];
+        }
+
+        if($arrColumns == null || !in_array("system_sort", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_sort")." ) ", array());
+
+        if($arrColumns == null || !in_array("system_owner", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_owner")." ) ", array());
+
+        if($arrColumns == null || !in_array("system_create_date", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_create_date")." ) ", array());
+
+        if($arrColumns == null || !in_array("system_status", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_status")." ) ", array());
+
+        if($arrColumns == null || !in_array("system_lm_time", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_lm_time")." ) ", array());
+
 
         $strReturn .= "Adding index to table system_date\n";
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_start")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_end")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_special")." ) ", array());
+        $arrColumns = null;
+        if(class_config::getInstance()->getConfig("dbdriver") == "mysqli") {
+            $arrIndex = $this->objDB->getPArray("SHOW INDEX FROM "._dbprefix_."system_date", array());
+            $arrColumns = array();
+            foreach($arrIndex as $arrOneRow)
+                $arrColumns[] = $arrOneRow["Column_name"];
+        }
+
+        if($arrColumns == null || !in_array("system_date_start", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_start")." ) ", array());
+
+        if($arrColumns == null || !in_array("system_date_end", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_end")." ) ", array());
+
+        if($arrColumns == null || !in_array("system_date_special", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_special")." ) ", array());
 
         $strReturn .= "Adding index to table changelog\n";
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_date")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_user")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_systemid")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_property")." ) ", array());
+        $arrColumns = null;
+        if(class_config::getInstance()->getConfig("dbdriver") == "mysqli") {
+            $arrIndex = $this->objDB->getPArray("SHOW INDEX FROM "._dbprefix_."changelog", array());
+            $arrColumns = array();
+            foreach($arrIndex as $arrOneRow)
+                $arrColumns[] = $arrOneRow["Column_name"];
+        }
+
+        if($arrColumns == null || !in_array("change_date", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_date")." ) ", array());
+
+        if($arrColumns == null || !in_array("change_user", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_user")." ) ", array());
+
+        if($arrColumns == null || !in_array("change_systemid", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_systemid")." ) ", array());
+
+        if($arrColumns == null || !in_array("change_property", $arrColumns))
+            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_property")." ) ", array());
 
 
         $strReturn .= "Updating module-versions...\n";
@@ -991,6 +1040,9 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_pQuery($strQuery, array()))
             $strReturn .= "An error occured! ...\n";
 
+        $strReturn .= "Adding indices to tables..\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."session")." ADD INDEX ( ".$this->objDB->encloseColumnName("session_releasetime")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."session")." ADD INDEX ( ".$this->objDB->encloseColumnName("session_userid")." ) ", array());
 
 
         $strReturn .= "Updating module-versions...\n";

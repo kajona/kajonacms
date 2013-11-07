@@ -39,7 +39,7 @@ class class_installer_workflows extends class_installer_base implements interfac
 		$arrFields["workflows_text"]           = array("text", true);
 		$arrFields["workflows_text2"]          = array("text", true);
 
-		if(!$this->objDB->createTable("workflows", $arrFields, array("workflows_id")))
+		if(!$this->objDB->createTable("workflows", $arrFields, array("workflows_id"), array("workflows_state", "workflows_systemid")))
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Installing table workflows_handler...\n";
@@ -188,6 +188,12 @@ class class_installer_workflows extends class_installer_base implements interfac
         $objModule = class_module_system_module::getModuleByName("workflows");
         $objModule->setStrNamePortal("class_module_workflows_portal.php");
         $objModule->updateObjectToDb();
+
+
+        $strReturn .= "Adding indices to tables..\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")." ADD INDEX ( ".$this->objDB->encloseColumnName("workflows_state")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")." ADD INDEX ( ".$this->objDB->encloseColumnName("workflows_systemid")." ) ", array());
+
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3.1");
