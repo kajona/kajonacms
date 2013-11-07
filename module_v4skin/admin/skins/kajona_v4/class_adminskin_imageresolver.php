@@ -35,11 +35,6 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
             return $strFA;
 
 
-        if($strName == "loadingSmall")
-            $strName .= ".gif";
-        else
-            $strName .= ".png";
-
         return "<img src=\""._skinwebpath_."/pics/".$strName."\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )." data-kajona-icon='".$strName."' />";
     }
 
