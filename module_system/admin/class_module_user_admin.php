@@ -593,6 +593,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
         }
 
+        //flush the navigation cache in order to get new items for a possible updated list
+        class_admin_helper::flushActionNavigationCache();
         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
 
 
@@ -1168,6 +1170,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
             $objNewUser = new class_module_user_user($this->getSystemid());
             if($this->objSession->switchSessionToUser($objNewUser)) {
+                class_admin_helper::flushActionNavigationCache();
                 $this->adminReload(getLinkAdminHref("dashboard", "", $strAddon));
                 return "";
             }

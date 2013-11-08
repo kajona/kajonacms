@@ -35,7 +35,7 @@ class class_admin_helper {
         foreach($arrModules as $arrOneModule) {
             $objModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
 
-            if(!$objModule->rightEdit())
+            if(!$objModule->rightView())
                 continue;
 
             $arrCurMenuEntry = array(
@@ -104,14 +104,20 @@ class class_admin_helper {
             $arrItems = $objAdminModule->getOutputModuleNavi();
             $arrFinalItems = array();
             //build array of final items
+            $intI = 0;
             foreach($arrItems as $arrOneItem) {
                 if($arrOneItem[0] == "")
                     $bitAdd = true;
                 else
                     $bitAdd = class_carrier::getInstance()->getObjRights()->validatePermissionString($arrOneItem[0], $objModule);
 
-                if($bitAdd || $arrOneItem[1] == "")
-                    $arrFinalItems[] = $arrOneItem[1];
+                if($bitAdd || $arrOneItem[1] == "") {
+
+                    if($arrOneItem[1] != "" || (!isset($arrFinalItems[$intI-1]) || $arrFinalItems[$intI-1] != "")) {
+                        $arrFinalItems[] = $arrOneItem[1];
+                        $intI++;
+                    }
+                }
             }
 
             class_carrier::getInstance()->getObjSession()->setSession($strKey, $arrFinalItems);
@@ -120,5 +126,20 @@ class class_admin_helper {
         return array();
     }
 
+    /**
+     * Static helper to flush the complete backend navigation cache for the current session
+     * May be used during language-changes or user-switches
+     */
+    public static function flushActionNavigationCache() {
+
+        $arrAspects = class_module_system_aspect::getObjectList();
+
+        foreach(class_module_system_module::getModulesInNaviAsArray() as $arrOneModule) {
+            $objOneModule = class_module_system_module::getModuleByName($arrOneModule["module_name"])->getAdminInstanceOfConcreteModule();
+            foreach($arrAspects as $objOneAspect)
+                class_carrier::getInstance()->getObjSession()->sessionUnset(__CLASS__."adminNaviEntries".get_class($objOneModule).$objOneAspect->getSystemid());
+        }
+
+    }
 
 }
