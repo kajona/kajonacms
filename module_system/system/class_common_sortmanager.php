@@ -128,12 +128,16 @@ class class_common_sortmanager implements interface_sortmanager {
      * @param int $intNewPosition
      * @param array|bool $arrRestrictionModules If an array of module-ids is passed, the determination of siblings will be limited to the module-records matching one of the module-ids
      *
+     * @throws class_exception
      * @return void
      */
     function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         class_logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
+        //validate if object is sortable
+        if(!$this->objSource->getLockManager()->isAccessibleForCurrentUser())
+            throw new class_exception("Object is locked", class_exception::$level_ERROR);
 
         $arrParams = array();
         $arrParams[] = $this->objSource->getPrevId();
