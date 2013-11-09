@@ -645,7 +645,21 @@ HTML;
                 return "onclick=\"document.location='".getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$this->getParam("form_element")."&systemid=".$objOneIterable->getSystemid())."'\"";
             }
             else if($objOneIterable->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
-                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objOneIterable->getStrFilename()."']]);\"";
+
+                $strValue = $objOneIterable->getStrFilename();
+                $arrMime  = $this->objToolkit->mimeType($strValue);
+                $bitImage = false;
+                if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
+                    $bitImage = true;
+
+                if ($bitImage && $this->getParam("form_element") == "ckeditor") {
+                    $strValue = _webpath_."/image.php?image=".$strValue;
+                } else {
+                    $strValue = _webpath_.$strValue;
+                }
+
+
+                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$strValue."']]);\"";
             }
 
             return "";
