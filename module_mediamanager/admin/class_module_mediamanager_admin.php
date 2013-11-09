@@ -521,7 +521,7 @@ HTML;
                 getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
             );
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
-                getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_accept", "accept_icon")
+                getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
             )." ";
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
@@ -541,6 +541,10 @@ HTML;
                 function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:KAJONA.admin.mediamanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
+
+
+                KAJONA.admin.strCropEnabled= '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_accept", $this->getLang("icon_crop_accept")))."';
+                KAJONA.admin.strCropDisabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("icon_crop_accept")))."';
 
                 </script>";
 
