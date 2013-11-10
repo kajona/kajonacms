@@ -1,5 +1,10 @@
 Module Mediamanager
 
+V4.3.1 --------------------------------------------------------------------------------------------------
+BUG: fixed the loading of admin-list sections from elements.tpl to avoid errors during system-upgrades
+BUG:The image-cropper used a wrong js-replace to switch action icons
+BUG: the folderview image-selector missed to include the _webpath_ constant in some wysiwyg scenarios
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: moved the gallery / download element / samplecontent installers from module mediamanager to module pages. the mediamanger no longer requires the pages module, therefore it may be installed in advance of the pages module causing the elements to be skipped due to unresolved requirements.
 NEW: class_image2: Migrated media manager and image resizing with image.php to new class.
