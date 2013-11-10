@@ -162,7 +162,7 @@ class class_lockmanager {
      *
      * @return string
      */
-    private function getLockId() {
+    public function getLockId() {
 
         $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
 
