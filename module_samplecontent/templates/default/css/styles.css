@@ -174,13 +174,24 @@ table.portalList td.image {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    height: 300px;
+    height: 125px;
     background-image: url(../pics/default/header.jpg);
     background-repeat: no-repeat;
     background-position: center;
 }
 
-
+#headerImageHome
+ {
+    margin-top: 30px;
+    border: 1px solid #dadada;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    height: 300px;
+    background-image: url(../pics/default/header_home.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
 ul.mainnavul li {
 }

@@ -13,7 +13,7 @@
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack";
 $lang["action_download"]                 = "Template-Pack herunterladen";
 $lang["action_list"]                     = "Installierte Pakete";
-$lang["action_list_templates"]           = "Installierte Templates";
+$lang["action_list_templates"]           = "Template-Verwaltung";
 $lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
 $lang["action_upload_package"]           = "Neues / Aktualisiertes Paket installieren";
 $lang["all"]                             = "Alle";

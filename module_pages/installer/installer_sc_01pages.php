@@ -1,4 +1,4 @@
-<?php
+hom<?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2013 by Kajona, www.kajona.de                                                              *
@@ -67,7 +67,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $objPage->setStrBrowsername("Welcome");
         }
 
-        $objPage->setStrTemplate("standard.tpl");
+        $objPage->setStrTemplate("home.tpl");
         $objPage->updateObjectToDb();
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
@@ -155,8 +155,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
             $arrParams = array();
             if($this->strContentLanguage == "de") {
-                $arrParams[] = "Linke Spalte";
-                $arrParams[] = "Dieser Text-Absatz befindet sich am Platzhalter column1_paragraph|image, der im Standard-Template link ausgerichtet ist. Sobald Sie sich am
+                $arrParams[] = "Teaser 1";
+                $arrParams[] = "Dieser Text-Absatz befindet sich am Platzhalter column1_paragraph|image, der im Standard-Template links ausgerichtet ist. Sobald Sie sich am
                                 System <a href='_webpath_/admin'>angemeldet</a> haben und das Portal erneut aufrufen, wird der Portal-Editor angezeigt. Nutzen Sie Drag n Drop
                                 um diesen Text-Absatz an einen anderen Platzhalter in diesem Template zu verschieben. Einzige Voraussetzung hierfür ist, dass der Platzhalter
                                 Elemente des Typs paragraph zulässt.";
@@ -164,7 +164,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
             }
             else {
-                $arrParams[] = "Left column";
+                $arrParams[] = "Teaser 1";
                 $arrParams[] = "This paragraph is located at the placeholder column1_paragraph|image. The default-template aligns this placeholder to the left.
                                 As soon as you <a href='_webpath_/admin'>log in</a> at the administration-backend and reload the portal, the portal-editor is being shown.
                                 Use drag n drop to rearrange this placeholder and move it to another placeholder.
@@ -193,14 +193,14 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
             $arrParams = array();
             if($this->strContentLanguage == "de") {
-                $arrParams[] = "Rechte Spalte";
+                $arrParams[] = "Teaser 2";
                 $arrParams[] = "Der Platzhalter dieses Elementes lautet column2_paragraph|image. Daher ist er für alle anderen Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
                                 sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.";
                 $arrParams[] = $strElementId;
 
             }
             else {
-                $arrParams[] = "Right column";
+                $arrParams[] = "Teaser 2";
                 $arrParams[] = "The placeholder of this paragraph is defined as column2_paragraph|image. Therefore it is a valid target-placeholder for other paragraphs on the current
                                 page. Try to move paragraph on this site in order so see how the possible drop-areas are being highlighted.";
                 $arrParams[] = $strElementId;
@@ -215,7 +215,49 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $strReturn .= "Paragraph element created.\n";
             else
                 $strReturn .= "Error creating paragraph element.\n";
+            
+           
+            $objPagelement = new class_module_pages_pageelement();
+            $objPagelement->setStrPlaceholder("column3_paragraph|image");
+            $objPagelement->setStrName("column3");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($this->strIndexID);
+            $strElementId = $objPagelement->getSystemid();
+
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Teaser 3";
+                $arrParams[] = "Der Platzhalter dieses Elementes lautet column3_paragraph|image. Daher ist er für alle anderen Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
+                                sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.";
+                $arrParams[] = $strElementId;
+
+            }
+            else {
+                $arrParams[] = "Teaser 3";
+                $arrParams[] = "The placeholder of this paragraph is defined as column3_paragraph|image. Therefore it is a valid target-placeholder for other paragraphs on the current
+                                page. Try to move paragraph on this site in order so see how the possible drop-areas are being highlighted.";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?,
+                                    paragraph_content =  ?
+                                WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";            
+            
+            
         }
+        
+        
+
+        
+        
+        
+
 
         $strReturn .= "Creating master-page\n";
         $objPage = new class_module_pages_page();

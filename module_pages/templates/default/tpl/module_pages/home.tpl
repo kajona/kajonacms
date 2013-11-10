@@ -49,7 +49,7 @@
             <div class="topSearch">%%mastersearch_search%%</div>
             <div class="clearer"></div>
         </div>
-        <div id="headerImage"></div>
+        <div id="headerImageHome"></div>
         %%masterpathnavi_navigation%%
 
         <div>
