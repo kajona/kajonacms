@@ -190,6 +190,12 @@ class class_request_dispatcher {
                 $strReturn = $objLogin->action($strAction);
             }
             else {
+
+                if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_ . "/installer.php")) {
+                    class_response_object::getInstance()->setStrRedirectUrl(_webpath_ . "/installer.php");
+                    return "";
+                }
+
                 $objLogin = new class_module_login_admin();
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
