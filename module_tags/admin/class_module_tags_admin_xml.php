@@ -27,7 +27,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
      * Creates a new tag (if not already existing) and assigns the tag to the passed system-record
      *
      * @return string
-     * @permissions edit
+     * @permissions view
      */
     protected function actionSaveTag() {
         $strReturn = "";
@@ -94,7 +94,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
      * Please be aware of the fact, that this only deletes the assignment, not the tag itself.
      *
      * @return string
-     * @permissions edit
+     * @permissions view
      */
     protected function actionRemoveTag() {
         $strReturn = "";

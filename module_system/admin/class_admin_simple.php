@@ -473,7 +473,7 @@ abstract class class_admin_simple extends class_admin {
      * @return string
      */
     protected function renderTagAction(class_model $objListEntry) {
-        if($objListEntry->rightEdit()) {
+        if($objListEntry->rightView()) {
 
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
 

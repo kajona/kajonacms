@@ -135,7 +135,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
      *  - the param "attribute"
      *
      * @return string
-     * @permissions edit
+     * @permissions view
      */
     protected function actionGenericTagForm() {
         $this->setArrModuleEntry("template", "/folderview.tpl");
@@ -151,7 +151,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
      * @param string $strAttribute additional info used to differ between tag-sets for a single systemid
      *
      * @return string
-     * @permissions edit
+     * @permissions view
      */
     public function getTagForm($strTargetSystemid, $strAttribute = null) {
         $strTagContent = "";
