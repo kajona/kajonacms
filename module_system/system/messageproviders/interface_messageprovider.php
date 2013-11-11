@@ -44,13 +44,4 @@ interface interface_messageprovider {
      */
     public function getStrName();
 
-    /**
-     * Returns a short identifier, mainly used to reference the provider in the config-view
-     *
-     * @abstract
-     * @return string
-     * @todo validate if still required, may be replaced by the implementing class-name
-     */
-    public function getStrIdentifier();
-
 }

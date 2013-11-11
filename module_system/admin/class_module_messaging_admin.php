@@ -77,8 +77,8 @@ JS;
 
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
-                "inlineFormEntry 1" => $this->objToolkit->formInputOnOff($objOneProvider->getStrIdentifier()."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, false, $strCallback),
-                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff($objOneProvider->getStrIdentifier()."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, false, $strCallback)
+                "inlineFormEntry 1" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, ($objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysActive()), $strCallback),
+                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, ($objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysByMail()), $strCallback)
             );
 
         }
@@ -127,8 +127,8 @@ JS;
         foreach($arrMessageproviders as $objOneProvider) {
 
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
-            $objConfig->setBitBymail($this->getParam($objOneProvider->getStrIdentifier()."_bymail") != "");
-            $objConfig->setBitEnabled($this->getParam($objOneProvider->getStrIdentifier()."_enabled") != "");
+            $objConfig->setBitBymail($this->getParam(get_class($objOneProvider)."_bymail") != "");
+            $objConfig->setBitEnabled($this->getParam(get_class($objOneProvider)."_enabled") != "");
             $objConfig->updateObjectToDb();
 
         }
@@ -154,20 +154,20 @@ JS;
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
             //only update the message provider which is set in the param "messageprovidertype"
-            if($this->getParam("messageprovidertype") == $objOneProvider->getStrIdentifier()) {
-                if($this->getParam($objOneProvider->getStrIdentifier()."_bymail") != "") {
-                    $bitA = $this->getParam($objOneProvider->getStrIdentifier()."_bymail") == "true";
+            if($this->getParam("messageprovidertype") == get_class($objOneProvider)) {
+                if($this->getParam(get_class($objOneProvider)."_bymail") != "") {
+                    $bitA = $this->getParam(get_class($objOneProvider)."_bymail") == "true";
                     $objConfig->setBitBymail($bitA);
                     $objConfig->updateObjectToDb();
-                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_bymail")."=".$this->getParam($objOneProvider->getStrIdentifier()."_bymail");
+                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_bymail")."=".$this->getParam(get_class($objOneProvider)."_bymail");
                     break;
 
                 }
-                else if($this->getParam($objOneProvider->getStrIdentifier()."_enabled") != "") {
-                    $bitA = $this->getParam($objOneProvider->getStrIdentifier()."_enabled") == "true";
+                else if($this->getParam(get_class($objOneProvider)."_enabled") != "") {
+                    $bitA = $this->getParam(get_class($objOneProvider)."_enabled") == "true";
                     $objConfig->setBitEnabled($bitA);
                     $objConfig->updateObjectToDb();
-                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".$this->getParam($objOneProvider->getStrIdentifier()."_enabled");
+                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".$this->getParam(get_class($objOneProvider)."_enabled");
                     break;
                 }
             }

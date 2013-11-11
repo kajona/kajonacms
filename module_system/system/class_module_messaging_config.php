@@ -112,6 +112,22 @@ class class_module_messaging_config extends class_model implements interface_mod
         }
     }
 
+    /**
+     * Returns a new instance of the referenced messageprovider
+     *
+     * @return null|interface_messageprovider|interface_messageprovider_extended
+     */
+    private function getObjProvider() {
+        if($this->getStrMessageprovider() != "") {
+            $objRefl = new ReflectionClass($this->getStrMessageprovider());
+            $objInstance = $objRefl->newInstance();
+
+            return $objInstance;
+        }
+
+        return null;
+    }
+
 
     /**
      * @param string $strUser
@@ -152,6 +168,11 @@ class class_module_messaging_config extends class_model implements interface_mod
      * @return boolean
      */
     public function getBitEnabled() {
+        if($this->getObjProvider() instanceof interface_messageprovider_extended) {
+            if($this->getObjProvider()->isAlwaysActive())
+                return true;
+        }
+
         return $this->bitEnabled;
     }
 
@@ -166,6 +187,10 @@ class class_module_messaging_config extends class_model implements interface_mod
      * @return boolean
      */
     public function getBitBymail() {
+        if($this->getObjProvider() instanceof interface_messageprovider_extended) {
+            if($this->getObjProvider()->isAlwaysByMail())
+                return true;
+        }
         return $this->bitBymail;
     }
 

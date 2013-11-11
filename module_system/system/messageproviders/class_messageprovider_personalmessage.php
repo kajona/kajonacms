@@ -41,12 +41,4 @@ class class_messageprovider_personalmessage implements interface_messageprovider
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_personalmessage_name", "system");
     }
 
-    /**
-     * Returns a short identifier, mainly used to reference the provider in the config-view
-     *
-     * @return string
-     */
-    public function getStrIdentifier() {
-        return "personalmessage";
-    }
 }

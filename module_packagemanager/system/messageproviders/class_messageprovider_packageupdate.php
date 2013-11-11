@@ -43,12 +43,4 @@ class class_messageprovider_packageupdate implements interface_messageprovider {
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_packageupdate_name", "messaging");
     }
 
-    /**
-     * Returns a short identifier, mainly used to reference the provider in the config-view
-     *
-     * @return string
-     */
-    public function getStrIdentifier() {
-        return "packageupdate";
-    }
 }
