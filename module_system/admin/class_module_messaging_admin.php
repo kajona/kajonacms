@@ -304,7 +304,7 @@ JS;
                 $objMessage->updateObjectToDb();
             }
 
-            $objUser = new class_module_user_user($objMessage->getStrUser());
+            $objSender = new class_module_user_user($objMessage->getStrSenderId());
 
             $strReference = "";
             if(validateSystemid($objMessage->getStrMessageRefId())) {
@@ -318,7 +318,7 @@ JS;
                 array($this->getLang("message_subject"), $objMessage->getStrTitle()),
                 array($this->getLang("message_date"), dateToString($objMessage->getObjDate())),
                 array($this->getLang("message_type"), $objMessage->getObjMessageProvider()->getStrName()),
-                array($this->getLang("message_sender"), $objUser->getStrDisplayName()),
+                array($this->getLang("message_sender"), $objSender->getStrDisplayName()),
                 array($this->getLang("message_reference"), $strReference)
             );
 

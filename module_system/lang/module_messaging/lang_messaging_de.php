@@ -27,7 +27,6 @@ $lang["message_date"]                       = "Datum";
 $lang["message_type"]                       = "Typ";
 $lang["message_subject"]                    = "Betreff";
 $lang["message_body"]                    = "Nachricht";
-$lang["message_body"]                    = "Nachricht";
 $lang["message_reference"]                    = "Referenziert auf";
 $lang["message_reply"]                    = "Antworten";
 $lang["message_sent_success"]            = "Die Nachricht wurde erfolgreich verschickt.";

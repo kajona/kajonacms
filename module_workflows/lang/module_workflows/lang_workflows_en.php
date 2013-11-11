@@ -58,6 +58,14 @@ $lang["workflow_trigger"]                = "Next execution";
 $lang["workflow_ui"]                     = "Show edit-form for the current step";
 $lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "");
 $lang["_workflows_trigger_authkey_"]     = "Auth-Key";
+$lang["messageprovider_workflows_summary"] = "Summary of new messages";
+$lang["workflow_messagesummary_title"] = "Summary of new messages";
+$lang["workflow_messagesummary_val1"] = "Resend after x days";
+$lang["workflow_messagesummary_val2"] = "Delivery time";
+
+$lang["message_messagesummary_subject"] = "You have %%count%% unread messages";
+$lang["message_messagesummary_intro"] = "You have %%count%% unread messages. Following is a summary of all unread messages.";
+$lang["message_messagesummary_body_indicator"] = "Message %%current%% of %%total%%";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Handlers", 5 => "", 6 => "", 7 => "", 8 => "");
