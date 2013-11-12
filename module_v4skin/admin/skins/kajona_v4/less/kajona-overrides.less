@@ -562,7 +562,9 @@ footer {
     .border-radius(0px);
     .box-shadow(none);
     margin:9px 0 0 0;
-    padding: 6px 14px 6px 14px;
+    padding: 6px 14px 2px 14px;
+
+    white-space: nowrap;
 
     li.pathentry {
         text-shadow:none;
@@ -570,6 +572,15 @@ footer {
         font-weight: 600;
         font-size:@baseFontSize;
         text-transform:uppercase;
+
+        max-width: 250px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        .transition(max-width ease-out .5s);
+
+        &:hover {
+            max-width: 100% !important;
+        }
 
         a.moduleSwitchLink {
             i {
@@ -588,14 +599,19 @@ footer {
         font-family: fontawesome;
     }
 
-    li.pathentry:first-child:before {
-        display: none;
+    li.pathentry:first-child {
+        overflow: visible;
+        vertical-align: top;
+
+        &:before {
+            display: none;
+        }
     }
 }
 
 .breadcrumbTop {
     margin: 0px;
-    padding: 2px 14px 2px 14px;
+    padding: 2px 14px 0px 14px;
 }
 
 

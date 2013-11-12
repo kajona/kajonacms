@@ -93,6 +93,13 @@ $(function () {
 
 
     });
+
+    KAJONA.v4skin.breadcrumb.updatePathNavigationEllipsis();
+    $(window).on("resize", function() {
+        KAJONA.v4skin.breadcrumb.updatePathNavigationEllipsis();
+
+    })
+
 });
 
 if (typeof KAJONA == "undefined") {
@@ -104,4 +111,43 @@ KAJONA.v4skin = {
         var link = $("<li class='pathentry'></li>").append(strLinkContent);
         $("div.pathNaviContainer  ul.breadcrumb").append(link);
     }
+
+};
+
+KAJONA.v4skin.breadcrumb = {
+    updatePathNavigationEllipsis : function() {
+
+        var $arrPathLIs = $(".pathNaviContainer  .breadcrumb  li.pathentry");
+        var $objBreadcrumb = $(".pathNaviContainer  .breadcrumb");
+
+        //first run: get the number of entries and a first styling
+        var intEntries = ($arrPathLIs.length);
+        var intWidth = $objBreadcrumb.width();
+        var intMaxWidth = Math.ceil(intWidth/intEntries);
+
+        $arrPathLIs.css("max-width", intMaxWidth);
+
+        //second run: calc the remaining x-space
+        var intTotalUnused = KAJONA.v4skin.breadcrumb.getUnusedSpace(intMaxWidth);
+
+        if(intTotalUnused > intMaxWidth) {
+            intMaxWidth = Math.ceil(intWidth/ (intEntries - (Math.floor(intTotalUnused / intMaxWidth)) ));
+            $arrPathLIs.css("max-width", intMaxWidth);
+        }
+
+    },
+
+    getUnusedSpace : function(intMaxWidth) {
+        var intTotalUnused = 0;
+        $(".pathNaviContainer  .breadcrumb  li.pathentry").each(function() {
+            var $li = $(this);
+            if($li.width() < intMaxWidth) {
+                intTotalUnused += (intMaxWidth - $li.width());
+            }
+        });
+
+        return intTotalUnused;
+    }
+
+
 };
