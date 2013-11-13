@@ -89,9 +89,11 @@ class class_module_right_admin extends class_admin implements interface_admin {
 
 
             $arrHeaderRow = $this->getLang("permissions_header", $strModule);
+            $arrDefaultHeader = $this->getLang("permissions_default_header", "system");
+
 
             if($arrHeaderRow == "!permissions_header!")
-                $arrHeaderRow = $this->getLang("permissions_default_header", "system");
+                $arrHeaderRow = $arrDefaultHeader;
 
             if($strSystemID == "0")
                 $arrHeaderRow = $this->getLang("permissions_root_header", "system");
@@ -107,6 +109,8 @@ class class_module_right_admin extends class_admin implements interface_admin {
             $arrTemplateTotal["title6"] = $arrTitles[6];
             $arrTemplateTotal["title7"] = $arrTitles[7];
             $arrTemplateTotal["title8"] = $arrTitles[8];
+            if(_system_changehistory_enabled_ == "true")
+                $arrTemplateTotal["title9"] = (isset($arrTitles[9]) ? $arrTitles[9] : $arrDefaultHeader[9]); //fallback for pre 4.3.2 systems
 
             //Read the template
             $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_row");
@@ -220,6 +224,21 @@ class class_module_right_admin extends class_admin implements interface_admin {
                     $arrTemplateRow["box8"] = "<input type=\"checkbox\" name=\"9," . $arrSingleGroup["group_id"] . "\" id=\"9," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
                 }
 
+                if(_system_changehistory_enabled_ == "true") {
+                    if(in_array($arrSingleGroup["group_id"], $arrRights["changelog"])) {
+                        //field editable?
+                        if($arrTemplateTotal["title9"] != "") {
+                            $arrTemplateRow["box9"] = "<input type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
+                        }
+                        else {
+                            $arrTemplateRow["box9"] = "<input type=\"hidden\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
+                        }
+                    }
+                    elseif($arrTemplateTotal["title9"] != "") {
+                        $arrTemplateRow["box9"] = "<input type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
+                    }
+                }
+
 
                 //And Print it to template
                 $arrTemplateTotal["rows"] .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID);
@@ -274,6 +293,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
                     if($strRightName == "right3") $intRightCounter = 7;
                     if($strRightName == "right4") $intRightCounter = 8;
                     if($strRightName == "right5") $intRightCounter = 9;
+                    if($strRightName == "changelog") $intRightCounter = 10;
 
                     foreach($arrRightsPerAction as $strOneGroupId) {
                         //place hidden field
@@ -343,6 +363,7 @@ class class_module_right_admin extends class_admin implements interface_admin {
             $strRight3 = _admins_group_id_;
             $strRight4 = _admins_group_id_;
             $strRight5 = _admins_group_id_;
+            $strChangelog = _admins_group_id_;
 
             foreach($arrGroups as $objSingleGroup) {
                 $strGroupId = $objSingleGroup->getSystemid();
@@ -378,6 +399,9 @@ class class_module_right_admin extends class_admin implements interface_admin {
                 if($this->getParam("9," . $strGroupId) == 1) {
                     $strRight5 .= "," . $strGroupId;
                 }
+                if($this->getParam("10," . $strGroupId) == 1) {
+                    $strChangelog .= "," . $strGroupId;
+                }
             }
             $arrReturn = array(
                 "inherit"          => $intInherit,
@@ -389,7 +413,9 @@ class class_module_right_admin extends class_admin implements interface_admin {
                 "right2"           => $strRight2,
                 "right3"           => $strRight3,
                 "right4"           => $strRight4,
-                "right5"           => $strRight5);
+                "right5"           => $strRight5,
+                "changelog"        => $strChangelog
+            );
 
             //Pass to right-class
             if($objRights->setRights($arrReturn, $strSystemid)) {

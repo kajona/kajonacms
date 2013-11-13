@@ -25,6 +25,7 @@ class class_rights {
     public static $STR_RIGHT_RIGHT3 = "right3";
     public static $STR_RIGHT_RIGHT4 = "right4";
     public static $STR_RIGHT_RIGHT5 = "right5";
+    public static $STR_RIGHT_CHANGELOG = "changelog";
 
 
     /**
@@ -103,6 +104,7 @@ class class_rights {
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT3];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT4];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT5];
+        $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
         $arrParams[] = $strSystemid;
 
         $strQuery = "UPDATE "._dbprefix_."system_right
@@ -115,7 +117,8 @@ class class_rights {
                             right_right2=?,
                             right_right3=?,
                             right_right4=?,
-                            right_right5=?
+                            right_right5=?,
+                            right_changelog=?
                       WHERE right_id=?";
 
         if($this->objDb->_pQuery($strQuery, $arrParams)) {
@@ -274,6 +277,7 @@ class class_rights {
             $arrRights[self::$STR_RIGHT_RIGHT3] = $arrRow["right_right3"];
             $arrRights[self::$STR_RIGHT_RIGHT4] = $arrRow["right_right4"];
             $arrRights[self::$STR_RIGHT_RIGHT5] = $arrRow["right_right5"];
+            $arrRights[self::$STR_RIGHT_CHANGELOG] = $arrRow["right_changelog"];
             $arrRights[self::$STR_RIGHT_INHERIT] = (int)$arrRow["right_inherit"];
         }
         else {
@@ -286,6 +290,7 @@ class class_rights {
             $arrRights[self::$STR_RIGHT_RIGHT3] = "";
             $arrRights[self::$STR_RIGHT_RIGHT4] = "";
             $arrRights[self::$STR_RIGHT_RIGHT5] = "";
+            $arrRights[self::$STR_RIGHT_CHANGELOG] = "";
             $arrRights[self::$STR_RIGHT_INHERIT] = 1;
         }
 
@@ -316,6 +321,7 @@ class class_rights {
         $arrReturn[self::$STR_RIGHT_RIGHT3] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT3]);
         $arrReturn[self::$STR_RIGHT_RIGHT4] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT4]);
         $arrReturn[self::$STR_RIGHT_RIGHT5] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT5]);
+        $arrReturn[self::$STR_RIGHT_CHANGELOG] = explode(",", $arrRow[self::$STR_RIGHT_CHANGELOG]);
 
         $arrReturn[self::$STR_RIGHT_INHERIT] = (int)$arrRow[self::$STR_RIGHT_INHERIT];
 
@@ -437,6 +443,18 @@ class class_rights {
     }
 
     /**
+     * Checks if the user has the right to edit the right5 of the record
+     *
+     * @param string $strSystemid
+     * @param string $strUserid
+     *
+     * @return bool
+     */
+    public function rightChangelog($strSystemid, $strUserid = "") {
+        return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_CHANGELOG, $strSystemid);
+    }
+
+    /**
      * Checks if a given user-id is granted the passed permission for the passed systemid.
      *
      * @param $strUserid
@@ -532,6 +550,7 @@ class class_rights {
         $arrRights[self::$STR_RIGHT_RIGHT3] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
         $arrRights[self::$STR_RIGHT_RIGHT4] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
         $arrRights[self::$STR_RIGHT_RIGHT5] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
+        $arrRights[self::$STR_RIGHT_CHANGELOG] = implode(",", $arrRights[self::$STR_RIGHT_CHANGELOG]);
 
 
         //and save the row
@@ -579,6 +598,7 @@ class class_rights {
         $arrRights[self::$STR_RIGHT_RIGHT3] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
         $arrRights[self::$STR_RIGHT_RIGHT4] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
         $arrRights[self::$STR_RIGHT_RIGHT5] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
+        $arrRights[self::$STR_RIGHT_CHANGELOG] = implode(",", $arrRights[self::$STR_RIGHT_CHANGELOG]);
 
         //and save the row
         $bitReturn = $this->setRights($arrRights, $strSystemid);
@@ -670,6 +690,11 @@ class class_rights {
                 break;
             case self::$STR_RIGHT_RIGHT5:
                 if($objObject->rightRight5()) {
+                    return true;
+                }
+                break;
+            case self::$STR_RIGHT_CHANGELOG:
+                if($objObject->rightChangelog()) {
                     return true;
                 }
                 break;

@@ -973,6 +973,16 @@ abstract class class_root {
         return $this->objRights->rightRight5($this->getSystemid());
     }
 
+    /**
+     * Returns the bool-value for the right5 of this record,
+     * Systemid MUST be given, otherwise false
+     *
+     * @return bool
+     */
+    public function rightChangelog() {
+        return $this->objRights->rightChangelog($this->getSystemid());
+    }
+
     // --- SystemID & System-Table Methods ------------------------------------------------------------------
 
     /**

@@ -64,6 +64,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["right_right3"] = array("text", true);
         $arrFields["right_right4"] = array("text", true);
         $arrFields["right_right5"] = array("text", true);
+        $arrFields["right_changelog"] = array("text", true);
 
         if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
             $strReturn .= "An error occured! ...\n";
@@ -388,7 +389,8 @@ class class_installer_system extends class_installer_base implements interface_i
 					   	right_right2 	= ".$strGroupsAdmin.",
 					   	right_right3  	= ".$strGroupsAdmin.",
 					   	right_right4    = ".$strGroupsAdmin.",
-					   	right_right5  	= ".$strGroupsAdmin."
+					   	right_right5  	= ".$strGroupsAdmin.",
+					   	right_changelog = ".$strGroupsAdmin."
 					   	WHERE right_id='0'";
 
         $this->objDB->_query($strQuery);
@@ -1042,8 +1044,16 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Adding indices to tables..\n";
         $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."session")." ADD INDEX ( ".$this->objDB->encloseColumnName("session_releasetime")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."session")." ADD INDEX ( ".$this->objDB->encloseColumnName("session_userid")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."session")." ADD INDEX ( ".$this->objDB->encloseColumnName("session_releasetime")." ) ", array());
 
+
+        $strReturn .= "Adding changelog permission...\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_right")."
+                                       ADD ".$this->objDB->encloseColumnName("right_changelog")." ".$this->objDB->getDatatype("text")." NULL", array());
+
+        $strReturn .= "Updating default changelog permissions for admins...\n";
+        $strQuery = "UPDATE "._dbprefix_."system SET right_changelog = ?";
+        $this->objDB->_pQuery($strQuery, array(_admins_group_id_));
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.3.2");

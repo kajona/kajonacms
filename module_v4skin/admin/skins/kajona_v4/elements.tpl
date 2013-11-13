@@ -843,6 +843,7 @@ The following sections specify the layout of the rights-mgmt
 		<th>%%title6%%</td>
 		<th>%%title7%%</td>
 		<th>%%title8%%</td>
+		<th>%%title9%%</td>
 	</tr>
 	%%rows%%
 </table>
@@ -861,6 +862,7 @@ The following sections specify the layout of the rights-mgmt
 		<td>%%box6%%</td>
 		<td>%%box7%%</td>
 		<td>%%box8%%</td>
+		<td>%%box9%%</td>
 	</tr>
 </rights_form_row>
 

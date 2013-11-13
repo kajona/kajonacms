@@ -638,7 +638,7 @@ JS;
      * @return string
      * @since 3.4.0
      * @autoTestable
-     * @permissions edit
+     * @permissions changelog
      */
     public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog", $bitBlockFolderview = false) {
 
