@@ -105,8 +105,8 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled"), "", ++$intI);
             foreach($arrCorruptedRecords as $arrOneRecords)  {
-                $objRecord = class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "", $intI);
+                $objRecord = class_objectfactory::getInstance()->getObject($arrOneRecords["system_id"]);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
