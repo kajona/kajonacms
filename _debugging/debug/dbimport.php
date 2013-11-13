@@ -16,7 +16,7 @@ echo "+-------------------------------------------------------------------------
 
 if(issetPost("doimport")) {
     $strFilename = getPost("dumpname");
-    $objDb = $objCarrier->getObjDB();
+    $objDb = class_carrier::getInstance()->getObjDB();
     echo "importing ".$strFilename."\n";
     if($objDb->importDb($strFilename))
         echo "\n<span style='color: green;font-weight:bold;'>import successfull.</span>\n";
