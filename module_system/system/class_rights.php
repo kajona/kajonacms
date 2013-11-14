@@ -55,9 +55,11 @@ class class_rights {
         $this->objDb = $objCarrier->getObjDb();
         $this->objSession = $objCarrier->getObjSession();
 
-        $arrModul = class_module_system_module::getPlainModuleData("system");
-        if(version_compare($arrModul["module_version"], "4.3.1") < 0)
-            $this->bitChangelog = false;
+        if(count($this->objDb->getTables()) > 0) {
+            $arrModule = class_module_system_module::getPlainModuleData("system");
+            if(version_compare($arrModule["module_version"], "4.3.1") < 0)
+                $this->bitChangelog = false;
+        }
     }
 
     /**
@@ -118,9 +120,11 @@ class class_rights {
 
 
         if($this->bitChangelog)
-            $strQuery = "UPDATE "._dbprefix_."system_right SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
+            $strQuery = "UPDATE "._dbprefix_."system_right
+            SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
         else
-            $strQuery = "UPDATE "._dbprefix_."system_right SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=? WHERE right_id=?";
+            $strQuery = "UPDATE "._dbprefix_."system_right
+            SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=? WHERE right_id=?";
 
 
         if($this->objDb->_pQuery($strQuery, $arrParams)) {
