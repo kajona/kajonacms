@@ -45,6 +45,8 @@ class class_rights {
 
     private $bitTestMode = false;
 
+    private $bitChangelog = true;
+
     /**
      * Constructor doing the usual setup things
      */
@@ -52,6 +54,10 @@ class class_rights {
         $objCarrier = class_carrier::getInstance();
         $this->objDb = $objCarrier->getObjDb();
         $this->objSession = $objCarrier->getObjSession();
+
+        $arrModul = class_module_system_module::getPlainModuleData("system");
+        if(version_compare($arrModul["module_version"], "4.3.1") < 0)
+            $this->bitChangelog = false;
     }
 
     /**
@@ -92,6 +98,7 @@ class class_rights {
      * @return bool
      */
     private function writeSingleRecord($strSystemid, $arrRights) {
+
         //Splitting up the rights
         $arrParams = array();
         $arrParams[] = (int)$arrRights[self::$STR_RIGHT_INHERIT];
@@ -104,22 +111,17 @@ class class_rights {
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT3];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT4];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT5];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
+        if($this->bitChangelog)
+            $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
         $arrParams[] = $strSystemid;
 
-        $strQuery = "UPDATE "._dbprefix_."system_right
-                        SET right_inherit=?,
-                            right_view=?,
-                            right_edit=?,
-                            right_delete=?,
-                            right_right=?,
-                            right_right1=?,
-                            right_right2=?,
-                            right_right3=?,
-                            right_right4=?,
-                            right_right5=?,
-                            right_changelog=?
-                      WHERE right_id=?";
+
+
+        if($this->bitChangelog)
+            $strQuery = "UPDATE "._dbprefix_."system_right SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
+        else
+            $strQuery = "UPDATE "._dbprefix_."system_right SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=? WHERE right_id=?";
+
 
         if($this->objDb->_pQuery($strQuery, $arrParams)) {
             //Flush the cache so later lookups will match the new rights
@@ -277,7 +279,7 @@ class class_rights {
             $arrRights[self::$STR_RIGHT_RIGHT3] = $arrRow["right_right3"];
             $arrRights[self::$STR_RIGHT_RIGHT4] = $arrRow["right_right4"];
             $arrRights[self::$STR_RIGHT_RIGHT5] = $arrRow["right_right5"];
-            $arrRights[self::$STR_RIGHT_CHANGELOG] = $arrRow["right_changelog"];
+            $arrRights[self::$STR_RIGHT_CHANGELOG] = isset($arrRow["right_changelog"]) ? $arrRow["right_changelog"] : "";
             $arrRights[self::$STR_RIGHT_INHERIT] = (int)$arrRow["right_inherit"];
         }
         else {

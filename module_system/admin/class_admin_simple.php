@@ -617,7 +617,7 @@ abstract class class_admin_simple extends class_admin {
      * @return string
      */
     protected function renderChangeHistoryAction(class_model $objListEntry) {
-        if(_system_changehistory_enabled_ == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightEdit() && class_module_system_module::getModuleByName("system")->rightRight3()) {
+        if(_system_changehistory_enabled_ == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightChangelog()) {
             return $this->objToolkit->listButton(
                 getLinkAdminDialog(
                     "system",

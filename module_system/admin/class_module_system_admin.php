@@ -649,9 +649,9 @@ JS;
             $strSystemid = $this->getSystemid();
 
         $strReturn = "";
-        //check needed rights - done twice since public and callable by not only the controller
-        if(!class_carrier::getInstance()->getObjRights()->validatePermissionString("right3", $this->getObjModule()))
-            return $this->getLang("commons_error_permissions");
+//        check needed rights - done twice since public and callable by not only the controller
+//        if(!class_carrier::getInstance()->getObjRights()->validatePermissionString(class_rights::$STR_RIGHT_CHANGELOG, $this->getObjModule()))
+//            return $this->getLang("commons_error_permissions");
 
         //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));

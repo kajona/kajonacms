@@ -1051,9 +1051,15 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_right")."
                                        ADD ".$this->objDB->encloseColumnName("right_changelog")." ".$this->objDB->getDatatype("text")." NULL", array());
 
+
+
         $strReturn .= "Updating default changelog permissions for admins...\n";
-        $strQuery = "UPDATE "._dbprefix_."system SET right_changelog = ?";
+        $strQuery = "UPDATE "._dbprefix_."system_right SET right_changelog = ?";
         $this->objDB->_pQuery($strQuery, array(_admins_group_id_));
+
+
+        $this->objDB->flushQueryCache();
+        $this->objDB->flushPreparedStatementsCache();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.3.2");
