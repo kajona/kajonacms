@@ -833,17 +833,17 @@ The following sections specify the layout of the rights-mgmt
 <rights_form_form>
 <table class="table admintable table-striped">
 	<tr class="">
-		<th>&nbsp;</td>
-		<th>%%title0%%</td>
-		<th>%%title1%%</td>
-		<th>%%title2%%</td>
-		<th>%%title3%%</td>
-		<th>%%title4%%</td>
-		<th>%%title5%%</td>
-		<th>%%title6%%</td>
-		<th>%%title7%%</td>
-		<th>%%title8%%</td>
-		<th>%%title9%%</td>
+		<th>&nbsp;</th>
+		<th>%%title0%%</th>
+		<th>%%title1%%</th>
+		<th>%%title2%%</th>
+		<th>%%title3%%</th>
+		<th>%%title4%%</th>
+		<th>%%title5%%</th>
+		<th>%%title6%%</th>
+		<th>%%title7%%</th>
+		<th>%%title8%%</th>
+		<th>%%title9%%</th>
 	</tr>
 	%%rows%%
 </table>
