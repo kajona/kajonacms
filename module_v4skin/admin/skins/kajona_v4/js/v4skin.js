@@ -111,7 +111,6 @@ KAJONA.v4skin = {
         var link = $("<li class='pathentry'></li>").append(strLinkContent);
         $("div.pathNaviContainer  ul.breadcrumb").append(link);
     }
-
 };
 
 KAJONA.v4skin.breadcrumb = {
@@ -149,5 +148,39 @@ KAJONA.v4skin.breadcrumb = {
         return intTotalUnused;
     }
 
+};
 
+KAJONA.v4skin.defaultAutoComplete = function() {
+
+    this.minLength = 2;
+
+    this.delay = KAJONA.util.isTouchDevice() ? 2000 : 0;
+
+    this.messages = {
+        noResults: '',
+        results: function() {return ''}
+    };
+
+    this.search = function(event, ui) {
+        $(this).css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)').css('background-repeat', 'no-repeat').
+            css('background-position', 'right center');
+    };
+
+    this.response = function(event, ui) {
+        $(this).css('background-image', 'none');
+    };
+
+    this.focus = function() {
+        return false;
+    };
+
+    this.select = function( event, ui ) {
+        if(ui.item) {
+            $objCur = $(this);
+            $objCur.val( ui.item.title );
+            if($('#'+$objCur.attr('id')+'_id'))
+                $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid );
+        }
+        return false;
+    };
 };

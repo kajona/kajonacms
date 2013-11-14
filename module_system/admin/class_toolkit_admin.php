@@ -304,25 +304,20 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
                     $(function() {
-                        KAJONA.admin.".$strJsVarName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
-                            source: function(request, response) {
-                                $.ajax({
-                                    url: '".getLinkAdminXml("pages", "getPagesByFilter")."',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    data: {
-                                        filter: request.term
-                                    },
-                                    success: response
-                                });
-                            },
-                            minLength: 1,
-                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
-                            messages: {
-                                noResults: '',
-                                results: function() {}
-                            }
-                        });
+                        var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+                        objConfig.source = function(request, response) {
+                            $.ajax({
+                                url: '".getLinkAdminXml("pages", "getPagesByFilter")."',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    filter: request.term
+                                },
+                                success: response
+                            });
+                        };
+
+                        KAJONA.admin.".$strJsVarName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
                     });
 	        </script>
         ";
@@ -394,38 +389,24 @@ class class_toolkit_admin extends class_toolkit {
 	        <script type=\"text/javascript\">
                     $(function() {
 
-                        $('#".$strName."').autocomplete({
-                            source: function(request, response) {
-                                $.ajax({
-                                    url: '".getLinkAdminXml("user", "getUserByFilter")."',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    data: {
-                                        filter: request.term,
-                                        user: ".($bitUser ? "'true'" : "'false'").",
-                                        group: ".($bitGroups ? "'true'" : "'false'").",
-                                        block: ".($bitBlockCurrentUser ? "'current'" : "''")."
-                                    },
-                                    success: response
-                                });
-                            },
+                        var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+                        objConfig.source = function(request, response) {
+                            $.ajax({
+                                url: '".getLinkAdminXml("user", "getUserByFilter")."',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    filter: request.term,
+                                    user: ".($bitUser ? "'true'" : "'false'").",
+                                    group: ".($bitGroups ? "'true'" : "'false'").",
+                                    block: ".($bitBlockCurrentUser ? "'current'" : "''")."
+                                },
+                                success: response
+                            });
+                        };
 
-                            select: function( event, ui ) {
-                                if(ui.item) {
-                                    $( '#".$strName."' ).val( ui.item.title );
-                                    if($( '#".$strName."_id' ))
-                                        $( '#".$strName."_id' ).val( ui.item.systemid );
-                                }
-                                return false;
-                            },
-                            minLength: 1,
-                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
-                            messages: {
-                                noResults: '',
-                                results: function() {return ''}
-                            }
-                        })
-                        .data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
+
+                        $('#".$strName."').autocomplete(objConfig).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data('ui-autocomplete-item', item)
                                 .append( '<a class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
@@ -2134,36 +2115,29 @@ class class_toolkit_admin extends class_toolkit {
                             return split( term ).pop();
                         }
 
-                        KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete({
-                            source: function(request, response) {
-                                $.ajax({
-                                    url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    data: {
-                                        filter:  extractLast( request.term )
-                                    },
-                                    success: response
-                                });
-                            },
-                            focus: function() {
-                                return false;
-                            },
-                            select: function( event, ui ) {
-                                var terms = split( this.value );
-                                terms.pop();
-                                terms.push( ui.item.value );
-                                terms.push( '' );
-                                this.value = terms.join( ', ' );
-                                return false;
-                            },
-                            minLength: 1,
-                            delay: KAJONA.util.isTouchDevice() ? 2000 : 0,
-                            messages: {
-                                noResults: '',
-                                results: function() {}
-                            }
-                        });
+                        var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+                        objConfig.source = function(request, response) {
+                            $.ajax({
+                                url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    filter:  extractLast( request.term )
+                                },
+                                success: response
+                            });
+                        };
+
+                        objConfig.select = function( event, ui ) {
+                            var terms = split( this.value );
+                            terms.pop();
+                            terms.push( ui.item.value );
+                            terms.push( '' );
+                            this.value = terms.join( ', ' );
+                            return false;
+                        };
+
+                        KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
                     });
 	        </script>
         ";
