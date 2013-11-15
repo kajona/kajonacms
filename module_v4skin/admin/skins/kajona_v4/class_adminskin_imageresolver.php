@@ -90,6 +90,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_excel"                       => "<i class='icon-ms-excel'></i>",
         "icon_externalBrowser"             => "<i class='icon-search'></i>",
         "icon_favorite"                    => "<i class='icon-bookmark'></i>",
+        "icon_favoriteDisabled"            => "<i class='icon-bookmark icon-muted'></i>",
         "icon_folderActionLevelup"         => "<span class='icon-stack'><i class='icon-folder-open-alt'></i><i class='icon-circle-arrow-up icon-stack-base' ></i></span>",
         "icon_folderActionOpen"            => "<span class='icon-stack'><i class='icon-folder-open-alt'></i><i class='icon-search icon-stack-base' ></i></span>",
         "icon_folderClosed"                => "<i class='icon-folder-close-alt'></i>",
