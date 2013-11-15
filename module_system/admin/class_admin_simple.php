@@ -308,7 +308,7 @@ abstract class class_admin_simple extends class_admin {
         $strActions .= $this->renderEditAction($objOneIterable);
         $arrAddons = $this->renderAdditionalActions($objOneIterable);
         if(is_array($arrAddons))
-            $strActions .= implode("", $this->renderAdditionalActions($objOneIterable));
+            $strActions .= implode("", $arrAddons);
         $strActions .= $this->renderDeleteAction($objOneIterable);
         $strActions .= $this->renderCopyAction($objOneIterable);
         $strActions .= $this->renderStatusAction($objOneIterable);
