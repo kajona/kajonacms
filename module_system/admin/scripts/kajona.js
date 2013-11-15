@@ -402,8 +402,8 @@ KAJONA.admin.statusDisplay = {
 	idOfContentBox : "jsStatusBoxContent",
 	classOfMessageBox : "jsStatusBoxMessage",
 	classOfErrorBox : "jsStatusBoxError",
-	timeToFadeOutMessage : 4000,
-	timeToFadeOutError : 10000,
+	timeToFadeOutMessage : 3000,
+	timeToFadeOutError   : 5000,
 	timeToFadeOut : null,
 
 	/**
@@ -414,7 +414,7 @@ KAJONA.admin.statusDisplay = {
 	 */
 	displayXMLMessage : function(message) {
 		//decide, whether to show an error or a message, message only in debug mode
-		if(message.indexOf("<message>") != -1 && KAJONA_DEBUG > 0 && message.indexOf("<error>") == -1) {
+		if(message.indexOf("<message>") != -1 && message.indexOf("<error>") == -1) {
 			var intStart = message.indexOf("<message>")+9;
 			var responseText = message.substr(intStart, message.indexOf("</message>")-intStart);
 			this.messageOK(responseText);
@@ -470,7 +470,9 @@ KAJONA.admin.statusDisplay = {
 	},
 
 	fadeIn : function () {
-        $("#"+this.idOfMessageBox).animate({opacity: 0.8}, 1000, function() {  window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", this.timeToFadeOut); });
+        $("#"+this.idOfMessageBox).animate({opacity: 0.8}, 1000, function() {
+            window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", KAJONA.admin.statusDisplay.timeToFadeOut);
+        });
 	},
 
 	startFadeOut : function() {
