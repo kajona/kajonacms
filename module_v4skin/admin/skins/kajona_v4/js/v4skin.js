@@ -125,8 +125,7 @@ KAJONA.v4skin = {
         };
 
         this.search = function(event, ui) {
-            $(this).css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)').css('background-repeat', 'no-repeat').
-                css('background-position', 'right center');
+            $(this).css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
         };
 
         this.response = function(event, ui) {
@@ -146,6 +145,10 @@ KAJONA.v4skin = {
             }
             return false;
         };
+
+        this.create = function( event, ui ) {
+            $(this).css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+        }
     }
 };
 
