@@ -97,7 +97,7 @@
 
     <!-- redefined to include all relevant less files -->
     <target name="compileLess" description="Compiles the less files and inserts them into to tpl files">
-        <touch file="${basedir}${tempPath}/project/admin/agpskin/artemeon_project_overrides.less"/>
+        <touch file="${basedir}${tempPath}/project/admin/agpskin/artemeon_project_overrides.less" mkdirs="true" />
         <echo>Compiling less files</echo>
         <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f lessc/v4setup.php "/>
