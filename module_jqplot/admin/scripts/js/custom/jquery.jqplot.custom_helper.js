@@ -62,7 +62,7 @@ KAJONA.admin.jqplotHelper = {
                         arrXAxisTicks[neighbor.pointIndex] :
                         neighbor.data[0],
 
-                yValue: isNaN(neighbor.data[1]) ? neighbor.data[1] : neighbor.data[1].toFixed(3),
+                yValue: isNaN(neighbor.data[1]) ? neighbor.data[1] : Math.round(neighbor.data[1] * 1000) / 1000,
                 seriesIndex: neighbor.seriesIndex,
                 plot: plot
             };
