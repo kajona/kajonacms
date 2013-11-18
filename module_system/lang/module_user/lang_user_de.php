@@ -30,6 +30,7 @@ $lang["form_user_pass2"]                 = "Passwort (Bestätigung)";
 $lang["form_user_postal"]                = "PLZ";
 $lang["form_user_street"]                = "Straße";
 $lang["form_user_tel"]                   = "Telefon";
+$lang["form_user_hint_groups"]           = "Hinweis: Ein Benutzer muss mindestens einer Gruppe zugeordnet sein damit er sich am System anmelden kann!<br />Ansonsten wird eine Fehlermeldung oder eine leere Seite ausgegeben.";
 $lang["group_accept"]                    = "Gruppe übernehmen";
 $lang["group_dn"]                        = "Distinguished-Name im Verzeichnis";
 $lang["group_memberlist"]                = "Mitglieder der Gruppe ";

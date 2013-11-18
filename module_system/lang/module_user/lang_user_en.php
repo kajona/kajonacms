@@ -30,6 +30,7 @@ $lang["form_user_pass2"]                 = "Password (Confirmation)";
 $lang["form_user_postal"]                = "Postal";
 $lang["form_user_street"]                = "Street";
 $lang["form_user_tel"]                   = "Phone";
+$lang["form_user_hint_groups"]           = "Hint: A User needs at least one groups assignment to login.<br />Otherwise he gets an error message or a blank page.";
 $lang["group_accept"]                    = "Select group ";
 $lang["group_dn"]                        = "Distinguished-Name in the directory";
 $lang["group_memberlist"]                = "Members of group ";

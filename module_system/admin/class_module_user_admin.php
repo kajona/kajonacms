@@ -378,7 +378,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
 
                 $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-
+                
                 return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
             }
         }
@@ -425,7 +425,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
 
             $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-
+            
             return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
         }
 
@@ -497,7 +497,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objForm->addField(new class_formentry_checkbox("user", "portal"))->setStrLabel($this->getLang("user_portal"));
             $objForm->addField(new class_formentry_checkbox("user", "active"))->setStrLabel($this->getLang("user_aktiv"));
         }
-
+        
+        $objForm->addField(new class_formentry_plaintext())->setStrValue($this->objToolkit->warningBox($this->getLang("form_user_hint_groups")));
+        
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
 
         return $objForm;
