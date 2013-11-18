@@ -495,15 +495,9 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderCopyAction(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            return $this->objToolkit->listButton(
-                getLinkAdmin(
-                    $objListEntry->getArrModule("modul"),
-                    $this->getActionNameForClass("copyObject", $objListEntry),
-                    "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
-                    "",
-                    $this->getLang("commons_edit_copy"),
-                    "icon_copy"
-                )
+            $strHref = getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
+            return $this->objToolkit->jsDialog(3).$this->objToolkit->listButton(
+                getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
             );
         }
         return "";
