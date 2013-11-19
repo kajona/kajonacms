@@ -342,9 +342,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
         $strQuery = "DELETE FROM "._dbprefix_."tags_member
                            WHERE tags_systemid = ?
-                             AND tags_attribute = ?
+                             ".($strAttribute != null ? "AND tags_attribute = ?" : "")."
                              AND tags_tagid = ?
                              ".$strPrivate;
+
+        if($strAttribute == null)
+            unset($arrParams[1]);
 
         return $this->objDB->_pQuery($strQuery, $arrParams);
     }

@@ -644,7 +644,7 @@ KAJONA.admin.ajax = {
                     }
 
 //                    KAJONA.admin.tooltip.addTooltip(link.find("img"));
-                    KAJONA.admin.tooltip.addTooltip(link.find("span"));
+                    KAJONA.admin.tooltip.addTooltip($('#statusLink_' + strSystemIdToSet).find("span"));
 				}
         	}
             else

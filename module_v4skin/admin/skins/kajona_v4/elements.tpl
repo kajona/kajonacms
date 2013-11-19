@@ -107,11 +107,11 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
             delay: KAJONA.util.isTouchDevice() ? 2000 : 0
         });
         $('#%%listid%% > tbody:has(tr[data-systemid!=""]) > tr').each(function(index) {
-            $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='icon-resize-vertical'></i>");
+            $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
             KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
 
             if(bitMoveToTree) {
-                $(this).find("td.treedrag").css('cursor', 'move').addClass("jstree-draggable").append("<i class='icon-resize-horizontal' data-systemid='"+$(this).closest("tr").data("systemid")+"'></i>");
+                $(this).find("td.treedrag").css('cursor', 'move').addClass("jstree-draggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).closest("tr").data("systemid")+"'></i>");
                 KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
             }
         });
@@ -363,7 +363,7 @@ Toggle_On_Off (using bootstrap-switch.org)
     <div class="control-group">
         <label class="control-label" for="%%name%%">%%title%%</label>
         <div class="controls">
-            <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='icon-ok icon-white' ></i>" data-off-label="<i class='icon-remove'></i>">
+            <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='fa fa-check fa-white' ></i>" data-off-label="<i class='fa fa-times'></i>">
                 <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
             </div>
         </div>
@@ -719,24 +719,24 @@ Part to display the login status, user is logged in
         </a>
         <ul class="dropdown-menu" role="menu">
             <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class='icon-envelope'></i> [lang,modul_titel,messaging]</a>
+                <a tabindex="-1" href="#"><i class='fa fa-envelope'></i> [lang,modul_titel,messaging]</a>
                 <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
             </li>
 
             <!-- messages will be inserted here -->
             <li class="divider"></li>
             <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class='icon-tag'></i> [lang,modul_titel,tags]</a>
+                <a tabindex="-1" href="#"><i class='fa fa-tag'></i> [lang,modul_titel,tags]</a>
                 <ul class="dropdown-menu sub-menu" id="tagsSubemenu"></ul>
             </li>
             <li class="divider"></li>
-            <li><a href="%%dashboard%%"><i class='icon-home'></i> %%dashboardTitle%%</a></li>
+            <li><a href="%%dashboard%%"><i class='fa fa-home'></i> %%dashboardTitle%%</a></li>
             <li class="divider"></li>
-            <li><a href="#" onclick="window.print();"><i class='icon-print'></i> %%printTitle%%</a></li>
+            <li><a href="#" onclick="window.print();"><i class='fa fa-print'></i> %%printTitle%%</a></li>
             <li class="divider"></li>
-            <li><a href="%%profile%%"><i class='icon-user'></i> %%profileTitle%%</a></li>
+            <li><a href="%%profile%%"><i class='fa fa-user'></i> %%profileTitle%%</a></li>
             <li class="divider"></li>
-            <li><a href="%%logout%%"><i class="icon-off"></i> %%logoutTitle%%</a></li>
+            <li><a href="%%logout%%"><i class="fa fa-power-off"></i> %%logoutTitle%%</a></li>
         </ul>
     </div>
 <script type="text/javascript">
@@ -760,11 +760,11 @@ Part to display the login status, user is logged in
             $('#messagingShortlist').empty();
             $.each(objResponse.messages, function(index, item) {
                 if(item.unread == 0)
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> <b>"+item.title+"</b></a></li>");
+                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> <b>"+item.title+"</b></a></li>");
                 else
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='icon-envelope'></i> "+item.title+"</a></li>");
+                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> "+item.title+"</a></li>");
             });
-            $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='icon-envelope'></i> [lang,action_show_all,messaging]</a></li>");
+            $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> [lang,action_show_all,messaging]</a></li>");
 
             window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
         });
@@ -774,9 +774,9 @@ Part to display the login status, user is logged in
     KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
         if(status == 'success') {
             $.each($.parseJSON(data), function(index, item) {
-                $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='icon-tag'></i> "+item.name+"</a></li>");
+                $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
             });
-            $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='icon-tag'></i> [lang,action_show_all,tags]</a></li>")
+            $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
         }
     });
 </script>
@@ -1111,7 +1111,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 Displays the new element button
 <pe_actionNewWrapper>
     <div id="menuContainer_%%placeholder%%" class="dropdown">
-        <i class="peNewButton icon-plus-sign" role="button" data-toggle="dropdown" title="%%label%% &quot;%%placeholderName%%&quot;" rel="tooltip"></i>
+        <i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="%%label%% &quot;%%placeholderName%%&quot;" rel="tooltip"></i>
         <div class="dropdown-menu peContextMenu" role="menu">
             <ul >
                 %%contentElements%%
@@ -1512,7 +1512,7 @@ otherwise the JavaScript will fail!
 </tags_tag>
 
 <tags_tag_delete>
-    <span class="label label-info">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> <i class="icon-trash icon-white" id="icon_%%strTagId%%" title="[lang,commons_delete,tag]" rel="tooltip" ></i></a></span>
+    <span class="label label-info">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> <i class="fa fa-trash-o" style="color: white;" id="icon_%%strTagId%%" title="[lang,commons_delete,tag]" rel="tooltip" ></i></a></span>
     <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
 </tags_tag_delete>
 

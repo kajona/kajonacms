@@ -1,6 +1,6 @@
 
 
-@FontAwesomePath:    "../fonts/fontawesome/font";
+@fa-font-path:    "../fonts/fontawesome/font";
 
 @font-face {
     font-family: 'Open Sans';
@@ -380,11 +380,11 @@ footer {
         width: 100%;
         text-align: left;
 
-        i, img, .icon-stack {
+        i, img, .fa-stack {
             padding-right: 5px;
         }
 
-        .icon-stack {
+        .fa-stack {
             i {
                 padding-left: 0px;
             }
@@ -605,7 +605,7 @@ footer {
     }
 
     li.pathentry:before {
-        content: @angle-right;
+        content: @fa-var-angle-right;
         font-family: fontawesome;
     }
 
@@ -1023,29 +1023,29 @@ footer {
 
 
     //Fontawesome configuration start
-    .icon-stack {
+    .fa-stack {
         width: 1em;
         height: 1em;
         line-height: 1em;
         vertical-align: 0;
 
-        .icon-stack-base {
-            left: 4px; top: -3px;
+        .fa-stack-1x {
+            left: 4px; top: 2px;
             text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
             color: #7d7d7d;
         }
 
-        .icon-stack-base-full {
+        .fa-stack-base-full {
             left: auto;
             top: auto;
         }
     }
 
-    [class^='icon-']:before, [class*=' icon-']:before {
+    [class^='fa-']:before, [class*=' fa-']:before {
         font-size: @baseFontSize+4;
     }
 
-    [class*=' icon-stack-base']:before {
+    [class*=' fa-stack']:before {
         font-size: @baseFontSize - 2;
         text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     }
@@ -1122,14 +1122,10 @@ label {
     }
 
     // group icon is a little bigger, make it smaller
-    .icon-group:before {
-        font-size: 16px !important;
+    .fa-users:before {
+        font-size: @baseFontSize+3 !important;
     }
 
-    .icon-group + .icon-stack-base {
-        padding-top: 3px;
-        padding-left: 1px;
-    }
 }
 
 
@@ -1193,7 +1189,7 @@ label {
     .jstree-closed > ins {
         cursor: pointer;
         &:before {
-            content: @chevron-right;
+            content: @fa-var-chevron-right;
             font-family: fontawesome;
         }
     }
@@ -1201,7 +1197,7 @@ label {
     .jstree-open > ins {
         cursor: pointer;
         &:before {
-            content: @chevron-down;
+            content: @fa-var-chevron-down;
             font-family: fontawesome;
         }
     }
@@ -1394,7 +1390,7 @@ label {
 
     &:before {
         font-size: @baseFontSize + 10;
-        content: @spinner;
+        content: @fa-var-spinner;
         color: @green;
         font-family: fontawesome;
     }

@@ -75,7 +75,7 @@ class class_admin_helper {
 
         $strModuleMenuId = generateSystemid();
         $strModuleSwitcher = "
-                    <span class='dropdown moduleSwitch'><a href='#' data-toggle='dropdown' class='moduleSwitchLink' role='button'><i class='icon-home'></i></a>
+                    <span class='dropdown moduleSwitch'><a href='#' data-toggle='dropdown' class='moduleSwitchLink' role='button'><i class='fa fa-home'></i></a>
                     ".class_carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>";
 
         array_unshift($arrPathEntries, $strModuleSwitcher);

@@ -1,6 +1,6 @@
 
 
-@FontAwesomePath: "../fonts/fontawesome/font";
+@fa-font-path: "../fonts/fontawesome/font";
 @peColorHover: #9a9a9a;
 @wysiwygOutlineColor: #afafaf;
 @wysiwygOutlineColorHover: #7b7b7b;
@@ -69,28 +69,28 @@
 
 
     //Fontawesome configuration start
-    .icon-stack {
+    .fa-stack {
 //        width: 1em;
 //        height: 1em;
 //        line-height: 2em;
         vertical-align: -20%;
 
-        .icon-stack-base {
+        .fa-stack-1x {
 //            left: 2px; top: -3px;
             text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
         }
 
-        .icon-stack-base-full {
+        .fa-stack-base-full {
 //            left: auto;
 //            top: auto;
         }
     }
 
-    [class^='icon-']:before, [class*=' icon-']:before, [class^='icon-stack']:before, [class*=' icon-stack']:before  {
+    [class^='fa-']:before, [class*=' fa-']:before, [class^='fa-stack']:before, [class*=' fa-stack']:before  {
         font-size: @baseFontSize+4;
     }
 
-    [class*=' icon-stack-base']:before {
+    [class*=' fa-stack-1x']:before {
         font-size: @baseFontSize - 2;
     }
     //Fontawesome configuration end
@@ -250,7 +250,7 @@ body *[data-kajona-editable]:focus {
 
     &:before {
         font-size: @baseFontSize + 10;
-        content: @spinner;
+        content: @fa-var-spinner;
         color: @green;
         font-family: fontawesome;
     }

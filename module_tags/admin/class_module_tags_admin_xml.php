@@ -105,7 +105,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
         $objTag = new class_module_tags_tag($this->getSystemid());
 
         //add the connection itself
-        if($objTag->removeFromSystemrecord($strTargetSystemid, $strAttribute))
+        if($objTag->removeFromSystemrecord($strTargetSystemid, $strAttribute != '' ? $strAttribute : null))
             $strReturn .= "<success>assignment removed</success>";
         else
             $strReturn .= "<error>assignment removal failed</error>";
