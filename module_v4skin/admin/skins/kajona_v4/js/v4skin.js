@@ -107,10 +107,7 @@ if (typeof KAJONA == "undefined") {
 }
 
 KAJONA.v4skin = {
-    appendLinkToPathNavigation : function(strLinkContent) {
-        var link = $("<li class='pathentry'></li>").append(strLinkContent);
-        $("div.pathNaviContainer  ul.breadcrumb").append(link);
-    },
+
 
 
     defaultAutoComplete : function() {
@@ -185,6 +182,12 @@ KAJONA.v4skin.breadcrumb = {
         });
 
         return intTotalUnused;
+    },
+
+    appendLinkToPathNavigation : function(strLinkContent) {
+        var link = $("<li class='pathentry'></li>").append(strLinkContent+"&nbsp;");
+        $("div.pathNaviContainer  ul.breadcrumb").append(link);
+        KAJONA.v4skin.breadcrumb.updatePathNavigationEllipsis();
     }
 
 };
