@@ -219,10 +219,9 @@ class class_module_navigation_point extends class_model implements interface_mod
         $arrReturn = array();
         $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
-    			             AND system_module_nr = ?
     			             AND navigation_page_i = ?
     			             AND system_status = 1";
-        $arrIds = $objDB->getPArray($strQuery, array(_navigation_modul_id_, $strPagename));
+        $arrIds = $objDB->getPArray($strQuery, array( $strPagename));
 
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_navigation_point($arrOneId["system_id"]);
