@@ -48,6 +48,22 @@ class class_formentry_checkbox extends class_formentry_base implements interface
         return $this;
     }
 
+
+    /**
+     * Queries the params-array or the source-object for the mapped value.
+     * If found in the params-array, the value will be used, otherwise
+     * the source-objects' getter is invoked.
+     */
+    protected function updateValue() {
+        $arrParams = class_carrier::getAllParams();
+        if(isset($arrParams[$this->getStrEntryName()]))
+            $this->setStrValue(true);
+        else if(count($_POST) > 0)
+            $this->setStrValue(false);
+        else
+            $this->setStrValue($this->getValueFromObject());
+    }
+
     /**
      * @param $strOpener
      * @return class_formentry_text
