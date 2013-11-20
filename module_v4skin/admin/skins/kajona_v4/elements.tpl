@@ -1322,7 +1322,7 @@ The language switch surrounds the buttons
         <div class="modal-header">
             <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
         </div>
-        <div class="modal-body" style="height: 100px;">
+        <div class="modal-body">
             <div id="dialogLoadingDiv" class="loadingContainer loadingContainerBackground"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
