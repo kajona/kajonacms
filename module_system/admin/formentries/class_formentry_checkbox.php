@@ -40,6 +40,15 @@ class class_formentry_checkbox extends class_formentry_base implements interface
     }
 
     /**
+     * @param $strValue
+     * @return class_formentry_base
+     */
+    public function setStrValue($strValue) {
+        parent::setStrValue($strValue != false);
+        return $this;
+    }
+
+    /**
      * @param $strOpener
      * @return class_formentry_text
      */

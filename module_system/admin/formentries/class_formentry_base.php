@@ -86,9 +86,9 @@ class class_formentry_base {
     protected function updateValue() {
         $arrParams = class_carrier::getAllParams();
         if(isset($arrParams[$this->strEntryName]))
-            $this->strValue = $arrParams[$this->strEntryName];
+            $this->setStrValue($arrParams[$this->strEntryName]);
         else
-            $this->strValue = $this->getValueFromObject();
+            $this->setStrValue($this->getValueFromObject());
     }
 
     /**
