@@ -43,8 +43,10 @@ PHP;
 PHP;
 
 
-        file_put_contents(_realpath_."/core/module_system/system/class_module_eventdispatcher_test.php", $strClass);
-        file_put_contents(_realpath_."/core/module_system/system/interface_eventtest_listener.php", $strInterface);
+        echo "Saving testfiles to ".__DIR__."/../system/class_module_eventdispatcher_test.php\n";
+        echo "Saving testfiles to ".__DIR__."/../system/interface_eventtest_listener.php\n";
+        file_put_contents(__DIR__."/../system/class_module_eventdispatcher_test.php", $strClass);
+        file_put_contents(__DIR__."/../system/interface_eventtest_listener.php", $strInterface);
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
@@ -89,9 +91,9 @@ PHP;
     protected function tearDown() {
 
 
-        $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete("/core/module_system/system/class_module_eventdispatcher_test.php");
-        $objFilesystem->fileDelete("/core/module_system/system/interface_eventtest_listener.php");
+
+        unlink(__DIR__."/../system/class_module_eventdispatcher_test.php");
+        unlink(__DIR__."/../system/interface_eventtest_listener.php");
 
 
         class_resourceloader::getInstance()->flushCache();
