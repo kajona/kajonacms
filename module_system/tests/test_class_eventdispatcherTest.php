@@ -43,10 +43,10 @@ PHP;
 PHP;
 
 
-        echo "Saving testfiles to ".__DIR__."/../system/class_module_eventdispatcher_test.php\n";
-        echo "Saving testfiles to ".__DIR__."/../system/interface_eventtest_listener.php\n";
-        file_put_contents(__DIR__."/../system/class_module_eventdispatcher_test.php", $strClass);
-        file_put_contents(__DIR__."/../system/interface_eventtest_listener.php", $strInterface);
+        echo "Saving testfiles to "._realpath_."/core/module_system/system/class_module_eventdispatcher_test.php\n";
+        echo "Saving testfiles to "._realpath_."/core/module_system/system/interface_eventtest_listener.php\n";
+        file_put_contents(_realpath_."/core/module_system/system/class_module_eventdispatcher_test.php", $strClass);
+        file_put_contents(_realpath_."/core/module_system/system/interface_eventtest_listener.php", $strInterface);
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
@@ -59,7 +59,6 @@ PHP;
     public function testInstantiations() {
 
         $objInstance = new class_module_eventdispatcher_test();
-
         $this->assertTrue(is_object($objInstance));
 
     }
@@ -90,11 +89,8 @@ PHP;
 
     protected function tearDown() {
 
-
-
-        unlink(__DIR__."/../system/class_module_eventdispatcher_test.php");
-        unlink(__DIR__."/../system/interface_eventtest_listener.php");
-
+        unlink(_realpath_."/core/module_system/system/class_module_eventdispatcher_test.php");
+        unlink(_realpath_."/core/module_system/system/interface_eventtest_listener.php");
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
