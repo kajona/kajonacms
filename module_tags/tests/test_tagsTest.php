@@ -4,6 +4,34 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class class_test_tags extends class_testbase  {
 
+
+    public function testTagAssignmentRemoval() {
+        //related to checkin #6111
+
+        $objTag = new class_module_tags_tag();
+        $objTag->setStrName(generateSystemid());
+        $objTag->updateObjectToDb();
+
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName(generateSystemid());
+        $objAspect->updateObjectToDb();
+
+        $objTag->assignToSystemrecord($objAspect->getSystemid());
+
+        $this->flushDBCache();
+
+        $this->assertEquals(count($objTag->getArrAssignedRecords()), 1);
+        $this->assertEquals(count(class_module_tags_tag::getTagsForSystemid($objAspect->getSystemid())), 1);
+
+        $objTag->removeFromSystemrecord($objAspect->getSystemid(), "");
+
+        $this->flushDBCache();
+
+        $this->assertEquals(count($objTag->getArrAssignedRecords()), 0);
+        $this->assertEquals(count(class_module_tags_tag::getTagsForSystemid($objAspect->getSystemid())), 0);
+    }
+
+
     public function testTagAssignment() {
 
         if(class_module_system_module::getModuleByName("pages") === null)
