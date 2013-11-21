@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 395
 
 //non-editable entries
-$lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
+$lang["quickhelp_copyPack"]              = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack";

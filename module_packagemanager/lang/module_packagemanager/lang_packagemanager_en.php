@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 395
 
 //non-editable entries
-$lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
+$lang["quickhelp_copyPack"]              = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Active template-pack";
