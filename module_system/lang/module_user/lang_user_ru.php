@@ -7,7 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Скин админа по умолчанию";
@@ -119,6 +122,3 @@ $lang["user_portal"]                     = "Логин портала";
 $lang["user_system"]                     = "Настройки системы";
 $lang["user_username"]                   = "Имя пользователя";
 $lang["user_zugehoerigkeit"]             = "Участие в группах";
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");

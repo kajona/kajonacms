@@ -7,7 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Download", 6 => "Voting", 7 => "", 8 => "");
 
 //editable entries
 $lang["_mediamanager_default_filesrepoid_"] = "Default file-repository";
@@ -94,6 +97,3 @@ $lang["xmlupload_error_copyUpload"]      = "Error while copying the file on the 
 $lang["xmlupload_error_filter"]          = "Filetyp not allowed in current filter";
 $lang["xmlupload_error_notWritable"]     = "Folder not writable";
 $lang["xmlupload_success"]               = "Upload successfull";
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Download", 6 => "Voting", 7 => "", 8 => "");

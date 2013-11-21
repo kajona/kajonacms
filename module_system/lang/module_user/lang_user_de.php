@@ -7,7 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Standard-Admin-Skin";
@@ -23,6 +26,7 @@ $lang["form_user_city"]                  = "Ort";
 $lang["form_user_date"]                  = "Geburtsdatum";
 $lang["form_user_email"]                 = "E-Mail";
 $lang["form_user_forename"]              = "Vorname";
+$lang["form_user_hint_groups"]           = "Hinweis: Ein Benutzer muss mindestens einer Gruppe zugeordnet sein damit er sich am System anmelden kann.<br />Ansonsten wird eine Fehlermeldung oder eine leere Seite ausgegeben.";
 $lang["form_user_mobile"]                = "Handy";
 $lang["form_user_name"]                  = "Nachname";
 $lang["form_user_pass"]                  = "Passwort";
@@ -30,7 +34,6 @@ $lang["form_user_pass2"]                 = "Passwort (Bestätigung)";
 $lang["form_user_postal"]                = "PLZ";
 $lang["form_user_street"]                = "Straße";
 $lang["form_user_tel"]                   = "Telefon";
-$lang["form_user_hint_groups"]           = "Hinweis: Ein Benutzer muss mindestens einer Gruppe zugeordnet sein damit er sich am System anmelden kann.<br />Ansonsten wird eine Fehlermeldung oder eine leere Seite ausgegeben.";
 $lang["group_accept"]                    = "Gruppe übernehmen";
 $lang["group_dn"]                        = "Distinguished-Name im Verzeichnis";
 $lang["group_memberlist"]                = "Mitglieder der Gruppe ";
@@ -154,6 +157,3 @@ $lang["user_username"]                   = "Benutzername";
 $lang["user_usersource"]                 = "Benutzerquelle";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["userlist_filter"]                 = "Filter anwenden";
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");

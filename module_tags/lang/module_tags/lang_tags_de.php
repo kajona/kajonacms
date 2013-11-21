@@ -7,7 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Favoriten", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_tags_defaultprivate_"]           = "Zuweisungen standardmäßig privat";
@@ -27,6 +30,3 @@ $lang["tag_assignments"]                 = "Zuweisungen";
 $lang["tag_edit"]                        = "Bearbeiten";
 $lang["tag_name_hint"]                   = "Mehrere Tags können in Form einer kommaseparierten Liste eingegeben werden";
 $lang["tagsection_header"]               = "Tags";
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Favoriten", 5 => "", 6 => "", 7 => "", 8 => "");

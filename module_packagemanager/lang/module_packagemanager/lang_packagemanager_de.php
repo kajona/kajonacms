@@ -7,7 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack";
@@ -80,6 +83,3 @@ $lang["update_notification_intro"]       = "Für ein installiertes Paket ist ein
 $lang["update_notification_package"]     = "Betreffendes Paket";
 $lang["update_notification_verav"]       = "Verfügbare Version";
 $lang["update_notification_verinst"]     = "Installierte Version";
-
-//non-editable entries
-$lang["quickhelp_copyPack"]              = $lang["quickhelp_new"];

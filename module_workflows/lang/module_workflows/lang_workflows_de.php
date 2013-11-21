@@ -7,9 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Handler", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
+$lang["_workflows_trigger_authkey_"]     = "Auth-Key";
+$lang["_workflows_trigger_authkey_hint"] = "Der Auth-Key wird als Geheimnis beim Aufruf der Workflow-Engine verwendet. Nur wenn der übergebene Auth-Key dem gespeicherten entspricht werden die ausstehenden Workflows ausgeführt. Dies verhindert, dass Dritte durch einfache Aufrufe die Workflows starten können (DOS-Attacke).<br />Nachstehende URL kann zum Aufruf der Workflows-Egine, z.B. in einem Cron-Job, verwendet werden: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "";
 $lang["action_edit_handler"]             = "Default-Werte bearbeiten";
 $lang["action_instantiate_handler"]      = "Neue Instanz des Workflows erstellen";
 $lang["action_list_handlers"]            = "Workflow-Handlers";
@@ -22,6 +27,10 @@ $lang["instance_responsible_hint"]       = "Sofern der Workflow die Interaktion 
 $lang["instance_systemid"]               = "Betreffende Systemid";
 $lang["instance_systemid_hint"]          = "Sofern der Workflow einem konkreten Datensatz zugeordnet werden soll kann die System-ID des Datensatzes angegeben werden.";
 $lang["list_empty"]                      = "Keine Workflows angelegt";
+$lang["message_messagesummary_body_indicator"] = "Nachricht %%current%% von %%total%%";
+$lang["message_messagesummary_intro"]    = "Sie haben %%count%% neue Nachrichten. Nachfolgend finden Sie eine Zusammenstellung der ungelesenen Nachrichten.";
+$lang["message_messagesummary_subject"]  = "Sie haben %%count%% neue Nachrichten";
+$lang["messageprovider_workflows_summary"] = "Zusammenfassung neuer Nachrichten";
 $lang["modul_titel"]                     = "Workflows";
 $lang["module_list_handlers"]            = "Workflow-Handler";
 $lang["module_mylist"]                   = "Meine Workflows";
@@ -43,6 +52,9 @@ $lang["workflow_handler_val2"]           = "Wert 2";
 $lang["workflow_handler_val3"]           = "Wert 3";
 $lang["workflow_int1"]                   = "Zahl 1";
 $lang["workflow_int2"]                   = "Zahl 2";
+$lang["workflow_messagesummary_title"]   = "Zusammenfassung neuer Nachrichten";
+$lang["workflow_messagesummary_val1"]    = "Neue Zusammenfassung nach X Tagen";
+$lang["workflow_messagesummary_val2"]    = "Uhrzeit des Versands";
 $lang["workflow_owner"]                  = "Ersteller";
 $lang["workflow_params"]                 = "Technische Parameter";
 $lang["workflow_responsible"]            = "Verantwortlicher";
@@ -56,16 +68,3 @@ $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Nächste Ausführung";
 $lang["workflow_ui"]                     = "Bearbeitungsmaske für den aktuellen Schritt anzeigen";
-$lang["_workflows_trigger_authkey_hint"] = "Der Auth-Key wird als Geheimnis beim Aufruf der Workflow-Engine verwendet. Nur wenn der übergebene Auth-Key dem gespeicherten entspricht werden die ausstehenden Workflows ausgeführt. Dies verhindert, dass Dritte durch einfache Aufrufe die Workflows starten können (DOS-Attacke).<br />Nachstehende URL kann zum Aufruf der Workflows-Egine, z.B. in einem Cron-Job, verwendet werden: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "");
-$lang["_workflows_trigger_authkey_"]     = "Auth-Key";
-$lang["messageprovider_workflows_summary"] = "Zusammenfassung neuer Nachrichten";
-$lang["workflow_messagesummary_title"] = "Zusammenfassung neuer Nachrichten";
-$lang["workflow_messagesummary_val1"] = "Neue Zusammenfassung nach X Tagen";
-$lang["workflow_messagesummary_val2"] = "Uhrzeit des Versands";
-
-$lang["message_messagesummary_subject"] = "Sie haben %%count%% neue Nachrichten";
-$lang["message_messagesummary_intro"] = "Sie haben %%count%% neue Nachrichten. Nachfolgend finden Sie eine Zusammenstellung der ungelesenen Nachrichten.";
-$lang["message_messagesummary_body_indicator"] = "Nachricht %%current%% von %%total%%";
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Handler", 5 => "", 6 => "", 7 => "", 8 => "");

@@ -7,7 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 389
+//Kajona Language Editor Core Build 395
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Default admin skin";
@@ -23,6 +26,7 @@ $lang["form_user_city"]                  = "City";
 $lang["form_user_date"]                  = "Date of birth";
 $lang["form_user_email"]                 = "Email";
 $lang["form_user_forename"]              = "Forename";
+$lang["form_user_hint_groups"]           = "Hint: A User needs at least one groups assignment to login.<br />Otherwise he gets an error message or a blank page.";
 $lang["form_user_mobile"]                = "Mobile";
 $lang["form_user_name"]                  = "Surname";
 $lang["form_user_pass"]                  = "Password";
@@ -30,7 +34,6 @@ $lang["form_user_pass2"]                 = "Password (Confirmation)";
 $lang["form_user_postal"]                = "Postal";
 $lang["form_user_street"]                = "Street";
 $lang["form_user_tel"]                   = "Phone";
-$lang["form_user_hint_groups"]           = "Hint: A User needs at least one groups assignment to login.<br />Otherwise he gets an error message or a blank page.";
 $lang["group_accept"]                    = "Select group ";
 $lang["group_dn"]                        = "Distinguished-Name in the directory";
 $lang["group_memberlist"]                = "Members of group ";
@@ -153,6 +156,3 @@ $lang["user_username"]                   = "Username";
 $lang["user_usersource"]                 = "User-Source";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["userlist_filter"]                 = "Apply filter";
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
