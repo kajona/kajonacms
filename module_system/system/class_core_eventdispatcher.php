@@ -11,6 +11,8 @@
  * The core eventmanager is used to trigger and fire internal events such as status-changed or record-deleted-events.
  * Therefore the corresponding interface-implementers are called and notified.
  *
+ * Since version 4.4, the eventdispatcher is totally generic. Hardcoded dependencies are no longer required.
+ *
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.0
@@ -18,29 +20,48 @@
 class class_core_eventdispatcher {
 
     /**
-     * @var interface_statuschanged_listener
+     * @var class_model[]
      */
-    private static $arrStatusChangedListener = null;
+    private static $arrListeners = array();
+
 
     /**
-     * @var interface_recorddeleted_listener
+     * Returns all classes (here: instances of the class) implementing a given interface
+     * @param $strInterface
+     *
+     * @return class_model
      */
-    private static $arrRecordDeletedListener = null;
+    public static function getEventListeners($strInterface) {
+        if(!isset(self::$arrListeners[$strInterface]))
+            self::$arrListeners[$strInterface] = self::loadInterfaceImplementers($strInterface);
+
+        return self::$arrListeners[$strInterface];
+    }
+
 
     /**
-     * @var interface_previdchanged_listener
+     * Generic function to notify a set of event-listeners.
+     * Therefore the implementing interface, the name of the notify-method and an array of arguments sent to the handler
+     * are required.
+     *
+     * @param $strInterface
+     * @param $strMethodname
+     * @param $arrArguments
+     *
+     * @return bool
      */
-    private static $arrPrevidChangedListener = null;
+    public static function notifyListeners($strInterface, $strMethodname,  $arrArguments) {
+        if(!isset(self::$arrListeners[$strInterface]))
+            self::$arrListeners[$strInterface] = self::loadInterfaceImplementers($strInterface);
 
-    /**
-     * @var interface_recordcopied_listener
-     */
-    private static $arrRecordCopiedListener = null;
+        $bitReturn = true;
+        foreach(self::$arrListeners[$strInterface] as $objOneListener) {
+            $bitReturn = $bitReturn && call_user_func_array(array($objOneListener, $strMethodname), $arrArguments);
+        }
 
-    /**
-     * @var interface_userfirstlogin_listener
-     */
-    private static $arrFirstLoginListener = null;
+        return $bitReturn;
+    }
+
 
     /**
      * Triggers all model-classes implementing the interface interface_statuschanged_listener and notifies
@@ -52,17 +73,11 @@ class class_core_eventdispatcher {
      * @return bool
      *
      * @see interface_statuschanged_listener
+     * @deprecated use class_core_eventdispatcher::notifyListeners() instead
+     * @see class_core_eventdispatcher::notifyListeners()
      */
     public static function notifyStatusChangedListeners($strSystemid, $intNewStatus) {
-        $bitReturn = true;
-        $arrListener = self::getStatusChangedListeners();
-        /** @var interface_statuschanged_listener $objOneListener */
-        foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating statusChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid." status: ".$intNewStatus, class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handleStatusChangedEvent($strSystemid, $intNewStatus);
-        }
-
-        return $bitReturn;
+        return self::notifyListeners("interface_statuschanged_listener", "handleStatusChangedEvent", array($strSystemid, $intNewStatus));
     }
 
     /**
@@ -77,17 +92,11 @@ class class_core_eventdispatcher {
      * @return bool
      *
      * @see interface_recorddeleted_listener
+     * @deprecated use class_core_eventdispatcher::notifyListeners() instead
+     * @see class_core_eventdispatcher::notifyListeners()
      */
     public static function notifyRecordDeletedListeners($strSystemid, $strClass) {
-        $bitReturn = true;
-        $arrListener = self::getRecordDeletedListeners();
-        /** @var interface_recorddeleted_listener $objOneListener */
-        foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating recordDeletedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handleRecordDeletedEvent($strSystemid, $strClass);
-        }
-
-        return $bitReturn;
+        return self::notifyListeners("interface_recorddeleted_listener", "handleRecordDeletedEvent", array($strSystemid, $strClass));
     }
 
 
@@ -103,17 +112,11 @@ class class_core_eventdispatcher {
      *
      * @return bool
      * @see interface_previdchanged_listener
+     * @deprecated use class_core_eventdispatcher::notifyListeners() instead
+     * @see class_core_eventdispatcher::notifyListeners()
      */
     public static function notifyPrevidChangedListeners($strSystemid, $strOldPrevid, $strNewPrevid) {
-        $bitReturn = true;
-        $arrListener = self::getPrevidChangedListeners();
-        /** @var interface_previdchanged_listener $objOneListener */
-        foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating previdChangedEvent to ".get_class($objOneListener)." sysid: ".$strSystemid, class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handlePrevidChangedEvent($strSystemid, $strOldPrevid, $strNewPrevid);
-        }
-
-        return $bitReturn;
+        return self::notifyListeners("interface_previdchanged_listener", "handlePrevidChangedEvent", array($strSystemid, $strOldPrevid, $strNewPrevid));
     }
 
 
@@ -128,17 +131,11 @@ class class_core_eventdispatcher {
      *
      * @return bool
      * @see interface_recordcopied_listener
+     * @deprecated use class_core_eventdispatcher::notifyListeners() instead
+     * @see class_core_eventdispatcher::notifyListeners()
      */
     public static function notifyRecordCopiedListeners($strOldSystemid, $strNewSystemid) {
-        $bitReturn = true;
-        $arrListener = self::getRecordCopiedListeners();
-        /** @var interface_recordcopied_listener $objOneListener */
-        foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating recordCopiedEvent to ".get_class($objOneListener)." oldsysid: ".$strOldSystemid." newsysid: ".$strNewSystemid, class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handleRecordCopiedEvent($strOldSystemid, $strNewSystemid);
-        }
-
-        return $bitReturn;
+        return self::notifyListeners("interface_recordcopied_listener", "handleRecordCopiedEvent", array($strOldSystemid, $strNewSystemid));
     }
 
 
@@ -152,85 +149,13 @@ class class_core_eventdispatcher {
      *
      * @return bool
      * @see interface_userfirstlogin_listener
+     * @deprecated use class_core_eventdispatcher::notifyListeners() instead
+     * @see class_core_eventdispatcher::notifyListeners()
      */
     public static function notifyUserFirstLoginListeners($strUserid) {
-        $bitReturn = true;
-        $arrListener = self::getUserFirstLoginListeners();
-        foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating userFirstLoginEvent to ".get_class($objOneListener)." userid: ".$strUserid, class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handleUserFirstLoginEvent($strUserid);
-        }
-
-        return $bitReturn;
+        return self::notifyListeners("interface_userfirstlogin_listener", "handleUserFirstLoginEvent", array($strUserid));
     }
 
-
-    /**
-     * Loads all objects registered to ne notified in case of status-changes
-     * @static
-     * @return interface_userfirstlogin_listener[]
-     */
-    private static function getUserFirstLoginListeners() {
-        if(self::$arrFirstLoginListener == null) {
-            self::$arrFirstLoginListener = self::loadInterfaceImplementers("interface_userfirstlogin_listener");
-        }
-
-        return self::$arrFirstLoginListener;
-    }
-
-    /**
-     * Loads all objects registered to ne notified in case of status-changes
-     * @static
-     * @return interface_recorddeleted_listener[]
-     */
-    private static function getRecordDeletedListeners() {
-        if(self::$arrRecordDeletedListener == null) {
-            self::$arrRecordDeletedListener = self::loadInterfaceImplementers("interface_recorddeleted_listener");
-        }
-
-        return self::$arrRecordDeletedListener;
-    }
-
-    /**
-     * Loads all objects registered to ne notified in case of status-changes
-     * @static
-     * @return interface_statuschanged_listener[]
-     */
-    private static function getStatusChangedListeners() {
-        if(self::$arrStatusChangedListener == null) {
-            self::$arrStatusChangedListener = self::loadInterfaceImplementers("interface_statuschanged_listener");
-        }
-
-        return self::$arrStatusChangedListener;
-    }
-
-
-    /**
-     * Loads all objects registered to ne notified in case of previd-changes
-     * @static
-     * @return interface_previdchanged_listener[]
-     */
-    private static function getPrevidChangedListeners() {
-        if(self::$arrPrevidChangedListener == null) {
-            self::$arrPrevidChangedListener = self::loadInterfaceImplementers("interface_previdchanged_listener");
-        }
-
-        return self::$arrPrevidChangedListener;
-    }
-
-
-    /**
-     * Loads all objects registered to ne notified in case of previd-changes
-     * @static
-     * @return interface_recordcopied_listener[]
-     */
-    private static function getRecordCopiedListeners() {
-        if(self::$arrRecordCopiedListener == null) {
-            self::$arrRecordCopiedListener = self::loadInterfaceImplementers("interface_recordcopied_listener");
-        }
-
-        return self::$arrRecordCopiedListener;
-    }
 
     /**
      * Loads all business-objects implementing the passed interface
