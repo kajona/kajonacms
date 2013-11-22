@@ -174,14 +174,13 @@ table.portalList td.image {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    height: 125px;
+    height: 134px;
     background-image: url(../pics/default/header.jpg);
     background-repeat: no-repeat;
     background-position: center;
 }
 
-#headerImageHome
- {
+#headerImageHome {
     margin-top: 30px;
     border: 1px solid #dadada;
     -webkit-border-radius: 3px;

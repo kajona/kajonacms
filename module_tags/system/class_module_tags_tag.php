@@ -333,7 +333,14 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public function removeFromSystemrecord($strTargetSystemid, $strAttribute = null) {
 
-        $arrParams = array($strTargetSystemid, $strAttribute, $this->getSystemid());
+        $arrParams = array();
+        $arrParams[] = $strTargetSystemid;
+
+        if($strAttribute != null)
+            $arrParams[] = $strAttribute;
+
+        $arrParams[] = $this->getSystemid();
+
         $strPrivate = "";
         if($this->getIntPrivate() == 1) {
             $strPrivate = "AND (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?)";
@@ -345,9 +352,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                              ".($strAttribute != null ? "AND tags_attribute = ?" : "")."
                              AND tags_tagid = ?
                              ".$strPrivate;
-
-        if($strAttribute == null)
-            unset($arrParams[1]);
 
         return $this->objDB->_pQuery($strQuery, $arrParams);
     }
