@@ -133,7 +133,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
             $arrParams[] = $strAttribute;
         }
 
-        $strQuery = "SELECT DISTINCT(tags_tagid)
+        $strQuery = "SELECT DISTINCT(tags_tagid), tags_tag_name
                        FROM "._dbprefix_."tags_member,
                             "._dbprefix_."tags_tag
                       WHERE tags_systemid = ?
