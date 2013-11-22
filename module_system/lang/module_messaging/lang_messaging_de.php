@@ -14,6 +14,7 @@ $lang["action_config"]                   = "Einstellungen";
 $lang["action_edit"]                     = "Detail-Ansicht";
 $lang["action_show_all"]                 = "Alle Nachrichten anzeigen";
 $lang["batchaction_read"]                = "Als gelesen markieren";
+$lang["batchaction_unread"]              = "Als ungelesen markieren";
 $lang["delete_question"]                 = "Möchten Sie die Nachricht &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["message_body"]                    = "Nachricht";
 $lang["message_date"]                    = "Datum";

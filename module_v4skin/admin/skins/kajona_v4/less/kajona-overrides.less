@@ -573,7 +573,7 @@ footer {
     .border-radius(0px);
     .box-shadow(none);
     margin:9px 0 0 0;
-    padding: 6px 14px 2px 14px;
+    padding: 6px 14px 5px 14px;
 
     white-space: nowrap;
 
@@ -583,10 +583,11 @@ footer {
         font-weight: 600;
         font-size:@baseFontSize;
         text-transform:uppercase;
+        vertical-align: top;
 
+        .text-overflow();
         max-width: 250px;
-        text-overflow: ellipsis;
-        overflow: hidden;
+
         .transition(max-width ease-out .5s);
 
         &:hover {
@@ -612,7 +613,7 @@ footer {
 
     li.pathentry:first-child {
         overflow: visible;
-        vertical-align: top;
+
 
         &:before {
             display: none;

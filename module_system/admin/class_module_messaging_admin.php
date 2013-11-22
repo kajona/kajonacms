@@ -219,6 +219,7 @@ JS;
     protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = $this->getDefaultActionHandlers();
         $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mail"), getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
+        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mailNew"), getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
         return $arrDefault;
     }
 
@@ -234,6 +235,25 @@ JS;
         $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objMessage instanceof class_module_messaging_message) {
             $objMessage->setBitRead(true);
+            $objMessage->updateObjectToDb();
+
+            return "<message><success /></message>";
+        }
+
+        return "<message><error /></message>";
+    }
+
+    /**
+     * Marks a single message as unread
+     *
+     * @return string
+     * @xml
+     * @permissions view
+     */
+    protected function actionSetUnread() {
+        $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objMessage instanceof class_module_messaging_message) {
+            $objMessage->setBitRead(false);
             $objMessage->updateObjectToDb();
 
             return "<message><success /></message>";
