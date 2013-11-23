@@ -31,6 +31,8 @@
  * Custom operations can be added by implementing interface_image_operation. Most operations
  * should inherit from class_image_abstract_operation, which implements interface_image_operation
  * and provides common functionality.
+ *
+ * @package module_system
  */
 class class_image2 {
 
@@ -51,6 +53,10 @@ class class_image2 {
     private $strCacheId;
 
     public function __construct() {
+        // Try to overwrite PHP memory-limit so large images can be processed, too
+        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 128) {
+            @ini_set("memory_limit", "128M");
+        }
     }
 
     public function __destruct() {
@@ -80,8 +86,7 @@ class class_image2 {
             $intBlue = hexdec($arrMatches[3]);
             $arrColor = array($intRed, $intGreen, $intBlue);
 
-            if (isset($arrMatches[4]))
-            {
+            if(isset($arrMatches[4])) {
                 // alpha is a value between 0 and 127
                 $intAlpha = (int)(hexdec($arrMatches[4]) / 2);
                 $arrColor[] = $intAlpha;
