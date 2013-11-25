@@ -538,7 +538,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strValue
      * @param string $strName
      * @param string $strEventhandler
-     * @param string $strClass
+     * @param string $strClass use cancelbutton for cancel-buttons
      * @param bool $bitEnabled
      * @return string
      */
