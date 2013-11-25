@@ -1383,6 +1383,8 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function getLoginStatus(array $arrElements) {
         //Loading a small login-form
+        $arrElements["renderTags"] = class_module_system_module::getModuleByName("tags") != null && class_module_system_module::getModuleByName("tags")->rightView() ? "true" : "false";
+        $arrElements["renderMessages"] = class_module_system_module::getModuleByName("messaging") != null && class_module_system_module::getModuleByName("messaging")->rightView() ? "true" : "false";
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
         $strReturn = $this->objTemplate->fillTemplate($arrElements, $strTemplateID);
         return $strReturn;

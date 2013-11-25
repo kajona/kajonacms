@@ -713,35 +713,36 @@ Needed Elements: %%error%%, %%form%%
 
 Part to display the login status, user is logged in
 <logout_form>
-    <div class="dropdown userNotificationsDropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-blank-kajona" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> %%name%%
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class='fa fa-envelope'></i> [lang,modul_titel,messaging]</a>
-                <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
-            </li>
+<div class="dropdown userNotificationsDropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-blank-kajona" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> %%name%%
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-submenu">
+            <a tabindex="-1" href="#"><i class='fa fa-envelope'></i> [lang,modul_titel,messaging]</a>
+            <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
+        </li>
 
-            <!-- messages will be inserted here -->
-            <li class="divider"></li>
-            <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class='fa fa-tag'></i> [lang,modul_titel,tags]</a>
-                <ul class="dropdown-menu sub-menu" id="tagsSubemenu"></ul>
-            </li>
-            <li class="divider"></li>
-            <li><a href="%%dashboard%%"><i class='fa fa-home'></i> %%dashboardTitle%%</a></li>
-            <li class="divider"></li>
-            <li><a href="#" onclick="window.print();"><i class='fa fa-print'></i> %%printTitle%%</a></li>
-            <li class="divider"></li>
-            <li><a href="%%profile%%"><i class='fa fa-user'></i> %%profileTitle%%</a></li>
-            <li class="divider"></li>
-            <li><a href="%%logout%%"><i class="fa fa-power-off"></i> %%logoutTitle%%</a></li>
-        </ul>
-    </div>
+        <!-- messages will be inserted here -->
+        <li class="divider"></li>
+        <li class="dropdown-submenu">
+            <a tabindex="-1" href="#"><i class='fa fa-tag'></i> [lang,modul_titel,tags]</a>
+            <ul class="dropdown-menu sub-menu" id="tagsSubemenu"></ul>
+        </li>
+        <li class="divider"></li>
+        <li><a href="%%dashboard%%"><i class='fa fa-home'></i> %%dashboardTitle%%</a></li>
+        <li class="divider"></li>
+        <li><a href="#" onclick="window.print();"><i class='fa fa-print'></i> %%printTitle%%</a></li>
+        <li class="divider"></li>
+        <li><a href="%%profile%%"><i class='fa fa-user'></i> %%profileTitle%%</a></li>
+        <li class="divider"></li>
+        <li><a href="%%logout%%"><i class="fa fa-power-off"></i> %%logoutTitle%%</a></li>
+    </ul>
+</div>
 <script type="text/javascript">
 
     KAJONA.admin.messaging.pollMessages = function() {
+
         KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
             var $userNotificationsCount = $('#userNotificationsCount');
             var oldCount = $userNotificationsCount.text();
@@ -769,16 +770,26 @@ Part to display the login status, user is logged in
             window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
         });
     };
-    $(function() { KAJONA.admin.messaging.pollMessages() });
+    if(%%renderMessages%%) {
+        $(function() { KAJONA.admin.messaging.pollMessages() });
+    }
+    else {
+        $('#messagingShortlist').closest("li").hide();
+    }
 
-    KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
-        if(status == 'success') {
-            $.each($.parseJSON(data), function(index, item) {
-                $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
-            });
-            $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
-        }
-    });
+    if(%%renderTags%%) {
+        KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
+            if(status == 'success') {
+                $.each($.parseJSON(data), function(index, item) {
+                    $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
+                });
+                $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
+            }
+        });
+    }
+    else {
+        $('#tagsSubemenu').closest("li").hide();
+    }
 </script>
 </logout_form>
 
