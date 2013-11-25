@@ -601,6 +601,7 @@ KAJONA.admin.ajax = {
             type: 'POST',
             url: postTarget,
             data: data,
+            error: objCallback,
             success: objCallback,
             dataType: 'text'
         });
