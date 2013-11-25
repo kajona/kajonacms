@@ -135,6 +135,9 @@ class class_exception extends Exception {
             }
             print $strErrormessage;
             //Execution has to be stopped here!
+            if(class_response_object::getInstance()->getStrStatusCode() == "" || class_response_object::getInstance()->getStrStatusCode() == class_http_statuscodes::SC_OK)
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+
             class_response_object::getInstance()->sendHeaders();
             die();
         }
