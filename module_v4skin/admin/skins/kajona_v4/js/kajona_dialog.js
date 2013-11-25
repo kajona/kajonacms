@@ -25,6 +25,8 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
     this.setContent = function (strContent, strConfirmButton, strLinkHref) {
         if (intDialogType == 1) {
+            this.unbindEvents();
+
             $('#' + this.containerId + '_content').html(strContent);
 
             var $confirmButton = $('#' + this.containerId + '_confirmButton');
@@ -122,6 +124,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
     this.hide = function() {
         $('#' + this.containerId).modal('hide');
+        this.unbindEvents();
     };
 
     this.enableDragging = function() {};
@@ -146,6 +149,13 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 
 
         });
+    };
+
+    this.unbindEvents = function() {
+        if(intDialogType == 1) {
+            $('#' + this.containerId + '_cancelButton').unbind();
+            $('#' + this.containerId + '_confirmButton').unbind();
+        }
     };
 };
 
