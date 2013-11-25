@@ -1239,7 +1239,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["id"] = $strID;
         $arrTemplate["content"] = $strContent;
-        $arrTemplate["display"] = ($bitVisible ? "block" : "none");
+        $arrTemplate["display"] = ($bitVisible ? "folderVisible" : "folderHidden");
         $arrReturn[0] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."', ". ($strCallbackVisible != "" ? $strCallbackVisible : "null") .", ". ($strCallbackInvisible != "" ? $strCallbackInvisible : "null") .");\">".$strLinkText."</a>";
         return $arrReturn;
