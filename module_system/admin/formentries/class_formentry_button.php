@@ -41,9 +41,11 @@ class class_formentry_button extends class_formentry_base implements interface_f
 
     /**
      * @param string $strEventhandler
+     * @return class_formentry_button
      */
     public function setStrEventhandler($strEventhandler) {
         $this->strEventhandler = $strEventhandler;
+        return $this;
     }
 
     /**
