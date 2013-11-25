@@ -75,15 +75,17 @@ KAJONA.util.inArray = function (strNeedle, arrHaystack) {
  * @param {Function} objCallbackInvisible
  */
 KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisible) {
-	var element = document.getElementById(strElementId);
-	if (element.style.display == 'none') 	{
-		element.style.display = 'block';
+	var $element = $('#'+strElementId);
+	if ($element.hasClass("folderHidden")) 	{
+        $element.removeClass("folderHidden");
+        $element.addClass("folderVisible");
 		if ($.isFunction(objCallbackVisible)) {
 			objCallbackVisible();
 		}
     }
     else {
-    	element.style.display = 'none';
+        $element.removeClass("folderVisible");
+        $element.addClass("folderHidden");
 		if ($.isFunction(objCallbackInvisible)) {
 			objCallbackInvisible();
 		}

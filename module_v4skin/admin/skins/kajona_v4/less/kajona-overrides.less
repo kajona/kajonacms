@@ -1037,6 +1037,26 @@ footer {
     }
 
 
+
+    .contentFolder {
+
+        .transition(opacity .25s ease-in);
+
+        &.folderHidden {
+            .opacity(0);
+            height: 0px;
+            overflow: hidden;
+        }
+
+        &.folderVisible {
+            .opacity(100);
+            height: auto;
+            max-height: 2000px;
+        }
+    }
+
+
+
     //Fontawesome configuration start
     .fa-stack {
         width: 1em;

@@ -610,13 +610,13 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements
 <layout_folder>
-<div id="%%id%%" style="display: %%display%%;">%%content%%</div>
+<div id="%%id%%" class="contentFolder %%display%%">%%content%%</div>
 </layout_folder>
 
 Same as above, but using an image to fold / unfold the content
 Deprecated!!!
 <layout_folder_pic>
-%%link%%<br /><br /><div id="%%id%%" style="display: %%display%%;">%%content%%</div>
+%%link%%<br /><br /><div id="%%id%%" class="contentFolder %%display%%">%%content%%</div>
 </layout_folder_pic>
 
 A precent-beam to illustrate proportions
