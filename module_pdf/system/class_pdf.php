@@ -19,7 +19,7 @@ class class_pdf {
     public static $PAGE_ORIENTATION_PORTRAIT = "P";
     public static $PAGE_ORIENTATION_LANDSCAPE = "L";
     public static $PAGE_FORMAT_A4 = "A4";
-    
+
     public static $PDF_UNIT = "mm";
 
     public static $TEXT_ALIGN_CENTER = "C";
@@ -33,22 +33,21 @@ class class_pdf {
     public static $FONT_STYLE_LINE_TROUGH = "D";
 
 
+    /**
+     * @var class_pdf_tcpdf
+     */
+    private $objPdf;
 
-	/**
-	 * @var class_pdf_tcpdf
-	 */
-	private $objPdf;
-	
-	public function __construct() {
-        
-		$this->objPdf = new class_pdf_tcpdf(self::$PAGE_ORIENTATION_PORTRAIT, self::$PDF_UNIT, self::$PAGE_FORMAT_A4);
-		
-		//document meta data
-		$this->objPdf->SetCreator("Kajona V3");
-		$this->objPdf->SetAuthor('Kajona PDF Engine');
-		$this->objPdf->SetTitle('Kajona PDF');
-		$this->objPdf->SetSubject('Kajona - Free Content Management');
-		$this->objPdf->SetKeywords('Kajona, PDF, CMS');
+    public function __construct() {
+
+        $this->objPdf = new class_pdf_tcpdf(self::$PAGE_ORIENTATION_PORTRAIT, self::$PDF_UNIT, self::$PAGE_FORMAT_A4);
+
+        //document meta data
+        $this->objPdf->SetCreator("Kajona V3");
+        $this->objPdf->SetAuthor('Kajona PDF Engine');
+        $this->objPdf->SetTitle('Kajona PDF');
+        $this->objPdf->SetSubject('Kajona - Free Content Management');
+        $this->objPdf->SetKeywords('Kajona, PDF, CMS');
 
         $this->objPdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 
@@ -57,7 +56,7 @@ class class_pdf {
 
         $this->setHeader(new class_pdf_header());
         $this->setFooter(new class_pdf_footer());
-	}
+    }
 
     public function setStrTitle($strTitle) {
         $this->objPdf->SetTitle($strTitle);
@@ -71,7 +70,7 @@ class class_pdf {
         $this->objPdf->SetKeywords($strKeywords);
     }
 
-	public function getBitHeader() {
+    public function getBitHeader() {
         return $this->objPdf->getBitHeader();
     }
 
@@ -114,20 +113,22 @@ class class_pdf {
 
     /**
      * Finalizes the current page and starts a new one
-     * 
+     *
      * @param string $PAGE_ORIENTATION one of self::$PAGE_ORIENTATION_PORTRAIT
      * @param string $PAGE_FORMAT one of self::$PAGE_ORIENTATION_LANDSCAPE, self::$PAGE_FORMAT_A4
      */
-	public function addPage($PAGE_ORIENTATION = "", $PAGE_FORMAT = "") {
-        if($PAGE_ORIENTATION == "")
+    public function addPage($PAGE_ORIENTATION = "", $PAGE_FORMAT = "") {
+        if($PAGE_ORIENTATION == "") {
             $PAGE_ORIENTATION = self::$PAGE_ORIENTATION_PORTRAIT;
+        }
 
-        if($PAGE_FORMAT == "")
+        if($PAGE_FORMAT == "") {
             $PAGE_FORMAT = self::$PAGE_FORMAT_A4;
-            
-		$this->objPdf->AddPage($PAGE_ORIENTATION, $PAGE_FORMAT);
-	}
+        }
 
+        $this->objPdf->AddPage($PAGE_ORIENTATION, $PAGE_FORMAT);
+        $this->objPdf->resetColumns();
+    }
 
 
     /**
@@ -135,6 +136,7 @@ class class_pdf {
      * In most cases, addMultiCell is the element you may want to use instead.
      *
      * @see class_pdf::addMultiCell()
+     *
      * @param string $strContent
      * @param int $intWidth
      * @param int $intHeight
@@ -142,19 +144,28 @@ class class_pdf {
      * @param string $strAlign one of self::$TEXT_ALIGN_CENTER, self::$TEXT_ALIGN_RIGHT, self::$TEXT_ALIGN_LEFT
      * @param int $bitFill fill the cell with the color set before via setFillColor()
      */
-	public function addCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L", $bitFill = 0 ) {
+    public function addCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L", $bitFill = 0) {
 
         $strBorders = "";
-        if($bitBorders[0]) $strBorders .= "T";
-        if($bitBorders[1]) $strBorders .= "R";
-        if($bitBorders[2]) $strBorders .= "B";
-        if($bitBorders[3]) $strBorders .= "L";
+        if($bitBorders[0]) {
+            $strBorders .= "T";
+        }
+        if($bitBorders[1]) {
+            $strBorders .= "R";
+        }
+        if($bitBorders[2]) {
+            $strBorders .= "B";
+        }
+        if($bitBorders[3]) {
+            $strBorders .= "L";
+        }
 
-        if($strBorders == "")
+        if($strBorders == "") {
             $strBorders = 0;
+        }
 
-		$this->objPdf->Cell($intWidth, $intHeight, $strContent, $strBorders, 1, $strAlign, $bitFill);
-	}
+        $this->objPdf->Cell($intWidth, $intHeight, $strContent, $strBorders, 1, $strAlign, $bitFill);
+    }
 
     /**
      * Creates a single cell using automatic wrapping at the end of the cell.
@@ -165,19 +176,28 @@ class class_pdf {
      * @param array $bitBorders array of boolean: array(top, right, bottom, left)
      * @param string $strAlign one of self::$TEXT_ALIGN_CENTER, self::$TEXT_ALIGN_RIGHT, self::$TEXT_ALIGN_LEFT
      */
-    public function addMultiCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L" ) {
+    public function addMultiCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L") {
 
         $strBorders = "";
-        if($bitBorders[0]) $strBorders .= "T";
-        if($bitBorders[1]) $strBorders .= "R";
-        if($bitBorders[2]) $strBorders .= "B";
-        if($bitBorders[3]) $strBorders .= "L";
+        if($bitBorders[0]) {
+            $strBorders .= "T";
+        }
+        if($bitBorders[1]) {
+            $strBorders .= "R";
+        }
+        if($bitBorders[2]) {
+            $strBorders .= "B";
+        }
+        if($bitBorders[3]) {
+            $strBorders .= "L";
+        }
 
-        if($strBorders == "")
+        if($strBorders == "") {
             $strBorders = 0;
+        }
 
-		$this->objPdf->MultiCell( $intWidth, $intHeight, $strContent, $strBorders, $strAlign );
-	}
+        $this->objPdf->MultiCell($intWidth, $intHeight, $strContent, $strBorders, $strAlign);
+    }
 
     /**
      * Adds a single paragraph to the pdf
@@ -196,14 +216,15 @@ class class_pdf {
      *
      * @param string $strTitle
      * @param int $intTargetPage
+     *
      * @see class_pdf::addBookmark()
      */
     public function addTableOfContents($strTitle, $intTargetPage = 2) {
 
-        
+
         // add a new page for TOC
         $this->objPdf->addTOCPage();
-        $this->objPdf->selectColumn();
+        $this->objPdf->selectColumn(0);
 
         $this->addMultiCell($strTitle);
         $this->objPdf->Ln();
@@ -227,6 +248,7 @@ class class_pdf {
 
     /**
      * Adds an image to the current page.
+     *
      * @param string $strImage
      * @param int $intX
      * @param int $intY
@@ -245,15 +267,14 @@ class class_pdf {
     }
 
 
-	
-	/**
+    /**
      * Sends the pdf directly to the browser
      *
      * @param string $strFilename
      */
-	public function sendPdfToBrowser($strFilename = "kajonaPdf.pdf") {
-		$this->objPdf->Output($strFilename, 'I');
-	}
+    public function sendPdfToBrowser($strFilename = "kajonaPdf.pdf") {
+        $this->objPdf->Output($strFilename, 'I');
+    }
 
     /**
      * Saves the pdf to the filesystem
@@ -277,7 +298,7 @@ class class_pdf {
     public function setDrawColor($intR, $intG, $intB) {
         $this->objPdf->SetDrawColor($intR, $intG, $intB);
     }
-    
+
     /**
      * Sets a text color
      */
@@ -294,8 +315,6 @@ class class_pdf {
     public function getObjPdf() {
         return $this->objPdf;
     }
-
-
 
 }
 

@@ -26,7 +26,8 @@ class class_test_pdf extends class_testbase  {
         $objPdf->setFont("helvetica", 12, class_pdf::$FONT_STYLE_REGULAR);
 
         $objPdf->setBitHeader(true);
-        $objPdf->addPage();
+        $objPdf->addPage(); //TOC page
+        $objPdf->getObjPdf()->resetColumns();
         $objPdf->setBitFooter(true);
 
         $objPdf->addBookmark("page 2");
@@ -63,17 +64,18 @@ class class_test_pdf extends class_testbase  {
         $objPdf->addPage();
         $objPdf->addBookmark("multicolumn");
         $objPdf->setNumberOfColumns(2, 75);
-        $objPdf->selectColumn();
+        $objPdf->selectColumn(0);
+        $objPdf->addCell("Content in Column 0");
+        $objPdf->addParagraph("This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text");
+        $objPdf->selectColumn(1);
         $objPdf->addCell("Content in Column 1");
         $objPdf->addParagraph("This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text");
-      
-        
+
         $objPdf->addPage();
         $objPdf->setNumberOfColumns(0);
         $objPdf->addBookmark("single column");
         $objPdf->addParagraph("This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text");
 
-        $objPdf->addPage();
         $objPdf->addTableOfContents("Inhalt");
 
         $objPdf->savePdf($strFile);
