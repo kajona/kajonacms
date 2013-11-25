@@ -14,6 +14,7 @@
 class class_formentry_textarea extends class_formentry_base implements interface_formentry_printable {
 
     private $strOpener = "";
+    private $bitLarge = false;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -34,7 +35,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->bitLarge ? "input-xxlarge" : "", $this->getBitReadonly());
 
         return $strReturn;
     }
@@ -61,5 +62,23 @@ class class_formentry_textarea extends class_formentry_base implements interface
     public function getStrOpener() {
         return $this->strOpener;
     }
+
+    /**
+     * @param boolean $bitLarge
+     *
+     * @return $this
+     */
+    public function setBitLarge($bitLarge) {
+        $this->bitLarge = $bitLarge;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBitLarge() {
+        return $this->bitLarge;
+    }
+
 
 }
