@@ -1413,17 +1413,17 @@ class class_toolkit_admin extends class_toolkit {
 
         $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
 
-        /** @var $arrAdminInstances class_admin[] */
-        $arrAdminInstances = array();
+        /** @var $arrNaviInstances class_module_system_module[] */
+        $arrNaviInstances = array();
         foreach ($arrModules as $arrModule) {
             $objModule = class_module_system_module::getModuleBySystemid($arrModule["module_id"]);
             if($objModule->rightView()) {
-                $arrAdminInstances[] = $objModule->getAdminInstanceOfConcreteModule();
+                $arrNaviInstances[] = $objModule;
             }
         }
 
 
-        foreach ($arrAdminInstances as $objOneInstance) {
+        foreach ($arrNaviInstances as $objOneInstance) {
 
             $arrActions = class_admin_helper::getModuleActionNaviHelper($objOneInstance);
 
@@ -1442,15 +1442,15 @@ class class_toolkit_admin extends class_toolkit {
 
 
             $arrModuleLevel = array(
-                "module" => getLinkAdmin($objOneInstance->getObjModule()->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName())),
+                "module" => class_link::getLinkAdmin($objOneInstance->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
                 "actions" => $strActions,
-                "systemid" => $objOneInstance->getObjModule()->getSystemid(),
-                "moduleTitle" => $objOneInstance->getObjModule()->getStrName(),
-                "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getObjModule()->getStrName()),
-                "moduleHref" => getLinkAdminHref($objOneInstance->getObjModule()->getStrName(), "")
+                "systemid" => $objOneInstance->getSystemid(),
+                "moduleTitle" => $objOneInstance->getStrName(),
+                "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
+                "moduleHref" => class_link::getLinkAdminHref($objOneInstance->getStrName(), "")
             );
 
-            if($strCurrentModule == $objOneInstance->getObjModule()->getStrName())
+            if($strCurrentModule == $objOneInstance->getStrName())
                 $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleActiveID);
             else
                 $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleID);

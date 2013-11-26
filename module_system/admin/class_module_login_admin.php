@@ -174,8 +174,8 @@ class class_module_login_admin extends class_admin implements interface_admin {
             }
             //save the current skin as a cookie
             $objCookie = new class_cookie();
-            $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
-            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
+            $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false, true));
+            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false, true));
             //any url to redirect?
             if($this->objSession->getSession(self::SESSION_REFERER) != "") {
                 class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));

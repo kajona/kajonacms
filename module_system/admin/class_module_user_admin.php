@@ -593,9 +593,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $this->objDB->flushQueryCache();
             $this->objSession->resetUser();
             //and update the cookie
-            $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
+            $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false, true));
             //update language set before
-            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
+            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false, true));
         }
 
         //flush the navigation cache in order to get new items for a possible updated list

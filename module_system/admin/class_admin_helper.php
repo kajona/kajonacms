@@ -40,14 +40,14 @@ class class_admin_helper {
 
             $arrCurMenuEntry = array(
                 "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
-                "onclick" => "location.href='".getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
+                "onclick" => "location.href='".class_link::getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
                 "link" => "#"
             );
 
             //fetch the submenu entries
             if($objModule != null) {
                 $arrActionMenuEntries = array();
-                $arrModuleActions = self::getModuleActionNaviHelper($objModule->getAdminInstanceOfConcreteModule());
+                $arrModuleActions = self::getModuleActionNaviHelper($objModule);
                 foreach($arrModuleActions as $strOneAction) {
                     if($strOneAction != "") {
                         $arrLink = splitUpLink($strOneAction);
@@ -86,22 +86,23 @@ class class_admin_helper {
 
     /**
      * Fetches the list of actions for a single module, saved to the session for performance reasons
+     *
      * @static
-     * @param class_admin $objAdminModule
+     *
+     * @param class_module_system_module $objModule
+     *
      * @return array
      */
-    public static function getModuleActionNaviHelper(class_admin $objAdminModule) {
+    public static function getModuleActionNaviHelper(class_module_system_module $objModule) {
         if(class_carrier::getInstance()->getObjSession()->isLoggedin()) {
 
-            $strKey = __CLASS__."adminNaviEntries".get_class($objAdminModule).class_module_system_aspect::getCurrentAspectId();
+            $strKey = __CLASS__."adminNaviEntries".$objModule->getSystemid().class_module_system_aspect::getCurrentAspectId();
 
             $arrFinalItems = class_carrier::getInstance()->getObjSession()->getSession($strKey);
             if($arrFinalItems !== false)
                 return $arrFinalItems;
 
-
-            $objModule = $objAdminModule->getObjModule();
-            $arrItems = $objAdminModule->getOutputModuleNavi();
+            $arrItems = $objModule->getAdminInstanceOfConcreteModule()->getOutputModuleNavi();
             $arrFinalItems = array();
             //build array of final items
             $intI = 0;
