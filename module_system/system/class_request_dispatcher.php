@@ -61,7 +61,7 @@ class class_request_dispatcher {
 
 
         $strReturn = $this->cleanupOutput($strReturn);
-        $strReturn = $this->getDebugInfo() . $strReturn;
+        $strReturn = $this->getDebugInfo($strReturn);
         $this->sendConditionalGetHeaders($strReturn);
 
         $this->objResponse->setStrContent($strReturn);
@@ -325,9 +325,11 @@ class class_request_dispatcher {
     /**
      * Generates debugging-infos, but only in non-xml mode
      *
+     * @param $strReturn
+     *
      * @return string
      */
-    private function getDebugInfo() {
+    private function getDebugInfo($strReturn) {
         $strDebug = "";
         if(_timedebug_ || _dbnumber_ || _templatenr_ || _memory_) {
 
@@ -365,17 +367,23 @@ class class_request_dispatcher {
             }
 
             if(_xmlLoader_ === true) {
-                $strDebug = "<!-- Kajona Debug: " . $strDebug . " -->";
+                class_response_object::getInstance()->addHeader("Kajona Debug: ".$strDebug);
             }
             else {
-                $strDebug = "<pre style='z-index: 2000000; position: absolute; background-color: white; width: 100%; top: 0px; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: " . $strDebug . "</pre>";
+                $strDebug = "<pre style='z-index: 2000000; position: fixed; background-color: white; width: 100%; top: 0px; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: " . $strDebug . "</pre>";
+
+                $intBodyPos = uniStrpos($strReturn, "</body>");
+                if($intBodyPos !== false) {
+                    $strReturn = uniSubstr($strReturn, 0, $intBodyPos).$strDebug.uniSubstr($strReturn, $intBodyPos);
+                }
+                else
+                    $strReturn = $strDebug.$strReturn;
             }
 
-            $strDebug .= "\n";
 
         }
 
-        return $strDebug;
+        return $strReturn;
     }
 
 }
