@@ -121,10 +121,12 @@ class class_resourceloader {
      * The filename is the relative path, so adding /templates/[packname] is not required and not allowed.
      *
      * @param string $strTemplateName
+     * @param bool $bitScanAdminSkin
+     *
+     * @throws class_exception
      * @return string The path on the filesystem, relative to the root-folder. Null if the file could not be mapped.
-     * @throws class_exception in case the filename could not be mapped
      */
-    public function getTemplate($strTemplateName) {
+    public function getTemplate($strTemplateName, $bitScanAdminSkin = false) {
         $strTemplateName = removeDirectoryTraversals($strTemplateName);
         if(isset($this->arrTemplates[$strTemplateName]))
             return $this->arrTemplates[$strTemplateName];
@@ -134,11 +136,13 @@ class class_resourceloader {
         $strFilename = null;
         //first try: load the file in the current template-pack
         if(is_file(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName)) {
+            $this->arrTemplates[$strTemplateName] = _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
             return _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
         if(is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
+            $this->arrTemplates[$strTemplateName] = _templatepath_."/default/tpl".$strTemplateName;
             return _templatepath_."/default/tpl".$strTemplateName;
         }
 
@@ -148,6 +152,11 @@ class class_resourceloader {
                 $strFilename = "/core/".$strOneModule."/templates/default/tpl".$strTemplateName;
                 break;
             }
+        }
+
+        if($bitScanAdminSkin) {
+            if(is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName))
+                $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
         }
 
         if($strFilename === null)
