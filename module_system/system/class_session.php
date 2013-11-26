@@ -42,6 +42,9 @@ final class class_session {
 
     private $bitClosed = false;
 
+    const STR_SESSION_ADMIN_SKIN_KEY = "STR_SESSION_ADMIN_SKIN_KEY";
+    const STR_SESSION_ADMIN_LANG_KEY = "STR_SESSION_ADMIN_LANG_KEY";
+
 
     private function __construct() {
 
@@ -239,10 +242,15 @@ final class class_session {
      * Returns the name of the current skin, if the user is logged in and admin
      *
      * @param bool $bitUseCookie
+     * @param bool $bitSkipSessionEntry
      *
      * @return string
      */
-    public function getAdminSkin($bitUseCookie = true) {
+    public function getAdminSkin($bitUseCookie = true, $bitSkipSessionEntry = false) {
+
+        if(!$bitSkipSessionEntry && $this->getSession(self::STR_SESSION_ADMIN_SKIN_KEY) != "")
+            return $this->getSession(self::STR_SESSION_ADMIN_SKIN_KEY);
+
         //Maybe we can load the skin from the cookie
         $objCookie = new class_cookie();
         $strSkin = $objCookie->getCookie("adminskin");
@@ -253,11 +261,14 @@ final class class_session {
         if($this->isLoggedin()) {
             if($this->isAdmin()) {
                 if($this->getUser() != null && $this->getUser()->getStrAdminskin() != "") {
-                    return $this->getUser()->getStrAdminskin();
+                    $strSkin = $this->getUser()->getStrAdminskin();
+                    $this->setSession(self::STR_SESSION_ADMIN_SKIN_KEY, $strSkin);
+                    return $strSkin;
                 }
             }
         }
 
+        $this->setSession(self::STR_SESSION_ADMIN_SKIN_KEY, _admin_skin_default_);
         return _admin_skin_default_;
     }
 
@@ -266,10 +277,15 @@ final class class_session {
      * NOTE: THIS IS FOR THE TEXTS, NOT THE CONTENTS
      *
      * @param bool $bitUseCookie
+     * @param bool $bitSkipSessionEntry
      *
      * @return string
      */
-    public function getAdminLanguage($bitUseCookie = true) {
+    public function getAdminLanguage($bitUseCookie = true, $bitSkipSessionEntry = false) {
+
+        if(!$bitSkipSessionEntry && $this->getSession(self::STR_SESSION_ADMIN_LANG_KEY) != "")
+            return $this->getSession(self::STR_SESSION_ADMIN_LANG_KEY);
+
         //Maybe we can load the language from the cookie
         $objCookie = new class_cookie();
         $strLanguage = $objCookie->getCookie("adminlanguage");
@@ -280,7 +296,9 @@ final class class_session {
         if($this->isLoggedin()) {
             if($this->isAdmin()) {
                 if($this->getUser() != null && $this->getUser()->getStrAdminlanguage() != "") {
-                    return $this->getUser()->getStrAdminlanguage();
+                    $strLang = $this->getUser()->getStrAdminlanguage();
+                    $this->setSession(self::STR_SESSION_ADMIN_LANG_KEY, $strLang);
+                    return $strLang;
                 }
             }
         }
