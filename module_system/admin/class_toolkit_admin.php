@@ -756,11 +756,8 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false) {
-        $strId = generateSystemid();
-        $strCallbackVisible = "function() { $('#".$strId."').addClass('optionalElementsWrapperVisible'); }";
-        $strCallbackInvisible = "function() { $('#".$strId."').removeClass('optionalElementsWrapperVisible'); }";
-        $arrFolder = $this->getLayoutFolder($strContent, class_adminskin_helper::getAdminImage("icon_folderClosed")." ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
-        return "<br /><div id=\"".$strId."\" class=\"optionalElementsWrapper".($bitVisible ? " optionalElementsWrapperVisible" : "")."\">".$this->getFieldset($arrFolder[1], $arrFolder[0])."</div>";
+        $arrFolder = $this->getLayoutFolder($strContent, class_adminskin_helper::getAdminImage("icon_folderClosed")." ".$strTitle, $bitVisible);
+        return $this->getFieldset($arrFolder[1], $arrFolder[0]);
     }
 
     /**
