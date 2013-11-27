@@ -195,7 +195,6 @@ class class_flyimage {
         else
             $intHeight = $this->intMaxHeight;
 
-
         $intMinfontSize = 15;
         $intMaxFontSize = 22;
         $intWidthPerChar = 30;
@@ -209,27 +208,21 @@ class class_flyimage {
         //init the random-function
         srand((double)microtime() * 1000000);
 
-
-        //create a blank image
-        $objImage = new class_image();
-        $objImage->setIntHeight($intHeight);
-        $objImage->setIntWidth($intWidth);
-        $objImage->createBlankImage();
-        //create a white background
-        $intWhite = $objImage->registerColor(255, 255, 255);
-        $intBlack = $objImage->registerColor(0, 0, 0);
-        $objImage->drawFilledRectangle(0, 0, $intWidth, $intHeight, $intWhite);
+        //v2 version
+        $objImage2 = new class_image2();
+        $objImage2->create($intWidth, $intHeight);
+        $objImage2->addOperation(new class_image_rectangle(0, 0, $intWidth, $intHeight, "#FFFFFF"));
 
         //draw vertical lines
         $intStart = 5;
         while($intStart < $intWidth - 5) {
-            $objImage->drawLine($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor($objImage));
+            $objImage2->addOperation(new class_image_line($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor()));
             $intStart += rand(10, 17);
         }
         //draw horizontal lines
         $intStart = 5;
         while($intStart < $intHeight - 5) {
-            $objImage->drawLine(0, $intStart, $intWhite, $intStart, $this->generateGreyLikeColor($objImage));
+            $objImage2->addOperation(new class_image_line(0, $intStart, $intWidth, $intStart, $this->generateGreyLikeColor()));
             $intStart += rand(10, 17);
         }
 
@@ -240,7 +233,7 @@ class class_flyimage {
             while($intXPrev <= $intWidth) {
                 $intNewX = rand($intXPrev, $intXPrev + 50);
                 $intNewY = rand(0, $intHeight);
-                $objImage->drawLine($intXPrev, $intYPrev, $intNewX, $intNewY, $this->generateGreyLikeColor($objImage));
+                $objImage2->addOperation(new class_image_line($intXPrev, $intYPrev, $intNewX, $intNewY, $this->generateGreyLikeColor()));
                 $intXPrev = $intNewX;
                 $intYPrev = $intNewY;
             }
@@ -258,8 +251,6 @@ class class_flyimage {
             $intCol1 = rand(0, 200);
             $intCol2 = rand(0, 200);
             $intCol3 = rand(0, 200);
-            $strColor = "" . $intCol1 . "," . $intCol2 . "," . $intCol3;
-            $strColorForeground = "" . ($intCol1 + 50) . "," . ($intCol2 + 50) . "," . ($intCol3 + 50);
             //fontsize
             $intSize = rand($intMinfontSize, $intMaxFontSize);
             //calculate x and y pos
@@ -268,37 +259,32 @@ class class_flyimage {
             //the angle
             $intAngle = rand(-30, 30);
             //place the background character
-            $objImage->imageText($strCurrentChar, $intX, $intY, $intSize, $strColor, "dejavusans.ttf", false, $intAngle);
+            $objImage2->addOperation(new class_image_text($strCurrentChar, $intX, $intY, $intSize, "rgb(".$intCol1.",".$intCol2.",".$intCol3.")", "dejavusans.ttf", $intAngle));
             //place the foreground charater
-            $objImage->imageText($strCurrentChar, $intX + $intForegroundOffset, $intY + $intForegroundOffset, $intSize, $strColorForeground, "dejavusans.ttf", false, $intAngle);
+            $objImage2->addOperation(new class_image_text($strCurrentChar, $intX + $intForegroundOffset, $intY + $intForegroundOffset, $intSize, "rgb(".($intCol1+50).",".($intCol2+50).",".($intCol3+50).")", "dejavusans.ttf", $intAngle));
         }
 
         //register placed string to session
         class_carrier::getInstance()->getObjSession()->setCaptchaCode($strCharactersPlaced);
 
         //and send it to the browser
-        //$objImage->saveImage("/test.jpg");
-        //echo "<img src=\""._webpath_."/test.jpg\" />";
-        $objImage->setBitNeedToSave(false);
 
         //force no-cache headers
         class_response_object::getInstance()->addHeader("Expires: Thu, 19 Nov 1981 08:52:00 GMT", true);
         class_response_object::getInstance()->addHeader("Cache-Control: no-store, no-cache, must-revalidate, private", true);
         class_response_object::getInstance()->addHeader("Pragma: no-cache", true);
 
-        $objImage->sendImageToBrowser(70);
-        $objImage->releaseResources();
+        $objImage2->setUseCache(false);
+        $objImage2->sendToBrowser(class_image2::FORMAT_JPG);
     }
 
     /**
      * Generates a greyish color and registers the color to the image
      *
-     * @param $objImage
-     *
      * @return int color-id in image
      */
-    private function generateGreyLikeColor($objImage) {
-        return $objImage->registerColor(rand(150, 230), rand(150, 230), rand(150, 230));
+    private function generateGreyLikeColor() {
+        return "rgb(".(rand(150, 230).", ".rand(150, 230).", ".rand(150, 230).")");
     }
 
     /**

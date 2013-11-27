@@ -7,31 +7,35 @@
 ********************************************************************************************************/
 
 /**
- * Implements an image rotation operation.
+ * Implements an operation to draw a rectangle
  */
-class class_image_rotate extends class_image_abstract_operation {
-    private $floatAngle;
+class class_image_rectangle extends class_image_abstract_operation {
+    private $intX;
+    private $intY;
+    private $intWidth;
+    private $intHeight;
     private $arrColor;
 
-    public function __construct($floatAngle, $strColor = "#000000") {
-        $this->floatAngle = $floatAngle;
+    public function __construct($intX, $intY, $intWidth, $intHeight, $strColor = "#FFFFFF") {
+        $this->intX = $intX;
+        $this->intY = $intY;
         $this->arrColor = class_image2::parseColorRgb($strColor);
+        $this->intWidth = $intWidth;
+        $this->intHeight = $intHeight;
     }
 
     public function render(&$objResource) {
         $intColor = $this->allocateColor($objResource, $this->arrColor);
-
-        if ($intColor === null) {
-            return false;
-        }
-
-        imagealphablending($objResource, true);
-        $objResource = imagerotate($objResource, $this->floatAngle, $intColor);
-        return true;
+        return imagefilledrectangle($objResource, $this->intX, $this->intY, ($this->intX + $this->intWidth), ($this->intY + $this->intHeight), $intColor);
     }
 
     public function getCacheIdValues() {
-        $arrValues = array($this->floatAngle);
+        $arrValues = array(
+            $this->intX,
+            $this->intY,
+            $this->intHeight,
+            $this->intWidth,
+        );
         $arrValues = array_merge($arrValues, $this->arrColor);
         return $arrValues;
     }
