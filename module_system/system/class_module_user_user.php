@@ -262,7 +262,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return bool
      */
     public function deleteObject() {
-        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid() ." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")", class_logger::$levelWarning);
         $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
         //call other models that may be interested
         $this->getObjSourceUser()->deleteUser();
