@@ -164,12 +164,19 @@ class class_admin_formgenerator {
             $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
         }
 
-        //lock the record to avoid multiple edit-sessions
+        //lock the record to avoid multiple edit-sessions - in in edit mode
         if(method_exists($this->objSourceobject, "getLockManager")) {
-            if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
-                $this->objSourceobject->getLockManager()->lockRecord();
-            else
-                throw new class_exception("current record is already locked, cannot be locked for the current user", class_exception::$level_ERROR);
+
+            $bitSkip = false;
+            if($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new")
+                $bitSkip = true;
+
+            if(!$bitSkip) {
+                if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
+                    $this->objSourceobject->getLockManager()->lockRecord();
+                else
+                    throw new class_exception("current record is already locked, cannot be locked for the current user", class_exception::$level_ERROR);
+            }
         }
 
 
