@@ -15,7 +15,7 @@ $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeit
 //editable entries
 $lang["_tags_defaultprivate_"]           = "Zuweisungen standardmäßig privat";
 $lang["action_add_to_favorites"]         = "Als Favorit ablegen";
-$lang["action_list_favorites"]           = "Favoriten anzeigen";
+$lang["action_list_favorites"]           = "Favoriten";
 $lang["action_show_all"]                 = "Alle Tags anzeigen";
 $lang["action_show_assigned_records"]    = "Zugewiesene Datensätze anzeigen";
 $lang["adminskin_tooltip"]               = "Favoriten anzeigen";

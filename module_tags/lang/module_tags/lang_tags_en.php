@@ -15,7 +15,7 @@ $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => 
 //editable entries
 $lang["_tags_defaultprivate_"]           = "Private assignments by default";
 $lang["action_add_to_favorites"]         = "Marks as favorite";
-$lang["action_list_favorites"]           = "List favorites";
+$lang["action_list_favorites"]           = "Favorites";
 $lang["action_show_all"]                 = "Show all tags";
 $lang["action_show_assigned_records"]    = "Show assigned records";
 $lang["adminskin_tooltip"]               = "Show favorites";
