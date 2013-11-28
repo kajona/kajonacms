@@ -274,6 +274,8 @@ Dropdown
         var id = '#%%name%%'.replace("[", "\\[");
         var id = id.replace("]", "\\]");
         $(id).chosen();
+        if($(id).hasClass("mandatoryFormElement"))
+            $(id+'_chzn').addClass("mandatoryFormElement");
     }, true);
     </script>
 </input_dropdown>
