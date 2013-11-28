@@ -14,7 +14,7 @@
  * @package module_messaging
  * @since 4.3
  */
-class class_messageprovider_personalmessage implements interface_messageprovider {
+class class_messageprovider_personalmessage implements interface_messageprovider_extended {
 
     /**
      * Called whenever a message is being deleted
@@ -39,6 +39,27 @@ class class_messageprovider_personalmessage implements interface_messageprovider
      */
     public function getStrName() {
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_personalmessage_name", "system");
+    }
+
+    /**
+     * If set to true, the messageprovider may not be disabled by the user.
+     * Messages are always sent to the user.
+     *
+     * @return bool
+     */
+    public function isAlwaysActive() {
+        return true;
+    }
+
+    /**
+     * If set to true, all messages sent by this provider will be sent by mail, too.
+     * The user is not allowed to disable the by-mail flag.
+     * Set this to true with care.
+     *
+     * @return mixed
+     */
+    public function isAlwaysByMail() {
+        return false;
     }
 
 }
