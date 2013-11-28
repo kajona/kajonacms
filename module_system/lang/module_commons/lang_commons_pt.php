@@ -21,3 +21,4 @@ $lang["commons_no"]                      = "Não";
 $lang["commons_ok"]                      = "Ok";
 $lang["commons_save"]                    = "Guardar";
 $lang["commons_yes"]                     = "Sim";
+$lang["commons_dropdown_dataplaceholder"]= "Por favor seleccione...";

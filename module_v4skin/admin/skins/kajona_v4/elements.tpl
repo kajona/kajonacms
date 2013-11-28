@@ -265,7 +265,7 @@ Dropdown
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
-            <select name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
+            <select data-placeholder="[lang,commons_dropdown_dataplaceholder,system]" name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 

@@ -67,3 +67,4 @@ $lang["commons_submit"]                  = "Submit";
 $lang["commons_title"]                   = "Title";
 $lang["commons_unlock"]                  = "Unlock record";
 $lang["commons_yes"]                     = "Yes";
+$lang["commons_dropdown_dataplaceholder"]= "Please select...";

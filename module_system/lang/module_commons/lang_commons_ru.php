@@ -38,3 +38,4 @@ $lang["commons_result_page"]             = "Страница результат�
 $lang["commons_save"]                    = "Сохранить";
 $lang["commons_title"]                   = "Имя";
 $lang["commons_yes"]                     = "Да";
+$lang["commons_dropdown_dataplaceholder"]= "Пожалуйста, выберите...";
