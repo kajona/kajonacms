@@ -1271,7 +1271,7 @@ The language switch surrounds the buttons
                     KAJONA.util.evalScript(data);
                     KAJONA.admin.tooltip.initTooltip();
                 } else {
-                    KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
+                    //KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
                 }
             });
         });
