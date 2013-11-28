@@ -25,7 +25,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_systemid_validator());
+        $this->setObjValidator(new class_user_validator());
     }
 
     /**
@@ -97,6 +97,14 @@ class class_formentry_user extends class_formentry_base implements interface_for
      */
     public function setBitBlockCurrentUser($bitBlockCurrentUser) {
         $this->bitBlockCurrentUser = $bitBlockCurrentUser;
+
+        if($this->bitBlockCurrentUser) {
+            $this->setObjValidator(new class_differentuser_validator());
+        }
+        else {
+            $this->setObjValidator(new class_user_validator());
+        }
+
         return $this;
     }
 
