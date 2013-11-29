@@ -104,7 +104,7 @@ class class_module_search_search extends class_model implements interface_model,
      * @return array
      */
     private function getModuleNumbers() {
-        $strQuery = "SELECT DISTINCT system_module_nr FROM "._dbprefix_."system";
+        $strQuery = "SELECT DISTINCT system_module_nr FROM "._dbprefix_."system WHERE system_prev_id != '0' AND system_id != '0'";
 
         $arrRows = $this->objDB->getPArray($strQuery, array());
 
