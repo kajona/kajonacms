@@ -117,7 +117,7 @@ class class_module_search_genericsearch_admin implements interface_search_plugin
             foreach($arrRows as $arrOneRow) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
 
-                if($objInstance != null && $objInstance->rightView()) {
+                if($objInstance != null && $objInstance->rightView() && class_module_system_module::getModuleByName($objInstance->getArrModule("modul"))->rightView()) {
                     $objResult = new class_search_result();
                     $objResult->setObjObject($objInstance);
                     $this->arrHits[] = $objResult;
