@@ -167,10 +167,6 @@ abstract class class_admin_simple extends class_admin {
     protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
         $strReturn = "";
 
-        if($objArraySectionIterator->getNrOfPages() > 1) {
-            throw new class_exception("sortable lists with more than one page are not supported!", class_exception::$level_ERROR);
-        }
-
         $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
         $arrIterables = $arrPageViews["elements"];
 
@@ -196,7 +192,7 @@ abstract class class_admin_simple extends class_admin {
 
         if(count($arrIterables) > 0) {
 
-            $strReturn .= $this->objToolkit->gridHeader($bitSortable);
+            $strReturn .= $this->objToolkit->gridHeader($bitSortable, $objArraySectionIterator->getIntElementsPerPage(), $objArraySectionIterator->getPageNumber());
 
             /** @var $objOneIterable class_model|interface_model|interface_admin_gridable */
             foreach($arrIterables as $objOneIterable) {
@@ -235,10 +231,6 @@ abstract class class_admin_simple extends class_admin {
         $strReturn = "";
         $intI = 0;
 
-        if($bitSortable && $objArraySectionIterator->getNrOfPages() > 1) {
-            throw new class_exception("sortable lists with more than one page are not supported!", class_exception::$level_ERROR);
-        }
-
         $strListId = generateSystemid();
 
         $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
@@ -248,7 +240,7 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
 
         if($bitSortable)
-            $strReturn .= $this->objToolkit->dragableListHeader($strListId, false, $bitAllowTreeDrop);
+            $strReturn .= $this->objToolkit->dragableListHeader($strListId, false, $bitAllowTreeDrop, $objArraySectionIterator->getIntElementsPerPage(), $objArraySectionIterator->getPageNumber());
         else
             $strReturn .= $this->objToolkit->listHeader();
 

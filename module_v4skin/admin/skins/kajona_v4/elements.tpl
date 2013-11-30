@@ -15,7 +15,7 @@ templates!
 -- GRID ELEMENTS ----------------------------------------------------------------------------------------
 
 <grid_header>
-<div class="grid">
+<div class="grid" data-kajona-pagenum="%%curPage%%" data-kajona-elementsperpage="%%elementsPerPage%%">
     <ul class="thumbnails gallery %%sortable%%">
 </grid_header>
 
@@ -33,7 +33,16 @@ $(function() {
         },
         stop: function(event, ui) {
             if(oldPos != ui.item.index()) {
-                 KAJONA.admin.ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1);
+
+                //calc the page-offset
+                var intCurPage = $(this).parent(".grid").attr("data-kajona-pagenum");
+                var intElementsPerPage = $(this).parent(".grid").attr("data-kajona-elementsperpage");
+
+                var intPagingOffset = 0;
+                if(intCurPage > 1 && intElementsPerPage > 0)
+                    intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
+
+                KAJONA.admin.ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1+intPagingOffset);
             }
             oldPos = 0;
         },
@@ -93,14 +102,23 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
             stop: function(event, ui) {
                 if(oldPos != ui.item.index()) {
                     var intOffset = 1;
-                    //see, of there are nodes not being sortable - would lead to another offset
+                    //see, if there are nodes not being sortable - would lead to another offset
                     $('#%%listid%% > tbody').each(function(index) {
                         if($(this).find('tr').data('systemid') == "")
                             intOffset--;
                         if($(this).find('tr').data('systemid') == ui.item.find('tr').data('systemid'))
                             return false;
                     });
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset, null, null, '%%targetModule%%');
+
+                    //calc the page-offset
+                    var intCurPage = $("#%%listid%%").attr("data-kajona-pagenum");
+                    var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
+
+                    var intPagingOffset = 0;
+                    if(intCurPage > 1 && intElementsPerPage > 0)
+                        intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
+
+                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset+intPagingOffset, null, null, '%%targetModule%%');
                 }
                 oldPos = 0;
             },
@@ -118,7 +136,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     });
 </script>
 <style>.group_move_placeholder { display: table-row; } </style>
-<table id="%%listid%%" class="table admintable table-striped-tbody">
+<table id="%%listid%%" class="table admintable table-striped-tbody" data-kajona-pagenum="%%curPage%%" data-kajona-elementsperpage="%%elementsPerPage%%">
 
 </dragable_list_header>
 

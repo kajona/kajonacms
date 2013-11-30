@@ -143,18 +143,21 @@ class class_module_navigation_point extends class_model implements interface_mod
      * Loads all navigation points one layer under the given systemid
      *
      * @param string $strSystemid
-     * @param bool
+     * @param bool $bitJustActive
+     * @param null $intStart
+     * @param null $intEnd
      *
+     * @internal param $bool
      * @return class_module_navigation_point[]
      * @static
      */
-    public static function getNaviLayer($strSystemid, $bitJustActive = false) {
+    public static function getNaviLayer($strSystemid, $bitJustActive = false, $intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
     			             AND system_prev_id = ?
     			             ".($bitJustActive ? " AND system_status = 1 " : "")."
     			             ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
             $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);

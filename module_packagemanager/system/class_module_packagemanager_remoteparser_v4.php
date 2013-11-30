@@ -22,7 +22,6 @@ class class_module_packagemanager_remoteparser_v4 implements interface_packagema
         $arrPackages = $arrRemoteResponse['items'];
 
         $objIterator = new class_array_section_iterator($intNumberOfTotalItems);
-        $objIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objIterator->setPageNumber($intPageNumber);
         $objIterator->setArraySection($arrPackages, $intStart, $intEnd);
 

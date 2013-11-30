@@ -23,11 +23,12 @@ class class_array_iterator implements interface_iterator {
 
     /**
      * Constructor
-     * @param $arrElements
-     * @return \class_array_iterator
      *
+     * @param $arrElements
+     *
+     * @return \class_array_iterator
      */
-	public function __construct($arrElements) {
+    public function __construct($arrElements) {
 
         $this->intElementsPerPage = _admin_nr_of_rows_;
         $this->setArrElements($arrElements);
@@ -38,13 +39,12 @@ class class_array_iterator implements interface_iterator {
      *
      * @param $arrElements
      */
-    public function setArrElements($arrElements)
-    {
+    public function setArrElements($arrElements) {
         $this->arrElements = array();
 
         //Loop over elements to create numeric indices
-        if (count($arrElements) > 0) {
-            foreach ($arrElements as $objOneElement) {
+        if(count($arrElements) > 0) {
+            foreach($arrElements as $objOneElement) {
                 $this->arrElements[] = $objOneElement;
             }
         }
@@ -65,8 +65,9 @@ class class_array_iterator implements interface_iterator {
      * @return mixed
      */
     public function getNextElement() {
-        if(!$this->isNext())
+        if(!$this->isNext()) {
             return null;
+        }
 
         return $this->arrElements[++$this->intArrCursor];
     }
@@ -110,15 +111,26 @@ class class_array_iterator implements interface_iterator {
     public function setIntElementsPerPage($intElements) {
         if((int)$intElements > 0) {
             $this->intElementsPerPage = (int)$intElements;
-        } else {
+        }
+        else {
             $this->intElementsPerPage = 100;
         }
     }
 
     /**
+     * @return int|string
+     */
+    public function getIntElementsPerPage() {
+        return $this->intElementsPerPage;
+    }
+
+
+
+    /**
      * Set the cursor to a defined position
      *
      * @param int $intElement
+     *
      * @return bool
      */
     public function setCursorPosition($intElement) {
@@ -126,8 +138,9 @@ class class_array_iterator implements interface_iterator {
             $this->intArrCursor = $intElement;
             return true;
         }
-        else
+        else {
             return false;
+        }
 
     }
 
@@ -137,8 +150,9 @@ class class_array_iterator implements interface_iterator {
      * @return int
      */
     public function getNrOfPages() {
-        if($this->intElementsPerPage == (int)0)
+        if($this->intElementsPerPage == (int)0) {
             return 0;
+        }
 
         return ceil($this->getNumberOfElements() / $this->intElementsPerPage);
     }
@@ -147,23 +161,27 @@ class class_array_iterator implements interface_iterator {
      * Returns the elements placed on the given page
      *
      * @param int $intPageNumber
+     *
      * @return array
      */
     public function getElementsOnPage($intPageNumber) {
-        if((int)$intPageNumber <= 0)
+        if((int)$intPageNumber <= 0) {
             $intPageNumber = 1;
+        }
 
         $arrReturn = array();
         //calc elements to return
-        $intStart = ($intPageNumber * $this->intElementsPerPage)-$this->intElementsPerPage;
-        $intEnd = $this->intElementsPerPage + $intStart -1;
+        $intStart = ($intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage;
+        $intEnd = $this->intElementsPerPage + $intStart - 1;
 
-        if($intEnd > $this->getNumberOfElements())
-            $intEnd = $this->getNumberOfElements()-1;
+        if($intEnd > $this->getNumberOfElements()) {
+            $intEnd = $this->getNumberOfElements() - 1;
+        }
 
-        for($intI = $intStart; $intI <= $intEnd; $intI++)  {
-            if(!$this->setCursorPosition($intI))
+        for($intI = $intStart; $intI <= $intEnd; $intI++) {
+            if(!$this->setCursorPosition($intI)) {
                 break;
+            }
             $arrReturn[] = $this->arrElements[$this->intArrCursor];
         }
         return $arrReturn;

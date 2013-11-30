@@ -804,7 +804,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objUsersources = new class_module_user_sourcefactory();
 
             $objIterator = new class_array_section_iterator($objSourceGroup->getNumberOfMembers());
-            $objIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

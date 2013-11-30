@@ -300,9 +300,8 @@ HTML;
         $strActions .= $this->generateNewFolderDialogCode();
 
         $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid()));
-        $objIterator->setIntElementsPerPage(class_module_mediamanager_file::getFileCount($this->getSystemid()));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
+        $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         return $strJsCode.$strActions.$this->renderFloatingGrid($objIterator, class_module_mediamanager_admin::INT_LISTTYPE_FOLDER);
 
@@ -626,9 +625,8 @@ HTML;
                 return $this->getLang("commons_error_permissions");
 
             $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid()));
-            $objIterator->setIntElementsPerPage(class_module_mediamanager_file::getFileCount($this->getSystemid()));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid()));
+            $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
             $strReturn .= $this->actionUploadFileInternal();
             $strReturn .= $this->generateNewFolderDialogCode();

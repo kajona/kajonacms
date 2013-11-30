@@ -64,8 +64,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
             $objIterator = new class_array_section_iterator(class_module_navigation_point::getObjectCount($this->getSystemid()));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setIntElementsPerPage($objIterator->getNumberOfElements());
-            $objIterator->setArraySection(class_module_navigation_point::getNaviLayer($this->getSystemid()));
+            $objIterator->setArraySection(class_module_navigation_point::getNaviLayer($this->getSystemid(), false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
             $strReturn .= $this->renderList($objIterator, true, "naviPoints", true);
 
             if($this->strPeAddon == "")

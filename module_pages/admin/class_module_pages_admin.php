@@ -98,11 +98,9 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $bitPeMode = $this->getParam("pe") != "";
 
         //Collect the pages belonging to the current parent
-        $arrPages = class_module_pages_folder::getPagesAndFolderList($this->getSystemid());
-        $objArraySectionIterator = new class_array_section_iterator(count($arrPages));
-        $objArraySectionIterator->setPageNumber(1);
-        $objArraySectionIterator->setIntElementsPerPage($objArraySectionIterator->getNumberOfElements());
-        $objArraySectionIterator->setArraySection($arrPages);
+        $objArraySectionIterator = new class_array_section_iterator(class_module_pages_folder::getPagesAndFolderListCount($this->getSystemid()));
+        $objArraySectionIterator->setPageNumber($this->getParam("pv"));
+        $objArraySectionIterator->setArraySection(class_module_pages_folder::getPagesAndFolderList($this->getSystemid(), false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strPages = $this->renderList($objArraySectionIterator, true, class_module_pages_admin::STR_LIST_PAGES, true);
 
         if($bitPeMode)

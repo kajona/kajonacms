@@ -820,12 +820,17 @@ class class_toolkit_admin extends class_toolkit {
      * By default, a grid is sortable.
      *
      * @param bool $bitSortable
+     * @param $intElementsPerPage
+     * @param $intCurPage
      *
      * @return string
      */
-    public function gridHeader($bitSortable = true) {
+    public function gridHeader($bitSortable = true, $intElementsPerPage = -1, $intCurPage = -1) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_header");
-        return $this->objTemplate->fillTemplate(array("sortable" => ($bitSortable ? "sortable" : "")), $strTemplateID);
+        return $this->objTemplate->fillTemplate(
+            array("sortable" => ($bitSortable ? "sortable" : ""), "elementsPerPage" => $intElementsPerPage, "curPage" => $intCurPage),
+            $strTemplateID
+        );
     }
 
     /**
@@ -887,16 +892,20 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strListId
      * @param bool $bitOnlySameTable dropping only allowed within the same table or also in other tables
      * @param bool $bitAllowDropOnTree
+     * @param int $intElementsPerPage
+     * @param int $intCurPage
      *
      * @return string
      */
-    public function dragableListHeader($strListId, $bitOnlySameTable = false, $bitAllowDropOnTree = false) {
+    public function dragableListHeader($strListId, $bitOnlySameTable = false, $bitAllowDropOnTree = false, $intElementsPerPage = -1, $intCurPage = -1) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_header");
         return $this->objTemplate->fillTemplate(
             array(
                 "listid" => $strListId,
                 "sameTable" => $bitOnlySameTable? "true" : "false",
-                "jsInject" => "bitMoveToTree = ".($bitAllowDropOnTree ? "true" : "false").";"
+                "jsInject" => "bitMoveToTree = ".($bitAllowDropOnTree ? "true" : "false").";",
+                "elementsPerPage" => $intElementsPerPage,
+                "curPage" => $intCurPage
             ),
             $strTemplateID
         );
