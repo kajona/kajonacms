@@ -19,7 +19,8 @@ class class_v3_v4_postupdate {
     private $objDB;
 
     public function postUpdate() {
-
+		@set_time_limit(600);
+		
         $this->objDB = class_carrier::getInstance()->getObjDB();
 
         echo "<pre>";
@@ -378,7 +379,7 @@ class class_v3_v4_postupdate {
                     $objOneFile->setStrName($arrOneOldFile["pic_name"]);
                     $objOneFile->setStrDescription($arrOneOldFile["pic_description"]);
                     $objOneFile->setStrSubtitle($arrOneOldFile["pic_subtitle"]);
-                    $objOneFile->setIntHits($arrOneOldFile["pic_hits"]);
+                    $objOneFile->setIntHits((int)$arrOneOldFile["pic_hits"]);
                     $objOneFile->updateObjectToDb();
 
                     $this->moveComments($arrOneOldFile["pic_id"], $objOneFile->getSystemid());
