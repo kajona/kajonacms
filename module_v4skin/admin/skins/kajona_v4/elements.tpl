@@ -1486,7 +1486,9 @@ The language switch surrounds the buttons
             })
             //TODO: Hotkeys removed. currently theres no way of preventing a node-renaming, e.g. by pressing f2
             .bind("select_node.jstree", function (event, data) {
-                document.location.href=data.rslt.obj.attr("link");
+                if(data.rslt.obj.attr("link")) {
+                    document.location.href=data.rslt.obj.attr("link");
+                }
             })
             .bind("rename_node.jstree", function (NODE, REF_NODE) {
                 // Do your operation
