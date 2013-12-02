@@ -559,6 +559,16 @@ HTML;
     }
 
 
+    protected function getArrOutputNaviEntries() {
+        $arrEntries = parent::getArrOutputNaviEntries();
+
+        //remove the duplicated link to the repo-list http://trace.kajona.de/view.php?id=856
+        if(isset($arrEntries[2]))
+            unset($arrEntries[2]);
+
+        return $arrEntries;
+    }
+
     protected function getOutputNaviEntry(interface_model $objInstance) {
         return getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
     }
