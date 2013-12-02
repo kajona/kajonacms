@@ -18,7 +18,7 @@ $(function () {
                 self._renderItemData(ul, item);
             });
 
-            ul.append('<li class="detailedResults"><a href="#">View detailed search results</a></li>');
+            ul.append('<li class="detailedResults"><a href="#">'+searchExtendText+'</a></li>');
             ul.addClass('dropdown-menu');
             ul.addClass('search-dropdown-menu');
 

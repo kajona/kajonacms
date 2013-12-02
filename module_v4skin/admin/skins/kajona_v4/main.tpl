@@ -114,6 +114,7 @@
 <script src="_skinwebpath_/js/bootstrap-carousel.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/bootstrap-affix.js?_system_browser_cachebuster_"></script>
 
+<script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 
 

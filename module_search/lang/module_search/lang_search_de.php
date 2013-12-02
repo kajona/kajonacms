@@ -29,3 +29,4 @@ $lang["searchterm_label"]                = "Suchbegriff";
 $lang["select_all"]                      = "Alle Module";
 $lang["stats_title"]                     = "Suchanfragen";
 $lang["submit_label"]                    = "Suchen";
+$lang["search_details"]                  = "Ausführliches Ergebnis anzeigen";

@@ -29,3 +29,4 @@ $lang["searchterm_label"]                = "Search term";
 $lang["select_all"]                      = "All modules";
 $lang["stats_title"]                     = "Searchqueries";
 $lang["submit_label"]                    = "Search";
+$lang["search_details"]                  = "View detailed search results";
