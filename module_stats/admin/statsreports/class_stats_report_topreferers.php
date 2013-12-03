@@ -98,7 +98,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
         $arrHeader[] = "#";
         $arrHeader[] = $this->objTexts->getLang("top_referer_titel", "stats");
         $arrHeader[] = $this->objTexts->getLang("top_referer_gewicht", "stats");
-        $arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
+        $arrHeader[] = $this->objTexts->getLang("anteil", "stats");
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 

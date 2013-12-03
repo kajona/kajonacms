@@ -94,7 +94,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
         $arrHeader[] = $this->objTexts->getLang("top_seiten_titel", "stats");
         $arrHeader[] = $this->objTexts->getLang("commons_language", "stats");
         $arrHeader[] = $this->objTexts->getLang("commons_hits_header", "stats");
-        $arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
+        $arrHeader[] = $this->objTexts->getLang("anteil", "stats");
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 

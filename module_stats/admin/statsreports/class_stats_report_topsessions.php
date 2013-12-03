@@ -135,11 +135,11 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
             //Load the details for all sessions
             $strDetails = "";
             $strSessionID = $arrOneSession["stats_session"];
-            $strDetails .= $this->objTexts->getLang("top_session_detail_start", "stats", "admin").timeToString($arrOneSession["startdate"])."<br />";
-            $strDetails .= $this->objTexts->getLang("top_session_detail_end", "stats", "admin").timeToString($arrOneSession["enddate"])."<br />";
-            $strDetails .= $this->objTexts->getLang("top_session_detail_time", "stats", "admin").($arrOneSession["dauer"])."<br />";
-            $strDetails .= $this->objTexts->getLang("top_session_detail_ip", "stats", "admin").$arrOneSession["stats_ip"]."<br />";
-            $strDetails .= $this->objTexts->getLang("top_session_detail_hostname", "stats", "admin").$arrOneSession["stats_hostname"]."<br />";
+            $strDetails .= $this->objTexts->getLang("top_session_detail_start", "stats").timeToString($arrOneSession["startdate"])."<br />";
+            $strDetails .= $this->objTexts->getLang("top_session_detail_end", "stats").timeToString($arrOneSession["enddate"])."<br />";
+            $strDetails .= $this->objTexts->getLang("top_session_detail_time", "stats").($arrOneSession["dauer"])."<br />";
+            $strDetails .= $this->objTexts->getLang("top_session_detail_ip", "stats").$arrOneSession["stats_ip"]."<br />";
+            $strDetails .= $this->objTexts->getLang("top_session_detail_hostname", "stats").$arrOneSession["stats_hostname"]."<br />";
             //and fetch all pages
             $strQuery = "SELECT stats_page
                            FROM "._dbprefix_."stats_data

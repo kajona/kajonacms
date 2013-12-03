@@ -109,7 +109,7 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
         $arrHeader[] = "#";
         $arrHeader[] = $this->objLang->getLang("top_visitor_titel", "stats");
         $arrHeader[] = $this->objLang->getLang("commons_hits_header", "stats");
-        $arrHeader[] = $this->objLang->getLang("anteil", "stats", "admin");
+        $arrHeader[] = $this->objLang->getLang("anteil", "stats");
         $arrHeader[] = $this->objLang->getLang("login_utrace", "user");
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
