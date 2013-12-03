@@ -124,7 +124,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
         $arrHeader[] = "#";
         $arrHeader[] = $this->objTexts->getLang("top_browser_titel", "stats");
         $arrHeader[] = $this->objTexts->getLang("top_browser_gewicht", "stats");
-        $arrHeader[] = $this->objTexts->getLang("anteil", "stats", "admin");
+        $arrHeader[] = $this->objTexts->getLang("anteil", "stats");
 
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
