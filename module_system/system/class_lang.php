@@ -104,18 +104,21 @@ class class_lang {
      * @deprecated use getLang() instead
      */
     public function getText($strText, $strModule, $strArea) {
+        class_logger::getInstance(class_logger::SYSTEMLOG)->addLogRow("deprecated class_lang::getText call, params: ".$strText.", ".$strModule.", ".$strArea, class_logger::$levelWarning);
         return $this->getLang($strText, $strModule);
     }
 
     /**
-     * Returning the searched text-entry
+     * Returning the searched text-entry.
+     * If you have placeholders in the property (like {1}, {2}, you may replace them with the values of the third param.
      *
      * @param string $strText
      * @param $strModule
+     * @param array $arrParameters an array of variables which are embedded into the string
      *
      * @return string
      */
-    public function getLang($strText, $strModule) {
+    public function getLang($strText, $strModule, $arrParameters = array()) {
 
         //Did we already load this text?
         if(!isset($this->arrTexts[$this->strLanguage][$strModule])) {
@@ -143,9 +146,26 @@ class class_lang {
             }
         }
 
-        return $strReturn;
+        return $this->replaceParams($strReturn, $arrParameters);
     }
-    
+
+    /**
+     *
+     * Internal helper to fill parametrized properties.
+     *
+     * @param $strProperty
+     * @param $arrParameters
+     *
+     * @return mixed
+     */
+    public function replaceParams($strProperty, $arrParameters) {
+        //todo: evaluate against array based strReplace and sprintf
+        foreach($arrParameters as $intKey => $strParameter)
+            $strProperty = uniStrReplace("{".$intKey."}", $strParameter, $strProperty);
+
+        return $strProperty;
+    }
+
     
     public function stringToPlaceholder($strText) {
         $strReturn = "";

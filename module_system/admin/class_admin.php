@@ -386,20 +386,27 @@ abstract class class_admin {
     // --- TextMethods --------------------------------------------------------------------------------------
 
     /**
-     * Used to get Text out of Textfiles
+     * Used to load a property.
+     * If you want to provide a list of parameters but no module (automatic loading), pass
+     * the parameters array as the second argument (an array). In this case the module is resolved
+     * internally.
      *
      * @param string $strName
-     * @param string $strModule
+     * @param string|array $strModule Either the module name (if required) or an array of parameters
+     * @param array $arrParameters
      *
      * @return string
      */
-    public function getLang($strName, $strModule = "") {
-        if($strModule == "") {
+    public function getLang($strName, $strModule = "", $arrParameters = array()) {
+        if(is_array($strModule))
+            $arrParameters = $strModule;
+
+        if($strModule == "" || is_array($strModule)) {
             $strModule = $this->strLangBase;
         }
 
         //Now we have to ask the Text-Object to return the text
-        return $this->objLang->getLang($strName, $strModule);
+        return $this->objLang->getLang($strName, $strModule, $arrParameters);
     }
 
     /**
