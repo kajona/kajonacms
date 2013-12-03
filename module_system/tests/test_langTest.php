@@ -23,5 +23,59 @@ class class_test_lang extends class_testbase  {
 
         $this->assertEquals($objLang->replaceParams("lorem {0} dolor {0} amet", array("ipsum")), "lorem ipsum dolor ipsum amet");
     }
+
+
+
+
+    public function testPerformanceTest() {
+
+        $objLang = class_lang::getInstance();
+
+        $arrParameters = array("lorem", "ipsum", "dolor", "sit", "amet");
+        $strPropertyRaw = "lorem {0} ipsum {1} dolor {2} sit {3} amet {4} {0}";
+
+        $intStart = microtime(true);
+        for($intI = 0; $intI <= 10000; $intI++) {
+            $strProperty = $strPropertyRaw;
+            foreach($arrParameters as $intKey => $strParameter) {
+                $strProperty = uniStrReplace("{".$intKey."}", $strParameter, $strProperty);
+            }
+            $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
+        }
+        $intEnd = microtime(true);
+
+        echo "uniStrReplace: ".($intEnd-$intStart)." sec\n";
+
+
+        $intStart = microtime(true);
+        for($intI = 0; $intI <= 10000; $intI++) {
+            $strProperty = uniStrReplace(array_map(function($i) {return "{".$i."}";}, array_keys($arrParameters)), $arrParameters, $strPropertyRaw);
+            $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
+        }
+        $intEnd = microtime(true);
+
+        echo "array based uniStrReplace: ".($intEnd-$intStart)." sec\n";
+
+
+        $intStart = microtime(true);
+        for($intI = 0; $intI <= 10000; $intI++) {
+            $strProperty = preg_replace_callback("/{(\d)}/", function($hit) use ($arrParameters) { return $arrParameters[$hit[1]]; } , $strPropertyRaw);
+            $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
+        }
+        $intEnd = microtime(true);
+
+        echo "preg_replace based : ".($intEnd-$intStart)." sec\n";
+
+
+        $intStart = microtime(true);
+        for($intI = 0; $intI <= 10000; $intI++) {
+            $strProperty = $objLang->replaceParams($strPropertyRaw, $arrParameters);
+            $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
+        }
+        $intEnd = microtime(true);
+
+        echo "current implementation : ".($intEnd-$intStart)." sec\n";
+
+    }
 }
 
