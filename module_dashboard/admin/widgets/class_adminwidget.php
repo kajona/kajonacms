@@ -132,11 +132,12 @@ abstract class class_adminwidget {
      * Loads a text-fragement from the textfiles
      *
      * @param string $strKey
+     * @param array $arrParameters
      *
      * @return string
      */
-    public final function getLang($strKey) {
-        return $this->objLang->getLang($strKey, "adminwidget");
+    public final function getLang($strKey, $arrParameters = array()) {
+        return $this->objLang->getLang($strKey, "adminwidget", $arrParameters);
     }
 
     /**

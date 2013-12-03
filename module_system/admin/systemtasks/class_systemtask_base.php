@@ -80,11 +80,12 @@ abstract class class_systemtask_base {
      * Delegate requests for strings to the text-subsystem
      *
      * @param string $strLangKey
+     * @param array $arrParameters
      *
      * @return string
      */
-    protected function getLang($strLangKey) {
-        return $this->objLang->getLang($strLangKey, $this->strTextbase);
+    protected function getLang($strLangKey, $arrParameters = array()) {
+        return $this->objLang->getLang($strLangKey, $this->strTextbase, $arrParameters);
     }
 
     /**

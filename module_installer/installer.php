@@ -776,11 +776,12 @@ class class_installer {
      * Loads a text
      *
      * @param string $strKey
+     * @param array $arrParameters
      *
      * @return string
      */
-    public function getLang($strKey) {
-        return $this->objLang->getLang($strKey, "installer");
+    public function getLang($strKey, $arrParameters = array()) {
+        return $this->objLang->getLang($strKey, "installer", $arrParameters);
     }
 }
 
