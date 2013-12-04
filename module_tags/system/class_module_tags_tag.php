@@ -22,7 +22,7 @@
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener {
+class class_module_tags_tag extends class_model implements interface_model, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener, interface_search_resultobject {
 
     /**
      * @var string
@@ -56,6 +56,18 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         parent::__construct($strSystemid);
 
     }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return getLinkAdminHref($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$this->getSystemid());
+    }
+
 
     public function getStrDisplayName() {
         return $this->getStrName();
