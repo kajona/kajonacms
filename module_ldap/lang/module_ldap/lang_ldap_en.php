@@ -13,6 +13,6 @@
 $lang["form_group_dn"]                   = "DN";
 $lang["systemtask_ldapsync_error"]       = "Error while updating user-data";
 $lang["systemtask_ldapsync_name"]        = "Sync userdata";
-$lang["systemtask_ldapsync_success"]     = "Update of userdata successfull";
+$lang["systemtask_ldapsync_success"]     = "Update of userdata successful";
 $lang["workflow_ldapsync_title"]         = "Synchronize ldap data";
 $lang["workflow_ldapsync_val1"]          = "Interval";

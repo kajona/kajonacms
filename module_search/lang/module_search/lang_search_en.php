@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 395
 
 //editable entries
-$lang["action_execute_search"]           = "Exectue search";
+$lang["action_execute_search"]           = "Execute search";
 $lang["action_new"]                      = "New Search";
 $lang["delete_question"]                 = "Do you really want to delete the search &quot;<b>%%element_name%%</b>&quot;?";
 $lang["form_additionalheader"]           = "Additional filter";
