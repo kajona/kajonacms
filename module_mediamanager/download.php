@@ -35,8 +35,6 @@ class class_download_manager extends class_root {
     public function actionDownload() {
         //Load filedetails
 
-        $bitRedirectToErrorPage = false;
-
         if(validateSystemid($this->getSystemid())) {
 
             /** @var $objFile class_module_mediamanager_file */
@@ -83,27 +81,28 @@ class class_download_manager extends class_root {
                     fpassthru($ptrFile);
                     @fclose($ptrFile);
 
+                    return "";
+
                 }
                 else {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
-                    $bitRedirectToErrorPage = true;
                 }
 
             }
             else {
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
-                $bitRedirectToErrorPage = true;
             }
 
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
-            $bitRedirectToErrorPage = true;
         }
 
-        if($bitRedirectToErrorPage) {
-            class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalHref(_pages_errorpage_)));
-        }
+        //if we reach up here, something gone wrong :/
+        class_response_object::getInstance()->sendHeaders();
+        class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalHref(_pages_errorpage_)));
+
+        return "";
     }
 }
 
@@ -111,5 +110,5 @@ class class_download_manager extends class_root {
 //Create a object
 $objDownload = new class_download_manager(getGet("systemid"));
 $objDownload->actionDownload();
-class_response_object::getInstance()->sendHeaders();
+
 
