@@ -422,7 +422,10 @@ class class_module_right_admin extends class_admin implements interface_admin {
                 //Redirecting
                 $strUrlHistory = $this->getHistory(0);
                 $arrHistory = explode("&", $strUrlHistory);
-                if($arrHistory[1] != "module=rights") {
+                if(isset($arrHistory[1]) && $arrHistory[1] != "module=rights") {
+                    $this->adminReload(_indexpath_ . "?" . $this->getHistory(0) . ($this->getParam("pe") != "" ? "&peClose=1" : ""));
+                }
+                else {
                     $this->adminReload(_indexpath_ . "?" . $this->getHistory(0) . ($this->getParam("pe") != "" ? "&peClose=1" : ""));
                 }
 
