@@ -491,6 +491,7 @@ class class_db {
                     $strErrorCode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
                 }
             }
+            class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error in Query: ".$strQuery, class_logger::$levelWarning);
             throw new class_exception($strErrorCode, class_exception::$level_ERROR);
         }
         else {
