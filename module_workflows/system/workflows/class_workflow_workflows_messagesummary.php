@@ -91,6 +91,7 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
     private function createMessageForUser(class_module_user_user $objUser, array $arrMessages) {
 
         $objLang = class_carrier::getInstance()->getObjLang();
+        $objLang->setStrTextLanguage($objUser->getStrAdminlanguage());
 
         $objTemplate = class_carrier::getInstance()->getObjTemplate();
 
