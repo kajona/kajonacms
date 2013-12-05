@@ -66,7 +66,7 @@ class class_apc_cache  {
         if(!$this->bitAPCInstalled)
             return self::$arrFallbackCache[$strKey] = $objValue;
 
-        return apc_store($strKey, $objValue, $intTtl);
+        return @apc_store($strKey, $objValue, $intTtl);
     }
 
     /**
