@@ -192,6 +192,10 @@ JS;
         return "";
     }
 
+    protected function renderStatusAction(class_model $objListEntry) {
+        return "";
+    }
+
 
     /**
      * Returns a list of the languages
