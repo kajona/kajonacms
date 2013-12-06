@@ -26,11 +26,11 @@ class class_element_tagto_portal extends class_element_portal implements interfa
         //actions or systemids passed? pagename?
         $strSystemid = $this->getParam("systemid");
         $strActions = $this->getParam("action");
-        $strPagenme = $this->getPagename();
+        $strPageName = $this->getPagename();
 
         //load the template
         $strTemplateID = $this->objTemplate->readTemplate("/element_tagto/".$this->arrElementData["char1"], "tagtos");
-        $strLink = getLinkPortalHref($strPagenme, "", $strActions, "", $strSystemid);
+        $strLink = getLinkPortalHref($strPageName, "", $strActions, "", $strSystemid);
         $strReturn = $this->fillTemplate(array("pageurl" => $strLink), $strTemplateID);
 
         return $strReturn;
