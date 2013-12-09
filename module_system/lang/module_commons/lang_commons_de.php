@@ -67,4 +67,5 @@ $lang["commons_submit"]                  = "Absenden";
 $lang["commons_title"]                   = "Titel";
 $lang["commons_unlock"]                  = "Datensatz entsperren";
 $lang["commons_yes"]                     = "Ja";
+$lang["commons_reset"]                     = "Zurücksetzen";
 $lang["commons_dropdown_dataplaceholder"]= "Bitte wählen...";

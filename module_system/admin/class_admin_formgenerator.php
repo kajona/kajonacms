@@ -31,11 +31,12 @@ class class_admin_formgenerator {
     const  STR_LABEL_ANNOTATION     = "@fieldLabel";
     const  STR_HIDDEN_ANNOTATION    = "@fieldHidden";
 
-    const  BIT_BUTTON_SAVE = 2;
+    const  BIT_BUTTON_SAVE   = 2;
     const  BIT_BUTTON_CLOSE  = 4;
     const  BIT_BUTTON_CANCEL = 8;
     const  BIT_BUTTON_SUBMIT = 16;
     const  BIT_BUTTON_DELETE = 32;
+    const  BIT_BUTTON_RESET  = 64;
 
 
     /**
@@ -153,6 +154,9 @@ class class_admin_formgenerator {
 
         if($intButtonConfig & self::BIT_BUTTON_DELETE)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "submit");
+
+        if($intButtonConfig & self::BIT_BUTTON_RESET)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
 
 
 
