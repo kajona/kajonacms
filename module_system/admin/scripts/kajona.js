@@ -532,6 +532,7 @@ KAJONA.admin.systemtask = {
 
                     //show status info
                     document.getElementById('systemtaskStatusDiv').innerHTML = strStatusInfo;
+                    KAJONA.util.evalScript(strStatusInfo);
 
                     if(strReload == "") {
                     	jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE_DONE);
