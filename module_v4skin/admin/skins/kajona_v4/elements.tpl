@@ -785,7 +785,7 @@ Part to display the login status, user is logged in
                 else
                     $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> "+item.title+"</a></li>");
             });
-            $('#messagingShortlist').append("<li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> [lang,action_show_all,messaging]</a></li>");
+            $('#messagingShortlist').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> [lang,action_show_all,messaging]</a></li>");
 
             window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
         });
@@ -803,7 +803,7 @@ Part to display the login status, user is logged in
                 $.each($.parseJSON(data), function(index, item) {
                     $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
                 });
-                $('#tagsSubemenu').append("<li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
+                $('#tagsSubemenu').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
             }
         });
     }
