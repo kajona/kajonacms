@@ -294,6 +294,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 }
 
                 $objForm->updateSourceObject();
+                $objRecord = $objForm->getObjSourceobject();
                 $objRecord->updateObjectToDb($strSystemId);
 
                 $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1" : "")));
