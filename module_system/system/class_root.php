@@ -556,7 +556,7 @@ abstract class class_root {
 
         //process subrecords
         //validate, if there are subrecords, so child nodes to be copied to the current record
-        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($strOldSysid));
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort ASC", array($strOldSysid));
         foreach($arrChilds as $arrOneChild) {
             if(validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
