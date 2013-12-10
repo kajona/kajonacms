@@ -395,7 +395,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
             }
 
-
+            //get user and userForm
             $objUser = new class_module_user_user($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
 
@@ -403,7 +403,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $objForm = $this->getUserForm($objSourceUser, $bitSelfedit, "edit");
             }
 
-            $objForm->getField("user_username")->setStrValue($objUser->getStrUsername());
+
+            //set user name
+            $strUserName  = $this->getParam("user_username") != "" ? $this->getParam("user_username"):$objUser->getStrUsername();
+            $objForm->getField("user_username")->setStrValue($strUserName);
             if($bitSelfedit) {
                 $objForm->getField("user_username")->setBitReadonly(true);
             }
