@@ -598,7 +598,7 @@ function splitUpLink($strLink) {
  * @since 4.3
  */
 function replaceTextLinks($strText) {
-    return preg_replace('/((www|http|https:\/\/)[^ |^<]+)/', '<a href="\1">\1</a>', $strText);
+    return preg_replace('/^(?!href=.)*((www|http|https:\/\/)[^ |^<]+)/', '<a href="\1">\1</a>', $strText);
 }
 
 /**
