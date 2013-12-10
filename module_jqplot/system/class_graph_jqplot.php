@@ -321,6 +321,7 @@ class class_graph_jqplot implements interface_graph {
                         '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js',
                         '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.min.js',
                         '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.min.js',
+                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.min.js',
 
                         '/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
                         '/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
@@ -552,5 +553,20 @@ class class_graph_jqplot implements interface_graph {
     public function setIntXAxisAngle($intXAxisAngle) {
         $this->arrOptions["axes"]["xaxis"]["tickOptions"]["angle"] = $intXAxisAngle;
     }
+
+    /**
+     * @param \class_graph_jqplot_seriesdata[] $arrSeriesData
+     */
+    public function setArrSeriesData($arrSeriesData) {
+        $this->arrSeriesData = $arrSeriesData;
+    }
+
+    /**
+     * @return \class_graph_jqplot_seriesdata[]
+     */
+    public function getArrSeriesData() {
+        return $this->arrSeriesData;
+    }
+
 
 }

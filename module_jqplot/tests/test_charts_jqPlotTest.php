@@ -31,11 +31,15 @@ class class_test_charts_jqPlotTest extends class_testbase  {
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js\"></script>";
 //        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
-//        //custom
+        //custom
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
 //        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_."/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
+        //test-Divs
+//        echo "<div id=\"ChartDIV\"></div>";
+//        echo "<div id=\"ChartDIV2\"></div>";
 
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
