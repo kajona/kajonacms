@@ -250,11 +250,6 @@ class class_formentry_base {
      */
     public function setBitReadonly($bitReadonly) {
         $this->bitReadonly = $bitReadonly;
-
-        if($bitReadonly === true) {
-            $this->setStrValue($this->getValueFromObject());
-        }
-
         return $this;
     }
 

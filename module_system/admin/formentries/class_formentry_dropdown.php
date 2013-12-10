@@ -87,6 +87,10 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         }
     }
 
+    public function validateValue() {
+        return in_array($this->getStrValue(), array_keys($this->arrKeyValues)) && parent::validateValue();
+    }
+
 
     /**
      * Returns a textual representation of the formentries' value.
