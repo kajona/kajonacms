@@ -2073,26 +2073,44 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Renders a single tag (including the options to remove the tag again)
      *
-     * @param string $strTagname
-     * @param string $strTagId
+     * @param class_module_tags_tag $objTag
      * @param string $strTargetid
      * @param string $strAttribute
-     * @param bool $bitDelete
      *
+     * @internal param string $strTagname
+     * @internal param string $strTagId
+     * @internal param bool $bitDelete
+     * @internal param bool $bitFavorite
      * @return string
      */
-    public function getTagEntry($strTagname, $strTagId, $strTargetid, $strAttribute, $bitDelete = true) {
+    public function getTagEntry(class_module_tags_tag $objTag, $strTargetid, $strAttribute) {
 
-        if($bitDelete)
+        if(class_carrier::getInstance()->getParam("delete") != "false")
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag_delete");
         else
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag");
 
+        $strFavorite = "";
+        if($objTag->rightRight1()) {
+
+            $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
+                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favorite", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
+                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favoriteDisabled", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
+                });</script>";
+
+            $strImage = class_module_tags_favorite::getAllFavoritesForUserAndTag(class_carrier::getInstance()->getObjSession()->getUserID(), $objTag->getSystemid()) != null ?
+                class_adminskin_helper::getAdminImage("icon_favorite", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")) :
+                class_adminskin_helper::getAdminImage("icon_favoriteDisabled", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags"));
+
+            $strFavorite = $strJs."<a href=\"#\" onclick=\"KAJONA.admin.tags.createFavorite('".$objTag->getSystemid()."', this); return false;\">".$strImage."</a>";
+        }
+
         $arrTemplate = array();
-        $arrTemplate["tagname"] = $strTagname;
-        $arrTemplate["strTagId"] = $strTagId;
+        $arrTemplate["tagname"] = $objTag->getStrDisplayName();
+        $arrTemplate["strTagId"] = $objTag->getSystemid();
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
+        $arrTemplate["strFavorite"] = $strFavorite;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

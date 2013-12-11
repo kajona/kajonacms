@@ -14,6 +14,27 @@ if (typeof KAJONA == "undefined") {
  */
 KAJONA.admin.tags = {};
 
+
+KAJONA.admin.tags.createFavorite = function(strSystemid, objLink) {
+
+    KAJONA.admin.ajax.genericAjaxCall("tags", "addFavorite", strSystemid, function(data, status, jqXHR) {
+
+        KAJONA.admin.tooltip.removeTooltip($(objLink).find("[rel='tooltip']"));
+
+        if($(objLink).find("[data-kajona-icon='icon_favorite']").size() > 0) {
+            $(objLink).html(KAJONA.admin.tags.createFavoriteDisabledIcon);//createFavoriteDisabledIcon set via class_module_tags_admin->renderAdditionalActions
+        }
+        else {
+            $(objLink).html(KAJONA.admin.tags.createFavoriteEnabledIcon);//createFavoriteEnabledIcon set via class_module_tags_admin->renderAdditionalActions
+        }
+
+        KAJONA.admin.tooltip.addTooltip($(objLink).find("[rel='tooltip']"));
+
+        KAJONA.admin.ajax.regularCallback(data, status, jqXHR);
+    });
+
+};
+
 KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
     KAJONA.admin.ajax.genericAjaxCall("tags", "saveTag", strSystemid+"&tagname="+strTagname+"&attribute="+strAttribute, function(data, status, jqXHR) {
         if(status == 'success') {

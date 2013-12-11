@@ -23,6 +23,41 @@
  */
 class class_module_tags_admin_xml extends class_admin implements interface_xml_admin {
 
+
+    /**
+     * @return string
+     * @throws class_exception
+     * @permissions right1
+     */
+    protected function actionAddFavorite() {
+
+        $objTags = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
+        $strError = "<message>".$this->getLang("favorite_save_error")."</message>";
+        $strSuccess = "<message>".$this->getLang("favorite_save_success").": ".$objTags->getStrDisplayName()."</message>";
+        $strExisting = "<message>".$this->getLang("favorite_save_remove").": ".$objTags->getStrDisplayName()."</message>";
+
+        //already added before?
+        if(count(class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) > 0) {
+            $arrFavorites = class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid());
+            foreach($arrFavorites as $objOneFavorite)
+                $objOneFavorite->deleteObject();
+
+            return $strExisting;
+        }
+
+        $objFavorite = new class_module_tags_favorite();
+        $objFavorite->setStrUserId($this->objSession->getUserID());
+        $objFavorite->setStrTagId($objTags->getSystemid());
+
+        if(!$objFavorite->updateObjectToDb())
+            return $strError;
+        else
+            return $strSuccess;
+    }
+
+
     /**
      * Creates a new tag (if not already existing) and assigns the tag to the passed system-record
      *
@@ -81,7 +116,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
         $strReturn .=" <tags>";
         foreach($arrTags as $objOneTag) {
 
-            $strReturn .= $this->objToolkit->getTagEntry($objOneTag->getStrName(), $objOneTag->getSystemid(), $strSystemid, $strAttribute, $bitDelete);
+            $strReturn .= $this->objToolkit->getTagEntry($objOneTag, $strSystemid, $strAttribute);
         }
 
         $strReturn .= "</tags>";

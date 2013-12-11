@@ -647,17 +647,14 @@ KAJONA.admin.ajax = {
                         adminListRow.removeClass('disabled');
                     }
 
-//                    KAJONA.admin.tooltip.addTooltip(link.find("img"));
-                    KAJONA.admin.tooltip.addTooltip($('#statusLink_' + strSystemIdToSet).find("span"));
+                    KAJONA.admin.tooltip.addTooltip($('#statusLink_' + strSystemIdToSet).find("[rel='tooltip']"));
 				}
         	}
             else
         		KAJONA.admin.statusDisplay.messageError(data);
         };
 
-        var link = $('#statusLink_' + strSystemIdToSet);
-//        KAJONA.admin.tooltip.removeTooltip(link.find("img"));
-        KAJONA.admin.tooltip.removeTooltip(link.find("span"));
+        KAJONA.admin.tooltip.removeTooltip($('#statusLink_' + strSystemIdToSet).find("[rel='tooltip']"));
         KAJONA.admin.ajax.genericAjaxCall("system", "setStatus", strSystemIdToSet, objCallback);
 	},
 

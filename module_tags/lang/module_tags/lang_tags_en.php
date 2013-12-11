@@ -14,7 +14,6 @@ $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => 
 
 //editable entries
 $lang["_tags_defaultprivate_"]           = "Private assignments by default";
-$lang["action_add_to_favorites"]         = "Marks as favorite";
 $lang["action_list_favorites"]           = "Favorites";
 $lang["action_show_all"]                 = "Show all tags";
 $lang["action_show_assigned_records"]    = "Show assigned records";
@@ -30,3 +29,9 @@ $lang["tag_assignments"]                 = "Assignments";
 $lang["tag_edit"]                        = "Edit";
 $lang["tag_name_hint"]                   = "A set of tags may be submitted as a comma-separated list";
 $lang["tagsection_header"]               = "Tags";
+
+$lang["favorite_save_error"]             = "An error occurred while saving favorite";
+$lang["favorite_save_remove"]            = "Favorite has been deleted";
+$lang["favorite_save_success"]           = "Favorite has been saved successfully.";
+$lang["tag_favorite_add"]                = "Set as favorite";
+$lang["tag_favorite_remove"]             = "Delete favorite";

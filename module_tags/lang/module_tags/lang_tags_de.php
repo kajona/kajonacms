@@ -14,7 +14,6 @@ $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeit
 
 //editable entries
 $lang["_tags_defaultprivate_"]           = "Zuweisungen standardmäßig privat";
-$lang["action_add_to_favorites"]         = "Als Favorit ablegen";
 $lang["action_list_favorites"]           = "Favoriten";
 $lang["action_show_all"]                 = "Alle Tags anzeigen";
 $lang["action_show_assigned_records"]    = "Zugewiesene Datensätze anzeigen";
@@ -30,3 +29,10 @@ $lang["tag_assignments"]                 = "Zuweisungen";
 $lang["tag_edit"]                        = "Bearbeiten";
 $lang["tag_name_hint"]                   = "Mehrere Tags können in Form einer kommaseparierten Liste eingegeben werden";
 $lang["tagsection_header"]               = "Tags";
+
+
+$lang["favorite_save_error"]             = "Fehler beim Speichern des Favoriten";
+$lang["favorite_save_remove"]            = "Der Favorit wurde gelöscht";
+$lang["favorite_save_success"]           = "Der Favorit wurde angelegt";
+$lang["tag_favorite_add"]                = "Als Favorit setzen";
+$lang["tag_favorite_remove"]             = "Favorit löschen";

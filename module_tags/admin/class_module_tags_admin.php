@@ -56,16 +56,17 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
             );
 
             if($objListEntry->rightRight1()) {
-                $arrButtons[] = $this->objToolkit->listButton(
-                    getLinkAdmin(
-                        $this->getArrModule("modul"),
-                        "addToFavorites",
-                        "&systemid=" . $objListEntry->getSystemid(),
-                        $this->getLang("action_add_to_favorites"),
-                        $this->getLang("action_add_to_favorites"),
-                        "icon_favorite"
-                    )
-                );
+
+                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
+                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
+                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
+                });</script>";
+
+                $strImage = class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $objListEntry->getSystemid()) != null ?
+                    class_adminskin_helper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")) :
+                    class_adminskin_helper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add"));
+
+                $arrButtons[] = $strJs.$this->objToolkit->listButton("<a href=\"#\" onclick=\"KAJONA.admin.tags.createFavorite('".$objListEntry->getSystemid()."', this); return false;\">".$strImage."</a>");
             }
 
             return $arrButtons;
@@ -195,20 +196,4 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         return $this->renderList($objArraySectionIterator);
     }
 
-    /**
-     * Adds a single tag to a users list of favorites
-     *
-     * @permissons right1
-     */
-    protected function actionAddToFavorites() {
-        if(count(class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) == 0) {
-            $objFavorite = new class_module_tags_favorite();
-            $objFavorite->setStrUserId($this->objSession->getUserID());
-            $objFavorite->setStrTagId($this->getSystemid());
-
-            $objFavorite->updateObjectToDb();
-        }
-
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listFavorites"));
-    }
 }
