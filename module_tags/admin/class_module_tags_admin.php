@@ -166,6 +166,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tags_name"));
         $strTagContent .= $this->objToolkit->formInputSubmit($this->getLang("button_add"), $this->getLang("button_add"), "");
         $strTagContent .= $this->objToolkit->formClose();
+        $strTagContent .= $this->objToolkit->setBrowserFocus("tagname");
 
         $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
 
