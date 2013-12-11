@@ -120,10 +120,10 @@ abstract class class_admin_simple extends class_admin {
     }
 
     /**
-     * A general action to delete a record.
+     * A general action to copy a record.
      * This method may be overwritten by subclasses.
      *
-     * @permissions delete
+     * @permissions edit
      * @throws class_exception
      */
     protected function actionCopyObject() {
