@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Resizes and compresses all uploaded pictures in /portal/pics/upload to save disk space
+ * Resizes and compresses all uploaded pictures in "/files/images" to save disk space
  *
  * @package module_system
  */
