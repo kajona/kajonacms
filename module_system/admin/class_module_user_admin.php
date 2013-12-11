@@ -408,7 +408,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $strUserName  = $this->getParam("user_username") != "" ? $this->getParam("user_username"):$objUser->getStrUsername();
             $objForm->getField("user_username")->setStrValue($strUserName);
             if($bitSelfedit) {
-                $objForm->getField("user_username")->setBitReadonly(true);
+                $objForm->getField("user_username")->setBitReadonly(true)->setStrValue($objUser->getStrUsername());
             }
 
             if($objUser->getStrAdminskin() != "" && $objForm->getField("user_skin") != null)
