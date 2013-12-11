@@ -69,16 +69,23 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
                 var postBody = param1+'&'+param2;
 
                 KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
+
+                if(inputId.indexOf("_enabled") > 0 ) {
+                    $("#"+inputId).closest("tr").find("div.make-switch:not(.blockEnable)").slice(1).bootstrapSwitch("setActive", data.value != 0);
+                }
 JS;
         $arrRows = array();
         foreach($arrMessageproviders as $objOneProvider) {
 
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
+            $bitAlwaysEnabled = $objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysActive();
+            $bitAlwaysMail = $objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysByMail();
+
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
-                "inlineFormEntry 1" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, ($objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysActive()), $strCallback),
-                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, ($objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysByMail()), $strCallback)
+                "inlineFormEntry 1" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, $bitAlwaysEnabled, $strCallback),
+                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail || $bitAlwaysEnabled, $strCallback, "switch-small ".($bitAlwaysMail ? "blockEnable" : ""))
             );
 
         }
