@@ -436,6 +436,12 @@ function timeToString($intTime, $bitLong = true) {
 function dateToString($objDate, $bitLong = true, $strFormat = "") {
     $strReturn = "";
     if($objDate != null) {
+
+        //if the $objDate is a string, conver it to date object
+        if(is_string($objDate) && !is_object($objDate)) {
+            $objDate = new class_date($objDate);
+        }
+
         //convert to a current date
         if($strFormat == "") {
             if($bitLong)
