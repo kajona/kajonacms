@@ -2077,10 +2077,6 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTargetid
      * @param string $strAttribute
      *
-     * @internal param string $strTagname
-     * @internal param string $strTagId
-     * @internal param bool $bitDelete
-     * @internal param bool $bitFavorite
      * @return string
      */
     public function getTagEntry(class_module_tags_tag $objTag, $strTargetid, $strAttribute) {
@@ -2111,6 +2107,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
         $arrTemplate["strFavorite"] = $strFavorite;
+        $arrTemplate["strDelete"] = class_adminskin_helper::getAdminImage("icon_delete", class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "tags"));;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

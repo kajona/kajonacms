@@ -1545,8 +1545,8 @@ otherwise the JavaScript will fail!
 </tags_tag>
 
 <tags_tag_delete>
-    <span class="label label-info">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> <i class="fa fa-trash-o" style="color: white;" id="icon_%%strTagId%%" title="[lang,commons_delete,tag]" rel="tooltip" ></i></a> %%strFavorite%%</span>
-    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
+    <span class="label label-info taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
+    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip($(".taglabel [rel='tooltip']"));</script>
 </tags_tag_delete>
 
 
