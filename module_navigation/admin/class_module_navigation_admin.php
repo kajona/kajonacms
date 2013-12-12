@@ -498,6 +498,24 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             }
         }
 
+        $objCurNode = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objCurNode instanceof class_module_navigation_tree) {
+
+            $arrReturn = array(
+                "data" => array(
+                    "title" => class_adminskin_helper::getAdminImage($objCurNode->getStrIcon())."&nbsp;".$objCurNode->getStrDisplayName()
+                ),
+                "state" => "",
+                "attr" => array(
+                    "id" => $objCurNode->getSystemid(),
+                    "systemid" => $objCurNode->getSystemid(),
+                    "link" => "",
+                ),
+                "children" => $arrReturn
+            );
+
+        }
+
         class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
