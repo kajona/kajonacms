@@ -312,7 +312,7 @@ Multiselect
     <div class="control-group">
         <label for="%%name%%[]" class="control-label">%%title%%</label>
         <div class="controls">
-            <select name="%%name%%[]" id="%%name%%" class="input-xlarge %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
+            <select size="7" name="%%name%%[]" id="%%name%%" class="input-xlarge %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 </input_multiselect>
