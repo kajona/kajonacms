@@ -367,9 +367,12 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrFilterModules = $objSearch->getPossibleModulesForFilter();
         $objForm->getField("formfiltermodules")->setArrKeyValues($arrFilterModules);
 
-        $objForm->addField(new class_formentry_checkbox("search", "filter_all"))->setStrLabel($this->getLang("select_all"))->setStrValue(
-            $objSearch->getStrInternalFilterModules() == "-1" || $objSearch->getStrInternalFilterModules() == ""
-        );
+
+
+        $objForm->addField(new class_formentry_checkbox("search", "filter_all"))
+            ->setStrLabel($this->getLang("select_all"))
+            ->setStrValue($objSearch->getStrInternalFilterModules() == "-1" || $objSearch->getStrInternalFilterModules() == "");
+        $objForm->setFieldToPosition("search_filter_all", 3);
 
         $bitVisible = ($objSearch->getStrInternalFilterModules() != "-1" && $objSearch->getStrInternalFilterModules() != "") || $objSearch->getObjChangeEnddate() != null || $objSearch->getObjChangeStartdate() != null;
 
@@ -379,6 +382,20 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $objForm->addFieldToHiddenGroup($objForm->getField("objChangeStartdate"));
         $objForm->addFieldToHiddenGroup($objForm->getField("objChangeEnddate"));
         $objForm->setBitHiddenElementsVisible($bitVisible);
+
+
+        //add js-code for enabling and disabling multiselect box for modules
+        $strJS = <<<JS
+            KAJONA.admin.loader.loadFile('/core/module_search/admin/scripts/search.js', function() {
+                    KAJONA.admin.search.switchFilterAllModules();
+                    $('#search_filter_all').click(function() {KAJONA.admin.search.switchFilterAllModules()});
+
+                });
+JS;
+        $strPlain = "<script type='text/javascript'>" . $strJS . "</script>";
+        $objForm->addField(new class_formentry_plaintext())->setStrValue($strPlain);
+
+
 
         return $objForm;
     }
