@@ -38,24 +38,29 @@
    </properties>
    <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase" />
    <exclude name="Generic.ControlStructures.InlineControlStructure.Discouraged" />
+
+    <!-- temporary! -->
+   <exclude name="Generic.Files.LineLength" />
  </rule>
 
 
  <rule ref="PEAR">
    <exclude name="PEAR.Classes.ClassDeclaration"/>
+   <exclude name="PEAR.NamingConventions.ValidClassName"/>
    <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
    <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
    <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
    <exclude name="PEAR.Commenting.ClassComment.InvalidPackage" />
+   <exclude name="PEAR.Commenting.ClassComment.WrongStyle" />
    <exclude name="PEAR.Commenting.FileComment.WrongStyle" />
    <exclude name="PEAR.ControlStructures.ControlSignature" />
-   <exclude name="PEAR.NamingConventions.ValidClassName.StartWithCaptial" />
    <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
    <exclude name="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned" />
    <exclude name="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned" />
+
+     <!-- temporary! -->
+     <exclude name="Generic.Files.LineLength" />
   </rule>
-
-
 
 
 
