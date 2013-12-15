@@ -80,4 +80,5 @@ CKEDITOR.editorConfig = function(config) {
     config.entities_greek = false;
     config.entities_latin = false;
     config.autoParagraph = false;
+    config.enterMode = CKEDITOR.ENTER_BR;
 };

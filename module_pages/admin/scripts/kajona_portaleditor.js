@@ -132,7 +132,7 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
  *
  * wysiwyg: full CKEditor
  * plain: limited CKEditor, no linebreaks and only undo/redo buttons
- * textarea: limited CKEditor, linebreaks are allows, undo/redo buttons
+ * textarea: limited CKEditor, linebreaks are allowed, undo/redo buttons
  */
 KAJONA.admin.portaleditor.RTE.init = function () {
 
@@ -154,8 +154,16 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 var data = event.editor.getData();
                 var attr = $(event.editor.element).attr('data-kajona-editable');
 
+                //validate, if injected <br />s have to be removed. its then up to the
+                //portal element to decide if \n should be nl2br()ed.
+                if(event.editor.config.kajona_strMode == 'textarea') {
+                    debugger;
+                    data = data.replace("<br />", "");
+                }
+
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
                 //console.log('modified field', attr, data);
+
 
                 // save field on blur
                 KAJONA.admin.portaleditor.RTE.savePage();
