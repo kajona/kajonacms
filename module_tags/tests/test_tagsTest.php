@@ -4,6 +4,36 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class class_test_tags extends class_testbase  {
 
+    public function testCopyRecordWithTag() {
+
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName("autotest");
+        $objAspect->updateObjectToDb();
+
+        $objTag = new class_module_tags_tag();
+        $objTag->setStrName("demo tag");
+        $objTag->updateObjectToDb();
+
+        $objTag->assignToSystemrecord($objAspect->getStrSystemid());
+
+        $objFirstAspect = new class_module_system_aspect($objAspect->getSystemid());
+
+        $objAspect->copyObject();
+
+        $this->assertNotEquals($objFirstAspect->getSystemid(), $objAspect->getSystemid());
+
+        $this->assertEquals(count(class_module_tags_tag::getTagsForSystemid($objFirstAspect->getSystemid())), count(class_module_tags_tag::getTagsForSystemid($objAspect->getSystemid())));
+
+        $arrTagsFirst = class_module_tags_tag::getTagsForSystemid($objFirstAspect->getSystemid());
+        $objFirstTag = $arrTagsFirst[0];
+        $arrTagsCopy = class_module_tags_tag::getTagsForSystemid($objAspect->getSystemid());
+        $objSecondTag = $arrTagsCopy[0];
+
+        $this->assertEquals($objFirstTag->getSystemid(), $objSecondTag->getSystemid());
+
+    }
+
+
 
     public function testTagAssignmentRemoval() {
         //related to checkin #6111

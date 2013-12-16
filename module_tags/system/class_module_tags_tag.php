@@ -403,12 +403,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return bool
      */
     public function handleRecordCopiedEvent($strOldSystemid, $strNewSystemid) {
-        $strQuery = "SELECT tags_tagid, tags_attribute
+        $strQuery = "SELECT tags_tagid, tags_attribute, tags_owner
                        FROM "._dbprefix_."tags_member
                       WHERE tags_systemid = ?";
         $arrRows = $this->objDB->getPArray($strQuery, array($strOldSystemid));
         foreach($arrRows as $arrSingleRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_memberid, tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?)";
+            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_memberid, tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?, ?)";
             $this->objDB->_pQuery($strQuery, array(generateSystemid(), $arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
         }
 
