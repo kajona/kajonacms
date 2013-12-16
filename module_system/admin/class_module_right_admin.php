@@ -71,7 +71,9 @@ class class_module_right_admin extends class_admin implements interface_admin {
             $arrGroups = class_module_user_group::getObjectList();
 
             //Determine name of the record
-            if($objTargetRecord->getStrRecordComment() == "")
+            if($objTargetRecord instanceof class_module_system_module)
+                $strTitle = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objTargetRecord->getStrName()) ." (".$objTargetRecord->getStrDisplayName().")";
+            else if($objTargetRecord->getStrDisplayName() == "")
                 $strTitle = $this->getLang("titel_leer");
             else
                 $strTitle = $objTargetRecord->getStrDisplayName() . " ";
