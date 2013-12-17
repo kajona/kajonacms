@@ -63,6 +63,59 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
     }
 
+
+    protected function createObject($strClassType, $strParentId) {
+        //create the object
+        $objReflector = new ReflectionClass($strClassType);
+        $obj = $objReflector->newInstance();
+        $obj->updateObjectToDb($strParentId);
+
+        $arrReflectionProperties = $objReflector->getProperties();
+        $objReflectorAnnotated = new class_reflection($strClassType);
+
+        //set properties which are annotated with @var and have a setter method
+        foreach($arrReflectionProperties as $objReflectionProperty) {
+            $strPropName = $objReflectionProperty->getName();
+
+            //check if the property is annotated with @tablecolumn
+            if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_mapper::STR_ANNOTATION_TABLECOLUMN)) {
+                $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
+
+                if($objReflector->hasMethod($strSetterMethod)) {
+                    $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
+
+                    //determine the field type
+                    $strDataType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@var");
+                    $strFieldType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@fieldType");
+                    $objMethodValue = null;
+
+                    if($strDataType == "string") {
+                        if($strFieldType != "dropdown") {
+                            $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+                        }
+                    }
+                    else if($strDataType == "int") {
+                        if($strFieldType != "dropdown") {
+                            $objMethodValue = 0;
+                        }
+                    }
+                    else if($strDataType == "class_date") {
+                            $objMethodValue = new class_date();
+                    }
+                    else if($strDataType == "bool") {
+                            $objMethodValue = false;
+                    }
+
+                    $objReflectionMethod->invoke($obj, $objMethodValue);
+                }
+            }
+        }
+
+        //save it
+        $obj->updateObjectToDb($strParentId);
+        return $obj;
+    }
+
 }
 
 
