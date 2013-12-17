@@ -80,8 +80,9 @@ class class_admin_formgenerator {
      * Afterwards, the object may be persisted.
      */
     public function updateSourceObject() {
-        foreach($this->arrFields as $objOneField)
+        foreach($this->arrFields as $objOneField) {
             $objOneField->setValueToObject();
+        }
     }
 
     /**
