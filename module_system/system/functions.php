@@ -602,9 +602,10 @@ function splitUpLink($strLink) {
  *
  * @return string
  * @since 4.3
+ * @todo: white-space handling is still messed up
  */
 function replaceTextLinks($strText) {
-    return preg_replace('/^(?!href=.)*((www|http|https:\/\/)[^ |^<]+)/', '<a href="\1">\1</a>', $strText);
+    return preg_replace('#([^href=("|\')|^>]((http|https|ftp)://)[^ |^<|^>]+)#', '<a href="\1">\1</a>', $strText);
 }
 
 /**
