@@ -97,7 +97,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //add a filter-form
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "list"));
-        $strReturn .= $this->objToolkit->formInputUserSelector("userlist_filter", $this->getLang("user_username"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
+        $strReturn .= $this->objToolkit->formInputText("userlist_filter", $this->getLang("user_username"),  $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("userlist_filter"));
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
