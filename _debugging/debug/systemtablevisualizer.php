@@ -93,7 +93,7 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
             ".(count($arrChilds) > 0 ? " onclick=\"javascript:fold('".$strStartId."')\"  " : " " )."
             >";
     $strStatus = "<span style=\"color: green; \">active</span>";
-    if($objCommon->getStatus() == 0)
+    if($objCommon->getIntRecordStatus() == 0)
         $strStatus = "<span style=\"color: red;\">inactive</span>";
 
     if(count($arrChilds) > 0)
