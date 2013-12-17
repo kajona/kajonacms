@@ -708,7 +708,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
     protected function actionElementStatus() {
         //Create the object
         $objElement = new class_module_pages_pageelement($this->getSystemid());
-        $objElement->setStatus();
+        $objElement->setIntRecordStatus($objElement->getIntRecordStatus() == 0 ? 1 : 0);
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
 
