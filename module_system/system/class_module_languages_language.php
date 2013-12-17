@@ -399,7 +399,7 @@ class class_module_languages_language extends class_model implements interface_m
     public function setStrPortalLanguage($strLanguage) {
         $objLanguage = class_module_languages_language::getLanguageByName($strLanguage);
         if($objLanguage !== false) {
-            if($objLanguage->getStatus() != 0) {
+            if($objLanguage->getIntRecordStatus() != 0) {
                 if(!$this->objSession->getBitClosed()) {
                     $this->objSession->setSession("portalLanguage", $objLanguage->getStrName());
                 }
@@ -415,7 +415,7 @@ class class_module_languages_language extends class_model implements interface_m
     public function setStrAdminLanguageToWorkOn($strLanguage) {
         $objLanguage = class_module_languages_language::getLanguageByName($strLanguage);
         if($objLanguage !== false) {
-            if($objLanguage->getStatus() != 0) {
+            if($objLanguage->getIntRecordStatus() != 0) {
                 if(!$this->objSession->getBitClosed()) {
                     $this->objSession->setSession("adminLanguage", $objLanguage->getStrName());
                 }

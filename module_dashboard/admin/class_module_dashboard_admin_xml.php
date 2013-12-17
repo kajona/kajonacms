@@ -105,7 +105,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         //fetch modules relevant for processing
         $arrModules = class_module_system_module::getAllModules();
         foreach($arrModules as $objSingleModule) {
-            if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
+            if($objSingleModule->getIntRecordStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
                 $arrRelevantModules[] = $objSingleModule->getAdminInstanceOfConcreteModule();
         }
 

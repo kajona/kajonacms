@@ -1495,10 +1495,12 @@ abstract class class_root {
     }
 
     /**
-     * Sets the id of the user who owns this record
+     * Sets the id of the user who owns this record.
+     * Please note that since 4.4, setting an owner-id no longer fires an updateObjectToDb()!
      *
      * @param string $strOwner
      * @param string $strSystemid
+     * @deprecated
      *
      * @throws class_exception
      * @return bool
@@ -1508,10 +1510,7 @@ abstract class class_root {
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
 
         $this->setStrOwner($strOwner);
-        if(validateSystemid($this->getSystemid()))
-            return $this->updateObjectToDb();
-        else
-            return true;
+        return true;
     }
 
     public function getIntRecordStatus() {
@@ -1535,38 +1534,6 @@ abstract class class_root {
         return $this->getIntRecordStatus();
     }
 
-    /**
-     * If a defined status is passed, it will be set. Ohterwise, it
-     * negates the status of a systemRecord.
-     *
-     * @param string $strSystemid
-     * @param bool $intStatus
-     *
-     * @throws class_exception
-     * @deprecated user setIntRecordStatus() instead
-     * @see class_root::setIntRecordStatus()
-     * @return bool
-     * @todo: systemid param handling
-     */
-    public function setStatus($strSystemid = "", $intStatus = false) {
-
-        if($strSystemid != "")
-            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-
-        $intNewStatus = $intStatus;
-        if($intStatus === false) {
-            $intStatus = $this->getIntRecordStatus();
-            if($intStatus == 0)
-                $intNewStatus = 1;
-            else
-                $intNewStatus = 0;
-        }
-
-        $bitReturn = $this->setIntRecordStatus($intNewStatus);
-        //$this->updateSystemrecord();
-
-        return $bitReturn;
-    }
 
     /**
      * Sets the internal status. Fires a status-changed event.
@@ -1584,7 +1551,7 @@ abstract class class_root {
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
             if(validateSystemid($this->getSystemid()))
                 $this->updateObjectToDb();
-            if($bitFireStatusChangeEvent) {
+            if($bitFireStatusChangeEvent && validateSystemid($this->getSystemid())) {
                 $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
             }
         }
@@ -1608,20 +1575,6 @@ abstract class class_root {
         return $this->getStrRecordComment();
     }
 
-    /**
-     * Sets the comment saved with a record
-     *
-     * @param string $strNewComment
-     * @return bool
-     * @deprecated
-     */
-    public function setRecordComment($strNewComment) {
-        $this->setStrRecordComment($strNewComment);
-        if(validateSystemid($this->getSystemid()))
-            return $this->updateObjectToDb();
-        else
-            return true;
-    }
 
     public function getStrRecordComment() {
         return $this->strRecordComment;

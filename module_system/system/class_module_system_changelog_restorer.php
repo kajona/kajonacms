@@ -28,6 +28,10 @@ class class_module_system_changelog_restorer extends class_module_system_changel
      */
     public function restoreProperty(interface_versionable $objObject, class_date $objTimestamp, $strProperty) {
 
+        //there are a few properties not to change
+        if($strProperty == "intRecordStatus")
+            return;
+
         //load the value from the changelog
         $strValue = $this->getValueForDate($objObject->getSystemid(), $strProperty, $objTimestamp);
 
@@ -51,12 +55,19 @@ class class_module_system_changelog_restorer extends class_module_system_changel
         if($strValue === false)
             return;
 
+        //remove the system-id temporary to avoid callbacks and so on
+        $strSystemid = $objObject->getSystemid();
+
+        $objObject->unsetSystemid();
+
         //all prerequisites match, start creating query
         $objReflection = new class_reflection($objObject);
         $strSetter = $objReflection->getSetter($strProperty);
         if($strSetter !== null) {
             call_user_func(array($objObject, $strSetter), $strValue);
         }
+
+        $objObject->setSystemid($strSystemid);
 
     }
 

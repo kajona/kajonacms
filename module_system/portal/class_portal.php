@@ -338,21 +338,6 @@ abstract class class_portal {
         return $this->strSystemid;
     }
 
-    /**
-     * Negates the status of a systemRecord
-     *
-     * @param string $strSystemid
-     *
-     * @return bool
-     * @deprecated call setStatus on a model-object directly
-     */
-    public function setStatus($strSystemid = "") {
-        if($strSystemid == "") {
-            $strSystemid = $this->getSystemid();
-        }
-        $objCommon = new class_module_system_common($strSystemid);
-        return $objCommon->setStatus();
-    }
 
     /**
      * Gets the status of a systemRecord
@@ -367,7 +352,7 @@ abstract class class_portal {
             $strSystemid = $this->getSystemid();
         }
         $objCommon = new class_module_system_common($strSystemid);
-        return $objCommon->getStatus();
+        return $objCommon->getIntRecordStatus();
     }
 
     /**
