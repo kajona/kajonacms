@@ -31,6 +31,10 @@ class class_test_tags extends class_testbase  {
 
         $this->assertEquals($objFirstTag->getSystemid(), $objSecondTag->getSystemid());
 
+        $objFirstAspect->deleteObject();
+        $objAspect->deleteObject();
+        $objSecondTag->deleteObject();
+
     }
 
 
