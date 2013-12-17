@@ -329,7 +329,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
         //check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
         $bitErrorpage = false;
-        if($objPageData == null || ($objPageData->getStatus() != 1 || !$objPageData->rightView()))
+        if($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView()))
             $bitErrorpage = true;
 
         //but: if count != 0 && preview && rights:
