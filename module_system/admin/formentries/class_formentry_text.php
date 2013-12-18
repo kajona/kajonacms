@@ -7,13 +7,14 @@
 ********************************************************************************************************/
 
 /**
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author  sidler@mulchprod.de
+ * @since   4.0
  * @package module_formgenerator
  */
 class class_formentry_text extends class_formentry_base implements interface_formentry_printable {
 
     private $strOpener = "";
+
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -50,7 +51,7 @@ class class_formentry_text extends class_formentry_base implements interface_for
     }
 
     /**
-     * @param $strOpener
+     * @param string $strOpener
      * @return class_formentry_text
      */
     public function setStrOpener($strOpener) {
@@ -58,6 +59,9 @@ class class_formentry_text extends class_formentry_base implements interface_for
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getStrOpener() {
         return $this->strOpener;
     }

@@ -20,7 +20,7 @@
  * 3. addField(), pass a field to add it explicitly
  *
  * @author sidler@mulchprod.de
- * @since 4.0
+ * @since  4.0
  * @module module_formgenerator
  */
 class class_admin_formgenerator {
@@ -67,7 +67,7 @@ class class_admin_formgenerator {
     /**
      * Creates a new instance of the form-generator.
      *
-     * @param $strFormname
+     * @param string $strFormname
      * @param class_model $objSourceobject
      */
     public function __construct($strFormname,  $objSourceobject) {
@@ -78,6 +78,8 @@ class class_admin_formgenerator {
     /**
      * Stores the values saved with the params-array back to the currently associated object.
      * Afterwards, the object may be persisted.
+     *
+     * @return void
      */
     public function updateSourceObject() {
         foreach($this->arrFields as $objOneField) {
@@ -111,7 +113,7 @@ class class_admin_formgenerator {
     }
 
     /**
-     * @param $strTargetURI
+     * @param string $strTargetURI
      * @param int $intButtonConfig a list of buttons to attach to the end of the form. if you need more then the obligatory save-button,
      *                             pass them combined by a bitwise or, e.g. class_admin_formgenerator::BIT_BUTTON_SAVE | class_admin_formgenerator::$BIT_BUTTON_CANCEL
      *
@@ -165,8 +167,20 @@ class class_admin_formgenerator {
 
         if(count($this->arrFields) > 0) {
             reset($this->arrFields);
-            $objField = current($this->arrFields);
-            $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
+
+            do {
+                $objField = current($this->arrFields);
+                if(!$objField instanceof class_formentry_hidden
+                    && !$objField instanceof class_formentry_plaintext
+                    && !$objField instanceof class_formentry_headline
+                    && !$objField instanceof class_formentry_divider
+                ) {
+                    $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
+                    break;
+                }
+            }
+            while(next($this->arrFields) !== false);
+
         }
 
         //lock the record to avoid multiple edit-sessions - in in edit mode
@@ -217,7 +231,7 @@ class class_admin_formgenerator {
      * So it is essential to provide the matching getters and setters in order to have all
      * set up dynamically.
      *
-     * @param $strPropertyName
+     * @param string $strPropertyName
      * @return class_formentry_base|interface_formentry
      * @throws class_exception
      */
@@ -280,10 +294,11 @@ class class_admin_formgenerator {
      * The position is set human-readable, so the first element uses
      * the index 1.
      *
-     * @param $strField
-     * @param $intPos
+     * @param string $strField
+     * @param int $intPos
      *
      * @throws class_exception
+     * @return void
      */
     public function setFieldToPosition($strField, $intPos) {
 
@@ -323,8 +338,8 @@ class class_admin_formgenerator {
     /**
      * Loads the field-entry identified by the passed name.
      *
-     * @param $strName
-     * @param $strPropertyname
+     * @param string $strName
+     * @param string $strPropertyname
      * @return class_formentry_base|interface_formentry
      * @throws class_exception
      */
@@ -342,7 +357,7 @@ class class_admin_formgenerator {
     /**
      * Loads the validator identified by the passed name.
      *
-     * @param $strName
+     * @param string $strName
      * @return interface_validator
      * @throws class_exception
      */
@@ -376,8 +391,9 @@ class class_admin_formgenerator {
     /**
      * Adds an additional, user-specific validation-error to the current list of errors.
      *
-     * @param $strEntry
-     * @param $strMessage
+     * @param string $strEntry
+     * @param string $strMessage
+     * @return void
      */
     public function addValidationError($strEntry, $strMessage) {
         $this->arrValidationErrors[$strEntry] = $strMessage;
@@ -385,7 +401,8 @@ class class_admin_formgenerator {
 
     /**
      * Removes a single validation error
-     * @param $strEntry
+     * @param string $strEntry
+     * @return void
      */
     public function removeValidationError($strEntry) {
         if(isset($this->arrValidationErrors[$strEntry]))
@@ -411,7 +428,7 @@ class class_admin_formgenerator {
 
     /**
      * Returns a single entry form the fields, identified by its form-entry-name.
-     * @param $strName
+     * @param string $strName
      * @return class_formentry_base|interface_formentry
      */
     public function getField($strName) {
@@ -424,8 +441,7 @@ class class_admin_formgenerator {
     /**
      * Removes a single entry form the fields, identified by its form-entry-name.
      *
-     * @param $strName
-     *
+     * @param string $strName
      * @return $this
      */
     public function removeField($strName) {
@@ -436,7 +452,7 @@ class class_admin_formgenerator {
     /**
      * Sets the name of the group of hidden elements
      *
-     * @param $strHiddenGroupTitle
+     * @param string $strHiddenGroupTitle
      * @return $this
      */
     public function setStrHiddenGroupTitle($strHiddenGroupTitle) {
@@ -459,7 +475,8 @@ class class_admin_formgenerator {
 
     /**
      * Makes the group of hidden elements visible or hides the content on page-load
-     * @param $bitHiddenElementsVisible
+     * @param bool $bitHiddenElementsVisible
+     * @return void
      */
     public function setBitHiddenElementsVisible($bitHiddenElementsVisible) {
         $this->bitHiddenElementsVisible = $bitHiddenElementsVisible;
@@ -472,6 +489,9 @@ class class_admin_formgenerator {
         return $this->objSourceobject;
     }
 
+    /**
+     * @return class_formentry_base[]|interface_formentry[]
+     */
     public function getArrFields() {
         return $this->arrFields;
     }
