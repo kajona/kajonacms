@@ -135,7 +135,7 @@ KAJONA.v4skin = {
 
         this.select = function( event, ui ) {
             if(ui.item) {
-                $objCur = $(this);
+                var $objCur = $(this);
                 $objCur.val( ui.item.title );
                 if($('#'+$objCur.attr('id')+'_id'))
                     $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid );
@@ -144,7 +144,14 @@ KAJONA.v4skin = {
         };
 
         this.create = function( event, ui ) {
-            $(this).css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+            var $objCur = $(this);
+            $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+
+            $('#'+$objCur.attr('id')).keypress(function(event) {
+                if($('#'+$objCur.attr('id')+'_id')) {
+                    $( '#'+$objCur.attr('id')+'_id' ).val( "" );
+                }
+            });
         }
     }
 };
