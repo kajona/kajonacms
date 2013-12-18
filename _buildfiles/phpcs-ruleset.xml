@@ -32,7 +32,11 @@
         <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
         <exclude name="PEAR.Commenting.ClassComment.InvalidPackage"/>
         <exclude name="PEAR.Commenting.ClassComment.WrongStyle"/>
+        <exclude name="PEAR.Commenting.ClassComment.MissingTag"/>
         <exclude name="PEAR.Commenting.FileComment.WrongStyle"/>
+        <exclude name="PEAR.Commenting.FileComment.WrongTagOrder"/>
+        <exclude name="PEAR.Commenting.FileComment.TagsNotGrouped"/>
+        <exclude name="PEAR.Commenting.FileComment.MissingTag"/>
         <exclude name="PEAR.ControlStructures.ControlSignature"/>
         <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
         <exclude name="PEAR.Commenting.FunctionComment.SpacingBeforeTags"/>
