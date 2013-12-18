@@ -39,7 +39,7 @@
         <exclude name="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
         <exclude name="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
-
+        <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment" />
 
         <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase"/>
         <exclude name="Generic.ControlStructures.InlineControlStructure.Discouraged"/>
